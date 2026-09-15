@@ -9,8 +9,10 @@ squares is copied by templating, the copies are copied, copy errors appear and a
 inherited, a conserved energy budget and end-fraying give turnover, and the
 population reaches a steady state. Nothing in the rules mentions "copy",
 "strand", or "organism". In a well-mixed world the shortest strand wins, as
-Spiegelman found; the one local rule found so far that pushes back is
-cooperative docking (a lone docked monomer is unstable, a linked run is not).
+Spiegelman found, by 50:1. One more local rule reverses that: make a lone docked
+monomer unstable (a linked run is not), so copying has to nucleate, and longer
+templates nucleate faster. At an undocking rate of 0.1 per step the 6-mer beats
+the dimer and takes four fifths of the copied material.
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 ## Run it

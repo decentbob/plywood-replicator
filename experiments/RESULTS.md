@@ -2,7 +2,7 @@
 
 Measurements from the headless runner on the current code. Every run is deterministic per seed;
 the commands are in the `.sh` scripts next to this file and `run_all.sh` reproduces everything
-in about 40 minutes on four cores. Tables come from `summarize.js`, `births_by_length.js` and
+in about 50 minutes on four cores. Tables come from `summarize.js`, `births_by_length.js` and
 `mutation_rates.js` over `out/*.csv` and `out/*.births.jsonl`.
 
 Unless stated otherwise: 80×80 torus, 400 A + 400 B monomers, 300 energy particles, one seed
@@ -128,4 +128,51 @@ off the face; a run of two or more linked units stays. Copying becomes nucleatio
 slow step is two monomers landing side by side before either leaves, and a template of N units
 has N-1 places for that to happen while a dimer has one.
 
-(Results pending; this section is filled in when the batch completes.)
+Same competition as section 4 (three `AB` and three `ABBABA`, mutation off, unit-mode energy,
+300 particles), with the undocking rate varied. Two seeds each.
+
+| pUndock | dimer births (seed 21, 22) | 6-mer births (21, 22) | dimer : 6-mer by births | share of copied material in 6-mers |
+|---:|---:|---:|---:|---:|
+| 0 (section 4) | 269, 273 | 5, 6 | 50 : 1 | 6% |
+| 0.02 | 251, 270 | 42, 33 | 7 : 1 | 30% |
+| 0.05 | 158, 205 | 70, 54 | 3 : 1 | 51% |
+| 0.1 | 102, 47 | 86, 105 | 0.8 : 1 | 79% |
+| 0.2 | 54, 80 | 99, 87 | 0.7 : 1 | 81% |
+
+"Share of copied material" weights births by length. The race flips between 0.05 and 0.1 per
+step, which at this jostle is an undocking wait of ten to twenty steps against a single-site
+docking wait of a few hundred. One local rule, of the same form as fraying, turns selection
+for the shortest strand into selection for the longer one.
+
+Two runs also seeded a 12-mer (`ABBABAABABBA`) at `pUndock` 0.02: it reproduced (6 and 8 births
+against 35 for the 6-mer and about 200 for the dimer) but did not gain. Where the optimum lies
+at higher undocking rates is the next measurement; the copy-time estimate in the design doc
+(section 13) puts it near 12 units when undocking is ten times faster than docking.
+
+**Evolutionary regime with undocking.** Gentle mutation and turnover (pSoft 0.01, pCapture 0.01,
+pFray 0.0001) with `pUndock` 0.02, one seed strand, 100,000 steps, two seeds; the same regime
+without undocking is `R_gentle` in section 2.
+
+| run | mean length | max | strands | free | births | faithful | distinct seqs | entropy (bits) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| R_gentle_7 (no undock) | 2.25 | 4 | 166 | 54 | 1,152 | 65% | 8 | 2.24 |
+| R_gentle_8 (no undock) | 2.41 | 5 | 168 | 36 | 1,175 | 64% | 11 | 2.50 |
+| U_evo_undock02_7 | 2.91 | 7 | 170 | 178 | 1,315 | 55% | 25 | 3.78 |
+| U_evo_undock02_8 | 3.23 | 7 | 147 | 167 | 1,017 | 51% | 30 | 4.21 |
+
+Even at the weakest setting tried, undocking lifts mean length by about 0.8 units, triples the
+number of distinct sequences in play, and adds 1.5 bits of sequence entropy, while leaving
+three times as many free monomers in the pool (lone dockings that used to lock up material now
+fall off). This is the regime the viewer's "cooperative docking" preset shows, at `pUndock` 0.1.
+
+## 6. Summary
+
+- Copying, release, re-arming and turnover all come out of one internal state per square, one
+  compatibility table and six local transitions. Copies are exact when the soft knobs are zero.
+- Every soft knob is a distinct, measurable mutation channel. Ligation is not usable as a
+  per-step probability with rigid bodies.
+- Without cooperativity the shortest strand wins in every energy regime tried, by 10:1 to 50:1.
+- With a lone docked monomer made unstable, the balance tips to longer strands at undocking
+  rates above about 0.1 per step, and the evolutionary regime becomes both longer and far more
+  diverse. What sets the optimum length, and whether sequence content can matter once hinges or
+  energy motifs exist, are the open questions for Phase 3.
