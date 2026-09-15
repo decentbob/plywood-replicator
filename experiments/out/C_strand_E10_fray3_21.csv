@@ -1,2 +1,5 @@
 t,free,docked,repel,tpl,strands,complexes,meanLen,maxLen,distinct,entropy,births,maxGen,eOn,energyUsed,docks,softDocks,captures,ligations,frays,undocks
 5000,708,16,38,38,10,9,3.3,6,5,2.046,28,3,8,8,117,0,0,0,32,0
+10000,655,19,67,59,25,14,2.92,5,7,2.303,80,4,5,22,281,0,0,0,109,0
+15000,652,22,64,62,30,15,2.4,4,7,1.938,143,5,5,32,457,0,0,0,223,0
+20000,680,19,57,44,23,13,2.565,4,7,2.131,200,6,4,44,620,0,0,0,337,0
