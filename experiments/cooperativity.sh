@@ -15,3 +15,11 @@ echo "U_evo_undock02_7  --seed 7 --seedSeq ABBABA --pSoft 0.01 --pCapture 0.01 -
 echo "U_evo_undock02_8  --seed 8 --seedSeq ABBABA --pSoft 0.01 --pCapture 0.01 --pFray 0.0001 --pUndock 0.02"
 } | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$COMMON"' "$@" --births experiments/out/$name.births.jsonl > experiments/out/$name.csv 2> experiments/out/$name.json'
 echo ALLDONE
+# Stronger undocking, added after the first batch showed 0.02 and 0.05 shift the balance without flipping it.
+{
+echo "U_undock10_21  --seed 21 --seedSeq AB,ABBABA --seedCount 3 --pSoft 0 --pCapture 0 --pFray 0 --pUndock 0.1"
+echo "U_undock20_21  --seed 21 --seedSeq AB,ABBABA --seedCount 3 --pSoft 0 --pCapture 0 --pFray 0 --pUndock 0.2"
+echo "U_undock10_22  --seed 22 --seedSeq AB,ABBABA --seedCount 3 --pSoft 0 --pCapture 0 --pFray 0 --pUndock 0.1"
+echo "U_undock20_22  --seed 22 --seedSeq AB,ABBABA --seedCount 3 --pSoft 0 --pCapture 0 --pFray 0 --pUndock 0.2"
+} | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$COMMON"' "$@" --births experiments/out/$name.births.jsonl > experiments/out/$name.csv 2> experiments/out/$name.json'
+echo ALLDONE2
