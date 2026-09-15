@@ -8,8 +8,10 @@ selection come out of the rules rather than being programmed into the creatures.
 squares is copied by templating, the copies are copied, copy errors appear and are
 inherited, a conserved energy budget and end-fraying give turnover, and the
 population reaches a steady state. Nothing in the rules mentions "copy",
-"strand", or "organism". What happens after that is an open experiment; see
-[experiments/RESULTS.md](experiments/RESULTS.md) for what we have measured so far.
+"strand", or "organism". In a well-mixed world the shortest strand wins, as
+Spiegelman found; the one local rule found so far that pushes back is
+cooperative docking (a lone docked monomer is unstable, a linked run is not).
+See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 ## Run it
 
@@ -39,6 +41,8 @@ node run.js --steps 100000 --every 5000 --seed 3 --pSoft 0.02 --pCapture 0.05 --
 node run.js --help            # any key of DEFAULTS in src/sim.js is a flag
 node test.js                  # invariants: no junk chains, exact copies, energy accounting, conservation, determinism
 node build.js                 # single-file dist/polygon-chemistry.html
+./experiments/run_all.sh      # every experiment batch, about 35 minutes on 4 cores
+node experiments/summarize.js # tables from experiments/out/*.csv
 ```
 
 ## The whole chemistry
@@ -69,7 +73,9 @@ partner whether it sits in the middle of the template or at an end.
 | L/R `INERT` | R/L `STICKY`/`END` | `pCapture` | a free monomer joins a strand without a template |
 | K `WANT` | E `ON` | 1 | energy docks |
 
-**Transitions** (five rules, one internal state):
+A docked unit's free lateral side reads `STICKY` only where its template partner's face says the template continues; at the template's end it reads `END`. That is what stops copies docked on two different templates from linking into chimeras.
+
+**Transitions** (six rules, one internal state):
 
 | rule | from | to | when |
 |---|---|---|---|
@@ -77,7 +83,8 @@ partner whether it sits in the middle of the template or at an end.
 | R2 | DOCK | REPEL | laterally captured without a template |
 | R3 | REPEL / TPL | DOCK | no lateral bonds left |
 | R4 | REPEL | TPL | an ON energy particle is docked on K (in `strand` mode, also if a lateral neighbour is already TPL) |
-| R5 | any | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
+| R5 | REPEL / TPL | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
+| R6 | DOCK (docked) | DOCK (free) | cooperativity: a docked monomer with no lateral bonds falls off with probability `pUndock` per step |
 
 **Bond holding.** A bond breaks the moment either side reads as `REPEL`,
 `INERT`, `IDLE` or `OFF`. That is what releases a finished copy, resets a spent
@@ -97,8 +104,10 @@ repulsion between bodies, and digital bonds. When a bond forms, the smaller body
 is snapped flush onto the larger one and the two become one rigid body; when a
 bond breaks, the body is split into its connected components. Bonds never break
 from jostling. A bond forms only if the compatibility table allows it, the two
-sides face each other within a tolerance, and the slot the mover would snap into
-is empty.
+sides face each other within a tolerance, and every unit of the moving body
+would land in an empty spot. A monomer that undocks is pushed off the face it
+left. All soft probabilities are per step of contact, and a contact lasts several
+steps, so nominal values overstate softness (see the design doc, section 6).
 
 ## Layout
 

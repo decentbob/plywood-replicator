@@ -59,6 +59,7 @@ const DEFAULTS = {
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
   pLigate: 0,      // two strand ends join end to end: fusion
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
+  pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   energyMode: 'strand', // 'unit': every unit needs its own E. 'strand': a re-armed unit re-arms its lateral neighbours, so one E per strand.
   pReload: 0.002,  // OFF -> ON per step when the sun is off
@@ -113,11 +114,14 @@ class Sim {
     this.ss = new Uint8Array(n * 4);              // derived side states
     this.open = new Uint8Array(n);                // bitmask of bondable sides
     this.fresh = new Uint8Array(n);               // released from a template since last birth
+    this.parentOf = new Int32Array(n).fill(-1);   // the template unit this unit was copied on
     this.gen = new Uint16Array(n);
+    this.pendingUnlink = [];                      // bonds a transition asked to break, applied after all transitions
+    this.kicked = [];                             // units that undocked this step and get pushed off the face
     this.bodies = new Map(); this.nextBodyId = 0;
     this.dirty = new Set();
     this.births = []; this.birthCount = 0; this.maxGen = 0;
-    this.energyUsed = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0;
+    this.energyUsed = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0;
 
     // types
     let u = 0;
@@ -287,19 +291,22 @@ class Sim {
       const phi = this.pa[a] + ia * Math.PI / 2;
       const d = (this.size[a] + this.size[m]) / 2;
       const tx = this.px[a] + d * Math.cos(phi), ty = this.py[a] + d * Math.sin(phi);
-      // the anchor unit itself sits at distance d from the slot; anything closer than 3/4 of a contact blocks it
-      if (!this._slotFree(m, tx, ty)) return false;
       const tang = phi + Math.PI - im * Math.PI / 2;
       const ca2 = tang - this.la[m];
       const c = Math.cos(ca2), s = Math.sin(ca2);
-      bm.ca = ca2;
-      bm.cx = tx - (this.lx[m] * c - this.ly[m] * s);
-      bm.cy = ty - (this.lx[m] * s + this.ly[m] * c);
+      const cx2 = tx - (this.lx[m] * c - this.ly[m] * s);
+      const cy2 = ty - (this.lx[m] * s + this.ly[m] * c);
+      // space is exclusive: every unit of the mover must land in an empty spot
+      for (const w of bm.units) {
+        const wx = cx2 + this.lx[w] * c - this.ly[w] * s, wy = cy2 + this.lx[w] * s + this.ly[w] * c;
+        if (!this._slotFree(w, wx, wy)) return false;
+      }
+      bm.ca = ca2; bm.cx = cx2; bm.cy = cy2;
       this._updatePoses(bm);
       const units = ba.units.concat(bm.units);
       this.bodies.delete(ba.id); this.bodies.delete(bm.id);
-      this.dirty.delete(ba.id); this.dirty.delete(bm.id);
       this._makeBody(units);
+      this._buildHash();   // the mover's units changed cells
     }
     this._link(u, i, v, j);
     return true;
@@ -371,9 +378,13 @@ class Sim {
     if (st === I_DOCK) this.ss[o + F] = S.DOCK;
     else if (st === I_REPEL) this.ss[o + F] = S.REPEL;
     else this.ss[o + F] = (bL && bR) ? S.TPL_MM : bL ? S.TPL_RF : S.TPL_LF;
-    // L, R
-    const lat = (bonded) => bonded ? (st === I_TPL ? S.ARMED : S.BONDED) : (st === I_DOCK ? ((bF || nl > 0) ? S.STICKY : S.INERT) : S.END);
-    this.ss[o + L] = lat(bL); this.ss[o + R] = lat(bR);
+    // L, R. A docked unit's free lateral is sticky only where its template partner's face says the
+    // template continues (TPL_MM, or TPL_LF for my L / TPL_RF for my R); at the template's end it is an open end.
+    const pf = bF ? this.ss[b[o + F]] : -1;
+    const lat = (bonded, contin) => bonded ? (st === I_TPL ? S.ARMED : S.BONDED)
+      : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
+    this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
+    this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
     // K
     this.ss[o + K] = st === I_REPEL ? S.WANT : S.IDLE;
   }
@@ -399,14 +410,16 @@ class Sim {
     const st = this.is[u];
     if (st === I_DOCK) {
       if (bF) {
+        // R6 undocking: a lone docked monomer is not stable; a laterally linked run is
+        if (nl === 0 && p.pUndock > 0 && this.rng() < p.pUndock) { this.pendingUnlink.push(o + F); this.kicked.push(u); this.undockEvents++; return; }
         // R1 release: docked, and every lateral bond the template partner says I need is in place
         const pf = this.ss[b[o + F]];
         const needL = pf === S.TPL_MM || pf === S.TPL_LF;
         const needR = pf === S.TPL_MM || pf === S.TPL_RF;
-        if ((!needL || bL) && (!needR || bR)) { this.is[u] = I_REPEL; this.fresh[u] = 1; }
+        if ((!needL || bL) && (!needR || bR)) { this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = b[o + F] >> 2; }
       } else if (nl > 0) {
         // R2 captured laterally without a template: also a new strand unit
-        this.is[u] = I_REPEL; this.fresh[u] = 1; this.captureEvents++;
+        this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = -1; this.captureEvents++;
       }
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3 lost its strand: back to the pool
@@ -418,7 +431,7 @@ class Sim {
     // R5 fraying: an end unit of an undocked strand falls off
     if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < p.pFray) {
       this.is[u] = I_DOCK; this.fresh[u] = 0;
-      this._unlink(u, L); this._unlink(u, R); this.frayEvents++;
+      this.pendingUnlink.push(o + L, o + R); this.frayEvents++;
     }
   }
 
@@ -444,52 +457,50 @@ class Sim {
       if (comps.length === 1) continue;
       this.bodies.delete(id);
       const newBodies = comps.map((c) => this._makeBody(c));
-      // births: a standalone strand made mostly of freshly released units
+      // births: a component whose main chain is mostly freshly released units has just left its template
       for (let k = 0; k < newBodies.length; k++) {
-        const c = newBodies[k].units;
-        let nAB = 0, nFresh = 0, faceBonded = false;
-        for (const u of c) {
-          if (this.type[u] === T_E) continue;
-          nAB++; if (this.fresh[u]) nFresh++;
-          if (this.bond[u * 4 + F] >= 0) faceBonded = true;
-        }
-        if (nAB < 2 || faceBonded) continue;
-        if (nFresh * 2 >= nAB) {
+        const chain = this.chainOf(newBodies[k].units);
+        if (chain.length < 2) continue;
+        let nFresh = 0, pu = -1;
+        for (const u of chain) if (this.fresh[u]) { nFresh++; if (pu < 0 && this.parentOf[u] >= 0) pu = this.parentOf[u]; }
+        if (nFresh * 2 >= chain.length) {
           let pgen = 0, parentSeq = '';
-          for (let m = 0; m < newBodies.length; m++) {
-            if (m === k) continue;
-            for (const u of newBodies[m].units) if (this.type[u] !== T_E && this.gen[u] > pgen) pgen = this.gen[u];
-            if (!parentSeq) parentSeq = this.sequenceOf(newBodies[m].units);
+          const pb = pu >= 0 ? this.bodies.get(this.body[pu]) : null;
+          if (pb) {
+            const pchain = this.chainOf(pb.units);
+            parentSeq = pchain.map((u) => TNAME[this.type[u]]).join('');
+            for (const u of pchain) if (this.gen[u] > pgen) pgen = this.gen[u];
           }
           const g = pgen + 1; if (g > this.maxGen) this.maxGen = g;
-          for (const u of c) this.gen[u] = g;
+          for (const u of chain) this.gen[u] = g;
           this.birthCount++;
           if (this.p.logBirths) {
-            const seq = this.sequenceOf(c);
-            this.births.push({ t: this.t, seq, gen: g, parent: parentSeq, x: newBodies[k].cx, y: newBodies[k].cy });
+            const seq = chain.map((u) => TNAME[this.type[u]]).join('');
+            let x = newBodies[k].cx % this.p.W, y = newBodies[k].cy % this.p.H;
+            if (x < 0) x += this.p.W; if (y < 0) y += this.p.H;
+            this.births.push({ t: this.t, seq, gen: g, parent: parentSeq, x, y });
             if (this.births.length > this.p.maxBirthLog) this.births.splice(0, this.births.length - this.p.maxBirthLog);
           }
+          for (const u of chain) this.fresh[u] = 0;
         }
-        for (const u of c) this.fresh[u] = 0;
       }
     }
     this.dirty.clear();
   }
 
-  /** Read a strand's sequence L->R from a unit list (E units ignored). */
-  sequenceOf(units) {
-    let best = '';
+  /** The longest L->R chain of A/B units in a unit list, as an array of unit indices. */
+  chainOf(units) {
+    let best = [];
     for (const start of units) {
       if (this.type[start] === T_E || this.bond[start * 4 + L] >= 0) continue;
-      let s = '', u = start, guard = 0;
-      while (u >= 0 && guard++ < 100000) {
-        s += TNAME[this.type[u]];
-        const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2;
-      }
-      if (s.length > best.length) best = s;
+      const c = []; let u = start;
+      while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
+      if (c.length > best.length) best = c;
     }
     return best;
   }
+  /** Read a strand's sequence L->R from a unit list (E units ignored). */
+  sequenceOf(units) { return this.chainOf(units).map((u) => TNAME[this.type[u]]).join(''); }
 
   // ------------------------------------------------------------- one step
   step() {
@@ -559,8 +570,10 @@ class Sim {
         }
       });
     }
-    // 4. state transitions (synchronous: all read last step's derived states)
+    // 4. state transitions (synchronous: all read last step's derived states; bond breaks are applied after)
     for (let u = 0; u < n; u++) this._transition(u);
+    for (const q of this.pendingUnlink) this._unlink(q >> 2, q & 3);
+    this.pendingUnlink.length = 0;
     // 5. derive, then break every bond that a side no longer holds
     this._deriveAll();
     for (let u = 0; u < n; u++) for (let i = 0; i < 4; i++) {
@@ -568,6 +581,14 @@ class Sim {
     }
     this._deriveAll();
     this._splitDirty();
+    // an undocked monomer is pushed off the face it left, so it does not simply re-dock next step
+    for (const u of this.kicked) {
+      const bd = this.bodies.get(this.body[u]);
+      if (!bd || bd.units.length !== 1) continue;
+      bd.cx -= 0.6 * Math.cos(this.pa[u]); bd.cy -= 0.6 * Math.sin(this.pa[u]);
+      this._updatePoses(bd);
+    }
+    this.kicked.length = 0;
     // 6. energy reload (E is never created or destroyed; it flips OFF -> ON)
     for (let u = 0; u < n; u++) {
       if (this.type[u] !== T_E || this.is[u] !== I_OFF) continue;
@@ -618,7 +639,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, bodies: this.bodies.size,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, bodies: this.bodies.size,
     };
   }
 

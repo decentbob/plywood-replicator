@@ -103,6 +103,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="copy">Preset: pure copying</option>
           <option value="mut" selected>Preset: copying with mutation</option>
           <option value="evo">Preset: mutation + turnover</option>
+          <option value="coop">Preset: cooperative docking</option>
           <option value="sun">Preset: sun patch</option>
         </select>
         <button id="bSeed">Add seed strand</button>
@@ -143,7 +144,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
     </div>
   </div>
 </div>
-<footer>Click a square to read its state. The whole chemistry is the compatibility table (which sides may bond, with what probability) and five transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand or frays off an end. Copies come out antiparallel, so a child reads as the reverse of its parent.</footer>
+<footer>Click a square to read its state. The whole chemistry is the compatibility table (which sides may bond, with what probability) and six transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand, frays off an end, or undocks while it has no neighbour. Copies come out antiparallel, so a child reads as the reverse of its parent.</footer>
 </div>
 <script src="src/sim.js"></script>
 <script>
@@ -152,13 +153,14 @@ const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, TNAME, SNAME, F, R, K, L } 
 const $ = (id) => document.getElementById(id);
 
 const PRESETS = {
-  copy: { pSoft: 0, pCapture: 0, pLigate: 0, pFray: 0, sun: false },
-  mut:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0, pFray: 0, sun: false },
-  evo:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0.05, pFray: 0.0003, sun: false },
-  sun:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0.05, pFray: 0.0003, sun: true, sunR: 12 },
+  copy: { pSoft: 0, pCapture: 0, pLigate: 0, pFray: 0, pUndock: 0, sun: false },
+  mut:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0, pFray: 0, pUndock: 0, sun: false },
+  evo:  { pSoft: 0.01, pCapture: 0.01, pLigate: 0, pFray: 0.0001, pUndock: 0, sun: false },
+  coop: { pSoft: 0.01, pCapture: 0.01, pLigate: 0, pFray: 0.0001, pUndock: 0.02, sun: false },
+  sun:  { pSoft: 0.01, pCapture: 0.01, pLigate: 0, pFray: 0.0001, pUndock: 0.02, sun: true, sunR: 12 },
 };
 const BASE = { seed: 7, W: 80, H: 80, nA: 400, nB: 400, nE: 300, seedSeq: 'ABBABA', seedCount: 1,
-  sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, energyGate: true };
+  sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, energyGate: true, energyMode: 'unit' };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
@@ -166,6 +168,7 @@ const KNOBS = [
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
   ['pLigate', 'p ligate ends', 'fusion of strands'],
   ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
+  ['pUndock', 'p undock per step', 'a lone docked monomer falls off; cooperativity'],
   ['grp', 'Energy'],
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
   ['pReload', 'p reload per step', 'OFF→ON, when sun is off'],
@@ -178,7 +181,7 @@ const KNOBS = [
   ['grp', 'Population (reset)'],
   ['seed', 'RNG seed'],
   ['nA', 'A monomers'], ['nB', 'B monomers'], ['nE', 'E particles'],
-  ['seedSeq', 'seed strand', 'A/B sequence', 'text'],
+  ['seedSeq', 'seed strands', 'A/B sequences, comma-separated', 'text'],
   ['seedCount', 'seed strands'],
   ['W', 'world width'], ['H', 'world height'],
 ];
@@ -189,7 +192,7 @@ let sim, running = true, speed = 6, series = [], lastStat = null, selected = -1;
 function currentParams() {
   const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
   for (const k of KNOBS) { if (k[0] === 'grp') continue; const el = $('k_' + k[0]); if (!el) continue;
-    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? el.value.toUpperCase().replace(/[^AB]/g, '') : Number(el.value)); }
+    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? el.value.toUpperCase().replace(/[^AB,]/g, '') : Number(el.value)); }
   return p;
 }
 function buildKnobs(p) {
@@ -337,7 +340,8 @@ $('bReset').addEventListener('click', reset);
 $('speed').addEventListener('input', (e) => { speed = Number(e.target.value); });
 $('preset').addEventListener('change', () => { buildKnobs(Object.assign({}, BASE, PRESETS[$('preset').value])); reset(); });
 $('bSeed').addEventListener('click', () => {
-  const p = currentParams(); const ok = sim.seedStrand(sim.p.W * Math.random(), sim.p.H * Math.random(), Math.random() * Math.PI * 2, p.seedSeq.length || 6, p.seedSeq);
+  const p = currentParams(); const seq = (p.seedSeq.split(',')[0] || '').trim();
+  const ok = sim.seedStrand(sim.p.W * Math.random(), sim.p.H * Math.random(), Math.random() * Math.PI * 2, seq.length || 6, seq);
   if (ok) { sim._deriveAll(); sim._computeOpen(); refresh(true); draw(); }
 });
 window.addEventListener('resize', () => { draw(); drawChart(); });
