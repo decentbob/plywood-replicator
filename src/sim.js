@@ -53,7 +53,7 @@ const DEFAULTS = {
   seed: 1,
   W: 80, H: 80,                 // torus
   nA: 400, nB: 400, nE: 300,    // fixed populations (mass and energy are conserved)
-  seedCount: 1, seedLen: 6, seedSeq: '',
+  seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
@@ -149,12 +149,16 @@ class Sim {
     this.cosTol = Math.cos(p.tolDeg * Math.PI / 180);
     this.cosTolRot = Math.cos(p.tolRotDeg * Math.PI / 180);
 
-    // seed strands
+    // seed strands: seedSeq may list several sequences separated by commas; seedCount repeats the list
+    const seqs = p.seedSeq ? String(p.seedSeq).split(',').map((q) => q.trim()).filter(Boolean) : [''];
     for (let s = 0; s < p.seedCount; s++) {
-      const len = p.seedSeq ? p.seedSeq.length : p.seedLen;
-      const cx = p.W * (0.5 + (s === 0 ? 0 : (this.rng() - 0.5) * 0.8));
-      const cy = p.H * (0.5 + (s === 0 ? 0 : (this.rng() - 0.5) * 0.8));
-      this.seedStrand(cx, cy, this.rng() * TAU, len, p.seedSeq);
+      for (let q = 0; q < seqs.length; q++) {
+        const first = s === 0 && q === 0;
+        const len = seqs[q] ? seqs[q].length : p.seedLen;
+        const cx = p.W * (0.5 + (first ? 0 : (this.rng() - 0.5) * 0.8));
+        const cy = p.H * (0.5 + (first ? 0 : (this.rng() - 0.5) * 0.8));
+        this.seedStrand(cx, cy, this.rng() * TAU, len, seqs[q]);
+      }
     }
     this._deriveAll();
     this._computeOpen();
