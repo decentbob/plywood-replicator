@@ -1,0 +1,13 @@
+{
+  "name": "polygon-chemistry",
+  "version": "0.1.0",
+  "description": "Artificial life from one universal rule table: template replication with mutation emerging from local rules on rigid squares.",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "run": "node run.js",
+    "test": "node test.js",
+    "build": "node build.js",
+    "serve": "python3 -m http.server 8000"
+  }
+}

@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Polygon Chemistry</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f3f2ee; --panel:#faf9f6; --ink:#1d1e21; --muted:#6b6a66; --rule:#d9d7d0; --rule-strong:#bdbab1;
+  --accent:#0f7b78; --accent-ink:#ffffff; --field:#ffffff; --dish:#0b0f14;
+  --good:#2f9e5b; --warn:#c9820e; --bad:#c9453c;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141517; --panel:#1b1d20; --ink:#e8e6e0; --muted:#9a9891; --rule:#2c2f34; --rule-strong:#41454c;
+  --accent:#3fbdb8; --accent-ink:#0b0f14; --field:#101215;
+  --good:#5ad27a; --warn:#e6b455; --bad:#ff6b61;
+}}
+:root[data-theme="dark"]{
+  --bg:#141517; --panel:#1b1d20; --ink:#e8e6e0; --muted:#9a9891; --rule:#2c2f34; --rule-strong:#41454c;
+  --accent:#3fbdb8; --accent-ink:#0b0f14; --field:#101215;
+  --good:#5ad27a; --warn:#e6b455; --bad:#ff6b61;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);padding-block:0;padding-inline:16px}
+.app{display:flex;flex-direction:column;gap:12px;max-width:1400px;margin:0 auto;min-height:100%;padding-block:14px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px}
+header h1{font:600 20px/1.2 var(--mono);margin:0;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);max-width:70ch}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:start}
+@media (max-width:900px){.main{grid-template-columns:1fr}}
+.dish{position:relative;background:var(--dish);border-radius:6px;overflow:hidden;aspect-ratio:1/1;max-width:100%}
+.dish canvas{display:block;width:100%;height:100%;cursor:crosshair}
+.hud{position:absolute;left:10px;top:8px;display:flex;gap:14px;font:12px/1.4 var(--mono);color:#cfd3d8;pointer-events:none;flex-wrap:wrap}
+.hud b{color:#fff;font-weight:600}
+.legend{position:absolute;right:10px;bottom:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font:11px/1.3 var(--mono);color:#aab0b8;pointer-events:none;max-width:70%;justify-content:flex-end}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:1px;margin-right:4px;vertical-align:-1px}
+.inspect{position:absolute;left:10px;bottom:8px;font:11px/1.35 var(--mono);color:#cfd3d8;background:rgba(11,15,20,.8);padding:6px 8px;border-radius:4px;max-width:60%;white-space:pre}
+.inspect[hidden]{display:none}
+.side{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px}
+.card h2{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:500 13px var(--sans);color:var(--ink);background:var(--field);border:1px solid var(--rule-strong);border-radius:4px;padding:6px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.knobs{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;font:12px var(--mono)}
+.knobs label{color:var(--ink)}
+.knobs small{display:block;color:var(--muted);font:11px var(--sans)}
+.knobs input[type=number],.knobs input[type=text],.knobs select{width:96px;font:12px var(--mono);color:var(--ink);background:var(--field);border:1px solid var(--rule-strong);border-radius:4px;padding:4px 6px}
+.knobs input[type=checkbox]{width:16px;height:16px;margin:0 40px 0 0;accent-color:var(--accent)}
+.knobs .grp{grid-column:1/-1;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:6px;padding-top:6px;border-top:1px solid var(--rule)}
+.knobs .grp:first-child{margin-top:0;padding-top:0;border-top:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px;font:12px var(--mono);font-variant-numeric:tabular-nums}
+.stats div{display:flex;flex-direction:column;gap:1px}
+.stats span{color:var(--muted);font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+.stats b{font-weight:600;font-size:14px}
+canvas.chart{width:100%;height:110px;display:block;margin-top:10px}
+.seqs{font:12px var(--mono);display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-variant-numeric:tabular-nums}
+.seqs .n{color:var(--muted);text-align:right}
+.seq .A{color:#5b93c9}.seq .B{color:#c98a3a}
+.log{font:11px/1.45 var(--mono);color:var(--muted);max-height:150px;overflow:auto;white-space:pre}
+.log b{color:var(--ink);font-weight:500}
+.note{color:var(--muted);font-size:12px;margin:0}
+footer{color:var(--muted);font-size:12px;max-width:80ch}
+footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Polygon Chemistry</h1>
+  <p>Squares with one rule table. A strand is copied by templating, the copy is released when every unit is locally complete, and a spent energy particle re-arms it. Nothing in the rules says "copy".</p>
+</header>
+<div class="main">
+  <div class="dish">
+    <canvas id="c" width="800" height="800" aria-label="Simulation view"></canvas>
+    <div class="hud"><span>t <b id="hT">0</b></span><span>strands <b id="hS">0</b></span><span>free <b id="hF">0</b></span><span>births <b id="hB">0</b></span><span>gen <b id="hG">0</b></span><span id="hFps"></span></div>
+    <div class="legend">
+      <span><i style="background:#6fa8dc"></i>A</span><span><i style="background:#e0a458"></i>B</span>
+      <span><i style="background:#5ad27a"></i>F template</span><span><i style="background:#ff5a5a"></i>F released</span>
+      <span><i style="background:#ffd75a"></i>sticky</span><span><i style="background:#59d6e8"></i>open end</span>
+      <span><i style="background:#e565d1"></i>K wants E</span><span><i style="background:#ffe066"></i>E on</span><span><i style="background:#4a4f55"></i>E off</span>
+    </div>
+    <div id="inspect" class="inspect" hidden></div>
+  </div>
+  <div class="side">
+    <div class="card">
+      <div class="row">
+        <button id="bRun" class="primary">Pause</button>
+        <button id="bStep">Step</button>
+        <button id="bReset">Reset</button>
+        <label style="font:12px var(--mono)">speed <input id="speed" type="range" min="1" max="30" value="6" style="vertical-align:middle;width:90px;accent-color:var(--accent)"></label>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <select id="preset" aria-label="Preset">
+          <option value="copy">Preset: pure copying</option>
+          <option value="mut" selected>Preset: copying with mutation</option>
+          <option value="evo">Preset: mutation + turnover</option>
+          <option value="sun">Preset: sun patch</option>
+        </select>
+        <button id="bSeed">Add seed strand</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Readout</h2>
+      <div class="stats">
+        <div><span>free monomers</span><b id="sFree">0</b></div>
+        <div><span>strands</span><b id="sStr">0</b></div>
+        <div><span>being copied</span><b id="sCpx">0</b></div>
+        <div><span>mean length</span><b id="sLen">0</b></div>
+        <div><span>max length</span><b id="sMax">0</b></div>
+        <div><span>distinct seqs</span><b id="sDist">0</b></div>
+        <div><span>seq entropy</span><b id="sEnt">0</b></div>
+        <div><span>births</span><b id="sBirth">0</b></div>
+        <div><span>generation</span><b id="sGen">0</b></div>
+        <div><span>E on / off</span><b id="sE">0</b></div>
+        <div><span>E spent</span><b id="sEu">0</b></div>
+        <div><span>waiting for E</span><b id="sRep">0</b></div>
+      </div>
+      <canvas id="chart" class="chart" height="110" aria-label="Strand count and mean length over time"></canvas>
+      <p class="note" style="margin-top:4px"><span style="color:var(--accent)">■</span> strands <span style="color:var(--warn)">■</span> mean length <span style="color:var(--muted)">■</span> free monomers (scaled)</p>
+    </div>
+    <div class="card">
+      <h2>Sequences in the population</h2>
+      <div id="seqs" class="seqs"></div>
+      <div id="hist" class="note" style="margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h2>Knobs</h2>
+      <div class="knobs" id="knobs"></div>
+      <p class="note" style="margin-top:8px">Population and world size apply on Reset. Everything else applies live.</p>
+    </div>
+    <div class="card">
+      <h2>Birth log</h2>
+      <div id="log" class="log"></div>
+    </div>
+  </div>
+</div>
+<footer>Click a square to read its state. The whole chemistry is the compatibility table (which sides may bond, with what probability) and five transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand or frays off an end. Copies come out antiparallel, so a child reads as the reverse of its parent.</footer>
+</div>
+<script src="src/sim.js"></script>
+<script>
+(function(){
+const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, TNAME, SNAME, F, R, K, L } = PC;
+const $ = (id) => document.getElementById(id);
+
+const PRESETS = {
+  copy: { pSoft: 0, pCapture: 0, pLigate: 0, pFray: 0, sun: false },
+  mut:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0, pFray: 0, sun: false },
+  evo:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0.05, pFray: 0.0003, sun: false },
+  sun:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0.05, pFray: 0.0003, sun: true, sunR: 12 },
+};
+const BASE = { seed: 7, W: 80, H: 80, nA: 400, nB: 400, nE: 300, seedSeq: 'ABBABA', seedCount: 1,
+  sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, energyGate: true };
+
+const KNOBS = [
+  ['grp', 'Chemistry'],
+  ['pSoft', 'p wrong-type dock', 'substitution'],
+  ['pCapture', 'p end capture', 'insertion, gap substitution'],
+  ['pLigate', 'p ligate ends', 'fusion of strands'],
+  ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
+  ['grp', 'Energy'],
+  ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
+  ['pReload', 'p reload per step', 'OFF→ON, when sun is off'],
+  ['sun', 'sun patch', 'reload only inside a disc', 'bool'],
+  ['sunR', 'sun radius'],
+  ['grp', 'Physics'],
+  ['sigma', 'jostle', 'Brownian step per unit mass'],
+  ['sigmaRot', 'jostle rotation'],
+  ['tolDeg', 'dock tolerance °'],
+  ['grp', 'Population (reset)'],
+  ['seed', 'RNG seed'],
+  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nE', 'E particles'],
+  ['seedSeq', 'seed strand', 'A/B sequence', 'text'],
+  ['seedCount', 'seed strands'],
+  ['W', 'world width'], ['H', 'world height'],
+];
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'seedSeq', 'seedCount', 'W', 'H']);
+
+let sim, running = true, speed = 6, series = [], lastStat = null, selected = -1;
+
+function currentParams() {
+  const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
+  for (const k of KNOBS) { if (k[0] === 'grp') continue; const el = $('k_' + k[0]); if (!el) continue;
+    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? el.value.toUpperCase().replace(/[^AB]/g, '') : Number(el.value)); }
+  return p;
+}
+function buildKnobs(p) {
+  const host = $('knobs'); host.innerHTML = '';
+  for (const k of KNOBS) {
+    if (k[0] === 'grp') { const d = document.createElement('div'); d.className = 'grp'; d.textContent = k[1]; host.appendChild(d); continue; }
+    const lab = document.createElement('label'); lab.htmlFor = 'k_' + k[0];
+    lab.innerHTML = k[1] + (k[2] ? '<small>' + k[2] + '</small>' : '');
+    const inp = document.createElement('input'); inp.id = 'k_' + k[0];
+    if (k[3] === 'bool') { inp.type = 'checkbox'; inp.checked = !!p[k[0]]; }
+    else if (k[3] === 'text') { inp.type = 'text'; inp.value = p[k[0]]; }
+    else { inp.type = 'number'; inp.value = p[k[0]]; inp.step = 'any'; }
+    inp.addEventListener('change', () => { if (!RESET_KEYS.has(k[0])) applyLive(); });
+    host.appendChild(lab); host.appendChild(inp);
+  }
+}
+function applyLive() {
+  const p = currentParams();
+  for (const k in p) if (!RESET_KEYS.has(k)) sim.p[k] = p[k];
+  sim.cosTol = Math.cos(sim.p.tolDeg * Math.PI / 180);
+}
+function reset() {
+  const p = currentParams();
+  sim = new Sim(p); series = []; selected = -1; $('inspect').hidden = true; $('log').textContent = '';
+  draw(); refresh(true);
+}
+
+// ------------------------------------------------------------ drawing
+const cv = $('c'), ctx = cv.getContext('2d');
+const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55' };
+const SIDECOL = {}; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
+SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.WANT] = '#e565d1';
+function fitCanvas() {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = Math.max(200, Math.round(r.width * dpr)), h = Math.max(200, Math.round(r.height * dpr));
+  if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+}
+function draw() {
+  fitCanvas();
+  const W = sim.p.W, H = sim.p.H, sx = cv.width / W, sy = cv.height / H, sc = Math.min(sx, sy);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#0b0f14'; ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.setTransform(sc, 0, 0, sc, 0, 0);
+  if (sim.p.sun) { ctx.fillStyle = 'rgba(255,224,102,0.07)'; ctx.beginPath(); ctx.arc(W / 2, H / 2, sim.p.sunR, 0, Math.PI * 2); ctx.fill(); }
+  const n = sim.n, lw = 0.16;
+  for (let u = 0; u < n; u++) {
+    const sz = sim.size[u], h = sz / 2;
+    let x = sim.px[u] % W; if (x < 0) x += W; let y = sim.py[u] % H; if (y < 0) y += H;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(sim.pa[u]);
+    if (sim.type[u] === T_E) {
+      ctx.fillStyle = sim.is[u] === 1 ? COL.EON : COL.EOFF; ctx.fillRect(-h, -h, sz, sz);
+    } else {
+      ctx.fillStyle = sim.type[u] === T_A ? COL.A : COL.B; ctx.fillRect(-h, -h, sz, sz);
+      // sides: F at +x (angle 0), R at +y, K at -x, L at -y  (side i normal = angle i*90°)
+      ctx.lineWidth = lw;
+      for (let i = 0; i < 4; i++) {
+        const s = sim.ss[u * 4 + i], col = SIDECOL[s]; if (!col) continue;
+        ctx.strokeStyle = col; ctx.beginPath();
+        if (i === 0) { ctx.moveTo(h - lw / 2, -h); ctx.lineTo(h - lw / 2, h); }
+        else if (i === 1) { ctx.moveTo(-h, h - lw / 2); ctx.lineTo(h, h - lw / 2); }
+        else if (i === 2) { ctx.moveTo(-h + lw / 2, -h); ctx.lineTo(-h + lw / 2, h); }
+        else { ctx.moveTo(-h, -h + lw / 2); ctx.lineTo(h, -h + lw / 2); }
+        ctx.stroke();
+      }
+      if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.08; ctx.strokeRect(-h - 0.1, -h - 0.1, sz + 0.2, sz + 0.2); }
+    }
+    ctx.restore();
+  }
+}
+cv.addEventListener('click', (ev) => {
+  const r = cv.getBoundingClientRect(); const W = sim.p.W, H = sim.p.H;
+  const sc = Math.min(cv.width / W, cv.height / H) / (cv.width / r.width);
+  const x = (ev.clientX - r.left) / sc, y = (ev.clientY - r.top) / sc;
+  let best = -1, bd = 0.8;
+  for (let u = 0; u < sim.n; u++) { const dx = sim._dx(sim.px[u] - x), dy = sim._dy(sim.py[u] - y); const d = Math.hypot(dx, dy); if (d < bd) { bd = d; best = u; } }
+  selected = best; showInspect();
+});
+function showInspect() {
+  const el = $('inspect'); if (selected < 0) { el.hidden = true; return; }
+  const u = selected, t = TNAME[sim.type[u]];
+  const st = sim.type[u] === T_E ? (sim.is[u] ? 'ON' : 'OFF') : ['DOCK', 'REPEL', 'TPL'][sim.is[u]];
+  let s = `unit ${u}  type ${t}  state ${st}  gen ${sim.gen[u]}\n`;
+  const names = ['F', 'R', 'K', 'L'];
+  for (let i = 0; i < 4; i++) {
+    const q = sim.bond[u * 4 + i];
+    s += `${names[i]} ${SNAME[sim.ss[u * 4 + i]].padEnd(7)} ${q >= 0 ? '→ ' + (q >> 2) + '.' + names[q & 3] + ' ' + SNAME[sim.ss[q]] : ''}\n`;
+  }
+  const b = sim.bodies.get(sim.body[u]); s += `body of ${b.units.length}  seq ${sim.sequenceOf(b.units) || '-'}`;
+  el.textContent = s; el.hidden = false;
+}
+
+// ------------------------------------------------------------ readout
+const chart = $('chart'), cctx = chart.getContext('2d');
+function refresh(force) {
+  if (!force && sim.t % 200 !== 0) return;
+  const st = lastStat = sim.stats();
+  $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
+  $('sFree').textContent = st.free; $('sStr').textContent = st.strands + st.complexes; $('sCpx').textContent = st.complexes;
+  $('sLen').textContent = st.meanLen.toFixed(2); $('sMax').textContent = st.maxLen; $('sDist').textContent = st.distinct; $('sEnt').textContent = st.entropy.toFixed(2) + ' bits';
+  $('sBirth').textContent = st.births; $('sGen').textContent = st.maxGen; $('sE').textContent = st.eOn + ' / ' + st.eOff; $('sEu').textContent = st.energyUsed; $('sRep').textContent = st.repel;
+  series.push([st.t, st.strands + st.complexes, st.meanLen, st.free]); if (series.length > 600) series.shift();
+  drawChart();
+  const seqs = $('seqs'); seqs.innerHTML = '';
+  for (const [s, c] of st.top) {
+    const a = document.createElement('div'); a.className = 'seq'; a.innerHTML = s.split('').map((ch) => `<span class="${ch}">${ch}</span>`).join('');
+    const b = document.createElement('div'); b.className = 'n'; b.textContent = c; seqs.appendChild(a); seqs.appendChild(b);
+  }
+  $('hist').textContent = st.lenHist.length ? 'length histogram  ' + st.lenHist.map(([l, c]) => l + ':' + c).join('  ') : 'no free strands yet';
+  const log = $('log'); const recent = sim.births.slice(-40).reverse();
+  log.innerHTML = recent.map((b) => `t=${String(b.t).padStart(7)} g${String(b.gen).padStart(3)}  <b>${b.seq}</b>  from ${b.parent}`).join('\n');
+  if (selected >= 0) showInspect();
+}
+function drawChart() {
+  const dpr = Math.min(2, window.devicePixelRatio || 1), r = chart.getBoundingClientRect();
+  chart.width = Math.round(r.width * dpr); chart.height = Math.round(110 * dpr);
+  cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const w = r.width, h = 110; cctx.clearRect(0, 0, w, h);
+  const css = getComputedStyle(document.documentElement);
+  cctx.strokeStyle = css.getPropertyValue('--rule'); cctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) { cctx.beginPath(); cctx.moveTo(0, h * i / 4); cctx.lineTo(w, h * i / 4); cctx.stroke(); }
+  if (series.length < 2) return;
+  const line = (idx, color, max) => {
+    cctx.strokeStyle = color; cctx.lineWidth = 1.5; cctx.beginPath();
+    series.forEach((s, i) => { const x = i / (series.length - 1) * w, y = h - 4 - (s[idx] / max) * (h - 8); i ? cctx.lineTo(x, y) : cctx.moveTo(x, y); });
+    cctx.stroke();
+  };
+  const maxS = Math.max(5, ...series.map((s) => s[1])), maxL = Math.max(4, ...series.map((s) => s[2])), maxF = Math.max(10, ...series.map((s) => s[3]));
+  line(3, css.getPropertyValue('--muted'), maxF); line(2, css.getPropertyValue('--warn'), maxL); line(1, css.getPropertyValue('--accent'), maxS);
+  cctx.fillStyle = css.getPropertyValue('--muted'); cctx.font = '10px ' + css.getPropertyValue('--mono');
+  cctx.fillText('strands max ' + maxS + '   mean len max ' + maxL.toFixed(1), 4, 10);
+}
+
+// ------------------------------------------------------------ loop
+let frames = 0, fpsT = performance.now();
+function loop() {
+  if (running) { for (let i = 0; i < speed; i++) { sim.step(); refresh(false); } }
+  draw();
+  frames++; const now = performance.now();
+  if (now - fpsT > 1000) { $('hFps').textContent = Math.round(frames * speed * 1000 / (now - fpsT)) + ' steps/s'; frames = 0; fpsT = now; }
+  requestAnimationFrame(loop);
+}
+$('bRun').addEventListener('click', () => { running = !running; $('bRun').textContent = running ? 'Pause' : 'Run'; });
+$('bStep').addEventListener('click', () => { sim.step(); refresh(true); draw(); });
+$('bReset').addEventListener('click', reset);
+$('speed').addEventListener('input', (e) => { speed = Number(e.target.value); });
+$('preset').addEventListener('change', () => { buildKnobs(Object.assign({}, BASE, PRESETS[$('preset').value])); reset(); });
+$('bSeed').addEventListener('click', () => {
+  const p = currentParams(); const ok = sim.seedStrand(sim.p.W * Math.random(), sim.p.H * Math.random(), Math.random() * Math.PI * 2, p.seedSeq.length || 6, p.seedSeq);
+  if (ok) { sim._deriveAll(); sim._computeOpen(); refresh(true); draw(); }
+});
+window.addEventListener('resize', () => { draw(); drawChart(); });
+buildKnobs(Object.assign({}, BASE, PRESETS[$('preset').value]));
+reset();
+loop();
+})();
+</script>
+</body>
+</html>
