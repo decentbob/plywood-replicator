@@ -54,8 +54,8 @@ Sides, counter-clockwise from the face: `F` (face), `R` (right), `K` (back), `L`
 | F | `TPL_MM`, `TPL_LF`, `TPL_RF` | state is `TPL`; both laterals bonded, left free, or right free |
 | F | `REPEL` | state is `REPEL` |
 | L, R | `BONDED` / `ARMED` | bonded; `ARMED` if this unit is `TPL` |
-| L, R | `STICKY` | unbonded, and the unit is docked or laterally captured |
-| L, R | `END` | unbonded, and the unit is `REPEL` or `TPL` (an open strand end) |
+| L, R | `STICKY` | unbonded, and the unit is docked where its template partner's face says the template continues on that side, or the unit was laterally captured |
+| L, R | `END` | unbonded, and the unit is `REPEL` or `TPL` (an open strand end), or docked at its template's end |
 | L, R | `INERT` | unbonded free monomer |
 | K | `WANT` / `IDLE` | state is `REPEL` / anything else |
 | E (all sides) | `ON` / `OFF` | |
@@ -70,8 +70,8 @@ Physics:
 
 Bond formation:
 
-- Two sides may bond if the compatibility table allows their (type, side, derived state) pair, the vector between the two units lies along both sides' outward normals within a tolerance, the sides are nearly antiparallel, and **the slot the mover would snap into is empty**.
-- Compatibility is probabilistic. Exact matches bind with probability 1. Near matches bind with a small probability. The near matches are the mutation sources (section 6).
+- Two sides may bond if the compatibility table allows their (type, side, derived state) pair, the vector between the two units lies along both sides' outward normals within a tolerance, the sides are nearly antiparallel, and **every unit of the moving body would land in an empty spot**.
+- Compatibility is probabilistic. Exact matches bind with probability 1. Near matches bind with a small probability **per step of contact**. A monomer's contact with a face lasts a handful of steps and a rigid strand's contact with another strand can last tens of steps, so the per-encounter probability is several times the nominal value (section 6). The near matches are the mutation sources.
 
 Rules:
 
@@ -105,14 +105,15 @@ Everything else is 0. Note what is absent: `DOCK`-`DOCK` (two free monomers neve
 | R3 | `REPEL` or `TPL` | `DOCK` | no lateral bonds |
 | R4 | `REPEL` | `TPL` | an `ON` energy particle is bonded to my K. In `strand` energy mode, also if a lateral partner reads `ARMED` |
 | R5 | `REPEL` or `TPL` | `DOCK`, breaking my lateral bonds | I have no face bond, exactly one lateral bond, and a coin at `pFray` comes up |
+| R6 | `DOCK` (docked) | `DOCK`, breaking my face bond | I have no lateral bonds and a coin at `pUndock` comes up. Physics then pushes me off the face I left |
 
 **Bond holding:** a bond breaks when either of its sides derives to `REPEL`, `INERT`, `IDLE` or `OFF`.
 
 **Walkthrough.**
 
 1. *Free monomer.* State `DOCK`, no bonds. Its laterals derive to `INERT`. It can bond only face-first onto a `TPL` face.
-2. *Docking.* It meets a `TPL` face of its own type, geometry checks, the slot is free, the bond forms. Its laterals now derive to `STICKY`. Because the docked monomer is rotated 180°, its L faces the template's R direction: copies are antiparallel.
-3. *Lateral linking.* Two docked neighbours, both `STICKY`, link (probability 1). `STICKY` only ever arises from docking or capture, so free monomers never form chains.
+2. *Docking.* It meets a `TPL` face of its own type, geometry checks, the slot is free, the bond forms. Its laterals now derive to `STICKY`. Because the docked monomer is rotated 180°, its L faces the template's R direction: copies are antiparallel. With `pUndock` > 0 a docked monomer that has no lateral neighbour yet falls off again at that rate; only a run of two or more linked units is stable. Copying is then nucleation-limited, as base pairing is.
+3. *Lateral linking.* Two docked neighbours, both `STICKY`, link (probability 1). `STICKY` only ever arises from docking or capture, so free monomers never form chains. A docked unit at its template's end reads `END` on the outward side, not `STICKY`, so copies growing on two different templates that happen to sit end to end do not link into a chimera (they may ligate at `pLigate`, like any two ends).
 4. *Local completion (R1).* A docked unit reads its partner's face. On a middle template unit it waits for both lateral bonds; on an end unit it waits for the one that points into the strand. When satisfied it goes `REPEL`, which breaks its face bond. There is no round trip and no cap: each unit decides for itself, and the copy leaves the template exactly when every unit has decided, because until then the undecided ones hold it. A copy with a gap waits for the gap to fill.
 5. *Separation.* `REPEL` faces do not bond to anything. Body repulsion and jostling push the two strands apart. They cannot re-dock: `REPEL` is inert and `TPL` does not bond `TPL`.
 6. *Re-arming (R4, the energy step).* A `REPEL` unit's K reads `WANT`. An `ON` energy particle docks, the unit goes `TPL`, the particle goes `OFF`, and both sides stop holding, so the particle leaves. The unit's face now reads `TPL_MM`/`TPL_LF`/`TPL_RF` from its own lateral bonds, so a fresh copy knows its own ends without being told.
@@ -141,7 +142,7 @@ All measured in the birth log (`run.js --births`).
 - **Substitution and insertion** from `pCapture`: a free monomer sticks to a docked unit's open lateral side (filling a gap with a random letter, never checked against the template), or to a strand's open end (lengthening it by one, template or copy alike).
 - **Truncation** from `pCapture` interacting with gaps: a captured unit in a gap has an `END` side facing the fragment on the other side of the gap, which is `STICKY`; they join only at `pLigate`. If they do not, the near fragment is complete and leaves as a shorter strand, and the far fragment waits on the template until fresh monomers fill the vacated sites and link to it. Nothing is stuck for good.
 - **Deletion** from `pFray`: end units fall off undocked strands.
-- **Fusion** from `pLigate`: two strands meet end to end and join.
+- **Fusion** from `pLigate`: two strands meet end to end and join. Measured to be a runaway at any per-step value tried (0.005 and up): rigid strands that touch end to end stay in contact for many steps and roll the dice every step, so almost every touch fuses, and within 100,000 steps the population is a handful of rafts of fused templates and half-finished copies that cannot separate. Default 0. A per-encounter roll would need a side to remember that it already refused a partner until that partner leaves; see section 15.
 
 Measured rates matter more than the parameters. In the reference runs, `pSoft` 0.02 gave about 6% of dockings wrong-typed; `pCapture` 0.05 gave about one capture per three dockings, most of them gap fills; `pFray` 0.0003 gave about one fray per birth in unit mode. See `experiments/RESULTS.md`.
 
@@ -153,7 +154,7 @@ Resolved with fraying (R5): a unit that is not docked and has exactly one latera
 
 Without turnover the free monomer pool drains into strands and selection stops within a few hundred thousand steps: every template ends up holding a partial copy that can never be completed. With turnover the pool stays at a steady fraction and the population keeps producing births indefinitely.
 
-Fraying also does something the first draft hoped for and the build confirmed only in part: a two-unit strand is two ends, so it dies at rate `2 pFray`, while a long strand only shortens. This penalises dimers but does not, on its own, hold length up (section 10, "shortest replicator wins").
+Fraying also does something the first draft hoped for and the build confirmed only in part: a two-unit strand is two ends, so it dies at rate `2 pFray`, while a long strand only shortens. This penalises dimers but does not, on its own, hold length up (section 10, "shortest replicator wins"). Fraying is also a mutation source in its own right: a template end can fray after its copy unit has released but before the copy leaves, and a released copy end can fray while the rest of the copy is still docked, so children come out one unit longer or shorter than their parent even with every soft probability at zero.
 
 ---
 
@@ -237,6 +238,7 @@ Answered by the build:
 Still open:
 
 - Is one universal `pCapture` right, or should captures at a template end and at a copy gap differ? (They are the same event locally; making them differ would need a new derived state.)
+- Should soft probabilities be per encounter rather than per step? Per step is the only memoryless option, and it makes the effective rate depend on how long bodies stay in contact, which depends on their size.
 - Does the birth-rate advantage of short strands survive under strand-mode energy scarcity, and at what energy density does it flip?
 - Is `pLigate` a mutation source or a runaway? Fusion is rare at 0.05 in a dilute world; in a crowded one it may not be.
 - What does the population do over millions of steps rather than hundreds of thousands?
@@ -259,6 +261,12 @@ Keep entries short: date, what changed, why, what evidence.
 - 2026-09-15. Added end fraying as turnover instead of a breaker type or a timer. Reason: per-unit, memoryless, no new type, and it penalises dimers.
 - 2026-09-15. Added `strand` energy mode (re-arming spreads along lateral bonds). Reason: it is the only local mechanism found so far that gives length a physical advantage; kept `unit` mode for comparison. Evidence pending in `experiments/RESULTS.md`.
 - 2026-09-15. Self-complementary alphabet (`A`-`A`, `B`-`B`). Reason: birth log readability. Copies are reverses of parents.
+- 2026-09-15. A docked unit's outward lateral side at its template's end now reads `END`, not `STICKY`. Reason: an independent review of the code found that copies docked on two different templates lying end to end linked into chimeras with every mutation knob at zero (odd-length births in the mutation-off competition runs). Evidence: after the change, zero odd-length births in 20,000 steps with knobs off, two seeds.
+- 2026-09-15. Space exclusion now checks every unit of a moving body, not only the bonding unit; the spatial hash is rebuilt after a merge; rule-requested bond breaks are applied after all units have been updated, so transitions are truly synchronous. Reason: same review. No behaviour change at default settings, but ligation and fraying no longer depend on unit index order.
+- 2026-09-15. Birth logging finds the strand as the component's longest chain and takes the parent from the template unit each copy unit was docked on. Reason: the review found births deferred or attributed to a frayed singleton when the copy separated while a monomer was already docked on it.
+- 2026-09-15. `pLigate` default set to 0 and marked a runaway. Evidence: section 6.
+- 2026-09-15. Added R6 undocking (`pUndock`), with a physical push off the face. Reason: the dimer-versus-6-mer competition showed every configuration favouring the dimer by 6:1 to 50:1; a lone docked monomer here is as stable as a full duplex, which is what lets a dimer copy on two lucky dockings. Making a lone docked unit unstable makes copying nucleation-limited, and a longer template has more places to nucleate. Evidence: section 10.
+- 2026-09-15. Strand-mode energy did not rescue length. Evidence: section 8 and `experiments/RESULTS.md`. Kept as an option because it changes what energy limits.
 
 ---
 
