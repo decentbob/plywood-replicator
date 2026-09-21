@@ -37,6 +37,7 @@ see which way a free monomer points:
 |---|---|---|
 | grey-blue | F | free monomer's face: will dock on a template of its type |
 | green | F | template: a free monomer can dock here |
+| orange | K | an `ABA` motif's back: recharges spent energy (motif rule) |
 | red | F | released, waiting for energy |
 | dark | L/R | inert: a free monomer's lateral sides never bond |
 | yellow | L/R | sticky: a docked unit's side, will bond to its neighbour |
@@ -90,7 +91,9 @@ partner whether it sits in the middle of the template or at an end.
 | L `STICKY` | R `STICKY` | 1 | two docked neighbours link |
 | L/R `STICKY`/`END` | R/L `END`/`STICKY` | `pLigate` | strands fuse end to end |
 | L/R `INERT` | R/L `STICKY`/`END` | `pCapture` | a free monomer joins a strand without a template |
-| K `WANT` | E `ON` | 1 | energy docks |
+| K `WANT` | E `ON` | 1 | energy docks and is spent |
+| K `CHARGE` | E `OFF` | 1 | a spent particle recharges at an `ABA` motif's back (motif rule) |
+| L `INERT` | R `INERT` | `pSpont` | two free monomers join: life without a seed |
 
 A docked unit's free lateral side reads `STICKY` only where its template partner's face says the template continues; at the template's end it reads `END`. That is what stops copies docked on two different templates from linking into chimeras.
 
@@ -104,10 +107,18 @@ A docked unit's free lateral side reads `STICKY` only where its template partner
 | R4 | REPEL | TPL | an ON energy particle is docked on K (in `strand` mode, also if a lateral neighbour is already TPL) |
 | R5 | REPEL / TPL | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
 | R6 | DOCK (docked) | DOCK (free) | cooperativity: a docked monomer with no lateral bonds falls off with probability `pUndock` per step |
+| R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances `resA`, `resB` |
 
 **Bond holding.** A bond breaks the moment either side reads as `REPEL`,
 `INERT`, `IDLE` or `OFF`. That is what releases a finished copy, resets a spent
 energy particle, and frees a frayed unit.
+
+**Energy.** Energy particles are half-size squares of a third type that never
+chain. A charged one docks on the back of a released block, the block re-arms,
+the particle is left spent and drifts off; nothing is absorbed and the count is
+fixed. Spent particles recharge at a background rate, in the sun patch, or, with
+the motif rule, at the back of a `B` block flanked by two `A`s, which makes energy
+income a property of sequence.
 
 There is no completion handshake and no cap type. A copy is released when every
 unit is *locally* complete: a middle unit needs both lateral bonds, an end unit

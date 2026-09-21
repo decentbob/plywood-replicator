@@ -73,7 +73,7 @@ canvas.chart{width:100%;height:100px;display:block;margin-top:10px}
 .feed button:hover,.feed button:focus-visible{background:var(--rule);color:var(--ink)}
 .feed .k{font-weight:600}
 .feed .k.dock{color:#ffd75a}.feed .k.link{color:#ffffff}.feed .k.release{color:#ff5a5a}.feed .k.rearm{color:#5ad27a}.feed .k.birth{color:var(--accent)}
-.feed .k.energy{color:#ffe066}.feed .k.fray,.feed .k.undock{color:var(--muted)}.feed .k.capture,.feed .k.ligate{color:#e565d1}
+.feed .k.energy{color:#ffe066}.feed .k.fray,.feed .k.undock{color:var(--muted)}.feed .k.capture,.feed .k.ligate{color:#e565d1}.feed .k.spont{color:#ffffff}.feed .k.break{color:#ff5a5a}.feed .k.charge{color:#ff9f1c}
 .note{color:var(--muted);font-size:12px;margin:0}
 footer{color:var(--muted);font-size:12px;max-width:90ch}
 footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border-radius:3px}
@@ -84,7 +84,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Scroll to zoom, drag to pan, click a square to read it, click an event to jump to it.</p>
+  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
 </header>
 <div class="main">
   <div class="dish">
@@ -100,7 +100,8 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
       <span><i style="background:#8a97a8"></i>F free (DOCK)</span><span><i style="background:#5ad27a"></i>F template</span>
       <span><i style="background:#ff5a5a"></i>F released</span><span><i style="background:#3a4250"></i>L/R inert</span>
       <span><i style="background:#ffd75a"></i>L/R sticky</span><span><i style="background:#59d6e8"></i>L/R open end</span>
-      <span><i style="background:#e565d1"></i>K wants energy</span><span><i style="background:#ffffff"></i>bond</span>
+      <span><i style="background:#e565d1"></i>K wants energy</span><span><i style="background:#ff9f1c"></i>K charges energy</span>
+      <span><i style="background:#ffffff"></i>bond</span><span></span>
       <span><i style="background:#ffe066"></i>E charged</span><span><i style="background:#4a4f55"></i>E spent</span>
     </div>
     <div id="inspect" class="inspect" hidden></div>
@@ -116,11 +117,13 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
       <div class="row" style="margin-top:8px">
         <select id="preset" aria-label="Preset">
           <option value="copy">Preset: pure copying</option>
-          <option value="mut" selected>Preset: copying with mutation</option>
-          <option value="evo">Preset: mutation + turnover</option>
+          <option value="mut">Preset: copying with mutation</option>
+          <option value="evo" selected>Preset: mutation + turnover</option>
           <option value="race">Preset: dimers vs 6-mers, no cooperativity</option>
           <option value="coop">Preset: dimers vs 6-mers, cooperative docking</option>
-          <option value="stack">Preset: back-to-back stacking (2D)</option>
+          <option value="origin">Preset: origin, no seed strand</option>
+          <option value="metab">Preset: metabolism, energy from ABA motifs</option>
+          <option value="rad">Preset: radiation, tough B blocks are scarce</option>
           <option value="sun">Preset: sun patch</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -165,7 +168,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
     </div>
   </div>
 </div>
-<footer>Sides are fixed for life: F (face, marked with a notch) docks only on a template's F of the same type; L bonds only to a neighbour's R, which is why chains are one-dimensional; K (back) takes only energy, or with the stacking knob another template's K. The whole chemistry is the compatibility table and six transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand, frays off an end, or undocks while alone. Copies are antiparallel, so a child reads as the reverse of its parent. In the physics a bond is only a constraint between the two squares it joins.</footer>
+<footer>Sides are fixed for life: F (face) docks only on a template's F of the same type; L bonds only to a neighbour's R, which is why chains are one-dimensional; K (back) takes only energy. Energy particles are small squares of a third type that never chain: a charged one docks on a back that wants energy, the block re-arms, the particle is left spent and drifts off; it recharges at a background rate, in the sun patch, or at the back of a B block flanked by two As. The whole chemistry is the compatibility table and six transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand, frays off an end, or undocks while alone. Copies are antiparallel, so a child reads as the reverse of its parent. In the physics a bond is only a constraint between the two squares it joins.</footer>
 </div>
 <script src="src/sim.js"></script>
 <script>
@@ -173,20 +176,22 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, TNAME, SNAME, F, R, K, L } = PC;
 const $ = (id) => document.getElementById(id);
 
-// Presets. The first three show copying, then mutation, then turnover, from one seed strand.
-// "cooperative docking" seeds dimers and 6-mers together with undocking on and fraying off: watch which wins
-// (without undocking the dimers take everything; with it the 6-mers do). "race without cooperativity" is the control.
+// Presets. The first three show copying, mutation and turnover from one seed strand. The two races seed dimers and
+// 6-mers together: without undocking the dimers take everything, with it the 6-mers do. "origin" has no seed strand.
+// "metabolism" gets energy only from ABA motifs. "radiation" breaks bonds, B blocks resist, and B is scarce.
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 200, nB: 200, seedSeq: 'ABBABA', seedCount: 1 };
 const PRESETS = {
-  copy:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pStack: 0, sun: false },
-  mut:   { pSoft: 0.02, pCapture: 0.05, pFray: 0, pUndock: 0, pStack: 0, sun: false },
-  evo:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0, pStack: 0, sun: false },
-  race:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pStack: 0, sun: false, seedSeq: 'AB,ABBABA', seedCount: 3 },
-  coop:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0.1, pStack: 0, sun: false, seedSeq: 'AB,ABBABA', seedCount: 3 },
-  stack: { pSoft: 0.01, pCapture: 0.01, pFray: 0, pUndock: 0.1, pStack: 0.2, sun: false },
-  sun:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, pStack: 0, sun: true, sunR: 10 },
+  copy:   Object.assign({}, ZERO),
+  mut:    Object.assign({}, ZERO, { pSoft: 0.02, pCapture: 0.05 }),
+  evo:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001 }),
+  race:   Object.assign({}, ZERO, { seedSeq: 'AB,ABBABA', seedCount: 3 }),
+  coop:   Object.assign({}, ZERO, { pUndock: 0.1, seedSeq: 'AB,ABBABA', seedCount: 3 }),
+  origin: Object.assign({}, ZERO, { seedCount: 0, pSpont: 0.001, pSoft: 0.01, pCapture: 0.02, pFray: 0.0001 }),
+  metab:  Object.assign({}, ZERO, { motif: true, pReload: 0, pSoft: 0.02, pCapture: 0.02, pFray: 0.0001 }),
+  rad:    Object.assign({}, ZERO, { pBreak: 0.001, resB: 0.9, nA: 300, nB: 100, pLigate: 0.005, pFray: 0.0001, pSoft: 0.02, pCapture: 0.02 }),
+  sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 10 }),
 };
-const BASE = { seed: 7, W: 48, H: 48, nA: 200, nB: 200, nE: 150, seedSeq: 'ABBABA', seedCount: 1,
-  sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, pLigate: 0, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
+const BASE = { seed: 7, W: 48, H: 48, nE: 150, sigma: 0.3, sigmaRot: 0.45, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
@@ -194,11 +199,16 @@ const KNOBS = [
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
   ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
   ['pUndock', 'p undock per step', 'a lone docked monomer falls off; cooperativity'],
-  ['pStack', 'p stack backs', 'template backs pair K to K; 2D forms'],
   ['pLigate', 'p ligate ends', 'fusion of strands; with fraying, sets a length distribution'],
+  ['pSpont', 'p spontaneous link', 'two free monomers join; life without a seed'],
+  ['grp', 'Radiation'],
+  ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
+  ['resA', 'A resistance', '0 fragile to 1 immune'],
+  ['resB', 'B resistance', '0 fragile to 1 immune'],
   ['grp', 'Energy'],
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
-  ['pReload', 'p reload per step', 'OFF→ON, when sun is off'],
+  ['motif', 'ABA motif charges', 'a B between two As recharges spent E at its back', 'bool'],
+  ['pReload', 'p reload per step', 'OFF→ON background rate, when sun is off'],
   ['sun', 'sun patch', 'reload only inside a disc', 'bool'],
   ['sunR', 'sun radius'],
   ['grp', 'Physics'],
@@ -253,7 +263,7 @@ function reset() {
   // the seed strand is the first TPL unit
   seedUnit = -1; for (let u = 0; u < sim.n; u++) if (sim.type[u] !== T_E && sim.is[u] === 2) { seedUnit = u; break; }
   cam.follow = false; $('bFollow').setAttribute('aria-pressed', 'false');
-  zoomToSeed(); draw(); refresh(true);
+  fitWorld(); draw(); refresh(true);
 }
 
 // ------------------------------------------------------------ camera
@@ -309,8 +319,8 @@ const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55' };
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6';
-const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1' };
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c';
+const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c' };
 function draw() {
   fitCanvas();
   if (cam.follow && sim.births.length) { const b = sim.births[sim.births.length - 1]; cam.x = b.x; cam.y = b.y; }
@@ -358,8 +368,6 @@ function draw() {
         else { ctx.moveTo(-h, -h + inset); ctx.lineTo(h, -h + inset); }
         ctx.stroke();
       }
-      // face notch: a small triangle pointing out of the F side, so orientation reads on every square
-      if (z >= 8) { ctx.fillStyle = 'rgba(11,15,20,0.75)'; ctx.beginPath(); ctx.moveTo(h - lw - 0.16 * z, -0.12 * z); ctx.lineTo(h - lw, 0); ctx.lineTo(h - lw - 0.16 * z, 0.12 * z); ctx.closePath(); ctx.fill(); }
       if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(-h - 3, -h - 3, sz + 6, sz + 6); }
     }
     ctx.restore();
@@ -397,14 +405,15 @@ function refreshFeed() {
   const feed = $('feed'); feed.innerHTML = '';
   const recent = ev.slice(-60).reverse();
   for (const e of recent) {
-    if (e.kind === 'dock' || e.kind === 'link' || e.kind === 'release' || e.kind === 'rearm' || e.kind === 'birth' || e.kind === 'capture' || e.kind === 'fray' || e.kind === 'undock' || e.kind === 'ligate') {
+    if (e.kind !== 'energy') {
       if (!flashes.has(e.u) || flashes.get(e.u).t < e.t) flashes.set(e.u, { t: e.t, kind: e.kind });
       if (e.v >= 0) flashes.set(e.v, { t: e.t, kind: e.kind });
     }
     const b = document.createElement('button'); b.type = 'button';
     const what = e.kind === 'dock' ? `${e.u} docks on ${e.v}` : e.kind === 'link' ? `${e.u} links ${e.v}` : e.kind === 'release' ? `${e.u} released` :
       e.kind === 'rearm' ? `${e.u} re-armed` : e.kind === 'birth' ? `new strand at ${e.u}` : e.kind === 'energy' ? `E ${e.u} spent` :
-      e.kind === 'capture' ? `${e.u} captured` : e.kind === 'ligate' ? `${e.u} joins ${e.v}` : `${e.u} ${e.kind}`;
+      e.kind === 'capture' ? `${e.u} captured by ${e.v}` : e.kind === 'ligate' ? `${e.u} joins ${e.v}` : e.kind === 'spont' ? `${e.u} and ${e.v} join: a strand begins` :
+      e.kind === 'break' ? `${e.u}–${e.v} bond broken` : e.kind === 'charge' ? `E ${e.u} charged at ${e.v}` : `${e.u} ${e.kind}`;
     b.innerHTML = `<span>t ${e.t}</span><span class="k ${e.kind}">${e.kind}</span><span>${what}</span>`;
     b.addEventListener('click', () => jumpTo(e.u));
     feed.appendChild(b);

@@ -57,4 +57,33 @@ test('determinism: same seed, same trajectory', () => {
   assert.deepStrictEqual(Array.from(a.px), Array.from(b.px));
 });
 
+
+
+// --- channels added in the third draft
+test('seedless bath: spontaneous linking starts replication, and nothing starts without it', () => {
+  const off = new Sim(Object.assign({}, base, { seed: 3, seedCount: 0, pSpont: 0, pCapture: 0.02 }));
+  off.run(30000); assert.strictEqual(off.stats().births, 0);
+  const on = new Sim(Object.assign({}, base, { seed: 3, seedCount: 0, pSpont: 1e-3, pCapture: 0.02 }));
+  on.run(30000); const st = on.stats();
+  assert.ok(st.spont > 0, 'no spontaneous links');
+  assert.ok(st.births > 0, 'no births from a seedless bath');
+  assert.deepStrictEqual(on.check(), []);
+});
+
+test('motif metabolism: ABA backs recharge spent energy; a seed without the motif runs out', () => {
+  const withMotif = new Sim(Object.assign({}, base, { seed: 3, seedSeq: 'ABBABA', motif: true, pReload: 0 }));
+  withMotif.run(30000); const a = withMotif.stats();
+  assert.ok(a.energyCharged > 0 && a.eOn + a.eOff === 150, 'charging should happen and E count stay fixed');
+  const without = new Sim(Object.assign({}, base, { seed: 3, seedSeq: 'AABBAA', motif: true, pReload: 0 }));
+  without.run(30000); const b = without.stats();
+  assert.strictEqual(b.energyCharged, 0); assert.strictEqual(b.eOn, 0, 'all energy should be spent');
+});
+
+test('radiation: resistant blocks keep their bonds, fragile ones lose them', () => {
+  const frag = new Sim(Object.assign({}, base, { seed: 4, seedSeq: 'AAAAAAAA', pBreak: 0.002, resA: 0, resB: 0.95, energyGate: false }));
+  const tough = new Sim(Object.assign({}, base, { seed: 4, seedSeq: 'BBBBBBBB', pBreak: 0.002, resA: 0, resB: 0.95, energyGate: false }));
+  frag.run(3000); tough.run(3000);
+  assert.ok(frag.stats().breaks > 5 * (tough.stats().breaks + 1), `fragile ${frag.stats().breaks} breaks vs tough ${tough.stats().breaks}`);
+});
+
 console.log(passed + ' tests passed');

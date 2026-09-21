@@ -59,6 +59,7 @@ Sides, counter-clockwise from the face: `F` (face), `R` (right), `K` (back), `L`
 | L, R | `END` | unbonded, and the unit is `REPEL` or `TPL` (an open strand end), or docked at its template's end |
 | L, R | `INERT` | unbonded free monomer |
 | K | `WANT` / `IDLE` | state is `REPEL` / anything else |
+| K | `CHARGE` | (motif rule on) state is `TPL`, the unit is a `B`, and both lateral partners are `A` |
 | E (all sides) | `ON` / `OFF` | |
 
 This keeps section 2's locality intact (a derived state depends only on the unit's own bonds and state) and shrinks the state space to three values per unit.
@@ -97,10 +98,12 @@ This is what the build settled on. It has no caps, no completion handshake, and 
 | L `STICKY` | R `STICKY` | 1 | two neighbours docked on the same template link |
 | L/R `STICKY` or `END` | R/L `END` or `STICKY` | `pLigate` | two strands join end to end |
 | L/R `INERT` | R/L `STICKY` or `END` | `pCapture` | a free monomer joins a strand without a template |
-| K `WANT` | E `ON` | 1 | energy docks |
-| K `IDLE` of a `TPL` unit | K `IDLE` of a `TPL` unit | `pStack` | two templates pair back to back (default 0; the one row that lets forms leave one dimension) |
+| K `WANT` | E `ON` | 1 | energy docks and is spent |
+| K `CHARGE` | E `OFF` | 1 | a spent particle is recharged at an `ABA` motif's back (motif rule) |
+| L `INERT` | R `INERT` | `pSpont` | two free monomers join: the only way a strand can begin without a seed |
+| K `IDLE` of a `TPL` unit | K `IDLE` of a `TPL` unit | `pStack` | two templates pair back to back (experiment, default 0; chains stay one-dimensional without it) |
 
-Everything else is 0. Note what is absent: `DOCK`-`DOCK` (two free monomers never join), `TPL`-`TPL` (two strands never dock on each other), anything involving `REPEL`.
+Everything else is 0. Note what is absent: `DOCK`-`DOCK` (two free monomers never dock on each other), `TPL`-`TPL` (two strands never dock on each other), anything involving `REPEL`. With `pSpont` at 0 nothing ever starts without a seed; with it above 0, two free monomers that happen to meet flush side to side become a strand of two, and R2, R4 and the rest do the rest.
 
 **Transitions:**
 
@@ -112,6 +115,7 @@ Everything else is 0. Note what is absent: `DOCK`-`DOCK` (two free monomers neve
 | R4 | `REPEL` | `TPL` | an `ON` energy particle is bonded to my K. In `strand` energy mode, also if a lateral partner reads `ARMED` |
 | R5 | `REPEL` or `TPL` | `DOCK`, breaking my lateral bonds | I have no face bond, exactly one lateral bond, and a coin at `pFray` comes up |
 | R6 | `DOCK` (docked) | `DOCK`, breaking my face bond | I have no lateral bonds and a coin at `pUndock` comes up. Physics then pushes me off the face I left |
+| R7 | any | same, breaking one lateral bond | radiation: each lateral bond breaks with probability `pBreak` × (1 − res of me) × (1 − res of my neighbour), where `resA` and `resB` are the two block types' resistances |
 
 **Bond holding:** a bond breaks when either of its sides derives to `REPEL`, `INERT`, `IDLE` or `OFF`.
 
@@ -148,6 +152,8 @@ All measured in the birth log (`run.js --births`).
 - **Substitution and insertion** from `pCapture`: a free monomer sticks to a docked unit's open lateral side (filling a gap with a random letter, never checked against the template), or to a strand's open end (lengthening it by one, template or copy alike).
 - **Truncation** from `pCapture` interacting with gaps: a captured unit in a gap has an `END` side facing the fragment on the other side of the gap, which is `STICKY`; they join only at `pLigate`. If they do not, the near fragment is complete and leaves as a shorter strand, and the far fragment waits on the template until fresh monomers fill the vacated sites and link to it. Nothing is stuck for good.
 - **Deletion** from `pFray`: end units fall off undocked strands.
+- **Fission and recombination** from `pBreak` (R7): a lateral bond breaks, anywhere in a strand, not only at the ends. With ligation on, the fragments rejoin in new combinations. A docked copy is immune in practice: its neighbours are still flush and sticky, so a broken link re-forms the next step, which means a template shields its copy and an undocked strand is the exposed one.
+- **Origins** from `pSpont`: two free monomers link side to side and become a strand of two with no template. The tight flush check for side-to-side links makes this rare per contact (about one event per 40,000 steps at 1e-4 with 320 monomers), which is what a seedless world needs: rare enough not to be junk, frequent enough to happen.
 - **Fusion** from `pLigate`: two strands meet end to end and join. On the rigid-body physics this was a runaway: fused strands became rigid rafts that could not separate and births fell by three quarters. On the per-square physics it is a working channel: at 0.02 with fraying on, fusion and fission balance at a mean length of 4.6 with strands up to 18 units, 46 sequences in play and 4.9 bits of sequence entropy, the longest and most diverse population measured so far, while births continue at two thirds the rate of the ligation-free runs (`experiments/RESULTS.md`, section 3). This is chemistry setting a length distribution, not selection for length, but it is the first regime in which long strands persist in an open population.
 
 Measured rates matter more than the parameters. In the reference runs, `pSoft` 0.02 gave about 6% of dockings wrong-typed; `pCapture` 0.05 gave about one capture per three dockings, most of them gap fills; `pFray` 0.0003 gave about one fray per birth in unit mode. See `experiments/RESULTS.md`.
@@ -166,8 +172,9 @@ Fraying also does something the first draft hoped for and the build confirmed on
 
 ## 8. Energy
 
-- Fixed population of `E` particles, `ON` or `OFF`. Never created, never destroyed.
-- `OFF` particles reload to `ON` either at a fixed rate everywhere (`pReload`) or only inside a disc (`sun`).
+- Energy particles are squares of a third type, half the side of a block, with one state (`ON` or `OFF`) that all four of their sides show. They never chain and never dock on a face: the only side that accepts them is a block's back. A charged particle meeting the back of a released block (`WANT`) bonds, the block re-arms to `TPL`, the particle flips to `OFF`, and the bond lets go the same step. Nothing is absorbed: the spent particle drifts off as a grey square.
+- Fixed population, never created, never destroyed. `OFF` particles recharge to `ON` at a background rate everywhere (`pReload`), or only inside a disc (`sun`), or, with the motif rule, at the back of a `B` block flanked by two `A` blocks (`CHARGE`): a spent particle meeting such a back bonds, flips to `ON`, and lets go.
+- The motif rule makes energy income a property of sequence. With `pReload` at 0, a world whose strands carry no `ABA` runs out of energy and stops (measured: a seed of `AABBAA` spends its 150 particles and makes 25 copies, a seed of `ABBABA` keeps charging). A strand with the motif feeds the re-arming of every strand near it, so the first question is whether the motif is selected for or merely tolerated; the answer depends on how far a charged particle travels before it is spent.
 - Two modes of what one energy particle buys, chosen by `energyMode`:
   - `unit`: every released unit needs its own particle. Cost of a copy is its length, in both strands' worth of re-arming. This is the first draft's proposal.
   - `strand`: a re-armed unit re-arms its lateral neighbours (R4's second clause: a lateral partner reads `ARMED`). One particle re-arms a whole strand. The particle can land on any of the strand's N back sides, so a long strand catches energy N times faster than a monomer would, and the wait for energy shrinks with length instead of growing with it. It is fully local. **Measured: it does not hold length up.** In direct competition a dimer out-reproduces a 6-mer about 50:1 with abundant energy in either mode, and 5:1 to 16:1 when energy is scarce; the scarcity narrows the gap because everyone waits, not because long strands wait less (`experiments/RESULTS.md`, sections 3 and 4). Kept as an option because it changes which resource limits the population.
@@ -178,6 +185,10 @@ Fraying also does something the first draft hoped for and the build confirmed on
 ## 9. Phenotype and higher structure
 
 Copying alone gives selection on copy speed only, and the winner is the shortest strand. The build confirms it (section 10). For evolution to build anything, a sequence has to do something. Sources of phenotype, cheapest first:
+
+**Durability (now).** With radiation on and the two block types given different resistances, the sequence decides how long a strand survives between copies: an `A`-`A` bond at `resB` 0.9 breaks 25 times more often than a `B`-`B` bond. If `B` is the scarcer monomer, a tough strand waits longer for its material, so durability costs copying speed and there is a real trade-off for selection to work on. This is the first phenotype in the world that is about the sequence's content rather than its length, and it needs no new geometry.
+
+**Metabolism (now).** With the motif rule on, an `ABA` run in a strand recharges energy particles at its back (section 8). Sequence content then sets energy income. Because charged particles diffuse, the benefit is shared with neighbours, which makes it a public good and invites parasites; whether the motif spreads or free-riders win is a measurement, not a design decision.
 
 **Cooperativity (now).** With R6 on, length is a phenotype: a longer template has more places for two monomers to land side by side before either leaves, so it nucleates copies faster. Measured to flip the dimer-versus-6-mer competition at `pUndock` between 0.02 and 0.05 and to make 6-mers win nine to one at 0.1 (`experiments/RESULTS.md`, section 5). Sequence is not yet a phenotype.
 
@@ -217,7 +228,9 @@ Copying alone gives selection on copy speed only, and the winner is the shortest
 
 **Phase 3, structure.** *Next.* First map the window in which R6 holds length up in an open population: `pUndock` against `pFray` against monomer density, more than two seeds, and the optimum length within it (seed 2-, 6-, 12- and 24-mers together). Then add sequence-dependent hinges (section 9), then a triangle type. Watch for self-closing rings. Ask: do ringed replicators outcompete open ones near the sun?
 
-**Phase 4, rule-space search.** The whole chemistry is now one compatibility table of six rows and five transitions. Randomising it within section 2's constraints and searching for tables that produce replicators from a seedless bath is a smaller search than the first draft assumed. Still: do not start here.
+**Phase 4, origins.** *Started.* With `pSpont` on and no seed strand, replication starts by itself: two monomers meet flush, become a two-unit strand, get re-armed, and are copied. The seedless bath is now a runnable experiment (`experiments/channels.sh`, the `O_` runs), and the time to first birth is its first number.
+
+**Phase 5, rule-space search.** The whole chemistry is now one compatibility table of ten rows and seven transitions. Randomising it within section 2's constraints and searching for tables that produce replicators from a seedless bath is a smaller search than the first draft assumed. Still: do not start here.
 
 Metrics logged from Phase 1 onward (`run.js`): free monomer count, strand count and length histogram, births, generation depth, sequence count and entropy, energy state, event counts for dockings, wrong-type dockings, captures, ligations, frays.
 
@@ -251,6 +264,8 @@ Still open:
 - Should soft probabilities be per encounter rather than per step? Per step is the only memoryless option, and it makes the effective rate depend on how long bodies stay in contact, which depends on their size.
 - Under cooperative docking, where is the optimum length, and how does it move with `pUndock` and with fraying? The estimate in section 10's terms is a copy time of about `κ/((N-1)λ²) + H_N/λ` for undock rate κ and single-site docking rate λ, which peaks near N = 12 when κ is ten times λ.
 - With ligation setting the length distribution, does selection act on top of it? A ligation regime with cooperative docking on is the obvious next run; whether it favours particular sequences is the question that matters.
+- Does radiation with unequal resistances select `B`-rich sequences when `B` is scarce, or does copying speed win? Does the `ABA` motif spread under the metabolism rule, or do parasites free-ride? Both are measured in `experiments/RESULTS.md` sections 7 to 9.
+- Rings. A ring of tough blocks around a fragile template would be the first protective structure. It needs chains that can close, which needs hinges or a second shape. Radiation is the pressure that would make such a structure pay.
 - What does the population do over millions of steps rather than hundreds of thousands?
 
 ---
@@ -284,6 +299,10 @@ Keep entries short: date, what changed, why, what evidence.
 - 2026-09-21. Side-to-side links get their own tight tolerance (10°, 15%) and the solver runs 24 passes. Reason: with per-square physics, squares docked on different nearby templates linked and released as two-unit chimeras (section 10). Evidence: 21 dimers in 30,000 steps with all knobs at zero before, three odd chains after.
 - 2026-09-21. Overlap between unbonded squares made a hard constraint inside the solver loop, replacing the soft repulsion. Reason: the remaining odd chains came from templates sliding through each other (section 10). Evidence: zero odd chains in 30,000 steps with all knobs at zero, two seeds, and the closest unbonded pair in the world never inside a side length.
 - 2026-09-21. Added `pStack` (template backs pair). Reason: it is the one-row answer to "why are forms one-dimensional"; off by default.
+- 2026-09-21. Added `pSpont` (two free monomers may link). Reason: without it only seeded strands could ever replicate; with it the seedless bath is an origin experiment. The flush check keeps it rare.
+- 2026-09-21. Added radiation (R7, `pBreak` with `resA`, `resB`). Reason: the user's point that a destructive force with unequal resistances gives sequence content a fitness meaning; it also ends the material lockup that pure copying runs into. Ends-only fraying stays as the gentler turnover.
+- 2026-09-21. Added the `ABA` charging motif. Reason: section 15 item 3; the cheapest way to make energy income depend on sequence. Chose `ABA` because it is a palindrome and so survives the antiparallel copy.
+- 2026-09-21. Face notch removed from the viewer; side colours carry orientation. Stacking preset removed; chains stay one-dimensional, the knob remains as an experiment.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
@@ -294,7 +313,8 @@ Ordered by how little they add to the rule table.
 
 1. **Activated monomers.** Gate docking instead of re-arming: a free monomer needs an `ON` energy particle on its K before its face reads `DOCK`. Energy is then carried by the food, as in biology. Changes who competes for energy (monomers, not strands) and may change the length result.
 2. **Sequence-dependent hinges.** A `B`-`B` lateral bond is free to rotate; all other lateral bonds are rigid. Strands fold where the sequence says; copies inherit the fold; rings become possible; folded strands hide their faces and copy slower. This is the cheapest genotype-to-phenotype map available and the one Phase 3 should start with.
-3. **Sequence motifs as metabolism.** Make energy reload conditional on a local pattern: an `OFF` particle docking on the K side of a unit whose lateral partners are both `A` (a derived state `K_MOTIF`) turns `ON`. Then an `A A A` run in a strand is a photosystem, and a strand's energy income depends on its sequence. Costs one derived state and one compatibility row. It would make selection act on content, not just length.
+3. **Sequence motifs as metabolism.** *Done* (`motif`, section 8): a `B` between two `A`s recharges spent particles at its back.
 4. **Two-sided templates.** Let the K side also pair (`A.K` with `B.K`, say). Strands would then template on both faces, and two strands could sandwich a third. Probably too much; listed because it is one row.
 5. **Parasite ecology.** With `pCapture` and `pLigate` on, strands appear that were never templated. Log lineage (which units were ever docked) and ask whether spatial structure from the sun patch separates producers from parasites, as Boerlijst and Hogeweg found for hypercycles.
-6. **Rule-space search.** Treat the compatibility table's probabilities and the five transition conditions as a genome, start from a seedless bath, and select tables for births per energy. The search space is small enough now to be tractable on a laptop.
+6. **Rule-space search.** Treat the compatibility table's probabilities and the transition conditions as a genome, start from a seedless bath (now possible with `pSpont`), and select tables for births per energy. The search space is small enough now to be tractable on a laptop.
+7. **Shapes.** A triangle type would bend chains and make rings possible, and rings of tough blocks are the protective structure radiation would select for. The blocker is that a bent template cannot be copied by rigid docking; hinges (item 2) come first, and with per-square constraints a hinge is one skipped angle term.

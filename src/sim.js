@@ -51,10 +51,11 @@ const S = {
   ON: 11, OFF: 12,                                      // E (all four sides)
   ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL)
   STACKED: 14,                                          // K: bonded back to back with another template unit
+  CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
 };
 const SNAME = Object.keys(S);
 // A bond breaks the moment either of its sides derives to one of these.
-const NONHOLD = new Uint8Array(16);
+const NONHOLD = new Uint8Array(32);
 NONHOLD[S.REPEL] = NONHOLD[S.INERT] = NONHOLD[S.IDLE] = NONHOLD[S.OFF] = 1;
 
 const DEFAULTS = {
@@ -68,7 +69,11 @@ const DEFAULTS = {
   pLigate: 0,      // two strand ends join end to end: fusion. Balanced against fraying it sets a length distribution.
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
-  pStack: 0,       // back sides of two template units bond (K to K): strands pair back to back, 2D forms become possible
+  pStack: 0,       // back sides of two template units bond (K to K): strands pair back to back, 2D forms become possible (experiment; keeps chains 1D when 0)
+  pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
+  pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
+  resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
+  motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   energyMode: 'unit', // 'unit': every unit needs its own E. 'strand': a re-armed unit re-arms its lateral neighbours.
   pReload: 0.002,  // OFF -> ON per step when the sun is off
@@ -134,7 +139,7 @@ class Sim {
     this.contacts = [];                           // candidate unbonded pairs close enough to touch this step
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0;
     this._seen = new Uint8Array(n);
 
     // types
@@ -298,8 +303,8 @@ class Sim {
     const p = this.p, tu = this.type[u], tv = this.type[v];
     const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
     if (tu === T_E || tv === T_E) {
-      if (tu === T_E && tv !== T_E) return (su === S.ON && j === K && sv === S.WANT) ? 1 : 0;
-      if (tv === T_E && tu !== T_E) return (sv === S.ON && i === K && su === S.WANT) ? 1 : 0;
+      if (tu === T_E && tv !== T_E) return (j === K && ((su === S.ON && sv === S.WANT) || (su === S.OFF && sv === S.CHARGE))) ? 1 : 0;
+      if (tv === T_E && tu !== T_E) return (i === K && ((sv === S.ON && su === S.WANT) || (sv === S.OFF && su === S.CHARGE))) ? 1 : 0;
       return 0;
     }
     if (i === K && j === K) return (su === S.IDLE && sv === S.IDLE && this.is[u] === I_TPL && this.is[v] === I_TPL) ? p.pStack : 0;
@@ -313,6 +318,7 @@ class Sim {
       if (su === S.STICKY && sv === S.STICKY) return 1;
       if (openish(su) && openish(sv)) return p.pLigate;
       if ((su === S.INERT && openish(sv)) || (sv === S.INERT && openish(su))) return p.pCapture;
+      if (su === S.INERT && sv === S.INERT) return p.pSpont;
       return 0;
     }
     return 0;
@@ -326,10 +332,10 @@ class Sim {
         if (this.bond[u * 4 + i] >= 0) continue;
         const s = this.ss[u * 4 + i];
         let ok = false;
-        if (this.type[u] === T_E) ok = s === S.ON;
+        if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
-        else if (i === K) ok = s === S.WANT || (s === S.IDLE && p.pStack > 0 && this.is[u] === I_TPL);
-        else ok = s === S.STICKY || s === S.END || (s === S.INERT && p.pCapture > 0);
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || (s === S.IDLE && p.pStack > 0 && this.is[u] === I_TPL);
+        else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
       this.open[u] = m;
@@ -357,9 +363,13 @@ class Sim {
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
-    // K
+    // K. A B template unit flanked by two A units reads CHARGE at its back when the motif rule is on:
+    // this is the one place a side's state depends on what its neighbours are (their type is their colour).
     const bK = b[o + K] >= 0;
-    this.ss[o + K] = st === I_REPEL ? S.WANT : (bK && st === I_TPL && this.type[b[o + K] >> 2] !== T_E) ? S.STACKED : S.IDLE;
+    if (st === I_REPEL) this.ss[o + K] = S.WANT;
+    else if (bK && st === I_TPL && this.type[b[o + K] >> 2] !== T_E) this.ss[o + K] = S.STACKED;
+    else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
+    else this.ss[o + K] = S.IDLE;
   }
   _deriveAll() { for (let u = 0; u < this.n; u++) this._derive(u); }
 
@@ -371,10 +381,11 @@ class Sim {
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
     if (this.type[u] === T_E) {
-      // E: docking spends it.
-      if (b[o] >= 0 || b[o + 1] >= 0 || b[o + 2] >= 0 || b[o + 3] >= 0) {
-        if (this.is[u] === I_ON) { this.energyUsed++; this._event('energy', u); }
-        this.is[u] = I_OFF;
+      // E: docking on a WANT back spends it; docking on a CHARGE back recharges it. Either way it lets go.
+      for (let i = 0; i < 4; i++) {
+        const q = b[o + i]; if (q < 0) continue;
+        if (this.ss[q] === S.CHARGE) { if (this.is[u] === I_OFF) { this.energyCharged++; this._event('charge', u, q >> 2); } this.is[u] = I_ON; this.pendingUnlink.push(o + i); }
+        else { if (this.is[u] === I_ON) { this.energyUsed++; this._event('energy', u); } this.is[u] = I_OFF; }
       }
       return;
     }
@@ -391,8 +402,8 @@ class Sim {
         const needR = pf === S.TPL_MM || pf === S.TPL_RF;
         if ((!needL || bL) && (!needR || bR)) { this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = b[o + F] >> 2; this._event('release', u); }
       } else if (nl > 0) {
-        // R2 captured laterally without a template: also a new strand unit
-        this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = -1; this.captureEvents++; this._event('capture', u);
+        // R2 linked laterally without a template (captured by a strand end, or two free monomers that met): a new strand unit
+        this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = -1;
       }
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3 lost its strand: back to the pool
@@ -405,6 +416,18 @@ class Sim {
     if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < p.pFray) {
       this.is[u] = I_DOCK; this.fresh[u] = 0;
       this.pendingUnlink.push(o + L, o + R); this.frayEvents++; this._event('fray', u);
+      return;
+    }
+    // R7 radiation: each of my lateral bonds breaks with probability pBreak scaled by how fragile the two blocks are.
+    // A docked copy re-links at once (its neighbours are still flush and sticky), so a template shields its copy.
+    if (p.pBreak > 0 && nl > 0) {
+      const mine = 1 - (this.type[u] === T_B ? p.resB : p.resA);
+      for (const side of [L, R]) {
+        const q = b[o + side]; if (q < 0) continue;
+        const v = q >> 2; if (v < u) continue;   // each bond is rolled once, by its lower-numbered end
+        const theirs = 1 - (this.type[v] === T_B ? p.resB : p.resA);
+        if (this.rng() < p.pBreak * mine * theirs) { this.pendingUnlink.push(o + side); this.breakEvents++; this._event('break', u, v); }
+      }
     }
   }
 
@@ -558,7 +581,9 @@ class Sim {
             if (i === F && j === F) { this.dockEvents++; if (this.type[u] !== this.type[v]) this.softDockEvents++; this._event('dock', u, v); }
             else if (i !== K && j !== K && this.type[u] !== T_E && this.type[v] !== T_E) {
               if (su === S.STICKY && sv === S.STICKY) this._event('link', u, v);
-              else if (su !== S.INERT && sv !== S.INERT) { this.ligateEvents++; this._event('ligate', u, v); }
+              else if (su === S.INERT && sv === S.INERT) { this.spontEvents++; this._event('spont', u, v); }
+              else if (su === S.INERT || sv === S.INERT) { this.captureEvents++; this._event('capture', su === S.INERT ? u : v, su === S.INERT ? v : u); }
+              else { this.ligateEvents++; this._event('ligate', u, v); }
             }
             this.open[u] &= ~(1 << i); this.open[v] &= ~(1 << j);
             break;
@@ -640,7 +665,8 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, bodies: components,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents,
+      energyCharged: this.energyCharged, bodies: components,
     };
   }
 
