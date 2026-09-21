@@ -34,7 +34,34 @@ lockup the design predicted for a world without turnover.
 
 ## 2. One variation source at a time (`regimes.sh`, 100,000 steps)
 
-<<REGIMES>>
+| run | knobs | births | faithful | substitution | longer | shorter | mean length at end | distinct seqs | free monomers |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| R_base | none | 83 | 100% | 0% | 0% | 0% | 6.00 | 1 | 0 |
+| R_soft | pSoft 0.02 | 81 | 83% | 17% | 0% | 0% | 6.00 | 10 | 0 |
+| R_capture | pCapture 0.05 | 91 | 77% | 0% | 10% | 13% | 5.40 | 22 | 0 |
+| R_fray | pFray 0.0003 | 4,027 | 98.6% | 0.4% | 1.0% | 0% | 2.06 | 5 | 365 |
+| R_fraycap | pCapture 0.05, pFray 0.0003 | 2,869 | 89.5% | 2.3% | 5.8% | 1.0% | 2.45 | 15 | 207 |
+| R_gentle_7 | pSoft 0.01, pCapture 0.01, pFray 0.0001 | 1,898 | 92% | 4.4% | 2.8% | 0.4% | 2.30 | 14 | 104 |
+| R_gentle_8 | same, seed 8 | 1,841 | 92% | 4.9% | 2.3% | 0.6% | 2.26 | 12 | 90 |
+
+What each source does:
+
+- **Wrong-type docking** gives substitutions and nothing else. Length stays 6. At `pSoft` 0.02 about
+  3% of dockings are wrong-typed and 17% of births carry at least one substitution.
+- **End capture** gives insertions (a monomer sticks to a strand end) and, through gaps, both
+  substitutions and truncations: a captured unit faces the fragment on the far side of the gap with
+  an `END` side, the fragment answers `STICKY`, they only join at `pLigate`, so the near fragment
+  leaves as a shorter strand. The longest strand reached 12 units and 22 sequences were in play.
+- **Fraying** alone gives turnover (365 free monomers at steady state instead of 0) and a
+  fifty-fold jump in births, almost all of them dimers and trimers. Length collapses to 2 within
+  30,000 steps. Fraying is itself a mutation source: 1% of births are longer than their parent,
+  because a template end frays after its copy unit has released.
+- **Gentle** (all sources at low rates) keeps nine tenths of births faithful and a dozen sequences
+  in play, and still collapses to length 2.3.
+
+Soft probabilities are per step of contact. A free monomer sits in front of a face for a few
+steps, so `pSoft` 0.02 gives 3% wrong-typed dockings, not 2%; on the earlier rigid-body physics,
+whose contacts lasted longer, the same setting gave 6%.
 
 ## 3. Does anything besides cooperativity hold length up? (`length_selection.sh`, 150,000 steps)
 
@@ -113,7 +140,30 @@ design doc (section 13) puts it near 12 units when undocking is ten times faster
 pFray 0.0001), one seed strand, 100,000 steps, two seeds, with undocking off (`R_gentle`,
 section 2), at 0.02 and at 0.1.
 
-<<EVO>>
+| run | pUndock | mean length | max | strands | free | births | faithful | distinct seqs | entropy (bits) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| R_gentle_7 | 0 | 2.27 | 5 | 216 | 96 | 1,898 | 92% | 12 | 1.92 |
+| R_gentle_8 | 0 | 2.28 | 6 | 214 | 88 | 1,841 | 92% | 13 | 2.42 |
+| U_evo_undock02_7 | 0.02 | 2.28 | 4 | 149 | 422 | 1,434 | 90% | 9 | 2.24 |
+| U_evo_undock02_8 | 0.02 | 2.26 | 4 | 143 | 442 | 1,525 | 90% | 11 | 2.11 |
+| U_evo_undock10_7 | 0.1 | died at ~40,000 | 0 | 0 | 800 | 14 | 64% | 0 | 0 |
+| U_evo_undock10_8 | 0.1 | 3.39 | 6 | 24 | 709 | 151 | 78% | 12 | 3.19 |
+
+This is the honest limit of the result so far. Undocking wins the head-to-head race, but in the
+evolutionary regime with turnover on it does not lift length at 0.02 (it only leaves more
+monomers free, because lone dockings that used to lock up material now fall off), and at 0.1 the
+population starves: with 800 monomers in an 80×80 world a lone docked monomer lasts ten steps
+and the next monomer takes hundreds to arrive, so copies rarely nucleate, while fraying keeps
+eroding the templates that wait. One seed died at about 40,000 steps; the other hung on with two
+dozen strands of mean length 3.4, the longest population this regime has produced.
+
+Density changes the picture. In the viewer's world (48×48, 400 monomers) at `pUndock` 0.1 with
+fraying off, the population grows to about fifty strands of mean length 6.2 to 6.5 (insertions
+lengthen them); with fraying at 0.0001 the dimers come back and mean length is 2.4 to 2.6.
+Cooperativity therefore beats the shortest-wins rule when nucleation is fast enough, and
+fraying is what decides whether it is. The window between "dimers win" and "nothing
+nucleates" is where the next measurements go: fraying rate against density against undocking
+rate, with more than two seeds.
 
 ## 6. Summary
 
@@ -123,7 +173,9 @@ section 2), at 0.02 and at 0.1.
 - Every soft knob is a distinct, measurable mutation channel. Ligation is not usable as a
   per-step probability.
 - Without cooperativity the shortest strand wins in every energy regime tried, by 10:1 to 60:1.
-- With a lone docked monomer made unstable, the balance tips to longer strands at undocking
-  rates above about 0.05 per step, decisively at 0.1. What sets the optimum length, and whether
-  sequence content can matter once hinges, stacking or energy motifs exist, are the open
+- With a lone docked monomer made unstable, the head-to-head race tips to longer strands at
+  undocking rates above about 0.05 per step, decisively at 0.1. In the evolutionary regime with
+  turnover the same rule has not yet produced a long-strand population: at low rates it changes
+  nothing, at high rates nucleation starves at the densities tried. Mapping that window, and
+  whether sequence content can matter once hinges, stacking or energy motifs exist, are the open
   questions for Phase 3.
