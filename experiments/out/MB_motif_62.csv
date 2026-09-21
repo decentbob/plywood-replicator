@@ -1,3 +1,4 @@
 t,free,docked,repel,tpl,strands,complexes,meanLen,maxLen,distinct,entropy,births,maxGen,eOn,energyUsed,docks,softDocks,captures,ligations,frays,undocks,spont,breaks,energyCharged,rings,memRings,memArcs,enclosedAB,enclosedE,enclosedTPL,enclosedMotif,totalMotif,ringsWithStrand
 5000,782,5,1,12,1,4,2.4,4,2,0.722,5,2,288,13,21,1,0,133,2,0,0,10,1,0,1,77,0,0,0,0,1,0
 10000,749,11,6,34,9,11,2,2,2,0.722,28,5,238,64,87,5,0,197,8,0,4,39,2,0,7,70,2,1,0,0,0,0
+15000,560,55,60,125,37,55,2.011,3,4,0.622,171,8,39,267,445,9,2,243,41,0,5,100,6,0,12,62,1,1,0,0,1,0
