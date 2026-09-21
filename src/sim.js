@@ -811,7 +811,7 @@ class Sim {
   // ------------------------------------------------------------- observation
   stats() {
     const n = this.n;
-    let free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0;
+    let free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) continue;
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
@@ -825,7 +825,7 @@ class Sim {
     }
     const hist = new Map(); const seqs = new Map();
     let strands = 0, complexes = 0, totalLen = 0, maxLen = 0, components = 0, rings = 0, ringLen = 0;
-    let memRings = 0, memRingLen = 0, memArcs = 0, enclosedAB = 0, enclosedE = 0, memFree = 0, enclosedTPL = 0, enclosedMotif = 0, totalMotif = 0, ringsWithStrand = 0;
+    let memRings = 0, memRingLen = 0, memArcs = 0, enclosedAB = 0, enclosedE = 0, memFree = 0, enclosedTPL = 0, enclosedMotif = 0, ringsWithStrand = 0;
     const seen = new Uint8Array(n);
     for (let u0 = 0; u0 < n; u0++) {
       if (seen[u0]) continue;

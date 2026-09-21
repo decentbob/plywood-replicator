@@ -326,7 +326,39 @@ At 0.1 the copying rate rises by a quarter, because linking tolerates the wobble
 pair, and copies stay exact. At 0.2 squares docked on different templates link again. The
 tolerance is a property of the block, and 0.1 is where it should sit.
 
-## 11. Summary
+## 11. Membrane blocks (`membranes.sh`, 100,000 steps)
+
+A fourth block type `M` bonds only to other `M`, side to side, forming on any corner touch and
+then holding a built-in bend (`memAngle` ± `memFlex`), so arcs grow by capturing free blocks at
+their ends and close into rings when they reach the size the bend dictates. Radiation breaks
+`M` bonds at `resM`. `M` has no state, docks on nothing, and takes no energy.
+
+**Self-assembly** (300 blocks, no replicators): with a 60° bend, 14 rings by 20,000 steps and
+41 rings of about 6 blocks by 100,000, with 13 arcs left; with 45°, 26 rings of about 8. Forming
+bonds only when the corners meet *at the right bend* had failed completely (arcs grew one block
+per 10,000 steps and never closed); forming on any corner touch and letting the bond pull the
+joint to its angle is what makes assembly fast.
+
+**Enclosure** (300 blocks with 800 monomers, gentle mutation and turnover, spontaneous
+linking, radiation 0.0002 with `resM` 0.7): rings form at the same rate (33 at the end, two
+seeds), but they close around almost nothing. At any sample 2 to 4 monomers are inside a ring,
+never a template unit, and no ring ever held a strand. A six-block ring has an interior of
+about 2.6 square sides in a world with 0.17 units per square side, so it expects to enclose
+about half a unit, and a strand of two or more essentially never. The replicator population is
+unaffected (6,000 births, all dimers).
+
+**Compartments and the motif** could therefore not be tested: nothing was inside to select. The
+motif regime itself (energy only from `ABA`, no background reload) also died within 50,000 steps
+both with and without membranes, because under turnover and spontaneous linking the dimers that
+take over carry no motif, the charged energy runs out, and copying stops.
+
+What this says: self-assembly works; enclosure by chance does not at any density a replicator
+population tolerates. For compartments to matter, rings have to form *around* strands, which
+biology does with coat proteins that recognise the genome (a capsid) or with lipids at
+concentrations where anything is inside. In this table that is one more row, `M` binding the
+back of a template unit so that membranes nucleate on strands, and it is the next experiment.
+
+## 12. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
@@ -350,6 +382,10 @@ tolerance is a property of the block, and 0.1 is where it should sit.
   durable forms, and the hinged, ligating population is the most diverse measured (about forty
   sequences, five bits). A trapezoid slack of 0.1 on flush bonds raises the copying rate by a
   quarter at no cost; 0.2 lets chimeras back in.
-- The open questions for Phase 3: keep the benefit of a motif with the strand that carries it
-  (spatial structure, slower particles, or compartments), find the radiation window where long
-  strands can persist, and make rings do something, such as shelter what is inside them.
+- Membrane blocks self-assemble into rings of a chosen size within 10,000 to 20,000 steps, and
+  replicators are unaffected by them; but rings close around empty space at every density tried,
+  so no strand was ever enclosed and compartment selection could not be measured.
+- The open questions for Phase 3: make membranes nucleate on strands (one row: `M` binds a
+  template's back), so that compartments hold a genome and the `ABA` motif's public good can
+  stay with its carrier; find the radiation window where long strands persist; and give rings a
+  way to divide.
