@@ -118,7 +118,8 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="copy">Preset: pure copying</option>
           <option value="mut" selected>Preset: copying with mutation</option>
           <option value="evo">Preset: mutation + turnover</option>
-          <option value="coop">Preset: cooperative docking</option>
+          <option value="race">Preset: dimers vs 6-mers, no cooperativity</option>
+          <option value="coop">Preset: dimers vs 6-mers, cooperative docking</option>
           <option value="stack">Preset: back-to-back stacking (2D)</option>
           <option value="sun">Preset: sun patch</option>
         </select>
@@ -172,13 +173,17 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, TNAME, SNAME, F, R, K, L } = PC;
 const $ = (id) => document.getElementById(id);
 
+// Presets. The first three show copying, then mutation, then turnover, from one seed strand.
+// "cooperative docking" seeds dimers and 6-mers together with undocking on and fraying off: watch which wins
+// (without undocking the dimers take everything; with it the 6-mers do). "race without cooperativity" is the control.
 const PRESETS = {
   copy:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pStack: 0, sun: false },
   mut:   { pSoft: 0.02, pCapture: 0.05, pFray: 0, pUndock: 0, pStack: 0, sun: false },
   evo:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0, pStack: 0, sun: false },
-  coop:  { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.1, pStack: 0, sun: false },
-  stack: { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.1, pStack: 0.2, sun: false },
-  sun:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.1, pStack: 0, sun: true, sunR: 10 },
+  race:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pStack: 0, sun: false, seedSeq: 'AB,ABBABA', seedCount: 3 },
+  coop:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0.1, pStack: 0, sun: false, seedSeq: 'AB,ABBABA', seedCount: 3 },
+  stack: { pSoft: 0.01, pCapture: 0.01, pFray: 0, pUndock: 0.1, pStack: 0.2, sun: false },
+  sun:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, pStack: 0, sun: true, sunR: 10 },
 };
 const BASE = { seed: 7, W: 48, H: 48, nA: 200, nB: 200, nE: 150, seedSeq: 'ABBABA', seedCount: 1,
   sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, pLigate: 0, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
