@@ -132,7 +132,10 @@ checked against `reverse(parent)`.
 Nothing bigger than a square exists in the physics. Each square gets its own
 Brownian kick; two squares that are not bonded may not overlap; a bond is a
 constraint that the two bonded sides lie flush. Both kinds of constraint are
-enforced the same way, by nudging the two squares involved, 24 passes per step. Chains are straight because a row of flush
+enforced the same way, by nudging the two squares involved, 24 passes per step.
+With the `hinge` knob, lateral bonds between free squares pin only their shared
+back corner and may bend up to 90°, so free strands curl and can close into rings
+by ligation, while a strand being copied is straightened by the docking itself. Chains are straight because a row of flush
 constraints is straight, not because anything holds a chain. Bonds never break
 from jostling. A bond forms only if the compatibility table allows it, the two
 sides face each other within a tolerance (30° for docking, 10° for side-to-side

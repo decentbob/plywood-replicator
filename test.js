@@ -86,4 +86,23 @@ test('radiation: resistant blocks keep their bonds, fragile ones lose them', () 
   assert.ok(frag.stats().breaks > 5 * (tough.stats().breaks + 1), `fragile ${frag.stats().breaks} breaks vs tough ${tough.stats().breaks}`);
 });
 
+
+test('hinges: free chains bend up to the limit, docked chains are straight, copies stay exact', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 2, seedSeq: 'ABBABABA', hinge: 'all', hingeMax: 90 }));
+  const rel = (u, v, i, j) => { let e = s.pa[v] - s.pa[u] - ((i - j) * Math.PI / 2 + Math.PI); e = (e + Math.PI) % (2 * Math.PI); if (e < 0) e += 2 * Math.PI; e -= Math.PI; return (i === R ? 1 : -1) * e * 180 / Math.PI; };
+  const hinged = [], rigid = [];
+  for (let k = 0; k < 20; k++) {
+    s.run(1000); s._bondList();
+    for (let b = 0; b < s.bonds.length; b++) { const q = s.bonds[b], r = s.bond[q]; if (s.bondKind[b] === 2) hinged.push(rel(q >> 2, r >> 2, q & 3, r & 3)); else if (s.bondKind[b] === 1) rigid.push(Math.abs(rel(q >> 2, r >> 2, q & 3, r & 3))); }
+  }
+  hinged.sort((a, b) => a - b); rigid.sort((a, b) => a - b);
+  assert.ok(hinged.length > 20, 'expected hinged bonds to exist');
+  assert.ok(hinged[Math.floor(hinged.length / 2)] > 10, 'free chains should bend');
+  assert.ok(hinged[hinged.length - 1] < 100 && hinged[0] > -10, 'hinge angle should respect its limit');
+  assert.ok(rigid.length === 0 || rigid[Math.floor(rigid.length * 0.9)] < 5, 'docked chains should be straight');
+  assert.ok(s.stats().births > 0, 'copying should still happen');
+  for (const b of s.births) assert.strictEqual(b.seq, rev(b.parent));
+  assert.deepStrictEqual(s.check(), []);
+});
+
 console.log(passed + ' tests passed');

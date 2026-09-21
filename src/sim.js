@@ -74,6 +74,8 @@ const DEFAULTS = {
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
+  hinge: 'none',   // which lateral bonds bend when neither square is docked: 'none', 'all', 'BB' (both B), 'AB' (mixed). A hinge pivots on the shared back corner.
+  hingeMax: 90,    // a hinge bends at most this many degrees (toward the backs)
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   energyMode: 'unit', // 'unit': every unit needs its own E. 'strand': a re-armed unit re-arms its lateral neighbours.
   pReload: 0.002,  // OFF -> ON per step when the sun is off
@@ -124,6 +126,7 @@ class Sim {
     this.size = new Float64Array(n);
     this.rad = new Float64Array(n);       // repulsion radius
     this.w = new Float64Array(n);         // inverse mass
+    this.wr = new Float64Array(n);        // inverse moment of inertia
     this.px = new Float64Array(n); this.py = new Float64Array(n); this.pa = new Float64Array(n);
     this.bond = new Int32Array(n * 4).fill(-1);   // partner = unit*4+side
     this.ss = new Uint8Array(n * 4);              // derived side states
@@ -135,6 +138,7 @@ class Sim {
     this.kicked = [];                             // units that undocked this step and get pushed off the face
     this.brokeF = [];                             // units whose face bond broke this step (observation)
     this.bonds = [];                              // list of bonds as u*4+i (the lower end), rebuilt when bonds change
+    this.bondKind = [];                           // per bond: 0 docking (flush, angle + midpoint), 1 rigid lateral (two corners), 2 hinge (back corner only)
     this.bondsDirty = true;
     this.contacts = [];                           // candidate unbonded pairs close enough to touch this step
     this.births = []; this.birthCount = 0; this.maxGen = 0;
@@ -151,6 +155,7 @@ class Sim {
       this.size[u] = this.type[u] === T_E ? p.sizeE : 1;
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
       this.w[u] = 1 / (this.size[u] * this.size[u]);
+      this.wr[u] = 6 / Math.pow(this.size[u], 4);
       this.is[u] = this.type[u] === T_E ? I_ON : I_DOCK;
     }
     // jittered grid placement
@@ -250,9 +255,33 @@ class Sim {
   _bonded(u, v) { for (let i = 0; i < 4; i++) if (this.bond[u * 4 + i] >= 0 && (this.bond[u * 4 + i] >> 2) === v) return true; return false; }
   _bondList() {
     if (!this.bondsDirty) return this.bonds;
-    const out = [];
-    for (let q = 0; q < this.n * 4; q++) { const r = this.bond[q]; if (r > q) out.push(q); }
-    this.bonds = out; this.bondsDirty = false; return out;
+    const out = [], kinds = [], h = this.p.hinge;
+    for (let q = 0; q < this.n * 4; q++) {
+      const r = this.bond[q]; if (r <= q) continue;
+      const u = q >> 2, i = q & 3, v = r >> 2, j = r & 3;
+      let kind = 0;
+      if ((i === L || i === R) && (j === L || j === R) && this.type[u] !== T_E && this.type[v] !== T_E) {
+        kind = 1;
+        if (h !== 'none' && this.bond[u * 4 + F] < 0 && this.bond[v * 4 + F] < 0) {
+          const tu = this.type[u], tv = this.type[v];
+          if (h === 'all' || (h === 'BB' && tu === T_B && tv === T_B) || (h === 'AB' && tu !== tv)) kind = 2;
+        }
+      }
+      out.push(q); kinds.push(kind);
+    }
+    this.bonds = out; this.bondKind = kinds; this.bondsDirty = false; return out;
+  }
+
+  /** Position-based correction that brings point a on u (world offset ax,ay from its centre) onto point b on v. */
+  _solvePoint(u, ax, ay, v, bx, by) {
+    const dx = this._dx(this.px[v] + bx - this.px[u] - ax), dy = this._dy(this.py[v] + by - this.py[u] - ay);
+    const d2 = dx * dx + dy * dy; if (d2 < 1e-12) return;
+    const d = Math.sqrt(d2), nx = dx / d, ny = dy / d;
+    const cu = ax * ny - ay * nx, cv = bx * ny - by * nx;
+    const wu = this.w[u] + this.wr[u] * cu * cu, wv = this.w[v] + this.wr[v] * cv * cv;
+    const lam = d / (wu + wv);
+    this.px[u] += nx * lam * this.w[u]; this.py[u] += ny * lam * this.w[u]; this.pa[u] += this.wr[u] * cu * lam;
+    this.px[v] -= nx * lam * this.w[v]; this.py[v] -= ny * lam * this.w[v]; this.pa[v] -= this.wr[v] * cv * lam;
   }
 
   /** True if unit m could sit at (tx,ty) without overlapping another unit (space exclusion). */
@@ -451,16 +480,29 @@ class Sim {
     for (const x of comp) seen[x] = 0;
     return comp;
   }
-  /** The longest L->R chain of A/B units in a unit list, as an array of unit indices. */
+  /** The longest L->R chain of A/B units in a unit list, as an array of unit indices. A closed ring is returned from an arbitrary start. */
   chainOf(units) {
-    let best = [];
+    let best = [], anyAB = -1;
     for (const start of units) {
-      if (this.type[start] === T_E || this.bond[start * 4 + L] >= 0) continue;
+      if (this.type[start] === T_E) continue;
+      anyAB = start;
+      if (this.bond[start * 4 + L] >= 0) continue;
       const c = []; let u = start;
       while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
       if (c.length > best.length) best = c;
     }
+    if (best.length === 0 && anyAB >= 0) {   // no free L side anywhere: a ring
+      const c = []; let u = anyAB;
+      while (c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; if (q < 0) break; u = q >> 2; if (u === anyAB) break; }
+      best = c;
+    }
     return best;
+  }
+  /** True if the A/B units form a closed ring (every unit has both lateral bonds). */
+  isRing(units) {
+    let nAB = 0;
+    for (const u of units) { if (this.type[u] === T_E) continue; nAB++; if (this.bond[u * 4 + L] < 0 || this.bond[u * 4 + R] < 0) return false; }
+    return nAB >= 3;
   }
   /** Read a strand's sequence L->R from a unit list (E units ignored). */
   sequenceOf(units) { return this.chainOf(units).map((u) => TNAME[this.type[u]]).join(''); }
@@ -539,20 +581,38 @@ class Sim {
         this.px[u] -= fx * wu / ws; this.py[u] -= fy * wu / ws;
         this.px[v] += fx * wv / ws; this.py[v] += fy * wv / ws;
       }
+      const kinds = this.bondKind;
       for (let k = 0; k < bl.length; k++) {
         const q = bl[k], r = this.bond[q];
         const u = q >> 2, i = q & 3, v = r >> 2, j = r & 3;
-        const wu = this.w[u], wv = this.w[v], ws = wu + wv;
-        // angle: v's side j must face u's side i
-        const e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
-        this.pa[u] += e * wu / ws; this.pa[v] -= e * wv / ws;
-        // position: the two side midpoints must coincide
-        const phu = this.pa[u] + i * Math.PI / 2, phv = this.pa[v] + j * Math.PI / 2;
+        if (kinds[k] !== 2) {
+          // rigid bond (docking, or a lateral bond that is not a hinge): flush. Angle first (v's side j must face
+          // u's side i), then the two side midpoints coincide.
+          const wu = this.w[u], wv = this.w[v], ws = wu + wv;
+          const e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
+          this.pa[u] += e * wu / ws; this.pa[v] -= e * wv / ws;
+          const phu = this.pa[u] + i * Math.PI / 2, phv = this.pa[v] + j * Math.PI / 2;
+          const hu = this.size[u] / 2, hv = this.size[v] / 2;
+          const ex = this._dx(this.px[v] + hv * Math.cos(phv) - this.px[u] - hu * Math.cos(phu));
+          const ey = this._dy(this.py[v] + hv * Math.sin(phv) - this.py[u] - hu * Math.sin(phu));
+          this.px[u] += ex * wu / ws; this.py[u] += ey * wu / ws;
+          this.px[v] -= ex * wv / ws; this.py[v] -= ey * wv / ws;
+          continue;
+        }
+        // hinge: only the shared back corner is pinned. Side i of u has its midpoint at h*n_i and its two corners at
+        // h*(n_i +/- f), where f is u's face direction; the back corner is the one on the -f side. The angle is free,
+        // and contacts stop the squares folding through each other, so a strand bends toward its backs.
         const hu = this.size[u] / 2, hv = this.size[v] / 2;
-        const ex = this._dx(this.px[v] + hv * Math.cos(phv) - this.px[u] - hu * Math.cos(phu));
-        const ey = this._dy(this.py[v] + hv * Math.sin(phv) - this.py[u] - hu * Math.sin(phu));
-        this.px[u] += ex * wu / ws; this.py[u] += ey * wu / ws;
-        this.px[v] -= ex * wv / ws; this.py[v] -= ey * wv / ws;
+        const phu = this.pa[u] + i * Math.PI / 2, phv = this.pa[v] + j * Math.PI / 2;
+        const nux = Math.cos(phu), nuy = Math.sin(phu), fux = Math.cos(this.pa[u]), fuy = Math.sin(this.pa[u]);
+        const nvx = Math.cos(phv), nvy = Math.sin(phv), fvx = Math.cos(this.pa[v]), fvy = Math.sin(this.pa[v]);
+        this._solvePoint(u, hu * (nux - fux), hu * (nuy - fuy), v, hv * (nvx - fvx), hv * (nvy - fvy));
+        // angle limit: relative rotation stays between 0 (flush) and hingeMax degrees toward the backs
+        const e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));   // 0 when flush
+        const sgn = i === R ? 1 : -1, bend = sgn * e, lim = p.hingeMax * Math.PI / 180;
+        let corr = 0;
+        if (bend > lim) corr = bend - lim; else if (bend < 0) corr = bend;
+        if (corr !== 0) { const wu = this.w[u], wv = this.w[v], ws = wu + wv; this.pa[u] += sgn * corr * wu / ws; this.pa[v] -= sgn * corr * wv / ws; }
       }
     }
     for (let u = 0; u < n; u++) { this.px[u] = this._wx(this.px[u]); this.py[u] = this._wy(this.py[u]); this.pa[u] = wrapAngle(this.pa[u]); }
@@ -635,7 +695,7 @@ class Sim {
       for (let i = 0; i < 4; i++) if (this.bond[o + i] >= 0) bonds++;
     }
     const hist = new Map(); const seqs = new Map();
-    let strands = 0, complexes = 0, totalLen = 0, maxLen = 0, components = 0;
+    let strands = 0, complexes = 0, totalLen = 0, maxLen = 0, components = 0, rings = 0, ringLen = 0;
     const seen = new Uint8Array(n);
     for (let u0 = 0; u0 < n; u0++) {
       if (seen[u0]) continue;
@@ -647,6 +707,7 @@ class Sim {
       if (nAB < 2) continue;
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
+      if (this.isRing(comp)) { rings++; ringLen += len; }
       if (faceBonded) complexes++; else strands++;
       totalLen += len; if (len > maxLen) maxLen = len;
       hist.set(len, (hist.get(len) || 0) + 1);
@@ -666,7 +727,7 @@ class Sim {
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
       ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents,
-      energyCharged: this.energyCharged, bodies: components,
+      energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
     };
   }
 

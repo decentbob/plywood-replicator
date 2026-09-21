@@ -89,7 +89,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="main">
   <div class="dish">
     <canvas id="c" width="800" height="800" aria-label="Simulation view"></canvas>
-    <div class="hud"><span>t <b id="hT">0</b></span><span>strands <b id="hS">0</b></span><span>free <b id="hF">0</b></span><span>births <b id="hB">0</b></span><span>gen <b id="hG">0</b></span><span id="hFps"></span></div>
+    <div class="hud"><span>t <b id="hT">0</b></span><span>strands <b id="hS">0</b></span><span>rings <b id="hR">0</b></span><span>free <b id="hF">0</b></span><span>births <b id="hB">0</b></span><span>gen <b id="hG">0</b></span><span id="hFps"></span></div>
     <div class="cam">
       <button id="bFit" title="Show the whole world">fit</button>
       <button id="bSeed" title="Zoom to the seed strand">seed</button>
@@ -124,6 +124,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="origin">Preset: origin, no seed strand</option>
           <option value="metab">Preset: metabolism, energy from ABA motifs</option>
           <option value="rad">Preset: radiation, tough B blocks are scarce</option>
+          <option value="hinge">Preset: hinged chains, rings can close</option>
           <option value="sun">Preset: sun patch</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -179,7 +180,7 @@ const $ = (id) => document.getElementById(id);
 // Presets. The first three show copying, mutation and turnover from one seed strand. The two races seed dimers and
 // 6-mers together: without undocking the dimers take everything, with it the 6-mers do. "origin" has no seed strand.
 // "metabolism" gets energy only from ABA motifs. "radiation" breaks bonds, B blocks resist, and B is scarce.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 200, nB: 200, seedSeq: 'ABBABA', seedCount: 1 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 200, nB: 200, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90 };
 const PRESETS = {
   copy:   Object.assign({}, ZERO),
   mut:    Object.assign({}, ZERO, { pSoft: 0.02, pCapture: 0.05 }),
@@ -189,6 +190,7 @@ const PRESETS = {
   origin: Object.assign({}, ZERO, { seedCount: 0, pSpont: 0.001, pSoft: 0.01, pCapture: 0.02, pFray: 0.0001 }),
   metab:  Object.assign({}, ZERO, { motif: true, pReload: 0, pSoft: 0.02, pCapture: 0.02, pFray: 0.0001 }),
   rad:    Object.assign({}, ZERO, { pBreak: 0.001, resB: 0.9, nA: 300, nB: 100, pLigate: 0.005, pFray: 0.0001, pSoft: 0.02, pCapture: 0.02 }),
+  hinge:  Object.assign({}, ZERO, { hinge: 'all', seedSeq: 'ABBABABABABA', pLigate: 0.02, pFray: 0.0001, pSoft: 0.01, pCapture: 0.01 }),
   sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 10 }),
 };
 const BASE = { seed: 7, W: 48, H: 48, nE: 150, sigma: 0.3, sigmaRot: 0.45, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
@@ -201,6 +203,9 @@ const KNOBS = [
   ['pUndock', 'p undock per step', 'a lone docked monomer falls off; cooperativity'],
   ['pLigate', 'p ligate ends', 'fusion of strands; with fraying, sets a length distribution'],
   ['pSpont', 'p spontaneous link', 'two free monomers join; life without a seed'],
+  ['grp', 'Shape'],
+  ['hinge', 'hinges', 'none, all, BB or AB: which lateral bonds bend when free', 'text'],
+  ['hingeMax', 'hinge limit °'],
   ['grp', 'Radiation'],
   ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
   ['resA', 'A resistance', '0 fragile to 1 immune'],
@@ -232,7 +237,7 @@ const flashes = new Map();   // unit -> {t, kind}
 function currentParams() {
   const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
   for (const k of KNOBS) { if (k[0] === 'grp') continue; const el = $('k_' + k[0]); if (!el) continue;
-    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? el.value.toUpperCase().replace(/[^AB,]/g, '') : Number(el.value)); }
+    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? (k[0] === 'hinge' ? el.value.trim() : el.value.toUpperCase().replace(/[^AB,]/g, '')) : Number(el.value)); }
   return p;
 }
 function buildKnobs(p) {
@@ -254,6 +259,7 @@ function applyLive() {
   const p = currentParams();
   for (const k in p) if (!RESET_KEYS.has(k)) sim.p[k] = p[k];
   sim.cosTol = Math.cos(sim.p.tolDeg * Math.PI / 180);
+  sim.bondsDirty = true;
   sim._computeOpen();
 }
 function reset() {
@@ -425,7 +431,7 @@ function refresh(force) {
   refreshFeed();
   if (!force && sim.t % 200 !== 0) return;
   const st = sim.stats();
-  $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
+  $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hR').textContent = st.rings; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
   $('sFree').textContent = st.free; $('sStr').textContent = st.strands + st.complexes; $('sCpx').textContent = st.complexes;
   $('sLen').textContent = st.meanLen.toFixed(2); $('sMax').textContent = st.maxLen; $('sDist').textContent = st.distinct; $('sEnt').textContent = st.entropy.toFixed(2) + ' bits';
   $('sBirth').textContent = st.births; $('sGen').textContent = st.maxGen; $('sE').textContent = st.eOn + ' / ' + st.eOff; $('sEu').textContent = st.energyUsed; $('sRep').textContent = st.repel;
