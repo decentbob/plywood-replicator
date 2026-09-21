@@ -65,7 +65,7 @@ const DEFAULTS = {
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
-  pLigate: 0,      // two strand ends join end to end: fusion (a runaway with rigid strands; keep 0)
+  pLigate: 0,      // two strand ends join end to end: fusion. Balanced against fraying it sets a length distribution.
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
   pStack: 0,       // back sides of two template units bond (K to K): strands pair back to back, 2D forms become possible
