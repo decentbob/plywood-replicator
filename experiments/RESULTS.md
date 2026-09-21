@@ -358,7 +358,43 @@ biology does with coat proteins that recognise the genome (a capsid) or with lip
 concentrations where anything is inside. In this table that is one more row, `M` binding the
 back of a template unit so that membranes nucleate on strands, and it is the next experiment.
 
-## 12. Summary
+## 12. Choosing the presets (`presets.sh`, 100,000 steps)
+
+Four candidate open regimes, all with trapezoid slack 0.1, spontaneous linking 0.001, gentle
+mutation and ligation 0.02, `B` scarce (200 against 600 `A`):
+
+| run | turnover | mean length | max | strands | births | distinct | entropy (bits) | B fraction, 2nd half |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| E_fray | fraying 0.0001 | 4.33 | 14 | 107 | 1,369 | 40 | 4.64 | 0.24 |
+| E_rad1 | radiation 0.0001, resB 0.9 | 2.54 | 8 | 202 | 1,159 | 24 | 2.88 | 0.06 |
+| E_rad3 | radiation 0.0003, resB 0.9 | 2.32 | 6 | 200 | 2,156 | 18 | 2.12 | 0.11 |
+| E_rad3_und | radiation 0.0003, resB 0.9, undock 0.05 | 2.37 | 6 | 158 | 834 | 15 | 2.15 | 0.20 |
+
+Fraying and radiation are not interchangeable. Fraying erodes ends only, so with ligation it
+sets a length distribution and the population stays long and diverse; radiation cuts anywhere,
+so with ligation it fragments, and at every rate tried the population is dimers. Radiation is
+the selective pressure (section 8), fraying is the turnover, and the "evolution" preset uses
+fraying with ligation. Cooperative undocking halves births here and does not lift length.
+
+Larger membrane rings, same regime plus radiation 0.0002 (`resM` 0.7):
+
+| run | bend | ring size | rings at 100k | template units inside, per 20k sample | rings holding a strand, per sample |
+|---|---:|---:|---:|---|---|
+| P_ring30 | 30° | ~10 | 10 | 0, 0, 2, 0, 0 | 0, 0, 1, 0, 0 |
+| P_ring225 | 22.5° | ~14 | 6 | 2, 2, 2, 0, 2 | 1, 1, 1, 0, 1 |
+
+Fourteen-block rings enclose a strand some of the time; ten-block rings almost never. The
+protocell regime (30° rings, motif energy with a small background reload) ran without dying,
+1,833 births against 1,702 in its membrane-free control, with one ring holding a strand at the
+end and no motif inside any ring. That is the state of the compartment line: the machinery
+works, the statistics are too thin to say anything about selection, and nucleation on strands
+(design doc, section 15, item 7) is what would change that.
+
+The viewer keeps three presets: copying with every soft knob at zero, the `E_fray` regime as
+"evolution", and "protocells" (evolution plus 300 membrane blocks at 30°, motif energy, a little
+radiation).
+
+## 13. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in

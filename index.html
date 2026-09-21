@@ -84,7 +84,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
+  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime, and protocells with self-assembling membrane rings. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
 </header>
 <div class="main">
   <div class="dish">
@@ -117,17 +117,9 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
       </div>
       <div class="row" style="margin-top:8px">
         <select id="preset" aria-label="Preset">
-          <option value="copy">Preset: pure copying</option>
-          <option value="mut">Preset: copying with mutation</option>
-          <option value="evo" selected>Preset: mutation + turnover</option>
-          <option value="race">Preset: dimers vs 6-mers, no cooperativity</option>
-          <option value="coop">Preset: dimers vs 6-mers, cooperative docking</option>
-          <option value="origin">Preset: origin, no seed strand</option>
-          <option value="metab">Preset: metabolism, energy from ABA motifs</option>
-          <option value="rad">Preset: radiation, tough B blocks are scarce</option>
-          <option value="hinge">Preset: hinged replicator chains (they clump)</option>
-          <option value="mem">Preset: membrane blocks, rings self-assemble</option>
-          <option value="sun">Preset: sun patch</option>
+          <option value="copy">Preset: copying, no mutation</option>
+          <option value="evo" selected>Preset: evolution</option>
+          <option value="proto">Preset: protocells</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
       </div>
@@ -179,22 +171,16 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, T_M, TNAME, SNAME, F, R, K, L } = PC;
 const $ = (id) => document.getElementById(id);
 
-// Presets. The first three show copying, mutation and turnover from one seed strand. The two races seed dimers and
-// 6-mers together: without undocking the dimers take everything, with it the 6-mers do. "origin" has no seed strand.
-// "metabolism" gets energy only from ABA motifs. "radiation" breaks bonds, B blocks resist, and B is scarce.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 60, memFlex: 6, pMem: 0.2, resM: 0.7 };
+// Three presets. "copying" shows the mechanism with every soft knob at zero. "evolution" is the open regime
+// that keeps a long, diverse population (spontaneous origins, gentle mutation, ligation against end fraying,
+// trapezoid slack). "protocells" adds membrane blocks that self-assemble into rings, energy from ABA motifs,
+// and a little radiation to open rings again; rings enclose strands only rarely so far.
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 30, memFlex: 6, pMem: 0.2 };
+const EVO = { slack: 0.1, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pLigate: 0.02, pFray: 0.0001 };
 const PRESETS = {
-  copy:   Object.assign({}, ZERO),
-  mut:    Object.assign({}, ZERO, { pSoft: 0.02, pCapture: 0.05 }),
-  evo:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001 }),
-  race:   Object.assign({}, ZERO, { seedSeq: 'AB,ABBABA', seedCount: 3 }),
-  coop:   Object.assign({}, ZERO, { pUndock: 0.1, seedSeq: 'AB,ABBABA', seedCount: 3 }),
-  origin: Object.assign({}, ZERO, { seedCount: 0, pSpont: 0.001, pSoft: 0.01, pCapture: 0.02, pFray: 0.0001 }),
-  metab:  Object.assign({}, ZERO, { motif: true, pReload: 0, pSoft: 0.02, pCapture: 0.02, pFray: 0.0001 }),
-  rad:    Object.assign({}, ZERO, { pBreak: 0.0005, resB: 0.9, nA: 600, nB: 200, pLigate: 0.005, pFray: 0.0001, pSoft: 0.02, pCapture: 0.02 }),
-  hinge:  Object.assign({}, ZERO, { hinge: 'all', slack: 0.1, pLigate: 0.02, pFray: 0.0001, pSoft: 0.01, pCapture: 0.01 }),
-  mem:    Object.assign({}, ZERO, { nM: 300, pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pSpont: 0.001, pBreak: 0.0002, resM: 0.7 }),
-  sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 14 }),
+  copy:  Object.assign({}, ZERO),
+  evo:   Object.assign({}, ZERO, EVO),
+  proto: Object.assign({}, ZERO, EVO, { nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
 };
 const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400 };
 
