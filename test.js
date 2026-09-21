@@ -3,7 +3,7 @@
 const { Sim, T_E, I_TPL, F, L, R } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
-const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60, sigma: 0.3, sigmaRot: 0.45 };
+const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
 let passed = 0;
 function test(name, fn) { fn(); passed++; console.log('ok  ' + name); }
 

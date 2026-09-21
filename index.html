@@ -27,32 +27,36 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);padding-block:0;padding-inline:16px}
-.app{display:flex;flex-direction:column;gap:12px;max-width:1400px;margin:0 auto;min-height:100%;padding-block:14px}
+.app{display:flex;flex-direction:column;gap:12px;max-width:1440px;margin:0 auto;min-height:100%;padding-block:14px}
 header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px}
 header h1{font:600 20px/1.2 var(--mono);margin:0;letter-spacing:-.01em}
-header p{margin:0;color:var(--muted);max-width:70ch}
-.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:start}
+header p{margin:0;color:var(--muted);max-width:76ch}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:14px;align-items:start}
 @media (max-width:900px){.main{grid-template-columns:1fr}}
-.dish{position:relative;background:var(--dish);border-radius:6px;overflow:hidden;aspect-ratio:1/1;max-width:100%}
-.dish canvas{display:block;width:100%;height:100%;cursor:crosshair}
+.dish{position:relative;background:var(--dish);border-radius:6px;overflow:hidden;aspect-ratio:1/1;max-width:100%;max-height:84vh}
+.dish canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+.dish canvas.drag{cursor:grabbing}
 .hud{position:absolute;left:10px;top:8px;display:flex;gap:14px;font:12px/1.4 var(--mono);color:#cfd3d8;pointer-events:none;flex-wrap:wrap}
 .hud b{color:#fff;font-weight:600}
-.legend{position:absolute;right:10px;bottom:8px;display:flex;flex-wrap:wrap;gap:4px 10px;font:11px/1.3 var(--mono);color:#aab0b8;pointer-events:none;max-width:70%;justify-content:flex-end}
-.legend i{display:inline-block;width:9px;height:9px;border-radius:1px;margin-right:4px;vertical-align:-1px}
-.inspect{position:absolute;left:10px;bottom:8px;font:11px/1.35 var(--mono);color:#cfd3d8;background:rgba(11,15,20,.8);padding:6px 8px;border-radius:4px;max-width:60%;white-space:pre}
+.cam{position:absolute;right:8px;top:8px;display:flex;gap:4px}
+.cam button{padding:3px 8px;font:12px var(--mono);background:rgba(11,15,20,.75);color:#cfd3d8;border-color:#41454c}
+.cam button[aria-pressed="true"]{color:#0b0f14;background:#3fbdb8;border-color:#3fbdb8}
+.legend{position:absolute;right:10px;bottom:8px;display:grid;grid-template-columns:auto auto;gap:2px 12px;font:11px/1.35 var(--mono);color:#aab0b8;pointer-events:none;background:rgba(11,15,20,.72);padding:6px 8px;border-radius:4px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:1px;margin-right:5px;vertical-align:-1px}
+.inspect{position:absolute;left:10px;bottom:8px;font:11px/1.35 var(--mono);color:#cfd3d8;background:rgba(11,15,20,.82);padding:6px 8px;border-radius:4px;max-width:56%;white-space:pre}
 .inspect[hidden]{display:none}
 .side{display:flex;flex-direction:column;gap:12px}
 .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px}
 .card h2{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-button{font:500 13px var(--sans);color:var(--ink);background:var(--field);border:1px solid var(--rule-strong);border-radius:4px;padding:6px 10px;cursor:pointer}
+button,select{font:500 13px var(--sans);color:var(--ink);background:var(--field);border:1px solid var(--rule-strong);border-radius:4px;padding:6px 10px;cursor:pointer}
 button:hover{border-color:var(--accent)}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .knobs{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;font:12px var(--mono)}
 .knobs label{color:var(--ink)}
 .knobs small{display:block;color:var(--muted);font:11px var(--sans)}
-.knobs input[type=number],.knobs input[type=text],.knobs select{width:96px;font:12px var(--mono);color:var(--ink);background:var(--field);border:1px solid var(--rule-strong);border-radius:4px;padding:4px 6px}
+.knobs input[type=number],.knobs input[type=text]{width:96px;font:12px var(--mono);color:var(--ink);background:var(--field);border:1px solid var(--rule-strong);border-radius:4px;padding:4px 6px}
 .knobs input[type=checkbox]{width:16px;height:16px;margin:0 40px 0 0;accent-color:var(--accent)}
 .knobs .grp{grid-column:1/-1;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:6px;padding-top:6px;border-top:1px solid var(--rule)}
 .knobs .grp:first-child{margin-top:0;padding-top:0;border-top:0}
@@ -60,14 +64,18 @@ button.primary{background:var(--accent);color:var(--accent-ink);border-color:var
 .stats div{display:flex;flex-direction:column;gap:1px}
 .stats span{color:var(--muted);font-size:10px;letter-spacing:.04em;text-transform:uppercase}
 .stats b{font-weight:600;font-size:14px}
-canvas.chart{width:100%;height:110px;display:block;margin-top:10px}
+canvas.chart{width:100%;height:100px;display:block;margin-top:10px}
 .seqs{font:12px var(--mono);display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-variant-numeric:tabular-nums}
 .seqs .n{color:var(--muted);text-align:right}
 .seq .A{color:#5b93c9}.seq .B{color:#c98a3a}
-.log{font:11px/1.45 var(--mono);color:var(--muted);max-height:150px;overflow:auto;white-space:pre}
-.log b{color:var(--ink);font-weight:500}
+.feed{font:11px/1.5 var(--mono);max-height:220px;overflow:auto;display:flex;flex-direction:column;gap:1px}
+.feed button{all:unset;cursor:pointer;display:grid;grid-template-columns:52px 62px 1fr;gap:8px;padding:1px 4px;border-radius:3px;color:var(--muted);font-variant-numeric:tabular-nums}
+.feed button:hover,.feed button:focus-visible{background:var(--rule);color:var(--ink)}
+.feed .k{font-weight:600}
+.feed .k.dock{color:#ffd75a}.feed .k.link{color:#ffffff}.feed .k.release{color:#ff5a5a}.feed .k.rearm{color:#5ad27a}.feed .k.birth{color:var(--accent)}
+.feed .k.energy{color:#ffe066}.feed .k.fray,.feed .k.undock{color:var(--muted)}.feed .k.capture,.feed .k.ligate{color:#e565d1}
 .note{color:var(--muted);font-size:12px;margin:0}
-footer{color:var(--muted);font-size:12px;max-width:80ch}
+footer{color:var(--muted);font-size:12px;max-width:90ch}
 footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border-radius:3px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -76,17 +84,24 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Squares with one rule table. A strand is copied by templating, the copy is released when every unit is locally complete, and a spent energy particle re-arms it. Nothing in the rules says "copy".</p>
+  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Scroll to zoom, drag to pan, click a square to read it, click an event to jump to it.</p>
 </header>
 <div class="main">
   <div class="dish">
     <canvas id="c" width="800" height="800" aria-label="Simulation view"></canvas>
     <div class="hud"><span>t <b id="hT">0</b></span><span>strands <b id="hS">0</b></span><span>free <b id="hF">0</b></span><span>births <b id="hB">0</b></span><span>gen <b id="hG">0</b></span><span id="hFps"></span></div>
+    <div class="cam">
+      <button id="bFit" title="Show the whole world">fit</button>
+      <button id="bSeed" title="Zoom to the seed strand">seed</button>
+      <button id="bFollow" aria-pressed="false" title="Keep the camera on the most recent birth">follow births</button>
+    </div>
     <div class="legend">
       <span><i style="background:#6fa8dc"></i>A</span><span><i style="background:#e0a458"></i>B</span>
-      <span><i style="background:#5ad27a"></i>F template</span><span><i style="background:#ff5a5a"></i>F released</span>
-      <span><i style="background:#ffd75a"></i>sticky</span><span><i style="background:#59d6e8"></i>open end</span>
-      <span><i style="background:#e565d1"></i>K wants E</span><span><i style="background:#ffe066"></i>E on</span><span><i style="background:#4a4f55"></i>E off</span>
+      <span><i style="background:#8a97a8"></i>F free (DOCK)</span><span><i style="background:#5ad27a"></i>F template</span>
+      <span><i style="background:#ff5a5a"></i>F released</span><span><i style="background:#3a4250"></i>L/R inert</span>
+      <span><i style="background:#ffd75a"></i>L/R sticky</span><span><i style="background:#59d6e8"></i>L/R open end</span>
+      <span><i style="background:#e565d1"></i>K wants energy</span><span><i style="background:#ffffff"></i>bond</span>
+      <span><i style="background:#ffe066"></i>E charged</span><span><i style="background:#4a4f55"></i>E spent</span>
     </div>
     <div id="inspect" class="inspect" hidden></div>
   </div>
@@ -96,7 +111,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
         <button id="bRun" class="primary">Pause</button>
         <button id="bStep">Step</button>
         <button id="bReset">Reset</button>
-        <label style="font:12px var(--mono)">speed <input id="speed" type="range" min="1" max="30" value="6" style="vertical-align:middle;width:90px;accent-color:var(--accent)"></label>
+        <label style="font:12px var(--mono)">speed <input id="speed" type="range" min="1" max="40" value="3" style="vertical-align:middle;width:90px;accent-color:var(--accent)"> <span id="speedV">3</span>/frame</label>
       </div>
       <div class="row" style="margin-top:8px">
         <select id="preset" aria-label="Preset">
@@ -104,10 +119,15 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="mut" selected>Preset: copying with mutation</option>
           <option value="evo">Preset: mutation + turnover</option>
           <option value="coop">Preset: cooperative docking</option>
+          <option value="stack">Preset: back-to-back stacking (2D)</option>
           <option value="sun">Preset: sun patch</option>
         </select>
-        <button id="bSeed">Add seed strand</button>
+        <button id="bAddSeed">Add seed strand</button>
       </div>
+    </div>
+    <div class="card">
+      <h2>Events</h2>
+      <div id="feed" class="feed"></div>
     </div>
     <div class="card">
       <h2>Readout</h2>
@@ -125,7 +145,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
         <div><span>E spent</span><b id="sEu">0</b></div>
         <div><span>waiting for E</span><b id="sRep">0</b></div>
       </div>
-      <canvas id="chart" class="chart" height="110" aria-label="Strand count and mean length over time"></canvas>
+      <canvas id="chart" class="chart" height="100" aria-label="Strand count and mean length over time"></canvas>
       <p class="note" style="margin-top:4px"><span style="color:var(--accent)">■</span> strands <span style="color:var(--warn)">■</span> mean length <span style="color:var(--muted)">■</span> free monomers (scaled)</p>
     </div>
     <div class="card">
@@ -136,15 +156,15 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
     <div class="card">
       <h2>Knobs</h2>
       <div class="knobs" id="knobs"></div>
-      <p class="note" style="margin-top:8px">Population and world size apply on Reset. Everything else applies live.</p>
+      <p class="note" style="margin-top:8px">Population and world size apply on Reset. Everything else applies live. Soft probabilities are per step of contact.</p>
     </div>
     <div class="card">
       <h2>Birth log</h2>
-      <div id="log" class="log"></div>
+      <div id="log" class="feed"></div>
     </div>
   </div>
 </div>
-<footer>Click a square to read its state. The whole chemistry is the compatibility table (which sides may bond, with what probability) and six transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand, frays off an end, or undocks while it has no neighbour. Copies come out antiparallel, so a child reads as the reverse of its parent.</footer>
+<footer>Sides are fixed for life: F (face, marked with a notch) docks only on a template's F of the same type; L bonds only to a neighbour's R, which is why chains are one-dimensional; K (back) takes only energy, or with the stacking knob another template's K. The whole chemistry is the compatibility table and six transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy, back to <code>DOCK</code> when a unit loses its strand, frays off an end, or undocks while alone. Copies are antiparallel, so a child reads as the reverse of its parent. In the physics a bond is only a constraint between the two squares it joins.</footer>
 </div>
 <script src="src/sim.js"></script>
 <script>
@@ -153,41 +173,46 @@ const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, TNAME, SNAME, F, R, K, L } 
 const $ = (id) => document.getElementById(id);
 
 const PRESETS = {
-  copy: { pSoft: 0, pCapture: 0, pLigate: 0, pFray: 0, pUndock: 0, sun: false },
-  mut:  { pSoft: 0.02, pCapture: 0.05, pLigate: 0, pFray: 0, pUndock: 0, sun: false },
-  evo:  { pSoft: 0.01, pCapture: 0.01, pLigate: 0, pFray: 0.0001, pUndock: 0, sun: false },
-  coop: { pSoft: 0.01, pCapture: 0.01, pLigate: 0, pFray: 0.0001, pUndock: 0.1, sun: false },
-  sun:  { pSoft: 0.01, pCapture: 0.01, pLigate: 0, pFray: 0.0001, pUndock: 0.1, sun: true, sunR: 12 },
+  copy:  { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pStack: 0, sun: false },
+  mut:   { pSoft: 0.02, pCapture: 0.05, pFray: 0, pUndock: 0, pStack: 0, sun: false },
+  evo:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0, pStack: 0, sun: false },
+  coop:  { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.1, pStack: 0, sun: false },
+  stack: { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.1, pStack: 0.2, sun: false },
+  sun:   { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.1, pStack: 0, sun: true, sunR: 10 },
 };
-const BASE = { seed: 7, W: 80, H: 80, nA: 400, nB: 400, nE: 300, seedSeq: 'ABBABA', seedCount: 1,
-  sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, energyGate: true, energyMode: 'unit' };
+const BASE = { seed: 7, W: 48, H: 48, nA: 200, nB: 200, nE: 150, seedSeq: 'ABBABA', seedCount: 1,
+  sigma: 0.3, sigmaRot: 0.45, pReload: 0.002, pLigate: 0, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
   ['pSoft', 'p wrong-type dock', 'substitution'],
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
-  ['pLigate', 'p ligate ends', 'fusion of strands'],
   ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
   ['pUndock', 'p undock per step', 'a lone docked monomer falls off; cooperativity'],
+  ['pStack', 'p stack backs', 'template backs pair K to K; 2D forms'],
+  ['pLigate', 'p ligate ends', 'fusion; a runaway above ~0.005'],
   ['grp', 'Energy'],
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
   ['pReload', 'p reload per step', 'OFF→ON, when sun is off'],
   ['sun', 'sun patch', 'reload only inside a disc', 'bool'],
   ['sunR', 'sun radius'],
   ['grp', 'Physics'],
-  ['sigma', 'jostle', 'Brownian step per unit mass'],
+  ['sigma', 'jostle', 'Brownian step per square'],
   ['sigmaRot', 'jostle rotation'],
+  ['iters', 'bond solver iterations'],
   ['tolDeg', 'dock tolerance °'],
   ['grp', 'Population (reset)'],
   ['seed', 'RNG seed'],
   ['nA', 'A monomers'], ['nB', 'B monomers'], ['nE', 'E particles'],
   ['seedSeq', 'seed strands', 'A/B sequences, comma-separated', 'text'],
-  ['seedCount', 'seed strands'],
+  ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
 const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'seedSeq', 'seedCount', 'W', 'H']);
 
-let sim, running = true, speed = 6, series = [], lastStat = null, selected = -1;
+let sim, running = true, speed = 3, series = [], selected = -1, seedUnit = -1;
+const cam = { x: 24, y: 24, zoom: 16, follow: false };
+const flashes = new Map();   // unit -> {t, kind}
 
 function currentParams() {
   const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
@@ -202,9 +227,10 @@ function buildKnobs(p) {
     const lab = document.createElement('label'); lab.htmlFor = 'k_' + k[0];
     lab.innerHTML = k[1] + (k[2] ? '<small>' + k[2] + '</small>' : '');
     const inp = document.createElement('input'); inp.id = 'k_' + k[0];
-    if (k[3] === 'bool') { inp.type = 'checkbox'; inp.checked = !!p[k[0]]; }
-    else if (k[3] === 'text') { inp.type = 'text'; inp.value = p[k[0]]; }
-    else { inp.type = 'number'; inp.value = p[k[0]]; inp.step = 'any'; }
+    const val = p[k[0]] !== undefined ? p[k[0]] : PC.DEFAULTS[k[0]];
+    if (k[3] === 'bool') { inp.type = 'checkbox'; inp.checked = !!val; }
+    else if (k[3] === 'text') { inp.type = 'text'; inp.value = val; }
+    else { inp.type = 'number'; inp.value = val; inp.step = 'any'; }
     inp.addEventListener('change', () => { if (!RESET_KEYS.has(k[0])) applyLive(); });
     host.appendChild(lab); host.appendChild(inp);
   }
@@ -213,63 +239,134 @@ function applyLive() {
   const p = currentParams();
   for (const k in p) if (!RESET_KEYS.has(k)) sim.p[k] = p[k];
   sim.cosTol = Math.cos(sim.p.tolDeg * Math.PI / 180);
+  sim._computeOpen();
 }
 function reset() {
   const p = currentParams();
-  sim = new Sim(p); series = []; selected = -1; $('inspect').hidden = true; $('log').textContent = '';
-  draw(); refresh(true);
+  sim = new Sim(p); series = []; selected = -1; flashes.clear(); lastEvent = 0;
+  $('inspect').hidden = true; $('log').textContent = ''; $('feed').textContent = '';
+  // the seed strand is the first TPL unit
+  seedUnit = -1; for (let u = 0; u < sim.n; u++) if (sim.type[u] !== T_E && sim.is[u] === 2) { seedUnit = u; break; }
+  cam.follow = false; $('bFollow').setAttribute('aria-pressed', 'false');
+  zoomToSeed(); draw(); refresh(true);
 }
 
-// ------------------------------------------------------------ drawing
+// ------------------------------------------------------------ camera
 const cv = $('c'), ctx = cv.getContext('2d');
-const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55' };
-const SIDECOL = {}; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
-SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.WANT] = '#e565d1';
 function fitCanvas() {
   const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
   const w = Math.max(200, Math.round(r.width * dpr)), h = Math.max(200, Math.round(r.height * dpr));
   if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
 }
+function fitWorld() { fitCanvas(); cam.zoom = Math.min(cv.width / sim.p.W, cv.height / sim.p.H); cam.x = sim.p.W / 2; cam.y = sim.p.H / 2; }
+function zoomToSeed() { fitCanvas(); cam.zoom = Math.min(cv.width, cv.height) / 22; if (seedUnit >= 0) { cam.x = sim.px[seedUnit]; cam.y = sim.py[seedUnit]; } else { cam.x = sim.p.W / 2; cam.y = sim.p.H / 2; } }
+function toScreen(x, y) { return [cv.width / 2 + sim._dx(x - cam.x) * cam.zoom, cv.height / 2 + sim._dy(y - cam.y) * cam.zoom]; }
+function toWorld(sx, sy) { return [sim._wx(cam.x + (sx - cv.width / 2) / cam.zoom), sim._wy(cam.y + (sy - cv.height / 2) / cam.zoom)]; }
+let drag = null;
+cv.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY, moved: false }; cv.setPointerCapture(e.pointerId); cv.classList.add('drag'); });
+cv.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  const r = cv.getBoundingClientRect(), k = cv.width / r.width;
+  const dx = (e.clientX - drag.x) * k, dy = (e.clientY - drag.y) * k;
+  if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
+  cam.x = sim._wx(cam.x - dx / cam.zoom); cam.y = sim._wy(cam.y - dy / cam.zoom); drag.x = e.clientX; drag.y = e.clientY;
+  if (drag.moved) { cam.follow = false; $('bFollow').setAttribute('aria-pressed', 'false'); }
+});
+cv.addEventListener('pointerup', (e) => {
+  cv.classList.remove('drag');
+  if (drag && !drag.moved) pick(e);
+  drag = null;
+});
+cv.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const r = cv.getBoundingClientRect(), k = cv.width / r.width;
+  const sx = (e.clientX - r.left) * k, sy = (e.clientY - r.top) * k;
+  const [wx, wy] = toWorld(sx, sy);
+  const f = Math.exp(-e.deltaY * 0.0015);
+  cam.zoom = Math.max(cv.width / sim.p.W / 1.2, Math.min(200, cam.zoom * f));
+  // keep the point under the cursor fixed
+  cam.x = sim._wx(wx - (sx - cv.width / 2) / cam.zoom); cam.y = sim._wy(wy - (sy - cv.height / 2) / cam.zoom);
+}, { passive: false });
+function pick(e) {
+  const r = cv.getBoundingClientRect(), k = cv.width / r.width;
+  const [x, y] = toWorld((e.clientX - r.left) * k, (e.clientY - r.top) * k);
+  let best = -1, bd = 0.8;
+  for (let u = 0; u < sim.n; u++) { const d = Math.hypot(sim._dx(sim.px[u] - x), sim._dy(sim.py[u] - y)); if (d < bd) { bd = d; best = u; } }
+  selected = best; showInspect();
+}
+$('bFit').addEventListener('click', fitWorld);
+$('bSeed').addEventListener('click', () => { zoomToSeed(); });
+$('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFollow').setAttribute('aria-pressed', String(cam.follow)); });
+function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
+
+// ------------------------------------------------------------ drawing
+const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55' };
+const SIDECOL = {};
+SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
+SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6';
+const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1' };
 function draw() {
   fitCanvas();
-  const W = sim.p.W, H = sim.p.H, sx = cv.width / W, sy = cv.height / H, sc = Math.min(sx, sy);
+  if (cam.follow && sim.births.length) { const b = sim.births[sim.births.length - 1]; cam.x = b.x; cam.y = b.y; }
+  const W = sim.p.W, H = sim.p.H, z = cam.zoom;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#0b0f14'; ctx.fillRect(0, 0, cv.width, cv.height);
-  ctx.setTransform(sc, 0, 0, sc, 0, 0);
-  if (sim.p.sun) { ctx.fillStyle = 'rgba(255,224,102,0.07)'; ctx.beginPath(); ctx.arc(W / 2, H / 2, sim.p.sunR, 0, Math.PI * 2); ctx.fill(); }
-  const n = sim.n, lw = 0.16;
+  if (sim.p.sun) { const [sx, sy] = toScreen(W / 2, H / 2); ctx.fillStyle = 'rgba(255,224,102,0.07)'; ctx.beginPath(); ctx.arc(sx, sy, sim.p.sunR * z, 0, Math.PI * 2); ctx.fill(); }
+  // world boundary hint when zoomed out
+  const halfW = W * z / 2, halfH = H * z / 2;
+  if (halfW < cv.width / 2 || halfH < cv.height / 2) {
+    const [ox, oy] = toScreen(0, 0);
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1; ctx.strokeRect(ox, oy, W * z, H * z);
+  }
+  const n = sim.n, lw = Math.max(1.5, 0.14 * z), margin = 2 * z;
+  // bonds: a tie across the shared edge
+  ctx.lineCap = 'round';
   for (let u = 0; u < n; u++) {
-    const sz = sim.size[u], h = sz / 2;
-    let x = sim.px[u] % W; if (x < 0) x += W; let y = sim.py[u] % H; if (y < 0) y += H;
-    ctx.save(); ctx.translate(x, y); ctx.rotate(sim.pa[u]);
+    for (let i = 0; i < 4; i++) {
+      const q = sim.bond[u * 4 + i]; if (q < 0 || q < u * 4 + i) continue;
+      const v = q >> 2;
+      const [x1, y1] = toScreen(sim.px[u], sim.py[u]);
+      if (x1 < -margin || y1 < -margin || x1 > cv.width + margin || y1 > cv.height + margin) continue;
+      const x2 = x1 + sim._dx(sim.px[v] - sim.px[u]) * z, y2 = y1 + sim._dy(sim.py[v] - sim.py[u]) * z;
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = Math.max(1.5, 0.1 * z);
+      ctx.beginPath(); ctx.moveTo(x1 + (x2 - x1) * 0.3, y1 + (y2 - y1) * 0.3); ctx.lineTo(x1 + (x2 - x1) * 0.7, y1 + (y2 - y1) * 0.7); ctx.stroke();
+    }
+  }
+  // squares
+  for (let u = 0; u < n; u++) {
+    const [sx, sy] = toScreen(sim.px[u], sim.py[u]);
+    if (sx < -margin || sy < -margin || sx > cv.width + margin || sy > cv.height + margin) continue;
+    const sz = sim.size[u] * z, h = sz / 2;
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(sim.pa[u]);
     if (sim.type[u] === T_E) {
       ctx.fillStyle = sim.is[u] === 1 ? COL.EON : COL.EOFF; ctx.fillRect(-h, -h, sz, sz);
     } else {
       ctx.fillStyle = sim.type[u] === T_A ? COL.A : COL.B; ctx.fillRect(-h, -h, sz, sz);
-      // sides: F at +x (angle 0), R at +y, K at -x, L at -y  (side i normal = angle i*90°)
       ctx.lineWidth = lw;
+      const inset = lw / 2;
       for (let i = 0; i < 4; i++) {
-        const s = sim.ss[u * 4 + i], col = SIDECOL[s]; if (!col) continue;
-        ctx.strokeStyle = col; ctx.beginPath();
-        if (i === 0) { ctx.moveTo(h - lw / 2, -h); ctx.lineTo(h - lw / 2, h); }
-        else if (i === 1) { ctx.moveTo(-h, h - lw / 2); ctx.lineTo(h, h - lw / 2); }
-        else if (i === 2) { ctx.moveTo(-h + lw / 2, -h); ctx.lineTo(-h + lw / 2, h); }
-        else { ctx.moveTo(-h, -h + lw / 2); ctx.lineTo(h, -h + lw / 2); }
+        ctx.strokeStyle = SIDECOL[sim.ss[u * 4 + i]] || '#000'; ctx.beginPath();
+        if (i === 0) { ctx.moveTo(h - inset, -h); ctx.lineTo(h - inset, h); }
+        else if (i === 1) { ctx.moveTo(-h, h - inset); ctx.lineTo(h, h - inset); }
+        else if (i === 2) { ctx.moveTo(-h + inset, -h); ctx.lineTo(-h + inset, h); }
+        else { ctx.moveTo(-h, -h + inset); ctx.lineTo(h, -h + inset); }
         ctx.stroke();
       }
-      if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.08; ctx.strokeRect(-h - 0.1, -h - 0.1, sz + 0.2, sz + 0.2); }
+      // face notch: a small triangle pointing out of the F side, so orientation reads on every square
+      if (z >= 8) { ctx.fillStyle = 'rgba(11,15,20,0.75)'; ctx.beginPath(); ctx.moveTo(h - lw - 0.16 * z, -0.12 * z); ctx.lineTo(h - lw, 0); ctx.lineTo(h - lw - 0.16 * z, 0.12 * z); ctx.closePath(); ctx.fill(); }
+      if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(-h - 3, -h - 3, sz + 6, sz + 6); }
     }
     ctx.restore();
   }
+  // flashes
+  for (const [u, f] of flashes) {
+    const age = sim.t - f.t; if (age > 80) { flashes.delete(u); continue; }
+    const [sx, sy] = toScreen(sim.px[u], sim.py[u]);
+    ctx.strokeStyle = FLASHCOL[f.kind] || '#fff'; ctx.globalAlpha = 1 - age / 80; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(sx, sy, (0.9 + age / 80) * z, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1;
+  }
 }
-cv.addEventListener('click', (ev) => {
-  const r = cv.getBoundingClientRect(); const W = sim.p.W, H = sim.p.H;
-  const sc = Math.min(cv.width / W, cv.height / H) / (cv.width / r.width);
-  const x = (ev.clientX - r.left) / sc, y = (ev.clientY - r.top) / sc;
-  let best = -1, bd = 0.8;
-  for (let u = 0; u < sim.n; u++) { const dx = sim._dx(sim.px[u] - x), dy = sim._dy(sim.py[u] - y); const d = Math.hypot(dx, dy); if (d < bd) { bd = d; best = u; } }
-  selected = best; showInspect();
-});
 function showInspect() {
   const el = $('inspect'); if (selected < 0) { el.hidden = true; return; }
   const u = selected, t = TNAME[sim.type[u]];
@@ -280,15 +377,40 @@ function showInspect() {
     const q = sim.bond[u * 4 + i];
     s += `${names[i]} ${SNAME[sim.ss[u * 4 + i]].padEnd(7)} ${q >= 0 ? '→ ' + (q >> 2) + '.' + names[q & 3] + ' ' + SNAME[sim.ss[q]] : ''}\n`;
   }
-  const b = sim.bodies.get(sim.body[u]); s += `body of ${b.units.length}  seq ${sim.sequenceOf(b.units) || '-'}`;
+  const comp = sim.componentOf(u); s += `connected to ${comp.length - 1} others  seq ${sim.sequenceOf(comp) || '-'}`;
   el.textContent = s; el.hidden = false;
 }
 
 // ------------------------------------------------------------ readout
 const chart = $('chart'), cctx = chart.getContext('2d');
+let lastEvent = 0;
+function refreshFeed() {
+  const ev = sim.events; if (!ev.length) return;
+  const newest = ev[ev.length - 1];
+  if (newest.t === lastEvent && ev.length === lastFeedLen) return;
+  lastEvent = newest.t; lastFeedLen = ev.length;
+  const feed = $('feed'); feed.innerHTML = '';
+  const recent = ev.slice(-60).reverse();
+  for (const e of recent) {
+    if (e.kind === 'dock' || e.kind === 'link' || e.kind === 'release' || e.kind === 'rearm' || e.kind === 'birth' || e.kind === 'capture' || e.kind === 'fray' || e.kind === 'undock' || e.kind === 'ligate') {
+      if (!flashes.has(e.u) || flashes.get(e.u).t < e.t) flashes.set(e.u, { t: e.t, kind: e.kind });
+      if (e.v >= 0) flashes.set(e.v, { t: e.t, kind: e.kind });
+    }
+    const b = document.createElement('button'); b.type = 'button';
+    const what = e.kind === 'dock' ? `${e.u} docks on ${e.v}` : e.kind === 'link' ? `${e.u} links ${e.v}` : e.kind === 'release' ? `${e.u} released` :
+      e.kind === 'rearm' ? `${e.u} re-armed` : e.kind === 'birth' ? `new strand at ${e.u}` : e.kind === 'energy' ? `E ${e.u} spent` :
+      e.kind === 'capture' ? `${e.u} captured` : e.kind === 'ligate' ? `${e.u} joins ${e.v}` : `${e.u} ${e.kind}`;
+    b.innerHTML = `<span>t ${e.t}</span><span class="k ${e.kind}">${e.kind}</span><span>${what}</span>`;
+    b.addEventListener('click', () => jumpTo(e.u));
+    feed.appendChild(b);
+  }
+}
+let lastFeedLen = 0;
 function refresh(force) {
+  if (!force && sim.t % 100 !== 0) return;
+  refreshFeed();
   if (!force && sim.t % 200 !== 0) return;
-  const st = lastStat = sim.stats();
+  const st = sim.stats();
   $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
   $('sFree').textContent = st.free; $('sStr').textContent = st.strands + st.complexes; $('sCpx').textContent = st.complexes;
   $('sLen').textContent = st.meanLen.toFixed(2); $('sMax').textContent = st.maxLen; $('sDist').textContent = st.distinct; $('sEnt').textContent = st.entropy.toFixed(2) + ' bits';
@@ -301,15 +423,20 @@ function refresh(force) {
     const b = document.createElement('div'); b.className = 'n'; b.textContent = c; seqs.appendChild(a); seqs.appendChild(b);
   }
   $('hist').textContent = st.lenHist.length ? 'length histogram  ' + st.lenHist.map(([l, c]) => l + ':' + c).join('  ') : 'no free strands yet';
-  const log = $('log'); const recent = sim.births.slice(-40).reverse();
-  log.innerHTML = recent.map((b) => `t=${String(b.t).padStart(7)} g${String(b.gen).padStart(3)}  <b>${b.seq}</b>  from ${b.parent}`).join('\n');
+  const log = $('log'); log.innerHTML = '';
+  for (const b of sim.births.slice(-40).reverse()) {
+    const el = document.createElement('button'); el.type = 'button';
+    el.innerHTML = `<span>t ${b.t}</span><span class="k birth">g${b.gen}</span><span><b>${b.seq}</b> from ${b.parent || '?'}</span>`;
+    el.addEventListener('click', () => { cam.x = b.x; cam.y = b.y; if (cam.zoom < 24) cam.zoom = 36; });
+    log.appendChild(el);
+  }
   if (selected >= 0) showInspect();
 }
 function drawChart() {
   const dpr = Math.min(2, window.devicePixelRatio || 1), r = chart.getBoundingClientRect();
-  chart.width = Math.round(r.width * dpr); chart.height = Math.round(110 * dpr);
+  chart.width = Math.round(r.width * dpr); chart.height = Math.round(100 * dpr);
   cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const w = r.width, h = 110; cctx.clearRect(0, 0, w, h);
+  const w = r.width, h = 100; cctx.clearRect(0, 0, w, h);
   const css = getComputedStyle(document.documentElement);
   cctx.strokeStyle = css.getPropertyValue('--rule'); cctx.lineWidth = 1;
   for (let i = 1; i < 4; i++) { cctx.beginPath(); cctx.moveTo(0, h * i / 4); cctx.lineTo(w, h * i / 4); cctx.stroke(); }
@@ -337,12 +464,12 @@ function loop() {
 $('bRun').addEventListener('click', () => { running = !running; $('bRun').textContent = running ? 'Pause' : 'Run'; });
 $('bStep').addEventListener('click', () => { sim.step(); refresh(true); draw(); });
 $('bReset').addEventListener('click', reset);
-$('speed').addEventListener('input', (e) => { speed = Number(e.target.value); });
+$('speed').addEventListener('input', (e) => { speed = Number(e.target.value); $('speedV').textContent = speed; });
 $('preset').addEventListener('change', () => { buildKnobs(Object.assign({}, BASE, PRESETS[$('preset').value])); reset(); });
-$('bSeed').addEventListener('click', () => {
+$('bAddSeed').addEventListener('click', () => {
   const p = currentParams(); const seq = (p.seedSeq.split(',')[0] || '').trim();
-  const ok = sim.seedStrand(sim.p.W * Math.random(), sim.p.H * Math.random(), Math.random() * Math.PI * 2, seq.length || 6, seq);
-  if (ok) { sim._deriveAll(); sim._computeOpen(); refresh(true); draw(); }
+  const ok = sim.seedStrand(cam.x, cam.y, Math.random() * Math.PI * 2, seq.length || 6, seq);
+  if (ok) { refresh(true); draw(); }
 });
 window.addEventListener('resize', () => { draw(); drawChart(); });
 buildKnobs(Object.assign({}, BASE, PRESETS[$('preset').value]));

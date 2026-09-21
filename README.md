@@ -24,14 +24,21 @@ dependencies). Or serve the folder:
 python3 -m http.server 8000     # then open http://localhost:8000/
 ```
 
-Click a square to read its state. Side colours are the state machine:
+The view opens zoomed on the seed strand. Scroll to zoom, drag to pan, click a
+square to read its state and its partners' states, click an event in the feed to
+jump to it. Every side of every square is drawn in the colour of its state, every
+bond is a white tie across the shared edge, and every face has a notch so you can
+see which way a free monomer points:
 
 | colour | side | meaning |
 |---|---|---|
+| grey-blue | F | free monomer's face: will dock on a template of its type |
 | green | F | template: a free monomer can dock here |
 | red | F | released, waiting for energy |
+| dark | L/R | inert: a free monomer's lateral sides never bond |
 | yellow | L/R | sticky: a docked unit's side, will bond to its neighbour |
 | cyan | L/R | open strand end |
+| white | L/R | bonded |
 | magenta | K | wants an energy particle |
 | bright yellow square | E | energy particle, charged |
 | grey small square | E | energy particle, spent |
@@ -49,9 +56,16 @@ node experiments/summarize.js # tables from experiments/out/*.csv
 
 ## The whole chemistry
 
-A unit is a square with four sides: **F** (face), **R**, **K** (back), **L**. Two
-monomer types **A** and **B** pair face to face with their own type. A third type
-**E** is the energy particle. Each A/B unit carries exactly one internal state:
+A unit is a square with four sides that are fixed for life: **F** (face), **R**,
+**K** (back), **L**. The sides are not interchangeable. Only a face docks, and only
+on the face of a template of the same type; L bonds only to a neighbour's R, so
+every square has at most one neighbour on each lateral side and chains cannot
+branch; the back takes only an energy particle. That is why forms are
+one-dimensional. The `pStack` knob adds one row to the table (back of a template to
+back of a template) and is the smallest change that lets them leave one dimension.
+
+Two monomer types **A** and **B** pair face to face with their own type. A third
+type **E** is the energy particle. Each A/B unit carries exactly one internal state:
 
 ```
 DOCK    a free monomer, or a monomer docked on a template
@@ -101,15 +115,18 @@ checked against `reverse(parent)`.
 
 ## Physics
 
-Rigid compound bodies in a periodic box with Brownian jostling, soft disc
-repulsion between bodies, and digital bonds. When a bond forms, the smaller body
-is snapped flush onto the larger one and the two become one rigid body; when a
-bond breaks, the body is split into its connected components. Bonds never break
+Nothing bigger than a square exists in the physics. Each square gets its own
+Brownian kick; two squares that are not bonded may not overlap; a bond is a
+constraint that the two bonded sides lie flush. Both kinds of constraint are
+enforced the same way, by nudging the two squares involved, 24 passes per step. Chains are straight because a row of flush
+constraints is straight, not because anything holds a chain. Bonds never break
 from jostling. A bond forms only if the compatibility table allows it, the two
-sides face each other within a tolerance, and every unit of the moving body
-would land in an empty spot. A monomer that undocks is pushed off the face it
-left. All soft probabilities are per step of contact, and a contact lasts several
-steps, so nominal values overstate softness (see the design doc, section 6).
+sides face each other within a tolerance (30° for docking, 10° for side-to-side
+links), and the moving square would land in an empty spot. A monomer that
+undocks is pushed off the face it left. All soft probabilities are per step of
+contact, and a contact lasts several steps, so nominal values overstate softness
+(see the design doc, section 6). The functions that find connected components
+are observation only and never feed back into the dynamics.
 
 ## Layout
 

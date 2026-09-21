@@ -30,7 +30,8 @@ Prior art worth reading before building: Lionel Penrose's mechanical self-replic
 - **Mutation is a side effect.** Binding compatibility is soft: a near-match binds with low probability. Variation comes from that, from strands fraying, and from nothing else added on purpose.
 - **Energy is conserved and recycled.** Energy particles are never created or destroyed. They flip between ON and OFF, and OFF ones get reloaded somewhere. Energy is required for exactly one scarce step of the replication pathway.
 - **Minimal environment.** Random jostling (the only "temperature"), soft repulsion between bodies, and an energy reload rule. Nothing else. No gradients, no chemistry zones, unless an experiment shows they are needed. (The optional sun patch is such an experiment, section 8.)
-- **Space is exclusive.** Two bodies cannot occupy the same place, and a bond cannot form into a slot that is occupied. Added in the second draft after the build showed what happens without it (section 10).
+- **Space is exclusive.** Two squares cannot occupy the same place, and a bond cannot form into a spot that is occupied. Added in the second draft after the build showed what happens without it (section 10).
+- **Nothing bigger than a square exists in the dynamics.** Not in the rules and not in the physics. A bond is a constraint between the two squares it joins and nothing else; jostling, repulsion and bond constraints act on one square at a time. Chains, strands, templates and copies are words for what an observer sees. The code that counts them (`componentOf`, `stats`, the birth log) is observation and never feeds back. Added in the third draft: the second draft's physics moved bonded squares as one rigid body, which was faster and exact but broke this principle.
 
 ---
 
@@ -62,16 +63,20 @@ Sides, counter-clockwise from the face: `F` (face), `R` (right), `K` (back), `L`
 
 This keeps section 2's locality intact (a derived state depends only on the unit's own bonds and state) and shrinks the state space to three values per unit.
 
-Physics:
+Physics (all of it per square):
 
-- Brownian motion plus soft disc repulsion between bodies.
-- A bonded set of units is one rigid body. When a bond forms the smaller body is snapped flush onto the larger and the two merge; when a bond breaks the body is split into its connected components. Strands come out exactly straight with no spring tuning.
+- Every square gets its own Brownian kick in position and angle each step.
+- Two squares that are not bonded to each other may not overlap (as discs of half a side). This is a constraint, not a force: the solver separates any overlapping pair on every pass, the same way it enforces bonds. A soft repulsion was tried first and lost against the bond passes, so chains slid through each other (section 10).
+- A bond is a constraint: the two bonded sides must lie flush (same midpoint, antiparallel normals). Each step the solver visits every bond and every touching pair a fixed number of times and nudges the two squares involved toward satisfying the constraint, splitting the correction by inverse mass. That is the only way a bond or a contact acts on anything. Straightness of a strand is not imposed; it is what a row of flush constraints produces. With 24 passes a docked square sits within a degree or two of its template partner and a chain of ten is straight to the eye.
+- When a bond forms, the less-connected of the two squares is snapped flush onto the other. That is the one discontinuous move in the physics.
 - No ranged attraction of any kind.
+- A hinge (section 9) is now one line: skip the angle part of the constraint for that bond.
 
 Bond formation:
 
-- Two sides may bond if the compatibility table allows their (type, side, derived state) pair, the vector between the two units lies along both sides' outward normals within a tolerance, the sides are nearly antiparallel, and **every unit of the moving body would land in an empty spot**.
-- Compatibility is probabilistic. Exact matches bind with probability 1. Near matches bind with a small probability **per step of contact**. A monomer's contact with a face lasts a handful of steps and a rigid strand's contact with another strand can last tens of steps, so the per-encounter probability is several times the nominal value (section 6). The near matches are the mutation sources.
+- Two sides may bond if the compatibility table allows their (type, side, derived state) pair, the vector between the two units lies along both sides' outward normals within a tolerance, the sides are nearly antiparallel, and **the moving square would land in an empty spot**.
+- Docking (face to face, or energy to back) uses a loose tolerance, 30° and 35% of a side, so that a jostling monomer finds a template in reasonable time. Side-to-side links (L to R, and K to K when stacking is on) use a tight one, 10° and 15%, because the only legitimate case is two squares already held flush by the same template, and a loose tolerance lets squares docked on *different* templates link (section 10).
+- Compatibility is probabilistic. Exact matches bind with probability 1. Near matches bind with a small probability **per step of contact**. A monomer's contact with a face lasts a handful of steps and two strands in contact can stay so for tens of steps, so the per-encounter probability is several times the nominal value (section 6). The near matches are the mutation sources.
 
 Rules:
 
@@ -93,6 +98,7 @@ This is what the build settled on. It has no caps, no completion handshake, and 
 | L/R `STICKY` or `END` | R/L `END` or `STICKY` | `pLigate` | two strands join end to end |
 | L/R `INERT` | R/L `STICKY` or `END` | `pCapture` | a free monomer joins a strand without a template |
 | K `WANT` | E `ON` | 1 | energy docks |
+| K `IDLE` of a `TPL` unit | K `IDLE` of a `TPL` unit | `pStack` | two templates pair back to back (default 0; the one row that lets forms leave one dimension) |
 
 Everything else is 0. Note what is absent: `DOCK`-`DOCK` (two free monomers never join), `TPL`-`TPL` (two strands never dock on each other), anything involving `REPEL`.
 
@@ -175,7 +181,9 @@ Copying alone gives selection on copy speed only, and the winner is the shortest
 
 **Cooperativity (now).** With R6 on, length is a phenotype: a longer template has more places for two monomers to land side by side before either leaves, so it nucleates copies faster. Measured to flip the dimer-versus-6-mer competition at `pUndock` above about 0.1 (`experiments/RESULTS.md`, section 5). Sequence is not yet a phenotype.
 
-**Geometry (next).** Mixed shapes in a strand give it a shape: a run of triangles bends, squares run straight, some sequences close into rings. Rings enclose monomers and energy near their own template, which is the strongest known protection against parasites. Working through the geometry turned up a problem the first draft missed: with rigid units, **a bent template cannot be copied**. A bend turns away from the face side, so the copy sits on the outside of the bend, where adjacent docked units are further apart than a side length and cannot link. The copy of a curve has gaps. The fix that keeps everything local is to make flexibility heritable: a lateral bond between two particular letters (say `B`-`B`) is a free hinge, everything else is rigid. A hinged template can fold; its copy has hinges in the same places (it is a copy), so the copy can flex to close its gaps. Sequence then decides where a strand bends, which is exactly a genotype-to-phenotype map, and it needs a constraint solver in the physics (section 12).
+**Why chains are one-dimensional, and the knob that changes it.** Sides are fixed for life and the table only lets F meet F, L meet R, and K meet E. A square therefore has exactly one neighbour on each lateral side and a chain cannot branch; a template and its copy meet face to face and nothing meets a back. `pStack` adds one row, K of a template to K of a template, so two strands can pair back to back into a ribbon whose two faces both template. It is the smallest change that lets structures leave one dimension, and it is off by default because its consequences have not been measured.
+
+**Geometry (next).** Mixed shapes in a strand give it a shape: a run of triangles bends, squares run straight, some sequences close into rings. Rings enclose monomers and energy near their own template, which is the strongest known protection against parasites. Working through the geometry turned up a problem the first draft missed: with rigid bonds, **a bent template cannot be copied**. A bend turns away from the face side, so the copy sits on the outside of the bend, where adjacent docked units are further apart than a side length and cannot link. The copy of a curve has gaps. The fix that keeps everything local is to make flexibility heritable: a lateral bond between two particular letters (say `B`-`B`) is a free hinge, everything else is rigid. A hinged template can fold; its copy has hinges in the same places (it is a copy), so the copy can flex to close its gaps. Sequence then decides where a strand bends, which is exactly a genotype-to-phenotype map. The per-square constraint solver already supports it: a hinge is a bond whose angle constraint is skipped.
 
 **Self-bonding.** Compatible faces on distant units of the same strand can bond, folding the strand (RNA secondary structure). Free once hinges exist. Avoid ranged attraction; it is the particle-life knob, hard to tune, and it blurs what "chemistry" means here.
 
@@ -192,6 +200,7 @@ Copying alone gives selection on copy speed only, and the winner is the shortest
 - **Immediate re-docking.** *Not observed.* `REPEL` faces are inert and `TPL` does not dock on `TPL`, so the energy gate is not needed for this; it is needed only as the scarce resource.
 - **Stalled copies.** *Observed as a transient*: a captured unit in a gap leaves the far fragment waiting on the template. It resolves when new monomers fill the freed sites. Diagnostic: `docked` count in the CSV that stays high while `free` is nonzero.
 - **Docking through an occupied slot.** *Observed and fixed.* With loose geometric tolerance and soft repulsion, a monomer near a template site whose old copy unit was still sitting there unbonded could pass the geometry check and be snapped into the occupied spot, on top of the old unit. Fix: a bond forms only if the slot is empty (section 3). This is the reason for the "space is exclusive" commitment in section 2.
+- **Squares docked on different templates link.** *Observed twice and fixed twice.* The rules never say "the two sticky squares must be on the same template"; geometry is supposed to make it so. First case: two templates lying end to end, whose end-docked squares faced each other. Fix: a square docked at its template's end reads `END` on the outward side, not `STICKY`. Second case, after the move to per-square physics: two templates lying close and roughly parallel, each with one square docked at its end, the two docked squares tilted a few degrees each and passed the 30° link check. The pair then satisfied both release conditions and left as a two-unit "copy" of nothing (21 such dimers in 30,000 steps with every mutation knob at zero). Fix: side-to-side links require flush alignment within 10°, and the solver runs enough passes that a docked square sits within a degree or two of its partner. Third case, same session: with links tight, odd chains still appeared, and the positions showed why: two templates had slid *through* each other until one template's end unit sat a quarter of a side from the other's third unit, so a square docked on the one sat exactly in a copy slot of the other. The soft repulsion (one weak push per step) could not hold against 24 bond passes. Fix: overlap between unbonded squares is a hard constraint solved in the same passes as the bonds. The general lesson: any place where the rules rely on geometry to rule out a pairing needs the geometry to be tight enough to actually rule it out, and a test with all knobs at zero that counts odd-length births is the way to know.
 - **Shortest replicator wins.** *Observed, robustly.* With fraying on, mean strand length collapses from 6 to between 2.5 and 2.9 within 50,000 steps in every configuration tried (unit or strand energy, abundant or scarce, uniform or sun patch), while the birth rate goes up by a factor of ten to seventy. In direct competition with mutation off, a dimer out-reproduces a 6-mer 50:1 with abundant energy, 10:1 with scarce energy, and with fraying on the 6-mers produce no births at all. Everything in the copy cycle favours short strands: a copy of N units waits for the slowest of N dockings, then (in unit mode) the slowest of N energy arrivals, then a longer body diffuses away more slowly, and fraying shortens a long template faster than it finishes a copy. Neither strand-mode energy nor the sun patch changed this. The missing ingredient is cooperativity: here a single docked monomer is as stable as a whole duplex, so a dimer copies on two lucky dockings. R6 (`pUndock`) makes a lone docked unit unstable, so copying needs two monomers to land side by side before either leaves, and a long template has more places for that to happen. *Measured:* the dimer's advantage falls from 50:1 at `pUndock` 0 to 7:1 at 0.02, 3:1 at 0.05, and reverses at 0.1 and 0.2, where 6-mers take four fifths of the copied material. In the evolutionary regime, 0.02 already raises mean length from 2.3 to 3.1 and sequence entropy from 2.4 to 4 bits (`experiments/RESULTS.md`, section 5).
 - **Rules leaking global knowledge.** None. Every rule in section 4 reads one unit and its bonded partner sides.
 - **Analog creep.** None in the chemistry. The physics has tolerances (docking angle and distance, repulsion stiffness, jostle size) but no pair of them has to be balanced against each other for chains to both form and release; release is a logic event.
@@ -216,12 +225,13 @@ Metrics logged from Phase 1 onward (`run.js`): free monomer count, strand count 
 
 ## 12. Implementation notes
 
-- 2D torus with a spatial hash. Bodies are rigid compounds: merge on bond, split into connected components on break. Poses are exact; there is no jitter and no constraint solver. Hinges (section 9) will need one: either position-based dynamics on the bond constraints, or articulated bodies with pin joints.
+- 2D torus with a spatial hash. Per-square state only: position, angle, type, one internal state, four bond slots. Bonds are enforced by position-based dynamics: 24 Gauss-Seidel passes over the bond list per step, each pass correcting angle then side-midpoint distance for one bond, weighted by inverse mass. About 2,000 steps per second for 440 squares in Node; the solver is not the bottleneck.
 - The compatibility table is one function (`compat`) over (type, side, derived state) pairs and the transitions are one function (`_transition`) of five clauses. Both are small enough to print on a page and to randomise.
 - Deterministic RNG (mulberry32) with a logged seed. `test.js` checks two runs with the same seed give the same positions.
 - Side states are drawn as colours on the square's edges; the state machine can be read off the screen, and clicking a square prints its state and its partners' states.
 - Every birth is logged with time, sequence, generation, parent sequence and position. Most of the analysis happens on that log.
-- Speed: about 1,000 steps per second for 1,100 units in Node on one core; about 350 in the browser while drawing. A copy cycle is a few thousand steps. Phase 3 will want a faster inner loop before it wants a GPU.
+- Speed: about 2,000 steps per second for 440 units and 900 for 1,100 units in Node on one core; about 180 in the browser while drawing at full detail. A copy cycle is a few thousand steps. Phase 3 will want a faster inner loop before it wants a GPU.
+- The viewer draws every side of every square in the colour of its derived state, a tie across every bond, a notch on every face so orientation reads on free monomers too, and a ring that fades over 80 steps at the site of every dock, link, release, re-arm, birth, fray and undock. The event feed lists the same events and jumps the camera to the square.
 
 ---
 
@@ -230,7 +240,7 @@ Metrics logged from Phase 1 onward (`run.js`): free monomer count, strand count 
 Answered by the build:
 
 - *Is the K side needed?* Yes, but only as a place for energy to dock that faces away from the template; nothing else uses it.
-- *Does the FWD/REL round trip need caps at both ends?* Moot: the round trip is gone. Local completion needs neither caps nor a wave.
+- *Does the FWD/REL round trip need caps at both ends?* Moot: the round trip is gone. Local completion needs neither caps nor a wave. The only rule in the table that lets anything travel along a chain is the optional `strand` energy mode (R4's second clause), which is off by default.
 - *What is the smallest rule table that passes Phase 1?* Five transitions and the first three rows of the compatibility table. R2, R5 and the soft rows are only for variation and turnover.
 - *Should a template accept docking while its neighbour is still busy?* Yes, and it does; no tangles observed.
 - *Does anything secretly depend on strands being straight?* Yes, copying does (section 9). This is the phenotype/replication tension, arriving on schedule.
@@ -268,6 +278,11 @@ Keep entries short: date, what changed, why, what evidence.
 - 2026-09-15. Added R6 undocking (`pUndock`), with a physical push off the face. Reason: the dimer-versus-6-mer competition showed every configuration favouring the dimer by 6:1 to 50:1; a lone docked monomer here is as stable as a full duplex, which is what lets a dimer copy on two lucky dockings. Making a lone docked unit unstable makes copying nucleation-limited, and a longer template has more places to nucleate. Evidence: section 10.
 - 2026-09-15. Strand-mode energy did not rescue length. Evidence: section 8 and `experiments/RESULTS.md`. Kept as an option because it changes what energy limits.
 - 2026-09-15. R6 confirmed as the first length-favouring rule. Evidence: `experiments/RESULTS.md`, section 5. Viewer presets "cooperative docking" and "sun patch" now run with `pUndock` 0.1.
+- 2026-09-21. Physics rewritten per square: rigid compound bodies replaced by bond constraints solved by position-based dynamics. Reason: the project's principle is that nothing bigger than a square exists, and the rigid-body code had an object for every chain. Cost: strands are straight to within a degree or two instead of exactly; docking rate is unchanged.
+- 2026-09-21. Side-to-side links get their own tight tolerance (10°, 15%) and the solver runs 24 passes. Reason: with per-square physics, squares docked on different nearby templates linked and released as two-unit chimeras (section 10). Evidence: 21 dimers in 30,000 steps with all knobs at zero before, three odd chains after.
+- 2026-09-21. Overlap between unbonded squares made a hard constraint inside the solver loop, replacing the soft repulsion. Reason: the remaining odd chains came from templates sliding through each other (section 10). Evidence: zero odd chains in 30,000 steps with all knobs at zero, two seeds, and the closest unbonded pair in the world never inside a side length.
+- 2026-09-21. Added `pStack` (template backs pair). Reason: it is the one-row answer to "why are forms one-dimensional"; off by default.
+- 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
 

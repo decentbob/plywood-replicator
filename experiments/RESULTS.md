@@ -1,5 +1,11 @@
 # Results
 
+**Note (2026-09-21):** the numbers below were measured on the rigid-body physics of the second
+draft. The physics has since been rewritten per square (bonds and contacts as constraints,
+nothing bigger than a square). The batches are being re-run on the new physics and this file
+will be replaced by the new measurements; the conclusions are expected to hold, since the
+chemistry is unchanged, but the rates will differ.
+
 Measurements from the headless runner on the current code. Every run is deterministic per seed;
 the commands are in the `.sh` scripts next to this file and `run_all.sh` reproduces everything
 in about 50 minutes on four cores. Tables come from `summarize.js`, `births_by_length.js` and
