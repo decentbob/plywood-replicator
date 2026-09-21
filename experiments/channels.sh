@@ -5,7 +5,7 @@
 #  M_*  metabolism selection: energy only from ABA motifs (pReload 0). Does the motif spread? Control: motif off, background reload.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
-COMMON="--steps 100000 --every 5000 --W 80 --H 80 --nE 300 --energyMode unit"
+COMMON="--steps 100000 --every 5000 --W 80 --H 80 --nE 300"
 {
 for seed in 31 32; do
   echo "O_spont3e4_$seed --seed $seed --nA 400 --nB 400 --seedCount 0 --pSpont 0.0003 --pCapture 0.02 --pFray 0.0001 --pSoft 0.01"

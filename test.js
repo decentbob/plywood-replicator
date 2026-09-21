@@ -16,7 +16,7 @@ test('free monomers never join each other (no seed, no capture)', () => {
 });
 
 test('a seeded strand is copied exactly; every child is the reverse of its parent', () => {
-  const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', energyMode: 'unit' }));
+  const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA' }));
   s.run(30000);
   const st = s.stats();
   assert.ok(st.births >= 10, 'expected at least 10 births, got ' + st.births);
@@ -27,19 +27,11 @@ test('a seeded strand is copied exactly; every child is the reverse of its paren
 });
 
 test('energy accounting, unit mode: one E per re-armed unit', () => {
-  const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', energyMode: 'unit' }));
+  const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA' }));
   s.run(30000);
   let tpl = 0; for (let u = 0; u < s.n; u++) if (s.type[u] !== T_E && s.is[u] === I_TPL) tpl++;
   assert.strictEqual(s.energyUsed, tpl - 6, 'E spent should equal re-armed units (seed excluded)');
   assert.strictEqual(s.stats().eOn + s.stats().eOff, 150, 'energy particles conserved');
-});
-
-test('energy accounting, strand mode: about one E per copy', () => {
-  const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', energyMode: 'strand' }));
-  s.run(30000);
-  const st = s.stats();
-  assert.ok(st.births >= 10);
-  assert.ok(s.energyUsed < 2.5 * st.births, `E spent ${s.energyUsed} for ${st.births} births`);
 });
 
 test('mass is conserved and bonds stay consistent under mutation and turnover', () => {

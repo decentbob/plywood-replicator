@@ -182,7 +182,7 @@ const $ = (id) => document.getElementById(id);
 // Presets. The first three show copying, mutation and turnover from one seed strand. The two races seed dimers and
 // 6-mers together: without undocking the dimers take everything, with it the 6-mers do. "origin" has no seed strand.
 // "metabolism" gets energy only from ABA motifs. "radiation" breaks bonds, B blocks resist, and B is scarce.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, hingeSnap: 0, slack: 0, nM: 0, memAngle: 60, memFlex: 6, pMem: 0.2, resM: 0.7 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 60, memFlex: 6, pMem: 0.2, resM: 0.7 };
 const PRESETS = {
   copy:   Object.assign({}, ZERO),
   mut:    Object.assign({}, ZERO, { pSoft: 0.02, pCapture: 0.05 }),
@@ -196,7 +196,7 @@ const PRESETS = {
   mem:    Object.assign({}, ZERO, { nM: 300, pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pSpont: 0.001, pBreak: 0.0002, resM: 0.7 }),
   sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 14 }),
 };
-const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
+const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
@@ -215,7 +215,6 @@ const KNOBS = [
   ['grp', 'Shape'],
   ['hinge', 'hinges', 'none, all, BB or AB: which lateral bonds bend when free', 'text'],
   ['hingeMax', 'hinge limit °'],
-  ['hingeSnap', 'hinge detents', '0 free; 0.2 clicks to flush or the limit'],
   ['slack', 'trapezoid slack', 'corner gap a flush bond tolerates; 0.1 is safe, 0.2 lets chimeras in'],
   ['grp', 'Radiation'],
   ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
@@ -224,9 +223,7 @@ const KNOBS = [
   ['grp', 'Energy'],
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
   ['motif', 'ABA motif charges', 'a B between two As recharges spent E at its back', 'bool'],
-  ['pReload', 'p reload per step', 'OFF→ON background rate, when sun is off'],
-  ['sun', 'sun patch', 'reload only inside a disc', 'bool'],
-  ['sunR', 'sun radius'],
+  ['pReload', 'p reload per step', 'OFF→ON background energy income'],
   ['grp', 'Physics'],
   ['sigma', 'jostle', 'Brownian step per square'],
   ['sigmaRot', 'jostle rotation'],
@@ -344,7 +341,6 @@ function draw() {
   const W = sim.p.W, H = sim.p.H, z = cam.zoom;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = '#0b0f14'; ctx.fillRect(0, 0, cv.width, cv.height);
-  if (sim.p.sun) { const [sx, sy] = toScreen(W / 2, H / 2); ctx.fillStyle = 'rgba(255,224,102,0.07)'; ctx.beginPath(); ctx.arc(sx, sy, sim.p.sunR * z, 0, Math.PI * 2); ctx.fill(); }
   // world boundary hint when zoomed out
   const halfW = W * z / 2, halfH = H * z / 2;
   if (halfW < cv.width / 2 || halfH < cv.height / 2) {

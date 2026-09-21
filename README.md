@@ -38,6 +38,7 @@ see which way a free monomer points:
 | grey-blue | F | free monomer's face: will dock on a template of its type |
 | green | F | template: a free monomer can dock here |
 | orange | K | an `ABA` motif's back: recharges spent energy (motif rule) |
+| moss green | M | membrane block; pale sides are its open ends |
 | red | F | released, waiting for energy |
 | dark | L/R | inert: a free monomer's lateral sides never bond |
 | yellow | L/R | sticky: a docked unit's side, will bond to its neighbour |
@@ -65,8 +66,8 @@ A unit is a square with four sides that are fixed for life: **F** (face), **R**,
 on the face of a template of the same type; L bonds only to a neighbour's R, so
 every square has at most one neighbour on each lateral side and chains cannot
 branch; the back takes only an energy particle. That is why forms are
-one-dimensional. The `pStack` knob adds one row to the table (back of a template to
-back of a template) and is the smallest change that lets them leave one dimension.
+one-dimensional. Membrane blocks (type M) are the only squares that build anything
+else, and they build it around the chains, not out of them.
 
 Two monomer types **A** and **B** pair face to face with their own type. A third
 type **E** is the energy particle. A fourth, **M**, is a membrane block: it bonds
@@ -107,7 +108,7 @@ A docked unit's free lateral side reads `STICKY` only where its template partner
 | R1 | DOCK | REPEL | docked, and every lateral bond the template partner says I need is in place |
 | R2 | DOCK | REPEL | laterally captured without a template |
 | R3 | REPEL / TPL | DOCK | no lateral bonds left |
-| R4 | REPEL | TPL | an ON energy particle is docked on K (in `strand` mode, also if a lateral neighbour is already TPL) |
+| R4 | REPEL | TPL | an ON energy particle is docked on K |
 | R5 | REPEL / TPL | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
 | R6 | DOCK (docked) | DOCK (free) | cooperativity: a docked monomer with no lateral bonds falls off with probability `pUndock` per step |
 | R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances `resA`, `resB` |
@@ -119,9 +120,9 @@ energy particle, and frees a frayed unit.
 **Energy.** Energy particles are half-size squares of a third type that never
 chain. A charged one docks on the back of a released block, the block re-arms,
 the particle is left spent and drifts off; nothing is absorbed and the count is
-fixed. Spent particles recharge at a background rate, in the sun patch, or, with
-the motif rule, at the back of a `B` block flanked by two `A`s, which makes energy
-income a property of sequence.
+fixed. Spent particles recharge at a background rate or, with the motif rule, at the
+back of a `B` block flanked by two `A`s, which makes energy income a property of
+sequence.
 
 There is no completion handshake and no cap type. A copy is released when every
 unit is *locally* complete: a middle unit needs both lateral bonds, an end unit

@@ -49,8 +49,7 @@ const S = {
   INERT: 5, STICKY: 6, BONDED: 7, END: 8,               // L, R
   IDLE: 9, WANT: 10,                                    // K
   ON: 11, OFF: 12,                                      // E (all four sides)
-  ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL)
-  STACKED: 14,                                          // K: bonded back to back with another template unit
+  ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL); read by nothing, shown by the viewer
   CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
 };
@@ -71,23 +70,19 @@ const DEFAULTS = {
   pLigate: 0,      // two strand ends join end to end: fusion. Balanced against fraying it sets a length distribution.
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
-  pStack: 0,       // back sides of two template units bond (K to K): strands pair back to back, 2D forms become possible (experiment; keeps chains 1D when 0)
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   hinge: 'none',   // which lateral bonds bend when neither square is docked: 'none', 'all', 'BB' (both B), 'AB' (mixed). A hinge pivots on the shared back corner.
   hingeMax: 90,    // a hinge bends at most this many degrees (toward the backs)
-  hingeSnap: 0,    // detents: each pass pulls a hinge this fraction of the way toward the nearer of flush and hingeMax
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the bond then bends to memAngle
   memAngle: 45,    // built-in bend of a membrane bond, degrees toward the backs (45 closes a ring of 8)
   memFlex: 12,     // a membrane bond may flex this many degrees either side of its bend
   resM: 0.5,       // membrane blocks' resistance to radiation
   slack: 0,        // trapezoid tolerance: a rigid lateral bond lets each pair of shared corners gap by up to this much (in sides), with no restoring force inside the gap
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
-  energyMode: 'unit', // 'unit': every unit needs its own E. 'strand': a re-armed unit re-arms its lateral neighbours.
-  pReload: 0.002,  // OFF -> ON per step when the sun is off
-  sun: false, sunR: 10,   // if on, OFF -> ON only inside a disc at the world centre
+  pReload: 0.002,  // OFF -> ON per step, the background energy income; the ABA motif (motif rule) is the other source
   // physics knobs (these should not need tuning for the chemistry to work)
   sigma: 0.3, sigmaRot: 0.45,    // Brownian step (translation, rotation) per unit per step
   repMargin: 1.0,                // contact radius of a square as a fraction of half its side; unbonded squares never overlap more than this allows
@@ -401,7 +396,6 @@ class Sim {
       if (tv === T_E && tu !== T_E) return (i === K && ((sv === S.ON && su === S.WANT) || (sv === S.OFF && su === S.CHARGE))) ? 1 : 0;
       return 0;
     }
-    if (i === K && j === K) return (su === S.IDLE && sv === S.IDLE && this.is[u] === I_TPL && this.is[v] === I_TPL) ? p.pStack : 0;
     if (i === F && j === F) {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
@@ -429,7 +423,7 @@ class Sim {
         if (this.type[u] === T_M) ok = s === S.MEM;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE || (s === S.IDLE && p.pStack > 0 && this.is[u] === I_TPL);
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -465,9 +459,8 @@ class Sim {
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
     // K. A B template unit flanked by two A units reads CHARGE at its back when the motif rule is on:
     // this is the one place a side's state depends on what its neighbours are (their type is their colour).
-    const bK = b[o + K] >= 0;
+    // (K to K bonds no longer exist; the back is for energy only.)
     if (st === I_REPEL) this.ss[o + K] = S.WANT;
-    else if (bK && st === I_TPL && this.type[b[o + K] >> 2] !== T_E) this.ss[o + K] = S.STACKED;
     else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
     else this.ss[o + K] = S.IDLE;
   }
@@ -520,7 +513,6 @@ class Sim {
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3 lost its strand: back to the pool
       else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
-      else if (p.energyMode === 'strand' && ((bL && this.ss[b[o + L]] === S.ARMED) || (bR && this.ss[b[o + R]] === S.ARMED))) this.is[u] = I_TPL; // R4b re-arm spreads along the strand
     } else { // I_TPL
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3
     }
@@ -738,7 +730,6 @@ class Sim {
         const sgn = i === R ? 1 : -1, bend = sgn * e, lim = p.hingeMax * Math.PI / 180;
         let corr = 0;
         if (bend > lim) corr = bend - lim; else if (bend < 0) corr = bend;
-        else if (p.hingeSnap > 0) corr = p.hingeSnap * (bend < lim / 2 ? bend : bend - lim);   // detent at flush or at the limit
         if (corr !== 0) { const wu = this.w[u], wv = this.w[v], ws = wu + wv; this.pa[u] += sgn * corr * wu / ws; this.pa[v] -= sgn * corr * wv / ws; }
       }
     }
@@ -797,10 +788,7 @@ class Sim {
     // 8. energy reload (E is never created or destroyed; it flips OFF -> ON)
     for (let u = 0; u < n; u++) {
       if (this.type[u] !== T_E || this.is[u] !== I_OFF) continue;
-      if (p.sun) {
-        const dx = this._dx(this.px[u] - p.W / 2), dy = this._dy(this.py[u] - p.H / 2);
-        if (dx * dx + dy * dy <= p.sunR * p.sunR) this.is[u] = I_ON;
-      } else if (rng() < p.pReload) this.is[u] = I_ON;
+      if (rng() < p.pReload) this.is[u] = I_ON;
     }
     for (let u = 0; u < n; u++) if (this.type[u] === T_E) this._derive(u);
     this._computeOpen();

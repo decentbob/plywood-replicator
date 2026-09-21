@@ -3,7 +3,7 @@
 # plus a "gentle" regime with all sources on at low rates. 100k steps each, about 3 minutes per run.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
-COMMON="--steps 100000 --every 5000 --nA 400 --nB 400 --nE 300 --W 80 --H 80 --seedSeq ABBABA --sigma 0.3 --sigmaRot 0.45 --energyMode unit --pLigate 0"
+COMMON="--steps 100000 --every 5000 --nA 400 --nB 400 --nE 300 --W 80 --H 80 --seedSeq ABBABA --sigma 0.3 --sigmaRot 0.45 --pLigate 0"
 {
 echo "R_base      --seed 7 --pSoft 0 --pCapture 0 --pFray 0"
 echo "R_soft      --seed 7 --pSoft 0.02 --pCapture 0 --pFray 0"

@@ -4,7 +4,7 @@
 # Then one full evolutionary run with undocking on, to see where length settles. 100k steps each.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
-COMMON="--steps 100000 --every 5000 --nA 400 --nB 400 --nE 300 --W 80 --H 80 --sigma 0.3 --sigmaRot 0.45 --energyMode unit --pLigate 0"
+COMMON="--steps 100000 --every 5000 --nA 400 --nB 400 --nE 300 --W 80 --H 80 --sigma 0.3 --sigmaRot 0.45 --pLigate 0"
 {
 for seed in 21 22; do
   echo "U_undock02_$seed  --seed $seed --seedSeq AB,ABBABA --seedCount 3 --pSoft 0 --pCapture 0 --pFray 0 --pUndock 0.02"
