@@ -71,7 +71,40 @@ whole strand, caught by any of its N back sides. E40 uses fewer particles and a 
 `sun`: particles reload only inside a disc of radius 12. Mean length counts templates that are
 being copied as well as free strands.
 
-<<LENGTH>>
+| run | energy | mean length | max | strands | births | distinct | entropy (bits) | E on | free |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| L_unit_E300_11 | unit, 300 | 2.46 | 5 | 146 | 5,611 | 16 | 2.96 | 251 | 279 |
+| L_unit_E300_12 | unit, 300 | 2.52 | 5 | 148 | 5,070 | 16 | 3.02 | 260 | 244 |
+| L_strand_E300_11 | strand, 300 | 2.49 | 6 | 155 | 5,380 | 19 | 2.96 | 281 | 238 |
+| L_strand_E300_12 | strand, 300 | 2.74 | 6 | 137 | 4,675 | 22 | 3.52 | 285 | 214 |
+| L_unit_E40_11 | unit, 40 | 2.51 | 5 | 78 | 2,520 | 14 | 3.02 | 15 | 531 |
+| L_unit_E40_12 | unit, 40 | 2.45 | 5 | 73 | 2,653 | 13 | 2.77 | 17 | 553 |
+| L_strand_E40_11 | strand, 40 | 2.47 | 5 | 137 | 4,233 | 14 | 2.91 | 17 | 315 |
+| L_strand_E40_12 | strand, 40 | 2.57 | 5 | 140 | 4,289 | 19 | 3.17 | 20 | 279 |
+| L_sun_strand_11 | strand, sun | 2.53 | 5 | 144 | 4,643 | 17 | 3.07 | 33 | 282 |
+| L_sun_strand_12 | strand, sun | 2.54 | 6 | 140 | 4,321 | 16 | 3.06 | 39 | 293 |
+
+Every configuration lands between 2.45 and 2.75. Strand-mode energy does not hold length up;
+under scarcity it only supports more strands (137 against 75), because one particle re-arms a
+whole strand. The sun patch changes where things happen, not what. Roughly one birth in six
+carries a mutation in these runs (84% faithful, 8% substitution, 6% longer, 1% shorter).
+
+**Ligation, revised.** On the rigid-body physics ligation was a runaway: fused strands became
+rigid rafts that could not separate and births fell by three quarters. On the per-square physics
+the same two probes (strand mode, 300 E, otherwise as above) give the longest and most diverse
+populations measured so far:
+
+| run | pLigate | ligations | mean length | max | strands | births | distinct | entropy (bits) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| L_ligate005_11 | 0.005 | 668 | 2.75 | 6 | 149 | 3,913 | 24 | 3.42 |
+| L_ligate02_11 | 0.02 | 1,390 | 4.66 | 19 | 90 | 2,110 | 46 | 4.95 |
+
+At 0.02 the length histogram at the end runs from 2 to 25 units with most mass between 3 and 8,
+births continue at two fifths of the ligation-free rate, and eight of ten births are still
+faithful copies. Fusion and fraying set a length distribution the way a polymerisation
+equilibrium does; this is chemistry, not selection, but it is the first open regime in which long
+strands persist. Whether selection acts on top of it (ligation with cooperative docking on, and
+which sequences win) is the obvious next run.
 
 ## 4. Direct competition: dimer against 6-mer (`competition.sh`, 100,000 steps)
 
@@ -170,9 +203,11 @@ rate, with more than two seeds.
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
   the dynamics. Copies are exact when the soft knobs are zero.
-- Every soft knob is a distinct, measurable mutation channel. Ligation is not usable as a
-  per-step probability.
-- Without cooperativity the shortest strand wins in every energy regime tried, by 10:1 to 60:1.
+- Every soft knob is a distinct, measurable mutation channel. Ligation, a runaway on rigid
+  bodies, is on the per-square physics the one regime that keeps long strands in an open
+  population (mean length 4.7, up to 25 units, 46 sequences), by fusion balanced against fraying.
+- Without cooperativity or ligation the shortest strand wins in every energy regime tried, by 10:1
+  to 60:1.
 - With a lone docked monomer made unstable, the head-to-head race tips to longer strands at
   undocking rates above about 0.05 per step, decisively at 0.1. In the evolutionary regime with
   turnover the same rule has not yet produced a long-strand population: at low rates it changes
