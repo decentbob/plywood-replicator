@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, T_E, I_TPL, F, L, R } = require('./src/sim.js');
+const { Sim, T_E, T_M, I_TPL, F, L, R } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -113,6 +113,21 @@ test('trapezoid slack 0.1: copies stay exact and the copying rate does not fall'
   for (const b of slack.births) assert.strictEqual(b.seq, rev(b.parent));
   for (const [len] of slack.stats().lenHist) assert.strictEqual(len, 6, 'strand of wrong length with slack');
   assert.ok(slack.stats().births >= 0.8 * rigid.stats().births, `slack ${slack.stats().births} births vs rigid ${rigid.stats().births}`);
+});
+
+
+test('membrane blocks self-assemble into rings and never bond to anything else', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 7, nM: 120, memAngle: 60, memFlex: 6, seedSeq: 'ABBABA' }));
+  s.run(30000);
+  const st = s.stats();
+  assert.ok(st.memRings >= 3, 'expected membrane rings, got ' + st.memRings);
+  for (let u = 0; u < s.n; u++) for (let i = 0; i < 4; i++) {
+    const q = s.bond[u * 4 + i]; if (q < 0) continue;
+    const mu = s.type[u] === T_M, mv = s.type[q >> 2] === T_M;
+    assert.strictEqual(mu, mv, 'a membrane block bonded to a non-membrane block');
+  }
+  assert.ok(st.births > 0, 'replicators should keep copying with membranes around');
+  assert.deepStrictEqual(s.check(), []);
 });
 
 console.log(passed + ' tests passed');

@@ -36,8 +36,8 @@
 
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
-const T_A = 0, T_B = 1, T_E = 2;
-const TNAME = ['A', 'B', 'E'];
+const T_A = 0, T_B = 1, T_E = 2, T_M = 3;
+const TNAME = ['A', 'B', 'E', 'M'];
 
 // internal states
 const I_DOCK = 0, I_REPEL = 1, I_TPL = 2;   // A / B
@@ -52,6 +52,7 @@ const S = {
   ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL)
   STACKED: 14,                                          // K: bonded back to back with another template unit
   CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
+  MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
 };
 const SNAME = Object.keys(S);
 // A bond breaks the moment either of its sides derives to one of these.
@@ -62,6 +63,7 @@ const DEFAULTS = {
   seed: 1,
   W: 48, H: 48,                 // torus
   nA: 160, nB: 160, nE: 120,    // fixed populations (mass and energy are conserved)
+  nM: 0,                        // membrane blocks: bond only to each other, side to side, at a built-in bend; self-assemble into arcs and rings
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
@@ -77,6 +79,10 @@ const DEFAULTS = {
   hinge: 'none',   // which lateral bonds bend when neither square is docked: 'none', 'all', 'BB' (both B), 'AB' (mixed). A hinge pivots on the shared back corner.
   hingeMax: 90,    // a hinge bends at most this many degrees (toward the backs)
   hingeSnap: 0,    // detents: each pass pulls a hinge this fraction of the way toward the nearer of flush and hingeMax
+  pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the bond then bends to memAngle
+  memAngle: 45,    // built-in bend of a membrane bond, degrees toward the backs (45 closes a ring of 8)
+  memFlex: 12,     // a membrane bond may flex this many degrees either side of its bend
+  resM: 0.5,       // membrane blocks' resistance to radiation
   slack: 0,        // trapezoid tolerance: a rigid lateral bond lets each pair of shared corners gap by up to this much (in sides), with no restoring force inside the gap
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   energyMode: 'unit', // 'unit': every unit needs its own E. 'strand': a re-armed unit re-arms its lateral neighbours.
@@ -122,7 +128,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE;
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.size = new Float64Array(n);
@@ -153,6 +159,7 @@ class Sim {
     for (let i = 0; i < p.nA; i++) this.type[u++] = T_A;
     for (let i = 0; i < p.nB; i++) this.type[u++] = T_B;
     for (let i = 0; i < p.nE; i++) this.type[u++] = T_E;
+    for (let i = 0; i < (p.nM || 0); i++) this.type[u++] = T_M;
     for (u = 0; u < n; u++) {
       this.size[u] = this.type[u] === T_E ? p.sizeE : 1;
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
@@ -262,7 +269,8 @@ class Sim {
       const r = this.bond[q]; if (r <= q) continue;
       const u = q >> 2, i = q & 3, v = r >> 2, j = r & 3;
       let kind = 0;
-      if ((i === L || i === R) && (j === L || j === R) && this.type[u] !== T_E && this.type[v] !== T_E) {
+      if (this.type[u] === T_M && this.type[v] === T_M) kind = 3;
+      else if ((i === L || i === R) && (j === L || j === R) && this.type[u] !== T_E && this.type[v] !== T_E) {
         kind = 1;
         if (h !== 'none' && this.bond[u * 4 + F] < 0 && this.bond[v * 4 + F] < 0) {
           const tu = this.type[u], tv = this.type[v];
@@ -277,6 +285,7 @@ class Sim {
   /** Would a lateral bond between u and v be a hinge right now (hinge mode applies to their types, neither is docked)? */
   _wouldHinge(u, v) {
     const h = this.p.hinge;
+    if (this.type[u] === T_M || this.type[v] === T_M) return false;
     if (h === 'none' || this.bond[u * 4 + F] >= 0 || this.bond[v * 4 + F] >= 0) return false;
     const tu = this.type[u], tv = this.type[v];
     return h === 'all' || (h === 'BB' && tu === T_B && tv === T_B) || (h === 'AB' && tu !== tv);
@@ -310,7 +319,7 @@ class Sim {
 
   /** Form a bond between side i of u and side j of v, snapping the less-connected unit flush. Returns false if the spot is taken. */
   _formBond(u, i, v, j) {
-    if ((i === L || i === R) && (j === L || j === R) && this.type[u] !== T_E && this.type[v] !== T_E && this._wouldHinge(u, v)) {
+    if ((i === L || i === R) && (j === L || j === R) && ((this.type[u] === T_M && this.type[v] === T_M) || (this.type[u] !== T_E && this.type[v] !== T_E && this._wouldHinge(u, v)))) {
       this._link(u, i, v, j);   // a hinge forms where the corners already touch; the solver takes it from here
       return true;
     }
@@ -332,6 +341,19 @@ class Sim {
     const nux = Math.cos(phu), nuy = Math.sin(phu), nvx = Math.cos(phv), nvy = Math.sin(phv);
     const ux = dx / dist, uy = dy / dist;
     const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E;
+    if (this.type[u] === T_M && this.type[v] === T_M) {
+      // membrane link: back corners touch, bend within the membrane's window (plus the link tolerance)
+      const hu = this.size[u] / 2, hv = this.size[v] / 2;
+      const cux = this.px[u] + hu * (nux - Math.cos(this.pa[u])), cuy = this.py[u] + hu * (nuy - Math.sin(this.pa[u]));
+      const cvx = this.px[v] + hv * (nvx - Math.cos(this.pa[v])), cvy = this.py[v] + hv * (nvy - Math.sin(this.pa[v]));
+      const gx = this._dx(cvx - cux), gy = this._dy(cvy - cuy);
+      const tol = this.p.linkDistTol * (hu + hv);
+      if (gx * gx + gy * gy > tol * tol) return false;
+      // any bend a hinge could take is accepted; the bond then pulls the joint to its built-in angle
+      const e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
+      const bend = (i === R ? 1 : -1) * e * 180 / Math.PI;
+      return bend > -this.p.linkTolDeg && bend < 90 + this.p.linkTolDeg;
+    }
     if (lateral && (i === L || i === R) && this._wouldHinge(u, v)) {
       // a hinge forms when the two back corners touch and the bend is within the hinge's range
       const hu = this.size[u] / 2, hv = this.size[v] / 2;
@@ -370,6 +392,10 @@ class Sim {
   compat(u, i, v, j) {
     const p = this.p, tu = this.type[u], tv = this.type[v];
     const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
+    if (tu === T_M || tv === T_M) {
+      if (tu === T_M && tv === T_M && su === S.MEM && sv === S.MEM && ((i === L && j === R) || (i === R && j === L))) return p.pMem;
+      return 0;
+    }
     if (tu === T_E || tv === T_E) {
       if (tu === T_E && tv !== T_E) return (j === K && ((su === S.ON && sv === S.WANT) || (su === S.OFF && sv === S.CHARGE))) ? 1 : 0;
       if (tv === T_E && tu !== T_E) return (i === K && ((sv === S.ON && su === S.WANT) || (sv === S.OFF && su === S.CHARGE))) ? 1 : 0;
@@ -400,7 +426,8 @@ class Sim {
         if (this.bond[u * 4 + i] >= 0) continue;
         const s = this.ss[u * 4 + i];
         let ok = false;
-        if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
+        if (this.type[u] === T_M) ok = s === S.MEM;
+        else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
         else if (i === K) ok = s === S.WANT || s === S.CHARGE || (s === S.IDLE && p.pStack > 0 && this.is[u] === I_TPL);
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
@@ -413,6 +440,11 @@ class Sim {
   // ------------------------------------------------------------- derived side states
   _derive(u) {
     const b = this.bond, o = u * 4;
+    if (this.type[u] === T_M) {
+      this.ss[o + F] = S.INERT; this.ss[o + K] = S.INERT;
+      this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : S.MEM; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : S.MEM;
+      return;
+    }
     if (this.type[u] === T_E) {
       const s = this.is[u] === I_ON ? S.ON : S.OFF;
       this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = s;
@@ -448,6 +480,18 @@ class Sim {
    */
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
+    if (this.type[u] === T_M) {
+      // membrane blocks have no state; radiation is the only thing that changes them
+      if (p.pBreak > 0) {
+        const mine = 1 - p.resM;
+        for (const side of [L, R]) {
+          const q = b[o + side]; if (q < 0) continue;
+          const v = q >> 2; if (v < u) continue;
+          if (this.rng() < p.pBreak * mine * mine) { this.pendingUnlink.push(o + side); this.breakEvents++; this._event('break', u, v); }
+        }
+      }
+      return;
+    }
     if (this.type[u] === T_E) {
       // E: docking on a WANT back spends it; docking on a CHARGE back recharges it. Either way it lets go.
       for (let i = 0; i < 4; i++) {
@@ -520,11 +564,11 @@ class Sim {
     return comp;
   }
   /** A closed L->R cycle of A/B units in a unit list, if there is one (a ring, possibly with monomers docked on it). */
-  cycleOf(units) {
-    const seen = this._seen;
+  cycleOf(units, want) {
+    const seen = this._seen, isM = want === T_M;
     let cyc = [];
     for (const start of units) {
-      if (this.type[start] === T_E || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
+      if ((isM ? this.type[start] !== T_M : (this.type[start] === T_E || this.type[start] === T_M)) || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
       const c = []; let u = start;
       while (u >= 0 && !seen[u] && c.length < 100000) { seen[u] = 1; c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
       if (u === start && c.length >= 3) { cyc = c; break; }
@@ -536,7 +580,7 @@ class Sim {
   chainOf(units) {
     let best = this.cycleOf(units);
     for (const start of units) {
-      if (this.type[start] === T_E || this.bond[start * 4 + L] >= 0) continue;
+      if (this.type[start] === T_E || this.type[start] === T_M || this.bond[start * 4 + L] >= 0) continue;
       const c = []; let u = start;
       while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
       if (c.length > best.length) best = c;
@@ -545,6 +589,23 @@ class Sim {
   }
   /** True if the A/B units contain a closed ring. */
   isRing(units) { return this.cycleOf(units).length >= 3; }
+  /** Units (of any type) whose centres lie inside the polygon through the given ring's centres. */
+  enclosedBy(ring) {
+    const ox = this.px[ring[0]], oy = this.py[ring[0]];
+    const poly = ring.map((u) => [this._dx(this.px[u] - ox), this._dy(this.py[u] - oy)]);
+    const out = [];
+    for (let u = 0; u < this.n; u++) {
+      if (ring.includes(u)) continue;
+      const x = this._dx(this.px[u] - ox), y = this._dy(this.py[u] - oy);
+      let inside = false;
+      for (let a = 0, b = poly.length - 1; a < poly.length; b = a++) {
+        const [xa, ya] = poly[a], [xb, yb] = poly[b];
+        if ((ya > y) !== (yb > y) && x < (xb - xa) * (y - ya) / (yb - ya) + xa) inside = !inside;
+      }
+      if (inside) out.push(u);
+    }
+    return out;
+  }
   /** Read a strand's sequence L->R from a unit list (E units ignored). */
   sequenceOf(units) { return this.chainOf(units).map((u) => TNAME[this.type[u]]).join(''); }
 
@@ -634,6 +695,20 @@ class Sim {
           const nvx = Math.cos(phv), nvy = Math.sin(phv), fvx = Math.cos(this.pa[v]), fvy = Math.sin(this.pa[v]);
           this._solvePoint(u, hu * (nux - fux), hu * (nuy - fuy), v, hv * (nvx - fvx), hv * (nvy - fvy), p.slack);
           this._solvePoint(u, hu * (nux + fux), hu * (nuy + fuy), v, hv * (nvx + fvx), hv * (nvy + fvy), p.slack);
+          continue;
+        }
+        if (kinds[k] === 3) {
+          // membrane bond: back corners pinned, bend held within memAngle +/- memFlex toward the backs
+          const hu = this.size[u] / 2, hv = this.size[v] / 2;
+          const phu = this.pa[u] + i * Math.PI / 2, phv = this.pa[v] + j * Math.PI / 2;
+          const nux = Math.cos(phu), nuy = Math.sin(phu), fux = Math.cos(this.pa[u]), fuy = Math.sin(this.pa[u]);
+          const nvx = Math.cos(phv), nvy = Math.sin(phv), fvx = Math.cos(this.pa[v]), fvy = Math.sin(this.pa[v]);
+          this._solvePoint(u, hu * (nux - fux), hu * (nuy - fuy), v, hv * (nvx - fvx), hv * (nvy - fvy));
+          const e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
+          const sgn = i === R ? 1 : -1, bend = sgn * e, a0 = p.memAngle * Math.PI / 180, fl = p.memFlex * Math.PI / 180;
+          let corr = 0;
+          if (bend > a0 + fl) corr = bend - (a0 + fl); else if (bend < a0 - fl) corr = bend - (a0 - fl);
+          if (corr !== 0) { const wu = this.w[u], wv = this.w[v], ws = wu + wv; this.pa[u] += sgn * corr * wu / ws; this.pa[v] -= sgn * corr * wv / ws; }
           continue;
         }
         if (kinds[k] !== 2) {
@@ -738,8 +813,10 @@ class Sim {
     const n = this.n;
     let free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0;
     for (let u = 0; u < n; u++) {
+      if (this.type[u] === T_M) continue;
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
+      if (this.ss[o + K] === S.CHARGE) totalMotif++;
       if (this.is[u] === I_DOCK && this.bond[o] < 0 && this.bond[o + L] < 0 && this.bond[o + R] < 0) free++;
       if (this.is[u] === I_DOCK && this.bond[o] >= 0) docked++;
       if (this.is[u] === I_REPEL) repel++;
@@ -748,14 +825,29 @@ class Sim {
     }
     const hist = new Map(); const seqs = new Map();
     let strands = 0, complexes = 0, totalLen = 0, maxLen = 0, components = 0, rings = 0, ringLen = 0;
+    let memRings = 0, memRingLen = 0, memArcs = 0, enclosedAB = 0, enclosedE = 0, memFree = 0, enclosedTPL = 0, enclosedMotif = 0, totalMotif = 0, ringsWithStrand = 0;
     const seen = new Uint8Array(n);
     for (let u0 = 0; u0 < n; u0++) {
       if (seen[u0]) continue;
       const comp = this.componentOf(u0);
       for (const x of comp) seen[x] = 1;
       components++;
+      if (this.type[u0] === T_M) {
+        if (comp.length === 1) { memFree++; continue; }
+        const cyc = this.cycleOf(comp, T_M);
+        if (cyc.length >= 3) {
+          memRings++; memRingLen += cyc.length;
+          let tplHere = 0;
+          for (const w of this.enclosedBy(cyc)) {
+            if (this.type[w] === T_E) enclosedE++;
+            else if (this.type[w] !== T_M) { enclosedAB++; if (this.is[w] === I_TPL) { enclosedTPL++; tplHere++; } if (this.ss[w * 4 + K] === S.CHARGE) enclosedMotif++; }
+          }
+          if (tplHere >= 2) ringsWithStrand++;
+        } else memArcs++;
+        continue;
+      }
       let nAB = 0, faceBonded = false;
-      for (const u of comp) { if (this.type[u] === T_E) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
+      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
       if (nAB < 2) continue;
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
@@ -780,6 +872,7 @@ class Sim {
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
       ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
+      memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
   }
 
@@ -798,5 +891,5 @@ class Sim {
   }
 }
 
-return { Sim, DEFAULTS, S, SNAME, F, R, K, L, T_A, T_B, T_E, TNAME, I_DOCK, I_REPEL, I_TPL, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, DEFAULTS, S, SNAME, F, R, K, L, T_A, T_B, T_E, T_M, TNAME, I_DOCK, I_REPEL, I_TPL, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

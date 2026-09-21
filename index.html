@@ -89,7 +89,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="main">
   <div class="dish">
     <canvas id="c" width="800" height="800" aria-label="Simulation view"></canvas>
-    <div class="hud"><span>t <b id="hT">0</b></span><span>strands <b id="hS">0</b></span><span>rings <b id="hR">0</b></span><span>free <b id="hF">0</b></span><span>births <b id="hB">0</b></span><span>gen <b id="hG">0</b></span><span id="hFps"></span></div>
+    <div class="hud"><span>t <b id="hT">0</b></span><span>strands <b id="hS">0</b></span><span>rings <b id="hR">0</b></span><span>membranes <b id="hM">0</b></span><span>enclosed <b id="hEn">0</b></span><span>free <b id="hF">0</b></span><span>births <b id="hB">0</b></span><span>gen <b id="hG">0</b></span><span id="hFps"></span></div>
     <div class="cam">
       <button id="bFit" title="Show the whole world">fit</button>
       <button id="bSeed" title="Zoom to the seed strand">seed</button>
@@ -97,6 +97,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
     </div>
     <div class="legend">
       <span><i style="background:#6fa8dc"></i>A</span><span><i style="background:#e0a458"></i>B</span>
+      <span><i style="background:#7d9b73"></i>M membrane</span><span><i style="background:#c9e2b8"></i>M open side</span>
       <span><i style="background:#8a97a8"></i>F free (DOCK)</span><span><i style="background:#5ad27a"></i>F template</span>
       <span><i style="background:#ff5a5a"></i>F released</span><span><i style="background:#3a4250"></i>L/R inert</span>
       <span><i style="background:#ffd75a"></i>L/R sticky</span><span><i style="background:#59d6e8"></i>L/R open end</span>
@@ -112,7 +113,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
         <button id="bRun" class="primary">Pause</button>
         <button id="bStep">Step</button>
         <button id="bReset">Reset</button>
-        <label style="font:12px var(--mono)">speed <input id="speed" type="range" min="1" max="40" value="3" style="vertical-align:middle;width:90px;accent-color:var(--accent)"> <span id="speedV">3</span>/frame</label>
+        <label style="font:12px var(--mono)">speed <input id="speed" type="range" min="1" max="40" value="4" style="vertical-align:middle;width:90px;accent-color:var(--accent)"> <span id="speedV">4</span>/frame</label>
       </div>
       <div class="row" style="margin-top:8px">
         <select id="preset" aria-label="Preset">
@@ -124,7 +125,8 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="origin">Preset: origin, no seed strand</option>
           <option value="metab">Preset: metabolism, energy from ABA motifs</option>
           <option value="rad">Preset: radiation, tough B blocks are scarce</option>
-          <option value="hinge">Preset: hinged chains and trapezoid slack, rings can close</option>
+          <option value="hinge">Preset: hinged replicator chains (they clump)</option>
+          <option value="mem">Preset: membrane blocks, rings self-assemble</option>
           <option value="sun">Preset: sun patch</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -174,13 +176,13 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <script src="src/sim.js"></script>
 <script>
 (function(){
-const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, TNAME, SNAME, F, R, K, L } = PC;
+const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, T_M, TNAME, SNAME, F, R, K, L } = PC;
 const $ = (id) => document.getElementById(id);
 
 // Presets. The first three show copying, mutation and turnover from one seed strand. The two races seed dimers and
 // 6-mers together: without undocking the dimers take everything, with it the 6-mers do. "origin" has no seed strand.
 // "metabolism" gets energy only from ABA motifs. "radiation" breaks bonds, B blocks resist, and B is scarce.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 200, nB: 200, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, hingeSnap: 0, slack: 0 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, hingeSnap: 0, slack: 0, nM: 0, memAngle: 60, memFlex: 6, pMem: 0.2, resM: 0.7 };
 const PRESETS = {
   copy:   Object.assign({}, ZERO),
   mut:    Object.assign({}, ZERO, { pSoft: 0.02, pCapture: 0.05 }),
@@ -189,11 +191,12 @@ const PRESETS = {
   coop:   Object.assign({}, ZERO, { pUndock: 0.1, seedSeq: 'AB,ABBABA', seedCount: 3 }),
   origin: Object.assign({}, ZERO, { seedCount: 0, pSpont: 0.001, pSoft: 0.01, pCapture: 0.02, pFray: 0.0001 }),
   metab:  Object.assign({}, ZERO, { motif: true, pReload: 0, pSoft: 0.02, pCapture: 0.02, pFray: 0.0001 }),
-  rad:    Object.assign({}, ZERO, { pBreak: 0.001, resB: 0.9, nA: 300, nB: 100, pLigate: 0.005, pFray: 0.0001, pSoft: 0.02, pCapture: 0.02 }),
+  rad:    Object.assign({}, ZERO, { pBreak: 0.0005, resB: 0.9, nA: 600, nB: 200, pLigate: 0.005, pFray: 0.0001, pSoft: 0.02, pCapture: 0.02 }),
   hinge:  Object.assign({}, ZERO, { hinge: 'all', slack: 0.1, pLigate: 0.02, pFray: 0.0001, pSoft: 0.01, pCapture: 0.01 }),
-  sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 10 }),
+  mem:    Object.assign({}, ZERO, { nM: 300, pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pSpont: 0.001, pBreak: 0.0002, resM: 0.7 }),
+  sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 14 }),
 };
-const BASE = { seed: 7, W: 48, H: 48, nE: 150, sigma: 0.3, sigmaRot: 0.45, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
+const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
@@ -203,6 +206,12 @@ const KNOBS = [
   ['pUndock', 'p undock per step', 'a lone docked monomer falls off; cooperativity'],
   ['pLigate', 'p ligate ends', 'fusion of strands; with fraying, sets a length distribution'],
   ['pSpont', 'p spontaneous link', 'two free monomers join; life without a seed'],
+  ['grp', 'Membrane blocks'],
+  ['nM', 'M blocks (reset)', 'bond only to each other, side to side, at a built-in bend'],
+  ['memAngle', 'bend °', '60 closes a ring of 6, 45 of 8, 90 of 4'],
+  ['memFlex', 'bend flex °'],
+  ['pMem', 'p link per contact'],
+  ['resM', 'M resistance'],
   ['grp', 'Shape'],
   ['hinge', 'hinges', 'none, all, BB or AB: which lateral bonds bend when free', 'text'],
   ['hingeMax', 'hinge limit °'],
@@ -230,9 +239,9 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'seedSeq', 'seedCount', 'W', 'H']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'seedSeq', 'seedCount', 'W', 'H']);
 
-let sim, running = true, speed = 3, series = [], selected = -1, seedUnit = -1;
+let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
 const flashes = new Map();   // unit -> {t, kind}
 
@@ -323,11 +332,11 @@ $('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFol
 function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
 
 // ------------------------------------------------------------ drawing
-const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55' };
+const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73' };
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c' };
 function draw() {
   fitCanvas();
@@ -365,7 +374,7 @@ function draw() {
     if (sim.type[u] === T_E) {
       ctx.fillStyle = sim.is[u] === 1 ? COL.EON : COL.EOFF; ctx.fillRect(-h, -h, sz, sz);
     } else {
-      ctx.fillStyle = sim.type[u] === T_A ? COL.A : COL.B; ctx.fillRect(-h, -h, sz, sz);
+      ctx.fillStyle = sim.type[u] === T_A ? COL.A : sim.type[u] === T_B ? COL.B : COL.M; ctx.fillRect(-h, -h, sz, sz);
       ctx.lineWidth = lw;
       const inset = lw / 2;
       for (let i = 0; i < 4; i++) {
@@ -391,7 +400,7 @@ function draw() {
 function showInspect() {
   const el = $('inspect'); if (selected < 0) { el.hidden = true; return; }
   const u = selected, t = TNAME[sim.type[u]];
-  const st = sim.type[u] === T_E ? (sim.is[u] ? 'ON' : 'OFF') : ['DOCK', 'REPEL', 'TPL'][sim.is[u]];
+  const st = sim.type[u] === T_E ? (sim.is[u] ? 'ON' : 'OFF') : sim.type[u] === T_M ? 'membrane' : ['DOCK', 'REPEL', 'TPL'][sim.is[u]];
   let s = `unit ${u}  type ${t}  state ${st}  gen ${sim.gen[u]}\n`;
   const names = ['F', 'R', 'K', 'L'];
   for (let i = 0; i < 4; i++) {
@@ -433,7 +442,7 @@ function refresh(force) {
   refreshFeed();
   if (!force && sim.t % 200 !== 0) return;
   const st = sim.stats();
-  $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hR').textContent = st.rings; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
+  $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hR').textContent = st.rings; $('hM').textContent = st.memRings; $('hEn').textContent = st.enclosedAB; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
   $('sFree').textContent = st.free; $('sStr').textContent = st.strands + st.complexes; $('sCpx').textContent = st.complexes;
   $('sLen').textContent = st.meanLen.toFixed(2); $('sMax').textContent = st.maxLen; $('sDist').textContent = st.distinct; $('sEnt').textContent = st.entropy.toFixed(2) + ' bits';
   $('sBirth').textContent = st.births; $('sGen').textContent = st.maxGen; $('sE').textContent = st.eOn + ' / ' + st.eOff; $('sEu').textContent = st.energyUsed; $('sRep').textContent = st.repel;

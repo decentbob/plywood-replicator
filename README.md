@@ -69,7 +69,10 @@ one-dimensional. The `pStack` knob adds one row to the table (back of a template
 back of a template) and is the smallest change that lets them leave one dimension.
 
 Two monomer types **A** and **B** pair face to face with their own type. A third
-type **E** is the energy particle. Each A/B unit carries exactly one internal state:
+type **E** is the energy particle. A fourth, **M**, is a membrane block: it bonds
+only to other M blocks, side to side, at a built-in bend, so arcs and rings
+self-assemble around whatever is there, and radiation opens them again. Each A/B
+unit carries exactly one internal state:
 
 ```
 DOCK    a free monomer, or a monomer docked on a template
