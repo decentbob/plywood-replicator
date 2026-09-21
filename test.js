@@ -105,4 +105,14 @@ test('hinges: free chains bend up to the limit, docked chains are straight, copi
   assert.deepStrictEqual(s.check(), []);
 });
 
+
+test('trapezoid slack 0.1: copies stay exact and the copying rate does not fall', () => {
+  const rigid = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', slack: 0 }));
+  const slack = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', slack: 0.1 }));
+  rigid.run(20000); slack.run(20000);
+  for (const b of slack.births) assert.strictEqual(b.seq, rev(b.parent));
+  for (const [len] of slack.stats().lenHist) assert.strictEqual(len, 6, 'strand of wrong length with slack');
+  assert.ok(slack.stats().births >= 0.8 * rigid.stats().births, `slack ${slack.stats().births} births vs rigid ${rigid.stats().births}`);
+});
+
 console.log(passed + ' tests passed');

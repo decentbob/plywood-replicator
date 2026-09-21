@@ -135,7 +135,10 @@ constraint that the two bonded sides lie flush. Both kinds of constraint are
 enforced the same way, by nudging the two squares involved, 24 passes per step.
 With the `hinge` knob, lateral bonds between free squares pin only their shared
 back corner and may bend up to 90°, so free strands curl and can close into rings
-by ligation, while a strand being copied is straightened by the docking itself. Chains are straight because a row of flush
+by ligation, while a strand being copied is straightened by the docking itself. A
+hinge forms where two back corners touch, which is what lets a ring's last bond
+close. With `slack`, a flush bond tolerates a small corner gap, a trapezoid, so a
+gently curved chain is a rest state; 0.1 is safe and raises the copying rate. Chains are straight because a row of flush
 constraints is straight, not because anything holds a chain. Bonds never break
 from jostling. A bond forms only if the compatibility table allows it, the two
 sides face each other within a tolerance (30° for docking, 10° for side-to-side

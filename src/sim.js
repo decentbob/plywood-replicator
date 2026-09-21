@@ -76,6 +76,8 @@ const DEFAULTS = {
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   hinge: 'none',   // which lateral bonds bend when neither square is docked: 'none', 'all', 'BB' (both B), 'AB' (mixed). A hinge pivots on the shared back corner.
   hingeMax: 90,    // a hinge bends at most this many degrees (toward the backs)
+  hingeSnap: 0,    // detents: each pass pulls a hinge this fraction of the way toward the nearer of flush and hingeMax
+  slack: 0,        // trapezoid tolerance: a rigid lateral bond lets each pair of shared corners gap by up to this much (in sides), with no restoring force inside the gap
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   energyMode: 'unit', // 'unit': every unit needs its own E. 'strand': a re-armed unit re-arms its lateral neighbours.
   pReload: 0.002,  // OFF -> ON per step when the sun is off
@@ -272,11 +274,21 @@ class Sim {
     this.bonds = out; this.bondKind = kinds; this.bondsDirty = false; return out;
   }
 
-  /** Position-based correction that brings point a on u (world offset ax,ay from its centre) onto point b on v. */
-  _solvePoint(u, ax, ay, v, bx, by) {
+  /** Would a lateral bond between u and v be a hinge right now (hinge mode applies to their types, neither is docked)? */
+  _wouldHinge(u, v) {
+    const h = this.p.hinge;
+    if (h === 'none' || this.bond[u * 4 + F] >= 0 || this.bond[v * 4 + F] >= 0) return false;
+    const tu = this.type[u], tv = this.type[v];
+    return h === 'all' || (h === 'BB' && tu === T_B && tv === T_B) || (h === 'AB' && tu !== tv);
+  }
+
+  /** Position-based correction that brings point a on u (world offset ax,ay from its centre) onto point b on v,
+   *  or, with maxGap > 0, only close enough that they are no further apart than maxGap. */
+  _solvePoint(u, ax, ay, v, bx, by, maxGap) {
     const dx = this._dx(this.px[v] + bx - this.px[u] - ax), dy = this._dy(this.py[v] + by - this.py[u] - ay);
     const d2 = dx * dx + dy * dy; if (d2 < 1e-12) return;
-    const d = Math.sqrt(d2), nx = dx / d, ny = dy / d;
+    const dFull = Math.sqrt(d2), nx = dx / dFull, ny = dy / dFull;
+    const d = maxGap ? Math.max(0, dFull - maxGap) : dFull; if (d <= 0) return;
     const cu = ax * ny - ay * nx, cv = bx * ny - by * nx;
     const wu = this.w[u] + this.wr[u] * cu * cu, wv = this.w[v] + this.wr[v] * cv * cv;
     const lam = d / (wu + wv);
@@ -298,6 +310,10 @@ class Sim {
 
   /** Form a bond between side i of u and side j of v, snapping the less-connected unit flush. Returns false if the spot is taken. */
   _formBond(u, i, v, j) {
+    if ((i === L || i === R) && (j === L || j === R) && this.type[u] !== T_E && this.type[v] !== T_E && this._wouldHinge(u, v)) {
+      this._link(u, i, v, j);   // a hinge forms where the corners already touch; the solver takes it from here
+      return true;
+    }
     const nb = (x) => (this.bond[x * 4] >= 0) + (this.bond[x * 4 + 1] >= 0) + (this.bond[x * 4 + 2] >= 0) + (this.bond[x * 4 + 3] >= 0);
     let a = u, ia = i, m = v, im = j;
     if (nb(u) < nb(v)) { a = v; ia = j; m = u; im = i; }
@@ -316,6 +332,29 @@ class Sim {
     const nux = Math.cos(phu), nuy = Math.sin(phu), nvx = Math.cos(phv), nvy = Math.sin(phv);
     const ux = dx / dist, uy = dy / dist;
     const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E;
+    if (lateral && (i === L || i === R) && this._wouldHinge(u, v)) {
+      // a hinge forms when the two back corners touch and the bend is within the hinge's range
+      const hu = this.size[u] / 2, hv = this.size[v] / 2;
+      const cux = this.px[u] + hu * (nux - Math.cos(this.pa[u])), cuy = this.py[u] + hu * (nuy - Math.sin(this.pa[u]));
+      const cvx = this.px[v] + hv * (nvx - Math.cos(this.pa[v])), cvy = this.py[v] + hv * (nvy - Math.sin(this.pa[v]));
+      const gx = this._dx(cvx - cux), gy = this._dy(cvy - cuy);
+      const tol = this.p.linkDistTol * (hu + hv);
+      if (gx * gx + gy * gy > tol * tol) return false;
+      let e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
+      const bend = (i === R ? 1 : -1) * e * 180 / Math.PI, slack = this.p.linkTolDeg;
+      return bend > -slack && bend < this.p.hingeMax + slack;
+    }
+    if (lateral && (i === L || i === R) && this.p.slack > 0) {
+      // trapezoid link: both shared corner pairs within slack plus the usual tolerance, sides roughly antiparallel
+      const hu = this.size[u] / 2, hv = this.size[v] / 2, fux = Math.cos(this.pa[u]), fuy = Math.sin(this.pa[u]), fvx = Math.cos(this.pa[v]), fvy = Math.sin(this.pa[v]);
+      const tol = this.p.slack + this.p.linkDistTol * (hu + hv);
+      for (const sg of [-1, 1]) {
+        const gx = this._dx(this.px[v] + hv * (nvx + sg * fvx) - this.px[u] - hu * (nux + sg * fux));
+        const gy = this._dy(this.py[v] + hv * (nvy + sg * fvy) - this.py[u] - hu * (nuy + sg * fuy));
+        if (gx * gx + gy * gy > tol * tol) return false;
+      }
+      return nux * nvx + nuy * nvy < -Math.cos((this.p.linkTolDeg + this.p.slack * 180 / Math.PI) * Math.PI / 180);
+    }
     const cT = lateral ? this.cosLinkTol : this.cosTol, cR = lateral ? this.cosLinkTol : this.cosTolRot;
     if (lateral) {
       const d0 = (this.size[u] + this.size[v]) / 2;
@@ -480,30 +519,32 @@ class Sim {
     for (const x of comp) seen[x] = 0;
     return comp;
   }
-  /** The longest L->R chain of A/B units in a unit list, as an array of unit indices. A closed ring is returned from an arbitrary start. */
-  chainOf(units) {
-    let best = [], anyAB = -1;
+  /** A closed L->R cycle of A/B units in a unit list, if there is one (a ring, possibly with monomers docked on it). */
+  cycleOf(units) {
+    const seen = this._seen;
+    let cyc = [];
     for (const start of units) {
-      if (this.type[start] === T_E) continue;
-      anyAB = start;
-      if (this.bond[start * 4 + L] >= 0) continue;
+      if (this.type[start] === T_E || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
+      const c = []; let u = start;
+      while (u >= 0 && !seen[u] && c.length < 100000) { seen[u] = 1; c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
+      if (u === start && c.length >= 3) { cyc = c; break; }
+    }
+    for (const u of units) seen[u] = 0;
+    return cyc;
+  }
+  /** The longest L->R chain of A/B units in a unit list, as an array of unit indices; a ring counts as a chain from an arbitrary start. */
+  chainOf(units) {
+    let best = this.cycleOf(units);
+    for (const start of units) {
+      if (this.type[start] === T_E || this.bond[start * 4 + L] >= 0) continue;
       const c = []; let u = start;
       while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
       if (c.length > best.length) best = c;
     }
-    if (best.length === 0 && anyAB >= 0) {   // no free L side anywhere: a ring
-      const c = []; let u = anyAB;
-      while (c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; if (q < 0) break; u = q >> 2; if (u === anyAB) break; }
-      best = c;
-    }
     return best;
   }
-  /** True if the A/B units form a closed ring (every unit has both lateral bonds). */
-  isRing(units) {
-    let nAB = 0;
-    for (const u of units) { if (this.type[u] === T_E) continue; nAB++; if (this.bond[u * 4 + L] < 0 || this.bond[u * 4 + R] < 0) return false; }
-    return nAB >= 3;
-  }
+  /** True if the A/B units contain a closed ring. */
+  isRing(units) { return this.cycleOf(units).length >= 3; }
   /** Read a strand's sequence L->R from a unit list (E units ignored). */
   sequenceOf(units) { return this.chainOf(units).map((u) => TNAME[this.type[u]]).join(''); }
 
@@ -585,6 +626,16 @@ class Sim {
       for (let k = 0; k < bl.length; k++) {
         const q = bl[k], r = this.bond[q];
         const u = q >> 2, i = q & 3, v = r >> 2, j = r & 3;
+        if (kinds[k] === 1 && p.slack > 0) {
+          // trapezoid bond: each shared corner pair may gap by up to `slack`, nothing pulls inside the gap
+          const hu = this.size[u] / 2, hv = this.size[v] / 2;
+          const phu = this.pa[u] + i * Math.PI / 2, phv = this.pa[v] + j * Math.PI / 2;
+          const nux = Math.cos(phu), nuy = Math.sin(phu), fux = Math.cos(this.pa[u]), fuy = Math.sin(this.pa[u]);
+          const nvx = Math.cos(phv), nvy = Math.sin(phv), fvx = Math.cos(this.pa[v]), fvy = Math.sin(this.pa[v]);
+          this._solvePoint(u, hu * (nux - fux), hu * (nuy - fuy), v, hv * (nvx - fvx), hv * (nvy - fvy), p.slack);
+          this._solvePoint(u, hu * (nux + fux), hu * (nuy + fuy), v, hv * (nvx + fvx), hv * (nvy + fvy), p.slack);
+          continue;
+        }
         if (kinds[k] !== 2) {
           // rigid bond (docking, or a lateral bond that is not a hinge): flush. Angle first (v's side j must face
           // u's side i), then the two side midpoints coincide.
@@ -612,6 +663,7 @@ class Sim {
         const sgn = i === R ? 1 : -1, bend = sgn * e, lim = p.hingeMax * Math.PI / 180;
         let corr = 0;
         if (bend > lim) corr = bend - lim; else if (bend < 0) corr = bend;
+        else if (p.hingeSnap > 0) corr = p.hingeSnap * (bend < lim / 2 ? bend : bend - lim);   // detent at flush or at the limit
         if (corr !== 0) { const wu = this.w[u], wv = this.w[v], ws = wu + wv; this.pa[u] += sgn * corr * wu / ws; this.pa[v] -= sgn * corr * wv / ws; }
       }
     }

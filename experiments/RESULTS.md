@@ -284,7 +284,49 @@ re-arms whoever is nearest, so the motif is a public good and the dimers free-ri
 This is the expected result for a well-mixed world and the classic reason spatial structure or
 compartments matter: the benefit has to stay with the sequence that pays for it.
 
-## 10. Summary
+## 10. Hinges, rings and slack (`rings.sh`, `rings2.sh`, 100,000 steps)
+
+A hinge is a lateral bond that pins only the shared back corner, bends up to 90° toward the
+backs, and is rigid whenever either square has a face bond: chains are straight while copied and
+fold when free. With flush-only bond formation no ring closed in any run (a ring's last bond is
+itself a bend). With hinges allowed to form where two back corners touch, rings close.
+
+Open population, `hinge` all, ligation 0.02, gentle mutation and turnover, three seeds:
+
+| run | rings every 20,000 steps | mean ring length | births | strands | mean length | max | distinct | entropy (bits) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| H2_hinge_51 | 0, 5, 6, 5, 5 | 5.2 | 175 | 69 | 5.6 | 23 | 42 | 5.02 |
+| H2_hinge_52 | 1, 2, 3, 4, 4 | 4.3 | 551 | 82 | 4.8 | 27 | 38 | 4.41 |
+| H2_hinge_53 | 0, 0, 2, 2, 2 | 4.5 | 113 | 64 | 6.0 | 20 | 41 | 4.84 |
+
+Rings appear within 20,000 to 60,000 steps, are mostly four squares, and persist: they have no
+ends to fray and nothing else in this regime breaks a bond. They are sterile (a ring's faces lie
+on a curve, so a copy on it can never complete), so they accumulate as durable dead ends and
+slowly lock up material. The population around them is the most diverse measured so far: about
+forty sequences and 4.4 to 5.0 bits, mean length 5 to 6, strands up to 27, because hinged chains
+fuse by ligation readily and fray slowly. Copying is slower than with rigid chains (113 to 551
+births against 1,000 to 2,000 in comparable rigid regimes): a curled template has to be
+straightened by the docking itself before its copy can link.
+
+With radiation on top (`H2_hingerad_*`, `pBreak` 0.0003, `resB` 0.9, B a quarter of the pool),
+rings are transient (0 or 1 at any sample), radiation opening them as fast as ligation closes
+them, and the population is dimers again (mean length 2.3 to 2.4). Tough blocks hold 14% to 19%
+of copied material, above the 4% to 7% of a scarcity-only control but below the pool.
+
+**Slack.** A rigid lateral bond may instead tolerate a corner gap up to `slack` with no
+restoring force inside it (a trapezoid block). Two seeds, 20,000 steps, all soft knobs at zero:
+
+| slack | births | copies exact | odd-length chains | max joint angle |
+|---:|---:|---|---:|---:|
+| 0 | 33 | yes | 0 | 0.7° |
+| 0.1 | 42 | yes | 0 | 18.7° |
+| 0.2 | 41 | no | 2 | 23.5° |
+
+At 0.1 the copying rate rises by a quarter, because linking tolerates the wobble of a docked
+pair, and copies stay exact. At 0.2 squares docked on different templates link again. The
+tolerance is a property of the block, and 0.1 is where it should sit.
+
+## 11. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
@@ -303,6 +345,11 @@ compartments matter: the benefit has to stay with the sequence that pays for it.
 - Radiation with unequal resistance selects on content: tough but scarce blocks make up 26% to
   46% of copied material, against 4% to 7% when they are scarce but not tough. Energy from `ABA`
   motifs sustains a population but is not selected for in a well-mixed world; the dimers free-ride.
+- Hinged chains, rigid while copied and free when split, close into four-square rings once a
+  hinge may form where corners touch; rings persist without radiation and accumulate as sterile
+  durable forms, and the hinged, ligating population is the most diverse measured (about forty
+  sequences, five bits). A trapezoid slack of 0.1 on flush bonds raises the copying rate by a
+  quarter at no cost; 0.2 lets chimeras back in.
 - The open questions for Phase 3: keep the benefit of a motif with the strand that carries it
   (spatial structure, slower particles, or compartments), find the radiation window where long
-  strands can persist, and give chains a way to close into rings so protection can be built.
+  strands can persist, and make rings do something, such as shelter what is inside them.

@@ -124,7 +124,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="origin">Preset: origin, no seed strand</option>
           <option value="metab">Preset: metabolism, energy from ABA motifs</option>
           <option value="rad">Preset: radiation, tough B blocks are scarce</option>
-          <option value="hinge">Preset: hinged chains, rings can close</option>
+          <option value="hinge">Preset: hinged chains and trapezoid slack, rings can close</option>
           <option value="sun">Preset: sun patch</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -180,7 +180,7 @@ const $ = (id) => document.getElementById(id);
 // Presets. The first three show copying, mutation and turnover from one seed strand. The two races seed dimers and
 // 6-mers together: without undocking the dimers take everything, with it the 6-mers do. "origin" has no seed strand.
 // "metabolism" gets energy only from ABA motifs. "radiation" breaks bonds, B blocks resist, and B is scarce.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 200, nB: 200, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, motif: false, sun: false, pLigate: 0, pReload: 0.002, nA: 200, nB: 200, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, hingeSnap: 0, slack: 0 };
 const PRESETS = {
   copy:   Object.assign({}, ZERO),
   mut:    Object.assign({}, ZERO, { pSoft: 0.02, pCapture: 0.05 }),
@@ -190,7 +190,7 @@ const PRESETS = {
   origin: Object.assign({}, ZERO, { seedCount: 0, pSpont: 0.001, pSoft: 0.01, pCapture: 0.02, pFray: 0.0001 }),
   metab:  Object.assign({}, ZERO, { motif: true, pReload: 0, pSoft: 0.02, pCapture: 0.02, pFray: 0.0001 }),
   rad:    Object.assign({}, ZERO, { pBreak: 0.001, resB: 0.9, nA: 300, nB: 100, pLigate: 0.005, pFray: 0.0001, pSoft: 0.02, pCapture: 0.02 }),
-  hinge:  Object.assign({}, ZERO, { hinge: 'all', seedSeq: 'ABBABABABABA', pLigate: 0.02, pFray: 0.0001, pSoft: 0.01, pCapture: 0.01 }),
+  hinge:  Object.assign({}, ZERO, { hinge: 'all', slack: 0.1, pLigate: 0.02, pFray: 0.0001, pSoft: 0.01, pCapture: 0.01 }),
   sun:    Object.assign({}, ZERO, { pSoft: 0.01, pCapture: 0.01, pFray: 0.0001, pUndock: 0.05, sun: true, sunR: 10 }),
 };
 const BASE = { seed: 7, W: 48, H: 48, nE: 150, sigma: 0.3, sigmaRot: 0.45, energyGate: true, energyMode: 'unit', maxEventLog: 400 };
@@ -206,6 +206,8 @@ const KNOBS = [
   ['grp', 'Shape'],
   ['hinge', 'hinges', 'none, all, BB or AB: which lateral bonds bend when free', 'text'],
   ['hingeMax', 'hinge limit °'],
+  ['hingeSnap', 'hinge detents', '0 free; 0.2 clicks to flush or the limit'],
+  ['slack', 'trapezoid slack', 'corner gap a flush bond tolerates; 0.1 is safe, 0.2 lets chimeras in'],
   ['grp', 'Radiation'],
   ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
   ['resA', 'A resistance', '0 fragile to 1 immune'],
