@@ -18,3 +18,11 @@ for seed in 31 32; do
 done
 } | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$COMMON"' "$@" --births experiments/out/$name.births.jsonl > experiments/out/$name.csv 2> experiments/out/$name.json'
 echo CHANNELSDONE
+# Milder radiation, added after the first batch showed pBreak 0.001 kills the seed before it copies in most runs.
+{
+for seed in 31 32 33; do
+  echo "X_rad03_$seed  --seed $seed --nA 300 --nB 100 --seedSeq ABBABA --pBreak 0.0003 --resB 0.9 --pLigate 0.005 --pFray 0.0001 --pSoft 0.02 --pCapture 0.02"
+  echo "X_ctrl03_$seed --seed $seed --nA 300 --nB 100 --seedSeq ABBABA --pBreak 0.0003 --resB 0   --pLigate 0.005 --pFray 0.0001 --pSoft 0.02 --pCapture 0.02"
+done
+} | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$COMMON"' "$@" --births experiments/out/$name.births.jsonl > experiments/out/$name.csv 2> experiments/out/$name.json'
+echo CHANNELSDONE2

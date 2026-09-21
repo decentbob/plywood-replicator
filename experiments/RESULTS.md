@@ -198,7 +198,73 @@ fraying is what decides whether it is. The window between "dimers win" and "noth
 nucleates" is where the next measurements go: fraying rate against density against undocking
 rate, with more than two seeds.
 
-## 6. Summary
+## 7. Origins: a seedless bath (`channels.sh`, `O_` runs, 100,000 steps)
+
+No seed strand. Two free monomers whose lateral sides meet flush link with probability `pSpont`
+per step of contact, become a two-unit strand (rule R2), get re-armed, and are templates.
+Gentle mutation and turnover (pSoft 0.01, pCapture 0.02, pFray 0.0001), 400 A + 400 B.
+
+| run | pSpont | first birth at | births | strands at end | mean length | distinct | B fraction of births |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| O_spont3e4_31 | 0.0003 | 8,458 | 2,747 | 244 | 2.12 | 9 | 0.49 |
+| O_spont3e4_32 | 0.0003 | 15,015 | 2,368 | 234 | 2.16 | 9 | 0.50 |
+| O_spont1e3_31 | 0.001 | 8,574 | 2,696 | 246 | 2.10 | 8 | 0.50 |
+| O_spont1e3_32 | 0.001 | 1,639 | 2,586 | 225 | 2.26 | 13 | 0.52 |
+| O_spont3e3_31 | 0.003 | 1,063 | 2,889 | 230 | 2.19 | 11 | 0.51 |
+| O_spont3e3_32 | 0.003 | 1,708 | 2,634 | 213 | 2.33 | 14 | 0.49 |
+
+Life starts by itself in every run, and once it has started the rate of spontaneous links no
+longer matters: all six reach the same population of 210 to 250 strands with about 2,600 births.
+What emerges is what the physics of this world favours, dimers, at the pool's composition. The
+tight flush check makes `pSpont` 0.0003 already rare in practice (first event after 8,000 to
+15,000 steps with 800 monomers); with `pSpont` at 0 nothing ever starts (`node test.js`).
+
+## 8. Radiation with unequal resistance (`channels.sh`, `X_` runs, 100,000 steps)
+
+Rule R7: every lateral bond breaks with probability `pBreak` × (1 − resA) × (1 − resB) per step
+for the two blocks it joins. `B` is tough (resB 0.9) and scarce (100 B against 300 A, so a
+quarter of the pool). Ligation 0.005 lets fragments rejoin. Control: same rates, no resistance.
+
+| run | resistance | births | strands at end | B fraction of births, first half | second half |
+|---|---|---:|---:|---:|---:|
+| X_ctrl_31 | none | 2 | 0 | (died) | |
+| X_ctrl_32 | none | 1 | 0 | (died) | |
+| X_rad_31 | B 0.9 | 4 | 0 | (died) | |
+| X_rad_32 | B 0.9 | 616 | 30 | 0.46 | 0.41 |
+
+At `pBreak` 0.001 the seed strand's five bonds last about 200 steps and the seed usually dies
+before its first copy: both controls and one of the two resistant runs died. The run that lived
+shows the effect clearly: tough blocks make up 41% to 46% of the copied material against 25% of
+the pool, almost twice their availability, because an `A`-`A` bond breaks 25 times more often
+than a `B`-`B` bond and scarcity is a weaker penalty than fragility at this rate. The population
+is dimers (mean length 2.0), so what is being selected is the `BB` dimer over `AB` and `AA`.
+A milder batch (`pBreak` 0.0003, three seeds, with controls) is in `X_rad03_*` / `X_ctrl03_*`.
+
+<<MILD>>
+
+## 9. Metabolism from sequence (`channels.sh`, `M_` runs, 100,000 steps)
+
+Motif rule on and background reload off, so the only source of charged energy is the back of a
+`B` block flanked by two `A` blocks. Seed `ABBABA` carries one such motif. Mutation and turnover
+as in section 7. Control: motif off, background reload 0.002.
+
+| run | energy from | births | strands | E charged | E spent | E on / off at end | ABA per block, first half | second half |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| M_ctrl_31 | background | 1,301 | 191 | 0 | 3,292 | 283 / 17 | 0.021 | 0.027 |
+| M_ctrl_32 | background | 1,037 | 192 | 0 | 3,199 | 281 / 19 | 0.044 | 0.024 |
+| M_motif_31 | ABA motifs only | 1,772 | 206 | 3,411 | 3,594 | 117 / 183 | 0.014 | 0.017 |
+| M_motif_32 | ABA motifs only | 1,575 | 204 | 3,480 | 3,579 | 201 / 99 | 0.019 | 0.024 |
+
+The population lives on motif energy alone: 3,400 recharges against 3,600 spends, and more
+births than the controls, because a motif on a strand charges particles right where they are
+needed. But the motif is not selected for: `ABA` per block stays at 0.015 to 0.025 in both
+conditions, and the commonest sequences under the motif rule are `AB`, `AA`, `ABB` and `BB`,
+none of which carries it. A charged particle diffuses away from the back that charged it and
+re-arms whoever is nearest, so the motif is a public good and the dimers free-ride on it.
+This is the expected result for a well-mixed world and the classic reason spatial structure or
+compartments matter: the benefit has to stay with the sequence that pays for it.
+
+## 10. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
@@ -211,6 +277,12 @@ rate, with more than two seeds.
 - With a lone docked monomer made unstable, the head-to-head race tips to longer strands at
   undocking rates above about 0.05 per step, decisively at 0.1. In the evolutionary regime with
   turnover the same rule has not yet produced a long-strand population: at low rates it changes
-  nothing, at high rates nucleation starves at the densities tried. Mapping that window, and
-  whether sequence content can matter once hinges, stacking or energy motifs exist, are the open
-  questions for Phase 3.
+  nothing, at high rates nucleation starves at the densities tried.
+- Life starts by itself from a seedless bath at every spontaneous-link rate tried, within 1,000
+  to 15,000 steps.
+- Radiation with unequal resistance selects on content: tough blocks reach 41% to 46% of copied
+  material from a 25% pool. Energy from `ABA` motifs sustains a population but is not selected
+  for in a well-mixed world; the dimers free-ride.
+- The open questions for Phase 3: keep the benefit of a motif with the strand that carries it
+  (spatial structure, slower particles, or compartments), find the radiation window where long
+  strands can persist, and give chains a way to close into rings so protection can be built.
