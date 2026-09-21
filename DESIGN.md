@@ -2,7 +2,7 @@
 
 Design notes for an artificial life simulation where replication and evolution come out of a tiny universal physics, not out of code inside the creatures.
 
-**Status:** living design, second draft. The first draft was a plan; this draft records what was built, what the build changed, and what was measured. Section 2 lists the commitments that define the project. Everything else is a current best guess and should be replaced the moment a better idea or an experiment says so. The decision log at the end (section 14) is where the reasoning behind each change survives. Section 15 holds the ideas not yet tried.
+**Status:** living design, third draft. The first draft was a plan; the second recorded what was built and measured; this one records the move to a physics with nothing bigger than a square in it, what that exposed, and the re-measured results. Section 2 lists the commitments that define the project. Everything else is a current best guess and should be replaced the moment a better idea or an experiment says so. The decision log at the end (section 14) is where the reasoning behind each change survives. Section 15 holds the ideas not yet tried.
 
 ---
 
