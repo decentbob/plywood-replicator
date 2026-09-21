@@ -240,7 +240,27 @@ than a `B`-`B` bond and scarcity is a weaker penalty than fragility at this rate
 is dimers (mean length 2.0), so what is being selected is the `BB` dimer over `AB` and `AA`.
 A milder batch (`pBreak` 0.0003, three seeds, with controls) is in `X_rad03_*` / `X_ctrl03_*`.
 
-<<MILD>>
+Milder rate, three seeds each:
+
+| run | resistance | births | strands at end | B fraction of births, first half | second half |
+|---|---|---:|---:|---:|---:|
+| X_ctrl03_31 | none | 828 | 32 | 0.05 | 0.04 |
+| X_ctrl03_32 | none | 0 | 0 | (died) | |
+| X_ctrl03_33 | none | 588 | 25 | 0.06 | 0.07 |
+| X_rad03_31 | B 0.9 | 828 | 58 | 0.40 | 0.29 |
+| X_rad03_32 | B 0.9 | 727 | 64 | 0.23 | 0.26 |
+| X_rad03_33 | B 0.9 | 639 | 56 | 0.50 | 0.28 |
+
+The right comparison is not against the pool but against the control, and it is stark. Without
+resistance, scarcity alone drives `B` out: only 4% to 7% of copied material is `B` against 25%
+of the pool, because a strand that needs a `B` waits three times longer for its monomer, and in
+a world of dimers that decides everything. With resistance, `B` holds 26% to 29% in the second
+half of every run, five to six times the control, and the resistant runs carry twice as many
+strands. Durability pays for scarcity and then some. At the harsh rate above the enrichment
+reached 41% to 46%. Sequence content is under selection, in the direction the physics predicts,
+and the strength of the selection is set by the radiation rate. What has not happened is any
+length beyond 2: the winning form is the `BB` dimer, and a ring of tough blocks around a fragile
+core is not something a one-dimensional chain can build.
 
 ## 9. Metabolism from sequence (`channels.sh`, `M_` runs, 100,000 steps)
 
@@ -280,9 +300,9 @@ compartments matter: the benefit has to stay with the sequence that pays for it.
   nothing, at high rates nucleation starves at the densities tried.
 - Life starts by itself from a seedless bath at every spontaneous-link rate tried, within 1,000
   to 15,000 steps.
-- Radiation with unequal resistance selects on content: tough blocks reach 41% to 46% of copied
-  material from a 25% pool. Energy from `ABA` motifs sustains a population but is not selected
-  for in a well-mixed world; the dimers free-ride.
+- Radiation with unequal resistance selects on content: tough but scarce blocks make up 26% to
+  46% of copied material, against 4% to 7% when they are scarce but not tough. Energy from `ABA`
+  motifs sustains a population but is not selected for in a well-mixed world; the dimers free-ride.
 - The open questions for Phase 3: keep the benefit of a motif with the strand that carries it
   (spatial structure, slower particles, or compartments), find the radiation window where long
   strands can persist, and give chains a way to close into rings so protection can be built.
