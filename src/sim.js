@@ -636,6 +636,32 @@ class Sim {
     this.brokeF.length = 0;
   }
 
+  /** Bond formation between two open units that are within docking distance: first compatible, well-placed side pair wins. */
+  _tryBond(u, v, dx, dy, d) {
+    const rng = this.rng;
+    for (let i = 0; i < 4; i++) {
+      if (!(this.open[u] & (1 << i))) continue;
+      for (let j = 0; j < 4; j++) {
+        if (!(this.open[v] & (1 << j))) continue;
+        const pr = this.compat(u, i, v, j);
+        if (pr <= 0) continue;
+        if (!this._geomOK(u, i, v, j, dx, dy, d)) continue;
+        if (pr < 1 && rng() >= pr) continue;
+        const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
+        if (!this._formBond(u, i, v, j)) continue;
+        if (i === F && j === F) { this.dockEvents++; if (this.type[u] !== this.type[v]) this.softDockEvents++; this._event('dock', u, v); }
+        else if (i !== K && j !== K && this.type[u] !== T_E && this.type[v] !== T_E) {
+          if (su === S.STICKY && sv === S.STICKY) this._event('link', u, v);
+          else if (su === S.INERT && sv === S.INERT) { this.spontEvents++; this._event('spont', u, v); }
+          else if (su === S.INERT || sv === S.INERT) { this.captureEvents++; this._event('capture', su === S.INERT ? u : v, su === S.INERT ? v : u); }
+          else { this.ligateEvents++; this._event('ligate', u, v); }
+        }
+        this.open[u] &= ~(1 << i); this.open[v] &= ~(1 << j);
+        break;
+      }
+    }
+  }
+
   // ------------------------------------------------------------- one step
   step() {
     const p = this.p, n = this.n, rng = this.rng;
@@ -649,31 +675,43 @@ class Sim {
     for (let u = 0; u < n; u++) { this.px[u] = this._wx(this.px[u]); this.py[u] = this._wy(this.py[u]); }
     this._buildHash();
     // 2. contact candidates: unbonded squares close enough that they might touch during the solve
+    //    (the 3x3 cell neighbourhood of each square, visited in the same order as _forNear)
     const contacts = this.contacts; contacts.length = 0;
+    const px = this.px, py = this.py, pa = this.pa, rad = this.rad, bond = this.bond, size = this.size, open = this.open;
+    const W = p.W, H = p.H, gw = this.gw, gh = this.gh, cell = this.cell, head = this.head, next = this.next;
     for (let u = 0; u < n; u++) {
-      this._forNear(this.px[u], this.py[u], (v) => {
-        if (v <= u) return;
-        const dx = this._dx(this.px[v] - this.px[u]), dy = this._dy(this.py[v] - this.py[u]);
-        const rr = (this.rad[u] + this.rad[v]) * 1.3;
-        if (dx * dx + dy * dy >= rr * rr) return;
-        if (this._bonded(u, v)) return;
-        contacts.push(u, v);
-      });
+      const x = px[u], y = py[u], ru = rad[u], ub = u * 4;
+      const cx = Math.min(gw - 1, (x / cell) | 0), cy = Math.min(gh - 1, (y / cell) | 0);
+      for (let oy = -1; oy <= 1; oy++) {
+        const row = ((cy + oy + gh) % gh) * gw;
+        for (let ox = -1; ox <= 1; ox++) {
+          for (let v = head[row + (cx + ox + gw) % gw]; v >= 0; v = next[v]) {
+            if (v <= u) continue;
+            let dx = px[v] - x; dx -= W * Math.round(dx / W);
+            let dy = py[v] - y; dy -= H * Math.round(dy / H);
+            const rr = (ru + rad[v]) * 1.3;
+            if (dx * dx + dy * dy >= rr * rr) continue;
+            if ((bond[ub] >> 2) === v || (bond[ub + 1] >> 2) === v || (bond[ub + 2] >> 2) === v || (bond[ub + 3] >> 2) === v) continue;
+            contacts.push(u, v);
+          }
+        }
+      }
     }
     // 3. constraints. Bonds: the two bonded sides must lie flush. Contacts: two unbonded squares may not overlap.
     //    Each constraint nudges only the two squares it involves; the passes are repeated so they settle together.
-    const bl = this._bondList();
+    const bl = this._bondList(), wt = this.w;
     for (let it = 0; it < p.iters; it++) {
       for (let k = 0; k < contacts.length; k += 2) {
         const u = contacts[k], v = contacts[k + 1];
-        const dx = this._dx(this.px[v] - this.px[u]), dy = this._dy(this.py[v] - this.py[u]);
-        const rr = this.rad[u] + this.rad[v];
+        let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
+        let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
+        const rr = rad[u] + rad[v];
         const d2 = dx * dx + dy * dy; if (d2 >= rr * rr) continue;
         const d = Math.sqrt(d2) || 1e-6;
-        const push = (rr - d) / d, wu = this.w[u], wv = this.w[v], ws = wu + wv;
+        const push = (rr - d) / d, wu = wt[u], wv = wt[v], ws = wu + wv;
         const fx = dx * push, fy = dy * push;
-        this.px[u] -= fx * wu / ws; this.py[u] -= fy * wu / ws;
-        this.px[v] += fx * wv / ws; this.py[v] += fy * wv / ws;
+        px[u] -= fx * wu / ws; py[u] -= fy * wu / ws;
+        px[v] += fx * wv / ws; py[v] += fy * wv / ws;
       }
       const kinds = this.bondKind;
       for (let k = 0; k < bl.length; k++) {
@@ -706,15 +744,15 @@ class Sim {
         if (kinds[k] !== 2) {
           // rigid bond (docking, or a lateral bond that is not a hinge): flush. Angle first (v's side j must face
           // u's side i), then the two side midpoints coincide.
-          const wu = this.w[u], wv = this.w[v], ws = wu + wv;
-          const e = angDiff(this.pa[v] - this.pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
-          this.pa[u] += e * wu / ws; this.pa[v] -= e * wv / ws;
-          const phu = this.pa[u] + i * Math.PI / 2, phv = this.pa[v] + j * Math.PI / 2;
-          const hu = this.size[u] / 2, hv = this.size[v] / 2;
-          const ex = this._dx(this.px[v] + hv * Math.cos(phv) - this.px[u] - hu * Math.cos(phu));
-          const ey = this._dy(this.py[v] + hv * Math.sin(phv) - this.py[u] - hu * Math.sin(phu));
-          this.px[u] += ex * wu / ws; this.py[u] += ey * wu / ws;
-          this.px[v] -= ex * wv / ws; this.py[v] -= ey * wv / ws;
+          const wu = wt[u], wv = wt[v], ws = wu + wv;
+          const e = angDiff(pa[v] - pa[u] - ((i - j) * Math.PI / 2 + Math.PI));
+          pa[u] += e * wu / ws; pa[v] -= e * wv / ws;
+          const phu = pa[u] + i * Math.PI / 2, phv = pa[v] + j * Math.PI / 2;
+          const hu = size[u] / 2, hv = size[v] / 2;
+          let ex = px[v] + hv * Math.cos(phv) - px[u] - hu * Math.cos(phu); ex -= W * Math.round(ex / W);
+          let ey = py[v] + hv * Math.sin(phv) - py[u] - hu * Math.sin(phu); ey -= H * Math.round(ey / H);
+          px[u] += ex * wu / ws; py[u] += ey * wu / ws;
+          px[v] -= ex * wv / ws; py[v] -= ey * wv / ws;
           continue;
         }
         // hinge: only the shared back corner is pinned. Side i of u has its midpoint at h*n_i and its two corners at
@@ -735,39 +773,25 @@ class Sim {
     }
     for (let u = 0; u < n; u++) { this.px[u] = this._wx(this.px[u]); this.py[u] = this._wy(this.py[u]); this.pa[u] = wrapAngle(this.pa[u]); }
     this._buildHash();
-    // 4. bond formation
+    // 4. bond formation (same neighbourhood order as _forNear)
     for (let u = 0; u < n; u++) {
-      if (!this.open[u]) continue;
-      this._forNear(this.px[u], this.py[u], (v) => {
-        if (v <= u || !this.open[v] || !this.open[u]) return;
-        const dx = this._dx(this.px[v] - this.px[u]), dy = this._dy(this.py[v] - this.py[u]);
-        const d0 = (this.size[u] + this.size[v]) / 2;
-        const d2 = dx * dx + dy * dy;
-        const dmax = d0 * (1 + p.distTol), dmin = d0 * (1 - p.distTol);
-        if (d2 > dmax * dmax || d2 < dmin * dmin) return;
-        const d = Math.sqrt(d2);
-        for (let i = 0; i < 4; i++) {
-          if (!(this.open[u] & (1 << i))) continue;
-          for (let j = 0; j < 4; j++) {
-            if (!(this.open[v] & (1 << j))) continue;
-            const pr = this.compat(u, i, v, j);
-            if (pr <= 0) continue;
-            if (!this._geomOK(u, i, v, j, dx, dy, d)) continue;
-            if (pr < 1 && rng() >= pr) continue;
-            const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
-            if (!this._formBond(u, i, v, j)) continue;
-            if (i === F && j === F) { this.dockEvents++; if (this.type[u] !== this.type[v]) this.softDockEvents++; this._event('dock', u, v); }
-            else if (i !== K && j !== K && this.type[u] !== T_E && this.type[v] !== T_E) {
-              if (su === S.STICKY && sv === S.STICKY) this._event('link', u, v);
-              else if (su === S.INERT && sv === S.INERT) { this.spontEvents++; this._event('spont', u, v); }
-              else if (su === S.INERT || sv === S.INERT) { this.captureEvents++; this._event('capture', su === S.INERT ? u : v, su === S.INERT ? v : u); }
-              else { this.ligateEvents++; this._event('ligate', u, v); }
-            }
-            this.open[u] &= ~(1 << i); this.open[v] &= ~(1 << j);
-            break;
+      if (!open[u]) continue;
+      const cx = Math.min(gw - 1, (px[u] / cell) | 0), cy = Math.min(gh - 1, (py[u] / cell) | 0);
+      for (let oy = -1; oy <= 1; oy++) {
+        const row = ((cy + oy + gh) % gh) * gw;
+        for (let ox = -1; ox <= 1; ox++) {
+          for (let v = head[row + (cx + ox + gw) % gw]; v >= 0; v = next[v]) {
+            if (v <= u || !open[v] || !open[u]) continue;
+            let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
+            let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
+            const d0 = (size[u] + size[v]) / 2;
+            const d2 = dx * dx + dy * dy;
+            const dmax = d0 * (1 + p.distTol), dmin = d0 * (1 - p.distTol);
+            if (d2 > dmax * dmax || d2 < dmin * dmin) continue;
+            this._tryBond(u, v, dx, dy, Math.sqrt(d2));
           }
         }
-      });
+      }
     }
     // 5. state transitions (synchronous: all read last step's derived states; bond breaks are applied after)
     for (let u = 0; u < n; u++) this._transition(u);
