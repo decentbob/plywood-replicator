@@ -101,7 +101,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
       <span><i style="background:#8a97a8"></i>F free (DOCK)</span><span><i style="background:#5ad27a"></i>F template</span>
       <span><i style="background:#ff5a5a"></i>F released</span><span><i style="background:#3a4250"></i>L/R inert</span>
       <span><i style="background:#ffd75a"></i>L/R sticky</span><span><i style="background:#59d6e8"></i>L/R open end</span>
-      <span><i style="background:#e565d1"></i>K wants energy</span><span><i style="background:#ff9f1c"></i>K charges energy</span>
+      <span><i style="background:#e565d1"></i>K wants energy</span><span><i style="background:#ff9f1c"></i>K charges / L,R feed</span>
       <span><i style="background:#ffffff"></i>bond</span><span><i style="background:#ff3b3b"></i>L/R fraying</span>
       <span><i style="background:#ffe066"></i>E charged</span><span><i style="background:#4a4f55"></i>E spent</span>
     </div>
@@ -175,7 +175,7 @@ const $ = (id) => document.getElementById(id);
 // that keeps a long, diverse population (spontaneous origins, gentle mutation, ligation against end fraying,
 // trapezoid slack). "protocells" adds membrane blocks that self-assemble into rings, energy from ABA motifs,
 // and a little radiation to open rings again; rings enclose strands only rarely so far.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 30, memFlex: 6, pMem: 0.2 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 30, memFlex: 6, pMem: 0.2 };
 const EVO = { slack: 0.1, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pLigate: 0.02, pFray: 0.0001 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -210,6 +210,7 @@ const KNOBS = [
   ['grp', 'Energy'],
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
   ['motif', 'ABA motif charges', 'a B between two As recharges spent E at its back', 'bool'],
+  ['feed', 'ABA motif feeds', 'a B between two As re-arms its released neighbours through their bonds', 'bool'],
   ['pReload', 'p reload per step', 'OFF→ON background energy income'],
   ['grp', 'Physics'],
   ['sigma', 'jostle', 'Brownian step per square'],
@@ -320,7 +321,7 @@ const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55', M: '#
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c' };
 function draw() {
   fitCanvas();

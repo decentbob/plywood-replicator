@@ -52,6 +52,7 @@ const S = {
   ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL); read by nothing, shown by the viewer
   CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
+  FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
 };
 const SNAME = Object.keys(S);
@@ -76,6 +77,7 @@ const DEFAULTS = {
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
+  feed: false,     // a B template unit flanked by two A units re-arms its released neighbours through their shared bonds (private metabolism)
   hinge: 'none',   // which lateral bonds bend when neither square is docked: 'none', 'all', 'BB' (both B), 'AB' (mixed). A hinge pivots on the shared back corner.
   hingeMax: 90,    // a hinge bends at most this many degrees (toward the backs)
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the bond then bends to memAngle
@@ -149,7 +151,7 @@ class Sim {
     this.contacts = [];                           // candidate unbonded pairs close enough to touch this step
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0;
     this._seen = new Uint8Array(n);
 
     // types
@@ -464,6 +466,7 @@ class Sim {
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
+    if (this.p.feed && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + L] = this.ss[o + R] = S.FEED;
     // K. A B template unit flanked by two A units reads CHARGE at its back when the motif rule is on:
     // this is the one place a side's state depends on what its neighbours are (their type is their colour).
     // (K to K bonds no longer exist; the back is for energy only.)
@@ -525,6 +528,7 @@ class Sim {
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3 lost its strand: back to the pool
       else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
+      else if (p.feed && ((bL && this.ss[b[o + L]] === S.FEED) || (bR && this.ss[b[o + R]] === S.FEED))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3
     }
@@ -900,7 +904,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
