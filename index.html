@@ -84,7 +84,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime, and protocells with self-assembling membrane rings. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
+  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and protocells with self-assembling membrane rings. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
 </header>
 <div class="main">
   <div class="dish">
@@ -171,16 +171,17 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, T_M, TNAME, SNAME, F, R, K, L } = PC;
 const $ = (id) => document.getElementById(id);
 
-// Three presets. "copying" shows the mechanism with every soft knob at zero. "evolution" is the open regime
-// that keeps a long, diverse population (spontaneous origins, gentle mutation, ligation against end fraying,
-// trapezoid slack). "protocells" adds membrane blocks that self-assemble into rings, energy from ABA motifs,
-// and a little radiation to open rings again; rings enclose strands only rarely so far.
+// Three presets. "copying" shows the mechanism with every soft knob at zero. "evolution" is the open regime in
+// which selection holds strands long: cooperative docking (a lone docked monomer falls off, so longer templates
+// nucleate copies faster) with processive fraying (strands die whole instead of being eroded), spontaneous
+// origins and gentle mutation, no ligation. "protocells" adds membrane blocks that self-assemble into rings,
+// energy from ABA motifs, and a little radiation to open rings again; rings enclose strands only rarely so far.
 const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 30, memFlex: 6, pMem: 0.2 };
-const EVO = { slack: 0.1, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pLigate: 0.02, pFray: 0.0001 };
+const EVO = { W: 60, H: 60, slack: 0.1, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
   evo:   Object.assign({}, ZERO, EVO),
-  proto: Object.assign({}, ZERO, EVO, { nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
+  proto: Object.assign({}, ZERO, EVO, { W: 80, H: 80, seedCount: 1, pUnzip: 0, pUndock: 0, pFray: 0.0001, pLigate: 0.02, nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
 };
 const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400 };
 
