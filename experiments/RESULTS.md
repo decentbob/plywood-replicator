@@ -394,7 +394,132 @@ The viewer keeps three presets: copying with every soft knob at zero, the `E_fra
 "evolution", and "protocells" (evolution plus 300 membrane blocks at 30°, motif energy, a little
 radiation).
 
-## 13. Summary
+## 13. Turnover is a deletion ratchet; processive fraying lifts it (`unzip.sh`)
+
+**Diagnosis.** In a closed world the only way a monomer returns to the pool is by fraying off an
+end. A copy of L units therefore has to be paid for by about L end deletions somewhere in the
+population. With cooperative docking on (`pUndock` 0.1) and end fraying at 0.00003, one run had
+1,092 frays for 602 births: each lineage loses a unit or two per copy cycle, faster than
+cooperativity rewards the extra length. Turnover itself is the mutation pressure that keeps
+strands short.
+
+**Change.** Processive fraying (`pUnzip`): a unit that frays reads `FRAY` on its lateral sides
+for one step before it lets go, and an undocked neighbour that reads `FRAY` follows it with
+probability `pUnzip`. At 1 a strand that starts to fray unzips one unit per step until it
+reaches a unit with a copy docked on it (being copied protects). Material comes back by strands
+dying whole instead of survivors being eroded. At `pUnzip` 0 nothing changes (trajectories are
+bit-identical).
+
+End fraying, 60×60, 400 A + 400 B, 300 E, three `ABBABA` seeds, gentle mutation (pSoft 0.01,
+pCapture 0.01, pSpont 0.001, slack 0.1), 100,000 steps, one seed each. "u" is `pUndock` × 100,
+"f" is `pFray`, "b" radiation instead of fraying:
+
+| run | mean length | max | strands | free | births | newborn length, last 50k | distinct | entropy (bits) | frays |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Z_end_u0_f1e5 | 2.27 | 7 | 251 | 4 | 558 | 2.16 | 15 | 1.84 | 333 |
+| Z_end_u0_f3e5 | 2.41 | 6 | 223 | 10 | 941 | 2.25 | 15 | 2.54 | 895 |
+| Z_end_u0_f1e4 | 2.22 | 5 | 239 | 57 | 2,754 | 2.14 | 12 | 1.97 | 2,994 |
+| Z_end_u0_b5e5 | 2.00 | 2 | 300 | 8 | 1,573 | 2.01 | 3 | 1.23 | 0 |
+| Z_end_u10_f1e5 | 3.66 | 8 | 189 | 68 | 363 | 3.64 | 40 | 4.59 | 396 |
+| Z_end_u10_f3e5 | 3.17 | 7 | 203 | 117 | 602 | 3.15 | 33 | 4.12 | 1,092 |
+| Z_end_u10_f1e4 | 2.60 | 5 | 164 | 339 | 1,614 | 2.73 | 20 | 2.93 | 3,078 |
+| Z_end_u10_b5e5 | 2.27 | 4 | 265 | 179 | 1,163 | 2.32 | 15 | 2.38 | 0 |
+
+With end fraying, cooperative docking helps (2.3 to 3.2-3.7) and the gentler the fraying the
+longer the strands, but births fall with it. Radiation as the only turnover gives dimers either
+way: it cuts anywhere, which is a deletion ratchet too.
+
+Processive fraying, same world, 150,000 steps, one seed each:
+
+| run | mean length | max | strands | free | births | newborn length, last 50k | distinct | entropy (bits) | frays | unzips |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Z_zip_u0_f3e5 | 2.26 | 7 | 246 | 16 | 1,589 | 2.15 | 15 | 2.24 | 1,478 | 804 |
+| Z_zip_u5_f3e5 | 3.97 | 8 | 140 | 128 | 1,404 | 3.75 | 41 | 4.80 | 1,582 | 2,807 |
+| Z_zip_u10_f3e5 | 4.72 | 9 | 119 | 136 | 952 | 4.64 | 42 | 4.91 | 1,140 | 2,779 |
+| Z_zip_u20_f3e5 | 5.36 | 13 | 94 | 196 | 738 | 5.09 | 52 | 5.40 | 870 | 2,454 |
+| Z_zip_u0_f1e4 | 2.31 | 6 | 231 | 42 | 4,112 | 2.17 | 16 | 2.40 | 4,357 | 2,459 |
+| Z_zip_u5_f1e4 | 3.13 | 7 | 142 | 270 | 3,197 | 3.19 | 24 | 3.88 | 4,040 | 6,039 |
+| Z_zip_u10_f1e4 | 3.48 | 6 | 105 | 371 | 2,472 | 3.45 | 32 | 4.37 | 3,107 | 5,538 |
+| Z_zip_u20_f1e4 | 3.10 | 7 | 58 | 599 | 1,506 | 3.00 | 15 | 3.10 | 1,759 | 3,364 |
+
+Replicates of the four settings that matter, three seeds each (150,000 steps; end-fraying seed 1
+ran 100,000):
+
+| setting | mean length | births | distinct |
+|---|---|---|---|
+| unzip, no cooperative docking | 2.26, 2.32, 2.23 | 1,589, 1,569, 1,638 | 15, 18, 17 |
+| end fraying, `pUndock` 0.1 | 3.17, 3.31, 3.23 | 602, 745, 752 | 33, 36, 38 |
+| unzip, `pUndock` 0.1 | 4.72, 4.02, 4.31 | 952, 1,223, 1,199 | 42, 38, 44 |
+| unzip, `pUndock` 0.2 | 5.36, 4.43, 4.52 | 738, 886, 916 | 52, 45, 50 |
+
+What this says:
+
+- Neither rule alone does it. Unzipping without cooperativity is still a dimer world (2.3);
+  cooperativity with end fraying gives 3.2. Together they give 4.0 to 5.4, a clean dose-response
+  in `pUndock`, and the length of newborns climbs through each run (from about 3.5 in the first
+  30,000 steps to about 5 at the end at `pUndock` 0.2). This is selection, not ligation: `pLigate`
+  is 0 in every run.
+- Unzipping is only partly processive in practice: two to three unzip steps per fray at
+  `pUndock` 0.1, because a template is often holding a nucleated copy and that stops the wave.
+- Denser worlds (42×42 and 50×50 with the same material) give the same lengths (3.9 to 4.9 with
+  cooperativity, 2.3 to 2.5 without) and no more births. Births are set by recycling: a birth
+  needs free monomers, and monomers come back only when strands die.
+- The price is speed. At `pUndock` 0.1 and fraying 0.00003 each strand is copied about once per
+  20,000 steps, so a 150,000-step run is only a dozen generations.
+
+Density runs (`Z_d42_*`, `Z_d50_*`, one seed each, 150,000 steps, 250 E):
+
+| run | mean length | max | births | distinct | entropy (bits) |
+|---|---:|---:|---:|---:|---:|
+| Z_d50_u0_f3e5 | 2.32 | 7 | 1,638 | 18 | 2.23 |
+| Z_d50_u5_f3e5 | 3.95 | 8 | 1,373 | 35 | 4.62 |
+| Z_d50_u10_f3e5 | 4.21 | 10 | 1,313 | 40 | 4.79 |
+| Z_d50_u10_f1e5 | 4.30 | 10 | 629 | 48 | 5.03 |
+| Z_d42_u0_f3e5 | 2.51 | 7 | 1,356 | 23 | 2.50 |
+| Z_d42_u10_f3e5 | 4.35 | 9 | 1,411 | 51 | 5.17 |
+| Z_d42_u20_f3e5 | 4.85 | 11 | 1,177 | 52 | 5.22 |
+| Z_d42_u10_f1e4 | 3.88 | 9 | 3,812 | 46 | 4.89 |
+
+## 14. Does sequence pay once length does? The `ABA` motif (`motif.sh`, `long.sh`)
+
+All runs in the length regime above (50×50, unzip, `pUndock` 0.1, fraying 0.00003). The measure
+is `ABA` motifs in newborns against the number expected if each newborn's blocks were drawn at
+random at the window's `B` fraction (`composition.js`, "ABA vs chance"). Every run starts from
+`ABBABA` seeds, which carry one motif, so founder descent pushes even the controls above 1; the
+comparison that counts is motif against control.
+
+**Public motif, energy plentiful** (`Q_m_*`, 250 particles, background reload 0.00005, two
+seeds). The motif is 1.2 to 1.8 × chance in the last 50,000 steps against 0.9 to 1.3 in the
+control, and slowing energy particles to a fifth or a twentieth of their mobility (`mobE`) makes
+no consistent difference. The reason is in the energy counts: once any motifs exist, about 200 of
+250 particles are charged at any time, and the motif-off control, which used less than half the
+energy, made as many births (1,251 to 1,289 against 1,177 to 1,350). Energy is not what limits
+copying here; recycling and nucleation are. A public good that is not scarce is not selected.
+
+**Public motif, energy scarce** (`Q_n_*`, 60 particles, motif charging the only income; control
+with background reload instead). Last 50,000 steps: 1.3 to 1.6 × chance at normal mobility, 1.7
+to 1.9 at mobility 0.2, against 1.7 in the control. No selection.
+
+**Private motif** (`Q_f_*`, the `feed` rule: an armed `B` between two `A`s re-arms its released
+neighbours through their shared bonds, so a strand carrying the motif pays one particle where it
+would pay three and nobody else benefits). 40 particles, reload 0.0005, energy limiting (1 to 5
+particles charged at any time), 200,000 steps, two seeds:
+
+| run | births | fed re-arms | ABA per block, last 50k | ABA vs chance, by 50k window | mean length |
+|---|---:|---:|---:|---|---:|
+| Q_f_ctl_1 | 1,575 | 0 | 0.093 | 1.55, 1.34, 1.45, 1.52 | 4.27 |
+| Q_f_ctl_2 | 1,446 | 0 | 0.106 | 2.02, 1.87, 1.88, 1.79 | 4.28 |
+| Q_f_feed_1 | 1,443 | 525 | 0.108 | 2.03, 1.89, 1.89, 1.59 | 4.66 |
+| Q_f_feed_2 | 1,381 | 710 | 0.142 | 2.33, 1.94, 2.00, 1.99 | 4.97 |
+
+With `feed` the motif is somewhat more common and strands are longer (the energy saved buys
+length), but the difference is within the seed-to-seed spread. One arming in ten comes through a
+motif, a saving of a few percent per copy, and 200,000 steps is about fifteen generations: too
+few for a few-percent advantage to show above drift.
+
+LONGRUNS_PLACEHOLDER
+
+## 15. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in

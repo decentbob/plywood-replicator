@@ -13,9 +13,13 @@ Spiegelman found, by 25:1 to 60:1. One more local rule reverses that in a
 head-to-head race: make a lone docked monomer unstable (a linked run is not), so
 copying has to nucleate, and longer templates nucleate faster. At an undocking
 rate of 0.1 per step the 6-mer out-reproduces the dimer nine to one. In an open
-population with turnover the same rule has not yet won: at the densities tried,
-fraying erodes long templates faster than copies nucleate. That window is the
-next thing to map.
+population it wins too once turnover stops being a deletion ratchet: with end
+fraying as the only recycling, every copy is paid for by deletions, so strands
+stay short. With processive fraying (a strand that starts to fray unzips whole)
+the population holds a mean length of 4 to 5.4 by selection, against 2.3 without
+cooperative docking. Whether sequence, not just length, can be selected is the
+current question: an energy motif that benefits only its carrier (`feed`) is
+under test.
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 ## Run it
@@ -101,15 +105,16 @@ partner whether it sits in the middle of the template or at an end.
 
 A docked unit's free lateral side reads `STICKY` only where its template partner's face says the template continues; at the template's end it reads `END`. That is what stops copies docked on two different templates from linking into chimeras.
 
-**Transitions** (six rules, one internal state):
+**Transitions** (one internal state):
 
 | rule | from | to | when |
 |---|---|---|---|
 | R1 | DOCK | REPEL | docked, and every lateral bond the template partner says I need is in place |
 | R2 | DOCK | REPEL | laterally captured without a template |
 | R3 | REPEL / TPL | DOCK | no lateral bonds left |
-| R4 | REPEL | TPL | an ON energy particle is docked on K |
+| R4 | REPEL | TPL | an ON energy particle is docked on K, or (with `feed`) a neighbour's side reads FEED: an armed `B` between two `A`s arms its neighbours through their bonds |
 | R5 | REPEL / TPL | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
+| R5b | REPEL / TPL | FRAY, then DOCK | processive fraying: an undocked unit whose neighbour's side reads FRAY follows it with probability `pUnzip`, so a strand can unzip whole |
 | R6 | DOCK (docked) | DOCK (free) | cooperativity: a docked monomer with no lateral bonds falls off with probability `pUndock` per step |
 | R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances `resA`, `resB` |
 
