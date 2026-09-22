@@ -23,7 +23,7 @@
  *   L (3) left   — lateral, bonds only to a neighbour's R
  *
  * Every unit carries ONE internal state:
- *   monomer types A, B:  DOCK | REPEL | TPL
+ *   monomer types A, B:  DOCK | REPEL | TPL | FRAY (FRAY only with processive fraying, pUnzip > 0)
  *   energy type E:       OFF  | ON
  * Everything a neighbour can read (the "side states" of the design doc) is
  * derived each step from that internal state plus which sides are bonded.
@@ -40,7 +40,7 @@ const T_A = 0, T_B = 1, T_E = 2, T_M = 3;
 const TNAME = ['A', 'B', 'E', 'M'];
 
 // internal states
-const I_DOCK = 0, I_REPEL = 1, I_TPL = 2;   // A / B
+const I_DOCK = 0, I_REPEL = 1, I_TPL = 2, I_FRAY = 3;   // A / B
 const I_OFF = 0, I_ON = 1;                  // E
 
 // derived side states (the interface a bonded partner can read)
@@ -52,6 +52,7 @@ const S = {
   ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL); read by nothing, shown by the viewer
   CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
+  FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
 };
 const SNAME = Object.keys(S);
 // A bond breaks the moment either of its sides derives to one of these.
@@ -69,6 +70,7 @@ const DEFAULTS = {
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
   pLigate: 0,      // two strand ends join end to end: fusion. Balanced against fraying it sets a length distribution.
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
+  pUnzip: 0,       // processive fraying: a unit whose lateral neighbour is fraying frays next, per step. 1 unzips a whole strand; 0 is plain end fraying
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
@@ -146,7 +148,7 @@ class Sim {
     this.contacts = [];                           // candidate unbonded pairs close enough to touch this step
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0;
     this._seen = new Uint8Array(n);
 
     // types
@@ -446,6 +448,10 @@ class Sim {
     }
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0, bR = b[o + R] >= 0, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u];
+    if (st === I_FRAY) {
+      this.ss[o + F] = S.REPEL; this.ss[o + K] = S.IDLE; this.ss[o + L] = S.FRAY; this.ss[o + R] = S.FRAY;
+      return;
+    }
     // F
     if (st === I_DOCK) this.ss[o + F] = S.DOCK;
     else if (st === I_REPEL) this.ss[o + F] = S.REPEL;
@@ -497,6 +503,11 @@ class Sim {
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0, bR = b[o + R] >= 0, bK = b[o + K] >= 0;
     const nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u];
+    if (st === I_FRAY) {
+      // leaving: every lateral bond goes, and the unit is a free monomer again
+      this.is[u] = I_DOCK; this.pendingUnlink.push(o + L, o + R);
+      return;
+    }
     if (st === I_DOCK) {
       if (bF) {
         // R6 undocking: a lone docked monomer is not stable; a laterally linked run is
@@ -516,10 +527,16 @@ class Sim {
     } else { // I_TPL
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3
     }
-    // R5 fraying: an end unit of an undocked strand falls off
+    // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
+    // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).
     if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < p.pFray) {
-      this.is[u] = I_DOCK; this.fresh[u] = 0;
-      this.pendingUnlink.push(o + L, o + R); this.frayEvents++; this._event('fray', u);
+      this.fresh[u] = 0; this.frayEvents++; this._event('fray', u);
+      if (p.pUnzip > 0) this.is[u] = I_FRAY;
+      else { this.is[u] = I_DOCK; this.pendingUnlink.push(o + L, o + R); }
+      return;
+    }
+    if (p.pUnzip > 0 && this.is[u] !== I_DOCK && !bF && ((bL && this.ss[b[o + L]] === S.FRAY) || (bR && this.ss[b[o + R]] === S.FRAY)) && this.rng() < p.pUnzip) {
+      this.is[u] = I_FRAY; this.fresh[u] = 0; this.unzipEvents++;
       return;
     }
     // R7 radiation: each of my lateral bonds breaks with probability pBreak scaled by how fragile the two blocks are.
@@ -882,7 +899,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
@@ -903,5 +920,5 @@ class Sim {
   }
 }
 
-return { Sim, DEFAULTS, S, SNAME, F, R, K, L, T_A, T_B, T_E, T_M, TNAME, I_DOCK, I_REPEL, I_TPL, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, DEFAULTS, S, SNAME, F, R, K, L, T_A, T_B, T_E, T_M, TNAME, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

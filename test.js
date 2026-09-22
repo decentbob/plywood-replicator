@@ -122,4 +122,15 @@ test('membrane blocks self-assemble into rings and never bond to anything else',
   assert.deepStrictEqual(s.check(), []);
 });
 
+test('processive fraying: with pUnzip 1 a strand that frays unzips completely; pUnzip 0 is plain end fraying', () => {
+  const mk = (pUnzip) => new Sim(Object.assign({}, base, { seed: 3, nA: 20, nB: 20, nE: 10, W: 40, H: 40, seedSeq: 'ABBABAAB', pFray: 0.01, pUnzip, energyGate: false }));
+  const zip = mk(1); zip.run(200);
+  assert.strictEqual(zip.frayEvents, 1, 'one fray should start it');
+  assert.strictEqual(zip.unzipEvents, 7, 'the other seven units should follow');
+  assert.strictEqual(zip.stats().strands + zip.stats().complexes, 0);
+  const end = mk(0); end.run(200);
+  assert.ok(end.frayEvents >= 1 && end.unzipEvents === 0);
+  assert.deepStrictEqual(zip.check(), []); assert.deepStrictEqual(end.check(), []);
+});
+
 console.log(passed + ' tests passed');
