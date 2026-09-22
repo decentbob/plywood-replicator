@@ -3,6 +3,7 @@
 #  Z_end_*  end fraying only (pUnzip 0), 60x60, 100k steps; Z_end_*_b* uses radiation as the turnover instead
 #  Z_zip_*  processive fraying (pUnzip 1), 60x60, 150k steps
 #  Z_d42_*, Z_d50_*  the same at higher monomer density (42x42 and 50x50)
+#  Z_*_2, Z_*_3  replicate seeds for the four key settings (150k steps; Z_end_* seed 1 above ran 100k)
 # Names: u = pUndock x 100, f = pFray (3e5 = 0.00003), b = pBreak.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
@@ -34,4 +35,12 @@ echo "Z_d42_u10_f3e5 --seed 1 --W 42 --H 42 --pFray 0.00003 --pUndock 0.1"
 echo "Z_d42_u20_f3e5 --seed 1 --W 42 --H 42 --pFray 0.00003 --pUndock 0.2"
 echo "Z_d42_u10_f1e4 --seed 1 --W 42 --H 42 --pFray 0.0001 --pUndock 0.1"
 } | run "--steps 150000 --every 10000 --nE 250 --pUnzip 1 $MUT"
+{
+for sd in 2 3; do
+  echo "Z_zip_u10_f3e5_$sd --seed $sd --pUnzip 1 --pUndock 0.1 --pFray 0.00003"
+  echo "Z_end_u10_f3e5_$sd --seed $sd --pUndock 0.1 --pFray 0.00003"
+  echo "Z_zip_u0_f3e5_$sd  --seed $sd --pUnzip 1 --pFray 0.00003"
+  echo "Z_zip_u20_f3e5_$sd --seed $sd --pUnzip 1 --pUndock 0.2 --pFray 0.00003"
+done
+} | run "--steps 150000 --every 10000 --W 60 --H 60 --nE 300 $MUT"
 echo UNZIPDONE
