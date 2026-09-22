@@ -87,6 +87,7 @@ const DEFAULTS = {
   pReload: 0.002,  // OFF -> ON per step, the background energy income; the ABA motif (motif rule) is the other source
   // physics knobs (these should not need tuning for the chemistry to work)
   sigma: 0.3, sigmaRot: 0.45,    // Brownian step (translation, rotation) per unit per step
+  mobE: 1,                       // energy particles' Brownian step relative to their size's; below 1 the medium is viscous for energy and a charged particle stays near where it was charged
   repMargin: 1.0,                // contact radius of a square as a fraction of half its side; unbonded squares never overlap more than this allows
   iters: 24,                     // constraint iterations per step (bonds and contacts together)
   tolDeg: 30, tolRotDeg: 40, distTol: 0.35,   // geometric tolerance for docking (F to F, E to K)
@@ -685,7 +686,7 @@ class Sim {
     this.t++;
     // 1. Brownian jostling, per square
     for (let u = 0; u < n; u++) {
-      const sw = Math.sqrt(this.w[u]);
+      const sw = this.type[u] === T_E ? Math.sqrt(this.w[u]) * p.mobE : Math.sqrt(this.w[u]);
       this.px[u] += p.sigma * sw * gauss(rng); this.py[u] += p.sigma * sw * gauss(rng);
       this.pa[u] += p.sigmaRot * this.w[u] * gauss(rng);
     }
