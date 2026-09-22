@@ -1,6 +1,6 @@
 # Results
 
-Measurements from the headless runner on the per-square physics (third draft, 2026-09-21).
+Measurements from the headless runner on the per-square physics (third draft, 2026-09-21; sections 13 and 14 added 2026-09-22).
 Every run is deterministic per seed; the commands are in the `.sh` scripts next to this file and
 `run_all.sh` reproduces everything in about 50 minutes on four cores. Tables come from
 `summarize.js`, `births_by_length.js` and `mutation_rates.js` over `out/*.csv` and
@@ -517,7 +517,26 @@ length), but the difference is within the seed-to-seed spread. One arming in ten
 motif, a saving of a few percent per copy, and 200,000 steps is about fifteen generations: too
 few for a few-percent advantage to show above drift.
 
-LONGRUNS_PLACEHOLDER
+**Private motif over many generations** (`long.sh`, `L1M_*`): a 40×40 world with 256 A + 256 B
+and 26 particles (energy limiting), same regime, 1,000,000 steps, 40 to 52 generations, two seeds
+each. "ABA vs chance" by 200,000-step window:
+
+| run | births | max generation | fed re-arms | ABA vs chance, by 200k window | ABA per block, whole run |
+|---|---:|---:|---:|---|---:|
+| L1M_ctl_1 | 3,816 | 40 | 0 | 1.59, 1.43, 0.95, 1.18, 1.01 | 0.082 |
+| L1M_ctl_2 | 3,992 | 44 | 0 | 1.16, 0.62, 0.98, 1.42, 1.72 | 0.078 |
+| L1M_feed_1 | 3,845 | 46 | 2,035 | 1.98, 2.15, 2.07, 1.64, 1.65 | 0.132 |
+| L1M_feed_2 | 3,712 | 52 | 2,243 | 1.92, 2.24, 2.11, 2.33, 1.64 | 0.147 |
+
+This is the first sequence-level selection in the open regime. With the motif private, `ABA` stays
+at 1.6 to 2.3 times chance in every window of both seeds and averages 1.7 times the control's
+frequency; without it, the frequency drifts between 0.6 and 1.7 times chance. It is a balance,
+not a sweep: the motif does not keep rising. One arming in seven comes through a motif, total
+births are unchanged (they are set by recycling, section 13), and mutation keeps breaking motifs
+as fast as selection keeps them. Mean length is the same in both arms (4.4 to 5.1). What it
+shows is the condition, not the size, of the effect: in this well-mixed world a sequence feature
+is selected when its benefit reaches its carrier through the carrier's own bonds, and not when
+it goes out into the medium, however slowly the medium carries it.
 
 ## 15. Summary
 
@@ -546,6 +565,13 @@ LONGRUNS_PLACEHOLDER
 - Membrane blocks self-assemble into rings of a chosen size within 10,000 to 20,000 steps, and
   replicators are unaffected by them; but rings close around empty space at every density tried,
   so no strand was ever enclosed and compartment selection could not be measured.
+- Turnover by end fraying is a deletion ratchet: every recycled monomer is a deletion. With
+  processive fraying (a fraying strand unzips whole) and cooperative docking together, the open
+  population holds a mean length of 4 to 5.4 by selection, 40 to 50 sequences, against 2.3 with
+  either rule alone (three seeds each). Monomer density does not matter; recycling sets births.
+- The `ABA` energy motif is not selected as a public good, even with energy scarce and slow. Made
+  private (`feed`: the motif arms its own neighbours through their bonds) it holds at about 1.7
+  times the control's frequency over 40 to 50 generations, a mutation-selection balance.
 - The open questions for Phase 3: make membranes nucleate on strands (one row: `M` binds a
   template's back), so that compartments hold a genome and the `ABA` motif's public good can
   stay with its carrier; find the radiation window where long strands persist; and give rings a
