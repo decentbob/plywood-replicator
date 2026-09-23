@@ -55,6 +55,7 @@ const S = {
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
   RAW: 20,                                              // K and L, R of a raw membrane block (make rule): its back docks on a MAKE back and its sides on an active block's open side, either of which activates it
   MAKE: 21,                                             // K of an A template unit flanked by two B units (make rule): activates raw membrane blocks
+  HYB: 22,                                              // L, R of a template unit whose face is bound to another template's face (binding): read by its neighbours
   FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
 };
@@ -76,6 +77,9 @@ const DEFAULTS = {
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
   pUnzip: 0,       // processive fraying: a unit whose lateral neighbour is fraying frays next, per step. 1 unzips a whole strand; 0 is plain end fraying
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
+  pHyb: 0,         // binding: two template faces of opposite type (A on B) bind, per step of contact. Copies pair A on A, so kin never bind
+  pMelt: 0.1,      // binding: a face-to-face bond with no bound neighbour melts, per step
+  pMeltRun: 0.001, // binding: a face-to-face bond with a bound neighbour melts, per step; long matches hold, short ones do not
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
@@ -164,7 +168,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0;
     this._seen = new Uint8Array(n);
 
     // types
@@ -404,6 +408,7 @@ class Sim {
   _formBond(u, i, v, j) {
     const nb = (x) => (this.bond[x * 4] >= 0) + (this.bond[x * 4 + 1] >= 0) + (this.bond[x * 4 + 2] >= 0) + (this.bond[x * 4 + 3] >= 0);
     if (this.type[u] === T_M && this.type[v] === T_M) { this._link(u, i, v, j); return true; }   // corners already touch
+    if (i === F && j === F && this.is[u] === I_TPL && this.is[v] === I_TPL) { this._link(u, i, v, j); return true; }   // binding: both sit in strands, the pins align them
     let a = u, ia = i, m = v, im = j;
     if (nb(u) < nb(v)) { a = v; ia = j; m = u; im = i; }
     const sa = this._side(a, ia, [0, 0, 0, 0]), sm = this._side(m, im, [0, 0, 0, 0]);
@@ -438,6 +443,7 @@ class Sim {
     }
     if (i === F && j === F) {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
+      if (isTpl(su) && isTpl(sv)) return tu !== tv ? p.pHyb : 0;   // binding: two templates, opposite types
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
       return tu === tv ? 1 : p.pSoft;
     }
@@ -499,7 +505,8 @@ class Sim {
     // L, R. A docked unit's free lateral is sticky only where its template partner's face says the
     // template continues (TPL_MM, or TPL_LF for my L / TPL_RF for my R); at the template's end it is an open end.
     const pf = bF ? this.ss[b[o + F]] : -1;
-    const lat = (bonded, contin) => bonded ? (st === I_TPL ? S.ARMED : S.BONDED)
+    const hyb = st === I_TPL && pf >= 0 && pf !== S.DOCK;   // my face is bound to another template's face
+    const lat = (bonded, contin) => bonded ? (st === I_TPL ? (hyb ? S.HYB : S.ARMED) : S.BONDED)
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
@@ -577,6 +584,11 @@ class Sim {
       else if (p.feed && ((bL && this.ss[b[o + L]] === S.FEED) || (bR && this.ss[b[o + R]] === S.FEED))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3
+      else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
+        // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
+        const held = (bL && this.ss[b[o + L]] === S.HYB) || (bR && this.ss[b[o + R]] === S.HYB);
+        if (this.rng() < (held ? p.pMeltRun : p.pMelt)) { this.pendingUnlink.push(o + F); this.meltEvents++; }
+      }
     }
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
     // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).
@@ -723,7 +735,8 @@ class Sim {
         if (pr < 1 && rng() >= pr) continue;
         const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
         if (!this._formBond(u, i, v, j)) continue;
-        if (i === F && j === F) { this.dockEvents++; if (this.type[u] !== this.type[v]) this.softDockEvents++; this._event('dock', u, v); }
+        if (i === F && j === F && this.is[u] === I_TPL && this.is[v] === I_TPL) { this.hybEvents++; this._event('bind', u, v); }
+        else if (i === F && j === F) { this.dockEvents++; if (this.type[u] !== this.type[v]) this.softDockEvents++; this._event('dock', u, v); }
         else if (i !== K && j !== K && this.type[u] !== T_E && this.type[v] !== T_E) {
           if (su === S.STICKY && sv === S.STICKY) this._event('link', u, v);
           else if (su === S.INERT && sv === S.INERT) { this.spontEvents++; this._event('spont', u, v); }
@@ -959,7 +972,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };

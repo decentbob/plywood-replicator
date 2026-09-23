@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, T_E, T_M, I_TPL, F, L, R, NV } = require('./src/sim.js');
+const { Sim, S, T_E, T_M, I_TPL, F, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -141,6 +141,26 @@ test('polygon physics: copies are exact at stiffness 1 and 0.5, octagons mostly,
   const m = new Sim(Object.assign({}, base, { seed: 7, seedCount: 0, nA: 50, nB: 50, nE: 10, W: 40, H: 40, nM: 150, memAngle: 45 }));
   m.run(20000);
   assert.ok(m.stats().memRings >= 3, 'expected membrane rings, got ' + m.stats().memRings);
+});
+
+test('binding: opposite-type template faces bind and melt, cooperatively; copies never bind their parents; copying stays exact', () => {
+  // ABBABA and BABAAB face each other letter for letter as opposites, so they bind; each one's copies pair like with like
+  const s = new Sim(Object.assign({}, base, { seed: 4, W: 30, H: 30, nA: 120, nB: 120, nE: 80, seedSeq: 'ABBABA,BABAAB', seedCount: 4, pHyb: 0.2 }));
+  let heldRuns = 0;
+  for (let k = 0; k < 8; k++) {
+    s.run(2500);
+    for (let u = 0; u < s.n; u++) {
+      if (s.is[u] !== I_TPL || s.type[u] === T_E || s.type[u] === T_M) continue;
+      const q = s.bond[u * 4 + F]; if (q < 0 || s.is[q >> 2] !== I_TPL) continue;
+      assert.notStrictEqual(s.type[u], s.type[q >> 2], 'bound faces must be of opposite type');
+      const bl = s.bond[u * 4 + L], br = s.bond[u * 4 + R];
+      if ((bl >= 0 && s.ss[bl] === S.HYB) || (br >= 0 && s.ss[br] === S.HYB)) heldRuns++;
+    }
+  }
+  assert.ok(s.hybEvents > 50 && s.meltEvents > 50, 'binding should form and melt');
+  assert.ok(heldRuns > 0, 'matching stretches should hold as runs');
+  for (const b of s.births) assert.strictEqual(b.seq, rev(b.parent));
+  assert.deepStrictEqual(s.check(), []);
 });
 
 console.log(passed + ' tests passed');
