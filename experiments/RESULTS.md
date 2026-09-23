@@ -606,7 +606,52 @@ fray and unzip while the rest of its strand is still being copied, and the copy'
 leaves early as a truncated strand. Selection cannot build on a lineage when every other birth is
 a mutant. The rule was removed: it adds a state and a row and costs more fidelity than it buys.
 
-## 15. Summary
+## 15. Deformable polygons (`physics: 'poly'`, `poly_probe.js`)
+
+A second physics engine, on the user's suggestion: each unit is four corners held to a rest
+shape by shape matching at a per-type stiffness, and a bond pins the two corners of one side onto
+the two corners of the other, so bonded edges coincide and a strand is drawn and moves as one
+body. A pin moves each unit rigidly (as the rigid engine's point constraint does) and, by the
+unit's softness, deforms the pinned corner. The chemistry is unchanged. The rigid engine stays
+the default, so every table above is reproducible bit for bit.
+
+**Copying at every soft knob zero**, `ABBABA`, 60×60, 20,000 steps, seeds 2 and 5:
+
+| engine | stiffness | births | exact | odd lengths |
+|---|---:|---|---|---|
+| rigid | - | 12, 21 | yes | none |
+| poly | 1 | 13, 11 | yes | none |
+| poly | 0.5 | 15, 19 | yes | none |
+| poly | 0.2 | 25, 23 | 3 unfaithful in one seed | 3- and 8-mers |
+| poly | 0.05 | 40, 60 | 18 unfaithful | dimers to 7-mers |
+
+Softness does what slack did (section 10): a little speeds copying because neighbours docked on a
+template can link while wobbling, and too much lets copies docked on neighbouring templates link.
+0.5 is safe. Bonded corners sit a median 0.015 of a side apart (90th percentile 0.08).
+
+**Membrane wedges.** The membrane block's rest shape is a trapezoid whose lateral sides lean in
+by half the bend, so a ring is its rest state and no bend rule is needed; a bond forms where two
+back corners touch and the pins pull the edges flush. A block one side deep cannot lean past
+about 50 degrees, so rings have at least seven or eight blocks. 150 blocks in 40×40: rings of
+about 7 at 45 degrees (9 rings by 20,000 steps) and 11 at 30 degrees (6 rings).
+
+**Shape as a phenotype.** `bendA` and `bendB` give the replicator blocks the same wedge rest
+shape, so a strand's resting curvature is set by its sequence. Copying `ABBABA` at stiffness 0.5:
+
+| `B` bend per bond | births (seeds 2, 5) | exact |
+|---:|---|---|
+| 0 (square) | 15, 19 | yes |
+| 10 | 25, 24 | yes |
+| 20 | 9, 9 | yes |
+| 30 | 0, 0 | - |
+
+Shape has a fitness landscape: a slight taper copies faster than a square, a strong bend slows
+copying and at 30 degrees a template cannot be copied at all (monomers docked on its outer curve
+splay too far apart to link; an all-`B` 6-mer stays curled at about 155 degrees with monomers
+docked on it). Two seeds at 20,000 steps each: a lead, not yet a result. What shape could buy in
+return (rings that cannot fray, faces hidden from parasites) is the next question.
+
+## 16. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in

@@ -98,6 +98,7 @@ const DEFAULTS = {
   physics: 'rigid',  // 'rigid': each square is a rigid body and bonds are flush constraints. 'poly': each unit is four corners
                      // held to its rest shape by a restoring force (shape matching) and a bond pins corners to corners
   stiffA: 1, stiffB: 1, stiffM: 1,   // poly: how hard a block is pulled back to its rest shape per solver pass (1 rigid, toward 0 soft)
+  bendA: 0, bendB: 0,                // poly: rest shape of A and B blocks, degrees of bend between two bonded neighbours (0 square, >0 a wedge that curls strands)
   logBirths: true, maxBirthLog: 5000, maxEventLog: 300,
 };
 
@@ -971,7 +972,10 @@ class PolySim extends Sim {
     for (let t = 0; t < 4; t++) {
       const h = 0.5 * (t === T_E ? p.sizeE : 1);
       let pts = [[h, -h], [h, h], [-h, h], [-h, -h]];
-      if (t === T_M) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(p.memAngle * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }   // a block one side deep cannot lean past about 50 degrees
+      // wedges: the lateral sides lean in toward the back by half the bend, so two blocks bonded side to side meet at the
+      // bend and a run of them curls with its backs inside. A block one side deep cannot lean past about 50 degrees.
+      const bend = t === T_M ? p.memAngle : t === T_A ? p.bendA : t === T_B ? p.bendB : 0;
+      if (bend !== 0) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(bend * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }
       const mx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4, my = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
       for (let k = 0; k < 4; k++) { this.rx[t * 4 + k] = pts[k][0] - mx; this.ry[t * 4 + k] = pts[k][1] - my; }
     }
