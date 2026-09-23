@@ -834,7 +834,29 @@ perfect match as for a partial one. With two letters and strands of four to six,
 few distinct keys for recognition to be specific. The line would need longer strands or a larger
 alphabet; it is parked, with both knobs off by default.
 
-## 19. Summary
+## 19. Two genes in a four-letter world (`genes.sh`, `motifs.js`)
+
+Four letters, 128 of each, small world, low mutation, the length regime. Two rules of the same
+form, both always on: `feed` (an armed `B` between two `A`s arms its neighbours: private energy)
+and `shield` (a `D` between two `C`s makes its two bonds immune to radiation: private durability).
+Seeds `ABABCD` and `CDCDAB` carry one gene each. Only the environment differs. Motif frequency
+per block (× chance at the window's letter frequencies), by 250,000-step window:
+
+| run | environment | ABA | CDC | mean newborn length |
+|---|---|---|---|---:|
+| G_none_1 | plentiful energy, no radiation | 0.054, 0.026, 0.027, 0.003 | 0.003, 0.001, 0.005, 0.024 | 3.4 to 4.0 |
+| G_energy_1 | 26 particles, reload 0.0005 | 0.003, 0.009, 0.021, 0.001 | 0.075, 0.030, 0.009, 0.002 | 3.3 to 3.7 |
+| G_rad_1 | radiation 0.0001 | 0.001, 0.003, 0, 0 | 0.185, 0.188, 0.171, 0.176 (13 to 21 × chance) | 2.5 to 2.6 |
+| G_both_1 | both | 0, 0, 0, 0 | 0.207, 0.212, 0.203, 0.214 (8 to 10 × chance) | 2.6 |
+
+Radiation selects the shield strongly and at once, and the population shrinks to about the
+smallest strand that carries it, `CDC` itself, with both its bonds shielded. The energy setting
+was not a pressure: `feed` fired 91 times in a million steps and births were as in the unpressed
+run, so `ABA` drifted. With both, the shield wins alone and no genome carries both genes: the
+radiation pressure toward short strands overrides everything, and a genome with both genes needs
+at least six units.
+
+## 20. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
