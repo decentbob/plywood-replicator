@@ -7,7 +7,7 @@
  *   --quiet         no CSV, only the summary
  *   --change T:k=v,k=v   at step T set parameters (an environment change); may be repeated
  */
-const { Sim, DEFAULTS } = require('./src/sim.js');
+const { Sim, DEFAULTS, REMOVED } = require('./src/sim.js');
 const fs = require('fs');
 
 const args = process.argv.slice(2);
@@ -30,6 +30,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (k in opt) opt[k] = typeof opt[k] === 'boolean' ? v !== '0' : (typeof opt[k] === 'number' ? Number(v) : v);
   else if (k in DEFAULTS) params[k] = typeof DEFAULTS[k] === 'boolean' ? v !== '0' : (typeof DEFAULTS[k] === 'string' ? v : Number(v));
+  else if (REMOVED.includes(k)) console.error('ignoring --' + k + ': it belonged to the rigid engine, removed on 2026-09-23');
   else { console.error('unknown option --' + k); process.exit(2); }
 }
 

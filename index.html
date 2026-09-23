@@ -84,7 +84,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Blocks with one rule table and nothing bigger than a block in the physics. Each block is a slightly deformable polygon, and a bond pins its edge to its partner's, so a strand moves as one body. Every side of every block is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and protocells with self-assembling membrane rings. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
+  <p>Blocks with one rule table and nothing bigger than a block in the physics. Each block is a slightly deformable polygon, and a bond pins its edge to its partner's, so a strand moves as one body. Every side of every block is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and protocells with self-assembling membrane rings. Click a block to read it, click an event to jump to it; drag and scroll move the view.</p>
 </header>
 <div class="main">
   <div class="dish">
@@ -163,7 +163,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
     </div>
   </div>
 </div>
-<footer>Sides are fixed for life: F (face) docks only on a template's F of the same type; L bonds only to a neighbour's R, which is why chains are one-dimensional; K (back) takes only energy. Energy particles are small squares of a third type that never chain: a charged one docks on a back that wants energy, the block re-arms, the particle is left spent and drifts off; it recharges at a background rate or at the back of a B block flanked by two As. The whole chemistry is the compatibility table and a handful of transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy (or, with feed, from an armed B between two As through their bonds), back to <code>DOCK</code> when a unit loses its strand, frays off an end (and, with unzipping, when the neighbour it is bonded to is fraying), or undocks while alone. Copies are antiparallel, so a child reads as the reverse of its parent. In the physics a bond is only a constraint between the two squares it joins.</footer>
+<footer>Sides are fixed for life: F (face) docks only on a template's F of the same type; L bonds only to a neighbour's R, which is why chains are one-dimensional; K (back) takes only energy. Energy particles are small squares of a third type that never chain: a charged one docks on a back that wants energy, the block re-arms, the particle is left spent and drifts off; it recharges at a background rate or at the back of a B block flanked by two As. The whole chemistry is the compatibility table and a handful of transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy (or, with feed, from an armed B between two As through their bonds), back to <code>DOCK</code> when a unit loses its strand, frays off an end (and, with unzipping, when the neighbour it is bonded to is fraying), or undocks while alone. Copies are antiparallel, so a child reads as the reverse of its parent. In the physics a bond pins the two corners of one edge onto its partner's, and a block is held to its shape by a restoring force; nothing bigger than a block exists.</footer>
 </div>
 <script src="src/sim.js"></script>
 <script>
@@ -176,14 +176,14 @@ const $ = (id) => document.getElementById(id);
 // nucleate copies faster) with processive fraying (strands die whole instead of being eroded), spontaneous
 // origins and gentle mutation, no ligation. "protocells" adds membrane blocks that self-assemble into rings,
 // energy from ABA motifs, and a little radiation to open rings again; rings enclose strands only rarely so far.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, hinge: 'none', hingeMax: 90, slack: 0, nM: 0, memAngle: 30, memFlex: 6, pMem: 0.2 };
-const EVO = { W: 60, H: 60, slack: 0.1, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
+const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
   evo:   Object.assign({}, ZERO, EVO),
   proto: Object.assign({}, ZERO, EVO, { W: 80, H: 80, seedCount: 1, pUnzip: 0, pUndock: 0, pFray: 0.0001, pLigate: 0.02, nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
 };
-const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, physics: 'poly', stiffA: 0.5, stiffB: 0.5, stiffM: 1, shapeA: 'square', shapeB: 'square', shapeM: 'square', bendA: 0, bendB: 0 };
+const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, stiffA: 0.5, stiffB: 0.5, stiffM: 1, shapeA: 'square', shapeB: 'square', shapeM: 'square', bendA: 0, bendB: 0 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
@@ -197,22 +197,17 @@ const KNOBS = [
   ['grp', 'Membrane blocks'],
   ['nM', 'M blocks (reset)', 'bond only to each other, side to side, at a built-in bend'],
   ['memAngle', 'bend °', '60 closes a ring of 6, 45 of 8, 90 of 4'],
-  ['memFlex', 'bend flex °'],
   ['pMem', 'p link per contact'],
   ['resM', 'M resistance'],
   ['grp', 'Shape'],
-  ['physics', 'physics (reset)', 'rigid, or poly: deformable blocks whose bonded edges coincide', 'text'],
-  ['stiffA', 'A stiffness', 'poly: 1 rigid, 0.5 safe; below about 0.3 copies docked on neighbouring templates can link'],
+  ['stiffA', 'A stiffness', '1 rigid, 0.5 safe; below about 0.3 copies docked on neighbouring templates can link'],
   ['stiffB', 'B stiffness'],
   ['stiffM', 'M stiffness'],
-  ['shapeA', 'A shape (reset)', 'poly: square (with bend) or oct', 'text'],
+  ['shapeA', 'A shape (reset)', 'square (a wedge when bent) or oct', 'text'],
   ['shapeB', 'B shape (reset)', '', 'text'],
   ['shapeM', 'M shape (reset)', '', 'text'],
-  ['bendA', 'A bend °', 'poly: rest shape; a wedge that bends a run of A by this much per bond (0 square)'],
+  ['bendA', 'A bend °', 'rest shape: a wedge that bends a run of A by this much per bond (0 square)'],
   ['bendB', 'B bend °'],
-  ['hinge', 'hinges', 'none, all, BB or AB: which lateral bonds bend when free', 'text'],
-  ['hingeMax', 'hinge limit °'],
-  ['slack', 'trapezoid slack', 'corner gap a flush bond tolerates; 0.1 is safe, 0.2 lets chimeras in'],
   ['grp', 'Radiation'],
   ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
   ['resA', 'A resistance', '0 fragile to 1 immune'],
@@ -234,7 +229,7 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'seedSeq', 'seedCount', 'W', 'H', 'physics', 'shapeA', 'shapeB', 'shapeM', 'bendA', 'bendB', 'memAngle']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeM', 'bendA', 'bendB', 'memAngle']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -243,7 +238,7 @@ const flashes = new Map();   // unit -> {t, kind}
 function currentParams() {
   const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
   for (const k of KNOBS) { if (k[0] === 'grp') continue; const el = $('k_' + k[0]); if (!el) continue;
-    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? ((k[0] === 'hinge' || k[0] === 'physics' || k[0].startsWith('shape')) ? el.value.trim() : el.value.toUpperCase().replace(/[^AB,]/g, '')) : Number(el.value)); }
+    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? (k[0].startsWith('shape') ? el.value.trim() : el.value.toUpperCase().replace(/[^AB,]/g, '')) : Number(el.value)); }
   return p;
 }
 function buildKnobs(p) {
@@ -385,26 +380,7 @@ function draw() {
   for (let u = 0; u < n; u++) {
     const [sx, sy] = toScreen(sim.px[u], sim.py[u]);
     if (sx < -margin || sy < -margin || sx > cv.width + margin || sy > cv.height + margin) continue;
-    if (sim.ox) { drawPoly(u, sx, sy, z, lw); continue; }
-    const sz = sim.size[u] * z, h = sz / 2;
-    ctx.save(); ctx.translate(sx, sy); ctx.rotate(sim.pa[u]);
-    if (sim.type[u] === T_E) {
-      ctx.fillStyle = sim.is[u] === 1 ? COL.EON : COL.EOFF; ctx.fillRect(-h, -h, sz, sz);
-    } else {
-      ctx.fillStyle = sim.type[u] === T_A ? COL.A : sim.type[u] === T_B ? COL.B : COL.M; ctx.fillRect(-h, -h, sz, sz);
-      ctx.lineWidth = lw;
-      const inset = lw / 2;
-      for (let i = 0; i < 4; i++) {
-        ctx.strokeStyle = SIDECOL[sim.ss[u * 4 + i]] || '#000'; ctx.beginPath();
-        if (i === 0) { ctx.moveTo(h - inset, -h); ctx.lineTo(h - inset, h); }
-        else if (i === 1) { ctx.moveTo(-h, h - inset); ctx.lineTo(h, h - inset); }
-        else if (i === 2) { ctx.moveTo(-h + inset, -h); ctx.lineTo(-h + inset, h); }
-        else { ctx.moveTo(-h, -h + inset); ctx.lineTo(h, -h + inset); }
-        ctx.stroke();
-      }
-      if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(-h - 3, -h - 3, sz + 6, sz + 6); }
-    }
-    ctx.restore();
+    drawPoly(u, sx, sy, z, lw);
   }
   // flashes
   for (const [u, f] of flashes) {

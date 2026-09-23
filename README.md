@@ -65,7 +65,7 @@ node experiments/summarize.js # tables from experiments/out/*.csv
 
 ## The whole chemistry
 
-A unit is a square with four sides that are fixed for life: **F** (face), **R**,
+A unit is a block with four working sides that are fixed for life: **F** (face), **R**,
 **K** (back), **L**. The sides are not interchangeable. Only a face docks, and only
 on the face of a template of the same type; L bonds only to a neighbour's R, so
 every square has at most one neighbour on each lateral side and chains cannot
@@ -138,33 +138,30 @@ checked against `reverse(parent)`.
 
 ## Physics
 
-Nothing bigger than a square exists in the physics. Each square gets its own
-Brownian kick; two squares that are not bonded may not overlap; a bond is a
-constraint that the two bonded sides lie flush. Both kinds of constraint are
-enforced the same way, by nudging the two squares involved, 24 passes per step.
-With the `hinge` knob, lateral bonds between free squares pin only their shared
-back corner and may bend up to 90°, so free strands curl and can close into rings
-by ligation, while a strand being copied is straightened by the docking itself. A
-hinge forms where two back corners touch, which is what lets a ring's last bond
-close. With `slack`, a flush bond tolerates a small corner gap, a trapezoid, so a
-gently curved chain is a rest state; 0.1 is safe and raises the copying rate. Chains are straight because a row of flush
-constraints is straight, not because anything holds a chain. Bonds never break
-from jostling. A bond forms only if the compatibility table allows it, the two
-sides face each other within a tolerance (30° for docking, 10° for side-to-side
-links), and the moving square would land in an empty spot. A monomer that
-undocks is pushed off the face it left. All soft probabilities are per step of
-contact, and a contact lasts several steps, so nominal values overstate softness
-(see the design doc, section 6). The functions that find connected components
-are observation only and never feed back into the dynamics.
+Nothing bigger than a block exists in the physics. Each block is a polygon (a square, a wedge,
+or an octagon) held to its rest shape by a restoring force whose strength is a per-type
+stiffness. A bond pins the two corners of one edge onto the two corners of its partner's edge,
+so bonded edges coincide and a strand moves as one body. Each block gets its own Brownian kick;
+two blocks that are not bonded may not overlap. Pins, contacts and the shape restoring force are
+solved together by nudging the blocks involved, 16 passes per step; a pin moves each block
+rigidly and, by its softness, deforms the pinned corner.
 
-**Polygon physics** (`physics: 'poly'`, the viewer's default). Each block is a polygon (a square,
-a wedge, or an octagon) held to its rest shape by a restoring force whose strength is a per-type
-stiffness, and a bond pins the two corners of one edge onto the two corners of its partner's
-edge, so bonded edges coincide and a strand moves as one body. A wedge-shaped block (`bendA`,
-`bendB`) curls a strand by its sequence; membrane blocks are wedges whose rest state is a ring.
-Stiffness 0.5 is safe (exact copies, faster copying than rigid); below about 0.3 copies docked on
-neighbouring templates start to link. The rigid engine (`physics: 'rigid'`) stays the default
-for the headless runner, so every recorded experiment reproduces exactly.
+Chains are straight because a row of pinned squares is straight, not because anything holds a
+chain. A wedge-shaped block (`bendA`, `bendB`) curls a strand where it sits, so shape follows
+sequence. Membrane blocks are wedges whose rest state is a ring. Stiffness 0.5 is safe (exact
+copies, faster copying than rigid blocks); below about 0.3 copies docked on neighbouring
+templates start to link. Octagons (`shapeA`, `shapeB` = `oct`) copy but leak: their rounder
+outline lets templates pack close enough for such links.
+
+Bonds never break from jostling. A bond forms only if the compatibility table allows it, the two
+sides face each other within a tolerance (30° for docking, 10° for side-to-side links), and the
+moving block would land in an empty spot. A monomer that undocks is pushed off the face it
+left. All soft probabilities are per step of contact. The functions that find connected
+components are observation only and never feed back into the dynamics.
+
+An earlier rigid-body engine (squares as rigid bodies, with hinges and slack for bending) was
+removed on 2026-09-23; `experiments/RESULTS.md` sections 1 to 14 were measured on it, and it can
+be recovered from git at commit `b41557c`.
 
 ## Layout
 

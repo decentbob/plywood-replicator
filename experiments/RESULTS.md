@@ -1,6 +1,10 @@
 # Results
 
-Measurements from the headless runner on the per-square physics (third draft, 2026-09-21; sections 13 and 14 added 2026-09-22).
+Measurements from the headless runner. **Sections 1 to 14 were measured on the rigid-body engine,
+which was removed on 2026-09-23** (recover it from git at commit `b41557c` to reproduce them bit
+for bit; their scripts now run on the polygon engine and give different numbers). Section 15 and
+later are on the polygon engine, which is now the only one. Where a result was re-measured on the
+polygon engine (length selection, section 15) it held.
 Every run is deterministic per seed; the commands are in the `.sh` scripts next to this file and
 `run_all.sh` reproduces everything in about 50 minutes on four cores. Tables come from
 `summarize.js`, `births_by_length.js` and `mutation_rates.js` over `out/*.csv` and
