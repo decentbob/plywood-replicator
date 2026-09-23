@@ -97,6 +97,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
     </div>
     <div class="legend">
       <span><i style="background:#6fa8dc"></i>A</span><span><i style="background:#e0a458"></i>B</span>
+      <span><i style="background:#c678dd"></i>C</span><span><i style="background:#8fce7a"></i>D</span>
       <span><i style="background:#7d9b73"></i>M membrane</span><span><i style="background:#3b4a38"></i>M raw</span>
       <span><i style="background:#c9e2b8"></i>M open side</span><span><i style="background:#b6e3a1"></i>K makes membrane</span>
       <span><i style="background:#8a97a8"></i>F free (DOCK)</span><span><i style="background:#5ad27a"></i>F template</span>
@@ -184,7 +185,7 @@ const PRESETS = {
   evo:   Object.assign({}, ZERO, EVO),
   proto: Object.assign({}, ZERO, EVO, { W: 80, H: 80, seedCount: 1, pUnzip: 0, pUndock: 0, pFray: 0.0001, pLigate: 0.02, nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
 };
-const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, stiffA: 0.5, stiffB: 0.5, stiffM: 1, shapeA: 'square', shapeB: 'square', shapeM: 'square', bendA: 0, bendB: 0 };
+const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, stiffA: 0.5, stiffB: 0.5, stiffC: 0.5, stiffD: 0.5, stiffM: 1, shapeA: 'square', shapeB: 'square', shapeC: 'square', shapeD: 'square', shapeM: 'square', bendA: 0, bendB: 0, bendC: 0, bendD: 0, nC: 0, nD: 0 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],
@@ -207,17 +208,18 @@ const KNOBS = [
   ['pMemDecay', 'p membrane decay', 'an active M with no neighbours falls back to raw, per step'],
   ['grp', 'Shape'],
   ['stiffA', 'A stiffness', '1 rigid, 0.5 safe; below about 0.3 copies docked on neighbouring templates can link'],
-  ['stiffB', 'B stiffness'],
+  ['stiffB', 'B stiffness'], ['stiffC', 'C stiffness'], ['stiffD', 'D stiffness'],
   ['stiffM', 'M stiffness'],
   ['shapeA', 'A shape (reset)', 'square (a wedge when bent) or oct', 'text'],
-  ['shapeB', 'B shape (reset)', '', 'text'],
+  ['shapeB', 'B shape (reset)', '', 'text'], ['shapeC', 'C shape (reset)', '', 'text'], ['shapeD', 'D shape (reset)', '', 'text'],
   ['shapeM', 'M shape (reset)', '', 'text'],
   ['bendA', 'A bend °', 'rest shape: a wedge that bends a run of A by this much per bond (0 square)'],
-  ['bendB', 'B bend °'],
+  ['bendB', 'B bend °'], ['bendC', 'C bend °'], ['bendD', 'D bend °'],
   ['grp', 'Radiation'],
   ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
   ['resA', 'A resistance', '0 fragile to 1 immune'],
   ['resB', 'B resistance', '0 fragile to 1 immune'],
+  ['resC', 'C resistance'], ['resD', 'D resistance'],
   ['grp', 'Energy'],
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
   ['motif', 'ABA motif charges', 'a B between two As recharges spent E at its back', 'bool'],
@@ -230,12 +232,12 @@ const KNOBS = [
   ['tolDeg', 'dock tolerance °'],
   ['grp', 'Population (reset)'],
   ['seed', 'RNG seed'],
-  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nE', 'E particles'],
-  ['seedSeq', 'seed strands', 'A/B sequences, comma-separated', 'text'],
+  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nC', 'C monomers', 'more letters: each pairs with its own kind'], ['nD', 'D monomers'], ['nE', 'E particles'],
+  ['seedSeq', 'seed strands', 'sequences of A, B, C, D, comma-separated', 'text'],
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeM', 'bendA', 'bendB', 'memAngle']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -244,7 +246,7 @@ const flashes = new Map();   // unit -> {t, kind}
 function currentParams() {
   const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
   for (const k of KNOBS) { if (k[0] === 'grp') continue; const el = $('k_' + k[0]); if (!el) continue;
-    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? (k[0].startsWith('shape') ? el.value.trim() : el.value.toUpperCase().replace(/[^AB,]/g, '')) : Number(el.value)); }
+    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? (k[0].startsWith('shape') ? el.value.trim() : el.value.toUpperCase().replace(/[^ABCD,]/g, '')) : Number(el.value)); }
   return p;
 }
 function buildKnobs(p) {
@@ -328,7 +330,7 @@ $('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFol
 function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
 
 // ------------------------------------------------------------ drawing
-const COL = { A: '#6fa8dc', B: '#e0a458', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
+const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
@@ -340,7 +342,7 @@ function drawPoly(u, sx, sy, z, lw) {
   for (let k = 0; k < nv; k++) { X.push(sx + sim.ox[u * NV + k] * z); Y.push(sy + sim.oy[u * NV + k] * z); }
   const outline = () => { ctx.beginPath(); ctx.moveTo(X[0], Y[0]); for (let k = 1; k < nv; k++) ctx.lineTo(X[k], Y[k]); ctx.closePath(); };
   outline();
-  ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : sim.type[u] === T_A ? COL.A : sim.type[u] === T_B ? COL.B : (sim.is[u] === 1 ? COL.M : COL.MRAW);
+  ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : sim.type[u] === T_M ? (sim.is[u] === 1 ? COL.M : COL.MRAW) : COL[PC.TNAME[sim.type[u]]];
   ctx.fill();
   if (sim.type[u] === T_E) return;
   ctx.lineWidth = lw;

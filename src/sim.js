@@ -36,9 +36,13 @@
 
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
-const T_A = 0, T_B = 1, T_E = 2, T_M = 3;
+const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5;   // A, B, C, D are the replicator letters (each pairs with its own kind)
+const NT = 6;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M'];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D'];
+const LETTERS = [T_A, T_B, T_C, T_D];
+/** A per-type parameter: p[base + letter], e.g. stiffC; dflt where the type has none (E has no stiffness knob). */
+function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
 // internal states
 const I_DOCK = 0, I_REPEL = 1, I_TPL = 2, I_FRAY = 3;   // A / B
@@ -68,6 +72,7 @@ const DEFAULTS = {
   seed: 1,
   W: 48, H: 48,                 // torus
   nA: 160, nB: 160, nE: 120,    // fixed populations (mass and energy are conserved)
+  nC: 0, nD: 0,                 // two more replicator letters; each pairs with its own kind, like A and B
   nM: 0,                        // membrane blocks: wedges that bond only to each other, side to side; self-assemble into arcs and rings
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
@@ -83,7 +88,7 @@ const DEFAULTS = {
   pMeltEnd: -1,    // binding: one with a bound neighbour on one side only (the end of a run); -1 means pMeltRun. Set between the two, only runs of three or more hold
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
-  resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
+  resA: 0, resB: 0, resC: 0, resD: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   feed: false,     // a B template unit flanked by two A units re-arms its released neighbours through their shared bonds (private metabolism)
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
@@ -95,9 +100,9 @@ const DEFAULTS = {
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   pReload: 0.002,  // OFF -> ON per step, the background energy income; the ABA motif (motif rule) is the other source
   // shape: each block type's rest polygon and how hard it is pulled back to it
-  shapeA: 'square', shapeB: 'square', shapeM: 'square',   // 'square' (a wedge when bent) or 'oct' (an octagon, working sides on alternate edges)
-  bendA: 0, bendB: 0,            // degrees of bend between two bonded neighbours of this type (0 square, >0 a wedge that curls strands)
-  stiffA: 0.5, stiffB: 0.5, stiffM: 1,   // pull back to the rest shape per solver pass: 1 rigid; 0.5 is safe; below about 0.3 copies docked on neighbouring templates can link
+  shapeA: 'square', shapeB: 'square', shapeC: 'square', shapeD: 'square', shapeM: 'square',   // 'square' (a wedge when bent) or 'oct' (an octagon, working sides on alternate edges)
+  bendA: 0, bendB: 0, bendC: 0, bendD: 0,           // degrees of bend between two bonded neighbours of this type (0 square, >0 a wedge that curls strands)
+  stiffA: 0.5, stiffB: 0.5, stiffC: 0.5, stiffD: 0.5, stiffM: 1,   // pull back to the rest shape per solver pass: 1 rigid; 0.5 is safe; below about 0.3 copies docked on neighbouring templates can link
   // physics knobs (these should not need tuning for the chemistry to work)
   sigma: 0.3, sigmaRot: 0.45,    // Brownian step (translation, rotation) per unit per step
   mobE: 1,                       // energy particles' Brownian step relative to their size's; below 1 the medium is viscous for energy
@@ -145,7 +150,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.size = new Float64Array(n);
@@ -178,6 +183,8 @@ class Sim {
     for (let i = 0; i < p.nB; i++) this.type[u++] = T_B;
     for (let i = 0; i < p.nE; i++) this.type[u++] = T_E;
     for (let i = 0; i < (p.nM || 0); i++) this.type[u++] = T_M;
+    for (let i = 0; i < (p.nC || 0); i++) this.type[u++] = T_C;
+    for (let i = 0; i < (p.nD || 0); i++) this.type[u++] = T_D;
     for (u = 0; u < n; u++) {
       this.size[u] = this.type[u] === T_E ? p.sizeE : 1;
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
@@ -198,9 +205,9 @@ class Sim {
     }
     // rest shapes per type: nv corners about their mean, face along +x, counter-clockwise; edge e runs corner e -> e+1.
     // edgeOf maps each working side (F, R, K, L) to the polygon edge that carries it; any other edge is skin.
-    this.nv = new Uint8Array(4); this.rx = new Float64Array(4 * NV); this.ry = new Float64Array(4 * NV); this.edgeOf = new Int8Array(16);
-    for (let t = 0; t < 4; t++) {
-      const h = 0.5 * (t === T_E ? p.sizeE : 1), shape = t === T_A ? p.shapeA : t === T_B ? p.shapeB : t === T_M ? p.shapeM : 'square';
+    this.nv = new Uint8Array(NT); this.rx = new Float64Array(NT * NV); this.ry = new Float64Array(NT * NV); this.edgeOf = new Int8Array(NT * 4);
+    for (let t = 0; t < NT; t++) {
+      const h = 0.5 * (t === T_E ? p.sizeE : 1), shape = typeParam(p, 'shape', t, 'square');
       let pts, edges;
       if (shape === 'oct') {
         // regular octagon one side across (flat to flat); the working sides are every other edge
@@ -211,7 +218,7 @@ class Sim {
         pts = [[h, -h], [h, h], [-h, h], [-h, -h]]; edges = [0, 1, 2, 3];
         // wedges: the lateral sides lean in toward the back by half the bend, so two blocks bonded side to side meet at
         // the bend and a run of them curls with its backs inside. A block one side deep cannot lean past about 50 degrees.
-        const bend = t === T_M ? p.memAngle : t === T_A ? p.bendA : t === T_B ? p.bendB : 0;
+        const bend = t === T_M ? p.memAngle : typeParam(p, 'bend', t, 0);
         if (bend !== 0) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(bend * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }
       }
       let mx = 0, my = 0; for (const q of pts) { mx += q[0] / pts.length; my += q[1] / pts.length; }
@@ -223,7 +230,6 @@ class Sim {
     const hbM = p.shapeM === 'oct' ? 0.5 : this.ry[T_M * NV + 2];
     for (u = 0; u < n; u++) if (this.type[u] === T_M) this.rad[u] = 0.5 * (0.5 + hbM) * p.repMargin;
     this.vw = new Float64Array(n);                 // inverse mass of one corner
-    this.stiff = [p.stiffA, p.stiffB, 1, p.stiffM];
     for (u = 0; u < n; u++) { this.vw[u] = this.nv[this.type[u]] * this.w[u]; this._resetShape(u); }
     // spatial hash
     // neighbour scan reach: docking distance (1.35 sides) plus room for the solver's moves within a step; the cells
@@ -256,7 +262,7 @@ class Sim {
   seedStrand(cx, cy, ang, len, seq) {
     const units = [];
     for (let i = 0; i < len; i++) {
-      const want = seq ? (seq[i] === 'B' ? T_B : T_A) : (this.rng() < 0.5 ? T_A : T_B);
+      const want = seq ? LETTERS['ABCD'.indexOf(seq[i])] : (this.rng() < 0.5 ? T_A : T_B);
       let found = -1;
       for (let u = 0; u < this.n; u++) {
         if (this.type[u] === want && this.is[u] === I_DOCK && this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0
@@ -607,11 +613,11 @@ class Sim {
     // R7 radiation: each of my lateral bonds breaks with probability pBreak scaled by how fragile the two blocks are.
     // A docked copy re-links at once (its neighbours are still flush and sticky), so a template shields its copy.
     if (p.pBreak > 0 && nl > 0) {
-      const mine = 1 - (this.type[u] === T_B ? p.resB : p.resA);
+      const mine = 1 - typeParam(p, 'res', this.type[u], 0);
       for (const side of [L, R]) {
         const q = b[o + side]; if (q < 0) continue;
         const v = q >> 2; if (v < u) continue;   // each bond is rolled once, by its lower-numbered end
-        const theirs = 1 - (this.type[v] === T_B ? p.resB : p.resA);
+        const theirs = 1 - typeParam(p, 'res', this.type[v], 0);
         if (this.rng() < p.pBreak * mine * theirs) { this.pendingUnlink.push(o + side); this.breakEvents++; this._event('break', u, v); }
       }
     }
@@ -804,7 +810,8 @@ class Sim {
     }
     // 3. constraints
     this._bondList();
-    const pins = this.pins, soft = [1 - p.stiffA, 1 - p.stiffB, 0, 1 - p.stiffM];
+    const pins = this.pins, soft = this._soft || (this._soft = []);
+    for (let t = 0; t < NT; t++) soft[t] = t === T_E ? 0 : 1 - typeParam(p, 'stiff', t, 1);
     const bonded = this._bondedUnits || (this._bondedUnits = []); bonded.length = 0;
     const mark = this._seen;
     for (let k = 0; k < pins.length; k++) { const u = (pins[k] / NV) | 0; if (!mark[u]) { mark[u] = 1; bonded.push(u); } }
@@ -997,5 +1004,5 @@ class Sim {
 }
 
 
-return { Sim, NV, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_E, T_M, TNAME, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });
