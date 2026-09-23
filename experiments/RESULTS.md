@@ -710,7 +710,28 @@ baselines: with little mutation they keep the founder's make-up (`ABBABA` is fou
 bonds), so "× chance" figures in a control measure descent as much as selection. The comparison
 that counts is against the control, as everywhere above.
 
-## 16. Summary
+## 16. Compartments by chance (`encl.sh`, polygon engine)
+
+40×40, 400 replicator monomers in the length regime, many membrane wedges, mild radiation
+(0.0002 per bond, `resM` 0.7, both replicator types resistance 0.9), 150,000 steps, one seed each.
+"Rings holding a strand" counts rings with two or more template units inside, sampled every
+30,000 steps.
+
+| run | M blocks | bend | rings | rings holding a strand |
+|---|---:|---:|---|---|
+| EN_m400_a20 | 400 | 20° | 11 to 15 | 1, 2, 2, 3, 2 |
+| EN_m400_a25 | 400 | 25° | 19 to 24 | 0, 1, 1, 2, 0 |
+| EN_m600_a20 | 600 | 20° | 14 to 24 | 2, 3, 1, 1, 10 |
+| EN_m600_a30 | 600 | 30° | 44 to 50 | 0, 1, 0, 1, 0 |
+
+Large wedge rings (18 blocks at 20 degrees) at high density do close around strands, up to ten
+at once, where the rigid engine's rings almost never did. Two things are still missing for
+compartments to be selected. At this radiation rate a ring opens every few thousand steps, far
+less than a generation (about 20,000), so an enclosure does not last. And rings do not divide,
+so a ring holding a good strand cannot make more rings like it. Division is the missing step,
+and no local rule for it has been found that does not need a force threshold on bonds.
+
+## 17. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
