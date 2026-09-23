@@ -886,6 +886,21 @@ survives, and point mutation alone is slow to build a genome of six or more that
 Round 4 (`G4_*`) makes both pressures milder and turns on ligation, the one channel here that
 joins two strands, so an energy-gene strand and a shield-gene strand can fuse.
 
+Round 4 (26 particles, reload 0.0005, radiation 0.00005, relay on, two seeds each, with and
+without ligation 0.02): every run survives and every run selects the shield (`CDC` 8 to 17 ×
+chance). `ABA` never rises: `feed` fired 2 to 107 times in a million steps, so energy was still not
+what limited births in the four-letter world. Ligation made 185 to 200 fusions per run and
+genomes carrying both genes appeared (up to 8% of the long newborns in one window) but did not
+spread, and none were left in the last quarter of either run.
+
+Where the two-gene test stands: each gene is selected where its pressure acts, and with the
+relay each pays for length; the shield is robust, the energy gene only where energy truly limits
+copying, which in four-letter worlds is a narrow band between "not limiting" and "the population
+dies". Genes did not accumulate in any run. The obstacle is not the rules for the genes but the
+pressures: to hold two genes the population must meet two pressures of similar strength, each
+strong enough to select and together weak enough to survive, for long enough that a combined
+genome arises and spreads. That band has not been found.
+
 ## 20. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
@@ -922,6 +937,11 @@ joins two strands, so an energy-gene strand and a shield-gene strand can fuse.
   times the control's frequency over 40 to 50 generations (0.15 to 0.19 motifs per block against
   0.05 to 0.10, four seeds each, no overlap), strands carrying it are longer, and alternating
   sequences, which the rule rewards most, become common without any rule mentioning them.
+- In a four-letter world a shield gene (`CDC`: its bonds immune to radiation) is selected
+  strongly and at once wherever radiation acts; an energy gene (`ABA` with `feed`) only where
+  energy truly limits copying. With a relay (one motif serves its whole strand) each gene pays
+  for the length of its genome. Genomes carrying both genes appeared with ligation but did not
+  spread in any run: accumulation of genes has not been shown.
 - On the polygon engine, a block's shape is a phenotype that selects on sequence, with no rule
   mentioning shape or sequence: a strongly wedge-shaped `B` is purged from the genomes (2% to 8%
   of newborn blocks against 50% with square `B`); a mildly wedge-shaped one is kept at half the
