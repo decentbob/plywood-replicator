@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // RESULTS.md, section 16: rings holding a strand with the make rule on (1) or with a fixed active membrane stock (0).
-// Usage: node experiments/make_probe.js 1 [k=v,k=v extra parameters, e.g. memStrain=0.25,memAngle=30] [seed=3]
+// Usage: node experiments/make_probe.js 1 [k=v,k=v extra parameters, e.g. maxStrain=0.25,memAngle=30] [seed=3]
 const { Sim } = require('../src/sim.js');
 const make = process.argv[2] === '1';
 const extra = {}; for (const kv of (process.argv[3] || '').split(',').filter(Boolean)) { const [k, v] = kv.split('='); extra[k] = v === 'true' ? true : v === 'false' ? false : Number(v); }

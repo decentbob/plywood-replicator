@@ -102,10 +102,6 @@ const DEFAULTS = {
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
-  pSwap: 0,        // fluid membrane: an open side of an active membrane block that meets a bonded one (back corners touching) takes the bond
-                   // over, per step of contact, and the old partner is left open. Lets rings take in blocks and an overlong arc close on itself
-  memStrain: 0,    // a membrane bond whose pinned corners end a step further apart than this (in block sides) lets go: membrane cannot hold a
-                   // shape its blocks do not fit, so a ring holding more blocks than its bend closes snaps. 0: off (pins stretch without limit)
   make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
                    // (and stays anchored there), or where its side links to an active block's open side, so membrane grows from its makers
   pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
@@ -125,6 +121,10 @@ const DEFAULTS = {
                                  // and energy diffuse, as on a mineral surface, so offspring stay near their parents
   repMargin: 1.0,                // contact radius of a block as a fraction of half its side; unbonded blocks never overlap more than this allows
   iters: 16,                     // constraint passes per step (pins, contacts, shape); 8 to 24 all copy exactly, more keep bonded edges closer
+  maxStrain: 0,                  // a weak bond (membrane, a lone docked monomer) whose pinned corners the passes leave further apart than this
+                                 // (in block sides) lets go: blocks give only so far, so a shape they do not fit (a ring of the wrong size)
+                                 // snaps. Monomers linked into a copy in progress hold each other. 0: off
+  maxStrainStrand: 0,            // the same for a strand's own lateral bonds (template to template): stronger, 0 = never breaks mechanically
   snapCorners: false,            // after the passes, every pinned corner pair is brought together exactly by deforming the two blocks: bonded
                                  // sides are always flush, and a misfit (a ring the wedges do not fit) is carried as deformation, which the
                                  // shape force works against from the next step on
@@ -194,7 +194,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.swapEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.strainBackbone = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
@@ -363,6 +363,19 @@ class Sim {
       pins.push(cu[0], cv[1], cu[1], cv[0]);
     }
     this.bonds = out; this.pins = pins; this.bondsDirty = false; return out;
+  }
+
+  /** Corners joined by pins, directly or through other pinned corners, as groups (rebuilt with the bond list). */
+  _cornerGroups() {
+    if (this._groupsFor === this.pins) return this._groups;
+    const pins = this.pins, parent = new Map();
+    const find = (x) => { while (parent.get(x) !== x) { const g = parent.get(parent.get(x)); parent.set(x, g); x = g; } return x; };
+    for (const q of pins) if (!parent.has(q)) parent.set(q, q);
+    for (let k = 0; k < pins.length; k += 2) { const a = find(pins[k]), b = find(pins[k + 1]); if (a !== b) parent.set(a, b); }
+    const by = new Map();
+    for (const q of parent.keys()) { const r = find(q); if (!by.has(r)) by.set(r, []); by.get(r).push(q); }
+    this._groups = [...by.values()]; this._groupsFor = pins;
+    return this._groups;
   }
 
   /** Number of corners of unit u. */
@@ -915,32 +928,43 @@ class Sim {
       }
     }
     for (let u = 0; u < n; u++) { px[u] = this._wx(px[u]); py[u] = this._wy(py[u]); pa[u] = wrapAngle(pa[u]); }
-    if (p.memStrain > 0) {
-      // strain: a membrane bond whose corners the solver could not bring together lets go (applied with the rule breaks)
-      const lim2 = p.memStrain * p.memStrain, bl = this.bonds;
+    if (p.maxStrain > 0) {
+      // strain: a bond whose corners the passes could not bring together lets go (applied with the rule breaks)
+      const lim2 = p.maxStrain * p.maxStrain, lim2s = p.maxStrainStrand * p.maxStrainStrand, bl = this.bonds;
       for (let k = 0, q = 0; k < bl.length; k++) {
         const u = bl[k] >> 2, v = this.bond[bl[k]] >> 2;
         if (this.type[u] === T_E || this.type[v] === T_E) continue;
         const a0 = pins[q], b0 = pins[q + 1], a1 = pins[q + 2], b1 = pins[q + 3]; q += 4;
-        if (this.type[u] !== T_M || this.type[v] !== T_M) continue;
         let g = 0;
         for (const [qa, qb] of [[a0, b0], [a1, b1]]) {
           let dx = px[v] + ox[qb] - px[u] - ox[qa]; dx -= W * Math.round(dx / W);
           let dy = py[v] + oy[qb] - py[u] - oy[qa]; dy -= H * Math.round(dy / H);
           g = Math.max(g, dx * dx + dy * dy);
         }
-        if (g > lim2) { this.pendingUnlink.push(bl[k]); this.strainEvents++; this._event('snap', u, v); }
+        if (g > lim2) {
+          // a lone docked monomer under strain falls off (as in undocking); a membrane bond breaks where it is; a strand's own
+          // bond only past its own, higher limit; the units of a copy in progress hold each other
+          const dk = (x) => x >= 0 && this.type[x] !== T_M && this.is[x] === I_DOCK && this.bond[x * 4 + F] >= 0;
+          const m = dk(u) ? u : dk(v) ? v : -1;
+          if (m < 0 && this.type[u] !== T_M && (lim2s === 0 || g <= lim2s)) continue;
+          if (m >= 0) {
+            if (this.bond[m * 4 + L] >= 0 || this.bond[m * 4 + R] >= 0) continue;   // a copy in progress holds its units (measured: breaking it costs fidelity)
+            this.pendingUnlink.push(m * 4 + F); this.kicked.push(m);               // a lone docked monomer falls off, as in undocking
+          } else { this.pendingUnlink.push(bl[k]); if (this.type[u] !== T_M) this.strainBackbone++; }
+          this.strainEvents++; if ((bl[k] & 3) === F) this.strainFace++; this._event('snap', u, v);
+        }
       }
     }
     if (p.snapCorners && pins.length) {
-      // corners onto corners: a few Gauss-Seidel sweeps that move only the pinned corners (a corner can carry two pins)
-      for (let sweep = 0; sweep < 4; sweep++) {
-        for (let k = 0; k < pins.length; k += 2) {
-          const qa = pins[k], qb = pins[k + 1], u = (qa / NV) | 0, v = (qb / NV) | 0;
-          let dx = px[v] + ox[qb] - px[u] - ox[qa]; dx -= W * Math.round(dx / W);
-          let dy = py[v] + oy[qb] - py[u] - oy[qa]; dy -= H * Math.round(dy / H);
-          ox[qa] += dx / 2; oy[qa] += dy / 2; ox[qb] -= dx / 2; oy[qb] -= dy / 2;
-        }
+      // corners onto corners: every group of corners pinned together (two blocks, or three or four meeting at a point) moves
+      // to its common mean, so the blocks deform just enough to meet exactly
+      const groups = this._cornerGroups();
+      for (const g of groups) {
+        const q0 = g[0], u0 = (q0 / NV) | 0, x0 = px[u0] + ox[q0], y0 = py[u0] + oy[q0];
+        let mx = 0, my = 0;
+        for (const q of g) { const u = (q / NV) | 0; let dx = px[u] + ox[q] - x0; dx -= W * Math.round(dx / W); let dy = py[u] + oy[q] - y0; dy -= H * Math.round(dy / H); mx += dx; my += dy; }
+        mx /= g.length; my /= g.length;
+        for (const q of g) { const u = (q / NV) | 0; let dx = px[u] + ox[q] - x0; dx -= W * Math.round(dx / W); let dy = py[u] + oy[q] - y0; dy -= H * Math.round(dy / H); ox[q] += mx - dx; oy[q] += my - dy; }
       }
     }
     this._buildHash();   // for the empty-slot check when bonds form
@@ -951,7 +975,6 @@ class Sim {
     const p = this.p, px = this.px, py = this.py, open = this.open, size = this.size, pairs = this.pairs, W = p.W, H = p.H;
     for (let k = 0; k < pairs.length; k += 2) {
       const u = pairs[k], v = pairs[k + 1];
-      if (p.pSwap > 0 && this.type[u] === T_M && this.type[v] === T_M && (open[u] || open[v])) this._trySwap(u, v);
       if (!open[u] || !open[v]) continue;
       let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
       let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
@@ -959,29 +982,6 @@ class Sim {
       const dmax = d0 * (1 + p.distTol), dmin = d0 * (1 - p.distTol);
       if (d2 > dmax * dmax || d2 < dmin * dmin) continue;
       this._tryBond(u, v, dx, dy, Math.sqrt(d2));
-    }
-  }
-
-  /** Fluid membrane: an open lateral side of one active membrane block takes over a bonded lateral side of another. */
-  _trySwap(u, v) {
-    const p = this.p, b = this.bond;
-    if (this.is[u] !== I_ON || this.is[v] !== I_ON || this._bonded(u, v)) return;
-    let dx = this.px[v] - this.px[u]; dx -= p.W * Math.round(dx / p.W);
-    let dy = this.py[v] - this.py[u]; dy -= p.H * Math.round(dy / p.H);
-    const d = Math.sqrt(dx * dx + dy * dy); if (d > 1 + p.distTol) return;
-    for (let dir = 0; dir < 2; dir++) {
-      const a = dir ? v : u, c = dir ? u : v, ex = dir ? -dx : dx, ey = dir ? -dy : dy;   // a has the open side, c the bonded one
-      for (const i of [L, R]) {
-        if (b[a * 4 + i] >= 0 || !(this.open[a] & (1 << i))) continue;
-        const j = i === L ? R : L, q = b[c * 4 + j];
-        if (q < 0) continue;
-        const w = q >> 2; if (w === a || this.type[w] !== T_M) continue;
-        if (!this._geomOK(a, i, c, j, ex, ey, d)) continue;
-        if (this.rng() >= p.pSwap) continue;
-        this._unlink(c, j); this._link(a, i, c, j); this.open[a] &= ~(1 << i);
-        this.swapEvents++; this._event('swap', a, c);
-        return;
-      }
     }
   }
 
@@ -1084,7 +1084,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, swaps: this.swapEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };

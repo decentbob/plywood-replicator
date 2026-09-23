@@ -218,9 +218,9 @@ test('act: units leaving a strand are inactive until a BAB back activates them; 
 });
 
 
-test('memStrain: a ring of its natural size keeps its bonds; an overgrown one snaps; off, it holds any shape', () => {
-  const ring = (N, memStrain) => {
-    const s = new Sim({ seed: 1, W: 30, H: 30, nA: 0, nB: 0, nE: 0, nM: N, memAngle: 30, stiffM: 1, pReload: 0, memStrain });
+test('maxStrain: a ring of its natural size keeps its bonds; an overgrown one snaps; off, it holds any shape', () => {
+  const ring = (N, maxStrain) => {
+    const s = new Sim({ seed: 1, W: 30, H: 30, nA: 0, nB: 0, nE: 0, nM: N, memAngle: 30, stiffM: 1, pReload: 0, maxStrain });
     const r = N / (2 * Math.PI) * 0.9;
     for (let i = 0; i < N; i++) { const th = 2 * Math.PI * i / N; s.px[i] = 15 + r * Math.cos(th); s.py[i] = 15 + r * Math.sin(th); s.pa[i] = th; s._resetShape(i); }
     for (let i = 0; i < N; i++) s._link(i, R, (i + 1) % N, L);
@@ -229,6 +229,23 @@ test('memStrain: a ring of its natural size keeps its bonds; an overgrown one sn
   assert.strictEqual(ring(12, 0.25).strainEvents, 0, 'a natural ring should not snap');
   assert.ok(ring(20, 0.25).strainEvents > 0, 'an overgrown ring should snap');
   assert.strictEqual(ring(20, 0).strainEvents, 0);
+});
+
+
+test('snapCorners: bonded corners coincide after the physics of every step; with the strain limit on copies stay exact', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 2, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'ABBABA', seedCount: 2, snapCorners: true, maxStrain: 0.4 }));
+  for (let k = 0; k < 30; k++) {
+    s.run(999);
+    // one step by hand, measured right after the physics phase (bonds formed later in the step are snapped the next one)
+    s.t++; s._physics();
+    const pins = s.pins; let worst = 0;
+    for (let q = 0; q < pins.length; q += 2) { const u = (pins[q] / NV) | 0, v = (pins[q + 1] / NV) | 0;
+      worst = Math.max(worst, Math.hypot(s._dx(s.px[v] + s.ox[pins[q + 1]] - s.px[u] - s.ox[pins[q]]), s._dy(s.py[v] + s.oy[pins[q + 1]] - s.py[u] - s.oy[pins[q]]))); }
+    assert.ok(worst < 0.02, 'pinned corners apart by ' + worst);
+    s._formBonds(); s._chemistry();
+  }
+  assert.ok(s.births.length >= 10, 'births ' + s.births.length);
+  for (const x of s.births) assert.strictEqual(x.seq, rev(x.parent), 'unfaithful copy ' + JSON.stringify(x));
 });
 
 console.log(passed + ' tests passed');

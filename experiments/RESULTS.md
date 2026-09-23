@@ -781,18 +781,9 @@ constraints solved in a fixed number of passes, and when a shape is geometricall
 settle on an even compromise. In a natural 12-ring at 30° the pinned corners coincide (gap 0.008
 of a side on average); in a 20-ring they gape by 0.15 on average and 0.27 at most, and 64 or 256
 passes instead of 16 change nothing (0.147, 0.146). Frustrated pins act as stiff springs.
-`memStrain` (default 0) lets a membrane bond go when its corners end a step further apart than a
-threshold, so membrane cannot hold a shape its blocks do not fit. Hand-built rings at 30° (natural
-size 12) after 16,000 steps:
-
-| threshold | 16 blocks | 20 blocks | 24 blocks |
-|---:|---|---|---|
-| 0.08 | shatters (fresh bonds snap too) | shatters | shatters |
-| 0.2 | arcs of 1, 3, 6, 6 | a ring of 10, arcs | arcs of 1 to 6 |
-| 0.25 | a ring of 12 and an arc of 4 | a ring of 11, arcs of 1, 3, 5 | arcs of 1 to 8 |
-
-At 0.25 a ring cannot exceed its natural size: an overgrown one sheds its excess and recloses.
-That is a size limit, not division; two halves of a doubled ring do not each close.
+A strain limit (`maxStrain`, section 23) lets such a bond go, so membrane cannot hold a shape its
+blocks do not fit; with it an overlong membrane closes into several rings of about the natural
+size instead of one frustrated one (section 23).
 
 ## 17. Does space rescue a public good? (`space.sh`)
 
@@ -1078,3 +1069,60 @@ than two is itself a viable replicator, so any genome is in competition with its
 pieces are cheaper. A genome can hold only where its fragments cannot live on their own. Two
 directions follow: a smallest viable replicator longer than two (so fragments die), or compartments
 (so fragments stay with the whole and are selected with it).
+
+## 23. Flush polygons: snapped corners and a strain limit (`arc_split.js`)
+
+On the user's picture of bonded polygons as one shape with a line between them: a bond pins two
+corners onto two corners, but in a fixed number of solver passes the pins settle on a compromise
+wherever the blocks cannot fit (section 16), and a closed ring of the wrong size shows gaping
+corners. Two knobs, both default off:
+
+- `snapCorners`: after the passes, every group of pinned corners (two blocks, or three or four
+  meeting at a point) is brought to its common mean by deforming the blocks; the shape force works against the deformation from the next step on
+  (rigid blocks included). Bonded sides are then always flush.
+- `maxStrain`: a bond whose corners the passes left further apart than this (in block sides) lets
+  go. It applies to membrane bonds and to a lone docked monomer (which falls off, as in undocking).
+  A strand's own lateral bonds have their own limit, `maxStrainStrand`, off by default.
+
+**Copying.** 40×40, 400 monomers, two `ABBABA` seeds, 40,000 steps, three seeds per row
+(`snapCorners` on):
+
+| rule for a strained bond | limit | births | unfaithful | strands not of length 6 at the end |
+|---|---:|---:|---:|---:|
+| none (limit off) | - | 107 | 0 | 0 |
+| every bond breaks where it is | 0.25 | 854 | 49 | 471 |
+| every bond breaks where it is | 0.9 | 129 | 18 | 44 |
+| docked monomer falls off whole, strand bonds exempt | 0.25 | 496 | 26 | 496 |
+| docked monomer lets go of its template only | 0.25 | 541 | 107 | 470 |
+| only a lone docked monomer falls off; a copy in progress holds | 0.25 | 118 | 0 | 0 |
+| the same | 0.4 | 115 | 0 | 0 |
+
+Any mechanical break inside a copy in progress wrecks fidelity, at every limit tried: the strands
+break into fragments, each a replicator. The misfits come from ordinary copying: 1% of face bonds
+are pulled more than 0.26 to 0.54 of a side at any moment, almost all on docked monomers that
+already have a linked neighbour (10% of those against 0.2% of lone ones), where a partial copy
+forms a closed loop of bonds with its template; some are bridges between two neighbouring
+templates. Polygon-exact contacts between unbonded blocks (a corner inside another block pushed out
+across its nearest edge) were tried and removed: the tail did not shrink (face p99 0.45 either way)
+and the physics ran 2.3 times slower. With a copy in progress exempt, copying is exact and
+`snapCorners` alone copies exactly at stiffness 0.5 and 1 (140 and 159 births, none unfaithful, four
+seeds).
+
+**Membrane.** An open arc of 24 wedges at 30° (natural ring 12), relaxed, then left alone for
+20,000 steps, 20 seeds each:
+
+| setting | two rings | one ring | no ring | ring sizes |
+|---|---:|---:|---:|---|
+| no limit | 0 | 18 (all of 24, frustrated) | 2 | 24 |
+| limit 0.25, rigid wedges | 4 | 13 | 3 | 9 to 13 |
+| limit 0.25, corners snapped | 8 | 12 | 0 | 9 to 13 |
+| no limit, corners snapped, stiffness 0.7 | 0 | 12 | 8 | - |
+| limit 0.25, corners snapped, stiffness 0.7 | 15 | 5 | 0 | 8 to 14 |
+| the same, an arc of 36 | 19 (two or three) | 1 | 0 | 8 to 14 |
+
+Blocks that give a little plus bonds that give up past a limit turn an overlong membrane into
+rings of about the natural size: the arc curls, the most strained bond lets go, and each part
+closes. That is the physical half of division: a membrane that has grown to twice its natural
+size usually ends up as two compartments. Whether the contents are split between them is the next
+question. Fluid membrane (an open membrane side taking over a bonded one, `pSwap`) was also tried
+and removed: rings formed faster but at the wrong sizes, and with the limit on it did not help.
