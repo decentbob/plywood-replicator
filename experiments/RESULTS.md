@@ -564,6 +564,28 @@ them, so `ABAB` is also common without feed, and the windows swing widely in bot
 mutation raised motif frequency in both arms; the ratio between them stayed near 1.7, so mutation
 was not what capped the motif.
 
+**The environment changes, the population adapts** (`shift.sh`, `S_*`). Same small world and low
+mutation as `L1L_*`, 1,500,000 steps, two seeds each. For the first 500,000 steps energy is
+plentiful (reload 0.005 per spent particle per step); at step 500,000 it drops to 0.0003 and
+stays there (`run.js --change 500000:pReload=0.0003`). The rules never change; only the world
+does.
+
+| run | ABA per block, by 250k window (switch after the second) | mean newborn length, same windows | alternating share of long newborns, same windows |
+|---|---|---|---|
+| S_ctl_1 | 0.152, 0.147 → 0.088, 0.017, 0.036, 0.025 | 4.4, 4.5 → 3.4, 2.8, 2.7, 2.4 | 26%, 24% → 19%, 3%, 31%, 21% |
+| S_ctl_2 | 0.082, 0.095 → 0.053, 0.033, 0.050, 0.014 | 3.6, 3.9 → 3.0, 2.9, 2.9, 2.8 | 24%, 9% → 20%, 16%, 9%, 1% |
+| S_feed_1 | 0.140, 0.126 → 0.079, 0.182, 0.215, 0.189 | 4.0, 3.7 → 3.2, 3.0, 2.9, 3.0 | 15%, 23% → 10%, 45%, 56%, 46% |
+| S_feed_2 | 0.127, 0.160 → 0.182, 0.194, 0.166, 0.186 | 3.7, 3.3 → 3.2, 3.0, 3.0, 3.2 | 34%, 74% → 49%, 60%, 60%, 52% |
+
+While energy is plentiful the two arms look the same: the motif saves nothing when particles
+are free. When energy turns scarce they split. Without the private motif, selection strips the
+population to the cheapest strands, mean length falls from about 4 to 2.5, and the motif all but
+disappears (0.4 to 1.3 × chance by the end). With it, the motif rises to 0.17 to 0.22 per block
+(3.8 to 5.0 × chance), alternating strands make up about half of the long newborns, and length
+holds at 3. Seed 1 shows the adaptation in time: the motif first falls with everything else
+after the switch (0.079), then climbs back past its old level within 250,000 steps. Same rules,
+same seeds; only the environment changed, and the population followed it.
+
 **Making energy the bottleneck: the spend rule, tried and removed** (`L1S_*`, same world and
 regime as `L1M_*`). With `spend` on, a docked unit that is complete reads `DONE` on its face for
 a step, and its template unit reads that and drops back to needing energy, so every copy costs
@@ -620,6 +642,9 @@ a mutant. The rule was removed: it adds a state and a row and costs more fidelit
   times the control's frequency over 40 to 50 generations (0.15 to 0.19 motifs per block against
   0.05 to 0.10, four seeds each, no overlap), strands carrying it are longer, and alternating
   sequences, which the rule rewards most, become common without any rule mentioning them.
+- When the environment changes from plentiful to scarce energy, populations adapt: without the
+  private motif they shrink to short, motif-free strands; with it the motif rises to 4 to 5 ×
+  chance and alternating strands to half of the long births, and length holds.
 - The open questions for Phase 3: make membranes nucleate on strands (one row: `M` binds a
   template's back), so that compartments hold a genome and the `ABA` motif's public good can
   stay with its carrier; find the radiation window where long strands persist; and give rings a
