@@ -686,8 +686,15 @@ class Sim {
 
   // ------------------------------------------------------------- one step
   step() {
-    const p = this.p, n = this.n, rng = this.rng;
     this.t++;
+    this._physics();
+    this._formBonds();
+    this._chemistry();
+  }
+
+  /** Jostling, then bonds and contacts solved as constraints; leaves the spatial hash built on the new positions. */
+  _physics() {
+    const p = this.p, n = this.n, rng = this.rng;
     // 1. Brownian jostling, per square
     for (let u = 0; u < n; u++) {
       const sw = this.type[u] === T_E ? Math.sqrt(this.w[u]) * p.mobE : Math.sqrt(this.w[u]);
@@ -795,7 +802,12 @@ class Sim {
     }
     for (let u = 0; u < n; u++) { this.px[u] = this._wx(this.px[u]); this.py[u] = this._wy(this.py[u]); this.pa[u] = wrapAngle(this.pa[u]); }
     this._buildHash();
-    // 4. bond formation (same neighbourhood order as _forNear)
+  }
+
+  /** Every pair of open units within docking distance gets a chance to bond (same neighbourhood order as _forNear). */
+  _formBonds() {
+    const p = this.p, n = this.n, px = this.px, py = this.py, open = this.open, size = this.size;
+    const W = p.W, H = p.H, gw = this.gw, gh = this.gh, cell = this.cell, head = this.head, next = this.next;
     for (let u = 0; u < n; u++) {
       if (!open[u]) continue;
       const cx = Math.min(gw - 1, (px[u] / cell) | 0), cy = Math.min(gh - 1, (py[u] / cell) | 0);
@@ -815,6 +827,11 @@ class Sim {
         }
       }
     }
+  }
+
+  /** Transitions, bond holding, births, energy reload. */
+  _chemistry() {
+    const p = this.p, n = this.n, rng = this.rng;
     // 5. state transitions (synchronous: all read last step's derived states; bond breaks are applied after)
     for (let u = 0; u < n; u++) this._transition(u);
     for (const q of this.pendingUnlink) this._unlink(q >> 2, q & 3);
