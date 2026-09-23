@@ -5,13 +5,14 @@
  * Any DEFAULTS key from src/sim.js can be passed as --key value. Booleans: --sun 1.
  *   --births FILE   write the birth log (one JSON object per line)
  *   --quiet         no CSV, only the summary
+ *   --change T:k=v,k=v   at step T set parameters (an environment change); may be repeated
  */
 const { Sim, DEFAULTS } = require('./src/sim.js');
 const fs = require('fs');
 
 const args = process.argv.slice(2);
 const opt = { steps: 50000, every: 2000, quiet: false, births: '' };
-const params = {};
+const params = {}, changes = [];
 if (args.includes('--help') || args.includes('-h')) {
   console.log('usage: node run.js [--steps N] [--every N] [--quiet] [--births FILE] [--<param> value ...]\nparams and defaults:');
   for (const k in DEFAULTS) console.log('  --' + k.padEnd(12) + JSON.stringify(DEFAULTS[k]));
@@ -22,6 +23,11 @@ for (let i = 0; i < args.length; i++) {
   if (!a.startsWith('--')) continue;
   const k = a.slice(2);
   const v = (i + 1 < args.length && !args[i + 1].startsWith('--')) ? args[++i] : '1';
+  if (k === 'change') {
+    const [at, kv] = v.split(':'); const set = {};
+    for (const pair of kv.split(',')) { const [key, val] = pair.split('='); if (!(key in DEFAULTS)) { console.error('unknown parameter in --change: ' + key); process.exit(2); } set[key] = typeof DEFAULTS[key] === 'boolean' ? val !== '0' : (typeof DEFAULTS[key] === 'string' ? val : Number(val)); }
+    changes.push({ at: Number(at), set }); continue;
+  }
   if (k in opt) opt[k] = typeof opt[k] === 'boolean' ? v !== '0' : (typeof opt[k] === 'number' ? Number(v) : v);
   else if (k in DEFAULTS) params[k] = typeof DEFAULTS[k] === 'boolean' ? v !== '0' : (typeof DEFAULTS[k] === 'string' ? v : Number(v));
   else { console.error('unknown option --' + k); process.exit(2); }
@@ -31,8 +37,15 @@ const sim = new Sim(params);
 const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand'];
 if (!opt.quiet) console.log(cols.join(','));
 const t0 = Date.now();
+changes.sort((a, b) => a.at - b.at);
 for (let s = 0; s < opt.steps; s += opt.every) {
-  sim.run(Math.min(opt.every, opt.steps - s));
+  // run to the end of this reporting interval, applying any environment change on the way
+  const end = Math.min(s + opt.every, opt.steps);
+  while (changes.length && changes[0].at < end) {
+    sim.run(Math.max(0, changes[0].at - sim.t));
+    Object.assign(sim.p, changes.shift().set); sim.bondsDirty = true; sim._computeOpen();
+  }
+  sim.run(end - sim.t);
   const st = sim.stats();
   if (!opt.quiet) console.log(cols.map((c) => typeof st[c] === 'number' ? +st[c].toFixed(3) : st[c]).join(','));
   const errs = sim.check();
