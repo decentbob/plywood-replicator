@@ -901,6 +901,27 @@ pressures: to hold two genes the population must meet two pressures of similar s
 strong enough to select and together weak enough to survive, for long enough that a combined
 genome arises and spreads. That band has not been found.
 
+**The band, searched** (`GR_*`): energy at 12, 16 and 20 particles (reload 0.0003 to 0.0005) against
+radiation at 0.00002, 0.00003 and 0.00005, relay and ligation 0.01 on, 1,000,000 steps, one seed
+each. Last 500,000 steps:
+
+| energy \ radiation | 0.00002 | 0.00003 | 0.00005 |
+|---|---|---|---|
+| 12 particles | length 2.2, neither gene | 2.3, neither | 2.1, `ABA` traces |
+| 16 particles | 2.2, `CDC` traces | 2.5, `CDC` 0.09 per block | 2.7, `CDC` 0.13 |
+| 20 particles | 2.4, neither | 2.7, `CDC` 0.07 | 2.8, `CDC` 0.13 |
+
+No cell holds both genes, and no cell holds the energy gene past the first half. Under two
+pressures at once every population shrinks toward two or three units, the shield survives where
+radiation is strong enough to select it, and the energy gene, which needs three units and an
+armed middle before it pays, is lost. Genomes carrying both never exceeded a trace.
+
+This is the old obstacle in a new form: every pressure in this world costs long genomes more than
+short ones, so a genome carrying two genes must out-copy a dimer, and it does not. Biology's
+answer to the same problem was not longer genomes first but compartments: genes in separate
+short strands that share one enclosure and are selected together (the stochastic corrector). That
+again needs compartments that keep with their contents and divide, which section 16 did not get.
+
 ## 20. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one

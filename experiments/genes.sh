@@ -3,7 +3,8 @@
 # radiation). Both rules are always on; only the environment changes. Round 1 (G_*): none, scarce energy, radiation,
 # both. Round 2 (G2_*): energy truly scarce, radiation a third as strong, two seeds each. Round 3 (G3_*): the relay on
 # (one motif serves its whole strand), the four environments, two seeds each. Round 4 (G4_*): both pressures, milder,
-# with and without ligation (strands fuse end to end, so genes can be combined).
+# with and without ligation (strands fuse end to end, so genes can be combined). Grid (GR_*): energy (12, 16, 20 particles)
+# against radiation (0.00002, 0.00003, 0.00005), relay and ligation on, one seed each.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
 O=experiments/out
@@ -35,4 +36,11 @@ echo "G4_both_lig_$sd --seed $sd --pLigate 0.02"
 echo "G4_both_$sd     --seed $sd --pLigate 0"
 done
 } | run "$C --relay 1 --nE 26 --pReload 0.0005 --pBreak 0.00005"
+for e in "12 0.0003 e12" "16 0.0004 e16" "20 0.0005 e20"; do
+  set -- $e
+  for b in "0.00002 b2" "0.00003 b3" "0.00005 b5"; do
+    set -- $e $b
+    echo "GR_$3_$5 --seed 1 --nE $1 --pReload $2 --pBreak $4"
+  done
+done | run "$C --relay 1 --pLigate 0.01"
 echo GENESDONE
