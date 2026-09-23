@@ -760,7 +760,30 @@ and the world looks like the fixed-stock one. What is still missing is something
 membrane with the strand that made it, as a tether keeps a cell wall with its cell. The rule is
 kept, off by default, as the base for that.
 
-## 17. Summary
+## 17. Does space rescue a public good? (`space.sh`)
+
+The `ABA` charging motif as the only real energy income (background reload 0.00005), energy
+particles slowed to a fifth (`mobE` 0.2), low mutation, the length regime, 1,000,000 steps. The
+same density of monomers and particles in a 40×40 world and in an 80×80 one (four times the
+area, four times the population).
+
+| run | world | motifs per template unit at 200k, 400k, 600k, 800k, 1M | mean length at the end | outcome |
+|---|---|---|---:|---|
+| SP_small_motif | 40×40 | 0.14, 0.08, 0.12, 0.03, 0 | 2.04 | collapsed to motif-free dimers |
+| SP_small_motif_2 | 40×40 | 0.10, 0.02, 0, 0, 0.05 | 2.26 | collapsed |
+| SP_small_motif_3 | 40×40 | 0.03, 0.07, 0.13, 0.18, 0.16 | 3.34 | survived, motif enriched |
+| SP80_motif_1 | 80×80 | 0.11, 0.14, 0.12, 0.12, 0.12 | 2.96 | sustained |
+| SP80_motif_2 | 80×80 | 0.12, 0.12, 0.09, 0.10, 0.10 | 3.55 | sustained |
+
+In the small world the motif economy collapses in two seeds of three: once the motif carriers
+dip, energy runs out, only dimers (which cannot carry `ABA`) still copy, and the motif is gone.
+In the larger world neither seed collapses; the motif holds at about one template unit in ten
+throughout. What this does not yet say is why. The larger world differs in two ways, local
+structure (energy charged in one corner is spent there) and a four times larger population,
+which is harder to lose to chance. Separating them needs the large world with energy mobility 1,
+which washes local structure out while keeping the population. Two seeds against three: a lead.
+
+## 18. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
