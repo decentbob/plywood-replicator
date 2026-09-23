@@ -1047,3 +1047,34 @@ protect against that.
 What this does not say: the worlds are small (about 100 strands) and one clustering scale was
 measured; a larger world with slow polymers might behave differently. `mobS` stays as a physics
 knob, default 1.
+
+## 22. Is a two-gene genome kept once it exists? (`keep.sh`)
+
+Section 19 asked whether evolution would assemble a genome carrying both genes and found none. This
+asks the other half: seed only `ABACDC` (the energy gene `ABA` with `feed` and the shield gene `CDC`
+with `shield`, relay on, so one copy of each serves the whole strand; three seed strands) in the
+same four-letter world, and see whether it holds. Hard: the pressures of `G3_both` (12 particles,
+reload 0.0003, radiation 0.0001); mild: `GR_e16_b3` (16 particles, 0.0004, radiation 0.00003);
+none: 60 particles, reload 0.002, no radiation. Two seeds each, 1,000,000 steps.
+
+| run | commonest newborns, first 50k steps | commonest newborns, 50k to 150k | last birth carrying `ABACDC` (step) | end: template units, mean length |
+|---|---|---|---:|---|
+| K_hard_1 | ABACDC, AB, CDC, CD | CDC, AB, CD, ACDC | 78,347 | 0, extinct |
+| K_hard_2 | (both genes in half of the long births) | dimers only | 13,349 | 0, extinct |
+| K_mild_1 | ABACDC, AB, ABA, CD | AB, CD, ABA, AC, CDC | 71,508 | 82, 2.4 |
+| K_mild_2 | ABA and CDC at 11 to 16 × chance | both genes in 54% of long births | 175,877 | 58, 2.0 |
+| K_none_1 | BBACDC, ABACDC, BACDC | BACDC, BBACDC, AB, CD | 221,527 | 291, 3.5 |
+| K_none_2 | both genes in 14% of long births | no long birth carries both | 83,996 | 310, 3.4 |
+
+The two-gene genome is not kept anywhere, not even without pressure. It falls apart into pieces
+of itself (`AB`, `CD`, `ABA`, `CDC`, `ACDC`); the last birth carrying it comes between steps 13,000 and 222,000, and the pieces, each a
+complete replicator of two to four units, out-copy the whole. Under radiation the reason is plain:
+a newborn copy is not shielded until it is re-armed (the shield is a template-unit state), so it
+is broken while it waits for energy, and the fragments live on. Under the hard pressures the
+fragments die too and the world goes extinct; under the mild ones dimers take over.
+
+What this says: the obstacle of section 19 is not only assembly. Every fragment of a genome longer
+than two is itself a viable replicator, so any genome is in competition with its own pieces, and
+pieces are cheaper. A genome can hold only where its fragments cannot live on their own. Two
+directions follow: a smallest viable replicator longer than two (so fragments die), or compartments
+(so fragments stay with the whole and are selected with it).

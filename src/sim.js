@@ -102,6 +102,8 @@ const DEFAULTS = {
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
+  pSwap: 0,        // fluid membrane: an open side of an active membrane block that meets a bonded one (back corners touching) takes the bond
+                   // over, per step of contact, and the old partner is left open. Lets rings take in blocks and an overlong arc close on itself
   memStrain: 0,    // a membrane bond whose pinned corners end a step further apart than this (in block sides) lets go: membrane cannot hold a
                    // shape its blocks do not fit, so a ring holding more blocks than its bend closes snaps. 0: off (pins stretch without limit)
   make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
@@ -123,6 +125,9 @@ const DEFAULTS = {
                                  // and energy diffuse, as on a mineral surface, so offspring stay near their parents
   repMargin: 1.0,                // contact radius of a block as a fraction of half its side; unbonded blocks never overlap more than this allows
   iters: 16,                     // constraint passes per step (pins, contacts, shape); 8 to 24 all copy exactly, more keep bonded edges closer
+  snapCorners: false,            // after the passes, every pinned corner pair is brought together exactly by deforming the two blocks: bonded
+                                 // sides are always flush, and a misfit (a ring the wedges do not fit) is carried as deformation, which the
+                                 // shape force works against from the next step on
   tolDeg: 30, tolRotDeg: 40, distTol: 0.35,   // geometric tolerance for docking (F to F, E to K)
   linkTolDeg: 10, linkDistTol: 0.15,          // tighter tolerance for side-to-side links (L to R): flush means flush
   sizeE: 0.5,
@@ -189,7 +194,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.swapEvents = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
@@ -892,7 +897,7 @@ class Sim {
       }
       for (const u of bonded) {
         const t = this.type[u];
-        if (soft[t] === 0) continue;
+        if (soft[t] === 0 && !p.snapCorners) continue;   // rigid blocks keep their shape by moving rigidly, unless corners are snapped
         // shape matching: best-fit rotation of the rest shape onto the corners, then pull toward it by the stiffness;
         // the centre is re-read as the mean of the corners
         const o = u * NV, r = t * NV, nv = this.nv[t];
@@ -927,6 +932,17 @@ class Sim {
         if (g > lim2) { this.pendingUnlink.push(bl[k]); this.strainEvents++; this._event('snap', u, v); }
       }
     }
+    if (p.snapCorners && pins.length) {
+      // corners onto corners: a few Gauss-Seidel sweeps that move only the pinned corners (a corner can carry two pins)
+      for (let sweep = 0; sweep < 4; sweep++) {
+        for (let k = 0; k < pins.length; k += 2) {
+          const qa = pins[k], qb = pins[k + 1], u = (qa / NV) | 0, v = (qb / NV) | 0;
+          let dx = px[v] + ox[qb] - px[u] - ox[qa]; dx -= W * Math.round(dx / W);
+          let dy = py[v] + oy[qb] - py[u] - oy[qa]; dy -= H * Math.round(dy / H);
+          ox[qa] += dx / 2; oy[qa] += dy / 2; ox[qb] -= dx / 2; oy[qb] -= dy / 2;
+        }
+      }
+    }
     this._buildHash();   // for the empty-slot check when bonds form
   }
 
@@ -935,6 +951,7 @@ class Sim {
     const p = this.p, px = this.px, py = this.py, open = this.open, size = this.size, pairs = this.pairs, W = p.W, H = p.H;
     for (let k = 0; k < pairs.length; k += 2) {
       const u = pairs[k], v = pairs[k + 1];
+      if (p.pSwap > 0 && this.type[u] === T_M && this.type[v] === T_M && (open[u] || open[v])) this._trySwap(u, v);
       if (!open[u] || !open[v]) continue;
       let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
       let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
@@ -942,6 +959,29 @@ class Sim {
       const dmax = d0 * (1 + p.distTol), dmin = d0 * (1 - p.distTol);
       if (d2 > dmax * dmax || d2 < dmin * dmin) continue;
       this._tryBond(u, v, dx, dy, Math.sqrt(d2));
+    }
+  }
+
+  /** Fluid membrane: an open lateral side of one active membrane block takes over a bonded lateral side of another. */
+  _trySwap(u, v) {
+    const p = this.p, b = this.bond;
+    if (this.is[u] !== I_ON || this.is[v] !== I_ON || this._bonded(u, v)) return;
+    let dx = this.px[v] - this.px[u]; dx -= p.W * Math.round(dx / p.W);
+    let dy = this.py[v] - this.py[u]; dy -= p.H * Math.round(dy / p.H);
+    const d = Math.sqrt(dx * dx + dy * dy); if (d > 1 + p.distTol) return;
+    for (let dir = 0; dir < 2; dir++) {
+      const a = dir ? v : u, c = dir ? u : v, ex = dir ? -dx : dx, ey = dir ? -dy : dy;   // a has the open side, c the bonded one
+      for (const i of [L, R]) {
+        if (b[a * 4 + i] >= 0 || !(this.open[a] & (1 << i))) continue;
+        const j = i === L ? R : L, q = b[c * 4 + j];
+        if (q < 0) continue;
+        const w = q >> 2; if (w === a || this.type[w] !== T_M) continue;
+        if (!this._geomOK(a, i, c, j, ex, ey, d)) continue;
+        if (this.rng() >= p.pSwap) continue;
+        this._unlink(c, j); this._link(a, i, c, j); this.open[a] &= ~(1 << i);
+        this.swapEvents++; this._event('swap', a, c);
+        return;
+      }
     }
   }
 
@@ -1044,7 +1084,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, swaps: this.swapEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
