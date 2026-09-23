@@ -133,18 +133,13 @@ test('processive fraying: with pUnzip 1 a strand that frays unzips completely; p
   assert.deepStrictEqual(zip.check(), []); assert.deepStrictEqual(end.check(), []);
 });
 
-test('spend and feed: a template re-arms after every copy it makes; an armed ABA arms its neighbours without energy', () => {
-  const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', spend: true }));
-  s.run(30000);
-  let tpl = 0; for (let u = 0; u < s.n; u++) if (s.type[u] !== T_E && s.is[u] === I_TPL) tpl++;
-  assert.ok(s.stats().births >= 10 && s.spentEvents > 50, 'copying should go on and spend templates');
-  assert.strictEqual(s.energyUsed, tpl - 6 + s.spentEvents, 'E spent = re-armed copy units + re-armed spent template units');
-  for (const b of s.births) assert.strictEqual(b.seq, rev(b.parent));
-  const f = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', spend: true, feed: true }));
+test('feed: an armed ABA arms its released neighbours without energy, and every arming is paid for', () => {
+  const f = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', feed: true, nE: 20, pReload: 0.001 }));
   f.run(30000);
   let tf = 0; for (let u = 0; u < f.n; u++) if (f.type[u] !== T_E && f.is[u] === I_TPL) tf++;
   assert.ok(f.fedEvents > 0, 'the motif should feed its neighbours');
-  assert.strictEqual(f.energyUsed + f.fedEvents, tf - 6 + f.spentEvents, 'every arming is paid by a particle or a feed');
+  assert.strictEqual(f.energyUsed + f.fedEvents, tf - 6, 'every arming is paid by a particle or a feed');
+  for (const b of f.births) assert.strictEqual(b.seq, rev(b.parent));
 });
 
 console.log(passed + ' tests passed');

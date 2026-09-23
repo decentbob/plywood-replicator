@@ -538,6 +538,26 @@ shows is the condition, not the size, of the effect: in this well-mixed world a 
 is selected when its benefit reaches its carrier through the carrier's own bonds, and not when
 it goes out into the medium, however slowly the medium carries it.
 
+**Making energy the bottleneck: the spend rule, tried and removed** (`L1S_*`, same world and
+regime as `L1M_*`). With `spend` on, a docked unit that is complete reads `DONE` on its face for
+a step, and its template unit reads that and drops back to needing energy, so every copy costs
+energy on both sides and a motif on the template pays at the step that limits copying.
+
+| run | births | faithful births | fed re-arms | ABA vs chance, by 200k window | ABA per block, whole run |
+|---|---:|---:|---:|---|---:|
+| L1S_ctl_1 | 2,753 | 47% | 0 | 1.15, 1.48, 1.27, 1.07, 1.00 | 0.066 |
+| L1S_ctl_2 | 2,790 | 47% | 0 | 1.63, 1.01, 1.13, 1.57, 1.05 | 0.070 |
+| L1S_feed_1 | 3,002 | 56% | 3,523 | 1.61, 2.33, 2.34, 2.20, 2.00 | 0.131 |
+| L1S_feed_2 | 2,865 | 55% | 3,529 | 1.93, 1.69, 1.95, 2.48, 2.22 | 0.132 |
+
+The motif is held a little higher (about twice the control, 2.0 to 2.5 × chance late in the
+runs), one arming in five comes through it, and for the first time it raises births (5%). But
+copying falls apart: only half of births are faithful, against 72% without the rule, with 13%
+longer and 10% shorter than their parent. A template unit spent mid-copy is undocked, so it can
+fray and unzip while the rest of its strand is still being copied, and the copy's finished part
+leaves early as a truncated strand. Selection cannot build on a lineage when every other birth is
+a mutant. The rule was removed: it adds a state and a row and costs more fidelity than it buys.
+
 ## 15. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
