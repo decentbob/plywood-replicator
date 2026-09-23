@@ -1194,8 +1194,9 @@ class PolySim extends Sim {
 
   _chemistry() {
     super._chemistry();
-    // a unit that has lost every bond springs back to its rest shape (it is no longer held out of it)
-    for (let u = 0; u < this.n; u++) {
+    // a unit that has lost every bond springs back to its rest shape (it is no longer held out of it); only units that
+    // were pinned in this step's physics can be out of shape
+    for (const u of this._bondedUnits || []) {
       if (this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0 && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0) this._resetShape(u);
     }
   }
