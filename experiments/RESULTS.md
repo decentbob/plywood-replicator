@@ -803,8 +803,22 @@ Binding lowers diversity (18 sequences against 30), shortens strands and costs b
 dominant sequence changes no more often. The reason is that a two-unit match already holds, and
 among random sequences a two-unit opposite-letter match is everywhere: binding is not a lock and
 key but general stickiness, and it costs long strands most because they have more places to be
-caught. Next on this line: let a face-to-face bond hold only where both neighbours are bound, so
-only runs of three or more last and keys are specific.
+caught. **A longer key, tried.** `pMeltEnd` sets the melting of a bond with a bound neighbour on one side
+only (the end of a run), between the lone rate and the in-run rate, so only runs of three or more
+hold (a zipper). Bound units on average over 12,000 steps, four copies of `ABBABA` and of its
+perfect complement `BABAAB` against eight random 6-mers:
+
+| pMeltEnd | perfect complements | random strands |
+|---:|---:|---:|
+| 0.02 | 0.3 | 1.0 |
+| 0.01 | 0.7 | 5.7 |
+| 0.004 | 13.7 | 12.7 |
+
+There is no window in which the perfect match holds and the random ones do not. Random 6-mers
+share a three-unit opposite stretch often enough, and nucleating a run takes as long for a
+perfect match as for a partial one. With two letters and strands of four to six, there are too
+few distinct keys for recognition to be specific. The line would need longer strands or a larger
+alphabet; it is parked, with both knobs off by default.
 
 ## 19. Summary
 

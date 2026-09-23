@@ -79,7 +79,8 @@ const DEFAULTS = {
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
   pHyb: 0,         // binding: two template faces of opposite type (A on B) bind, per step of contact. Copies pair A on A, so kin never bind
   pMelt: 0.1,      // binding: a face-to-face bond with no bound neighbour melts, per step
-  pMeltRun: 0.001, // binding: a face-to-face bond with a bound neighbour melts, per step; long matches hold, short ones do not
+  pMeltRun: 0.001, // binding: a face-to-face bond with a bound neighbour on each side melts, per step
+  pMeltEnd: -1,    // binding: one with a bound neighbour on one side only (the end of a run); -1 means pMeltRun. Set between the two, only runs of three or more hold
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
@@ -586,8 +587,9 @@ class Sim {
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
-        const held = (bL && this.ss[b[o + L]] === S.HYB) || (bR && this.ss[b[o + R]] === S.HYB);
-        if (this.rng() < (held ? p.pMeltRun : p.pMelt)) { this.pendingUnlink.push(o + F); this.meltEvents++; }
+        const nh = (bL && this.ss[b[o + L]] === S.HYB ? 1 : 0) + (bR && this.ss[b[o + R]] === S.HYB ? 1 : 0);
+        const pm = nh === 0 ? p.pMelt : nh === 2 || p.pMeltEnd < 0 ? p.pMeltRun : p.pMeltEnd;
+        if (this.rng() < pm) { this.pendingUnlink.push(o + F); this.meltEvents++; }
       }
     }
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
