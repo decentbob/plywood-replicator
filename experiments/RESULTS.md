@@ -781,7 +781,19 @@ In the larger world neither seed collapses; the motif holds at about one templat
 throughout. What this does not yet say is why. The larger world differs in two ways, local
 structure (energy charged in one corner is spent there) and a four times larger population,
 which is harder to lose to chance. Separating them needs the large world with energy mobility 1,
-which washes local structure out while keeping the population. Two seeds against three: a lead.
+which washes local structure out while keeping the population.
+
+| run | world | energy mobility | motifs per template unit at 200k, 400k, 600k, 800k, 1M | charged particles |
+|---|---|---:|---|---:|
+| SP80_fastE_1 | 80×80 | 1 | 0.14, 0.13, 0.11, 0.06, 0.04 | 130 to 185 of 192 |
+| SP80_fastE_2 | 80×80 | 1 | 0.15, 0.18, 0.13, 0.11, 0.12 | 165 to 185 of 192 |
+
+With fast energy the large world does not collapse either, so the rescue is mostly size: a
+population four times larger does not lose its motif carriers to chance. There is a hint of local
+structure on top. Fast particles find motif backs quickly, energy is plentiful (130 to 185 of 192
+charged, against about 100 with slow particles), and in one seed the motif erodes to 0.04 per
+template unit, as a public good does when free-riders pay nothing for it; with slow energy it held
+at 0.10 to 0.14 in both seeds. One seed each way: space as such is not shown to matter yet.
 
 ## 18. Lock-and-key binding between strands (`binding.sh`)
 
