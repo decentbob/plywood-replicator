@@ -47,7 +47,7 @@ const COMP = [T_B, T_A, -1, -1, T_D, T_C];
 function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
 // internal states
-const I_DOCK = 0, I_REPEL = 1, I_TPL = 2, I_FRAY = 3;   // A / B
+const I_DOCK = 0, I_REPEL = 1, I_TPL = 2, I_FRAY = 3, I_RAW = 4;   // A / B (RAW: an inactive free monomer, act rule)
 const I_OFF = 0, I_ON = 1;                  // E
 
 // derived side states (the interface a bonded partner can read)
@@ -66,6 +66,8 @@ const S = {
   HYB: 22,                                              // L, R of a template unit whose face is bound to another template's face (binding, complementary letters): read by its neighbours
   FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
+  INACT: 25,                                            // K of an inactive free monomer (act rule): docks on an ACT back and is activated there
+  ACT: 26,                                              // K of a template unit in the activating motif (act rule): activates inactive monomers
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
 // A bond breaks the moment either of its sides derives to one of these.
@@ -103,6 +105,9 @@ const DEFAULTS = {
   make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
                    // (and stays anchored there), or where its side links to an active block's open side, so membrane grows from its makers
   pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
+  act: false,      // a unit that leaves a strand is an inactive monomer (it cannot dock) until its back meets the back of a template unit in
+                   // actMotif, which activates it: monomer activation as a second catalysed good beside energy
+  actMotif: 'BAB', // the activating context: the middle letter flanked by the outer one on both sides (a palindrome)
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   pReload: 0.002,  // OFF -> ON per step, the background energy income; the ABA motif (motif rule) is the other source
   // shape: each block type's rest polygon and how hard it is pulled back to it
@@ -112,6 +117,8 @@ const DEFAULTS = {
   // physics knobs (these should not need tuning for the chemistry to work)
   sigma: 0.3, sigmaRot: 0.45,    // Brownian step (translation, rotation) per unit per step
   mobE: 1,                       // energy particles' Brownian step relative to their size's; below 1 the medium is viscous for energy
+  mobS: 1,                       // Brownian step (and turn) of a block that has a bond, relative to a free one's: below 1 polymers creep while monomers
+                                 // and energy diffuse, as on a mineral surface, so offspring stay near their parents
   repMargin: 1.0,                // contact radius of a block as a fraction of half its side; unbonded blocks never overlap more than this allows
   iters: 16,                     // constraint passes per step (pins, contacts, shape); 8 to 24 all copy exactly, more keep bonded edges closer
   tolDeg: 30, tolRotDeg: 40, distTol: 0.35,   // geometric tolerance for docking (F to F, E to K)
@@ -180,8 +187,10 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0;
     this._seen = new Uint8Array(n);
+    const am = String(p.actMotif || 'BAB');
+    this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
 
     // types
     let u = 0;
@@ -405,7 +414,8 @@ class Sim {
       const gx = dx + this.ox[bv] - this.ox[bu], gy = dy + this.oy[bv] - this.oy[bu], tol = this.p.linkDistTol * (this.size[u] + this.size[v]) / 2;
       return gx * gx + gy * gy <= tol * tol && su[2] * sv[2] + su[3] * sv[3] <= 0;
     }
-    const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E && !(this.type[u] === T_M && this.type[v] === T_M);
+    const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E && !(this.type[u] === T_M && this.type[v] === T_M)
+      && !(i === K && j === K && this.type[u] !== T_M && this.type[v] !== T_M);   // back to back between letters (act rule) is a docking
     // gap between the two side midpoints, and how antiparallel the two sides are
     const gx = dx + sv[0] - su[0], gy = dy + sv[1] - su[1];
     const d0 = (this.size[u] + this.size[v]) / 2;
@@ -460,6 +470,7 @@ class Sim {
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
       return tu === tv ? 1 : p.pSoft;
     }
+    if (i === K && j === K) return (su === S.INACT && sv === S.ACT) || (su === S.ACT && sv === S.INACT) ? 1 : 0;   // activation (act rule)
     if ((i === L && j === R) || (i === R && j === L)) {
       const openish = (x) => x === S.STICKY || x === S.END;
       if (su === S.STICKY && sv === S.STICKY) return 1;
@@ -482,7 +493,7 @@ class Sim {
         if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE;
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -509,6 +520,10 @@ class Sim {
     const st = this.is[u];
     if (st === I_FRAY) {
       this.ss[o + F] = S.REPEL; this.ss[o + K] = S.IDLE; this.ss[o + L] = S.FRAY; this.ss[o + R] = S.FRAY;
+      return;
+    }
+    if (st === I_RAW) {   // an inactive monomer shows nothing but its back
+      this.ss[o + F] = S.IDLE; this.ss[o + L] = S.IDLE; this.ss[o + R] = S.IDLE; this.ss[o + K] = S.INACT;
       return;
     }
     // F
@@ -542,6 +557,7 @@ class Sim {
     if (st === I_REPEL) this.ss[o + K] = S.WANT;
     else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
     else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
+    else if (this.p.act && st === I_TPL && bL && bR && this.type[u] === this._actMid && this.type[b[o + L] >> 2] === this._actOut && this.type[b[o + R] >> 2] === this._actOut) this.ss[o + K] = S.ACT;
     else this.ss[o + K] = S.IDLE;
   }
 
@@ -584,10 +600,15 @@ class Sim {
     }
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0, bR = b[o + R] >= 0, bK = b[o + K] >= 0;
     const nl = (bL ? 1 : 0) + (bR ? 1 : 0);
-    const st = this.is[u];
+    const st = this.is[u], pool = p.act ? I_RAW : I_DOCK;   // what a unit that leaves its strand becomes
+    if (st === I_RAW) {
+      // A1 activation: my back is on an ACT back; I can dock from now on, and let go
+      if (bK) { this.is[u] = I_DOCK; this.pendingUnlink.push(o + K); this.actEvents++; this._event('activate', u); }
+      return;
+    }
     if (st === I_FRAY) {
       // leaving: every lateral bond goes, and the unit is a free monomer again
-      this.is[u] = I_DOCK; this.pendingUnlink.push(o + L, o + R);
+      this.is[u] = pool; this.pendingUnlink.push(o + L, o + R);
       return;
     }
     if (st === I_DOCK) {
@@ -604,11 +625,11 @@ class Sim {
         this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = -1;
       }
     } else if (st === I_REPEL) {
-      if (nl === 0) this.is[u] = I_DOCK;                                   // R3 lost its strand: back to the pool
+      if (nl === 0) this.is[u] = pool;                                     // R3 lost its strand: back to the pool
       else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
       else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
-      if (nl === 0) this.is[u] = I_DOCK;                                   // R3
+      if (nl === 0) this.is[u] = pool;                                     // R3
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
         const nh = (bL && this.ss[b[o + L]] === S.HYB ? 1 : 0) + (bR && this.ss[b[o + R]] === S.HYB ? 1 : 0);
@@ -621,7 +642,7 @@ class Sim {
     if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < p.pFray) {
       this.fresh[u] = 0; this.frayEvents++; this._event('fray', u);
       if (p.pUnzip > 0) this.is[u] = I_FRAY;
-      else { this.is[u] = I_DOCK; this.pendingUnlink.push(o + L, o + R); }
+      else { this.is[u] = pool; this.pendingUnlink.push(o + L, o + R); }
       return;
     }
     if (p.pUnzip > 0 && this.is[u] !== I_DOCK && !bF && ((bL && this.ss[b[o + L]] === S.FRAY) || (bR && this.ss[b[o + R]] === S.FRAY)) && this.rng() < p.pUnzip) {
@@ -792,9 +813,10 @@ class Sim {
     const W = p.W, H = p.H, gw = this.gw, gh = this.gh, cell = this.cell, head = this.head, next = this.next;
     // 1. Brownian jostling: each block translates and turns as a whole (its shape changes only under pins)
     for (let u = 0; u < n; u++) {
-      const sw = this.type[u] === T_E ? Math.sqrt(wt[u]) * p.mobE : Math.sqrt(wt[u]);
+      const ub = u * 4, slow = p.mobS !== 1 && this.type[u] !== T_E && (bond[ub] >= 0 || bond[ub + 1] >= 0 || bond[ub + 2] >= 0 || bond[ub + 3] >= 0);
+      const sw = this.type[u] === T_E ? Math.sqrt(wt[u]) * p.mobE : slow ? Math.sqrt(wt[u]) * p.mobS : Math.sqrt(wt[u]);
       px[u] = this._wx(px[u] + p.sigma * sw * this._gauss()); py[u] = this._wy(py[u] + p.sigma * sw * this._gauss());
-      const da = p.sigmaRot * wt[u] * this._gauss(), c = Math.cos(da), s = Math.sin(da);
+      const da = p.sigmaRot * wt[u] * (slow ? p.mobS : 1) * this._gauss(), c = Math.cos(da), s = Math.sin(da);
       pa[u] += da;
       for (let k = u * NV, e = k + this.nv[this.type[u]]; k < e; k++) { const x = ox[k], y = oy[k]; ox[k] = c * x - s * y; oy[k] = s * x + c * y; }
     }
@@ -942,13 +964,15 @@ class Sim {
   // ------------------------------------------------------------- observation
   stats() {
     const n = this.n;
-    let free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
+    let inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
       if (this.ss[o + K] === S.CHARGE) totalMotif++;
       if (this.is[u] === I_DOCK && this.bond[o] < 0 && this.bond[o + L] < 0 && this.bond[o + R] < 0) free++;
+      if (this.is[u] === I_RAW) inactive++;
+      if (this.ss[o + K] === S.ACT) totalAct++;
       if (this.is[u] === I_DOCK && this.bond[o] >= 0) docked++;
       if (this.is[u] === I_REPEL) repel++;
       if (this.is[u] === I_TPL) tpl++;
@@ -1001,7 +1025,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
@@ -1024,5 +1048,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, COMP, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, COMP, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

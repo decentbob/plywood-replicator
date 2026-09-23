@@ -761,6 +761,21 @@ and the world looks like the fixed-stock one. What is still missing is something
 membrane with the strand that made it, as a tether keeps a cell wall with its cell. The rule is
 kept, off by default, as the base for that.
 
+**Division by overgrowth, checked** (`ring_shape.js`, 2026-09-23). The hope behind "a ring grown
+past its natural size divides": a closed loop of wedges that together want to turn 720° must
+buckle, perhaps into a dumbbell whose waist brings two membrane backs together, where one local
+rule could split it. Rings of 8 to 20 blocks built by hand and relaxed for 3,000 steps:
+
+| bend, stiffness | natural size | 12 blocks | 16 blocks | 20 blocks |
+|---|---:|---|---|---|
+| 45°, rigid | 8 | round | coils into a double loop that overlaps itself | the same |
+| 45°, soft (0.5) | 8 | round | round, blocks flattened | round, blocks flattened |
+| 30°, rigid | 12 | round | round, pins gape | round, pins gape |
+
+No ring pinches. Soft blocks and the pins' give absorb the extra membrane, so an overgrown ring is
+just a larger round ring; at a strong bend it coils past itself, an artefact of the membrane's small
+contact radius. Division would need a rule of its own; the geometry does not supply one.
+
 ## 17. Does space rescue a public good? (`space.sh`)
 
 The `ABA` charging motif as the only real energy income (background reload 0.00005), energy
@@ -975,3 +990,42 @@ again needs compartments that keep with their contents and divide, which section
   template's back), so that compartments hold a genome and the `ABA` motif's public good can
   stay with its carrier; find the radiation window where long strands persist; and give rings a
   way to divide.
+
+## 21. Slow polymers: does limited dispersal rescue a public good? (`viscous.sh`, `assort.js`)
+
+Section 17 slowed the energy particles and enlarged the world; the strands themselves always
+diffused freely, so a copy was far from its parent within a generation. `mobS` slows every block
+that has a bond (its Brownian step and turn) relative to a free one, as polymers adsorbed on a
+mineral surface creep while monomers and energy diffuse: offspring stay near their parents. The
+world is `SP_small_motif`'s (40×40, public `ABA` motif as the only real energy income, energy at a
+fifth of its mobility, low mutation, the length regime, 1,000,000 steps). Copying is unharmed:
+in a 150,000-step probe births were 571, 722, 606 and 840 at `mobS` 1, 0.3, 0.1 and 0.03, though
+strands are shorter at 0.03 (2.4 against 4.0). `ABA` per newborn block, by 250,000-step window:
+
+| run | mobS | ABA per block, by window | lost (≤ 0.01) in a window |
+|---|---:|---|---|
+| SP_small_motif (rerun, bit-identical) | 1 | 0.125, 0.102, 0.129, 0.035 | no, falling |
+| SP_small_motif_2 | 1 | 0.105, 0.068, 0.004, 0.008 | yes |
+| SP_small_motif_3 | 1 | 0.072, 0.128, 0.164, 0.184 | no |
+| V_m10_1 | 0.1 | 0.159, 0.073, 0.001, 0.120 | yes, then back |
+| V_m10_2 | 0.1 | 0.148, 0.130, 0.175, 0.118 | no |
+| V_m10_3 | 0.1 | 0.213, 0.164, 0.146, 0.149 | no |
+| V_m30_1 | 0.03 | 0.131, 0.149, 0.127, 0.107 | no |
+| V_m30_2 | 0.03 | 0.120, 0.182, 0.207, 0.221 | no |
+| V_m30_3 | 0.03 | 0.187, 0.114, 0.002, 0.007 | yes |
+| V_ctl_m100_1 (motif off, reload 0.0003) | 1 | 0.046, 0.056, 0.087, 0.130 | - |
+| V_ctl_m10_1 (motif off) | 0.1 | 0.037, 0.008, 0.035, 0.119 | - |
+| V_ctl_m10_2 (motif off) | 0.1 | 0.036, 0.061, 0.109, 0.111 | - |
+
+Slow polymers do make space: a newborn carrying `ABA` has carriers among the newborns born within
+five units and 5,000 steps of it 1.12 to 1.61 times as often as among all newborns of that time,
+against 1.05 to 1.18 at full mobility (`assort.js`). But the public motif is not rescued: it is
+lost in one run of three at every mobility, and where it survives its frequency overlaps the
+motif-off controls, which drift up to 0.11 to 0.13 by the end through founder descent. The losses
+are not a slow invasion by free-riders but a crash: energy dips, only dimers (which cannot carry
+`ABA`) still afford a copy, and the motif is gone with them. Kin clusters of a few strands do not
+protect against that.
+
+What this does not say: the worlds are small (about 100 strands) and one clustering scale was
+measured; a larger world with slow polymers might behave differently. `mobS` stays as a physics
+knob, default 1.
