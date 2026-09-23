@@ -1,5 +1,6 @@
 #!/bin/sh
-# Space and the public motif (RESULTS.md, section 17): motif energy only, 80x80 against 40x40 at the same density.
+# Space and the public motif (RESULTS.md, section 17): motif energy only, 80x80 against 40x40 at the same density;
+# SP80_fastE_*: the large world with energy at full mobility, to separate local structure from population size.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
 O=experiments/out
@@ -7,6 +8,8 @@ M="--steps 1000000 --every 20000 --maxBirthLog 300000 --pSoft 0.002 --pCapture 0
 {
 echo "SP80_motif_1 --seed 1 --W 80 --H 80 --nA 704 --nB 704 --nE 192 --seedCount 8"
 echo "SP80_motif_2 --seed 2 --W 80 --H 80 --nA 704 --nB 704 --nE 192 --seedCount 8"
+echo "SP80_fastE_1 --seed 1 --W 80 --H 80 --nA 704 --nB 704 --nE 192 --seedCount 8 --mobE 1"
+echo "SP80_fastE_2 --seed 2 --W 80 --H 80 --nA 704 --nB 704 --nE 192 --seedCount 8 --mobE 1"
 echo "SP_small_motif --seed 1 --W 40 --H 40 --nA 176 --nB 176 --nE 48 --seedCount 2"
 echo "SP_small_motif_2 --seed 2 --W 40 --H 40 --nA 176 --nB 176 --nE 48 --seedCount 2"
 echo "SP_small_motif_3 --seed 3 --W 40 --H 40 --nA 176 --nB 176 --nE 48 --seedCount 2"
