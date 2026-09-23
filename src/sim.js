@@ -971,10 +971,13 @@ class PolySim extends Sim {
     for (let t = 0; t < 4; t++) {
       const h = 0.5 * (t === T_E ? p.sizeE : 1);
       let pts = [[h, -h], [h, h], [-h, h], [-h, -h]];
-      if (t === T_M) { const hb = h - 2 * h * Math.tan(p.memAngle * Math.PI / 360); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }
+      if (t === T_M) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(p.memAngle * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }   // a block one side deep cannot lean past about 50 degrees
       const mx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4, my = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
       for (let k = 0; k < 4; k++) { this.rx[t * 4 + k] = pts[k][0] - mx; this.ry[t * 4 + k] = pts[k][1] - my; }
     }
+    // a membrane block is a wedge: its contact radius is its mean half-width, so two blocks can reach the flush pose
+    const hbM = this.ry[T_M * 4 + 2];
+    for (let u = 0; u < n; u++) if (this.type[u] === T_M) this.rad[u] = 0.5 * (0.5 + hbM) * this.p.repMargin;
     this.vw = new Float64Array(n);       // inverse mass of one corner
     for (let u = 0; u < n; u++) { this.vw[u] = 4 * this.w[u]; this._resetShape(u); }
     this.pins = [];                      // per bond: the two corner pairs it pins, as u*4+k, v*4+k (rebuilt with the bond list)
@@ -1016,6 +1019,13 @@ class PolySim extends Sim {
 
   _geomOK(u, i, v, j, dx, dy, dist) {
     const su = this._side(u, i, this._sa || (this._sa = [0, 0, 0, 0])), sv = this._side(v, j, this._sb || (this._sb = [0, 0, 0, 0]));
+    if (this.type[u] === T_M && this.type[v] === T_M) {
+      // membrane blocks link where their back corners touch and their sides roughly face; the pins then pull the
+      // two edges flush and the blocks' leaning sides give the ring its bend
+      const bu = u * 4 + (i === R ? 2 : 3), bv = v * 4 + (j === R ? 2 : 3);
+      const gx = dx + this.ox[bv] - this.ox[bu], gy = dy + this.oy[bv] - this.oy[bu], tol = this.p.linkDistTol * (this.size[u] + this.size[v]) / 2;
+      return gx * gx + gy * gy <= tol * tol && su[2] * sv[2] + su[3] * sv[3] <= 0;
+    }
     const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E && !(this.type[u] === T_M && this.type[v] === T_M);
     // gap between the two side midpoints, and how antiparallel the two sides are
     const gx = dx + sv[0] - su[0], gy = dy + sv[1] - su[1];
@@ -1023,14 +1033,15 @@ class PolySim extends Sim {
     const tolD = (lateral ? this.p.linkDistTol : this.p.distTol) * d0;
     if (gx * gx + gy * gy > tolD * tolD) return false;
     const cT = lateral ? this.cosLinkTol : this.cosTol, cR = lateral ? this.cosLinkTol : this.cosTolRot;
-    const ux = dx / dist, uy = dy / dist;
-    if (!lateral && su[2] * ux + su[3] * uy < cT) return false;        // v lies in front of u's side i (docking)
-    if (!lateral && -(sv[2] * ux + sv[3] * uy) < cT) return false;
+    const ux = dx / dist, uy = dy / dist, dock = !lateral && !(this.type[u] === T_M && this.type[v] === T_M);
+    if (dock && su[2] * ux + su[3] * uy < cT) return false;          // v lies in front of u's side i (docking)
+    if (dock && -(sv[2] * ux + sv[3] * uy) < cT) return false;       // (membrane blocks lean, so for them the sides alone decide)
     return su[2] * sv[2] + su[3] * sv[3] <= -cR;                      // the sides face each other
   }
 
   _formBond(u, i, v, j) {
     const nb = (x) => (this.bond[x * 4] >= 0) + (this.bond[x * 4 + 1] >= 0) + (this.bond[x * 4 + 2] >= 0) + (this.bond[x * 4 + 3] >= 0);
+    if (this.type[u] === T_M && this.type[v] === T_M) { this._link(u, i, v, j); return true; }   // corners already touch
     let a = u, ia = i, m = v, im = j;
     if (nb(u) < nb(v)) { a = v; ia = j; m = u; im = i; }
     const sa = this._side(a, ia, [0, 0, 0, 0]), sm = this._side(m, im, [0, 0, 0, 0]);

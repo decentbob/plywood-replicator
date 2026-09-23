@@ -142,4 +142,27 @@ test('feed: an armed ABA arms its released neighbours without energy, and every 
   for (const b of f.births) assert.strictEqual(b.seq, rev(b.parent));
 });
 
+test('polygon physics: copies are exact at stiffness 1 and 0.5, bonded edges coincide, membrane wedges close rings', () => {
+  for (const st of [1, 0.5]) {
+    const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', physics: 'poly', stiffA: st, stiffB: st }));
+    s.run(20000);
+    assert.ok(s.stats().births >= 5, `stiffness ${st}: expected copying, got ${s.stats().births} births`);
+    for (const b of s.births) assert.strictEqual(b.seq, rev(b.parent), `stiffness ${st}: unfaithful copy`);
+    for (const [len] of s.stats().lenHist) assert.strictEqual(len, 6, `stiffness ${st}: strand of wrong length`);
+    // bonded corners coincide: median gap under 3% of a side, nine in ten under 15%
+    s._bondList();
+    const gaps = [];
+    for (let k = 0; k < s.pins.length; k += 2) {
+      const a = s.pins[k], b = s.pins[k + 1];
+      gaps.push(Math.hypot(s._dx(s.px[b >> 2] + s.ox[b] - s.px[a >> 2] - s.ox[a]), s._dy(s.py[b >> 2] + s.oy[b] - s.py[a >> 2] - s.oy[a])));
+    }
+    gaps.sort((x, y) => x - y);
+    assert.ok(gaps[gaps.length >> 1] < 0.03 && gaps[Math.floor(gaps.length * 0.9)] < 0.15, 'bonded corners apart: median ' + gaps[gaps.length >> 1]);
+    assert.deepStrictEqual(s.check(), []);
+  }
+  const m = new Sim(Object.assign({}, base, { seed: 7, seedCount: 0, nA: 50, nB: 50, nE: 10, W: 40, H: 40, nM: 150, memAngle: 45, physics: 'poly' }));
+  m.run(20000);
+  assert.ok(m.stats().memRings >= 3, 'expected membrane rings, got ' + m.stats().memRings);
+});
+
 console.log(passed + ' tests passed');
