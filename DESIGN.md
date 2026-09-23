@@ -2,7 +2,7 @@
 
 Design notes for an artificial life simulation where replication and evolution come out of a tiny universal physics, not out of code inside the creatures.
 
-**Status:** living design, third draft. The first draft was a plan; the second recorded what was built and measured; this one records the move to a physics with nothing bigger than a square in it, what that exposed, and the re-measured results. Section 2 lists the commitments that define the project. Everything else is a current best guess and should be replaced the moment a better idea or an experiment says so. The decision log at the end (section 14) is where the reasoning behind each change survives. Section 15 holds the ideas not yet tried.
+**Status:** living design, fourth draft (2026-09-23). The first draft was a plan; the second recorded what was built and measured; the third moved to a physics with nothing bigger than a square; this one records the deformable-polygon engine (now the only physics), processive fraying, private metabolism, four letters and the attempts at compartments, recognition and gene accumulation. Section 2 lists the commitments that define the project. Everything else is a current best guess and should be replaced the moment a better idea or an experiment says so. The decision log (section 14) is where the reasoning behind each change survives; section 15 holds the ideas not yet tried, ranked at its top. `AGENTS.md` at the repository root is the short guide for a new working session (`CLAUDE.md` imports it).
 
 ---
 
@@ -233,7 +233,7 @@ Copying alone gives selection on copy speed only, and the winner is the shortest
 
 **Phase 2, variation and selection.** *Done.* With `pSoft`, `pCapture` and `pFray` on, sequence diversity grows to about ten distinct sequences and 2.5 to 3.3 bits of entropy within 100,000 steps, the population turns over indefinitely (generation 20 to 40), and length collapses to between 2.5 and 3 units. Energy scarcity and where energy comes from do not change that. Ligation, on the per-square physics, sets a length distribution by fusion against fraying (mean 4.7, up to 25) and is the most diverse regime measured. Cooperative docking (R6) attacks the cause and wins a head-to-head race but starves in the open regime; see `experiments/RESULTS.md`.
 
-**Phase 3, structure.** *Started.* The window in which R6 holds length up in an open population is mapped (`experiments/RESULTS.md`, section 13): it needs processive fraying, and within it length rises with `pUndock` and falls with the fraying rate, while monomer density changes nothing because births are set by recycling. Next is making sequence pay: the `ABA` motif is not selected as a public good, and its private form (`feed`) is being measured over many generations (section 14). Hinges and membranes are in (section 9); the next structural step is membranes that nucleate on strands (section 15, item 7), so that compartments hold a genome.
+**Phase 3, structure.** *In progress.* Done since: length selected (processive fraying with cooperative docking), private metabolism selected, adaptation to environment change, shape as a phenotype, a shield gene under radiation (`experiments/RESULTS.md`, sections 13 to 19). Not yet: compartments that keep their contents and divide, specific recognition between strands, genomes carrying more than one gene. The obstacle common to the last three is that every pressure costs long genomes more than short ones; compartments (several short strands selected together) are the next step. Earlier text of this phase: The window in which R6 holds length up in an open population is mapped (`experiments/RESULTS.md`, section 13): it needs processive fraying, and within it length rises with `pUndock` and falls with the fraying rate, while monomer density changes nothing because births are set by recycling. Next is making sequence pay: the `ABA` motif is not selected as a public good, and its private form (`feed`) is being measured over many generations (section 14). Hinges and membranes are in (section 9); the next structural step is membranes that nucleate on strands (section 15, item 7), so that compartments hold a genome.
 
 **Phase 4, origins.** *Started.* With `pSpont` on and no seed strand, replication starts by itself: two monomers meet flush, become a two-unit strand, get re-armed, and are copied. The seedless bath is now a runnable experiment (`experiments/channels.sh`, the `O_` runs). *Measured:* life starts in every run, first birth between 1,000 and 15,000 steps, and the population that emerges is the one the physics favours, dimers at the pool's composition (`experiments/RESULTS.md`, section 7).
 
@@ -334,6 +334,30 @@ Keep entries short: date, what changed, why, what evidence.
 ---
 
 ## 15. Ideas not yet tried
+
+**Ranked next steps (2026-09-23).**
+
+- **A. Tethered compartments** (builds on the `make` rule). Keep the anchor: a raw membrane block anchored on a
+  `MAKE` back stays bonded while that unit is a template, and recruitment extends only arcs that are anchored
+  (an active block reads a different open-side state when its arc has no anchor, and raw blocks join only the
+  anchored kind), so membrane grows from, and stays with, the strands that make it. A ring grown past its
+  natural size and broken twice by radiation closes into two, each with its share of the contents. Measure:
+  do rings hold their makers for a generation; do ring counts grow by division; then the stochastic corrector
+  (an `ABA` strand and a `CDC` strand in one ring against either alone, under both pressures).
+- **B. Viewer presets for what evolves**, and a button that applies an environment change (the headless
+  runner has `--change`; the viewer has none).
+- **C. Bigger populations** (80×80 and up) for gene combinations: the motif economy survived there where
+  small worlds collapsed, mostly through size. Several hours per run.
+- **D. Longer strands for recognition.** Binding needs keys of four or more letters to be specific; that
+  needs mean lengths of eight or more, which only the strongest cooperative docking gave.
+- **E. Activated monomers** (item 1) only if energy has to limit docking itself; so far scarce energy limits
+  births through re-arming when it is scarce enough (`G3_energy_*`), so it has not been needed.
+
+Status of the items below: 3 done; 7 built as the `make` rule (did not put rings around makers); 8 still
+open; 9 and 10 superseded by the polygon engine (shapes, wedges, per-type stiffness); 11 done (the only
+engine); 12 tried (general stickiness at key length two; no specificity window); 13 partly done (`feed`,
+`shield`, `make` and the relay are three entries of such a table); 14 not tried; 15 tried (size, not locality,
+explains the rescue so far).
 
 Ordered by how little they add to the rule table.
 

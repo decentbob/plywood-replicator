@@ -4,22 +4,13 @@ An artificial life experiment: a 2D world of small rigid squares governed by one
 fixed, universal rule table, in which template replication, copy errors, and
 selection come out of the rules rather than being programmed into the creatures.
 
-**Status.** Phase 1 and Phase 2 of the [design](DESIGN.md) run. A seeded strand of
-squares is copied by templating, the copies are copied, copy errors appear and are
-inherited, a conserved energy budget and end-fraying give turnover, and the
-population reaches a steady state. Nothing in the rules mentions "copy",
-"strand", or "organism". In a well-mixed world the shortest strand wins, as
-Spiegelman found, by 25:1 to 60:1. One more local rule reverses that in a
-head-to-head race: make a lone docked monomer unstable (a linked run is not), so
-copying has to nucleate, and longer templates nucleate faster. At an undocking
-rate of 0.1 per step the 6-mer out-reproduces the dimer nine to one. In an open
-population it wins too once turnover stops being a deletion ratchet: with end
-fraying as the only recycling, every copy is paid for by deletions, so strands
-stay short. With processive fraying (a strand that starts to fray unzips whole)
-the population holds a mean length of 4 to 5.4 by selection, against 2.3 without
-cooperative docking. Whether sequence, not just length, can be selected is the
-current question: an energy motif that benefits only its carrier (`feed`) is
-under test.
+**Status.** Copying, mutation, selection and adaptation all come out of the rules. Length is selected in
+an open population (cooperative docking with processive fraying); a private energy motif is selected and a
+public one is not; populations adapt when the environment changes; on the deformable-polygon engine a block's
+shape selects on the sequences that carry it; radiation selects a shield gene. Not yet: compartments that
+keep their contents and divide, specific recognition between strands, and genomes that carry more than one
+gene, all of which run into the same obstacle, that every pressure here costs long genomes more than short
+ones. `AGENTS.md` is the working guide for whoever continues (`CLAUDE.md` imports it).
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 ## Run it
@@ -32,10 +23,9 @@ python3 -m http.server 8000     # then open http://localhost:8000/
 ```
 
 The view opens zoomed on the seed strand. Scroll to zoom, drag to pan, click a
-square to read its state and its partners' states, click an event in the feed to
-jump to it. Every side of every square is drawn in the colour of its state, every
-bond is a white tie across the shared edge, and every face has a notch so you can
-see which way a free monomer points:
+block to read its state and its partners' states, click an event in the feed to
+jump to it. Every side of every block is drawn in the colour of its state, and
+every bond is a white tie across the shared edge:
 
 | colour | side | meaning |
 |---|---|---|

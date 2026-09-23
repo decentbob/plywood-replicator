@@ -1,7 +1,7 @@
 {
   "name": "polygon-chemistry",
   "version": "0.1.0",
-  "description": "Artificial life from one universal rule table: template replication with mutation emerging from local rules on rigid squares.",
+  "description": "Artificial life from one universal rule table: template replication, mutation and selection emerging from local rules on deformable polygons.",
   "license": "MIT",
   "private": true,
   "scripts": {
