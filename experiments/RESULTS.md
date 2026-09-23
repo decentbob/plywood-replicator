@@ -681,8 +681,27 @@ Block shape alone purged `B` from the genomes: with wedge `B` it makes up 2% to 
 in newborns, against 50% with square `B` and 50% of the pool. The population first collapsed to
 `AA` dimers (a dimer has one bond to bend, so it copies whatever its shape) and then rebuilt length
 out of `A` (mean newborn length 2.1 rising to 2.9). The prediction was that selection would favour
-mixing, since an `AB` bond bends half as much as a `BB` bond; it did not, which says a 10-degree
-bond already costs more than it buys at this stiffness. The controls are a warning about
+mixing, since an `AB` bond bends half as much as a `BB` bond; at 20 degrees it did not, because
+even an `AB` bond (10 degrees) costs more than it buys.
+
+With a gentler wedge the prediction holds (`SH10_*`, 10 degrees per `BB` bond, 5 per `AB`):
+
+| run | window | mean length | B fraction of newborn blocks | BB / AB / AA bonds (× chance) |
+|---|---|---:|---:|---|
+| SH10_wedge_1 | first 200k | 3.66 | 0.48 | 0.30 / 1.69 / 0.32 |
+| SH10_wedge_1 | last 200k | 3.29 | 0.47 | 0.04 / 1.83 / 0.28 |
+| SH10_wedge_2 | first 200k | 3.89 | 0.50 | 0.30 / 1.76 / 0.17 |
+| SH10_wedge_2 | last 200k | 3.18 | 0.50 | 0.02 / 1.82 / 0.34 |
+| SH10_all_1 | whole run | 2.0 to 2.2 | 0.43 to 0.60 | about 1 / 1 / 1 (137 births in 800k) |
+| SH10_all_2 | whole run | 2.0 | 0.39 to 0.53 | about 1 / 1 / 1 (125 births) |
+
+The genome keeps the curved block and spaces it out. `B` stays at half of every newborn, but two
+`B`s are almost never neighbours: `BB` bonds fall to 1% (0.02 to 0.04 × chance) against 8% to 11%
+in the square control, and nine bonds in ten are `AB`. Where both block types are 10-degree
+wedges (`SH10_all_*`) there is no straight block to fall back on, every strand curls, and the
+population barely survives as dimers. The same physics gives three different answers depending
+on how strong the shape effect is and whether there is an alternative: space the curved block out
+(mild), purge it (strong), or fail (no escape). The controls are a warning about
 baselines: with little mutation they keep the founder's make-up (`ABBABA` is four fifths `AB`
 bonds), so "× chance" figures in a control measure descent as much as selection. The comparison
 that counts is against the control, as everywhere above.
@@ -723,9 +742,10 @@ that counts is against the control, as everywhere above.
   times the control's frequency over 40 to 50 generations (0.15 to 0.19 motifs per block against
   0.05 to 0.10, four seeds each, no overlap), strands carrying it are longer, and alternating
   sequences, which the rule rewards most, become common without any rule mentioning them.
-- On the polygon engine, a block's shape is a phenotype: wedge-shaped `B` blocks, which make
-  strands curl and copy badly, are purged from the genomes (2% to 8% of newborn blocks against
-  50% with square `B`), with no rule mentioning shape or sequence.
+- On the polygon engine, a block's shape is a phenotype that selects on sequence, with no rule
+  mentioning shape or sequence: a strongly wedge-shaped `B` is purged from the genomes (2% to 8%
+  of newborn blocks against 50% with square `B`); a mildly wedge-shaped one is kept at half the
+  genome but never placed next to another `B` (`BB` bonds 1% against 8% to 11% in the control).
 - When the environment changes from plentiful to scarce energy, populations adapt: without the
   private motif they shrink to short, motif-free strands; with it the motif rises to 4 to 5 ×
   chance and alternating strands to half of the long births, and length holds.
