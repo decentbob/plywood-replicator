@@ -783,7 +783,30 @@ structure (energy charged in one corner is spent there) and a four times larger 
 which is harder to lose to chance. Separating them needs the large world with energy mobility 1,
 which washes local structure out while keeping the population. Two seeds against three: a lead.
 
-## 18. Summary
+## 18. Lock-and-key binding between strands (`binding.sh`)
+
+Two template faces of opposite type bind at `pHyb` per step of contact; a bond with a bound
+neighbour melts at 0.001 per step, a lone one at 0.1. Copies pair like with like, so kin never
+bind. Small world, low mutation, the length regime, 1,000,000 steps. Diversity is counted over
+newborns of three units or more, per 200,000-step window (`turnover.js`).
+
+| run | pHyb | births | bindings | mean newborn length, last half | distinct sequences (mean) | entropy (bits, mean) | changes of the dominant sequence |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HY_ctl_1 | 0 | 5,275 | 0 | 3.64 | 30 | 3.89 | 3 |
+| HY_h05_1 | 0.05 | 4,984 | 65,523 | 3.42 | 28 | 3.67 | 2 |
+| HY_h20_1 | 0.2 | 4,252 | 191,417 | 2.59 | 18 | 3.17 | 3 |
+| HY_h20_2 | 0.2 | 4,750 | 180,152 | 2.56 | 18 | 2.96 | 2 |
+
+The hope was frequency-dependent selection: common sequences caught by their complements,
+diversity kept high, the dominant sequence replaced again and again. The opposite happened.
+Binding lowers diversity (18 sequences against 30), shortens strands and costs births, and the
+dominant sequence changes no more often. The reason is that a two-unit match already holds, and
+among random sequences a two-unit opposite-letter match is everywhere: binding is not a lock and
+key but general stickiness, and it costs long strands most because they have more places to be
+caught. Next on this line: let a face-to-face bond hold only where both neighbours are bound, so
+only runs of three or more last and keys are specific.
+
+## 19. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
