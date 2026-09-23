@@ -157,6 +157,15 @@ contact, and a contact lasts several steps, so nominal values overstate softness
 (see the design doc, section 6). The functions that find connected components
 are observation only and never feed back into the dynamics.
 
+**Polygon physics** (`physics: 'poly'`, the viewer's default). Each block is a polygon (a square,
+a wedge, or an octagon) held to its rest shape by a restoring force whose strength is a per-type
+stiffness, and a bond pins the two corners of one edge onto the two corners of its partner's
+edge, so bonded edges coincide and a strand moves as one body. A wedge-shaped block (`bendA`,
+`bendB`) curls a strand by its sequence; membrane blocks are wedges whose rest state is a ring.
+Stiffness 0.5 is safe (exact copies, faster copying than rigid); below about 0.3 copies docked on
+neighbouring templates start to link. The rigid engine (`physics: 'rigid'`) stays the default
+for the headless runner, so every recorded experiment reproduces exactly.
+
 ## Layout
 
 ```

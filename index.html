@@ -84,7 +84,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Squares with one rule table and nothing bigger than a square in the physics. Every side of every square is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and protocells with self-assembling membrane rings. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
+  <p>Blocks with one rule table and nothing bigger than a block in the physics. Each block is a slightly deformable polygon, and a bond pins its edge to its partner's, so a strand moves as one body. Every side of every block is drawn in the colour of its state; a bright tie across two edges is a bond. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and protocells with self-assembling membrane rings. Click a square to read it, click an event to jump to it; drag and scroll move the view.</p>
 </header>
 <div class="main">
   <div class="dish">
@@ -183,7 +183,7 @@ const PRESETS = {
   evo:   Object.assign({}, ZERO, EVO),
   proto: Object.assign({}, ZERO, EVO, { W: 80, H: 80, seedCount: 1, pUnzip: 0, pUndock: 0, pFray: 0.0001, pLigate: 0.02, nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
 };
-const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400 };
+const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, physics: 'poly', stiffA: 0.5, stiffB: 0.5, stiffM: 1, shapeA: 'square', shapeB: 'square', shapeM: 'square', bendA: 0, bendB: 0 };
 
 const KNOBS = [
   ['grp', 'Chemistry'],

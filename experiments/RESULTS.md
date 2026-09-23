@@ -629,6 +629,12 @@ Softness does what slack did (section 10): a little speeds copying because neigh
 template can link while wobbling, and too much lets copies docked on neighbouring templates link.
 0.5 is safe. Bonded corners sit a median 0.015 of a side apart (90th percentile 0.08).
 
+**Length selection carries over** (`PZ_*`, the section 13 regime on the polygon engine at stiffness
+0.5, 150,000 steps): mean length 2.50 without cooperative docking, 3.83 and 3.70 at `pUndock`
+0.1 (two seeds) and 4.85 at 0.2, against 2.2 to 2.3, 4.0 to 4.7 and 4.4 to 5.4 on the rigid
+engine. The same dose-response, slightly lower at 0.1. The polygon engine is about twice as
+slow per step at this size.
+
 **Membrane wedges.** The membrane block's rest shape is a trapezoid whose lateral sides lean in
 by half the bend, so a ring is its rest state and no bend rule is needed; a bond forms where two
 back corners touch and the pins pull the edges flush. A block one side deep cannot lean past
@@ -644,6 +650,11 @@ shape, so a strand's resting curvature is set by its sequence. Copying `ABBABA` 
 | 10 | 25, 24 | yes |
 | 20 | 9, 9 | yes |
 | 30 | 0, 0 | - |
+
+**Octagons** (`shapeA`, `shapeB` = `oct`: a regular octagon one side across, the four working
+sides on alternate edges, the other four inert skin) copy at about the square rate, 14 and 20
+births at stiffness 0.5, with one truncated copy per seed: neighbours touch only along short
+edges, which leaves more room for neighbouring templates to interfere.
 
 Shape has a fitness landscape: a slight taper copies faster than a square, a strong bend slows
 copying and at 30 degrees a template cannot be copied at all (monomers docked on its outer curve
