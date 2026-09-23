@@ -856,6 +856,20 @@ run, so `ABA` drifted. With both, the shield wins alone and no genome carries bo
 radiation pressure toward short strands overrides everything, and a genome with both genes needs
 at least six units.
 
+Round 2 (`G2_*`), energy truly scarce (12 particles, reload 0.0003), radiation a third as strong,
+two seeds each. Scarce energy: `ABA` rose to 0.09 to 0.11 per block (6 to 11 × chance) for
+750,000 steps in one seed and was then lost, and never rose in the other; genomes shrank to 2.4
+to 3.2 units. Both pressures: dimers in one seed, `CDC` alone in the other. No genome carried
+both.
+
+Why, in one line: neither gene pays for its own length. `ABA` with `feed` is three units that
+save at most two energy particles, so a strand without it is always cheaper; `CDC` with `shield`
+adds two bonds and protects exactly those two. Selection therefore prefers the shortest genome
+that works, and two genes never fit. For genes to accumulate, a gene's benefit has to grow with
+the genome that carries it. That is what the relay does (`relay`: a template unit passes FEED and
+SHIELD on along its strand, away from the motif, so one motif arms or shields the whole strand);
+round 3 (`G3_*`) repeats the four environments with it.
+
 ## 20. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
