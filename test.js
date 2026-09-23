@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, T_E, T_M, I_TPL, F, L, R } = require('./src/sim.js');
+const { Sim, T_E, T_M, I_TPL, F, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -142,7 +142,7 @@ test('feed: an armed ABA arms its released neighbours without energy, and every 
   for (const b of f.births) assert.strictEqual(b.seq, rev(b.parent));
 });
 
-test('polygon physics: copies are exact at stiffness 1 and 0.5, bonded edges coincide, membrane wedges close rings', () => {
+test('polygon physics: copies are exact at stiffness 1 and 0.5 and with octagons, bonded edges coincide, membrane wedges close rings', () => {
   for (const st of [1, 0.5]) {
     const s = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', physics: 'poly', stiffA: st, stiffB: st }));
     s.run(20000);
@@ -154,12 +154,17 @@ test('polygon physics: copies are exact at stiffness 1 and 0.5, bonded edges coi
     const gaps = [];
     for (let k = 0; k < s.pins.length; k += 2) {
       const a = s.pins[k], b = s.pins[k + 1];
-      gaps.push(Math.hypot(s._dx(s.px[b >> 2] + s.ox[b] - s.px[a >> 2] - s.ox[a]), s._dy(s.py[b >> 2] + s.oy[b] - s.py[a >> 2] - s.oy[a])));
+      const ua = (a / NV) | 0, ub = (b / NV) | 0;
+      gaps.push(Math.hypot(s._dx(s.px[ub] + s.ox[b] - s.px[ua] - s.ox[a]), s._dy(s.py[ub] + s.oy[b] - s.py[ua] - s.oy[a])));
     }
     gaps.sort((x, y) => x - y);
     assert.ok(gaps[gaps.length >> 1] < 0.03 && gaps[Math.floor(gaps.length * 0.9)] < 0.15, 'bonded corners apart: median ' + gaps[gaps.length >> 1]);
     assert.deepStrictEqual(s.check(), []);
   }
+  const o = new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', physics: 'poly', shapeA: 'oct', shapeB: 'oct' }));
+  o.run(20000);
+  assert.ok(o.stats().births >= 3, 'octagons should copy too, got ' + o.stats().births);
+  for (const b of o.births) assert.strictEqual(b.seq, rev(b.parent), 'octagons: unfaithful copy');
   const m = new Sim(Object.assign({}, base, { seed: 7, seedCount: 0, nA: 50, nB: 50, nE: 10, W: 40, H: 40, nM: 150, memAngle: 45, physics: 'poly' }));
   m.run(20000);
   assert.ok(m.stats().memRings >= 3, 'expected membrane rings, got ' + m.stats().memRings);

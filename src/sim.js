@@ -98,6 +98,7 @@ const DEFAULTS = {
   physics: 'rigid',  // 'rigid': each square is a rigid body and bonds are flush constraints. 'poly': each unit is four corners
                      // held to its rest shape by a restoring force (shape matching) and a bond pins corners to corners
   stiffA: 1, stiffB: 1, stiffM: 1,   // poly: how hard a block is pulled back to its rest shape per solver pass (1 rigid, toward 0 soft)
+  shapeA: 'square', shapeB: 'square', shapeM: 'square',   // poly: rest shape of each block type, 'square' (a wedge with a bend) or 'oct' (an octagon, working sides on alternate edges)
   bendA: 0, bendB: 0,                // poly: rest shape of A and B blocks, degrees of bend between two bonded neighbours (0 square, >0 a wedge that curls strands)
   logBirths: true, maxBirthLog: 5000, maxEventLog: 300,
 };
@@ -962,35 +963,57 @@ class Sim {
  * edge to edge meet at memAngle and a closed ring of them is the natural rest state; no bend rule is needed.
  * Hinges and slack are rigid-engine features and are ignored here (deformation takes their place).
  */
+const NV = 8;   // polygon engine: most corners a unit can have
+
 class PolySim extends Sim {
   _init() {
     super._init();
     const p = this.p, n = this.n;
-    this.ox = new Float64Array(n * 4); this.oy = new Float64Array(n * 4);
-    // rest shapes per type (corners about the corners' mean), face along +x
-    this.rx = new Float64Array(16); this.ry = new Float64Array(16);
+    this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);
+    // rest shapes per type: nv corners about their mean, face along +x, counter-clockwise; edge e runs corner e -> e+1.
+    // edgeOf maps each working side (F, R, K, L) to the polygon edge that carries it; any other edge is skin and never bonds.
+    this.nv = new Uint8Array(4); this.rx = new Float64Array(4 * NV); this.ry = new Float64Array(4 * NV); this.edgeOf = new Int8Array(16);
     for (let t = 0; t < 4; t++) {
-      const h = 0.5 * (t === T_E ? p.sizeE : 1);
-      let pts = [[h, -h], [h, h], [-h, h], [-h, -h]];
-      // wedges: the lateral sides lean in toward the back by half the bend, so two blocks bonded side to side meet at the
-      // bend and a run of them curls with its backs inside. A block one side deep cannot lean past about 50 degrees.
-      const bend = t === T_M ? p.memAngle : t === T_A ? p.bendA : t === T_B ? p.bendB : 0;
-      if (bend !== 0) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(bend * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }
-      const mx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4, my = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
-      for (let k = 0; k < 4; k++) { this.rx[t * 4 + k] = pts[k][0] - mx; this.ry[t * 4 + k] = pts[k][1] - my; }
+      const h = 0.5 * (t === T_E ? p.sizeE : 1), shape = t === T_A ? p.shapeA : t === T_B ? p.shapeB : t === T_M ? p.shapeM : 'square';
+      let pts, edges;
+      if (shape === 'oct') {
+        // regular octagon one side across (flat to flat); the working sides are every other edge
+        const r = h / Math.cos(Math.PI / 8);
+        pts = []; for (let k = 0; k < 8; k++) { const a = -Math.PI / 8 + k * Math.PI / 4; pts.push([r * Math.cos(a), r * Math.sin(a)]); }
+        edges = [0, 2, 4, 6];
+      } else {
+        pts = [[h, -h], [h, h], [-h, h], [-h, -h]]; edges = [0, 1, 2, 3];
+        // wedges: the lateral sides lean in toward the back by half the bend, so two blocks bonded side to side meet at
+        // the bend and a run of them curls with its backs inside. A block one side deep cannot lean past about 50 degrees.
+        const bend = t === T_M ? p.memAngle : t === T_A ? p.bendA : t === T_B ? p.bendB : 0;
+        if (bend !== 0) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(bend * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }
+      }
+      let mx = 0, my = 0; for (const q of pts) { mx += q[0] / pts.length; my += q[1] / pts.length; }
+      this.nv[t] = pts.length;
+      for (let k = 0; k < pts.length; k++) { this.rx[t * NV + k] = pts[k][0] - mx; this.ry[t * NV + k] = pts[k][1] - my; }
+      for (let i = 0; i < 4; i++) this.edgeOf[t * 4 + i] = edges[i];
     }
-    // a membrane block is a wedge: its contact radius is its mean half-width, so two blocks can reach the flush pose
-    const hbM = this.ry[T_M * 4 + 2];
-    for (let u = 0; u < n; u++) if (this.type[u] === T_M) this.rad[u] = 0.5 * (0.5 + hbM) * this.p.repMargin;
+    // a membrane wedge's contact radius is its mean half-width, so two blocks can reach the flush pose
+    if (p.shapeM !== 'oct') { const hbM = this.ry[T_M * NV + 2]; for (let u = 0; u < n; u++) if (this.type[u] === T_M) this.rad[u] = 0.5 * (0.5 + hbM) * p.repMargin; }
     this.vw = new Float64Array(n);       // inverse mass of one corner
-    for (let u = 0; u < n; u++) { this.vw[u] = 4 * this.w[u]; this._resetShape(u); }
-    this.pins = [];                      // per bond: the two corner pairs it pins, as u*4+k, v*4+k (rebuilt with the bond list)
+    for (let u = 0; u < n; u++) { this.vw[u] = this.nv[this.type[u]] * this.w[u]; this._resetShape(u); }
+    this.pins = [];                      // per bond: the two corner pairs it pins, as u*NV+k, v*NV+k (rebuilt with the bond list)
+  }
+
+  /** Number of corners of unit u. */
+  corners(u) { return this.nv[this.type[u]]; }
+
+  /** The two corners (as u*NV+k) of side i of u, in counter-clockwise order; -1 if u's shape has no such side. */
+  _sideCorners(u, i, out) {
+    const t = this.type[u], e = this.edgeOf[t * 4 + i], nv = this.nv[t];
+    out[0] = u * NV + e; out[1] = u * NV + (e + 1) % nv;
+    return out;
   }
 
   /** Put u's corners at its rest shape, rotated to its orientation. */
   _resetShape(u) {
     const t = this.type[u], c = Math.cos(this.pa[u]), s = Math.sin(this.pa[u]);
-    for (let k = 0; k < 4; k++) { const x = this.rx[t * 4 + k], y = this.ry[t * 4 + k]; this.ox[u * 4 + k] = c * x - s * y; this.oy[u * 4 + k] = s * x + c * y; }
+    for (let k = 0; k < this.nv[t]; k++) { const x = this.rx[t * NV + k], y = this.ry[t * NV + k]; this.ox[u * NV + k] = c * x - s * y; this.oy[u * NV + k] = s * x + c * y; }
   }
 
   seedStrand(cx, cy, ang, len, seq) {
@@ -1007,15 +1030,16 @@ class PolySim extends Sim {
       const u = q >> 2, i = q & 3, v = r >> 2, j = r & 3;
       out.push(q);
       if (this.type[u] === T_E || this.type[v] === T_E) continue;   // an energy bond never lives into a physics phase
-      // side i of u runs corner i -> i+1, side j of v runs j -> j+1; facing each other, i meets j+1 and i+1 meets j
-      pins.push(u * 4 + i, v * 4 + ((j + 1) & 3), u * 4 + ((i + 1) & 3), v * 4 + j);
+      // side i of u runs corner a0 -> a1, side j of v runs b0 -> b1; facing each other, a0 meets b1 and a1 meets b0
+      const cu = this._sideCorners(u, i, [0, 0]), cv = this._sideCorners(v, j, [0, 0]);
+      pins.push(cu[0], cv[1], cu[1], cv[0]);
     }
     this.bonds = out; this.pins = pins; this.bondKind = out.map(() => 0); this.bondsDirty = false; return out;
   }
 
   /** Midpoint (relative to u's centre) and outward unit normal of side i of u. */
   _side(u, i, out) {
-    const a = u * 4 + i, b = u * 4 + ((i + 1) & 3);
+    const cs = this._sideCorners(u, i, this._sc || (this._sc = [0, 0])), a = cs[0], b = cs[1];
     const ex = this.ox[b] - this.ox[a], ey = this.oy[b] - this.oy[a], el = Math.hypot(ex, ey) || 1;
     out[0] = (this.ox[a] + this.ox[b]) / 2; out[1] = (this.oy[a] + this.oy[b]) / 2; out[2] = ey / el; out[3] = -ex / el;
     return out;
@@ -1026,7 +1050,9 @@ class PolySim extends Sim {
     if (this.type[u] === T_M && this.type[v] === T_M) {
       // membrane blocks link where their back corners touch and their sides roughly face; the pins then pull the
       // two edges flush and the blocks' leaning sides give the ring its bend
-      const bu = u * 4 + (i === R ? 2 : 3), bv = v * 4 + (j === R ? 2 : 3);
+      // the back corner of a right side is its second corner, of a left side its first
+      const cu = this._sideCorners(u, i, [0, 0]), cv = this._sideCorners(v, j, [0, 0]);
+      const bu = i === R ? cu[1] : cu[0], bv = j === R ? cv[1] : cv[0];
       const gx = dx + this.ox[bv] - this.ox[bu], gy = dy + this.oy[bv] - this.oy[bu], tol = this.p.linkDistTol * (this.size[u] + this.size[v]) / 2;
       return gx * gx + gy * gy <= tol * tol && su[2] * sv[2] + su[3] * sv[3] <= 0;
     }
@@ -1055,7 +1081,7 @@ class PolySim extends Sim {
     const tx = this._wx(this.px[a] + sa[0] - mx), ty = this._wy(this.py[a] + sa[1] - my);
     if (!this._slotFree(m, tx, ty)) return false;
     if (this.type[a] !== T_E && this.type[m] !== T_E) {
-      for (let k = 0; k < 4; k++) { const q = m * 4 + k, x = this.ox[q], y = this.oy[q]; this.ox[q] = c * x - s * y; this.oy[q] = s * x + c * y; }
+      for (let k = 0; k < this.corners(m); k++) { const q = m * NV + k, x = this.ox[q], y = this.oy[q]; this.ox[q] = c * x - s * y; this.oy[q] = s * x + c * y; }
       this.pa[m] = wrapAngle(this.pa[m] + rot); this.px[m] = tx; this.py[m] = ty;
     }
     this._link(u, i, v, j);
@@ -1072,7 +1098,7 @@ class PolySim extends Sim {
       px[u] += p.sigma * sw * gauss(rng); py[u] += p.sigma * sw * gauss(rng);
       const da = p.sigmaRot * wt[u] * gauss(rng), c = Math.cos(da), s = Math.sin(da);
       pa[u] += da;
-      for (let k = u * 4; k < u * 4 + 4; k++) { const x = ox[k], y = oy[k]; ox[k] = c * x - s * y; oy[k] = s * x + c * y; }
+      for (let k = u * NV, e = u * NV + this.corners(u); k < e; k++) { const x = ox[k], y = oy[k]; ox[k] = c * x - s * y; oy[k] = s * x + c * y; }
     }
     for (let u = 0; u < n; u++) { px[u] = this._wx(px[u]); py[u] = this._wy(py[u]); }
     this._buildHash();
@@ -1102,7 +1128,7 @@ class PolySim extends Sim {
     const pins = this.pins, soft = [1 - p.stiffA, 1 - p.stiffB, 0, 1 - p.stiffM];
     const bonded = this._bondedUnits || (this._bondedUnits = []); bonded.length = 0;
     const mark = this._seen;
-    for (let k = 0; k < pins.length; k++) { const u = pins[k] >> 2; if (!mark[u]) { mark[u] = 1; bonded.push(u); } }
+    for (let k = 0; k < pins.length; k++) { const u = (pins[k] / NV) | 0; if (!mark[u]) { mark[u] = 1; bonded.push(u); } }
     for (const u of bonded) mark[u] = 0;
     for (let it = 0; it < p.iters; it++) {
       for (let k = 0; k < contacts.length; k += 2) {
@@ -1121,7 +1147,7 @@ class PolySim extends Sim {
         // a pin brings two corners together. Each unit takes its share of the correction partly as a rigid move
         // (translate and turn, as in the rigid engine's point constraint) and, by its softness, partly as a
         // deformation of that one corner
-        const qa = pins[k], qb = pins[k + 1], u = qa >> 2, v = qb >> 2;
+        const qa = pins[k], qb = pins[k + 1], u = (qa / NV) | 0, v = (qb / NV) | 0;
         let dx = px[v] + ox[qb] - px[u] - ox[qa]; dx -= W * Math.round(dx / W);
         let dy = py[v] + oy[qb] - py[u] - oy[qa]; dy -= H * Math.round(dy / H);
         const dl = Math.sqrt(dx * dx + dy * dy); if (dl < 1e-9) continue;
@@ -1139,13 +1165,14 @@ class PolySim extends Sim {
         if (soft[t] === 0) continue;
         // shape matching: best-fit rotation of the rest shape onto the corners, then pull toward it by the stiffness;
         // the centre is re-read as the mean of the corners
-        const o = u * 4, r = t * 4;
-        const mx = (ox[o] + ox[o + 1] + ox[o + 2] + ox[o + 3]) / 4, my = (oy[o] + oy[o + 1] + oy[o + 2] + oy[o + 3]) / 4;
-        px[u] += mx; py[u] += my;
+        const o = u * NV, r = t * NV, nv = this.nv[t];
+        let mx = 0, my = 0;
+        for (let k = 0; k < nv; k++) { mx += ox[o + k]; my += oy[o + k]; }
+        mx /= nv; my /= nv; px[u] += mx; py[u] += my;
         let A = 0, B = 0;
-        for (let k = 0; k < 4; k++) { ox[o + k] -= mx; oy[o + k] -= my; A += this.rx[r + k] * ox[o + k] + this.ry[r + k] * oy[o + k]; B += this.rx[r + k] * oy[o + k] - this.ry[r + k] * ox[o + k]; }
+        for (let k = 0; k < nv; k++) { ox[o + k] -= mx; oy[o + k] -= my; A += this.rx[r + k] * ox[o + k] + this.ry[r + k] * oy[o + k]; B += this.rx[r + k] * oy[o + k] - this.ry[r + k] * ox[o + k]; }
         const th = Math.atan2(B, A), c = Math.cos(th), s = Math.sin(th), a = 1 - soft[t];
-        for (let k = 0; k < 4; k++) {
+        for (let k = 0; k < nv; k++) {
           const gx = c * this.rx[r + k] - s * this.ry[r + k], gy = s * this.rx[r + k] + c * this.ry[r + k];
           ox[o + k] += a * (gx - ox[o + k]); oy[o + k] += a * (gy - oy[o + k]);
         }
@@ -1162,7 +1189,7 @@ class PolySim extends Sim {
     if (da === 0) return;
     this.pa[u] += da;
     const c = Math.cos(da), s = Math.sin(da);
-    for (let k = u * 4; k < u * 4 + 4; k++) { const x = this.ox[k], y = this.oy[k]; this.ox[k] = c * x - s * y; this.oy[k] = s * x + c * y; }
+    for (let k = u * NV, e = u * NV + this.corners(u); k < e; k++) { const x = this.ox[k], y = this.oy[k]; this.ox[k] = c * x - s * y; this.oy[k] = s * x + c * y; }
   }
 
   _chemistry() {
@@ -1175,10 +1202,10 @@ class PolySim extends Sim {
 
   check() {
     const errs = super.check();
-    for (let k = 0; k < this.n * 4; k++) if (!Number.isFinite(this.ox[k]) || !Number.isFinite(this.oy[k])) { errs.push(`corner ${k} not finite`); break; }
+    for (let k = 0; k < this.n * NV; k++) if (!Number.isFinite(this.ox[k]) || !Number.isFinite(this.oy[k])) { errs.push(`corner ${k} not finite`); break; }
     return errs;
   }
 }
 
-return { Sim, PolySim, DEFAULTS, S, SNAME, F, R, K, L, T_A, T_B, T_E, T_M, TNAME, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, PolySim, NV, DEFAULTS, S, SNAME, F, R, K, L, T_A, T_B, T_E, T_M, TNAME, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });
