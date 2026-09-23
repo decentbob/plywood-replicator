@@ -24,8 +24,8 @@ python3 -m http.server 8000     # then open http://localhost:8000/
 
 The view opens zoomed on the seed strand. Scroll to zoom, drag to pan, click a
 block to read its state and its partners' states, click an event in the feed to
-jump to it. Every side of every block is drawn in the colour of its state, and
-every bond is a white tie across the shared edge:
+jump to it. Every side of every block is drawn in the colour of its state; bonded
+blocks meet flush and share an edge, drawn pale:
 
 | colour | side | meaning |
 |---|---|---|
@@ -95,6 +95,8 @@ partner whether it sits in the middle of the template or at an end.
 | F `TPL_*` | F `TPL_*`, complementary letter (A–B, C–D) | `pHyb` | two templates bind face to face (binding); kin never match |
 | K `RAW` of a membrane block | K `MAKE` | 1 | a raw membrane block anchors on a strand and turns active (make rule) |
 | L/R `RAW` of a membrane block | R/L `MEM` | `pMem` | an active membrane arc recruits a raw block (make rule) |
+| L/R `RAW` of a membrane block | R/L `MEMA` | `pMem` | with `tether`: only an arc anchored on a maker recruits (its open ends read `MEMA`; the anchor signal runs along the arc as `ANC`) |
+| K `INACT` of an inactive monomer | K `ACT` | 1 | with `act`: a monomer that left a strand is activated at the back of a template unit in `actMotif` (`BAB`) |
 
 A docked unit's free lateral side reads `STICKY` only where its template partner's face says the template continues; at the template's end it reads `END`. That is what stops copies docked on two different templates from linking into chimeras.
 
@@ -112,6 +114,8 @@ A docked unit's free lateral side reads `STICKY` only where its template partner
 | R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances (`resA` to `resD`), unless a side reads SHIELD (a `D` between two `C`s, with `shield`) |
 | R8 | TPL (bound face to face) | same, face bond broken | binding melts: `pMelt` with no bound neighbour, `pMeltEnd` with one, `pMeltRun` with two |
 | M1 | membrane raw | active | anchored on a MAKE back or recruited by an active block (make rule); back to raw at `pMemDecay` when alone |
+| M2 | membrane active | raw, letting go | with `tether`: the anchor signal does not reach it, at `pMemDecay` per step |
+| A1 | inactive (`RAW`) | DOCK | with `act`: its back is docked on an `ACT` back; units leaving a strand become inactive instead of DOCK |
 
 **Bond holding.** A bond breaks the moment either side reads as `REPEL`,
 `INERT`, `IDLE` or `OFF`. That is what releases a finished copy, resets a spent
@@ -148,7 +152,18 @@ copies, faster copying than rigid blocks); below about 0.3 copies docked on neig
 templates start to link. Octagons (`shapeA`, `shapeB` = `oct`) copy but leak: their rounder
 outline lets templates pack close enough for such links.
 
-Bonds never break from jostling. A bond forms only if the compatibility table allows it, the two
+**Flush polygons** (`snapCorners`, `maxStrain`, off by default). After the passes, every group of
+pinned corners is moved to its common point by deforming the blocks, so bonded blocks always meet
+flush, like one polygon with lines between; the shape force pulls them back to their rest shape from
+the next step on. A membrane bond, or a lone docked monomer, whose corners the passes leave further
+apart than `maxStrain` lets go (the monomer falls off): blocks give only so far, so a ring of the
+wrong size snaps and an overlong membrane splits into rings of about its natural size. The monomers
+of a copy in progress hold each other, and a strand's own bonds break mechanically only past
+`maxStrainStrand` (off): breaking either was measured to shatter strands into replicating
+fragments (`experiments/RESULTS.md`, section 23). `mobS` slows bonded blocks relative to free ones
+(polymers creep while monomers diffuse); `memPerm` lets free monomers pass membrane.
+
+Bonds never break from jostling (with `maxStrain` off). A bond forms only if the compatibility table allows it, the two
 sides face each other within a tolerance (30° for docking, 10° for side-to-side links), and the
 moving block would land in an empty spot. A monomer that undocks is pushed off the face it
 left. All soft probabilities are per step of contact. The functions that find connected

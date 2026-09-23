@@ -1161,3 +1161,26 @@ motif against drift, and without makers the tethered membrane decays. When energ
 the public `ABA` motif (charged particles cannot pass membrane), walls persist in both seeds tried
 (121 to 176 active blocks after 200,000 steps, one to four rings holding strands). Whether walls
 then pay (whether `BAB` and `ABA` rise together) is `walls.sh`, below.
+
+**Do walls pay?** (`walls.sh`, 30×30, energy only from the public `ABA` motif, 1,000,000 steps,
+three seeds each.) W: strands carrying `BAB` grow tethered, permeable walls. N: the same world with no
+membrane, where `BAB` does nothing. Per newborn block, × chance, by 250,000-step window:
+
+| run | `BAB` | `ABA` | births | active membrane at the end |
+|---|---|---|---:|---:|
+| W_1 | 2.2, 0.8, 0.2, 0.1 | 2.7, 2.0, 2.3, 3.6 | 1,470 | 79 |
+| W_2 | 0, 0, 0, 0 (lost with the motif at the start) | 0, 0, 0.3, 0.1 | 930 | 30 |
+| W_3 | 1.6, 0.8, 0.4, 0.8 | 1.7, 3.0, 4.3, 3.2 | 1,485 | 49 |
+| N_1 | 1.7, 2.3, 1.9, 2.2 | 1.6, 2.7, 2.1, 0.9 | 1,636 | - |
+| N_2 | 1.9, 1.4, 2.0, 0.6 | 1.9, 1.9, 2.1, 0.7 | 1,469 | - |
+| N_3 | 2.0, 2.8, 4.1, 3.9 | 2.3, 2.4, 2.4, 2.9 | 2,112 | - |
+
+Making a wall is selected against: where walls exist `BAB` falls from about twice chance to a fifth
+of it, while in the world without membrane, where it does nothing, it drifts around twice chance.
+`ABA` does as well or better in the walled seeds that kept it, but only after the walls were gone.
+The reason is that only a closed ring keeps energy in, and a wall rarely closes around its maker;
+an open wall is a cost (it bends its strand, crowds the copies, and slows births) with no return.
+
+What this says: tethered walls are made by, and stay with, their makers, which section 16 lacked,
+but a wall pays only when it closes, and closure is left to chance. For compartments to be selected,
+a maker's wall has to close around it reliably, and then divide with it. Neither is solved.
