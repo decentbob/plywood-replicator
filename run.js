@@ -28,7 +28,7 @@ for (let i = 0; i < args.length; i++) {
 }
 
 const sim = new Sim(params);
-const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand'];
+const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'spent', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand'];
 if (!opt.quiet) console.log(cols.join(','));
 const t0 = Date.now();
 for (let s = 0; s < opt.steps; s += opt.every) {
