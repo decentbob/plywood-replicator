@@ -7,7 +7,7 @@
 # Names: u = pUndock x 100, f = pFray (3e5 = 0.00003), b = pBreak.
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
-MUT="--seedSeq ABBABA --seedCount 3 --slack 0.1 --pSoft 0.01 --pCapture 0.01 --pSpont 0.001 --nA 400 --nB 400"
+MUT="--seedSeq ABBABA --seedCount 3 --pSoft 0.01 --pCapture 0.01 --pSpont 0.001 --nA 400 --nB 400"
 run() { xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$1"' "$@" --births experiments/out/$name.births.jsonl > experiments/out/$name.csv 2> experiments/out/$name.json'; }
 {
 for u in 0 10; do

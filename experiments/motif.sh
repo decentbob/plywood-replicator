@@ -6,7 +6,7 @@
 #  Q_f_*  the feed rule (motif re-arms its own neighbours through bonds) against a control, 40 particles, weak reload, 200k steps
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
-M="--every 10000 --W 50 --H 50 --pUnzip 1 --pUndock 0.1 --pFray 0.00003 --seedSeq ABBABA --seedCount 3 --slack 0.1 --pSoft 0.01 --pCapture 0.01 --pSpont 0.001 --nA 400 --nB 400"
+M="--every 10000 --W 50 --H 50 --pUnzip 1 --pUndock 0.1 --pFray 0.00003 --seedSeq ABBABA --seedCount 3 --pSoft 0.01 --pCapture 0.01 --pSpont 0.001 --nA 400 --nB 400"
 run() { xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$1"' "$@" --births experiments/out/$name.births.jsonl > experiments/out/$name.csv 2> experiments/out/$name.json'; }
 {
 for sd in 1 2; do

@@ -49,7 +49,7 @@ node run.js --steps 100000 --every 5000 --seed 3 --pSoft 0.02 --pCapture 0.05 --
 node run.js --help            # any key of DEFAULTS in src/sim.js is a flag
 node test.js                  # invariants: no junk chains, exact copies, energy accounting, conservation, determinism
 node build.js                 # single-file dist/polygon-chemistry.html
-./experiments/run_all.sh      # every experiment batch, about 35 minutes on 4 cores
+./experiments/genes.sh        # one experiment batch per script; RESULTS.md names each section's script
 node experiments/summarize.js # tables from experiments/out/*.csv
 ```
 

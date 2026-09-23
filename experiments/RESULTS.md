@@ -5,8 +5,9 @@ which was removed on 2026-09-23** (recover it from git at commit `b41557c` to re
 for bit; their scripts now run on the polygon engine and give different numbers). Section 15 and
 later are on the polygon engine, which is now the only one. Where a result was re-measured on the
 polygon engine (length selection, section 15) it held.
-Every run is deterministic per seed; the commands are in the `.sh` scripts next to this file and
-`run_all.sh` reproduces everything in about 50 minutes on four cores. Tables come from
+Every run is deterministic per seed; the commands are in the `.sh` scripts next to this file (the
+scripts of sections 10 to 12 tested mechanisms that were removed with the rigid engine, so they
+were deleted too; they are at commit `b41557c`). Tables come from
 `summarize.js`, `births_by_length.js` and `mutation_rates.js` over `out/*.csv` and
 `out/*.births.jsonl`. The same batches were run on the earlier rigid-body physics; every
 conclusion below held there too, with different rates.

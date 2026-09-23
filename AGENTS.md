@@ -98,7 +98,8 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80Ã
 - Four-letter worlds copy about four times slower per strand (each site needs one letter of four).
 - Octagon blocks leak (chimeras); stiffness below ~0.3 lets copies docked on neighbouring templates link.
 - Every RESULTS section: the command/script, a table, what it says, and what it does not say.
-- Commit often with descriptive messages; push to the session's branch.
+- `main` is the default branch. Commit often with descriptive messages; push to the session's branch and merge into `main`
+  when a piece of work is done (delete merged branches, so `main` stays the only long-lived one).
 
 ## Where the project stands (2026-09-23)
 
