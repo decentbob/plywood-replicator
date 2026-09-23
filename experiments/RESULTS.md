@@ -659,8 +659,33 @@ edges, which leaves more room for neighbouring templates to interfere.
 Shape has a fitness landscape: a slight taper copies faster than a square, a strong bend slows
 copying and at 30 degrees a template cannot be copied at all (monomers docked on its outer curve
 splay too far apart to link; an all-`B` 6-mer stays curled at about 155 degrees with monomers
-docked on it). Two seeds at 20,000 steps each: a lead, not yet a result. What shape could buy in
-return (rings that cannot fray, faces hidden from parasites) is the next question.
+docked on it). Two seeds at 20,000 steps each: a lead, not yet a result.
+
+**Shape selects on sequence** (`shape.sh`, `SH_*`): the section 13 regime on the polygon engine,
+40×40, 256 A + 256 B, low mutation, 800,000 steps, two seeds each. `B` blocks are wedges bending
+20 degrees per `BB` bond (10 per `AB` bond), against square `B` as the control. The monomer pool is
+half `B` throughout; what changes is what the newborns are made of (`pairs.js`):
+
+| run | window | mean length | B fraction of newborn blocks | BB / AB / AA bonds (× chance) |
+|---|---|---:|---:|---|
+| SH_square_1 | first 200k | 4.40 | 0.50 | 0.73 / 1.42 / 0.43 |
+| SH_square_1 | last 200k | 3.34 | 0.50 | 0.44 / 1.64 / 0.28 |
+| SH_square_2 | first 200k | 4.04 | 0.51 | 0.70 / 1.59 / 0.09 |
+| SH_square_2 | last 200k | 3.23 | 0.49 | 0.32 / 1.73 / 0.23 |
+| SH_wedge_1 | first 200k | 2.14 | 0.02 | 0 / 1.03 / 1.00 |
+| SH_wedge_1 | last 200k | 2.89 | 0.06 | 0.21 / 0.85 / 1.02 |
+| SH_wedge_2 | first 200k | 2.07 | 0.03 | 0 / 1.06 / 1.00 |
+| SH_wedge_2 | last 200k | 2.84 | 0.08 | 0.24 / 0.86 / 1.03 |
+
+Block shape alone purged `B` from the genomes: with wedge `B` it makes up 2% to 8% of the blocks
+in newborns, against 50% with square `B` and 50% of the pool. The population first collapsed to
+`AA` dimers (a dimer has one bond to bend, so it copies whatever its shape) and then rebuilt length
+out of `A` (mean newborn length 2.1 rising to 2.9). The prediction was that selection would favour
+mixing, since an `AB` bond bends half as much as a `BB` bond; it did not, which says a 10-degree
+bond already costs more than it buys at this stiffness. The controls are a warning about
+baselines: with little mutation they keep the founder's make-up (`ABBABA` is four fifths `AB`
+bonds), so "× chance" figures in a control measure descent as much as selection. The comparison
+that counts is against the control, as everywhere above.
 
 ## 16. Summary
 
@@ -698,6 +723,9 @@ return (rings that cannot fray, faces hidden from parasites) is the next questio
   times the control's frequency over 40 to 50 generations (0.15 to 0.19 motifs per block against
   0.05 to 0.10, four seeds each, no overlap), strands carrying it are longer, and alternating
   sequences, which the rule rewards most, become common without any rule mentioning them.
+- On the polygon engine, a block's shape is a phenotype: wedge-shaped `B` blocks, which make
+  strands curl and copy badly, are purged from the genomes (2% to 8% of newborn blocks against
+  50% with square `B`), with no rule mentioning shape or sequence.
 - When the environment changes from plentiful to scarce energy, populations adapt: without the
   private motif they shrink to short, motif-free strands; with it the motif rises to 4 to 5 ×
   chance and alternating strands to half of the long births, and length holds.
