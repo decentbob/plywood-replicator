@@ -728,8 +728,19 @@ Large wedge rings (18 blocks at 20 degrees) at high density do close around stra
 at once, where the rigid engine's rings almost never did. Two things are still missing for
 compartments to be selected. At this radiation rate a ring opens every few thousand steps, far
 less than a generation (about 20,000), so an enclosure does not last. And rings do not divide,
-so a ring holding a good strand cannot make more rings like it. Division is the missing step,
-and no local rule for it has been found that does not need a force threshold on bonds.
+so a ring holding a good strand cannot make more rings like it. Division is the missing step.
+
+**Can rings grow and split without a new rule?** (`ring_growth.js`, 500 membrane blocks at 25
+degrees, radiation opening a ring every ten thousand steps or so, 150,000 steps.) The hope was
+that an opened ring would take in free blocks, reclose larger, and at about twice its natural
+size split in two when two of its bonds broke. It does not happen. Ring sizes stay at 8 to 18
+(median 11 with soft blocks, 13 with rigid ones) and never reach 22: an opened ring's ends are
+still next to each other, so it recloses before anything can join, and almost every block is
+already in some ring, so there is little free membrane to add. Growth needs membrane to be made
+continuously, not drawn from a fixed stock. The natural candidate is membrane made by the
+replicators themselves: a precursor block that becomes a membrane block where it touches a strand
+carrying some motif, so membrane forms around its makers and a ring holding a maker grows. That
+is one new type and one row, and the next thing to try on this line.
 
 ## 17. Summary
 
