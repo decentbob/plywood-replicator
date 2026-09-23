@@ -739,8 +739,26 @@ still next to each other, so it recloses before anything can join, and almost ev
 already in some ring, so there is little free membrane to add. Growth needs membrane to be made
 continuously, not drawn from a fixed stock. The natural candidate is membrane made by the
 replicators themselves: a precursor block that becomes a membrane block where it touches a strand
-carrying some motif, so membrane forms around its makers and a ring holding a maker grows. That
-is one new type and one row, and the next thing to try on this line.
+carrying some motif, so membrane forms around its makers and a ring holding a maker grows. 
+
+**Membrane made by the replicators** (`make` rule, `make_probe.js`). Built as a state change, on
+the user's preference, not a new type: membrane blocks start raw (their sides cannot link); the
+back of an `A` template unit between two `B`s reads `MAKE`; an active block with no neighbours
+falls back to raw at `pMemDecay`. Same world as above, 400 blocks at 18 degrees (rings of about
+18), radiation opening rings, 150,000 steps. Mean over samples after step 30,000:
+
+| membrane | rings holding a strand | template units inside rings |
+|---|---:|---:|
+| fixed stock, all active (`make` off) | 1.42 | 3.42 |
+| made: a raw block activates where its face touches a `MAKE` back, then lets go | 0.08 | 0.17 |
+| made and anchored: a raw block's back docks on a `MAKE` back and stays; raw blocks touching an active block's open side are recruited | 1.42 | 3.58 |
+
+Neither version puts compartments around their makers. Activated blocks that let go drift off
+and decay before they meet, so rings seldom assemble at all. Anchored blocks do start arcs on the
+strands, but recruitment spreads: within 40,000 steps nearly every block is active (395 of 400)
+and the world looks like the fixed-stock one. What is still missing is something that keeps a
+membrane with the strand that made it, as a tether keeps a cell wall with its cell. The rule is
+kept, off by default, as the base for that.
 
 ## 17. Summary
 
