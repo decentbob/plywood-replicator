@@ -73,7 +73,7 @@ branch; the back takes only an energy particle. That is why forms are
 one-dimensional. Membrane blocks (type M) are the only squares that build anything
 else, and they build it around the chains, not out of them.
 
-Two monomer types **A** and **B** pair face to face with their own type. A third
+Monomer types **A** and **B** (and, with `nC`, `nD`, **C** and **D**) pair face to face with their own type. A third
 type **E** is the energy particle. A fourth, **M**, is a membrane block: it bonds
 only to other M blocks, side to side, at a built-in bend, so arcs and rings
 self-assemble around whatever is there, and radiation opens them again. Each A/B
@@ -102,6 +102,9 @@ partner whether it sits in the middle of the template or at an end.
 | K `WANT` | E `ON` | 1 | energy docks and is spent |
 | K `CHARGE` | E `OFF` | 1 | a spent particle recharges at an `ABA` motif's back (motif rule) |
 | L `INERT` | R `INERT` | `pSpont` | two free monomers join: life without a seed |
+| F `TPL_*` | F `TPL_*`, complementary letter (A–B, C–D) | `pHyb` | two templates bind face to face (binding); kin never match |
+| K `RAW` of a membrane block | K `MAKE` | 1 | a raw membrane block anchors on a strand and turns active (make rule) |
+| L/R `RAW` of a membrane block | R/L `MEM` | `pMem` | an active membrane arc recruits a raw block (make rule) |
 
 A docked unit's free lateral side reads `STICKY` only where its template partner's face says the template continues; at the template's end it reads `END`. That is what stops copies docked on two different templates from linking into chimeras.
 
@@ -116,7 +119,9 @@ A docked unit's free lateral side reads `STICKY` only where its template partner
 | R5 | REPEL / TPL | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
 | R5b | REPEL / TPL | FRAY, then DOCK | processive fraying: an undocked unit whose neighbour's side reads FRAY follows it with probability `pUnzip`, so a strand can unzip whole |
 | R6 | DOCK (docked) | DOCK (free) | cooperativity: a docked monomer with no lateral bonds falls off with probability `pUndock` per step |
-| R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances `resA`, `resB` |
+| R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances (`resA` to `resD`), unless a side reads SHIELD (a `D` between two `C`s, with `shield`) |
+| R8 | TPL (bound face to face) | same, face bond broken | binding melts: `pMelt` with no bound neighbour, `pMeltEnd` with one, `pMeltRun` with two |
+| M1 | membrane raw | active | anchored on a MAKE back or recruited by an active block (make rule); back to raw at `pMemDecay` when alone |
 
 **Bond holding.** A bond breaks the moment either side reads as `REPEL`,
 `INERT`, `IDLE` or `OFF`. That is what releases a finished copy, resets a spent
