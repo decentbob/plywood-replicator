@@ -1,5 +1,5 @@
 // Render a Sim's current state to a PNG (for probes): every block as its polygon, coloured by type and state, bonds
-// as white ticks. Needs Playwright and Chromium (NODE_PATH=$(npm root -g) in the cloud sandbox).
+// share an edge (opt.corners: also mark the pinned corners). Needs Playwright and Chromium (NODE_PATH=$(npm root -g) in the cloud sandbox).
 //   const snap = require('./tools/snap.js'); await snap(sim, 'out.png', { x0, y0, w, h, scale });
 const { NV, T_A, T_B, T_C, T_D, T_E, T_M, I_TPL, I_REPEL, I_ON } = require('../src/sim.js');
 
@@ -8,7 +8,7 @@ function polys(s, box) {
   for (let u = 0; u < s.n; u++) {
     const t = s.type[u], nv = s.corners(u);
     let x = s.px[u], y = s.py[u];
-    if (box) { x = box.x0 + s._dx(x - box.x0); y = box.y0 + s._dy(y - box.y0); if (x < box.x0 - 1 || y < box.y0 - 1 || x > box.x0 + box.w + 1 || y > box.y0 + box.h + 1) continue; }
+    if (box) { const W = s.p.W, H = s.p.H; x = box.x0 + (((x - box.x0) % W) + W) % W; y = box.y0 + (((y - box.y0) % H) + H) % H; if (x < box.x0 - 1 || y < box.y0 - 1 || x > box.x0 + box.w + 1 || y > box.y0 + box.h + 1) continue; }
     const pts = []; for (let k = 0; k < nv; k++) pts.push([x + s.ox[u * NV + k], y + s.oy[u * NV + k]]);
     let col;
     if (t === T_E) col = s.is[u] === I_ON ? '#ffe14d' : '#666';
@@ -34,7 +34,7 @@ module.exports = async function snap(s, file, opt = {}) {
   const b = await chromium.launch({ executablePath: process.env.CHROMIUM || '/opt/pw-browsers/chromium' });
   const pg = await b.newPage({ viewport: { width: Math.ceil(box.w * sc), height: Math.ceil(box.h * sc) } });
   await pg.setContent(`<canvas id=c width=${Math.ceil(box.w * sc)} height=${Math.ceil(box.h * sc)}></canvas><style>body{margin:0;background:#111}</style>`);
-  await pg.evaluate(([data, box, sc, label]) => {
+  await pg.evaluate(([data, box, sc, label, opts]) => {
     const g = document.getElementById('c').getContext('2d');
     g.fillStyle = '#111'; g.fillRect(0, 0, 1e5, 1e5);
     const X = (p) => (p[0] - box.x0) * sc, Y = (p) => (p[1] - box.y0) * sc;
@@ -45,10 +45,11 @@ module.exports = async function snap(s, file, opt = {}) {
       const [a, c] = d.face; g.beginPath(); g.moveTo(X(d.pts[a]) * 0.8 + X(d.pts[c]) * 0.2, Y(d.pts[a]) * 0.8 + Y(d.pts[c]) * 0.2); g.lineTo(X(d.pts[a]) * 0.2 + X(d.pts[c]) * 0.8, Y(d.pts[a]) * 0.2 + Y(d.pts[c]) * 0.8);
       g.globalAlpha = 0.35; g.stroke(); g.globalAlpha = 1;
       g.strokeStyle = '#fff'; g.lineWidth = Math.max(1.5, sc * 0.12);
-      for (const [a2, c2] of d.bonds) { const mx = (X(d.pts[a2]) + X(d.pts[c2])) / 2, my = (Y(d.pts[a2]) + Y(d.pts[c2])) / 2; g.beginPath(); g.arc(mx, my, Math.max(1, sc * 0.07), 0, 6.3); g.fillStyle = '#fff'; g.fill(); }
+      // a bond pins the two corners of an edge onto the partner's two corners: mark those corners
+      if (opts.corners) for (const [a2, c2] of d.bonds) for (const q of [a2, c2]) { g.beginPath(); g.arc(X(d.pts[q]), Y(d.pts[q]), Math.max(1, sc * 0.05), 0, 6.3); g.fillStyle = '#fff'; g.fill(); }
     }
     if (label) { g.fillStyle = '#fff'; g.font = '16px sans-serif'; g.fillText(label, 8, 20); }
-  }, [data, box, sc, opt.label || '']);
+  }, [data, box, sc, opt.label || '', { corners: !!opt.corners }]);
   await pg.screenshot({ path: file });
   await b.close();
 };

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, S, T_E, T_M, I_TPL, F, L, R, NV } = require('./src/sim.js');
+const { Sim, S, T_E, T_M, I_TPL, I_RAW, I_DOCK, F, K, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -186,6 +186,49 @@ test('relay: one motif serves its whole strand (feed arms it, shield protects it
   for (const u of units) if (s.type[u] !== 1) s.is[u] = 1;   // REPEL, except the motif's B
   s._deriveAll(); s._computeOpen(); s.run(10);
   assert.ok(units.every((u) => s.is[u] === I_TPL), 'the whole strand should be armed through the relay');
+});
+
+
+test('slow polymers: bonded blocks creep, free ones do not; copies stay exact', () => {
+  const mk = (mobS) => new Sim(Object.assign({}, base, { seed: 5, seedSeq: 'ABBABA', mobS }));
+  const a = mk(1), b = mk(0.1);
+  const disp = (s, steps) => { const u = s.seedStrand ? 0 : 0; let seedU = []; for (let v = 0; v < s.n; v++) if (s.is[v] === I_TPL) seedU.push(v);
+    const x0 = seedU.map((v) => [s.px[v], s.py[v]]); s.run(steps); return seedU.reduce((m, v, k) => m + Math.hypot(s._dx(s.px[v] - x0[k][0]), s._dy(s.py[v] - x0[k][1])), 0) / seedU.length; };
+  assert.ok(disp(b, 300) * 3 < disp(a, 300), 'a slow strand should move far less');
+  b.run(30000);
+  assert.ok(b.stats().births >= 10, 'slow strands still copy');
+  for (const x of b.births) assert.strictEqual(x.seq, rev(x.parent), 'unfaithful copy ' + JSON.stringify(x));
+});
+
+test('act: units leaving a strand are inactive until a BAB back activates them; inactive monomers never dock', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 3, W: 40, H: 40, nA: 256, nB: 256, nE: 80, seedSeq: 'ABBABA', seedCount: 2, pUnzip: 1, pUndock: 0.1, pFray: 0.0001, act: true }));
+  let sawRaw = false;
+  for (let k = 0; k < 30; k++) {
+    s.run(1000);
+    for (let u = 0; u < s.n; u++) if (s.is[u] === I_RAW) { sawRaw = true; for (let i = 0; i < 4; i++) if (i !== K) assert.strictEqual(s.bond[u * 4 + i], -1, 'inactive monomer bonded'); }
+    assert.deepStrictEqual(s.check(), []);
+  }
+  const st = s.stats();
+  assert.ok(sawRaw && st.activations > 0 && st.births > 0, `inactive monomers ${sawRaw}, activations ${st.activations}, births ${st.births}`);
+  // no BAB anywhere: once the pool is spent, copying stops
+  const t = new Sim(Object.assign({}, base, { seed: 3, W: 40, H: 40, nA: 40, nB: 40, nE: 80, seedSeq: 'AABB', seedCount: 2, pUnzip: 1, pFray: 0.001, act: true }));
+  t.run(40000); const b1 = t.stats().births; t.run(20000);
+  assert.strictEqual(t.stats().activations, 0);
+  assert.ok(t.stats().births - b1 <= 2, 'without the activating motif copying should stall');
+});
+
+
+test('memStrain: a ring of its natural size keeps its bonds; an overgrown one snaps; off, it holds any shape', () => {
+  const ring = (N, memStrain) => {
+    const s = new Sim({ seed: 1, W: 30, H: 30, nA: 0, nB: 0, nE: 0, nM: N, memAngle: 30, stiffM: 1, pReload: 0, memStrain });
+    const r = N / (2 * Math.PI) * 0.9;
+    for (let i = 0; i < N; i++) { const th = 2 * Math.PI * i / N; s.px[i] = 15 + r * Math.cos(th); s.py[i] = 15 + r * Math.sin(th); s.pa[i] = th; s._resetShape(i); }
+    for (let i = 0; i < N; i++) s._link(i, R, (i + 1) % N, L);
+    s._deriveAll(); s._computeOpen(); s.run(3000); return s;
+  };
+  assert.strictEqual(ring(12, 0.25).strainEvents, 0, 'a natural ring should not snap');
+  assert.ok(ring(20, 0.25).strainEvents > 0, 'an overgrown ring should snap');
+  assert.strictEqual(ring(20, 0).strainEvents, 0);
 });
 
 console.log(passed + ' tests passed');

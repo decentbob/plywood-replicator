@@ -776,6 +776,24 @@ No ring pinches. Soft blocks and the pins' give absorb the extra membrane, so an
 just a larger round ring; at a strong bend it coils past itself, an artefact of the membrane's small
 contact radius. Division would need a rule of its own; the geometry does not supply one.
 
+Why the overgrown ring stays round: a bond pins two corners onto two corners, but the pins are
+constraints solved in a fixed number of passes, and when a shape is geometrically impossible they
+settle on an even compromise. In a natural 12-ring at 30° the pinned corners coincide (gap 0.008
+of a side on average); in a 20-ring they gape by 0.15 on average and 0.27 at most, and 64 or 256
+passes instead of 16 change nothing (0.147, 0.146). Frustrated pins act as stiff springs.
+`memStrain` (default 0) lets a membrane bond go when its corners end a step further apart than a
+threshold, so membrane cannot hold a shape its blocks do not fit. Hand-built rings at 30° (natural
+size 12) after 16,000 steps:
+
+| threshold | 16 blocks | 20 blocks | 24 blocks |
+|---:|---|---|---|
+| 0.08 | shatters (fresh bonds snap too) | shatters | shatters |
+| 0.2 | arcs of 1, 3, 6, 6 | a ring of 10, arcs | arcs of 1 to 6 |
+| 0.25 | a ring of 12 and an arc of 4 | a ring of 11, arcs of 1, 3, 5 | arcs of 1 to 8 |
+
+At 0.25 a ring cannot exceed its natural size: an overgrown one sheds its excess and recloses.
+That is a size limit, not division; two halves of a doubled ring do not each close.
+
 ## 17. Does space rescue a public good? (`space.sh`)
 
 The `ABA` charging motif as the only real energy income (background reload 0.00005), energy

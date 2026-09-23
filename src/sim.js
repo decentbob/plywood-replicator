@@ -102,6 +102,8 @@ const DEFAULTS = {
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
+  memStrain: 0,    // a membrane bond whose pinned corners end a step further apart than this (in block sides) lets go: membrane cannot hold a
+                   // shape its blocks do not fit, so a ring holding more blocks than its bend closes snaps. 0: off (pins stretch without limit)
   make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
                    // (and stays anchored there), or where its side links to an active block's open side, so membrane grows from its makers
   pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
@@ -187,7 +189,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
@@ -908,6 +910,23 @@ class Sim {
       }
     }
     for (let u = 0; u < n; u++) { px[u] = this._wx(px[u]); py[u] = this._wy(py[u]); pa[u] = wrapAngle(pa[u]); }
+    if (p.memStrain > 0) {
+      // strain: a membrane bond whose corners the solver could not bring together lets go (applied with the rule breaks)
+      const lim2 = p.memStrain * p.memStrain, bl = this.bonds;
+      for (let k = 0, q = 0; k < bl.length; k++) {
+        const u = bl[k] >> 2, v = this.bond[bl[k]] >> 2;
+        if (this.type[u] === T_E || this.type[v] === T_E) continue;
+        const a0 = pins[q], b0 = pins[q + 1], a1 = pins[q + 2], b1 = pins[q + 3]; q += 4;
+        if (this.type[u] !== T_M || this.type[v] !== T_M) continue;
+        let g = 0;
+        for (const [qa, qb] of [[a0, b0], [a1, b1]]) {
+          let dx = px[v] + ox[qb] - px[u] - ox[qa]; dx -= W * Math.round(dx / W);
+          let dy = py[v] + oy[qb] - py[u] - oy[qa]; dy -= H * Math.round(dy / H);
+          g = Math.max(g, dx * dx + dy * dy);
+        }
+        if (g > lim2) { this.pendingUnlink.push(bl[k]); this.strainEvents++; this._event('snap', u, v); }
+      }
+    }
     this._buildHash();   // for the empty-slot check when bonds form
   }
 
@@ -1025,7 +1044,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
