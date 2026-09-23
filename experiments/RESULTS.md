@@ -793,13 +793,15 @@ newborns of three units or more, per 200,000-step window (`turnover.js`).
 | run | pHyb | births | bindings | mean newborn length, last half | distinct sequences (mean) | entropy (bits, mean) | changes of the dominant sequence |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | HY_ctl_1 | 0 | 5,275 | 0 | 3.64 | 30 | 3.89 | 3 |
+| HY_ctl_2 | 0 | 4,961 | 0 | 3.65 | 33 | 3.92 | 3 |
 | HY_h05_1 | 0.05 | 4,984 | 65,523 | 3.42 | 28 | 3.67 | 2 |
+| HY_h05_2 | 0.05 | 5,465 | 68,153 | 3.15 | 26 | 3.56 | 3 |
 | HY_h20_1 | 0.2 | 4,252 | 191,417 | 2.59 | 18 | 3.17 | 3 |
 | HY_h20_2 | 0.2 | 4,750 | 180,152 | 2.56 | 18 | 2.96 | 2 |
 
 The hope was frequency-dependent selection: common sequences caught by their complements,
 diversity kept high, the dominant sequence replaced again and again. The opposite happened.
-Binding lowers diversity (18 sequences against 30), shortens strands and costs births, and the
+Binding lowers diversity (18 sequences against 30 to 33 at 0.2, 26 to 28 at 0.05), shortens strands and costs births, and the
 dominant sequence changes no more often. The reason is that a two-unit match already holds, and
 among random sequences a two-unit opposite-letter match is everywhere: binding is not a lock and
 key but general stickiness, and it costs long strands most because they have more places to be
