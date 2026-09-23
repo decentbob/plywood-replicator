@@ -538,6 +538,32 @@ shows is the condition, not the size, of the effect: in this well-mixed world a 
 is selected when its benefit reaches its carrier through the carrier's own bonds, and not when
 it goes out into the medium, however slowly the medium carries it.
 
+**Less mutation, four seeds** (`L1L_*`, same world as `L1M_*` with `pSoft` and `pCapture` at 0.002
+and `pSpont` at 0.0002, 1,000,000 steps; 91% of births faithful against 72%):
+
+| run | births | fed re-arms | ABA per block | ABA vs chance | mean newborn length | alternating share of newborns of length 4+, by 250k window | top long sequences, last 250k |
+|---|---:|---:|---:|---:|---:|---|---|
+| L1L_ctl_1 | 5,284 | 0 | 0.099 | 1.90 | 3.47 | 18%, 14%, 39%, 25% | AABA, ABAB, BABB |
+| L1L_ctl_2 | 5,542 | 0 | 0.099 | 2.04 | 3.29 | 16%, 33%, 18%, 38% | ABAB, AABAB, AABA |
+| L1L_ctl_3 | 6,458 | 0 | 0.050 | 1.22 | 2.97 | 13%, 2%, 12%, 9% | AABB, BAAB, ABBB |
+| L1L_ctl_4 | 5,999 | 0 | 0.101 | 2.22 | 3.13 | 22%, 42%, 16%, 23% | BABB, ABAB, AABA |
+| L1L_feed_1 | 5,446 | 2,915 | 0.192 | 3.36 | 3.59 | 35%, 70%, 55%, 52% | ABAB, ABABAB, ABABA |
+| L1L_feed_2 | 5,670 | 2,200 | 0.146 | 2.72 | 3.48 | 24%, 52%, 39%, 31% | ABAB, AABA, BABB |
+| L1L_feed_3 | 5,222 | 2,477 | 0.155 | 2.70 | 3.67 | 34%, 54%, 30%, 16% | ABAB, AABA, BAAB |
+| L1L_feed_4 | 5,116 | 2,362 | 0.151 | 2.57 | 3.72 | 19%, 35%, 36%, 16% | AABA, ABAB, AABB |
+
+The two arms no longer overlap. With the private motif every seed carries 0.146 to 0.192 motifs
+per block and every control 0.050 to 0.101, and newborns are longer in every `feed` run (3.5 to
+3.7 against 3.0 to 3.5): a strand that feeds itself can afford more units. Selection also finds
+the sequence the rule rewards most. In an alternating strand every inner `B` is flanked by `A`s,
+so `ABABA` needs two particles instead of five; alternating newborns reach 50% to 70% of the long
+births in some windows of the `feed` runs (`ABABAB` and `ABABA` among the commonest long strands
+in seed 1), and seldom pass 40% in the controls. Nothing in the rules mentions alternation. The
+controls are not flat either: with little mutation a few lineages dominate and drift carries
+them, so `ABAB` is also common without feed, and the windows swing widely in both arms. Less
+mutation raised motif frequency in both arms; the ratio between them stayed near 1.7, so mutation
+was not what capped the motif.
+
 **Making energy the bottleneck: the spend rule, tried and removed** (`L1S_*`, same world and
 regime as `L1M_*`). With `spend` on, a docked unit that is complete reads `DONE` on its face for
 a step, and its template unit reads that and drops back to needing energy, so every copy costs
@@ -591,7 +617,9 @@ a mutant. The rule was removed: it adds a state and a row and costs more fidelit
   either rule alone (three seeds each). Monomer density does not matter; recycling sets births.
 - The `ABA` energy motif is not selected as a public good, even with energy scarce and slow. Made
   private (`feed`: the motif arms its own neighbours through their bonds) it holds at about 1.7
-  times the control's frequency over 40 to 50 generations, a mutation-selection balance.
+  times the control's frequency over 40 to 50 generations (0.15 to 0.19 motifs per block against
+  0.05 to 0.10, four seeds each, no overlap), strands carrying it are longer, and alternating
+  sequences, which the rule rewards most, become common without any rule mentioning them.
 - The open questions for Phase 3: make membranes nucleate on strands (one row: `M` binds a
   template's back), so that compartments hold a genome and the `ABA` motif's public good can
   stay with its carrier; find the radiation window where long strands persist; and give rings a
