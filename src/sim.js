@@ -53,6 +53,8 @@ const S = {
   ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL); read by nothing, shown by the viewer
   CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
+  RAW: 20,                                              // F of a raw membrane block (make rule): docks on a MAKE back, which activates it
+  MAKE: 21,                                             // K of an A template unit flanked by two B units (make rule): activates raw membrane blocks
   FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
 };
@@ -82,6 +84,8 @@ const DEFAULTS = {
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
+  make: false,     // membrane blocks start raw (cannot link) and are activated at the back of an A template unit flanked by two B units
+  pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   pReload: 0.002,  // OFF -> ON per step, the background energy income; the ABA motif (motif rule) is the other source
   // shape: each block type's rest polygon and how hard it is pulled back to it
@@ -159,7 +163,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0;
     this._seen = new Uint8Array(n);
 
     // types
@@ -173,7 +177,7 @@ class Sim {
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
       this.w[u] = 1 / (this.size[u] * this.size[u]);
       this.wr[u] = 6 / Math.pow(this.size[u], 4);
-      this.is[u] = this.type[u] === T_E ? I_ON : I_DOCK;
+      this.is[u] = this.type[u] === T_E ? I_ON : this.type[u] === T_M ? (p.make ? I_OFF : I_ON) : I_DOCK;   // a membrane block is active (ON) or raw (OFF)
     }
     // jittered grid placement
     const cols = Math.ceil(Math.sqrt(n * p.W / p.H)), rows = Math.ceil(n / cols);
@@ -420,8 +424,10 @@ class Sim {
     const p = this.p, tu = this.type[u], tv = this.type[v];
     const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
     if (tu === T_M || tv === T_M) {
-      if (tu === T_M && tv === T_M && su === S.MEM && sv === S.MEM && ((i === L && j === R) || (i === R && j === L))) return p.pMem;
-      return 0;
+      if (tu === T_M && tv === T_M) return su === S.MEM && sv === S.MEM && ((i === L && j === R) || (i === R && j === L)) ? p.pMem : 0;
+      // a raw membrane block's face meets a MAKE back
+      if (tu === T_M) return tv !== T_E && i === F && su === S.RAW && j === K && sv === S.MAKE ? 1 : 0;
+      return tu !== T_E && j === F && sv === S.RAW && i === K && su === S.MAKE ? 1 : 0;
     }
     if (tu === T_E || tv === T_E) {
       if (tu === T_E && tv !== T_E) return (j === K && ((su === S.ON && sv === S.WANT) || (su === S.OFF && sv === S.CHARGE))) ? 1 : 0;
@@ -452,10 +458,10 @@ class Sim {
         if (this.bond[u * 4 + i] >= 0) continue;
         const s = this.ss[u * 4 + i];
         let ok = false;
-        if (this.type[u] === T_M) ok = s === S.MEM;
+        if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE;
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -467,8 +473,10 @@ class Sim {
   _derive(u) {
     const b = this.bond, o = u * 4;
     if (this.type[u] === T_M) {
-      this.ss[o + F] = S.INERT; this.ss[o + K] = S.INERT;
-      this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : S.MEM; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : S.MEM;
+      // an active block's lateral sides link to other active blocks; a raw block shows only its face, which a MAKE back activates
+      const on = this.is[u] === I_ON;
+      this.ss[o + F] = on ? S.INERT : S.RAW; this.ss[o + K] = S.INERT;
+      this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : on ? S.MEM : S.INERT; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : on ? S.MEM : S.INERT;
       return;
     }
     if (this.type[u] === T_E) {
@@ -499,6 +507,7 @@ class Sim {
     // (K to K bonds no longer exist; the back is for energy only.)
     if (st === I_REPEL) this.ss[o + K] = S.WANT;
     else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
+    else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
     else this.ss[o + K] = S.IDLE;
   }
 
@@ -512,7 +521,13 @@ class Sim {
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
     if (this.type[u] === T_M) {
-      // membrane blocks have no state; radiation is the only thing that changes them
+      // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
+      // bonds falls back to raw at pMemDecay
+      if (this.is[u] === I_OFF) {
+        if (b[o + F] >= 0 && this.ss[b[o + F]] === S.MAKE) { this.is[u] = I_ON; this.pendingUnlink.push(o + F); this.makeEvents++; this._event('make', u, b[o + F] >> 2); }
+        return;
+      }
+      if (p.pMemDecay > 0 && b[o + L] < 0 && b[o + R] < 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; return; }
       if (p.pBreak > 0) {
         const mine = 1 - p.resM;
         for (const side of [L, R]) {
@@ -882,9 +897,9 @@ class Sim {
   // ------------------------------------------------------------- observation
   stats() {
     const n = this.n;
-    let free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0;
+    let free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
-      if (this.type[u] === T_M) continue;
+      if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
       if (this.ss[o + K] === S.CHARGE) totalMotif++;
@@ -941,9 +956,9 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
-      memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
+      memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
   }
 
