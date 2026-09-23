@@ -53,7 +53,7 @@ const S = {
   ARMED: 13,                                            // L, R: bonded, and this unit is a template (TPL); read by nothing, shown by the viewer
   CHARGE: 15,                                           // K: the back of a B template unit flanked by two A units; charges spent energy
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
-  RAW: 20,                                              // F of a raw membrane block (make rule): docks on a MAKE back, which activates it
+  RAW: 20,                                              // K and L, R of a raw membrane block (make rule): its back docks on a MAKE back and its sides on an active block's open side, either of which activates it
   MAKE: 21,                                             // K of an A template unit flanked by two B units (make rule): activates raw membrane blocks
   FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
@@ -84,7 +84,8 @@ const DEFAULTS = {
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
-  make: false,     // membrane blocks start raw (cannot link) and are activated at the back of an A template unit flanked by two B units
+  make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
+                   // (and stays anchored there), or where its side links to an active block's open side, so membrane grows from its makers
   pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
   energyGate: true,// REPEL -> TPL needs an ON energy particle on K
   pReload: 0.002,  // OFF -> ON per step, the background energy income; the ABA motif (motif rule) is the other source
@@ -378,7 +379,7 @@ class Sim {
 
   _geomOK(u, i, v, j, dx, dy, dist) {
     const su = this._side(u, i, this._sa || (this._sa = [0, 0, 0, 0])), sv = this._side(v, j, this._sb || (this._sb = [0, 0, 0, 0]));
-    if (this.type[u] === T_M && this.type[v] === T_M) {
+    if (this.type[u] === T_M && this.type[v] === T_M && i !== K && j !== K) {
       // membrane blocks link where their back corners touch and their sides roughly face; the pins then pull the
       // two edges flush and the blocks' leaning sides give the ring its bend
       // the back corner of a right side is its second corner, of a left side its first
@@ -424,10 +425,11 @@ class Sim {
     const p = this.p, tu = this.type[u], tv = this.type[v];
     const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
     if (tu === T_M || tv === T_M) {
-      if (tu === T_M && tv === T_M) return su === S.MEM && sv === S.MEM && ((i === L && j === R) || (i === R && j === L)) ? p.pMem : 0;
-      // a raw membrane block's face meets a MAKE back
-      if (tu === T_M) return tv !== T_E && i === F && su === S.RAW && j === K && sv === S.MAKE ? 1 : 0;
-      return tu !== T_E && j === F && sv === S.RAW && i === K && su === S.MAKE ? 1 : 0;
+      // side to side: two active blocks, or a raw block recruited by an active one
+      if (tu === T_M && tv === T_M) return ((su === S.MEM && (sv === S.MEM || sv === S.RAW)) || (su === S.RAW && sv === S.MEM)) && ((i === L && j === R) || (i === R && j === L)) ? p.pMem : 0;
+      // a raw membrane block's back meets a MAKE back
+      if (tu === T_M) return tv !== T_E && i === K && su === S.RAW && j === K && sv === S.MAKE ? 1 : 0;
+      return tu !== T_E && j === K && sv === S.RAW && i === K && su === S.MAKE ? 1 : 0;
     }
     if (tu === T_E || tv === T_E) {
       if (tu === T_E && tv !== T_E) return (j === K && ((su === S.ON && sv === S.WANT) || (su === S.OFF && sv === S.CHARGE))) ? 1 : 0;
@@ -475,8 +477,8 @@ class Sim {
     if (this.type[u] === T_M) {
       // an active block's lateral sides link to other active blocks; a raw block shows only its face, which a MAKE back activates
       const on = this.is[u] === I_ON;
-      this.ss[o + F] = on ? S.INERT : S.RAW; this.ss[o + K] = S.INERT;
-      this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : on ? S.MEM : S.INERT; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : on ? S.MEM : S.INERT;
+      this.ss[o + F] = S.INERT; this.ss[o + K] = b[o + K] >= 0 ? S.BONDED : on ? S.INERT : S.RAW;
+      this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : on ? S.MEM : S.RAW; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : on ? S.MEM : S.RAW;
       return;
     }
     if (this.type[u] === T_E) {
@@ -524,10 +526,11 @@ class Sim {
       // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
       // bonds falls back to raw at pMemDecay
       if (this.is[u] === I_OFF) {
-        if (b[o + F] >= 0 && this.ss[b[o + F]] === S.MAKE) { this.is[u] = I_ON; this.pendingUnlink.push(o + F); this.makeEvents++; this._event('make', u, b[o + F] >> 2); }
+        // anchored on a MAKE back, or linked to an active block: activate (and stay bonded)
+        if (b[o + K] >= 0 || b[o + L] >= 0 || b[o + R] >= 0) { this.is[u] = I_ON; this.makeEvents++; this._event('make', u); }
         return;
       }
-      if (p.pMemDecay > 0 && b[o + L] < 0 && b[o + R] < 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; return; }
+      if (p.pMemDecay > 0 && b[o + L] < 0 && b[o + R] < 0 && b[o + K] < 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; return; }
       if (p.pBreak > 0) {
         const mine = 1 - p.resM;
         for (const side of [L, R]) {
