@@ -4,18 +4,13 @@ An artificial life experiment: a 2D world of small rigid squares governed by one
 fixed, universal rule table, in which template replication, copy errors, and
 selection come out of the rules rather than being programmed into the creatures.
 
-**Status.** Phase 1 and Phase 2 of the [design](DESIGN.md) run. A seeded strand of
-squares is copied by templating, the copies are copied, copy errors appear and are
-inherited, a conserved energy budget and end-fraying give turnover, and the
-population reaches a steady state. Nothing in the rules mentions "copy",
-"strand", or "organism". In a well-mixed world the shortest strand wins, as
-Spiegelman found, by 25:1 to 60:1. One more local rule reverses that in a
-head-to-head race: make a lone docked monomer unstable (a linked run is not), so
-copying has to nucleate, and longer templates nucleate faster. At an undocking
-rate of 0.1 per step the 6-mer out-reproduces the dimer nine to one. In an open
-population with turnover the same rule has not yet won: at the densities tried,
-fraying erodes long templates faster than copies nucleate. That window is the
-next thing to map.
+**Status.** Copying, mutation, selection and adaptation all come out of the rules. Length is selected in
+an open population (cooperative docking with processive fraying); a private energy motif is selected and a
+public one is not; populations adapt when the environment changes; on the deformable-polygon engine a block's
+shape selects on the sequences that carry it; radiation selects a shield gene. Not yet: compartments that
+keep their contents and divide, specific recognition between strands, and genomes that carry more than one
+gene, all of which run into the same obstacle, that every pressure here costs long genomes more than short
+ones. `AGENTS.md` is the working guide for whoever continues (`CLAUDE.md` imports it).
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 ## Run it
@@ -28,10 +23,9 @@ python3 -m http.server 8000     # then open http://localhost:8000/
 ```
 
 The view opens zoomed on the seed strand. Scroll to zoom, drag to pan, click a
-square to read its state and its partners' states, click an event in the feed to
-jump to it. Every side of every square is drawn in the colour of its state, every
-bond is a white tie across the shared edge, and every face has a notch so you can
-see which way a free monomer points:
+block to read its state and its partners' states, click an event in the feed to
+jump to it. Every side of every block is drawn in the colour of its state, and
+every bond is a white tie across the shared edge:
 
 | colour | side | meaning |
 |---|---|---|
@@ -61,7 +55,7 @@ node experiments/summarize.js # tables from experiments/out/*.csv
 
 ## The whole chemistry
 
-A unit is a square with four sides that are fixed for life: **F** (face), **R**,
+A unit is a block with four working sides that are fixed for life: **F** (face), **R**,
 **K** (back), **L**. The sides are not interchangeable. Only a face docks, and only
 on the face of a template of the same type; L bonds only to a neighbour's R, so
 every square has at most one neighbour on each lateral side and chains cannot
@@ -69,7 +63,7 @@ branch; the back takes only an energy particle. That is why forms are
 one-dimensional. Membrane blocks (type M) are the only squares that build anything
 else, and they build it around the chains, not out of them.
 
-Two monomer types **A** and **B** pair face to face with their own type. A third
+Monomer types **A** and **B** (and, with `nC`, `nD`, **C** and **D**) pair face to face with their own type. A third
 type **E** is the energy particle. A fourth, **M**, is a membrane block: it bonds
 only to other M blocks, side to side, at a built-in bend, so arcs and rings
 self-assemble around whatever is there, and radiation opens them again. Each A/B
@@ -98,20 +92,26 @@ partner whether it sits in the middle of the template or at an end.
 | K `WANT` | E `ON` | 1 | energy docks and is spent |
 | K `CHARGE` | E `OFF` | 1 | a spent particle recharges at an `ABA` motif's back (motif rule) |
 | L `INERT` | R `INERT` | `pSpont` | two free monomers join: life without a seed |
+| F `TPL_*` | F `TPL_*`, complementary letter (A–B, C–D) | `pHyb` | two templates bind face to face (binding); kin never match |
+| K `RAW` of a membrane block | K `MAKE` | 1 | a raw membrane block anchors on a strand and turns active (make rule) |
+| L/R `RAW` of a membrane block | R/L `MEM` | `pMem` | an active membrane arc recruits a raw block (make rule) |
 
 A docked unit's free lateral side reads `STICKY` only where its template partner's face says the template continues; at the template's end it reads `END`. That is what stops copies docked on two different templates from linking into chimeras.
 
-**Transitions** (six rules, one internal state):
+**Transitions** (one internal state):
 
 | rule | from | to | when |
 |---|---|---|---|
 | R1 | DOCK | REPEL | docked, and every lateral bond the template partner says I need is in place |
 | R2 | DOCK | REPEL | laterally captured without a template |
 | R3 | REPEL / TPL | DOCK | no lateral bonds left |
-| R4 | REPEL | TPL | an ON energy particle is docked on K |
+| R4 | REPEL | TPL | an ON energy particle is docked on K, or (with `feed`) a neighbour's side reads FEED: an armed `B` between two `A`s arms its neighbours through their bonds |
 | R5 | REPEL / TPL | DOCK | fraying: an undocked end unit falls off with probability `pFray` per step |
+| R5b | REPEL / TPL | FRAY, then DOCK | processive fraying: an undocked unit whose neighbour's side reads FRAY follows it with probability `pUnzip`, so a strand can unzip whole |
 | R6 | DOCK (docked) | DOCK (free) | cooperativity: a docked monomer with no lateral bonds falls off with probability `pUndock` per step |
-| R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances `resA`, `resB` |
+| R7 | any | same, one lateral bond broken | radiation: a lateral bond breaks with probability `pBreak` scaled by the two blocks' resistances (`resA` to `resD`), unless a side reads SHIELD (a `D` between two `C`s, with `shield`) |
+| R8 | TPL (bound face to face) | same, face bond broken | binding melts: `pMelt` with no bound neighbour, `pMeltEnd` with one, `pMeltRun` with two |
+| M1 | membrane raw | active | anchored on a MAKE back or recruited by an active block (make rule); back to raw at `pMemDecay` when alone |
 
 **Bond holding.** A bond breaks the moment either side reads as `REPEL`,
 `INERT`, `IDLE` or `OFF`. That is what releases a finished copy, resets a spent
@@ -133,24 +133,30 @@ checked against `reverse(parent)`.
 
 ## Physics
 
-Nothing bigger than a square exists in the physics. Each square gets its own
-Brownian kick; two squares that are not bonded may not overlap; a bond is a
-constraint that the two bonded sides lie flush. Both kinds of constraint are
-enforced the same way, by nudging the two squares involved, 24 passes per step.
-With the `hinge` knob, lateral bonds between free squares pin only their shared
-back corner and may bend up to 90°, so free strands curl and can close into rings
-by ligation, while a strand being copied is straightened by the docking itself. A
-hinge forms where two back corners touch, which is what lets a ring's last bond
-close. With `slack`, a flush bond tolerates a small corner gap, a trapezoid, so a
-gently curved chain is a rest state; 0.1 is safe and raises the copying rate. Chains are straight because a row of flush
-constraints is straight, not because anything holds a chain. Bonds never break
-from jostling. A bond forms only if the compatibility table allows it, the two
-sides face each other within a tolerance (30° for docking, 10° for side-to-side
-links), and the moving square would land in an empty spot. A monomer that
-undocks is pushed off the face it left. All soft probabilities are per step of
-contact, and a contact lasts several steps, so nominal values overstate softness
-(see the design doc, section 6). The functions that find connected components
-are observation only and never feed back into the dynamics.
+Nothing bigger than a block exists in the physics. Each block is a polygon (a square, a wedge,
+or an octagon) held to its rest shape by a restoring force whose strength is a per-type
+stiffness. A bond pins the two corners of one edge onto the two corners of its partner's edge,
+so bonded edges coincide and a strand moves as one body. Each block gets its own Brownian kick;
+two blocks that are not bonded may not overlap. Pins, contacts and the shape restoring force are
+solved together by nudging the blocks involved, 16 passes per step; a pin moves each block
+rigidly and, by its softness, deforms the pinned corner.
+
+Chains are straight because a row of pinned squares is straight, not because anything holds a
+chain. A wedge-shaped block (`bendA`, `bendB`) curls a strand where it sits, so shape follows
+sequence. Membrane blocks are wedges whose rest state is a ring. Stiffness 0.5 is safe (exact
+copies, faster copying than rigid blocks); below about 0.3 copies docked on neighbouring
+templates start to link. Octagons (`shapeA`, `shapeB` = `oct`) copy but leak: their rounder
+outline lets templates pack close enough for such links.
+
+Bonds never break from jostling. A bond forms only if the compatibility table allows it, the two
+sides face each other within a tolerance (30° for docking, 10° for side-to-side links), and the
+moving block would land in an empty spot. A monomer that undocks is pushed off the face it
+left. All soft probabilities are per step of contact. The functions that find connected
+components are observation only and never feed back into the dynamics.
+
+An earlier rigid-body engine (squares as rigid bodies, with hinges and slack for bending) was
+removed on 2026-09-23; `experiments/RESULTS.md` sections 1 to 14 were measured on it, and it can
+be recovered from git at commit `b41557c`.
 
 ## Layout
 

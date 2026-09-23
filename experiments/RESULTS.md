@@ -1,6 +1,10 @@
 # Results
 
-Measurements from the headless runner on the per-square physics (third draft, 2026-09-21).
+Measurements from the headless runner. **Sections 1 to 14 were measured on the rigid-body engine,
+which was removed on 2026-09-23** (recover it from git at commit `b41557c` to reproduce them bit
+for bit; their scripts now run on the polygon engine and give different numbers). Section 15 and
+later are on the polygon engine, which is now the only one. Where a result was re-measured on the
+polygon engine (length selection, section 15) it held.
 Every run is deterministic per seed; the commands are in the `.sh` scripts next to this file and
 `run_all.sh` reproduces everything in about 50 minutes on four cores. Tables come from
 `summarize.js`, `births_by_length.js` and `mutation_rates.js` over `out/*.csv` and
@@ -394,7 +398,531 @@ The viewer keeps three presets: copying with every soft knob at zero, the `E_fra
 "evolution", and "protocells" (evolution plus 300 membrane blocks at 30°, motif energy, a little
 radiation).
 
-## 13. Summary
+## 13. Turnover is a deletion ratchet; processive fraying lifts it (`unzip.sh`)
+
+**Diagnosis.** In a closed world the only way a monomer returns to the pool is by fraying off an
+end. A copy of L units therefore has to be paid for by about L end deletions somewhere in the
+population. With cooperative docking on (`pUndock` 0.1) and end fraying at 0.00003, one run had
+1,092 frays for 602 births: each lineage loses a unit or two per copy cycle, faster than
+cooperativity rewards the extra length. Turnover itself is the mutation pressure that keeps
+strands short.
+
+**Change.** Processive fraying (`pUnzip`): a unit that frays reads `FRAY` on its lateral sides
+for one step before it lets go, and an undocked neighbour that reads `FRAY` follows it with
+probability `pUnzip`. At 1 a strand that starts to fray unzips one unit per step until it
+reaches a unit with a copy docked on it (being copied protects). Material comes back by strands
+dying whole instead of survivors being eroded. At `pUnzip` 0 nothing changes (trajectories are
+bit-identical).
+
+End fraying, 60×60, 400 A + 400 B, 300 E, three `ABBABA` seeds, gentle mutation (pSoft 0.01,
+pCapture 0.01, pSpont 0.001, slack 0.1), 100,000 steps, one seed each. "u" is `pUndock` × 100,
+"f" is `pFray`, "b" radiation instead of fraying:
+
+| run | mean length | max | strands | free | births | newborn length, last 50k | distinct | entropy (bits) | frays |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Z_end_u0_f1e5 | 2.27 | 7 | 251 | 4 | 558 | 2.16 | 15 | 1.84 | 333 |
+| Z_end_u0_f3e5 | 2.41 | 6 | 223 | 10 | 941 | 2.25 | 15 | 2.54 | 895 |
+| Z_end_u0_f1e4 | 2.22 | 5 | 239 | 57 | 2,754 | 2.14 | 12 | 1.97 | 2,994 |
+| Z_end_u0_b5e5 | 2.00 | 2 | 300 | 8 | 1,573 | 2.01 | 3 | 1.23 | 0 |
+| Z_end_u10_f1e5 | 3.66 | 8 | 189 | 68 | 363 | 3.64 | 40 | 4.59 | 396 |
+| Z_end_u10_f3e5 | 3.17 | 7 | 203 | 117 | 602 | 3.15 | 33 | 4.12 | 1,092 |
+| Z_end_u10_f1e4 | 2.60 | 5 | 164 | 339 | 1,614 | 2.73 | 20 | 2.93 | 3,078 |
+| Z_end_u10_b5e5 | 2.27 | 4 | 265 | 179 | 1,163 | 2.32 | 15 | 2.38 | 0 |
+
+With end fraying, cooperative docking helps (2.3 to 3.2-3.7) and the gentler the fraying the
+longer the strands, but births fall with it. Radiation as the only turnover gives dimers either
+way: it cuts anywhere, which is a deletion ratchet too.
+
+Processive fraying, same world, 150,000 steps, one seed each:
+
+| run | mean length | max | strands | free | births | newborn length, last 50k | distinct | entropy (bits) | frays | unzips |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Z_zip_u0_f3e5 | 2.26 | 7 | 246 | 16 | 1,589 | 2.15 | 15 | 2.24 | 1,478 | 804 |
+| Z_zip_u5_f3e5 | 3.97 | 8 | 140 | 128 | 1,404 | 3.75 | 41 | 4.80 | 1,582 | 2,807 |
+| Z_zip_u10_f3e5 | 4.72 | 9 | 119 | 136 | 952 | 4.64 | 42 | 4.91 | 1,140 | 2,779 |
+| Z_zip_u20_f3e5 | 5.36 | 13 | 94 | 196 | 738 | 5.09 | 52 | 5.40 | 870 | 2,454 |
+| Z_zip_u0_f1e4 | 2.31 | 6 | 231 | 42 | 4,112 | 2.17 | 16 | 2.40 | 4,357 | 2,459 |
+| Z_zip_u5_f1e4 | 3.13 | 7 | 142 | 270 | 3,197 | 3.19 | 24 | 3.88 | 4,040 | 6,039 |
+| Z_zip_u10_f1e4 | 3.48 | 6 | 105 | 371 | 2,472 | 3.45 | 32 | 4.37 | 3,107 | 5,538 |
+| Z_zip_u20_f1e4 | 3.10 | 7 | 58 | 599 | 1,506 | 3.00 | 15 | 3.10 | 1,759 | 3,364 |
+
+Replicates of the four settings that matter, three seeds each (150,000 steps; end-fraying seed 1
+ran 100,000):
+
+| setting | mean length | births | distinct |
+|---|---|---|---|
+| unzip, no cooperative docking | 2.26, 2.32, 2.23 | 1,589, 1,569, 1,638 | 15, 18, 17 |
+| end fraying, `pUndock` 0.1 | 3.17, 3.31, 3.23 | 602, 745, 752 | 33, 36, 38 |
+| unzip, `pUndock` 0.1 | 4.72, 4.02, 4.31 | 952, 1,223, 1,199 | 42, 38, 44 |
+| unzip, `pUndock` 0.2 | 5.36, 4.43, 4.52 | 738, 886, 916 | 52, 45, 50 |
+
+What this says:
+
+- Neither rule alone does it. Unzipping without cooperativity is still a dimer world (2.3);
+  cooperativity with end fraying gives 3.2. Together they give 4.0 to 5.4, a clean dose-response
+  in `pUndock`, and the length of newborns climbs through each run (from about 3.5 in the first
+  30,000 steps to about 5 at the end at `pUndock` 0.2). This is selection, not ligation: `pLigate`
+  is 0 in every run.
+- Unzipping is only partly processive in practice: two to three unzip steps per fray at
+  `pUndock` 0.1, because a template is often holding a nucleated copy and that stops the wave.
+- Denser worlds (42×42 and 50×50 with the same material) give the same lengths (3.9 to 4.9 with
+  cooperativity, 2.3 to 2.5 without) and no more births. Births are set by recycling: a birth
+  needs free monomers, and monomers come back only when strands die.
+- The price is speed. At `pUndock` 0.1 and fraying 0.00003 each strand is copied about once per
+  20,000 steps, so a 150,000-step run is only a dozen generations.
+
+Density runs (`Z_d42_*`, `Z_d50_*`, one seed each, 150,000 steps, 250 E):
+
+| run | mean length | max | births | distinct | entropy (bits) |
+|---|---:|---:|---:|---:|---:|
+| Z_d50_u0_f3e5 | 2.32 | 7 | 1,638 | 18 | 2.23 |
+| Z_d50_u5_f3e5 | 3.95 | 8 | 1,373 | 35 | 4.62 |
+| Z_d50_u10_f3e5 | 4.21 | 10 | 1,313 | 40 | 4.79 |
+| Z_d50_u10_f1e5 | 4.30 | 10 | 629 | 48 | 5.03 |
+| Z_d42_u0_f3e5 | 2.51 | 7 | 1,356 | 23 | 2.50 |
+| Z_d42_u10_f3e5 | 4.35 | 9 | 1,411 | 51 | 5.17 |
+| Z_d42_u20_f3e5 | 4.85 | 11 | 1,177 | 52 | 5.22 |
+| Z_d42_u10_f1e4 | 3.88 | 9 | 3,812 | 46 | 4.89 |
+
+## 14. Does sequence pay once length does? The `ABA` motif (`motif.sh`, `long.sh`)
+
+All runs in the length regime above (50×50, unzip, `pUndock` 0.1, fraying 0.00003). The measure
+is `ABA` motifs in newborns against the number expected if each newborn's blocks were drawn at
+random at the window's `B` fraction (`composition.js`, "ABA vs chance"). Every run starts from
+`ABBABA` seeds, which carry one motif, so founder descent pushes even the controls above 1; the
+comparison that counts is motif against control.
+
+**Public motif, energy plentiful** (`Q_m_*`, 250 particles, background reload 0.00005, two
+seeds). The motif is 1.2 to 1.8 × chance in the last 50,000 steps against 0.9 to 1.3 in the
+control, and slowing energy particles to a fifth or a twentieth of their mobility (`mobE`) makes
+no consistent difference. The reason is in the energy counts: once any motifs exist, about 200 of
+250 particles are charged at any time, and the motif-off control, which used less than half the
+energy, made as many births (1,251 to 1,289 against 1,177 to 1,350). Energy is not what limits
+copying here; recycling and nucleation are. A public good that is not scarce is not selected.
+
+**Public motif, energy scarce** (`Q_n_*`, 60 particles, motif charging the only income; control
+with background reload instead). Last 50,000 steps: 1.3 to 1.6 × chance at normal mobility, 1.7
+to 1.9 at mobility 0.2, against 1.7 in the control. No selection.
+
+**Private motif** (`Q_f_*`, the `feed` rule: an armed `B` between two `A`s re-arms its released
+neighbours through their shared bonds, so a strand carrying the motif pays one particle where it
+would pay three and nobody else benefits). 40 particles, reload 0.0005, energy limiting (1 to 5
+particles charged at any time), 200,000 steps, two seeds:
+
+| run | births | fed re-arms | ABA per block, last 50k | ABA vs chance, by 50k window | mean length |
+|---|---:|---:|---:|---|---:|
+| Q_f_ctl_1 | 1,575 | 0 | 0.093 | 1.55, 1.34, 1.45, 1.52 | 4.27 |
+| Q_f_ctl_2 | 1,446 | 0 | 0.106 | 2.02, 1.87, 1.88, 1.79 | 4.28 |
+| Q_f_feed_1 | 1,443 | 525 | 0.108 | 2.03, 1.89, 1.89, 1.59 | 4.66 |
+| Q_f_feed_2 | 1,381 | 710 | 0.142 | 2.33, 1.94, 2.00, 1.99 | 4.97 |
+
+With `feed` the motif is somewhat more common and strands are longer (the energy saved buys
+length), but the difference is within the seed-to-seed spread. One arming in ten comes through a
+motif, a saving of a few percent per copy, and 200,000 steps is about fifteen generations: too
+few for a few-percent advantage to show above drift.
+
+**Private motif over many generations** (`long.sh`, `L1M_*`): a 40×40 world with 256 A + 256 B
+and 26 particles (energy limiting), same regime, 1,000,000 steps, 40 to 52 generations, two seeds
+each. "ABA vs chance" by 200,000-step window:
+
+| run | births | max generation | fed re-arms | ABA vs chance, by 200k window | ABA per block, whole run |
+|---|---:|---:|---:|---|---:|
+| L1M_ctl_1 | 3,816 | 40 | 0 | 1.59, 1.43, 0.95, 1.18, 1.01 | 0.082 |
+| L1M_ctl_2 | 3,992 | 44 | 0 | 1.16, 0.62, 0.98, 1.42, 1.72 | 0.078 |
+| L1M_feed_1 | 3,845 | 46 | 2,035 | 1.98, 2.15, 2.07, 1.64, 1.65 | 0.132 |
+| L1M_feed_2 | 3,712 | 52 | 2,243 | 1.92, 2.24, 2.11, 2.33, 1.64 | 0.147 |
+
+This is the first sequence-level selection in the open regime. With the motif private, `ABA` stays
+at 1.6 to 2.3 times chance in every window of both seeds and averages 1.7 times the control's
+frequency; without it, the frequency drifts between 0.6 and 1.7 times chance. It is a balance,
+not a sweep: the motif does not keep rising. One arming in seven comes through a motif, total
+births are unchanged (they are set by recycling, section 13), and mutation keeps breaking motifs
+as fast as selection keeps them. Mean length is the same in both arms (4.4 to 5.1). What it
+shows is the condition, not the size, of the effect: in this well-mixed world a sequence feature
+is selected when its benefit reaches its carrier through the carrier's own bonds, and not when
+it goes out into the medium, however slowly the medium carries it.
+
+**Less mutation, four seeds** (`L1L_*`, same world as `L1M_*` with `pSoft` and `pCapture` at 0.002
+and `pSpont` at 0.0002, 1,000,000 steps; 91% of births faithful against 72%):
+
+| run | births | fed re-arms | ABA per block | ABA vs chance | mean newborn length | alternating share of newborns of length 4+, by 250k window | top long sequences, last 250k |
+|---|---:|---:|---:|---:|---:|---|---|
+| L1L_ctl_1 | 5,284 | 0 | 0.099 | 1.90 | 3.47 | 18%, 14%, 39%, 25% | AABA, ABAB, BABB |
+| L1L_ctl_2 | 5,542 | 0 | 0.099 | 2.04 | 3.29 | 16%, 33%, 18%, 38% | ABAB, AABAB, AABA |
+| L1L_ctl_3 | 6,458 | 0 | 0.050 | 1.22 | 2.97 | 13%, 2%, 12%, 9% | AABB, BAAB, ABBB |
+| L1L_ctl_4 | 5,999 | 0 | 0.101 | 2.22 | 3.13 | 22%, 42%, 16%, 23% | BABB, ABAB, AABA |
+| L1L_feed_1 | 5,446 | 2,915 | 0.192 | 3.36 | 3.59 | 35%, 70%, 55%, 52% | ABAB, ABABAB, ABABA |
+| L1L_feed_2 | 5,670 | 2,200 | 0.146 | 2.72 | 3.48 | 24%, 52%, 39%, 31% | ABAB, AABA, BABB |
+| L1L_feed_3 | 5,222 | 2,477 | 0.155 | 2.70 | 3.67 | 34%, 54%, 30%, 16% | ABAB, AABA, BAAB |
+| L1L_feed_4 | 5,116 | 2,362 | 0.151 | 2.57 | 3.72 | 19%, 35%, 36%, 16% | AABA, ABAB, AABB |
+
+The two arms no longer overlap. With the private motif every seed carries 0.146 to 0.192 motifs
+per block and every control 0.050 to 0.101, and newborns are longer in every `feed` run (3.5 to
+3.7 against 3.0 to 3.5): a strand that feeds itself can afford more units. Selection also finds
+the sequence the rule rewards most. In an alternating strand every inner `B` is flanked by `A`s,
+so `ABABA` needs two particles instead of five; alternating newborns reach 50% to 70% of the long
+births in some windows of the `feed` runs (`ABABAB` and `ABABA` among the commonest long strands
+in seed 1), and seldom pass 40% in the controls. Nothing in the rules mentions alternation. The
+controls are not flat either: with little mutation a few lineages dominate and drift carries
+them, so `ABAB` is also common without feed, and the windows swing widely in both arms. Less
+mutation raised motif frequency in both arms; the ratio between them stayed near 1.7, so mutation
+was not what capped the motif.
+
+**The environment changes, the population adapts** (`shift.sh`, `S_*`). Same small world and low
+mutation as `L1L_*`, 1,500,000 steps, two seeds each. For the first 500,000 steps energy is
+plentiful (reload 0.005 per spent particle per step); at step 500,000 it drops to 0.0003 and
+stays there (`run.js --change 500000:pReload=0.0003`). The rules never change; only the world
+does.
+
+| run | ABA per block, by 250k window (switch after the second) | mean newborn length, same windows | alternating share of long newborns, same windows |
+|---|---|---|---|
+| S_ctl_1 | 0.152, 0.147 → 0.088, 0.017, 0.036, 0.025 | 4.4, 4.5 → 3.4, 2.8, 2.7, 2.4 | 26%, 24% → 19%, 3%, 31%, 21% |
+| S_ctl_2 | 0.082, 0.095 → 0.053, 0.033, 0.050, 0.014 | 3.6, 3.9 → 3.0, 2.9, 2.9, 2.8 | 24%, 9% → 20%, 16%, 9%, 1% |
+| S_feed_1 | 0.140, 0.126 → 0.079, 0.182, 0.215, 0.189 | 4.0, 3.7 → 3.2, 3.0, 2.9, 3.0 | 15%, 23% → 10%, 45%, 56%, 46% |
+| S_feed_2 | 0.127, 0.160 → 0.182, 0.194, 0.166, 0.186 | 3.7, 3.3 → 3.2, 3.0, 3.0, 3.2 | 34%, 74% → 49%, 60%, 60%, 52% |
+
+While energy is plentiful the two arms look the same: the motif saves nothing when particles
+are free. When energy turns scarce they split. Without the private motif, selection strips the
+population to the cheapest strands, mean length falls from about 4 to 2.5, and the motif all but
+disappears (0.4 to 1.3 × chance by the end). With it, the motif rises to 0.17 to 0.22 per block
+(3.8 to 5.0 × chance), alternating strands make up about half of the long newborns, and length
+holds at 3. Seed 1 shows the adaptation in time: the motif first falls with everything else
+after the switch (0.079), then climbs back past its old level within 250,000 steps. Same rules,
+same seeds; only the environment changed, and the population followed it.
+
+**Making energy the bottleneck: the spend rule, tried and removed** (`L1S_*`, same world and
+regime as `L1M_*`). With `spend` on, a docked unit that is complete reads `DONE` on its face for
+a step, and its template unit reads that and drops back to needing energy, so every copy costs
+energy on both sides and a motif on the template pays at the step that limits copying.
+
+| run | births | faithful births | fed re-arms | ABA vs chance, by 200k window | ABA per block, whole run |
+|---|---:|---:|---:|---|---:|
+| L1S_ctl_1 | 2,753 | 47% | 0 | 1.15, 1.48, 1.27, 1.07, 1.00 | 0.066 |
+| L1S_ctl_2 | 2,790 | 47% | 0 | 1.63, 1.01, 1.13, 1.57, 1.05 | 0.070 |
+| L1S_feed_1 | 3,002 | 56% | 3,523 | 1.61, 2.33, 2.34, 2.20, 2.00 | 0.131 |
+| L1S_feed_2 | 2,865 | 55% | 3,529 | 1.93, 1.69, 1.95, 2.48, 2.22 | 0.132 |
+
+The motif is held a little higher (about twice the control, 2.0 to 2.5 × chance late in the
+runs), one arming in five comes through it, and for the first time it raises births (5%). But
+copying falls apart: only half of births are faithful, against 72% without the rule, with 13%
+longer and 10% shorter than their parent. A template unit spent mid-copy is undocked, so it can
+fray and unzip while the rest of its strand is still being copied, and the copy's finished part
+leaves early as a truncated strand. Selection cannot build on a lineage when every other birth is
+a mutant. The rule was removed: it adds a state and a row and costs more fidelity than it buys.
+
+## 15. Deformable polygons (`physics: 'poly'`, `poly_probe.js`)
+
+A second physics engine, on the user's suggestion: each unit is four corners held to a rest
+shape by shape matching at a per-type stiffness, and a bond pins the two corners of one side onto
+the two corners of the other, so bonded edges coincide and a strand is drawn and moves as one
+body. A pin moves each unit rigidly (as the rigid engine's point constraint does) and, by the
+unit's softness, deforms the pinned corner. The chemistry is unchanged. The rigid engine stays
+the default, so every table above is reproducible bit for bit.
+
+**Copying at every soft knob zero**, `ABBABA`, 60×60, 20,000 steps, seeds 2 and 5:
+
+| engine | stiffness | births | exact | odd lengths |
+|---|---:|---|---|---|
+| rigid | - | 12, 21 | yes | none |
+| poly | 1 | 13, 11 | yes | none |
+| poly | 0.5 | 15, 19 | yes | none |
+| poly | 0.2 | 25, 23 | 3 unfaithful in one seed | 3- and 8-mers |
+| poly | 0.05 | 40, 60 | 18 unfaithful | dimers to 7-mers |
+
+Softness does what slack did (section 10): a little speeds copying because neighbours docked on a
+template can link while wobbling, and too much lets copies docked on neighbouring templates link.
+0.5 is safe. Bonded corners sit a median 0.015 of a side apart (90th percentile 0.08).
+
+**Length selection carries over** (`PZ_*`, the section 13 regime on the polygon engine at stiffness
+0.5, 150,000 steps): mean length 2.50 without cooperative docking, 3.83 and 3.70 at `pUndock`
+0.1 (two seeds) and 4.85 at 0.2, against 2.2 to 2.3, 4.0 to 4.7 and 4.4 to 5.4 on the rigid
+engine. The same dose-response, slightly lower at 0.1. The polygon engine is about twice as
+slow per step at this size.
+
+**Membrane wedges.** The membrane block's rest shape is a trapezoid whose lateral sides lean in
+by half the bend, so a ring is its rest state and no bend rule is needed; a bond forms where two
+back corners touch and the pins pull the edges flush. A block one side deep cannot lean past
+about 50 degrees, so rings have at least seven or eight blocks. 150 blocks in 40×40: rings of
+about 7 at 45 degrees (9 rings by 20,000 steps) and 11 at 30 degrees (6 rings).
+
+**Shape as a phenotype.** `bendA` and `bendB` give the replicator blocks the same wedge rest
+shape, so a strand's resting curvature is set by its sequence. Copying `ABBABA` at stiffness 0.5:
+
+| `B` bend per bond | births (seeds 2, 5) | exact |
+|---:|---|---|
+| 0 (square) | 15, 19 | yes |
+| 10 | 25, 24 | yes |
+| 20 | 9, 9 | yes |
+| 30 | 0, 0 | - |
+
+**Octagons** (`shapeA`, `shapeB` = `oct`: a regular octagon one side across, the four working
+sides on alternate edges, the other four inert skin) copy at about the square rate, 14 and 20
+births at stiffness 0.5, with one truncated copy per seed: neighbours touch only along short
+edges, which leaves more room for neighbouring templates to interfere.
+
+Shape has a fitness landscape: a slight taper copies faster than a square, a strong bend slows
+copying and at 30 degrees a template cannot be copied at all (monomers docked on its outer curve
+splay too far apart to link; an all-`B` 6-mer stays curled at about 155 degrees with monomers
+docked on it). Two seeds at 20,000 steps each: a lead, not yet a result.
+
+**Shape selects on sequence** (`shape.sh`, `SH_*`): the section 13 regime on the polygon engine,
+40×40, 256 A + 256 B, low mutation, 800,000 steps, two seeds each. `B` blocks are wedges bending
+20 degrees per `BB` bond (10 per `AB` bond), against square `B` as the control. The monomer pool is
+half `B` throughout; what changes is what the newborns are made of (`pairs.js`):
+
+| run | window | mean length | B fraction of newborn blocks | BB / AB / AA bonds (× chance) |
+|---|---|---:|---:|---|
+| SH_square_1 | first 200k | 4.40 | 0.50 | 0.73 / 1.42 / 0.43 |
+| SH_square_1 | last 200k | 3.34 | 0.50 | 0.44 / 1.64 / 0.28 |
+| SH_square_2 | first 200k | 4.04 | 0.51 | 0.70 / 1.59 / 0.09 |
+| SH_square_2 | last 200k | 3.23 | 0.49 | 0.32 / 1.73 / 0.23 |
+| SH_wedge_1 | first 200k | 2.14 | 0.02 | 0 / 1.03 / 1.00 |
+| SH_wedge_1 | last 200k | 2.89 | 0.06 | 0.21 / 0.85 / 1.02 |
+| SH_wedge_2 | first 200k | 2.07 | 0.03 | 0 / 1.06 / 1.00 |
+| SH_wedge_2 | last 200k | 2.84 | 0.08 | 0.24 / 0.86 / 1.03 |
+
+Block shape alone purged `B` from the genomes: with wedge `B` it makes up 2% to 8% of the blocks
+in newborns, against 50% with square `B` and 50% of the pool. The population first collapsed to
+`AA` dimers (a dimer has one bond to bend, so it copies whatever its shape) and then rebuilt length
+out of `A` (mean newborn length 2.1 rising to 2.9). The prediction was that selection would favour
+mixing, since an `AB` bond bends half as much as a `BB` bond; at 20 degrees it did not, because
+even an `AB` bond (10 degrees) costs more than it buys.
+
+With a gentler wedge the prediction holds (`SH10_*`, 10 degrees per `BB` bond, 5 per `AB`):
+
+| run | window | mean length | B fraction of newborn blocks | BB / AB / AA bonds (× chance) |
+|---|---|---:|---:|---|
+| SH10_wedge_1 | first 200k | 3.66 | 0.48 | 0.30 / 1.69 / 0.32 |
+| SH10_wedge_1 | last 200k | 3.29 | 0.47 | 0.04 / 1.83 / 0.28 |
+| SH10_wedge_2 | first 200k | 3.89 | 0.50 | 0.30 / 1.76 / 0.17 |
+| SH10_wedge_2 | last 200k | 3.18 | 0.50 | 0.02 / 1.82 / 0.34 |
+| SH10_all_1 | whole run | 2.0 to 2.2 | 0.43 to 0.60 | about 1 / 1 / 1 (137 births in 800k) |
+| SH10_all_2 | whole run | 2.0 | 0.39 to 0.53 | about 1 / 1 / 1 (125 births) |
+
+The genome keeps the curved block and spaces it out. `B` stays at half of every newborn, but two
+`B`s are almost never neighbours: `BB` bonds fall to 1% (0.02 to 0.04 × chance) against 8% to 11%
+in the square control, and nine bonds in ten are `AB`. Where both block types are 10-degree
+wedges (`SH10_all_*`) there is no straight block to fall back on, every strand curls, and the
+population barely survives as dimers. The same physics gives three different answers depending
+on how strong the shape effect is and whether there is an alternative: space the curved block out
+(mild), purge it (strong), or fail (no escape). The controls are a warning about
+baselines: with little mutation they keep the founder's make-up (`ABBABA` is four fifths `AB`
+bonds), so "× chance" figures in a control measure descent as much as selection. The comparison
+that counts is against the control, as everywhere above.
+
+## 16. Compartments by chance (`encl.sh`, polygon engine)
+
+40×40, 400 replicator monomers in the length regime, many membrane wedges, mild radiation
+(0.0002 per bond, `resM` 0.7, both replicator types resistance 0.9), 150,000 steps, one seed each.
+"Rings holding a strand" counts rings with two or more template units inside, sampled every
+30,000 steps.
+
+| run | M blocks | bend | rings | rings holding a strand |
+|---|---:|---:|---|---|
+| EN_m400_a20 | 400 | 20° | 11 to 15 | 1, 2, 2, 3, 2 |
+| EN_m400_a25 | 400 | 25° | 19 to 24 | 0, 1, 1, 2, 0 |
+| EN_m600_a20 | 600 | 20° | 14 to 24 | 2, 3, 1, 1, 10 |
+| EN_m600_a30 | 600 | 30° | 44 to 50 | 0, 1, 0, 1, 0 |
+
+Large wedge rings (18 blocks at 20 degrees) at high density do close around strands, up to ten
+at once, where the rigid engine's rings almost never did. Two things are still missing for
+compartments to be selected. At this radiation rate a ring opens every few thousand steps, far
+less than a generation (about 20,000), so an enclosure does not last. And rings do not divide,
+so a ring holding a good strand cannot make more rings like it. Division is the missing step.
+
+**Can rings grow and split without a new rule?** (`ring_growth.js`, 500 membrane blocks at 25
+degrees, radiation opening a ring every ten thousand steps or so, 150,000 steps.) The hope was
+that an opened ring would take in free blocks, reclose larger, and at about twice its natural
+size split in two when two of its bonds broke. It does not happen. Ring sizes stay at 8 to 18
+(median 11 with soft blocks, 13 with rigid ones) and never reach 22: an opened ring's ends are
+still next to each other, so it recloses before anything can join, and almost every block is
+already in some ring, so there is little free membrane to add. Growth needs membrane to be made
+continuously, not drawn from a fixed stock. The natural candidate is membrane made by the
+replicators themselves: a precursor block that becomes a membrane block where it touches a strand
+carrying some motif, so membrane forms around its makers and a ring holding a maker grows. 
+
+**Membrane made by the replicators** (`make` rule, `make_probe.js`). Built as a state change, on
+the user's preference, not a new type: membrane blocks start raw (their sides cannot link); the
+back of an `A` template unit between two `B`s reads `MAKE`; an active block with no neighbours
+falls back to raw at `pMemDecay`. Same world as above, 400 blocks at 18 degrees (rings of about
+18), radiation opening rings, 150,000 steps. Mean over samples after step 30,000:
+
+| membrane | rings holding a strand | template units inside rings |
+|---|---:|---:|
+| fixed stock, all active (`make` off) | 1.42 | 3.42 |
+| made: a raw block activates where its face touches a `MAKE` back, then lets go | 0.08 | 0.17 |
+| made and anchored: a raw block's back docks on a `MAKE` back and stays; raw blocks touching an active block's open side are recruited | 1.42 | 3.58 |
+
+Neither version puts compartments around their makers. Activated blocks that let go drift off
+and decay before they meet, so rings seldom assemble at all. Anchored blocks do start arcs on the
+strands, but recruitment spreads: within 40,000 steps nearly every block is active (395 of 400)
+and the world looks like the fixed-stock one. What is still missing is something that keeps a
+membrane with the strand that made it, as a tether keeps a cell wall with its cell. The rule is
+kept, off by default, as the base for that.
+
+## 17. Does space rescue a public good? (`space.sh`)
+
+The `ABA` charging motif as the only real energy income (background reload 0.00005), energy
+particles slowed to a fifth (`mobE` 0.2), low mutation, the length regime, 1,000,000 steps. The
+same density of monomers and particles in a 40×40 world and in an 80×80 one (four times the
+area, four times the population).
+
+| run | world | motifs per template unit at 200k, 400k, 600k, 800k, 1M | mean length at the end | outcome |
+|---|---|---|---:|---|
+| SP_small_motif | 40×40 | 0.14, 0.08, 0.12, 0.03, 0 | 2.04 | collapsed to motif-free dimers |
+| SP_small_motif_2 | 40×40 | 0.10, 0.02, 0, 0, 0.05 | 2.26 | collapsed |
+| SP_small_motif_3 | 40×40 | 0.03, 0.07, 0.13, 0.18, 0.16 | 3.34 | survived, motif enriched |
+| SP80_motif_1 | 80×80 | 0.11, 0.14, 0.12, 0.12, 0.12 | 2.96 | sustained |
+| SP80_motif_2 | 80×80 | 0.12, 0.12, 0.09, 0.10, 0.10 | 3.55 | sustained |
+
+In the small world the motif economy collapses in two seeds of three: once the motif carriers
+dip, energy runs out, only dimers (which cannot carry `ABA`) still copy, and the motif is gone.
+In the larger world neither seed collapses; the motif holds at about one template unit in ten
+throughout. What this does not yet say is why. The larger world differs in two ways, local
+structure (energy charged in one corner is spent there) and a four times larger population,
+which is harder to lose to chance. Separating them needs the large world with energy mobility 1,
+which washes local structure out while keeping the population.
+
+| run | world | energy mobility | motifs per template unit at 200k, 400k, 600k, 800k, 1M | charged particles |
+|---|---|---:|---|---:|
+| SP80_fastE_1 | 80×80 | 1 | 0.14, 0.13, 0.11, 0.06, 0.04 | 130 to 185 of 192 |
+| SP80_fastE_2 | 80×80 | 1 | 0.15, 0.18, 0.13, 0.11, 0.12 | 165 to 185 of 192 |
+
+With fast energy the large world does not collapse either, so the rescue is mostly size: a
+population four times larger does not lose its motif carriers to chance. There is a hint of local
+structure on top. Fast particles find motif backs quickly, energy is plentiful (130 to 185 of 192
+charged, against about 100 with slow particles), and in one seed the motif erodes to 0.04 per
+template unit, as a public good does when free-riders pay nothing for it; with slow energy it held
+at 0.10 to 0.14 in both seeds. One seed each way: space as such is not shown to matter yet.
+
+## 18. Lock-and-key binding between strands (`binding.sh`)
+
+Two template faces of opposite type bind at `pHyb` per step of contact; a bond with a bound
+neighbour melts at 0.001 per step, a lone one at 0.1. Copies pair like with like, so kin never
+bind. Small world, low mutation, the length regime, 1,000,000 steps. Diversity is counted over
+newborns of three units or more, per 200,000-step window (`turnover.js`).
+
+| run | pHyb | births | bindings | mean newborn length, last half | distinct sequences (mean) | entropy (bits, mean) | changes of the dominant sequence |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HY_ctl_1 | 0 | 5,275 | 0 | 3.64 | 30 | 3.89 | 3 |
+| HY_ctl_2 | 0 | 4,961 | 0 | 3.65 | 33 | 3.92 | 3 |
+| HY_h05_1 | 0.05 | 4,984 | 65,523 | 3.42 | 28 | 3.67 | 2 |
+| HY_h05_2 | 0.05 | 5,465 | 68,153 | 3.15 | 26 | 3.56 | 3 |
+| HY_h20_1 | 0.2 | 4,252 | 191,417 | 2.59 | 18 | 3.17 | 3 |
+| HY_h20_2 | 0.2 | 4,750 | 180,152 | 2.56 | 18 | 2.96 | 2 |
+
+The hope was frequency-dependent selection: common sequences caught by their complements,
+diversity kept high, the dominant sequence replaced again and again. The opposite happened.
+Binding lowers diversity (18 sequences against 30 to 33 at 0.2, 26 to 28 at 0.05), shortens strands and costs births, and the
+dominant sequence changes no more often. The reason is that a two-unit match already holds, and
+among random sequences a two-unit opposite-letter match is everywhere: binding is not a lock and
+key but general stickiness, and it costs long strands most because they have more places to be
+caught. **A longer key, tried.** `pMeltEnd` sets the melting of a bond with a bound neighbour on one side
+only (the end of a run), between the lone rate and the in-run rate, so only runs of three or more
+hold (a zipper). Bound units on average over 12,000 steps, four copies of `ABBABA` and of its
+perfect complement `BABAAB` against eight random 6-mers:
+
+| pMeltEnd | perfect complements | random strands |
+|---:|---:|---:|
+| 0.02 | 0.3 | 1.0 |
+| 0.01 | 0.7 | 5.7 |
+| 0.004 | 13.7 | 12.7 |
+
+There is no window in which the perfect match holds and the random ones do not. Random 6-mers
+share a three-unit opposite stretch often enough, and nucleating a run takes as long for a
+perfect match as for a partial one. With two letters and strands of four to six, there are too
+few distinct keys for recognition to be specific. The line would need longer strands or a larger
+alphabet; it is parked, with both knobs off by default.
+
+## 19. Two genes in a four-letter world (`genes.sh`, `motifs.js`)
+
+Four letters, 128 of each, small world, low mutation, the length regime. Two rules of the same
+form, both always on: `feed` (an armed `B` between two `A`s arms its neighbours: private energy)
+and `shield` (a `D` between two `C`s makes its two bonds immune to radiation: private durability).
+Seeds `ABABCD` and `CDCDAB` carry one gene each. Only the environment differs. Motif frequency
+per block (× chance at the window's letter frequencies), by 250,000-step window:
+
+| run | environment | ABA | CDC | mean newborn length |
+|---|---|---|---|---:|
+| G_none_1 | plentiful energy, no radiation | 0.054, 0.026, 0.027, 0.003 | 0.003, 0.001, 0.005, 0.024 | 3.4 to 4.0 |
+| G_energy_1 | 26 particles, reload 0.0005 | 0.003, 0.009, 0.021, 0.001 | 0.075, 0.030, 0.009, 0.002 | 3.3 to 3.7 |
+| G_rad_1 | radiation 0.0001 | 0.001, 0.003, 0, 0 | 0.185, 0.188, 0.171, 0.176 (13 to 21 × chance) | 2.5 to 2.6 |
+| G_both_1 | both | 0, 0, 0, 0 | 0.207, 0.212, 0.203, 0.214 (8 to 10 × chance) | 2.6 |
+
+Radiation selects the shield strongly and at once, and the population shrinks to about the
+smallest strand that carries it, `CDC` itself, with both its bonds shielded. The energy setting
+was not a pressure: `feed` fired 91 times in a million steps and births were as in the unpressed
+run, so `ABA` drifted. With both, the shield wins alone and no genome carries both genes: the
+radiation pressure toward short strands overrides everything, and a genome with both genes needs
+at least six units.
+
+Round 2 (`G2_*`), energy truly scarce (12 particles, reload 0.0003), radiation a third as strong,
+two seeds each. Scarce energy: `ABA` rose to 0.09 to 0.11 per block (6 to 11 × chance) for
+750,000 steps in one seed and was then lost, and never rose in the other; genomes shrank to 2.4
+to 3.2 units. Both pressures: dimers in one seed, `CDC` alone in the other. No genome carried
+both.
+
+Why, in one line: neither gene pays for its own length. `ABA` with `feed` is three units that
+save at most two energy particles, so a strand without it is always cheaper; `CDC` with `shield`
+adds two bonds and protects exactly those two. Selection therefore prefers the shortest genome
+that works, and two genes never fit. For genes to accumulate, a gene's benefit has to grow with
+the genome that carries it. That is what the relay does (`relay`: a template unit passes FEED and
+SHIELD on along its strand, away from the motif, so one motif arms or shields the whole strand);
+round 3 (`G3_*`) repeats the four environments with it.
+
+Round 3 (`G3_*`, relay on), per-block motif frequency (× chance) over the run, two seeds each:
+
+| environment | ABA | CDC | mean newborn length | outcome |
+|---|---|---|---:|---|
+| none | drifts, 0 to 0.05 | drifts, 0 to 0.05 | 3.3 to 3.9 | neither selected |
+| scarce energy | seed 1 held at 0.07 to 0.09 (4 to 7 ×) all run; seed 2 never arose | - | 3.3 to 4.1 (seed 1) | energy gene kept where it exists |
+| radiation | - | 0.15 to 0.20 (8 to 11 ×), both seeds | 2.8 to 3.4 | shield gene selected, genomes longer than without the relay (2.5) |
+| both | - | lost | 2.0 | both seeds collapse to dimers |
+
+With the relay each gene pays for length where its pressure acts: energy-limited genomes carrying
+`ABA` stay at 3.3 to 4.1 units, and radiation no longer shrinks shield carriers to bare `CDC`. No
+genome carried both genes, though: two pressures at these strengths are more than the population
+survives, and point mutation alone is slow to build a genome of six or more that has both.
+Round 4 (`G4_*`) makes both pressures milder and turns on ligation, the one channel here that
+joins two strands, so an energy-gene strand and a shield-gene strand can fuse.
+
+Round 4 (26 particles, reload 0.0005, radiation 0.00005, relay on, two seeds each, with and
+without ligation 0.02): every run survives and every run selects the shield (`CDC` 8 to 17 ×
+chance). `ABA` never rises: `feed` fired 2 to 107 times in a million steps, so energy was still not
+what limited births in the four-letter world. Ligation made 185 to 200 fusions per run and
+genomes carrying both genes appeared (up to 8% of the long newborns in one window) but did not
+spread, and none were left in the last quarter of either run.
+
+Where the two-gene test stands: each gene is selected where its pressure acts, and with the
+relay each pays for length; the shield is robust, the energy gene only where energy truly limits
+copying, which in four-letter worlds is a narrow band between "not limiting" and "the population
+dies". Genes did not accumulate in any run. The obstacle is not the rules for the genes but the
+pressures: to hold two genes the population must meet two pressures of similar strength, each
+strong enough to select and together weak enough to survive, for long enough that a combined
+genome arises and spreads. That band has not been found.
+
+**The band, searched** (`GR_*`): energy at 12, 16 and 20 particles (reload 0.0003 to 0.0005) against
+radiation at 0.00002, 0.00003 and 0.00005, relay and ligation 0.01 on, 1,000,000 steps, one seed
+each. Last 500,000 steps:
+
+| energy \ radiation | 0.00002 | 0.00003 | 0.00005 |
+|---|---|---|---|
+| 12 particles | length 2.2, neither gene | 2.3, neither | 2.1, `ABA` traces |
+| 16 particles | 2.2, `CDC` traces | 2.5, `CDC` 0.09 per block | 2.7, `CDC` 0.13 |
+| 20 particles | 2.4, neither | 2.7, `CDC` 0.07 | 2.8, `CDC` 0.13 |
+
+No cell holds both genes, and no cell holds the energy gene past the first half. Under two
+pressures at once every population shrinks toward two or three units, the shield survives where
+radiation is strong enough to select it, and the energy gene, which needs three units and an
+armed middle before it pays, is lost. Genomes carrying both never exceeded a trace.
+
+This is the old obstacle in a new form: every pressure in this world costs long genomes more than
+short ones, so a genome carrying two genes must out-copy a dimer, and it does not. Biology's
+answer to the same problem was not longer genomes first but compartments: genes in separate
+short strands that share one enclosure and are selected together (the stochastic corrector). That
+again needs compartments that keep with their contents and divide, which section 16 did not get.
+
+## 20. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
@@ -421,6 +949,27 @@ radiation).
 - Membrane blocks self-assemble into rings of a chosen size within 10,000 to 20,000 steps, and
   replicators are unaffected by them; but rings close around empty space at every density tried,
   so no strand was ever enclosed and compartment selection could not be measured.
+- Turnover by end fraying is a deletion ratchet: every recycled monomer is a deletion. With
+  processive fraying (a fraying strand unzips whole) and cooperative docking together, the open
+  population holds a mean length of 4 to 5.4 by selection, 40 to 50 sequences, against 2.3 with
+  either rule alone (three seeds each). Monomer density does not matter; recycling sets births.
+- The `ABA` energy motif is not selected as a public good, even with energy scarce and slow. Made
+  private (`feed`: the motif arms its own neighbours through their bonds) it holds at about 1.7
+  times the control's frequency over 40 to 50 generations (0.15 to 0.19 motifs per block against
+  0.05 to 0.10, four seeds each, no overlap), strands carrying it are longer, and alternating
+  sequences, which the rule rewards most, become common without any rule mentioning them.
+- In a four-letter world a shield gene (`CDC`: its bonds immune to radiation) is selected
+  strongly and at once wherever radiation acts; an energy gene (`ABA` with `feed`) only where
+  energy truly limits copying. With a relay (one motif serves its whole strand) each gene pays
+  for the length of its genome. Genomes carrying both genes appeared with ligation but did not
+  spread in any run: accumulation of genes has not been shown.
+- On the polygon engine, a block's shape is a phenotype that selects on sequence, with no rule
+  mentioning shape or sequence: a strongly wedge-shaped `B` is purged from the genomes (2% to 8%
+  of newborn blocks against 50% with square `B`); a mildly wedge-shaped one is kept at half the
+  genome but never placed next to another `B` (`BB` bonds 1% against 8% to 11% in the control).
+- When the environment changes from plentiful to scarce energy, populations adapt: without the
+  private motif they shrink to short, motif-free strands; with it the motif rises to 4 to 5 ×
+  chance and alternating strands to half of the long births, and length holds.
 - The open questions for Phase 3: make membranes nucleate on strands (one row: `M` binds a
   template's back), so that compartments hold a genome and the `ABA` motif's public good can
   stay with its carrier; find the radiation window where long strands persist; and give rings a
