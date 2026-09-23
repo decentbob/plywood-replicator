@@ -68,6 +68,8 @@ const S = {
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
   INACT: 25,                                            // K of an inactive free monomer (act rule): docks on an ACT back and is activated there
   ACT: 26,                                              // K of a template unit in the activating motif (act rule): activates inactive monomers
+  ANC: 27,                                              // L, R of an active membrane block, bonded, passing on the anchor signal (tether rule)
+  MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
 // A bond breaks the moment either of its sides derives to one of these.
@@ -105,6 +107,10 @@ const DEFAULTS = {
   make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
                    // (and stays anchored there), or where its side links to an active block's open side, so membrane grows from its makers
   pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
+  memPerm: false,  // membrane is permeable to free monomers (a membrane block and an unbonded letter do not collide); strands and energy
+                   // particles stay on their side, so a closed ring is fed from outside and keeps its strands and its energy
+  tether: false,   // (with make) an anchored block passes an anchor signal along its arc; raw blocks join only an anchored arc's open ends, and
+                   // an active block the signal does not reach falls back to raw (at pMemDecay) and lets go: membrane stays with its makers
   act: false,      // a unit that leaves a strand is an inactive monomer (it cannot dock) until its back meets the back of a template unit in
                    // actMotif, which activates it: monomer activation as a second catalysed good beside energy
   actMotif: 'BAB', // the activating context: the middle letter flanked by the outer one on both sides (a palindrome)
@@ -474,7 +480,14 @@ class Sim {
     const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
     if (tu === T_M || tv === T_M) {
       // side to side: two active blocks, or a raw block recruited by an active one
-      if (tu === T_M && tv === T_M) return ((su === S.MEM && (sv === S.MEM || sv === S.RAW)) || (su === S.RAW && sv === S.MEM)) && ((i === L && j === R) || (i === R && j === L)) ? p.pMem : 0;
+      if (tu === T_M && tv === T_M) {
+        if (!((i === L && j === R) || (i === R && j === L))) return 0;
+        if (p.tether) {   // raw blocks join only an anchored arc; active ends link to each other
+          const act = (x) => x === S.MEM || x === S.MEMA;
+          return (act(su) && act(sv)) || (su === S.RAW && sv === S.MEMA) || (su === S.MEMA && sv === S.RAW) ? p.pMem : 0;
+        }
+        return (su === S.MEM && (sv === S.MEM || sv === S.RAW)) || (su === S.RAW && sv === S.MEM) ? p.pMem : 0;
+      }
       // a raw membrane block's back meets a MAKE back
       if (tu === T_M) return tv !== T_E && i === K && su === S.RAW && j === K && sv === S.MAKE ? 1 : 0;
       return tu !== T_E && j === K && sv === S.RAW && i === K && su === S.MAKE ? 1 : 0;
@@ -510,7 +523,7 @@ class Sim {
         if (this.bond[u * 4 + i] >= 0) continue;
         const s = this.ss[u * 4 + i];
         let ok = false;
-        if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW;
+        if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
         else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT;
@@ -528,6 +541,15 @@ class Sim {
       // an active block's lateral sides link to other active blocks; a raw block shows only its face, which a MAKE back activates
       const on = this.is[u] === I_ON;
       this.ss[o + F] = S.INERT; this.ss[o + K] = b[o + K] >= 0 ? S.BONDED : on ? S.INERT : S.RAW;
+      if (this.p.tether && on) {
+        // the anchor signal runs along the arc away from the anchor: each side shows it if the block is anchored or its
+        // neighbour on the other side shows it toward the block
+        const src = b[o + K] >= 0, fromL = b[o + L] >= 0 && this.ss[b[o + L]] === S.ANC, fromR = b[o + R] >= 0 && this.ss[b[o + R]] === S.ANC;
+        const sR = src || fromL, sL = src || fromR;
+        this.ss[o + L] = b[o + L] >= 0 ? (sL ? S.ANC : S.BONDED) : (sL ? S.MEMA : S.MEM);
+        this.ss[o + R] = b[o + R] >= 0 ? (sR ? S.ANC : S.BONDED) : (sR ? S.MEMA : S.MEM);
+        return;
+      }
       this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : on ? S.MEM : S.RAW; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : on ? S.MEM : S.RAW;
       return;
     }
@@ -598,7 +620,11 @@ class Sim {
         if (b[o + K] >= 0 || b[o + L] >= 0 || b[o + R] >= 0) { this.is[u] = I_ON; this.makeEvents++; this._event('make', u); }
         return;
       }
-      if (p.pMemDecay > 0 && b[o + L] < 0 && b[o + R] < 0 && b[o + K] < 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; return; }
+      if (p.tether) {
+        // tether: an active block the anchor signal does not reach falls back to raw and lets go
+        const ss = this.ss, anchored = b[o + K] >= 0 || (b[o + L] >= 0 && ss[b[o + L]] === S.ANC) || (b[o + R] >= 0 && ss[b[o + R]] === S.ANC);
+        if (!anchored && p.pMemDecay > 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; this.pendingUnlink.push(o + L, o + R); return; }
+      } else if (p.pMemDecay > 0 && b[o + L] < 0 && b[o + R] < 0 && b[o + K] < 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; return; }
       if (p.pBreak > 0) {
         const mine = 1 - p.resM;
         for (const side of [L, R]) {
@@ -868,6 +894,11 @@ class Sim {
       const rr = (rad[u] + rad[v]) * 1.3;
       if (dx * dx + dy * dy >= rr * rr) continue;
       if ((bond[ub] >> 2) === v || (bond[ub + 1] >> 2) === v || (bond[ub + 2] >> 2) === v || (bond[ub + 3] >> 2) === v) continue;
+      if (p.memPerm && (this.type[u] === T_M) !== (this.type[v] === T_M)) {
+        // a free monomer passes through membrane
+        const x = this.type[u] === T_M ? v : u, xb = x * 4;
+        if (this.type[x] !== T_E && bond[xb] < 0 && bond[xb + 1] < 0 && bond[xb + 2] < 0 && bond[xb + 3] < 0) continue;
+      }
       contacts.push(u, v);
     }
     // 3. constraints
@@ -1046,7 +1077,9 @@ class Sim {
       const comp = this.componentOf(u0);
       for (const x of comp) seen[x] = 1;
       components++;
-      if (this.type[u0] === T_M) {
+      // membrane in this component (a ring or arc may be anchored on a strand, so both kinds are looked for in any component)
+      let nM = 0; for (const x of comp) if (this.type[x] === T_M) nM++;
+      if (nM > 0) {
         if (comp.length === 1) { memFree++; continue; }
         const cyc = this.cycleOf(comp, T_M);
         if (cyc.length >= 3) {
@@ -1057,8 +1090,8 @@ class Sim {
             else if (this.type[w] !== T_M) { enclosedAB++; if (this.is[w] === I_TPL) { enclosedTPL++; tplHere++; } if (this.ss[w * 4 + K] === S.CHARGE) enclosedMotif++; }
           }
           if (tplHere >= 2) ringsWithStrand++;
-        } else memArcs++;
-        continue;
+        } else if (nM >= 2) memArcs++;
+        if (nM === comp.length) continue;
       }
       let nAB = 0, faceBonded = false;
       for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }

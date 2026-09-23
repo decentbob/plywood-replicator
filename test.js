@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, S, T_E, T_M, I_TPL, I_RAW, I_DOCK, F, K, L, R, NV } = require('./src/sim.js');
+const { Sim, S, T_E, T_M, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -246,6 +246,27 @@ test('snapCorners: bonded corners coincide after the physics of every step; with
   }
   assert.ok(s.births.length >= 10, 'births ' + s.births.length);
   for (const x of s.births) assert.strictEqual(x.seq, rev(x.parent), 'unfaithful copy ' + JSON.stringify(x));
+});
+
+
+test('tether: membrane grows only from makers and stays with them; memPerm lets a free monomer through membrane', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 4, W: 30, H: 30, nA: 40, nB: 40, nE: 30, nM: 250, memAngle: 12, make: true, tether: true, pMemDecay: 0.002,
+    seedSeq: 'ABBABA', seedCount: 1, energyGate: false, snapCorners: true, stiffM: 0.7, maxStrain: 0.5 }));
+  s.run(30000);
+  let active = 0, withMaker = 0;
+  for (let u = 0; u < s.n; u++) {
+    if (s.type[u] !== T_M || s.is[u] !== I_ON) continue; active++;
+    if (s.componentOf(u).some((x) => s.type[x] !== T_M && s.type[x] !== T_E)) withMaker++;
+  }
+  assert.ok(active >= 20, 'membrane should grow on the makers, active ' + active);
+  assert.ok(withMaker >= 0.9 * active, `active membrane should be attached to strands: ${withMaker} of ${active}`);
+  // permeability: a free monomer placed on a membrane block is not pushed off it; a bonded one would be
+  const t = new Sim({ seed: 1, W: 20, H: 20, nA: 1, nB: 0, nE: 0, nM: 1, memPerm: true, sigma: 0, sigmaRot: 0, pReload: 0 });
+  t.px[0] = 10; t.py[0] = 10; t.px[1] = 10.3; t.py[1] = 10; t._resetShape(0); t._resetShape(1); t.run(5);
+  assert.ok(Math.hypot(t.px[1] - t.px[0], t.py[1] - t.py[0]) < 0.4, 'a free monomer should pass through membrane');
+  const c = new Sim({ seed: 1, W: 20, H: 20, nA: 1, nB: 0, nE: 0, nM: 1, memPerm: false, sigma: 0, sigmaRot: 0, pReload: 0 });
+  c.px[0] = 10; c.py[0] = 10; c.px[1] = 10.3; c.py[1] = 10; c._resetShape(0); c._resetShape(1); c.run(5);
+  assert.ok(Math.hypot(c.px[1] - c.px[0], c.py[1] - c.py[0]) > 0.6, 'without memPerm they collide');
 });
 
 console.log(passed + ' tests passed');

@@ -84,7 +84,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <div class="app">
 <header>
   <h1>Polygon Chemistry</h1>
-  <p>Blocks with one rule table and nothing bigger than a block in the physics. Each block is a slightly deformable polygon, and a bond pins its corners onto its partner's, so bonded blocks meet flush and a strand moves as one body. Every side of every block is drawn in the colour of its state; a bonded side is pale. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and protocells with self-assembling membrane rings. Click a block to read it, click an event to jump to it; drag and scroll move the view.</p>
+  <p>Blocks with one rule table and nothing bigger than a block in the physics. Each block is a slightly deformable polygon, and a bond pins its corners onto its partner's, so bonded blocks meet flush and a strand moves as one body. Every side of every block is drawn in the colour of its state; a bonded side is pale. Three presets: the copying mechanism alone, the open evolutionary regime (cooperative docking and processive fraying hold strands long by selection), and cells: strands carrying the motif BAB grow membrane walls around themselves. Click a block to read it, click an event to jump to it; drag and scroll move the view.</p>
 </header>
 <div class="main">
   <div class="dish">
@@ -121,7 +121,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
         <select id="preset" aria-label="Preset">
           <option value="copy">Preset: copying, no mutation</option>
           <option value="evo" selected>Preset: evolution</option>
-          <option value="proto">Preset: protocells</option>
+          <option value="cells">Preset: cells (strands grow their own walls)</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
       </div>
@@ -176,14 +176,15 @@ const $ = (id) => document.getElementById(id);
 // Three presets. "copying" shows the mechanism with every soft knob at zero. "evolution" is the open regime in
 // which selection holds strands long: cooperative docking (a lone docked monomer falls off, so longer templates
 // nucleate copies faster) with processive fraying (strands die whole instead of being eroded), spontaneous
-// origins and gentle mutation, no ligation. "protocells" adds membrane blocks that self-assemble into rings,
-// energy from ABA motifs, and a little radiation to open rings again; rings enclose strands only rarely so far.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
+// origins and gentle mutation, no ligation.
+// "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
+// the walls let monomers through but not strands or energy.
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
   evo:   Object.assign({}, ZERO, EVO),
-  proto: Object.assign({}, ZERO, EVO, { W: 80, H: 80, seedCount: 1, pUnzip: 0, pUndock: 0, pFray: 0.0001, pLigate: 0.02, nM: 300, memAngle: 30, motif: true, pReload: 0.0005, pBreak: 0.0002 }),
+  cells: Object.assign({}, ZERO, EVO, { W: 40, H: 40, nA: 200, nB: 200, nE: 60, seedCount: 2, pSoft: 0.002, pCapture: 0.002, pSpont: 0.0002, nM: 400, memAngle: 15, make: true, tether: true, memPerm: true, pMemDecay: 0.002, energyGate: false }),
 };
 const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, snapCorners: true, maxStrain: 0.4, mobS: 1, act: false, stiffA: 0.5, stiffB: 0.5, stiffC: 0.5, stiffD: 0.5, stiffM: 0.7, shapeA: 'square', shapeB: 'square', shapeC: 'square', shapeD: 'square', shapeM: 'square', bendA: 0, bendB: 0, bendC: 0, bendD: 0, nC: 0, nD: 0 };
 
@@ -205,6 +206,8 @@ const KNOBS = [
   ['pMem', 'p link per contact'],
   ['resM', 'M resistance'],
   ['make', 'strands make membrane', 'M starts raw; the back of an A between two Bs activates it', 'bool'],
+  ['tether', 'membrane tethered', 'raw M joins only arcs anchored on a maker; membrane the anchor signal does not reach decays', 'bool'],
+  ['memPerm', 'membrane lets monomers through', 'free monomers pass membrane; strands and energy do not', 'bool'],
   ['act', 'monomers need activation', 'a unit leaving a strand is inactive until its back meets the back of an A between two Bs', 'bool'],
   ['pMemDecay', 'p membrane decay', 'an active M with no neighbours falls back to raw, per step'],
   ['grp', 'Shape'],
@@ -340,7 +343,7 @@ const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', EON: '#ffe
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {

@@ -1,0 +1,16 @@
+10000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 2 strands 3 free 194
+20000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 3 strands 3 free 194
+30000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 15 strands 9 free 180
+40000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 41 strands 30 free 139
+50000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 62 strands 31 free 136
+60000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 88 strands 31 free 135
+70000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 105 strands 29 free 142
+80000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 124 strands 33 free 134
+90000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 143 strands 33 free 134
+100000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 163 strands 34 free 129
+110000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 182 strands 34 free 131
+120000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 209 strands 40 free 119
+130000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 227 strands 36 free 126
+140000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 252 strands 41 free 117
+150000: active 0 rings 0 (mean 0) arcs 0 rings holding a strand 0 template units inside 0 births 269 strands 39 free 121
+mean rings holding a strand over the last two thirds: 0.00

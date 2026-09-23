@@ -1126,3 +1126,38 @@ closes. That is the physical half of division: a membrane that has grown to twic
 size usually ends up as two compartments. Whether the contents are split between them is the next
 question. Fluid membrane (an open membrane side taking over a bonded one, `pSwap`) was also tried
 and removed: rings formed faster but at the wrong sizes, and with the limit on it did not help.
+
+## 24. Walls made by their strands (`tether_probe.js`, `cells.sh`, `walls.sh`)
+
+Section 16's make rule activated membrane at a maker's back, but activated membrane spread
+everywhere. `tether` keeps it with its makers: a raw block anchored on a `MAKE` back (the back of an
+`A` template unit between two `B`s) passes an anchor signal along its arc (as `relay` passes `FEED`
+along a strand); raw blocks join only an anchored arc's open ends; active membrane the signal does
+not reach falls back to raw at `pMemDecay` and lets go. `memPerm` makes membrane permeable to free
+monomers (a membrane block and an unbonded letter do not collide), while strands and energy
+particles stay on their side. All on the flush-polygon physics of section 23 (corners snapped,
+membrane stiffness 0.7, strain limit 0.5).
+
+**What the tether does.** One `ABBABA` strand among 250 raw membrane blocks (30×30, no turnover,
+energy not gating): an anchored arc grows on the strand's back and curls around it, the strand
+bending along the inside of its wall; each copy that carries `BAB` starts a wall of its own; arcs of
+neighbouring strands join end to end into walls shared by several strands; now and then an arc
+closes into a ring around its maker and the maker's copy. Nothing in the rules mentions a cell;
+the rule is "raw membrane joins the open end of an arc anchored on a maker".
+
+**Rings holding strands**, three seeds per regime, 150,000 steps, bend 15° (rings of about 24),
+standard turnover; mean over the last two thirds (`cells.sh`):
+
+| membrane | seed 1 | seed 2 | seed 3 | active membrane at the end (of 250) |
+|---|---:|---:|---:|---|
+| fixed stock, all active | 1.40 | 2.30 | 1.70 | 250 |
+| made at `BAB` backs (section 16's rule), permeable | 0.30 | 1.10 | 0.30 | 20, 250, 16 |
+| tethered | 0.20 | 0.00 (extinct) | 1.20 | 155, 0, 74 |
+| tethered, permeable | 0.00 | 0.80 | 0.00 | 0, 87, 0 |
+
+By this measure the tether does worse than a fixed stock. Where walls vanish, the population lost
+its `BAB` makers: a wall does nothing for the strand inside it yet, so nothing keeps the maker
+motif against drift, and without makers the tethered membrane decays. When energy comes only from
+the public `ABA` motif (charged particles cannot pass membrane), walls persist in both seeds tried
+(121 to 176 active blocks after 200,000 steps, one to four rings holding strands). Whether walls
+then pay (whether `BAB` and `ABA` rise together) is `walls.sh`, below.

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Screenshot the viewer after running it for a while, with knobs set. Needs Playwright (global install is fine) and a
-// Chromium; in the cloud sandbox: NODE_PATH=$(npm root -g) node tools/screenshot.js out.png '{"preset":"proto","make":true,"nM":300}' 15000
+// Chromium; in the cloud sandbox: NODE_PATH=$(npm root -g) node tools/screenshot.js out.png '{"preset":"cells"}' 15000
 // Booleans tick checkboxes, everything else fills the knob's input; "preset" picks a preset first.
 const { chromium } = require('playwright');
 const path = require('path');
