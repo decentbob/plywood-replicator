@@ -62,11 +62,12 @@ const S = {
   RAW: 20,                                              // K and L, R of a raw membrane block (make rule): its back docks on a MAKE back and its sides on an active block's open side, either of which activates it
   MAKE: 21,                                             // K of an A template unit flanked by two B units (make rule): activates raw membrane blocks
   SHIELD: 23,                                           // L, R of a D template unit flanked by two C units (shield rule): radiation cannot break these bonds
+  FSH: 24,                                              // L, R carrying both signals, FEED and SHIELD (relay)
   HYB: 22,                                              // L, R of a template unit whose face is bound to another template's face (binding, complementary letters): read by its neighbours
   FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
 };
-const SNAME = Object.keys(S);
+const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
 // A bond breaks the moment either of its sides derives to one of these.
 const NONHOLD = new Uint8Array(32);
 NONHOLD[S.REPEL] = NONHOLD[S.INERT] = NONHOLD[S.IDLE] = NONHOLD[S.OFF] = 1;
@@ -95,6 +96,7 @@ const DEFAULTS = {
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   feed: false,     // a B template unit flanked by two A units re-arms its released neighbours through their shared bonds (private metabolism)
   shield: false,   // a D template unit flanked by two C units makes its two lateral bonds immune to radiation (private durability)
+  relay: false,    // template units pass FEED and SHIELD on along their strand, away from the motif, so one motif serves the whole strand
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
@@ -521,8 +523,19 @@ class Sim {
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
-    if (this.p.feed && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + L] = this.ss[o + R] = S.FEED;
-    if (this.p.shield && st === I_TPL && bL && bR && this.type[u] === T_D && this.type[b[o + L] >> 2] === T_C && this.type[b[o + R] >> 2] === T_C) this.ss[o + L] = this.ss[o + R] = S.SHIELD;
+    if (st === I_TPL && (this.p.feed || this.p.shield)) {
+      // a B between two As shows FEED on both sides, a D between two Cs SHIELD. With the relay, a template unit also shows
+      // on each side what its neighbour on the other side shows toward it, so a signal runs along the strand away from
+      // its motif and stops at the ends; it cannot circle without a source.
+      const srcF = this.p.feed && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A;
+      const srcS = this.p.shield && bL && bR && this.type[u] === T_D && this.type[b[o + L] >> 2] === T_C && this.type[b[o + R] >> 2] === T_C;
+      const rel = this.p.relay, ss = this.ss;
+      const has = (q, sig) => rel && q >= 0 && (ss[q] === sig || ss[q] === S.FSH);
+      const fR = srcF || has(b[o + L], S.FEED), fL = srcF || has(b[o + R], S.FEED);
+      const sR = srcS || has(b[o + L], S.SHIELD), sL = srcS || has(b[o + R], S.SHIELD);
+      if (bL && (fL || sL)) ss[o + L] = fL && sL ? S.FSH : fL ? S.FEED : S.SHIELD;
+      if (bR && (fR || sR)) ss[o + R] = fR && sR ? S.FSH : fR ? S.FEED : S.SHIELD;
+    }
     // K. A B template unit flanked by two A units reads CHARGE at its back when the motif rule is on:
     // this is the one place a side's state depends on what its neighbours are (their type is their colour).
     // (K to K bonds no longer exist; the back is for energy only.)
@@ -593,7 +606,7 @@ class Sim {
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3 lost its strand: back to the pool
       else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
-      else if (p.feed && ((bL && this.ss[b[o + L]] === S.FEED) || (bR && this.ss[b[o + R]] === S.FEED))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
+      else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
       if (nl === 0) this.is[u] = I_DOCK;                                   // R3
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
@@ -622,7 +635,8 @@ class Sim {
       for (const side of [L, R]) {
         const q = b[o + side]; if (q < 0) continue;
         const v = q >> 2; if (v < u) continue;   // each bond is rolled once, by its lower-numbered end
-        if (this.ss[o + side] === S.SHIELD || this.ss[q] === S.SHIELD) continue;   // shield rule: a shielded bond does not break
+        const s1 = this.ss[o + side], s2 = this.ss[q];
+        if (s1 === S.SHIELD || s1 === S.FSH || s2 === S.SHIELD || s2 === S.FSH) continue;   // shield rule: a shielded bond does not break
         const theirs = 1 - typeParam(p, 'res', this.type[v], 0);
         if (this.rng() < p.pBreak * mine * theirs) { this.pendingUnlink.push(o + side); this.breakEvents++; this._event('break', u, v); }
       }

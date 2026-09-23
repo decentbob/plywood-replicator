@@ -178,7 +178,7 @@ const $ = (id) => document.getElementById(id);
 // nucleate copies faster) with processive fraying (strands die whole instead of being eroded), spontaneous
 // origins and gentle mutation, no ligation. "protocells" adds membrane blocks that self-assemble into rings,
 // energy from ABA motifs, and a little radiation to open rings again; rings enclose strands only rarely so far.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, make: false, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -224,6 +224,7 @@ const KNOBS = [
   ['energyGate', 'energy gate', 'REPEL→TPL needs an E particle', 'bool'],
   ['motif', 'ABA motif charges', 'a B between two As recharges spent E at its back', 'bool'],
   ['shield', 'CDC motif shields', 'a D between two Cs makes its two bonds immune to radiation', 'bool'],
+  ['relay', 'motif signals relay', 'template units pass FEED and SHIELD along their strand: one motif serves the whole strand', 'bool'],
   ['feed', 'ABA motif feeds', 'a B between two As re-arms its released neighbours through their bonds', 'bool'],
   ['pReload', 'p reload per step', 'OFF→ON background energy income'],
   ['grp', 'Physics'],
@@ -335,7 +336,7 @@ const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', EON: '#ffe
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {

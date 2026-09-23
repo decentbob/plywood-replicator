@@ -173,4 +173,19 @@ test('four letters copy exactly; shield: a D between two Cs keeps its bonds unde
   assert.ok(on.breakEvents < off.breakEvents, `shielded ${on.breakEvents} breaks vs ${off.breakEvents}`);
 });
 
+test('relay: one motif serves its whole strand (feed arms it, shield protects it)', () => {
+  let off = 0, on = 0;
+  for (const seed of [4, 5, 6]) {
+    const mk = (relay) => new Sim(Object.assign({}, base, { seed, W: 40, H: 40, nA: 3, nB: 3, nC: 20, nD: 5, nE: 10, seedSeq: 'CCDCCCCC', pBreak: 0.002, shield: true, relay, energyGate: false }));
+    const a = mk(false), b = mk(true); a.run(3000); b.run(3000); off += a.breakEvents; on += b.breakEvents;
+  }
+  assert.ok(on * 3 < off, `relayed shield ${on} breaks vs ${off} without`);
+  // feed: a strand released with only its motif armed arms the rest through the relay, with no energy at all
+  const s = new Sim(Object.assign({}, base, { seed: 4, W: 40, H: 40, nA: 20, nB: 20, nE: 0, seedSeq: 'AAABAAAA', feed: true, relay: true, sigma: 0, sigmaRot: 0 }));
+  const units = []; for (let u = 0; u < s.n; u++) if (s.is[u] === I_TPL) units.push(u);
+  for (const u of units) if (s.type[u] !== 1) s.is[u] = 1;   // REPEL, except the motif's B
+  s._deriveAll(); s._computeOpen(); s.run(10);
+  assert.ok(units.every((u) => s.is[u] === I_TPL), 'the whole strand should be armed through the relay');
+});
+
 console.log(passed + ' tests passed');
