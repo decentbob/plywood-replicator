@@ -2,7 +2,8 @@
 # Two genes in a four-letter world (RESULTS.md, section 19): ABA (feed: private energy) and CDC (shield: bonds immune to
 # radiation). Both rules are always on; only the environment changes. Round 1 (G_*): none, scarce energy, radiation,
 # both. Round 2 (G2_*): energy truly scarce, radiation a third as strong, two seeds each. Round 3 (G3_*): the relay on
-# (one motif serves its whole strand), the four environments, two seeds each.
+# (one motif serves its whole strand), the four environments, two seeds each. Round 4 (G4_*): both pressures, milder,
+# with and without ligation (strands fuse end to end, so genes can be combined).
 cd "$(dirname "$0")/.."
 mkdir -p experiments/out
 O=experiments/out
@@ -28,4 +29,10 @@ echo "G3_rad_$sd    --seed $sd --nE 60 --pReload 0.002 --pBreak 0.0001"
 echo "G3_both_$sd   --seed $sd --nE 12 --pReload 0.0003 --pBreak 0.0001"
 done
 } | run "$C --relay 1"
+{
+for sd in 1 2; do
+echo "G4_both_lig_$sd --seed $sd --pLigate 0.02"
+echo "G4_both_$sd     --seed $sd --pLigate 0"
+done
+} | run "$C --relay 1 --nE 26 --pReload 0.0005 --pBreak 0.00005"
 echo GENESDONE

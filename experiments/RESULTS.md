@@ -870,6 +870,22 @@ the genome that carries it. That is what the relay does (`relay`: a template uni
 SHIELD on along its strand, away from the motif, so one motif arms or shields the whole strand);
 round 3 (`G3_*`) repeats the four environments with it.
 
+Round 3 (`G3_*`, relay on), per-block motif frequency (× chance) over the run, two seeds each:
+
+| environment | ABA | CDC | mean newborn length | outcome |
+|---|---|---|---:|---|
+| none | drifts, 0 to 0.05 | drifts, 0 to 0.05 | 3.3 to 3.9 | neither selected |
+| scarce energy | seed 1 held at 0.07 to 0.09 (4 to 7 ×) all run; seed 2 never arose | - | 3.3 to 4.1 (seed 1) | energy gene kept where it exists |
+| radiation | - | 0.15 to 0.20 (8 to 11 ×), both seeds | 2.8 to 3.4 | shield gene selected, genomes longer than without the relay (2.5) |
+| both | - | lost | 2.0 | both seeds collapse to dimers |
+
+With the relay each gene pays for length where its pressure acts: energy-limited genomes carrying
+`ABA` stay at 3.3 to 4.1 units, and radiation no longer shrinks shield carriers to bare `CDC`. No
+genome carried both genes, though: two pressures at these strengths are more than the population
+survives, and point mutation alone is slow to build a genome of six or more that has both.
+Round 4 (`G4_*`) makes both pressures milder and turns on ligation, the one channel here that
+joins two strands, so an energy-gene strand and a shield-gene strand can fuse.
+
 ## 20. Summary
 
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
