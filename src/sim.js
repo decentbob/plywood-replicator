@@ -41,6 +41,8 @@ const NT = 6;
 const NV = 8;   // most corners a unit can have
 const TNAME = ['A', 'B', 'E', 'M', 'C', 'D'];
 const LETTERS = [T_A, T_B, T_C, T_D];
+/** Binding partners: A with B, C with D (copying pairs each letter with itself, binding with its complement). */
+const COMP = [T_B, T_A, -1, -1, T_D, T_C];
 /** A per-type parameter: p[base + letter], e.g. stiffC; dflt where the type has none (E has no stiffness knob). */
 function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
@@ -59,7 +61,8 @@ const S = {
   MEM: 16,                                              // L, R of a membrane block: open, bonds only to another membrane block's opposite side
   RAW: 20,                                              // K and L, R of a raw membrane block (make rule): its back docks on a MAKE back and its sides on an active block's open side, either of which activates it
   MAKE: 21,                                             // K of an A template unit flanked by two B units (make rule): activates raw membrane blocks
-  HYB: 22,                                              // L, R of a template unit whose face is bound to another template's face (binding): read by its neighbours
+  SHIELD: 23,                                           // L, R of a D template unit flanked by two C units (shield rule): radiation cannot break these bonds
+  HYB: 22,                                              // L, R of a template unit whose face is bound to another template's face (binding, complementary letters): read by its neighbours
   FEED: 18,                                             // L, R of a B template unit flanked by two A units (feed rule): a released neighbour that reads it re-arms without energy
   FRAY: 17,                                             // L, R of a unit that is leaving its strand this step (processive fraying); holds, and a neighbour can read it
 };
@@ -82,7 +85,7 @@ const DEFAULTS = {
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
   pUnzip: 0,       // processive fraying: a unit whose lateral neighbour is fraying frays next, per step. 1 unzips a whole strand; 0 is plain end fraying
   pUndock: 0,      // a docked monomer with no lateral bonds falls off its template, per step: cooperativity
-  pHyb: 0,         // binding: two template faces of opposite type (A on B) bind, per step of contact. Copies pair A on A, so kin never bind
+  pHyb: 0,         // binding: two template faces of complementary letters (A on B, C on D) bind, per step of contact. Copies pair A on A, so kin never bind
   pMelt: 0.1,      // binding: a face-to-face bond with no bound neighbour melts, per step
   pMeltRun: 0.001, // binding: a face-to-face bond with a bound neighbour on each side melts, per step
   pMeltEnd: -1,    // binding: one with a bound neighbour on one side only (the end of a run); -1 means pMeltRun. Set between the two, only runs of three or more hold
@@ -91,6 +94,7 @@ const DEFAULTS = {
   resA: 0, resB: 0, resC: 0, resD: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   feed: false,     // a B template unit flanked by two A units re-arms its released neighbours through their shared bonds (private metabolism)
+  shield: false,   // a D template unit flanked by two C units makes its two lateral bonds immune to radiation (private durability)
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
@@ -450,7 +454,7 @@ class Sim {
     }
     if (i === F && j === F) {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
-      if (isTpl(su) && isTpl(sv)) return tu !== tv ? p.pHyb : 0;   // binding: two templates, opposite types
+      if (isTpl(su) && isTpl(sv)) return COMP[tu] === tv ? p.pHyb : 0;   // binding: two templates, complementary letters (A-B, C-D)
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
       return tu === tv ? 1 : p.pSoft;
     }
@@ -518,6 +522,7 @@ class Sim {
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
     if (this.p.feed && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + L] = this.ss[o + R] = S.FEED;
+    if (this.p.shield && st === I_TPL && bL && bR && this.type[u] === T_D && this.type[b[o + L] >> 2] === T_C && this.type[b[o + R] >> 2] === T_C) this.ss[o + L] = this.ss[o + R] = S.SHIELD;
     // K. A B template unit flanked by two A units reads CHARGE at its back when the motif rule is on:
     // this is the one place a side's state depends on what its neighbours are (their type is their colour).
     // (K to K bonds no longer exist; the back is for energy only.)
@@ -617,6 +622,7 @@ class Sim {
       for (const side of [L, R]) {
         const q = b[o + side]; if (q < 0) continue;
         const v = q >> 2; if (v < u) continue;   // each bond is rolled once, by its lower-numbered end
+        if (this.ss[o + side] === S.SHIELD || this.ss[q] === S.SHIELD) continue;   // shield rule: a shielded bond does not break
         const theirs = 1 - typeParam(p, 'res', this.type[v], 0);
         if (this.rng() < p.pBreak * mine * theirs) { this.pendingUnlink.push(o + side); this.breakEvents++; this._event('break', u, v); }
       }
@@ -1004,5 +1010,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, COMP, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

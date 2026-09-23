@@ -163,4 +163,14 @@ test('binding: opposite-type template faces bind and melt, cooperatively; copies
   assert.deepStrictEqual(s.check(), []);
 });
 
+test('four letters copy exactly; shield: a D between two Cs keeps its bonds under radiation', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 5, nA: 100, nB: 100, nC: 100, nD: 100, seedSeq: 'ABCDCA' }));
+  s.run(20000);
+  assert.ok(s.births.length >= 2, 'four-letter strands should copy');
+  for (const b of s.births) assert.strictEqual(b.seq, rev(b.parent));
+  const mk = (shield) => new Sim(Object.assign({}, base, { seed: 4, W: 40, H: 40, nA: 3, nB: 3, nC: 3, nD: 3, nE: 10, seedSeq: 'CDCDCD', pBreak: 0.002, shield, energyGate: false }));
+  const off = mk(false), on = mk(true); off.run(3000); on.run(3000);
+  assert.ok(on.breakEvents < off.breakEvents, `shielded ${on.breakEvents} breaks vs ${off.breakEvents}`);
+});
+
 console.log(passed + ' tests passed');
