@@ -1537,3 +1537,51 @@ about 300 blocks):
   that separates copying from self-assembly.
 
 Not yet done: `autocat.js` on the top tables (55, 57, 4, 15, 1, 54), and the other 69 tables.
+
+## 33. Telomeres: end-replication loss and the fragment problem (`telo.sh`, `telo3.sh`, `telo2.sh`, `capped.js`)
+
+Section 22 ended on the fragment problem: any piece of a genome is itself a replicator and out-copies the whole, so a
+two-gene genome falls apart into its genes. `endLoss` is a one-neighbour rule aimed at it (the user's point the same day:
+locality is fundamental, so no rule may treat whole strands specially). A template block with a free lateral side shows no
+face and marks its bonded side as a tip; a block that reads the tip counts that side as the end. A copy therefore lacks
+its template's open ends. Caps (`P` has no left side, `Q` no right side) have no free side, so a strand capped at both ends
+copies whole; a piece shrinks by a unit per open end per generation (`ABBABA` → `BABB` → `BA` → nothing; `PABBAB` →
+`ABBAQ` → `PABBA` → `BBAQ` → `PAB` → `AQ` → nothing, `test.js`). This is the end-replication problem of linear
+chromosomes and the telomere answer to it.
+
+**Finding a working regime** (40×40, four letters, feed, shield and relay on, seed `PABACDCQ` ×3, 150,000-step probes):
+
+| regime | what happened |
+|---|---|
+| 40 caps of each kind, 128 of each letter, `pFray` 3e-5, `pUndock` 0.1 | copying of the 8-unit genome so slow that radiation 3e-5 kills everything |
+| 60 caps, `pUndock` 0 | copying stops at 20,000 steps: half-finished copies hold all the `A` and `C` monomers, and a template with a copy on it cannot die |
+| 40 caps, 200 of each letter, `pUndock` 0.02 | the pieces' dying lineages (`CDCA` → `CD`, `PABA` → `BAQ` → `PA`) hold the caps; capped births stop |
+| 120 caps, `pUndock` 0 | better (69 to 90 capped births in the first 50,000 steps), then the pieces' lineages fill the world and take the free letters |
+| 120 caps, open ends fragile (`pFray` 0.001), caps not (`capFray` 0.03) | pieces die within about 1,000 steps; whole genomes copy steadily (120 to 340 capped births per 50,000 steps) |
+
+The last is the regime of everything below: open ends fray fast (an exonuclease), capped ends slowly. Biology again: an
+unprotected chromosome end is degraded.
+
+**Round 1** (`telo.sh`, seed `PABACDCQ` alone, 500,000 steps, seed 1). Environments as in section 22: none (60
+particles, reload 0.002), energy (16, 0.0004), radiation (`pBreak` 3e-5), both. Share of capped births carrying each gene:
+
+| run | 0–100k | 100k–200k | 200k–300k | 300k–400k | 400k–500k |
+|---|---|---|---|---|---|
+| none | ABA 55%, CDC 47%, `PQ` 35 of 292 | `PQ` 271 of 388 | `PQ` 371 of 379 | `PQ` 360 of 361 | `PQ` only |
+| energy | ABA 89%, CDC 90% | 82%, 82% | 87%, 74% | 89%, 53% | 85%, 64% (length 7.8) |
+| radiation | ABA 65%, CDC 85% | 66%, 85% | 65%, 85% | `PQ` 101 of 363 | `PQ` 464 of 554 |
+| both | ABA 73%, CDC 73% | `PQ` 373 of 675 | `PQ` 628 of 665 | `PQ` only | `PQ` only |
+
+What it says. The fragment problem is gone: genomes do not fall apart into their genes, and each gene is kept where its
+pressure acts (the energy gene at 85 to 89% under scarce energy while the unused shield gene drifts down; the shield at 85%
+under radiation). But a new, smaller replicator appears: `PQ`, two caps and nothing between, made by a copying mistake
+(first births of `PQ` at steps 17,615 to 30,198 in all four runs, from parents such as `DCABAQ`, `PABACDCQ`, `PCDC`).
+Without pressure it won at once. Under radiation it arose at step 28,069 and took over only after step 300,000; under both
+pressures it took over by step 200,000. Under scarce energy alone it arose (step 25,558) and did not spread: 19 births in
+500,000 steps, while the two-gene genome held at length 7.8. So under scarce energy the genome with the private `feed` gene holds against `PQ` (why exactly is not measured); under
+radiation, which costs per bond, the one-bond `PQ` wins slowly, and with both pressures radiation's push wins sooner. A gene here only reduces a cost that grows
+with length, and the shortest genome hardly pays that cost.
+
+The fix tried next is in the same spirit as `endLoss`, one block property: `bareCaps`, caps have no back, so no energy
+particle docks on a cap and a cap is armed only through its bond (the `feed` relay). Then `PQ` can never be re-armed, and a
+genome must carry the energy gene to reproduce, as a real genome must encode its own metabolism.
