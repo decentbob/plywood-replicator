@@ -131,6 +131,12 @@ Works, measured (RESULTS sections in brackets):
 - Walls made by their strands (24): with `make` + `tether` a strand carrying `BAB` anchors membrane on its back
   and grows a wall around itself; with `memLinkTol` 0.3 the wall closes around its maker in 20 of 20 seeds within
   about 12,000 steps, stays closed for 10,000 to 50,000 and opens under strain. `memPerm` lets monomers through.
+- **Two genes kept in one genome (33, seed 1 so far).** Telomeres: with `endLoss` (a template block with a free side shows
+  no face, so copies lose their template's open ends) only strands capped `P...Q` persist, and a genome's pieces die out;
+  with `bareCaps` (caps armed only through their bond by the `feed` relay) a genome must carry the energy gene `ABA`, so
+  `PQ` is sterile. Then `PABACDCQ` (energy + shield genes) drives `PABAQ` extinct wherever radiation acts and keeps both
+  genes in 74 to 86% of births for 500,000 steps; without radiation `PABAQ` wins and the shield is lost. Open ends fray
+  fast (`pFray` 0.001), caps slowly (`capFray` 0.03). Scripts `telo*.sh`, analysis `capped.js`, viewer preset "genomes".
 
 Tried and failed, with the reason (so they are not retried blindly):
 - Compartments by chance (16): rings close around strands, but enclosures last less than a generation and
@@ -158,8 +164,9 @@ Tried and failed, with the reason (so they are not retried blindly):
 
 The core obstacle, stated once: **every pressure in this world costs long genomes more than short ones**, and
 any fragment of a genome is itself a replicator that out-copies it (22), so anything that needs several genes
-in one genome loses to its pieces. Biology's answer is compartments (the stochastic corrector); here they have
-not paid (24, 25). Ecology (predation by recognition, 26) is being tried as a route that needs no long genomes.
+in one genome loses to its pieces. Section 33 is the first way past it: caps with end-replication loss make pieces
+sterile, and bare caps make the energy gene essential, so the smallest viable genome already carries one gene and a
+second gene pays where its pressure acts. Still one seed at the time of writing; see RESULTS 33 for the rest.
 
 ## Handoff (2026-09-24, end of a long session): pick up here
 
