@@ -1365,3 +1365,23 @@ beside it. In two letters no cutter can avoid it.
 its own kind. With cutter motif `CAC` and a cutter strand `ACACCA` among mixed strands, 23 of 24 cuts
 in 200,000 steps hit strands carrying B or D, none a strand of the cutter's own sequence: self and
 non-self are told apart by sequence. The selection test is below (`CUT4_*`, `CTL4_*`).
+
+**Four letters, selection** (`CUT4_*`, `CTL4_*`: 128 of each letter, binding 0.05, cutter motif `CAC`,
+seeds `ACACCA` and `ABCDBA`, slow polymers, 1,000,000 steps, three seeds each). Newborns of three
+units or more by tribe (`tribes.js`: a strand using one letter of each binding pair cannot bind its
+own kind):
+
+| run | cuts | births | `CAC` per block, by 250k window | share of newborns in a tribe (not mixed), by window |
+|---|---:|---:|---|---|
+| CUT4_1 | 5 | 3,079 | 0.003, 0.001, 0.001, 0.001 | 4%, 10%, 6%, 6% |
+| CUT4_2 | 14 | 3,221 | 0.012, 0.003, 0.002, 0.000 | 9%, 8%, 22%, 11% |
+| CUT4_3 | 36 | 3,352 | 0.010, 0.001, 0.002, 0.012 | 8%, 6%, 13%, 18% |
+| CTL4_1 | 0 | 3,380 | 0.004, 0.000, 0.001, 0.001 | 5%, 11%, 8%, 11% |
+| CTL4_2 | 0 | 3,457 | 0.021, 0.000, 0.001, 0.001 | 17%, 7%, 11%, 10% |
+| CTL4_3 | 0 | 3,382 | 0.025, 0.021, 0.005, 0.012 | 12%, 4%, 14%, 18% |
+
+Nothing happened: cutting was too rare to matter (5 to 36 cuts in a million steps). The one A/C cutter
+seed was swamped by mixed strands within the first window, and random sequences almost always carry
+both letters of a pair (80% to 96% of newborns), so a cutter's own lineage is mixed within a few
+generations and the motif is as rare as in the control. Cutting as built needs its motif to be
+common before it can pay, and nothing makes it common. A null result, not a negative one.
