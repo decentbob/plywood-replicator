@@ -157,4 +157,10 @@ not paid (24, 25). Ecology (predation by recognition, 26) is being tried as a ro
    pieces cannot replicate on their own would let genomes keep several genes.
 3. Compartments are parked (16, 24, 25): every part works, together they do not pay. If resumed: faster wall
    building (pre-made vesicles that encapsulate by chance, grow and split by strain) rather than recruitment.
-4. Longer list: DESIGN.md section 15.
+4. **Stranger blocks for the search** (the user's idea, 2026-09-24): block types not thought of or set aside before,
+   each behind a knob so `search.js` can draw them: branching blocks (three or more lateral sides: 2D organisms),
+   two-faced blocks (template on face and back), blocks whose shape depends on their state (curl as template,
+   straighten while copied), free catalyst blocks that speed a reaction where they touch without being used up,
+   extremes of existing properties (giant or tiny, very soft, ray-proof or fragile, very fast or slow letters),
+   poisonous blocks that block faces or break bonds.
+5. Longer list: DESIGN.md section 15.

@@ -343,6 +343,12 @@ Keep entries short: date, what changed, why, what evidence.
 
 ## 15. Ideas not yet tried
 
+**Added 2026-09-24.** Search over worlds instead of one mechanism at a time (`experiments/search.js`,
+RESULTS section 27; the user's idea that evolution got going only once enough separate processes had built up).
+Next for it: stranger block types to draw from (the user's idea): branching blocks with three or more lateral
+sides, two-faced blocks, state-dependent shapes, free catalyst blocks, extreme sizes, softness, speeds and
+resistances, poisonous blocks.
+
 **Ranked next steps (2026-09-23).**
 
 - **A. Tethered compartments** (builds on the `make` rule). Keep the anchor: a raw membrane block anchored on a
