@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, S, T_E, T_M, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
+const { Sim, S, T_E, T_M, T_X, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -267,6 +267,23 @@ test('tether: membrane grows only from makers and stays with them; memPerm lets 
   const c = new Sim({ seed: 1, W: 20, H: 20, nA: 1, nB: 0, nE: 0, nM: 1, memPerm: false, sigma: 0, sigmaRot: 0, pReload: 0 });
   c.px[0] = 10; c.py[0] = 10; c.px[1] = 10.3; c.py[1] = 10; c._resetShape(0); c._resetShape(1); c.run(5);
   assert.ok(Math.hypot(c.px[1] - c.px[0], c.py[1] - c.py[0]) > 0.6, 'without memPerm they collide');
+});
+
+
+test('rays: they break the bonds of an exposed strand and never reach one inside a closed ring', () => {
+  const N = 24, r = N / (2 * Math.PI);
+  const s = new Sim({ seed: 1, W: 30, H: 30, nA: 12, nB: 0, nE: 0, nM: N, nX: 60, memAngle: 15, stiffM: 1, snapCorners: true, pReload: 0, rayHit: 0.05, resM: 1, mobS: 0.6, mobM: 0.5, mobX: 0.08 });
+  const mem = []; for (let u = 0; u < s.n; u++) if (s.type[u] === T_M) mem.push(u);
+  mem.forEach((u, i) => { const th = 2 * Math.PI * i / N; s.px[u] = 10 + r * Math.cos(th); s.py[u] = 15 + r * Math.sin(th); s.pa[u] = th; s._resetShape(u); });
+  mem.forEach((u, i) => s._link(u, R, mem[(i + 1) % N], L));
+  const inside = s.seedStrand(10, 15, 0, 4, 'AAAA'), outside = s.seedStrand(23, 15, 0, 4, 'AAAA');
+  for (let u = 0; u < s.n; u++) if (s.type[u] === T_X && Math.hypot(s._dx(s.px[u] - 10), s._dy(s.py[u] - 15)) < r + 1.5) s.px[u] = s._wx(s.px[u] + 12);
+  s._deriveAll(); s._computeOpen();
+  const intact = (units) => units.every((u, i) => i + 1 === units.length || s.bond[u * 4 + R] >= 0);
+  s.run(15000);
+  assert.ok(intact(inside), 'the strand inside the ring should be untouched');
+  assert.ok(!intact(outside) && s.rayHits > 0, 'the strand outside should have been hit');
+  assert.deepStrictEqual(s.check(), []);
 });
 
 console.log(passed + ' tests passed');
