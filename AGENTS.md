@@ -12,9 +12,14 @@ entries near the end of the list), 15 (ideas not yet tried).
 
 ## The user's rules (hard constraints and preferences)
 
-- **Simple base rules, strictly local.** A block reads only its own type and state, which of its sides are
-  bonded, and the derived state of the side it is bonded to. Communication only through connected sides.
-  No global signals, no counters, no knowledge of strand length.
+- **Locality is the fundamental rule, the reason the project exists** (the user, 2026-09-24: many projects have
+  pre-programmed behaviour; emergent evolution without it is what has not been seen). A block reads only its own
+  type and state, which of its sides are bonded, and the derived state of the side it is bonded to, and changes
+  its own state by simple rules on those. Communication only through connected sides. No global signals, no
+  counters, no knowledge of strand length, no special behaviour for whole strands, finished copies or anything
+  bigger than a block (even if it could be written with local steps: judge a rule by what one block does). A
+  signal relayed from block to block moves one block per derive pass (read neighbours' relayed states from
+  `ss0` / `tip0`, the previous pass), never further. Check every new rule against this before anything else.
 - **No pre-programming.** No rule may mention copy, strand, organism, genome. Those words live in comments.
 - **Prefer state changes to type changes.** When a block should become something else, give it an internal
   state and let a bonded side's state trigger the change (as energy particles recharge, as raw membrane is

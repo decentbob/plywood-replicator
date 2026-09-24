@@ -55,6 +55,13 @@ node experiments/summarize.js # tables from experiments/out/*.csv
 
 ## The whole chemistry
 
+**The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and
+the state shown by the side it is bonded to, and changes its own state by simple rules on those. Nothing bigger than a
+block has any behaviour of its own: no rule treats a whole strand, a finished copy or a genome specially, and a signal
+passed from block to block (the relay, the tether's anchor signal, `endLoss`'s tip) moves one block per update pass.
+Whatever a strand or a population does comes out of that. This is what the project is about: evolution that emerges
+without pre-programmed behaviour.
+
 A unit is a block with four working sides that are fixed for life: **F** (face), **R**,
 **K** (back), **L**. The sides are not interchangeable. Only a face docks, and only
 on the face of a template of the same type; L bonds only to a neighbour's R, so
@@ -136,6 +143,7 @@ sequence.
 | `cut`, `cutMotif`, `pCut`, `cutRelay` | a bound template carrying `cutMotif` cuts the strand it is bound to (26) |
 | `sizeA`..`sizeD`, `mobA`..`mobD`, `foldA`..`foldD` | per-letter size, mobility, and folding: a letter bends by `fold` degrees while its face is free, so a free strand curls and straightens where it is copied |
 | `nP`, `nQ`, `capFray` | caps: letters with one lateral side (`P` has no left, `Q` no right) that pair only with each other and fray at `capFray` of the normal rate; a capped strand grows only by a copying mistake inside it |
+| `endLoss` | end-replication loss: a template unit with a free lateral side shows no face and marks its bonded side as a tip, and a neighbour reading the tip counts that side as the end. Every copy lacks its template's open ends, so pieces of a strand shrink by a unit per open end each generation and die out, while a strand capped at both ends (`P...Q`) copies whole, as telomeres protect chromosome ends (33) |
 | `compCopy` | complementary copying: `A` docks on `B` and `C` on `D`, so a copy is the reversed complement of its parent (28) |
 | `nJ`, `pHub` | hubs: blocks whose four sides each hold a strand's open end, tethering strands in a star without fusing them |
 | `heatPeriod`, `heatFrac`, `heatMelt` | temperature cycles: in the hot part of each period binding stops and bound pairs melt at `heatMelt` (29) |

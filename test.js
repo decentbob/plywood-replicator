@@ -322,6 +322,22 @@ test('caps: a strand capped P...Q copies into capped strands, and caps never fra
 });
 
 
+test('endLoss: a copy lacks its template\'s open ends; a strand capped at both ends is copied whole', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 2, W: 40, H: 40, nA: 150, nB: 150, nP: 30, nQ: 30, nE: 120, seedSeq: 'PABBAQ,ABBABA,PABBAB', endLoss: true }));
+  s.run(30000);
+  const swap = (q) => [...q].reverse().map((c) => (c === 'P' ? 'Q' : c === 'Q' ? 'P' : c)).join('');
+  const openEnds = (q) => (q[0] === 'P' ? 0 : 1) + (q[q.length - 1] === 'Q' ? 0 : 1);
+  assert.ok(s.births.length >= 5, 'births ' + s.births.length);
+  assert.ok(s.births.some((b) => b.parent === 'PABBAQ' && b.seq === 'PABBAQ'), 'a capped strand copies whole');
+  for (const b of s.births) {
+    if (!b.parent || b.seq.length === b.parent.length - openEnds(b.parent)) continue;
+    assert.fail('a copy of ' + b.parent + ' is ' + b.seq + ': it should be ' + openEnds(b.parent) + ' shorter');
+  }
+  assert.ok(s.births.some((b) => b.parent === 'ABBABA' && b.seq === 'BABB'), 'an open strand loses both ends');
+  assert.ok(s.births.every((b) => b.parent !== 'PABBAB' || b.seq === swap('PABBA')), 'a strand open at one end loses that end');
+  assert.deepStrictEqual(s.check(), []);
+});
+
 test('compCopy: copies are reversed complements; hubs hold strand ends and never enter a sequence', () => {
   const rc = (q) => [...q].reverse().map((c) => ({ A: 'B', B: 'A', C: 'D', D: 'C' })[c]).join('');
   const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'AAABAB', seedCount: 2, compCopy: true }));

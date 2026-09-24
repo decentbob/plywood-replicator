@@ -182,7 +182,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, nG: 0, gRange: 2.2, gStick: 1 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, nG: 0, gRange: 2.2, gStick: 1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -209,6 +209,7 @@ const KNOBS = [
   ['pMisDock', 'p mirror dock', 'a monomer of the other hand docks at this fraction of the rate and blocks the site (cross-inhibition)'],
   ['pMixLink', 'p mixed link', 'neighbours of different hands link at this fraction of the rate'],
   ['compCopy', 'complementary copying', 'A docks on B and C on D (as in DNA): a copy is the reversed complement', 'bool'],
+  ['endLoss', 'end-replication loss', 'a template unit with a free side shows no face, so every copy lacks its template\'s open ends; strands capped P...Q copy whole (telomeres)', 'bool'],
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
   ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
   ['pUnzip', 'p unzip per step', 'the next unit follows a fraying one; 1 recycles a whole strand'],

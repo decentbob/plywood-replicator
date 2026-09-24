@@ -91,6 +91,10 @@ const DEFAULTS = {
   nM: 0,                        // membrane blocks: wedges that bond only to each other, side to side; self-assemble into arcs and rings
   nP: 0, nQ: 0,                 // caps: letters with one lateral side. P has only R (a left end), Q only L (a right end); P docks on a Q
                                 // template and Q on P, so a capped strand P...Q copies into a capped strand. A cap cannot be extended
+  endLoss: false,               // end-replication loss: a template unit with a free lateral side shows nothing on its face and marks its
+                                // bonded side as a tip; a neighbour reading the tip counts that side as the template's end. Every copy then
+                                // lacks its template's open ends (two units shorter; one if capped at one end), so pieces of a strand die
+                                // out in a few generations while a strand capped at both ends (P...Q) is copied whole (telomeres)
   capFray: 0,                   // a cap's fraying rate relative to an ordinary end's (0: a cap never frays, so a strand capped at both
                                 // ends lives until it breaks in the middle)
   nJ: 0, pHub: 0.1,             // hubs: blocks whose four sides each hold the open end of a strand, per step of contact, so several strands
@@ -231,6 +235,11 @@ class Sim {
     this.px = new Float64Array(n); this.py = new Float64Array(n); this.pa = new Float64Array(n);
     this.bond = new Int32Array(n * 4).fill(-1);   // partner = unit*4+side
     this.ss = new Uint8Array(n * 4);              // derived side states
+    this.tip = new Uint8Array(n * 4);             // endLoss: a lateral side shows, beside its state, whether its unit is a tip (a template
+                                                  // unit whose other lateral side is free), derived like the state
+    this.ss0 = new Uint8Array(n * 4);             // side states as the last derive pass left them: a signal relayed along a strand (relay,
+                                                  // cutRelay, tether) is read from here, so it moves one block per pass, never further
+    this.tip0 = new Uint8Array(n * 4);            // the tips as the last derive pass left them, which is what a neighbour reads
     this.open = new Uint8Array(n);                // bitmask of bondable sides
     this.fresh = new Uint8Array(n);               // released from a template since last birth (observation)
     this.parentOf = new Int32Array(n).fill(-1);   // the template unit this unit was copied on (observation)
@@ -628,7 +637,7 @@ class Sim {
       if (this.p.tether && on) {
         // the anchor signal runs along the arc away from the anchor: each side shows it if the block is anchored or its
         // neighbour on the other side shows it toward the block
-        const src = b[o + K] >= 0, fromL = b[o + L] >= 0 && this.ss[b[o + L]] === S.ANC, fromR = b[o + R] >= 0 && this.ss[b[o + R]] === S.ANC;
+        const src = b[o + K] >= 0, fromL = b[o + L] >= 0 && this.ss0[b[o + L]] === S.ANC, fromR = b[o + R] >= 0 && this.ss0[b[o + R]] === S.ANC;
         const sR = src || fromL, sL = src || fromR;
         this.ss[o + L] = b[o + L] >= 0 ? (sL ? S.ANC : S.BONDED) : (sL ? S.MEMA : S.MEM);
         this.ss[o + R] = b[o + R] >= 0 ? (sR ? S.ANC : S.BONDED) : (sR ? S.MEMA : S.MEM);
@@ -671,7 +680,7 @@ class Sim {
       let carries = src;
       if (this.p.cutRelay) {
         // the signal runs along the strand away from its source; each side shows it if I am a source or my other side receives it
-        const ss = this.ss, got = (q) => q >= 0 && (ss[q] === S.ARMEDC || ss[q] === S.HYBC);
+        const ss = this.ss, s0 = this.ss0, got = (q) => q >= 0 && (s0[q] === S.ARMEDC || s0[q] === S.HYBC);
         const inL = bL && got(b[o + L]), inR = bR && got(b[o + R]);
         if (bL && (src || inR)) ss[o + L] = ss[o + L] === S.HYB ? S.HYBC : S.ARMEDC;
         if (bR && (src || inL)) ss[o + R] = ss[o + R] === S.HYB ? S.HYBC : S.ARMEDC;
@@ -686,7 +695,7 @@ class Sim {
       const srcF = this.p.feed && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A;
       const srcS = this.p.shield && bL && bR && this.type[u] === T_D && this.type[b[o + L] >> 2] === T_C && this.type[b[o + R] >> 2] === T_C;
       const rel = this.p.relay, ss = this.ss;
-      const has = (q, sig) => rel && q >= 0 && (ss[q] === sig || ss[q] === S.FSH);
+      const s0 = this.ss0, has = (q, sig) => rel && q >= 0 && (s0[q] === sig || s0[q] === S.FSH);
       const fR = srcF || has(b[o + L], S.FEED), fL = srcF || has(b[o + R], S.FEED);
       const sR = srcS || has(b[o + L], S.SHIELD), sL = srcS || has(b[o + R], S.SHIELD);
       if (bL && (fL || sL)) ss[o + L] = fL && sL ? S.FSH : fL ? S.FEED : S.SHIELD;
@@ -700,13 +709,26 @@ class Sim {
     else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
     else if (this.p.act && st === I_TPL && bL && bR && this.type[u] === this._actMid && this.type[b[o + L] >> 2] === this._actOut && this.type[b[o + R] >> 2] === this._actOut) this.ss[o + K] = S.ACT;
     else this.ss[o + K] = S.IDLE;
+    if (this.p.endLoss) {
+      // end-replication loss: a template unit with a free lateral side (a cap's missing side is not free) is a tip and shows no
+      // face; a unit whose neighbour is a tip counts that side as the end, so the copy stops one unit short of the open end
+      const tp = this.tip, t0 = this.tip0, t = this.type[u];
+      tp[o + L] = tp[o + R] = 0;
+      if (st === I_TPL) {
+        if ((!bL && t !== T_P) || (!bR && t !== T_Q)) { this.ss[o + F] = S.IDLE; tp[o + L] = tp[o + R] = 1; }
+        else {
+          const eL = bL && !t0[b[o + L]], eR = bR && !t0[b[o + R]];   // sides along which the template continues
+          if (eL !== bL || eR !== bR) this.ss[o + F] = (eL && eR) ? S.TPL_MM : eL ? S.TPL_RF : eR ? S.TPL_LF : S.IDLE;
+        }
+      }
+    }
     if (this.type[u] >= T_P) this._capSides(u);
   }
 
   /** Caps lack one lateral side: that side shows IDLE and never bonds. */
   _capSides(u) { const t = this.type[u]; if (t === T_P) this.ss[u * 4 + L] = S.IDLE; else if (t === T_Q) this.ss[u * 4 + R] = S.IDLE; }
 
-  _deriveAll() { for (let u = 0; u < this.n; u++) this._derive(u); }
+  _deriveAll() { const p = this.p; if (p.endLoss) this.tip0.set(this.tip); if (p.relay || p.cutRelay || p.tether) this.ss0.set(this.ss); for (let u = 0; u < this.n; u++) this._derive(u); }
 
   // ------------------------------------------------------------- the rule table
   /**
