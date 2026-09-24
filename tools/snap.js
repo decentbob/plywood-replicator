@@ -1,17 +1,18 @@
 // Render a Sim's current state to a PNG (for probes): every block as its polygon, coloured by type and state, bonds
 // share an edge (opt.corners: also mark the pinned corners). Needs Playwright and Chromium (NODE_PATH=$(npm root -g) in the cloud sandbox).
-//   const snap = require('./tools/snap.js'); await snap(sim, 'out.png', { x0, y0, w, h, scale });
+//   const snap = require('./tools/snap.js'); await snap(sim, 'out.png', { x0, y0, w, h, scale, colorOf: (u) => css colour or null });
 const { NV, T_A, T_B, T_C, T_D, T_E, T_M, T_X, T_P, T_Q, T_J, T_G, I_TPL, I_REPEL, I_ON } = require('../src/sim.js');
 
-function polys(s, box) {
+function polys(s, box, colorOf) {
   const out = [];
   for (let u = 0; u < s.n; u++) {
     const t = s.type[u], nv = s.corners(u);
     let x = s.px[u], y = s.py[u];
     if (box) { const W = s.p.W, H = s.p.H; x = box.x0 + (((x - box.x0) % W) + W) % W; y = box.y0 + (((y - box.y0) % H) + H) % H; if (x < box.x0 - 1 || y < box.y0 - 1 || x > box.x0 + box.w + 1 || y > box.y0 + box.h + 1) continue; }
     const pts = []; for (let k = 0; k < nv; k++) pts.push([x + s.ox[u * NV + k], y + s.oy[u * NV + k]]);
-    let col;
-    if (t === T_X) col = '#ff2bd6';
+    let col = colorOf ? colorOf(u) : null;
+    if (col) ;
+    else if (t === T_X) col = '#ff2bd6';
     else if (t === T_J) col = '#ff9900';
     else if (t === T_G) col = '#6d6a8f';
     else if (t === T_E) col = s.is[u] === I_ON ? '#ffe14d' : '#666';
@@ -33,7 +34,7 @@ module.exports = async function snap(s, file, opt = {}) {
   const { chromium } = require('playwright');
   const box = { x0: opt.x0 ?? 0, y0: opt.y0 ?? 0, w: opt.w ?? s.p.W, h: opt.h ?? s.p.H };
   const sc = opt.scale ?? Math.min(900 / box.w, 900 / box.h);
-  const data = polys(s, box);
+  const data = polys(s, box, opt.colorOf);
   const b = await chromium.launch({ executablePath: process.env.CHROMIUM || '/opt/pw-browsers/chromium' });
   const pg = await b.newPage({ viewport: { width: Math.ceil(box.w * sc), height: Math.ceil(box.h * sc) } });
   await pg.setContent(`<canvas id=c width=${Math.ceil(box.w * sc)} height=${Math.ceil(box.h * sc)}></canvas><style>body{margin:0;background:#111}</style>`);
