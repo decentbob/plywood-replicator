@@ -38,7 +38,7 @@ src/rchem.js        random chemistry: Sim with its rule table replaced by a rand
 index.html          viewer: canvas, knobs, presets, readout, event feed, click-to-inspect
 run.js              headless runner: CSV every --every steps, JSON summary on stderr, --births FILE (JSONL, written
                     at the END of the run), --change T:k=v,k=v (environment change mid-run, repeatable)
-test.js             invariant tests (28; about 10 minutes on one core)
+test.js             invariant tests (27; about 10 minutes on one core)
 build.js            single-file dist/ build of the viewer
 experiments/*.sh    one script per batch; each RESULTS.md section names its script
 experiments/*.js    analysis over experiments/out/*.births.jsonl (see below)
