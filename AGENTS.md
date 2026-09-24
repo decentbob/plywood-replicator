@@ -146,10 +146,34 @@ Tried and failed, with the reason (so they are not retried blindly):
 - Tried and removed: polygon-exact contacts (no effect, 2.3× slower), fluid membrane `pSwap`, mechanical breaks
   inside a copy in progress (strands shatter into replicating fragments) (23).
 
+- Double strands (29): binding without heat collapses length to about 2.3; heat cycles restore it, no gain over no binding.
+- Chirality (30): a racemic world stays racemic with hands fixed for life (round 1); Frank's conditions not yet run.
+
 The core obstacle, stated once: **every pressure in this world costs long genomes more than short ones**, and
 any fragment of a genome is itself a replicator that out-copies it (22), so anything that needs several genes
 in one genome loses to its pieces. Biology's answer is compartments (the stochastic corrector); here they have
 not paid (24, 25). Ecology (predation by recognition, 26) is being tried as a route that needs no long genomes.
+
+## Handoff (2026-09-24, end of a long session): pick up here
+
+All code below is committed on branch `claude/serene-keller-sprlt0` (not yet merged into `main`; ask the user before
+merging). Background batches were stopped at the handoff; partial outputs are in `experiments/out/` and RESULTS 29–32.
+Unfinished, in order of value:
+
+1. **Random chemistry (RESULTS 32)**, the user's latest question. Run `node experiments/autocat.js 55 57 4 15 1 54` (does the
+   commonest assembly of the most ordered tables beget itself? compare with `--control`), then screen the remaining tables
+   (`node experiments/rsearch.js 31 50` and `81 100`, the file keeps indices 0–30 and 50–65 or so). Report to the user
+   whether any random table passes the heredity test. The viewer's "random chemistry" preset shows any table by its seed.
+2. **Chirality round 2** (RESULTS 30): `ROUND=2 OUT=... P=4 experiments/chiral.sh` (Frank's conditions: `pRacem`,
+   small `pMixLink`, `pMisDock`), 2 seeds; `node experiments/hand.js <births files>`. Round 1 seed 2 too.
+3. **Droplets and the public motif** (RESULTS 31): `experiments/droplets.sh`, compare with section 21.
+4. **Double strands** (RESULTS 29): seed 3 and `DX_bindheat_2` (`experiments/duplex.sh`, edit the seed list).
+5. **Search round 2** (RESULTS 27): 53 of 80 worlds in `experiments/out/search_2_partial.jsonl`; summarize with
+   `node experiments/search_summary.js experiments/out/search_2_partial.jsonl --by=enrich`, finish indices missing from it
+   (`node experiments/search.js <from> <to> --round=2`), then round 3 (`--round=3`: folding, caps, ligation).
+6. The walker/helicase block (DESIGN 15, ideas from reality) is designed in words only.
+
+Runs share four cores: keep at most four processes (the last session ran 17 and everything crawled).
 
 ## Next steps, ranked (details in DESIGN.md section 15)
 
