@@ -82,7 +82,7 @@
     constructor(params) {
       const o = Object.assign({}, RDEFAULTS, params || {});
       const tab = o.table || randomTable(o);
-      const counts = {}; for (let t = 0; t < 6; t++) counts['n' + TNAME[LETTERS[t]]] = t < tab.K ? (o['n' + TNAME[LETTERS[t]]] ?? o.nEach) : 0;
+      const counts = {}; for (let t = 0; t < 6; t++) counts['n' + TNAME[LETTERS[t]]] = t < tab.K ? o.nEach : 0;
       super(Object.assign({ W: 25, H: 25, nE: 0, seedCount: 0, maxEventLog: 0, maxBirthLog: 0, snapCorners: true }, o, counts, { _tab: tab }));
     }
 
@@ -160,13 +160,14 @@
 
     /** Observation: the bonded components, each with a signature (a Weisfeiler-Lehman hash of its graph of (type, state)
      * blocks joined side to side), so identical assemblies can be counted. */
-    assemblies(minSize = 2) {
+    assemblies(minSize = 2, label) {
+      const lb = label || ((u) => this._ti(u) * 16 + this.is[u]);
       const n = this.n, seen = new Uint8Array(n), out = [];
       for (let s0 = 0; s0 < n; s0++) {
         if (seen[s0]) continue;
         const comp = this.componentOf(s0); for (const x of comp) seen[x] = 1;
         if (comp.length < minSize) continue;
-        let lab = new Map(comp.map((u) => [u, this._ti(u) * 16 + this.is[u]]));
+        let lab = new Map(comp.map((u) => [u, lb(u)]));
         for (let it = 0; it < 3; it++) {
           const nl = new Map();
           for (const u of comp) {
@@ -177,9 +178,33 @@
           lab = nl;
         }
         const sig = comp.length + '#' + hash([...lab.values()].sort((a, b) => a - b).join(','));
-        out.push({ size: comp.length, sig });
+        out.push({ size: comp.length, sig, comp });
       }
       return out;
+    }
+
+    /** A copy of an assembly (its blocks' types, states, shapes relative to the first block, and bonds), to transplant. */
+    capture(comp) {
+      const u0 = comp[0], idx = new Map(comp.map((u, k) => [u, k]));
+      const blocks = comp.map((u) => ({ ti: this._ti(u), st: this.is[u], dx: this._dx(this.px[u] - this.px[u0]), dy: this._dy(this.py[u] - this.py[u0]), pa: this.pa[u],
+        ox: Array.from(this.ox.slice(u * NV, u * NV + NV)), oy: Array.from(this.oy.slice(u * NV, u * NV + NV)) }));
+      const links = []; for (const u of comp) for (let i = 0; i < 4; i++) { const q = this.bond[u * 4 + i]; if (q >= 0 && (q >> 2) > u) links.push([idx.get(u), i, idx.get(q >> 2), q & 3]); }
+      return { blocks, links };
+    }
+
+    /** Put a captured assembly at (cx, cy) using free blocks of the right types. False if there are not enough. */
+    transplant(a, cx, cy) {
+      const used = [];
+      for (const b of a.blocks) {
+        let f = -1;
+        for (let u = 0; u < this.n; u++) if (this._ti(u) === b.ti && !used.includes(u) && this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0 && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0) { f = u; break; }
+        if (f < 0) return false;
+        used.push(f);
+      }
+      a.blocks.forEach((b, k) => { const u = used[k]; this.px[u] = this._wx(cx + b.dx); this.py[u] = this._wy(cy + b.dy); this.pa[u] = b.pa; this.is[u] = b.st; for (let c = 0; c < NV; c++) { this.ox[u * NV + c] = b.ox[c]; this.oy[u * NV + c] = b.oy[c]; } });
+      for (const [x, i, y, j] of a.links) this._link(used[x], i, used[y], j);
+      this._deriveAll(); this._computeOpen();
+      return used;
     }
 
     /** One snapshot: how many blocks are bonded, component sizes, and repeats of identical assemblies of size >= 4. */
@@ -194,7 +219,19 @@
         if (c > top || (c === top && size > topSize)) { top = c; topSize = size; }
         if (size >= 6) { if (c >= 2) repeat6 += (c - 1) * size; if (c > top6 || (c === top6 && size > top6Size)) { top6 = c; top6Size = size; } }
       }
-      return { t: this.t, comps: as.length, bonded, largest, kinds, top, topSize, repeat, top6, top6Size, repeat6, switches: this.switches, breaks: this.breaks };
+      // order beyond chance: repeats among assemblies of three or more blocks, against the same assemblies with the labels
+      // (type, state) of all bonded blocks shuffled among them (same shapes, random make-up); the mean of three shuffles
+      const rep3 = (as2) => { const m = new Map(); for (const a of as2) if (a.size >= 3) m.set(a.sig, (m.get(a.sig) || 0) + 1); let r = 0; for (const [sig, c] of m) if (c >= 2) r += (c - 1) * Number(sig.split('#')[0]); return r; };
+      const repeat3 = rep3(as);
+      const bl = []; for (let u = 0; u < this.n; u++) if (this.bond[u * 4] >= 0 || this.bond[u * 4 + 1] >= 0 || this.bond[u * 4 + 2] >= 0 || this.bond[u * 4 + 3] >= 0) bl.push(u);
+      const r = mulberry32(this.t + 17); let shuf = 0;
+      for (let k = 0; k < 3; k++) {
+        const labs = bl.map((u) => this._ti(u) * 16 + this.is[u]);
+        for (let i = labs.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const x = labs[i]; labs[i] = labs[j]; labs[j] = x; }
+        const mp = new Map(bl.map((u, i) => [u, labs[i]]));
+        shuf += rep3(this.assemblies(2, (u) => mp.get(u))) / 3;
+      }
+      return { t: this.t, comps: as.length, bonded, largest, kinds, top, topSize, repeat, top6, top6Size, repeat6, repeat3, repeat3Shuffled: +shuf.toFixed(1), switches: this.switches, breaks: this.breaks };
     }
   }
 

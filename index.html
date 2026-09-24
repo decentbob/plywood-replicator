@@ -123,6 +123,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="copy">Preset: copying, no mutation</option>
           <option value="evo" selected>Preset: evolution</option>
           <option value="cells">Preset: cells (strands grow their own walls)</option>
+          <option value="random">Preset: random chemistry (a random rule table; change the table seed)</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
       </div>
@@ -169,6 +170,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
 <footer>Sides are fixed for life: F (face) docks only on a template's F of the same type; L bonds only to a neighbour's R, which is why chains are one-dimensional; K (back) takes only energy. Energy particles are small squares of a third type that never chain: a charged one docks on a back that wants energy, the block re-arms, the particle is left spent and drifts off; it recharges at a background rate or at the back of a B block flanked by two As. The whole chemistry is the compatibility table and a handful of transitions on one internal state per square: <code>DOCK → REPEL</code> when locally complete or captured, <code>REPEL → TPL</code> on energy (or, with feed, from an armed B between two As through their bonds), back to <code>DOCK</code> when a unit loses its strand, frays off an end (and, with unzipping, when the neighbour it is bonded to is fraying), or undocks while alone. Copies are antiparallel, so a child reads as the reverse of its parent. In the physics a bond pins the two corners of one edge onto its partner's, and a block is held to its shape by a restoring force; nothing bigger than a block exists.</footer>
 </div>
 <script src="src/sim.js"></script>
+<script src="src/rchem.js"></script>
 <script>
 (function(){
 const PC = window.PolyChem, { Sim, S, T_E, T_A, T_B, T_M, TNAME, SNAME, F, R, K, L } = PC;
@@ -187,6 +189,9 @@ const PRESETS = {
   evo:   Object.assign({}, ZERO, EVO),
   cells: Object.assign({}, ZERO, EVO, { W: 40, H: 40, nA: 200, nB: 200, nE: 60, seedCount: 2, pSoft: 0.002, pCapture: 0.002, pSpont: 0.0002, nM: 400, memAngle: 15, stiffM: 1, memLinkTol: 0.3, make: true, tether: true, memPerm: true, pMemDecay: 0.002, energyGate: false }),
 };
+// "random": the rule table replaced by a random one (src/rchem.js): side colours, colour attractions and state switches drawn from
+// the table seed. Fill: the block's type, lighter by state; side lines: the colour each side shows.
+PRESETS.random = Object.assign({}, ZERO, { mode: 'random', W: 30, H: 30, nE: 0, seedCount: 0, chemSeed: 1, K: 3, NS: 3, NC: 4, pAff: 0.3, pRule: 0.2, pRuleFree: 0.05, pInert: 0.3, rBreak: 0.0002, nEach: 80 });
 const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, snapCorners: true, maxStrain: 0.4, mobS: 1, act: false, stiffA: 0.5, stiffB: 0.5, stiffC: 0.5, stiffD: 0.5, stiffM: 0.7, shapeA: 'square', shapeB: 'square', shapeC: 'square', shapeD: 'square', shapeM: 'square', bendA: 0, bendB: 0, bendC: 0, bendD: 0, nC: 0, nD: 0 };
 
 const KNOBS = [
@@ -195,6 +200,11 @@ const KNOBS = [
   ['gStick', 'droplet stickiness', 'G blocks close this share of a small gap to each other per step: at about 1 they separate into liquid droplets'],
   ['gStickS', 'strands to droplets', 'a letter in a strand is drawn to G at this fraction of the stickiness'],
   ['gStickF', 'monomers to droplets', 'a free letter is drawn to G at this fraction of the stickiness'],
+  ['grp', 'Random chemistry (random preset only)'],
+  ['chemSeed', 'table seed', 'which random rule table'], ['K', 'block types', '2 to 6'], ['NS', 'states per block'], ['NC', 'side colours', 'colour 0 never bonds'],
+  ['pAff', 'share of colour pairs that attract'], ['pRule', 'share of (type, state, side, colour) with a switching rule'], ['pRuleFree', 'the same for a free side'],
+  ['pInert', 'share of inert sides'], ['rBreak', 'p bond breaks per step'], ['nEach', 'blocks of each type'],
+  ['grp', 'Letters'],
   ['chiral', 'mirror letters', 'this fraction of letters are mirror forms (drawn with a slash, lowercase in sequences): each hand docks only on its own'],
   ['pMisDock', 'p mirror dock', 'a monomer of the other hand docks at this fraction of the rate and blocks the site (cross-inhibition)'],
   ['pMixLink', 'p mixed link', 'neighbours of different hands link at this fraction of the rate'],
@@ -260,7 +270,7 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -296,7 +306,7 @@ function applyLive() {
 }
 function reset() {
   const p = currentParams();
-  sim = new Sim(p); series = []; selected = -1; flashes.clear(); lastEvent = 0;
+  sim = p.mode === 'random' ? new PC.RChem(p) : new Sim(p); series = []; selected = -1; flashes.clear(); lastEvent = 0;
   $('inspect').hidden = true; $('log').textContent = ''; $('feed').textContent = '';
   // the seed strand is the first TPL unit
   seedUnit = -1; for (let u = 0; u < sim.n; u++) if (sim.type[u] !== T_E && sim.is[u] === 2) { seedUnit = u; break; }
@@ -355,6 +365,7 @@ function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) ca
 // ------------------------------------------------------------ drawing
 const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', J: '#ff9900', G: '#6d6a8f', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
 const SIDECOL = {};
+const RPAL = ['#000', '#ff4d4d', '#ffd84d', '#4dff88', '#4dd2ff', '#b84dff', '#ff4dd2', '#ffffff', '#ff9f1c', '#9fff1c', '#1c9fff'];
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
 SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66';
@@ -365,6 +376,15 @@ function drawPoly(u, sx, sy, z, lw) {
   for (let k = 0; k < nv; k++) { X.push(sx + sim.ox[u * NV + k] * z); Y.push(sy + sim.oy[u * NV + k] * z); }
   const outline = () => { ctx.beginPath(); ctx.moveTo(X[0], Y[0]); for (let k = 1; k < nv; k++) ctx.lineTo(X[k], Y[k]); ctx.closePath(); };
   outline();
+  if (sim.census) {   // random chemistry: type colour, lighter by state; sides in the colour they show
+    ctx.fillStyle = COL[PC.TNAME[sim.type[u]]]; ctx.fill();
+    if (sim.is[u]) { ctx.fillStyle = `rgba(255,255,255,${0.18 * sim.is[u]})`; ctx.fill(); }
+    ctx.lineWidth = lw; const cs = [0, 0];
+    for (let i = 0; i < 4; i++) { const c = sim.ss[u * 4 + i]; if (!c) continue; sim._sideCorners(u, i, cs); const a = cs[0] - u * NV, b = cs[1] - u * NV;
+      ctx.strokeStyle = RPAL[c % RPAL.length]; ctx.beginPath(); ctx.moveTo(X[a] * 0.9 + X[b] * 0.1, Y[a] * 0.9 + Y[b] * 0.1); ctx.lineTo(X[a] * 0.1 + X[b] * 0.9, Y[a] * 0.1 + Y[b] * 0.9); ctx.stroke(); }
+    if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; outline(); ctx.stroke(); }
+    return;
+  }
   ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : sim.type[u] === T_M ? (sim.is[u] === 1 ? COL.M : COL.MRAW) : COL[PC.TNAME[sim.type[u]]];
   ctx.fill();
   if (sim.hand && sim.hand[u]) { ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = Math.max(1, z * 0.12); ctx.beginPath(); ctx.moveTo(X[0], Y[0]); ctx.lineTo(X[Math.floor(nv / 2)], Y[Math.floor(nv / 2)]); ctx.stroke(); }   // mirror letter: a slash
@@ -413,6 +433,7 @@ function draw() {
 function showInspect() {
   const el = $('inspect'); if (selected < 0) { el.hidden = true; return; }
   const u = selected, t = TNAME[sim.type[u]];
+  if (sim.census) { let s = `block ${u}  type ${t}  state ${sim.is[u]}\n`; for (let i = 0; i < 4; i++) { const q = sim.bond[u * 4 + i]; s += `${'FRKL'[i]} colour ${sim.ss[u * 4 + i]} ${q >= 0 ? '→ ' + (q >> 2) + '.' + 'FRKL'[q & 3] + ' colour ' + sim.ss[q] : ''}\n`; } s += `connected to ${sim.componentOf(u).length - 1} others`; el.textContent = s; el.hidden = false; return; }
   const st = sim.type[u] === T_E ? (sim.is[u] ? 'ON' : 'OFF') : sim.type[u] === T_M ? 'membrane' : ['DOCK', 'REPEL', 'TPL', 'FRAY'][sim.is[u]];
   let s = `unit ${u}  type ${t}  state ${st}  gen ${sim.gen[u]}\n`;
   const names = ['F', 'R', 'K', 'L'];
@@ -454,6 +475,7 @@ function refresh(force) {
   if (!force && sim.t % 100 !== 0) return;
   refreshFeed();
   if (!force && sim.t % 200 !== 0) return;
+  if (sim.census) { refreshRandom(); return; }
   const st = sim.stats();
   $('hT').textContent = st.t; $('hS').textContent = st.strands + st.complexes; $('hR').textContent = st.rings; $('hM').textContent = st.memRings; $('hEn').textContent = st.enclosedAB; $('hF').textContent = st.free; $('hB').textContent = st.births; $('hG').textContent = st.maxGen;
   $('sFree').textContent = st.free; $('sStr').textContent = st.strands + st.complexes; $('sCpx').textContent = st.complexes;
@@ -474,6 +496,16 @@ function refresh(force) {
     el.addEventListener('click', () => { cam.x = b.x; cam.y = b.y; if (cam.zoom < 24) cam.zoom = 36; });
     log.appendChild(el);
   }
+  if (selected >= 0) showInspect();
+}
+function refreshRandom() {
+  const c = sim.census();
+  $('hT').textContent = c.t; $('hS').textContent = c.comps; $('hF').textContent = sim.n - c.bonded;
+  series.push([c.t, c.comps, c.largest / 10, sim.n - c.bonded]); if (series.length > 600) series.shift();
+  drawChart();
+  $('seqs').innerHTML = '';
+  $('hist').textContent = `assemblies ${c.comps}, blocks bonded ${c.bonded} of ${sim.n}, largest ${c.largest}, kinds of 4+ ${c.kinds}; most repeated: ${c.top} of ${c.topSize} blocks; ` +
+    `repeats among 3+ ${c.repeat3} (shuffled make-up: ${c.repeat3Shuffled}); state switches ${c.switches}, breaks ${c.breaks}`;
   if (selected >= 0) showInspect();
 }
 function drawChart() {
