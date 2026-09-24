@@ -91,6 +91,8 @@ const DEFAULTS = {
   nM: 0,                        // membrane blocks: wedges that bond only to each other, side to side; self-assemble into arcs and rings
   nP: 0, nQ: 0,                 // caps: letters with one lateral side. P has only R (a left end), Q only L (a right end); P docks on a Q
                                 // template and Q on P, so a capped strand P...Q copies into a capped strand. A cap cannot be extended
+  bareCaps: false,              // caps have no back: no energy particle docks on a cap, so a cap is armed only through its bond (feed rule,
+                                // with the relay), and a capped strand re-arms only if it carries a feed motif
   endLoss: false,               // end-replication loss: a template unit with a free lateral side shows nothing on its face and marks its
                                 // bonded side as a tip; a neighbour reading the tip counts that side as the template's end. Every copy then
                                 // lacks its template's open ends (two units shorter; one if capped at one end), so pieces of a strand die
@@ -725,8 +727,8 @@ class Sim {
     if (this.type[u] >= T_P) this._capSides(u);
   }
 
-  /** Caps lack one lateral side: that side shows IDLE and never bonds. */
-  _capSides(u) { const t = this.type[u]; if (t === T_P) this.ss[u * 4 + L] = S.IDLE; else if (t === T_Q) this.ss[u * 4 + R] = S.IDLE; }
+  /** Caps lack one lateral side (and, with bareCaps, the back): that side shows IDLE and never bonds. */
+  _capSides(u) { const t = this.type[u]; if (t === T_P) this.ss[u * 4 + L] = S.IDLE; else if (t === T_Q) this.ss[u * 4 + R] = S.IDLE; if (this.p.bareCaps) this.ss[u * 4 + K] = S.IDLE; }
 
   _deriveAll() { const p = this.p; if (p.endLoss) this.tip0.set(this.tip); if (p.relay || p.cutRelay || p.tether) this.ss0.set(this.ss); for (let u = 0; u < this.n; u++) this._derive(u); }
 
