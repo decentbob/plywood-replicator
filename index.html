@@ -191,6 +191,7 @@ const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energ
 const KNOBS = [
   ['grp', 'Chemistry'],
   ['pSoft', 'p wrong-type dock', 'substitution'],
+  ['compCopy', 'complementary copying', 'A docks on B and C on D (as in DNA): a copy is the reversed complement', 'bool'],
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
   ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
   ['pUnzip', 'p unzip per step', 'the next unit follows a fraying one; 1 recycles a whole strand'],
@@ -247,12 +248,12 @@ const KNOBS = [
   ['tolDeg', 'dock tolerance °'],
   ['grp', 'Population (reset)'],
   ['seed', 'RNG seed'],
-  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nP', 'P caps', 'a left-end cap (no left side); pairs with Q; caps never fray'], ['nQ', 'Q caps'], ['nC', 'C monomers', 'more letters: each pairs with its own kind'], ['nD', 'D monomers'], ['nE', 'E particles'],
+  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nP', 'P caps', 'a left-end cap (no left side); pairs with Q; caps never fray'], ['nQ', 'Q caps'], ['nJ', 'hubs', 'blocks whose four sides hold strand ends: strands tethered in a star'], ['nC', 'C monomers', 'more letters: each pairs with its own kind'], ['nD', 'D monomers'], ['nE', 'E particles'],
   ['seedSeq', 'seed strands', 'sequences of A, B, C, D, comma-separated', 'text'],
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -345,11 +346,11 @@ $('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFol
 function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
 
 // ------------------------------------------------------------ drawing
-const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
+const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', J: '#ff9900', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {

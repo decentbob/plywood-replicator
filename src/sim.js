@@ -36,17 +36,17 @@
 
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
-const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps
-const NT = 9;
+const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8, T_J = 9;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps; J is a hub
+const NT = 10;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q'];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J'];
 const LETTERS = [T_A, T_B, T_C, T_D, T_P, T_Q];
 /** The type of a letter character ('A'..'D', or the caps 'P', 'Q'); -1 if none. */
 function letterType(ch) { const k = 'ABCDPQ'.indexOf(ch); return k < 0 ? -1 : LETTERS[k]; }
 /** What a letter docks on: its own kind, except caps, which pair with each other (a copy lies reversed on its template). */
-const PAIR = [T_A, T_B, -1, -1, T_C, T_D, -1, T_Q, T_P];
+const PAIR = [T_A, T_B, -1, -1, T_C, T_D, -1, T_Q, T_P, -1];
 /** Binding partners: A with B, C with D (copying pairs each letter with itself, binding with its complement). */
-const COMP = [T_B, T_A, -1, -1, T_D, T_C, -1, -1, -1];
+const COMP = [T_B, T_A, -1, -1, T_D, T_C, -1, -1, -1, -1];
 /** A per-type parameter: p[base + letter], e.g. stiffC; dflt where the type has none (E has no stiffness knob). */
 function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
@@ -74,7 +74,8 @@ const S = {
   ACT: 26,                                              // K of a template unit in the activating motif (act rule): activates inactive monomers
   ANC: 27,                                              // L, R of an active membrane block, bonded, passing on the anchor signal (tether rule)
   CUT: 29,
-  ARMEDC: 30, HYBC: 31,                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
+  ARMEDC: 30, HYBC: 31,
+  HUB: 32,                                              // any side of a hub block, open: holds the open end of a strand (hub rule)                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
@@ -92,6 +93,8 @@ const DEFAULTS = {
                                 // template and Q on P, so a capped strand P...Q copies into a capped strand. A cap cannot be extended
   capFray: 0,                   // a cap's fraying rate relative to an ordinary end's (0: a cap never frays, so a strand capped at both
                                 // ends lives until it breaks in the middle)
+  nJ: 0, pHub: 0.1,             // hubs: blocks whose four sides each hold the open end of a strand, per step of contact, so several strands
+                                // are tethered in a star without being fused; to the strand the tethered side counts as free
   nX: 0,                        // rays: small fast blocks that never bond; they pass through everything but membrane, and a ray touching a
                                 // block breaks one of its lateral bonds at rayHit (radiation as particles, so a wall shields what it encloses)
   rayHit: 0.05, sizeX: 0.3, mobX: 0.12, // per step of contact; a ray's size; its Brownian step relative to its size's. At 0.12 a ray
@@ -99,6 +102,8 @@ const DEFAULTS = {
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
+  compCopy: false, // complementary copying: A docks on a B template and C on a D (caps still pair P with Q), so a copy is the reversed
+                   // complement of its template and a lineage alternates between two forms, as DNA's strands do
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
   pLigate: 0,      // two strand ends join end to end: fusion. Balanced against fraying it sets a length distribution.
   pFray: 0,        // an end unit of an undocked strand falls off, per step: turnover / deletion
@@ -202,7 +207,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.size = new Float64Array(n);
@@ -245,6 +250,7 @@ class Sim {
     for (let i = 0; i < (p.nX || 0); i++) this.type[u++] = T_X;
     for (let i = 0; i < (p.nP || 0); i++) this.type[u++] = T_P;
     for (let i = 0; i < (p.nQ || 0); i++) this.type[u++] = T_Q;
+    for (let i = 0; i < (p.nJ || 0); i++) this.type[u++] = T_J;
     for (u = 0; u < n; u++) {
       this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
@@ -480,7 +486,7 @@ class Sim {
       const gx = dx + this.ox[bv] - this.ox[bu], gy = dy + this.oy[bv] - this.oy[bu], tol = (this.p.memLinkTol || this.p.linkDistTol) * (this.size[u] + this.size[v]) / 2;
       return gx * gx + gy * gy <= tol * tol && su[2] * sv[2] + su[3] * sv[3] <= 0;
     }
-    const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E && !(this.type[u] === T_M && this.type[v] === T_M)
+    const lateral = (i !== F || this.type[u] === T_J) && (j !== F || this.type[v] === T_J) && this.type[u] !== T_E && this.type[v] !== T_E && !(this.type[u] === T_M && this.type[v] === T_M)
       && !(i === K && j === K && this.type[u] !== T_M && this.type[v] !== T_M);   // back to back between letters (act rule) is a docking
     // gap between the two side midpoints, and how antiparallel the two sides are
     const gx = dx + sv[0] - su[0], gy = dy + sv[1] - su[1];
@@ -532,6 +538,11 @@ class Sim {
       if (tu === T_M) return tv !== T_E && i === K && su === S.RAW && j === K && sv === S.MAKE ? 1 : 0;
       return tu !== T_E && j === K && sv === S.RAW && i === K && su === S.MAKE ? 1 : 0;
     }
+    if (tu === T_J || tv === T_J) {
+      if (tu === T_J && tv === T_J) return 0;
+      const [hs, xs, xi] = tu === T_J ? [su, sv, j] : [sv, su, i];
+      return hs === S.HUB && (xi === L || xi === R) && xs === S.END ? p.pHub : 0;
+    }
     if (tu === T_E || tv === T_E) {
       if (tu === T_E && tv !== T_E) return (j === K && ((su === S.ON && sv === S.WANT) || (su === S.OFF && sv === S.CHARGE))) ? 1 : 0;
       if (tv === T_E && tu !== T_E) return (i === K && ((sv === S.ON && su === S.WANT) || (sv === S.OFF && su === S.CHARGE))) ? 1 : 0;
@@ -541,7 +552,8 @@ class Sim {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
       if (isTpl(su) && isTpl(sv)) return COMP[tu] === tv ? p.pHyb : 0;   // binding: two templates, complementary letters (A-B, C-D)
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
-      return PAIR[tu] === tv ? 1 : (tu >= T_P || tv >= T_P) ? 0 : p.pSoft;   // caps pair only with each other
+      const mate = p.compCopy && tu < T_P ? COMP[tu] : PAIR[tu];
+      return mate === tv ? 1 : (tu >= T_P || tv >= T_P) ? 0 : p.pSoft;   // caps pair only with each other
     }
     if (i === K && j === K) return (su === S.INACT && sv === S.ACT) || (su === S.ACT && sv === S.INACT) ? 1 : 0;   // activation (act rule)
     if ((i === L && j === R) || (i === R && j === L)) {
@@ -564,6 +576,7 @@ class Sim {
         const s = this.ss[u * 4 + i];
         let ok = false;
         if (this.type[u] === T_X) ok = false;
+        else if (this.type[u] === T_J) ok = s === S.HUB;
         else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
@@ -595,12 +608,13 @@ class Sim {
       return;
     }
     if (this.type[u] === T_X) { this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = S.IDLE; return; }
+    if (this.type[u] === T_J) { for (let i = 0; i < 4; i++) this.ss[o + i] = b[o + i] >= 0 ? S.BONDED : S.HUB; return; }
     if (this.type[u] === T_E) {
       const s = this.is[u] === I_ON ? S.ON : S.OFF;
       this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = s;
       return;
     }
-    const bF = b[o + F] >= 0, bL = b[o + L] >= 0, bR = b[o + R] >= 0, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
+    const bF = b[o + F] >= 0, bL = b[o + L] >= 0 && this.type[b[o + L] >> 2] !== T_J, bR = b[o + R] >= 0 && this.type[b[o + R] >> 2] !== T_J, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u];
     if (st === I_FRAY) {
       this.ss[o + F] = S.REPEL; this.ss[o + K] = S.IDLE; this.ss[o + L] = S.FRAY; this.ss[o + R] = S.FRAY;
@@ -671,7 +685,7 @@ class Sim {
    */
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
-    if (this.type[u] === T_X) return;
+    if (this.type[u] === T_X || this.type[u] === T_J) return;
     if (this.type[u] === T_M) {
       // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
       // bonds falls back to raw at pMemDecay
@@ -704,7 +718,7 @@ class Sim {
       }
       return;
     }
-    const bF = b[o + F] >= 0, bL = b[o + L] >= 0, bR = b[o + R] >= 0, bK = b[o + K] >= 0;
+    const bF = b[o + F] >= 0, bL = b[o + L] >= 0 && this.type[b[o + L] >> 2] !== T_J, bR = b[o + R] >= 0 && this.type[b[o + R] >> 2] !== T_J, bK = b[o + K] >= 0;   // a hub-held side counts as free
     const nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u], pool = p.act ? I_RAW : I_DOCK;   // what a unit that leaves its strand becomes
     if (st === I_RAW) {
@@ -802,9 +816,9 @@ class Sim {
     const seen = this._seen, isM = want === T_M;
     let cyc = [];
     for (const start of units) {
-      if ((isM ? this.type[start] !== T_M : (this.type[start] === T_E || this.type[start] === T_M)) || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
+      if ((isM ? this.type[start] !== T_M : (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J)) || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
       const c = []; let u = start;
-      while (u >= 0 && !seen[u] && c.length < 100000) { seen[u] = 1; c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
+      while (u >= 0 && !seen[u] && c.length < 100000) { seen[u] = 1; c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 || this.type[q >> 2] === T_J ? -1 : q >> 2; }
       if (u === start && c.length >= 3) { cyc = c; break; }
     }
     for (const u of units) seen[u] = 0;
@@ -815,9 +829,10 @@ class Sim {
   chainOf(units) {
     let best = this.cycleOf(units);
     for (const start of units) {
-      if (this.type[start] === T_E || this.type[start] === T_M || this.bond[start * 4 + L] >= 0) continue;
+      const ql = this.bond[start * 4 + L];
+      if (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J || this.type[start] === T_X || (ql >= 0 && this.type[ql >> 2] !== T_J)) continue;
       const c = []; let u = start;
-      while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 ? -1 : q >> 2; }
+      while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 || this.type[q >> 2] === T_J ? -1 : q >> 2; }
       if (c.length > best.length) best = c;
     }
     return best;
@@ -1143,7 +1158,7 @@ class Sim {
     let inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
-      if (this.type[u] === T_X) continue;
+      if (this.type[u] === T_X || this.type[u] === T_J) continue;
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
       if (this.ss[o + K] === S.CHARGE) totalMotif++;
@@ -1181,7 +1196,7 @@ class Sim {
         if (nM === comp.length) continue;
       }
       let nAB = 0, faceBonded = false;
-      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
+      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M || this.type[u] === T_J || this.type[u] === T_X) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
       if (nAB < 2) continue;
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
@@ -1227,5 +1242,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, COMP, PAIR, letterType, T_P, T_Q, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

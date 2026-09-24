@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, S, T_E, T_M, T_X, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
+const { Sim, S, T_E, T_M, T_X, T_J, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -319,6 +319,22 @@ test('caps: a strand capped P...Q copies into capped strands, and caps never fra
   assert.ok(s.births.some((b) => b.seq === swap(b.parent)), 'faithful copies exist');
   assert.strictEqual(s.frayEvents, 0, 'a strand capped at both ends never frays');
   assert.deepStrictEqual(s.check(), []);
+});
+
+
+test('compCopy: copies are reversed complements; hubs hold strand ends and never enter a sequence', () => {
+  const rc = (q) => [...q].reverse().map((c) => ({ A: 'B', B: 'A', C: 'D', D: 'C' })[c]).join('');
+  const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'AAABAB', seedCount: 2, compCopy: true }));
+  s.run(30000);
+  assert.ok(s.births.length >= 10, 'births ' + s.births.length);
+  for (const x of s.births) assert.strictEqual(x.seq, rc(x.parent), 'not the reversed complement ' + JSON.stringify(x));
+  assert.ok(s.births.some((x) => x.seq === 'ABABBB') && s.births.some((x) => x.seq === 'AAABAB'), 'both forms should appear');
+  const h = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, nJ: 20, pHub: 0.1, seedSeq: 'ABBABA', seedCount: 3, pFray: 0.00003, pUnzip: 1, pUndock: 0.1 }));
+  h.run(30000);
+  let held = 0; for (let u = 0; u < h.n; u++) if (h.type[u] === T_J) for (let i = 0; i < 4; i++) if (h.bond[u * 4 + i] >= 0) held++;
+  assert.ok(held > 0, 'hubs should hold strand ends');
+  assert.ok(!h.births.some((x) => x.seq.includes('J')), 'a hub is never part of a sequence');
+  assert.deepStrictEqual(h.check(), []);
 });
 
 console.log(passed + ' tests passed');
