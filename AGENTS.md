@@ -133,25 +133,28 @@ Tried and failed, with the reason (so they are not retried blindly):
 - Slow polymers (`mobS`, 21): kin clusters form, but the public `ABA` motif is still lost in 1 run of 3.
 - A seeded two-gene genome (`ABACDC`, 22) is not kept even without pressure: it falls apart into pieces of
   itself, each a replicator, which out-copy it. Any fragment of a genome competes with it.
-- Walls when energy is plentiful (24): making a wall is selected against (`BAB` to a tenth of chance), open or
-  closing; a closed wall shuts its maker's copies in.
+- Walls (24, 25): made by and tethered to their makers, closing, sealing (with slow membrane `mobM` 0.5 and slow
+  contents: letters `mobS` 0.6, energy `mobE` 0.2, rays `mobX` 0.08). In every selection test (energy plentiful
+  or scarce, rays) making a wall was selected against or the walled world died: walls are slow to build, seal only
+  when everything moves slowly, then close only around 3-unit makers, and shut the maker's copies in. Note: at
+  default mobilities walls leak (energy, rays and strands pass), so section 24's energy rounds measured cost only.
+- Cutting (26): a `BAB` template bound face to face to another strand cuts it. In two letters the cutter binds its
+  own copies (alternating sequences are self-complementary) and is selected against.
 - Tried and removed: polygon-exact contacts (no effect, 2.3× slower), fluid membrane `pSwap`, mechanical breaks
   inside a copy in progress (strands shatter into replicating fragments) (23).
 
-The core obstacle, stated once: **every pressure in this world costs long genomes more than short ones**, so
-anything that needs several genes in one genome loses to dimers. Biology's answer is compartments (group
-selection of several short strands in one enclosure: the stochastic corrector).
+The core obstacle, stated once: **every pressure in this world costs long genomes more than short ones**, and
+any fragment of a genome is itself a replicator that out-copies it (22), so anything that needs several genes
+in one genome loses to its pieces. Biology's answer is compartments (the stochastic corrector); here they have
+not paid (24, 25). Ecology (predation by recognition, 26) is being tried as a route that needs no long genomes.
 
 ## Next steps, ranked (details in DESIGN.md section 15)
 
-1. **Tethered compartments.** Membrane that stays with the lineage that made it and divides: a raw block
-   anchored on a MAKE back keeps the anchor; recruitment only extends arcs that are anchored (not any active
-   block anywhere), so each ring is grown by the strands inside it; a ring grown past its natural size and
-   broken twice by radiation closes into two, each with its share of contents. Then test the stochastic
-   corrector: an energy-gene strand and a shield-gene strand in one ring vs either alone. All state changes,
-   read through bonded sides.
-2. **Viewer presets that show what evolves**: shield genes under radiation, the energy gene when energy turns
-   scarce (the viewer has no `--change`; a button that applies an environment change would do), shape spacing.
-3. **Bigger populations** (80×80 and up): the motif economy survived there where small worlds collapsed,
-   mostly through size; gene combinations might too. Slow: several hours per run.
+1. **Arms race with four letters** (26, running on 2026-09-24): a cutter whose genome uses one letter of each
+   binding pair (A/C) cannot bind its own kind; does it spread, do prey shift tribe (AC, AD, BC, BD), does
+   `cutRelay` (the whole cutter strand is the key) give an open-ended race? `tribes.js`, `who_cuts.js`.
+2. **The fragment problem** (22): any piece of a genome is a viable replicator. A local rule under which short
+   pieces cannot replicate on their own would let genomes keep several genes.
+3. Compartments are parked (16, 24, 25): every part works, together they do not pay. If resumed: faster wall
+   building (pre-made vesicles that encapsulate by chance, grow and split by strain) rather than recruitment.
 4. Longer list: DESIGN.md section 15.
