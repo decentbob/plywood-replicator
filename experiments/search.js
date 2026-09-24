@@ -3,7 +3,8 @@
 // world deterministically (which rules are on, how strong, energy, radiation, rays, binding and cutting, walls, mobility, two
 // or four letters); seeds are a few random strands plus spontaneous origins, so no gene is put in by hand. Each world runs
 // for --steps and is scored on several signs of accumulating complexity, printed as one JSON line per world.
-// Usage: node experiments/search.js <from> <to> [--steps=300000] > out.jsonl      (run several ranges in parallel)
+// Usage: node experiments/search.js <from> <to> [--steps=300000] [--round=1|2] > out.jsonl   (run several ranges in parallel)
+// Round 2 adds random per-letter properties (bend, stiffness, resistance, shape) to each round-1 world.
 const { Sim } = require('../src/sim.js');
 const arg = (k, d) => Number((process.argv.find((a) => a.startsWith('--' + k + '=')) || `--${k}=${d}`).split('=')[1]);
 const from = Number(process.argv[2] || 0), to = Number(process.argv[3] || from + 1), steps = arg('steps', 300000);
@@ -40,6 +41,21 @@ function draw(i) {
   return p;
 }
 
+/** Round 2: the round-1 world, plus random properties per letter drawn from a second random stream (so a round-2 world
+ * differs from its round-1 namesake only in its letters): a wedge bend, stiffness, resistance to breaking, octagon shape. */
+function draw2(i) {
+  const p = draw(i), r = mulberry(555 + i * 104729), pick = (a) => a[Math.floor(r() * a.length)];
+  for (const L of p.nC ? 'ABCD' : 'AB') {
+    p['bend' + L] = r() < 0.6 ? 0 : pick([5, 10, 15, 20, 25]);
+    p['stiff' + L] = pick([0.4, 0.5, 0.7, 1]);
+    p['res' + L] = pick([0, 0, 0.5, 0.9]);
+    p['shape' + L] = r() < 0.1 ? 'oct' : 'square';
+  }
+  return p;
+}
+const ROUND = Number((process.argv.find((a) => a.startsWith('--round=')) || '--round=1').split('=')[1]);
+const drawRound = (i) => (ROUND === 2 ? draw2(i) : draw(i));
+
 /** Motifs that do something under the world's rules (a motif is a middle letter flanked by one letter on both sides). */
 function functional(p) {
   const m = [];
@@ -67,13 +83,13 @@ function score(s, p) {
   return { alive: st.tpl > 0, tpl: st.tpl, births: s.birthCount, mid, last, functional: functional(p) };
 }
 
-module.exports = { draw, functional };
+module.exports = { draw, draw2, functional };
 if (require.main !== module) return;
 for (let i = from; i < to; i++) {
-  const p = draw(i), t0 = Date.now();
+  const p = drawRound(i), t0 = Date.now();
   const s = new Sim(p);
   let ok = true;
   try { s.run(steps); } catch (e) { ok = false; }
-  const out = { i, ok, secs: Math.round((Date.now() - t0) / 1000), params: p, score: ok ? score(s, p) : null };
+  const out = { i, round: ROUND, ok, secs: Math.round((Date.now() - t0) / 1000), params: p, score: ok ? score(s, p) : null };
   console.log(JSON.stringify(out));
 }
