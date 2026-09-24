@@ -36,13 +36,17 @@
 
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
-const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray
-const NT = 7;
+const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps
+const NT = 9;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X'];
-const LETTERS = [T_A, T_B, T_C, T_D];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q'];
+const LETTERS = [T_A, T_B, T_C, T_D, T_P, T_Q];
+/** The type of a letter character ('A'..'D', or the caps 'P', 'Q'); -1 if none. */
+function letterType(ch) { const k = 'ABCDPQ'.indexOf(ch); return k < 0 ? -1 : LETTERS[k]; }
+/** What a letter docks on: its own kind, except caps, which pair with each other (a copy lies reversed on its template). */
+const PAIR = [T_A, T_B, -1, -1, T_C, T_D, -1, T_Q, T_P];
 /** Binding partners: A with B, C with D (copying pairs each letter with itself, binding with its complement). */
-const COMP = [T_B, T_A, -1, -1, T_D, T_C, -1];
+const COMP = [T_B, T_A, -1, -1, T_D, T_C, -1, -1, -1];
 /** A per-type parameter: p[base + letter], e.g. stiffC; dflt where the type has none (E has no stiffness knob). */
 function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
@@ -84,6 +88,10 @@ const DEFAULTS = {
   nA: 160, nB: 160, nE: 120,    // fixed populations (mass and energy are conserved)
   nC: 0, nD: 0,                 // two more replicator letters; each pairs with its own kind, like A and B
   nM: 0,                        // membrane blocks: wedges that bond only to each other, side to side; self-assemble into arcs and rings
+  nP: 0, nQ: 0,                 // caps: letters with one lateral side. P has only R (a left end), Q only L (a right end); P docks on a Q
+                                // template and Q on P, so a capped strand P...Q copies into a capped strand. A cap cannot be extended
+  capFray: 0,                   // a cap's fraying rate relative to an ordinary end's (0: a cap never frays, so a strand capped at both
+                                // ends lives until it breaks in the middle)
   nX: 0,                        // rays: small fast blocks that never bond; they pass through everything but membrane, and a ray touching a
                                 // block breaks one of its lateral bonds at rayHit (radiation as particles, so a wall shields what it encloses)
   rayHit: 0.05, sizeX: 0.3, mobX: 0.12, // per step of contact; a ray's size; its Brownian step relative to its size's. At 0.12 a ray
@@ -194,7 +202,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.size = new Float64Array(n);
@@ -221,10 +229,10 @@ class Sim {
     this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
-    this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
+    this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
     this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1);
     const cm = String(p.cutMotif || 'BAB');
-    this._cutOut = LETTERS['ABCD'.indexOf(cm[0])]; this._cutMid = LETTERS['ABCD'.indexOf(cm[1])];   // cut rule
+    this._cutOut = letterType(cm[0]); this._cutMid = letterType(cm[1]);   // cut rule
 
     // types
     let u = 0;
@@ -235,6 +243,8 @@ class Sim {
     for (let i = 0; i < (p.nC || 0); i++) this.type[u++] = T_C;
     for (let i = 0; i < (p.nD || 0); i++) this.type[u++] = T_D;
     for (let i = 0; i < (p.nX || 0); i++) this.type[u++] = T_X;
+    for (let i = 0; i < (p.nP || 0); i++) this.type[u++] = T_P;
+    for (let i = 0; i < (p.nQ || 0); i++) this.type[u++] = T_Q;
     for (u = 0; u < n; u++) {
       this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
@@ -317,7 +327,7 @@ class Sim {
   seedStrand(cx, cy, ang, len, seq) {
     const units = [];
     for (let i = 0; i < len; i++) {
-      const want = seq ? LETTERS['ABCD'.indexOf(seq[i])] : (this.rng() < 0.5 ? T_A : T_B);
+      const want = seq ? letterType(seq[i]) : (this.rng() < 0.5 ? T_A : T_B);
       let found = -1;
       for (let u = 0; u < this.n; u++) {
         if (this.type[u] === want && this.is[u] === I_DOCK && this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0
@@ -531,7 +541,7 @@ class Sim {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
       if (isTpl(su) && isTpl(sv)) return COMP[tu] === tv ? p.pHyb : 0;   // binding: two templates, complementary letters (A-B, C-D)
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
-      return tu === tv ? 1 : p.pSoft;
+      return PAIR[tu] === tv ? 1 : (tu >= T_P || tv >= T_P) ? 0 : p.pSoft;   // caps pair only with each other
     }
     if (i === K && j === K) return (su === S.INACT && sv === S.ACT) || (su === S.ACT && sv === S.INACT) ? 1 : 0;   // activation (act rule)
     if ((i === L && j === R) || (i === R && j === L)) {
@@ -646,7 +656,11 @@ class Sim {
     else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
     else if (this.p.act && st === I_TPL && bL && bR && this.type[u] === this._actMid && this.type[b[o + L] >> 2] === this._actOut && this.type[b[o + R] >> 2] === this._actOut) this.ss[o + K] = S.ACT;
     else this.ss[o + K] = S.IDLE;
+    if (this.type[u] >= T_P) this._capSides(u);
   }
+
+  /** Caps lack one lateral side: that side shows IDLE and never bonds. */
+  _capSides(u) { const t = this.type[u]; if (t === T_P) this.ss[u * 4 + L] = S.IDLE; else if (t === T_Q) this.ss[u * 4 + R] = S.IDLE; }
 
   _deriveAll() { for (let u = 0; u < this.n; u++) this._derive(u); }
 
@@ -735,13 +749,14 @@ class Sim {
     }
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
     // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).
-    if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < p.pFray) {
+    const cap = this.type[u] >= T_P, pfr = cap ? p.pFray * p.capFray : p.pFray;
+    if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < pfr) {
       this.fresh[u] = 0; this.frayEvents++; this._event('fray', u);
       if (p.pUnzip > 0) this.is[u] = I_FRAY;
       else { this.is[u] = pool; this.pendingUnlink.push(o + L, o + R); }
       return;
     }
-    if (p.pUnzip > 0 && this.is[u] !== I_DOCK && !bF && ((bL && this.ss[b[o + L]] === S.FRAY) || (bR && this.ss[b[o + R]] === S.FRAY)) && this.rng() < p.pUnzip) {
+    if (p.pUnzip > 0 && this.is[u] !== I_DOCK && !bF && ((bL && this.ss[b[o + L]] === S.FRAY) || (bR && this.ss[b[o + R]] === S.FRAY)) && this.rng() < (cap ? p.pUnzip * p.capFray : p.pUnzip)) {
       this.is[u] = I_FRAY; this.fresh[u] = 0; this.unzipEvents++;
       return;
     }
@@ -1212,5 +1227,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, COMP, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, COMP, PAIR, letterType, T_P, T_Q, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

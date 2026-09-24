@@ -57,11 +57,13 @@ function draw2(i) {
   return p;
 }
 
-/** Round 3: round 2 plus folding letters (curled while their face is free) and, with folding, ligation more often. */
+/** Round 3: round 2 plus folding letters (curled while their face is free), ligation more often, and cap letters (P, Q). */
 function draw3(i) {
   const p = draw2(i), r = mulberry(777 + i * 15485863), pick = (a) => a[Math.floor(r() * a.length)];
   for (const L of p.nC ? 'ABCD' : 'AB') p['fold' + L] = r() < 0.5 ? 0 : pick([10, 15, 20, 30]);
   if (r() < 0.5) p.pLigate = pick([0.005, 0.02]);
+  // caps: letters with one lateral side that end a strand and never (or seldom) fray
+  if (r() < 0.5) Object.assign(p, { nP: pick([20, 40, 80]), nQ: 0, capFray: pick([0, 0, 0.1]) }), p.nQ = p.nP;
   return p;
 }
 const ROUND = Number((process.argv.find((a) => a.startsWith('--round=')) || '--round=1').split('=')[1]);

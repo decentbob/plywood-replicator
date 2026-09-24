@@ -309,4 +309,16 @@ test('fold: a free strand of folding letters curls; the part being copied straig
   for (const x of t.births) assert.strictEqual(x.seq, rev(x.parent), 'unfaithful copy ' + JSON.stringify(x));
 });
 
+
+test('caps: a strand capped P...Q copies into capped strands, and caps never fray', () => {
+  const swap = (q) => [...q].reverse().map((c) => (c === 'P' ? 'Q' : c === 'Q' ? 'P' : c)).join('');
+  const s = new Sim(Object.assign({}, base, { seed: 2, W: 40, H: 40, nA: 150, nB: 150, nP: 30, nQ: 30, nE: 120, seedSeq: 'PABBAQ', seedCount: 2, pFray: 0.0003, pUnzip: 1 }));
+  s.run(30000);
+  assert.ok(s.births.length >= 5, 'births ' + s.births.length);
+  assert.ok(s.births.every((b) => b.seq[0] === 'P' && b.seq[b.seq.length - 1] === 'Q'), 'every copy should be capped');
+  assert.ok(s.births.some((b) => b.seq === swap(b.parent)), 'faithful copies exist');
+  assert.strictEqual(s.frayEvents, 0, 'a strand capped at both ends never frays');
+  assert.deepStrictEqual(s.check(), []);
+});
+
 console.log(passed + ' tests passed');

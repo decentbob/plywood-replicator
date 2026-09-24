@@ -1437,3 +1437,40 @@ the searched range (1.1e-5), and fused strands pile up and copy ever more slowly
 by fusion, not selection for function. Without ligation the world copies faster and the energy motif
 stands at 5 to 7 times chance. A false lead, with a lesson for the search: mean length rewards fusion,
 so a score must ask for function, not length.
+
+## 28. Stranger blocks (the user's idea, 2026-09-24)
+
+Block types that were not thought of or were set aside, each behind a knob (default off,
+trajectories bit-identical) so the search can draw them.
+
+- **Size and mobility per letter** (`sizeA`..`sizeD`, `mobA`..`mobD`). 40×40, two `ABBABA` seeds,
+  30,000 steps, two seeds: uniform giants (1.4) 77 births, none unfaithful; uniform small letters
+  (0.7) 84 births, 7 unfaithful; A at 1.4 with B at 0.7, 2 births: a docked giant and a docked small
+  neighbour cannot hold a link, so a strand of mixed sizes can hardly be copied.
+- **Folding letters** (`foldA`..`foldD`, degrees): a folding letter has the fold as its bend while
+  its face is free and its ordinary shape while something is bound to its face, so a free strand
+  curls and the part being copied straightens (copy straight, fold free: the hinge idea of the rigid
+  engine, now as a shape). Twelve A at 30° curl into a spiral; they do not close into a ring (ligation
+  needs flush ends). Copying is untouched: fold 0, 10 and 20° on both letters give 74, 71 and 76
+  births, none unfaithful.
+- **Caps** (`nP`, `nQ`, `capFray`), after the user's question whether chains have end blocks (they did
+  not: an end was any letter with a free side). `P` has only a right side and can sit only at a left
+  end, `Q` the mirror; a copy lies reversed on its template, so `P` docks on a `Q` template and `Q` on
+  `P`, and a capped strand `P…Q` copies into a capped strand. A cap cannot be extended, captured onto
+  or ligated, and it frays at `capFray` times the normal rate (default 0: never). Seeds `PABBAQ`
+  against `ABBA`, strong fraying, three seeds, 40,000 steps:
+
+  | seed | births | capped at both ends | frays | template units at the end |
+  |---|---:|---:|---:|---:|
+  | `PABBAQ` | 59 | 59 | 0 | 922 |
+  | `ABBA` | 3,191 | 0 | 3,461 | 688 |
+
+  Capped strands never die, so the material ends up locked in immortal templates and births almost
+  stop; caps need something else that kills (radiation, rays, cutting). A capped genome changes length
+  only by copying errors inside it (the user's point: consistent copies, variation still possible).
+  The errors that appeared are duplications: `PABBAQ` → `PABBBBAQ` → `PABBBBBBBBAQ`, made when a copy's
+  two halves dock on two neighbouring templates and link in the middle (the chimera of crowded
+  templates, section 10). With capped ends that is the only way a genome grows, and what it makes is
+  internal duplication, which in biology is the raw material of new genes.
+
+Search round 3 (`search.js --round=3`) draws folding letters, more ligation and caps on top of round 2.

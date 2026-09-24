@@ -1,7 +1,7 @@
 // Render a Sim's current state to a PNG (for probes): every block as its polygon, coloured by type and state, bonds
 // share an edge (opt.corners: also mark the pinned corners). Needs Playwright and Chromium (NODE_PATH=$(npm root -g) in the cloud sandbox).
 //   const snap = require('./tools/snap.js'); await snap(sim, 'out.png', { x0, y0, w, h, scale });
-const { NV, T_A, T_B, T_C, T_D, T_E, T_M, T_X, I_TPL, I_REPEL, I_ON } = require('../src/sim.js');
+const { NV, T_A, T_B, T_C, T_D, T_E, T_M, T_X, T_P, T_Q, I_TPL, I_REPEL, I_ON } = require('../src/sim.js');
 
 function polys(s, box) {
   const out = [];
@@ -15,7 +15,7 @@ function polys(s, box) {
     else if (t === T_E) col = s.is[u] === I_ON ? '#ffe14d' : '#666';
     else if (t === T_M) col = s.is[u] === I_ON ? (s.bond[u * 4 + 2] >= 0 ? '#2e8b57' : '#6b8e23') : '#3a4a2a';
     else {
-      const base = { [T_A]: [80, 140, 255], [T_B]: [255, 110, 90], [T_C]: [190, 110, 255], [T_D]: [60, 210, 170] }[t];
+      const base = { [T_A]: [80, 140, 255], [T_B]: [255, 110, 90], [T_C]: [190, 110, 255], [T_D]: [60, 210, 170], [T_P]: [245, 245, 245], [T_Q]: [170, 170, 170] }[t];
       const f = s.is[u] === I_TPL ? 1 : s.is[u] === I_REPEL ? 0.75 : (s.bond[u * 4] >= 0 || s.bond[u * 4 + 1] >= 0 || s.bond[u * 4 + 3] >= 0) ? 0.6 : 0.35;
       col = `rgb(${base.map((c) => Math.round(c * f)).join(',')})`;
     }
