@@ -128,7 +128,27 @@ fixed. Spent particles recharge at a background rate or, with the motif rule, at
 back of a `B` block flanked by two `A`s, which makes energy income a property of
 sequence.
 
-There is no completion handshake and no cap type. A copy is released when every
+**Optional blocks and rules** (each behind knobs that default off; RESULTS.md sections in brackets):
+
+| knobs | what it adds |
+|---|---|
+| `nX`, `rayHit`, `sizeX`, `mobX` | rays: small fast blocks that never bond; one touching a block breaks a lateral bond; only membrane stops them (19, 25) |
+| `cut`, `cutMotif`, `pCut`, `cutRelay` | a bound template carrying `cutMotif` cuts the strand it is bound to (26) |
+| `sizeA`..`sizeD`, `mobA`..`mobD`, `foldA`..`foldD` | per-letter size, mobility, and folding: a letter bends by `fold` degrees while its face is free, so a free strand curls and straightens where it is copied |
+| `nP`, `nQ`, `capFray` | caps: letters with one lateral side (`P` has no left, `Q` no right) that pair only with each other and fray at `capFray` of the normal rate; a capped strand grows only by a copying mistake inside it |
+| `compCopy` | complementary copying: `A` docks on `B` and `C` on `D`, so a copy is the reversed complement of its parent (28) |
+| `nJ`, `pHub` | hubs: blocks whose four sides each hold a strand's open end, tethering strands in a star without fusing them |
+| `heatPeriod`, `heatFrac`, `heatMelt` | temperature cycles: in the hot part of each period binding stops and bound pairs melt at `heatMelt` (29) |
+| `chiral`, `pMisDock`, `pMixLink` | chirality: a fraction of letters are mirror forms (lowercase in sequences, drawn with a slash); each hand docks only on its own, a mirror monomer docks at `pMisDock` and blocks the site, and mixed neighbours link at `pMixLink` (30) |
+| `nG`, `gStick`, `gRange`, `gStickS`, `gStickF` | droplets: `G` blocks never bond but attract each other within `gRange` of touching, so they separate into liquid droplets (coacervates); strand and free letters can be drawn to them (31) |
+
+**Random chemistry** (`src/rchem.js`, section 32): the same physics under a random rule table. Each block has a type and a
+state; each side shows a colour looked up from (type, state, side); colour pairs bond with probabilities from a random
+table and a bond holds while its colours attract; a block switches state when one of its sides is bonded to a given colour
+(or is free). `experiments/rsearch.js` screens random tables, `experiments/autocat.js` tests whether an assembly begets
+itself, and the viewer's "random chemistry" preset shows any table by its seed.
+
+There is no completion handshake. A copy is released when every
 unit is *locally* complete: a middle unit needs both lateral bonds, an end unit
 needs one, and the unit learns which it is from its template partner's face
 state. Because a docked monomer is rotated 180°, copies are antiparallel and a
@@ -177,6 +197,7 @@ be recovered from git at commit `b41557c`.
 
 ```
 src/sim.js        the simulation core (browser global PolyChem, or require())
+src/rchem.js      random chemistry: the same physics under a random rule table (PolyChem.RChem)
 index.html        viewer: canvas, knobs, readout, birth log
 run.js            headless runner, CSV + JSON summary + birth log
 test.js           invariant tests

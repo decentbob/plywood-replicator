@@ -33,23 +33,26 @@ entries near the end of the list), 15 (ideas not yet tried).
 ## Layout
 
 ```
-src/sim.js          the whole simulation (browser global PolyChem, or require()); about 1,000 lines
+src/sim.js          the whole simulation (browser global PolyChem, or require()); about 1,350 lines
+src/rchem.js        random chemistry: Sim with its rule table replaced by a random one (RChem, randomTable, copyTable)
 index.html          viewer: canvas, knobs, presets, readout, event feed, click-to-inspect
 run.js              headless runner: CSV every --every steps, JSON summary on stderr, --births FILE (JSONL, written
                     at the END of the run), --change T:k=v,k=v (environment change mid-run, repeatable)
-test.js             invariant tests (15; about 6 minutes on one core)
+test.js             invariant tests (28; about 10 minutes on one core)
 build.js            single-file dist/ build of the viewer
 experiments/*.sh    one script per batch; each RESULTS.md section names its script
 experiments/*.js    analysis over experiments/out/*.births.jsonl (see below)
 experiments/out/    CSV (committed), JSON and births JSONL (gitignored)
 tools/fingerprint.js  trajectory hash, to prove a change leaves default behaviour identical
 tools/screenshot.js   drive the viewer headless and screenshot it (Playwright + /opt/pw-browsers/chromium)
+tools/snap.js         render a Sim in Node to PNG (colorOf callback for custom colours)
 ```
 
 ## src/sim.js map
 
-- Constants: sides `F R K L`; types `T_A T_B T_E T_M T_C T_D` (A–D are replicator letters; E energy particle;
-  M membrane block); internal states `I_DOCK I_REPEL I_TPL I_FRAY` (letters), `I_OFF I_ON` (E, and M raw/active);
+- Constants: sides `F R K L`; types `T_A T_B T_E T_M T_C T_D T_X T_P T_Q T_J T_G` (A–D replicator letters, P/Q caps,
+  all in `LETTERS`; E energy particle; M membrane block; X ray; J hub; G droplet block); `hand` (chirality) is a
+  per-block property like type; internal states `I_DOCK I_REPEL I_TPL I_FRAY` (letters), `I_OFF I_ON` (E, and M raw/active);
   derived side states in `S` (append new ones with a new unique value; `SNAME` is built by value).
 - `DEFAULTS`: every knob with a one-line comment. Per-type knobs are `<base><Letter>` (`resC`, `stiffD`,
   `bendB`, `shapeA`) read through `typeParam(p, base, t, dflt)`.
