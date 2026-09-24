@@ -102,7 +102,9 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80�
 - Octagon blocks leak (chimeras); stiffness below ~0.3 lets copies docked on neighbouring templates link.
 - Every RESULTS section: the command/script, a table, what it says, and what it does not say.
 - `main` is the default branch. Commit often with descriptive messages; push to the session's branch and merge into `main`
-  when a piece of work is done (delete merged branches, so `main` stays the only long-lived one).
+  when a piece of work is done (delete merged branches, so `main` stays the only long-lived one). **Standing approval**
+  (the user, 2026-09-24): merging finished work from a session branch into `main` and pushing `main` needs no further
+  permission (tests pass and the default fingerprint is unchanged first).
 
 ## Where the project stands (2026-09-24)
 
@@ -156,8 +158,7 @@ not paid (24, 25). Ecology (predation by recognition, 26) is being tried as a ro
 
 ## Handoff (2026-09-24, end of a long session): pick up here
 
-All code below is committed on branch `claude/serene-keller-sprlt0` (not yet merged into `main`; ask the user before
-merging). Background batches were stopped at the handoff; partial outputs are in `experiments/out/` and RESULTS 29–32.
+All code below is merged into `main` (from `claude/serene-keller-sprlt0`). Background batches were stopped at the handoff; partial outputs are in `experiments/out/` and RESULTS 29–32.
 Unfinished, in order of value:
 
 1. **Random chemistry (RESULTS 32)**, the user's latest question. Run `node experiments/autocat.js 55 57 4 15 1 54` (does the
