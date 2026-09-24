@@ -101,7 +101,7 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80�
 - `main` is the default branch. Commit often with descriptive messages; push to the session's branch and merge into `main`
   when a piece of work is done (delete merged branches, so `main` stays the only long-lived one).
 
-## Where the project stands (2026-09-23)
+## Where the project stands (2026-09-24)
 
 Works, measured (RESULTS sections in brackets):
 - Exact template copying from local rules; copy errors of every kind from soft rules (1–2).
@@ -114,6 +114,13 @@ Works, measured (RESULTS sections in brackets):
 - Block shape selects on sequence: a strongly wedge-shaped `B` is purged; a mildly wedge-shaped one is kept
   but never placed next to another `B` (15).
 - Radiation selects a shield gene (`CDC`, `shield`) at once, 8–21× chance (19).
+- Flush polygons (23): `snapCorners` brings pinned corners together exactly (blocks deform, the shape force
+  pulls back); `maxStrain` lets a membrane bond or a lone docked monomer go when deformed too far. Copying stays
+  exact; an overlong membrane splits into rings of about its natural size (an arc of twice the size: two rings
+  in 15 of 20 seeds). The viewer uses both by default. (The user's direction, 2026-09-23.)
+- Walls made by their strands (24): with `make` + `tether` a strand carrying `BAB` anchors membrane on its back
+  and grows a wall around itself; with `memLinkTol` 0.3 the wall closes around its maker in 20 of 20 seeds within
+  about 12,000 steps, stays closed for 10,000 to 50,000 and opens under strain. `memPerm` lets monomers through.
 
 Tried and failed, with the reason (so they are not retried blindly):
 - Compartments by chance (16): rings close around strands, but enclosures last less than a generation and
@@ -123,6 +130,13 @@ Tried and failed, with the reason (so they are not retried blindly):
 - Gene accumulation (19): under any pair of pressures genomes shrink to 2–3 units; no genome kept both the
   energy and the shield gene, even with the relay (one motif serves the whole strand) and ligation.
 - Spend rule (templates re-arm after every copy): half of births became mutants; removed (14).
+- Slow polymers (`mobS`, 21): kin clusters form, but the public `ABA` motif is still lost in 1 run of 3.
+- A seeded two-gene genome (`ABACDC`, 22) is not kept even without pressure: it falls apart into pieces of
+  itself, each a replicator, which out-copy it. Any fragment of a genome competes with it.
+- Walls when energy is plentiful (24): making a wall is selected against (`BAB` to a tenth of chance), open or
+  closing; a closed wall shuts its maker's copies in.
+- Tried and removed: polygon-exact contacts (no effect, 2.3× slower), fluid membrane `pSwap`, mechanical breaks
+  inside a copy in progress (strands shatter into replicating fragments) (23).
 
 The core obstacle, stated once: **every pressure in this world costs long genomes more than short ones**, so
 anything that needs several genes in one genome loses to dimers. Biology's answer is compartments (group

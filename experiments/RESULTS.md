@@ -1224,3 +1224,23 @@ could not have shown a benefit: once a few motifs exist, nearly every particle i
 is not scarce, and a wall that keeps energy private saves nothing (the lesson of section 14 again).
 What was measured is the cost: a closed wall also shuts its maker's copies in, so a walled lineage
 cannot spread until its wall opens, while an unwalled one spreads freely. Round 3 makes energy scarce.
+
+**Round 3, energy scarce** (`W3_*`, `N3_*`: 12 particles instead of 40, two seeds each):
+
+| run | `BAB` × chance, by 250k window | `ABA` × chance | charged particles (of 12), every 100k | births |
+|---|---|---|---|---:|
+| W3_1 | 0.6, 0, 0, 0 | 0.6, 0, 0, 0 | 2 1 2 0 0 2 0 1 4 1 | 420 |
+| W3_2 | 1.5, 0.9, 0.1, 0.1 | 2.3, 5.8, 4.0, 2.2 | 1 8 10 11 9 12 8 2 8 1 | 1,593 |
+| N3_1 | 2.3, 2.1, 2.3, 1.8 | 2.3, 2.5, 2.8, 1.0 | 9 10 12 10 10 12 7 10 0 0 | 1,525 |
+| N3_2 | 1.6, 2.1, 0.2, 0.3 | 1.5, 1.2, 1.7, 2.8 | 10 10 4 2 0 6 9 10 10 9 | 1,773 |
+
+Walls are selected against here too: in the walled seed that lived, `BAB` fell to a tenth of chance
+within 500,000 steps while `ABA` rose to 4 to 6 times chance without it; the other walled seed lost
+its motifs early and lived on dimers. Even with 12 particles the energy economy flips between
+plenty and crash, so a steady scarcity in which private energy pays for the wall was not reached.
+
+Where walls stand after three rounds: made by their strands, tethered to them, closing reliably, and
+not worth their cost to the lineage in any energy regime tried. Two costs are plain: a closed wall
+shuts the maker's copies in until strain opens it, and the wall is made from the same crowded space
+the lineage needs to spread into. The benefit (energy kept inside) is real only while energy is
+scarce, and in this world energy is scarce only on the way to a crash.
