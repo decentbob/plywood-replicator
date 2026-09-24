@@ -1207,3 +1207,20 @@ aligned bond snaps under strain, the catch can be looser:
 With the looser catch a maker's wall closes around it within about 12,000 steps, stays closed for
 10,000 to 50,000 steps, opens under strain and often closes again (eight seeds traced over 60,000
 steps). Rigid membrane closes more reliably than soft.
+
+**Do walls pay once they close?** (`walls.sh`, round 2, `W2_*`: the same test with rigid membrane
+and the catch at 0.3; `W2b_1` at 18°; the `N_*` runs above are the control.)
+
+| run | `BAB` × chance, by 250k window | `ABA` × chance | charged particles (of 40), every 100k |
+|---|---|---|---|
+| W2_1 | 2.3, 0.5, 0.8, 0.1 | 3.0, 4.6, 1.9, 1.0 | 33 36 39 37 33 26 1 5 36 2 |
+| W2_2 | 1.0, 0.4, 0.4, 0.0 | 4.2, 4.1, 2.2, 1.1 | 38 38 38 40 38 40 34 38 34 2 |
+| W2_3 | 0.3, 0, 0, 0.1 | 1.4, 0.2, 0, 0 | 36 27 1 19 1 1 1 1 2 0 |
+| W2b_1 | 0.5, 0, 0.3, 0.1 | 0.6, 1.4, 3.1, 2.2 | 5 0 1 33 32 38 37 40 40 37 |
+| N_1 (no membrane) | 1.7, 2.3, 1.9, 2.2 | 1.6, 2.7, 2.1, 0.9 | 39 38 33 38 38 38 38 39 19 0 |
+
+Closing walls are selected against as strongly as open ones. The energy column shows why this test
+could not have shown a benefit: once a few motifs exist, nearly every particle is charged, so energy
+is not scarce, and a wall that keeps energy private saves nothing (the lesson of section 14 again).
+What was measured is the cost: a closed wall also shuts its maker's copies in, so a walled lineage
+cannot spread until its wall opens, while an unwalled one spreads freely. Round 3 makes energy scarce.

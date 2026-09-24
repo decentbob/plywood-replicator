@@ -19,4 +19,11 @@ for sd in 1 2 3; do
 done
 echo "W2b_1 --seed 1 --nM 250 --memAngle 18 --stiffM 1 --memLinkTol 0.3 --make 1 --tether 1 --memPerm 1 --pMemDecay 0.002"
 } | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$C"' "$@" --births '$O'/$name.births.jsonl > '$O'/$name.csv 2> '$O'/$name.json'
+# round 3 (W3_*, N3_*): energy scarce (12 particles instead of 40), walls against no membrane, two seeds each
+{
+for sd in 1 2; do
+  echo "W3_$sd --seed $sd --nE 12 --nM 250 --memAngle 15 --stiffM 1 --memLinkTol 0.3 --make 1 --tether 1 --memPerm 1 --pMemDecay 0.002"
+  echo "N3_$sd --seed $sd --nE 12 --nM 0"
+done
+} | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$C"' "$@" --births '$O'/$name.births.jsonl > '$O'/$name.csv 2> '$O'/$name.json'
 echo WALLSDONE
