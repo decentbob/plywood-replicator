@@ -1416,3 +1416,24 @@ its functional motifs are present, and genomes carry two of them at once, in fou
 two genes need five units or more. Ligation is on in five of the six. Walls, which never paid in a
 controlled test, are on in three. One seed each and 300,000 steps: these are leads. Long runs and a
 second seed follow (`world.js`).
+
+**World 19 followed up** (`world.js 19`, 2,000,000 steps, and with a second random seed): mean newborn
+length by 500,000-step window 5.0, 7.3, 7.9, 8.7 (second seed 5.0, 7.9, 12.1, 11.0), strands in the
+population 12 to 13 units long at the end, the longest this project has seen; but births fall in
+every window (596 to 195), diversity falls (36 to 18 distinct), and the three motifs do not hold.
+Knockouts, one mechanism off at a time, 1,000,000 steps:
+
+| world 19 with | mean strand length at 1M | births | `ABA` × chance, second half |
+|---|---:|---:|---:|
+| everything on | 7.7 | 959 | 0.7 |
+| ligation off | **4.1** | **1,540** | **6.9** |
+| binding off | 17.8 | 667 | 0.7 |
+| walls off | 8.6 | 845 | 1.9 |
+| shield off | 12.3 | 833 | 1.8 |
+| energy motif off | 14.1 | 605 | 2.0 |
+
+The long genomes are ligation and nothing else: strands fuse end to end, fraying is at the bottom of
+the searched range (1.1e-5), and fused strands pile up and copy ever more slowly. It is accumulation
+by fusion, not selection for function. Without ligation the world copies faster and the energy motif
+stands at 5 to 7 times chance. A false lead, with a lesson for the search: mean length rewards fusion,
+so a score must ask for function, not length.
