@@ -118,6 +118,9 @@ const DEFAULTS = {
   cutMotif: 'BAB', pCut: 0.01,
   cutRelay: false, // template units pass the cutter signal along their strand from a cutMotif unit, so any unit of a cutter strand cuts
                    // where it is bound: the rest of the strand is the key (not compatible with feed/shield, which also write lateral sides)
+  heatPeriod: 0,   // temperature cycles (environment): for the first heatFrac of every heatPeriod steps it is hot, no two template faces
+  heatFrac: 0.2,   // bind, and every face-to-face binding melts at least at heatMelt per step, so double strands come apart (as in PCR,
+  heatMelt: 0.05,  // or strands cycled through a hydrothermal gradient); 0 is off
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, resC: 0, resD: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
@@ -550,7 +553,7 @@ class Sim {
     }
     if (i === F && j === F) {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
-      if (isTpl(su) && isTpl(sv)) return COMP[tu] === tv ? p.pHyb : 0;   // binding: two templates, complementary letters (A-B, C-D)
+      if (isTpl(su) && isTpl(sv)) return COMP[tu] === tv && !this._hot ? p.pHyb : 0;   // binding: two templates, complementary letters (A-B, C-D); not while hot
       if (!((su === S.DOCK && isTpl(sv)) || (sv === S.DOCK && isTpl(su)))) return 0;
       const mate = p.compCopy && tu < T_P ? COMP[tu] : PAIR[tu];
       return mate === tv ? 1 : (tu >= T_P || tv >= T_P) ? 0 : p.pSoft;   // caps pair only with each other
@@ -757,7 +760,8 @@ class Sim {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
         const isH = (x) => x === S.HYB || x === S.HYBC;
         const nh = (bL && isH(this.ss[b[o + L]]) ? 1 : 0) + (bR && isH(this.ss[b[o + R]]) ? 1 : 0);
-        const pm = nh === 0 ? p.pMelt : nh === 2 || p.pMeltEnd < 0 ? p.pMeltRun : p.pMeltEnd;
+        let pm = nh === 0 ? p.pMelt : nh === 2 || p.pMeltEnd < 0 ? p.pMeltRun : p.pMeltEnd;
+        if (this._hot && pm < p.heatMelt) pm = p.heatMelt;
         if (this.rng() < pm) { this.pendingUnlink.push(o + F); this.meltEvents++; }
       }
     }
@@ -927,6 +931,7 @@ class Sim {
   // ------------------------------------------------------------- one step
   step() {
     this.t++;
+    this._hot = this.p.heatPeriod > 0 && (this.t % this.p.heatPeriod) < this.p.heatFrac * this.p.heatPeriod;
     this._physics();
     this._formBonds();
     this._chemistry();
