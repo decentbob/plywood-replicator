@@ -1,17 +1,18 @@
 #!/usr/bin/env node
 // Births in a capped world (endLoss), by window: how many are capped at both ends (P...Q, the only ones copied whole),
 // their mean length, the share carrying each gene and all genes at once, and the commonest capped sequences.
-// Usage: node experiments/capped.js ABA,CDC experiments/out/E_*.births.jsonl [--window=100000] [--top=4]
+// Usage: node experiments/capped.js ABA,CDC experiments/out/E_*.births.jsonl [--window=100000] [--top=4] [--x0=0 --x1=20]
+// (--x0/--x1: only births whose first unit lies at x0 <= x < x1, for worlds with a radiation band)
 const fs = require('fs');
 const opt = (k, d) => { const a = process.argv.find((x) => x.startsWith('--' + k + '=')); return a ? a.split('=')[1] : d; };
 const genes = process.argv[2].split(',');
-const win = Number(opt('window', 100000)), ntop = Number(opt('top', 4));
+const win = Number(opt('window', 100000)), ntop = Number(opt('top', 4)), x0 = Number(opt('x0', -Infinity)), x1 = Number(opt('x1', Infinity));
 const capped = (q) => q[0] === 'P' && q[q.length - 1] === 'Q';
 console.log(`| run | window | births | capped | mean capped length | ${genes.map((g) => 'with ' + g).join(' | ')} | with all | commonest capped |`);
 console.log('|---|---|---:|---:|---:|' + genes.map(() => '---:').join('|') + '|---:|---|');
 for (const f of process.argv.slice(3).filter((a) => !a.startsWith('--'))) {
   if (!fs.existsSync(f)) { console.error('missing ' + f); continue; }
-  const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l));
+  const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((r) => r.x >= x0 && r.x < x1);
   const tmax = rows.length ? rows[rows.length - 1].t : 0;
   for (let w0 = 0; w0 < tmax; w0 += win) {
     const rs = rows.filter((r) => r.t >= w0 && r.t < w0 + win); if (!rs.length) continue;

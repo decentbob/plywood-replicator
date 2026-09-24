@@ -139,6 +139,7 @@ const DEFAULTS = {
   heatMelt: 0.05,  // or strands cycled through a hydrothermal gradient); 0 is off
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
+  radBand: 1,      // radiation (pBreak) acts only on blocks in the band x < radBand * W: a world with a lit and a dark part
   resA: 0, resB: 0, resC: 0, resD: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
   motif: false,    // a B template unit flanked by two A units charges spent energy at its back (sequence as metabolism)
   feed: false,     // a B template unit flanked by two A units re-arms its released neighbours through their shared bonds (private metabolism)
@@ -753,7 +754,7 @@ class Sim {
         const ss = this.ss, anchored = b[o + K] >= 0 || (b[o + L] >= 0 && ss[b[o + L]] === S.ANC) || (b[o + R] >= 0 && ss[b[o + R]] === S.ANC);
         if (!anchored && p.pMemDecay > 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; this.pendingUnlink.push(o + L, o + R); return; }
       } else if (p.pMemDecay > 0 && b[o + L] < 0 && b[o + R] < 0 && b[o + K] < 0 && this.rng() < p.pMemDecay) { this.is[u] = I_OFF; return; }
-      if (p.pBreak > 0) {
+      if (p.pBreak > 0 && (p.radBand >= 1 || this.px[u] < p.radBand * p.W)) {
         const mine = 1 - p.resM;
         for (const side of [L, R]) {
           const q = b[o + side]; if (q < 0) continue;
@@ -831,7 +832,7 @@ class Sim {
     }
     // R7 radiation: each of my lateral bonds breaks with probability pBreak scaled by how fragile the two blocks are.
     // A docked copy re-links at once (its neighbours are still flush and sticky), so a template shields its copy.
-    if (p.pBreak > 0 && nl > 0) {
+    if (p.pBreak > 0 && nl > 0 && (p.radBand >= 1 || this.px[u] < p.radBand * p.W)) {   // radBand: radiation only where x < radBand * W
       const mine = 1 - typeParam(p, 'res', this.type[u], 0);
       for (const side of [L, R]) {
         const q = b[o + side]; if (q < 0) continue;
