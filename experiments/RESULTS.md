@@ -1474,3 +1474,66 @@ trajectories bit-identical) so the search can draw them.
   internal duplication, which in biology is the raw material of new genes.
 
 Search round 3 (`search.js --round=3`) draws folding letters, more ligation and caps on top of round 2.
+
+## 29. Double strands and temperature cycles (`duplex.sh`), partial
+
+Complementary copying (`compCopy`) with binding (`pHyb` 0.2) and heat cycles (`heatPeriod` 5,000, hot fifth). 500,000
+steps, 40×40. Seeds 1 and 2 finished (seed 3 and `DX_bindheat_2` were stopped at the handoff, 2026-09-24). Mean length of
+newborns (length 2 and up) per 125,000-step window:
+
+| run | births | mean length by window |
+|---|---:|---|
+| DX_comp_1 (no binding) | 2,674 | 4.55, 3.61, 3.37, 3.48 |
+| DX_comp_2 | 2,213 | 4.60, 4.26, 4.18, 3.71 |
+| DX_bind_1 (binding, no heat) | 2,444 | 2.09, 2.26, 2.38, 2.39 |
+| DX_bind_2 | 2,578 | 2.13, 2.31, 2.33, 2.33 |
+| DX_bindheat_1 (binding + heat) | 1,678 | 4.56, 4.17, 3.92, 3.63 |
+| DX_heat_1, DX_heat_2 (heat, no binding) | | identical to DX_comp_1, _2 (heat acts only on binding) |
+
+What it says: binding without heat collapses length to about 2.3 (long strands are locked in double strands and stop
+copying; short ones win). Heat undoes that: with cycles, length stays near the no-binding level (3.6 at the end against
+3.5, one seed). The earlier lead (4.3–4.8 against 3.65 in a short probe) does not hold at 500,000 steps. What it does not
+say: one seed for binding + heat; whether double strands protect anything (no pressure was on).
+
+## 30. Chirality (`chiral.sh`, `hand.js`), partial
+
+A racemic pool (`chiral` 0.5), one strand of each hand as seeds, 300,000 steps. Births per 50,000-step window as
+one-handed upper / one-handed lower / mixed, and the enantiomeric excess of the one-handed ones:
+
+| run | windows |
+|---|---|
+| CH_mis0_1 (no mirror docking) | ee 0.10, 0.13, 0.04, 0.06, 0.06, 0.06; no mixed births |
+| CH_mis03_1 (`pMisDock` 0.3) | ee 0.10, 0.03, 0.13, 0.10, 0.21, 0.02; about half of births mixed |
+| CH_mis1_1 (`pMisDock` 1) | ee 0.00, 0.16, 0.04, 0.16, 0.04, 0.01; about half mixed |
+
+No symmetry breaking: with hands fixed for life, the losing hand's monomers pile up in the pool and favour it again
+(negative frequency dependence), as expected without a shared pool. Round 2 (`ROUND=2 experiments/chiral.sh`: free monomers
+flip hand at `pRacem` 0.001, mixed neighbours link at `pMixLink` 0.001, with and without mirror docking; Frank's conditions)
+was started and stopped at the handoff; it needs running. Seed 2 of round 1 also.
+
+## 31. Droplets (`droplets.sh`), not yet run
+
+`nG` blocks separate into liquid droplets at `gStick` 1, `gRange` 2.2 (at 0.3 or with range 1.6 they stay dispersed:
+Brownian steps are 0.3 of a side). With strands drawn to G (`gStickS` 0.6, `gStickF` 0.3) about a fifth of template units
+sit in droplets, at the droplet surfaces, and copying is unharmed (105 births in 30,000 steps against 82 without). The
+selection test (does grouping in droplets rescue the public `ABA` motif that section 21 lost) is scripted, not run.
+
+## 32. Random chemistry (`src/rchem.js`, `rsearch.js`, `autocat.js`), partial
+
+The user's question (2026-09-24): blocks with random sides, random attractions and random switching rules in one world,
+too much chaos or enough for complexity? A random table: K types, NS states, NC side colours (0 inert); a side's colour
+from (type, state, side); colour pairs attract with probability pAff; rules "side i bonded to colour c (or free) → state
+s" with probability pRule. 31 of 100 tables screened (`experiments/out/rsearch_1_partial.jsonl`, 30,000 steps, 25×25,
+about 300 blocks):
+
+- 5 of 31 gel (one assembly of 100 or more blocks), 2 barely bond, 24 in between: small assemblies that form and break.
+- Order beyond chance is common: repeats among assemblies of 3+ blocks against the same assemblies with their make-up
+  shuffled are 44 against 1 (table 55), 30 against 0 (table 4), 65 against 22 (table 57). Table 4 of the first probe
+  builds 2×2 squares of two types. This is self-assembly; it is not yet known to be copying.
+- Positive control: `copyTable()` is a hand-written copier in the same format (states: free, docked, docked and linked
+  right or left, released, strand, left end, right end, leaving). It copies (strand blocks from 12 to 140 in 30,000 steps)
+  but products fragment into 2–3-block strands (the fragment problem of section 22 again). `autocat.js --control`: 4
+  copies of its commonest assembly put into a fresh world give 12 after 1,000 steps against 1 unseeded. That is the test
+  that separates copying from self-assembly.
+
+Not yet done: `autocat.js` on the top tables (55, 57, 4, 15, 1, 54), and the other 69 tables.
