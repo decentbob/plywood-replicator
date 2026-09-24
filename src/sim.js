@@ -36,13 +36,13 @@
 
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
-const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5;   // A, B, C, D are the replicator letters (each pairs with its own kind)
-const NT = 6;
+const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray
+const NT = 7;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M', 'C', 'D'];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X'];
 const LETTERS = [T_A, T_B, T_C, T_D];
 /** Binding partners: A with B, C with D (copying pairs each letter with itself, binding with its complement). */
-const COMP = [T_B, T_A, -1, -1, T_D, T_C];
+const COMP = [T_B, T_A, -1, -1, T_D, T_C, -1];
 /** A per-type parameter: p[base + letter], e.g. stiffC; dflt where the type has none (E has no stiffness knob). */
 function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
@@ -82,6 +82,10 @@ const DEFAULTS = {
   nA: 160, nB: 160, nE: 120,    // fixed populations (mass and energy are conserved)
   nC: 0, nD: 0,                 // two more replicator letters; each pairs with its own kind, like A and B
   nM: 0,                        // membrane blocks: wedges that bond only to each other, side to side; self-assemble into arcs and rings
+  nX: 0,                        // rays: small fast blocks that never bond; they pass through everything but membrane, and a ray touching a
+                                // block breaks one of its lateral bonds at rayHit (radiation as particles, so a wall shields what it encloses)
+  rayHit: 0.05, sizeX: 0.3, mobX: 0.12, // per step of contact; a ray's size; its Brownian step relative to its size's. At 0.12 a ray
+                                // moves about 0.12 of a side per step, too little to jump a wall (a wall also needs mobS about 0.3)
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
@@ -125,7 +129,9 @@ const DEFAULTS = {
   // physics knobs (these should not need tuning for the chemistry to work)
   sigma: 0.3, sigmaRot: 0.45,    // Brownian step (translation, rotation) per unit per step
   mobE: 1,                       // energy particles' Brownian step relative to their size's; below 1 the medium is viscous for energy
-  mobS: 1,                       // Brownian step (and turn) of a block that has a bond, relative to a free one's: below 1 polymers creep while monomers
+  mobM: 1,                       // Brownian step (and turn) of a membrane block relative to others: a wall that jostles as hard as a free
+                                 // block sweeps small particles through itself
+  mobS: 1,                       // Brownian step (and turn) of a non-membrane block that has a bond, relative to a free one's: below 1 polymers creep while monomers
                                  // and energy diffuse, as on a mineral surface, so offspring stay near their parents
   repMargin: 1.0,                // contact radius of a block as a fraction of half its side; unbonded blocks never overlap more than this allows
   iters: 16,                     // constraint passes per step (pins, contacts, shape); 8 to 24 all copy exactly, more keep bonded edges closer
@@ -178,7 +184,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.size = new Float64Array(n);
@@ -202,7 +208,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.strainBackbone = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
@@ -215,8 +221,9 @@ class Sim {
     for (let i = 0; i < (p.nM || 0); i++) this.type[u++] = T_M;
     for (let i = 0; i < (p.nC || 0); i++) this.type[u++] = T_C;
     for (let i = 0; i < (p.nD || 0); i++) this.type[u++] = T_D;
+    for (let i = 0; i < (p.nX || 0); i++) this.type[u++] = T_X;
     for (u = 0; u < n; u++) {
-      this.size[u] = this.type[u] === T_E ? p.sizeE : 1;
+      this.size[u] = this.type[u] === T_E ? p.sizeE : this.type[u] === T_X ? p.sizeX : 1;
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
       this.w[u] = 1 / (this.size[u] * this.size[u]);
       this.wr[u] = 6 / Math.pow(this.size[u], 4);
@@ -237,7 +244,7 @@ class Sim {
     // edgeOf maps each working side (F, R, K, L) to the polygon edge that carries it; any other edge is skin.
     this.nv = new Uint8Array(NT); this.rx = new Float64Array(NT * NV); this.ry = new Float64Array(NT * NV); this.edgeOf = new Int8Array(NT * 4);
     for (let t = 0; t < NT; t++) {
-      const h = 0.5 * (t === T_E ? p.sizeE : 1), shape = typeParam(p, 'shape', t, 'square');
+      const h = 0.5 * (t === T_E ? p.sizeE : t === T_X ? p.sizeX : 1), shape = typeParam(p, 'shape', t, 'square');
       let pts, edges;
       if (shape === 'oct') {
         // regular octagon one side across (flat to flat); the working sides are every other edge
@@ -415,7 +422,7 @@ class Sim {
   _slotFree(m, tx, ty) {
     let free = true;
     this._forNear(tx, ty, (v) => {
-      if (!free || v === m) return;
+      if (!free || v === m || this.type[v] === T_X) return;
       const ex = this._dx(this.px[v] - tx), ey = this._dy(this.py[v] - ty);
       const lim = 0.75 * (this.size[v] + this.size[m]) / 2;
       if (ex * ex + ey * ey < lim * lim) free = false;
@@ -525,7 +532,8 @@ class Sim {
         if (this.bond[u * 4 + i] >= 0) continue;
         const s = this.ss[u * 4 + i];
         let ok = false;
-        if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
+        if (this.type[u] === T_X) ok = false;
+        else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
         else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT;
@@ -555,6 +563,7 @@ class Sim {
       this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : on ? S.MEM : S.RAW; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : on ? S.MEM : S.RAW;
       return;
     }
+    if (this.type[u] === T_X) { this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = S.IDLE; return; }
     if (this.type[u] === T_E) {
       const s = this.is[u] === I_ON ? S.ON : S.OFF;
       this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = s;
@@ -614,6 +623,7 @@ class Sim {
    */
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
+    if (this.type[u] === T_X) return;
     if (this.type[u] === T_M) {
       // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
       // bonds falls back to raw at pMemDecay
@@ -861,10 +871,12 @@ class Sim {
     const W = p.W, H = p.H, gw = this.gw, gh = this.gh, cell = this.cell, head = this.head, next = this.next;
     // 1. Brownian jostling: each block translates and turns as a whole (its shape changes only under pins)
     for (let u = 0; u < n; u++) {
-      const ub = u * 4, slow = p.mobS !== 1 && this.type[u] !== T_E && (bond[ub] >= 0 || bond[ub + 1] >= 0 || bond[ub + 2] >= 0 || bond[ub + 3] >= 0);
-      const sw = this.type[u] === T_E ? Math.sqrt(wt[u]) * p.mobE : slow ? Math.sqrt(wt[u]) * p.mobS : Math.sqrt(wt[u]);
+      const ub = u * 4, slow = p.mobS !== 1 && this.type[u] !== T_E && this.type[u] !== T_X && (bond[ub] >= 0 || bond[ub + 1] >= 0 || bond[ub + 2] >= 0 || bond[ub + 3] >= 0);
+      // mobility: energy mobE, rays mobX, membrane mobM (bonded or not), other bonded blocks mobS
+      const mob = this.type[u] === T_M ? p.mobM : slow ? p.mobS : 1;
+      const sw = this.type[u] === T_E ? Math.sqrt(wt[u]) * p.mobE : this.type[u] === T_X ? Math.sqrt(wt[u]) * p.mobX : Math.sqrt(wt[u]) * mob;
       px[u] = this._wx(px[u] + p.sigma * sw * this._gauss()); py[u] = this._wy(py[u] + p.sigma * sw * this._gauss());
-      const da = p.sigmaRot * wt[u] * (slow ? p.mobS : 1) * this._gauss(), c = Math.cos(da), s = Math.sin(da);
+      const da = p.sigmaRot * wt[u] * mob * this._gauss(), c = Math.cos(da), s = Math.sin(da);
       pa[u] += da;
       for (let k = u * NV, e = k + this.nv[this.type[u]]; k < e; k++) { const x = ox[k], y = oy[k]; ox[k] = c * x - s * y; oy[k] = s * x + c * y; }
     }
@@ -896,6 +908,7 @@ class Sim {
       const rr = (rad[u] + rad[v]) * 1.3;
       if (dx * dx + dy * dy >= rr * rr) continue;
       if ((bond[ub] >> 2) === v || (bond[ub + 1] >> 2) === v || (bond[ub + 2] >> 2) === v || (bond[ub + 3] >> 2) === v) continue;
+      if ((this.type[u] === T_X || this.type[v] === T_X) && this.type[u] !== T_M && this.type[v] !== T_M) continue;   // a ray meets only membrane
       if (p.memPerm && (this.type[u] === T_M) !== (this.type[v] === T_M)) {
         // a free monomer passes through membrane
         const x = this.type[u] === T_M ? v : u, xb = x * 4;
@@ -1008,6 +1021,7 @@ class Sim {
     const p = this.p, px = this.px, py = this.py, open = this.open, size = this.size, pairs = this.pairs, W = p.W, H = p.H;
     for (let k = 0; k < pairs.length; k += 2) {
       const u = pairs[k], v = pairs[k + 1];
+      if (p.nX > 0 && (this.type[u] === T_X) !== (this.type[v] === T_X)) { if (this.type[u] === T_X) this._rayHit(u, v); else this._rayHit(v, u); continue; }
       if (!open[u] || !open[v]) continue;
       let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
       let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
@@ -1016,6 +1030,22 @@ class Sim {
       if (d2 > dmax * dmax || d2 < dmin * dmin) continue;
       this._tryBond(u, v, dx, dy, Math.sqrt(d2));
     }
+  }
+
+  /** A ray touching block v breaks one of v's lateral bonds, at rayHit scaled by the resistance of the two blocks it joins
+   * (membrane at resM); a shielded bond does not break. */
+  _rayHit(x, v) {
+    const p = this.p, t = this.type[v];
+    if (t === T_E || t === T_X) return;
+    let dx = this.px[v] - this.px[x]; dx -= p.W * Math.round(dx / p.W);
+    let dy = this.py[v] - this.py[x]; dy -= p.H * Math.round(dy / p.H);
+    const reach = 0.5 * (this.size[x] + this.size[v]); if (dx * dx + dy * dy > reach * reach) return;
+    const o = v * 4, bL = this.bond[o + L] >= 0, bR = this.bond[o + R] >= 0; if (!bL && !bR) return;
+    const side = bL && bR ? (this.rng() < 0.5 ? L : R) : bL ? L : R, q = this.bond[o + side], w = q >> 2;
+    const s1 = this.ss[o + side], s2 = this.ss[q];
+    if (s1 === S.SHIELD || s1 === S.FSH || s2 === S.SHIELD || s2 === S.FSH) return;
+    const res = (y) => this.type[y] === T_M ? p.resM : typeParam(p, 'res', this.type[y], 0);
+    if (this.rng() < p.rayHit * (1 - res(v)) * (1 - res(w))) { this.pendingUnlink.push(o + side); this.rayHits++; this._event('break', v, w); }
   }
 
   /** Transitions, bond holding, births, energy reload. */
@@ -1059,6 +1089,7 @@ class Sim {
     let inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
+      if (this.type[u] === T_X) continue;
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
       if (this.ss[o + K] === S.CHARGE) totalMotif++;
@@ -1119,7 +1150,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
@@ -1142,5 +1173,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, COMP, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, COMP, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

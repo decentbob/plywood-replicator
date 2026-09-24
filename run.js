@@ -35,7 +35,7 @@ for (let i = 0; i < args.length; i++) {
 }
 
 const sim = new Sim(params);
-const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts'];
+const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts', 'snaps', 'rayHits'];
 if (!opt.quiet) console.log(cols.join(','));
 const t0 = Date.now();
 changes.sort((a, b) => a.at - b.at);

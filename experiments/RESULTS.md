@@ -1162,6 +1162,12 @@ the public `ABA` motif (charged particles cannot pass membrane), walls persist i
 (121 to 176 active blocks after 200,000 steps, one to four rings holding strands). Whether walls
 then pay (whether `BAB` and `ABA` rise together) is `walls.sh`, below.
 
+**Correction (section 25).** The three rounds below ran with energy particles at full mobility and
+membrane jostling as hard as any block, and in that setting walls do not keep energy particles in:
+three particles started inside a closed ring were all outside within 20,000 steps. The benefit these
+rounds were meant to test (energy kept inside) did not exist; what they measured is the cost of a
+wall. Read them as that.
+
 **Do walls pay?** (`walls.sh`, 30×30, energy only from the public `ABA` motif, 1,000,000 steps,
 three seeds each.) W: strands carrying `BAB` grow tethered, permeable walls. N: the same world with no
 membrane, where `BAB` does nothing. Per newborn block, × chance, by 250,000-step window:
@@ -1244,3 +1250,57 @@ not worth their cost to the lineage in any energy regime tried. Two costs are pl
 shuts the maker's copies in until strain opens it, and the wall is made from the same crowded space
 the lineage needs to spread into. The benefit (energy kept inside) is real only while energy is
 scarce, and in this world energy is scarce only on the way to a crash.
+
+## 25. Walls that are walls, and rays as particles (`leak.js`, `ray_shield.js`, `closure.js`)
+
+**Leaks.** Particles started inside a closed ring of rigid membrane (24 blocks at 15°, immune to
+rays), counted outside after 20,000 steps (`leak.js`; three particles; the ring's own polygon decides
+inside):
+
+| walls' mobility | energy, mobility 1 | energy, 0.2 | ray (size 0.3), mobility 0.3 | ray, 0.12 | ray, 0.08 |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 3 of 3 out | 3 of 3 | 3 of 3 | 3 of 3 | 3 of 3 |
+| 0.5 | 3 of 3 | **0 of 3** | 3 of 3 | 2 of 3 | **0 of 3** |
+
+Two separate leaks. A particle whose Brownian step is a sizeable part of a side (energy at full
+mobility moves about 0.6 per step) jumps a wall one block thick. And a wall block kicked as hard as a
+free block (0.3 per step, sometimes 0.9) can carry its centre past a particle lying against it; the
+disc contact then pushes the particle out the far side while the pins pull the block back (traced
+step by step: the particle moves 0.6 to 1.2 within the solve, against a kick of 0.12). Crowding does
+the same: particles pressed into the wall by others are pushed through. Neither is cured by more
+passes or a wider contact list. A wall seals when its blocks move less (`mobM`, the membrane's
+Brownian step, default 1) and what it holds moves in small steps. The same goes for strands: at full
+strand mobility a strand leaves a closed ring (5% of its blocks inside at the end against 50% for a
+strand that stays); at `mobS` 0.6 it stays.
+
+**Rays** (`nX`, `rayHit`, `sizeX`, `mobX`): radiation as particles instead of a rate. A ray is a small
+block that never bonds; it passes through everything but membrane, and touching a block it breaks one
+of its lateral bonds at `rayHit` per step of contact, scaled by the resistances (a shielded bond does
+not break). A closed ring then shields what it encloses by plain physics (`ray_shield.js`: a ring
+immune to rays, a strand of four inside, one outside, 60 rays, broken bonds rejoined only where the
+halves still touch, 30,000 steps):
+
+| mobilities (bonded letters, membrane, rays) | hits inside | hits outside | strand blocks inside |
+|---|---:|---:|---:|
+| 1, 1, 0.08 | 0 | 992 | 3% (the strand left) |
+| 1, 0.5, 0.08 | 0 | 1,420 | 4% (the strand left) |
+| 0.6, 0.7, 0.08 | 152 | 492 | 50% |
+| **0.6, 0.5, 0.08** | **0** | **594** | **50%** |
+
+**Closure at sealing mobilities.** Slow membrane closes less often: the arms of a wall that miss each
+other no longer wobble into each other, and they overshoot into spirals. The pictures show why they
+miss: the maker, a straight strand anchored on its own wall, is a stiff bar across the inside of the
+ring and holds the wall out of round near the anchor. A genome has to fit inside the wall it makes
+(`closure.js`, bend 15° unless noted, catch 0.3, letters 0.6, membrane 0.5, 20 seeds, 60,000 steps):
+
+| maker | closed | overshot |
+|---|---:|---:|
+| `ABBABA` (6 units) | 4 | 11 (5 broke) |
+| `ABBABA`, bend 10°, catch 0.5 | 10 | 10 |
+| `ABAB` (4) | 11 | 9 |
+| `BAB` (3) | 19 | 1 |
+| `BAB`, bend 18° | 20 | 0 |
+
+(At full mobility, where walls leak, `ABBABA` closed 20 of 20: its strand bends and the wall wobbles.)
+So in a world where walls hold, cell size limits genome length, a constraint no rule states. The
+selection test with rays is `rays.sh`, below.
