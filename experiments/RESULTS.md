@@ -1606,5 +1606,21 @@ and holds both genes in 74% (radiation) and 81 to 86% (both pressures) of capped
 capped length 7.9 to 8.0. Where radiation does not act, `PABAQ` wins and the shield gene is lost by step 100,000 to
 200,000. This is the first time in this project that a genome with two genes has been selected over a shorter competitor
 and kept, and it happens in the environment (energy and radiation together) where every earlier attempt collapsed (section
-19: to dimers; section 22: to the genome's own pieces; round 1: to `PQ`). One seed; seed 2 and a control without `endLoss`
-are running.
+19: to dimers; section 22: to the genome's own pieces; round 1: to `PQ`). **Seed 2** (`TB_comp_rad_2`, `TB_comp_both_2`) repeats it: `PABAQ`
+out-competed within the first window, both genes in 68 to 70% (radiation) and 82 to 85% (both) of capped births from
+100,000 steps to the end. **Keep runs** (`TB_keep_*_1`, `PABACDCQ` alone): with radiation both genes stay in 67 to 87% of
+capped births for 500,000 steps (under both pressures `PABAQ` arose by mutation, 33 births between steps 200,000 and 300,000,
+and was purged); without radiation the shield gene decays by point mutation (74% → 32% with no pressure, 75% → 26% under
+scarce energy) while the energy gene holds at 83 to 89%.
+
+**Control: bare caps without `endLoss`** (`TB_noend_comp_rad_1`, radiation, seed 1). Among capped births the two-gene
+genome still beats `PABAQ` (both genes in 59 to 71%), so bare caps are what decide between capped genomes. But pieces now
+live on: capped births are 13 to 19% of all births (against 25 to 33% with `endLoss`), mean newborn length is 3.8, and at
+the end the world holds 25 two-gene genomes among dimers and pieces (`CP`, `AP`, `DCP`, `CQ`, `AB`), against 47 with
+`endLoss`. `endLoss` keeps the population made of whole genomes; bare caps make the second gene pay.
+
+**Assembly** (`telo2.sh`, `TA_lig_1`: seeds `PABAQ` and `PCDCQ`, both pressures, ligation 0.02, 1,000,000 steps): no
+genome carrying both genes was ever born. With bare caps `PCDCQ` cannot re-arm, so its seeds only wait to be broken; the last
+birth carrying `CDC` was at step 32,662, and 174 ligations in the run never joined a `CDC` piece to an `ABA` piece. The test
+gave the second gene no time to be picked up. The fairer question, whether the shield gene can arise inside `PABAQ` by
+mutation, is `telo4.sh`.
