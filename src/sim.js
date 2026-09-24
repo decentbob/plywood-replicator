@@ -110,6 +110,8 @@ const DEFAULTS = {
                    // of its own hand, binding pairs only one hand, and neighbours of different hands link only at pMixLink (capture and
   pMixLink: 0.05,  // ligation too): the cross-inhibition of mixed chains. 0.5 is a racemic pool; does a population become one-handed?
   pMisDock: 0,     // chirality: a monomer of the other hand docks at this fraction of the normal rate (enantiomeric cross-inhibition)
+  pRacem: 0,       // chirality: a free letter (no bonds) flips to the other hand at this rate per step (racemization), so the two
+                   // hands draw on one pool of monomers
   compCopy: false, // complementary copying: A docks on a B template and C on a D (caps still pair P with Q), so a copy is the reversed
                    // complement of its template and a lineage alternates between two forms, as DNA's strands do
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
@@ -1198,6 +1200,10 @@ class Sim {
       if (rng() < p.pReload) this.is[u] = I_ON;
     }
     for (let u = 0; u < n; u++) if (this.type[u] === T_E) this._derive(u);
+    if (p.pRacem > 0) for (let u = 0; u < n; u++) {
+      const b = u * 4;
+      if (LETTERS.includes(this.type[u]) && this.bond[b] < 0 && this.bond[b + 1] < 0 && this.bond[b + 2] < 0 && this.bond[b + 3] < 0 && rng() < p.pRacem) this.hand[u] ^= 1;
+    }
     this._computeOpen();
     // a unit that has lost every bond springs back to its rest shape; only units pinned this step can be out of shape
     for (const u of this._bondedUnits || []) {
