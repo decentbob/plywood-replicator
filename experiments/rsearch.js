@@ -22,6 +22,6 @@ for (let i = from; i < to; i++) {
   let ok = true;
   try { for (let t = every; t <= steps; t += every) { s.run(every); cen.push(s.census()); } } catch (e) { ok = false; }
   const late = cen.slice(Math.floor(cen.length / 2));
-  const score = ok && late.length ? { top6: Math.max(...late.map((c) => c.top6)), repeat6: Math.max(...late.map((c) => c.repeat6)), largest: Math.max(...late.map((c) => c.largest)), bonded: late[late.length - 1].bonded, kinds: late[late.length - 1].kinds } : null;
+  const score = ok && late.length ? { excess: +Math.max(...late.map((c) => c.repeat3 - c.repeat3Shuffled)).toFixed(1), top6: Math.max(...late.map((c) => c.top6)), repeat6: Math.max(...late.map((c) => c.repeat6)), largest: Math.max(...late.map((c) => c.largest)), bonded: late[late.length - 1].bonded, kinds: late[late.length - 1].kinds } : null;
   console.log(JSON.stringify({ i, ok, secs: Math.round((Date.now() - t0) / 1000), params: p, score, census: cen }));
 }
