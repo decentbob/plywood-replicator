@@ -79,7 +79,17 @@ function score(s, p) {
     const fm = functional(p), carried = fm.filter((m) => rs.some((x) => x.seq.includes(m)));
     // how many functional motifs co-occur in one genome, at most
     let both = 0; for (const x of rs) both = Math.max(both, fm.filter((m) => x.seq.includes(m)).length);
-    return { n: rs.length, len: +(rs.reduce((a, x) => a + x.seq.length, 0) / rs.length).toFixed(2), distinct: seqs.size, motifs: carried.length, maxMotifsInOne: both };
+    // enrichment of each functional motif against chance at the window's letter frequencies, and the share of newborns
+    // carrying two different functional motifs at once
+    const freq = {}; let tot = 0; for (const x of rs) for (const c of x.seq) { freq[c] = (freq[c] || 0) + 1; tot++; }
+    const enrich = {};
+    for (const m of fm) {
+      let obs = 0, exp = 0;
+      for (const x of rs) { for (let k = 0; k + 3 <= x.seq.length; k++) if (x.seq.startsWith(m, k)) obs++; exp += Math.max(0, x.seq.length - 2) * [...m].reduce((q, c) => q * (freq[c] || 0) / tot, 1); }
+      enrich[m] = exp > 0 ? +(obs / exp).toFixed(2) : 0;
+    }
+    const multi = rs.filter((x) => fm.filter((m) => x.seq.includes(m)).length >= 2).length / rs.length;
+    return { n: rs.length, len: +(rs.reduce((a, x) => a + x.seq.length, 0) / rs.length).toFixed(2), distinct: seqs.size, motifs: carried.length, maxMotifsInOne: both, enrich, multi: +multi.toFixed(3) };
   };
   const mid = stat(part(third, 2 * third)), last = stat(part(2 * third, steps + 1));
   const st = s.stats();
