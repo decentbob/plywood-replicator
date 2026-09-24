@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Invariant checks for the chemistry. Run: node test.js
-const { Sim, S, T_E, T_M, T_X, T_J, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
+const { Sim, S, T_E, T_M, T_X, T_J, T_G, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
@@ -345,6 +345,21 @@ test('chiral: each hand copies into its own hand; lowercase seeds are mirror str
   assert.strictEqual(up + lo, s.births.length, 'no mixed births without pMixLink');
   for (let u = 0; u < s.n; u++) { const v = s.bond[u * 4] >> 2; if (v >= 0 && s.type[v] !== T_E && s.type[u] !== T_E) assert.strictEqual(s.hand[u], s.hand[v], 'docking across hands'); }
   assert.deepStrictEqual(s.check(), []);
+});
+
+test('droplets: G blocks attract each other into droplets and never bond; without stickiness they stay dispersed', () => {
+  const largest = (g) => {
+    const s = new Sim(Object.assign({}, base, { seed: 1, W: 30, H: 30, nA: 20, nB: 20, nE: 0, nG: 250, gStick: g, gRange: 2.2, seedCount: 0 }));
+    s.run(4000);
+    for (let u = 0; u < s.n; u++) if (s.type[u] === T_G) for (let i = 0; i < 4; i++) assert.strictEqual(s.bond[u * 4 + i], -1, 'G bonded');
+    const G = []; for (let u = 0; u < s.n; u++) if (s.type[u] === T_G) G.push(u);
+    const par = new Map(G.map((u) => [u, u])), f = (x) => { while (par.get(x) !== x) x = par.get(x); return x; };
+    for (let a = 0; a < G.length; a++) for (let b = a + 1; b < G.length; b++) { const dx = s._dx(s.px[G[b]] - s.px[G[a]]), dy = s._dy(s.py[G[b]] - s.py[G[a]]); if (dx * dx + dy * dy < 1.69) par.set(f(G[a]), f(G[b])); }
+    const sz = {}; for (const u of G) sz[f(u)] = (sz[f(u)] || 0) + 1;
+    return Math.max(...Object.values(sz));
+  };
+  const on = largest(1), off = largest(0);
+  assert.ok(on >= 55 && off <= 35, `largest droplet ${on} with stickiness, ${off} without`);
 });
 
 console.log(passed + ' tests passed');

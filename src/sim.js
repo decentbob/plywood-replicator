@@ -36,10 +36,10 @@
 
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
-const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8, T_J = 9;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps; J is a hub
-const NT = 10;
+const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8, T_J = 9, T_G = 10;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps; J is a hub; G is droplet material
+const NT = 11;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J'];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J', 'G'];
 const LETTERS = [T_A, T_B, T_C, T_D, T_P, T_Q];
 /** The type of a letter character ('A'..'D', or the caps 'P', 'Q'); -1 if none. */
 function letterType(ch) { const k = 'ABCDPQ'.indexOf(String(ch).toUpperCase()); return k < 0 ? -1 : LETTERS[k]; }
@@ -99,6 +99,10 @@ const DEFAULTS = {
                                 // block breaks one of its lateral bonds at rayHit (radiation as particles, so a wall shields what it encloses)
   rayHit: 0.05, sizeX: 0.3, mobX: 0.12, // per step of contact; a ray's size; its Brownian step relative to its size's. At 0.12 a ray
                                 // moves about 0.12 of a side per step, too little to jump a wall (a wall also needs mobS about 0.3)
+  nG: 0,                        // droplets (coacervates): blocks that never bond but attract each other within gRange of touching, closing
+  gStick: 0.1, gRange: 1.6,     // gStick of the gap per step: with enough of them they separate into liquid droplets that fuse and break
+  gStickS: 0, gStickF: 0,       // how strongly a letter in a strand (gStickS) or a free letter (gStickF) is drawn to G, as a fraction of gStick:
+                                // strands then gather in droplets with the monomers they copy from (Oparin's coacervates)
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
@@ -214,7 +218,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0) + (p.nG || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.hand = new Uint8Array(n);        // chirality, fixed for life: 1 is the mirror form (chiral rule)
@@ -243,7 +247,7 @@ class Sim {
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
-    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1);
+    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1); this._mobL[T_G] = typeParam(p, 'mob', T_G, 1);
     const cm = String(p.cutMotif || 'BAB');
     this._cutOut = letterType(cm[0]); this._cutMid = letterType(cm[1]);   // cut rule
 
@@ -259,6 +263,7 @@ class Sim {
     for (let i = 0; i < (p.nP || 0); i++) this.type[u++] = T_P;
     for (let i = 0; i < (p.nQ || 0); i++) this.type[u++] = T_Q;
     for (let i = 0; i < (p.nJ || 0); i++) this.type[u++] = T_J;
+    for (let i = 0; i < (p.nG || 0); i++) this.type[u++] = T_G;
     for (u = 0; u < n; u++) {
       this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
       if (p.chiral > 0 && LETTERS.includes(this.type[u])) this.hand[u] = this.rng() < p.chiral ? 1 : 0;
@@ -468,7 +473,7 @@ class Sim {
   _slotFree(m, tx, ty) {
     let free = true;
     this._forNear(tx, ty, (v) => {
-      if (!free || v === m || this.type[v] === T_X) return;
+      if (!free || v === m || this.type[v] === T_X || this.type[v] === T_G) return;
       const ex = this._dx(this.px[v] - tx), ey = this._dy(this.py[v] - ty);
       const lim = 0.75 * (this.size[v] + this.size[m]) / 2;
       if (ex * ex + ey * ey < lim * lim) free = false;
@@ -557,6 +562,7 @@ class Sim {
       if (tv === T_E && tu !== T_E) return (i === K && ((sv === S.ON && su === S.WANT) || (sv === S.OFF && su === S.CHARGE))) ? 1 : 0;
       return 0;
     }
+    if (tu === T_G || tv === T_G) return 0;
     if (p.chiral > 0 && tu !== T_X && tv !== T_X && this.hand[u] !== this.hand[v]) {
       // chirality: no binding across hands, a mirror monomer docks only at pMisDock (then sits in the site, a poison,
       // until it falls off); side to side only at pMixLink
@@ -597,7 +603,7 @@ class Sim {
         if (this.bond[u * 4 + i] >= 0) continue;
         const s = this.ss[u * 4 + i];
         let ok = false;
-        if (this.type[u] === T_X) ok = false;
+        if (this.type[u] === T_X || this.type[u] === T_G) ok = false;
         else if (this.type[u] === T_J) ok = s === S.HUB;
         else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
@@ -629,7 +635,7 @@ class Sim {
       this.ss[o + L] = b[o + L] >= 0 ? S.BONDED : on ? S.MEM : S.RAW; this.ss[o + R] = b[o + R] >= 0 ? S.BONDED : on ? S.MEM : S.RAW;
       return;
     }
-    if (this.type[u] === T_X) { this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = S.IDLE; return; }
+    if (this.type[u] === T_X || this.type[u] === T_G) { this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = S.IDLE; return; }
     if (this.type[u] === T_J) { for (let i = 0; i < 4; i++) this.ss[o + i] = b[o + i] >= 0 ? S.BONDED : S.HUB; return; }
     if (this.type[u] === T_E) {
       const s = this.is[u] === I_ON ? S.ON : S.OFF;
@@ -707,7 +713,7 @@ class Sim {
    */
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
-    if (this.type[u] === T_X || this.type[u] === T_J) return;
+    if (this.type[u] === T_X || this.type[u] === T_J || this.type[u] === T_G) return;
     if (this.type[u] === T_M) {
       // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
       // bonds falls back to raw at pMemDecay
@@ -853,7 +859,7 @@ class Sim {
     let best = this.cycleOf(units);
     for (const start of units) {
       const ql = this.bond[start * 4 + L];
-      if (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J || this.type[start] === T_X || (ql >= 0 && this.type[ql >> 2] !== T_J)) continue;
+      if (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J || this.type[start] === T_X || this.type[start] === T_G || (ql >= 0 && this.type[ql >> 2] !== T_J)) continue;
       const c = []; let u = start;
       while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 || this.type[q >> 2] === T_J ? -1 : q >> 2; }
       if (c.length > best.length) best = c;
@@ -957,6 +963,30 @@ class Sim {
     this._chemistry();
   }
 
+  /** Droplets: a pair of G blocks a little apart (up to gRange of touching) closes gStick of the gap; a letter and a G at
+   * gStickS (in a strand) or gStickF (free) of that. An attraction between neighbours, nothing more. */
+  _stick(pairs) {
+    const p = this.p, px = this.px, py = this.py, wt = this.w, rad = this.rad, W = p.W, H = p.H, type = this.type, bond = this.bond;
+    for (let k = 0; k < pairs.length; k += 2) {
+      const u = pairs[k], v = pairs[k + 1], gu = type[u] === T_G, gv = type[v] === T_G;
+      if (!gu && !gv) continue;
+      let c = p.gStick;
+      if (!(gu && gv)) {
+        const x = gu ? v : u, t = type[x], xb = x * 4;
+        if (!LETTERS.includes(t)) continue;
+        c *= bond[xb] >= 0 || bond[xb + 1] >= 0 || bond[xb + 3] >= 0 ? p.gStickS : p.gStickF;
+        if (c <= 0) continue;
+      }
+      let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
+      let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
+      const rr = rad[u] + rad[v], d2 = dx * dx + dy * dy;
+      if (d2 <= rr * rr || d2 >= rr * rr * p.gRange * p.gRange) continue;
+      const d = Math.sqrt(d2), m = c * (d - rr) / d, wu = wt[u], wv = wt[v], ws = wu + wv;
+      px[u] = this._wx(px[u] + dx * m * wu / ws); py[u] = this._wy(py[u] + dy * m * wu / ws);
+      px[v] = this._wx(px[v] - dx * m * wv / ws); py[v] = this._wy(py[v] - dy * m * wv / ws);
+    }
+  }
+
   /** Jostling; one neighbour scan; then pins, contacts and shape relaxation solved together. Leaves the hash built. */
   _physics() {
     const p = this.p, n = this.n;
@@ -1010,6 +1040,7 @@ class Sim {
       }
       contacts.push(u, v);
     }
+    if (p.nG > 0) this._stick(pairs);
     // 3. constraints
     this._bondList();
     const pins = this.pins, soft = this._soft || (this._soft = []);
@@ -1130,7 +1161,7 @@ class Sim {
    * (membrane at resM); a shielded bond does not break. */
   _rayHit(x, v) {
     const p = this.p, t = this.type[v];
-    if (t === T_E || t === T_X) return;
+    if (t === T_E || t === T_X || t === T_G) return;
     let dx = this.px[v] - this.px[x]; dx -= p.W * Math.round(dx / p.W);
     let dy = this.py[v] - this.py[x]; dy -= p.H * Math.round(dy / p.H);
     const reach = 0.5 * (this.size[x] + this.size[v]); if (dx * dx + dy * dy > reach * reach) return;
@@ -1183,7 +1214,7 @@ class Sim {
     let inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
-      if (this.type[u] === T_X || this.type[u] === T_J) continue;
+      if (this.type[u] === T_X || this.type[u] === T_J || this.type[u] === T_G) continue;
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
       if (this.ss[o + K] === S.CHARGE) totalMotif++;
@@ -1221,7 +1252,7 @@ class Sim {
         if (nM === comp.length) continue;
       }
       let nAB = 0, faceBonded = false;
-      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M || this.type[u] === T_J || this.type[u] === T_X) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
+      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M || this.type[u] === T_J || this.type[u] === T_X || this.type[u] === T_G) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
       if (nAB < 2) continue;
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
@@ -1267,5 +1298,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });
