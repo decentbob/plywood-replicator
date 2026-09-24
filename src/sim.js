@@ -132,6 +132,8 @@ const DEFAULTS = {
   // shape: each block type's rest polygon and how hard it is pulled back to it
   shapeA: 'square', shapeB: 'square', shapeC: 'square', shapeD: 'square', shapeM: 'square',   // 'square' (a wedge when bent) or 'oct' (an octagon, working sides on alternate edges)
   bendA: 0, bendB: 0, bendC: 0, bendD: 0,           // degrees of bend between two bonded neighbours of this type (0 square, >0 a wedge that curls strands)
+  // foldA..foldD (default 0): a folding letter has this bend while its face is free and its ordinary shape while something is
+  // bound to its face, so a free strand curls up and the part being copied straightens (copy straight, fold free)
   stiffA: 0.5, stiffB: 0.5, stiffC: 0.5, stiffD: 0.5, stiffM: 1,   // pull back to the rest shape per solver pass: 1 rigid; 0.5 is safe; below about 0.3 copies docked on neighbouring templates can link
   // physics knobs (these should not need tuning for the chemistry to work)
   sigma: 0.3, sigmaRot: 0.45,    // Brownian step (translation, rotation) per unit per step
@@ -253,8 +255,12 @@ class Sim {
     }
     // rest shapes per type: nv corners about their mean, face along +x, counter-clockwise; edge e runs corner e -> e+1.
     // edgeOf maps each working side (F, R, K, L) to the polygon edge that carries it; any other edge is skin.
-    this.nv = new Uint8Array(NT); this.rx = new Float64Array(NT * NV); this.ry = new Float64Array(NT * NV); this.edgeOf = new Int8Array(NT * 4);
-    for (let t = 0; t < NT; t++) {
+    // slots NT..2NT-1 hold each type's folded shape (fold rule): the shape a folding letter takes while its face is free
+    this.nv = new Uint8Array(NT); this.rx = new Float64Array(2 * NT * NV); this.ry = new Float64Array(2 * NT * NV); this.edgeOf = new Int8Array(NT * 4);
+    this._fold = new Float64Array(NT); for (const t of LETTERS) this._fold[t] = typeParam(p, 'fold', t, 0);
+    for (let slot = 0; slot < 2 * NT; slot++) {
+      const t = slot % NT, folded = slot >= NT;
+      if (folded && !this._fold[t]) continue;
       const h = 0.5 * typeParam(p, 'size', t, 1), shape = typeParam(p, 'shape', t, 'square');
       let pts, edges;
       if (shape === 'oct') {
@@ -266,13 +272,13 @@ class Sim {
         pts = [[h, -h], [h, h], [-h, h], [-h, -h]]; edges = [0, 1, 2, 3];
         // wedges: the lateral sides lean in toward the back by half the bend, so two blocks bonded side to side meet at
         // the bend and a run of them curls with its backs inside. A block one side deep cannot lean past about 50 degrees.
-        const bend = t === T_M ? p.memAngle : typeParam(p, 'bend', t, 0);
+        const bend = t === T_M ? p.memAngle : folded ? this._fold[t] : typeParam(p, 'bend', t, 0);
         if (bend !== 0) { const hb = Math.max(0.15 * h, h - 2 * h * Math.tan(bend * Math.PI / 360)); pts = [[h, -h], [h, h], [-h, hb], [-h, -hb]]; }
       }
       let mx = 0, my = 0; for (const q of pts) { mx += q[0] / pts.length; my += q[1] / pts.length; }
-      this.nv[t] = pts.length;
-      for (let k = 0; k < pts.length; k++) { this.rx[t * NV + k] = pts[k][0] - mx; this.ry[t * NV + k] = pts[k][1] - my; }
-      for (let i = 0; i < 4; i++) this.edgeOf[t * 4 + i] = edges[i];
+      if (!folded) this.nv[t] = pts.length;
+      for (let k = 0; k < pts.length; k++) { this.rx[slot * NV + k] = pts[k][0] - mx; this.ry[slot * NV + k] = pts[k][1] - my; }
+      if (!folded) for (let i = 0; i < 4; i++) this.edgeOf[t * 4 + i] = edges[i];
     }
     // a membrane wedge's contact radius is its mean half-width, so two blocks can reach the flush pose
     const hbM = p.shapeM === 'oct' ? 0.5 : this.ry[T_M * NV + 2];
@@ -415,10 +421,13 @@ class Sim {
     return out;
   }
 
+  /** Which rest shape u has now: its folded one (slot type + NT) if it is a folding letter whose face is free. */
+  _restSlot(u) { const t = this.type[u]; return this._fold[t] && this.bond[u * 4] < 0 ? t + NT : t; }
+
   /** Put u's corners at its rest shape, rotated to its orientation. */
   _resetShape(u) {
-    const t = this.type[u], c = Math.cos(this.pa[u]), s = Math.sin(this.pa[u]);
-    for (let k = 0; k < this.nv[t]; k++) { const x = this.rx[t * NV + k], y = this.ry[t * NV + k]; this.ox[u * NV + k] = c * x - s * y; this.oy[u * NV + k] = s * x + c * y; }
+    const t = this.type[u], r = this._restSlot(u), c = Math.cos(this.pa[u]), s = Math.sin(this.pa[u]);
+    for (let k = 0; k < this.nv[t]; k++) { const x = this.rx[r * NV + k], y = this.ry[r * NV + k]; this.ox[u * NV + k] = c * x - s * y; this.oy[u * NV + k] = s * x + c * y; }
   }
 
   /** Move unit u rigidly: translate by (dx, dy), turn its corners by da about its centre. */
@@ -989,7 +998,7 @@ class Sim {
         if (soft[t] === 0 && !p.snapCorners) continue;   // rigid blocks keep their shape by moving rigidly, unless corners are snapped
         // shape matching: best-fit rotation of the rest shape onto the corners, then pull toward it by the stiffness;
         // the centre is re-read as the mean of the corners
-        const o = u * NV, r = t * NV, nv = this.nv[t];
+        const o = u * NV, r = this._restSlot(u) * NV, nv = this.nv[t];
         let mx = 0, my = 0;
         for (let k = 0; k < nv; k++) { mx += ox[o + k]; my += oy[o + k]; }
         mx /= nv; my /= nv; px[u] += mx; py[u] += my;

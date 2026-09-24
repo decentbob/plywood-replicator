@@ -56,8 +56,16 @@ function draw2(i) {
   }
   return p;
 }
+
+/** Round 3: round 2 plus folding letters (curled while their face is free) and, with folding, ligation more often. */
+function draw3(i) {
+  const p = draw2(i), r = mulberry(777 + i * 15485863), pick = (a) => a[Math.floor(r() * a.length)];
+  for (const L of p.nC ? 'ABCD' : 'AB') p['fold' + L] = r() < 0.5 ? 0 : pick([10, 15, 20, 30]);
+  if (r() < 0.5) p.pLigate = pick([0.005, 0.02]);
+  return p;
+}
 const ROUND = Number((process.argv.find((a) => a.startsWith('--round=')) || '--round=1').split('=')[1]);
-const drawRound = (i) => (ROUND === 2 ? draw2(i) : draw(i));
+const drawRound = (i) => (ROUND === 3 ? draw3(i) : ROUND === 2 ? draw2(i) : draw(i));
 
 /** Motifs that do something under the world's rules (a motif is a middle letter flanked by one letter on both sides). */
 function functional(p) {
@@ -96,7 +104,7 @@ function score(s, p) {
   return { alive: st.tpl > 0, tpl: st.tpl, births: s.birthCount, mid, last, functional: functional(p) };
 }
 
-module.exports = { draw, draw2, functional };
+module.exports = { draw, draw2, draw3, functional };
 if (require.main !== module) return;
 for (let i = from; i < to; i++) {
   const p = drawRound(i), t0 = Date.now();

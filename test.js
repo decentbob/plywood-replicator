@@ -296,4 +296,17 @@ test('cut: a bound cutter (BAB) cuts its partner; without the rule or without bi
   const nob = mk({ cut: true, pCut: 0.2, pHyb: 0 }); nob.run(20000); assert.strictEqual(nob.cutEvents, 0, 'no binding, no cutting');
 });
 
+
+test('fold: a free strand of folding letters curls; the part being copied straightens and copies stay exact', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 1, W: 30, H: 30, nA: 8, nB: 0, nE: 0, seedSeq: 'AAAAAAAA', foldA: 30, snapCorners: true, pReload: 0 }));
+  const units = []; for (let u = 0; u < s.n; u++) if (s.is[u] === I_TPL) units.push(u);
+  const span = () => Math.hypot(s._dx(s.px[units[0]] - s.px[units[units.length - 1]]), s._dy(s.py[units[0]] - s.py[units[units.length - 1]]));
+  const before = span(); s.run(3000);
+  assert.ok(span() < 0.7 * before, `the strand should curl: end to end ${before.toFixed(2)} -> ${span().toFixed(2)}`);
+  const t = new Sim(Object.assign({}, base, { seed: 2, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'ABBABA', seedCount: 2, foldA: 20, foldB: 20, snapCorners: true, maxStrain: 0.5 }));
+  t.run(30000);
+  assert.ok(t.births.length >= 10, 'births ' + t.births.length);
+  for (const x of t.births) assert.strictEqual(x.seq, rev(x.parent), 'unfaithful copy ' + JSON.stringify(x));
+});
+
 console.log(passed + ' tests passed');
