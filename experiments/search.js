@@ -42,7 +42,8 @@ function draw(i) {
 }
 
 /** Round 2: the round-1 world, plus random properties per letter drawn from a second random stream (so a round-2 world
- * differs from its round-1 namesake only in its letters): a wedge bend, stiffness, resistance to breaking, octagon shape. */
+ * differs from its round-1 namesake only in its letters): a wedge bend, stiffness, resistance to breaking, octagon shape,
+ * size and mobility. */
 function draw2(i) {
   const p = draw(i), r = mulberry(555 + i * 104729), pick = (a) => a[Math.floor(r() * a.length)];
   for (const L of p.nC ? 'ABCD' : 'AB') {
@@ -50,6 +51,8 @@ function draw2(i) {
     p['stiff' + L] = pick([0.4, 0.5, 0.7, 1]);
     p['res' + L] = pick([0, 0, 0.5, 0.9]);
     p['shape' + L] = r() < 0.1 ? 'oct' : 'square';
+    p['size' + L] = pick([1, 1, 1, 0.8, 0.9, 1.1, 1.25]);
+    p['mob' + L] = pick([1, 1, 0.5, 2]);
   }
   return p;
 }

@@ -151,7 +151,8 @@ const DEFAULTS = {
                                  // shape force works against from the next step on
   tolDeg: 30, tolRotDeg: 40, distTol: 0.35,   // geometric tolerance for docking (F to F, E to K)
   linkTolDeg: 10, linkDistTol: 0.15,          // tighter tolerance for side-to-side links (L to R): flush means flush
-  sizeE: 0.5,
+  sizeE: 0.5,                    // energy particles' size; sizeA..sizeD (default 1) and mobA..mobD (default 1) set a letter's size and
+                                 // mobility: giant or tiny, sluggish or fast letters (a strand of mixed sizes deforms to keep its edges flush)
   logBirths: true, maxBirthLog: 5000, maxEventLog: 300,
 };
 /** Knobs of the rigid engine, removed on 2026-09-23 with it; the runner ignores them with a warning. */
@@ -219,6 +220,7 @@ class Sim {
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
+    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1);
     const cm = String(p.cutMotif || 'BAB');
     this._cutOut = LETTERS['ABCD'.indexOf(cm[0])]; this._cutMid = LETTERS['ABCD'.indexOf(cm[1])];   // cut rule
 
@@ -232,7 +234,7 @@ class Sim {
     for (let i = 0; i < (p.nD || 0); i++) this.type[u++] = T_D;
     for (let i = 0; i < (p.nX || 0); i++) this.type[u++] = T_X;
     for (u = 0; u < n; u++) {
-      this.size[u] = this.type[u] === T_E ? p.sizeE : this.type[u] === T_X ? p.sizeX : 1;
+      this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
       this.w[u] = 1 / (this.size[u] * this.size[u]);
       this.wr[u] = 6 / Math.pow(this.size[u], 4);
@@ -253,7 +255,7 @@ class Sim {
     // edgeOf maps each working side (F, R, K, L) to the polygon edge that carries it; any other edge is skin.
     this.nv = new Uint8Array(NT); this.rx = new Float64Array(NT * NV); this.ry = new Float64Array(NT * NV); this.edgeOf = new Int8Array(NT * 4);
     for (let t = 0; t < NT; t++) {
-      const h = 0.5 * (t === T_E ? p.sizeE : t === T_X ? p.sizeX : 1), shape = typeParam(p, 'shape', t, 'square');
+      const h = 0.5 * typeParam(p, 'size', t, 1), shape = typeParam(p, 'shape', t, 'square');
       let pts, edges;
       if (shape === 'oct') {
         // regular octagon one side across (flat to flat); the working sides are every other edge
@@ -280,8 +282,9 @@ class Sim {
     // spatial hash
     // neighbour scan reach: docking distance (1.35 sides) plus room for the solver's moves within a step; the cells
     // are at least that wide, so the 3x3 cells around a unit hold every unit within reach
-    this.reach = 1.6;
-    this.cell = 1.6;
+    let big = 1; for (let t = 0; t < NT; t++) big = Math.max(big, typeParam(p, 'size', t, 1));
+    this.reach = 1.6 * big;
+    this.cell = 1.6 * big;
     this.gw = Math.max(3, Math.ceil(p.W / this.cell)); this.gh = Math.max(3, Math.ceil(p.H / this.cell));
     this.head = new Int32Array(this.gw * this.gh);
     this.next = new Int32Array(n);
@@ -899,7 +902,8 @@ class Sim {
     for (let u = 0; u < n; u++) {
       const ub = u * 4, slow = p.mobS !== 1 && this.type[u] !== T_E && this.type[u] !== T_X && (bond[ub] >= 0 || bond[ub + 1] >= 0 || bond[ub + 2] >= 0 || bond[ub + 3] >= 0);
       // mobility: energy mobE, rays mobX, membrane mobM (bonded or not), other bonded blocks mobS
-      const mob = this.type[u] === T_M ? p.mobM : slow ? p.mobS : 1;
+      let mob = this.type[u] === T_M ? p.mobM : slow ? p.mobS : 1;
+      if (this._mobL[this.type[u]] !== 1) mob *= this._mobL[this.type[u]];   // mobA..mobD: a letter's own mobility
       const sw = this.type[u] === T_E ? Math.sqrt(wt[u]) * p.mobE : this.type[u] === T_X ? Math.sqrt(wt[u]) * p.mobX : Math.sqrt(wt[u]) * mob;
       px[u] = this._wx(px[u] + p.sigma * sw * this._gauss()); py[u] = this._wy(py[u] + p.sigma * sw * this._gauss());
       const da = p.sigmaRot * wt[u] * mob * this._gauss(), c = Math.cos(da), s = Math.sin(da);
