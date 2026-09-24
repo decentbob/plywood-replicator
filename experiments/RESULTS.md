@@ -1585,3 +1585,26 @@ with length, and the shortest genome hardly pays that cost.
 The fix tried next is in the same spirit as `endLoss`, one block property: `bareCaps`, caps have no back, so no energy
 particle docks on a cap and a cap is armed only through its bond (the `feed` relay). Then `PQ` can never be re-armed, and a
 genome must carry the energy gene to reproduce, as a real genome must encode its own metabolism.
+
+**Round 2: bare caps** (`telo3.sh`: as round 1 with `bareCaps`; `TB_comp_*`: `PABACDCQ` against `PABAQ`, three seed strands
+each; 500,000 steps). With bare caps `PQ` is sterile and the smallest viable genome is `PABAQ`, the energy gene between
+caps. Share of capped births carrying each gene, and the one-gene competitor's births, by 100,000-step window, seed 1:
+
+| environment | 0–100k | 100k–200k | 200k–300k | 300k–400k | 400k–500k | `PABAQ` births after 100k |
+|---|---|---|---|---|---|---:|
+| none | ABA 67%, CDC 15% | 58%, 2% | 55%, 0% | 57%, 0% | 60%, 0% | 183 to 192 per window |
+| energy | ABA 72%, CDC 21% | 67%, 0% | 68%, 0% | 64%, 0% | 66%, 0% | 234 to 279 per window |
+| radiation | ABA 86%, CDC 64% | 84%, 80% | 86%, 83% | 85%, 86% | 85%, 84% | 1 |
+| both | ABA 91%, CDC 79% | 94%, 91% | 90%, 90% | 92%, 91% | 93%, 92% | 0 |
+
+(The capped births without `ABA` are one-generation dead ends: `PABDQ`, `PCBAQ` and the like, point mutants of the energy
+gene that cannot re-arm their caps. That load is why `ABA` sits at 55 to 70% of births where `PABAQ` wins.)
+
+What it says: the shield gene is kept exactly where it pays. Where radiation acts, the eight-unit genome carrying both genes
+drives the five-unit `PABAQ` extinct within the first 50,000 steps (78 births of it in the first 50,000, then 1 in 450,000)
+and holds both genes in 74% (radiation) and 81 to 86% (both pressures) of capped births for the rest of the run, at mean
+capped length 7.9 to 8.0. Where radiation does not act, `PABAQ` wins and the shield gene is lost by step 100,000 to
+200,000. This is the first time in this project that a genome with two genes has been selected over a shorter competitor
+and kept, and it happens in the environment (energy and radiation together) where every earlier attempt collapsed (section
+19: to dimers; section 22: to the genome's own pieces; round 1: to `PQ`). One seed; seed 2 and a control without `endLoss`
+are running.
