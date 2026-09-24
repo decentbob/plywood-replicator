@@ -362,4 +362,19 @@ test('droplets: G blocks attract each other into droplets and never bond; withou
   assert.ok(on >= 55 && off <= 35, `largest droplet ${on} with stickiness, ${off} without`);
 });
 
+test('heat: no binding in the hot part of a cycle, and bound pairs melt there', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'AAABAB,ABBABA', seedCount: 2, compCopy: true, pHyb: 0.2, heatPeriod: 4000, heatFrac: 0.5, heatMelt: 0.05 }));
+  let hotBinds = 0, coolBinds = 0, boundAtHotEnd = -1;
+  const bound = () => { let b = 0; for (let u = 0; u < s.n; u++) { const q = s.bond[u * 4]; if (q >= 0 && (q & 3) === 0 && s.is[u] === I_TPL && s.is[q >> 2] === I_TPL) b++; } return b; };
+  for (let t = 0; t < 24000; t++) {
+    const h0 = s.hybEvents; s.step();
+    if (s._hot) hotBinds += s.hybEvents - h0; else coolBinds += s.hybEvents - h0;
+    if (s.t === 22000 - 1) boundAtHotEnd = bound();   // the last step of a hot phase (hot while t mod 4000 < 2000)
+  }
+  assert.strictEqual(hotBinds, 0, 'binding while hot');
+  assert.ok(coolBinds > 0, 'no binding while cool');
+  assert.strictEqual(boundAtHotEnd, 0, 'bound pairs left at the end of a hot phase: ' + boundAtHotEnd);
+  assert.deepStrictEqual(s.check(), []);
+});
+
 console.log(passed + ' tests passed');
