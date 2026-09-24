@@ -162,7 +162,7 @@ Unfinished, in order of value:
 
 1. **Random chemistry (RESULTS 32)**, the user's latest question. Run `node experiments/autocat.js 55 57 4 15 1 54` (does the
    commonest assembly of the most ordered tables beget itself? compare with `--control`), then screen the remaining tables
-   (`node experiments/rsearch.js 31 50` and `81 100`, the file keeps indices 0–30 and 50–65 or so). Report to the user
+   (`node experiments/rsearch.js 16 50` and `65 100`; the file has indices 0–15 and 50–64). Report to the user
    whether any random table passes the heredity test. The viewer's "random chemistry" preset shows any table by its seed.
 2. **Chirality round 2** (RESULTS 30): `ROUND=2 OUT=... P=4 experiments/chiral.sh` (Frank's conditions: `pRacem`,
    small `pMixLink`, `pMisDock`), 2 seeds; `node experiments/hand.js <births files>`. Round 1 seed 2 too.
