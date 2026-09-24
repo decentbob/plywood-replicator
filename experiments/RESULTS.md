@@ -1304,3 +1304,30 @@ ring and holds the wall out of round near the anchor. A genome has to fit inside
 (At full mobility, where walls leak, `ABBABA` closed 20 of 20: its strand bends and the wall wobbles.)
 So in a world where walls hold, cell size limits genome length, a constraint no rule states. The
 selection test with rays is `rays.sh`, below.
+
+**Walls against rays** (`rays.sh`: 30×30, 60 rays at `rayHit` 0.0005, the sealing mobilities above,
+`ABBABA` seeds, 1,000,000 steps, three seeds each):
+
+| run | template units every 200k | births | ends |
+|---|---|---:|---|
+| R_W_1 (walls) | 0 0 2 0 0 | 285 | extinct |
+| R_W_2 | 0 2 9 10 0 | 358 | extinct |
+| R_W_3 | 6 0 2 0 0 | 269 | extinct |
+| R_N_1 (no membrane) | 35 34 39 44 23 | 3,170 | dimers |
+| R_N_2 | 16 51 26 24 45 | 3,021 | dimers |
+| R_N_3 | 40 43 52 41 32 | 3,152 | dimers |
+
+The walled worlds die; the unwalled ones live on as dimers. Two probes with three-unit makers
+(`BAB`, which close their walls reliably), rays switched on at step 40,000 once walls had had time
+to form, at `rayHit` 0.001 and 0.002: in both, one wall at most had closed when the rays came, the
+unwalled strands died, and the walled lineage was gone by step 100,000 (its wall decays once its
+maker is lost); the world without membrane lived on at 0.001 and was near extinction at 0.002.
+
+Where compartments stand after sections 16, 24 and 25. Every piece works on its own: division of an
+overlong membrane (strain), walls made by and tethered to their makers, closure around the maker,
+walls that keep rays out and strands in. Together they do not pay, for reasons that are physical
+rather than about the rules: a wall of 20 to 24 blocks recruited one at a time from the medium
+takes longer to build than a strand takes to copy; walls seal only when membrane and contents move
+slowly, and slow walls close only around short makers; a closed wall shuts its maker's copies in;
+and a world dense in membrane is a worse place for strands. In every selection test here, making a
+wall was selected against or the walled world died.

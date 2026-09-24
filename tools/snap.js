@@ -1,7 +1,7 @@
 // Render a Sim's current state to a PNG (for probes): every block as its polygon, coloured by type and state, bonds
 // share an edge (opt.corners: also mark the pinned corners). Needs Playwright and Chromium (NODE_PATH=$(npm root -g) in the cloud sandbox).
 //   const snap = require('./tools/snap.js'); await snap(sim, 'out.png', { x0, y0, w, h, scale });
-const { NV, T_A, T_B, T_C, T_D, T_E, T_M, I_TPL, I_REPEL, I_ON } = require('../src/sim.js');
+const { NV, T_A, T_B, T_C, T_D, T_E, T_M, T_X, I_TPL, I_REPEL, I_ON } = require('../src/sim.js');
 
 function polys(s, box) {
   const out = [];
@@ -11,7 +11,8 @@ function polys(s, box) {
     if (box) { const W = s.p.W, H = s.p.H; x = box.x0 + (((x - box.x0) % W) + W) % W; y = box.y0 + (((y - box.y0) % H) + H) % H; if (x < box.x0 - 1 || y < box.y0 - 1 || x > box.x0 + box.w + 1 || y > box.y0 + box.h + 1) continue; }
     const pts = []; for (let k = 0; k < nv; k++) pts.push([x + s.ox[u * NV + k], y + s.oy[u * NV + k]]);
     let col;
-    if (t === T_E) col = s.is[u] === I_ON ? '#ffe14d' : '#666';
+    if (t === T_X) col = '#ff2bd6';
+    else if (t === T_E) col = s.is[u] === I_ON ? '#ffe14d' : '#666';
     else if (t === T_M) col = s.is[u] === I_ON ? (s.bond[u * 4 + 2] >= 0 ? '#2e8b57' : '#6b8e23') : '#3a4a2a';
     else {
       const base = { [T_A]: [80, 140, 255], [T_B]: [255, 110, 90], [T_C]: [190, 110, 255], [T_D]: [60, 210, 170] }[t];

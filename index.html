@@ -340,7 +340,7 @@ $('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFol
 function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
 
 // ------------------------------------------------------------ drawing
-const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
+const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
@@ -354,7 +354,7 @@ function drawPoly(u, sx, sy, z, lw) {
   outline();
   ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : sim.type[u] === T_M ? (sim.is[u] === 1 ? COL.M : COL.MRAW) : COL[PC.TNAME[sim.type[u]]];
   ctx.fill();
-  if (sim.type[u] === T_E) return;
+  if (sim.type[u] === T_E || PC.TNAME[sim.type[u]] === 'X') return;
   ctx.lineWidth = lw;
   const cs = [0, 0];
   for (let i = 0; i < 4; i++) {
