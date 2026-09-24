@@ -179,12 +179,12 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
   evo:   Object.assign({}, ZERO, EVO),
-  cells: Object.assign({}, ZERO, EVO, { W: 40, H: 40, nA: 200, nB: 200, nE: 60, seedCount: 2, pSoft: 0.002, pCapture: 0.002, pSpont: 0.0002, nM: 400, memAngle: 15, make: true, tether: true, memPerm: true, pMemDecay: 0.002, energyGate: false }),
+  cells: Object.assign({}, ZERO, EVO, { W: 40, H: 40, nA: 200, nB: 200, nE: 60, seedCount: 2, pSoft: 0.002, pCapture: 0.002, pSpont: 0.0002, nM: 400, memAngle: 15, stiffM: 1, memLinkTol: 0.3, make: true, tether: true, memPerm: true, pMemDecay: 0.002, energyGate: false }),
 };
 const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energyGate: true, maxEventLog: 400, snapCorners: true, maxStrain: 0.4, mobS: 1, act: false, stiffA: 0.5, stiffB: 0.5, stiffC: 0.5, stiffD: 0.5, stiffM: 0.7, shapeA: 'square', shapeB: 'square', shapeC: 'square', shapeD: 'square', shapeM: 'square', bendA: 0, bendB: 0, bendC: 0, bendD: 0, nC: 0, nD: 0 };
 
@@ -204,6 +204,7 @@ const KNOBS = [
   ['nM', 'M blocks (reset)', 'bond only to each other, side to side, at a built-in bend'],
   ['memAngle', 'bend °', '60 closes a ring of 6, 45 of 8, 90 of 4'],
   ['pMem', 'p link per contact'],
+  ['memLinkTol', 'M link catch', 'how close two membrane ends must come to link (0 = the side-to-side tolerance); 0.3 lets a wall close on itself'],
   ['resM', 'M resistance'],
   ['make', 'strands make membrane', 'M starts raw; the back of an A between two Bs activates it', 'bool'],
   ['tether', 'membrane tethered', 'raw M joins only arcs anchored on a maker; membrane the anchor signal does not reach decays', 'bool'],

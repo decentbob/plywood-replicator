@@ -12,4 +12,11 @@ for sd in 1 2 3; do
   echo "N_$sd --seed $sd --nM 0"
 done
 } | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$C"' "$@" --births '$O'/$name.births.jsonl > '$O'/$name.csv 2> '$O'/$name.json'
+# round 2 (W2_*): walls that close reliably (rigid membrane, memLinkTol 0.3, closure.js); the N_* runs are the control
+{
+for sd in 1 2 3; do
+  echo "W2_$sd --seed $sd --nM 250 --memAngle 15 --stiffM 1 --memLinkTol 0.3 --make 1 --tether 1 --memPerm 1 --pMemDecay 0.002"
+done
+echo "W2b_1 --seed 1 --nM 250 --memAngle 18 --stiffM 1 --memLinkTol 0.3 --make 1 --tether 1 --memPerm 1 --pMemDecay 0.002"
+} | xargs -P 4 -L 1 sh -c 'name=$0; node run.js '"$C"' "$@" --births '$O'/$name.births.jsonl > '$O'/$name.csv 2> '$O'/$name.json'
 echo WALLSDONE

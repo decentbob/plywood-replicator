@@ -104,6 +104,8 @@ const DEFAULTS = {
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
+  memLinkTol: 0,   // how close (in block sides) two membrane blocks' back corners must come to link; 0 means linkDistTol. Looser lets
+                   // two passing arc ends catch each other; with snapCorners the pins then pull them flush
   make: false,     // membrane blocks start raw. A raw block activates where its back docks on the back of an A template unit flanked by two B units
                    // (and stays anchored there), or where its side links to an active block's open side, so membrane grows from its makers
   pMemDecay: 0,    // an active membrane block with no lateral bonds falls back to raw, per step (make rule): membrane has to be made continually
@@ -437,7 +439,7 @@ class Sim {
       // the back corner of a right side is its second corner, of a left side its first
       const cu = this._sideCorners(u, i, [0, 0]), cv = this._sideCorners(v, j, [0, 0]);
       const bu = i === R ? cu[1] : cu[0], bv = j === R ? cv[1] : cv[0];
-      const gx = dx + this.ox[bv] - this.ox[bu], gy = dy + this.oy[bv] - this.oy[bu], tol = this.p.linkDistTol * (this.size[u] + this.size[v]) / 2;
+      const gx = dx + this.ox[bv] - this.ox[bu], gy = dy + this.oy[bv] - this.oy[bu], tol = (this.p.memLinkTol || this.p.linkDistTol) * (this.size[u] + this.size[v]) / 2;
       return gx * gx + gy * gy <= tol * tol && su[2] * sv[2] + su[3] * sv[3] <= 0;
     }
     const lateral = i !== F && j !== F && this.type[u] !== T_E && this.type[v] !== T_E && !(this.type[u] === T_M && this.type[v] === T_M)

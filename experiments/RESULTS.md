@@ -1184,3 +1184,26 @@ an open wall is a cost (it bends its strand, crowds the copies, and slows births
 What this says: tethered walls are made by, and stay with, their makers, which section 16 lacked,
 but a wall pays only when it closes, and closure is left to chance. For compartments to be selected,
 a maker's wall has to close around it reliably, and then divide with it. Neither is solved.
+
+**Closure around the maker** (`closure.js`: one `ABBABA` among 150 raw membrane blocks, 24×24,
+tether on, strain limit 0.5, corners snapped, 20 seeds, 60,000 steps). A wall that does not close
+either overshoots (its two ends pass each other and it grows on into a spiral, up to three times a
+ring's length) or breaks and loses its unanchored part. Two membrane ends link where their back
+corners come within `memLinkTol` of each other (default: the side-to-side tolerance, 0.15 of a
+side); passing ends rarely come that close. Since corners are now snapped together and a badly
+aligned bond snaps under strain, the catch can be looser:
+
+| bend | membrane stiffness | catch | walls closed around their maker | median step |
+|---:|---:|---:|---:|---:|
+| 15° | 0.7 | 0.15 | 10 of 20 | 30,000 |
+| 15° | 1 | 0.15 | 8 of 20 (9 overshot, 3 broke) | 49,500 |
+| 12° | 1 | 0.15 | 8 of 20 (5 overshot, 7 broke) | 30,000 |
+| 15° | 1 | **0.3** | **20 of 20** | 11,500 |
+| 18° | 1 | 0.3 | 20 of 20 | 13,500 |
+| 12° | 1 | 0.3 | 15 of 20 | 13,500 |
+| 15° | 0.7 | 0.3 | 14 of 20 | 10,000 |
+| 15° | 1 | 0.5 | 19 of 20 | - |
+
+With the looser catch a maker's wall closes around it within about 12,000 steps, stays closed for
+10,000 to 50,000 steps, opens under strain and often closes again (eight seeds traced over 60,000
+steps). Rigid membrane closes more reliably than soft.
