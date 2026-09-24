@@ -10,6 +10,7 @@ const capped = (q) => q[0] === 'P' && q[q.length - 1] === 'Q';
 console.log(`| run | window | births | capped | mean capped length | ${genes.map((g) => 'with ' + g).join(' | ')} | with all | commonest capped |`);
 console.log('|---|---|---:|---:|---:|' + genes.map(() => '---:').join('|') + '|---:|---|');
 for (const f of process.argv.slice(3).filter((a) => !a.startsWith('--'))) {
+  if (!fs.existsSync(f)) { console.error('missing ' + f); continue; }
   const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l));
   const tmax = rows.length ? rows[rows.length - 1].t : 0;
   for (let w0 = 0; w0 < tmax; w0 += win) {
