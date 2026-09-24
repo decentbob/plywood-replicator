@@ -123,6 +123,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="copy">Preset: copying, no mutation</option>
           <option value="evo" selected>Preset: evolution</option>
           <option value="cells">Preset: cells (strands grow their own walls)</option>
+          <option value="genomes">Preset: capped genomes (telomeres; energy and shield genes)</option>
           <option value="random">Preset: random chemistry (a random rule table; change the table seed)</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -189,6 +190,10 @@ const PRESETS = {
   evo:   Object.assign({}, ZERO, EVO),
   cells: Object.assign({}, ZERO, EVO, { W: 40, H: 40, nA: 200, nB: 200, nE: 60, seedCount: 2, pSoft: 0.002, pCapture: 0.002, pSpont: 0.0002, nM: 400, memAngle: 15, stiffM: 1, memLinkTol: 0.3, make: true, tether: true, memPerm: true, pMemDecay: 0.002, energyGate: false }),
 };
+// "genomes": four letters, strands capped P...Q at both ends; a copy lacks its template's open ends (endLoss), open ends fray
+// fast and caps slowly, caps are armed only through their bond (bareCaps), so a genome needs the energy gene ABA to re-arm;
+// radiation breaks strands, and the shield gene CDC (with the relay) protects the whole genome.
+PRESETS.genomes = Object.assign({}, ZERO, { W: 40, H: 40, nA: 200, nB: 200, nC: 200, nD: 200, nP: 120, nQ: 120, nE: 60, pReload: 0.002, capFray: 0.03, pUnzip: 1, pFray: 0.001, seedSeq: 'PABACDCQ,PABAQ', seedCount: 3, pSoft: 0.002, pCapture: 0.002, feed: true, shield: true, relay: true, endLoss: true, bareCaps: true, pBreak: 0.00003 });
 // "random": the rule table replaced by a random one (src/rchem.js): side colours, colour attractions and state switches drawn from
 // the table seed. Fill: the block's type, lighter by state; side lines: the colour each side shows.
 PRESETS.random = Object.assign({}, ZERO, { mode: 'random', W: 30, H: 30, nE: 0, seedCount: 0, chemSeed: 1, K: 3, NS: 3, NC: 4, pAff: 0.3, pRule: 0.2, pRuleFree: 0.05, pInert: 0.3, rBreak: 0.0002, nEach: 80 });
