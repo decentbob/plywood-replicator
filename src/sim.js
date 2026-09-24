@@ -69,7 +69,8 @@ const S = {
   INACT: 25,                                            // K of an inactive free monomer (act rule): docks on an ACT back and is activated there
   ACT: 26,                                              // K of a template unit in the activating motif (act rule): activates inactive monomers
   ANC: 27,                                              // L, R of an active membrane block, bonded, passing on the anchor signal (tether rule)
-  CUT: 29,                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
+  CUT: 29,
+  ARMEDC: 30, HYBC: 31,                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
@@ -102,6 +103,8 @@ const DEFAULTS = {
   cut: false,      // (with binding, pHyb) a template unit in cutMotif whose face is bound to another strand's face shows CUT there, and the
                    // bound partner lets go of all its bonds at pCut per step: predation by recognition. Kin never bind, so never cut
   cutMotif: 'BAB', pCut: 0.01,
+  cutRelay: false, // template units pass the cutter signal along their strand from a cutMotif unit, so any unit of a cutter strand cuts
+                   // where it is bound: the rest of the strand is the key (not compatible with feed/shield, which also write lateral sides)
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, resC: 0, resD: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
@@ -597,7 +600,19 @@ class Sim {
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
-    if (hyb && this.p.cut && bL && bR && this.type[u] === this._cutMid && this.type[b[o + L] >> 2] === this._cutOut && this.type[b[o + R] >> 2] === this._cutOut) this.ss[o + F] = S.CUT;
+    if (this.p.cut && st === I_TPL) {
+      const src = bL && bR && this.type[u] === this._cutMid && this.type[b[o + L] >> 2] === this._cutOut && this.type[b[o + R] >> 2] === this._cutOut;
+      let carries = src;
+      if (this.p.cutRelay) {
+        // the signal runs along the strand away from its source; each side shows it if I am a source or my other side receives it
+        const ss = this.ss, got = (q) => q >= 0 && (ss[q] === S.ARMEDC || ss[q] === S.HYBC);
+        const inL = bL && got(b[o + L]), inR = bR && got(b[o + R]);
+        if (bL && (src || inR)) ss[o + L] = ss[o + L] === S.HYB ? S.HYBC : S.ARMEDC;
+        if (bR && (src || inL)) ss[o + R] = ss[o + R] === S.HYB ? S.HYBC : S.ARMEDC;
+        carries = src || inL || inR;
+      }
+      if (hyb && carries) this.ss[o + F] = S.CUT;
+    }
     if (st === I_TPL && (this.p.feed || this.p.shield)) {
       // a B between two As shows FEED on both sides, a D between two Cs SHIELD. With the relay, a template unit also shows
       // on each side what its neighbour on the other side shows toward it, so a signal runs along the strand away from
@@ -700,7 +715,8 @@ class Sim {
       if (nl === 0) this.is[u] = pool;                                     // R3
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
-        const nh = (bL && this.ss[b[o + L]] === S.HYB ? 1 : 0) + (bR && this.ss[b[o + R]] === S.HYB ? 1 : 0);
+        const isH = (x) => x === S.HYB || x === S.HYBC;
+        const nh = (bL && isH(this.ss[b[o + L]]) ? 1 : 0) + (bR && isH(this.ss[b[o + R]]) ? 1 : 0);
         const pm = nh === 0 ? p.pMelt : nh === 2 || p.pMeltEnd < 0 ? p.pMeltRun : p.pMeltEnd;
         if (this.rng() < pm) { this.pendingUnlink.push(o + F); this.meltEvents++; }
       }

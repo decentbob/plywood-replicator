@@ -1331,3 +1331,37 @@ takes longer to build than a strand takes to copy; walls seal only when membrane
 slowly, and slow walls close only around short makers; a closed wall shuts its maker's copies in;
 and a world dense in membrane is a worse place for strands. In every selection test here, making a
 wall was selected against or the walled world died.
+
+## 26. Cutting by recognition (`cut.sh`, `who_cuts.js`, `tribes.js`)
+
+The user's choice after section 25: ecology instead of longer genomes. `cut` builds on binding
+(section 18: two template faces of complementary letters, A–B and C–D, stick; a run of such pairs
+holds long, a lone pair melts fast): a template unit in the motif `cutMotif` (default `BAB`) whose face
+is bound to another strand shows `CUT`, and the unit bound to it lets go of all its bonds at `pCut`
+per step, so the other strand is cut. Copies pair a letter with itself, so a strand and its copy do
+not bind at the copying alignment; the hope was a bacteriocin: a cutter that cuts only non-kin.
+Neighbours are competitors when polymers creep (`mobS` 0.3).
+
+**Two letters** (`CUT_*`, `CTL_*`: 40×40, 256 A + 256 B, binding 0.05, `ABBABA` seeds, 1,000,000 steps):
+
+| run | `BAB` × chance, by 250k window | births | cuts |
+|---|---|---:|---:|
+| CUT_1 | 0.3, 0.1, 0.2, 0.2 | 5,751 | 233 |
+| CUT_2 | 1.6, 0.5, 0.3, 0.1 | 6,598 | 568 |
+| CUT_3 | 0.6, 1.2, 0.7, 0.2 | 6,953 | 577 |
+| CTL_1 (binding, no cutting) | 1.7, 0.9, 0.7, 0.3 | 5,322 | 0 |
+| CTL_2 | 3.8, 3.7, 3.0, 2.4 | 5,964 | 0 |
+| CTL_3 | 0.6, 0.3, 0.5, 0.8 | 5,280 | 0 |
+
+The cutter motif is selected against, ending at 0.1 to 0.2 × chance in every cutting run. Births
+rise a little with cutting (cut strands return their monomers). Who cuts whom (`who_cuts.js`, 200,000
+steps of `CUT_1`'s world, each strand read along its own bonds): 34 of 77 cuts hit a strand of the
+cutter's own sequence (`BABA` cuts `ABAB`, its reversed copy), 39 hit other strands without the motif.
+The cutter is autoimmune: `BAB` is alternating, and an alternating stretch is complementary to
+itself shifted by one letter, so a strand carrying it binds its own copies, which slow polymers keep
+beside it. In two letters no cutter can avoid it.
+
+**Four letters.** A strand that uses only one letter of each pair (only A and C, say) can never bind
+its own kind. With cutter motif `CAC` and a cutter strand `ACACCA` among mixed strands, 23 of 24 cuts
+in 200,000 steps hit strands carrying B or D, none a strand of the cutter's own sequence: self and
+non-self are told apart by sequence. The selection test is below (`CUT4_*`, `CTL4_*`).
