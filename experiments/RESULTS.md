@@ -1385,3 +1385,34 @@ seed was swamped by mixed strands within the first window, and random sequences 
 both letters of a pair (80% to 96% of newborns), so a cutter's own lineage is mixed within a few
 generations and the motif is as rare as in the control. Cutting as built needs its motif to be
 common before it can pay, and nothing makes it common. A null result, not a negative one.
+
+## 27. Throwing things at the wall: a random search over worlds (`search.js`, `search_summary.js`, `world.js`)
+
+The user's suggestion (2026-09-24): real evolution is messy and got going once enough complexity had
+built up through many separate processes, so stop testing one mechanism at a time. Almost everything
+built here fails alone for one reason: it is a cost with nothing yet to pay for it (walls without a
+hazard, cutters without prey, energy genes without scarcity). `search.js` draws worlds at random from
+everything built so far (two or four letters; energy count, reload, `motif`, `feed`, `relay`; `shield`;
+`act`; radiation as a rate or as rays; binding and cutting with or without the relay; tethered walls,
+permeable or not; polymer and membrane mobility; ligation; cooperative docking and fraying rates).
+Seeds are four random strands and spontaneous origins, so no gene is put in by hand. Each world runs
+300,000 steps (40×40, corners snapped, strain limit 0.5) and is scored, over the middle and the last
+third, on newborn length, distinct sequences, how many of its functional motifs (those that do
+something under its rules) are present, and how many sit in one genome. 80 worlds, results in
+`experiments/out/search_1.jsonl`; 64 alive at the end. Top by length and by motifs in one genome:
+
+| world | births | mean newborn length, middle → last third | distinct sequences | functional motifs present | most in one genome | mechanisms on |
+|---:|---:|---|---|---|---:|---|
+| 62 | 633 | 5.07 → 5.15 | 68 → 57 | `BAB` | 1 | 4 letters, walls (permeable), ligation, 40 particles, `mobS` 0.6 |
+| 19 | 444 | 4.35 → 4.78 | 33 → 42 | `ABA`, `CDC`, `BAB` | 2 | 4 letters, public energy motif, shield, walls (permeable), binding 0.02, ligation, 40 particles |
+| 59 | 218 | 4.05 → 4.23 | 13 → 16 | `CDC` of 3 | 1 | 4 letters, shield, relayed cutting, walls, binding, scarce energy, `mobS` 0.3 |
+| 45 | 534 | 3.51 → 3.80 | 24 → 26 | `ABA` | 1 | 2 letters, cutting, binding, ligation, `mobS` 0.3 |
+| 58 | 1,114 | 2.96 → 3.29 | 53 → 69 | `CDC`, `ACA` | 1 | 4 letters, relay, shield, cutting, radiation, binding 0.05, ligation, 12 particles |
+| 65 | 1,483 | 3.10 → 3.06 | 59 → 55 | `ABA` | 1 | 2 letters, feed, relayed cutting, 80 rays, binding 0.1, ligation, `mobS` 0.3 |
+
+(Two-letter worlds reach "two motifs in one genome" trivially: `ABAB` carries `ABA` and `BAB`.) World 19
+is the first world in this project where genomes are long and growing, diversity is rising, all
+its functional motifs are present, and genomes carry two of them at once, in four letters, where
+two genes need five units or more. Ligation is on in five of the six. Walls, which never paid in a
+controlled test, are on in three. One seed each and 300,000 steps: these are leads. Long runs and a
+second seed follow (`world.js`).
