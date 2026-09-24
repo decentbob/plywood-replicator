@@ -179,7 +179,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -198,6 +198,8 @@ const KNOBS = [
   ['pHyb', 'p bind (A face on B face)', 'two templates bind where their letters are opposite; kin never match'],
   ['pMelt', 'p melt, lone bond', 'a face-to-face bond with no bound neighbour lets go'],
   ['pMeltRun', 'p melt, in a run', 'a face-to-face bond next to another lets go'],
+  ['cut', 'bound BAB cuts', 'a BAB template bound to another strand cuts that strand; kin (copies) seldom bind', 'bool'],
+  ['pCut', 'p cut per step', 'a unit bound to a cutter lets go of all its bonds'],
   ['pLigate', 'p ligate ends', 'fusion of strands; with fraying, sets a length distribution'],
   ['pSpont', 'p spontaneous link', 'two free monomers join; life without a seed'],
   ['grp', 'Membrane blocks'],
@@ -222,6 +224,8 @@ const KNOBS = [
   ['bendB', 'B bend °'], ['bendC', 'C bend °'], ['bendD', 'D bend °'],
   ['grp', 'Radiation'],
   ['pBreak', 'p break per bond', 'a lateral bond breaks; fission'],
+  ['nX', 'rays (reset)', 'small slow particles that break bonds they touch and cannot pass membrane'],
+  ['rayHit', 'p ray hit', 'per step a ray touches a block: one lateral bond breaks'],
   ['resA', 'A resistance', '0 fragile to 1 immune'],
   ['resB', 'B resistance', '0 fragile to 1 immune'],
   ['resC', 'C resistance'], ['resD', 'D resistance'],
@@ -238,6 +242,7 @@ const KNOBS = [
   ['iters', 'bond solver iterations'],
   ['snapCorners', 'snap corners', 'bonded blocks meet corner to corner, flush; the blocks deform to fit and are pulled back to shape', 'bool'],
   ['maxStrain', 'max strain', 'a membrane bond or a lone docked monomer lets go when its corners are pulled this far apart (0 off)'],
+  ['mobM', 'membrane mobility', 'jostle of membrane blocks; walls seal only when they move little (0.5)'],
   ['mobS', 'polymer mobility', 'jostle of a bonded block relative to a free one; below 1 strands creep, offspring stay near parents'],
   ['tolDeg', 'dock tolerance °'],
   ['grp', 'Population (reset)'],
@@ -247,7 +252,7 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -344,7 +349,7 @@ const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', X: '#ff2bd
 const SIDECOL = {};
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {

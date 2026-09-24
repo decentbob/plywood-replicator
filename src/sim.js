@@ -69,6 +69,7 @@ const S = {
   INACT: 25,                                            // K of an inactive free monomer (act rule): docks on an ACT back and is activated there
   ACT: 26,                                              // K of a template unit in the activating motif (act rule): activates inactive monomers
   ANC: 27,                                              // L, R of an active membrane block, bonded, passing on the anchor signal (tether rule)
+  CUT: 29,                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
@@ -98,6 +99,9 @@ const DEFAULTS = {
   pMelt: 0.1,      // binding: a face-to-face bond with no bound neighbour melts, per step
   pMeltRun: 0.001, // binding: a face-to-face bond with a bound neighbour on each side melts, per step
   pMeltEnd: -1,    // binding: one with a bound neighbour on one side only (the end of a run); -1 means pMeltRun. Set between the two, only runs of three or more hold
+  cut: false,      // (with binding, pHyb) a template unit in cutMotif whose face is bound to another strand's face shows CUT there, and the
+                   // bound partner lets go of all its bonds at pCut per step: predation by recognition. Kin never bind, so never cut
+  cutMotif: 'BAB', pCut: 0.01,
   pSpont: 0,       // two free monomers link side to side: the only way a strand can begin without a seed
   pBreak: 0,       // radiation: a lateral bond breaks, per step, scaled by (1 - resA/resB) of the two blocks it joins
   resA: 0, resB: 0, resC: 0, resD: 0, // resistance of each block type to breaking, 0 (fragile) to 1 (immune)
@@ -208,10 +212,12 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = LETTERS['ABCD'.indexOf(am[0])]; this._actMid = LETTERS['ABCD'.indexOf(am[1])];   // act rule: flanking and middle letter
+    const cm = String(p.cutMotif || 'BAB');
+    this._cutOut = LETTERS['ABCD'.indexOf(cm[0])]; this._cutMid = LETTERS['ABCD'.indexOf(cm[1])];   // cut rule
 
     // types
     let u = 0;
@@ -591,6 +597,7 @@ class Sim {
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
     this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
     this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
+    if (hyb && this.p.cut && bL && bR && this.type[u] === this._cutMid && this.type[b[o + L] >> 2] === this._cutOut && this.type[b[o + R] >> 2] === this._cutOut) this.ss[o + F] = S.CUT;
     if (st === I_TPL && (this.p.feed || this.p.shield)) {
       // a B between two As shows FEED on both sides, a D between two Cs SHIELD. With the relay, a template unit also shows
       // on each side what its neighbour on the other side shows toward it, so a signal runs along the strand away from
@@ -687,6 +694,9 @@ class Sim {
       else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
       else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
+      if (p.cut && bF && this.ss[b[o + F]] === S.CUT && this.rng() < p.pCut) {   // C1 cut: bound to a cutter's face, I let go of everything
+        this.pendingUnlink.push(o + F, o + L, o + R); this.cutEvents++; this._event('cut', u, b[o + F] >> 2); return;
+      }
       if (nl === 0) this.is[u] = pool;                                     // R3
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
@@ -1150,7 +1160,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
       energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };

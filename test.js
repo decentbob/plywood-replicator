@@ -286,4 +286,14 @@ test('rays: they break the bonds of an exposed strand and never reach one inside
   assert.deepStrictEqual(s.check(), []);
 });
 
+
+test('cut: a bound cutter (BAB) cuts its partner; without the rule or without binding nothing is cut', () => {
+  const mk = (o) => new Sim(Object.assign({}, base, { seed: 3, W: 30, H: 30, nA: 120, nB: 120, nE: 60, seedSeq: 'BABBAB,ABAABA', seedCount: 3, pHyb: 0.2 }, o));
+  const on = mk({ cut: true, pCut: 0.2 }); on.run(20000);
+  assert.ok(on.cutEvents > 0, 'cuts should happen between a cutter and its complement');
+  assert.deepStrictEqual(on.check(), []);
+  const off = mk({ cut: false }); off.run(20000); assert.strictEqual(off.cutEvents, 0);
+  const nob = mk({ cut: true, pCut: 0.2, pHyb: 0 }); nob.run(20000); assert.strictEqual(nob.cutEvents, 0, 'no binding, no cutting');
+});
+
 console.log(passed + ' tests passed');
