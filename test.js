@@ -337,4 +337,14 @@ test('compCopy: copies are reversed complements; hubs hold strand ends and never
   assert.deepStrictEqual(h.check(), []);
 });
 
+test('chiral: each hand copies into its own hand; lowercase seeds are mirror strands; a mirror monomer never docks without pMisDock', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'ABBABA,abbaba', seedCount: 2, chiral: 0.5, pMixLink: 0, pFray: 0.00003, pUnzip: 1, pUndock: 0.1 }));
+  s.run(30000);
+  const up = s.births.filter((x) => x.seq === x.seq.toUpperCase()).length, lo = s.births.filter((x) => x.seq === x.seq.toLowerCase()).length;
+  assert.ok(up > 0 && lo > 0, `both hands copy: ${up} ${lo}`);
+  assert.strictEqual(up + lo, s.births.length, 'no mixed births without pMixLink');
+  for (let u = 0; u < s.n; u++) { const v = s.bond[u * 4] >> 2; if (v >= 0 && s.type[v] !== T_E && s.type[u] !== T_E) assert.strictEqual(s.hand[u], s.hand[v], 'docking across hands'); }
+  assert.deepStrictEqual(s.check(), []);
+});
+
 console.log(passed + ' tests passed');

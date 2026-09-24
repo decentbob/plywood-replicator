@@ -42,7 +42,7 @@ const NV = 8;   // most corners a unit can have
 const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J'];
 const LETTERS = [T_A, T_B, T_C, T_D, T_P, T_Q];
 /** The type of a letter character ('A'..'D', or the caps 'P', 'Q'); -1 if none. */
-function letterType(ch) { const k = 'ABCDPQ'.indexOf(ch); return k < 0 ? -1 : LETTERS[k]; }
+function letterType(ch) { const k = 'ABCDPQ'.indexOf(String(ch).toUpperCase()); return k < 0 ? -1 : LETTERS[k]; }
 /** What a letter docks on: its own kind, except caps, which pair with each other (a copy lies reversed on its template). */
 const PAIR = [T_A, T_B, -1, -1, T_C, T_D, -1, T_Q, T_P, -1];
 /** Binding partners: A with B, C with D (copying pairs each letter with itself, binding with its complement). */
@@ -102,6 +102,10 @@ const DEFAULTS = {
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
+  chiral: 0,       // chirality: this fraction of letter monomers are mirror forms (written in lowercase). A monomer docks only on a template
+                   // of its own hand, binding pairs only one hand, and neighbours of different hands link only at pMixLink (capture and
+  pMixLink: 0.05,  // ligation too): the cross-inhibition of mixed chains. 0.5 is a racemic pool; does a population become one-handed?
+  pMisDock: 0,     // chirality: a monomer of the other hand docks at this fraction of the normal rate (enantiomeric cross-inhibition)
   compCopy: false, // complementary copying: A docks on a B template and C on a D (caps still pair P with Q), so a copy is the reversed
                    // complement of its template and a lineage alternates between two forms, as DNA's strands do
   pCapture: 0,     // a free monomer sticks to an open strand end instead of a template: insertion / substitution
@@ -213,6 +217,7 @@ class Sim {
     const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
+    this.hand = new Uint8Array(n);        // chirality, fixed for life: 1 is the mirror form (chiral rule)
     this.size = new Float64Array(n);
     this.rad = new Float64Array(n);       // repulsion radius
     this.w = new Float64Array(n);         // inverse mass
@@ -256,6 +261,7 @@ class Sim {
     for (let i = 0; i < (p.nJ || 0); i++) this.type[u++] = T_J;
     for (u = 0; u < n; u++) {
       this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
+      if (p.chiral > 0 && LETTERS.includes(this.type[u])) this.hand[u] = this.rng() < p.chiral ? 1 : 0;
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
       this.w[u] = 1 / (this.size[u] * this.size[u]);
       this.wr[u] = 6 / Math.pow(this.size[u], 4);
@@ -336,10 +342,10 @@ class Sim {
   seedStrand(cx, cy, ang, len, seq) {
     const units = [];
     for (let i = 0; i < len; i++) {
-      const want = seq ? letterType(seq[i]) : (this.rng() < 0.5 ? T_A : T_B);
+      const want = seq ? letterType(seq[i]) : (this.rng() < 0.5 ? T_A : T_B), wantHand = seq && seq[i] !== seq[i].toUpperCase() ? 1 : 0;
       let found = -1;
       for (let u = 0; u < this.n; u++) {
-        if (this.type[u] === want && this.is[u] === I_DOCK && this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0
+        if (this.type[u] === want && this.hand[u] === wantHand && this.is[u] === I_DOCK && this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0
             && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0 && !units.includes(u)) { found = u; break; }
       }
       if (found < 0) return false;
@@ -551,6 +557,19 @@ class Sim {
       if (tv === T_E && tu !== T_E) return (i === K && ((sv === S.ON && su === S.WANT) || (sv === S.OFF && su === S.CHARGE))) ? 1 : 0;
       return 0;
     }
+    if (p.chiral > 0 && tu !== T_X && tv !== T_X && this.hand[u] !== this.hand[v]) {
+      // chirality: no binding across hands, a mirror monomer docks only at pMisDock (then sits in the site, a poison,
+      // until it falls off); side to side only at pMixLink
+      if (i === F && j === F) { const d = this.ss[u * 4] === S.DOCK || this.ss[v * 4] === S.DOCK; return d && p.pMisDock > 0 ? this._compat0(u, i, v, j) * p.pMisDock : 0; }
+      if (i === F || j === F) return 0;
+      const r = this._compat0(u, i, v, j); return r > 0 ? r * p.pMixLink : 0;
+    }
+    return this._compat0(u, i, v, j);
+  }
+
+  _compat0(u, i, v, j) {
+    const p = this.p, tu = this.type[u], tv = this.type[v];
+    const su = this.ss[u * 4 + i], sv = this.ss[v * 4 + j];
     if (i === F && j === F) {
       const isTpl = (x) => x === S.TPL_MM || x === S.TPL_LF || x === S.TPL_RF;
       if (isTpl(su) && isTpl(sv)) return COMP[tu] === tv && !this._hot ? p.pHyb : 0;   // binding: two templates, complementary letters (A-B, C-D); not while hot
@@ -864,7 +883,8 @@ class Sim {
   }
 
   /** Read a strand's sequence L->R from a unit list (E units ignored). */
-  sequenceOf(units) { return this.chainOf(units).map((u) => TNAME[this.type[u]]).join(''); }
+  _letter(u) { const c = TNAME[this.type[u]]; return this.hand[u] ? c.toLowerCase() : c; }
+  sequenceOf(units) { return this.chainOf(units).map((u) => this._letter(u)).join(''); }
 
   /** After face bonds broke: log a birth for every chain that just came free of its template. */
   _logBirths() {
@@ -885,13 +905,13 @@ class Sim {
       let pgen = 0, parentSeq = '';
       if (pu >= 0) {
         const pchain = this.chainOf(this.componentOf(pu));
-        parentSeq = pchain.map((u) => TNAME[this.type[u]]).join('');
+        parentSeq = pchain.map((u) => this._letter(u)).join('');
         for (const u of pchain) if (this.gen[u] > pgen) pgen = this.gen[u];
       }
       const g = pgen + 1; if (g > this.maxGen) this.maxGen = g;
       for (const u of chain) { this.gen[u] = g; this.fresh[u] = 0; }
       this.birthCount++;
-      const seq = chain.map((u) => TNAME[this.type[u]]).join('');
+      const seq = chain.map((u) => this._letter(u)).join('');
       this._event('birth', chain[0]);
       if (this.p.logBirths) {
         this.births.push({ t: this.t, seq, gen: g, parent: parentSeq, x: this.px[chain[0]], y: this.py[chain[0]] });
@@ -1209,7 +1229,7 @@ class Sim {
       if (faceBonded) complexes++; else strands++;
       totalLen += len; if (len > maxLen) maxLen = len;
       hist.set(len, (hist.get(len) || 0) + 1);
-      const s = chain.map((u) => TNAME[this.type[u]]).join(''); const rs = s.split('').reverse().join('');
+      const s = chain.map((u) => this._letter(u)).join(''); const rs = s.split('').reverse().join('');
       const canon = s < rs ? s : rs;
       seqs.set(canon, (seqs.get(canon) || 0) + 1);
     }

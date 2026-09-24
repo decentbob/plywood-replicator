@@ -179,7 +179,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -191,6 +191,9 @@ const BASE = { seed: 7, W: 80, H: 80, nE: 300, sigma: 0.3, sigmaRot: 0.45, energ
 const KNOBS = [
   ['grp', 'Chemistry'],
   ['pSoft', 'p wrong-type dock', 'substitution'],
+  ['chiral', 'mirror letters', 'this fraction of letters are mirror forms (drawn with a slash, lowercase in sequences): each hand docks only on its own'],
+  ['pMisDock', 'p mirror dock', 'a monomer of the other hand docks at this fraction of the rate and blocks the site (cross-inhibition)'],
+  ['pMixLink', 'p mixed link', 'neighbours of different hands link at this fraction of the rate'],
   ['compCopy', 'complementary copying', 'A docks on B and C on D (as in DNA): a copy is the reversed complement', 'bool'],
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
   ['pFray', 'p fray per step', 'end unit falls off; turnover, deletion'],
@@ -253,7 +256,7 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -262,7 +265,7 @@ const flashes = new Map();   // unit -> {t, kind}
 function currentParams() {
   const p = Object.assign({}, BASE, PRESETS[$('preset').value]);
   for (const k of KNOBS) { if (k[0] === 'grp') continue; const el = $('k_' + k[0]); if (!el) continue;
-    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? (k[0].startsWith('shape') ? el.value.trim() : el.value.toUpperCase().replace(/[^ABCD,]/g, '')) : Number(el.value)); }
+    p[k[0]] = k[3] === 'bool' ? el.checked : (k[3] === 'text' ? (k[0].startsWith('shape') ? el.value.trim() : el.value.replace(/[^ABCDPQabcdpq,]/g, '')) : Number(el.value)); }
   return p;
 }
 function buildKnobs(p) {
@@ -360,6 +363,7 @@ function drawPoly(u, sx, sy, z, lw) {
   outline();
   ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : sim.type[u] === T_M ? (sim.is[u] === 1 ? COL.M : COL.MRAW) : COL[PC.TNAME[sim.type[u]]];
   ctx.fill();
+  if (sim.hand && sim.hand[u]) { ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = Math.max(1, z * 0.12); ctx.beginPath(); ctx.moveTo(X[0], Y[0]); ctx.lineTo(X[Math.floor(nv / 2)], Y[Math.floor(nv / 2)]); ctx.stroke(); }   // mirror letter: a slash
   if (sim.type[u] === T_E || PC.TNAME[sim.type[u]] === 'X') return;
   ctx.lineWidth = lw;
   const cs = [0, 0];
