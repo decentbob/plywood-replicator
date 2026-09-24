@@ -350,6 +350,17 @@ Next for it: stranger block types to draw from (the user's idea): branching bloc
 sides, two-faced blocks, state-dependent shapes, free catalyst blocks, extreme sizes, softness, speeds and
 resistances, poisonous blocks.
 
+**Ideas from reality** (the user, 2026-09-24: reality can be explored for many new ideas). Each is an environment
+or a block property, not a rule inside a creature:
+- *Complementary pairing* (done, `compCopy`: A docks on B, C on D, as in DNA) and *temperature cycles* (done,
+  `heatPeriod`: hot phases melt double strands, as in PCR or in strands cycled through a hydrothermal gradient).
+- *Wet–dry cycles*: periods in which free monomers are concentrated (evaporation) and then diluted, which in the lab
+  drive polymerisation on its own.
+- *Mineral surfaces*: patches where strands adsorb (slow, protected) and monomers do not; clay catalysis of ligation.
+- *Gradients*: temperature or energy that varies across the world, so different places favour different chemistry.
+- *Chirality*: two mirror forms of each letter that do not pair with each other; a population has to break the symmetry.
+- *Catalytic strands*: a folded strand whose shape (fold rule) makes it speed a reaction where it touches.
+
 **Ranked next steps (2026-09-23).**
 
 - **A. Tethered compartments** (builds on the `make` rule). Keep the anchor: a raw membrane block anchored on a
