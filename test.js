@@ -338,6 +338,22 @@ test('endLoss: a copy lacks its template\'s open ends; a strand capped at both e
   assert.deepStrictEqual(s.check(), []);
 });
 
+test('bareCaps: a cap takes no energy, so only a capped strand carrying the feed motif re-arms', () => {
+  const s = new Sim(Object.assign({}, base, { seed: 3, W: 40, H: 40, nA: 150, nB: 150, nP: 40, nQ: 40, nE: 120, seedSeq: 'PQ,PABAQ', seedCount: 2, endLoss: true, bareCaps: true, feed: true, relay: true }));
+  s.run(25000);
+  assert.ok(s.births.filter((b) => b.seq === 'PABAQ').length >= 5, 'PABAQ copies ' + s.births.filter((b) => b.seq === 'PABAQ').length);
+  assert.strictEqual(s.energyUsed > 0, true);
+  // every armed strand that is not one of the four seeds carries the motif; no PQ copy is ever armed
+  let armedPQ = 0;
+  for (let u = 0; u < s.n; u++) {
+    if (s.type[u] < 7 || s.type[u] > 8 || s.is[u] !== I_TPL) continue;
+    const seq = s.sequenceOf(s.componentOf(u));
+    if (seq === 'PQ' && s.gen[u] > 0) armedPQ++;
+  }
+  assert.strictEqual(armedPQ, 0, 'an armed PQ copy');
+  assert.deepStrictEqual(s.check(), []);
+});
+
 test('compCopy: copies are reversed complements; hubs hold strand ends and never enter a sequence', () => {
   const rc = (q) => [...q].reverse().map((c) => ({ A: 'B', B: 'A', C: 'D', D: 'C' })[c]).join('');
   const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'AAABAB', seedCount: 2, compCopy: true }));
