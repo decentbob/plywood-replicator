@@ -67,6 +67,8 @@ function score(s, p) {
   return { alive: st.tpl > 0, tpl: st.tpl, births: s.birthCount, mid, last, functional: functional(p) };
 }
 
+module.exports = { draw, functional };
+if (require.main !== module) return;
 for (let i = from; i < to; i++) {
   const p = draw(i), t0 = Date.now();
   const s = new Sim(p);
