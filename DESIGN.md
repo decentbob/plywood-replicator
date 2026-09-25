@@ -363,7 +363,20 @@ with enough detail to be picked up by another session:
   each measured: walls (a ring of genome-set size), catalysts (a product that must touch a copy for its monomers to link:
   a replicase made of parts, public, so spatial structure decides), shields, traps for monomers. The genome then builds
   something that is not a copy of itself, von Neumann's missing half.
-- **Crystal ribbons, a second replication mode** (Schulman–Yurke–Winfree 2012, Penrose-like). Letters that template on
+- **Translation, what the product could do** (after RESULTS 34: the machine works, but a product that only has to fit its
+  maker adds no selective dimension). Candidates, each local:
+  (F1) *pleiotropic letters*: each letter has a role in the genome (its own physics as template) and one in the product
+  (its product kind's catalytic strength, fold, stiffness), with trade-offs between the two, so composition balances
+  them (the user's "letters with trade-offs" through the code). Graded, simple, probably shallow.
+  (F2) *shape-dependent function*: a product's fold (sequence-set) decides whether it can bind, straighten or enclose;
+  e.g. strongly curled products bind back slowly, rings of the right size trap particles.
+  (F3) *products that glue genomes into assemblies*: a finished product's back (K) also binds genome backs by a second
+  code (e.g. the complement), so a product holds two genomes back to back; genomes glued this way copy together, pieces
+  of an assembly break off and seed new ones (growth and scission, as crystal ribbons). Genes can then sit on separate
+  short strands held together physically (a stochastic corrector without walls) — the core obstacle attacked by linkage
+  through parts rather than by long genomes. Needs a way for a gene's benefit to reach glued partners (catalysis through
+  any bound product already does: a genome's face is catalysed by a product on its back, whoever made it).
+- **Crystal ribbons, a second replication mode**- **Crystal ribbons, a second replication mode** (Schulman–Yurke–Winfree 2012, Penrose-like). Letters that template on
   both faces (face and back: the user's "two-faced blocks"), with copies that do not release but become templates in
   place, give stacks of rows; stacks break between rows (melting, strain) and every piece carries the whole row sequence,
   which inverts the fragment problem. Coupled to strands: a strand seeds a stack. Cheap-ish: K-to-K docking plus a
