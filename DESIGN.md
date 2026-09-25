@@ -383,6 +383,12 @@ Keep entries short: date, what changed, why, what evidence.
   stickiness made heritable (`smeltA`..) is not selected. Kept, default off, as the second replication mode for combinations.
   With `endLoss` a back follows the face's rule (a tip shows nothing on its back either, a side toward a tip is the end), so back
   copies of a genome's pieces shrink as face copies do and the telomere logic of section 33 holds with two-faced letters.
+- 2026-09-25 (night). Added `transStart`: translation needs a start motif, whose mark is relayed along the strand one block per
+  pass (as the proofreading flag). Reason: with a shared catalyst and graded specificity (36), making a product and being
+  catalysed were the same thing (every coded letter translates), so the hosts could do nothing against parasites; with a start
+  rule a mimic (a host's key without the start) can exist, and a host that changes its key keeps its own catalyst (it is made from
+  that key) while leaving its mimics behind: the ingredients of an arms race (tag-based cooperation, Riolo, Cohen and Axelrod
+  2001), with no rule about keys. Evidence in `experiments/RESULTS.md`, section 43.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---

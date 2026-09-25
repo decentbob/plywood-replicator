@@ -156,7 +156,7 @@ const DEFAULTS = {
                                 // docked products link side to side where the template continues, and a finished product chain is released,
   transCode: 'A1,B2,C3,D4',     // as a copy is on the face. Products never become templates. The genome builds a polymer that is not itself
   pMisTrans: 0,                 // a product of the wrong kind docks on a back at this fraction of the rate (mistranslation)
-  transStart: '',               // (with translate) a start motif ('CDC': the middle letter between two of the outer one): only a strand that carries it
+  transStart: '',               // (with translate) a start motif ('CDC': the middle letter between two of the outer one; or one letter, 'D'): only a strand that carries it
                                 // translates. A template unit in the motif marks itself and the mark is passed along its strand, one block per
                                 // pass, as the proofreading flag is; a unit without the mark shows a plain back. '' : every strand translates
   catalysis: false,             // (with translate) a finished product binds back onto the backs of a strand it matches by the code (pBindP per step
@@ -359,7 +359,7 @@ class Sim {
     this._cutOut = letterType(cm[0]); this._cutMid = letterType(cm[1]);   // cut rule
     const pm = String(p.proofMotif || 'BDB');
     this._prfOut = letterType(pm[0]); this._prfMid = letterType(pm[1]);   // proof rule
-    const ts = String(p.transStart || ''); this._ts = ts.length === 3; this._tsOut = this._ts ? letterType(ts[0]) : -1; this._tsMid = this._ts ? letterType(ts[1]) : -1;   // transStart
+    const ts = String(p.transStart || ''); this._ts = ts.length === 3 || ts.length === 1; this._tsOut = ts.length === 3 ? letterType(ts[0]) : -1; this._tsMid = this._ts ? letterType(ts.length === 3 ? ts[1] : ts[0]) : -1;   // transStart
 
     this._initTypes();
     this._initGeometry();
@@ -854,7 +854,7 @@ class Sim {
       // transStart: a template unit in the start motif marks itself; the mark runs along the strand one block per pass (read from trs0)
       const tr = this.trs; tr[o + F] = tr[o + L] = tr[o + R] = 0;
       if (st === I_TPL && !isProd(this.type[u])) {
-        const src = bL && bR && this.type[u] === this._tsMid && this.type[b[o + L] >> 2] === this._tsOut && this.type[b[o + R] >> 2] === this._tsOut;
+        const src = this.type[u] === this._tsMid && (this._tsOut < 0 || (bL && bR && this.type[b[o + L] >> 2] === this._tsOut && this.type[b[o + R] >> 2] === this._tsOut));
         const inL = bL && this.trs0[b[o + L]] === 1, inR = bR && this.trs0[b[o + R]] === 1;
         if (bL && (src || inR)) tr[o + L] = 1;
         if (bR && (src || inL)) tr[o + R] = 1;
