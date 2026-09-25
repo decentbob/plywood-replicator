@@ -52,6 +52,8 @@ Headless, for experiments:
 ```sh
 node run.js --steps 100000 --every 5000 --seed 3 --pSoft 0.02 --pCapture 0.05 --pFray 0.0003
 node run.js --help            # any key of DEFAULTS in src/sim.js is a flag
+node run.js --steps 200000 --save world.json ...   # keep the world's state (open it in the viewer: "Open state")
+node run.js --steps 100000 --load world.json --pBreak 0.0001   # continue it, here under a changed rule (a branch)
 node test.js                  # invariants: no junk chains, exact copies, energy accounting, conservation, determinism
 node build.js                 # single-file dist/polygon-chemistry.html
 ./experiments/genes.sh        # one experiment batch per script; RESULTS.md names each section's script
@@ -175,13 +177,15 @@ checked against `reverse(parent)`.
 
 ## Physics
 
-Nothing bigger than a block exists in the physics. Each block is a polygon (a square, a wedge,
-or an octagon) held to its rest shape by a restoring force whose strength is a per-type
-stiffness. A bond pins the two corners of one edge onto the two corners of its partner's edge,
-so bonded edges coincide and a strand moves as one body. Each block gets its own Brownian kick;
-two blocks that are not bonded may not overlap. Pins, contacts and the shape restoring force are
-solved together by nudging the blocks involved, 16 passes per step; a pin moves each block
-rigidly and, by its softness, deforms the pinned corner.
+Each block is a polygon (a square, a wedge, or an octagon) held to its rest shape by a restoring
+force whose strength is a per-type stiffness. A bond pins the two corners of one edge onto the two
+corners of its partner's edge, so bonded edges coincide and a strand moves as one body. A free
+block gets its own Brownian kick; a set of bonded blocks is kicked as the rigid body it forms, by
+the move and turn its blocks' own kicks would give it (`bodyJostle`, default since 2026-09-25; it
+made the engine about twice as fast). Two blocks that are not bonded may not overlap. Pins, contacts
+and the shape restoring force are then solved together by nudging the blocks involved, 4 passes per
+step (`iters`); a pin moves each block rigidly and, by its softness, deforms the pinned corner. No
+rule reads a body: bonds, contacts and shapes are per block, and every rule is read by one block.
 
 Chains are straight because a row of pinned squares is straight, not because anything holds a
 chain. A wedge-shaped block (`bendA`, `bendB`) curls a strand where it sits, so shape follows

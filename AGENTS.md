@@ -63,7 +63,9 @@ src/rchem.js        random chemistry: Sim with its rule table replaced by a rand
 index.html          viewer: canvas, knobs, presets, readout, event feed, click-to-inspect
 run.js              headless runner: CSV every --every steps, JSON summary on stderr (written when the run ends), --births FILE
                     (JSONL, appended every --every steps, so a run in progress or a stopped one has its births so far),
-                    --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted
+                    --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted;
+                    --save FILE (the whole world state, rewritten every interval: open it in the viewer, or continue it) and
+                    --load FILE (continue a saved world; knobs given override its own: a branch under a changed rule)
 test.js             invariant tests (32; about 12 minutes on one core)
 LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
 experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
@@ -76,6 +78,7 @@ tools/fingerprint.js  trajectory hash, to prove a change leaves default behaviou
 tools/screenshot.js   drive the viewer headless and screenshot it (Playwright + /opt/pw-browsers/chromium)
 tools/snap.js         render a Sim in Node to PNG (colorOf callback for custom colours)
 tools/queue.sh        job queue: runs a file of jobs (OUTDIR NAME --knobs...), at most 4 run.js processes on the machine
+tools/killnode.sh     kill node processes by a pattern without killing your own shell (matches only lines starting "node")
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 ```
@@ -136,7 +139,11 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80Ã
   outputs into `experiments/out/` when done (a stop hook complains about files changing under git mid-run).
 - Check a new world lives before measuring anything in it: many screens this session were wasted on worlds that died at
   once (radiation too strong, too few caps, a seed that makes no product). A 20,000-step look with `peek.js` catches it.
-- `pkill -f <pattern>` can match your own shell's command line and kill it; kill by PID or a narrow pattern.
+- `pkill -f <pattern>` (or `pgrep -f` in a kill loop) matches your own shell's command line and kills it (exit 144); use
+  `tools/killnode.sh PATTERN` or kill by PID.
+- Measure speed in CPU time (`process.cpuUsage()`), not wall time: the machine is usually shared by several runs.
+- A birth's parent is the strand its template unit sits in (`strandOf`), not the longest chain of its component (fixed
+  2026-09-25: a template bound to another strand, or bridged to another template by a copy, was sometimes read as the parent).
 - "Ã— chance" baselines are inflated by founder descent (seeds like `ABBABA` carry motifs; low mutation keeps
   founder make-up). Always compare against a same-seed control run.
 - Two seeds is a lead, not a result. Say so in RESULTS.

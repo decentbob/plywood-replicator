@@ -199,13 +199,11 @@ const DEFAULTS = {
   mobS: 1,                       // Brownian step (and turn) of a non-membrane block that has a bond, relative to a free one's: below 1 polymers creep while monomers
                                  // and energy diffuse, as on a mineral surface, so offspring stay near their parents
   repMargin: 1.0,                // contact radius of a block as a fraction of half its side; unbonded blocks never overlap more than this allows
-  iters: 16,                     // constraint passes per step (pins, contacts, shape); 8 to 24 all copy exactly, more keep bonded edges closer
-  bodyJostle: false,             // bonded blocks are jostled together, as the rigid body they form (one random move and turn about their centre,
+  iters: 4,                      // constraint passes per step (pins, contacts, shape). With bodyJostle 3 to 4 copy exactly (2 lets an odd copy
+                                 // go wrong); without it 8 to 24 (16 was the default until 2026-09-25)
+  bodyJostle: true,              // bonded blocks are jostled together, as the rigid body they form (one random move and turn about their centre,
                                  // of the size a body of that many blocks has), instead of each on its own: the bonds stay satisfied, so the
-                                 // passes have only contacts to resolve (and each block keeps its own shape, softness and wedge)
-  solveTol: 0,                   // stop the constraint passes early once no contact or pin needed a correction larger than this (in block sides)
-  freePasses: 0,                 // contacts between two unbonded blocks are resolved only in the first freePasses passes (0: in every pass);
-                                 // loose monomers may then overlap a little for a step, which nothing reads, and the passes cost far less
+                                 // passes have only contacts to resolve (each block keeps its own shape, softness and wedge). About 2x faster
   maxStrain: 0,                  // a weak bond (membrane, a lone docked monomer) whose pinned corners the passes leave further apart than this
                                  // (in block sides) lets go: blocks give only so far, so a shape they do not fit (a ring of the wrong size)
                                  // snaps. Monomers linked into a copy in progress hold each other. 0: off
@@ -511,29 +509,30 @@ class Sim {
 
   _bondList() {
     if (!this.bondsDirty) return this.bonds;
-    const out = [], pins = [];
+    const out = this.bonds, pins = this.pins, cu = this._cu || (this._cu = [0, 0]), cv = this._cv || (this._cv = [0, 0]);
+    out.length = 0; pins.length = 0;
     for (let q = 0; q < this.n * 4; q++) {
       const r = this.bond[q]; if (r <= q) continue;
       const u = q >> 2, i = q & 3, v = r >> 2, j = r & 3;
       out.push(q);
       if (this.type[u] === T_E || this.type[v] === T_E) continue;   // an energy bond never lives into a physics phase
       // side i of u runs corner a0 -> a1, side j of v runs b0 -> b1; facing each other, a0 meets b1 and a1 meets b0
-      const cu = this._sideCorners(u, i, [0, 0]), cv = this._sideCorners(v, j, [0, 0]);
+      this._sideCorners(u, i, cu); this._sideCorners(v, j, cv);
       pins.push(cu[0], cv[1], cu[1], cv[0]);
     }
-    this.bonds = out; this.pins = pins; this.bondsDirty = false; return out;
+    this.pinsVersion = (this.pinsVersion || 0) + 1; this.bondsDirty = false; return out;
   }
 
   /** Corners joined by pins, directly or through other pinned corners, as groups (rebuilt with the bond list). */
   _cornerGroups() {
-    if (this._groupsFor === this.pins) return this._groups;
+    if (this._groupsFor === this.pinsVersion) return this._groups;
     const pins = this.pins, parent = new Map();
     const find = (x) => { while (parent.get(x) !== x) { const g = parent.get(parent.get(x)); parent.set(x, g); x = g; } return x; };
     for (const q of pins) if (!parent.has(q)) parent.set(q, q);
     for (let k = 0; k < pins.length; k += 2) { const a = find(pins[k]), b = find(pins[k + 1]); if (a !== b) parent.set(a, b); }
     const by = new Map();
     for (const q of parent.keys()) { const r = find(q); if (!by.has(r)) by.set(r, []); by.get(r).push(q); }
-    this._groups = [...by.values()]; this._groupsFor = pins;
+    this._groups = [...by.values()]; this._groupsFor = this.pinsVersion;
     return this._groups;
   }
 
@@ -802,12 +801,15 @@ class Sim {
     // template continues (TPL_MM, or TPL_LF for my L / TPL_RF for my R); at the template's end it is an open end.
     const pf = bF ? this.ss[b[o + F]] : -1;
     const hyb = st === I_TPL && pf >= 0 && pf !== S.DOCK;   // my face is bound to another template's face
-    const lat = (bonded, contin) => bonded ? (st === I_TPL ? (hyb ? S.HYB : S.ARMED) : S.BONDED)
-      : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
-    // a product docked on a back lies parallel to its template (a copy on a face lies reversed), so its L continues where the template's L does
+    // a lateral side: bonded (ARMED or HYB on a template), or free: STICKY where a docked unit's template continues, END at its end
+    // or on a strand; a product docked on a back lies parallel to its template (a copy on a face lies reversed), so its L continues
+    // where the template's L does
     const prod = isProd(this.type[u]);
-    this.ss[o + L] = lat(bL, prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF);
-    this.ss[o + R] = lat(bR, prod ? pf === S.TRN_MM || pf === S.TRN_LF : pf === S.TPL_MM || pf === S.TPL_RF);
+    const onB = st === I_TPL ? (hyb ? S.HYB : S.ARMED) : S.BONDED, freeLone = nl > 0 ? S.STICKY : S.INERT;
+    const cL = prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF;
+    const cR = prod ? pf === S.TRN_MM || pf === S.TRN_LF : pf === S.TPL_MM || pf === S.TPL_RF;
+    this.ss[o + L] = bL ? onB : st === I_DOCK ? (bF ? (cL ? S.STICKY : S.END) : freeLone) : S.END;
+    this.ss[o + R] = bR ? onB : st === I_DOCK ? (bF ? (cR ? S.STICKY : S.END) : freeLone) : S.END;
     if (this.p.cut && st === I_TPL) {
       const src = bL && bR && this.type[u] === this._cutMid && this.type[b[o + L] >> 2] === this._cutOut && this.type[b[o + R] >> 2] === this._cutOut;
       let carries = src;
@@ -828,9 +830,10 @@ class Sim {
       const srcF = this.p.feed && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A;
       const srcS = this.p.shield && bL && bR && this.type[u] === T_D && this.type[b[o + L] >> 2] === T_C && this.type[b[o + R] >> 2] === T_C;
       const rel = this.p.relay, ss = this.ss;
-      const s0 = this.ss0, has = (q, sig) => rel && q >= 0 && (s0[q] === sig || s0[q] === S.FSH);
-      const fR = srcF || has(b[o + L], S.FEED), fL = srcF || has(b[o + R], S.FEED);
-      const sR = srcS || has(b[o + L], S.SHIELD), sL = srcS || has(b[o + R], S.SHIELD);
+      // what each neighbour showed toward me on the last pass
+      const s0 = this.ss0, qL = b[o + L], qR = b[o + R], iL = rel && qL >= 0 ? s0[qL] : -1, iR = rel && qR >= 0 ? s0[qR] : -1;
+      const fR = srcF || iL === S.FEED || iL === S.FSH, fL = srcF || iR === S.FEED || iR === S.FSH;
+      const sR = srcS || iL === S.SHIELD || iL === S.FSH, sL = srcS || iR === S.SHIELD || iR === S.FSH;
       if (bL && (fL || sL)) ss[o + L] = fL && sL ? S.FSH : fL ? S.FEED : S.SHIELD;
       if (bR && (fR || sR)) ss[o + R] = fR && sR ? S.FSH : fR ? S.FEED : S.SHIELD;
     }
@@ -1068,6 +1071,17 @@ class Sim {
     return out;
   }
 
+  /** The strand through unit u, L->R: its own chain, not the longest in its component (a template may be bound to another strand, or
+   * a copy may bridge two templates, and those belong to its component too). Observation only. */
+  strandOf(u) {
+    const b = this.bond, J = (q) => q < 0 || this.type[q >> 2] === T_J;
+    let s = u;
+    for (let k = 0; k < 100000; k++) { const q = b[s * 4 + L]; if (J(q) || (q >> 2) === u) break; s = q >> 2; }
+    const c = [];
+    for (let x = s; x >= 0 && c.length < 100000;) { c.push(x); const q = b[x * 4 + R]; x = J(q) || (q >> 2) === s ? -1 : q >> 2; }
+    return c;
+  }
+
   /** Read a strand's sequence L->R from a unit list (E units ignored). */
   _letter(u) { const c = TNAME[this.type[u]]; return this.hand[u] ? c.toLowerCase() : c; }
   sequenceOf(units) { return this.chainOf(units).map((u) => this._letter(u)).join(''); }
@@ -1091,7 +1105,7 @@ class Sim {
       if (isProd(this.type[chain[0]])) {
         // a product chain came off its template (translate rule): logged with its template's sequence, not counted as a birth
         let tseq = '';
-        if (pu >= 0) tseq = this.chainOf(this.componentOf(pu)).map((x) => this._letter(x)).join('');
+        if (pu >= 0) tseq = this.strandOf(pu).map((x) => this._letter(x)).join('');
         for (const x of chain) this.fresh[x] = 0;
         this.prodCount++;
         const seq = chain.map((x) => this._letter(x)).join('');
@@ -1104,7 +1118,7 @@ class Sim {
       }
       let pgen = 0, parentSeq = '';
       if (pu >= 0) {
-        const pchain = this.chainOf(this.componentOf(pu));
+        const pchain = this.strandOf(pu);
         parentSeq = pchain.map((u) => this._letter(u)).join('');
         for (const u of pchain) if (this.gen[u] > pgen) pgen = this.gen[u];
       }
@@ -1285,7 +1299,6 @@ class Sim {
     }
     // contacts: the pairs that are not bonded and close enough that they might touch during the solve
     const contacts = this._contacts || (this._contacts = []); contacts.length = 0;
-    const fp = p.freePasses || 0, loose = this._loose || (this._loose = []); loose.length = 0;   // freePasses: loose pairs go last
     for (let k = 0; k < pairs.length; k += 2) {
       const u = pairs[k], v = pairs[k + 1], ub = u * 4;
       let dx = px[v] - px[u]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
@@ -1299,10 +1312,8 @@ class Sim {
         const x = this.type[u] === T_M ? v : u, xb = x * 4;
         if (this.type[x] !== T_E && bond[xb] < 0 && bond[xb + 1] < 0 && bond[xb + 2] < 0 && bond[xb + 3] < 0) continue;
       }
-      if (fp > 0 && bond[ub] < 0 && bond[ub + 1] < 0 && bond[ub + 2] < 0 && bond[ub + 3] < 0 && bond[v * 4] < 0 && bond[v * 4 + 1] < 0 && bond[v * 4 + 2] < 0 && bond[v * 4 + 3] < 0) loose.push(u, v);
-      else contacts.push(u, v);
+      contacts.push(u, v);
     }
-    const nFixed = contacts.length; for (let k = 0; k < loose.length; k++) contacts.push(loose[k]);
     if (p.nG > 0) this._stick(pairs);
     // 3. constraints
     this._bondList();
@@ -1312,19 +1323,15 @@ class Sim {
     const mark = this._seen;
     for (let k = 0; k < pins.length; k++) { const u = (pins[k] / NV) | 0; if (!mark[u]) { mark[u] = 1; bonded.push(u); } }
     for (const u of bonded) mark[u] = 0;
-    const tol = p.solveTol || 0;
     const shaped = this._shaped || (this._shaped = new Uint8Array(n)), shapeC = this._shapeC || (this._shapeC = new Float64Array(n)), shapeS = this._shapeS || (this._shapeS = new Float64Array(n));
     for (let it = 0; it < p.iters; it++) {
-      let worst = 0;   // largest correction of this pass (solveTol)
-      const nc = fp > 0 && it >= fp ? nFixed : contacts.length;
-      for (let k = 0; k < nc; k += 2) {
+      for (let k = 0; k < contacts.length; k += 2) {
         const u = contacts[k], v = contacts[k + 1];
         let dx = px[v] - px[u]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
         let dy = py[v] - py[u]; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
         const rr = rad[u] + rad[v];
         const d2 = dx * dx + dy * dy; if (d2 >= rr * rr) continue;
         const d = Math.sqrt(d2) || 1e-6;
-        if (rr - d > worst) worst = rr - d;
         const push = (rr - d) / d, wu = wt[u], wv = wt[v], ws = wu + wv;
         const fx = dx * push, fy = dy * push;
         px[u] -= fx * wu / ws; py[u] -= fy * wu / ws;
@@ -1338,7 +1345,6 @@ class Sim {
         let dx = px[v] + ox[qb] - px[u] - ox[qa]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
         let dy = py[v] + oy[qb] - py[u] - oy[qa]; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
         const dl = Math.sqrt(dx * dx + dy * dy); if (dl < 1e-9) continue;
-        if (dl > worst) worst = dl;
         const nx = dx / dl, ny = dy / dl;
         const cu = ox[qa] * ny - oy[qa] * nx, cv = ox[qb] * ny - oy[qb] * nx;
         const eu = wt[u] + wr[u] * cu * cu, ev = wt[v] + wr[v] * cv * cv;
@@ -1366,7 +1372,6 @@ class Sim {
         }
         shaped[u] = 1; shapeC[u] = c; shapeS[u] = s;
       }
-      if (worst < tol) break;
     }
     for (const u of bonded) if (shaped[u]) { pa[u] = Math.atan2(shapeS[u], shapeC[u]); shaped[u] = 0; }   // a shaped block's angle: its last fit
     for (let u = 0; u < n; u++) { px[u] = this._wx(px[u]); py[u] = this._wy(py[u]); pa[u] = wrapAngle(pa[u]); }
