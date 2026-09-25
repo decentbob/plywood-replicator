@@ -57,12 +57,16 @@ ranked shortlist at its end.
 ## Layout
 
 ```
-src/sim.js          the whole simulation (browser global PolyChem, or require()); about 1,350 lines
+src/sim.js          the whole simulation (browser global PolyChem, or require()); about 1,400 lines
 src/rchem.js        random chemistry: Sim with its rule table replaced by a random one (RChem, randomTable, copyTable)
 index.html          viewer: canvas, knobs, presets, readout, event feed, click-to-inspect
-run.js              headless runner: CSV every --every steps, JSON summary on stderr, --births FILE (JSONL, written
-                    at the END of the run), --change T:k=v,k=v (environment change mid-run, repeatable)
-test.js             invariant tests (28; about 10 minutes on one core)
+run.js              headless runner: CSV every --every steps, JSON summary on stderr (written when the run ends), --births FILE
+                    (JSONL, appended every --every steps, so a run in progress or a stopped one has its births so far),
+                    --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted
+test.js             invariant tests (32; about 12 minutes on one core)
+LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
+experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
+                    what worked, what failed and what is open; add a row for every new experiment
 build.js            single-file dist/ build of the viewer
 experiments/*.sh    one script per batch; each RESULTS.md section names its script
 experiments/*.js    analysis over experiments/out/*.births.jsonl (see below)
@@ -70,20 +74,26 @@ experiments/out/    CSV (committed), JSON and births JSONL (gitignored)
 tools/fingerprint.js  trajectory hash, to prove a change leaves default behaviour identical
 tools/screenshot.js   drive the viewer headless and screenshot it (Playwright + /opt/pw-browsers/chromium)
 tools/snap.js         render a Sim in Node to PNG (colorOf callback for custom colours)
+tools/queue.sh        job queue: runs a file of jobs (OUTDIR NAME --knobs...), at most 4 run.js processes on the machine
+experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
+experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 ```
 
 ## src/sim.js map
 
-- Constants: sides `F R K L`; types `T_A T_B T_E T_M T_C T_D T_X T_P T_Q T_J T_G` (A–D replicator letters, P/Q caps,
-  all in `LETTERS`; E energy particle; M membrane block; X ray; J hub; G droplet block); `hand` (chirality) is a
+- Constants: sides `F R K L`; types `T_A T_B T_E T_M T_C T_D T_X T_P T_Q T_J T_G T_1..T_4` (A–D replicator letters, P/Q caps,
+  all in `LETTERS`; E energy particle; M membrane block; X ray; J hub; G droplet block; 1–4 product blocks of the translate
+  rule, `PRODUCTS`, `isProd`); `hand` (chirality) is a
   per-block property like type; internal states `I_DOCK I_REPEL I_TPL I_FRAY` (letters), `I_OFF I_ON` (E, and M raw/active);
   derived side states in `S` (append new ones with a new unique value; `SNAME` is built by value).
 - `DEFAULTS`: every knob with a one-line comment. Per-type knobs are `<base><Letter>` (`resC`, `stiffD`,
   `bendB`, `shapeA`) read through `typeParam(p, base, t, dflt)`.
 - Chemistry (the rule table): `compat` (which side pairs bond, with what probability), `_computeOpen` (which
   sides can bond at all), `_derive` (side states from internal state + bonds; context motifs CHARGE, MAKE,
-  FEED, SHIELD, relay), `_transition` (all state changes, radiation, fraying, unzip, feed, binding melt,
-  membrane activation), `_logBirths` (observation).
+  FEED, SHIELD, relay; the endLoss tip bit `tip`/`tip0`; translation's back states `TRN_*`, a finished product's `PBIND`,
+  the catalysis bit `cat`), `_transition` (all state changes, radiation, fraying, unzip, feed, binding melt,
+  membrane activation, product release and melting), `_logBirths` (observation; products are logged with `prod: 1`).
+  Relayed signals are read from the previous derive pass (`ss0`, `tip0`), so they move one block per pass.
 - Physics: `_physics` (jostle, one neighbour scan, contacts, corner pins with rigid move + softness, shape
   matching), `_formBonds` / `_tryBond` / `_geomOK` / `_formBond` (bond formation from the scan's pairs),
   `_chemistry` (transitions, bond holding, births, reload). `step()` = physics, formBonds, chemistry.
@@ -105,6 +115,8 @@ node test.js                                    # all invariants, ~6 min
 node tools/fingerprint.js 1500 > before.txt     # then after a change: diff
 node run.js --help                              # every knob
 node run.js --steps 200000 --every 20000 --W 40 --H 40 --nA 256 --nB 256 --seedSeq ABBABA --pUndock 0.1 --pUnzip 1 --pFray 0.00003
+node experiments/peek.js experiments/out/TF_dense_1.births.jsonl --capped --has=ABA,CDC --window=100000
+nohup tools/queue.sh /path/jobs.txt 4 > /dev/null 2>&1 &   # lines: OUTDIR NAME --knob value ...
 node experiments/motifs.js ABA,CDC experiments/out/G3_*.births.jsonl --window=250000
 node experiments/composition.js | pairs.js | alternation.js | turnover.js | length_table.js | mutation_rates.js ...
 NODE_PATH=$(npm root -g) node tools/screenshot.js /tmp/v.png '{"preset":"evo"}' 10000
@@ -116,8 +128,12 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80�
 
 ## Working conventions and pitfalls
 
-- Long runs: write outputs to the scratchpad, copy into `experiments/out/` when done (a stop hook complains
-  about files changing under git mid-run). The births JSONL only appears when a run ends.
+- Workflow that worked (2026-09-25): state the question, screen 2 seeds × a few variants in 50,000–150,000 steps with
+  `tools/queue.sh` (outputs in the scratchpad), look with `peek.js` while they run, add a same-seed control, then run long
+  only what earns it; write the RESULTS section (what it says, what it does not) and a LEDGER row, commit, move on. Copy
+  outputs into `experiments/out/` when done (a stop hook complains about files changing under git mid-run).
+- Check a new world lives before measuring anything in it: many screens this session were wasted on worlds that died at
+  once (radiation too strong, too few caps, a seed that makes no product). A 20,000-step look with `peek.js` catches it.
 - `pkill -f <pattern>` can match your own shell's command line and kill it; kill by PID or a narrow pattern.
 - "× chance" baselines are inflated by founder descent (seeds like `ABBABA` carry motifs; low mutation keeps
   founder make-up). Always compare against a same-seed control run.
