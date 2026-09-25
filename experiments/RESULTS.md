@@ -1606,7 +1606,8 @@ and holds both genes in 74% (radiation) and 81 to 86% (both pressures) of capped
 capped length 7.9 to 8.0. Where radiation does not act, `PABAQ` wins and the shield gene is lost by step 100,000 to
 200,000. This is the first time in this project that a genome with two genes has been selected over a shorter competitor
 and kept, and it happens in the environment (energy and radiation together) where every earlier attempt collapsed (section
-19: to dimers; section 22: to the genome's own pieces; round 1: to `PQ`). **Seed 2** (`TB_comp_rad_2`, `TB_comp_both_2`) repeats it: `PABAQ`
+19: to dimers; section 22: to the genome's own pieces; round 1: to `PQ`). **Seed 2** repeats every cell: with no pressure and with scarce energy `PABAQ` wins and the shield gene is gone by step
+200,000 (`TB_comp_none_2`, `TB_comp_energy_2`); with radiation (`TB_comp_rad_2`, `TB_comp_both_2`) `PABAQ` is
 out-competed within the first window, both genes in 68 to 70% (radiation) and 82 to 85% (both) of capped births from
 100,000 steps to the end. **Keep runs** (`TB_keep_*_1`, `PABACDCQ` alone): with radiation both genes stay in 67 to 87% of
 capped births for 500,000 steps (under both pressures `PABAQ` arose by mutation, 33 births between steps 200,000 and 300,000,

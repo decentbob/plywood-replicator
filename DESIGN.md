@@ -356,8 +356,8 @@ loss, radiation) changes what is worth trying. Ranked:
 3. *A third gene with its own pressure*, in the capped world: candidates are walls (`make` + `tether`, paying against rays)
    and cutting (in a capped world a cut kills, it no longer makes two replicators; but `cutRelay` shares the lateral sides
    with `feed`/`shield`, so it needs its own signal bit, as `endLoss` has).
-4. *Speed*: the solver is 80% of the time; `iters` 8 is 1.6× faster (copying was exact at 8 on the square engine; check
-   again in the capped world before using it for batches).
+4. *Speed*: the solver is 80% of the time; `iters` 8 is 1.6× faster but not exact in the capped world (3 of 159 capped copies
+   wrong in 60,000 steps, a deletion, an insertion and a chimera, against 0 of 162 at 16), so batches stay at 16.
 
 **Added 2026-09-24.** Search over worlds instead of one mechanism at a time (`experiments/search.js`,
 RESULTS section 27; the user's idea that evolution got going only once enough separate processes had built up).
