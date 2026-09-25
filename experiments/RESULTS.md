@@ -1811,3 +1811,10 @@ What it says: with a private catalyst parasites cannot live (they are seeded and
 about half of all births within 100,000 steps, and slow polymers do not hold them back at this size. Births still rise in
 every shared run, so the cooperators are not yet losing. Whether this ends in coexistence, cycles or collapse is the
 question for the long runs (`PL_*`, 400,000 steps, same world: `STEPS=400000` with `--bindAny 1`).
+
+Long runs (`PL_mix_1`, `PL_mix_2`, `PL_slow_1`, 400,000 steps): steady coexistence in all three, about half of births pure
+parasites and half the letters `C`/`D` in every 50,000-step window from 50,000 on, births steady (250 to 360 per window).
+But the parasite share follows the supply of its letters (`PX_*`, 100,000 steps): with 300 `C` and 300 `D` against 150 `A`
+and 150 `B` parasites made 151 of 227 births in the last window (73% `C`/`D` letters), with 75 of each 4 of 45 (12%). So the
+coexistence is mostly the two kinds living on separate letters, not host–parasite dynamics. A fair test needs parasites
+and cooperators drawing on the same letters: code `A`→`1` only, cooperators `ABABBA`, parasites `BCDDCB` (`PY_*`).
