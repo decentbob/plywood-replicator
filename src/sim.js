@@ -145,6 +145,8 @@ const DEFAULTS = {
                                 // a row comes off its stack by unzipping from its ends, so long rows hold and short ones melt (scission)
   pSBind: 0,                    // (with stack) an armed or held face beside a stacked neighbour meets an armed back of its own kind: they bind, per
                                 // step of contact (a melted row zips back)
+  stackHold: false,             // (with stack) a unit whose back holds a stacked row does not fray either: a stack never frays, and without enough
+                                // melting it locks the world's letters up. Off, a stack's bottom row (its face free) frays like any strand
   pSNuc: -1,                    // the same for a face with no stacked neighbour (a new junction: a strand joins a stack, or two strands meet face to
                                 // back); -1: as pSBind. Low values are a nucleation barrier: rows zip back, strangers rarely start to bind
   pReloadV: -1,                 // the same for the second fuel, V (-1: as pReloadU); change either mid-run to shift the supply
@@ -1068,8 +1070,9 @@ class Sim {
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
     // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).
     const cap = this.type[u] === T_P || this.type[u] === T_Q, pfr = cap ? p.pFray * p.capFray : p.pFray;
-    // (stack rule) a unit whose back holds a stacked unit's face is held too: in a stack only a lone row can fray
-    const hk = p.stack && bK && (this.ss[b[o + K]] === S.HOLD || this.ss[b[o + K]] === S.TPL_MM || this.ss[b[o + K]] === S.TPL_LF || this.ss[b[o + K]] === S.TPL_RF);
+    // (stack rule, with stackHold) a unit whose back holds a stacked unit's face is held too, so in a stack only a lone row can fray;
+    // without it the bottom row of a stack (its face free) frays like any strand, and the stack treadmills: it grows at the top
+    const hk = p.stackHold && p.stack && bK && (this.ss[b[o + K]] === S.HOLD || this.ss[b[o + K]] === S.TPL_MM || this.ss[b[o + K]] === S.TPL_LF || this.ss[b[o + K]] === S.TPL_RF);
     if (this.is[u] !== I_DOCK && !bF && !hk && nl === 1 && p.pFray > 0 && this.rng() < pfr) {
       this.fresh[u] = 0; this.frayEvents++; this._event('fray', u);
       if (p.pUnzip > 0) this.is[u] = I_FRAY;

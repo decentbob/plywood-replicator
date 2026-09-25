@@ -501,7 +501,7 @@ test('backCopy and stack: a copy made on a back lies parallel (same sequence); s
   let nA = 0; for (let u = 0; u < s.n; u++) if (s.type[u] === 0) nA++; assert.strictEqual(nA, 150);
   assert.deepStrictEqual(s.check(), []);
   // stacked units do not fray: a strand whose every unit is held keeps its units under fraying that would take a free strand apart
-  const f = new Sim({ seed: 3, W: 20, H: 20, nA: 60, nB: 60, nE: 60, seedSeq: 'AABBA', seedCount: 1, backCopy: true, stack: true, pSMelt: 0, pSMeltEnd: 0, pSMeltRun: 0 });
+  const f = new Sim({ seed: 3, W: 20, H: 20, nA: 60, nB: 60, nE: 60, seedSeq: 'AABBA', seedCount: 1, backCopy: true, stack: true, stackHold: true, pSMelt: 0, pSMeltEnd: 0, pSMeltRun: 0 });
   f.run(3000);
   const held = []; for (let u = 0; u < f.n; u++) if (f.bond[u * 4] >= 0 && (f.bond[u * 4] & 3) === K && f.is[u] !== I_DOCK) held.push(u);
   assert.ok(held.length >= 5, 'a stacked row formed: ' + held.length);

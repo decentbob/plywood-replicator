@@ -18,7 +18,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    not change it (34d). Length has held only with cooperative docking plus processive fraying (13b, 15b), ligation
    balanced by fraying (3b, 27b: accumulation, not function), or a gene that removes the cost of length (33i, 33j). Three
    such costs have genes now: radiation per bond (shield), energy per unit (feed with relay), copy errors per functional
-   letter (proofreading, selected when seeded, 38b).
+   letter (proofreading, selected when seeded, 38b). A second mode of replication does not change it by itself: stacks (40b)
+   hold length only by hoarding (long rows zipped into stacks are immortal, the letters lock up, births fall), and stacks that
+   turn over let short rows win again (40c).
 2. **Any viable fragment of a genome defeats a genome that needs several genes.** (22, 19d, 33a'.) Make pieces
    sterile first (end loss on capped strands, 33a–d), and make the smallest viable genome already carry one gene (bare
    caps, 33b), or genes will not accumulate.
@@ -64,6 +66,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
 - **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold (on the new engine half or more of 11-unit capped copies then carry a
   substitution, 38a); on the old engine iters 8 added about 2% copy errors (33, DESIGN 15).
+- **Stacks** (40): held stacks (`stackHold`) lock the letters up at zip (`pSBind`) 0.03 or more with a nucleation barrier, at 0.1 or
+  more without; treadmilling stacks (default) never did. Without a barrier (`pSNuc` -1) two-letter strands aggregate.
 - **Engine (since 2026-09-25, section 37)**: `bodyJostle` with 4 passes; about 2x faster. Do not jam a world (blocks covering more
   than about 90% of it): the section 33 dense world (40×40, 400 of each letter, 240 caps) loses a letter in a third of its copies
   at 4 passes; use 48×48 (97% exact) or `iters` 8–16. Old step counts do not carry over exactly.
@@ -162,6 +166,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 39d | Pocket selection screens | Does composition follow fuel size? | `pocket`, fuel only, 40×40 and 30×30 | inconclusive | 9–47 births per 30k steps: too few; copying runs at ~1 birth per 1,000 steps in small worlds | FS_*, FT_*, PK_*, PR05..PR12 | bigger worlds, longer runs (PW_*) | worlds too small or fuel-poor |
 | 39e | Pockets with fuel as a supplement | Does fuel size decide which of three same-letter genomes wins, over scarce energy? | `pocket`, `nE` 16, `nU` 120, `sizeU` | inconclusive | without fuel `ABABABAB` wins (2 of 2); with fuel the winner differs between seeds | PS* | monoculture fitness assays, larger worlds | 5–30 births per lineage per window |
 | 39f | Pocket fitness assays | Does shape decide a genome's energy or births when it is alone? | `pocket`, `nU` 120/40, monocultures | partial | armed state follows the harvest spectrum (large fuel: `ABABABAB` 322 armed/67 waiting vs `AABBAABB` 230/120); births differ little (letters limit) | MO_*, ML_*, monoculture.js | competition in large worlds | fuel at 120 × 0.01 saturates energy |
+| 40a | Stacks (a second way to copy) | Do back copies that stay give crystals that grow and split? | `backCopy`, `stack`, `pSBind`, `pSNuc`, `pSMeltEnd` | works | rows exact (20 of 20), stacks of 3 to 26 rows melt apart and regrow; without a nucleation barrier two-letter strands sharing a 3-run aggregate | stacks.sh, stacks.js, test.js | kin aggregation with four letters; shape-limited stacks | copy is parallel on a back, reversed on a face |
+| 40b | Do stacks make length pay? | Is newborn length held in an open two-letter world with held stacks? | `stack`, `stackHold`, `pSBind` 0 to 0.05, `pSNuc` 0 | negative | length ≥ 3.5 only where letters lock up (free < 190 of 512) and births fall 3–10×; turning over, 2.0–2.5 as plain | stacks.sh (`ST_hold_*`) | hoarding is not selection | knife edge at zip 0.02 (alive, 3.1–3.5); 2 seeds |
+| 40c | Treadmilling stacks | Same with stack bottoms fraying (they grow at the top, die at the bottom)? | `stack`, `stackHold` off, `pSBind` 0 to 0.5 | negative | never lock up; length 2.1–2.8 at every zip rate; with aggregation (no barrier) 4.4–4.8 but letters locked again | stacks.sh (`ST_tread_*`) | stacks where free strands are punished (radiation) | melting is not death: a row that comes off copies at once |
+| 40d | Stacks keep a two-gene genome? | Is `ABACDC` kept longer with stacks (section 22 world)? | `stack` (held, zip 0.02) with `feed`, `shield`, `relay` | inconclusive | seed 2: plain lost it by 76–78k, stacks kept it to 165–192k; seed 1: no difference | stacks.sh (`ST_K*`) | more seeds | the plain world now keeps it far longer than section 22 said |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -172,6 +180,7 @@ the rows that used it). Rerun it after adding rows.
 <!-- knob-index -->
 | knob | rows (verdict) |
 |---|---|
+| `backCopy` | 40a (works) |
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead) |
 | `bendB` | 15c (lead), 15d (works) |
@@ -185,7 +194,7 @@ the rows that used it). Rerun it after adding rows.
 | `cutMotif` | 26 (negative), 26b (inconclusive) |
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works) |
 | `energyMode` | 3 (negative), 4 (negative) |
-| `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works) |
+| `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works) |
 | `foldA` | 28b (works), 39b (works), 39c (works) |
 | `foldB` | 39c (works) |
@@ -246,18 +255,21 @@ the rows that used it). Rerun it after adding rows.
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
+| `pSBind` | 40a (works), 40b (negative), 40c (negative) |
+| `pSMeltEnd` | 40a (works) |
+| `pSNuc` | 40a (works), 40b (negative) |
 | `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works) |
 | `pUnzip` | 13b (works), 15b (works) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
-| `relay` | 19c (works), 19d (negative), 22 (negative), 33b (works) |
+| `relay` | 19c (works), 19d (negative), 22 (negative), 33b (works), 40d (inconclusive) |
 | `resB` | 8 (works), 12 (works) |
 | `resC` | 35 (inconclusive) |
 | `resM` | 11 (superseded), 11b (negative), 16 (negative) |
 | `shapeA` | 15c (lead) |
-| `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works) |
+| `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works), 40d (inconclusive) |
 | `sizeA` | 28 (lead) |
 | `sizeD` | 28 (lead) |
 | `sizeU` | 39a (works), 39e (inconclusive) |
@@ -265,6 +277,8 @@ the rows that used it). Rerun it after adding rows.
 | `slack` | 10b (superseded), 12 (works) |
 | `snapCorners` | 23 (works), 23b (works) |
 | `spend` | 14d (negative) |
+| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive) |
+| `stackHold` | 40b (negative), 40c (negative) |
 | `stiffA` | 15 (works), 15b (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `sun` | 3 (negative) |

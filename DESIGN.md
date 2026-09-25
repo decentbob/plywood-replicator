@@ -372,6 +372,15 @@ Keep entries short: date, what changed, why, what evidence.
   per fuel: which strand shapes hold which particles is geometry (RESULTS 39). The first of the shape directions put to the user
   (DESIGN 15, option B), built with the genome as its own enzyme (a released copy is curled where its letters fold, and its
   hungry backs line the inside of the curl), before products.
+- 2026-09-25 (night). Added stacks, a second mode of replication (the user: several kinds of replication, mechanical designs):
+  `backCopy` (two-faced letters: an armed letter's back templates too, and the copy lies parallel to its template), `stack` (a
+  finished back copy stays on as a row, waits for energy, and once armed templates the next row), cooperative melting of stacked
+  bonds (`pSMelt`, `pSMeltEnd`, `pSMeltRun`), zipping beside a stacked neighbour (`pSBind`) with a separate rate for new junctions
+  (`pSNuc`, a nucleation barrier), and `stackHold` (a unit holding a stacked row on its back does not fray; off by default, so a
+  stack's bottom row frays and stacks treadmill). Held stacks were tried first and locked the world's letters up: a stack of long
+  zipped rows never dies. Evidence in `experiments/RESULTS.md`, section 40: stacks copy exactly and live beside strands, but hold
+  length only by hoarding. Kept, default off, as the second replication mode for combinations (kin aggregation, radiation,
+  shape-limited stacks).
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
