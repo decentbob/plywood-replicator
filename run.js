@@ -3,7 +3,8 @@
  * Headless runner. Prints a CSV row every `--every` steps and a JSON summary at the end.
  *   node run.js --steps 100000 --every 2000 --seed 3 --pCapture 0.02 --pFray 0.0005
  * Any DEFAULTS key from src/sim.js can be passed as --key value. Booleans: --sun 1.
- *   --births FILE   write the birth log (one JSON object per line)
+ *   --births FILE   write the birth log (one JSON object per line), appended every reporting interval so a run in progress (or
+ *                   one that is stopped) has its births so far
  *   --quiet         no CSV, only the summary
  *   --change T:k=v,k=v   at step T set parameters (an environment change); may be repeated
  */
@@ -39,6 +40,9 @@ const sim = new Sim(params);
 const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts', 'snaps', 'rayHits', 'cuts'];
 if (!opt.quiet) console.log(cols.join(','));
 const t0 = Date.now();
+// the birth log is flushed every interval (and the simulation's copy emptied), so it is complete up to the last report
+if (opt.births) fs.writeFileSync(opt.births, '');
+const flushBirths = () => { if (!opt.births || !sim.births.length) return; fs.appendFileSync(opt.births, sim.births.map((b) => JSON.stringify(b)).join('\n') + '\n'); sim.births.length = 0; };
 changes.sort((a, b) => a.at - b.at);
 for (let s = 0; s < opt.steps; s += opt.every) {
   // run to the end of this reporting interval, applying any environment change on the way
@@ -50,10 +54,11 @@ for (let s = 0; s < opt.steps; s += opt.every) {
   sim.run(end - sim.t);
   const st = sim.stats();
   if (!opt.quiet) console.log(cols.map((c) => typeof st[c] === 'number' ? +st[c].toFixed(3) : st[c]).join(','));
+  flushBirths();
   const errs = sim.check();
   if (errs.length) { console.error('CHECK FAILED at t=' + sim.t + ': ' + errs.slice(0, 5).join('; ')); process.exit(1); }
 }
 const st = sim.stats();
 const secs = (Date.now() - t0) / 1000;
 console.error(JSON.stringify({ params: sim.p, final: st, stepsPerSec: Math.round(opt.steps / secs) }, null, 1));
-if (opt.births) fs.writeFileSync(opt.births, sim.births.map((b) => JSON.stringify(b)).join('\n') + '\n');
+flushBirths();
