@@ -357,7 +357,15 @@ loss, radiation) changes what is worth trying. Ranked:
 3. *A third gene with its own pressure*, in the capped world: candidates are walls (`make` + `tether`, paying against rays)
    and cutting (in a capped world a cut kills, it no longer makes two replicators; but `cutRelay` shares the lateral sides
    with `feed`/`shield`, so it needs its own signal bit, as `endLoss` has).
-4. *Speed*: the solver is 80% of the time; `iters` 8 is 1.6× faster but not exact in the capped world (3 of 159 capped copies
+4. *Letters with trade-offs* (the user, 2026-09-25): give the letters different shapes and capabilities, none simply
+   better, each useful for a different reason, so that a strand's make-up and order are a physical phenotype strong enough
+   to drive adaptation (instead of more motif rules). The engine already has the knobs: size and mobility (`sizeA`..,
+   `mobA`..), resistance to radiation (`resA`..), wedge shape and folding (`bendA`.., `foldA`..), stiffness (`stiffA`..).
+   Candidate trade-offs: large slow letters that radiation cannot break against small fast fragile ones; wedge letters
+   that curl a strand (compact, bonds hidden) but copy slowly against straight ones; soft letters that bend without
+   breaking against stiff ones that dock cleanly. Test in small worlds first; measure whether composition and order track
+   the environment (radiation band, scarcity).
+5. *Speed*: the solver is 80% of the time; `iters` 8 is 1.6× faster but not exact in the capped world (3 of 159 capped copies
    wrong in 60,000 steps, a deletion, an insertion and a chimera, against 0 of 162 at 16), so batches stay at 16.
 
 **Added 2026-09-24.** Search over worlds instead of one mechanism at a time (`experiments/search.js`,

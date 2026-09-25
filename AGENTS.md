@@ -183,6 +183,8 @@ Outputs of section 33's runs are in `experiments/out/` (`TK_*`, `TB_*`, `TA_*`, 
   or a way for part of a gene to pay; which of these fits the locality rule is the open design question. End joining
   (ligation of broken pieces) makes length vary but made no gene either. `telo5.sh` (80×80, four times the population)
   was started at the end of the session; if its outputs (`TE_*`) are not in `experiments/out/`, rerun it (hours per run).
+- **Letters with trade-offs** (the user's idea, 2026-09-25; DESIGN 15 item 4): letters that differ in shape, size, speed,
+  resistance and stiffness, none simply better, so a strand's composition is a physical phenotype. Small worlds first.
 - **A third gene** (DESIGN 15, top of the list): walls against rays, or cutting (a cut kills in a capped world).
 
 Older unfinished items (from the 2026-09-24 handoff), still valid:
