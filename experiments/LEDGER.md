@@ -161,6 +161,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 39c | Harvest spectrum | Does letter order (same letters) decide which fuel is used? | `pocket`, `foldA` 45, `foldB` 30 | works | each fuel size has a different best 8-mer: 0.5 `AABBAABB` 36, 0.85 `AAAABBBB` 23, 1.2 `ABABABAB` 24 | harvest.js | pocket races (selection) | 2 seeds, mutation off |
 | 39d | Pocket selection screens | Does composition follow fuel size? | `pocket`, fuel only, 40×40 and 30×30 | inconclusive | 9–47 births per 30k steps: too few; copying runs at ~1 birth per 1,000 steps in small worlds | FS_*, FT_*, PK_*, PR05..PR12 | bigger worlds, longer runs (PW_*) | worlds too small or fuel-poor |
 | 39e | Pockets with fuel as a supplement | Does fuel size decide which of three same-letter genomes wins, over scarce energy? | `pocket`, `nE` 16, `nU` 120, `sizeU` | inconclusive | without fuel `ABABABAB` wins (2 of 2); with fuel the winner differs between seeds | PS* | monoculture fitness assays, larger worlds | 5–30 births per lineage per window |
+| 39f | Pocket fitness assays | Does shape decide a genome's energy or births when it is alone? | `pocket`, `nU` 120/40, monocultures | partial | armed state follows the harvest spectrum (large fuel: `ABABABAB` 322 armed/67 waiting vs `AABBAABB` 230/120); births differ little (letters limit) | MO_*, ML_*, monoculture.js | competition in large worlds | fuel at 120 × 0.01 saturates energy |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -225,7 +226,7 @@ the rows that used it). Rerun it after adding rows.
 | `nM` | 11 (superseded), 11b (negative), 16 (negative), 16b (negative) |
 | `nP` | 28c (lead) |
 | `nQ` | 28c (lead) |
-| `nU` | 39a (works), 39e (inconclusive) |
+| `nU` | 39a (works), 39e (inconclusive), 39f (partial) |
 | `nX` | 25b (works), 25d (negative) |
 | `pBindP` | 34c (works) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive) |
@@ -241,7 +242,7 @@ the rows that used it). Rerun it after adding rows.
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works) |
-| `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive) |
+| `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
