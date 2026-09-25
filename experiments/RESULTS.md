@@ -1625,3 +1625,26 @@ genome carrying both genes was ever born. With bare caps `PCDCQ` cannot re-arm, 
 birth carrying `CDC` was at step 32,662, and 174 ligations in the run never joined a `CDC` piece to an `ABA` piece. The test
 gave the second gene no time to be picked up. The fairer question, whether the shield gene can arise inside `PABAQ` by
 mutation, is `telo4.sh`.
+
+**A gene from nothing** (`telo4.sh`, `TD_*`: seed `PABAQ` only, both pressures, 1,000,000 steps). A shield gene needs about
+three insertions and some point mutations inside a genome that must keep `ABA` at every step. None arose: at fivefold
+mutation (`pSoft`, `pCapture` 0.01) one birth in two million steps carried `CDC` (a sterile `PCDCQ`), and capped births were
+almost all five units long (seed 1: 3,945 of length 5, 66 of length 6, none longer; seed 2: 4,386 of length 5, one of
+length 6). Insertions happen but are lost: each adds a bond for radiation to break and pays nothing until the whole gene is
+there, and under both pressures the population is small (60 to 70 template units, about thirteen genomes). This is the
+classic valley between genes. A run under radiation alone, where the population is about five times larger, follows
+(`TD_rad5_*`).
+
+**Niches** (`band.sh`: radiation only in the left half of an 80×20 world, `radBand` 0.5, seeds `PABACDCQ` and `PABAQ`,
+1,000,000 steps, seed 1). Share of capped births carrying `CDC`, lit half (x < 40) against dark half, by 200,000-step window:
+
+| run | lit half | dark half |
+|---|---|---|
+| TR_band_1 (ordinary mobility) | 63%, 83%, 82%, 83%, 80% | 46%, 63%, 70%, 65%, 64% |
+| TR_bandslow_1 (`mobS` 0.3) | 79%, 81%, 81%, 83%, 82% | 58%, 50%, 54%, 55%, 44% |
+
+No second species: `PABAQ` died out in both halves (after about 200,000 steps with ordinary mobility; at once, by chance,
+with slow polymers, 4 births in all), so the dark half is filled by the lit half's genome too. What does differ is the
+shield: in the dark half it decays by point mutation into same-length genomes with a broken shield (`PABADDCQ`,
+`PABABDCQ`, `PCDBABAQ`), 44% against 82% at the end with slow polymers. That is relaxed selection in a place: a cline in
+the genomes across the world, the first spatial difference in genomes seen here. One seed each.
