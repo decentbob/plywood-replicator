@@ -129,6 +129,7 @@ const DEFAULTS = {
                                 // or more grips at once arms one of the letters holding it (and is spent): a released copy is curled where its
                                 // letters fold (foldA..), so which fuel a genome can use is decided by its own shape (the genome as its own enzyme)
   pReloadU: 0.002,              // a spent fuel particle recharges at this rate per step (the environment's supply)
+  pReloadV: -1,                 // the same for the second fuel, V (-1: as pReloadU); change either mid-run to shift the supply
   translate: false,             // the back of an armed letter templates a product block by a fixed code (transCode): a free product docks its face there,
                                 // docked products link side to side where the template continues, and a finished product chain is released,
   transCode: 'A1,B2,C3,D4',     // as a copy is on the face. Products never become templates. The genome builds a polymer that is not itself
@@ -1518,7 +1519,7 @@ class Sim {
     for (let u = 0; u < n; u++) {
       if ((this.type[u] !== T_E && !isFuel(this.type[u])) || this.is[u] !== I_OFF) continue;
       if (this.type[u] === T_E) { if (rng() < p.pReload) this.is[u] = I_ON; }
-      else if (this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0 && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0 && rng() < p.pReloadU) this.is[u] = I_ON;   // spent fuel, free
+      else if (this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0 && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0 && rng() < (this.type[u] === T_V && p.pReloadV >= 0 ? p.pReloadV : p.pReloadU)) this.is[u] = I_ON;   // spent fuel, free
     }
     for (let u = 0; u < n; u++) if (this.type[u] === T_E || isFuel(this.type[u])) this._derive(u);
     if (p.pRacem > 0) for (let u = 0; u < n; u++) {
