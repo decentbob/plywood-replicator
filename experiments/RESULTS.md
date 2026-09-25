@@ -1713,3 +1713,18 @@ No: length falls the same way with and without catalysis. The machine works but 
 genome's own product fits it, and a two-unit product binds as stably as a long one (both of its units count as in a run).
 One seed. What it would take for the product to matter: a function that depends on the product's sequence or shape in
 graded ways (its fold, its kinds' physics), not only on matching its maker.
+
+**Scarcity and density** (`scarcity.sh`: the `TD_lig` world, caps 30/60/120 of each kind × letters 100/200/400 of each kind,
+400,000 steps, seed 1). Capped births from step 200,000 on:
+
+| caps \ letters | 100 | 200 | 400 |
+|---|---|---|---|
+| 30 | extinct | extinct | extinct |
+| 60 | extinct | extinct | length 5.05, 3.1% longer than 5 (up to 9) |
+| 120 | extinct | length 4.99, 1.0% longer than 5 (up to 10) | length 5.21, **10.4%** longer than 5 (up to 14) |
+
+Under this radiation a capped world needs density to live at all (six of nine cells died out). Where it lives, letter
+density sets how often genome length changes: at 400 letters of each kind a tenth of capped births are longer than the
+five-unit genome, against one in a hundred at 200. Crowded templates make more copies that bridge two templates (the
+duplications and insertions of section 28). No `CDC` gene arose in 400,000 steps. What it suggests: gene origin should be
+tried in dense worlds, where the raw material (longer genomes) is ten times as common. One seed.
