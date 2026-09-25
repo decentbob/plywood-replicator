@@ -361,6 +361,17 @@ Keep entries short: date, what changed, why, what evidence.
 - 2026-09-25. Saved states: `Sim.saveState` / `Sim.fromState` (a run resumes exactly, or branches with changed parameters),
   `run.js --save` / `--load`, the viewer's "Open state": long headless runs are looked at afterwards, and an evolved
   population can be put under a new rule without re-evolving it.
+- 2026-09-25. Added `proof` (proofreading, `proofMotif` `BDB`, `pProof`): a third gene whose pressure is copying itself (copy
+  errors cost per functional letter, Eigen's error threshold), not an environment. Local: a template unit in the motif flags its
+  face (relayed along its strand, one block per pass, on its own bit channel like `tip`); a monomer of the wrong kind docked on a
+  flagged face, not yet linked, lets go (it reads its partner's kind, as docking does). Evidence in RESULTS 38: substitutions
+  cut 3 to 6 times, and a genome carrying it beats a one-letter-different competitor (2 seeds).
+- 2026-09-25. Added fuel particles (`nU`, `nV`, sizes `sizeU`, `sizeV`) with `grip` (a released product's back grips fuel) and
+  `pocket` (a letter's back grips fuel; a charged particle held by two or more backs at once arms one letter that wants energy,
+  through the side it shows `GIVE` on, and is spent; a spent free particle recharges at `pReloadU`). One generic rule, no rule
+  per fuel: which strand shapes hold which particles is geometry (RESULTS 39). The first of the shape directions put to the user
+  (DESIGN 15, option B), built with the genome as its own enzyme (a released copy is curled where its letters fold, and its
+  hungry backs line the inside of the curl), before products.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
