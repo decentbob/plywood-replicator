@@ -2007,3 +2007,23 @@ letters, through the shape it folds into, decides which fuel a genome can use. N
 many-to-many genotype-to-phenotype map made of geometry, the kind that motif rules (one hand-written function each) cannot
 give. What it does not show yet: selection (the first screens, `FS_*`/`FT_*`, ran in a world too poor in fuel to hold a
 population: 9 to 47 births per 30,000 steps); harvest here mixes shape with copying speed; two seeds.
+
+**Selection, first attempts (what failed and why).** Fuel as the only energy makes fragile worlds. Uncapped (`FS_*`, `PK_*`,
+`PR05..12`, `PW_*`: 30×30 to 60×60): copies waiting for fuel fray from their open ends before they are armed, and births stay
+at a few per 25,000 steps per lineage. Capped (`PC*_fold_*`: 40×40, the three 8-mers between caps, 200,000 steps, mutation off),
+births of each lineage per 50,000 steps:
+
+| run | `PAABBAABBQ` | `PABABABABQ` | `PAAAABBBBQ` | prediction from the harvest spectrum |
+|---|---|---|---|---|
+| fuel 0.5, seed 1 | 16, 20, 8, 5 | 13, 1, 0, 0 | 12, 0, 0, 0 | `AABBAABB` (right) |
+| fuel 0.5, seed 2 | 7, 14, 7, 2 | 20, 1, 0, 0 | 19, 1, 0, 0 | `AABBAABB` (right) |
+| fuel 0.85, seed 1 | 13, 2, 0, 1 | 7, 11, 0, 0 | 7, 1, 0, 0 | `AAAABBBB` (wrong: `ABAB` led, then all died) |
+| fuel 1.2, seed 1 | 6, 6, 4, 17 | 13, 2, 0, 0 | 11, 0, 0, 0 | `ABABABAB` (wrong: `AABB` won) |
+| fuel 0.5, letters that do not fold | 7, then extinct | 13, then extinct | 14, then extinct | nothing lives on small fuel without folds |
+
+`AABBAABB` won three of four capped races, including one the uncapped spectrum gave to another sequence; without folding
+letters nothing lived on small fuel. But every capped fuel world declined (capped births 12 → 1 per 10,000 steps): a copy
+needs ten captures, two contacts each, and a capped genome lives about 16,000 steps (caps fray); making caps last ten times
+longer only locks the letters up (templates pile up, births stop). So these races are small and dying: a lead that fold and
+fuel size select sequences, not a result. Next: fuel as a supplement to scarce ordinary energy (`PS_*`), so every genome lives
+and shape gives a graded advantage.
