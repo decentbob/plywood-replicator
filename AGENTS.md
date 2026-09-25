@@ -21,6 +21,10 @@ entries near the end of the list), 15 (ideas not yet tried).
   signal relayed from block to block moves one block per derive pass (read neighbours' relayed states from
   `ss0` / `tip0`, the previous pass), never further. Check every new rule against this before anything else.
 - **No pre-programming.** No rule may mention copy, strand, organism, genome. Those words live in comments.
+- **Blocks are conserved: none is created or destroyed mid-run** (the user, 2026-09-25). A rule that makes blocks, or that
+  copies, duplicates or inserts a stretch, would make replication pre-programmed. New genes must come from mutations the
+  physics already makes. The user's preference for the workflow: wild ideas and combinations in small worlds, promising
+  leads in large ones; scarcity and density are factors worth varying.
 - **Prefer state changes to type changes.** When a block should become something else, give it an internal
   state and let a bonded side's state trigger the change (as energy particles recharge, as raw membrane is
   activated). The user explicitly disliked a precursor block turning into another type.
