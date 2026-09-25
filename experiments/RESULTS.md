@@ -1734,6 +1734,29 @@ five-unit genome, against one in a hundred at 200. Crowded templates make more c
 duplications and insertions of section 28). No `CDC` gene arose in 400,000 steps. What it suggests: gene origin should be
 tried in dense worlds, where the raw material (longer genomes) is ten times as common. One seed.
 
+**A gene from nothing, in a dense world (lead, one seed)** (`TF_dense_1`: the `TD_lig` world with 400 letters of each kind,
+radiation only, fivefold mutation, ligation 0.05, seed `PABAQ` only, 1,000,000 steps). Capped births by 50,000-step window:
+
+| window | births | capped | mean capped length | carrying both `ABA` and `CDC` |
+|---|---:|---:|---:|---:|
+| 500k–550k | 1,771 | 469 | 5.2 | 0 |
+| 600k–650k | 1,958 | 453 | 5.4 | 1 |
+| 650k–700k | 1,474 | 299 | 7.4 | 43 |
+| 700k–750k | 844 | 126 | 12.1 | 44 |
+| 800k–850k | 849 | 127 | 11.2 | 46 |
+| 850k–900k | 983 | 149 | 11.6 | 56 |
+| 950k–1000k | 758 | 110 | 10.8 | 26 |
+
+How it happened: by step 630,000 genomes had grown by duplicating the energy gene with insertions (`PABACAABAQ`,
+`PABAACABAACABABAQ`); at step 645,743 a copy carried `CDC` (`PABACDCAABAAQ`), and within 20,000 steps its descendants
+diversified into many two-gene genomes (`PADBDACDCABAQ`, `PBCDCDABAQ`, `PABACDCCDBCAQ`, up to 28 units with two `CDC`).
+Then genomes expanded: mean capped length went from 5 to 11 or 12 (the longest 43), free monomers fell from about 1,000 to
+about 150 (letters locked in long genomes) and births fell with them. Over the last 400,000 steps half of all capped births
+carry `CDC` and 35% carry both genes. The reading: duplications in a dense world supplied the raw material (a genome with
+room: `ABA` plus spare letters), point mutation made `CDC` in it, and once a genome was shielded radiation stopped
+punishing length, so genomes grew. This is the first gene in the project to arise by mutation and spread. One seed: seeds
+2 and 3 and a control without the shield rule (does length explode anyway?) are running.
+
 ## 35. Letters with trade-offs (`tradeoff.sh`, `letters.js`), the user's idea, first screens
 
 Letters that differ physically, none simply better, so a genome's make-up is a phenotype. First pair tried: `C` and `D`
