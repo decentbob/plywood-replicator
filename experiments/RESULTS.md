@@ -1582,6 +1582,12 @@ pressures it took over by step 200,000. Under scarce energy alone it arose (step
 radiation, which costs per bond, the one-bond `PQ` wins slowly, and with both pressures radiation's push wins sooner. A gene here only reduces a cost that grows
 with length, and the shortest genome hardly pays that cost.
 
+Controls without `endLoss` (`TK_off_*_1`, same world otherwise): under scarce energy `PQ` takes over too (the two-gene
+genome falls from 72% to 28% of capped births, `PQ` is the commonest capped strand at the end), where with `endLoss` it never
+spread; under radiation the genome falls apart into its pieces, `PCDCQ` (the shield gene alone) rising to the commonest
+capped birth (94 of 242 in the last window) beside `PQ`, with most births uncapped; under both pressures `PQ` again. So
+`endLoss` alone already stops the genome falling into its genes, and under scarce energy it also keeps `PQ` out.
+
 The fix tried next is in the same spirit as `endLoss`, one block property: `bareCaps`, caps have no back, so no energy
 particle docks on a cap and a cap is armed only through its bond (the `feed` relay). Then `PQ` can never be re-armed, and a
 genome must carry the energy gene to reproduce, as a real genome must encode its own metabolism.
