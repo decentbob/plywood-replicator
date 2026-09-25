@@ -6,7 +6,7 @@
 # follow the environment (tough letters under radiation, fast ones without)? TO_ctl_*: the same letters without the
 # trade-off (no resistance, full speed), for drift.
 cd "$(dirname "$0")/.."
-O=${OUT:-experiments/out}; P=${P:-4}; STEPS=${STEPS:-600000}
+O=${OUT:-experiments/out}; P=${P:-4}; STEPS=${STEPS:-150000}
 mkdir -p $O
 C="--steps $STEPS --every 20000 --maxBirthLog 600000 --W 40 --H 40 --nA 200 --nB 200 --nC 200 --nD 200 --nP 80 --nQ 80 --capFray 0.03 --pUnzip 1 --pUndock 0 --pFray 0.001 --seedCount 2 --feed 1 --relay 1 --endLoss 1 --bareCaps 1 --seedSeq PABACADBQ,PABADBCAQ --nE 60 --pReload 0.002 --pSoft 0.01"
 {

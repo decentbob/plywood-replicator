@@ -36,6 +36,10 @@ ranked shortlist at its end.
   settings (temperature, bands, cycles) may be tried but interest the user less. Theoretical work on self-replication
   (not only simulations) may hold a missing link; different replication modes (template chains and other assemblies)
   working together are worth exploring.
+- **Screen short, confirm long** (the user, 2026-09-25): most answers show in a fraction of a long run (in section 33 the
+  winner was clear within 50,000 of 500,000 steps). Screen many variants in 50,000 to 150,000-step runs, four at a time;
+  run long only to confirm a lead or to wait for slow or rare things (a gene decaying, a gene arising).
+- **Any block type is fine if it obeys locality** (the user, 2026-09-25, on product blocks and their functions).
 - **Prefer state changes to type changes.** When a block should become something else, give it an internal
   state and let a bonded side's state trigger the change (as energy particles recharge, as raw membrane is
   activated). The user explicitly disliked a precursor block turning into another type.
