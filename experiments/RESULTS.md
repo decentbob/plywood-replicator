@@ -1643,6 +1643,13 @@ classic valley between genes. Under radiation alone (`TD_rad5_1`, `_2`: plentifu
 (`CDC`, `PCDCQ`, `CDCD`), none with `ABA` as well; 15,103 capped births were five units long and ten were longer. With these
 mutation channels and population sizes a new gene of three letters does not arise inside a genome in a million steps.
 Seeded, it is kept; from nothing, it is not made.
+Part of the reason is the mutation spectrum: in a capped world almost only point mutations happen (a copy lies letter for
+letter on its template; insertions and deletions need a copy that bridges two templates, which is rare), so genome length
+hardly changes (15,103 of 15,113 capped births five units long). Ligation adds a local channel that changes length: a
+genome broken by radiation can have its pieces rejoined to other pieces (end joining, as cells repair double-strand
+breaks), giving duplications and deletions. With ligation 0.05 (`TD_lig_1`, `_2`, radiation only, fivefold mutation)
+length varies more (lengths 6 to 10 in 94 and 88 capped births, against 10 in all without it), but no genome carrying both
+genes was made in two million steps either (40 births with `CDC`, all sterile pieces).
 
 **Niches** (`band.sh`: radiation only in the left half of an 80×20 world, `radBand` 0.5, seeds `PABACDCQ` and `PABAQ`,
 1,000,000 steps, seed 1). Share of capped births carrying `CDC`, lit half (x < 40) against dark half, by 200,000-step window:
