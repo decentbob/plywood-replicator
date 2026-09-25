@@ -2074,3 +2074,81 @@ armed state follows the harvest spectrum where it differs most: with large fuel 
 a genome alone is limited by free letters, not by energy. What this says: shape decides how well a genome keeps itself armed;
 whether that decides who wins needs a competition where lineages take letters from each other, in a world large enough for
 hundreds of births per lineage (the next step in the handoff). One seed.
+
+## 40. Stacks: a second way to copy (`backCopy`, `stack`, `experiments/stacks.sh`, 2026-09-25)
+
+The user (2026-09-25): perhaps it is enough to get several different kinds of replication going, with mutation and a reason for
+selection, and mechanical designs should be enough. Every copy in this world so far is made on a face and released. This adds
+the growth-and-scission mode of crystals (Cairns-Smith's layered clays, Schulman–Yurke–Winfree's ribbons) with the same letters.
+**Two-faced letters** (`backCopy`): an armed letter's back templates too (it shows `KT_*`, as a face shows `TPL_*`); a free
+monomer of its kind docks there, and the copy lies parallel to its template (same sequence, same direction; a face copy lies
+reversed). **Stacks** (`stack`): a finished back copy is not released. It holds the back it was made on (`HOLD`), waits for
+energy like a released copy (every row costs as much as a copy), and once armed its own back templates the next row, so copies
+pile into a stack, a crystal of one sequence that grows row by row. A stacked bond melts at `pSMelt` / `pSMeltEnd` / `pSMeltRun`
+(no, one, two stacked lateral neighbours), so a row comes off by unzipping from its ends; `pSBind` zips a face back beside a
+stacked neighbour, `pSNuc` starts a new junction (a nucleation barrier when low). Stacked units do not fray (their face is held);
+with `stackHold` a unit holding a stacked row on its back does not fray either, and without it a stack's exposed bottom row frays
+like any strand (with processive fraying it goes whole), so the stack treadmills: it grows at the top and dies at the bottom. A
+stacked unit's broken lateral bond re-links where the row below continues, as a docked copy's does. Every rule is one block and
+its bonded partner.
+
+**It works.** Rows are exact copies of the row below (20 of 20 in a probe; `test.js`), stacks reach 3 to 26 rows, melt apart
+and regrow (a stack of `ABBABAAB` rows is a crystal striped by letter, one column per position). With re-zipping and no
+nucleation barrier, strands of different sequences that share a run of three letters in register bind face to back and hold,
+so two-letter stacks become mixed aggregates (the tallest stack of a probe had its commonest row in 3 of 13 rows); with four
+letters such matches are rarer.
+
+**Does stacking make length pay?** (Open two-letter world, 40×40, 256 of each letter, seeded `ABBABAAB` ×3, `pUndock` 0.05,
+processive fraying 0.0003, `pSoft` and `pCapture` 0.002; 60,000 steps unless noted; seeds 1, 2. Newborn length and births in the
+first and the last 15,000 steps, free letters at the end, tallest stack.)
+
+| arm | births first → last (15k) | newborn length first → last | free letters at end | tallest stack |
+|---|---|---|---:|---:|
+| plain (100k) | 65 → 527, 211 → 455 | 3.80 → 2.02, 3.17 → 2.09 | 384, 373 | – |
+| back copies released | 333 → 788, 401 → 664 | 3.14 → 2.20, 3.03 → 2.42 | 261, 292 | – |
+| stacks held, no zipping (100k) | 440 → 804, 396 → 866 | 2.44 → 2.06, 3.10 → 2.04 | 274, 275 | 4 |
+| held, zip 0.002, barrier | 440 → 762, 384 → 753 | 2.58 → 2.19, 3.03 → 2.17 | 264, 238 | 5 |
+| held, zip 0.005, barrier | 304 → 651, 462 → 821 | 3.25 → 2.51, 2.68 → 2.05 | 262, 278 | 4 |
+| held, zip 0.02, barrier | 160 → 390, 380 → 286 | 3.89 → 3.14, 2.75 → 3.49 | 166, 191 | 8 |
+| held, zip 0.03, barrier | 207 → 65, 157 → 54 | 3.34 → 4.52, 3.99 → 4.76 | 84, 69 | 11 |
+| held, zip 0.05, barrier | 127 → 32, 303 → 118 | 4.81 → 4.78, 2.88 → 3.54 | 66, 113 | 13 |
+| treadmill, no zipping | 253 → 783, 252 → 659 | 3.64 → 2.13, 4.03 → 2.41 | 281, 282 | 4 |
+| treadmill, zip 0.02, barrier | 310 → 715, 272 → 676 | 3.24 → 2.25, 3.49 → 2.44 | 286, 254 | 4 |
+| treadmill, zip 0.1, barrier | 302 → 693, 267 → 469 | 2.89 → 2.27, 3.48 → 2.67 | 259, 215 | 9 |
+| treadmill, zip 0.5, barrier | 279 → 333, 342 → 440 | 3.12 → 2.78, 2.84 → 2.76 | 197, 194 | 11 |
+| treadmill, zip 0.5, no barrier (aggregates) | 126 → 84, 134 → 64 | 4.13 → 4.37, 4.43 → 4.84 | 130, 131 | 26 |
+
+(Two runs held with zip 0.1 and 0.5 and no barrier locked up entirely: 16 to 22 free letters and 90 to 155 births by 50,000
+steps; stopped.) One regularity covers every row: **newborn length stays above about 3.5 only where stacks have locked up the
+letters** (free letters below about 190 of 512) **and births are falling** (to a third or a tenth of the start). Where stacks turn
+over, length falls to 2.0 to 2.8 as without them. Stacks hold length by hoarding, not by selection: a long row zipped into a
+stack is all but immortal (a row's stability grows steeply with its length), so the letters end up in stacks of long rows and
+the world slows toward a standstill. A knife edge lies between (zip 0.02 held: alive, length 3.1 to 3.5). Treadmilling stacks
+(the bottom row frays) never lock up at any zip rate tried, and do not hold length either: melting is not death (a row that
+comes off is a free strand, which copies on both sides at once), so short rows lose nothing by their stacks falling apart, and
+they copy faster.
+
+**Is a two-gene genome kept?** (The keep world of section 22: four letters, `ABACDC` ×3, feed, shield, relay; mild pressure
+(16 energy particles at 0.0004, radiation 3e-5) and none; 200,000 steps; stacks held, zip 0.02, barrier. Births of length 5 or
+more carrying both genes, first and last 50,000 steps; last birth of `ABACDC`.)
+
+| run | plain: both genes, first → last | plain: last `ABACDC` | stacks: both genes | stacks: last `ABACDC` |
+|---|---|---:|---|---:|
+| mild, seed 1 | 76% → 50% | 194,071 | 77% → 55% | 198,786 |
+| mild, seed 2 | 40% → none long | 76,072 | 67% → 26% | 164,573 |
+| none, seed 1 | 46% → 21% | 196,881 | 49% → 4% | 162,745 |
+| none, seed 2 | 27% → 0% | 78,279 | 83% → 18% | 191,999 |
+
+Stacks kept the two-gene genome much longer in seed 2 of both environments and made no difference (or a small loss) in seed 1.
+Inconclusive. Also new: on the current engine the plain world keeps `ABACDC` far longer than section 22 found (last births at
+76,000 to 197,000 steps, and half of the long births still carry both genes after 200,000 steps in one mild run), so section 22's
+"lost in 6 of 6" does not carry over to this engine and these rates (22 ran 1,000,000 steps on the old engine).
+
+What this says: a second mode of replication, crystal growth with scission, comes out of two local rules on the same letters,
+copies exactly, and lives beside strand copying (stacks shed free strands from their bottom face; a free strand founds a stack on
+its back). By itself it does not break regularity 1: a stack's rows are protected, but protection that makes long rows immortal
+locks up the world, and protection that lets stacks turn over leaves short rows free to win. What it does not say: whether
+stacks pay where something else punishes free strands (radiation breaks free strands while stacked rows re-link; that is untested
+here), whether kin aggregation (the no-barrier arm, with four letters) makes stacks into groups of genes that are selected
+together, or whether shape-limited stacks (rows of wedge letters are squeezed more with every row on their concave side, so a
+stack would snap at a height set by its sequence) give scission a sequence-set rate. Two seeds per arm.

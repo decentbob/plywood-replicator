@@ -106,6 +106,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
       <span><i style="background:#e565d1"></i>K wants energy</span><span><i style="background:#ff9f1c"></i>K charges / L,R feed</span>
       <span><i style="background:#ffffff"></i>bond</span><span><i style="background:#c58cff"></i>L/R bound to a strand</span><span><i style="background:#ff3b3b"></i>L/R fraying</span>
       <span><i style="background:#ffe066"></i>E charged</span><span><i style="background:#4a4f55"></i>E spent</span>
+      <span><i style="background:#2fd4c4"></i>K templates (stacks)</span><span><i style="background:#8fb4ff"></i>F held on a back</span>
       <span><i style="background:#6d6a8f"></i>G droplet</span><span>/ mirror letter</span>
     </div>
     <div id="inspect" class="inspect" hidden></div>
@@ -126,6 +127,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="evo" selected>Preset: evolution</option>
           <option value="cells">Preset: cells (strands grow their own walls)</option>
           <option value="genomes">Preset: capped genomes (telomeres; energy and shield genes)</option>
+          <option value="stacks">Preset: stacks (two-faced letters; copies pile into crystals that grow and split)</option>
           <option value="random">Preset: random chemistry (a random rule table; change the table seed)</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -185,7 +187,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1, backCopy: false, stack: false, pSBind: 0, pSNuc: -1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -196,6 +198,9 @@ const PRESETS = {
 // fast and caps slowly, caps are armed only through their bond (bareCaps), so a genome needs the energy gene ABA to re-arm;
 // radiation breaks strands, and the shield gene CDC (with the relay) protects the whole genome.
 PRESETS.genomes = Object.assign({}, ZERO, { W: 40, H: 40, nA: 200, nB: 200, nC: 200, nD: 200, nP: 120, nQ: 120, nE: 60, pReload: 0.002, capFray: 0.03, pUnzip: 1, pFray: 0.001, seedSeq: 'PABACDCQ,PABAQ', seedCount: 3, pSoft: 0.002, pCapture: 0.002, feed: true, shield: true, relay: true, endLoss: true, bareCaps: true, pBreak: 0.00003 });
+// "stacks": two-faced letters. A strand's back templates too, and a finished back copy stays on it as a new row, so copies pile into
+// stacks (crystals of one sequence) that grow row by row and lose rows by melting; a melted row can zip back, strangers rarely bind.
+PRESETS.stacks = Object.assign({}, ZERO, { W: 40, H: 40, nA: 256, nB: 256, nE: 60, seedSeq: 'ABBABAAB', seedCount: 3, pUndock: 0.05, pSoft: 0.002, pCapture: 0.002, pFray: 0.0003, pUnzip: 1, backCopy: true, stack: true, pSBind: 0.02, pSNuc: 0 });
 // "random": the rule table replaced by a random one (src/rchem.js): side colours, colour attractions and state switches drawn from
 // the table seed. Fill: the block's type, lighter by state; side lines: the colour each side shows.
 PRESETS.random = Object.assign({}, ZERO, { mode: 'random', W: 30, H: 30, nE: 0, seedCount: 0, chemSeed: 1, K: 3, NS: 3, NC: 4, pAff: 0.3, pRule: 0.2, pRuleFree: 0.05, pInert: 0.3, rBreak: 0.0002, nEach: 80 });
@@ -273,6 +278,12 @@ const KNOBS = [
   ['proof', 'BDB motif proofreads', 'a D between two Bs (proofMotif) flags its face (with the relay, its whole strand): a wrong monomer docked there lets go before it links', 'bool'],
   ['pProof', 'p proofread', 'per step a wrong monomer on a flagged face lets go'],
   ['pReload', 'p reload per step', 'OFF→ON background energy income'],
+  ['grp', 'Stacks (a second way to copy)'],
+  ['backCopy', 'backs template', 'two-faced letters: an armed letter\'s back templates too; the copy made there lies parallel (same sequence)', 'bool'],
+  ['stack', 'back copies stay', 'a finished back copy keeps holding the back it was made on and, once armed, templates the next row: stacks', 'bool'],
+  ['pSBind', 'p zip', 'per step a face beside a stacked neighbour binds the back below it again (a melted row zips back)'],
+  ['pSNuc', 'p new junction', 'the same for a face with no stacked neighbour (a strand joins a stack); -1 as p zip'],
+  ['pSMeltEnd', 'p melt, row end', 'per step a stacked unit with one stacked neighbour lets go (a row unzips from its ends)'],
   ['grp', 'Physics'],
   ['sigma', 'jostle', 'Brownian step per square'],
   ['sigmaRot', 'jostle rotation'],
@@ -387,7 +398,7 @@ const SIDECOL = {};
 const RPAL = ['#000', '#ff4d4d', '#ffd84d', '#4dff88', '#4dd2ff', '#b84dff', '#ff4dd2', '#ffffff', '#ff9f1c', '#9fff1c', '#1c9fff'];
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66'; SIDECOL[S.TRN_MM] = SIDECOL[S.TRN_LF] = SIDECOL[S.TRN_RF] = '#ffb3de'; SIDECOL[S.PBIND] = '#ff8fc8'; SIDECOL[S.GRIP] = '#c9a227'; SIDECOL[S.FUEL] = '#f3a712'; SIDECOL[S.GIVE] = '#fff3b0'; SIDECOL[S.SPENT] = '#5a4a2a';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66'; SIDECOL[S.TRN_MM] = SIDECOL[S.TRN_LF] = SIDECOL[S.TRN_RF] = '#ffb3de'; SIDECOL[S.PBIND] = '#ff8fc8'; SIDECOL[S.GRIP] = '#c9a227'; SIDECOL[S.FUEL] = '#f3a712'; SIDECOL[S.GIVE] = '#fff3b0'; SIDECOL[S.SPENT] = '#5a4a2a'; SIDECOL[S.KT_MM] = SIDECOL[S.KT_LF] = SIDECOL[S.KT_RF] = '#2fd4c4'; SIDECOL[S.HOLD] = '#8fb4ff';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {
