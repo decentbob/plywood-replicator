@@ -2027,3 +2027,19 @@ needs ten captures, two contacts each, and a capped genome lives about 16,000 st
 longer only locks the letters up (templates pile up, births stop). So these races are small and dying: a lead that fold and
 fuel size select sequences, not a result. Next: fuel as a supplement to scarce ordinary energy (`PS_*`), so every genome lives
 and shape gives a graded advantage.
+
+**Fuel as a supplement** (`PS*`: the capped race world with scarce ordinary energy underneath, 16 particles at reload 0.0004,
+plus 120 fuel particles; `foldA` 45, `foldB` 30; 200,000 steps, 2 seeds). Births of each lineage in the last 50,000 steps
+(`PAABBAABBQ` / `PABABABABQ` / `PAAAABBBBQ`):
+
+| world | seed 1 | seed 2 |
+|---|---|---|
+| no fuel | 11 / 27 / 0 | 5 / 23 / 7 |
+| fuel 0.5 | 1 / 7 / 8 | 19 / 5 / 1 |
+| fuel 0.85 | 2 / 5 / 3 | 2 / 5 / 7 |
+| fuel 1.2 | 0 / 6 / 17 | 5 / 12 / 2 |
+
+Every world lives now. Without fuel `ABABABAB` wins in both seeds (the folded runs of `AAAABBBB` copy worst); with fuel the
+outcome changes, but not the same way in the two seeds. Inconclusive: 5 to 30 births per lineage per window is drift's
+territory (regularity 10). What would decide it: fitness measured apart from drift, each genome alone (a monoculture) in each
+environment, births per step at steady state; then competitions in worlds large enough for hundreds of births per lineage.
