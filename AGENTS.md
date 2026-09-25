@@ -12,7 +12,9 @@ more mechanically could get somewhere interesting.
 
 Read in this order: this file, `README.md` (rules and physics as they stand), `experiments/RESULTS.md`
 section 20 "Summary" and the latest sections, `DESIGN.md` sections 2 (commitments), 14 (decision log, newest
-entries near the end of the list), 15 (ideas not yet tried).
+entries near the end of the list), 15 (ideas not yet tried). `LITERATURE.md` (2026-09-25): a survey of self-replication
+work (Penrose blocks, tile crystals, von Neumann, Hutton, chemoton, hypercycles, gene origin) mapped onto this world, with a
+ranked shortlist at its end.
 
 ## The user's rules (hard constraints and preferences)
 
