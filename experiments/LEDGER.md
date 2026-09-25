@@ -170,6 +170,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 40b | Do stacks make length pay? | Is newborn length held in an open two-letter world with held stacks? | `stack`, `stackHold`, `pSBind` 0 to 0.05, `pSNuc` 0 | negative | length ≥ 3.5 only where letters lock up (free < 190 of 512) and births fall 3–10×; turning over, 2.0–2.5 as plain | stacks.sh (`ST_hold_*`) | hoarding is not selection | knife edge at zip 0.02 (alive, 3.1–3.5); 2 seeds |
 | 40c | Treadmilling stacks | Same with stack bottoms fraying (they grow at the top, die at the bottom)? | `stack`, `stackHold` off, `pSBind` 0 to 0.5 | negative | never lock up; length 2.1–2.8 at every zip rate; with aggregation (no barrier) 4.4–4.8 but letters locked again | stacks.sh (`ST_tread_*`) | stacks where free strands are punished (radiation) | melting is not death: a row that comes off copies at once |
 | 40d | Stacks keep a two-gene genome? | Is `ABACDC` kept longer with stacks (section 22 world)? | `stack` (held, zip 0.02) with `feed`, `shield`, `relay` | inconclusive | seed 2: plain lost it by 76–78k, stacks kept it to 165–192k; seed 1: no difference | stacks.sh (`ST_K*`) | more seeds | the plain world now keeps it far longer than section 22 said |
+| 40e | Stacks under radiation | Do stacks keep a population alive where radiation kills it, and does length then pay? | `stack`, `pBreak` 3e-5 to 3e-4 | works | at 3e-4 plain extinct (2 of 2), stacks ~600 births per 15k; at 1e-4 births doubled; length 2.0 everywhere | stacks.sh (`ST_rad*`) | stacking as a heritable letter trait | a mechanical shield, not a reason for length |
+| 40f | Shape-limited stacks | Do wedge rows limit stack height? | `stack`, `bendA` 0 to 20 | negative | heights 6–10 at 0–10°; 15° and more: no copying at all | probe (RESULTS 40) | — | geometry is a switch again |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -182,7 +184,7 @@ the rows that used it). Rerun it after adding rows.
 |---|---|
 | `backCopy` | 40a (works) |
 | `bareCaps` | 33b (works), 33d (works) |
-| `bendA` | 15c (lead) |
+| `bendA` | 15c (lead), 40f (negative) |
 | `bendB` | 15c (lead), 15d (works) |
 | `bindAny` | 36a (works), 36b (works) |
 | `bodyJostle` | 37 (works) |
@@ -238,7 +240,7 @@ the rows that used it). Rerun it after adding rows.
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial) |
 | `nX` | 25b (works), 25d (negative) |
 | `pBindP` | 34c (works) |
-| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive) |
+| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (works) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial) |
@@ -277,7 +279,7 @@ the rows that used it). Rerun it after adding rows.
 | `slack` | 10b (superseded), 12 (works) |
 | `snapCorners` | 23 (works), 23b (works) |
 | `spend` | 14d (negative) |
-| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive) |
+| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (works), 40f (negative) |
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiffA` | 15 (works), 15b (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |

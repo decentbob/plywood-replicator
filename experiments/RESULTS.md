@@ -2144,6 +2144,23 @@ Inconclusive. Also new: on the current engine the plain world keeps `ABACDC` far
 76,000 to 197,000 steps, and half of the long births still carry both genes after 200,000 steps in one mild run), so section 22's
 "lost in 6 of 6" does not carry over to this engine and these rates (22 ran 1,000,000 steps on the old engine).
 
+**Under radiation** (`ST_rad*`: the open world above with `pBreak` 3e-5, 1e-4, 3e-4; plain against treadmilling stacks, zip 0.1
+and 0.5, barrier; 60,000 steps, seeds 1, 2; births in the last 15,000 steps, newborn length):
+
+| radiation | plain | stacks, zip 0.1 | stacks, zip 0.5 |
+|---|---|---|---|
+| 3e-5 | 513, 507 births; length 2.10, 2.08 | 602, 593; 2.32, 2.36 | 493, 452; 2.32, 2.57 |
+| 1e-4 | 433, 365; 2.00, 2.14 | 776, 794; 2.05, 2.03 | 662, 690; 2.11, 2.02 |
+| 3e-4 | extinct, extinct | 602, 619; 2.06, 2.01 | 618, 619; 2.00, 2.00 |
+
+A stacked row re-links where radiation breaks it, so stacks are a mechanical shield: they keep a population alive where the plain
+world dies (2 of 2 seeds at 3e-4) and double its births at 1e-4. They do not make length pay here either: inside stacks the
+dimer still wins. A reason to select the stacking mode itself, if it were heritable (a letter trait), not a reason for length.
+
+**Shape-limited stacks** (probe: rows of `A` only, `bendA` 0 to 20°, strong zipping, 15,000 steps, 2 seeds): tallest stacks 8 to
+10 rows at 0°, 6 to 7 at 5° and 10°; at 10° rows are made five times more slowly, and at 15° and 20° nothing is copied at all.
+Geometry acts as a switch (regularity 7), not as a sequence-set height; the idea is not worth pursuing in this form.
+
 What this says: a second mode of replication, crystal growth with scission, comes out of two local rules on the same letters,
 copies exactly, and lives beside strand copying (stacks shed free strands from their bottom face; a free strand founds a stack on
 its back). By itself it does not break regularity 1: a stack's rows are protected, but protection that makes long rows immortal

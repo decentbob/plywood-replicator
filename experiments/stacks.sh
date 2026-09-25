@@ -26,6 +26,7 @@ echo "ST_Kmild_plain_$sd --seed $sd $K --nE 16 --pReload 0.0004 --pBreak 0.00003
 echo "ST_Kmild_stk_$sd --seed $sd $K --nE 16 --pReload 0.0004 --pBreak 0.00003 $S --stackHold 1 --pSNuc 0 --pSBind 0.02"
 echo "ST_Knone_plain_$sd --seed $sd $K --nE 60 --pReload 0.002"
 echo "ST_Knone_stk_$sd --seed $sd $K --nE 60 --pReload 0.002 $S --stackHold 1 --pSNuc 0 --pSBind 0.02"
+for b in 0.00003 0.0001 0.0003; do echo "ST_radplain_b${b}_$sd --seed $sd --steps 60000 $A --pBreak $b"; echo "ST_radtread1_b${b}_$sd --seed $sd --steps 60000 $A $S --pSNuc 0 --pSBind 0.1 --pBreak $b"; echo "ST_radtread5_b${b}_$sd --seed $sd --steps 60000 $A $S --pSNuc 0 --pSBind 0.5 --pBreak $b"; done
 done
 } | xargs -P $P -L 1 sh -c 'name=$0; node run.js "$@" --births '$O'/$name.births.jsonl --save '$O'/$name.state.json > '$O'/$name.csv 2> '$O'/$name.json'
 echo STACKSDONE
