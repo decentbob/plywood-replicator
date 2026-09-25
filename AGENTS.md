@@ -10,7 +10,8 @@ The working name *plywood replicator* is after the Penroses' self-reproducing wo
 inspiration: passive units, shaken, that copy a seed, with the logic in their mechanics. The user (2026-09-25): thinking
 more mechanically could get somewhere interesting.
 
-Read in this order: this file, `README.md` (rules and physics as they stand), `experiments/RESULTS.md`
+Read in this order: this file, `experiments/LEDGER.md` (every experiment with its verdict, the regularities that predict
+outcomes, the viability atlas, the knob index, open gaps), `README.md` (rules and physics as they stand), `experiments/RESULTS.md`
 section 20 "Summary" and the latest sections, `DESIGN.md` sections 2 (commitments), 14 (decision log, newest
 entries near the end of the list), 15 (ideas not yet tried). `LITERATURE.md` (2026-09-25): a survey of self-replication
 work (Penrose blocks, tile crystals, von Neumann, Hutton, chemoton, hypercycles, gene origin) mapped onto this world, with a
@@ -130,7 +131,8 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80�
 
 - Workflow that worked (2026-09-25): state the question, screen 2 seeds × a few variants in 50,000–150,000 steps with
   `tools/queue.sh` (outputs in the scratchpad), look with `peek.js` while they run, add a same-seed control, then run long
-  only what earns it; write the RESULTS section (what it says, what it does not) and a LEDGER row, commit, move on. Copy
+  only what earns it; write the RESULTS section (what it says, what it does not) and a LEDGER row (then
+  `node tools/ledger_index.js`; revise a regularity if the result breaks one), commit, move on. Copy
   outputs into `experiments/out/` when done (a stop hook complains about files changing under git mid-run).
 - Check a new world lives before measuring anything in it: many screens this session were wasted on worlds that died at
   once (radiation too strong, too few caps, a seed that makes no product). A 20,000-step look with `peek.js` catches it.

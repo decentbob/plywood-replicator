@@ -1,0 +1,263 @@
+# Experiment ledger
+
+What has been tried in this world, what happened, and what it predicts. For an agent starting work: read the
+regularities first (they say what will probably happen to a new idea), then the viability atlas (so a new world lives),
+then look up the mechanisms you plan to use in the table and the knob index. Add a row for every new experiment, and
+revise a regularity when an experiment breaks it. Details are in `RESULTS.md` (section numbers in the first column).
+
+Verdicts: **works** (did what was asked, measured) · **negative** (tested, did not happen or was selected against) ·
+**inconclusive** (ran, data cannot decide) · **lead** (promising, too few seeds or steps) · **partial** (not finished) ·
+**superseded** (replaced by a later mechanism or engine). Sections 1–14 ran on the rigid engine (removed 2026-09-23).
+
+## Regularities (what predicts outcomes here)
+
+Each is backed by the rows cited; treat it as a strong prior, not a law.
+
+1. **Shortest wins unless something makes length pay.** Every open population shrinks toward the smallest viable
+   replicator: dimers (3, 4, 5b, 19d), `CDC` alone (19), `PQ` (33a), the minimal `AA` cooperator (36c), and catalysis does
+   not change it (34d). Length has held only with cooperative docking plus processive fraying (13b, 15b), ligation
+   balanced by fraying (3b, 27b: accumulation, not function), or a gene that removes the cost of length (33i, 33j).
+2. **Any viable fragment of a genome defeats a genome that needs several genes.** (22, 19d, 33a'.) Make pieces
+   sterile first (end loss on capped strands, 33a–d), and make the smallest viable genome already carry one gene (bare
+   caps, 33b), or genes will not accumulate.
+3. **A gene pays only where its pressure acts, and only if the benefit stays with its carrier.** Private goods are
+   selected (feed 14b, shield 19, relay 19c, 33b); public goods are not, in any world size or mobility tried (9, 14, 17,
+   21); a shared catalyst feeds parasites, which take the majority but not everything (36a, 36b); graded specificity
+   (a good that favours kin) holds parasites down (36c).
+4. **Without its pressure a gene decays by point mutation, slowly** (shield 74 → 32% of births over 500k steps, 33c):
+   genes are kept for a few hundred thousand steps after their pressure ends.
+5. **New genes need raw material: length variation comes from density, not population size.** At ordinary density
+   genome length almost never changes (1–2% of capped births) and no gene arose in 7 million-step runs up to 240 genomes
+   (33f); at 400 letters of each kind length varies ten times as often (33h) and the shield gene arose in 3 of 3 seeds
+   (33i). Duplications come from copies bridging two templates, which crowding makes common (28c, 33h).
+6. **Once shielded, genomes expand** (5 → 11–13 units) where monomers are plentiful; not without the shield rule, not at
+   200 letters (33i, 33j). A cost removed lets length drift up: raw material for further genes.
+7. **Geometry acts as a switch, not a gradient.** Wedge letters stop copying outright (15c, 35: `bendC` 15° never
+   copied); a strongly wedged letter is purged, a mild one kept apart from its own kind (15d); folding letters copy
+   exactly (28b); a folding product straightens as it binds, so its free shape has no effect (34e). Mixed sizes break
+   copying (28). Slow letters copy about five times slower (35). Stiffness below ~0.3 lets neighbouring copies link.
+8. **Walls and compartments have not paid in any form** (11b, 12b, 16, 16b–d, 24, 24b, 25d): they are slow to build,
+   seal only when everything is slow, shut copies in, and walled worlds died. Parked, not disproved.
+9. **Recognition between strands has not given specificity** (18, 18b, 26, 26b): with two letters binding is
+   self-complementary (autoimmune cutters); with four, partners rarely meet.
+10. **Small populations are drift-dominated.** Below about 100 births per 50,000 steps, composition effects are
+    swamped (35); founder make-up inflates "× chance" (always compare with a same-seed control).
+11. **Most answers show early.** Winners were clear within 50,000 of 500,000 steps (33b); run long only for slow decay
+    or rare events (33c, 33i).
+
+## Viability atlas (will a new world live?)
+
+- **Copying speed**: about 1,200 steps/s at 40×40 with ~540 blocks on an idle core, 800 at 60×60 with 1,100, 100–300 at
+  80×80 with 4,000+; four runs at once each slow by roughly a third. Capped four-letter worlds of 1,000–1,700 blocks run
+  at 150–400 steps/s.
+- **Radiation** (`pBreak`): capped 8–9-unit genomes without a shield die at 5e-5 (35); with the relayed shield they
+  live at 3e-5 (33b); unshielded capped worlds need ≤ 1e-5 to 2e-5 (35). Per-bond: long genomes pay more.
+- **Caps** (40×40): 30 or 60 of each kind die out under radiation 3e-5 (33h); 120 live. **Letters**: 100 of each die,
+  200 live, 400 give length variation (33h). Uncapped two-letter worlds: 150–256 of each is typical.
+- **Energy**: 60 particles at reload 0.002 is plentiful; 16 at 0.0004 is scarce (limits births, selects `ABA` with
+  feed); 12 at 0.0003 plus radiation collapses populations (19, 22).
+- **Turnover is required**: without fraying or another death, templates lock up material and copying stops (1, 28c,
+  34 probes). Capped worlds need open ends fragile (`pFray` 0.001) and caps not (`capFray` 0.03) (33).
+- **Seeds must be viable under the rules**: a translation seed needs adjacent coded letters or it makes no product
+  (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
+- **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold; iters 8 adds about 2% copy errors (33, DESIGN 15).
+
+## Experiments
+
+| § | Experiment | Question | Mechanism / knobs | Verdict | Key number | Script | Points to | Notes |
+|---|---|---|---|---|---|---|---|---|
+| 1 | Exact template copying | Do local rules copy a seed exactly? | every soft knob 0 (`pSoft`, `pCapture`, `pFray`) | works | 29 and 36 births, all exact (2 seeds, 30k steps) | test.js | material lockup without turnover (2) | Rigid engine (removed 2026-09-23); still checked by test.js |
+| 2 | One variation source each | What does each soft knob do alone? | `pSoft`, `pCapture`, `pFray` | works | `pFray` alone: 4,027 births vs 83, length collapses to 2.06 | regimes.sh | what holds length up (3) | Rigid engine (removed) |
+| 3 | Energy supply vs length | Does the energy regime hold length up? | `energyMode` unit/strand, `nE`, `sun` | negative | mean length 2.45 to 2.75 in every setting | length_selection.sh | cooperativity (5) | Rigid engine (removed); strand mode and sun patch later removed |
+| 3b | Ligation equilibrium | Does ligation keep long strands in an open population? | `pLigate` 0.005, 0.02 | lead | mean length 4.66, max 19, 46 seqs at 0.02 | length_selection.sh | ligation plus cooperative docking | Rigid engine (removed); one seed; chemistry, not selection |
+| 4 | Dimer vs 6-mer race | Which wins head to head? | `energyMode`, `nE`, `pFray` | negative | dimers out-copy 6-mers 10:1 to 69:1 | competition.sh | cooperative docking (5) | Rigid engine (removed); 2 seeds per setting |
+| 5 | Cooperative docking race | Does an unstable lone monomer favour long templates? | `pUndock` | works | race flips at 0.02 to 0.05; 1:9 for the 6-mer at 0.1 (2 seeds) | cooperativity.sh | evolutionary regime (5b) | Rigid engine (removed) |
+| 5b | Undocking with turnover | Does undocking lift length in an open population? | `pUndock`, `pSoft`, `pCapture`, `pFray` | negative | 2.28 at 0.02; at 0.1 one seed died, the other 3.39 | cooperativity.sh | fraying vs density vs undocking; unzip (13) | Rigid engine (removed); 2 seeds |
+| 7 | Seedless origins | Does replication start with no seed? | `pSpont` | works | first birth after 1,063 to 15,015 steps in 6 of 6 runs | channels.sh (`O_`) | dimers dominate what emerges | Rigid engine (removed) |
+| 8 | Radiation, unequal resistance | Does bond toughness select content? | `pBreak`, `resB`, `pLigate` | works | tough B 26–29% of births vs 4–7% in control (3 seeds) | channels.sh (`X_`) | length stays 2 | Rigid engine (removed) |
+| 9 | Public energy motif | Is an `ABA` charging motif selected? | `motif`, `pReload` 0 | negative | `ABA` 0.015–0.025 per block in both arms | channels.sh (`M_`) | benefit must stay with carrier (space, compartments) | Rigid engine (removed); 2 seeds |
+| 10 | Hinged rings | Do hinged chains close into rings? | `hinge`, `hingeMax`, `pLigate`, `pBreak` | superseded | 4-unit sterile rings; ~40 seqs, 4.4–5.0 bits (3 seeds) | rings.sh, rings2.sh | folding letters (28) | Rigid engine (removed); hinge removed, scripts deleted |
+| 10b | Corner slack | Does trapezoid slack help copying? | `slack` | superseded | 0.1: births +25%, exact; 0.2: chimeras | rings.sh, rings2.sh | polygon softness (15) | Rigid engine (removed); 2 seeds, 20k steps |
+| 11 | Membrane self-assembly | Do M blocks assemble into rings? | `nM`, `memAngle`, `memFlex`, `resM` | superseded | 41 rings of ~6 by 100k steps (60°) | membranes.sh | polygon membrane wedges (15) | Rigid engine (removed); script deleted |
+| 11b | Enclosure by chance (rigid) | Do rings close around strands? | `nM`, `pBreak`, `resM`, `pSpont` | negative | no ring ever held a strand | membranes.sh | M nucleating on strands | Rigid engine (removed); script deleted |
+| 12 | Preset choice: turnover | Which turnover keeps strands long and diverse? | `pFray`, `pBreak`, `resB`, `pUndock`, `pLigate`, `slack` | works | fraying + ligation: length 4.33, 40 seqs; radiation: 2.3–2.5 | presets.sh | "evolution" preset | Rigid engine (removed); one run each, script deleted |
+| 12b | Larger rings, protocells | Do larger rings enclose strands? | `memAngle` 30°, 22.5°, `motif` | inconclusive | 14-block rings hold a strand ~1 per sample | presets.sh | membrane nucleation on strands | Rigid engine (removed); one run each |
+| 13 | Deletion ratchet | Does end fraying keep strands short? | `pFray`, `pUndock` | works | 1,092 frays for 602 births; length ≤ 3.7 | unzip.sh | processive fraying (13b) | Rigid engine (removed); one seed each |
+| 13b | Processive fraying | Do unzip + cooperative docking select length? | `pUnzip`, `pUndock`, `pFray` | works | mean length 4.0–5.4 vs 2.3 with either rule alone (3 seeds) | unzip.sh | does sequence pay (14) | Rigid engine (removed); held on polygons (15) |
+| 14 | Public motif, energy varied | Is a public `ABA` selected when energy is plentiful or scarce? | `motif`, `mobE`, `nE`, `pReload` | negative | 1.3–1.9x chance vs 1.7 in control (scarce) | motif.sh | private motif | Rigid engine (removed); 2 seeds |
+| 14b | Private energy motif | Is a motif that feeds its own strand selected? | `feed`, `pSoft`, `pCapture` | works | 1.7x control; 0.146–0.192 vs 0.050–0.101 per block (4 seeds, no overlap) | long.sh | alternation emerges; environment change | Rigid engine (removed); 200k probe inconclusive |
+| 14c | Environment shift | Does a population adapt when energy turns scarce? | `feed`, `--change pReload` | works | motif 3.8–5.0x chance after switch vs 0.4–1.3 control | shift.sh | — | Rigid engine (removed); 2 seeds |
+| 14d | Spend rule | Does re-arming per copy make the motif pay? | `spend`, `feed` | negative | faithful births 47–56% vs 72% | long.sh (`L1S_`) | rule removed | Rigid engine (removed) |
+| 15 | Polygon engine copying | Do deformable polygons copy exactly? | `physics` poly, `stiffA` | works | exact at stiffness ≥ 0.5; 18 unfaithful at 0.05 | poly_probe.js | — | 2 seeds, 20k steps |
+| 15b | Length selection on polygons | Does section 13 hold on polygons? | `pUnzip`, `pUndock`, `stiffA` | works | 3.83, 3.70 at `pUndock` 0.1 and 4.85 at 0.2 vs 2.50 | poly_probe.js | — | `PZ_` runs; 1–2 seeds per setting |
+| 15c | Shape probes | Does block shape affect copying? | `bendA`, `bendB`, `shapeA` oct | lead | B bend 30°: 0 births; 10°: faster than square | poly_probe.js | shape selection test | 2 seeds, 20k steps |
+| 15d | Shape selects sequence | Does a wedge-shaped letter change genomes? | `bendB` (20°, 10°) | works | strong wedge: B 2–8% of newborn blocks vs 50%; mild: `BB` 0.02–0.04x chance | shape.sh | — | 2 seeds each |
+| 16 | Compartments by chance | Do rings hold strands long enough to matter? | `nM`, `memAngle`, `pBreak`, `resM` | negative | up to 10 rings with strands, but rings open far within a generation | encl.sh | ring division | One seed each |
+| 16b | Ring growth and split | Do opened rings grow and divide on their own? | `nM`, `memAngle`, `pBreak` | negative | ring sizes 8–18, never 22 | ring_growth.js | membrane made continuously | — |
+| 16c | Membrane made by strands | Does `make` put rings around their makers? | `make`, `pMemDecay` | negative | anchored: 395 of 400 blocks active by 40k steps | make_probe.js | tether (24) | — |
+| 16d | Division by overgrowth | Does an overgrown ring pinch in two? | `memAngle`, `stiffM` | negative | no ring pinches (12–20 blocks) | ring_shape.js | strain limit (23) | — |
+| 17 | Space and a public good | Does a larger world keep the public motif? | `motif`, `mobE`, `W`, `H` | inconclusive | small world collapses 2 of 3; 80x80 sustained 4 of 4 | space.sh | slow polymers (21) | Rescue mostly size; space not shown |
+| 18 | Lock-and-key binding | Does strand binding keep diversity high? | `pHyb`, `pMelt` | negative | 18 seqs vs 30–33 in control at `pHyb` 0.2 | binding.sh | longer key (18b) | 2 seeds |
+| 18b | Zipper binding | Is there a window where only perfect matches hold? | `pMeltEnd` | negative | 13.7 perfect vs 12.7 random bound at 0.004 | binding.sh | longer strands or larger alphabet | Parked, knobs off |
+| 19 | Shield gene | Does radiation select `CDC`? | `shield`, `pBreak`, `nC` | works | `CDC` 13–21x chance (G_rad_1); 8–11x both seeds with relay | genes.sh | two genes in one genome | Round 1 one seed |
+| 19b | Energy gene, four letters | Does scarce energy select `ABA`? | `feed`, `nE`, `pReload` | inconclusive | rose to 6–11x in one seed, then lost; never in the other | genes.sh | narrow energy band | 2 seeds |
+| 19c | Relay | Does a relayed gene pay for genome length? | `relay`, `feed`, `shield` | works | shield genomes 2.8–3.4 units vs 2.5 without relay | genes.sh | both genes (19d) | 2 seeds |
+| 19d | Both genes, ligation, band | Do genomes accumulate both genes? | `relay`, `pLigate`, `nE`, `pBreak` | negative | both-gene genomes ≤ 8% of long births, gone by the end | genes.sh, motifs.js | compartments (stochastic corrector) | Band search one seed per cell |
+| 21 | Slow polymers | Does limited dispersal rescue the public motif? | `mobS`, `motif`, `mobE` | negative | motif lost in 1 of 3 runs at every mobility | viscous.sh, assort.js | larger world; droplets (31) | Small worlds, ~100 strands |
+| 22 | Keeping a two-gene genome | Is a seeded `ABACDC` kept? | `feed`, `shield`, `relay` | negative | last `ABACDC` birth at 13k to 222k steps, 6 of 6 runs | keep.sh | fragment problem: longer minimum replicator or compartments | 2 seeds per environment |
+| 23 | Snapped corners, copying | Can bonds be flush and strain-limited with exact copying? | `snapCorners`, `maxStrain`, `maxStrainStrand` | works | 140 and 159 births, none unfaithful (4 seeds) | arc_split.js | — | Any break inside a copy wrecks fidelity; polygon-exact contacts removed |
+| 23b | Membrane division by strain | Does an overlong arc split into rings? | `maxStrain`, `snapCorners`, `stiffM` | works | arc of 24: two rings in 15 of 20 seeds | arc_split.js | do contents split | `pSwap` tried and removed |
+| 24 | Tethered walls | Do tethered walls enclose their makers? | `tether`, `make`, `memPerm` | negative | rings with strands 0–1.2 vs 1.4–2.3 fixed stock | cells.sh, tether_probe.js | do walls pay (24b) | 3 seeds |
+| 24b | Do walls pay | Is wall-making (`BAB`) selected? | `tether`, `motif`, `memLinkTol`, `nE` | negative | `BAB` falls to ~0.1x chance with walls vs ~2x without | walls.sh | sealing walls (25) | Walls leaked (25): measured cost only |
+| 24c | Wall closure | Can a wall close around its maker? | `memLinkTol`, `stiffM`, `memAngle` | works | 20 of 20 closed at catch 0.3, ~12k steps | closure.js | wall selection round 2 | 20 seeds per row |
+| 25 | Sealing walls | What lets a closed ring keep particles in? | `mobM`, `mobE`, `mobS` | works | membrane 0.5 + energy 0.2: 0 of 3 out | leak.js | rays as particles | 3 particles per test |
+| 25b | Rays as particles | Does a closed ring shield its contents? | `nX`, `rayHit`, `sizeX`, `mobX` | works | 0 hits inside vs 594 outside | ray_shield.js | wall selection with rays | — |
+| 25c | Closure at sealing mobilities | Which makers close walls when things move slowly? | `mobM`, `mobS`, `memLinkTol` | works | `BAB` 19 of 20 closed, `ABBABA` 4 of 20 | closure.js | cell size limits genome length | 20 seeds per row |
+| 25d | Walls against rays | Are walls selected under rays? | `tether`, `nX`, `rayHit`, `mobM` | negative | walled worlds extinct 3 of 3; unwalled live as dimers | rays.sh | compartments parked | 3 seeds each |
+| 26 | Cutting, two letters | Is a cutter motif selected? | `cut`, `cutMotif`, `pCut`, `pHyb`, `mobS` | negative | `BAB` ends at 0.1–0.2x chance in all 3 cutting runs | cut.sh, who_cuts.js | four letters (cutter autoimmune) | 3 seeds |
+| 26b | Cutting, four letters | Does an A/C cutter spread? | `cutMotif` `CAC`, `pHyb`, `mobS` | inconclusive | 5 to 36 cuts per million steps | cut.sh, tribes.js | a way to make the cutter motif common | 3 seeds; a null result |
+| 27 | Random world search | Does a random mix of mechanisms find long multi-gene genomes? | all built knobs, drawn at random | lead | world 19: length 4.35→4.78, 2 motifs in one genome | search.js, search_summary.js | world 19 follow-up | 80 worlds, one seed each, 300k steps |
+| 27b | World 19 knockouts | What makes world 19's genomes long? | `pLigate`, `pHyb`, `tether`, `shield`, `motif` | negative | ligation off: length 4.1, `ABA` 6.9x vs 0.7 | world.js | score function, not length | False lead: fusion, not selection |
+| 28 | Letter size and mobility | Can letters differ in size and speed? | `sizeA`..`sizeD`, `mobA`..`mobD` | lead | mixed sizes (1.4 / 0.7): 2 births vs 77–84 | — | search round 3 | 2 seeds, 30k steps |
+| 28b | Folding letters | Can strands curl free and straighten when copied? | `foldA`..`foldD` | works | fold 0/10/20°: 74, 71, 76 births, none unfaithful | — | search round 3 | Probe; spirals, no rings |
+| 28c | Caps | Do end caps give stable capped copies? | `nP`, `nQ`, `capFray` | lead | capped 59 births vs 3,191 uncapped; duplications appear | — | caps need something that kills | 3 seeds, 40k steps |
+| 29 | Double strands, heat | Do heat cycles undo binding's length collapse? | `compCopy`, `pHyb`, `heatPeriod`, `heatFrac` | partial | binding alone 2.3; binding + heat 3.6 vs 3.5 | duplex.sh | seed 3 and `DX_bindheat_2` | Binding + heat one seed |
+| 30 | Chirality, round 1 | Does a racemic world break symmetry? | `chiral`, `pMisDock` | partial | ee ≤ 0.21, no symmetry breaking | chiral.sh, hand.js | round 2 (`pRacem`, `pMixLink`); seed 2 | One seed per setting |
+| 31 | Droplets | Does grouping in droplets rescue the public motif? | `nG`, `gStick`, `gRange`, `gStickS`, `gStickF` | partial | 1/5 of template units in droplets; 105 vs 82 births | droplets.sh | run the selection test (vs 21) | Scripted, not run |
+| 32 | Random chemistry screen | Do random rule tables make ordered assemblies? | `randomTable` (`pAff`, `pRule`) | partial | 31 of 100 tables; repeats 44 vs 1 shuffled (table 55) | src/rchem.js, rsearch.js | `autocat.js` on top tables; 69 more tables | Self-assembly, not yet copying |
+| 32b | Hand-written copier control | Does the heredity test detect copying? | `copyTable` | works | 12 assemblies vs 1 unseeded after 1,000 steps | autocat.js | test random tables | Products fragment (fragment problem) |
+| 33a | Telomeres (end loss) | Do a genome's pieces die out, so a two-gene genome holds? | `endLoss`, `capFray`, `pFray`, caps | partial | genes kept per pressure until `PQ` (made by a copying mistake) takes over, 3 of 4 environments | telo.sh | bare caps (33b) | seed 1; `PQ` held out only under scarce energy |
+| 33a' | Telomeres off (control) | Same without end loss? | caps, no `endLoss` | negative | genome falls into its genes (`PCDCQ`) or `PQ` | telo.sh (`TK_off`) | end loss is needed | seed 1 |
+| 33b | Bare caps: two genes selected | Is `PABACDCQ` selected over `PABAQ`? | `bareCaps`, `endLoss`, `feed`, `shield`, `relay` | works | radiation: `PABAQ` gone within 50k steps, both genes in 68–92% of capped births for 500k; no radiation: shield lost by 200k | telo3.sh | gene from nothing | 2 seeds × 4 environments, all agree |
+| 33c | Bare caps, keep | Is a seeded two-gene genome kept? | as 33b | works | kept 67–88% under radiation; shield decays 74→32% without | telo3.sh | — | 2 seeds |
+| 33d | Bare caps without end loss | Which of the two rules does what? | `bareCaps` only | works | two-gene still wins among capped, but pieces fill the world (capped births 13–19% vs 25–33%) | telo3.sh (`TB_noend`) | both rules needed | seed 1 |
+| 33e | Assembly by ligation | Do `PABAQ` + `PCDCQ` pieces join? | `pLigate`, bare caps | negative | 0 two-gene births; `CDC` gone by 32k steps (`PCDCQ` cannot re-arm) | telo2.sh | gene from nothing | seed 1; design flaw |
+| 33f | Gene from nothing, ordinary density | Does `CDC` arise inside `PABAQ`? | fivefold mutation, `pLigate`, 13–240 genomes | negative | 0 two-gene births in 7 runs (1M steps each), incl. 80×80 | telo4.sh, telo5.sh | density (33i) | length almost never changes (1–2% of births) |
+| 33g | Radiation band (niches) | Do lit and dark halves keep different genomes? | `radBand` | lead | no second species; shield 82% lit vs 44% dark (a cline) | band.sh | — | 1 seed each, 2 mobilities |
+| 33h | Scarcity × density sweep | Which resource sets length variation? | caps 30–120 × letters 100–400 | lead | 6 of 9 worlds extinct; at 400 letters 10.4% of births longer than 5 vs 1% at 200 | scarcity.sh | dense gene origin | seed 1 |
+| 33i | Gene from nothing, dense world | Does `CDC` arise with 400 letters of each kind? | as 33f, `nA`..`nD` 400 | works | arose at steps 645k (seed 1) and 437k (seed 2), seed 3 also expanded; then 35–60% of capped births carry `CDC`, genomes expand 5 → 11–13 | telo4.sh (`TF_dense`) | third gene; mechanism of expansion | 3 seeds; control without shield rule: no gene, length 5.2 throughout |
+| 33j | What drives expansion | Shield alone, or density too? | seeded `PABACDCQ`, 200 vs 400 letters | works | 200 letters: length stays 7.5–7.8; 400: expands to ~10.7 | TG runs (commands in RESULTS 33) | — | 1 seed each |
+| 34a | Translation | Does a genome's back template a product by a code? | `translate`, `transCode`, `n1`..`n4` | works | 12 of 12 products exact (`ABACDCAB` → `12134312`) | test.js, probes | product function | — |
+| 34b | Product folding | Does a product's shape follow sequence? | `fold1` | works | 8 × 45° wedges fold into an almost closed wheel | probe (rendered) | shape-dependent function | rings do not close (ligation needs flush ends) |
+| 34c | Catalysis (the machine) | Can copying be made to need the product? | `catalysis`, `pLinkBare`, `pBindP` | works | links rare, no product: 0 births; with products: 40 births, accelerating | test.js, probes | what the product does | — |
+| 34d | Does catalysis make length pay? | Longer products bind longer? | as 34c + mutation | negative | length 3.7 vs 3.6 without catalysis at 300k | `CA_*` | graded product function | seed 1; a 2-unit product binds as stably as a long one |
+| 34e | Product shape vs catalysis | Does fold change catalysis? | `fold1` 0–60° | negative | births 188–245 at every fold | prodshape.sh | — | products straighten as they bind |
+| 35 | Letters with trade-offs | Does composition follow the environment (tough/slow vs fragile/fast)? | `resC`, `mobC`, `pBreak` | inconclusive | C+D drift up even in the control; slowness costs more than toughness pays | tradeoff.sh | larger worlds | small populations, drift dominates; speed check: `mobC` 0.5 copies ~5× slower, wedge `bendC` 15° never copied |
+| 36a | Shared catalyst, parasites | Do non-producers spread when the catalyst is shared? | `bindAny`, code `A1,B2` | works | parasites rise to ~50% in 100k, coexist for 400k | parasite.sh | — | share follows letter supply (resource partition), see 36b |
+| 36b | Parasites on shared letters | Same with shared letters? | `bindAny`, code `A1` | works | parasites 60–70% of births, level off; cooperators persist; private catalyst: ≤ 10% | parasite2.sh | graded specificity | 2 seeds + slow |
+| 36c | Graded specificity | Does a mismatched product letting go fast change it? | `pMisMelt` 0.05, 0.2 | works | parasites 5–20%; the smallest cooperator (one `AA` run) wins | parasite2.sh | "shortest wins" again | 2 seeds |
+
+## Knob index
+
+Generated by `node tools/ledger_index.js` from the table above (every knob in backticks in the Mechanism column, with
+the rows that used it). Rerun it after adding rows.
+
+<!-- knob-index -->
+| knob | rows (verdict) |
+|---|---|
+| `bareCaps` | 33b (works), 33d (works) |
+| `bendA` | 15c (lead) |
+| `bendB` | 15c (lead), 15d (works) |
+| `bindAny` | 36a (works), 36b (works) |
+| `capFray` | 28c (lead), 33a (partial) |
+| `catalysis` | 34c (works) |
+| `chiral` | 30 (partial) |
+| `compCopy` | 29 (partial) |
+| `cut` | 26 (negative) |
+| `cutMotif` | 26 (negative), 26b (inconclusive) |
+| `endLoss` | 33a (partial), 33a' (negative), 33b (works) |
+| `energyMode` | 3 (negative), 4 (negative) |
+| `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works) |
+| `fold1` | 34b (works), 34e (negative) |
+| `foldA` | 28b (works) |
+| `foldD` | 28b (works) |
+| `gRange` | 31 (partial) |
+| `gStick` | 31 (partial) |
+| `gStickF` | 31 (partial) |
+| `gStickS` | 31 (partial) |
+| `H` | 17 (inconclusive) |
+| `heatFrac` | 29 (partial) |
+| `heatPeriod` | 29 (partial) |
+| `hinge` | 10 (superseded) |
+| `hingeMax` | 10 (superseded) |
+| `make` | 16c (negative), 24 (negative) |
+| `maxStrain` | 23 (works), 23b (works) |
+| `maxStrainStrand` | 23 (works) |
+| `memAngle` | 11 (superseded), 12b (inconclusive), 16 (negative), 16b (negative), 16d (negative), 24c (works) |
+| `memFlex` | 11 (superseded) |
+| `memLinkTol` | 24b (negative), 24c (works), 25c (works) |
+| `memPerm` | 24 (negative) |
+| `mobA` | 28 (lead) |
+| `mobC` | 35 (inconclusive) |
+| `mobD` | 28 (lead) |
+| `mobE` | 14 (negative), 17 (inconclusive), 21 (negative), 25 (works) |
+| `mobM` | 25 (works), 25c (works), 25d (negative) |
+| `mobS` | 21 (negative), 25 (works), 25c (works), 26 (negative), 26b (inconclusive) |
+| `mobX` | 25b (works) |
+| `motif` | 9 (negative), 12b (inconclusive), 14 (negative), 17 (inconclusive), 21 (negative), 24b (negative), 27b (negative) |
+| `n1` | 34a (works) |
+| `n4` | 34a (works) |
+| `nA` | 33i (works) |
+| `nC` | 19 (works) |
+| `nD` | 33i (works) |
+| `nE` | 3 (negative), 4 (negative), 14 (negative), 19b (inconclusive), 19d (negative), 24b (negative) |
+| `nG` | 31 (partial) |
+| `nM` | 11 (superseded), 11b (negative), 16 (negative), 16b (negative) |
+| `nP` | 28c (lead) |
+| `nQ` | 28c (lead) |
+| `nX` | 25b (works), 25d (negative) |
+| `pBindP` | 34c (works) |
+| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive) |
+| `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
+| `pCut` | 26 (negative) |
+| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial) |
+| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
+| `physics` | 15 (works) |
+| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
+| `pLinkBare` | 34c (works) |
+| `pMelt` | 18 (negative) |
+| `pMeltEnd` | 18b (negative) |
+| `pMemDecay` | 16c (negative) |
+| `pMisDock` | 30 (partial) |
+| `pMisMelt` | 36c (works) |
+| `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works) |
+| `pSpont` | 7 (works), 11b (negative) |
+| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works) |
+| `pUnzip` | 13b (works), 15b (works) |
+| `radBand` | 33g (lead) |
+| `rayHit` | 25b (works), 25d (negative) |
+| `relay` | 19c (works), 19d (negative), 22 (negative), 33b (works) |
+| `resB` | 8 (works), 12 (works) |
+| `resC` | 35 (inconclusive) |
+| `resM` | 11 (superseded), 11b (negative), 16 (negative) |
+| `shapeA` | 15c (lead) |
+| `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works) |
+| `sizeA` | 28 (lead) |
+| `sizeD` | 28 (lead) |
+| `sizeX` | 25b (works) |
+| `slack` | 10b (superseded), 12 (works) |
+| `snapCorners` | 23 (works), 23b (works) |
+| `spend` | 14d (negative) |
+| `stiffA` | 15 (works), 15b (works) |
+| `stiffM` | 16d (negative), 23b (works), 24c (works) |
+| `sun` | 3 (negative) |
+| `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
+| `transCode` | 34a (works) |
+| `translate` | 34a (works) |
+| `W` | 17 (inconclusive) |
+<!-- /knob-index -->
+
+## Open gaps (worth trying, with the reason)
+
+- **A third gene in expanded genomes** (33i, 33j): genomes of 11–13 units carry spare letters; give them a third
+  pressure with a private gene and see whether a third gene arises (regularity 5, 6).
+- **Mechanical directions not yet built** (DESIGN 15, LITERATURE shortlist): crystal ribbons (a second replication mode;
+  fragments carry the whole information), a polymerase block (a copier made of parts), recombination by template
+  switching (genes move between lineages in one step).
+- **A product function that pays by degrees** (34d, 34e fail because every product fits its maker and shape is lost on
+  binding): candidates in DESIGN 15 (F1 pleiotropic letters, F2 shape that survives binding).
+- **Unfinished older items**: random chemistry heredity test (32), chirality round 2 (30), droplets selection test (31),
+  double strands seed 3 (29).
+- **Untested combinations**: dense world + translation (does the machine gain parts where length is cheap?); dense world
+  + parasites; radiation band in a dense world; bare caps with cutting (a cut kills in a capped world, 26 was null).
