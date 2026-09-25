@@ -164,9 +164,9 @@ big world when drift decides races (41).
   (the user, 2026-09-24): merging finished work from a session branch into `main` and pushing `main` needs no further
   permission (tests pass and the default fingerprint is unchanged first).
 
-## Where the project stands (2026-09-25, evening)
+## Where the project stands (2026-09-25, night)
 
-The full record is `experiments/LEDGER.md` (89 experiments with verdicts, the regularities that predict outcomes, the
+The full record is `experiments/LEDGER.md` (about 100 experiments with verdicts, the regularities that predict outcomes, the
 viability atlas, the knob index). The short version:
 
 - Works: exact template copying and every kind of copy error from local rules (1–2); length held by cooperative docking
@@ -174,49 +174,49 @@ viability atlas, the knob index). The short version:
   shape selecting on sequence (15); adaptation to an environment change (14).
 - **Genes accumulate, and genes arise by mutation.** With end-replication loss (`endLoss`) and bare caps (`bareCaps`) a
   two-gene genome beats its one-gene competitor wherever radiation acts (33). In dense worlds the shield gene arose by
-  mutation in 3 of 3 seeds (33, old engine). **Proofreading (`proof`, 38)**, a third gene whose pressure is copying itself
-  (copy errors per functional letter), cuts substitutions 3–6 times, is selected when seeded, and arises from a spare letter
-  one mutation away and sweeps (8 → 89%, 2 → 73%, 2 of 2 seeds), with a speed-accuracy trade-off (births fall a third).
-- **A machine of parts (34, 36).** Translation, catalysis, shared catalysts and their parasites; no product function yet makes
-  length or complexity pay.
-- **Shape as function (39)**, the user's preferred direction: fuel particles held in pockets, two backs at once (a mechanical
-  AND). Which fold holds which fuel size is geometry (45–90° small, 30° large, 20° none, straight mid-sized by pairing), and
-  among 8-mers of the same letters each fuel size has a different best sequence: a many-to-many genotype-to-phenotype map
-  that no rule lists. Selection on it is so far a lead only (worlds with fuel as the only energy are fragile; fuel as a
-  supplement to scarce energy, `PS_*`, running at the end of the session).
-- **The engine is 2–2.5 times faster** (37): bodies jostled whole, 4 passes, no trigonometry, cell lists. Old results were
-  on the old engine. Do not jam worlds (use 48×48 for "dense"). Saved states: `--save`, `--load`, the viewer's "Open state".
+  mutation in 3 of 3 seeds (33, old engine). **Proofreading (`proof`, 38)**, a third gene whose pressure is copying itself,
+  arises from a spare letter one mutation away and sweeps, with a speed-accuracy trade-off.
+- **A machine of parts (34, 36).** Translation, catalysis, shared catalysts and their parasites (60–70% of births: the strongest
+  ecological effect in the project); no product function yet makes length or complexity pay.
+- **A second mode of replication (40): stacks.** Two-faced letters (`backCopy`: a back templates too, the copy lies parallel)
+  and copies that stay on as rows (`stack`) give crystals that grow row by row and split, from two local rules on the same
+  letters. They copy exactly, but hold length only by hoarding letters (long zipped rows never die, births fall), let short
+  rows win again when they turn over, and give nothing under radiation that released back copies do not (two copy sites per
+  strand are what rescue a population there). Kept, default off, for combinations.
+- **Shape as function (39, 41)**: pockets hold fuel by fit, and a folded genome arms faster from fuel that fits it (a
+  many-to-many map no rule lists). But in races between same-letter genomes the fitness differences are within drift, in a
+  letter-limited world (8 seeds) and in an energy-limited one (12 seeds, `ABABABAB` 50% with folds vs 24% without at fuel
+  1.2, p = 0.09). Pockets are mostly one strand folded on itself (81–92% of fuel armings).
+- **The engine is 2–2.5 times faster** (37). Saved states: `--save`, `--load`, the viewer's "Open state".
 - Failed or parked, with reasons in the ledger: compartments and walls (16, 24, 25), recognition between strands (18, 26),
-  public goods (9, 14, 17, 21), composition as a phenotype at small scale (35).
+  public goods (9, 14, 17, 21), composition as a phenotype at small scale (35), stacks as a reason for length (40).
 
-The core obstacle, restated: **the shortest viable replicator wins unless something makes length pay** (regularity 1). Three
-per-length costs now have genes (radiation: shield; energy: feed with relay; copy errors: proofreading). What limits
-open-endedness is the function space: each motif gene is one hand-written rule. Shape (39) is the first generic map from
-sequence to function; the question now is whether it drives selection and, with several fuels, several shaped regions.
+The core obstacle, restated after this session: **the shortest viable replicator wins unless something makes length pay**
+(regularity 1), and a second replication mode does not change that by itself. Genes pay only by removing a per-length cost,
+so the number of genes follows the number of designed pressures. Graded functions (shape) give selection too weak for
+populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
+open-ended complexity is most likely to start.
 
-## Handoff (2026-09-25, evening): pick up here
+## Handoff (2026-09-25, night): pick up here
 
-Session of 2026-09-25 (branch `claude/zealous-wright-w26ln9`, merged into `main`). The user this session: think about what
-is promising, not only the handoff list; mechanical designs and several replication modes; physics may change freely for
-speed ("anything we can optimize now will reward us"), but keep shapes (no grid: "shapes I think are a very promising
-direction"); test runs headless, visualization only on demand. Done: engine speed-up (37), saved states, proofreading (38),
-fuel pockets (39), fixes (parent attribution, body turn), tools (`tools/killnode.sh`, `experiments/lineages.js`). The shape
-options A–D were put to the user (DESIGN 15, top); B was started without an answer.
+Session of 2026-09-25 night (branch `claude/youthful-clarke-pmu31b`, merged into `main` as it went). The user this session:
+don't follow the handoff blindly, think about what is promising or underexplored; perhaps several kinds of replication with
+mutation and a reason for selection are enough; mechanical designs at the core; theory may hold a missing link. Done: stacks
+(40), many-seed shape races (41), tools (`experiments/stacks.js`, `races.js`, `permtest.js`, `pockets.js`, `order.js`,
+`spatial.js`), regularities 1 and 10 revised. A claim was corrected by its control (40e: stacks are not a radiation shield);
+always run the same-physics control (released back copies, no folds) before believing a difference.
 
 Next steps, ranked:
 
-1. **Shape selection, properly.** Fuel as a supplement to scarce energy (`PS_*` world: capped 40×40, `nE` 16, `pReload`
-   0.0004, `nU` 120, `pReloadU` 0.01, `foldA` 45, `foldB` 30) or larger worlds, 3+ seeds. Does the winner follow fuel size?
-   Then mutation on: does letter order adapt? Then two fuels (`nU`, `nV`, `sizeV`, `pReloadV`): do genomes carry two
-   differently folded regions when each fuel is scarce (complexity from shape)? Probes: `experiments/harvest.js` (fuel used by sequence and fuel
-   size), `experiments/grip_probe.js` (fold against fuel size), `experiments/proof_capped.js`, `experiments/dense_fid.js`
-   (copy fidelity of an engine setting in the dense world); `experiments/lineages.js` counts births per competing genome.
-2. **Enzymes of parts** (the rest of option B): products that fold into pockets (`grip` exists), carry the charge, and deliver
-   it to kin genomes through code-matched binding. Then several product kinds, several fuels.
-3. **A gene from nothing needs raw material.** Proofreading arose one mutation away, not three. On the new engine the 48×48
-   dense world makes almost no longer copies; find a local source of duplications (copies bridging templates happened only
-   in jammed worlds).
-4. Options A (folded genomes with hairpins) and C (2D crystals, a second replication mode): see DESIGN 15.
+1. **Ecology in space** (42, running at the end of the session): the shared catalyst of section 36 in an 80×80 world with
+   creeping polymers (`mobS` 0.1) against well mixed; `experiments/spatial.js` measures whether hosts and parasites segregate
+   or form travelling fronts (host centre moving). Then parasites that arise by mutation instead of being seeded, and graded
+   specificity (`pMisMelt`) with mutation: can discrimination and mimicry coevolve (an arms race, the open-ended pressure)?
+2. **Bigger effective populations** for graded effects: the shape races need 96×96 worlds or genomes whose shapes differ more
+   (composition, not only order); two-faced letters (`backCopy` without `stack`) double births per genome and could be used as
+   a speed-up of evolution in any world (with `endLoss` the back follows the face's end rule).
+3. **A gene from nothing needs raw material** (unchanged): a local source of duplications at ordinary density.
+4. Stacks in combination (untested): kin aggregation with four letters (`pSNuc` > 0), stacks with translation, with caps.
 5. Older unfinished items as before (random chemistry heredity 32, chirality round 2 30, droplets 31, duplex seed 3 29).
 
 Runs share four cores: keep at most four `run.js` processes (`tools/queue.sh` enforces it; a second queue with a higher cap
