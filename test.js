@@ -372,6 +372,15 @@ test('translate: the backs of an armed strand template product chains by the cod
   assert.deepStrictEqual(c.check(), []);
 });
 
+test('bindAny: a shared catalyst copies strands that make no product far more often than a private one does', () => {
+  const w = { seed: 1, W: 40, H: 40, nA: 150, nB: 150, nC: 150, nD: 150, n1: 200, n2: 200, nE: 100, seedSeq: 'ABBABA,CDDCDC', seedCount: 3, pUndock: 0.1, pFray: 0.00003, pUnzip: 1, translate: true, transCode: 'A1,B2', catalysis: true, pLinkBare: 0.01 };
+  const parasites = (sim) => sim.births.filter((b) => !b.prod && !/[AB]/.test(b.seq)).length;
+  const kin = new Sim(Object.assign({}, base, w)); kin.run(60000);
+  const shared = new Sim(Object.assign({}, base, w, { bindAny: true })); shared.run(60000);
+  assert.ok(parasites(shared) >= 3 * Math.max(1, parasites(kin)), 'parasite births, shared ' + parasites(shared) + ' against private ' + parasites(kin));
+  assert.deepStrictEqual(shared.check(), []);
+});
+
 test('compCopy: copies are reversed complements; hubs hold strand ends and never enter a sequence', () => {
   const rc = (q) => [...q].reverse().map((c) => ({ A: 'B', B: 'A', C: 'D', D: 'C' })[c]).join('');
   const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'AAABAB', seedCount: 2, compCopy: true }));
