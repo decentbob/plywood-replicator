@@ -67,7 +67,7 @@ test('motif metabolism: ABA backs recharge spent energy; a seed without the moti
   withMotif.run(30000); const a = withMotif.stats();
   assert.ok(a.energyCharged > 0 && a.eOn + a.eOff === 150, 'charging should happen and E count stay fixed');
   const without = new Sim(Object.assign({}, base, { seed: 3, seedSeq: 'AABBAA', motif: true, pReload: 0 }));
-  without.run(30000); const b = without.stats();
+  without.run(50000); const b = without.stats();
   assert.strictEqual(b.energyCharged, 0); assert.strictEqual(b.eOn, 0, 'all energy should be spent');
 });
 

@@ -38,14 +38,15 @@ const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
 const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8, T_J = 9, T_G = 10;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps; J is a hub; G is droplet material
 const T_1 = 11, T_2 = 12, T_3 = 13, T_4 = 14;   // product blocks (translate rule): a second polymer made on the backs of template strands
-const NT = 15;
+const T_U = 15;   // fuel particle (grip rule): held in the pockets of folded products
+const NT = 16;
 const PRODUCTS = [T_1, T_2, T_3, T_4];
 const isProd = (t) => t >= T_1 && t <= T_4;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J', 'G', '1', '2', '3', '4'];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J', 'G', '1', '2', '3', '4', 'U'];
 const LETTERS = [T_A, T_B, T_C, T_D, T_P, T_Q];
 /** The type of a letter character ('A'..'D', or the caps 'P', 'Q'); -1 if none. */
-function letterType(ch) { const k = 'ABCDPQ'.indexOf(String(ch).toUpperCase()); return k < 0 ? -1 : LETTERS[k]; }
+function letterType(ch) { const k = 'ABCDPQ1234'.indexOf(String(ch).toUpperCase()); return k < 0 ? -1 : k < 6 ? LETTERS[k] : PRODUCTS[k - 6]; }   // (product kinds '1'..'4' too, for seeding)
 /** What a letter docks on: its own kind, except caps, which pair with each other (a copy lies reversed on its template). */
 const PAIR = [T_A, T_B, -1, -1, T_C, T_D, -1, T_Q, T_P, -1];
 /** Binding partners: A with B, C with D (copying pairs each letter with itself, binding with its complement). */
@@ -83,12 +84,14 @@ const S = {
   BACK: 37,                                             // K of an armed letter with no product in the code (bindAny): a finished product may bind here                                            // F of a finished product (catalysis): binds the back of a strand it matches
   TRN_MM: 33, TRN_LF: 34, TRN_RF: 35,                   // K of an armed letter (translate rule): a product block docks here; which lateral neighbours also
                                                         // translate, as TPL_* says for a face (TRN_RF: the left one only, TRN_LF: the right one only)                                              // any side of a hub block, open: holds the open end of a strand (hub rule)                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
+  GRIP: 38, FUEL: 39,                                   // K of a released product (grip rule); any side of a fuel particle
+  GIVE: 40, SPENT: 41,                                  // fuel (pocket rule): the side through which a held, charged particle arms a letter; a spent one
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
 // A bond breaks the moment either of its sides derives to one of these.
 const NONHOLD = new Uint8Array(64);
-NONHOLD[S.REPEL] = NONHOLD[S.INERT] = NONHOLD[S.IDLE] = NONHOLD[S.OFF] = 1;
+NONHOLD[S.REPEL] = NONHOLD[S.INERT] = NONHOLD[S.IDLE] = NONHOLD[S.OFF] = NONHOLD[S.SPENT] = 1;
 
 const DEFAULTS = {
   seed: 1,
@@ -117,6 +120,14 @@ const DEFAULTS = {
   gStickS: 0, gStickF: 0,       // how strongly a letter in a strand (gStickS) or a free letter (gStickF) is drawn to G, as a fraction of gStick:
                                 // strands then gather in droplets with the monomers they copy from (Oparin's coacervates)
   n1: 0, n2: 0, n3: 0, n4: 0,   // product blocks (translate rule), one count per kind; their physics per kind: size1, bend1, stiff1, res1, mob1 ...
+  nU: 0,                        // fuel particles (grip rule), size sizeU, mobility mobU
+  grip: false,                  // a released product's back grips a fuel particle (pGrip per step of contact); a particle held by one grip lets go
+  pGrip: 0.2,                   // at pGripMelt per step, one held by two or more at pGripMelt2: only a pocket, two backs at once, holds one (a
+  pGripMelt: 0.2, pGripMelt2: 0.001,   // mechanical AND), and whether a folded product's pockets fit a particle is its shape against the particle's size
+  pocket: false,                // a letter waiting for energy (its back shows WANT) grips fuel particles too, and a charged particle held by two
+                                // or more grips at once arms one of the letters holding it (and is spent): a released copy is curled where its
+                                // letters fold (foldA..), so which fuel a genome can use is decided by its own shape (the genome as its own enzyme)
+  pReloadU: 0.002,              // a spent fuel particle recharges at this rate per step (the environment's supply)
   translate: false,             // the back of an armed letter templates a product block by a fixed code (transCode): a free product docks its face there,
                                 // docked products link side to side where the template continues, and a finished product chain is released,
   transCode: 'A1,B2,C3,D4',     // as a copy is on the face. Products never become templates. The genome builds a polymer that is not itself
@@ -272,7 +283,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0) + (p.nG || 0) + (p.n1 || 0) + (p.n2 || 0) + (p.n3 || 0) + (p.n4 || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0) + (p.nG || 0) + (p.n1 || 0) + (p.n2 || 0) + (p.n3 || 0) + (p.n4 || 0) + (p.nU || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.hand = new Uint8Array(n);        // chirality, fixed for life: 1 is the mirror form (chiral rule)
@@ -305,11 +316,11 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0; this.proofEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0; this.proofEvents = 0; this.fuelUsed = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
-    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1); this._mobL[T_G] = typeParam(p, 'mob', T_G, 1); for (const t of PRODUCTS) this._mobL[t] = typeParam(p, 'mob', t, 1);
+    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1); this._mobL[T_G] = typeParam(p, 'mob', T_G, 1); this._mobL[T_U] = typeParam(p, 'mob', T_U, 1); for (const t of PRODUCTS) this._mobL[t] = typeParam(p, 'mob', t, 1);
     this._code = new Int8Array(NT).fill(-1);   // translate rule: which product kind docks on the back of each letter
     for (const pair of String(p.transCode || '').split(',')) { const lt = letterType(pair.trim()[0]), pt = TNAME.indexOf(pair.trim()[1]); if (lt >= 0 && isProd(pt)) this._code[lt] = pt; }
     const cm = String(p.cutMotif || 'BAB');
@@ -340,6 +351,7 @@ class Sim {
     for (let i = 0; i < (p.nJ || 0); i++) this.type[u++] = T_J;
     for (let i = 0; i < (p.nG || 0); i++) this.type[u++] = T_G;
     for (let k = 0; k < 4; k++) for (let i = 0; i < (p['n' + (k + 1)] || 0); i++) this.type[u++] = PRODUCTS[k];
+    for (let i = 0; i < (p.nU || 0); i++) this.type[u++] = T_U;
   }
 
   /** Polygon engine: sizes, masses, hands, states, a jittered grid placement, rest shapes, the spatial hash. */
@@ -352,7 +364,7 @@ class Sim {
       this.rad[u] = 0.5 * this.size[u] * p.repMargin;
       this.w[u] = 1 / (this.size[u] * this.size[u]);
       this.wr[u] = 6 / Math.pow(this.size[u], 4);
-      this.is[u] = this.type[u] === T_E ? I_ON : this.type[u] === T_M ? (p.make ? I_OFF : I_ON) : I_DOCK;   // a membrane block is active (ON) or raw (OFF)
+      this.is[u] = this.type[u] === T_E || this.type[u] === T_U ? I_ON : this.type[u] === T_M ? (p.make ? I_OFF : I_ON) : I_DOCK;   // a membrane block is active (ON) or raw (OFF)
     }
     // jittered grid placement
     const cols = Math.ceil(Math.sqrt(n * p.W / p.H)), rows = Math.ceil(n / cols);
@@ -660,6 +672,12 @@ class Sim {
       return 0;
     }
     if (tu === T_G || tv === T_G) return 0;
+    if (tu === T_U || tv === T_U) {   // grip rule: a fuel particle's side and a released product's back
+      if (tu === T_U && tv === T_U) return 0;
+      const [xs, xi] = tu === T_U ? [sv, j] : [su, i], us = tu === T_U ? su : sv;
+      if (xi !== K || us !== S.FUEL) return 0;
+      return (xs === S.GRIP && (p.grip || p.pocket)) || (p.pocket && xs === S.WANT) ? p.pGrip : 0;
+    }
     if (isProd(tu) !== isProd(tv)) {
       // translate rule: a free product block's face docks on an armed letter's back (TRN_*), by the code; nothing else joins the two families
       const [lt, ls, li, pt, ps, pi] = isProd(tu) ? [tv, sv, j, tu, su, i] : [tu, su, i, tv, sv, j];
@@ -725,8 +743,9 @@ class Sim {
         else if (this.type[u] === T_J) ok = s === S.HUB;
         else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
+        else if (this.type[u] === T_U) ok = s === S.FUEL;
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF || s === S.PBIND;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF || s === S.BACK;
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF || s === S.BACK || s === S.GRIP;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -754,6 +773,14 @@ class Sim {
       return;
     }
     if (this.type[u] === T_X || this.type[u] === T_G) { this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = S.IDLE; return; }
+    if (this.type[u] === T_U) {
+      // fuel: charged, it shows FUEL; held by two or more grips (a pocket), it shows GIVE on the first side whose partner wants energy;
+      // spent, it shows SPENT and lets go of everything
+      if (this.is[u] !== I_ON) { this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = S.SPENT; return; }
+      let nb = 0; for (let i = 0; i < 4; i++) { this.ss[o + i] = S.FUEL; if (b[o + i] >= 0) nb++; }
+      if (this.p.pocket && nb >= 2) for (let i = 0; i < 4; i++) if (b[o + i] >= 0 && this.ss[b[o + i]] === S.WANT) { this.ss[o + i] = S.GIVE; break; }
+      return;
+    }
     if (this.type[u] === T_J) { for (let i = 0; i < 4; i++) this.ss[o + i] = b[o + i] >= 0 ? S.BONDED : S.HUB; return; }
     if (this.type[u] === T_E) {
       const s = this.is[u] === I_ON ? S.ON : S.OFF;
@@ -852,7 +879,8 @@ class Sim {
     }
     else if (this.p.bindAny && st === I_TPL && !isProd(this.type[u]) && this.type[u] !== T_P && this.type[u] !== T_Q && this.p.translate) this.ss[o + K] = S.BACK;
     else this.ss[o + K] = S.IDLE;
-    if (prod) this.ss[o + K] = S.IDLE;   // a product has no use for its back: it takes no energy and is never armed
+    if (prod) this.ss[o + K] = this.p.grip && (st === I_REPEL || st === I_TPL) ? S.GRIP : S.IDLE;   // a product takes no energy and is never armed; released, it may grip fuel
+    else if (this.p.pocket && st === I_TPL && this.ss[o + K] === S.IDLE) this.ss[o + K] = S.GRIP;   // pocket rule: an armed letter's idle back helps hold fuel
     if (this.p.endLoss) {
       // end-replication loss: a template unit with a free lateral side (a cap's missing side is not free) is a tip and shows no
       // face; a unit whose neighbour is a tip counts that side as the end, so the copy stops one unit short of the open end
@@ -883,6 +911,14 @@ class Sim {
     const p = this.p, b = this.bond, o = u * 4;
     if (this.is[u] === 0 && b[o] < 0 && b[o + 1] < 0 && b[o + 2] < 0 && b[o + 3] < 0) return;   // a free block in state 0 has no transition
     if (this.type[u] === T_X || this.type[u] === T_J || this.type[u] === T_G) return;
+    if (this.type[u] === T_U) {
+      // pocket rule: a particle that showed GIVE has armed the letter on that side (it reads GIVE this step) and is spent
+      if (this.is[u] === I_ON && (this.ss[o] === S.GIVE || this.ss[o + 1] === S.GIVE || this.ss[o + 2] === S.GIVE || this.ss[o + 3] === S.GIVE)) { this.is[u] = I_OFF; this.fuelUsed++; return; }
+      // grip rule: held by one grip, a fuel particle lets go fast; held by two or more (in a pocket), slowly
+      let nb = 0, first = -1; for (let i = 0; i < 4; i++) if (b[o + i] >= 0) { nb++; if (first < 0) first = i; }
+      if (nb > 0 && this.rng() < (nb === 1 ? p.pGripMelt : p.pGripMelt2)) this.pendingUnlink.push(o + first);
+      return;
+    }
     if (this.type[u] === T_M) {
       // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
       // bonds falls back to raw at pMemDecay
@@ -949,7 +985,7 @@ class Sim {
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = pool;                                     // R3 lost its strand: back to the pool
       else if (isProd(this.type[u])) { if (p.catalysis) this.is[u] = I_TPL; }   // a product is never armed; with catalysis it is finished
-      else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
+      else if (!p.energyGate || (bK && (this.ss[b[o + K]] === S.ON || this.ss[b[o + K]] === S.GIVE))) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy, or fuel held in a pocket)
       else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
       if (p.cut && bF && this.ss[b[o + F]] === S.CUT && this.rng() < p.pCut) {   // C1 cut: bound to a cutter's face, I let go of everything
@@ -1028,7 +1064,7 @@ class Sim {
     const seen = this._seen, isM = want === T_M;
     let cyc = [];
     for (const start of units) {
-      if ((isM ? this.type[start] !== T_M : (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J)) || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
+      if ((isM ? this.type[start] !== T_M : (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J || this.type[start] === T_U)) || seen[start] || this.bond[start * 4 + L] < 0 || this.bond[start * 4 + R] < 0) continue;
       const c = []; let u = start;
       while (u >= 0 && !seen[u] && c.length < 100000) { seen[u] = 1; c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 || this.type[q >> 2] === T_J ? -1 : q >> 2; }
       if (u === start && c.length >= 3) { cyc = c; break; }
@@ -1042,7 +1078,7 @@ class Sim {
     let best = this.cycleOf(units);
     for (const start of units) {
       const ql = this.bond[start * 4 + L];
-      if (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J || this.type[start] === T_X || this.type[start] === T_G || (ql >= 0 && this.type[ql >> 2] !== T_J)) continue;
+      if (this.type[start] === T_E || this.type[start] === T_M || this.type[start] === T_J || this.type[start] === T_X || this.type[start] === T_G || this.type[start] === T_U || (ql >= 0 && this.type[ql >> 2] !== T_J)) continue;
       const c = []; let u = start;
       while (u >= 0 && c.length < 100000) { c.push(u); const q = this.bond[u * 4 + R]; u = q < 0 || this.type[q >> 2] === T_J ? -1 : q >> 2; }
       if (c.length > best.length) best = c;
@@ -1236,16 +1272,19 @@ class Sim {
           rx[v] = rx[x] + this._dx(px[v] - px[x]); ry[v] = ry[x] + this._dy(py[v] - py[x]);
         }
       }
-      let cx = 0, cy = 0, s2 = 0, r2 = 0, rot2 = 0;
+      let cx = 0, cy = 0, s2 = 0, tq = 0, inertia = 0;
       for (let k = 0; k < m; k++) { const x = list[k]; cx += rx[x]; cy += ry[x]; }
       cx /= m; cy /= m;
       for (let k = 0; k < m; k++) {
-        const x = list[k], sw = this._mobility(x), dxx = rx[x] - cx, dyy = ry[x] - cy;
-        s2 += sw * sw; r2 += dxx * dxx + dyy * dyy;
-        const mob = this.type[x] === T_E ? 1 : sw / Math.sqrt(wt[x]); rot2 += (p.sigmaRot * wt[x] * mob) * (p.sigmaRot * wt[x] * mob);
+        // the body's move is the mean of its blocks' kicks; its turn is the torque of those kicks plus the blocks' own turns, each
+        // weighed by the block's own moment of inertia (1 / wr), over the body's moment of inertia
+        const x = list[k], sw = this._mobility(x), dxx = rx[x] - cx, dyy = ry[x] - cy, r2 = dxx * dxx + dyy * dyy, ib = 1 / this.wr[x];
+        s2 += sw * sw; inertia += r2 + ib;
+        const mob = this.type[x] === T_E ? 1 : sw / Math.sqrt(wt[x]), spin = p.sigmaRot * wt[x] * mob;
+        tq += r2 * p.sigma * p.sigma * sw * sw + ib * ib * spin * spin;
       }
-      const st = p.sigma * Math.sqrt(s2) / m;                                        // mean of m independent kicks
-      const sr = Math.sqrt((r2 > 0 ? p.sigma * p.sigma * (s2 / m) / r2 : 0) + rot2 / (m * m));   // torque of the kicks, and the blocks' own turns
+      const st = p.sigma * Math.sqrt(s2) / m;              // mean of m independent kicks
+      const sr = Math.sqrt(tq) / inertia;                 // turn: torque of the kicks and the blocks' own turns over the body's inertia
       const tx = st * this._gauss(), ty = st * this._gauss(), da = sr * this._gauss(), c = Math.cos(da), s = Math.sin(da);
       const ax = px[u0] + cx, ay = py[u0] + cy;   // the centre, in world coordinates
       for (let k = 0; k < m; k++) {
@@ -1475,10 +1514,11 @@ class Sim {
     this._kickOff();
     // 8. energy reload (E is never created or destroyed; it flips OFF -> ON)
     for (let u = 0; u < n; u++) {
-      if (this.type[u] !== T_E || this.is[u] !== I_OFF) continue;
-      if (rng() < p.pReload) this.is[u] = I_ON;
+      if ((this.type[u] !== T_E && this.type[u] !== T_U) || this.is[u] !== I_OFF) continue;
+      if (this.type[u] === T_E) { if (rng() < p.pReload) this.is[u] = I_ON; }
+      else if (this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0 && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0 && rng() < p.pReloadU) this.is[u] = I_ON;   // spent fuel, free
     }
-    for (let u = 0; u < n; u++) if (this.type[u] === T_E) this._derive(u);
+    for (let u = 0; u < n; u++) if (this.type[u] === T_E || this.type[u] === T_U) this._derive(u);
     if (p.pRacem > 0) for (let u = 0; u < n; u++) {
       const b = u * 4;
       if (LETTERS.includes(this.type[u]) && this.bond[b] < 0 && this.bond[b + 1] < 0 && this.bond[b + 2] < 0 && this.bond[b + 3] < 0 && rng() < p.pRacem) this.hand[u] ^= 1;
@@ -1536,10 +1576,11 @@ class Sim {
   // ------------------------------------------------------------- observation
   stats() {
     const n = this.n;
-    let inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
+    let held1 = 0, held2 = 0, inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
       if (this.type[u] === T_X || this.type[u] === T_J || this.type[u] === T_G) continue;
+      if (this.type[u] === T_U) { let nb = 0; for (let i = 0; i < 4; i++) if (this.bond[u * 4 + i] >= 0) nb++; if (nb === 1) held1++; else if (nb >= 2) held2++; continue; }
       if (this.type[u] === T_E) { if (this.is[u] === I_ON) eOn++; else eOff++; continue; }
       const o = u * 4;
       if (this.ss[o + K] === S.CHARGE) totalMotif++;
@@ -1578,7 +1619,7 @@ class Sim {
         if (nM === comp.length) continue;
       }
       let nAB = 0, faceBonded = false;
-      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M || this.type[u] === T_J || this.type[u] === T_X || this.type[u] === T_G) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
+      for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M || this.type[u] === T_J || this.type[u] === T_X || this.type[u] === T_G || this.type[u] === T_U) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
       if (nAB < 2) continue;
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
@@ -1602,7 +1643,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone, proofs: this.proofEvents,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone, proofs: this.proofEvents, held1, held2, fuelUsed: this.fuelUsed,
       energyCharged: this.energyCharged, products: this.prodCount, prodChains, prodUnits, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
@@ -1625,5 +1666,5 @@ class Sim {
 }
 
 
-return { Sim, PRODUCTS, T_1, T_2, T_3, T_4, isProd, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, PRODUCTS, T_U, T_1, T_2, T_3, T_4, isProd, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

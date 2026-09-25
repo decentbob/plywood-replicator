@@ -1866,3 +1866,77 @@ one `AA` run and a letter or two (`BAAC`, `AAD`), making the smallest product (`
 survive by carrying `AA`, which makes them cooperators; but the population shrinks toward the minimal cooperator, the old
 "shortest wins" in a new form. Births are lower than with the shared catalyst (60 to 88 per 40,000 steps). One screen,
 two seeds.
+
+## 37. A faster engine (2026-09-25; `bench_final.js`-style probes in the session scratchpad, numbers below)
+
+The user: the physics so far was one instance's guess, results need not stay the same, speed pays for years; shapes stay
+(no grid). Every change was measured in CPU time per step (the machine is shared, so wall time misleads) and checked with
+mutation off, where every copy must be exact (capped worlds: copies of capped parents).
+
+**What was changed** (in order): exact skips (the torus wrap only near half the world; pairs of free blocks skipped in bond
+formation when `pSpont` is 0); no trigonometry in the solver (shape matching from the fit's cosine and sine, small turns by
+series, polar-method normals); a cell-list neighbour scan over half the neighbour cells; free monomers skip derivation,
+transitions and open-side work; allocations trimmed; and the big one, `bodyJostle` with `iters` 4: a set of bonded blocks is
+kicked as the rigid body it forms (a move and a turn of the size its blocks' own kicks would give it), so bonds are no longer
+pulled apart every step and a few passes suffice.
+
+| world (2 seeds × 20,000 steps, mutation off) | setting | CPU steps/s | births | wrong copies |
+|---|---|---:|---:|---:|
+| copying (40×40, 256 A + 256 B, `ABBABA` ×3) | old default: per-block jostle, 16 passes | 501–573 | 126–131 | 0 |
+| | bodies jostled whole, 4 passes | 1,066 | 137 | 0 |
+| | bodies, 3 passes | 1,157 | 137 | 0 |
+| | bodies, 2 passes | 1,279 | 138 | 1 |
+| capped (40×40, 200 each, 120 caps, feed/shield/relay, end loss, bare caps) | old default | 218–227 | 252–255 | 6 |
+| | bodies, 4 passes | 499–558 | 280 | 9 |
+| dense, jammed (40×40, 400 each: blocks cover more than the world) | old engine (16 passes) | 69 (heavier load) | 195 capped | 93% exact, 2% shorter |
+| | bodies, 4 passes | 289 | 202 capped | 59% exact, **39% shorter** |
+| | bodies, 8 passes | 198 | 198 capped | 86% exact, 10% shorter |
+| | bodies, 4 passes, 48×48 (80% covered) | 336 | 178 capped | 97% exact, 3% shorter |
+
+(In capped worlds a few "wrong" copies are expected with mutation off: a template changes while being copied.) After the
+later micro-optimizations the capped world ran at 775 CPU steps/s against 657 before them (same births, same trajectory).
+Tried and removed: stopping the passes on a tolerance (they never converge while loose monomers jostle), resolving loose
+pairs in the first pass only (no gain once bodies move whole), a larger Brownian step (copying is not diffusion-limited
+here: births per step unchanged, each step dearer).
+
+What it says: at ordinary densities the engine is about 2 to 2.5 times faster and copies as exactly as before. **A jammed
+world is different**: with 4 passes a third of copies lose a letter (mutation off, not ligation: 23 of 62 shorter copies with
+`pLigate` 0 as with 0.05, none assembled on two templates; blocks squeezed past the linking tolerance). The dense worlds of
+section 33 were jammed. On this engine use 48×48 for "dense" (area covered about 80%), or 8 to 16 passes. Two slips found on
+the way and fixed: a body's turn first counted every block's own spin as the whole body's (a slow strand, `mobS` 0.1, moved
+more than it should); and a birth's parent was read as the longest chain of the template's component, which could be another
+strand bound or bridged to it (now `strandOf`, the template unit's own strand). What it does not say: the old results
+(sections 1 to 36) were measured on the old engine and are not re-measured here; a known limitation remains that loose
+monomers jostling a slow strand push it further than its mass should allow (4 times less motion than a free strand, not 10).
+
+## 38. Proofreading: a third gene whose pressure is copying itself (`proof`, 2026-09-25)
+
+The shield and the energy gene each remove a cost that grows with genome length (bonds that radiation breaks; units that need
+energy). Copy errors are a third such cost, intrinsic, not an environment: every functional letter can be miscopied, so the
+load grows with the number of letters that matter (Eigen's error threshold). `proof`: a D between two Bs (`proofMotif` `BDB`)
+flags its template face and, with the relay, its whole strand's faces; a monomer of the wrong kind docked on a flagged face,
+not yet linked to a neighbour, lets go at `pProof` per step (it reads its partner's kind, as docking does). Kinetic
+proofreading, local, one block and its partner.
+
+**Does it work** (capped world, 40×40, `pSoft` 0.01, seeds `PABACDCBDBQ` and `PABACDCBCBQ`, 30,000 steps, 2 seeds): share of
+capped copies with a substitution, by parent. Without the rule 50% (parents with `BDB`) and 75%; with the rule at `pProof` 0.5,
+17.5% against 49%; at 0.9, 9.5% against 57%. Proofreading cuts substitutions three- to sixfold for the strand that carries it.
+(At `pSoft` 0.01 half or more of 11-unit copies carry a substitution: this is a heavy mutation regime.)
+
+**Is it selected** (`PC_*`: same world with radiation 3e-5, three seeds of each genome, which differ in one letter,
+`pProof` 0.9, 150,000 steps, 2 seeds; `experiments/capped.js`):
+
+| run | `BDB` among capped births, by 50,000-step window | `BCB` | `CDC` |
+|---|---|---|---|
+| PC_on_1 | 55%, 58%, 76% | 20%, 11%, 7% | 95%, 91%, 93% |
+| PC_on_2 | 54%, 69%, 78% | 10%, 0%, 0% | 87%, 96%, 100% |
+| PC_off_1 (rule off) | 20%, 13%, 10% | 35%, 23%, 12% | 73%, 80%, 82% |
+| PC_off_2 (rule off) | 29%, 9%, 17% | 35%, 23%, 23% | 78%, 81%, 64% |
+
+With the rule on, the proofreading genome takes over from its one-letter competitor in both seeds, and the other genes are
+kept better (fewer mutants); lineages are less diverse (10 to 18 distinct capped sequences per window against 20 to 32).
+With the rule off, both letters drift down alike. A lead (2 seeds, small populations: 45 to 78 capped births per window).
+An earlier attempt in the jammed dense world (`PR_*`, old engine, 5x mutation, pProof 0.5) showed no rescue: both arms melted
+down (births 128 → 23 per 20,000 steps); there about half the copy errors were length changes (baseline `BASE_m5`: 51% of
+capped copies exact, 27% with a substitution, 22% longer or shorter), a load proofreading of substitutions cannot lift. What it does not show yet: whether the gene arises from spare letters by point
+mutation (`PN_*` running: `BCB` one mutation away, `AAA` three away).
