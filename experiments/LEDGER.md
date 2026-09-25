@@ -180,6 +180,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 41a | Pocket races, 8 seeds | Does fuel size decide which of three same-letter genomes wins (section 39 world)? | `pocket`, `foldA` 45, `foldB` 30, `sizeU`, `nU` 40 | negative | shares within drift (per-seed 0–70%); the one nominal effect (p = 0.05) is matched by the no-fold control | races.js, permtest.js (`RC*`, `RN*`) | an energy-limited world (41b) | births limited by letters: fuel arms more templates but births stay (105–129 vs 122 without fuel) |
 | 41b | Who makes pockets; energy-limited world | Are pockets one strand or two? Where does energy limit births? | `pocket`; 48×48, 400 letters each, `nE` 8 to 64 | works | 81–92% of fuel armings in one folded strand; dense world: births 39/68/86/127 at 8/16/32/64 energy particles | pockets.js, `EL*` | races in the dense world (41c) | harvest order differs from the section 39 spectrum (context) |
 | 41c | Pocket races, energy-limited, 12 seeds | Does fold decide same-letter races where energy limits births? | `pocket`, folds on/off, fuel 0.5/1.2, dense 48×48 | inconclusive | `ABABABAB` 50% with folds vs 24% without at fuel 1.2 (p = 0.09), 49% with folds and no fuel; nothing significant | races.js, permtest.js (`DR*`, `DS*`) | 96×96 worlds, or genomes differing in composition | 20–40 births per lineage per seed: drift swings shares 0–100% |
+| 42a | Shared catalyst in space | Do creeping polymers let hosts and parasites separate and hold parasites down (80×80)? | `bindAny`, `translate`, `catalysis`, `mobS` 0.1 vs 1 | lead | parasites 50–65% of births with creeping polymers vs 71–72% well mixed; segregation 0.03–0.10 vs 0.01–0.02; host births equal | hostparasite.sh, spatial.js, hostmap.js (`HP_*`) | parasites from mutation, graded specificity with mutation (arms race) | 2 seeds; effect shrinking by 300k; no travelling front |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -194,10 +195,10 @@ the rows that used it). Rerun it after adding rows.
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative) |
 | `bendB` | 15c (lead), 15d (works) |
-| `bindAny` | 36a (works), 36b (works) |
+| `bindAny` | 36a (works), 36b (works), 42a (lead) |
 | `bodyJostle` | 37 (works) |
 | `capFray` | 28c (lead), 33a (partial) |
-| `catalysis` | 34c (works) |
+| `catalysis` | 34c (works), 42a (lead) |
 | `chiral` | 30 (partial) |
 | `compCopy` | 29 (partial) |
 | `cut` | 26 (negative) |
@@ -232,7 +233,7 @@ the rows that used it). Rerun it after adding rows.
 | `mobD` | 28 (lead) |
 | `mobE` | 14 (negative), 17 (inconclusive), 21 (negative), 25 (works) |
 | `mobM` | 25 (works), 25c (works), 25d (negative) |
-| `mobS` | 21 (negative), 25 (works), 25c (works), 26 (negative), 26b (inconclusive) |
+| `mobS` | 21 (negative), 25 (works), 25c (works), 26 (negative), 26b (inconclusive), 42a (lead) |
 | `mobX` | 25b (works) |
 | `motif` | 9 (negative), 12b (inconclusive), 14 (negative), 17 (inconclusive), 21 (negative), 24b (negative), 27b (negative) |
 | `n1` | 34a (works) |
@@ -294,7 +295,7 @@ the rows that used it). Rerun it after adding rows.
 | `sun` | 3 (negative) |
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
 | `transCode` | 34a (works) |
-| `translate` | 34a (works) |
+| `translate` | 34a (works), 42a (lead) |
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 
