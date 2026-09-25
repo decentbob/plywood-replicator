@@ -1939,7 +1939,26 @@ With the rule off, both letters drift down alike. A lead (2 seeds, small populat
 An earlier attempt in the jammed dense world (`PR_*`, old engine, 5x mutation, pProof 0.5) showed no rescue: both arms melted
 down (births 128 → 23 per 20,000 steps); there about half the copy errors were length changes (baseline `BASE_m5`: 51% of
 capped copies exact, 27% with a substitution, 22% longer or shorter), a load proofreading of substitutions cannot lift. What it does not show yet: whether the gene arises from spare letters by point
-mutation (`PN_*` running: `BCB` one mutation away, `AAA` three away).
+mutation (next).
+
+**A gene from a spare letter** (`PN1_*`: the same world, seeded only with `PABACDCBCBQ` ×6, whose spare `BCB` is one point
+mutation from the proofreading motif; 300,000 steps, 2 seeds):
+
+| run | `BDB` among capped births, by 50,000-step window | `CDC` at the end | births per window |
+|---|---|---:|---|
+| PN1_on_1 | 8%, 29%, 54%, 73%, 79%, 89% | 98% | 492 → 302 |
+| PN1_on_2 | 2%, 22%, 41%, 62%, 71%, 73% | 99% | 514 → 311 |
+| PN1_off_1 (rule off) | 9%, 17%, 16%, 8%, 3%, 7% | 76% | 502 → 548 |
+| PN1_off_2 (rule off) | 5%, 7%, 17%, 3%, 9%, 9% | 68% | 513 → 527 |
+
+The motif arises by a point mutation and sweeps where it proofreads; where it does nothing it drifts at a few percent. The
+other genes are kept better under proofreading (energy gene 87 to 91% against 67 to 72%, shield 98 to 99% against 68 to 76%).
+And a trade-off that no rule states: with proofreading total births fall by about a third (a wrong monomer that lets go
+leaves its site empty for a while), while more of the births are sound, the speed-accuracy trade-off of real polymerases.
+This is the second gene in the project to arise by mutation and spread, the first at ordinary density and the first whose
+pressure is copying itself rather than an imposed environment. What it does not show: a gene from nothing (the spare letters
+were placed one mutation away); from three mutations away (`PN3_*`, spare `AAA`) nothing arose in 110,000 steps (stopped),
+since at ordinary density genome length rarely changes (regularity 5) and three silent substitutions in a row are rare.
 
 ## 39. Shape as function: pockets that fit fuel (`grip`, `pocket`, fuel `U`/`V`, 2026-09-25), first probes
 
