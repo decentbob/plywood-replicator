@@ -367,6 +367,24 @@ Keep entries short: date, what changed, why, what evidence.
 
 ## 15. Ideas not yet tried
 
+**Added 2026-09-25 (later): shape directions put to the user** (the user: "shapes I think are a very promising direction";
+the decision log's assembly-level fit, mechanical AND, graded fit). Four options, recommendation B, refined:
+- *A. Folded genomes as machines*: folding letters plus weak cooperative back-to-back pairing of complementary letters, so
+  self-complementary stretches fold into hairpins (RNA-like secondary structure); stems survive a broken backbone bond,
+  folded faces copy slower, folds can hold strands together.
+- *B. Enzymes made of parts, fuelled by fit (recommended)*. A genome's product folds (its kinds' wedge angles) into a shape
+  with pockets. A fuel particle is recharged only while held by two product backs at once (a mechanical AND read by the
+  particle from its own bonds), so whether a pocket serves a particle is geometry: pocket width against particle size. A
+  charged product unit that binds back onto a genome of its own kind (the code-matched binding of catalysis) arms the genome
+  unit it sits on through the bond, loses its charge, lets go, refolds: a shuttle, private to kin by the code. An environment
+  with fuels of several sizes then offers several niches without a rule per fuel; genomes carrying more distinct pocket shapes
+  harvest more. The route to more genes that is not a hand-written motif list. First step: a physics probe that folded
+  products form pockets that hold particles by two contacts, and that which particles fit depends on product sequence.
+- *C. 2D crystals, a second replication mode*: blocks with extra working sides that attach only where two neighbours hold
+  them; a ribbon grows row by row copying its pattern and breaks under strain, every piece carrying the pattern; coupled to
+  strands (a strand seeds a ribbon, a ribbon templates strands).
+- *D. Letters with shape trade-offs at scale*: section 35 again in worlds 5 to 10 times larger, now affordable.
+
 **Added 2026-09-25, after the literature survey (`LITERATURE.md`) and the user's direction (mechanical, local-rule
 complexity; machines of independent parts; different replication modes together; go deep, not wide).** Directions, each
 with enough detail to be picked up by another session:
