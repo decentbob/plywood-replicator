@@ -1609,10 +1609,10 @@ and kept, and it happens in the environment (energy and radiation together) wher
 19: to dimers; section 22: to the genome's own pieces; round 1: to `PQ`). **Seed 2** repeats every cell: with no pressure and with scarce energy `PABAQ` wins and the shield gene is gone by step
 200,000 (`TB_comp_none_2`, `TB_comp_energy_2`); with radiation (`TB_comp_rad_2`, `TB_comp_both_2`) `PABAQ` is
 out-competed within the first window, both genes in 68 to 70% (radiation) and 82 to 85% (both) of capped births from
-100,000 steps to the end. **Keep runs** (`TB_keep_*_1`, `PABACDCQ` alone): with radiation both genes stay in 67 to 87% of
+100,000 steps to the end. **Keep runs** (`TB_keep_*`, `PABACDCQ` alone, two seeds): with radiation both genes stay in 67 to 88% of
 capped births for 500,000 steps (under both pressures `PABAQ` arose by mutation, 33 births between steps 200,000 and 300,000,
 and was purged); without radiation the shield gene decays by point mutation (74% → 32% with no pressure, 75% → 26% under
-scarce energy) while the energy gene holds at 83 to 89%.
+scarce energy in seed 1; 68% → 45% and 60% → 55% in seed 2) while the energy gene holds at 80 to 89%.
 
 **Control: bare caps without `endLoss`** (`TB_noend_comp_rad_1`, radiation, seed 1). Among capped births the two-gene
 genome still beats `PABAQ` (both genes in 59 to 71%), so bare caps are what decide between capped genomes. But pieces now
@@ -1632,8 +1632,11 @@ mutation (`pSoft`, `pCapture` 0.01) one birth in two million steps carried `CDC`
 almost all five units long (seed 1: 3,945 of length 5, 66 of length 6, none longer; seed 2: 4,386 of length 5, one of
 length 6). Insertions happen but are lost: each adds a bond for radiation to break and pays nothing until the whole gene is
 there, and under both pressures the population is small (60 to 70 template units, about thirteen genomes). This is the
-classic valley between genes. A run under radiation alone, where the population is about five times larger, follows
-(`TD_rad5_*`).
+classic valley between genes. Under radiation alone (`TD_rad5_1`, `_2`: plentiful energy, about 300 template units or
+60 genomes, fivefold mutation) it is the same: 28 births in two million steps carried `CDC`, all of them sterile pieces
+(`CDC`, `PCDCQ`, `CDCD`), none with `ABA` as well; 15,103 capped births were five units long and ten were longer. With these
+mutation channels and population sizes a new gene of three letters does not arise inside a genome in a million steps.
+Seeded, it is kept; from nothing, it is not made.
 
 **Niches** (`band.sh`: radiation only in the left half of an 80×20 world, `radBand` 0.5, seeds `PABACDCQ` and `PABAQ`,
 1,000,000 steps, seed 1). Share of capped births carrying `CDC`, lit half (x < 40) against dark half, by 200,000-step window:
