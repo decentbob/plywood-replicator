@@ -176,7 +176,9 @@ Outputs of section 33's runs are in `experiments/out/` (`TK_*`, `TB_*`, `TA_*`, 
 - **A gene from nothing** (33): no shield gene arose inside `PABAQ` in any of five million-step runs (both pressures and
   radiation alone, normal and fivefold mutation, 13 to 60 genomes). Seeded genes are kept; new ones are not made. The
   valley between genes needs a much larger population, a mutation channel that copies existing stretches (duplication),
-  or a way for part of a gene to pay; which of these fits the locality rule is the open design question.
+  or a way for part of a gene to pay; which of these fits the locality rule is the open design question. End joining
+  (ligation of broken pieces) makes length vary but made no gene either. `telo5.sh` (80×80, four times the population)
+  was started at the end of the session; if its outputs (`TE_*`) are not in `experiments/out/`, rerun it (hours per run).
 - **A third gene** (DESIGN 15, top of the list): walls against rays, or cutting (a cut kills in a capped world).
 
 Older unfinished items (from the 2026-09-24 handoff), still valid:
