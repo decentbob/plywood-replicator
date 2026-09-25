@@ -155,6 +155,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 37 | Faster engine | Can the engine be made much faster, shapes kept? | `bodyJostle`, `iters` 4 | works | 2–2.5x CPU steps/s at ordinary density, copies exact; jammed worlds need 48×48 or 8–16 passes (39% deletions at 4) | scratchpad probes (RESULTS 37) | bigger, longer worlds | Old results not re-measured; trajectories differ from before |
 | 38a | Proofreading works | Does `BDB` cut substitutions in its strand's copies? | `proof`, `pProof` | works | substitutions 50→17.5% (0.5), 57→9.5% (0.9) per capped copy | proof_capped probe | selection test | 2 seeds, 30k steps |
 | 38b | Proofreading selected | Is a genome carrying `BDB` selected over a one-letter-different competitor? | `proof`, `pSoft` 0.01, radiation | lead | `BDB` 55→76–78% with the rule, 20–29→10–17% without | PC_* (RESULTS 38) | gene from spare letters (`PN_*`) | 2 seeds, 150k steps, small populations |
+| 38d | Proofreading from a spare letter | Does `BDB` arise by one point mutation (`BCB` → `BDB`) and spread? | `proof`, `pSoft` 0.01, radiation | lead | seed 1: `BDB` 8 → 89% of capped births over 300k with the rule, 3–17% without; ABA 91%, CDC 98% vs 72%, 76% | PN1_* (RESULTS 38) | a third gene arises and spreads at ordinary density | seed 2 running; from three letters away (`AAA`) nothing arose in 110k (PN3) |
+| 39a | Pockets that fit fuel | Does a folded chain's shape decide which fuel particles its pockets hold? | `grip`, `nU`, `sizeU`, `fold1` | works | 45–90° folds hold small (0.4–0.7) fuel ~24%, 30° large (1.2) 17%, 20° almost nothing, straight mid/large by pairing | grip_probe.js | genome as its own enzyme | seeded product chains, 2 seeds |
+| 39b | Genome as its own enzyme | Does a genome whose shape fits the fuel arm faster? | `pocket`, `foldA`, fuel only energy | works | armed/waiting at 20k: fit 87/16 and 78/36, misfit 34/117 and 49/68 | probes (RESULTS 39) | selection | 1 seed each |
+| 39c | Harvest spectrum | Does letter order (same letters) decide which fuel is used? | `pocket`, `foldA` 45, `foldB` 30 | works | each fuel size has a different best 8-mer: 0.5 `AABBAABB` 36, 0.85 `AAAABBBB` 23, 1.2 `ABABABAB` 24 | harvest.js | pocket races (selection) | 2 seeds, mutation off |
+| 39d | Pocket selection screens | Does composition follow fuel size? | `pocket`, fuel only, 40×40 and 30×30 | inconclusive | 9–47 births per 30k steps: too few; copying runs at ~1 birth per 1,000 steps in small worlds | FS_*, FT_*, PK_*, PR05..PR12 | bigger worlds, longer runs (PW_*) | worlds too small or fuel-poor |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -179,10 +184,12 @@ the rows that used it). Rerun it after adding rows.
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works) |
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works) |
-| `fold1` | 34b (works), 34e (negative) |
-| `foldA` | 28b (works) |
+| `fold1` | 34b (works), 34e (negative), 39a (works) |
+| `foldA` | 28b (works), 39b (works), 39c (works) |
+| `foldB` | 39c (works) |
 | `foldD` | 28b (works) |
 | `gRange` | 31 (partial) |
+| `grip` | 39a (works) |
 | `gStick` | 31 (partial) |
 | `gStickF` | 31 (partial) |
 | `gStickS` | 31 (partial) |
@@ -217,6 +224,7 @@ the rows that used it). Rerun it after adding rows.
 | `nM` | 11 (superseded), 11b (negative), 16 (negative), 16b (negative) |
 | `nP` | 28c (lead) |
 | `nQ` | 28c (lead) |
+| `nU` | 39a (works) |
 | `nX` | 25b (works), 25d (negative) |
 | `pBindP` | 34c (works) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive) |
@@ -232,10 +240,11 @@ the rows that used it). Rerun it after adding rows.
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works) |
+| `pocket` | 39b (works), 39c (works), 39d (inconclusive) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
-| `proof` | 38a (works), 38b (lead), 38c (negative) |
-| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead) |
+| `proof` | 38a (works), 38b (lead), 38d (lead), 38c (negative) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (lead) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works) |
 | `pUnzip` | 13b (works), 15b (works) |
@@ -249,6 +258,7 @@ the rows that used it). Rerun it after adding rows.
 | `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works) |
 | `sizeA` | 28 (lead) |
 | `sizeD` | 28 (lead) |
+| `sizeU` | 39a (works) |
 | `sizeX` | 25b (works) |
 | `slack` | 10b (superseded), 12 (works) |
 | `snapCorners` | 23 (works), 23b (works) |
