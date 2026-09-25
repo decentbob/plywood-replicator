@@ -1837,3 +1837,21 @@ live without their products. A private catalyst keeps parasites at a few percent
 This is the classic replicase–parasite system, here made of physical parts. What it does not have yet is anything the
 cooperators could evolve against the parasites: `bindAny` is all or nothing for the whole world. Graded specificity (a
 product binds any back but lets go faster where it does not match) would let discrimination and mimicry evolve.
+
+**Graded specificity** (`parasite2.sh`, `PG_*`: the shared-letter world with `bindAny` and `pMisMelt`: a bound product unit on
+a letter it does not match lets go at 0.05 or 0.2 per step, matched units hold as a run; 200,000 steps, two seeds). Births
+(no `AA`), `A` share, by 40,000-step window, and the commonest births of the last window:
+
+| run | births (no `AA`) | `A` share | commonest last |
+|---|---|---|---|
+| PG_mis05_1 | 59 (6), 75 (14), 67 (10), 68 (5), 60 (5) | 56 to 59% | `BAAC`, `AAAAB`, `BAAAA`, `CAAB` |
+| PG_mis05_2 | 48 (3), 61 (3), 77 (12), 83 (16), 80 (3) | 55 to 64% | `AAD`, `DAA`, `AAAB`, `AA` |
+| PG_mis2_1 | 55 (4), 65 (4), 59 (4), 68 (5), 74 (6) | 65 to 67% | `BAAAC`, `BAAAA`, `AAAAB`, `BAAB` |
+| PG_mis2_2 | 53 (3), 80 (4), 77 (8), 88 (5), 83 (7) | 58 to 71% | `BAAC`, `CAAB`, `BAAA`, `AAAB` |
+
+With graded specificity parasites stay at 5 to 20% of births (against 60 to 70% with the all-or-nothing shared catalyst):
+a product helps its maker's kind most, so a strand that makes none gets little. What wins is the smallest cooperator,
+one `AA` run and a letter or two (`BAAC`, `AAD`), making the smallest product (`11`). Strands that would be parasites
+survive by carrying `AA`, which makes them cooperators; but the population shrinks toward the minimal cooperator, the old
+"shortest wins" in a new form. Births are lower than with the shared catalyst (60 to 88 per 40,000 steps). One screen,
+two seeds.
