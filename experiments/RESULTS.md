@@ -1767,3 +1767,24 @@ genome `ABBABA`, 80,000 steps, two seeds.) Births: 213 and 229 (0°), 215 and 18
 free shape never meets the genome. For shape to matter the product would have to keep it while bound (a permanent wedge,
 `bend1`), and wedges were seen to forbid docking outright (a wedge `C` homopolymer is never copied, section 35), so that
 would be a switch, not a gradient.
+
+## 36. A shared catalyst and its parasites (`parasite.sh`), the machine as an ecology
+
+The literature's reading (`LITERATURE.md`): where complexity grew in replicator systems it came, among other things, from
+ecology, parasites and cooperators (Könnyű, Hogeweg, Mizuuchi). The catalysis machine of section 34 is private by
+construction (a product binds only strands it matches). `bindAny` makes it a shared good: a finished product binds the back
+of any armed letter. With the code `A`→`1`, `B`→`2` only, strands of `C` and `D` make no product and are copied with other
+strands' products: parasites that arise from nothing more than a letter without a product in the code. Seeds `ABBABA` and
+`CDDCDC`, three each, `pLinkBare` 0.01, mutation 0.002, 100,000 steps, two seeds. Pure parasites (strands with no `A` or `B`)
+among births, and the share of `C` + `D` among newborn letters, by 25,000-step window:
+
+| run | pure parasites among births | C + D share |
+|---|---|---|
+| PA_kin_1, _2 (products bind only what they match) | 1, 2, 3, 1 of 52–88; 1, 0, 0, 0 of 36–57 | 4 → 10%; 5 → 10% |
+| PA_mix_1, _2 (shared catalyst) | 1, 4, 58, 60 of 56–165; 2, 7, 21, 49 of 30–110 | 6 → 49%; 11 → 45% |
+| PA_slow_1, _2 (shared, slow polymers `mobS` 0.3) | 6, 27, 43, 60 of 42–131; 5, 11, 22, 44 of 21–99 | 14 → 49%; 31 → 48% |
+
+What it says: with a private catalyst parasites cannot live (they are seeded and vanish); with a shared one they rise to
+about half of all births within 100,000 steps, and slow polymers do not hold them back at this size. Births still rise in
+every shared run, so the cooperators are not yet losing. Whether this ends in coexistence, cycles or collapse is the
+question for the long runs (`PL_*`, 400,000 steps, same world: `STEPS=400000` with `--bindAny 1`).
