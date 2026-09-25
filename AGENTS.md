@@ -131,7 +131,7 @@ Works, measured (RESULTS sections in brackets):
 - Walls made by their strands (24): with `make` + `tether` a strand carrying `BAB` anchors membrane on its back
   and grows a wall around itself; with `memLinkTol` 0.3 the wall closes around its maker in 20 of 20 seeds within
   about 12,000 steps, stays closed for 10,000 to 50,000 and opens under strain. `memPerm` lets monomers through.
-- **Two genes kept in one genome (33, seed 1 so far).** Telomeres: with `endLoss` (a template block with a free side shows
+- **Two genes kept in one genome (33, two seeds in every environment).** Telomeres: with `endLoss` (a template block with a free side shows
   no face, so copies lose their template's open ends) only strands capped `P...Q` persist, and a genome's pieces die out;
   with `bareCaps` (caps armed only through their bond by the `feed` relay) a genome must carry the energy gene `ABA`, so
   `PQ` is sterile. Then `PABACDCQ` (energy + shield genes) drives `PABAQ` extinct wherever radiation acts and keeps both
@@ -166,16 +166,17 @@ The core obstacle, stated once: **every pressure in this world costs long genome
 any fragment of a genome is itself a replicator that out-copies it (22), so anything that needs several genes
 in one genome loses to its pieces. Section 33 is the first way past it: caps with end-replication loss make pieces
 sterile, and bare caps make the energy gene essential, so the smallest viable genome already carries one gene and a
-second gene pays where its pressure acts. Still one seed at the time of writing; see RESULTS 33 for the rest.
+second gene pays where its pressure acts. What does not happen yet is a new gene arising by mutation (33).
 
 ## Handoff (2026-09-25): pick up here
 
 Session of 2026-09-24/25 (branch `claude/modest-newton-esla1t`, merged into `main` at checkpoints): locality recorded as
 the fundamental rule; relayed signals made one block per pass; `endLoss`, `bareCaps`, `radBand`; RESULTS 33 (telomeres).
 Outputs of section 33's runs are in `experiments/out/` (`TK_*`, `TB_*`, `TA_*`, `TD_*`, `TR_*`). Open from it:
-- **A gene from nothing** (33): under both pressures no shield gene arose inside `PABAQ` (small population); `TD_rad5_*`
-  (radiation only, bigger population) was the next try. If it fails too, the valley between genes needs a larger world
-  or a way for part of a gene to pay.
+- **A gene from nothing** (33): no shield gene arose inside `PABAQ` in any of five million-step runs (both pressures and
+  radiation alone, normal and fivefold mutation, 13 to 60 genomes). Seeded genes are kept; new ones are not made. The
+  valley between genes needs a much larger population, a mutation channel that copies existing stretches (duplication),
+  or a way for part of a gene to pay; which of these fits the locality rule is the open design question.
 - **A third gene** (DESIGN 15, top of the list): walls against rays, or cutting (a cut kills in a capped world).
 
 Older unfinished items (from the 2026-09-24 handoff), still valid:
