@@ -25,6 +25,11 @@ entries near the end of the list), 15 (ideas not yet tried).
   copies, duplicates or inserts a stretch, would make replication pre-programmed. New genes must come from mutations the
   physics already makes. The user's preference for the workflow: wild ideas and combinations in small worlds, promising
   leads in large ones; scarcity and density are factors worth varying.
+- **The kind of result the user wants** (2026-09-25): emergent complexity from the local rules themselves, ideally
+  "something based on logic, like a well-running machine made of independent parts that can copy itself". Environment
+  settings (temperature, bands, cycles) may be tried but interest the user less. Theoretical work on self-replication
+  (not only simulations) may hold a missing link; different replication modes (template chains and other assemblies)
+  working together are worth exploring.
 - **Prefer state changes to type changes.** When a block should become something else, give it an internal
   state and let a bonded side's state trigger the change (as energy particles recharge, as raw membrane is
   activated). The user explicitly disliked a precursor block turning into another type.
