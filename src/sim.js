@@ -127,6 +127,8 @@ const DEFAULTS = {
   pLinkBare: 0.01,              // pLinkBare per step of contact. The genome needs the machine it builds to be copied
   bindAny: false,               // (with catalysis) a finished product binds the back of any armed letter, whether it matches or has a product
                                 // in the code at all: the catalyst is shared, and a strand that makes none can use others' (a parasite)
+  pMisMelt: -1,                 // (with bindAny) a bound product unit on a letter it does not match lets go at this rate per step, whatever its
+                                // neighbours: binding is graded, products favour strands like their maker. -1: mismatched units hold like matched
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
@@ -862,7 +864,9 @@ class Sim {
         // catalysis: a finished product bound to a back lets go fast where it is alone, slowly inside a bound run
         const isH = (x) => x === S.HYB || x === S.HYBC;
         const nh = (bL && isH(this.ss[b[o + L]]) ? 1 : 0) + (bR && isH(this.ss[b[o + R]]) ? 1 : 0);
-        if (this.rng() < (nh === 0 ? p.pPMelt : p.pPMeltRun)) this.pendingUnlink.push(o + F);
+        let pm = nh === 0 ? p.pPMelt : p.pPMeltRun;
+        if (p.pMisMelt >= 0 && this._code[this.type[b[o + F] >> 2]] !== this.type[u]) pm = Math.max(pm, p.pMisMelt);   // graded: a mismatch lets go
+        if (this.rng() < pm) this.pendingUnlink.push(o + F);
       }
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
