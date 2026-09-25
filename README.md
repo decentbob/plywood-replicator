@@ -143,6 +143,8 @@ sequence.
 | `cut`, `cutMotif`, `pCut`, `cutRelay` | a bound template carrying `cutMotif` cuts the strand it is bound to (26) |
 | `sizeA`..`sizeD`, `mobA`..`mobD`, `foldA`..`foldD` | per-letter size, mobility, and folding: a letter bends by `fold` degrees while its face is free, so a free strand curls and straightens where it is copied |
 | `nP`, `nQ`, `capFray` | caps: letters with one lateral side (`P` has no left, `Q` no right) that pair only with each other and fray at `capFray` of the normal rate; a capped strand grows only by a copying mistake inside it |
+| `bareCaps` | caps have no back: no energy particle docks on a cap, so caps are armed only through their bond (the `feed` relay) and a capped genome re-arms only if it carries the energy gene `ABA`; `PQ` is sterile (33) |
+| `radBand` | radiation acts only where x < `radBand` × W: a world with a lit and a dark part (33) |
 | `endLoss` | end-replication loss: a template unit with a free lateral side shows no face and marks its bonded side as a tip, and a neighbour reading the tip counts that side as the end. Every copy lacks its template's open ends, so pieces of a strand shrink by a unit per open end each generation and die out, while a strand capped at both ends (`P...Q`) copies whole, as telomeres protect chromosome ends (33) |
 | `compCopy` | complementary copying: `A` docks on `B` and `C` on `D`, so a copy is the reversed complement of its parent (28) |
 | `nJ`, `pHub` | hubs: blocks whose four sides each hold a strand's open end, tethering strands in a star without fusing them |
