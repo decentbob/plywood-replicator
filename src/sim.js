@@ -406,8 +406,16 @@ class Sim {
     this.reach = 1.6 * big;
     this.cell = 1.6 * big;
     this.gw = Math.max(3, Math.ceil(p.W / this.cell)); this.gh = Math.max(3, Math.ceil(p.H / this.cell));
-    this.head = new Int32Array(this.gw * this.gh);
-    this.next = new Int32Array(n);
+    // cell list: the units of cell c are cellItems[cellStart[c] .. cellStart[c + 1]); fwd holds each cell's four forward neighbours
+    // (right, and the three above), so a scan of every cell against itself and those four meets every pair of nearby units once
+    const nc = this.gw * this.gh;
+    this.cellStart = new Int32Array(nc + 1); this.cellPos = new Int32Array(nc); this.cellItems = new Int32Array(n); this.cellOf = new Int32Array(n);
+    this.fwd = new Int32Array(nc * 4);
+    for (let cy = 0; cy < this.gh; cy++) for (let cx = 0; cx < this.gw; cx++) {
+      const c = cy * this.gw + cx, up = ((cy + 1) % this.gh) * this.gw;
+      this.fwd[c * 4] = cy * this.gw + (cx + 1) % this.gw;
+      this.fwd[c * 4 + 1] = up + (cx + this.gw - 1) % this.gw; this.fwd[c * 4 + 2] = up + cx; this.fwd[c * 4 + 3] = up + (cx + 1) % this.gw;
+    }
     this.cosTol = Math.cos(p.tolDeg * Math.PI / 180);
     this.cosTolRot = Math.cos(p.tolRotDeg * Math.PI / 180);
     this.cosLinkTol = Math.cos(p.linkTolDeg * Math.PI / 180);
@@ -466,12 +474,15 @@ class Sim {
   // ------------------------------------------------------------- spatial hash
   // ------------------------------------------------------------- spatial hash
   _buildHash() {
-    this.head.fill(-1);
-    for (let u = 0; u < this.n; u++) {
-      const cx = Math.min(this.gw - 1, (this.px[u] / this.cell) | 0), cy = Math.min(this.gh - 1, (this.py[u] / this.cell) | 0);
-      const c = cy * this.gw + cx;
-      this.next[u] = this.head[c]; this.head[c] = u;
+    const n = this.n, gw = this.gw, gh = this.gh, cell = this.cell, px = this.px, py = this.py;
+    const start = this.cellStart, pos = this.cellPos, items = this.cellItems, cOf = this.cellOf, nc = gw * gh;
+    start.fill(0);
+    for (let u = 0; u < n; u++) {
+      const cx = Math.min(gw - 1, (px[u] / cell) | 0), cy = Math.min(gh - 1, (py[u] / cell) | 0), c = cy * gw + cx;
+      cOf[u] = c; start[c + 1]++;
     }
+    for (let c = 0; c < nc; c++) { start[c + 1] += start[c]; pos[c] = start[c]; }
+    for (let u = 0; u < n; u++) items[pos[cOf[u]]++] = u;
   }
 
   /** Call fn(v) for every unit v in the 3x3 cells around (x, y). */
@@ -480,8 +491,8 @@ class Sim {
     for (let dy = -1; dy <= 1; dy++) {
       const yy = (cy + dy + this.gh) % this.gh;
       for (let dx = -1; dx <= 1; dx++) {
-        const xx = (cx + dx + this.gw) % this.gw;
-        for (let v = this.head[yy * this.gw + xx]; v >= 0; v = this.next[v]) fn(v);
+        const c = yy * this.gw + (cx + dx + this.gw) % this.gw;
+        for (let k = this.cellStart[c], e = this.cellStart[c + 1]; k < e; k++) fn(this.cellItems[k]);
       }
     }
   }
@@ -698,8 +709,14 @@ class Sim {
   }
 
   _computeOpen() {
-    const p = this.p;
+    const p = this.p, b = this.bond, type = this.type, is = this.is;
+    const freeMask = 1 << F | (p.pCapture > 0 || p.pSpont > 0 ? 1 << L | 1 << R : 0);   // a free monomer: its face, and its sides if they can capture
     for (let u = 0; u < this.n; u++) {
+      const t = type[u], o = u * 4;
+      if (is[u] === I_DOCK && b[o] < 0 && b[o + 1] < 0 && b[o + 2] < 0 && b[o + 3] < 0 && (t <= T_B || (t >= T_C && t <= T_D) || t === T_P || t === T_Q || isProd(t))) {
+        this.open[u] = t === T_P ? freeMask & ~(1 << L) : t === T_Q ? freeMask & ~(1 << R) : freeMask;   // (a cap lacks one side)
+        continue;
+      }
       let m = 0;
       for (let i = 0; i < 4; i++) {
         if (this.bond[u * 4 + i] >= 0) continue;
@@ -742,6 +759,15 @@ class Sim {
     if (this.type[u] === T_E) {
       const s = this.is[u] === I_ON ? S.ON : S.OFF;
       this.ss[o] = this.ss[o + 1] = this.ss[o + 2] = this.ss[o + 3] = s;
+      return;
+    }
+    if (this.is[u] === I_DOCK && b[o] < 0 && b[o + 1] < 0 && b[o + 2] < 0 && b[o + 3] < 0) {
+      // a free monomer (the commonest block): what the full derivation below gives it, directly
+      const ss = this.ss; ss[o + F] = S.DOCK; ss[o + L] = S.INERT; ss[o + R] = S.INERT; ss[o + K] = S.IDLE;
+      if (this.p.proof) this.prf[o + F] = this.prf[o + L] = this.prf[o + R] = 0;
+      if (this.p.catalysis) this.cat[o + F] = 0;
+      if (this.p.endLoss) this.tip[o + L] = this.tip[o + R] = 0;
+      if (this.type[u] === T_P || this.type[u] === T_Q) this._capSides(u);
       return;
     }
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0 && this.type[b[o + L] >> 2] !== T_J, bR = b[o + R] >= 0 && this.type[b[o + R] >> 2] !== T_J, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
@@ -852,6 +878,7 @@ class Sim {
    */
   _transition(u) {
     const p = this.p, b = this.bond, o = u * 4;
+    if (this.is[u] === 0 && b[o] < 0 && b[o + 1] < 0 && b[o + 2] < 0 && b[o + 3] < 0) return;   // a free block in state 0 has no transition
     if (this.type[u] === T_X || this.type[u] === T_J || this.type[u] === T_G) return;
     if (this.type[u] === T_M) {
       // make rule: a raw block whose face is on a MAKE back turns active and lets go; an active block with no lateral
@@ -959,13 +986,13 @@ class Sim {
     // R7 radiation: each of my lateral bonds breaks with probability pBreak scaled by how fragile the two blocks are.
     // A docked copy re-links at once (its neighbours are still flush and sticky), so a template shields its copy.
     if (p.pBreak > 0 && nl > 0 && (p.radBand >= 1 || this.px[u] < p.radBand * p.W)) {   // radBand: radiation only where x < radBand * W
-      const mine = 1 - typeParam(p, 'res', this.type[u], 0);
+      const mine = 1 - this._resT[this.type[u]];
       for (const side of [L, R]) {
         const q = b[o + side]; if (q < 0) continue;
         const v = q >> 2; if (v < u) continue;   // each bond is rolled once, by its lower-numbered end
         const s1 = this.ss[o + side], s2 = this.ss[q];
         if (s1 === S.SHIELD || s1 === S.FSH || s2 === S.SHIELD || s2 === S.FSH) continue;   // shield rule: a shielded bond does not break
-        const theirs = 1 - typeParam(p, 'res', this.type[v], 0);
+        const theirs = 1 - this._resT[this.type[v]];
         if (this.rng() < p.pBreak * mine * theirs) { this.pendingUnlink.push(o + side); this.breakEvents++; this._event('break', u, v); }
       }
     }
@@ -1219,7 +1246,7 @@ class Sim {
   _physics() {
     const p = this.p, n = this.n;
     const px = this.px, py = this.py, pa = this.pa, ox = this.ox, oy = this.oy, rad = this.rad, bond = this.bond, wt = this.w, wr = this.wr, vw = this.vw;
-    const W = p.W, H = p.H, gw = this.gw, gh = this.gh, cell = this.cell, head = this.head, next = this.next;
+    const W = p.W, H = p.H, gw = this.gw, gh = this.gh;
     // torus wrap: a difference well inside half the world needs none (the full formula gives the same number there, without a division)
     const hwW = 0.49 * W, hwH = 0.49 * H;
     // 1. Brownian jostling: each block translates and turns as a whole (its shape changes only under pins)
@@ -1238,18 +1265,20 @@ class Sim {
     this._buildHash();
     // 2. one neighbour scan: every pair of units whose centres are within reach, for contacts now and bonding after
     const pairs = this.pairs; pairs.length = 0;
-    const reach = this.reach;
-    for (let u = 0; u < n; u++) {
-      const x = px[u], y = py[u];
-      const cx = Math.min(gw - 1, (x / cell) | 0), cy = Math.min(gh - 1, (y / cell) | 0);
-      for (let oyy = -1; oyy <= 1; oyy++) {
-        const row = ((cy + oyy + gh) % gh) * gw;
-        for (let oxx = -1; oxx <= 1; oxx++) {
-          for (let v = head[row + (cx + oxx + gw) % gw]; v >= 0; v = next[v]) {
-            if (v <= u) continue;
+    const reach2 = this.reach * this.reach, start = this.cellStart, items = this.cellItems, fwd = this.fwd, nc = gw * gh;
+    for (let c = 0; c < nc; c++) {
+      const s0 = start[c], e0 = start[c + 1];
+      for (let a = s0; a < e0; a++) {
+        const u = items[a], x = px[u], y = py[u];
+        // the rest of my own cell, then my four forward cells (each pair of cells is scanned from one side only)
+        for (let f = -1; f < 4; f++) {
+          let k0, k1;
+          if (f < 0) { k0 = a + 1; k1 = e0; } else { const c2 = fwd[c * 4 + f]; k0 = start[c2]; k1 = start[c2 + 1]; }
+          for (let k = k0; k < k1; k++) {
+            const v = items[k];
             let dx = px[v] - x; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
             let dy = py[v] - y; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
-            if (dx * dx + dy * dy < reach * reach) pairs.push(u, v);
+            if (dx * dx + dy * dy < reach2) pairs.push(u, v);
           }
         }
       }
@@ -1426,6 +1455,7 @@ class Sim {
   _chemistry() {
     const p = this.p, n = this.n, rng = this.rng;
     // 5. state transitions (synchronous: all read last step's derived states; bond breaks are applied after)
+    const resT = this._resT || (this._resT = new Float64Array(NT)); for (let t = 0; t < NT; t++) resT[t] = typeParam(p, 'res', t, 0);   // (read once a step)
     for (let u = 0; u < n; u++) this._transition(u);
     for (const q of this.pendingUnlink) this._unlink(q >> 2, q & 3);
     this.pendingUnlink.length = 0;
