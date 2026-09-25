@@ -116,6 +116,8 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
         <button id="bRun" class="primary">Pause</button>
         <button id="bStep">Step</button>
         <button id="bReset">Reset</button>
+        <button id="bOpen" title="Open a world state saved by a headless run (node run.js --save FILE)">Open state</button>
+        <input id="fOpen" type="file" accept=".json,application/json" hidden>
         <label style="font:12px var(--mono)">speed <input id="speed" type="range" min="1" max="40" value="4" style="vertical-align:middle;width:90px;accent-color:var(--accent)"> <span id="speedV">4</span>/frame</label>
       </div>
       <div class="row" style="margin-top:8px">
@@ -183,7 +185,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -263,6 +265,8 @@ const KNOBS = [
   ['shield', 'CDC motif shields', 'a D between two Cs makes its two bonds immune to radiation', 'bool'],
   ['relay', 'motif signals relay', 'template units pass FEED and SHIELD along their strand: one motif serves the whole strand', 'bool'],
   ['feed', 'ABA motif feeds', 'a B between two As re-arms its released neighbours through their bonds', 'bool'],
+  ['proof', 'BDB motif proofreads', 'a D between two Bs (proofMotif) flags its face (with the relay, its whole strand): a wrong monomer docked there lets go before it links', 'bool'],
+  ['pProof', 'p proofread', 'per step a wrong monomer on a flagged face lets go'],
   ['pReload', 'p reload per step', 'OFF→ON background energy income'],
   ['grp', 'Physics'],
   ['sigma', 'jostle', 'Brownian step per square'],
@@ -550,6 +554,17 @@ function loop() {
 $('bRun').addEventListener('click', () => { running = !running; $('bRun').textContent = running ? 'Pause' : 'Run'; });
 $('bStep').addEventListener('click', () => { sim.step(); refresh(true); draw(); });
 $('bReset').addEventListener('click', reset);
+// a state saved by a headless run (run.js --save): look at it, and run it on from there
+$('bOpen').addEventListener('click', () => $('fOpen').click());
+$('fOpen').addEventListener('change', async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const st = JSON.parse(await f.text());
+  sim = Sim.fromState(st); series = []; selected = -1; flashes.clear(); lastEvent = 0;
+  $('inspect').hidden = true; $('log').textContent = ''; $('feed').textContent = '';
+  seedUnit = -1; for (let u = 0; u < sim.n; u++) if (sim.type[u] !== T_E && sim.is[u] === 2) { seedUnit = u; break; }
+  buildKnobs(sim.p); fitWorld(); draw(); refresh(true);
+  e.target.value = '';
+});
 $('speed').addEventListener('input', (e) => { speed = Number(e.target.value); $('speedV').textContent = speed; });
 $('preset').addEventListener('change', () => { buildKnobs(Object.assign({}, BASE, PRESETS[$('preset').value])); reset(); });
 $('bAddSeed').addEventListener('click', () => {

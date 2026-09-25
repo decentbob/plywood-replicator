@@ -7,12 +7,16 @@
  *                   one that is stopped) has its births so far
  *   --quiet         no CSV, only the summary
  *   --change T:k=v,k=v   at step T set parameters (an environment change); may be repeated
+ *   --save FILE     write the whole world state to FILE (JSON) at every reporting interval and at the end: the viewer opens it
+ *                   ("open state"), and --load continues from it
+ *   --load FILE     start from a saved state instead of a fresh world; parameters given on the command line override the saved
+ *                   ones (a branch: the evolved population under a changed rule). --steps counts the steps to add
  */
 const { Sim, DEFAULTS, REMOVED } = require('./src/sim.js');
 const fs = require('fs');
 
 const args = process.argv.slice(2);
-const opt = { steps: 50000, every: 2000, quiet: false, births: '' };
+const opt = { steps: 50000, every: 2000, quiet: false, births: '', save: '', load: '' };
 const params = {}, changes = [];
 if (args.includes('--help') || args.includes('-h')) {
   console.log('usage: node run.js [--steps N] [--every N] [--quiet] [--births FILE] [--<param> value ...]\nparams and defaults:');
@@ -36,8 +40,10 @@ for (let i = 0; i < args.length; i++) {
   else { console.error('unknown option --' + k); process.exit(2); }
 }
 
-const sim = new Sim(params);
-const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts', 'snaps', 'rayHits', 'cuts'];
+const sim = opt.load ? Sim.fromState(JSON.parse(fs.readFileSync(opt.load, 'utf8')), params) : new Sim(params);
+const t00 = sim.t;
+const saveState = () => { if (opt.save) { fs.writeFileSync(opt.save + '.tmp', JSON.stringify(sim.saveState())); fs.renameSync(opt.save + '.tmp', opt.save); } };
+const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts', 'snaps', 'rayHits', 'cuts', 'proofs'];
 if (!opt.quiet) console.log(cols.join(','));
 const t0 = Date.now();
 // the birth log is flushed every interval (and the simulation's copy emptied), so it is complete up to the last report
@@ -45,8 +51,9 @@ if (opt.births) fs.writeFileSync(opt.births, '');
 const flushBirths = () => { if (!opt.births || !sim.births.length) return; fs.appendFileSync(opt.births, sim.births.map((b) => JSON.stringify(b)).join('\n') + '\n'); sim.births.length = 0; };
 changes.sort((a, b) => a.at - b.at);
 for (let s = 0; s < opt.steps; s += opt.every) {
-  // run to the end of this reporting interval, applying any environment change on the way
-  const end = Math.min(s + opt.every, opt.steps);
+  // run to the end of this reporting interval, applying any environment change on the way (step numbers count from the start of
+  // the original run, so a resumed run keeps its clock)
+  const end = t00 + Math.min(s + opt.every, opt.steps);
   while (changes.length && changes[0].at < end) {
     sim.run(Math.max(0, changes[0].at - sim.t));
     Object.assign(sim.p, changes.shift().set); sim.bondsDirty = true; sim._computeOpen();
@@ -55,6 +62,7 @@ for (let s = 0; s < opt.steps; s += opt.every) {
   const st = sim.stats();
   if (!opt.quiet) console.log(cols.map((c) => typeof st[c] === 'number' ? +st[c].toFixed(3) : st[c]).join(','));
   flushBirths();
+  saveState();
   const errs = sim.check();
   if (errs.length) { console.error('CHECK FAILED at t=' + sim.t + ': ' + errs.slice(0, 5).join('; ')); process.exit(1); }
 }

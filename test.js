@@ -436,4 +436,27 @@ test('heat: no binding in the hot part of a cycle, and bound pairs melt there', 
   assert.deepStrictEqual(s.check(), []);
 });
 
+test('proof: a strand carrying BDB (relayed) is copied with fewer substitutions; with the rule off, no fewer; flags need a source', () => {
+  const run = (proof) => {
+    let tot = 0, sub = 0, pe = 0;
+    for (const seed of [1, 2]) {
+      const s = new Sim(Object.assign({}, base, { seed, W: 30, H: 30, nA: 150, nB: 150, nC: 150, nD: 150, nE: 80, seedCount: 3, seedSeq: 'CABDBAC', pSoft: 0.05, proof, pProof: 0.9, relay: true, pUndock: 0.05 }));
+      s.run(15000);
+      // only copies of strands that carry the motif (a strand that has lost it is not proofread)
+      for (const b of s.births) { if (!b.parent || !b.parent.includes('BDB')) continue; tot++; if (b.seq !== rev(b.parent) && b.seq.length === b.parent.length) sub++; }
+      pe += s.proofEvents;
+      assert.deepStrictEqual(s.check(), []);
+    }
+    return { tot, sub, pe };
+  };
+  const on = run(true), off = run(false);
+  assert.ok(on.tot >= 30 && off.tot >= 30, `births ${on.tot} ${off.tot}`);
+  assert.ok(on.pe > 0 && off.pe === 0, 'proof events ' + on.pe + ' ' + off.pe);
+  assert.ok(on.sub / on.tot < 0.5 * off.sub / off.tot, `substitutions ${on.sub}/${on.tot} with proofreading, ${off.sub}/${off.tot} without`);
+  // no motif, no flag: a strand without BDB never proofreads
+  const s = new Sim(Object.assign({}, base, { seed: 3, W: 30, H: 30, nA: 150, nB: 150, nC: 150, nD: 150, nE: 80, seedCount: 3, seedSeq: 'CABCBAC', proof: true, relay: true }));
+  s.run(3000);
+  assert.ok(s.births.length > 0 && s.prf.every((x) => x === 0), 'a flag without a BDB source');
+});
+
 console.log(passed + ' tests passed');

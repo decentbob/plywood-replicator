@@ -165,6 +165,9 @@ const DEFAULTS = {
   feed: false,     // a B template unit flanked by two A units re-arms its released neighbours through their shared bonds (private metabolism)
   shield: false,   // a D template unit flanked by two C units makes its two lateral bonds immune to radiation (private durability)
   relay: false,    // template units pass FEED and SHIELD on along their strand, away from the motif, so one motif serves the whole strand
+  proof: false,    // proofreading: a template unit in proofMotif (the middle letter between two of the outer one) flags its face, and with the
+  proofMotif: 'BDB', // relay passes the flag along its strand; a monomer of the wrong kind docked on a flagged face, not yet linked to a
+  pProof: 0.5,     // neighbour, lets go at pProof per step, so the right kind can take the site (kinetic proofreading, a private gene)
   pMem: 0.2,       // two membrane blocks whose back corners touch link, per step of contact; the pins then pull their edges flush
   memAngle: 45,    // bend between two bonded membrane blocks, degrees toward the backs: their wedge shape (45 closes a ring of 8; at most about 50)
   resM: 0.5,       // membrane blocks' resistance to radiation
@@ -197,6 +200,12 @@ const DEFAULTS = {
                                  // and energy diffuse, as on a mineral surface, so offspring stay near their parents
   repMargin: 1.0,                // contact radius of a block as a fraction of half its side; unbonded blocks never overlap more than this allows
   iters: 16,                     // constraint passes per step (pins, contacts, shape); 8 to 24 all copy exactly, more keep bonded edges closer
+  bodyJostle: false,             // bonded blocks are jostled together, as the rigid body they form (one random move and turn about their centre,
+                                 // of the size a body of that many blocks has), instead of each on its own: the bonds stay satisfied, so the
+                                 // passes have only contacts to resolve (and each block keeps its own shape, softness and wedge)
+  solveTol: 0,                   // stop the constraint passes early once no contact or pin needed a correction larger than this (in block sides)
+  freePasses: 0,                 // contacts between two unbonded blocks are resolved only in the first freePasses passes (0: in every pass);
+                                 // loose monomers may then overlap a little for a step, which nothing reads, and the passes cost far less
   maxStrain: 0,                  // a weak bond (membrane, a lone docked monomer) whose pinned corners the passes leave further apart than this
                                  // (in block sides) lets go: blocks give only so far, so a shape they do not fit (a ring of the wrong size)
                                  // snaps. Monomers linked into a copy in progress hold each other. 0: off
@@ -215,13 +224,29 @@ const REMOVED = ['physics', 'hinge', 'hingeMax', 'slack', 'memFlex'];
 
 function mulberry32(seed) {
   let a = seed | 0;
-  return function () {
+  const f = function () {
     a = a + 0x6D2B79F5 | 0;
     let t = Math.imul(a ^ a >>> 15, 1 | a);
     t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
+  f.getState = () => a; f.setState = (x) => { a = x | 0; };   // for saving and resuming a run
+  return f;
 }
+// typed arrays to and from base64, in Node and in the browser (saved states)
+function toB64(ta) {
+  const u8 = new Uint8Array(ta.buffer, ta.byteOffset, ta.byteLength);
+  if (typeof Buffer !== 'undefined') return Buffer.from(u8).toString('base64');
+  let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+function fromB64(b64, Ctor) {
+  let u8;
+  if (typeof Buffer !== 'undefined') { const b = Buffer.from(b64, 'base64'); u8 = new Uint8Array(b.length); u8.set(b); }
+  else { const s = atob(b64); u8 = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u8[i] = s.charCodeAt(i); }
+  return new Ctor(u8.buffer);
+}
+const ARRAY_TYPES = { Float64Array, Int32Array, Uint8Array, Uint16Array, Int8Array };
 const TAU = Math.PI * 2;
 function wrapAngle(a) { a %= TAU; if (a < 0) a += TAU; return a; }
 
@@ -234,13 +259,15 @@ class Sim {
     this._init();
   }
 
-  /** A standard normal deviate (Box-Muller, both values of each pair used). */
+  /** A standard normal deviate (Marsaglia's polar method, both values of each pair used). */
   _gauss() {
     if (this._spare === this._spare) { const g = this._spare; this._spare = NaN; return g; }
-    let u = 0; while (u === 0) u = this.rng();
-    const v = this.rng(), r = Math.sqrt(-2 * Math.log(u));
-    this._spare = r * Math.sin(TAU * v);
-    return r * Math.cos(TAU * v);
+    // Marsaglia's polar method: two normals from a point in the unit disc, no trigonometry
+    let x, y, q;
+    do { x = 2 * this.rng() - 1; y = 2 * this.rng() - 1; q = x * x + y * y; } while (q >= 1 || q === 0);
+    const f = Math.sqrt(-2 * Math.log(q) / q);
+    this._spare = y * f;
+    return x * f;
   }
 
   // ---------------------------------------------------------------- setup
@@ -264,6 +291,8 @@ class Sim {
                                                   // cutRelay, tether) is read from here, so it moves one block per pass, never further
     this.cat = new Uint8Array(n * 4);             // catalysis: a face shows, beside its state, whether a finished product is bound to its unit's back
     this.tip0 = new Uint8Array(n * 4);            // the tips as the last derive pass left them, which is what a neighbour reads
+    this.prf = new Uint8Array(n * 4);             // proof rule: a lateral side shows whether it passes on the proofreading flag, a face whether
+    this.prf0 = new Uint8Array(n * 4);            // its unit proofreads (derived like the state); prf0 is the last pass's, read by neighbours
     this.open = new Uint8Array(n);                // bitmask of bondable sides
     this.fresh = new Uint8Array(n);               // released from a template since last birth (observation)
     this.parentOf = new Int32Array(n).fill(-1);   // the template unit this unit was copied on (observation)
@@ -278,7 +307,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0; this.proofEvents = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
@@ -287,8 +316,19 @@ class Sim {
     for (const pair of String(p.transCode || '').split(',')) { const lt = letterType(pair.trim()[0]), pt = TNAME.indexOf(pair.trim()[1]); if (lt >= 0 && isProd(pt)) this._code[lt] = pt; }
     const cm = String(p.cutMotif || 'BAB');
     this._cutOut = letterType(cm[0]); this._cutMid = letterType(cm[1]);   // cut rule
+    const pm = String(p.proofMotif || 'BDB');
+    this._prfOut = letterType(pm[0]); this._prfMid = letterType(pm[1]);   // proof rule
 
-    // types
+    this._initTypes();
+    this._initGeometry();
+    this._seedAll();
+    this._deriveAll();
+    this._computeOpen();
+  }
+
+  /** Block types, in a fixed order (A, B, E, M, C, D, X, P, Q, J, G, products). */
+  _initTypes() {
+    const p = this.p;
     let u = 0;
     for (let i = 0; i < p.nA; i++) this.type[u++] = T_A;
     for (let i = 0; i < p.nB; i++) this.type[u++] = T_B;
@@ -302,6 +342,12 @@ class Sim {
     for (let i = 0; i < (p.nJ || 0); i++) this.type[u++] = T_J;
     for (let i = 0; i < (p.nG || 0); i++) this.type[u++] = T_G;
     for (let k = 0; k < 4; k++) for (let i = 0; i < (p['n' + (k + 1)] || 0); i++) this.type[u++] = PRODUCTS[k];
+  }
+
+  /** Polygon engine: sizes, masses, hands, states, a jittered grid placement, rest shapes, the spatial hash. */
+  _initGeometry() {
+    const p = this.p, n = this.n;
+    let u;
     for (u = 0; u < n; u++) {
       this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
       if (p.chiral > 0 && LETTERS.includes(this.type[u])) this.hand[u] = this.rng() < p.chiral ? 1 : 0;
@@ -365,8 +411,11 @@ class Sim {
     this.cosTol = Math.cos(p.tolDeg * Math.PI / 180);
     this.cosTolRot = Math.cos(p.tolRotDeg * Math.PI / 180);
     this.cosLinkTol = Math.cos(p.linkTolDeg * Math.PI / 180);
+  }
 
-    // seed strands: seedSeq may list several sequences separated by commas; seedCount repeats the list
+  /** Seed strands: seedSeq may list several sequences separated by commas; seedCount repeats the list. */
+  _seedAll() {
+    const p = this.p;
     const seqs = p.seedSeq ? String(p.seedSeq).split(',').map((q) => q.trim()).filter(Boolean) : [''];
     for (let s = 0; s < p.seedCount; s++) {
       for (let q = 0; q < seqs.length; q++) {
@@ -377,8 +426,6 @@ class Sim {
         this.seedStrand(cx, cy, this.rng() * TAU, len, seqs[q]);
       }
     }
-    this._deriveAll();
-    this._computeOpen();
   }
 
   /** Place a template strand of `len` units (or the given A/B sequence): a row of blocks, each bonded to the next. */
@@ -503,8 +550,10 @@ class Sim {
     this.px[u] += dx; this.py[u] += dy;
     if (da === 0) return;
     this.pa[u] += da;
-    const c = Math.cos(da), s = Math.sin(da);
-    for (let k = u * NV, e = u * NV + this.corners(u); k < e; k++) { const x = this.ox[k], y = this.oy[k]; this.ox[k] = c * x - s * y; this.oy[k] = s * x + c * y; }
+    let c, s;
+    if (da < 0.1 && da > -0.1) { const d2 = da * da; c = 1 - d2 * (0.5 - d2 * (1 / 24 - d2 / 720)); s = da * (1 - d2 * (1 / 6 - d2 * (1 / 120 - d2 / 5040))); }   // series, exact to double precision here
+    else { c = Math.cos(da); s = Math.sin(da); }
+    for (let k = u * NV, e = u * NV + this.nv[this.type[u]]; k < e; k++) { const x = this.ox[k], y = this.oy[k]; this.ox[k] = c * x - s * y; this.oy[k] = s * x + c * y; }
   }
 
   /** True if unit m could sit at (tx,ty) without overlapping another unit (space exclusion). */
@@ -697,6 +746,18 @@ class Sim {
     }
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0 && this.type[b[o + L] >> 2] !== T_J, bR = b[o + R] >= 0 && this.type[b[o + R] >> 2] !== T_J, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u];
+    if (this.p.proof) {
+      // proof rule: a template unit in the motif flags its face; with the relay it also shows the flag on each lateral side if it is a
+      // source or its neighbour on the other side showed it toward it on the last pass (one block per pass), and flags its face if either
+      const pr = this.prf; pr[o + F] = pr[o + L] = pr[o + R] = 0;
+      if (st === I_TPL && !isProd(this.type[u])) {
+        const src = bL && bR && this.type[u] === this._prfMid && this.type[b[o + L] >> 2] === this._prfOut && this.type[b[o + R] >> 2] === this._prfOut;
+        const rel = this.p.relay, inL = rel && bL && this.prf0[b[o + L]] === 1, inR = rel && bR && this.prf0[b[o + R]] === 1;
+        if (bL && (src || inR)) pr[o + L] = 1;
+        if (bR && (src || inL)) pr[o + R] = 1;
+        if (src || inL || inR) pr[o + F] = 1;
+      }
+    }
     if (st === I_FRAY) {
       this.ss[o + F] = S.REPEL; this.ss[o + K] = S.IDLE; this.ss[o + L] = S.FRAY; this.ss[o + R] = S.FRAY;
       return;
@@ -782,7 +843,7 @@ class Sim {
   /** Caps lack one lateral side (and, with bareCaps, the back): that side shows IDLE and never bonds. */
   _capSides(u) { const t = this.type[u]; if (t === T_P) this.ss[u * 4 + L] = S.IDLE; else if (t === T_Q) this.ss[u * 4 + R] = S.IDLE; if (this.p.bareCaps) this.ss[u * 4 + K] = S.IDLE; }
 
-  _deriveAll() { const p = this.p; if (p.endLoss) this.tip0.set(this.tip); if (p.relay || p.cutRelay || p.tether) this.ss0.set(this.ss); for (let u = 0; u < this.n; u++) this._derive(u); }
+  _deriveAll() { const p = this.p; if (p.endLoss) this.tip0.set(this.tip); if (p.proof) this.prf0.set(this.prf); if (p.relay || p.cutRelay || p.tether) this.ss0.set(this.ss); for (let u = 0; u < this.n; u++) this._derive(u); }
 
   // ------------------------------------------------------------- the rule table
   /**
@@ -841,6 +902,11 @@ class Sim {
       if (bF) {
         // R6 undocking: a lone docked monomer is not stable; a laterally linked run is
         if (nl === 0 && p.pUndock > 0 && this.rng() < p.pUndock) { this.pendingUnlink.push(o + F); this.kicked.push(u); this.undockEvents++; this._event('undock', u); return; }
+        // proofreading: a monomer of the wrong kind (it reads its partner's kind, its colour) on a flagged face lets go before it links
+        if (p.proof && nl === 0 && this.prf[b[o + F]]) {
+          const tt = this.type[b[o + F] >> 2], mate = p.compCopy && tt < T_P ? COMP[tt] : PAIR[tt];
+          if (mate !== this.type[u] && this.rng() < p.pProof) { this.pendingUnlink.push(o + F); this.kicked.push(u); this.proofEvents++; this._event('proof', u); return; }
+        }
         // R1 release: docked, and every lateral bond the template partner says I need is in place
         const pf = this.ss[b[o + F]], prod = isProd(this.type[u]);
         const needL = prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF;
@@ -1088,13 +1154,77 @@ class Sim {
     }
   }
 
+  /** A block's Brownian step size (translation) and turn size, from its mobility knobs. */
+  _mobility(u) {
+    const p = this.p, t = this.type[u], ub = u * 4, bond = this.bond;
+    const slow = p.mobS !== 1 && t !== T_E && t !== T_X && (bond[ub] >= 0 || bond[ub + 1] >= 0 || bond[ub + 2] >= 0 || bond[ub + 3] >= 0);
+    let mob = t === T_M ? p.mobM : slow ? p.mobS : 1;
+    if (this._mobL[t] !== 1) mob *= this._mobL[t];
+    const sw = t === T_E ? Math.sqrt(this.w[u]) * p.mobE : t === T_X ? Math.sqrt(this.w[u]) * p.mobX : Math.sqrt(this.w[u]) * mob;
+    return sw;
+  }
+
+  /** bodyJostle: a free block jostles alone; a set of bonded blocks moves and turns as one rigid body. Every block still gets its
+   * own kick in effect: the body's move is the mean of its blocks' kicks and its turn the torque they exert about its centre, so a
+   * body of n blocks steps about 1/sqrt(n) as far and a long one turns slowly. Nothing reads the body; it is how rigid bonds move. */
+  _jostleBodies() {
+    const p = this.p, n = this.n, px = this.px, py = this.py, pa = this.pa, ox = this.ox, oy = this.oy, bond = this.bond, wt = this.w;
+    const seen = this._jb || (this._jb = new Int32Array(n)), mark = ++this._jbMark || (this._jbMark = 1);
+    const list = this._jbList || (this._jbList = new Int32Array(n)), rx = this._jbx || (this._jbx = new Float64Array(n)), ry = this._jby || (this._jby = new Float64Array(n));
+    const rot = (u, c, s) => { for (let k = u * NV, e = k + this.nv[this.type[u]]; k < e; k++) { const x = ox[k], y = oy[k]; ox[k] = c * x - s * y; oy[k] = s * x + c * y; } };
+    for (let u0 = 0; u0 < n; u0++) {
+      if (seen[u0] === mark) continue;
+      seen[u0] = mark;
+      const b0 = u0 * 4;
+      if (bond[b0] < 0 && bond[b0 + 1] < 0 && bond[b0 + 2] < 0 && bond[b0 + 3] < 0) {
+        const sw = this._mobility(u0), t = this.type[u0];
+        px[u0] = this._wx(px[u0] + p.sigma * sw * this._gauss()); py[u0] = this._wy(py[u0] + p.sigma * sw * this._gauss());
+        const mob = t === T_E ? 1 : sw / Math.sqrt(wt[u0]);
+        const da = p.sigmaRot * wt[u0] * mob * this._gauss();
+        pa[u0] += da; rot(u0, Math.cos(da), Math.sin(da));
+        continue;
+      }
+      // the body: every block reachable through bonds, with its offset from the first one
+      let m = 0; list[m++] = u0; rx[u0] = 0; ry[u0] = 0;
+      for (let k = 0; k < m; k++) {
+        const x = list[k];
+        for (let i = 0; i < 4; i++) {
+          const q = bond[x * 4 + i]; if (q < 0) continue;
+          const v = q >> 2; if (seen[v] === mark) continue;
+          seen[v] = mark; list[m++] = v;
+          rx[v] = rx[x] + this._dx(px[v] - px[x]); ry[v] = ry[x] + this._dy(py[v] - py[x]);
+        }
+      }
+      let cx = 0, cy = 0, s2 = 0, r2 = 0, rot2 = 0;
+      for (let k = 0; k < m; k++) { const x = list[k]; cx += rx[x]; cy += ry[x]; }
+      cx /= m; cy /= m;
+      for (let k = 0; k < m; k++) {
+        const x = list[k], sw = this._mobility(x), dxx = rx[x] - cx, dyy = ry[x] - cy;
+        s2 += sw * sw; r2 += dxx * dxx + dyy * dyy;
+        const mob = this.type[x] === T_E ? 1 : sw / Math.sqrt(wt[x]); rot2 += (p.sigmaRot * wt[x] * mob) * (p.sigmaRot * wt[x] * mob);
+      }
+      const st = p.sigma * Math.sqrt(s2) / m;                                        // mean of m independent kicks
+      const sr = Math.sqrt((r2 > 0 ? p.sigma * p.sigma * (s2 / m) / r2 : 0) + rot2 / (m * m));   // torque of the kicks, and the blocks' own turns
+      const tx = st * this._gauss(), ty = st * this._gauss(), da = sr * this._gauss(), c = Math.cos(da), s = Math.sin(da);
+      const ax = px[u0] + cx, ay = py[u0] + cy;   // the centre, in world coordinates
+      for (let k = 0; k < m; k++) {
+        const x = list[k], dxx = rx[x] - cx, dyy = ry[x] - cy;
+        px[x] = this._wx(ax + c * dxx - s * dyy + tx); py[x] = this._wy(ay + s * dxx + c * dyy + ty);
+        pa[x] += da; rot(x, c, s);
+      }
+    }
+  }
+
   /** Jostling; one neighbour scan; then pins, contacts and shape relaxation solved together. Leaves the hash built. */
   _physics() {
     const p = this.p, n = this.n;
     const px = this.px, py = this.py, pa = this.pa, ox = this.ox, oy = this.oy, rad = this.rad, bond = this.bond, wt = this.w, wr = this.wr, vw = this.vw;
     const W = p.W, H = p.H, gw = this.gw, gh = this.gh, cell = this.cell, head = this.head, next = this.next;
+    // torus wrap: a difference well inside half the world needs none (the full formula gives the same number there, without a division)
+    const hwW = 0.49 * W, hwH = 0.49 * H;
     // 1. Brownian jostling: each block translates and turns as a whole (its shape changes only under pins)
-    for (let u = 0; u < n; u++) {
+    if (p.bodyJostle) this._jostleBodies();
+    else for (let u = 0; u < n; u++) {
       const ub = u * 4, slow = p.mobS !== 1 && this.type[u] !== T_E && this.type[u] !== T_X && (bond[ub] >= 0 || bond[ub + 1] >= 0 || bond[ub + 2] >= 0 || bond[ub + 3] >= 0);
       // mobility: energy mobE, rays mobX, membrane mobM (bonded or not), other bonded blocks mobS
       let mob = this.type[u] === T_M ? p.mobM : slow ? p.mobS : 1;
@@ -1117,8 +1247,8 @@ class Sim {
         for (let oxx = -1; oxx <= 1; oxx++) {
           for (let v = head[row + (cx + oxx + gw) % gw]; v >= 0; v = next[v]) {
             if (v <= u) continue;
-            let dx = px[v] - x; dx -= W * Math.round(dx / W);
-            let dy = py[v] - y; dy -= H * Math.round(dy / H);
+            let dx = px[v] - x; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
+            let dy = py[v] - y; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
             if (dx * dx + dy * dy < reach * reach) pairs.push(u, v);
           }
         }
@@ -1126,10 +1256,11 @@ class Sim {
     }
     // contacts: the pairs that are not bonded and close enough that they might touch during the solve
     const contacts = this._contacts || (this._contacts = []); contacts.length = 0;
+    const fp = p.freePasses || 0, loose = this._loose || (this._loose = []); loose.length = 0;   // freePasses: loose pairs go last
     for (let k = 0; k < pairs.length; k += 2) {
       const u = pairs[k], v = pairs[k + 1], ub = u * 4;
-      let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
-      let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
+      let dx = px[v] - px[u]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
+      let dy = py[v] - py[u]; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
       const rr = (rad[u] + rad[v]) * 1.3;
       if (dx * dx + dy * dy >= rr * rr) continue;
       if ((bond[ub] >> 2) === v || (bond[ub + 1] >> 2) === v || (bond[ub + 2] >> 2) === v || (bond[ub + 3] >> 2) === v) continue;
@@ -1139,8 +1270,10 @@ class Sim {
         const x = this.type[u] === T_M ? v : u, xb = x * 4;
         if (this.type[x] !== T_E && bond[xb] < 0 && bond[xb + 1] < 0 && bond[xb + 2] < 0 && bond[xb + 3] < 0) continue;
       }
-      contacts.push(u, v);
+      if (fp > 0 && bond[ub] < 0 && bond[ub + 1] < 0 && bond[ub + 2] < 0 && bond[ub + 3] < 0 && bond[v * 4] < 0 && bond[v * 4 + 1] < 0 && bond[v * 4 + 2] < 0 && bond[v * 4 + 3] < 0) loose.push(u, v);
+      else contacts.push(u, v);
     }
+    const nFixed = contacts.length; for (let k = 0; k < loose.length; k++) contacts.push(loose[k]);
     if (p.nG > 0) this._stick(pairs);
     // 3. constraints
     this._bondList();
@@ -1150,14 +1283,19 @@ class Sim {
     const mark = this._seen;
     for (let k = 0; k < pins.length; k++) { const u = (pins[k] / NV) | 0; if (!mark[u]) { mark[u] = 1; bonded.push(u); } }
     for (const u of bonded) mark[u] = 0;
+    const tol = p.solveTol || 0;
+    const shaped = this._shaped || (this._shaped = new Uint8Array(n)), shapeC = this._shapeC || (this._shapeC = new Float64Array(n)), shapeS = this._shapeS || (this._shapeS = new Float64Array(n));
     for (let it = 0; it < p.iters; it++) {
-      for (let k = 0; k < contacts.length; k += 2) {
+      let worst = 0;   // largest correction of this pass (solveTol)
+      const nc = fp > 0 && it >= fp ? nFixed : contacts.length;
+      for (let k = 0; k < nc; k += 2) {
         const u = contacts[k], v = contacts[k + 1];
-        let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
-        let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
+        let dx = px[v] - px[u]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
+        let dy = py[v] - py[u]; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
         const rr = rad[u] + rad[v];
         const d2 = dx * dx + dy * dy; if (d2 >= rr * rr) continue;
         const d = Math.sqrt(d2) || 1e-6;
+        if (rr - d > worst) worst = rr - d;
         const push = (rr - d) / d, wu = wt[u], wv = wt[v], ws = wu + wv;
         const fx = dx * push, fy = dy * push;
         px[u] -= fx * wu / ws; py[u] -= fy * wu / ws;
@@ -1168,9 +1306,10 @@ class Sim {
         // (translate and turn: a point constraint on a rigid body) and, by its softness, partly as a deformation of
         // that one corner
         const qa = pins[k], qb = pins[k + 1], u = (qa / NV) | 0, v = (qb / NV) | 0;
-        let dx = px[v] + ox[qb] - px[u] - ox[qa]; dx -= W * Math.round(dx / W);
-        let dy = py[v] + oy[qb] - py[u] - oy[qa]; dy -= H * Math.round(dy / H);
+        let dx = px[v] + ox[qb] - px[u] - ox[qa]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
+        let dy = py[v] + oy[qb] - py[u] - oy[qa]; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
         const dl = Math.sqrt(dx * dx + dy * dy); if (dl < 1e-9) continue;
+        if (dl > worst) worst = dl;
         const nx = dx / dl, ny = dy / dl;
         const cu = ox[qa] * ny - oy[qa] * nx, cv = ox[qb] * ny - oy[qb] * nx;
         const eu = wt[u] + wr[u] * cu * cu, ev = wt[v] + wr[v] * cv * cv;
@@ -1191,14 +1330,16 @@ class Sim {
         mx /= nv; my /= nv; px[u] += mx; py[u] += my;
         let A = 0, B = 0;
         for (let k = 0; k < nv; k++) { ox[o + k] -= mx; oy[o + k] -= my; A += this.rx[r + k] * ox[o + k] + this.ry[r + k] * oy[o + k]; B += this.rx[r + k] * oy[o + k] - this.ry[r + k] * ox[o + k]; }
-        const th = Math.atan2(B, A), c = Math.cos(th), s = Math.sin(th), a = 1 - soft[t];
+        const hyp = Math.sqrt(A * A + B * B) || 1, c = A / hyp, s = B / hyp, a = 1 - soft[t];   // the best-fit turn (cos, sin)
         for (let k = 0; k < nv; k++) {
           const gx = c * this.rx[r + k] - s * this.ry[r + k], gy = s * this.rx[r + k] + c * this.ry[r + k];
           ox[o + k] += a * (gx - ox[o + k]); oy[o + k] += a * (gy - oy[o + k]);
         }
-        pa[u] = th;
+        shaped[u] = 1; shapeC[u] = c; shapeS[u] = s;
       }
+      if (worst < tol) break;
     }
+    for (const u of bonded) if (shaped[u]) { pa[u] = Math.atan2(shapeS[u], shapeC[u]); shaped[u] = 0; }   // a shaped block's angle: its last fit
     for (let u = 0; u < n; u++) { px[u] = this._wx(px[u]); py[u] = this._wy(py[u]); pa[u] = wrapAngle(pa[u]); }
     if (p.maxStrain > 0) {
       // strain: a bond whose corners the passes could not bring together lets go (applied with the rule breaks)
@@ -1244,13 +1385,20 @@ class Sim {
 
   /** Every pair of open units from this step's neighbour scan that is within docking distance gets a chance to bond. */
   _formBonds() {
-    const p = this.p, px = this.px, py = this.py, open = this.open, size = this.size, pairs = this.pairs, W = p.W, H = p.H;
+    const p = this.p, px = this.px, py = this.py, open = this.open, size = this.size, pairs = this.pairs, W = p.W, H = p.H, hwW = 0.49 * W, hwH = 0.49 * H;
+    const is = this.is, bond = this.bond, noSpont = !(p.pSpont > 0);
     for (let k = 0; k < pairs.length; k += 2) {
       const u = pairs[k], v = pairs[k + 1];
       if (p.nX > 0 && (this.type[u] === T_X) !== (this.type[v] === T_X)) { if (this.type[u] === T_X) this._rayHit(u, v); else this._rayHit(v, u); continue; }
       if (!open[u] || !open[v]) continue;
-      let dx = px[v] - px[u]; dx -= W * Math.round(dx / W);
-      let dy = py[v] - py[u]; dy -= H * Math.round(dy / H);
+      // two unbonded blocks in state 0 (free monomers, spent energy, raw membrane) have no side pair that can bond except two
+      // inert laterals, at pSpont: with pSpont 0 the pair is skipped (the table would say 0 for every side pair)
+      if (noSpont && is[u] === 0 && is[v] === 0) {
+        const bu = u * 4, bv = v * 4;
+        if (bond[bu] < 0 && bond[bu + 1] < 0 && bond[bu + 2] < 0 && bond[bu + 3] < 0 && bond[bv] < 0 && bond[bv + 1] < 0 && bond[bv + 2] < 0 && bond[bv + 3] < 0) continue;
+      }
+      let dx = px[v] - px[u]; if (dx > hwW || dx < -hwW) dx -= W * Math.round(dx / W);
+      let dy = py[v] - py[u]; if (dy > hwH || dy < -hwH) dy -= H * Math.round(dy / H);
       const d0 = (size[u] + size[v]) / 2, d2 = dx * dx + dy * dy;
       const dmax = d0 * (1 + p.distTol), dmin = d0 * (1 - p.distTol);
       if (d2 > dmax * dmax || d2 < dmin * dmin) continue;
@@ -1289,10 +1437,7 @@ class Sim {
     this._deriveAll();
     // 7. observation: births; physics: an undocked monomer is pushed off the face it left
     this._logBirths();
-    for (const u of this.kicked) {
-      this.px[u] = this._wx(this.px[u] - 0.6 * Math.cos(this.pa[u])); this.py[u] = this._wy(this.py[u] - 0.6 * Math.sin(this.pa[u]));
-    }
-    this.kicked.length = 0;
+    this._kickOff();
     // 8. energy reload (E is never created or destroyed; it flips OFF -> ON)
     for (let u = 0; u < n; u++) {
       if (this.type[u] !== T_E || this.is[u] !== I_OFF) continue;
@@ -1304,13 +1449,53 @@ class Sim {
       if (LETTERS.includes(this.type[u]) && this.bond[b] < 0 && this.bond[b + 1] < 0 && this.bond[b + 2] < 0 && this.bond[b + 3] < 0 && rng() < p.pRacem) this.hand[u] ^= 1;
     }
     this._computeOpen();
-    // a unit that has lost every bond springs back to its rest shape; only units pinned this step can be out of shape
+    this._relaxFreed();
+  }
+
+  /** An undocked monomer is pushed off the face it left (physics). */
+  _kickOff() {
+    for (const u of this.kicked) {
+      this.px[u] = this._wx(this.px[u] - 0.6 * Math.cos(this.pa[u])); this.py[u] = this._wy(this.py[u] - 0.6 * Math.sin(this.pa[u]));
+    }
+    this.kicked.length = 0;
+  }
+
+  /** A unit that has lost every bond springs back to its rest shape; only units pinned this step can be out of shape. */
+  _relaxFreed() {
     for (const u of this._bondedUnits || []) {
       if (this.bond[u * 4] < 0 && this.bond[u * 4 + 1] < 0 && this.bond[u * 4 + 2] < 0 && this.bond[u * 4 + 3] < 0) this._resetShape(u);
     }
   }
 
   run(steps) { for (let i = 0; i < steps; i++) this.step(); }
+
+  /** The whole state as a JSON-safe object: parameters, every per-block array, every counter, the random generator. Take it
+   * between steps. Sim.fromState(saved) continues the run exactly where it was (or, with changed parameters, branches it). */
+  saveState() {
+    const arrays = {}, nums = {};
+    for (const k of Object.keys(this)) {
+      const v = this[k];
+      if (k === '_spare') { nums[k] = Number.isNaN(v) ? null : v; continue; }
+      if (k.startsWith('_') || k === 'p') continue;
+      if (ArrayBuffer.isView(v) && ARRAY_TYPES[v.constructor.name]) arrays[k] = { t: v.constructor.name, b: toB64(v) };
+      else if (typeof v === 'number' || typeof v === 'boolean') nums[k] = v;
+    }
+    return { version: 1, p: this.p, rng: this.rng.getState(), arrays, nums };
+  }
+
+  /** A Sim rebuilt from saveState(); `changes` (optional) overrides parameters, to branch a run. */
+  static fromState(st, changes) {
+    const s = new this(Object.assign({}, st.p, changes || {}));
+    for (const k in st.arrays) {
+      const a = fromB64(st.arrays[k].b, ARRAY_TYPES[st.arrays[k].t]);
+      if (s[k] && s[k].length === a.length) s[k].set(a); else s[k] = a;
+    }
+    for (const k in st.nums) s[k] = k === '_spare' && st.nums[k] === null ? NaN : st.nums[k];
+    s.rng.setState(st.rng);
+    s.bondsDirty = true; s._groupsFor = null;
+    s._computeOpen();
+    return s;
+  }
 
   // ------------------------------------------------------------- observation
   // ------------------------------------------------------------- observation
@@ -1382,7 +1567,7 @@ class Sim {
       distinct: seqs.size, entropy: H, top,
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
-      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
+      ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone, proofs: this.proofEvents,
       energyCharged: this.energyCharged, products: this.prodCount, prodChains, prodUnits, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
