@@ -6,6 +6,10 @@ An artificial-life experiment: a 2D world of small deformable polygons ("blocks"
 table, in which template copying, mutation, selection and (the goal) **complexity emerging from simplicity**
 come out of local rules, not out of code inside the creatures. Plain JavaScript, no dependencies.
 
+The working name *plywood replicator* is after the Penroses' self-reproducing wooden blocks (1957–59), the user's
+inspiration: passive units, shaken, that copy a seed, with the logic in their mechanics. The user (2026-09-25): thinking
+more mechanically could get somewhere interesting.
+
 Read in this order: this file, `README.md` (rules and physics as they stand), `experiments/RESULTS.md`
 section 20 "Summary" and the latest sections, `DESIGN.md` sections 2 (commitments), 14 (decision log, newest
 entries near the end of the list), 15 (ideas not yet tried).

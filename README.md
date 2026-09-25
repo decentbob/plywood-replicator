@@ -1,5 +1,8 @@
 # Polygon Chemistry
 
+The working name, *plywood replicator*, is after L. S. and R. Penrose's self-reproducing wooden blocks (1957–59):
+passive units that copy a seed configuration when shaken, with all the logic in their mechanics. That is the spirit here.
+
 An artificial life experiment: a 2D world of small rigid squares governed by one
 fixed, universal rule table, in which template replication, copy errors, and
 selection come out of the rules rather than being programmed into the creatures.
