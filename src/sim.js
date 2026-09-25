@@ -41,6 +41,7 @@ const T_1 = 11, T_2 = 12, T_3 = 13, T_4 = 14;   // product blocks (translate rul
 const T_U = 15, T_V = 16;   // fuel particles of two kinds (grip and pocket rules), each with its own size: held in the pockets of folded strands
 const NT = 17;
 const isFuel = (t) => t === T_U || t === T_V;
+const isKT = (x) => x === 42 || x === 43 || x === 44;   // a back that templates (S.KT_MM, S.KT_LF, S.KT_RF; backCopy rule)
 const PRODUCTS = [T_1, T_2, T_3, T_4];
 const isProd = (t) => t >= T_1 && t <= T_4;
 const NV = 8;   // most corners a unit can have
@@ -56,7 +57,8 @@ const COMP = [T_B, T_A, -1, -1, T_D, T_C, -1, -1, -1, -1];
 function typeParam(p, base, t, dflt) { const v = p[base + TNAME[t]]; return v === undefined ? dflt : v; }
 
 // internal states
-const I_DOCK = 0, I_REPEL = 1, I_TPL = 2, I_FRAY = 3, I_RAW = 4;   // A / B (RAW: an inactive free monomer, act rule)
+const I_DOCK = 0, I_REPEL = 1, I_TPL = 2, I_FRAY = 3, I_RAW = 4, I_HOLD = 5;   // A / B (RAW: an inactive free monomer, act rule; HOLD: a
+                                                                             // finished copy still holding the back it was made on, stack rule)
 const I_OFF = 0, I_ON = 1;                  // E
 
 // derived side states (the interface a bonded partner can read)
@@ -87,6 +89,9 @@ const S = {
                                                         // translate, as TPL_* says for a face (TRN_RF: the left one only, TRN_LF: the right one only)                                              // any side of a hub block, open: holds the open end of a strand (hub rule)                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
   GRIP: 38, FUEL: 39,                                   // K of a released product (grip rule); any side of a fuel particle
   GIVE: 40, SPENT: 41,                                  // fuel (pocket rule): the side through which a held, charged particle arms a letter; a spent one
+  KT_MM: 42, KT_LF: 43, KT_RF: 44,                      // K of an armed letter (backCopy rule): a monomer of its kind docks here, and the copy lies parallel to
+                                                        // its template; which lateral neighbours the template has, as TRN_* says (KT_RF: the left one only)
+  HOLD: 45,                                             // F of a finished copy that holds the back it was made on (stack rule): holds, like a template's face
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
@@ -129,6 +134,19 @@ const DEFAULTS = {
                                 // or more grips at once arms one of the letters holding it (and is spent): a released copy is curled where its
                                 // letters fold (foldA..), so which fuel a genome can use is decided by its own shape (the genome as its own enzyme)
   pReloadU: 0.002,              // a spent fuel particle recharges at this rate per step (the environment's supply)
+  backCopy: false,              // two-faced letters: the back of an armed letter templates too. A free monomer of the same kind docks its face there
+                                // (another kind at pSoft), docked monomers link where the template continues, and the finished copy lies parallel
+                                // to its template (the same sequence in the same direction; a copy on a face lies reversed). Released like a face copy
+  stack: false,                 // (with backCopy) a finished back copy is not released: it keeps holding the back it was made on (HOLD), waits for
+                                // energy like a released copy, and once armed its own back templates the next row, so copies pile into a stack (a
+                                // crystal that grows row by row: Cairns-Smith's layered clays). A stacked unit's broken lateral bond re-links where
+                                // the row below continues, as a docked copy's does; stacked units do not fray (their face is held)
+  pSMelt: 0.05, pSMeltEnd: 0.005, pSMeltRun: 0.0002,   // a stacked bond (face on a back) melts per step with no stacked lateral neighbour, one, two:
+                                // a row comes off its stack by unzipping from its ends, so long rows hold and short ones melt (scission)
+  pSBind: 0,                    // (with stack) an armed or held face beside a stacked neighbour meets an armed back of its own kind: they bind, per
+                                // step of contact (a melted row zips back)
+  pSNuc: -1,                    // the same for a face with no stacked neighbour (a new junction: a strand joins a stack, or two strands meet face to
+                                // back); -1: as pSBind. Low values are a nucleation barrier: rows zip back, strangers rarely start to bind
   pReloadV: -1,                 // the same for the second fuel, V (-1: as pReloadU); change either mid-run to shift the supply
   translate: false,             // the back of an armed letter templates a product block by a fixed code (transCode): a free product docks its face there,
                                 // docked products link side to side where the template continues, and a finished product chain is released,
@@ -304,6 +322,8 @@ class Sim {
     this.tip0 = new Uint8Array(n * 4);            // the tips as the last derive pass left them, which is what a neighbour reads
     this.prf = new Uint8Array(n * 4);             // proof rule: a lateral side shows whether it passes on the proofreading flag, a face whether
     this.prf0 = new Uint8Array(n * 4);            // its unit proofreads (derived like the state); prf0 is the last pass's, read by neighbours
+    this.stk = new Uint8Array(n * 4);             // stack rule: a lateral side shows, beside its state, whether its unit is stacked (its face holds a back)
+    this.heldNew = [];                            // units that finished a copy on a back this step (observation: a row's birth)
     this.open = new Uint8Array(n);                // bitmask of bondable sides
     this.fresh = new Uint8Array(n);               // released from a template since last birth (observation)
     this.parentOf = new Int32Array(n).fill(-1);   // the template unit this unit was copied on (observation)
@@ -318,7 +338,7 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0; this.proofEvents = 0; this.fuelUsed = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0; this.proofEvents = 0; this.fuelUsed = 0; this.stackMelts = 0; this.stackRows = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
@@ -630,6 +650,7 @@ class Sim {
     const nb = (x) => (this.bond[x * 4] >= 0) + (this.bond[x * 4 + 1] >= 0) + (this.bond[x * 4 + 2] >= 0) + (this.bond[x * 4 + 3] >= 0);
     if (this.type[u] === T_M && this.type[v] === T_M) { this._link(u, i, v, j); return true; }   // corners already touch
     if (i === F && j === F && this.is[u] === I_TPL && this.is[v] === I_TPL) { this._link(u, i, v, j); return true; }   // binding: both sit in strands, the pins align them
+    if (this.p.stack && ((i === F && j === K) || (i === K && j === F)) && this.is[u] !== I_DOCK && this.is[v] !== I_DOCK && LETTERS.includes(this.type[u]) && LETTERS.includes(this.type[v])) { this._link(u, i, v, j); return true; }   // (stack rule: a face binds a back, likewise)
     let a = u, ia = i, m = v, im = j;
     if (nb(u) < nb(v)) { a = v; ia = j; m = u; im = i; }
     const sa = this._side(a, ia, [0, 0, 0, 0]), sm = this._side(m, im, [0, 0, 0, 0]);
@@ -712,6 +733,20 @@ class Sim {
       return mate === tv ? 1 : (tu >= T_P || tv >= T_P) ? 0 : p.pSoft;   // caps pair only with each other
     }
     if (i === K && j === K) return (su === S.INACT && sv === S.ACT) || (su === S.ACT && sv === S.INACT) ? 1 : 0;   // activation (act rule)
+    if ((i === F && j === K) || (i === K && j === F)) {
+      // backCopy rule: a monomer's face docks on an armed back of its own kind (the copy lies parallel, so caps pair with their own kind
+      // too); with the stack rule an armed or held face binds such a back (pSBind)
+      if (!p.backCopy) return 0;
+      const [fs, ks, ft, kt] = i === F ? [su, sv, tu, tv] : [sv, su, tv, tu];
+      if (!(ks === S.KT_MM || ks === S.KT_LF || ks === S.KT_RF)) return 0;
+      if (fs === S.DOCK) return ft === kt ? 1 : (ft >= T_P || kt >= T_P) ? 0 : p.pSoft;
+      if (p.stack && (fs === S.HOLD || fs === S.TPL_MM || fs === S.TPL_LF || fs === S.TPL_RF) && ft === kt) {
+        // a face beside a stacked neighbour zips on at pSBind; a face with none starts a new junction only at pSNuc (nucleation)
+        const w = i === F ? u : v, b = this.bond, qL = b[w * 4 + L], qR = b[w * 4 + R];
+        return (qL >= 0 && this.stk[qL]) || (qR >= 0 && this.stk[qR]) ? p.pSBind : p.pSNuc < 0 ? p.pSBind : p.pSNuc;
+      }
+      return 0;
+    }
     if ((i === L && j === R) || (i === R && j === L)) {
       const openish = (x) => x === S.STICKY || x === S.END;
       if (su === S.STICKY && sv === S.STICKY) {
@@ -747,8 +782,8 @@ class Sim {
         else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (isFuel(this.type[u])) ok = s === S.FUEL;
-        else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF || s === S.PBIND;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF || s === S.BACK || s === S.GRIP;
+        else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF || s === S.PBIND || s === S.HOLD;
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF || s === S.BACK || s === S.GRIP || s === S.KT_MM || s === S.KT_LF || s === S.KT_RF;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -796,11 +831,13 @@ class Sim {
       if (this.p.proof) this.prf[o + F] = this.prf[o + L] = this.prf[o + R] = 0;
       if (this.p.catalysis) this.cat[o + F] = 0;
       if (this.p.endLoss) this.tip[o + L] = this.tip[o + R] = 0;
+      if (this.p.stack) this.stk[o + L] = this.stk[o + R] = 0;
       if (this.type[u] === T_P || this.type[u] === T_Q) this._capSides(u);
       return;
     }
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0 && this.type[b[o + L] >> 2] !== T_J, bR = b[o + R] >= 0 && this.type[b[o + R] >> 2] !== T_J, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u];
+    if (this.p.stack) this.stk[o + L] = this.stk[o + R] = 0;
     if (this.p.proof) {
       // proof rule: a template unit in the motif flags its face; with the relay it also shows the flag on each lateral side if it is a
       // source or its neighbour on the other side showed it toward it on the last pass (one block per pass), and flags its face if either
@@ -824,22 +861,27 @@ class Sim {
     // F
     if (st === I_DOCK) this.ss[o + F] = S.DOCK;
     else if (st === I_REPEL) this.ss[o + F] = S.REPEL;
+    else if (st === I_HOLD) this.ss[o + F] = S.HOLD;
     else this.ss[o + F] = (bL && bR) ? S.TPL_MM : bL ? S.TPL_RF : S.TPL_LF;
     if (st === I_TPL && isProd(this.type[u])) this.ss[o + F] = S.PBIND;   // a finished product (catalysis)
     if (this.p.catalysis) this.cat[o + F] = st === I_TPL && b[o + K] >= 0 && this.ss[b[o + K]] === S.PBIND ? 1 : 0;
     // L, R. A docked unit's free lateral is sticky only where its template partner's face says the
     // template continues (TPL_MM, or TPL_LF for my L / TPL_RF for my R); at the template's end it is an open end.
     const pf = bF ? this.ss[b[o + F]] : -1;
-    const hyb = st === I_TPL && pf >= 0 && pf !== S.DOCK;   // my face is bound to another template's face
+    const kt = pf === S.KT_MM || pf === S.KT_LF || pf === S.KT_RF;   // (backCopy) my face is on a back: I lie parallel to that template
+    const hyb = st === I_TPL && pf >= 0 && pf !== S.DOCK && !kt;   // my face is bound to another template's face
     // a lateral side: bonded (ARMED or HYB on a template), or free: STICKY where a docked unit's template continues, END at its end
     // or on a strand; a product docked on a back lies parallel to its template (a copy on a face lies reversed), so its L continues
     // where the template's L does
-    const prod = isProd(this.type[u]);
+    const prod = isProd(this.type[u]), par = prod || kt;
     const onB = st === I_TPL ? (hyb ? S.HYB : S.ARMED) : S.BONDED, freeLone = nl > 0 ? S.STICKY : S.INERT;
-    const cL = prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF;
-    const cR = prod ? pf === S.TRN_MM || pf === S.TRN_LF : pf === S.TPL_MM || pf === S.TPL_RF;
-    this.ss[o + L] = bL ? onB : st === I_DOCK ? (bF ? (cL ? S.STICKY : S.END) : freeLone) : S.END;
-    this.ss[o + R] = bR ? onB : st === I_DOCK ? (bF ? (cR ? S.STICKY : S.END) : freeLone) : S.END;
+    const cL = par ? pf === S.TRN_MM || pf === S.TRN_RF || pf === S.KT_MM || pf === S.KT_RF : pf === S.TPL_MM || pf === S.TPL_LF;
+    const cR = par ? pf === S.TRN_MM || pf === S.TRN_LF || pf === S.KT_MM || pf === S.KT_LF : pf === S.TPL_MM || pf === S.TPL_RF;
+    // (stack rule) a stacked unit, held or armed, is sticky where the row below continues, as a docked copy is: a broken row re-links
+    const stacked = kt && (st === I_HOLD || st === I_TPL), dk = st === I_DOCK || stacked;
+    this.ss[o + L] = bL ? onB : dk ? (bF ? (cL ? S.STICKY : S.END) : freeLone) : S.END;
+    this.ss[o + R] = bR ? onB : dk ? (bF ? (cR ? S.STICKY : S.END) : freeLone) : S.END;
+    if (stacked && this.p.stack) this.stk[o + L] = this.stk[o + R] = 1;
     if (this.p.cut && st === I_TPL) {
       const src = bL && bR && this.type[u] === this._cutMid && this.type[b[o + L] >> 2] === this._cutOut && this.type[b[o + R] >> 2] === this._cutOut;
       let carries = src;
@@ -870,7 +912,7 @@ class Sim {
     // K. A B template unit flanked by two A units reads CHARGE at its back when the motif rule is on:
     // this is the one place a side's state depends on what its neighbours are (their type is their colour).
     // (K to K bonds no longer exist; the back is for energy only.)
-    if (st === I_REPEL) this.ss[o + K] = S.WANT;
+    if (st === I_REPEL || st === I_HOLD) this.ss[o + K] = S.WANT;
     else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
     else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
     else if (this.p.act && st === I_TPL && bL && bR && this.type[u] === this._actMid && this.type[b[o + L] >> 2] === this._actOut && this.type[b[o + R] >> 2] === this._actOut) this.ss[o + K] = S.ACT;
@@ -881,6 +923,7 @@ class Sim {
       this.ss[o + K] = eL && eR ? S.TRN_MM : eL ? S.TRN_RF : eR ? S.TRN_LF : S.IDLE;
     }
     else if (this.p.bindAny && st === I_TPL && !isProd(this.type[u]) && this.type[u] !== T_P && this.type[u] !== T_Q && this.p.translate) this.ss[o + K] = S.BACK;
+    else if (this.p.backCopy && st === I_TPL && !isProd(this.type[u])) this.ss[o + K] = bL && bR ? S.KT_MM : bL ? S.KT_RF : S.KT_LF;   // (backCopy) my back templates
     else this.ss[o + K] = S.IDLE;
     if (prod) this.ss[o + K] = this.p.grip && (st === I_REPEL || st === I_TPL) ? S.GRIP : S.IDLE;   // a product takes no energy and is never armed; released, it may grip fuel
     else if (this.p.pocket && st === I_TPL && this.ss[o + K] === S.IDLE) this.ss[o + K] = S.GRIP;   // pocket rule: an armed letter's idle back helps hold fuel
@@ -977,16 +1020,20 @@ class Sim {
           if (mate !== this.type[u] && this.rng() < p.pProof) { this.pendingUnlink.push(o + F); this.kicked.push(u); this.proofEvents++; this._event('proof', u); return; }
         }
         // R1 release: docked, and every lateral bond the template partner says I need is in place
-        const pf = this.ss[b[o + F]], prod = isProd(this.type[u]);
-        const needL = prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF;
-        const needR = prod ? pf === S.TRN_MM || pf === S.TRN_LF : pf === S.TPL_MM || pf === S.TPL_RF;
-        if ((!needL || bL) && (!needR || bR)) { this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = b[o + F] >> 2; this._event('release', u); }
+        const pf = this.ss[b[o + F]], prod = isProd(this.type[u]), kt = pf === S.KT_MM || pf === S.KT_LF || pf === S.KT_RF, par = prod || kt;
+        const needL = par ? pf === S.TRN_MM || pf === S.TRN_RF || pf === S.KT_MM || pf === S.KT_RF : pf === S.TPL_MM || pf === S.TPL_LF;
+        const needR = par ? pf === S.TRN_MM || pf === S.TRN_LF || pf === S.KT_MM || pf === S.KT_LF : pf === S.TPL_MM || pf === S.TPL_RF;
+        if ((!needL || bL) && (!needR || bR)) {
+          this.fresh[u] = 1; this.parentOf[u] = b[o + F] >> 2;
+          if (kt && p.stack) { this.is[u] = I_HOLD; this.heldNew.push(u); this._event('hold', u); }   // stack rule: a finished back copy stays
+          else { this.is[u] = I_REPEL; this._event('release', u); }
+        }
       } else if (nl > 0) {
         // R2 linked laterally without a template (captured by a strand end, or two free monomers that met): a new strand unit
         this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = -1;
       }
-    } else if (st === I_REPEL) {
-      if (nl === 0) this.is[u] = pool;                                     // R3 lost its strand: back to the pool
+    } else if (st === I_REPEL || st === I_HOLD) {
+      if (nl === 0) this.is[u] = pool;                                     // R3 lost its strand: back to the pool (a held unit is then docked again)
       else if (isProd(this.type[u])) { if (p.catalysis) this.is[u] = I_TPL; }   // a product is never armed; with catalysis it is finished
       else if (!p.energyGate || (bK && (this.ss[b[o + K]] === S.ON || this.ss[b[o + K]] === S.GIVE))) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy, or fuel held in a pocket)
       else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
@@ -1003,7 +1050,7 @@ class Sim {
         if (p.pMisMelt >= 0 && this._code[this.type[b[o + F] >> 2]] !== this.type[u]) pm = Math.max(pm, p.pMisMelt);   // graded: a mismatch lets go
         if (this.rng() < pm) this.pendingUnlink.push(o + F);
       }
-      else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
+      else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u && !(p.backCopy && isKT(this.ss[b[o + F]]))) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
         const isH = (x) => x === S.HYB || x === S.HYBC;
         const nh = (bL && isH(this.ss[b[o + L]]) ? 1 : 0) + (bR && isH(this.ss[b[o + R]]) ? 1 : 0);
@@ -1012,16 +1059,24 @@ class Sim {
         if (this.rng() < pm) { this.pendingUnlink.push(o + F); this.meltEvents++; }
       }
     }
+    // S1 stack melting: a face held on a back lets go at pSMelt with no stacked lateral neighbour, pSMeltEnd with one, pSMeltRun with two,
+    // so a row comes off its stack by unzipping from its ends
+    if (p.stack && bF && (st === I_HOLD || st === I_TPL) && isKT(this.ss[b[o + F]])) {
+      const sk = this.stk, ns = (bL && sk[b[o + L]] ? 1 : 0) + (bR && sk[b[o + R]] ? 1 : 0);
+      if (this.rng() < (ns === 0 ? p.pSMelt : ns === 1 ? p.pSMeltEnd : p.pSMeltRun)) { this.pendingUnlink.push(o + F); this.stackMelts++; }
+    }
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
     // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).
     const cap = this.type[u] === T_P || this.type[u] === T_Q, pfr = cap ? p.pFray * p.capFray : p.pFray;
-    if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < pfr) {
+    // (stack rule) a unit whose back holds a stacked unit's face is held too: in a stack only a lone row can fray
+    const hk = p.stack && bK && (this.ss[b[o + K]] === S.HOLD || this.ss[b[o + K]] === S.TPL_MM || this.ss[b[o + K]] === S.TPL_LF || this.ss[b[o + K]] === S.TPL_RF);
+    if (this.is[u] !== I_DOCK && !bF && !hk && nl === 1 && p.pFray > 0 && this.rng() < pfr) {
       this.fresh[u] = 0; this.frayEvents++; this._event('fray', u);
       if (p.pUnzip > 0) this.is[u] = I_FRAY;
       else { this.is[u] = pool; this.pendingUnlink.push(o + L, o + R); }
       return;
     }
-    if (p.pUnzip > 0 && this.is[u] !== I_DOCK && !bF && ((bL && this.ss[b[o + L]] === S.FRAY) || (bR && this.ss[b[o + R]] === S.FRAY)) && this.rng() < (cap ? p.pUnzip * p.capFray : p.pUnzip)) {
+    if (p.pUnzip > 0 && this.is[u] !== I_DOCK && !bF && !hk && ((bL && this.ss[b[o + L]] === S.FRAY) || (bR && this.ss[b[o + R]] === S.FRAY)) && this.rng() < (cap ? p.pUnzip * p.capFray : p.pUnzip)) {
       this.is[u] = I_FRAY; this.fresh[u] = 0; this.unzipEvents++;
       return;
     }
@@ -1172,6 +1227,36 @@ class Sim {
       }
     }
     this.brokeF.length = 0;
+  }
+
+  /** Stack rule: log a birth for every row that has just been finished on a back and holds it (every unit held or armed). */
+  _logRows() {
+    if (this.heldNew.length === 0) return;
+    const done = new Set();
+    for (const u0 of this.heldNew) {
+      if (done.has(u0) || this.is[u0] !== I_HOLD) continue;
+      const row = this.strandOf(u0);
+      for (const x of row) done.add(x);
+      if (row.length < 2) continue;
+      let nFresh = 0, pu = -1, ok = true;
+      for (const u of row) {
+        if (this.is[u] === I_DOCK) { ok = false; break; }
+        if (this.fresh[u]) { nFresh++; if (pu < 0 && this.parentOf[u] >= 0) pu = this.parentOf[u]; }
+      }
+      if (!ok || nFresh * 2 < row.length) continue;
+      let pgen = 0, parentSeq = '';
+      if (pu >= 0) { const pchain = this.strandOf(pu); parentSeq = pchain.map((x) => this._letter(x)).join(''); for (const x of pchain) if (this.gen[x] > pgen) pgen = this.gen[x]; }
+      const g = pgen + 1; if (g > this.maxGen) this.maxGen = g;
+      for (const x of row) { this.gen[x] = g; this.fresh[x] = 0; }
+      this.birthCount++; this.stackRows++;
+      const seq = row.map((x) => this._letter(x)).join('');
+      this._event('birth', row[0]);
+      if (this.p.logBirths) {
+        this.births.push({ t: this.t, seq, gen: g, parent: parentSeq, stk: 1, x: this.px[row[0]], y: this.py[row[0]] });
+        if (this.births.length > this.p.maxBirthLog) this.births.splice(0, this.births.length - this.p.maxBirthLog);
+      }
+    }
+    this.heldNew.length = 0;
   }
 
   /** Bond formation between two open units that are within docking distance: first compatible, well-placed side pair wins. */
@@ -1514,6 +1599,7 @@ class Sim {
     this._deriveAll();
     // 7. observation: births; physics: an undocked monomer is pushed off the face it left
     this._logBirths();
+    if (this.p.stack) this._logRows();
     this._kickOff();
     // 8. energy reload (E is never created or destroyed; it flips OFF -> ON)
     for (let u = 0; u < n; u++) {
@@ -1579,7 +1665,7 @@ class Sim {
   // ------------------------------------------------------------- observation
   stats() {
     const n = this.n;
-    let held1 = 0, held2 = 0, inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
+    let held = 0, stacked = 0, held1 = 0, held2 = 0, inactive = 0, totalAct = 0, free = 0, eOn = 0, eOff = 0, repel = 0, tpl = 0, docked = 0, bonds = 0, totalMotif = 0, memActive = 0;
     for (let u = 0; u < n; u++) {
       if (this.type[u] === T_M) { if (this.is[u] === I_ON) memActive++; continue; }
       if (this.type[u] === T_X || this.type[u] === T_J || this.type[u] === T_G) continue;
@@ -1593,11 +1679,14 @@ class Sim {
       if (this.is[u] === I_DOCK && this.bond[o] >= 0) docked++;
       if (this.is[u] === I_REPEL) repel++;
       if (this.is[u] === I_TPL) tpl++;
+      if (this.is[u] === I_HOLD) held++;
+      if (this.bond[o] >= 0 && (this.bond[o] & 3) === K && LETTERS.includes(this.type[this.bond[o] >> 2])) stacked++;
       for (let i = 0; i < 4; i++) if (this.bond[o + i] >= 0) bonds++;
     }
     const hist = new Map(); const seqs = new Map();
     let prodChains = 0, prodUnits = 0;
     let strands = 0, complexes = 0, totalLen = 0, maxLen = 0, components = 0, rings = 0, ringLen = 0;
+    let nStacks = 0, stackRowsNow = 0, maxStack = 0;
     let memRings = 0, memRingLen = 0, memArcs = 0, enclosedAB = 0, enclosedE = 0, memFree = 0, enclosedTPL = 0, enclosedMotif = 0, ringsWithStrand = 0;
     const seen = new Uint8Array(n);
     for (let u0 = 0; u0 < n; u0++) {
@@ -1624,6 +1713,16 @@ class Sim {
       let nAB = 0, faceBonded = false;
       for (const u of comp) { if (this.type[u] === T_E || this.type[u] === T_M || this.type[u] === T_J || this.type[u] === T_X || this.type[u] === T_G || isFuel(this.type[u])) continue; nAB++; if (this.bond[u * 4 + F] >= 0) faceBonded = true; }
       if (nAB < 2) continue;
+      if (this.p.stack) {
+        // rows in a stack: armed or held letter units that start a row (no left neighbour; a P cap has none), in a component with a stacked unit
+        let rows = 0, st = false;
+        for (const u of comp) {
+          if (!LETTERS.includes(this.type[u])) continue;
+          if ((this.is[u] === I_TPL || this.is[u] === I_HOLD) && this.bond[u * 4 + L] < 0) rows++;
+          if (this.bond[u * 4] >= 0 && (this.bond[u * 4] & 3) === K) st = true;
+        }
+        if (st) { nStacks++; stackRowsNow += rows; if (rows > maxStack) maxStack = rows; }
+      }
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
       if (len > 0 && isProd(this.type[chain[0]])) { prodChains++; prodUnits += len; continue; }   // product chains are counted apart
@@ -1647,6 +1746,7 @@ class Sim {
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
       ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone, proofs: this.proofEvents, held1, held2, fuelUsed: this.fuelUsed,
+      held, stacked, stackMelts: this.stackMelts, stackRows: this.stackRows, nStacks, maxStack, meanStack: nStacks ? stackRowsNow / nStacks : 0,
       energyCharged: this.energyCharged, products: this.prodCount, prodChains, prodUnits, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
@@ -1669,5 +1769,5 @@ class Sim {
 }
 
 
-return { Sim, PRODUCTS, T_U, T_V, isFuel, T_1, T_2, T_3, T_4, isProd, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, I_HOLD, isKT, PRODUCTS, T_U, T_V, isFuel, T_1, T_2, T_3, T_4, isProd, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

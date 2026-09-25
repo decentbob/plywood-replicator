@@ -479,4 +479,34 @@ test('grip and pocket: folded backs hold small fuel two at a time; fuel held in 
   assert.ok(ff > 2 * fs, `fuel used: folded ${ff}, straight ${fs}`);
 });
 
+test('backCopy and stack: a copy made on a back lies parallel (same sequence); stacked rows are exact, held, paid for, and melt off', () => {
+  // backCopy alone: back copies are released like face copies, parallel to the template; face copies stay reversed
+  const s1 = new Sim({ seed: 1, W: 30, H: 30, nA: 150, nB: 150, nE: 80, seedSeq: 'ABBABAAB', seedCount: 3, pUndock: 0.05, backCopy: true });
+  s1.run(8000);
+  let same = 0, revd = 0, other = 0;
+  for (const b of s1.births) { if (b.seq === b.parent && b.seq !== rev(b.parent)) same++; else if (b.seq === rev(b.parent)) revd++; else other++; }
+  assert.ok(same >= 5 && revd >= 5 && other === 0, `back copies ${same}, face copies ${revd}, wrong ${other}`);
+  assert.deepStrictEqual(s1.check(), []);
+  // stack: finished back copies hold (logged as rows), wait for energy, and pile up; melting releases them
+  const s = new Sim({ seed: 2, W: 30, H: 30, nA: 150, nB: 150, nE: 80, seedSeq: 'ABBABAAB', seedCount: 3, pUndock: 0.05, backCopy: true, stack: true });
+  let rearms = 0; const orig = s._transition.bind(s);
+  s._transition = function (u) { const was = this.is[u], o = u * 4, q = this.bond[o + K]; const byE = q >= 0 && this.type[q >> 2] === T_E; orig(u); if ((was === 1 || was === 5) && this.is[u] === I_TPL && byE) rearms++; };
+  let maxStack = 0;
+  for (let k = 0; k < 6; k++) { s.run(2000); maxStack = Math.max(maxStack, s.stats().maxStack); }
+  const rows = s.births.filter((b) => b.stk), face = s.births.filter((b) => !b.stk);
+  assert.ok(rows.length >= 10 && rows.every((b) => b.seq === b.parent), `rows ${rows.length}, all copies of the row below`);
+  assert.ok(face.every((b) => b.seq === rev(b.parent) || b.seq === b.parent), 'released copies exact');
+  assert.ok(maxStack >= 3 && s.stackMelts > 0, `tallest stack ${maxStack} rows, melts ${s.stackMelts}`);
+  assert.strictEqual(rearms, s.energyUsed, 'every arming (of a released or a held unit) is paid by one energy particle');
+  let nA = 0; for (let u = 0; u < s.n; u++) if (s.type[u] === 0) nA++; assert.strictEqual(nA, 150);
+  assert.deepStrictEqual(s.check(), []);
+  // stacked units do not fray: a strand whose every unit is held keeps its units under fraying that would take a free strand apart
+  const f = new Sim({ seed: 3, W: 20, H: 20, nA: 60, nB: 60, nE: 60, seedSeq: 'AABBA', seedCount: 1, backCopy: true, stack: true, pSMelt: 0, pSMeltEnd: 0, pSMeltRun: 0 });
+  f.run(3000);
+  const held = []; for (let u = 0; u < f.n; u++) if (f.bond[u * 4] >= 0 && (f.bond[u * 4] & 3) === K && f.is[u] !== I_DOCK) held.push(u);
+  assert.ok(held.length >= 5, 'a stacked row formed: ' + held.length);
+  f.p.pFray = 0.05; f.run(500);
+  assert.strictEqual(held.filter((u) => f.bond[u * 4] >= 0 && f.is[u] !== I_DOCK).length, held.length, 'stacked units kept their places under fraying');
+});
+
 console.log(passed + ' tests passed');

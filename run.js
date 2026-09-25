@@ -43,7 +43,7 @@ for (let i = 0; i < args.length; i++) {
 const sim = opt.load ? Sim.fromState(JSON.parse(fs.readFileSync(opt.load, 'utf8')), params) : new Sim(params);
 const t00 = sim.t;
 const saveState = () => { if (opt.save) { fs.writeFileSync(opt.save + '.tmp', JSON.stringify(sim.saveState())); fs.renameSync(opt.save + '.tmp', opt.save); } };
-const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts', 'snaps', 'rayHits', 'cuts', 'proofs'];
+const cols = ['t', 'free', 'docked', 'repel', 'tpl', 'strands', 'complexes', 'meanLen', 'maxLen', 'distinct', 'entropy', 'births', 'maxGen', 'eOn', 'energyUsed', 'docks', 'softDocks', 'captures', 'ligations', 'frays', 'unzips', 'fed', 'undocks', 'spont', 'breaks', 'energyCharged', 'rings', 'memRings', 'memArcs', 'enclosedAB', 'enclosedE', 'enclosedTPL', 'enclosedMotif', 'totalMotif', 'ringsWithStrand', 'memActive', 'made', 'binds', 'melts', 'snaps', 'rayHits', 'cuts', 'proofs', 'held', 'stacked', 'stackRows', 'stackMelts', 'nStacks', 'maxStack', 'meanStack'];
 if (!opt.quiet) console.log(cols.join(','));
 const t0 = Date.now();
 // the birth log is flushed every interval (and the simulation's copy emptied), so it is complete up to the last report
