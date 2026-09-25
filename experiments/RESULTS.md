@@ -1939,7 +1939,26 @@ With the rule off, both letters drift down alike. A lead (2 seeds, small populat
 An earlier attempt in the jammed dense world (`PR_*`, old engine, 5x mutation, pProof 0.5) showed no rescue: both arms melted
 down (births 128 → 23 per 20,000 steps); there about half the copy errors were length changes (baseline `BASE_m5`: 51% of
 capped copies exact, 27% with a substitution, 22% longer or shorter), a load proofreading of substitutions cannot lift. What it does not show yet: whether the gene arises from spare letters by point
-mutation (`PN_*` running: `BCB` one mutation away, `AAA` three away).
+mutation (next).
+
+**A gene from a spare letter** (`PN1_*`: the same world, seeded only with `PABACDCBCBQ` ×6, whose spare `BCB` is one point
+mutation from the proofreading motif; 300,000 steps, 2 seeds):
+
+| run | `BDB` among capped births, by 50,000-step window | `CDC` at the end | births per window |
+|---|---|---:|---|
+| PN1_on_1 | 8%, 29%, 54%, 73%, 79%, 89% | 98% | 492 → 302 |
+| PN1_on_2 | 2%, 22%, 41%, 62%, 71%, 73% | 99% | 514 → 311 |
+| PN1_off_1 (rule off) | 9%, 17%, 16%, 8%, 3%, 7% | 76% | 502 → 548 |
+| PN1_off_2 (rule off) | 5%, 7%, 17%, 3%, 9%, 9% | 68% | 513 → 527 |
+
+The motif arises by a point mutation and sweeps where it proofreads; where it does nothing it drifts at a few percent. The
+other genes are kept better under proofreading (energy gene 87 to 91% against 67 to 72%, shield 98 to 99% against 68 to 76%).
+And a trade-off that no rule states: with proofreading total births fall by about a third (a wrong monomer that lets go
+leaves its site empty for a while), while more of the births are sound, the speed-accuracy trade-off of real polymerases.
+This is the second gene in the project to arise by mutation and spread, the first at ordinary density and the first whose
+pressure is copying itself rather than an imposed environment. What it does not show: a gene from nothing (the spare letters
+were placed one mutation away); from three mutations away (`PN3_*`, spare `AAA`) nothing arose in 110,000 steps (stopped),
+since at ordinary density genome length rarely changes (regularity 5) and three silent substitutions in a row are rare.
 
 ## 39. Shape as function: pockets that fit fuel (`grip`, `pocket`, fuel `U`/`V`, 2026-09-25), first probes
 
@@ -1988,3 +2007,39 @@ letters, through the shape it folds into, decides which fuel a genome can use. N
 many-to-many genotype-to-phenotype map made of geometry, the kind that motif rules (one hand-written function each) cannot
 give. What it does not show yet: selection (the first screens, `FS_*`/`FT_*`, ran in a world too poor in fuel to hold a
 population: 9 to 47 births per 30,000 steps); harvest here mixes shape with copying speed; two seeds.
+
+**Selection, first attempts (what failed and why).** Fuel as the only energy makes fragile worlds. Uncapped (`FS_*`, `PK_*`,
+`PR05..12`, `PW_*`: 30×30 to 60×60): copies waiting for fuel fray from their open ends before they are armed, and births stay
+at a few per 25,000 steps per lineage. Capped (`PC*_fold_*`: 40×40, the three 8-mers between caps, 200,000 steps, mutation off),
+births of each lineage per 50,000 steps:
+
+| run | `PAABBAABBQ` | `PABABABABQ` | `PAAAABBBBQ` | prediction from the harvest spectrum |
+|---|---|---|---|---|
+| fuel 0.5, seed 1 | 16, 20, 8, 5 | 13, 1, 0, 0 | 12, 0, 0, 0 | `AABBAABB` (right) |
+| fuel 0.5, seed 2 | 7, 14, 7, 2 | 20, 1, 0, 0 | 19, 1, 0, 0 | `AABBAABB` (right) |
+| fuel 0.85, seed 1 | 13, 2, 0, 1 | 7, 11, 0, 0 | 7, 1, 0, 0 | `AAAABBBB` (wrong: `ABAB` led, then all died) |
+| fuel 1.2, seed 1 | 6, 6, 4, 17 | 13, 2, 0, 0 | 11, 0, 0, 0 | `ABABABAB` (wrong: `AABB` won) |
+| fuel 0.5, letters that do not fold | 7, then extinct | 13, then extinct | 14, then extinct | nothing lives on small fuel without folds |
+
+`AABBAABB` won three of four capped races, including one the uncapped spectrum gave to another sequence; without folding
+letters nothing lived on small fuel. But every capped fuel world declined (capped births 12 → 1 per 10,000 steps): a copy
+needs ten captures, two contacts each, and a capped genome lives about 16,000 steps (caps fray); making caps last ten times
+longer only locks the letters up (templates pile up, births stop). So these races are small and dying: a lead that fold and
+fuel size select sequences, not a result. Next: fuel as a supplement to scarce ordinary energy (`PS_*`), so every genome lives
+and shape gives a graded advantage.
+
+**Fuel as a supplement** (`PS*`: the capped race world with scarce ordinary energy underneath, 16 particles at reload 0.0004,
+plus 120 fuel particles; `foldA` 45, `foldB` 30; 200,000 steps, 2 seeds). Births of each lineage in the last 50,000 steps
+(`PAABBAABBQ` / `PABABABABQ` / `PAAAABBBBQ`):
+
+| world | seed 1 | seed 2 |
+|---|---|---|
+| no fuel | 11 / 27 / 0 | 5 / 23 / 7 |
+| fuel 0.5 | 1 / 7 / 8 | 19 / 5 / 1 |
+| fuel 0.85 | 2 / 5 / 3 | 2 / 5 / 7 |
+| fuel 1.2 | 0 / 6 / 17 | 5 / 12 / 2 |
+
+Every world lives now. Without fuel `ABABABAB` wins in both seeds (the folded runs of `AAAABBBB` copy worst); with fuel the
+outcome changes, but not the same way in the two seeds. Inconclusive: 5 to 30 births per lineage per window is drift's
+territory (regularity 10). What would decide it: fitness measured apart from drift, each genome alone (a monoculture) in each
+environment, births per step at steady state; then competitions in worlds large enough for hundreds of births per lineage.
