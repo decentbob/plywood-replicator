@@ -66,7 +66,7 @@ run.js              headless runner: CSV every --every steps, JSON summary on st
                     --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted;
                     --save FILE (the whole world state, rewritten every interval: open it in the viewer, or continue it) and
                     --load FILE (continue a saved world; knobs given override its own: a branch under a changed rule)
-test.js             invariant tests (34; about 10 minutes on one core)
+test.js             invariant tests (35; about 10 minutes on one core)
 LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
 experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
                     what worked, what failed and what is open; add a row for every new experiment
@@ -81,10 +81,15 @@ tools/queue.sh        job queue: runs a file of jobs (OUTDIR NAME --knobs...), a
 tools/killnode.sh     kill node processes by a pattern without killing your own shell (matches only lines starting "node")
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
+experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
+experiments/races.js, permtest.js   many-seed races without mutation: each genome's share per seed and seeds won; permutation
+                    test between two groups of runs (41). pockets.js: who makes the fuel pockets; order.js: letter order per window
 ```
 
 ## src/sim.js map
 
+- Stack rule (40): `backCopy` makes an armed letter's back template (`KT_*`); with `stack` a finished back copy holds (`I_HOLD`, face
+  shows `HOLD`), and stacked units carry the `stk` bit on their lateral sides (read by neighbours for cooperative melting, `pSMelt*`).
 - Constants: sides `F R K L`; types `T_A T_B T_E T_M T_C T_D T_X T_P T_Q T_J T_G T_1..T_4` (A–D replicator letters, P/Q caps,
   all in `LETTERS`; E energy particle; M membrane block; X ray; J hub; G droplet block; 1–4 product blocks of the translate
   rule, `PRODUCTS`, `isProd`); `hand` (chirality) is a
@@ -115,7 +120,7 @@ experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): ge
 ## Commands
 
 ```sh
-node test.js                                    # all invariants, ~6 min
+node test.js                                    # all invariants, ~10 min
 node tools/fingerprint.js 1500 > before.txt     # then after a change: diff
 node run.js --help                              # every knob
 node run.js --steps 200000 --every 20000 --W 40 --H 40 --nA 256 --nB 256 --seedSeq ABBABA --pUndock 0.1 --pUnzip 1 --pFray 0.00003
@@ -129,7 +134,10 @@ NODE_PATH=$(npm root -g) node tools/screenshot.js /tmp/v.png '{"preset":"evo"}' 
 Speeds (engine of 2026-09-25, CPU time per process on a loaded machine, idle is faster): about 1,100 steps/s at 40×40 with
 570 blocks (two letters), 550 to 775 in the capped four-letter world (1,100 blocks), 300 in a jammed 40×40 world of 1,900.
 Roughly twice the old engine's. Four cores: at most four processes; more halves everyone. A 300,000-step capped run takes
-about 10 to 20 minutes with four running.
+about 10 to 20 minutes with four running. Measured with four running (wall, 2026-09-25 night): 1,700 to 1,900 steps/s in the
+two- and four-letter 40×40 worlds of about 550 blocks, 750 in the capped fuel races (700 blocks), 670 in the dense 48×48 world
+(1,300 blocks); stack worlds that lock up slow to 1,000. So 8 to 12 seeds per cell is affordable: prefer many small seeds to one
+big world when drift decides races (41).
 
 ## Working conventions and pitfalls
 

@@ -172,6 +172,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 40d | Stacks keep a two-gene genome? | Is `ABACDC` kept longer with stacks (section 22 world)? | `stack` (held, zip 0.02) with `feed`, `shield`, `relay` | inconclusive | seed 2: plain lost it by 76–78k, stacks kept it to 165–192k; seed 1: no difference | stacks.sh (`ST_K*`) | more seeds | the plain world now keeps it far longer than section 22 said |
 | 40e | Stacks under radiation | Do stacks keep a population alive where radiation kills it, and does length then pay? | `stack`, `pBreak` 3e-5 to 3e-4 | works | at 3e-4 plain extinct (2 of 2), stacks ~600 births per 15k; at 1e-4 births doubled; length 2.0 everywhere | stacks.sh (`ST_rad*`) | stacking as a heritable letter trait | a mechanical shield, not a reason for length |
 | 40f | Shape-limited stacks | Do wedge rows limit stack height? | `stack`, `bendA` 0 to 20 | negative | heights 6–10 at 0–10°; 15° and more: no copying at all | probe (RESULTS 40) | — | geometry is a switch again |
+| 41a | Pocket races, 8 seeds | Does fuel size decide which of three same-letter genomes wins (section 39 world)? | `pocket`, `foldA` 45, `foldB` 30, `sizeU`, `nU` 40 | negative | shares within drift (per-seed 0–70%); the one nominal effect (p = 0.05) is matched by the no-fold control | races.js, permtest.js (`RC*`, `RN*`) | an energy-limited world (41b) | births limited by letters: fuel arms more templates but births stay (105–129 vs 122 without fuel) |
+| 41b | Who makes pockets; energy-limited world | Are pockets one strand or two? Where does energy limit births? | `pocket`; 48×48, 400 letters each, `nE` 8 to 64 | works | 81–92% of fuel armings in one folded strand; dense world: births 39/68/86/127 at 8/16/32/64 energy particles | pockets.js, `EL*` | races in the dense world (41c) | harvest order differs from the section 39 spectrum (context) |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -198,8 +200,8 @@ the rows that used it). Rerun it after adding rows.
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works) |
-| `foldA` | 28b (works), 39b (works), 39c (works) |
-| `foldB` | 39c (works) |
+| `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative) |
+| `foldB` | 39c (works), 41a (negative) |
 | `foldD` | 28b (works) |
 | `gRange` | 31 (partial) |
 | `grip` | 39a (works) |
@@ -232,12 +234,12 @@ the rows that used it). Rerun it after adding rows.
 | `nA` | 33i (works) |
 | `nC` | 19 (works) |
 | `nD` | 33i (works) |
-| `nE` | 3 (negative), 4 (negative), 14 (negative), 19b (inconclusive), 19d (negative), 24b (negative), 39e (inconclusive) |
+| `nE` | 3 (negative), 4 (negative), 14 (negative), 19b (inconclusive), 19d (negative), 24b (negative), 39e (inconclusive), 41b (works) |
 | `nG` | 31 (partial) |
 | `nM` | 11 (superseded), 11b (negative), 16 (negative), 16b (negative) |
 | `nP` | 28c (lead) |
 | `nQ` | 28c (lead) |
-| `nU` | 39a (works), 39e (inconclusive), 39f (partial) |
+| `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
 | `pBindP` | 34c (works) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (works) |
@@ -253,7 +255,7 @@ the rows that used it). Rerun it after adding rows.
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works) |
-| `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial) |
+| `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial), 41a (negative), 41b (works) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
@@ -274,7 +276,7 @@ the rows that used it). Rerun it after adding rows.
 | `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works), 40d (inconclusive) |
 | `sizeA` | 28 (lead) |
 | `sizeD` | 28 (lead) |
-| `sizeU` | 39a (works), 39e (inconclusive) |
+| `sizeU` | 39a (works), 39e (inconclusive), 41a (negative) |
 | `sizeX` | 25b (works) |
 | `slack` | 10b (superseded), 12 (works) |
 | `snapCorners` | 23 (works), 23b (works) |

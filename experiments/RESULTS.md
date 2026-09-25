@@ -2169,3 +2169,43 @@ stacks pay where something else punishes free strands (radiation breaks free str
 here), whether kin aggregation (the no-barrier arm, with four letters) makes stacks into groups of genes that are selected
 together, or whether shape-limited stacks (rows of wedge letters are squeezed more with every row on their concave side, so a
 stack would snap at a height set by its sequence) give scission a sequence-set rate. Two seeds per arm.
+
+## 41. Shape selection with many seeds (`races.js`, `pockets.js`, `order.js`; RC, RN, EL, DR, DS runs; 2026-09-25)
+
+Section 39's pocket races were two seeds each and drowned in drift. Runs are cheap on the current engine (a capped 40×40 race of
+150,000 steps takes about 2.5 minutes), so the same question is asked here with 8 to 12 seeds per cell and a control in which the
+letters do not fold (so `A` and `B` are physically identical and any difference between the three genomes is drift).
+
+**Races in the section 39 world** (`RC*`: capped 40×40, 200 of each letter, 120 caps of each kind, three genomes of the same
+letters ×3 each, `foldA` 45, `foldB` 30, scarce energy (16 particles at 0.0004) plus 40 fuel particles at 0.002; mutation off;
+150,000 steps; 8 seeds. `RN*`: the same without folds.) Mean share of each genome among lineage births from step 75,000, and
+the number of seeds it won:
+
+| fuel | `AABBAABB` | `ABABABAB` | `AAAABBBB` |
+|---|---|---|---|
+| none (folds) | 34% (3) | 38% (3) | 28% (2) |
+| 0.5 (folds) | 47% (4) | 35% (3) | 17% (1) |
+| 0.85 (folds) | 21% (1) | 38% (3) | 41% (4) |
+| 1.2 (folds) | 35% (4) | 22% (1) | 43% (3) |
+| 0.5, no folds | 33% (2) | 35% (3) | 32% (3) |
+| 1.2, no folds | 28% (2) | 22% (1) | 50% (4) |
+
+Per-seed shares run from 0 to over 70%, so a mean over 8 seeds has an error of about 8 points. With folds, small fuel favours
+`AABBAABB` and the no-fold control is flat, as shape would predict; but at fuel 1.2 `AAAABBBB` leads just as much *without*
+folds (50%), where it cannot have an advantage, so leads of this size are drift. Permutation tests on the per-seed shares: the
+one nominal difference (`AAAABBBB` 17% at fuel 0.5 against 43% at 1.2, p = 0.05, one of many comparisons) is matched by the
+no-fold control (50% at 1.2); fold against no fold at 0.5, `AABBAABB` 47% against 33%, p = 0.27.
+
+**Why: this world is limited by letters, not energy.** Capped births per seed from step 75,000: no fuel 122, fuel 0.5 106, 0.85
+129, 1.2 105, no folds 106 to 109. Fuel arms many more templates (363 armed units against 152 at the end of seed 1) but uses up
+the free letters (79 against 224), so births stay where letter turnover sets them, and a better harvest cannot win much (as the
+monocultures of section 39 said). **Who makes the pockets** (`pockets.js`: every fuel arming, the strands of the backs holding
+the particle, 30,000 steps, 2 seeds): 86 to 92% of armings at fuel 0.5 and 81 to 83% at 1.2 are in a pocket of one strand folded
+on itself; pockets between two genomes are 6 to 15%. Here `AAAABBBB` harvests most at 1.2 (13 armed letters against 10 and 5)
+and `ABABABAB` at 0.5 (29, 22, 13), not in the order of the section 39 spectrum (which was measured uncapped with fuel the only
+energy): a genome's harvest depends on the world it is in.
+
+**An energy-limited world** (`EL*`: capped 48×48, 400 of each letter, 240 caps of each kind, one seed, 60,000 steps; capped births
+from 30,000 to 60,000 steps): energy particles 8, 16, 32, 64 give 39, 68, 86, 127 births; over 16 particles, fuel (size 0.5) adds
+births (20 at 0.001: 74; 10 at 0.001: 88; 40 at 0.002: 99; over 8 particles, 20 at 0.001: 67), with 260 to 370 letters waiting
+for energy and 400 to 680 free letters. Here energy limits births, and harvest can decide who wins.
