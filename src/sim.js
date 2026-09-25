@@ -37,9 +37,12 @@
 const F = 0, R = 1, K = 2, L = 3;
 const SIDE_NAME = ['F', 'R', 'K', 'L'];
 const T_A = 0, T_B = 1, T_E = 2, T_M = 3, T_C = 4, T_D = 5, T_X = 6, T_P = 7, T_Q = 8, T_J = 9, T_G = 10;   // A, B, C, D are the replicator letters (each pairs with its own kind); X is a ray; P, Q are caps; J is a hub; G is droplet material
-const NT = 11;
+const T_1 = 11, T_2 = 12, T_3 = 13, T_4 = 14;   // product blocks (translate rule): a second polymer made on the backs of template strands
+const NT = 15;
+const PRODUCTS = [T_1, T_2, T_3, T_4];
+const isProd = (t) => t >= T_1 && t <= T_4;
 const NV = 8;   // most corners a unit can have
-const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J', 'G'];
+const TNAME = ['A', 'B', 'E', 'M', 'C', 'D', 'X', 'P', 'Q', 'J', 'G', '1', '2', '3', '4'];
 const LETTERS = [T_A, T_B, T_C, T_D, T_P, T_Q];
 /** The type of a letter character ('A'..'D', or the caps 'P', 'Q'); -1 if none. */
 function letterType(ch) { const k = 'ABCDPQ'.indexOf(String(ch).toUpperCase()); return k < 0 ? -1 : LETTERS[k]; }
@@ -75,12 +78,15 @@ const S = {
   ANC: 27,                                              // L, R of an active membrane block, bonded, passing on the anchor signal (tether rule)
   CUT: 29,
   ARMEDC: 30, HYBC: 31,
-  HUB: 32,                                              // any side of a hub block, open: holds the open end of a strand (hub rule)                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
+  HUB: 32,
+  PBIND: 36,                                            // F of a finished product (catalysis): binds the back of a strand it matches
+  TRN_MM: 33, TRN_LF: 34, TRN_RF: 35,                   // K of an armed letter (translate rule): a product block docks here; which lateral neighbours also
+                                                        // translate, as TPL_* says for a face (TRN_RF: the left one only, TRN_LF: the right one only)                                              // any side of a hub block, open: holds the open end of a strand (hub rule)                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
 };
 const SNAME = []; for (const k in S) SNAME[S[k]] = k;   // name of each side-state value
 // A bond breaks the moment either of its sides derives to one of these.
-const NONHOLD = new Uint8Array(32);
+const NONHOLD = new Uint8Array(64);
 NONHOLD[S.REPEL] = NONHOLD[S.INERT] = NONHOLD[S.IDLE] = NONHOLD[S.OFF] = 1;
 
 const DEFAULTS = {
@@ -109,6 +115,15 @@ const DEFAULTS = {
   gStick: 0.1, gRange: 1.6,     // gStick of the gap per step: with enough of them they separate into liquid droplets that fuse and break
   gStickS: 0, gStickF: 0,       // how strongly a letter in a strand (gStickS) or a free letter (gStickF) is drawn to G, as a fraction of gStick:
                                 // strands then gather in droplets with the monomers they copy from (Oparin's coacervates)
+  n1: 0, n2: 0, n3: 0, n4: 0,   // product blocks (translate rule), one count per kind; their physics per kind: size1, bend1, stiff1, res1, mob1 ...
+  translate: false,             // the back of an armed letter templates a product block by a fixed code (transCode): a free product docks its face there,
+                                // docked products link side to side where the template continues, and a finished product chain is released,
+  transCode: 'A1,B2,C3,D4',     // as a copy is on the face. Products never become templates. The genome builds a polymer that is not itself
+  pMisTrans: 0,                 // a product of the wrong kind docks on a back at this fraction of the rate (mistranslation)
+  catalysis: false,             // (with translate) a finished product binds back onto the backs of a strand it matches by the code (pBindP per step
+  pBindP: 0.2,                  // of contact; a lone bound unit lets go at pPMelt, one in a bound run at pPMeltRun), and where a product is bound
+  pPMelt: 0.05, pPMeltRun: 0.0005, // the template's face is catalysed: two monomers docked there link side to side at once; elsewhere only at
+  pLinkBare: 0.01,              // pLinkBare per step of contact. The genome needs the machine it builds to be copied
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
@@ -227,7 +242,7 @@ class Sim {
   // ---------------------------------------------------------------- setup
   _init() {
     const p = this.p;
-    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0) + (p.nG || 0);
+    const n = this.n = p.nA + p.nB + p.nE + (p.nM || 0) + (p.nC || 0) + (p.nD || 0) + (p.nX || 0) + (p.nP || 0) + (p.nQ || 0) + (p.nJ || 0) + (p.nG || 0) + (p.n1 || 0) + (p.n2 || 0) + (p.n3 || 0) + (p.n4 || 0);
     this.type = new Uint8Array(n);
     this.is = new Uint8Array(n);          // internal state
     this.hand = new Uint8Array(n);        // chirality, fixed for life: 1 is the mirror form (chiral rule)
@@ -242,6 +257,7 @@ class Sim {
                                                   // unit whose other lateral side is free), derived like the state
     this.ss0 = new Uint8Array(n * 4);             // side states as the last derive pass left them: a signal relayed along a strand (relay,
                                                   // cutRelay, tether) is read from here, so it moves one block per pass, never further
+    this.cat = new Uint8Array(n * 4);             // catalysis: a face shows, beside its state, whether a finished product is bound to its unit's back
     this.tip0 = new Uint8Array(n * 4);            // the tips as the last derive pass left them, which is what a neighbour reads
     this.open = new Uint8Array(n);                // bitmask of bondable sides
     this.fresh = new Uint8Array(n);               // released from a template since last birth (observation)
@@ -257,11 +273,13 @@ class Sim {
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
     this.events = [];
-    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0;
+    this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0;
     this._seen = new Uint8Array(n);
     const am = String(p.actMotif || 'BAB');
     this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
-    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1); this._mobL[T_G] = typeParam(p, 'mob', T_G, 1);
+    this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1); this._mobL[T_G] = typeParam(p, 'mob', T_G, 1); for (const t of PRODUCTS) this._mobL[t] = typeParam(p, 'mob', t, 1);
+    this._code = new Int8Array(NT).fill(-1);   // translate rule: which product kind docks on the back of each letter
+    for (const pair of String(p.transCode || '').split(',')) { const lt = letterType(pair.trim()[0]), pt = TNAME.indexOf(pair.trim()[1]); if (lt >= 0 && isProd(pt)) this._code[lt] = pt; }
     const cm = String(p.cutMotif || 'BAB');
     this._cutOut = letterType(cm[0]); this._cutMid = letterType(cm[1]);   // cut rule
 
@@ -278,6 +296,7 @@ class Sim {
     for (let i = 0; i < (p.nQ || 0); i++) this.type[u++] = T_Q;
     for (let i = 0; i < (p.nJ || 0); i++) this.type[u++] = T_J;
     for (let i = 0; i < (p.nG || 0); i++) this.type[u++] = T_G;
+    for (let k = 0; k < 4; k++) for (let i = 0; i < (p['n' + (k + 1)] || 0); i++) this.type[u++] = PRODUCTS[k];
     for (u = 0; u < n; u++) {
       this.size[u] = typeParam(p, 'size', this.type[u], 1);   // sizeE, sizeX; sizeA..sizeD for letters (default 1)
       if (p.chiral > 0 && LETTERS.includes(this.type[u])) this.hand[u] = this.rng() < p.chiral ? 1 : 0;
@@ -301,7 +320,7 @@ class Sim {
     // edgeOf maps each working side (F, R, K, L) to the polygon edge that carries it; any other edge is skin.
     // slots NT..2NT-1 hold each type's folded shape (fold rule): the shape a folding letter takes while its face is free
     this.nv = new Uint8Array(NT); this.rx = new Float64Array(2 * NT * NV); this.ry = new Float64Array(2 * NT * NV); this.edgeOf = new Int8Array(NT * 4);
-    this._fold = new Float64Array(NT); for (const t of LETTERS) this._fold[t] = typeParam(p, 'fold', t, 0);
+    this._fold = new Float64Array(NT); for (const t of [...LETTERS, ...PRODUCTS]) this._fold[t] = typeParam(p, 'fold', t, 0);
     for (let slot = 0; slot < 2 * NT; slot++) {
       const t = slot % NT, folded = slot >= NT;
       if (folded && !this._fold[t]) continue;
@@ -577,6 +596,14 @@ class Sim {
       return 0;
     }
     if (tu === T_G || tv === T_G) return 0;
+    if (isProd(tu) !== isProd(tv)) {
+      // translate rule: a free product block's face docks on an armed letter's back (TRN_*), by the code; nothing else joins the two families
+      const [lt, ls, li, pt, ps, pi] = isProd(tu) ? [tv, sv, j, tu, su, i] : [tu, su, i, tv, sv, j];
+      if (!p.translate || li !== K || pi !== F || !(ls === S.TRN_MM || ls === S.TRN_LF || ls === S.TRN_RF)) return 0;
+      if (ps === S.PBIND) return p.catalysis && this._code[lt] === pt ? p.pBindP : 0;   // a finished product binds back (catalysis)
+      if (ps !== S.DOCK) return 0;
+      return this._code[lt] === pt ? 1 : p.pMisTrans;
+    }
     if (p.chiral > 0 && tu !== T_X && tv !== T_X && this.hand[u] !== this.hand[v]) {
       // chirality: no binding across hands, a mirror monomer docks only at pMisDock (then sits in the site, a poison,
       // until it falls off); side to side only at pMixLink
@@ -600,7 +627,12 @@ class Sim {
     if (i === K && j === K) return (su === S.INACT && sv === S.ACT) || (su === S.ACT && sv === S.INACT) ? 1 : 0;   // activation (act rule)
     if ((i === L && j === R) || (i === R && j === L)) {
       const openish = (x) => x === S.STICKY || x === S.END;
-      if (su === S.STICKY && sv === S.STICKY) return 1;
+      if (su === S.STICKY && sv === S.STICKY) {
+        if (!p.catalysis || isProd(tu)) return 1;   // (products link freely; only copies of letters need the catalyst)
+        // catalysis: two docked monomers link at once where either one's template unit has a finished product on its back
+        const fu = this.bond[u * 4 + F], fv = this.bond[v * 4 + F];
+        return (fu >= 0 && this.cat[fu]) || (fv >= 0 && this.cat[fv]) ? 1 : p.pLinkBare;
+      }
       if (openish(su) && openish(sv)) return p.pLigate;
       if ((su === S.INERT && openish(sv)) || (sv === S.INERT && openish(su))) return p.pCapture;
       if (su === S.INERT && sv === S.INERT) return p.pSpont;
@@ -621,8 +653,8 @@ class Sim {
         else if (this.type[u] === T_J) ok = s === S.HUB;
         else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
-        else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT;
+        else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF || s === S.PBIND;
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -670,14 +702,18 @@ class Sim {
     if (st === I_DOCK) this.ss[o + F] = S.DOCK;
     else if (st === I_REPEL) this.ss[o + F] = S.REPEL;
     else this.ss[o + F] = (bL && bR) ? S.TPL_MM : bL ? S.TPL_RF : S.TPL_LF;
+    if (st === I_TPL && isProd(this.type[u])) this.ss[o + F] = S.PBIND;   // a finished product (catalysis)
+    if (this.p.catalysis) this.cat[o + F] = st === I_TPL && b[o + K] >= 0 && this.ss[b[o + K]] === S.PBIND ? 1 : 0;
     // L, R. A docked unit's free lateral is sticky only where its template partner's face says the
     // template continues (TPL_MM, or TPL_LF for my L / TPL_RF for my R); at the template's end it is an open end.
     const pf = bF ? this.ss[b[o + F]] : -1;
     const hyb = st === I_TPL && pf >= 0 && pf !== S.DOCK;   // my face is bound to another template's face
     const lat = (bonded, contin) => bonded ? (st === I_TPL ? (hyb ? S.HYB : S.ARMED) : S.BONDED)
       : (st === I_DOCK ? (bF ? (contin ? S.STICKY : S.END) : (nl > 0 ? S.STICKY : S.INERT)) : S.END);
-    this.ss[o + L] = lat(bL, pf === S.TPL_MM || pf === S.TPL_LF);
-    this.ss[o + R] = lat(bR, pf === S.TPL_MM || pf === S.TPL_RF);
+    // a product docked on a back lies parallel to its template (a copy on a face lies reversed), so its L continues where the template's L does
+    const prod = isProd(this.type[u]);
+    this.ss[o + L] = lat(bL, prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF);
+    this.ss[o + R] = lat(bR, prod ? pf === S.TRN_MM || pf === S.TRN_LF : pf === S.TPL_MM || pf === S.TPL_RF);
     if (this.p.cut && st === I_TPL) {
       const src = bL && bR && this.type[u] === this._cutMid && this.type[b[o + L] >> 2] === this._cutOut && this.type[b[o + R] >> 2] === this._cutOut;
       let carries = src;
@@ -711,13 +747,20 @@ class Sim {
     else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
     else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
     else if (this.p.act && st === I_TPL && bL && bR && this.type[u] === this._actMid && this.type[b[o + L] >> 2] === this._actOut && this.type[b[o + R] >> 2] === this._actOut) this.ss[o + K] = S.ACT;
+    else if (this.p.translate && st === I_TPL && this._code[this.type[u]] >= 0) {
+      // translate rule: my back templates a product; it says along which sides the template continues (bonded neighbours whose letter
+      // has a product in the code; one not yet armed will be, and the product waits for it)
+      const eL = bL && this._code[this.type[b[o + L] >> 2]] >= 0, eR = bR && this._code[this.type[b[o + R] >> 2]] >= 0;
+      this.ss[o + K] = eL && eR ? S.TRN_MM : eL ? S.TRN_RF : eR ? S.TRN_LF : S.IDLE;
+    }
     else this.ss[o + K] = S.IDLE;
+    if (prod) this.ss[o + K] = S.IDLE;   // a product has no use for its back: it takes no energy and is never armed
     if (this.p.endLoss) {
       // end-replication loss: a template unit with a free lateral side (a cap's missing side is not free) is a tip and shows no
       // face; a unit whose neighbour is a tip counts that side as the end, so the copy stops one unit short of the open end
       const tp = this.tip, t0 = this.tip0, t = this.type[u];
       tp[o + L] = tp[o + R] = 0;
-      if (st === I_TPL) {
+      if (st === I_TPL && !isProd(t)) {
         if ((!bL && t !== T_P) || (!bR && t !== T_Q)) { this.ss[o + F] = S.IDLE; tp[o + L] = tp[o + R] = 1; }
         else {
           const eL = bL && !t0[b[o + L]], eR = bR && !t0[b[o + R]];   // sides along which the template continues
@@ -725,7 +768,7 @@ class Sim {
         }
       }
     }
-    if (this.type[u] >= T_P) this._capSides(u);
+    if (this.type[u] === T_P || this.type[u] === T_Q) this._capSides(u);
   }
 
   /** Caps lack one lateral side (and, with bareCaps, the back): that side shows IDLE and never bonds. */
@@ -791,9 +834,9 @@ class Sim {
         // R6 undocking: a lone docked monomer is not stable; a laterally linked run is
         if (nl === 0 && p.pUndock > 0 && this.rng() < p.pUndock) { this.pendingUnlink.push(o + F); this.kicked.push(u); this.undockEvents++; this._event('undock', u); return; }
         // R1 release: docked, and every lateral bond the template partner says I need is in place
-        const pf = this.ss[b[o + F]];
-        const needL = pf === S.TPL_MM || pf === S.TPL_LF;
-        const needR = pf === S.TPL_MM || pf === S.TPL_RF;
+        const pf = this.ss[b[o + F]], prod = isProd(this.type[u]);
+        const needL = prod ? pf === S.TRN_MM || pf === S.TRN_RF : pf === S.TPL_MM || pf === S.TPL_LF;
+        const needR = prod ? pf === S.TRN_MM || pf === S.TRN_LF : pf === S.TPL_MM || pf === S.TPL_RF;
         if ((!needL || bL) && (!needR || bR)) { this.is[u] = I_REPEL; this.fresh[u] = 1; this.parentOf[u] = b[o + F] >> 2; this._event('release', u); }
       } else if (nl > 0) {
         // R2 linked laterally without a template (captured by a strand end, or two free monomers that met): a new strand unit
@@ -801,6 +844,7 @@ class Sim {
       }
     } else if (st === I_REPEL) {
       if (nl === 0) this.is[u] = pool;                                     // R3 lost its strand: back to the pool
+      else if (isProd(this.type[u])) { if (p.catalysis) this.is[u] = I_TPL; }   // a product is never armed; with catalysis it is finished
       else if (!p.energyGate || (bK && this.ss[b[o + K]] === S.ON)) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy)
       else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
@@ -808,6 +852,12 @@ class Sim {
         this.pendingUnlink.push(o + F, o + L, o + R); this.cutEvents++; this._event('cut', u, b[o + F] >> 2); return;
       }
       if (nl === 0) this.is[u] = pool;                                     // R3
+      else if (bF && isProd(this.type[u])) {
+        // catalysis: a finished product bound to a back lets go fast where it is alone, slowly inside a bound run
+        const isH = (x) => x === S.HYB || x === S.HYBC;
+        const nh = (bL && isH(this.ss[b[o + L]]) ? 1 : 0) + (bR && isH(this.ss[b[o + R]]) ? 1 : 0);
+        if (this.rng() < (nh === 0 ? p.pPMelt : p.pPMeltRun)) this.pendingUnlink.push(o + F);
+      }
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
         const isH = (x) => x === S.HYB || x === S.HYBC;
@@ -819,7 +869,7 @@ class Sim {
     }
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
     // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).
-    const cap = this.type[u] >= T_P, pfr = cap ? p.pFray * p.capFray : p.pFray;
+    const cap = this.type[u] === T_P || this.type[u] === T_Q, pfr = cap ? p.pFray * p.capFray : p.pFray;
     if (this.is[u] !== I_DOCK && !bF && nl === 1 && p.pFray > 0 && this.rng() < pfr) {
       this.fresh[u] = 0; this.frayEvents++; this._event('fray', u);
       if (p.pUnzip > 0) this.is[u] = I_FRAY;
@@ -935,6 +985,20 @@ class Sim {
         if (this.is[u] === I_DOCK && this.bond[u * 4 + F] >= 0) attached = true;   // still docked on its template
       }
       if (attached || nFresh * 2 < chain.length) continue;
+      if (isProd(this.type[chain[0]])) {
+        // a product chain came off its template (translate rule): logged with its template's sequence, not counted as a birth
+        let tseq = '';
+        if (pu >= 0) tseq = this.chainOf(this.componentOf(pu)).map((x) => this._letter(x)).join('');
+        for (const x of chain) this.fresh[x] = 0;
+        this.prodCount++;
+        const seq = chain.map((x) => this._letter(x)).join('');
+        this._event('product', chain[0]);
+        if (this.p.logBirths) {
+          this.births.push({ t: this.t, seq, prod: 1, parent: tseq, x: this.px[chain[0]], y: this.py[chain[0]] });
+          if (this.births.length > this.p.maxBirthLog) this.births.splice(0, this.births.length - this.p.maxBirthLog);
+        }
+        continue;
+      }
       let pgen = 0, parentSeq = '';
       if (pu >= 0) {
         const pchain = this.chainOf(this.componentOf(pu));
@@ -1258,6 +1322,7 @@ class Sim {
       for (let i = 0; i < 4; i++) if (this.bond[o + i] >= 0) bonds++;
     }
     const hist = new Map(); const seqs = new Map();
+    let prodChains = 0, prodUnits = 0;
     let strands = 0, complexes = 0, totalLen = 0, maxLen = 0, components = 0, rings = 0, ringLen = 0;
     let memRings = 0, memRingLen = 0, memArcs = 0, enclosedAB = 0, enclosedE = 0, memFree = 0, enclosedTPL = 0, enclosedMotif = 0, ringsWithStrand = 0;
     const seen = new Uint8Array(n);
@@ -1287,6 +1352,7 @@ class Sim {
       if (nAB < 2) continue;
       // length and sequence are read off the longest chain, so a template that is being copied still counts
       const chain = this.chainOf(comp), len = chain.length;
+      if (len > 0 && isProd(this.type[chain[0]])) { prodChains++; prodUnits += len; continue; }   // product chains are counted apart
       if (this.isRing(comp)) { rings++; ringLen += len; }
       if (faceBonded) complexes++; else strands++;
       totalLen += len; if (len > maxLen) maxLen = len;
@@ -1307,7 +1373,7 @@ class Sim {
       births: this.birthCount, maxGen: this.maxGen, energyUsed: this.energyUsed,
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
       ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone,
-      energyCharged: this.energyCharged, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
+      energyCharged: this.energyCharged, products: this.prodCount, prodChains, prodUnits, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };
   }
@@ -1329,5 +1395,5 @@ class Sim {
 }
 
 
-return { Sim, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
+return { Sim, PRODUCTS, T_1, T_2, T_3, T_4, isProd, NV, NT, COMP, PAIR, letterType, T_P, T_Q, T_J, T_G, DEFAULTS, REMOVED, S, SNAME, F, R, K, L, T_A, T_B, T_C, T_D, T_E, T_M, TNAME, LETTERS, T_X, I_DOCK, I_REPEL, I_TPL, I_FRAY, I_RAW, I_ON, I_OFF, SIDE_NAME, mulberry32 };
 });

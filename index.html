@@ -183,7 +183,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, nG: 0, gRange: 2.2, gStick: 1 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -214,6 +214,9 @@ const KNOBS = [
   ['pMisDock', 'p mirror dock', 'a monomer of the other hand docks at this fraction of the rate and blocks the site (cross-inhibition)'],
   ['pMixLink', 'p mixed link', 'neighbours of different hands link at this fraction of the rate'],
   ['compCopy', 'complementary copying', 'A docks on B and C on D (as in DNA): a copy is the reversed complement', 'bool'],
+  ['translate', 'translation', 'an armed letter\'s back templates a product block by the code A→1, B→2, C→3, D→4: the genome builds a second polymer', 'bool'],
+  ['catalysis', 'catalysis', 'finished products bind back onto matching strands; monomers docked there link at once, elsewhere only at the bare rate', 'bool'],
+  ['pLinkBare', 'bare linking', 'with catalysis: how often two docked monomers link without a product on their template'],
   ['bareCaps', 'bare caps', 'caps have no back: armed only through their bond by the feed relay, so a capped strand re-arms only if it carries ABA', 'bool'],
   ['endLoss', 'end-replication loss', 'a template unit with a free side shows no face, so every copy lacks its template\'s open ends; strands capped P...Q copy whole (telomeres)', 'bool'],
   ['pCapture', 'p end capture', 'insertion, gap substitution'],
@@ -272,12 +275,12 @@ const KNOBS = [
   ['tolDeg', 'dock tolerance °'],
   ['grp', 'Population (reset)'],
   ['seed', 'RNG seed'],
-  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nP', 'P caps', 'a left-end cap (no left side); pairs with Q; caps never fray'], ['nQ', 'Q caps'], ['nJ', 'hubs', 'blocks whose four sides hold strand ends: strands tethered in a star'], ['nG', 'droplet blocks', 'never bond; attract each other (droplet stickiness) into liquid droplets that strands can gather in'], ['nC', 'C monomers', 'more letters: each pairs with its own kind'], ['nD', 'D monomers'], ['nE', 'E particles'],
+  ['nA', 'A monomers'], ['nB', 'B monomers'], ['nP', 'P caps', 'a left-end cap (no left side); pairs with Q; caps never fray'], ['nQ', 'Q caps'], ['nJ', 'hubs', 'blocks whose four sides hold strand ends: strands tethered in a star'], ['n1', 'product 1 blocks', 'product blocks (translation), one count per kind'], ['n2', 'product 2 blocks'], ['n3', 'product 3 blocks'], ['n4', 'product 4 blocks'], ['nG', 'droplet blocks', 'never bond; attract each other (droplet stickiness) into liquid droplets that strands can gather in'], ['nC', 'C monomers', 'more letters: each pairs with its own kind'], ['nD', 'D monomers'], ['nE', 'E particles'],
   ['seedSeq', 'seed strands', 'sequences of A, B, C, D, comma-separated', 'text'],
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'n1', 'n2', 'n3', 'n4', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -370,12 +373,12 @@ $('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFol
 function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
 
 // ------------------------------------------------------------ drawing
-const COL = { A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', J: '#ff9900', G: '#6d6a8f', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
+const COL = { 1: '#ffd166', 2: '#06d6a0', 3: '#ef476f', 4: '#118ab2', A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', J: '#ff9900', G: '#6d6a8f', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
 const SIDECOL = {};
 const RPAL = ['#000', '#ff4d4d', '#ffd84d', '#4dff88', '#4dd2ff', '#b84dff', '#ff4dd2', '#ffffff', '#ff9f1c', '#9fff1c', '#1c9fff'];
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66'; SIDECOL[S.TRN_MM] = SIDECOL[S.TRN_LF] = SIDECOL[S.TRN_RF] = '#ffb3de'; SIDECOL[S.PBIND] = '#ff8fc8';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {

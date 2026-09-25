@@ -354,6 +354,24 @@ test('bareCaps: a cap takes no energy, so only a capped strand carrying the feed
   assert.deepStrictEqual(s.check(), []);
 });
 
+test('translate: the backs of an armed strand template product chains by the code, parallel to it; catalysis makes copying need them', () => {
+  const code = { A: '1', B: '2', C: '3', D: '4' }, tr = (q) => [...q].map((c) => code[c]).join('');
+  const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 150, nB: 150, nC: 150, nD: 150, n1: 100, n2: 100, n3: 100, n4: 100, nE: 100, seedSeq: 'ABACDCAB', seedCount: 3, translate: true }));
+  s.run(20000);
+  const pr = s.births.filter((b) => b.prod);
+  assert.ok(pr.length >= 5, 'products ' + pr.length);
+  assert.ok(pr.every((b) => b.seq === tr(b.parent)), 'a product is its template read through the code: ' + pr.map((b) => b.parent + '>' + b.seq).join(' '));
+  assert.ok(s.births.some((b) => !b.prod), 'copying goes on beside translation');
+  assert.deepStrictEqual(s.check(), []);
+  // catalysis: with bare linking off, nothing is copied without products, and copying runs once products are made
+  const w = { seed: 1, W: 40, H: 40, nA: 200, nB: 200, n1: 200, n2: 200, nE: 100, seedSeq: 'ABBABA', seedCount: 3, catalysis: true, pLinkBare: 0 };
+  const a = new Sim(Object.assign({}, base, w)); a.run(40000);
+  assert.strictEqual(a.births.length, 0, 'copies without a catalyst');
+  const c = new Sim(Object.assign({}, base, w, { translate: true })); c.run(40000);
+  assert.ok(c.births.filter((b) => !b.prod).length >= 3, 'copies with catalysis ' + c.births.filter((b) => !b.prod).length);
+  assert.deepStrictEqual(c.check(), []);
+});
+
 test('compCopy: copies are reversed complements; hubs hold strand ends and never enter a sequence', () => {
   const rc = (q) => [...q].reverse().map((c) => ({ A: 'B', B: 'A', C: 'D', D: 'C' })[c]).join('');
   const s = new Sim(Object.assign({}, base, { seed: 1, W: 40, H: 40, nA: 200, nB: 200, nE: 120, seedSeq: 'AAABAB', seedCount: 2, compCopy: true }));
