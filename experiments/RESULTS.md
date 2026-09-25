@@ -2209,3 +2209,31 @@ energy): a genome's harvest depends on the world it is in.
 from 30,000 to 60,000 steps): energy particles 8, 16, 32, 64 give 39, 68, 86, 127 births; over 16 particles, fuel (size 0.5) adds
 births (20 at 0.001: 74; 10 at 0.001: 88; 40 at 0.002: 99; over 8 particles, 20 at 0.001: 67), with 260 to 370 letters waiting
 for energy and 400 to 680 free letters. Here energy limits births, and harvest can decide who wins.
+
+**Races in the energy-limited world** (`DR*`: the dense world above, 8 energy particles at 0.0004 plus 20 fuel particles at 0.001,
+the three genomes ×3, folds as before; `DS*`: no folds; 120,000 steps; 12 seeds, 6 without fuel). Mean share of lineage births
+from step 60,000 (seeds won):
+
+| world | `AABBAABB` | `ABABABAB` | `AAAABBBB` |
+|---|---|---|---|
+| folds, no fuel (6 seeds) | 41% (2) | 49% (4) | 10% (0) |
+| folds, fuel 0.5 | 45% (6) | 29% (4) | 27% (2) |
+| folds, fuel 1.2 | 27% (3) | 50% (7) | 23% (2) |
+| no folds, fuel 0.5 | 43% (6) | 25% (3) | 33% (3) |
+| no folds, fuel 1.2 | 37% (6) | 24% (3) | 38% (3) |
+
+The directions are those shape would give (with folds `ABABABAB` takes 50% at fuel 1.2 against 24% without; `AAAABBBB`, whose
+long runs curl up hardest, does worst with folds), but part of it is folding itself (with folds and no fuel `ABABABAB` leads as
+much, 49%), and nothing is significant: `ABABABAB` folds against no folds at 1.2, p = 0.09; at 1.2 against 0.5 with folds,
+p = 0.15; `AABBAABB` at 0.5 against 1.2 with folds, p = 0.14 (permutation tests, 12 seeds). Lineages make 20 to 40 births each in
+the second half, and per-seed shares run from 0 to 100%.
+
+What this says: with the same letters in different orders, the fitness differences that pockets give are small, a few tens of
+percent in share at most, against drift that swings shares from nothing to everything in populations of 20 to 30 genomes; neither
+a letter-limited nor an energy-limited world at this size shows them. Section 39's harvest spectrum is real (a folded genome
+arms faster from fuel that fits it), but it does not become a decisive fitness difference. What would: populations several times
+larger (a 96×96 world, about 13 minutes per 120,000 steps, so 12 seeds of two arms take about 80 minutes on four cores), genomes
+whose shapes differ more (compositions: `AAAAAAAA` against `ABABABAB` harvest 3 against 24 at fuel 1.2 in section 39), or a
+pocket that pays more (fuel the only energy, which made worlds fragile in section 39). What it does not say: that shape cannot be
+selected; the order effects may be real at a size these runs cannot resolve. The planned evolution runs (letter order adapting
+under mutation) were not run: they would be drift-dominated for the same reason.

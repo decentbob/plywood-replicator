@@ -174,6 +174,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 40f | Shape-limited stacks | Do wedge rows limit stack height? | `stack`, `bendA` 0 to 20 | negative | heights 6–10 at 0–10°; 15° and more: no copying at all | probe (RESULTS 40) | — | geometry is a switch again |
 | 41a | Pocket races, 8 seeds | Does fuel size decide which of three same-letter genomes wins (section 39 world)? | `pocket`, `foldA` 45, `foldB` 30, `sizeU`, `nU` 40 | negative | shares within drift (per-seed 0–70%); the one nominal effect (p = 0.05) is matched by the no-fold control | races.js, permtest.js (`RC*`, `RN*`) | an energy-limited world (41b) | births limited by letters: fuel arms more templates but births stay (105–129 vs 122 without fuel) |
 | 41b | Who makes pockets; energy-limited world | Are pockets one strand or two? Where does energy limit births? | `pocket`; 48×48, 400 letters each, `nE` 8 to 64 | works | 81–92% of fuel armings in one folded strand; dense world: births 39/68/86/127 at 8/16/32/64 energy particles | pockets.js, `EL*` | races in the dense world (41c) | harvest order differs from the section 39 spectrum (context) |
+| 41c | Pocket races, energy-limited, 12 seeds | Does fold decide same-letter races where energy limits births? | `pocket`, folds on/off, fuel 0.5/1.2, dense 48×48 | inconclusive | `ABABABAB` 50% with folds vs 24% without at fuel 1.2 (p = 0.09), 49% with folds and no fuel; nothing significant | races.js, permtest.js (`DR*`, `DS*`) | 96×96 worlds, or genomes differing in composition | 20–40 births per lineage per seed: drift swings shares 0–100% |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -255,7 +256,7 @@ the rows that used it). Rerun it after adding rows.
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works) |
-| `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial), 41a (negative), 41b (works) |
+| `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial), 41a (negative), 41b (works), 41c (inconclusive) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
