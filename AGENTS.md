@@ -200,8 +200,9 @@ Next steps, ranked:
 1. **Shape selection, properly.** Fuel as a supplement to scarce energy (`PS_*` world: capped 40×40, `nE` 16, `pReload`
    0.0004, `nU` 120, `pReloadU` 0.01, `foldA` 45, `foldB` 30) or larger worlds, 3+ seeds. Does the winner follow fuel size?
    Then mutation on: does letter order adapt? Then two fuels (`nU`, `nV`, `sizeV`, `pReloadV`): do genomes carry two
-   differently folded regions when each fuel is scarce (complexity from shape)? Harvest spectra with `harvest.js` in the
-   scratchpad (copy into `experiments/` when used; it is in RESULTS 39).
+   differently folded regions when each fuel is scarce (complexity from shape)? Probes: `experiments/harvest.js` (fuel used by sequence and fuel
+   size), `experiments/grip_probe.js` (fold against fuel size), `experiments/proof_capped.js`, `experiments/dense_fid.js`
+   (copy fidelity of an engine setting in the dense world); `experiments/lineages.js` counts births per competing genome.
 2. **Enzymes of parts** (the rest of option B): products that fold into pockets (`grip` exists), carry the charge, and deliver
    it to kin genomes through code-matched binding. Then several product kinds, several fuels.
 3. **A gene from nothing needs raw material.** Proofreading arose one mutation away, not three. On the new engine the 48×48
