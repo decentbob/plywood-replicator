@@ -79,7 +79,8 @@ const S = {
   CUT: 29,
   ARMEDC: 30, HYBC: 31,
   HUB: 32,
-  PBIND: 36,                                            // F of a finished product (catalysis): binds the back of a strand it matches
+  PBIND: 36,
+  BACK: 37,                                             // K of an armed letter with no product in the code (bindAny): a finished product may bind here                                            // F of a finished product (catalysis): binds the back of a strand it matches
   TRN_MM: 33, TRN_LF: 34, TRN_RF: 35,                   // K of an armed letter (translate rule): a product block docks here; which lateral neighbours also
                                                         // translate, as TPL_* says for a face (TRN_RF: the left one only, TRN_LF: the right one only)                                              // any side of a hub block, open: holds the open end of a strand (hub rule)                                 // L, R: ARMED / HYB carrying the cutter signal along a strand (cut rule with cutRelay)                                              // F of a template unit in cutMotif whose face is bound to another template (cut rule): its partner is cut
   MEMA: 28,                                             // L, R of an active membrane block, open, on an arc anchored on a maker (tether rule): raw blocks join here
@@ -124,6 +125,8 @@ const DEFAULTS = {
   pBindP: 0.2,                  // of contact; a lone bound unit lets go at pPMelt, one in a bound run at pPMeltRun), and where a product is bound
   pPMelt: 0.05, pPMeltRun: 0.0005, // the template's face is catalysed: two monomers docked there link side to side at once; elsewhere only at
   pLinkBare: 0.01,              // pLinkBare per step of contact. The genome needs the machine it builds to be copied
+  bindAny: false,               // (with catalysis) a finished product binds the back of any armed letter, whether it matches or has a product
+                                // in the code at all: the catalyst is shared, and a strand that makes none can use others' (a parasite)
   seedCount: 1, seedLen: 6, seedSeq: '',   // seedSeq: 'ABBABA' or a comma-separated list 'AB,ABBABA'
   // chemistry knobs
   pSoft: 0,        // wrong-type docking (A on a B template): substitution
@@ -599,7 +602,9 @@ class Sim {
     if (isProd(tu) !== isProd(tv)) {
       // translate rule: a free product block's face docks on an armed letter's back (TRN_*), by the code; nothing else joins the two families
       const [lt, ls, li, pt, ps, pi] = isProd(tu) ? [tv, sv, j, tu, su, i] : [tu, su, i, tv, sv, j];
-      if (!p.translate || li !== K || pi !== F || !(ls === S.TRN_MM || ls === S.TRN_LF || ls === S.TRN_RF)) return 0;
+      if (!p.translate || li !== K || pi !== F) return 0;
+      if (ps === S.PBIND && p.catalysis && p.bindAny && (ls === S.BACK || ls === S.TRN_MM || ls === S.TRN_LF || ls === S.TRN_RF)) return p.pBindP;   // any back
+      if (!(ls === S.TRN_MM || ls === S.TRN_LF || ls === S.TRN_RF)) return 0;
       if (ps === S.PBIND) return p.catalysis && this._code[lt] === pt ? p.pBindP : 0;   // a finished product binds back (catalysis)
       if (ps !== S.DOCK) return 0;
       return this._code[lt] === pt ? 1 : p.pMisTrans;
@@ -654,7 +659,7 @@ class Sim {
         else if (this.type[u] === T_M) ok = s === S.MEM || s === S.RAW || s === S.MEMA;
         else if (this.type[u] === T_E) ok = s === S.ON || (s === S.OFF && p.motif);
         else if (i === F) ok = s === S.DOCK || s === S.TPL_MM || s === S.TPL_LF || s === S.TPL_RF || s === S.PBIND;
-        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF;
+        else if (i === K) ok = s === S.WANT || s === S.CHARGE || s === S.MAKE || s === S.INACT || s === S.ACT || s === S.TRN_MM || s === S.TRN_LF || s === S.TRN_RF || s === S.BACK;
         else ok = s === S.STICKY || s === S.END || (s === S.INERT && (p.pCapture > 0 || p.pSpont > 0));
         if (ok) m |= 1 << i;
       }
@@ -753,6 +758,7 @@ class Sim {
       const eL = bL && this._code[this.type[b[o + L] >> 2]] >= 0, eR = bR && this._code[this.type[b[o + R] >> 2]] >= 0;
       this.ss[o + K] = eL && eR ? S.TRN_MM : eL ? S.TRN_RF : eR ? S.TRN_LF : S.IDLE;
     }
+    else if (this.p.bindAny && st === I_TPL && !isProd(this.type[u]) && this.type[u] !== T_P && this.type[u] !== T_Q && this.p.translate) this.ss[o + K] = S.BACK;
     else this.ss[o + K] = S.IDLE;
     if (prod) this.ss[o + K] = S.IDLE;   // a product has no use for its back: it takes no energy and is never armed
     if (this.p.endLoss) {
