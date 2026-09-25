@@ -58,7 +58,7 @@ ranked shortlist at its end.
 ## Layout
 
 ```
-src/sim.js          the whole simulation (browser global PolyChem, or require()); about 1,400 lines
+src/sim.js          the whole simulation (browser global PolyChem, or require()); about 1,700 lines
 src/rchem.js        random chemistry: Sim with its rule table replaced by a random one (RChem, randomTable, copyTable)
 index.html          viewer: canvas, knobs, presets, readout, event feed, click-to-inspect
 run.js              headless runner: CSV every --every steps, JSON summary on stderr (written when the run ends), --births FILE
@@ -66,7 +66,7 @@ run.js              headless runner: CSV every --every steps, JSON summary on st
                     --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted;
                     --save FILE (the whole world state, rewritten every interval: open it in the viewer, or continue it) and
                     --load FILE (continue a saved world; knobs given override its own: a branch under a changed rule)
-test.js             invariant tests (32; about 12 minutes on one core)
+test.js             invariant tests (34; about 10 minutes on one core)
 LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
 experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
                     what worked, what failed and what is open; add a row for every new experiment
@@ -126,9 +126,10 @@ node experiments/composition.js | pairs.js | alternation.js | turnover.js | leng
 NODE_PATH=$(npm root -g) node tools/screenshot.js /tmp/v.png '{"preset":"evo"}' 10000
 ```
 
-Speeds (one core, idle machine): about 800 steps/s at 60×60 with 1,100 blocks, 1,200 at 40×40 with 540,
-300 to 350 at 80×80 to 100×100. Four cores: run batches with `xargs -P 4`; six processes on four cores
-halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80×80 one several hours.
+Speeds (engine of 2026-09-25, CPU time per process on a loaded machine, idle is faster): about 1,100 steps/s at 40×40 with
+570 blocks (two letters), 550 to 775 in the capped four-letter world (1,100 blocks), 300 in a jammed 40×40 world of 1,900.
+Roughly twice the old engine's. Four cores: at most four processes; more halves everyone. A 300,000-step capped run takes
+about 10 to 20 minutes with four running.
 
 ## Working conventions and pitfalls
 
@@ -155,55 +156,60 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80�
   (the user, 2026-09-24): merging finished work from a session branch into `main` and pushing `main` needs no further
   permission (tests pass and the default fingerprint is unchanged first).
 
-## Where the project stands (2026-09-25)
+## Where the project stands (2026-09-25, evening)
 
-The full record is `experiments/LEDGER.md` (80 experiments with verdicts, the regularities that predict outcomes, the
+The full record is `experiments/LEDGER.md` (89 experiments with verdicts, the regularities that predict outcomes, the
 viability atlas, the knob index). The short version:
 
 - Works: exact template copying and every kind of copy error from local rules (1–2); length held by cooperative docking
   plus processive fraying (13, 15); private genes selected where their pressure acts (energy `feed` 14, shield 19);
   shape selecting on sequence (15); adaptation to an environment change (14).
-- **Genes accumulate, and a gene arose from nothing (33).** With end-replication loss (`endLoss`: pieces of a genome die
-  out) and bare caps (`bareCaps`: a genome must carry the energy gene to re-arm), a two-gene genome beats its one-gene
-  competitor wherever radiation acts (2 seeds, 4 environments). In dense worlds (400 letters of each kind, where copies
-  bridging two templates make duplications common) the shield gene arose by mutation inside `PABAQ` in 3 of 3 seeds and
-  spread, and shielded genomes then expanded from 5 to 10–13 units. At ordinary density, or with four times the population,
-  it never arose (0 of 7 runs). Density, not population size, supplies the raw material.
-- **A machine of parts (34, 36).** Translation (`translate`): a genome's backs template a second polymer (product blocks
-  `1`–`4`) by a code, exactly. With `catalysis` copying needs the product; with a shared catalyst (`bindAny`) parasites
-  take 60–70% of births and coexist with the makers; graded specificity (`pMisMelt`) holds them to 5–20%. No product
-  function tried yet makes length or complexity pay (34d, 34e).
+- **Genes accumulate, and genes arise by mutation.** With end-replication loss (`endLoss`) and bare caps (`bareCaps`) a
+  two-gene genome beats its one-gene competitor wherever radiation acts (33). In dense worlds the shield gene arose by
+  mutation in 3 of 3 seeds (33, old engine). **Proofreading (`proof`, 38)**, a third gene whose pressure is copying itself
+  (copy errors per functional letter), cuts substitutions 3–6 times, is selected when seeded, and arises from a spare letter
+  one mutation away and sweeps (8 → 89%, 2 → 73%, 2 of 2 seeds), with a speed-accuracy trade-off (births fall a third).
+- **A machine of parts (34, 36).** Translation, catalysis, shared catalysts and their parasites; no product function yet makes
+  length or complexity pay.
+- **Shape as function (39)**, the user's preferred direction: fuel particles held in pockets, two backs at once (a mechanical
+  AND). Which fold holds which fuel size is geometry (45–90° small, 30° large, 20° none, straight mid-sized by pairing), and
+  among 8-mers of the same letters each fuel size has a different best sequence: a many-to-many genotype-to-phenotype map
+  that no rule lists. Selection on it is so far a lead only (worlds with fuel as the only energy are fragile; fuel as a
+  supplement to scarce energy, `PS_*`, running at the end of the session).
+- **The engine is 2–2.5 times faster** (37): bodies jostled whole, 4 passes, no trigonometry, cell lists. Old results were
+  on the old engine. Do not jam worlds (use 48×48 for "dense"). Saved states: `--save`, `--load`, the viewer's "Open state".
 - Failed or parked, with reasons in the ledger: compartments and walls (16, 24, 25), recognition between strands (18, 26),
   public goods (9, 14, 17, 21), composition as a phenotype at small scale (35).
 
-The core obstacle, restated: **the shortest viable replicator wins unless something makes length pay** (ledger
-regularity 1). What has made length pay so far is a gene that removes a per-length cost (the relayed shield) in a world
-dense enough to supply duplications. The next step is to see whether that repeats: a third gene in expanded genomes.
+The core obstacle, restated: **the shortest viable replicator wins unless something makes length pay** (regularity 1). Three
+per-length costs now have genes (radiation: shield; energy: feed with relay; copy errors: proofreading). What limits
+open-endedness is the function space: each motif gene is one hand-written rule. Shape (39) is the first generic map from
+sequence to function; the question now is whether it drives selection and, with several fuels, several shaped regions.
 
-## Handoff (2026-09-25, end of session): pick up here
+## Handoff (2026-09-25, evening): pick up here
 
-Session of 2026-09-24/25 (branch `claude/modest-newton-esla1t`, merged into `main`). Locality made the fundamental rule;
-relayed signals one block per pass; `endLoss`, `bareCaps`, `radBand`, translation and catalysis, `bindAny`, `pMisMelt`;
-RESULTS 33–36; `LITERATURE.md`; the ledger and workflow tools (`tools/queue.sh`, `experiments/peek.js`, incremental birth
-logs, `tools/ledger_index.js`). All outputs are in `experiments/out/`. The user's view at the end: the dense-world gene
-origin is promising; mechanical directions interest them; screen short, confirm long; do not run worlds without a question.
+Session of 2026-09-25 (branch `claude/zealous-wright-w26ln9`, merged into `main`). The user this session: think about what
+is promising, not only the handoff list; mechanical designs and several replication modes; physics may change freely for
+speed ("anything we can optimize now will reward us"), but keep shapes (no grid: "shapes I think are a very promising
+direction"); test runs headless, visualization only on demand. Done: engine speed-up (37), saved states, proofreading (38),
+fuel pockets (39), fixes (parent attribution, body turn), tools (`tools/killnode.sh`, `experiments/lineages.js`). The shape
+options A–D were put to the user (DESIGN 15, top); B was started without an answer.
 
-Next steps, ranked (reasons in `experiments/LEDGER.md`, "Open gaps", and `DESIGN.md` section 15):
+Next steps, ranked:
 
-1. **A third gene in expanded genomes.** Dense capped world (the `TF_dense` setup) seeded with `PABACDCQ` (skip the slow
-   origin), plus a third pressure with a private gene not yet in the world. Does the third gene arise and spread in the
-   spare letters? That is the test of open-ended accumulation. Needs a third private function: candidates are `act`
-   (monomer activation, but it is public as built) or a new private rule; design it local and simple.
-2. **Mechanical directions** (the user's interest): crystal ribbons (a second replication mode where fragments carry the
-   whole information), a polymerase block (a copier made of parts), recombination by template switching (`pSwitch`).
-   Each is designed in words in DESIGN 15.
-3. **The translation machine in a dense world**: does it gain parts where length is cheap? And a product function that
-   pays by degrees (DESIGN 15, F1, F2).
-4. Older unfinished items (each a screen of an hour or two): random chemistry heredity test (32: `node
-   experiments/autocat.js 55 57 4 15 1 54`, compare `--control`), chirality round 2 (30: `ROUND=2 experiments/chiral.sh`),
-   droplets and the public motif (31: `experiments/droplets.sh`), double strands seed 3 (29: `experiments/duplex.sh`),
-   search round 2/3 (27: `experiments/search.js`).
+1. **Shape selection, properly.** Fuel as a supplement to scarce energy (`PS_*` world: capped 40×40, `nE` 16, `pReload`
+   0.0004, `nU` 120, `pReloadU` 0.01, `foldA` 45, `foldB` 30) or larger worlds, 3+ seeds. Does the winner follow fuel size?
+   Then mutation on: does letter order adapt? Then two fuels (`nU`, `nV`, `sizeV`, `pReloadV`): do genomes carry two
+   differently folded regions when each fuel is scarce (complexity from shape)? Harvest spectra with `harvest.js` in the
+   scratchpad (copy into `experiments/` when used; it is in RESULTS 39).
+2. **Enzymes of parts** (the rest of option B): products that fold into pockets (`grip` exists), carry the charge, and deliver
+   it to kin genomes through code-matched binding. Then several product kinds, several fuels.
+3. **A gene from nothing needs raw material.** Proofreading arose one mutation away, not three. On the new engine the 48×48
+   dense world makes almost no longer copies; find a local source of duplications (copies bridging templates happened only
+   in jammed worlds).
+4. Options A (folded genomes with hairpins) and C (2D crystals, a second replication mode): see DESIGN 15.
+5. Older unfinished items as before (random chemistry heredity 32, chirality round 2 30, droplets 31, duplex seed 3 29).
 
-Runs share four cores: keep at most four `run.js` processes (`tools/queue.sh` enforces it). The two old branches
-`claude/serene-keller-sprlt0` and `claude/simulation-behavior-evolution-i8yy4g` are fully merged into `main`; deleting
-them from here was refused by the git proxy, so they remain (harmless; the user can delete them on GitHub).
+Runs share four cores: keep at most four `run.js` processes (`tools/queue.sh` enforces it; a second queue with a higher cap
+for light runs is fine). Measure speed in CPU time. The two old branches `claude/serene-keller-sprlt0` and
+`claude/simulation-behavior-evolution-i8yy4g` are fully merged into `main` (deleting them was refused by the git proxy).
