@@ -1714,6 +1714,11 @@ genome's own product fits it, and a two-unit product binds as stably as a long o
 One seed. What it would take for the product to matter: a function that depends on the product's sequence or shape in
 graded ways (its fold, its kinds' physics), not only on matching its maker.
 
+**Four times the population** (`telo5.sh`, `TE_lig_1`, `_2`: 80×80, 800 letters and 480 caps of each kind, about 240 genomes,
+radiation only, fivefold mutation, ligation 0.05, 1,000,000 steps): about 30,000 capped births per run, 1.7 to 1.9% longer
+than five units (up to 16), `CDC` in 14 and 16 capped births (mostly the sterile `PCDCQ`; near-misses such as `PABCDCQ`,
+which has `AB`, not `ABA`), and no birth carrying both genes. Population size alone, at four times, does not make the gene.
+
 **Scarcity and density** (`scarcity.sh`: the `TD_lig` world, caps 30/60/120 of each kind × letters 100/200/400 of each kind,
 400,000 steps, seed 1). Capped births from step 200,000 on:
 
