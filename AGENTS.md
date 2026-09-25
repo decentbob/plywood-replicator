@@ -148,110 +148,55 @@ halves everyone. A 1,000,000-step small-world run takes 20 to 45 minutes; an 80�
   (the user, 2026-09-24): merging finished work from a session branch into `main` and pushing `main` needs no further
   permission (tests pass and the default fingerprint is unchanged first).
 
-## Where the project stands (2026-09-24)
+## Where the project stands (2026-09-25)
 
-Works, measured (RESULTS sections in brackets):
-- Exact template copying from local rules; copy errors of every kind from soft rules (1–2).
-- Length selected in an open population: cooperative docking (a lone docked monomer falls off) plus
-  processive fraying (strands die whole instead of eroding) hold mean length 4–5.4 against 2.3 (13, 15).
-- A private energy motif (`feed`: `ABA` arms its neighbours) is selected, 1.7× its control, four seeds; a
-  public one (`motif`: `ABA` charges particles into the medium) is not (14).
-- Adaptation to an environment change: when energy turns scarce the motif rises to 4–5× chance only where
-  it pays (14).
-- Block shape selects on sequence: a strongly wedge-shaped `B` is purged; a mildly wedge-shaped one is kept
-  but never placed next to another `B` (15).
-- Radiation selects a shield gene (`CDC`, `shield`) at once, 8–21× chance (19).
-- Flush polygons (23): `snapCorners` brings pinned corners together exactly (blocks deform, the shape force
-  pulls back); `maxStrain` lets a membrane bond or a lone docked monomer go when deformed too far. Copying stays
-  exact; an overlong membrane splits into rings of about its natural size (an arc of twice the size: two rings
-  in 15 of 20 seeds). The viewer uses both by default. (The user's direction, 2026-09-23.)
-- Walls made by their strands (24): with `make` + `tether` a strand carrying `BAB` anchors membrane on its back
-  and grows a wall around itself; with `memLinkTol` 0.3 the wall closes around its maker in 20 of 20 seeds within
-  about 12,000 steps, stays closed for 10,000 to 50,000 and opens under strain. `memPerm` lets monomers through.
-- **Two genes kept in one genome (33, two seeds in every environment).** Telomeres: with `endLoss` (a template block with a free side shows
-  no face, so copies lose their template's open ends) only strands capped `P...Q` persist, and a genome's pieces die out;
-  with `bareCaps` (caps armed only through their bond by the `feed` relay) a genome must carry the energy gene `ABA`, so
-  `PQ` is sterile. Then `PABACDCQ` (energy + shield genes) drives `PABAQ` extinct wherever radiation acts and keeps both
-  genes in 74 to 86% of births for 500,000 steps; without radiation `PABAQ` wins and the shield is lost. Open ends fray
-  fast (`pFray` 0.001), caps slowly (`capFray` 0.03). Scripts `telo*.sh`, analysis `capped.js`, viewer preset "genomes".
+The full record is `experiments/LEDGER.md` (80 experiments with verdicts, the regularities that predict outcomes, the
+viability atlas, the knob index). The short version:
 
-Tried and failed, with the reason (so they are not retried blindly):
-- Compartments by chance (16): rings close around strands, but enclosures last less than a generation and
-  rings never divide. Membrane made by strands (`make`, two versions): rings do not form around their makers.
-- Lock-and-key binding between strands (18): with two letters, general stickiness, diversity falls; the
-  zipper variant found no specificity window; with four letters, complementary strands rarely meet.
-- Gene accumulation (19): under any pair of pressures genomes shrink to 2–3 units; no genome kept both the
-  energy and the shield gene, even with the relay (one motif serves the whole strand) and ligation.
-- Spend rule (templates re-arm after every copy): half of births became mutants; removed (14).
-- Slow polymers (`mobS`, 21): kin clusters form, but the public `ABA` motif is still lost in 1 run of 3.
-- A seeded two-gene genome (`ABACDC`, 22) is not kept even without pressure: it falls apart into pieces of
-  itself, each a replicator, which out-copy it. Any fragment of a genome competes with it.
-- Walls (24, 25): made by and tethered to their makers, closing, sealing (with slow membrane `mobM` 0.5 and slow
-  contents: letters `mobS` 0.6, energy `mobE` 0.2, rays `mobX` 0.08). In every selection test (energy plentiful
-  or scarce, rays) making a wall was selected against or the walled world died: walls are slow to build, seal only
-  when everything moves slowly, then close only around 3-unit makers, and shut the maker's copies in. Note: at
-  default mobilities walls leak (energy, rays and strands pass), so section 24's energy rounds measured cost only.
-- Cutting (26): a `BAB` template bound face to face to another strand cuts it. In two letters the cutter binds its
-  own copies (alternating sequences are self-complementary) and is selected against.
-- Tried and removed: polygon-exact contacts (no effect, 2.3× slower), fluid membrane `pSwap`, mechanical breaks
-  inside a copy in progress (strands shatter into replicating fragments) (23).
+- Works: exact template copying and every kind of copy error from local rules (1–2); length held by cooperative docking
+  plus processive fraying (13, 15); private genes selected where their pressure acts (energy `feed` 14, shield 19);
+  shape selecting on sequence (15); adaptation to an environment change (14).
+- **Genes accumulate, and a gene arose from nothing (33).** With end-replication loss (`endLoss`: pieces of a genome die
+  out) and bare caps (`bareCaps`: a genome must carry the energy gene to re-arm), a two-gene genome beats its one-gene
+  competitor wherever radiation acts (2 seeds, 4 environments). In dense worlds (400 letters of each kind, where copies
+  bridging two templates make duplications common) the shield gene arose by mutation inside `PABAQ` in 3 of 3 seeds and
+  spread, and shielded genomes then expanded from 5 to 10–13 units. At ordinary density, or with four times the population,
+  it never arose (0 of 7 runs). Density, not population size, supplies the raw material.
+- **A machine of parts (34, 36).** Translation (`translate`): a genome's backs template a second polymer (product blocks
+  `1`–`4`) by a code, exactly. With `catalysis` copying needs the product; with a shared catalyst (`bindAny`) parasites
+  take 60–70% of births and coexist with the makers; graded specificity (`pMisMelt`) holds them to 5–20%. No product
+  function tried yet makes length or complexity pay (34d, 34e).
+- Failed or parked, with reasons in the ledger: compartments and walls (16, 24, 25), recognition between strands (18, 26),
+  public goods (9, 14, 17, 21), composition as a phenotype at small scale (35).
 
-- Double strands (29): binding without heat collapses length to about 2.3; heat cycles restore it, no gain over no binding.
-- Chirality (30): a racemic world stays racemic with hands fixed for life (round 1); Frank's conditions not yet run.
+The core obstacle, restated: **the shortest viable replicator wins unless something makes length pay** (ledger
+regularity 1). What has made length pay so far is a gene that removes a per-length cost (the relayed shield) in a world
+dense enough to supply duplications. The next step is to see whether that repeats: a third gene in expanded genomes.
 
-The core obstacle, stated once: **every pressure in this world costs long genomes more than short ones**, and
-any fragment of a genome is itself a replicator that out-copies it (22), so anything that needs several genes
-in one genome loses to its pieces. Section 33 is the first way past it: caps with end-replication loss make pieces
-sterile, and bare caps make the energy gene essential, so the smallest viable genome already carries one gene and a
-second gene pays where its pressure acts. What does not happen yet is a new gene arising by mutation (33).
+## Handoff (2026-09-25, end of session): pick up here
 
-## Handoff (2026-09-25): pick up here
+Session of 2026-09-24/25 (branch `claude/modest-newton-esla1t`, merged into `main`). Locality made the fundamental rule;
+relayed signals one block per pass; `endLoss`, `bareCaps`, `radBand`, translation and catalysis, `bindAny`, `pMisMelt`;
+RESULTS 33–36; `LITERATURE.md`; the ledger and workflow tools (`tools/queue.sh`, `experiments/peek.js`, incremental birth
+logs, `tools/ledger_index.js`). All outputs are in `experiments/out/`. The user's view at the end: the dense-world gene
+origin is promising; mechanical directions interest them; screen short, confirm long; do not run worlds without a question.
 
-Session of 2026-09-24/25 (branch `claude/modest-newton-esla1t`, merged into `main` at checkpoints): locality recorded as
-the fundamental rule; relayed signals made one block per pass; `endLoss`, `bareCaps`, `radBand`; RESULTS 33 (telomeres).
-Outputs of section 33's runs are in `experiments/out/` (`TK_*`, `TB_*`, `TA_*`, `TD_*`, `TR_*`). Open from it:
-- **A gene from nothing** (33): no shield gene arose inside `PABAQ` in any of five million-step runs (both pressures and
-  radiation alone, normal and fivefold mutation, 13 to 60 genomes). Seeded genes are kept; new ones are not made. The
-  valley between genes needs a much larger population, a mutation channel that copies existing stretches (duplication),
-  or a way for part of a gene to pay; which of these fits the locality rule is the open design question. End joining
-  (ligation of broken pieces) makes length vary but made no gene either. `telo5.sh` (80×80, four times the population)
-  was started at the end of the session; if its outputs (`TE_*`) are not in `experiments/out/`, rerun it (hours per run).
-- **Letters with trade-offs** (the user's idea, 2026-09-25; DESIGN 15 item 4): letters that differ in shape, size, speed,
-  resistance and stiffness, none simply better, so a strand's composition is a physical phenotype. Small worlds first.
-- **A third gene** (DESIGN 15, top of the list): walls against rays, or cutting (a cut kills in a capped world).
+Next steps, ranked (reasons in `experiments/LEDGER.md`, "Open gaps", and `DESIGN.md` section 15):
 
-Older unfinished items (from the 2026-09-24 handoff), still valid:
+1. **A third gene in expanded genomes.** Dense capped world (the `TF_dense` setup) seeded with `PABACDCQ` (skip the slow
+   origin), plus a third pressure with a private gene not yet in the world. Does the third gene arise and spread in the
+   spare letters? That is the test of open-ended accumulation. Needs a third private function: candidates are `act`
+   (monomer activation, but it is public as built) or a new private rule; design it local and simple.
+2. **Mechanical directions** (the user's interest): crystal ribbons (a second replication mode where fragments carry the
+   whole information), a polymerase block (a copier made of parts), recombination by template switching (`pSwitch`).
+   Each is designed in words in DESIGN 15.
+3. **The translation machine in a dense world**: does it gain parts where length is cheap? And a product function that
+   pays by degrees (DESIGN 15, F1, F2).
+4. Older unfinished items (each a screen of an hour or two): random chemistry heredity test (32: `node
+   experiments/autocat.js 55 57 4 15 1 54`, compare `--control`), chirality round 2 (30: `ROUND=2 experiments/chiral.sh`),
+   droplets and the public motif (31: `experiments/droplets.sh`), double strands seed 3 (29: `experiments/duplex.sh`),
+   search round 2/3 (27: `experiments/search.js`).
 
-Unfinished, in order of value:
-
-1. **Random chemistry (RESULTS 32)**, the user's latest question. Run `node experiments/autocat.js 55 57 4 15 1 54` (does the
-   commonest assembly of the most ordered tables beget itself? compare with `--control`), then screen the remaining tables
-   (`node experiments/rsearch.js 16 50` and `65 100`; the file has indices 0–15 and 50–64). Report to the user
-   whether any random table passes the heredity test. The viewer's "random chemistry" preset shows any table by its seed.
-2. **Chirality round 2** (RESULTS 30): `ROUND=2 OUT=... P=4 experiments/chiral.sh` (Frank's conditions: `pRacem`,
-   small `pMixLink`, `pMisDock`), 2 seeds; `node experiments/hand.js <births files>`. Round 1 seed 2 too.
-3. **Droplets and the public motif** (RESULTS 31): `experiments/droplets.sh`, compare with section 21.
-4. **Double strands** (RESULTS 29): seed 3 and `DX_bindheat_2` (`experiments/duplex.sh`, edit the seed list).
-5. **Search round 2** (RESULTS 27): 53 of 80 worlds in `experiments/out/search_2_partial.jsonl`; summarize with
-   `node experiments/search_summary.js experiments/out/search_2_partial.jsonl --by=enrich`, finish indices missing from it
-   (`node experiments/search.js <from> <to> --round=2`), then round 3 (`--round=3`: folding, caps, ligation).
-6. The walker/helicase block (DESIGN 15, ideas from reality) is designed in words only.
-
-Runs share four cores: keep at most four processes (the last session ran 17 and everything crawled).
-
-## Next steps, ranked (details in DESIGN.md section 15)
-
-1. **Arms race with four letters** (26, running on 2026-09-24): a cutter whose genome uses one letter of each
-   binding pair (A/C) cannot bind its own kind; does it spread, do prey shift tribe (AC, AD, BC, BD), does
-   `cutRelay` (the whole cutter strand is the key) give an open-ended race? `tribes.js`, `who_cuts.js`.
-2. **The fragment problem** (22): any piece of a genome is a viable replicator. A local rule under which short
-   pieces cannot replicate on their own would let genomes keep several genes.
-3. Compartments are parked (16, 24, 25): every part works, together they do not pay. If resumed: faster wall
-   building (pre-made vesicles that encapsulate by chance, grow and split by strain) rather than recruitment.
-4. **Stranger blocks for the search** (the user's idea, 2026-09-24): block types not thought of or set aside before,
-   each behind a knob so `search.js` can draw them: branching blocks (three or more lateral sides: 2D organisms),
-   two-faced blocks (template on face and back), blocks whose shape depends on their state (curl as template,
-   straighten while copied), free catalyst blocks that speed a reaction where they touch without being used up,
-   extremes of existing properties (giant or tiny, very soft, ray-proof or fragile, very fast or slow letters),
-   poisonous blocks that block faces or break bonds.
-5. Longer list: DESIGN.md section 15.
+Runs share four cores: keep at most four `run.js` processes (`tools/queue.sh` enforces it). The two old branches
+`claude/serene-keller-sprlt0` and `claude/simulation-behavior-evolution-i8yy4g` are fully merged into `main`; deleting
+them from here was refused by the git proxy, so they remain (harmless; the user can delete them on GitHub).
