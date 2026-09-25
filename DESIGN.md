@@ -381,6 +381,8 @@ Keep entries short: date, what changed, why, what evidence.
   zipped rows never dies. Evidence in `experiments/RESULTS.md`, section 40: stacks copy exactly and live beside strands, but hold
   length only by hoarding; under radiation the back copies (two copy sites per strand), not the stacks, rescue a population, and
   stickiness made heritable (`smeltA`..) is not selected. Kept, default off, as the second replication mode for combinations.
+  With `endLoss` a back follows the face's rule (a tip shows nothing on its back either, a side toward a tip is the end), so back
+  copies of a genome's pieces shrink as face copies do and the telomere logic of section 33 holds with two-faced letters.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---

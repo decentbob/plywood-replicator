@@ -509,6 +509,11 @@ test('backCopy and stack: a copy made on a back lies parallel (same sequence); s
   assert.strictEqual(held.filter((u) => f.bond[u * 4] >= 0 && f.is[u] !== I_DOCK).length, held.length, 'stacked units kept their places under fraying');
   // a slippery letter's stacked rows melt off: with smeltA high, rows of A stay far shorter lived than rows of B
   const standing = (sm) => { const m = new Sim({ seed: 4, W: 24, H: 24, nA: 120, nB: 0, nE: 60, seedSeq: 'AAAAA', seedCount: 2, pUndock: 0.05, backCopy: true, stack: true, pSNuc: 0, pSBind: 0.1, smeltA: sm }); let h = 0; for (let k = 0; k < 20; k++) { m.run(200); h += m.stats().stacked; } return h; };
+  // with endLoss a back follows the face's rule: capped genomes copy whole on both sides, pieces lose their ends on both sides
+  const el = (seq) => { const m = new Sim({ seed: 1, W: 30, H: 30, nA: 150, nB: 150, nP: 60, nQ: 60, nE: 80, seedSeq: seq, seedCount: 3, pUndock: 0.05, endLoss: true, backCopy: true }); m.run(8000); return m.births; };
+  const cb = el('PABBABQ'), pb = el('ABBABA');
+  assert.ok(cb.length >= 10 && cb.every((b) => b.seq.length === 7) && cb.some((b) => b.seq === 'PABBABQ') && cb.some((b) => b.seq === 'PBABBAQ'), 'capped copies whole, parallel and reversed');
+  assert.ok(pb.length >= 10 && pb.every((b) => b.seq.length < b.parent.length), 'copies of an uncapped piece are shorter, on backs too');
   const hs = standing(50), ho = standing(1);
   assert.ok(ho > 3 * hs, `units standing in stacks: slippery ${hs}, ordinary ${ho}`);
 });

@@ -928,7 +928,12 @@ class Sim {
       this.ss[o + K] = eL && eR ? S.TRN_MM : eL ? S.TRN_RF : eR ? S.TRN_LF : S.IDLE;
     }
     else if (this.p.bindAny && st === I_TPL && !isProd(this.type[u]) && this.type[u] !== T_P && this.type[u] !== T_Q && this.p.translate) this.ss[o + K] = S.BACK;
-    else if (this.p.backCopy && st === I_TPL && !isProd(this.type[u])) this.ss[o + K] = bL && bR ? S.KT_MM : bL ? S.KT_RF : S.KT_LF;   // (backCopy) my back templates
+    else if (this.p.backCopy && st === I_TPL && !isProd(this.type[u])) {
+      // (backCopy) my back templates; with endLoss it follows the face's rule: a tip shows nothing, and a side toward a tip is the end
+      let eL = bL, eR = bR;
+      if (this.p.endLoss) { const t = this.type[u]; if ((!bL && t !== T_P) || (!bR && t !== T_Q)) eL = eR = null; else { eL = bL && !this.tip0[b[o + L]]; eR = bR && !this.tip0[b[o + R]]; } }
+      this.ss[o + K] = eL === null ? S.IDLE : eL && eR ? S.KT_MM : eL ? S.KT_RF : eR ? S.KT_LF : S.IDLE;
+    }
     else this.ss[o + K] = S.IDLE;
     if (prod) this.ss[o + K] = this.p.grip && (st === I_REPEL || st === I_TPL) ? S.GRIP : S.IDLE;   // a product takes no energy and is never armed; released, it may grip fuel
     else if (this.p.pocket && st === I_TPL && this.ss[o + K] === S.IDLE) this.ss[o + K] = S.GRIP;   // pocket rule: an armed letter's idle back helps hold fuel
