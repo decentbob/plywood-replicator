@@ -2058,3 +2058,19 @@ units to about 40, armed template units rise from about 220 to about 360, and fr
 births are limited by letters (and fall a little). With energy saturated, shape cannot be selected through it, and drift
 decides the races. The regime needed: fuel limiting (waiting copies high) while scarce ordinary energy keeps the world alive
 (`ML_*`: 40 fuel particles at 0.002, running at the end of the session).
+
+**Fuel limited** (`ML_*`: 40 fuel particles at 0.002 over the same scarce energy, one seed, 100,000 steps). Births of the
+lineage per 10,000 steps from 50,000, and at the end armed template units / units waiting for energy:
+
+| genome | fuel 0.5 | fuel 0.85 | fuel 1.2 |
+|---|---|---|---|
+| `AAAABBBB` | 6.7 (316 / 69) | 5.6 (318 / 61) | 6.4 (220 / 104) |
+| `AABBAABB` | 7.0 (305 / 89) | 7.2 (322 / 82) | 5.8 (230 / 120) |
+| `ABABABAB` | 6.9 (301 / 84) | 6.3 (299 / 87) | 5.6 (322 / 67) |
+
+At a tenth of the supply fuel still covers most of the need (60 to 120 units waiting, against about 150 with no fuel). The
+armed state follows the harvest spectrum where it differs most: with large fuel `ABABABAB` keeps 322 armed and 67 waiting,
+`AABBAABB` 230 and 120, `AAAABBBB` 220 and 104 (the spectrum's order at 1.2: 24, 17, 8). But births hardly differ (5.6 to 7.2):
+a genome alone is limited by free letters, not by energy. What this says: shape decides how well a genome keeps itself armed;
+whether that decides who wins needs a competition where lineages take letters from each other, in a world large enough for
+hundreds of births per lineage (the next step in the handoff). One seed.
