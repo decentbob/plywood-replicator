@@ -1760,3 +1760,10 @@ toughness does not pay for slowness at these doses. Radiation 2e-5 killed the wo
 with it, so toughness helps survival a little. Populations are small (50 to 90 capped births per 50,000 steps) and drift
 dominates. Composition as a phenotype is weak here; it would need larger worlds, or a trade-off whose two sides are closer
 in size. Not pursued further for now.
+
+**Does a product's shape matter?** (`prodshape.sh`: the catalysis world with product kind `1` folding by 0, 30, 45 or 60°,
+genome `ABBABA`, 80,000 steps, two seeds.) Births: 213 and 229 (0°), 215 and 188 (30°), 245 and 191 (45°), 244 and 197
+(60°); products 109 to 139 in every run. No effect: a folding product straightens as its face binds (the fold rule), so its
+free shape never meets the genome. For shape to matter the product would have to keep it while bound (a permanent wedge,
+`bend1`), and wedges were seen to forbid docking outright (a wedge `C` homopolymer is never copied, section 35), so that
+would be a switch, not a gradient.
