@@ -17,5 +17,8 @@ echo "TD_rad5_2 --seed 2 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002"
 echo "TD_lig_1 --seed 1 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002 --pLigate 0.05"
 echo "TD_lig_2 --seed 2 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002 --pLigate 0.05"
 echo "TF_dense_1 --seed 1 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002 --pLigate 0.05 --nA 400 --nB 400 --nC 400 --nD 400"
+echo "TF_dense_2 --seed 2 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002 --pLigate 0.05 --nA 400 --nB 400 --nC 400 --nD 400"
+echo "TF_dense_3 --seed 3 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002 --pLigate 0.05 --nA 400 --nB 400 --nC 400 --nD 400"
+echo "TF_noshield_1 --seed 1 --pSoft 0.01 --pCapture 0.01 --nE 60 --pReload 0.002 --pLigate 0.05 --nA 400 --nB 400 --nC 400 --nD 400 --shield 0"
 } | xargs -P $P -L 1 sh -c 'name=$0; node run.js '"$C"' "$@" --births '$O'/$name.births.jsonl > '$O'/$name.csv 2> '$O'/$name.json'
 echo TELO4DONE
