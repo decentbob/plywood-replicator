@@ -20,7 +20,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    such costs have genes now: radiation per bond (shield), energy per unit (feed with relay), copy errors per functional
    letter (proofreading, selected when seeded, 38b). A second mode of replication does not change it by itself: stacks (40b)
    hold length only by hoarding (long rows zipped into stacks are immortal, the letters lock up, births fall), and stacks that
-   turn over let short rows win again (40c).
+   turn over let short rows win again (40c). More copy sites per strand (two-faced letters) make a population robust (40e),
+   not longer.
 2. **Any viable fragment of a genome defeats a genome that needs several genes.** (22, 19d, 33a'.) Make pieces
    sterile first (end loss on capped strands, 33a–d), and make the smallest viable genome already carry one gene (bare
    caps, 33b), or genes will not accumulate.
@@ -45,7 +46,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 9. **Recognition between strands has not given specificity** (18, 18b, 26, 26b): with two letters binding is
    self-complementary (autoimmune cutters); with four, partners rarely meet.
 10. **Small populations are drift-dominated.** Below about 100 births per 50,000 steps, composition effects are
-    swamped (35); founder make-up inflates "× chance" (always compare with a same-seed control).
+    swamped (35); founder make-up inflates "× chance" (always compare with a same-seed control). With 20 to 30 genomes per world,
+    races between genomes differing only in letter order swing from 0 to 100% per seed, and graded effects (pocket fit, 41) stay
+    invisible even at 12 seeds; the effects that were selected cleanly were all-or-nothing (shield under radiation, proofreading).
+    Run a same-physics control (e.g. no folds) beside every race: in 41a it matched the "effect".
 11. **Most answers show early.** Winners were clear within 50,000 of 500,000 steps (33b); run long only for slow decay
     or rare events (33c, 33i).
 
@@ -170,7 +174,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 40b | Do stacks make length pay? | Is newborn length held in an open two-letter world with held stacks? | `stack`, `stackHold`, `pSBind` 0 to 0.05, `pSNuc` 0 | negative | length ≥ 3.5 only where letters lock up (free < 190 of 512) and births fall 3–10×; turning over, 2.0–2.5 as plain | stacks.sh (`ST_hold_*`) | hoarding is not selection | knife edge at zip 0.02 (alive, 3.1–3.5); 2 seeds |
 | 40c | Treadmilling stacks | Same with stack bottoms fraying (they grow at the top, die at the bottom)? | `stack`, `stackHold` off, `pSBind` 0 to 0.5 | negative | never lock up; length 2.1–2.8 at every zip rate; with aggregation (no barrier) 4.4–4.8 but letters locked again | stacks.sh (`ST_tread_*`) | stacks where free strands are punished (radiation) | melting is not death: a row that comes off copies at once |
 | 40d | Stacks keep a two-gene genome? | Is `ABACDC` kept longer with stacks (section 22 world)? | `stack` (held, zip 0.02) with `feed`, `shield`, `relay` | inconclusive | seed 2: plain lost it by 76–78k, stacks kept it to 165–192k; seed 1: no difference | stacks.sh (`ST_K*`) | more seeds | the plain world now keeps it far longer than section 22 said |
-| 40e | Stacks under radiation | Do stacks keep a population alive where radiation kills it, and does length then pay? | `stack`, `pBreak` 3e-5 to 3e-4 | works | at 3e-4 plain extinct (2 of 2), stacks ~600 births per 15k; at 1e-4 births doubled; length 2.0 everywhere | stacks.sh (`ST_rad*`) | stacking as a heritable letter trait | a mechanical shield, not a reason for length |
+| 40e | Stacks under radiation | Do stacks keep a population alive where radiation kills it? | `stack`, `backCopy`, `pBreak` 3e-5 to 3e-4 | negative | at 3e-4 plain extinct (2 of 2) but back copies released without stacks live as well (665–684 births per 15k vs 602–619 with stacks); length 2.0 everywhere | stacks.sh (`ST_rad*`) | — | two-faced templating (two copy sites per strand) is the rescue, not stacking; first reading was wrong |
+| 40g | Heritable stacking (sticky and slippery letters) | Is the stacking mode selected under radiation when a letter sets it? | `smeltA` 20, `stack`, `pBreak` 0 to 3e-4 | negative | `B` share 0.47–0.55 in every arm | stacks.sh (`ST_slip*`) | — | follows from 40e: stacks give nothing to select |
 | 40f | Shape-limited stacks | Do wedge rows limit stack height? | `stack`, `bendA` 0 to 20 | negative | heights 6–10 at 0–10°; 15° and more: no copying at all | probe (RESULTS 40) | — | geometry is a switch again |
 | 41a | Pocket races, 8 seeds | Does fuel size decide which of three same-letter genomes wins (section 39 world)? | `pocket`, `foldA` 45, `foldB` 30, `sizeU`, `nU` 40 | negative | shares within drift (per-seed 0–70%); the one nominal effect (p = 0.05) is matched by the no-fold control | races.js, permtest.js (`RC*`, `RN*`) | an energy-limited world (41b) | births limited by letters: fuel arms more templates but births stay (105–129 vs 122 without fuel) |
 | 41b | Who makes pockets; energy-limited world | Are pockets one strand or two? Where does energy limit births? | `pocket`; 48×48, 400 letters each, `nE` 8 to 64 | works | 81–92% of fuel armings in one folded strand; dense world: births 39/68/86/127 at 8/16/32/64 energy particles | pockets.js, `EL*` | races in the dense world (41c) | harvest order differs from the section 39 spectrum (context) |
@@ -185,7 +190,7 @@ the rows that used it). Rerun it after adding rows.
 <!-- knob-index -->
 | knob | rows (verdict) |
 |---|---|
-| `backCopy` | 40a (works) |
+| `backCopy` | 40a (works), 40e (negative) |
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative) |
 | `bendB` | 15c (lead), 15d (works) |
@@ -243,7 +248,7 @@ the rows that used it). Rerun it after adding rows.
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
 | `pBindP` | 34c (works) |
-| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (works) |
+| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial) |
@@ -282,7 +287,7 @@ the rows that used it). Rerun it after adding rows.
 | `slack` | 10b (superseded), 12 (works) |
 | `snapCorners` | 23 (works), 23b (works) |
 | `spend` | 14d (negative) |
-| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (works), 40f (negative) |
+| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (negative), 40g (negative), 40f (negative) |
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiffA` | 15 (works), 15b (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |

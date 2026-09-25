@@ -2147,15 +2147,21 @@ Inconclusive. Also new: on the current engine the plain world keeps `ABACDC` far
 **Under radiation** (`ST_rad*`: the open world above with `pBreak` 3e-5, 1e-4, 3e-4; plain against treadmilling stacks, zip 0.1
 and 0.5, barrier; 60,000 steps, seeds 1, 2; births in the last 15,000 steps, newborn length):
 
-| radiation | plain | stacks, zip 0.1 | stacks, zip 0.5 |
-|---|---|---|---|
-| 3e-5 | 513, 507 births; length 2.10, 2.08 | 602, 593; 2.32, 2.36 | 493, 452; 2.32, 2.57 |
-| 1e-4 | 433, 365; 2.00, 2.14 | 776, 794; 2.05, 2.03 | 662, 690; 2.11, 2.02 |
-| 3e-4 | extinct, extinct | 602, 619; 2.06, 2.01 | 618, 619; 2.00, 2.00 |
+| radiation | plain | back copies released, no stacks | stacks, zip 0.1 | stacks, zip 0.5 |
+|---|---|---|---|---|
+| 3e-5 | 513, 507 births; length 2.10, 2.08 | – | 602, 593; 2.32, 2.36 | 493, 452; 2.32, 2.57 |
+| 1e-4 | 433, 365; 2.00, 2.14 | 834, 811; 2.04, 2.00 | 776, 794; 2.05, 2.03 | 662, 690; 2.11, 2.02 |
+| 3e-4 | extinct, extinct | 684, 665; 2.00, 2.01 | 602, 619; 2.06, 2.01 | 618, 619; 2.00, 2.00 |
 
-A stacked row re-links where radiation breaks it, so stacks are a mechanical shield: they keep a population alive where the plain
-world dies (2 of 2 seeds at 3e-4) and double its births at 1e-4. They do not make length pay here either: inside stacks the
-dimer still wins. A reason to select the stacking mode itself, if it were heritable (a letter trait), not a reason for length.
+Stack worlds live where the plain world dies (2 of 2 seeds at 3e-4), but so do worlds where back copies are simply released
+(`ST_radback_*`, run afterwards as the control): what rescues the population is two-faced templating, which gives every strand
+two copy sites and doubles its birth rate, not the stack. Stacking adds nothing under radiation (slightly fewer births), and
+length is 2.0 in every arm. (A first reading of these runs, before the control, called stacks a mechanical shield; it was wrong.)
+
+**Can the mode evolve?** (`ST_slipA_*`: the stack world, zip 0.1, with `smeltA` 20, so rows rich in `A` fall off at once and rows
+rich in `B` stay, against `ST_slipctl_*` with both letters alike; radiation 0, 1e-4, 3e-4; 100,000 steps; 2 seeds.) The share of
+`B` among newborn letters stays at 0.47 to 0.55 in every arm and window: no selection on the mode, as expected once stacking
+itself turned out to give nothing here. The population is dimers throughout (length 2.0 to 2.2 under radiation).
 
 **Shape-limited stacks** (probe: rows of `A` only, `bendA` 0 to 20°, strong zipping, 15,000 steps, 2 seeds): tallest stacks 8 to
 10 rows at 0°, 6 to 7 at 5° and 10°; at 10° rows are made five times more slowly, and at 15° and 20° nothing is copied at all.

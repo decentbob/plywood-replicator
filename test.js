@@ -507,6 +507,10 @@ test('backCopy and stack: a copy made on a back lies parallel (same sequence); s
   assert.ok(held.length >= 5, 'a stacked row formed: ' + held.length);
   f.p.pFray = 0.05; f.run(500);
   assert.strictEqual(held.filter((u) => f.bond[u * 4] >= 0 && f.is[u] !== I_DOCK).length, held.length, 'stacked units kept their places under fraying');
+  // a slippery letter's stacked rows melt off: with smeltA high, rows of A stay far shorter lived than rows of B
+  const standing = (sm) => { const m = new Sim({ seed: 4, W: 24, H: 24, nA: 120, nB: 0, nE: 60, seedSeq: 'AAAAA', seedCount: 2, pUndock: 0.05, backCopy: true, stack: true, pSNuc: 0, pSBind: 0.1, smeltA: sm }); let h = 0; for (let k = 0; k < 20; k++) { m.run(200); h += m.stats().stacked; } return h; };
+  const hs = standing(50), ho = standing(1);
+  assert.ok(ho > 3 * hs, `units standing in stacks: slippery ${hs}, ordinary ${ho}`);
 });
 
 console.log(passed + ' tests passed');

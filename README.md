@@ -15,7 +15,7 @@ selected over its one-gene competitor, and in dense worlds the second gene arise
 seeds), after which genomes expand. A genome can also build a second polymer by a code (translation) and be made to
 need it for copying; shared, that catalyst feeds parasites. A second mode of replication exists beside strand copying: with
 two-faced letters, copies made on a strand's back stay on as rows and pile into stacks, crystals that grow row by row and split
-(`backCopy`, `stack`); they copy exactly and shield a population from radiation, but do not by themselves make length pay. Not yet: compartments that keep their contents and divide,
+(`backCopy`, `stack`); they copy exactly, but do not by themselves make length pay or protect a population (40). Not yet: compartments that keep their contents and divide,
 specific recognition between strands, and a third gene. `AGENTS.md` is the working guide for whoever continues
 (`CLAUDE.md` imports it); `experiments/LEDGER.md` lists every experiment with its verdict.
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
