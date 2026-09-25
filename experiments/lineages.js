@@ -5,7 +5,7 @@
 const fs = require('fs');
 const opt = (k, d) => { const a = process.argv.find((x) => x.startsWith('--' + k + '=')); return a ? a.split('=')[1] : d; };
 const names = process.argv[2].split(','), win = Number(opt('window', 25000));
-const rev = (q) => q.split('').reverse().join('');
+const rev = (q) => q.split('').reverse().map((c) => (c === 'P' ? 'Q' : c === 'Q' ? 'P' : c)).join('');   // a copy reads reversed (caps swap ends)
 const canon = (q) => (q < rev(q) ? q : rev(q));
 const want = new Map(names.map((q) => [canon(q), q]));
 console.log(`| run | window | ${names.join(' | ')} | pieces |`);
