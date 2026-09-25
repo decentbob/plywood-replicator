@@ -349,6 +349,38 @@ Keep entries short: date, what changed, why, what evidence.
 
 ## 15. Ideas not yet tried
 
+**Added 2026-09-25, after the literature survey (`LITERATURE.md`) and the user's direction (mechanical, local-rule
+complexity; machines of independent parts; different replication modes together; go deep, not wide).** Directions, each
+with enough detail to be picked up by another session:
+
+- **Translation (chosen first, 2026-09-25).** A genome strand's backs (K) template a second polymer of *product* blocks
+  (a new block family, kinds `1`..`4`), through a fixed code (`A`→`1`, `B`→`2`, `C`→`3`, `D`→`4`): a free product block
+  docks its face on the back of a template unit of the matching letter, docked products link side to side where the
+  template continues, and a finished product chain is released, exactly as a copy is on the face. No rule says
+  "translate": it is docking, linking and release on another side. Product kinds have their own physics (bend, size,
+  stiffness, resistance: the user's "letters with trade-offs" live here), so a product's sequence sets its shape.
+  Stages: (1) translation works and is faithful; (2) products fold into sequence-set shapes; (3) a product *function*,
+  each measured: walls (a ring of genome-set size), catalysts (a product that must touch a copy for its monomers to link:
+  a replicase made of parts, public, so spatial structure decides), shields, traps for monomers. The genome then builds
+  something that is not a copy of itself, von Neumann's missing half.
+- **Crystal ribbons, a second replication mode** (Schulman–Yurke–Winfree 2012, Penrose-like). Letters that template on
+  both faces (face and back: the user's "two-faced blocks"), with copies that do not release but become templates in
+  place, give stacks of rows; stacks break between rows (melting, strain) and every piece carries the whole row sequence,
+  which inverts the fragment problem. Coupled to strands: a strand seeds a stack. Cheap-ish: K-to-K docking plus a
+  "complete copy turns template without releasing" state change.
+- **A copier made of parts**: a polymerase block (P-block) that holds a template unit's back and hops hand over hand, with
+  lateral links between docked monomers allowed only beside it. Directional, processive copying needing a machine;
+  later the P-block could be a folded product (the replicase of translation).
+- **Recombination by template switching** (`pSwitch`): a copy in progress links across two neighbouring templates, so genes
+  move between lineages in one event. One knob on the STICKY/END pair.
+- **Graded genes with a dosage benefit** (innovation–amplification–divergence; Lenski's stepping stones): shield strength
+  per C–D contact, feed summed over motif copies, a weak side activity shared between motifs, so new genes are reachable
+  in steps. Cheapest valley fix, but it tunes the landscape by hand.
+- **A stepwise pathway on the energy particle** (Horowitz's backward evolution; the metabolic replicator model): particle
+  states `OFF`→`S1`→`S2`→`ON`, each step at a different motif's back, the reload lowered in stages. Environment-driven.
+- **Chemoton coupling**: copying releases a token that activates membrane, so wall grows where and as fast as copying.
+- **Analysis tools**: RAF / chemical-organization detection for the random tables of section 32.
+
 **Added 2026-09-25, after section 33 (telomeres).** The first two-gene genome that holds (bare caps + end-replication
 loss, radiation) changes what is worth trying. Ranked:
 1. *A gene from nothing* (`telo4.sh`, running at the time of writing): seeded with `PABAQ` only, does the shield gene arise
