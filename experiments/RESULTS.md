@@ -2144,6 +2144,29 @@ Inconclusive. Also new: on the current engine the plain world keeps `ABACDC` far
 76,000 to 197,000 steps, and half of the long births still carry both genes after 200,000 steps in one mild run), so section 22's
 "lost in 6 of 6" does not carry over to this engine and these rates (22 ran 1,000,000 steps on the old engine).
 
+**Under radiation** (`ST_rad*`: the open world above with `pBreak` 3e-5, 1e-4, 3e-4; plain against treadmilling stacks, zip 0.1
+and 0.5, barrier; 60,000 steps, seeds 1, 2; births in the last 15,000 steps, newborn length):
+
+| radiation | plain | back copies released, no stacks | stacks, zip 0.1 | stacks, zip 0.5 |
+|---|---|---|---|---|
+| 3e-5 | 513, 507 births; length 2.10, 2.08 | – | 602, 593; 2.32, 2.36 | 493, 452; 2.32, 2.57 |
+| 1e-4 | 433, 365; 2.00, 2.14 | 834, 811; 2.04, 2.00 | 776, 794; 2.05, 2.03 | 662, 690; 2.11, 2.02 |
+| 3e-4 | extinct, extinct | 684, 665; 2.00, 2.01 | 602, 619; 2.06, 2.01 | 618, 619; 2.00, 2.00 |
+
+Stack worlds live where the plain world dies (2 of 2 seeds at 3e-4), but so do worlds where back copies are simply released
+(`ST_radback_*`, run afterwards as the control): what rescues the population is two-faced templating, which gives every strand
+two copy sites and doubles its birth rate, not the stack. Stacking adds nothing under radiation (slightly fewer births), and
+length is 2.0 in every arm. (A first reading of these runs, before the control, called stacks a mechanical shield; it was wrong.)
+
+**Can the mode evolve?** (`ST_slipA_*`: the stack world, zip 0.1, with `smeltA` 20, so rows rich in `A` fall off at once and rows
+rich in `B` stay, against `ST_slipctl_*` with both letters alike; radiation 0, 1e-4, 3e-4; 100,000 steps; 2 seeds.) The share of
+`B` among newborn letters stays at 0.47 to 0.55 in every arm and window: no selection on the mode, as expected once stacking
+itself turned out to give nothing here. The population is dimers throughout (length 2.0 to 2.2 under radiation).
+
+**Shape-limited stacks** (probe: rows of `A` only, `bendA` 0 to 20°, strong zipping, 15,000 steps, 2 seeds): tallest stacks 8 to
+10 rows at 0°, 6 to 7 at 5° and 10°; at 10° rows are made five times more slowly, and at 15° and 20° nothing is copied at all.
+Geometry acts as a switch (regularity 7), not as a sequence-set height; the idea is not worth pursuing in this form.
+
 What this says: a second mode of replication, crystal growth with scission, comes out of two local rules on the same letters,
 copies exactly, and lives beside strand copying (stacks shed free strands from their bottom face; a free strand founds a stack on
 its back). By itself it does not break regularity 1: a stack's rows are protected, but protection that makes long rows immortal
@@ -2152,3 +2175,71 @@ stacks pay where something else punishes free strands (radiation breaks free str
 here), whether kin aggregation (the no-barrier arm, with four letters) makes stacks into groups of genes that are selected
 together, or whether shape-limited stacks (rows of wedge letters are squeezed more with every row on their concave side, so a
 stack would snap at a height set by its sequence) give scission a sequence-set rate. Two seeds per arm.
+
+## 41. Shape selection with many seeds (`races.js`, `pockets.js`, `order.js`; RC, RN, EL, DR, DS runs; 2026-09-25)
+
+Section 39's pocket races were two seeds each and drowned in drift. Runs are cheap on the current engine (a capped 40×40 race of
+150,000 steps takes about 2.5 minutes), so the same question is asked here with 8 to 12 seeds per cell and a control in which the
+letters do not fold (so `A` and `B` are physically identical and any difference between the three genomes is drift).
+
+**Races in the section 39 world** (`RC*`: capped 40×40, 200 of each letter, 120 caps of each kind, three genomes of the same
+letters ×3 each, `foldA` 45, `foldB` 30, scarce energy (16 particles at 0.0004) plus 40 fuel particles at 0.002; mutation off;
+150,000 steps; 8 seeds. `RN*`: the same without folds.) Mean share of each genome among lineage births from step 75,000, and
+the number of seeds it won:
+
+| fuel | `AABBAABB` | `ABABABAB` | `AAAABBBB` |
+|---|---|---|---|
+| none (folds) | 34% (3) | 38% (3) | 28% (2) |
+| 0.5 (folds) | 47% (4) | 35% (3) | 17% (1) |
+| 0.85 (folds) | 21% (1) | 38% (3) | 41% (4) |
+| 1.2 (folds) | 35% (4) | 22% (1) | 43% (3) |
+| 0.5, no folds | 33% (2) | 35% (3) | 32% (3) |
+| 1.2, no folds | 28% (2) | 22% (1) | 50% (4) |
+
+Per-seed shares run from 0 to over 70%, so a mean over 8 seeds has an error of about 8 points. With folds, small fuel favours
+`AABBAABB` and the no-fold control is flat, as shape would predict; but at fuel 1.2 `AAAABBBB` leads just as much *without*
+folds (50%), where it cannot have an advantage, so leads of this size are drift. Permutation tests on the per-seed shares: the
+one nominal difference (`AAAABBBB` 17% at fuel 0.5 against 43% at 1.2, p = 0.05, one of many comparisons) is matched by the
+no-fold control (50% at 1.2); fold against no fold at 0.5, `AABBAABB` 47% against 33%, p = 0.27.
+
+**Why: this world is limited by letters, not energy.** Capped births per seed from step 75,000: no fuel 122, fuel 0.5 106, 0.85
+129, 1.2 105, no folds 106 to 109. Fuel arms many more templates (363 armed units against 152 at the end of seed 1) but uses up
+the free letters (79 against 224), so births stay where letter turnover sets them, and a better harvest cannot win much (as the
+monocultures of section 39 said). **Who makes the pockets** (`pockets.js`: every fuel arming, the strands of the backs holding
+the particle, 30,000 steps, 2 seeds): 86 to 92% of armings at fuel 0.5 and 81 to 83% at 1.2 are in a pocket of one strand folded
+on itself; pockets between two genomes are 6 to 15%. Here `AAAABBBB` harvests most at 1.2 (13 armed letters against 10 and 5)
+and `ABABABAB` at 0.5 (29, 22, 13), not in the order of the section 39 spectrum (which was measured uncapped with fuel the only
+energy): a genome's harvest depends on the world it is in.
+
+**An energy-limited world** (`EL*`: capped 48×48, 400 of each letter, 240 caps of each kind, one seed, 60,000 steps; capped births
+from 30,000 to 60,000 steps): energy particles 8, 16, 32, 64 give 39, 68, 86, 127 births; over 16 particles, fuel (size 0.5) adds
+births (20 at 0.001: 74; 10 at 0.001: 88; 40 at 0.002: 99; over 8 particles, 20 at 0.001: 67), with 260 to 370 letters waiting
+for energy and 400 to 680 free letters. Here energy limits births, and harvest can decide who wins.
+
+**Races in the energy-limited world** (`DR*`: the dense world above, 8 energy particles at 0.0004 plus 20 fuel particles at 0.001,
+the three genomes ×3, folds as before; `DS*`: no folds; 120,000 steps; 12 seeds, 6 without fuel). Mean share of lineage births
+from step 60,000 (seeds won):
+
+| world | `AABBAABB` | `ABABABAB` | `AAAABBBB` |
+|---|---|---|---|
+| folds, no fuel (6 seeds) | 41% (2) | 49% (4) | 10% (0) |
+| folds, fuel 0.5 | 45% (6) | 29% (4) | 27% (2) |
+| folds, fuel 1.2 | 27% (3) | 50% (7) | 23% (2) |
+| no folds, fuel 0.5 | 43% (6) | 25% (3) | 33% (3) |
+| no folds, fuel 1.2 | 37% (6) | 24% (3) | 38% (3) |
+
+The directions are those shape would give (with folds `ABABABAB` takes 50% at fuel 1.2 against 24% without; `AAAABBBB`, whose
+long runs curl up hardest, does worst with folds), but part of it is folding itself (with folds and no fuel `ABABABAB` leads as
+much, 49%), and nothing is significant: `ABABABAB` folds against no folds at 1.2, p = 0.09; at 1.2 against 0.5 with folds,
+p = 0.15; `AABBAABB` at 0.5 against 1.2 with folds, p = 0.14 (permutation tests, 12 seeds). Lineages make 20 to 40 births each in
+the second half, and per-seed shares run from 0 to 100%.
+
+What this says: with the same letters in different orders, the fitness differences that pockets give are small, a few tens of
+percent in share at most, against drift that swings shares from nothing to everything in populations of 20 to 30 genomes; neither
+a letter-limited nor an energy-limited world at this size shows them. Section 39's harvest spectrum is real (a folded genome
+arms faster from fuel that fits it), but it does not become a decisive fitness difference. What would: populations several times
+larger (a 96×96 world, about 13 minutes per 120,000 steps, so 12 seeds of two arms take about 80 minutes on four cores), genomes
+whose shapes differ more (compositions: `AAAAAAAA` against `ABABABAB` harvest 3 against 24 at fuel 1.2 in section 39), or a
+pocket that pays more (fuel the only energy, which made worlds fragile in section 39). What it does not say: that shape cannot be
+selected; the order effects may be real at a size these runs cannot resolve. The planned evolution runs (letter order adapting
+under mutation) were not run: they would be drift-dominated for the same reason.

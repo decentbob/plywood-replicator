@@ -145,6 +145,8 @@ const DEFAULTS = {
                                 // a row comes off its stack by unzipping from its ends, so long rows hold and short ones melt (scission)
   pSBind: 0,                    // (with stack) an armed or held face beside a stacked neighbour meets an armed back of its own kind: they bind, per
                                 // step of contact (a melted row zips back)
+  // smeltA..smeltD, smeltP, smeltQ (default 1): a letter's stacked bond melts at this multiple of pSMelt*: slippery letters make rows
+  // that fall off (copies released, as without stacks), sticky ones rows that stay, so a strand's make-up sets how much it stacks
   stackHold: false,             // (with stack) a unit whose back holds a stacked row does not fray either: a stack never frays, and without enough
                                 // melting it locks the world's letters up. Off, a stack's bottom row (its face free) frays like any strand
   pSNuc: -1,                    // the same for a face with no stacked neighbour (a new junction: a strand joins a stack, or two strands meet face to
@@ -345,6 +347,7 @@ class Sim {
     const am = String(p.actMotif || 'BAB');
     this._actOut = letterType(am[0]); this._actMid = letterType(am[1]);   // act rule: flanking and middle letter
     this._mobL = new Float64Array(NT).fill(1); for (const t of LETTERS) this._mobL[t] = typeParam(p, 'mob', t, 1); this._mobL[T_G] = typeParam(p, 'mob', T_G, 1); this._mobL[T_U] = typeParam(p, 'mob', T_U, 1); this._mobL[T_V] = typeParam(p, 'mob', T_V, 1); for (const t of PRODUCTS) this._mobL[t] = typeParam(p, 'mob', t, 1);
+    this._smelt = new Float64Array(NT).fill(1); for (const t of LETTERS) this._smelt[t] = typeParam(p, 'smelt', t, 1);   // stack rule: melting per letter
     this._code = new Int8Array(NT).fill(-1);   // translate rule: which product kind docks on the back of each letter
     for (const pair of String(p.transCode || '').split(',')) { const lt = letterType(pair.trim()[0]), pt = TNAME.indexOf(pair.trim()[1]); if (lt >= 0 && isProd(pt)) this._code[lt] = pt; }
     const cm = String(p.cutMotif || 'BAB');
@@ -925,7 +928,12 @@ class Sim {
       this.ss[o + K] = eL && eR ? S.TRN_MM : eL ? S.TRN_RF : eR ? S.TRN_LF : S.IDLE;
     }
     else if (this.p.bindAny && st === I_TPL && !isProd(this.type[u]) && this.type[u] !== T_P && this.type[u] !== T_Q && this.p.translate) this.ss[o + K] = S.BACK;
-    else if (this.p.backCopy && st === I_TPL && !isProd(this.type[u])) this.ss[o + K] = bL && bR ? S.KT_MM : bL ? S.KT_RF : S.KT_LF;   // (backCopy) my back templates
+    else if (this.p.backCopy && st === I_TPL && !isProd(this.type[u])) {
+      // (backCopy) my back templates; with endLoss it follows the face's rule: a tip shows nothing, and a side toward a tip is the end
+      let eL = bL, eR = bR;
+      if (this.p.endLoss) { const t = this.type[u]; if ((!bL && t !== T_P) || (!bR && t !== T_Q)) eL = eR = null; else { eL = bL && !this.tip0[b[o + L]]; eR = bR && !this.tip0[b[o + R]]; } }
+      this.ss[o + K] = eL === null ? S.IDLE : eL && eR ? S.KT_MM : eL ? S.KT_RF : eR ? S.KT_LF : S.IDLE;
+    }
     else this.ss[o + K] = S.IDLE;
     if (prod) this.ss[o + K] = this.p.grip && (st === I_REPEL || st === I_TPL) ? S.GRIP : S.IDLE;   // a product takes no energy and is never armed; released, it may grip fuel
     else if (this.p.pocket && st === I_TPL && this.ss[o + K] === S.IDLE) this.ss[o + K] = S.GRIP;   // pocket rule: an armed letter's idle back helps hold fuel
@@ -1065,7 +1073,8 @@ class Sim {
     // so a row comes off its stack by unzipping from its ends
     if (p.stack && bF && (st === I_HOLD || st === I_TPL) && isKT(this.ss[b[o + F]])) {
       const sk = this.stk, ns = (bL && sk[b[o + L]] ? 1 : 0) + (bR && sk[b[o + R]] ? 1 : 0);
-      if (this.rng() < (ns === 0 ? p.pSMelt : ns === 1 ? p.pSMeltEnd : p.pSMeltRun)) { this.pendingUnlink.push(o + F); this.stackMelts++; }
+      const pm = (ns === 0 ? p.pSMelt : ns === 1 ? p.pSMeltEnd : p.pSMeltRun) * this._smelt[this.type[u]];   // smeltA..: a letter's own stickiness
+      if (this.rng() < pm) { this.pendingUnlink.push(o + F); this.stackMelts++; }
     }
     // R5 fraying: an end unit of an undocked strand falls off. With pUnzip > 0 it first reads FRAY for one step,
     // and an undocked neighbour that reads FRAY on its partner side follows it with probability pUnzip (processive fraying).

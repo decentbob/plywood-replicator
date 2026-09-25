@@ -35,7 +35,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (k in opt) opt[k] = typeof opt[k] === 'boolean' ? v !== '0' : (typeof opt[k] === 'number' ? Number(v) : v);
   else if (k in DEFAULTS) params[k] = typeof DEFAULTS[k] === 'boolean' ? v !== '0' : (typeof DEFAULTS[k] === 'string' ? v : Number(v));
-  else if (/^(size|mob|bend|fold|stiff|res|shape)[A-Z0-9]$/.test(k)) params[k] = k.startsWith('shape') ? v : Number(v);   // per-type knobs (sizeA, mob1, ...)
+  else if (/^(size|mob|bend|fold|stiff|res|shape|smelt)[A-Z0-9]$/.test(k)) params[k] = k.startsWith('shape') ? v : Number(v);   // per-type knobs (sizeA, mob1, ...)
   else if (REMOVED.includes(k)) console.error('ignoring --' + k + ': it belonged to the rigid engine, removed on 2026-09-23');
   else { console.error('unknown option --' + k); process.exit(2); }
 }
