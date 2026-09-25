@@ -347,6 +347,18 @@ Keep entries short: date, what changed, why, what evidence.
 
 ## 15. Ideas not yet tried
 
+**Added 2026-09-25, after section 33 (telomeres).** The first two-gene genome that holds (bare caps + end-replication
+loss, radiation) changes what is worth trying. Ranked:
+1. *A gene from nothing* (`telo4.sh`, running at the time of writing): seeded with `PABAQ` only, does the shield gene arise
+   by insertion and point mutation and spread under radiation? If it does, genomes can grow by adding genes, the step that
+   has not been seen here.
+2. *Niches* (`radBand`, `band.sh`, running): radiation in half the world; do the two halves keep different genomes?
+3. *A third gene with its own pressure*, in the capped world: candidates are walls (`make` + `tether`, paying against rays)
+   and cutting (in a capped world a cut kills, it no longer makes two replicators; but `cutRelay` shares the lateral sides
+   with `feed`/`shield`, so it needs its own signal bit, as `endLoss` has).
+4. *Speed*: the solver is 80% of the time; `iters` 8 is 1.6× faster (copying was exact at 8 on the square engine; check
+   again in the capped world before using it for batches).
+
 **Added 2026-09-24.** Search over worlds instead of one mechanism at a time (`experiments/search.js`,
 RESULTS section 27; the user's idea that evolution got going only once enough separate processes had built up).
 Next for it: stranger block types to draw from (the user's idea): branching blocks with three or more lateral
