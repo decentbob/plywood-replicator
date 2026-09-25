@@ -1664,3 +1664,52 @@ with slow polymers, 4 births in all), so the dark half is filled by the lit half
 shield: in the dark half it decays by point mutation into same-length genomes with a broken shield (`PABADDCQ`,
 `PABABDCQ`, `PCDBABAQ`), 44% against 82% at the end with slow polymers. That is relaxed selection in a place: a cline in
 the genomes across the world, the first spatial difference in genomes seen here. One seed each.
+
+## 34. Translation: a genome that builds a second polymer (`tr1.js`-style probes, `CA_*` runs), stage by stage
+
+The user's direction (2026-09-25): emergent complexity from local rules, ideally "a well-running machine made of independent
+parts that can copy itself", and replication modes of different kinds together. Of the directions in `LITERATURE.md` and
+DESIGN 15, translation was chosen first: the genome builds something that is not a copy of itself (von Neumann's missing
+half). `translate`: the back of an armed letter templates a *product* block (a new family, kinds `1`..`4`) by a fixed code
+(`A`→`1`, `B`→`2`, `C`→`3`, `D`→`4`); docked products link where the template continues and a finished product chain is
+released, exactly as a copy is on the face. No rule mentions translation: it is docking, linking and release on another
+side.
+
+**Stage 1, translation works** (40×40, four letters and four product kinds of 100 to 150 each, seed `ABACDCAB`): 12 of 12
+products in 20,000 steps were exact (`ABACDCAB` → `12134312`), made beside ordinary copying. A first version cut products
+short at any neighbour not yet re-armed (partial products `3121`, `12`); continuation is now read from the neighbour's type,
+and a product waits for a neighbour that will be armed.
+
+**Stage 2, products fold** (`fold1` 45°: a product block of kind `1` is a wedge while its face is free and square while
+docked): the product of `AAAAAAAA` folds into an almost closed wheel of eight wedges (rendered; one gap: ligation needs flush
+ends). Shape follows the genome's sequence.
+
+**Stage 3, the machine needs its part** (`catalysis`): a finished product binds back onto strands it matches by the code
+(cooperatively: a lone bound unit lets go at 0.05 per step, one in a bound run at 0.0005), and where one is bound the
+template's face is catalysed: two monomers docked there link at once, elsewhere only at `pLinkBare`. Two letters, 50,000
+steps, seed `ABBABA`:
+
+| world | births |
+|---|---:|
+| ordinary copying | 152 |
+| `pLinkBare` 0.01, no translation (no catalyst) | 0, extinct by step 30,000 |
+| translation, no catalysis | 127 |
+| translation + catalysis, `pLinkBare` 0.01 | 40, from step 30,000 on and accelerating (template units 19 → 201) |
+
+With `pLinkBare` 0 nothing is ever copied without products, and with translation copying runs (test). The genome is copied
+only with the help of the machine part it builds. (A bug on the way: the catalysis gate first applied to the links between
+product blocks too, so no product could be finished; products link freely now.)
+
+**Does the machine make length pay?** The hypothesis: longer products bind back longer, so length pays by degrees, which
+might carry genomes over the valley of section 33. 300,000 steps, two letters, mutation (`CA_cat_1` against `CA_ctl_1`,
+translation without catalysis):
+
+| run | mean newborn length by 50,000-step window | births per window |
+|---|---|---|
+| CA_cat_1 | 5.25, 4.27, 3.97, 3.93, 3.60, 3.73 | 116 to 184 |
+| CA_ctl_1 | 4.87, 4.10, 4.02, 3.99, 3.64, 3.64 | 161 to 218 |
+
+No: length falls the same way with and without catalysis. The machine works but adds no new selective dimension: every
+genome's own product fits it, and a two-unit product binds as stably as a long one (both of its units count as in a run).
+One seed. What it would take for the product to matter: a function that depends on the product's sequence or shape in
+graded ways (its fold, its kinds' physics), not only on matching its maker.
