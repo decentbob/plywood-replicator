@@ -435,7 +435,7 @@ or a block property, not a rule inside a creature:
 - *A walker or helicase*: a block that moves along a strand side by side and unzips what it passes.
 - *Catalytic strands*: a folded strand whose shape (fold rule) makes it speed a reaction where it touches.
 
-**Ranked next steps (2026-09-23).**
+**Ranked next steps (2026-09-23; historical: superseded by the lists above and by `experiments/LEDGER.md`, open gaps).**
 
 - **A. Tethered compartments** (builds on the `make` rule). Keep the anchor: a raw membrane block anchored on a
   `MAKE` back stays bonded while that unit is a template, and recruitment extends only arcs that are anchored

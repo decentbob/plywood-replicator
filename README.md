@@ -8,12 +8,14 @@ fixed, universal rule table, in which template replication, copy errors, and
 selection come out of the rules rather than being programmed into the creatures.
 
 **Status.** Copying, mutation, selection and adaptation all come out of the rules. Length is selected in
-an open population (cooperative docking with processive fraying); a private energy motif is selected and a
-public one is not; populations adapt when the environment changes; on the deformable-polygon engine a block's
-shape selects on the sequences that carry it; radiation selects a shield gene. Not yet: compartments that
-keep their contents and divide, specific recognition between strands, and genomes that carry more than one
-gene, all of which run into the same obstacle, that every pressure here costs long genomes more than short
-ones. `AGENTS.md` is the working guide for whoever continues (`CLAUDE.md` imports it).
+an open population (cooperative docking with processive fraying); private genes are selected where their pressure
+acts and public goods are not; a block's shape selects on the sequences that carry it. With capped genomes whose
+pieces die out (`endLoss`) and whose caps must be armed by the energy gene (`bareCaps`), a genome carrying two genes is
+selected over its one-gene competitor, and in dense worlds the second gene arises by mutation and spreads (3 of 3
+seeds), after which genomes expand. A genome can also build a second polymer by a code (translation) and be made to
+need it for copying; shared, that catalyst feeds parasites. Not yet: compartments that keep their contents and divide,
+specific recognition between strands, and a third gene. `AGENTS.md` is the working guide for whoever continues
+(`CLAUDE.md` imports it); `experiments/LEDGER.md` lists every experiment with its verdict.
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 ## Run it
