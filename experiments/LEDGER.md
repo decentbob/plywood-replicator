@@ -16,7 +16,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 1. **Shortest wins unless something makes length pay.** Every open population shrinks toward the smallest viable
    replicator: dimers (3, 4, 5b, 19d), `CDC` alone (19), `PQ` (33a), the minimal `AA` cooperator (36c), and catalysis does
    not change it (34d). Length has held only with cooperative docking plus processive fraying (13b, 15b), ligation
-   balanced by fraying (3b, 27b: accumulation, not function), or a gene that removes the cost of length (33i, 33j).
+   balanced by fraying (3b, 27b: accumulation, not function), or a gene that removes the cost of length (33i, 33j). Three
+   such costs have genes now: radiation per bond (shield), energy per unit (feed with relay), copy errors per functional
+   letter (proofreading, selected when seeded, 38b).
 2. **Any viable fragment of a genome defeats a genome that needs several genes.** (22, 19d, 33a'.) Make pieces
    sterile first (end loss on capped strands, 33a–d), and make the smallest viable genome already carry one gene (bare
    caps, 33b), or genes will not accumulate.
@@ -60,7 +62,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   34 probes). Capped worlds need open ends fragile (`pFray` 0.001) and caps not (`capFray` 0.03) (33).
 - **Seeds must be viable under the rules**: a translation seed needs adjacent coded letters or it makes no product
   (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
-- **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold; iters 8 adds about 2% copy errors (33, DESIGN 15).
+- **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold (on the new engine half or more of 11-unit capped copies then carry a
+  substitution, 38a); on the old engine iters 8 added about 2% copy errors (33, DESIGN 15).
+- **Engine (since 2026-09-25, section 37)**: `bodyJostle` with 4 passes; about 2x faster. Do not jam a world (blocks covering more
+  than about 90% of it): the section 33 dense world (40×40, 400 of each letter, 240 caps) loses a letter in a third of its copies
+  at 4 passes; use 48×48 (97% exact) or `iters` 8–16. Old step counts do not carry over exactly.
 
 ## Experiments
 
@@ -146,6 +152,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 36a | Shared catalyst, parasites | Do non-producers spread when the catalyst is shared? | `bindAny`, code `A1,B2` | works | parasites rise to ~50% in 100k, coexist for 400k | parasite.sh | — | share follows letter supply (resource partition), see 36b |
 | 36b | Parasites on shared letters | Same with shared letters? | `bindAny`, code `A1` | works | parasites 60–70% of births, level off; cooperators persist; private catalyst: ≤ 10% | parasite2.sh | graded specificity | 2 seeds + slow |
 | 36c | Graded specificity | Does a mismatched product letting go fast change it? | `pMisMelt` 0.05, 0.2 | works | parasites 5–20%; the smallest cooperator (one `AA` run) wins | parasite2.sh | "shortest wins" again | 2 seeds |
+| 37 | Faster engine | Can the engine be made much faster, shapes kept? | `bodyJostle`, `iters` 4 | works | 2–2.5x CPU steps/s at ordinary density, copies exact; jammed worlds need 48×48 or 8–16 passes (39% deletions at 4) | scratchpad probes (RESULTS 37) | bigger, longer worlds | Old results not re-measured; trajectories differ from before |
+| 38a | Proofreading works | Does `BDB` cut substitutions in its strand's copies? | `proof`, `pProof` | works | substitutions 50→17.5% (0.5), 57→9.5% (0.9) per capped copy | proof_capped probe | selection test | 2 seeds, 30k steps |
+| 38b | Proofreading selected | Is a genome carrying `BDB` selected over a one-letter-different competitor? | `proof`, `pSoft` 0.01, radiation | lead | `BDB` 55→76–78% with the rule, 20–29→10–17% without | PC_* (RESULTS 38) | gene from spare letters (`PN_*`) | 2 seeds, 150k steps, small populations |
+| 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
 
@@ -159,6 +169,7 @@ the rows that used it). Rerun it after adding rows.
 | `bendA` | 15c (lead) |
 | `bendB` | 15c (lead), 15d (works) |
 | `bindAny` | 36a (works), 36b (works) |
+| `bodyJostle` | 37 (works) |
 | `capFray` | 28c (lead), 33a (partial) |
 | `catalysis` | 34c (works) |
 | `chiral` | 30 (partial) |
@@ -180,6 +191,7 @@ the rows that used it). Rerun it after adding rows.
 | `heatPeriod` | 29 (partial) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
+| `iters` | 37 (works) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |
 | `maxStrainStrand` | 23 (works) |
@@ -220,8 +232,10 @@ the rows that used it). Rerun it after adding rows.
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works) |
+| `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
-| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works) |
+| `proof` | 38a (works), 38b (lead), 38c (negative) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works) |
 | `pUnzip` | 13b (works), 15b (works) |

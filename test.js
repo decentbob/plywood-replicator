@@ -67,7 +67,7 @@ test('motif metabolism: ABA backs recharge spent energy; a seed without the moti
   withMotif.run(30000); const a = withMotif.stats();
   assert.ok(a.energyCharged > 0 && a.eOn + a.eOff === 150, 'charging should happen and E count stay fixed');
   const without = new Sim(Object.assign({}, base, { seed: 3, seedSeq: 'AABBAA', motif: true, pReload: 0 }));
-  without.run(30000); const b = without.stats();
+  without.run(50000); const b = without.stats();
   assert.strictEqual(b.energyCharged, 0); assert.strictEqual(b.eOn, 0, 'all energy should be spent');
 });
 
@@ -434,6 +434,49 @@ test('heat: no binding in the hot part of a cycle, and bound pairs melt there', 
   assert.ok(coolBinds > 0, 'no binding while cool');
   assert.strictEqual(boundAtHotEnd, 0, 'bound pairs left at the end of a hot phase: ' + boundAtHotEnd);
   assert.deepStrictEqual(s.check(), []);
+});
+
+test('proof: a strand carrying BDB (relayed) is copied with fewer substitutions; with the rule off, no fewer; flags need a source', () => {
+  const run = (proof) => {
+    let tot = 0, sub = 0, pe = 0;
+    for (const seed of [1, 2]) {
+      const s = new Sim(Object.assign({}, base, { seed, W: 30, H: 30, nA: 150, nB: 150, nC: 150, nD: 150, nE: 80, seedCount: 3, seedSeq: 'CABDBAC', pSoft: 0.05, proof, pProof: 0.9, relay: true, pUndock: 0.05 }));
+      s.run(15000);
+      // only copies of strands that carry the motif (a strand that has lost it is not proofread)
+      for (const b of s.births) { if (!b.parent || !b.parent.includes('BDB')) continue; tot++; if (b.seq !== rev(b.parent) && b.seq.length === b.parent.length) sub++; }
+      pe += s.proofEvents;
+      assert.deepStrictEqual(s.check(), []);
+    }
+    return { tot, sub, pe };
+  };
+  const on = run(true), off = run(false);
+  assert.ok(on.tot >= 30 && off.tot >= 30, `births ${on.tot} ${off.tot}`);
+  assert.ok(on.pe > 0 && off.pe === 0, 'proof events ' + on.pe + ' ' + off.pe);
+  assert.ok(on.sub / on.tot < 0.5 * off.sub / off.tot, `substitutions ${on.sub}/${on.tot} with proofreading, ${off.sub}/${off.tot} without`);
+  // no motif, no flag: a strand without BDB never proofreads
+  const s = new Sim(Object.assign({}, base, { seed: 3, W: 30, H: 30, nA: 150, nB: 150, nC: 150, nD: 150, nE: 80, seedCount: 3, seedSeq: 'CABCBAC', proof: true, relay: true }));
+  s.run(3000);
+  assert.ok(s.births.length > 0 && s.prf.every((x) => x === 0), 'a flag without a BDB source');
+});
+
+test('grip and pocket: folded backs hold small fuel two at a time; fuel held in a pocket arms a letter and is spent, once', () => {
+  // grip: seeded product chains, straight or folded 45 degrees, and small fuel particles: only the folded ones make pockets
+  const held = (fold) => { let h = 0; for (const seed of [1, 2]) { const s = new Sim({ seed, W: 30, H: 30, nA: 0, nB: 0, nE: 0, n1: 120, nU: 60, sizeU: 0.5, fold1: fold, grip: true, seedSeq: '111111', seedCount: 15 }); s.run(4000); h += s.stats().held2; assert.deepStrictEqual(s.check(), []); } return h; };
+  const hf = held(45), hs = held(0);
+  assert.ok(hf >= 10 && hf > 4 * hs, `fuel held in pockets: folded ${hf}, straight ${hs}`);
+  // pocket: fuel is the only energy; every fuel spent arms exactly one letter, and a folded genome gets more of it than a straight one
+  const run = (fold) => {
+    const s = new Sim({ seed: 1, W: 30, H: 30, nA: 200, nB: 0, nE: 0, nU: 80, sizeU: 0.5, foldA: fold, pocket: true, pReloadU: 0.01, seedSeq: 'AAAAAA', seedCount: 3, pUndock: 0.1 });
+    let rearms = 0; const orig = s._transition.bind(s);
+    s._transition = function (u) { const was = this.is[u]; orig(u); if (was === 1 && this.is[u] === 2 && this.type[u] === 0) rearms++; };
+    s.run(12000);
+    assert.strictEqual(rearms, s.fuelUsed, 'each spent fuel arms one letter');
+    let nU = 0; for (let u = 0; u < s.n; u++) if (s.type[u] === 15) nU++; assert.strictEqual(nU, 80);
+    assert.deepStrictEqual(s.check(), []);
+    return s.fuelUsed;
+  };
+  const ff = run(45), fs = run(0);
+  assert.ok(ff > 2 * fs, `fuel used: folded ${ff}, straight ${fs}`);
 });
 
 console.log(passed + ' tests passed');
