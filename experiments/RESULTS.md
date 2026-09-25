@@ -1754,8 +1754,19 @@ Then genomes expanded: mean capped length went from 5 to 11 or 12 (the longest 4
 about 150 (letters locked in long genomes) and births fell with them. Over the last 400,000 steps half of all capped births
 carry `CDC` and 35% carry both genes. The reading: duplications in a dense world supplied the raw material (a genome with
 room: `ABA` plus spare letters), point mutation made `CDC` in it, and once a genome was shielded radiation stopped
-punishing length, so genomes grew. This is the first gene in the project to arise by mutation and spread. One seed: seeds
-2 and 3 and a control without the shield rule (does length explode anyway?) are running.
+punishing length, so genomes grew. This is the first gene in the project to arise by mutation and spread.
+
+**Confirmed, three seeds and two controls.** Seed 2 (`TF_dense_2`): the first capped birth with both genes at step 437,447,
+then `CDC` in 38 to 61% of capped births per 100,000-step window and genomes of 11 to 12.6 units. Seed 3 (`TF_dense_3`): first
+at step 173,324 (`PABADCDCQ`), then `CDC` in 35 to 55% and genomes of 10 to 13 units. Control without the shield rule
+(`TF_noshield_1`, seed 1): no gene, capped genomes 5.1 to 5.3 units for the whole million steps, free monomers stay at about
+1,100. What drives the expansion (`TG_l200_1`, `TG_l400_1`: the two-gene genome `PABACDCQ` seeded, 300,000 steps, one seed
+each): at 200 letters of each kind genomes stay at 7.5 to 7.8 units; at 400 they grow to 9.3 → 10.7. So the gene arises
+where density supplies duplications (3 of 3 dense seeds against 0 of 7 runs at ordinary density), and genomes expand where
+both the shield (radiation no longer punishes length) and density (insertions are common) are present. Commands:
+`telo4.sh` (`TF_*` lines); the `TG` runs are that world with `--seedSeq PABACDCQ --shield 1 --steps 300000` and 200 or 400
+letters of each kind. What it does not show: whether a third gene can arise in the expanded genomes (no third pressure
+was offered), and why births fall once genomes expand (letters locked in long genomes is the likely reason, not measured).
 
 ## 35. Letters with trade-offs (`tradeoff.sh`, `letters.js`), the user's idea, first screens
 
