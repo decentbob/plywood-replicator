@@ -168,9 +168,18 @@ in one genome loses to its pieces. Section 33 is the first way past it: caps wit
 sterile, and bare caps make the energy gene essential, so the smallest viable genome already carries one gene and a
 second gene pays where its pressure acts. Still one seed at the time of writing; see RESULTS 33 for the rest.
 
-## Handoff (2026-09-24, end of a long session): pick up here
+## Handoff (2026-09-25): pick up here
 
-All code below is merged into `main` (from `claude/serene-keller-sprlt0`). Background batches were stopped at the handoff; partial outputs are in `experiments/out/` and RESULTS 29–32.
+Session of 2026-09-24/25 (branch `claude/modest-newton-esla1t`, merged into `main` at checkpoints): locality recorded as
+the fundamental rule; relayed signals made one block per pass; `endLoss`, `bareCaps`, `radBand`; RESULTS 33 (telomeres).
+Outputs of section 33's runs are in `experiments/out/` (`TK_*`, `TB_*`, `TA_*`, `TD_*`, `TR_*`). Open from it:
+- **A gene from nothing** (33): under both pressures no shield gene arose inside `PABAQ` (small population); `TD_rad5_*`
+  (radiation only, bigger population) was the next try. If it fails too, the valley between genes needs a larger world
+  or a way for part of a gene to pay.
+- **A third gene** (DESIGN 15, top of the list): walls against rays, or cutting (a cut kills in a capped world).
+
+Older unfinished items (from the 2026-09-24 handoff), still valid:
+
 Unfinished, in order of value:
 
 1. **Random chemistry (RESULTS 32)**, the user's latest question. Run `node experiments/autocat.js 55 57 4 15 1 54` (does the
