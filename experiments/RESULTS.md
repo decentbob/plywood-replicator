@@ -2272,3 +2272,19 @@ steady direction). What it says: the classic result that spatial structure prote
 physical parts, weakly, in two seeds. What it does not say: whether it lasts (the effect is shrinking at 300,000 steps), whether
 it holds when parasites must arise by mutation, or that anything evolves in response; the hosts cannot yet do anything against
 the parasites except be elsewhere.
+
+**More mobilities, and parasites that arise** (`HP_mid_*`: polymers at `mobS` 0.3; `HM_*`: only hosts seeded, 24 of them, mutation
+0.005, so strands that make no product have to arise; 300,000 steps, 2 seeds). Parasites among births in the last 50,000 steps:
+
+| world | seed 1 | seed 2 |
+|---|---:|---:|
+| seeded parasites, creeping (`mobS` 0.1) | 65% | 50% |
+| seeded parasites, `mobS` 0.3 | 60% | 63% |
+| seeded parasites, well mixed | 71% | 72% |
+| parasites from mutation, creeping | 62% | 58% |
+| parasites from mutation, well mixed | 72% | 72% |
+
+Every creeping or half-creeping run ends below every well-mixed one (8 against 4 runs; segregation 0.03 to 0.10 against 0.01 to
+0.03). Parasites arise by themselves within 50,000 steps: short strands of the letters that make no product (`BDC`, `BCC`, `CD`,
+`BD`; mean length 3.1), and the hosts shrink too (`AAB`, `AAAB`, `AAA`), so shortest wins on both sides. Space holds the
+parasites down by about ten percentage points and no more; it does not stop them, and it does not make anything evolve against them.
