@@ -1940,3 +1940,51 @@ An earlier attempt in the jammed dense world (`PR_*`, old engine, 5x mutation, p
 down (births 128 → 23 per 20,000 steps); there about half the copy errors were length changes (baseline `BASE_m5`: 51% of
 capped copies exact, 27% with a substitution, 22% longer or shorter), a load proofreading of substitutions cannot lift. What it does not show yet: whether the gene arises from spare letters by point
 mutation (`PN_*` running: `BCB` one mutation away, `AAA` three away).
+
+## 39. Shape as function: pockets that fit fuel (`grip`, `pocket`, fuel `U`/`V`, 2026-09-25), first probes
+
+The user: shapes are a very promising direction; the decision log: fit worth exploring is at the level of assemblies (emergent
+fit, a mechanical AND, graded fit). Option B of DESIGN 15, built first with the genome as its own enzyme. One generic rule:
+a back grips a fuel particle (per step of contact), a particle held by one grip lets go fast, and a charged particle held by two
+or more backs at once (a pocket: a mechanical AND read by the particle from its own bonds) arms one letter that wants energy
+and is spent. Nothing mentions shape or size; which strands hold which particles is geometry (wedge letters, `fold`, curl a
+free strand with its backs inside).
+
+**Which folds hold which particles** (`grip` on seeded product chains `111111`, 15 chains, 60 particles, share of particles held
+by two or more grips, steps 2,000 to 10,000, 2 seeds; the one-grip share in brackets, all 0 to 2%):
+
+| fold of product \ particle size | 0.4 | 0.5 | 0.7 | 0.85 | 1.0 | 1.2 |
+|---|---:|---:|---:|---:|---:|---:|
+| 0° (straight) | 0.6% | 1.4% | 10.2% | 7.7% | 9.9% | 3.8% |
+| 20° | 0.9% | 0.8% | 0.2% | 0.9% | 1.6% | 1.1% |
+| 30° | 0.2% | 0.1% | 0.8% | 7.3% | 10.8% | 17.3% |
+| 45° | 24.9% | 24.3% | 23.0% | 18.6% | 9.5% | 5.5% |
+| 60° | 24.7% | 24.8% | 20.9% | 13.9% | 6.1% | 0.0% |
+| 90° | 24.7% | 24.8% | 20.9% | 13.9% | 6.1% | 0.0% |
+
+(60° and 90° agree to the digit: a folded block cannot lean past about 50°, so both are the same shape.) Straight chains hold
+mid-sized and large particles between two chains lying back to back; 20° holds almost nothing (no pocket, no pairing); 30°
+holds the largest; 45° and more hold small ones in the corners of the curl. Different folds, different niches.
+
+**The genome as its own enzyme** (`pocket`, fuel the only energy, seeds `AAAAAA` ×3, 30×30, 20,000 steps): armed templates and
+copies still waiting for energy. Fold 45° with fuel 0.5 (fits): 87 armed, 16 waiting; fold 0° with fuel 0.5: 34, 117; fold 45°
+with fuel 1.2: 49, 68; fold 30° with fuel 1.2 (fits): 78, 36. A genome whose shape fits the fuel arms its copies two to three
+times as fast. Folding costs copying little: births of `AAAAAA` in 2 × 15,000 steps at fold 0/20/30/45/60°: 75, 70, 68, 52, 56
+with `pUndock` 0.1, 69 to 75 at every angle with 0.02.
+
+**Genotype to phenotype** (`harvest.js`: fuel used per 10,000 steps by a seeded genome, 3 seeds of it, `foldA` 45, `foldB` 30,
+fuel the only energy, 15,000 steps, 2 seeds; mutation off):
+
+| sequence | fuel 0.5 | fuel 0.85 | fuel 1.2 |
+|---|---:|---:|---:|
+| `AAAAAAAA` | 14 | 14 | 3 |
+| `BBBBBBBB` | 21 | 21 | 12 |
+| `AAAABBBB` | 14 | **23** | 8 |
+| `AABBAABB` | **36** | 20 | 17 |
+| `ABABABAB` | 29 | 15 | **24** |
+
+Each fuel size has a different best sequence, and the three mixed ones have the same letters in different orders: the order of
+letters, through the shape it folds into, decides which fuel a genome can use. No rule lists sequences or sizes. This is a
+many-to-many genotype-to-phenotype map made of geometry, the kind that motif rules (one hand-written function each) cannot
+give. What it does not show yet: selection (the first screens, `FS_*`/`FT_*`, ran in a world too poor in fuel to hold a
+population: 9 to 47 births per 30,000 steps); harvest here mixes shape with copying speed; two seeds.
