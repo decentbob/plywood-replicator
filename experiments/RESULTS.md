@@ -1818,3 +1818,22 @@ But the parasite share follows the supply of its letters (`PX_*`, 100,000 steps)
 and 150 `B` parasites made 151 of 227 births in the last window (73% `C`/`D` letters), with 75 of each 4 of 45 (12%). So the
 coexistence is mostly the two kinds living on separate letters, not host–parasite dynamics. A fair test needs parasites
 and cooperators drawing on the same letters: code `A`→`1` only, cooperators `ABABBA`, parasites `BCDDCB` (`PY_*`).
+
+**Parasites on the same letters** (`PY_*`: code `A`→`1` only, so a product is made only along runs of `A`; cooperators `BAAAAB`
+(product `1111`), parasites `BCDDCB`; 150 of each letter; 150,000 steps). A first version seeded `ABABBA`, which has no two
+`A` side by side, made no product and died out in every run. Births (of which strands with no `AA`, which make no product),
+and the share of `A` among newborn letters, first and last 25,000-step windows:
+
+| run | births (no `AA`), first → last window | `A` share |
+|---|---|---|
+| PY_kin_1 (products bind what they match) | 24 (0) → 37 (5) | 61 → 64% |
+| PY_mix_1 (shared) | 22 (0) → 106 (62) | 65 → 30% |
+| PY_mix_2 (shared) | 40 (5) → 127 (89) | 61 → 26% |
+| PY_slow_1 (shared, slow polymers) | 32 (3) → 103 (69) | 64 → 30% |
+
+With letters shared, strands that make no product take 60 to 70% of births within 75,000 steps of a shared catalyst and
+then level off, while births keep rising: the cooperators are kept at a minority but not lost, since the parasites cannot
+live without their products. A private catalyst keeps parasites at a few percent. Slow polymers only delay the takeover.
+This is the classic replicase–parasite system, here made of physical parts. What it does not have yet is anything the
+cooperators could evolve against the parasites: `bindAny` is all or nothing for the whole world. Graded specificity (a
+product binds any back but lets go faster where it does not match) would let discrimination and mimicry evolve.
