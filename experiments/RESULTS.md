@@ -1728,3 +1728,30 @@ density sets how often genome length changes: at 400 letters of each kind a tent
 five-unit genome, against one in a hundred at 200. Crowded templates make more copies that bridge two templates (the
 duplications and insertions of section 28). No `CDC` gene arose in 400,000 steps. What it suggests: gene origin should be
 tried in dense worlds, where the raw material (longer genomes) is ten times as common. One seed.
+
+## 35. Letters with trade-offs (`tradeoff.sh`, `letters.js`), the user's idea, first screens
+
+Letters that differ physically, none simply better, so a genome's make-up is a phenotype. First pair tried: `C` and `D`
+tough (radiation resistance 0.8) but slow (`mobC`, `mobD` 0.5), `A` and `B` fragile and fast. Capped nine-unit genomes with the
+energy gene (bare caps, `endLoss`, feed relay; the shield rule off), four free positions starting mixed; share of each letter
+in those positions, 150,000 steps, two seeds.
+
+Speed check first (homopolymer copies in 15,000 steps, two seeds): slow `C` 4 to 16 against `A` 37 to 38; large `C` (1.2)
+31 to 35; soft `C` (stiffness 0.3) 34 to 36; wedge `C` (15°) none at all. Slowness is a real copying cost, wedges forbid
+copying outright, size and softness cost little.
+
+| run | environment | C + D in the free positions, by 50,000-step window |
+|---|---|---|
+| TO2_ctlnone_1, _2 | no trade-off, no radiation | 59 → 58 → 65%; 55 → 60 → 69% |
+| TO_none_1, _2 | trade-off, no radiation | 52 → 61 → 60%; 43 → 60 → 69% |
+| TO2_rad1_1, _2 | trade-off, radiation 1e-5 | 36 → 42 → 45%; 49 → 52 → 63% |
+| TO2_rad2_1, _2 | trade-off, radiation 2e-5 | 38 → 36 → 27%; 42 → 50%, then extinct |
+| TO2_ctlrad2_1, _2 | no trade-off, radiation 2e-5 | extinct in both |
+| TO_rad, TO_ctlrad | radiation 5e-5 | extinct in all four |
+
+What it says: nothing clean. `C` and `D` drift upward even with no trade-off and no radiation (a founder or mutation bias),
+and under radiation the tough letters are not favoured (in three of four runs the fast letters did as well or better):
+toughness does not pay for slowness at these doses. Radiation 2e-5 killed the worlds without the trade-off and one of two
+with it, so toughness helps survival a little. Populations are small (50 to 90 capped births per 50,000 steps) and drift
+dominates. Composition as a phenotype is weak here; it would need larger worlds, or a trade-off whose two sides are closer
+in size. Not pursued further for now.
