@@ -459,4 +459,24 @@ test('proof: a strand carrying BDB (relayed) is copied with fewer substitutions;
   assert.ok(s.births.length > 0 && s.prf.every((x) => x === 0), 'a flag without a BDB source');
 });
 
+test('grip and pocket: folded backs hold small fuel two at a time; fuel held in a pocket arms a letter and is spent, once', () => {
+  // grip: seeded product chains, straight or folded 45 degrees, and small fuel particles: only the folded ones make pockets
+  const held = (fold) => { let h = 0; for (const seed of [1, 2]) { const s = new Sim({ seed, W: 30, H: 30, nA: 0, nB: 0, nE: 0, n1: 120, nU: 60, sizeU: 0.5, fold1: fold, grip: true, seedSeq: '111111', seedCount: 15 }); s.run(4000); h += s.stats().held2; assert.deepStrictEqual(s.check(), []); } return h; };
+  const hf = held(45), hs = held(0);
+  assert.ok(hf >= 10 && hf > 4 * hs, `fuel held in pockets: folded ${hf}, straight ${hs}`);
+  // pocket: fuel is the only energy; every fuel spent arms exactly one letter, and a folded genome gets more of it than a straight one
+  const run = (fold) => {
+    const s = new Sim({ seed: 1, W: 30, H: 30, nA: 200, nB: 0, nE: 0, nU: 80, sizeU: 0.5, foldA: fold, pocket: true, pReloadU: 0.01, seedSeq: 'AAAAAA', seedCount: 3, pUndock: 0.1 });
+    let rearms = 0; const orig = s._transition.bind(s);
+    s._transition = function (u) { const was = this.is[u]; orig(u); if (was === 1 && this.is[u] === 2 && this.type[u] === 0) rearms++; };
+    s.run(12000);
+    assert.strictEqual(rearms, s.fuelUsed, 'each spent fuel arms one letter');
+    let nU = 0; for (let u = 0; u < s.n; u++) if (s.type[u] === 15) nU++; assert.strictEqual(nU, 80);
+    assert.deepStrictEqual(s.check(), []);
+    return s.fuelUsed;
+  };
+  const ff = run(45), fs = run(0);
+  assert.ok(ff > 2 * fs, `fuel used: folded ${ff}, straight ${fs}`);
+});
+
 console.log(passed + ' tests passed');

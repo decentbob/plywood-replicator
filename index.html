@@ -265,6 +265,11 @@ const KNOBS = [
   ['shield', 'CDC motif shields', 'a D between two Cs makes its two bonds immune to radiation', 'bool'],
   ['relay', 'motif signals relay', 'template units pass FEED and SHIELD along their strand: one motif serves the whole strand', 'bool'],
   ['feed', 'ABA motif feeds', 'a B between two As re-arms its released neighbours through their bonds', 'bool'],
+  ['pocket', 'pockets use fuel', 'a letter waiting for energy grips fuel with its back; a charged fuel particle held by two backs at once arms one (folded strands make the pockets)', 'bool'],
+  ['nU', 'fuel particles (reset)', 'energy for the pocket rule; a particle recharges at the reload rate below when free'],
+  ['sizeU', 'fuel size (reset)', 'which pockets hold it: about 0.5 fits strands folded 45 to 90 degrees, 1.2 strands folded 30 degrees'],
+  ['pReloadU', 'p fuel reload', 'per step a spent, free fuel particle recharges'],
+  ['foldA', 'A fold (reset)', 'degrees a free A bends (straight while copied)'], ['foldB', 'B fold (reset)'],
   ['proof', 'BDB motif proofreads', 'a D between two Bs (proofMotif) flags its face (with the relay, its whole strand): a wrong monomer docked there lets go before it links', 'bool'],
   ['pProof', 'p proofread', 'per step a wrong monomer on a flagged face lets go'],
   ['pReload', 'p reload per step', 'OFF→ON background energy income'],
@@ -284,7 +289,7 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'n1', 'n2', 'n3', 'n4', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
+const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'n1', 'n2', 'n3', 'n4', 'nU', 'sizeU', 'foldA', 'foldB', 'foldC', 'foldD', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };
@@ -303,7 +308,7 @@ function buildKnobs(p) {
     const lab = document.createElement('label'); lab.htmlFor = 'k_' + k[0];
     lab.innerHTML = k[1] + (k[2] ? '<small>' + k[2] + '</small>' : '');
     const inp = document.createElement('input'); inp.id = 'k_' + k[0];
-    const val = p[k[0]] !== undefined ? p[k[0]] : PC.DEFAULTS[k[0]];
+    const val = p[k[0]] !== undefined ? p[k[0]] : PC.DEFAULTS[k[0]] !== undefined ? PC.DEFAULTS[k[0]] : (/^size/.test(k[0]) ? 1 : /^(mob|stiff)/.test(k[0]) ? 1 : 0);   // per-type knobs (sizeU, foldA) have no entry in DEFAULTS
     if (k[3] === 'bool') { inp.type = 'checkbox'; inp.checked = !!val; }
     else if (k[3] === 'text') { inp.type = 'text'; inp.value = val; }
     else { inp.type = 'number'; inp.value = val; inp.step = 'any'; }
@@ -377,12 +382,12 @@ $('bFollow').addEventListener('click', () => { cam.follow = !cam.follow; $('bFol
 function jumpTo(u) { cam.x = sim.px[u]; cam.y = sim.py[u]; if (cam.zoom < 24) cam.zoom = 36; selected = u; showInspect(); }
 
 // ------------------------------------------------------------ drawing
-const COL = { 1: '#ffd166', 2: '#06d6a0', 3: '#ef476f', 4: '#118ab2', A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', J: '#ff9900', G: '#6d6a8f', X: '#ff2bd6', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
+const COL = { 1: '#ffd166', 2: '#06d6a0', 3: '#ef476f', 4: '#118ab2', A: '#6fa8dc', B: '#e0a458', C: '#c678dd', D: '#8fce7a', P: '#f2f2f2', Q: '#a9a9a9', J: '#ff9900', G: '#6d6a8f', X: '#ff2bd6', UON: '#f3a712', UOFF: '#5a4a2a', EON: '#ffe066', EOFF: '#4a4f55', M: '#7d9b73', MRAW: '#3b4a38' };
 const SIDECOL = {};
 const RPAL = ['#000', '#ff4d4d', '#ffd84d', '#4dff88', '#4dd2ff', '#b84dff', '#ff4dd2', '#ffffff', '#ff9f1c', '#9fff1c', '#1c9fff'];
 SIDECOL[S.DOCK] = '#8a97a8'; SIDECOL[S.TPL_MM] = SIDECOL[S.TPL_LF] = SIDECOL[S.TPL_RF] = '#5ad27a'; SIDECOL[S.REPEL] = '#ff5a5a';
 SIDECOL[S.INERT] = '#3a4250'; SIDECOL[S.STICKY] = '#ffd75a'; SIDECOL[S.END] = '#59d6e8'; SIDECOL[S.BONDED] = '#d8dde6'; SIDECOL[S.ARMED] = '#9be3b0';
-SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66'; SIDECOL[S.TRN_MM] = SIDECOL[S.TRN_LF] = SIDECOL[S.TRN_RF] = '#ffb3de'; SIDECOL[S.PBIND] = '#ff8fc8';
+SIDECOL[S.IDLE] = '#2b3140'; SIDECOL[S.WANT] = '#e565d1'; SIDECOL[S.STACKED] = '#d8dde6'; SIDECOL[S.CHARGE] = '#ff9f1c'; SIDECOL[S.MEM] = '#c9e2b8'; SIDECOL[S.FRAY] = '#ff3b3b'; SIDECOL[S.FEED] = '#ff9f1c'; SIDECOL[S.SHIELD] = '#e8e8e8'; SIDECOL[S.FSH] = '#ffcf8a'; SIDECOL[S.HYB] = '#c58cff'; SIDECOL[S.RAW] = '#5d6b58'; SIDECOL[S.MAKE] = '#b6e3a1'; SIDECOL[S.INACT] = '#1d2230'; SIDECOL[S.ACT] = '#7fdbff'; SIDECOL[S.ANC] = '#e8f5c8'; SIDECOL[S.MEMA] = '#f4ff9a'; SIDECOL[S.CUT] = '#ff2b2b'; SIDECOL[S.HUB] = '#ffcc66'; SIDECOL[S.TRN_MM] = SIDECOL[S.TRN_LF] = SIDECOL[S.TRN_RF] = '#ffb3de'; SIDECOL[S.PBIND] = '#ff8fc8'; SIDECOL[S.GRIP] = '#c9a227'; SIDECOL[S.FUEL] = '#f3a712'; SIDECOL[S.GIVE] = '#fff3b0'; SIDECOL[S.SPENT] = '#5a4a2a';
 const FLASHCOL = { dock: '#ffd75a', link: '#ffffff', release: '#ff5a5a', rearm: '#5ad27a', birth: '#3fbdb8', energy: '#ffe066', fray: '#aab0b8', undock: '#aab0b8', capture: '#e565d1', ligate: '#e565d1', spont: '#ffffff', break: '#ff5a5a', charge: '#ff9f1c', make: '#b6e3a1', bind: '#c58cff' };
 // polygon engine: draw a unit from its corners; each working side is stroked along its edge, inset toward the centre
 function drawPoly(u, sx, sy, z, lw) {
@@ -399,7 +404,7 @@ function drawPoly(u, sx, sy, z, lw) {
     if (u === selected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; outline(); ctx.stroke(); }
     return;
   }
-  ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : sim.type[u] === T_M ? (sim.is[u] === 1 ? COL.M : COL.MRAW) : COL[PC.TNAME[sim.type[u]]];
+  ctx.fillStyle = sim.type[u] === T_E ? (sim.is[u] === 1 ? COL.EON : COL.EOFF) : PC.TNAME[sim.type[u]] === 'U' ? (sim.is[u] === 1 ? COL.UON : COL.UOFF) : sim.type[u] === T_M ? (sim.is[u] === 1 ? COL.M : COL.MRAW) : COL[PC.TNAME[sim.type[u]]];
   ctx.fill();
   if (sim.hand && sim.hand[u]) { ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = Math.max(1, z * 0.12); ctx.beginPath(); ctx.moveTo(X[0], Y[0]); ctx.lineTo(X[Math.floor(nv / 2)], Y[Math.floor(nv / 2)]); ctx.stroke(); }   // mirror letter: a slash
   if (sim.type[u] === T_E || PC.TNAME[sim.type[u]] === 'X') return;
