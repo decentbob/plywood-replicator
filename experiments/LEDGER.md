@@ -94,6 +94,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   One curved world retains overlapping prefixes despite 117 free monomers, so total pool depletion is not
   required for a stall. Its selected replay (54) finds occupied sites, excluded docking placements and failed
   linking distance. Contact-gated recruitment reduces unfinished inventory but lowers exact output (55).
+  In the selected state, releasing either overlapping prefix restores three exact copies versus zero;
+  the retained prefix completes intact, but the released piece remains inactive (56). This is one fixture,
+  not evidence for a general release rule or reuse of parts.
 - **Seeds must be viable under the rules**: a translation seed needs adjacent coded letters or it makes no product
   (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
 - **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold (on the new engine half or more of 11-unit capped copies then carry a
@@ -248,6 +251,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 53b | Productive mergers and overlapping prefixes | Are separate patches necessarily wasted assembly? | `pUndock` 0.1/0.3 | works | 10/13 curved control copies combine two nuclei; one 0.3 world has two overlapping prefixes aged over 36k despite 117 free monomers | patch_completion_summary.js (`PC_screen`) | measure local endpoint obstruction in selected stalled world | correlated within-world histories; completed-only times exclude censoring; no permanent-arrest or shape-benefit claim |
 | 54 | Anchor accessibility in a selected stall | Is progress blocked by occupancy, fit or delivery? | `pUndock` 0.3, unchanged chemistry | works | 35k samples: one next site always occupied; the other sees 8,146 compatible geometry checks but only 4 dockings; 428 anchor linking checks all fail gap | anchor_access.js (`AA_selected`) | separate local attachment and useful placement | exact replay of selected seed 83; repeated checks, no causal removal experiment; full saved-state/RNG neutrality |
 | 55 | Contact-gated assembly fronts | Can neighbor-triggered exposure improve completed assembly? | research-only L/R face gate, `pUndock` 0.1 | negative | curved 50k output 7/4 control, 3/2 L, 3/4 R; all 45 births exact; neither gate qualifies | assembly_front.js (`AF_screen`) | reversible positioning of linked parts, not an interpreter | two seeds; fewer unfinished rows and fewer mergers do not mean better output; no new core rule or universal-construction claim |
+| 56 | Selected placement blocker and release | Can freeing an attachment rescue the stalled assembly without fragmentation? | prepared DOCK→REPEL + F release, `pUndock` 0.3 | works | all 43 rejected placements excluded by anchor 87; release 87/107/both gives 3/3/2 new exact copies versus 0; retained original prefix completes | placement_release.js (`PR_selected`) | test local reversible docking and useful reattachment separately | one selected 15k state; released pieces remain inactive; forced partial birth logs excluded; all 150 blocks and lateral bonds preserved |
 
 ## Knob index
 
@@ -342,7 +346,7 @@ the rows that used it). Rerun it after adding rows.
 | `pSNuc` | 40a (works), 40b (negative) |
 | `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
 | `pSpont` | 7 (works), 11b (negative) |
-| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative) |
+| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
@@ -378,13 +382,13 @@ the rows that used it). Rerun it after adding rows.
 
 ## Open gaps (worth trying, with the reason)
 
-- **Reversible placement without lateral fragmentation** (50–55): the selected overlapping-prefix replay is
-  diagnosed: one next site is occupied, the other admits only four dockings despite many encounters, and all
-  428 compatible linking checks at its anchor fail distance. The blocker identities and causal rescue are not
-  measured. Constructor-inspired contact gates lower output despite cleaner inventories (55); do not tune or
-  promote them on that basis. Next isolate which physical neighbors exclude placement, then test a local
-  detach/reorient/reattach operation that preserves the linked part. Keep successful patch mergers visible and
-  section 23's fragmentation warning. No population sweep or universal interpreter is justified.
+- **Reversible placement without lateral fragmentation** (50–56): the selected replay now identifies anchor
+  87 as the sole blocker in all 43 rejected placements. Releasing either prefix restores three exact copies
+  versus zero, and the retained original prefix completes intact. Released pieces remain inactive: causal
+  rescue is demonstrated in one selected fixture, useful reattachment is not. Test a local reversible docking
+  state in a prepared fixture before a fresh-seed screen, counting reuse and exact completion separately from
+  cleanup. Contact gates lower output despite cleaner inventories (55); do not promote them. Keep successful
+  patch mergers and section 23's fragmentation warning visible. No population sweep or universal interpreter.
 
 - **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
   brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an

@@ -115,6 +115,11 @@ reduce output in the two-seed screen. They are not standard knobs or a universal
 `experiments/assembly_front_plan.md`; analysis: `assembly_front_summary.js` and
 `assembly_front_analysis_test.js`. The normal engine and viewer are unchanged.
 
+`placement_release.js` identifies physical placement blockers and forks a selected stalled state with
+either attachment released (56). Both single releases restore exact copying; the retained partial row
+completes, while the released row remains inactive. This prepared intervention is not a new reaction.
+Its `_summary.js` and `_test.js` reconstruct bond histories, physical membership and all 150 blocks.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

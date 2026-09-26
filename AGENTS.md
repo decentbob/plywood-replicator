@@ -100,6 +100,7 @@ experiments/end_protection.js  capped copying viability and matched completed/at
 experiments/patch_completion.js  single-template nucleation/growth/merger histories under existing undocking (53); summary/tests alongside
 experiments/anchor_access.js  exact selected-stall replay with docking/linking gate diagnostics (54); _summary.js validates counts/provenance
 experiments/assembly_front.js  research-only local contact gates, both polarities (55); plan, summary and tests alongside; not standard chemistry
+experiments/placement_release.js  selected-state release forks and actual placement blockers (56); full state/raw events, summary and tests; no new rule
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -233,7 +234,37 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): constructor-inspired contact gates cost output
+## Handoff (2026-09-26, latest): releasing either competing prefix restores exact copying
+
+Section 56 completes the selected causal diagnostic. Read `experiments/placement_release_plan.md`.
+
+- Exactly replay seed 83/opposed20/pUndock=0.3 to 15k. Fork unchanged/release87/release107/releaseBoth
+  through 50k. Only chosen anchor state DOCK→REPEL and its F bond change; no kicks, lateral severing,
+  fuel or ongoing intervention. ID selection is a prepared fixture, never a reaction.
+- **Blocker identified:** every one of the unchanged branch's 43 rejected placements at founder site 2
+  is excluded by anchor 87 alone. This is the actual center-distance slot gate, not a polygon-overlap test.
+- New exact copies after the fork: **0 / 3 / 3 / 2**. Release87 preserves the original six-member prefix,
+  which completes at 23,606; release107 preserves the original seven-member prefix, completing at 20,258.
+  Released prefixes stay intact, detached and inactive. Their four partial birth-log entries at 15,001
+  are excluded from exact output. All eight new exact births are generation 1; no lateral bond ever breaks.
+- One selected state, not fresh-seed confirmation. Release changes state and attachment; later trajectories
+  and RNG consumption diverge. The result does not establish a general rule, part reuse or a shape benefit.
+- Data: `experiments/out/PR_selected.json`, full 15k state, source hashes, raw bonds/birth member IDs,
+  placement exclusions and seven full 150-block inventories per fork. Archived execution 240k steps,
+  57.188 CPU seconds including unobserved restored and continuous controls. Restored observer neutrality
+  is exact; continuous versus restored state differs only by one extra cache `pinsVersion` increment.
+  Tests reject 21 malformed cases and check intervention edits, observer neutrality and raw reconstruction.
+  Core unchanged; focused checks/default fingerprints checked. Full 39-check suite passed in section 55.
+- **Next:** prepared local reversible-docking assay. A linked endpoint must retain the ability to dock
+  again without a global unfinished-row detector, age threshold, ID selection or lateral fragmentation.
+  Require actual reuse and exact completion, not just escape/cleanup. Ordinary REPEL release cannot supply
+  that in this no-energy fixture. Keep stock partial-release birth logs separate and preserve section 53's
+  successful mergers. Only a successful prepared primitive earns a prospective fresh-seed screen.
+
+Resume: `node experiments/placement_release_test.js` and
+`node experiments/placement_release_summary.js experiments/out/PR_selected.json`.
+
+## Previous handoff (2026-09-26): constructor-inspired contact gates cost output
 
 The user's open research/innovation request led to sections 54–55 and the final dated addition
 to `LITERATURE.md`. Read `experiments/assembly_front_plan.md` for prospective choices.

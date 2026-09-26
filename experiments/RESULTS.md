@@ -3670,3 +3670,93 @@ stall now provides a concrete placement obstruction. Identify actual blocking
 neighbors in a matched fixture, then assess a strictly local reversible attachment
 cycle, recording useful reattachment and fidelity as well as escape. Section 23's
 fragmentation warning still applies. No ecological sweep is warranted.
+
+## 56. Releasing either competing prefix restores exact copying in the selected stall
+
+**Question.** Which blocks exclude placement in section 54, and does freeing an
+attachment restore productive assembly? This is a causal intervention in that
+same selected seed-83/opposed20/pUndock-0.3 world, not a fresh replicate or a new
+reaction. Protocol: `placement_release_plan.md`. Restore the full state/RNG at
+15k, fork four matched fixtures, then run ordinary chemistry through 50k.
+
+The two retained prefixes are PAAAABB (anchor 87, founder site 3) and PAAAAB
+(anchor 107, site 4). Release changes only the chosen anchor's internal state
+from DOCK to REPEL and removes its F bond. No displacement or kick, lateral
+severing, added monomer, type conversion, fuel or further intervention is used.
+Choosing these IDs is a prepared diagnostic fixture; no ID-aware rule is added.
+
+**The excluding block is the anchor itself.** In the unchanged branch, all 43
+slot rejections at founder site 2 involve block 87, and no other block is inside
+the exclusion threshold. The gate uses center distance, not a polygon-overlap
+calculation. All 47 admissible placement calls and four accepted dockings match
+section 54. This narrows the geometric obstruction beyond merely observing
+many attached patches. It does not prove which upstream forces held that anchor
+in the excluding position.
+
+| intervention at 15k | new exact offspring by 50k | forced partial releases logged as births | originally attached piece that completes | completion step | free monomers at 50k |
+|---|---:|---:|---|---:|---:|
+| unchanged | 0 | 0 | neither | — | 117 |
+| release 87 | 3 | 1 | original PAAAAB, all six members retained | 23,606 | 88 |
+| release 107 | 3 | 1 | original PAAAABB, all seven members retained | 20,258 | 84 |
+| release both | 2 | 2 | neither original piece | — | 97 |
+
+All eight new exact offspring are PAAAABBBBQ, generation 1 from the original
+founder. The single birth before the fork is excluded from this table. Each
+released partial row produces a stock birth-log entry at 15,001; these four
+entries are **not** counted as exact output. Original-member tracking shows
+that all forcibly released prefixes remain intact, detached and entirely REPEL
+at 50k. None extends or is reused. All lateral bonds survive in every branch,
+and every 5k inventory accounts for all 150 original blocks.
+
+| intervention | admissible placements at sites 2/3 | accepted | rejected |
+|---|---:|---:|---:|
+| unchanged | 47 | 4 | 43 |
+| release 87 | 231 | 205 | 26 |
+| release 107 | 108 | 80 | 28 |
+| release both | 292 | 256 | 36 |
+
+These are repeated calls, not independent arrivals. In the release-107 branch,
+block 87 excludes only three placement calls. Thus useful growth can resume
+while preserving the very piece that excluded every placement in the control.
+Removing the other attachment changes the subsequent geometry and trajectory;
+it is not necessary to discard both intermediates. The increased counts alone
+do not establish an independent rate effect, and the branches diverge in RNG
+use after the intervention.
+
+**What this says.** Escape from an attachment obstruction can preserve a partial
+assembly and restore exact copying without fragmentation. A selected state with
+plenty of free monomers can still be rescued by removing an attachment. This
+earns a prepared test of local reversible docking, where productive reattachment
+of the released material must be demonstrated separately.
+
+**What it does not say.** This single selected state does not establish a general
+fitness benefit, a curvature advantage, reusable construction parts, sustained
+reproduction or a universal constructor. The current release spends an unfinished
+piece as inactive material. It changes both state and bonding, so it does not
+isolate the effect of a bond edit alone. It also does not show that arbitrary
+endpoint releases are beneficial: section 53's productive mergers remain a
+reason to measure interruption costs. No new chemistry, viewer knob or preset.
+
+```sh
+node experiments/placement_release.js experiments/scratch/PR_selected.json
+node experiments/placement_release_summary.js experiments/out/PR_selected.json
+node experiments/placement_release_test.js
+```
+
+**Provenance/validation.** `PR_selected.json` retains the 15k saved state, source
+hashes, all bond events, exact physical birth membership, placement blockers and
+seven complete inventories per branch. The archived execution uses 240k steps
+(15k preparation, four 35k forks, an unobserved 35k restored control and a 50k
+continuous control), 57.188 process CPU seconds. Development replays while
+correcting cache-comparison assertions are not included in that timing and are
+not independent samples. The observed/unobserved restored controls match every
+saved field and RNG bit. The continuous control matches the archived section-54
+hash; compared with the restored control, only `pinsVersion` differs by one.
+Restoration invalidates the bond cache, causing one extra rebuild; this counter
+only invalidates cached corner groups. Every other saved field matches exactly.
+
+Tests verify the precise intervention edits, unchanged physical arrays/RNG,
+four-arm observer neutrality, event-time birth membership, raw graph/material
+reconstruction, provenance and 21 malformed-data cases. Focused standard checks
+and all five default fingerprints are also checked; the full 39-check suite was
+passed in section 55 and is not rerun for this observer-only addition.

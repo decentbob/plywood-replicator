@@ -450,6 +450,14 @@ Keep entries short: date, what changed, why, what evidence.
   research assay and primary-source review. Next examine reversible positioning of linked parts with
   useful reattachment, not a programmed constructor or automatic fragmentation of unfinished material.
 
+- 2026-09-26. **Attachment release earns a reuse test (56).** In the selected stalled state, anchor 87
+  excludes all 43 admissible-but-rejected placements. Releasing either competing prefix at 15k restores
+  three exact copies by 50k versus zero; the original retained prefix completes without lateral loss.
+  Releasing both gives two exact copies. All forcibly released material stays intact but inactive, so
+  this is causal rescue in one fixture, not reversible construction. Next test a strictly local endpoint
+  state that can detach and dock again, retaining ordinary fit gates. Require actual reuse before screening
+  fresh seeds, preserve productive mergers, and keep global observer identities out of the rule.
+
 ---
 
 ## 15. Ideas not yet tried
@@ -458,8 +466,9 @@ Keep entries short: date, what changed, why, what evidence.
 not an unbuilt promise: both directions lose output. A universal constructor needs description copying,
 interpreted construction and a route for its own functional parts to be constructed; the present
 translation rule alone does not demonstrate that closure. The smaller useful next operation is
-reversible positioning. Identify polygons responsible for `_slotFree` rejections at the selected open
-site, then test an intact linked part's detachment and productive reattachment in a matched fixture.
+reversible positioning. Section 56 identifies anchor 87 as the placement blocker and shows that freeing
+either overlapping attachment rescues exact assembly. Test productive reattachment of the released intact
+part next; ordinary REPEL release instead leaves it inactive. Begin with a matched prepared fixture.
 Any new state must read only its own bonds and bonded-side states. No ID-specific rescue in chemistry,
 global assembly-age threshold, nonlocal completion detector, or lateral severing as a free cleanup.
 
