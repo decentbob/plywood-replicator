@@ -182,6 +182,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 41c | Pocket races, energy-limited, 12 seeds | Does fold decide same-letter races where energy limits births? | `pocket`, folds on/off, fuel 0.5/1.2, dense 48×48 | inconclusive | `ABABABAB` 50% with folds vs 24% without at fuel 1.2 (p = 0.09), 49% with folds and no fuel; nothing significant | races.js, permtest.js (`DR*`, `DS*`) | 96×96 worlds, or genomes differing in composition | 20–40 births per lineage per seed: drift swings shares 0–100% |
 | 42a | Shared catalyst in space | Do creeping polymers let hosts and parasites separate and hold parasites down (80×80)? | `bindAny`, `translate`, `catalysis`, `mobS` 0.1, 0.3, 1 | works | parasites at the end 50–65% creeping, 60–63% at 0.3, 71–72% well mixed (8 vs 4 runs, no overlap); segregation 0.03–0.10 vs 0.01–0.03; host births equal | hostparasite.sh, spatial.js, hostmap.js (`HP_*`) | hosts that can evolve against parasites (43) | 2 seeds per mobility; no travelling front; a ~10-point effect |
 | 42b | Parasites arise by themselves | With only hosts seeded, do non-producers arise, and does space hold them down? | as 42a, mutation 0.005 | works | short B/C/D strands arise within 50k and take 58–62% creeping vs 72% mixed | hostparasite.sh (`HM_*`) | — | hosts shrink to `AAB`, `AAAB` (regularity 1) |
+| 43a | Keys and mimics, open world | With a start letter for translation and graded specificity, do hosts escape mimics by changing keys (a Red Queen)? | `transStart` D, `transCode` A1,B2, `bindAny`, `pMisMelt` 0.05 | negative | mimics 12–29% of births; mimic load does not predict a key's fall (pooled r = +0.05, p = 0.72; +0.15 without specificity); keys shrink to 2–3 letters | armsrace.sh, keys.js, redqueen.js (`AR_*`) | capped world, where keys cannot shrink (`CR_*`) | 2 seeds, 1M steps; one striking cycle in seed 1 is drift by the test |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -196,7 +197,7 @@ the rows that used it). Rerun it after adding rows.
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative) |
 | `bendB` | 15c (lead), 15d (works) |
-| `bindAny` | 36a (works), 36b (works), 42a (works) |
+| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative) |
 | `bodyJostle` | 37 (works) |
 | `capFray` | 28c (lead), 33a (partial) |
 | `catalysis` | 34c (works), 42a (works) |
@@ -262,7 +263,7 @@ the rows that used it). Rerun it after adding rows.
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
-| `pMisMelt` | 36c (works) |
+| `pMisMelt` | 36c (works), 43a (negative) |
 | `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial), 41a (negative), 41b (works), 41c (inconclusive) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
@@ -295,8 +296,9 @@ the rows that used it). Rerun it after adding rows.
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `sun` | 3 (negative) |
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
-| `transCode` | 34a (works) |
+| `transCode` | 34a (works), 43a (negative) |
 | `translate` | 34a (works), 42a (works) |
+| `transStart` | 43a (negative) |
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 

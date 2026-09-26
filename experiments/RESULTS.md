@@ -2288,3 +2288,42 @@ Every creeping or half-creeping run ends below every well-mixed one (8 against 4
 0.03). Parasites arise by themselves within 50,000 steps: short strands of the letters that make no product (`BDC`, `BCC`, `CD`,
 `BD`; mean length 3.1), and the hosts shrink too (`AAB`, `AAAB`, `AAA`), so shortest wins on both sides. Space holds the
 parasites down by about ten percentage points and no more; it does not stop them, and it does not make anything evolve against them.
+
+## 43. Keys and mimics: can hosts evolve against parasites? (`transStart`, `armsrace.sh`, `keys.js`, `redqueen.js`)
+
+Section 42's hosts can escape parasites only by being elsewhere. For hosts to evolve a defence, the catalyst must recognise
+sequence, and making product must be separable from being catalysed. With the full code (`A`→`1`, `B`→`2`) a product carries its
+maker's key (its run of `A` and `B`), and with graded specificity (`pMisMelt`) it binds strongly only where that key recurs; but
+every strand with coded letters translates, so every strand that is catalysed also makes product. **`transStart`** (new, default off):
+only a strand carrying a start motif translates (here one letter, `D`); a template unit carrying it marks itself and the mark runs
+along the strand one block per pass, as the proofreading flag does. A mimic is then possible: a strand with a host's key and no
+`D`, copied on others' products and making none. A host that mutates its key keeps its own catalyst (made from the new key) and
+leaves its mimics behind: the ingredients of tag-based cooperation (Riolo, Cohen and Axelrod 2001), whose cheaters and escapes cycle
+without end, with no rule about keys.
+
+**Open world** (`AR_*`: 40×40, four letters, 150 of each, 150 blocks of each product kind, hosts `DABBAB` ×6, shared catalyst,
+1,000,000 steps, 2 seeds; controls without specificity and without the start rule). Births from step 500,000:
+
+| run | births | hosts (with `D`) | commonest host keys | mimics (a host key, no `D`) |
+|---|---:|---:|---|---:|
+| specificity, seed 1 | 1,732 | 1,166 | `AB` 329, `ABA` 287, `ABB` 279 | 499 |
+| specificity, seed 2 | 1,899 | 1,627 | `AB` 706, `ABB` 333, `ABA` 173 | 236 |
+| no specificity, seed 1 | 2,747 | 1,872 | `BAB` 349, `AAB` 275, `AB` 227 | 656 |
+| no specificity, seed 2 | 2,551 | 1,881 | `AB` 469, `BAB` 397, `AA` 242 | 368 |
+| no start rule, seed 1 | 2,099 | 1,257 | `AB` 928, `ABB` 182 | (785, all translate) |
+| no start rule, seed 2 | 2,116 | 1,089 | `AB` 909, `ABB` 37 | (889, all translate) |
+
+Mimics arise at once (15 to 25% of births in the first 200,000 steps, by losing the `D` or as pieces without it) and stay (12 to
+29% of births late). Keys do change: in seed 1 with specificity the hosts' commonest key went `AB` → `ABBA` → `AB` → `ABA`, with
+`AB` mimics peaking (38 per 50,000 steps) just before the hosts moved to `ABBA` and dying away while `ABBA` led. But that is what
+the eye picks out of drift: across all windows and keys, the mimic load on a key does not predict its fall among hosts (`redqueen.js`,
+50,000-step windows, pooled over two seeds: r = +0.05, p = 0.72 with specificity; +0.15 without; +0.12 without the start rule), and
+keys turn over as often without specificity. The keys shrink to two or three letters (`AB`, `ABA`, `ABB`) in every arm: the shortest
+key wins (regularity 1), and a two-letter key recurs in almost any strand, so there is no specificity left to escape by.
+
+What this says: the parts of an arms race exist (mimics arise and live on hosts' products; hosts can change keys and keep their
+catalyst), but in an open world the keys shrink until they recognise nothing. What it does not say: what happens where keys cannot
+shrink. `CR_*` (the capped world of section 33, hosts `PDABBABQ`, where a genome keeps its length and a key changes only by
+substitution; `pLinkBare` 0.05, since at 0.01 that world died; 2,000,000 steps, specificity on and off, 2 seeds) was running at
+the end of the session. A caution for reading it: a product holds on four of five matching letters (bound runs are cooperative),
+so one substitution barely escapes a mimic, and escapes will take several.
