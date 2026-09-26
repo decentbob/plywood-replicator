@@ -387,45 +387,30 @@ the rows that used it). Rerun it after adding rows.
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 
-## Open gaps (worth trying, with the reason)
+## Open gaps (current navigation)
 
-- **Physical registration after release** (50–57): release rescues a selected obstruction (56), and a local
-  SEEK state now reuses an intact, fully detached part in an exact product (57a). Fresh curved output rises
-  2/5→5/7, but square output falls and two products omit a B after redocking one site away among repeated
-  letters (57b). The fidelity criterion fails; do not promote or rate-tune the general release rule. Next
-  isolate how contact and physical fit can retain position without an index or completion reader. Keep
-  whole-part reuse distinct from releasing one endpoint while another stays bound, and use independent
-  physical completion records because stock births count temporary detachments. Preserve productive
-  mergers and section 23's fragmentation warning. No population sweep or universal interpreter.
-  Stronger stiffness with matched 4/8-pass controls does not rescue either selected shift (58): all eight
-  first returns remain shifted, despite physically lower curved deformation. Stop stiffness tuning. A
-  second retained contact is the next fixture question; 8 partly attached historical returns versus 17
-  fully detached ones are correlated observations, not proof that a second contact solves registration.
-  A prepared admissible secondary contact now rescues the square part in both placement orders (59a),
-  including a one-physics-phase DOCK contact. Mere alignment does not. Exposing the face without a prepared
-  bond instead captures at a shifted site and releases before another physics phase (59b). A local
-  handshake now acquires square support before release, preserves position and completes exactly (60a).
-  Waiting alone also succeeds sooner; curved request arms acquire no support and remain unfinished
-  through 5k (60b). No fresh screen or rate tuning. Test the same operation in the original two-prefix
-  obstruction, where waiting may have an actual cost, before claiming useful rearrangement.
+[ROADMAP.md](../ROADMAP.md) is the single ranked queue, updated after the 2026-09-26
+intent audit. Earlier rows' “points to” fields preserve the decision made at that time;
+later tests may have completed or rejected it. Do not treat every historical lead as active.
 
-- **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
-  brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an
-  operation whose geometric failure can actually be rescued before inherited stiffness/order races or a larger ecology.
-  Earlier first copying under individual kicks is a conditional lead (47c), not evidence that support construction pays.
+- **P0 — locality and physics:** default body jostling groups bonded assemblies. Validate
+  the individual-block path and side-information contract before claiming strict locality.
+- **P1 — causal ecology:** shared catalysts and space have strong effects (36, 42), but
+  useful recipient dependence must be measured before another arms-race search (43–46).
+- **P2 — resource-efficient assembly:** ask whether extra organization can economize a
+  scarce part under conserved material and local renewal; ordinary stacks did not (40).
+- **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);
+  inherited reproductive advantage remains open (41, 47, 51). No more uptake-only claims.
+- **P4 — random-chemistry heredity:** resolve recurrence versus variant-specific descendants
+  in existing candidates (32) before broadening the search.
+- **P5 — coupled modes:** conditional on a measured useful exchange and self-renewal of
+  the participating assemblies; not justified merely by having two copying modes.
+- **C1 — handoff closure:** the unchanged mechanism's selected two-prefix test remains
+  available (56, 60). It must beat waiting with useful completion/reuse or be parked.
 
-- **Product survival and productive encounters** (44): durability permits a little delivery without removing genome turnover;
-  forced release loses host function. Extend the matched durability assay before long arms-race runs. A lateral-bond-triggered
-  rest shape could leave monomers flat but generate curvature after assembly; test synthesis, release and useful binding separately.
-
-- **A third gene in expanded genomes** (33i, 33j): genomes of 11–13 units carry spare letters; give them a third
-  pressure with a private gene and see whether a third gene arises (regularity 5, 6).
-- **Mechanical directions not yet built** (DESIGN 15, LITERATURE shortlist): crystal ribbons (a second replication mode;
-  fragments carry the whole information), a polymerase block (a copier made of parts), recombination by template
-  switching (genes move between lineages in one step).
-- **A product function that pays by degrees** (34d, 34e fail because every product fits its maker and shape is lost on
-  binding): candidates in DESIGN 15 (F1 pleiotropic letters, F2 shape that survives binding).
-- **Unfinished older items**: random chemistry heredity test (32), chirality round 2 (30), droplets selection test (31),
-  double strands seed 3 (29).
-- **Untested combinations**: dense world + translation (does the machine gain parts where length is cheap?); dense world
-  + parasites; radiation band in a dense world; bare caps with cutting (a cut kills in a capped world, 26 was null).
+The old third-gene item is superseded by proofreading (38); further designed pressures
+are calibrations, not the main route to open-ended novelty. Product shape switches were
+built (45), and flexibility's recipient benefit failed fresh confirmation (46).
+Chirality, droplets, compartments and unrestricted combinations are parked pending a
+specific causal hypothesis; see ROADMAP for reopening conditions. Historical detail
+survives in RESULTS, DESIGN and the [archived guide](../docs/archive/AGENTS-2026-09-26.md).

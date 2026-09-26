@@ -3,3 +3,4 @@ dist/
 experiments/out/*.jsonl
 experiments/out/*.json
 !experiments/out/*.manifest.json
+experiments/scratch/

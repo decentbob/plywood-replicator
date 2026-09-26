@@ -949,6 +949,11 @@ again needs compartments that keep with their contents and divide, which section
 
 ## 20. Summary
 
+**Historical summary:** this section predates gene accumulation (33), proofreading (38),
+translation/stacks/ecology and the later engine settings. Its claims about absent genes,
+old hinges and per-block physics are not current status. See the ledger, README and the
+[2026-09-26 intent audit](../docs/RESEARCH_AUDIT.md); [ROADMAP](../ROADMAP.md) is the current queue.
+
 - Copying, release, re-arming and turnover all come out of one internal state per square, one
   compatibility table and six local transitions, with nothing bigger than a square anywhere in
   the dynamics. Copies are exact when the soft knobs are zero.

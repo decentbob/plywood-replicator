@@ -4,6 +4,10 @@
 
 # Literature survey: mechanisms for emergent complexity under strict locality
 
+**Current navigation:** [ROADMAP.md](ROADMAP.md) is the priority queue. The original shortlist
+below is historical and is not an instruction to add its mechanisms. Read the
+[2026-09-26 source recheck](#research-directions-rechecked-2026-09-26) before using its claims.
+
 **Historical context:** the original survey below predates translation and stacks.
 Its statements that the project has only copying or one replication mode describe
 that earlier state. See the dated updates and RESULTS 34–55 for subsequent tests.
@@ -311,7 +315,7 @@ chromodynamics").
   behind: an arms race whose space of keys is open, with no rule about keys. Crystal genes (Cairns-Smith, section 2 above) were
   built as `stack` (40).
 
-## Ranked shortlist: most likely to produce emergent complexity here
+## Historical ranked shortlist (superseded by ROADMAP.md)
 
 **1. A stepwise shared pathway on the energy particle (Horowitz, the metabolic replicator model, Lenski's stepping stones).**
 - **The change.** The particle gets states `OFF` → `S1` → `S2` → `ON`. Each transition is catalysed at the back of a *different* short motif (say `ABA` for `OFF`→`S1`, `CDC` for `S1`→`S2`, a third for `S2`→`ON`), and the environment reload is lowered in stages with `--change`.
@@ -502,3 +506,89 @@ fidelity test. This supports reusable attachment as an operation while exposing
 registration as the next problem. It does not supply a constructor interpreter,
 self-construction, or evidence of evolving machines. No new external claim is
 inferred from the prepared rescue.
+
+## Research directions rechecked (2026-09-26)
+
+This update informs [ROADMAP](ROADMAP.md), not a new experiment. Sources were checked
+through publisher/author pages and accessible paper text; access limits are stated below.
+The original survey remains historical. Its confident “most likely” ranking was not an
+estimated probability and is superseded by the evidence-based queue.
+
+### Assembly constraints can make resource economy favor organization
+
+[Schulman & Winfree, *Simple Evolution of Complex Crystal Species* (2011 conference paper)](https://www.dna.caltech.edu/Papers/simple-ca-evolution2011-LNCS.pdf),
+especially sections 4, 7 and 8, models 12 tile types where certain wider patterns consume a
+rare tile less often. The kinetic experiment keeps free-tile concentrations constant, applies
+path-dependent shearing and removes crystals for dilution. It finds an optimal width at a
+fixed scarcity, not indefinite growth in complexity under one fixed finite resource stock.
+Width is its complexity proxy. These conditions limit direct transfer to this project.
+
+**Our inference:** investigate resource use imposed by assembly constraints, rather than another
+motif reward. First establish an advantage after construction cost and finite-pool recycling,
+with simple contacts and no whole-crystal scission or counter. This is P2; section-40 stacks
+do not already supply that mechanism. The 2012 journal version is separately catalogued
+by [Caltech](https://authors.library.caltech.edu/records/xhj14-45j48).
+
+### Growth and scission demonstrate information copying, not automatic evolution
+
+[Schulman, Yurke & Winfree, *PNAS* (2012)](https://www.dna.caltech.edu/Papers/crystal-self-replication2012.pdf)
+reports information-bearing DNA ribbon growth and mechanically induced scission. Its
+[supplement, section 10](https://www.dna.caltech.edu/Papers/crystal-self-replication2012_SI.pdf)
+models repeated growth/scission with dilution into fresh monomers. This is strong evidence
+for a replication route, not a demonstrated autonomous conserved-material ecology.
+
+**Our inference:** in polygon assays, require independently renewing fragments retaining the
+relevant information/function, natural variation and a sustainable material cycle. Fragment
+count or stacked-row count alone cannot pass that gate.
+
+### Ecology supplies changing pressures, with model-specific shortcuts
+
+[Takeuchi & Hogeweg, *PLOS Computational Biology* (2009)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000542)
+compares spatial organization and explicit compartments. Its Models section treats whole
+replicator molecules as lattice entities, includes replication/decay and parameter mutation,
+and divides compartments using their volume and geometry. It provides evidence about spatial
+selection; those implementation rules are not allowed shortcuts for our blocks.
+
+**Our inference:** observe whether actual contact-mediated exchanges create frequency-dependent
+selection in the existing polymer world (P1). Do not implement a neighborhood species-count
+condition, group fitness, copied molecules or a division controller to reproduce the paper.
+
+[Mizuuchi, Furubayashi & Ichihashi, *Nature Communications* (2022)](https://www.nature.com/articles/s41467-022-29113-x)
+reports diversification into a network of host and parasitic RNAs; the authors distinguish
+the five-member network from the four RNAs whose sustained co-replication they confirmed.
+The experimental system uses a supplied translation/replication environment and serial
+propagation in droplets. This supports ecological organization as an outcome worth measuring, not a
+claim that minimal passive parts automatically acquire those capabilities. The publisher's
+indexed article text and the [PMC article](https://pmc.ncbi.nlm.nih.gov/articles/PMC8933500/)
+were available; direct publisher retrieval was blocked in this recheck.
+
+### Measure persistent causal novelty rather than rewarding a score
+
+[Dolson et al., MODES (2019)](https://doi.org/10.1162/artl_a_00280) distinguishes change,
+novelty, complexity and ecological potential. The publisher abstract was checked; this audit
+does not claim to have reproduced its detailed algorithms. [Taylor (2019; author preprint)](https://arxiv.org/abs/1806.01883)
+distinguishes exploratory, expansive and transformational innovation and discusses the role
+of compositional physical building blocks. Neither supplies proof that any one scalar metric
+certifies open-endedness.
+
+**Our proposal:** the audit's evidence ladder and ROADMAP gates. Keep lineage persistence,
+new physical function, interaction dependencies and rule complexity separate. These metrics
+are observation only; never feed a novelty score or a chosen function back into dynamics.
+
+### Corrections to earlier mappings
+
+- Translation and stacks already exist (34, 40); “only the copy half” and “only one mode” are
+  earlier-state descriptions. Coupling, closure and evolved additional function remain open.
+- The old shared-energy-pathway and graded-gene suggestions design the useful functions in
+  advance. They can calibrate selection, but should not head a roadmap for endogenous novelty.
+- Earlier oligomer/template-switching suggestions must not use a whole-piece match/placement
+  operation or a test for different template identity. Existing local contacts and errors are
+  the only acceptable starting point; feasibility remains unproven.
+- An older suggestion to stop products binding their own maker requires forbidden ancestry
+  knowledge as written. Whole-key recognition also requires a new compliant block-level argument.
+- No claim that parasites, another replication mode, or universality necessarily causes increasing
+  complexity follows from these papers. Their relevance is a hypothesis with explicit transfer costs.
+
+Other sources in the original survey, including its detailed Penrose, Hutton and SpudCell mappings,
+were not fully reverified in this audit. Their existing access caveats remain in force. Consult
+the actual local read/write contract before turning any historical analogy into a rule.

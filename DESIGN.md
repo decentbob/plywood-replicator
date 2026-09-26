@@ -2,7 +2,7 @@
 
 Design notes for an artificial life simulation where replication and evolution come out of a tiny universal physics, not out of code inside the creatures.
 
-**Status:** living design, fourth draft (2026-09-23). The first draft was a plan; the second recorded what was built and measured; the third moved to a physics with nothing bigger than a square; this one records the deformable-polygon engine (now the only physics), processive fraying, private metabolism, four letters and the attempts at compartments, recognition and gene accumulation. Section 2 lists the commitments that define the project. Everything else is a current best guess and should be replaced the moment a better idea or an experiment says so. The decision log (section 14) is where the reasoning behind each change survives; section 15 holds the ideas not yet tried, ranked at its top. `AGENTS.md` at the repository root is the short guide for a new working session (`CLAUDE.md` imports it).
+**Status:** living design, fourth draft (2026-09-23). The first draft was a plan; the second recorded what was built and measured; the third moved to a physics with nothing bigger than a square; this one records the deformable-polygon engine (now the only physics), processive fraying, private metabolism, four letters and the attempts at compartments, recognition and gene accumulation. Section 2 lists the commitments that define the project. Everything else is a current best guess and should be replaced the moment a better idea or an experiment says so. The decision log (section 14) is where the reasoning behind each change survives; section 15 preserves historical ideas and proposals, some since tested. ROADMAP.md is the current ranked queue. `AGENTS.md` at the repository root is the short guide for a new working session (`CLAUDE.md` imports it).
 
 ---
 
@@ -22,6 +22,13 @@ Prior art worth reading before building: Lionel Penrose's mechanical self-replic
 ---
 
 ## 2. Core commitments (do not change without a very good reason)
+
+**2026-09-26 audit note:** these are the intended constraints, not certification of every
+current path. Section 14 explicitly records the later whole-body-jostling speed relaxation;
+current defaults therefore do not satisfy the strict per-block physics statement below.
+See [docs/RESEARCH_AUDIT.md](docs/RESEARCH_AUDIT.md) and ROADMAP P0. Particle counts are
+conserved; recharge/jostling drive the system, so “energy conserved” below is not a claim
+of thermodynamic energy conservation. Preserve historical results under their actual assumptions.
 
 - **One universal physics.** Every primitive obeys the same rule table. No primitive carries its own program, genome, or neural net. An "organism" is any configuration of primitives that happens to make more of itself.
 - **Strict locality: the fundamental rule** (the user, 2026-09-24: "the whole reason I think the project is interesting. There are many such projects with pre-programmed behaviour, but I haven't seen emergent evolution without"). A primitive reads only: its own type, its own state, which of its sides are bonded, and the state of the side it is bonded to on each partner. It changes its own state by simple rules on those, and nothing else. No global signals, no counters, no knowledge of chain length, no "am I finished" flag that isn't computed locally, and no special behaviour for whole strands, complete copies or any other thing bigger than one block, even when every step of it could be written locally: a rule is judged by what one block does, and whatever a strand does must come out of that. A signal passed from block to block moves one block per update pass (`ss0`, `tip0`), never further, whatever order the blocks are visited in. Every other commitment serves this one; when a mechanism would be easier to write for a strand than for a block, it is not written.
@@ -494,9 +501,24 @@ Keep entries short: date, what changed, why, what evidence.
   an efficiency gain or general registration solution. Keep it outside core and test the original
   obstruction before any fresh screen; no rate search or additional signaling states.
 
+- 2026-09-26. **Meta audit and priority reset.** Preserved runtime and experimental sources,
+  defaults and raw data. Centralized current work in ROADMAP and archived the accumulating
+  AGENTS handoffs. The audit distinguishes local mechanics, autonomous renewal, inherited
+  benefit and evolved novelty. Whole-body jostling's documented speed exception conflicts
+  with the strict headline physics commitment; validate the existing individual-block path
+  before stronger locality claims. Existing motif selection remains evidence under designed
+  pressures, and handoff remains an operation without a demonstrated waiting-control benefit.
+  Next priorities are locality/interface validation, causal ecological dependence, and a
+  theoretical resource-economy test before another speculative mechanism. No new experiment.
+
 ---
 
-## 15. Ideas not yet tried
+## 15. Historical ideas and proposals
+
+**Superseded as a work queue on 2026-09-26.** Use [ROADMAP.md](ROADMAP.md) for current
+priorities. The dated entries below preserve decisions in context; many “next” tests are now
+completed. None authorizes a whole-assembly predicate, a same-maker exclusion or a global
+controller. Read the relevant later RESULTS section before reopening an idea.
 
 **2026-09-26, useful handoff versus waiting (60).** A contact-only handshake now acquires a
 secondary contact before releasing the old one, retaining support for two physics phases and

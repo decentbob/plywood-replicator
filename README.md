@@ -21,6 +21,13 @@ whole-key recognition between strands, and open-ended complexity. Proofreading s
 (`CLAUDE.md` imports it); `experiments/LEDGER.md` lists every experiment with its verdict.
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
+**Intent audit (2026-09-26).** These are results under designed local chemistry, not yet
+sustained evolution of increasingly capable machines. Default physics includes whole-body
+jostling, a documented speed trade-off that relaxes the stricter per-block commitment.
+The [audit](docs/RESEARCH_AUDIT.md) distinguishes that exception, side-interface gaps,
+and demonstrated operations from evolved complexity. [ROADMAP.md](ROADMAP.md) ranks
+next work; historical handoffs and literature shortlists are not the current queue.
+
 ## Run it
 
 Open `index.html` in a browser (it loads `src/sim.js`; no build step, no
@@ -64,88 +71,19 @@ node build.js                 # single-file dist/polygon-chemistry.html
 node experiments/summarize.js # tables from experiments/out/*.csv
 ```
 
-The portable product-exchange assay is `node experiments/product_exchange.js --out experiments/out/MY_BATCH
---steps 30000 --seeds 3,4,5,6 --arms baseline,durable --workers 3` (one command). It records parameters, source hashes,
-occupancy, births and CPU time; summarize with `node experiments/product_exchange_summary.js experiments/out/MY_BATCH.csv`.
-See RESULTS 44 for the measured release/lifetime tradeoff, and [LITERATURE.md](LITERATURE.md#spudcell-a-coupled-reproductive-cycle-and-its-mechanical-lessons-2026-09-26)
-for SpudCell's implications and an untested mechanical-crowding hypothesis.
-
-RESULTS 45 tests product shape changes with the same assay. `product_shape_summary.js` reports measured wedge angles and
-assembly events; `product_parent_summary.js` reads the adjacent birth log to distinguish recipient reproduction, new
-non-producers, and sequence changes. Shape switches live in `experiments/product_shapes.js`; they are experimental batch
-options, not standard viewer or `run.js` knobs. Summaries reject incomplete batches unless `--partial` is explicitly used.
-
-The four-arm flexibility control (46) has a pre-run plan in `experiments/flexibility_plan.md`.
-`node experiments/flexibility_summary.js experiments/out/PF_binding` validates the complete batch,
-reconciles raw births with every CSV window, checks the parameter contrast and reports paired binding
-effects. It preserves zero births and undefined occupancy when no recipient sites remain.
-
-For a smaller physical assay, `node experiments/mechanical_brace.js --out experiments/out/MY_BRACE --seeds 1,2`
-compares a prepared attached product support with an unbound one. `pLinkBare=1` makes the chemical linking probability
-equal, and no energy particles prevent copies from becoming active templates. Summarize with
-`node experiments/mechanical_brace_summary.js experiments/out/MY_BRACE`. RESULTS 47 finds strong straightening but
-no confirmed increase in 20k copy yield; earlier first copying under individual kicks is a separate, conditional lead.
-
-The follow-up `geometric_bottleneck.js` measures why permanent wedges stall: a straight support does not align the
-incoming wedges' lateral edges (48). `complementary_fit.js` tests existing complementary copying with opposing A/B
-wedges. It restores copying in eight fresh seeds and both directions under default physics (49), with explicit solver
-and jostling controls. `complementary_population.js` checks descendants with fuel and turnover; the small populations
-reproduce but still shorten. These are research assays, not new chemistry or presets. Each has a `_summary.js` analyzer;
-the prospective protocol is `experiments/complementary_fit_plan.md`.
-
-Fuel acquisition is isolated in `curved_fuel.js` (one inactive row, no free letters), and
-`curved_collective.js` (several rows, with actual cross-row fuel-contact diagnostics).
-`curved_fuel_reproduction.js` couples acquisition to ordinary complementary copying from inactive founders.
-Each has a `_summary.js` analyzer; `curved_fuel_plan.md` records the prospective choices and RESULTS 50 the outcomes.
-These assays use the ordinary engine. Row identity is recorded only by observers, never read by a rule.
-
-`offspring_recovery.js` replays those worlds with per-offspring identities and a complete material inventory.
-`offspring_forks.js` branches identical saved states to test energy gating and turnover separately (RESULTS 51).
-Their `_summary.js` analyzers distinguish exact copying by original intact offspring from reproduction of shorter
-fragments. Run `node experiments/offspring_analysis_test.js` to validate the committed datasets and provenance.
-
-`end_protection.js` tests capped copying and completed/unfinished row lifetimes. `end_protection_natural.js`
-replays capped copying to inventory protected unfinished ends (RESULTS 52). The `_summary.js` and
-`_analysis_test.js` files retain censored lifetimes and distinguish repeated snapshots from independent runs.
-
-`anchor_access.js` exactly replays a selected stalled world and distinguishes occupied sites, docking
-placement rejection and failed lateral geometry (54). `assembly_front.js` tests research-only contact-gated
-recruitment inspired by signal-passing construction (55). Both gate directions assemble exact offspring but
-reduce output in the two-seed screen. They are not standard knobs or a universal constructor. Protocol:
-`experiments/assembly_front_plan.md`; analysis: `assembly_front_summary.js` and
-`assembly_front_analysis_test.js`. The normal engine and viewer are unchanged.
-
-`placement_release.js` identifies physical placement blockers and forks a selected stalled state with
-either attachment released (56). Both single releases restore exact copying; the retained partial row
-completes, while the released row remains inactive. This prepared intervention is not a new reaction.
-Its `_summary.js` and `_test.js` reconstruct bond histories, physical membership and all 150 blocks.
-
-`local_redocking.js` tests an experimental endpoint state that preserves docking ability after release (57).
-Intact released parts can reattach and complete. The fresh `local_redocking_screen.js` screen improves
-curved output but also permits shortened products after shifted reattachment, so the rule stays outside
-the standard engine. Independent completion records avoid counting temporary detachments as offspring;
-plans, summaries and tests live beside these scripts.
-
-`registration_fit.js` forks two selected released-part states with stiffness 0.5/0.8 and 4/8 solver passes
-(58). All eight first reattachments still shift; reduced deformation does not restore exact completion.
-The assay records actual corner geometry, accepted/rejected docking and intact target membership.
-
-`second_contact.js` and `second_contact_order.js` test an admissible supporting contact against placement
-alone (59). Prepared contact rescues the square piece in both placement orders; longer holding is not
-consistently better. `second_contact_exposure.js` shows that merely exposing the face after release does
-not acquire the same benefit. These remain prepared fixtures, with no new core rule.
-
-`contact_handoff.js` tests a research-only local request/capture/release handshake (60).
-It autonomously acquires support and completes the selected square part exactly, but waiting
-alone also succeeds sooner; the curved part acquires no support within 5k. No population screen
-or standard knob is justified. See `contact_handoff_plan.md` and the companion summary/test.
-Its REQUEST/OFFER/LATCH states require the research subclass, not the standard viewer.
+For experiment entry points, raw-data handling and platform notes, see
+[experiments/README.md](experiments/README.md). The [ledger](experiments/LEDGER.md)
+indexes evidence; [ROADMAP.md](ROADMAP.md) is the current research queue.
+Research-only SEEK/REQUEST/OFFER/LATCH states require their assay subclass and must
+not be loaded in the standard viewer.
 
 ## The whole chemistry
 
-**The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and
-the state shown by the side it is bonded to, and changes its own state by simple rules on those. Nothing bigger than a
-block has any behaviour of its own: no rule treats a whole strand, a finished copy or a genome specially, and a signal
+**The fundamental rule: locality.** The intended reaction contract is that a block reads its own type and state, which of its sides are bonded, and
+the state shown by the side it is bonded to, and changes its own state by simple rules on those.
+The implementation also reads bonded partner types as colors; the exact side interface and live derived-state
+dependencies need the audit described above. Reaction rules must not assign behavior to a
+whole strand, finished copy or genome, and a signal
 passed from block to block (the relay, the tether's anchor signal, `endLoss`'s tip) moves one block per update pass.
 Whatever a strand or a population does comes out of that. This is what the project is about: evolution that emerges
 without pre-programmed behaviour.
@@ -270,8 +208,9 @@ block gets its own Brownian kick; a set of bonded blocks is kicked as the rigid 
 the move and turn its blocks' own kicks would give it (`bodyJostle`, default since 2026-09-25; it
 made the engine about twice as fast). Two blocks that are not bonded may not overlap. Pins, contacts
 and the shape restoring force are then solved together by nudging the blocks involved, 4 passes per
-step (`iters`); a pin moves each block rigidly and, by its softness, deforms the pinned corner. No
-rule reads a body: bonds, contacts and shapes are per block, and every rule is read by one block.
+step (`iters`); a pin moves each block rigidly and, by its softness, deforms the pinned corner.
+Chemical rules do not read a whole body, but the jostling routine does. This is the documented
+physics exception discussed in the intent audit; contact and pin corrections remain pairwise.
 
 Deformation and changing the rest shape are separate controls: `stiff1=0.8`, for example,
 lets a product polygon deform while pulling it back toward its current preferred shape;
@@ -302,7 +241,8 @@ Bonds never break from jostling (with `maxStrain` off). A bond forms only if the
 sides face each other within a tolerance (30° for docking, 10° for side-to-side links), and the
 moving block would land in an empty spot. A monomer that undocks is pushed off the face it
 left. All soft probabilities are per step of contact. The functions that find connected
-components are observation only and never feed back into the dynamics.
+components for statistics and birth records are observation only. Separately, default
+`_jostleBodies` traverses bonded components for physical motion; see the locality audit.
 
 An earlier rigid-body engine (squares as rigid bodies, with hinges and slack for bending) was
 removed on 2026-09-23; `experiments/RESULTS.md` sections 1 to 14 were measured on it, and it can
@@ -317,6 +257,8 @@ index.html        viewer: canvas, knobs, readout, birth log
 run.js            headless runner, CSV + JSON summary + birth log
 test.js           invariant tests
 build.js          inline everything into dist/polygon-chemistry.html
-DESIGN.md         the design document, with a decision log
+ROADMAP.md        current ranked research queue and decision gates
+DESIGN.md         commitments, historical design and decision log
+docs/            intent audit and archived worker guide
 experiments/      scripts and measured results
 ```
