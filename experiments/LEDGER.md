@@ -69,6 +69,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
     of evolved complexity. Measure recipient occupancy and include a no-binding control before calling non-producers parasites.
     Flexibility's recipient benefit in four reused seeds (45d) failed a fresh-seed binding control (46): mean recipient-parent
     births 5.25 with flexible binding vs 5.5 without it; only one of four seeds improves. Binding benefits producers much more.
+    In the uncapped PY setting, a fresh two-seed production/binding screen does support recipient dependence (61):
+    18/24 recipient-parent births versus 0/1 without binding and 2/1 without production, with continuing producer output.
+    Detached exact recipient output has the same direction. This is a lead awaiting fresh confirmation, not a rescue of flexibility.
 
 ## Viability atlas (will a new world live?)
 
@@ -99,6 +102,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   not evidence for a general release rule or reuse of parts.
 - **Seeds must be viable under the rules**: a translation seed needs adjacent coded letters or it makes no product
   (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
+- **Uncapped shared products** (61): the section-36 PY inventory of 1,000 blocks remains viable under current body jostling:
+  8/9 producer-parent births at 10k in viability seeds 101/102. Full product releases of 0/1 underestimate standing linked
+  production (34/38 units); use inventory and mature occupancy alongside release counts.
 - **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold (on the new engine half or more of 11-unit capped copies then carry a
   substitution, 38a); on the old engine iters 8 added about 2% copy errors (33, DESIGN 15).
 - **Stacks** (40): held stacks (`stackHold`) lock the letters up at zip (`pSBind`) 0.03 or more with a nucleation barrier, at 0.1 or
@@ -259,6 +265,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 59b | Natural secondary-face exposure | Does exposing an available face acquire the useful contact? | prepared REPEL→SEEK only | negative | neighbor docks at shifted site3 and releases within step5329; zero constraint phases; target still PAAAABBBQ | second_contact_exposure.js (`SC_exposure`) | local contact handoff, retaining support through physics | same selected state; no bond/pose/RNG edit; no fresh screen or extra exposed members |
 | 60a | Autonomous contact handoff | Can a neighbor acquire support before local release? | research REQUEST/OFFER/LATCH, previous-pass side marks | works | square capture 5318, release 5319, correct return 5320; support 2 physics phases, exact target at 7728 | contact_handoff.js (`CH_selected`) | test usefulness against waiting in the original two-prefix obstruction | one selected state; no prepared bond, ID read, kick or new material |
 | 60b | Handoff benefit and availability | Does the handshake outperform waiting and work when curved? | matched seek/wait/pulse/hold, +5k | negative | square wait exact at 6619 and pulse at 6048, both sooner than hold; curved request arms acquire no support and remain unfinished | contact_handoff.js (`CH_selected`) | no fresh screen, extra states or rate tuning | no efficiency benefit demonstrated; curved outcomes censored, not permanent arrest; default engine unchanged |
+| 61 | Uncapped recipient dependence | Does recipient reproduction require shared-product interactions? | `pBindP` 0/0.2, `transStart` absent P/off, `pLinkBare` 0.01, `bindAny` | lead | recipient-parent births 18/24 on, 0/1 no binding, 2/1 no production; detached exact output 15/18 versus 0/1 and 2/1 | recipient_dependence.js (`RD_dependence_screen`) | unchanged four-arm confirmation, fresh seeds 105–108 | two screen seeds plus two viability; fixed 1,000 blocks; producer-parent output 48/58; no frequency dependence or novelty |
 
 ## Knob index
 
@@ -272,7 +279,7 @@ the rows that used it). Rerun it after adding rows.
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works) |
 | `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works) |
-| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative) |
+| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead) |
 | `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
 | `catalysis` | 34c (works), 42a (works) |
@@ -327,7 +334,7 @@ the rows that used it). Rerun it after adding rows.
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
-| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative) |
+| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
@@ -336,7 +343,7 @@ the rows that used it). Rerun it after adding rows.
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
-| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative) |
+| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead) |
 | `pMelt` | 18 (negative) |
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |
@@ -383,7 +390,7 @@ the rows that used it). Rerun it after adding rows.
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
 | `transCode` | 34a (works), 43a (negative) |
 | `translate` | 34a (works), 42a (works) |
-| `transStart` | 43a (negative) |
+| `transStart` | 43a (negative), 61 (lead) |
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 
@@ -397,7 +404,8 @@ later tests may have completed or rejected it. Do not treat every historical lea
   Check promising mechanical effects with individual kicks and adequate solver resolution;
   retain strictly local reaction logic. No prerequisite physics rewrite.
 - **P1 — causal ecology:** shared catalysts and space have strong effects (36, 42), but
-  useful recipient dependence must be measured before another arms-race search (43–46).
+  the new recipient-dependence lead (61) still needs four fresh confirmation seeds before
+  frequency competition. The uncapped result does not reopen the failed flexibility setting (46).
 - **P2 — resource-efficient assembly:** ask whether extra organization can economize a
   scarce part under conserved material and local renewal; ordinary stacks did not (40).
 - **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);

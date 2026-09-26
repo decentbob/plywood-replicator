@@ -4229,3 +4229,148 @@ workers. Section 57 and 59 analysis regressions and all five 1500-step default
 fingerprints pass. Core chemistry, physics, viewer and presets are unchanged;
 the full 39-check suite was last run in section 55. Do not load these research
 states in the standard viewer.
+
+## 61. Shared products support recipient reproduction in an uncapped ecology
+
+2026-09-26, ROADMAP P1; [prospective plan](recipient_dependence_plan.md).
+**Two-seed lead:** removing either mature-product binding or production reduces
+absolute recipient-parent output, while producers continue reproducing. This
+returns to section 36's viable PY ecology; it does not rescue the failed capped
+flexibility setting (46), demonstrate frequency dependence, or establish novelty.
+
+### Controls and locality
+
+The unchanged core at baseline `768e564` runs 1,000 conserved blocks in 40x40:
+A/B/C/D 150 each, product 1 300, E 100; three BAAAAB and three BCDDCB founders.
+Code A1, shared binding, bare linking 0.01, fraying 0.00003, unzip 1,
+lone-monomer undocking 0.1, mutation 0.002. Ordinary body jostling, four solver
+passes, square shapes and no corner snapping apply to every arm.
+
+`on` retains production and binding. `noBind` sets pBindP=0. `noSource`
+requires the existing translation-start mark from P, absent from the inventory;
+`neither` combines both. All other parameters and each seed's initial positions,
+corners, states, bonds, types and RNG match. No parts are removed or converted.
+The production ablation retains `translate`, `catalysis`, A1 and `bindAny`:
+turning translate off would also disable mature binding. It changes coded backs
+from TRN to BACK, suppressing construction contacts while retaining mature
+binding compatibility. These are population-level interventions, not isolated
+per-recipient catalytic effects. The noSource/neither final physical hashes and
+RNG match within both seeds, as expected with no products available to bind.
+Other arms consume RNG conditionally after intervention, so matching their
+initial state does not imply later event-by-event matching.
+
+No reaction, state, type or core knob was added. Existing rules read own state,
+incident bonds, bonded-side marks and neighboring immutable type labels; the
+start signal uses trs0. Existing cat derivation reads live incident PBIND state,
+so this is not a blanket synchronous-side proof. Sequence classes, member IDs,
+inventory and follow-up are observation only. Aggregate motion is the accepted
+approximation; no geometric advantage or individual-kick robustness is claimed.
+
+### Predeclared screen
+
+Viability seeds 101/102 ran 10k: 8/9 producer-parent births, with 34/38 linked
+product units at the end. Both pass. Full product releases were 0/1: those
+events alone miss piecemeal production and mature binding. Fresh screen seeds
+103/104 then ran all four arms for 50k, with the primary interval (10k,50k].
+Classify a length>=2 parent snapshot as producer-potential when it contains AA,
+recipient otherwise; one-unit/missing parents remain unknown. The structural
+classification stays fixed even in production-disabled worlds.
+
+| arm | recipient-parent births, 103 / 104 | producer-parent births | producer-parent births at recorded gen>=2 | recipient mature bound / armed site-samples |
+|---|---:|---:|---:|---|
+| production + binding | 18 / 24 | 48 / 58 | 42 / 56 | 1,052 / 12,747; 3,411 / 15,493 |
+| no binding | 0 / 1 | 1 / 0 | 0 / 0 | 0 / 1,296; 0 / 8,511 |
+| no production | 2 / 1 | 4 / 0 | 1 / 0 | 0 / 1,233; 0 / 2,376 |
+| neither | 2 / 1 | 4 / 0 | 1 / 0 | 0 / 1,233; 0 / 2,376 |
+
+Recipient binding contrasts are **+18/+23** births; production contrasts
+**+16/+23**. Each passes the predeclared +5 threshold against both ablations,
+with at least five producer-parent births, at least one recorded later-generation
+producer birth and nonzero recipient occupancy. Recipient occupancy is 8.25/22.02%;
+producer occupancy is 54.19/56.31%. Repeated 100-step samples are exposure
+measurements, not independent encounters or replicates. Both controls support
+an ecological dependence lead, not a claim that recipients are absolutely sterile
+without products: bare reproduction remains possible.
+
+### Physical output, variation and sequestration
+
+Stock births are release observations, not a completion oracle. There are 69/83
+non-product events in the primary on windows, including 3/1 unknown-parent events.
+At logging, 66/79 have every member's F face unbound; 0/2 are already fully TPL.
+This distinction was recorded prospectively. The following stricter filter is
+a **post-hoc robustness check**, retaining the original primary outcome:
+
+| arm | detached recipient-parent events, 103 / 104 | detached exact recipient output | detached exact producer output |
+|---|---:|---:|---:|
+| production + binding | 16 / 22 | 15 / 18 | 37 / 47 |
+| no binding | 0 / 1 | 0 / 1 | 1 / 0 |
+| no production | 2 / 1 | 2 / 1 | 3 / 0 |
+| neither | 2 / 1 | 2 / 1 | 3 / 0 |
+
+The direction survives requiring detached output exactly matching reversed parent
+snapshots. Across all on events with known parents, 54/67 are exact, 7/9 have
+same-length changes, and 5/6 have length changes. These classes do not identify
+the physical error mechanism or prove the changed offspring are viable.
+
+For on events old enough for a 5k follow-up, 42/55 and 46/65 retain exactly their
+original member order and endpoints at the sampled follow-up; every such intact
+row is then fully TPL. Another 14/18 events are age-censored at the horizon.
+This is sampled integrity and activation, not continuous survival or a complete
+pedigree. Recorded gen>=2 output supports continued reproduction but is stock
+bookkeeping, not independent verification of all ancestry after material recycling.
+
+Final inventories (each category counts units; free means unlinked DOCK with
+unbound F; unfinished linked means any member still DOCK):
+
+| arm | free letters, 103 / 104 | docked single letters | unfinished linked letters | released linked letters | free products | unfinished linked products | released linked products |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| production + binding | 387 / 351 | 4 / 4 | 21 / 47 | 188 / 198 | 155 / 137 | 5 / 4 | 140 / 158 |
+| no binding | 592 / 583 | 0 / 0 | 0 / 5 | 8 / 12 | 260 / 300 | 2 / 0 | 38 / 0 |
+| no production | 587 / 600 | 0 / 0 | 0 / 0 | 13 / 0 | 300 / 300 | 0 / 0 | 0 / 0 |
+| neither | 587 / 600 | 0 / 0 | 0 / 0 | 13 / 0 | 300 / 300 | 0 / 0 | 0 / 0 |
+
+One additional product monomer is docked in on seed 104; all other omitted
+product-single/other bins are zero. All worlds retain exactly 600 letters,
+300 product blocks and 100 energy particles. Released linked inventory can
+include mature products bound to letters; it does not mean free-floating material.
+More reproduction also sequesters more material, so indefinite persistence is
+unproven. No replenishment was used.
+
+### Reproduction, validation and decision
+
+```sh
+node experiments/recipient_dependence.js --out experiments/scratch/RD_dependence_viability --seeds 101,102 --arms on --steps 10000 --workers 2
+node experiments/recipient_dependence.js --out experiments/scratch/RD_dependence_screen --seeds 103,104 --arms on,noBind,noSource,neither --steps 50000 --workers 4
+node experiments/recipient_dependence_summary.js experiments/out/RD_dependence_viability 0
+node experiments/recipient_dependence_summary.js experiments/out/RD_dependence_screen
+node experiments/recipient_dependence_test.js
+node experiments/recipient_dependence_analysis_test.js
+node test.js --match="^(translate:|bindAny:|transStart:)"
+node tools/fingerprint.js 1500
+```
+
+Both prefixes are archived in out with `.runs.jsonl` and `.manifest.json`:
+raw births, member follow-ups, all 100-step inventories/occupancy counts, final
+restart states, exact launch commands, parameters and source/input hashes.
+Path-specific Git attributes preserve the new hashed runner/plan's LF bytes;
+the unchanged engine hash records this checkout's existing CRLF bytes.
+The analyzer rejects missing/duplicate runs or samples, changed parameters,
+inconsistent birth/member counts, invalid inventories and incomplete manifests;
+it reconciles final samples against reconstructed final states. Observer neutrality
+compares complete saved arrays/counters and RNG; restart and mature-binding
+controls pass. Start-mark propagation and withdrawal are checked per derive pass.
+
+Ten assay runs, **420,000 steps and 795.203 process CPU seconds**: viability
+29.734, screen 765.469, at most four workers and no overlapping simulation-test
+queue. No deviations to rates, seeds, horizon or primary thresholds. Core,
+viewer and historical assay sources remain unchanged. The full 39-check suite
+is not required for this observer-only assay; focused checks and fingerprints
+are used instead. Both new test scripts and all three selected core checks
+pass; the five 1500-step fingerprints match the audit baseline exactly.
+
+**Decision:** P1 advances to a causal reproductive-effect lead under existing
+rules. Confirm the unchanged four-arm comparison at 50k in four fresh seeds
+(105–108) before frequency competition. Require recipient benefit across fresh
+worlds and continuing producer reproduction; a failed confirmation parks this
+setting without rate tuning or new states. This does not establish a heritable
+advantage, frequency dependence, sustained ecological closure or evolved complexity.

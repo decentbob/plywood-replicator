@@ -1,0 +1,48 @@
+{
+  "options": {
+    "out": "experiments/scratch/RD_dependence_viability",
+    "seeds": "101,102",
+    "arms": "on",
+    "steps": 10000,
+    "workers": 2
+  },
+  "jobs": [
+    {
+      "seed": 101,
+      "arm": "on",
+      "steps": 10000
+    },
+    {
+      "seed": 102,
+      "arm": "on",
+      "steps": 10000
+    }
+  ],
+  "node": "v24.6.0",
+  "platform": "win32",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\recipient_dependence.js",
+    "--out",
+    "experiments/scratch/RD_dependence_viability",
+    "--seeds",
+    "101,102",
+    "--arms",
+    "on",
+    "--steps",
+    "10000",
+    "--workers",
+    "2"
+  ],
+  "complete": true,
+  "completed": 2,
+  "sources": {
+    "src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "experiments/recipient_dependence.js": "8ec264ea0d41869b970525a877d1fa30e59ee6d71c3991c3df1b367fb23a2ee1",
+    "experiments/recipient_dependence_plan.md": "07d225e4e8d5b6288a2cec0f10812f237883a7bb118fd711e6a88d0d47692e76"
+  },
+  "started": "2026-09-26T18:50:32.859Z",
+  "cpuSeconds": 29.734,
+  "wallSeconds": 15.576,
+  "finished": "2026-09-26T18:50:48.438Z"
+}

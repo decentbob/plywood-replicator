@@ -5,10 +5,12 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** meta audit complete; no new simulation direction started. Following the
-user's clarification, retain body jostling for exploration and apply P0 checks to the relevant
-research. P0 is not a prerequisite physics rewrite. Choose a bounded test from P1 onward;
-do not automatically resume section 60. Ranking reflects evidence, goal fit, cost and added
+**Current status:** P1's first causal screen passes in two fresh uncapped worlds (61):
+recipient-parent births fall from 18/24 to 0/1 without binding and 2/1 without production,
+while producer reproduction continues. This is a lead awaiting four fresh confirmation
+seeds, not frequency dependence or evolved complexity. Retain body jostling for exploration
+and apply P0 checks to relevant research; no prerequisite physics rewrite. Do not
+automatically resume section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
 probability of achieving open-ended evolution. Confidence in that ultimate outcome remains low
 for every route.
@@ -18,7 +20,7 @@ for every route.
 | Order | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P1 | Contact-mediated ecological feedback using existing products | High / medium for measurable dependence, low for cumulative novelty | Small causal assay, then fresh worlds; conditional | Strongest measured endogenous pressure: parasitism and spatial effects (36, 42). |
+| P1 | Contact-mediated ecological feedback using existing products | High / medium for measurable dependence, low for cumulative novelty | Two-seed causal lead (61); fresh confirmation next | Recipient dependence survives production/binding ablations in the uncapped setting; no new rules. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / medium for a decisive theoretical result, low for a working evolving world | Paper/rule analysis first; ready for deep dive | Could make additional organization pay without a new reward motif. |
 | P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Small controls; choose one bottleneck | Closest to a machine of parts; fit already works, sustained advantage does not. |
 | P4 | Heredity test for existing random chemistries | Medium / low, but potentially high information gain | Small bounded assay; no broad search yet | Directly tests emergence from unselected simple rules and an old unclosed gap. |
@@ -91,6 +93,20 @@ cycling keys without added capability is not cumulative complexity.
 to rescue the assay. No same-maker exclusion, whole-key matcher, artificial fitness score or
 automatic replenishment. Review [the literature update](LITERATURE.md#research-directions-rechecked-2026-09-26)
 for why spatial models motivate this hypothesis without supplying compliant rules.
+
+**2026-09-26 screen outcome (61):** the existing section-36 PY setting passes its
+predeclared two-seed gate. Both production and binding ablations lower absolute
+recipient-parent output; producers still reproduce. Detached exact recipient
+output is 15/18 versus 0/1 without binding and 2/1 without production. The
+production control retains all blocks and binding compatibility using an absent
+translation-start type; it also changes back exposure and construction contacts.
+This does not reopen the capped flexibility hypothesis (46).
+
+**Next discriminating test:** unchanged four arms, 50k, fresh seeds 105–108;
+predeclare confirmation criteria before running. Keep the (10k,50k] primary
+window, separate detached/exact output and sampled integrity, and report producer
+renewal and unfinished inventory. The positive two-seed screen earns confirmation,
+not rare/common frequency competition yet. A failed confirmation parks this setting.
 
 ## P2 — extra organization that economizes scarce material
 
@@ -219,3 +235,6 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
 - **2026-09-26, user clarification:** body jostling retained for exploration. P0 revised from
   a locality-first physics project to rule-locality review and targeted mechanical validation.
   No new simulation or claim of equivalence between jostling schemes.
+- **2026-09-26, section 61:** P1 causal reproductive-effect **lead**, ten runs including
+  viability, 420k steps / 795.203 CPU seconds. No new chemistry. Both seeds pass;
+  fresh four-seed confirmation is next. No frequency dependence or complexity claim.

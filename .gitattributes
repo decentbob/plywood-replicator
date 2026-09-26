@@ -1,0 +1,3 @@
+# Preserve the bytes recorded by the section-61 launch manifests on Windows.
+experiments/recipient_dependence.js text eol=lf
+experiments/recipient_dependence_plan.md text eol=lf

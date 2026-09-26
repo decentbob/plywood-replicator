@@ -1,0 +1,47 @@
+| arm | seed | recipient | producer | recipientGen2 | producerGen2 | products | bound | sites | exact | sameLengthError | lengthError | unknown |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| neither | 103 | 2 | 4 | 1 | 1 | 0 | 0 | 1233 | 6 | 0 | 0 | 0 |
+| noBind | 103 | 0 | 1 | 0 | 0 | 26 | 0 | 1296 | 1 | 0 | 0 | 0 |
+| noSource | 103 | 2 | 4 | 1 | 1 | 0 | 0 | 1233 | 6 | 0 | 0 | 0 |
+| on | 103 | 18 | 48 | 15 | 42 | 31 | 1052 | 12747 | 54 | 7 | 5 | 3 |
+| neither | 104 | 1 | 0 | 0 | 0 | 0 | 0 | 2376 | 1 | 0 | 0 | 0 |
+| noBind | 104 | 1 | 0 | 0 | 0 | 5 | 0 | 8511 | 1 | 0 | 0 | 1 |
+| noSource | 104 | 1 | 0 | 0 | 0 | 0 | 0 | 2376 | 1 | 0 | 0 | 0 |
+| on | 104 | 24 | 58 | 14 | 56 | 48 | 3411 | 15493 | 67 | 9 | 6 | 1 |
+
+Face-free output at logging (post-hoc robustness check, original primary retained):
+| arm | seed | recipient detached | recipient detached exact | producer detached | producer detached exact |
+|---|---|---|---|---|---|
+| neither | 103 | 2 | 2 | 3 | 3 |
+| noBind | 103 | 0 | 0 | 1 | 1 |
+| noSource | 103 | 2 | 2 | 3 | 3 |
+| on | 103 | 16 | 15 | 47 | 37 |
+| neither | 104 | 1 | 1 | 0 | 0 |
+| noBind | 104 | 1 | 1 | 0 | 0 |
+| noSource | 104 | 1 | 1 | 0 | 0 |
+| on | 104 | 22 | 18 | 56 | 47 |
+
+Persistence at the first 100-step sample at least 5k after release:
+| arm | seed | detached | active at release | assessed | intact | active | censored | final unfinished letters |
+|---|---|---|---|---|---|---|---|---|
+| neither | 103 | 5 | 0 | 5 | 3 | 3 | 1 | 0 |
+| noBind | 103 | 1 | 0 | 0 | 0 | 0 | 1 | 0 |
+| noSource | 103 | 5 | 0 | 5 | 3 | 3 | 1 | 0 |
+| on | 103 | 66 | 0 | 55 | 42 | 42 | 14 | 21 |
+| neither | 104 | 1 | 0 | 1 | 1 | 1 | 0 | 0 |
+| noBind | 104 | 2 | 0 | 1 | 1 | 1 | 1 | 5 |
+| noSource | 104 | 1 | 0 | 1 | 1 | 1 | 0 | 0 |
+| on | 104 | 79 | 2 | 65 | 46 | 46 | 18 | 47 |
+
+Occupancy and final inventory (free / docked single / unfinished linked / released linked / other):
+{"arm":"neither","seed":103,"recipientBound":0,"recipientSites":1233,"producerBound":0,"producerSites":6187,"material":{"letters":{"free":587,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":13,"other":0},"products":{"free":300,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"energy":100}}
+{"arm":"noBind","seed":103,"recipientBound":0,"recipientSites":1296,"producerBound":0,"producerSites":2336,"material":{"letters":{"free":592,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":8,"other":0},"products":{"free":260,"dockedSingle":0,"unfinishedLinked":2,"releasedLinked":38,"other":0},"energy":100}}
+{"arm":"noSource","seed":103,"recipientBound":0,"recipientSites":1233,"producerBound":0,"producerSites":6187,"material":{"letters":{"free":587,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":13,"other":0},"products":{"free":300,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"energy":100}}
+{"arm":"on","seed":103,"recipientBound":1052,"recipientSites":12747,"producerBound":24095,"producerSites":44461,"material":{"letters":{"free":387,"dockedSingle":4,"unfinishedLinked":21,"releasedLinked":188,"other":0},"products":{"free":155,"dockedSingle":0,"unfinishedLinked":5,"releasedLinked":140,"other":0},"energy":100}}
+{"arm":"neither","seed":104,"recipientBound":0,"recipientSites":2376,"producerBound":0,"producerSites":2010,"material":{"letters":{"free":600,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"products":{"free":300,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"energy":100}}
+{"arm":"noBind","seed":104,"recipientBound":0,"recipientSites":8511,"producerBound":0,"producerSites":468,"material":{"letters":{"free":583,"dockedSingle":0,"unfinishedLinked":5,"releasedLinked":12,"other":0},"products":{"free":300,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"energy":100}}
+{"arm":"noSource","seed":104,"recipientBound":0,"recipientSites":2376,"producerBound":0,"producerSites":2010,"material":{"letters":{"free":600,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"products":{"free":300,"dockedSingle":0,"unfinishedLinked":0,"releasedLinked":0,"other":0},"energy":100}}
+{"arm":"on","seed":104,"recipientBound":3411,"recipientSites":15493,"producerBound":30339,"producerSites":53881,"material":{"letters":{"free":351,"dockedSingle":4,"unfinishedLinked":47,"releasedLinked":198,"other":0},"products":{"free":137,"dockedSingle":1,"unfinishedLinked":4,"releasedLinked":158,"other":0},"energy":100}}
+{"seed":103,"bindingEffect":18,"productionEffect":16,"pass":true}
+{"seed":104,"bindingEffect":23,"productionEffect":23,"pass":true}
+Validated 8 runs; 765.469 CPU seconds.
