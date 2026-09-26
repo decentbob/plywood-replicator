@@ -417,6 +417,12 @@ Keep entries short: date, what changed, why, what evidence.
 
 ## 15. Ideas not yet tried
 
+**2026-09-26, measured geometric obstruction (48).** Permanent `bendB` 20/30 prevents copying in a two-seed
+single-founder assay. A prepared straight brace reduces founder curvature to about two degrees but does not restore
+births: incoming monomers' lateral edges still miss the linking angle tolerance. This separates substrate straightening
+from a compatible two-row joint. Next test existing `compCopy` with opposing A/B wedges; no new reward or support
+ecology is warranted. The 10-degree support gain failed the screen's two-seed criterion.
+
 **2026-09-26, SpudCell-inspired surface crowding (unbuilt).** Before another compartment ecology, test whether bulky blocks
 attaching to one side of an arc or ribbon cause curvature and strain through collisions alone. Controls: no attachment,
 smaller attached blocks, identical physics. Keep this separate from prescribing rest-shape changes below. If it works,

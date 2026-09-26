@@ -2881,3 +2881,54 @@ or duplicate runs and unexpected paired parameters, and reports paired folding-s
 equal chemical linking probability, support retention, single-founder behaviour and exact saved-state continuation are
 tested by `mechanical_brace_test.js`. The core engine is unchanged from `ec8a1c7`; all five default 1,500-step fingerprints
 match. The unchanged general suite was not rerun. No new rule, material type or deformation clamp was added.
+
+## 48. Permanent wedges reveal a linking obstruction that a straight brace cannot remove
+
+**Question.** Section 47's folding letters flatten their preferred shape when a monomer docks. Does permanent
+curvature expose a physical failure, and can a prepared support rescue it? `geometric_bottleneck_plan.md` specifies
+the screen prospectively. The unchanged engine uses the same pool, initial geometry and support comparison as 47,
+but with `bendB=0,10,20,30` instead of `foldB`. Seeds 11-12, 20k steps, stiffness 0.5, default body jostling.
+
+```sh
+node experiments/geometric_bottleneck.js --out experiments/out/GB_screen --seeds 11,12 --steps 20000 --workers 4
+node experiments/geometric_bottleneck_summary.js experiments/out/GB_screen
+node experiments/geometric_bottleneck_test.js
+```
+
+Each entry is free / attached support. Means give equal weight to the two seeds.
+
+| bendB | exact copies, seed 11 | exact copies, seed 12 | actual mean founder bend | founder face occupancy |
+|---|---:|---:|---:|---:|
+| 0 | 10 / 9 | 10 / 10 | 3.81 / 1.38 degrees | 15.54 / 14.95% |
+| 10 | 5 / 8 | 7 / 7 | 6.83 / 1.58 degrees | 22.47 / 18.22% |
+| 20 | 0 / 0 | 0 / 0 | 12.48 / 2.01 degrees | 9.96 / 22.58% |
+| 30 | 0 / 0 | 0 / 0 | 18.42 / 1.97 degrees | 8.20 / 7.45% |
+
+The support straightens even the non-copying founders, but does not restore copying. The 10-degree yield increase
+occurs in only one seed, failing the prespecified two-seed selection criterion; it is not promoted or pooled with
+the earlier folding result. All 66 released letter births are exact.
+
+**Where the process stalls.** Every 20 steps the observer examines adjacent occupied founder faces. For the two
+docked letters it records whether the matching L/R sides are already joined, or are free and chemically compatible;
+in the latter case it measures edge midpoint gap, angular mismatch, and the unchanged `_geomOK` decision. Counters
+are retained separately for all five founder bonds and in 5k windows. They are dwell-time samples, **not independent
+attempts, reaction rates, or estimates of copy completion probability**. Fast successful links may occur between samples.
+
+At the founder's BB adjacency with bend 20, all 14 eligible free-support samples and all 476 attached-support samples
+fail the angular gate (10 degrees). Mean angular mismatch by seed is 43.34/40.93 degrees free and 23.47/23.24 degrees
+attached. Corresponding edge gaps are 0.350/0.360 and 0.189/0.187, against a 0.15 distance tolerance. Thus support
+reduces a real geometric mismatch, yet the incoming wedges themselves still cannot form the required joint reliably.
+The bottleneck is the fit of **both rows**, not just the founder's curvature.
+
+**What this does not say.** Two seeds do not rule out rare copying or other supports. Initial support is imposed,
+no offspring rearms, and neither construction costs nor population selection are measured. There is no new chemistry,
+force, template-specific behaviour, or programmed success reward. This negative result motivates a distinct hypothesis:
+existing complementary copying might allow oppositely wedged partners to fit (49).
+
+**Validation and provenance.** The test checks physically changed corners, matched initial geometry, equal link
+probabilities, observation neutrality including the random stream, retained support, conserved material, inactive
+offspring and exact saved-state continuation. The analyzer rejects incomplete/duplicate jobs and reconciles raw births,
+CSV, parameters and window counters. A first harness attempt accidentally imported a worker entry point, producing
+duplicate results; it was discarded in full. The corrected observer is self-contained, worker entry points are guarded,
+and the batch was rerun. Only the valid 16 runs (320k steps, 94.250 CPU seconds) are retained as results. Raw births,
+all counters, parameters and source hashes accompany the CSV. All five default 1,500-step fingerprints are unchanged.
