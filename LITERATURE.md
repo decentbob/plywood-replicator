@@ -361,6 +361,9 @@ The useful design lesson here is to distinguish assembling a product, releasing 
 against its supporting surface. Unlike the present face-dependent folding, binding again would not automatically flatten it.
 Monomers could stay flat for docking. Test small bends and measure assembly yield, escape and recipient catalysis separately;
 do not infer fitness from escape alone. Section 44's delayed latches test the temporal alternative, not this shape mechanism.
+**Local follow-up:** section 45 implements bond-triggered shapes in a research subclass, checks that the physical shape
+really changes, and separates product flexibility from curvature with matched controls. This is a simulator result, not
+additional evidence about the DNA system.
 
 **Ralph P. Lano, "Mechanical Self-replication" (2024 preprint).**
 [arXiv:2407.14556v2](https://arxiv.org/abs/2407.14556v2).

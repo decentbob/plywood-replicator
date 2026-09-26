@@ -545,6 +545,7 @@ test('transStart: only strands carrying the start motif (relayed along the stran
 
 test('product activation, refractory melting, exposure accounting and saved-state continuation', require('./experiments/product_exchange_test.js'));
 test('product durability preserves genome turnover and processive unzip', require('./experiments/product_durability_test.js'));
+test('product shape switching is local, physically active with softness, and exactly resumable', require('./experiments/product_shapes_test.js'));
 
 if (!selected) throw new Error('No tests matched');
 console.log(args.includes('--list') ? selected + ' tests listed' : passed + ' tests passed');

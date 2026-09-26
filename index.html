@@ -190,7 +190,7 @@ const $ = (id) => document.getElementById(id);
 // the walls let monomers through but not strands or energy.
 const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1, backCopy: false, stack: false, pSBind: 0, pSNuc: -1, bindAny: false, pMisMelt: -1, transStart: '', transCode: 'A1,B2,C3,D4', pLinkBare: 0.01, mobS: 1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
-Object.assign(ZERO, { productFray: 1 });
+Object.assign(ZERO, { productFray: 1, stiff1: 1, stiff2: 1 });
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
   evo:   Object.assign({}, ZERO, EVO),
@@ -261,6 +261,8 @@ const KNOBS = [
   ['stiffA', 'A stiffness', '1 rigid, 0.5 safe; below about 0.3 copies docked on neighbouring templates can link'],
   ['stiffB', 'B stiffness'], ['stiffC', 'C stiffness'], ['stiffD', 'D stiffness'],
   ['stiffM', 'M stiffness'],
+  ['stiff1', 'Product 1 stiffness', '1 rigid; lower values let these product blocks deform and change how assembled products fit other structures'],
+  ['stiff2', 'Product 2 stiffness', '1 rigid; lower values let these product blocks deform'],
   ['shapeA', 'A shape (reset)', 'square (a wedge when bent) or oct', 'text'],
   ['shapeB', 'B shape (reset)', '', 'text'], ['shapeC', 'C shape (reset)', '', 'text'], ['shapeD', 'D shape (reset)', '', 'text'],
   ['shapeM', 'M shape (reset)', '', 'text'],

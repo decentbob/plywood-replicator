@@ -198,6 +198,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 44c | Both product kinds folded | Can curvature plus a delay prevent rebinding? | `fold1` 45, `fold2` 45, experimental pPReady 0.01 | negative | zero linked product-unit samples in both seeds | product_exchange.js (`delayFold`) | flat monomers, shape changed on joining | 2 seeds, 20k; free monomers fold too; causal geometry ablation still needed |
 | 44d | No-turnover exchange probe | Can retraction permit exchange if products survive? | `pFray` 0, `pSoft` 0, experimental productReset | lead | recipient occupancy 0.92/0.51% vs 0/0; original-block retention 17/48% vs nearly 100% | product_exchange.js (`PE_lifetime_probe`) | restore genome turnover, change product lifetime only | 2 seeds, 20k; not an evolutionary world |
 | 44e | Product durability with matched controls | Does useful delivery survive genome turnover? | `productFray` 0.03; `pBindP` 0 control; experimental reset ablation | lead | late recipient occupancy 0.07/0/1.13/4.63% vs 0/0/0/0; capped births 20.25 vs 20.75; reset reduces births to 8.25 | product_exchange.js (`PE_durable`, `PE_durable_control`) | more seeds, encounter efficiency, bond-triggered shape | 4 fresh seeds, 30k; transport lead only, no selection or complexity claim |
+| 45a | Physical shape activation | Does selecting a folded rest shape actually bend bonded blocks? | `stiff1`, `stiff2`, `snapCorners`; experimental productShape | works | lateral-fold arms are exactly identical to straight at stiffness 1; stiffness 0.8 activates measured bending | product_shapes_test.js; product_exchange.js (`PS_screen`) | verify physical phenotype before population runs | stopped diagnostic: 9 complete 10k windows, not an efficacy screen |
+| 45b | Assembly-triggered shape screen | Can flat monomers assemble products that stay bent? | `fold1`, `fold2`, `stiff1` 0.8, `stiff2` 0.8; experimental productShape | lead | 5° persistent bend births 25/20 vs 20/13; 30° costs assembly and occupancy; free-only bend delivers in both seeds | product_exchange.js (`PS_flexible`) | fresh seeds, same-physics and no-binding controls | 2 seeds × 7 arms × 20k; actual bound/free angles measured |
+| 45c | Fresh-seed shape comparison | Do mild or free-only bends improve productive exchange? | `fold1`, `fold2`, `pBindP`; experimental productShape | inconclusive | mild-bend births rise in 3/4; free-bend occupancy 18.02% vs 10.32%, but recipient-parent births equal no-binding mean 6.5 | product_exchange.js (`PS_confirm`); product_parent_summary.js | retain research variants; occupancy is not fitness | 4 fresh seeds × 4 arms × 50k; 20k–50k analysis; no selection claim |
+| 45d | Product material compliance | Is flexibility alone enough to improve transfer? | `stiff1` 0.8, `stiff2` 0.8 vs 1; `productFray` 0.03 | lead | recipient occupancy 7.63% vs 1.45%; recipient-parent births 6.5 vs 4, both increase in 4/4 seeds; total births similar | product_exchange_summary.js (`PE_durable`, `PS_confirm`, 10k–30k) | flexibility × binding ablation, independent seeds, inherited mixed stiffness | reuses four matched historical controls; no new chemistry needed |
+| 45e | Shape without substitutions | Does mild bending still copy faithfully at pSoft 0? | `pSoft` 0, `fold1` 5, `fold2` 5, `stiff1` 0.8, `stiff2` 0.8 | works | 52/52 classifiable capped births exact; one parent snapshot only Q, fidelity unknown | product_exchange.js (`PS_exact`); product_parent_summary.js | separate snapshot differences from known copying errors | 2 seeds × 2 arms × 20k; post-hoc diagnostic, not long-run proof |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -223,8 +228,8 @@ the rows that used it). Rerun it after adding rows.
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
-| `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative) |
-| `fold2` | 44c (negative) |
+| `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
+| `fold2` | 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
 | `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative) |
 | `foldB` | 39c (works), 41a (negative) |
 | `foldD` | 28b (works) |
@@ -266,7 +271,7 @@ the rows that used it). Rerun it after adding rows.
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
-| `pBindP` | 34c (works), 44e (lead) |
+| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
@@ -284,12 +289,12 @@ the rows that used it). Rerun it after adding rows.
 | `pPMeltRun` | 44a (negative) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
-| `productFray` | 44e (lead) |
+| `productFray` | 44e (lead), 45d (lead) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
 | `pSBind` | 40a (works), 40b (negative), 40c (negative) |
 | `pSMeltEnd` | 40a (works) |
 | `pSNuc` | 40a (works), 40b (negative) |
-| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works) |
 | `pUnzip` | 13b (works), 15b (works) |
@@ -306,10 +311,12 @@ the rows that used it). Rerun it after adding rows.
 | `sizeU` | 39a (works), 39e (inconclusive), 41a (negative) |
 | `sizeX` | 25b (works) |
 | `slack` | 10b (superseded), 12 (works) |
-| `snapCorners` | 23 (works), 23b (works) |
+| `snapCorners` | 23 (works), 23b (works), 45a (works) |
 | `spend` | 14d (negative) |
 | `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (negative), 40f (negative), 40g (negative) |
 | `stackHold` | 40b (negative), 40c (negative) |
+| `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works) |
+| `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works) |
 | `stiffA` | 15 (works), 15b (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `sun` | 3 (negative) |
@@ -321,6 +328,10 @@ the rows that used it). Rerun it after adding rows.
 <!-- /knob-index -->
 
 ## Open gaps (worth trying, with the reason)
+
+- **Material compliance before more chemical rules** (45d): stiffness 0.8 improves recipient binding and reproduction in
+  all four matched seeds versus rigid durable products. Add the direct straight-flexible binding ablation and new seeds;
+  then test whether mixed product stiffness makes inherited composition/order matter. Shape switching alone remains mixed (45c).
 
 - **Product survival and productive encounters** (44): durability permits a little delivery without removing genome turnover;
   forced release loses host function. Extend the matched durability assay before long arms-race runs. A lateral-bond-triggered

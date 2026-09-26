@@ -70,6 +70,11 @@ occupancy, births and CPU time; summarize with `node experiments/product_exchang
 See RESULTS 44 for the measured release/lifetime tradeoff, and [LITERATURE.md](LITERATURE.md#spudcell-a-coupled-reproductive-cycle-and-its-mechanical-lessons-2026-09-26)
 for SpudCell's implications and an untested mechanical-crowding hypothesis.
 
+RESULTS 45 tests product shape changes with the same assay. `product_shape_summary.js` reports measured wedge angles and
+assembly events; `product_parent_summary.js` reads the adjacent birth log to distinguish recipient reproduction, new
+non-producers, and sequence changes. Shape switches live in `experiments/product_shapes.js`; they are experimental batch
+options, not standard viewer or `run.js` knobs. Summaries reject incomplete batches unless `--partial` is explicitly used.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and
@@ -158,7 +163,7 @@ sequence.
 |---|---|
 | `nX`, `rayHit`, `sizeX`, `mobX` | rays: small fast blocks that never bond; one touching a block breaks a lateral bond; only membrane stops them (19, 25) |
 | `cut`, `cutMotif`, `pCut`, `cutRelay` | a bound template carrying `cutMotif` cuts the strand it is bound to (26) |
-| `sizeA`..`sizeD`, `mobA`..`mobD`, `foldA`..`foldD` | per-letter size, mobility, and folding: a letter bends by `fold` degrees while its face is free, so a free strand curls and straightens where it is copied |
+| `sizeA`..`sizeD`, `mobA`..`mobD`, `foldA`..`foldD` | per-letter size, mobility, and folding: the rest shape bends by `fold` degrees while the face is free. Bonded blocks adopt changing rest shapes only with stiffness below 1 or `snapCorners`; rigid bonded blocks otherwise keep their existing shape (45a). |
 | `nP`, `nQ`, `capFray` | caps: letters with one lateral side (`P` has no left, `Q` no right) that pair only with each other and fray at `capFray` of the normal rate; a capped strand grows only by a copying mistake inside it |
 | `translate`, `transCode`, `pMisTrans`, `n1`..`n4` | translation: the back of an armed letter templates a *product* block by a code (`A`→`1` …); docked products link where the template continues and a finished product chain is released, parallel to its template. Products never template; their physics is per kind (`size1`, `fold1`, `stiff1` …) (34) |
 | `catalysis`, `pBindP`, `pPMelt`, `pPMeltRun`, `pLinkBare` | a finished product binds back onto strands it matches; a template face whose back holds one is catalysed, and monomers docked there link at once, elsewhere at `pLinkBare`: the genome needs the part it builds (34) |

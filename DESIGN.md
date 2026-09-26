@@ -395,6 +395,11 @@ Keep entries short: date, what changed, why, what evidence.
   subclass, not the standard chemistry. Added single-block transition hooks, bounded portable batches, source/parameter
   manifests, raw birth records for later batches, and equal-weight seed summaries. Observer provenance never enters rules.
   Default trajectory hashes remain identical. SpudCell prompted a separate, unimplemented crowding hypothesis in section 15.
+- 2026-09-26 (later). Section 45 tests bond-triggered shape in a research subclass and leaves standard chemistry unchanged.
+  The clearest measured lead is material compliance: product stiffness 0.8 improves recipient occupancy and reproduction
+  in four matched seeds versus rigid products, without a new chemical rule. Exposed existing `stiff1`/`stiff2` in the viewer,
+  default 1. Shape switches remain experimental: mild bends improve births in 3/4 seeds, but delivery does not reliably
+  translate to recipient reproduction. Added physical-shape tests, parent/offspring analysis and incomplete-batch guards.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
@@ -409,11 +414,14 @@ compartments; closure and co-inheritance must be measured independently. Resourc
 offspring production, with no component-level division or fitness rule. See `LITERATURE.md`, SpudCell, for primary sources,
 limitations and predictions about linkage and renewal.
 
-**2026-09-26 addition: bond-triggered rest shape.** Section 44 finds that both product kinds folding 45 degrees prevents linked
+**2026-09-26 addition: bond-triggered rest shape (tested experimentally in 45).** Section 44 finds that both product kinds folding 45 degrees prevents linked
 product formation; `_restSlot` folds free monomers too. A candidate mechanical alternative: a block uses its curved rest shape
 only when a lateral side is bonded, irrespective of its face. Its unlinked form can dock, joining introduces strain, and binding
-again cannot flatten it automatically. This reads only its own bonds. It has not been implemented. Test small bends first, with
-the same-shape and face-dependent-fold controls, and separate assembly yield, detachment, recipient occupancy and births.
+again cannot flatten it automatically. This reads only its own bonds. It is implemented in `experiments/product_shapes.js`,
+with a second control that bends only when laterally linked and face-free. Section 45 measures actual shape, assembly,
+recipient occupancy and births separately. Rigid bonded blocks skip shape matching; the measured screen uses product
+stiffness 0.8 and a straight control with the same physics. The standard chemistry is unchanged; the viewer now exposes
+the existing `stiff1`/`stiff2` controls, defaulting to 1. The experimental shape switches are not viewer options.
 Release alone already failed to improve ecological performance (44); curvature needs an independently measured function.
 
 **Added 2026-09-25 (later): shape directions put to the user** (the user: "shapes I think are a very promising direction";

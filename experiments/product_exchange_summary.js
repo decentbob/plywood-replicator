@@ -3,6 +3,11 @@
 // node experiments/product_exchange_summary.js experiments/out/PE_screen.csv --after=20000
 const fs = require('fs');
 const args = process.argv.slice(2), after = Number((args.find(a => a.startsWith('--after=')) || '--after=0').split('=')[1]);
+const untilArg = args.find(a=>a.startsWith('--until=')), until = untilArg ? Number(untilArg.slice(8)) : Infinity;
+if (!Number.isFinite(after) || !(until>after) || (untilArg && !Number.isFinite(until)) ||
+    !args.some(a=>!a.startsWith('--')) || args.some(a=>a.startsWith('--') && !/^--(?:after|until)=/.test(a) && a!=='--partial')) {
+  throw new Error('usage: product_exchange_summary.js FILE.csv [FILE.csv ...] [--after=0] [--until=N] [--partial]');
+}
 const groups = new Map();
 const windows = new Set();
 for (const file of args.filter(a => !a.startsWith('--'))) {
@@ -15,7 +20,7 @@ for (const file of args.filter(a => !a.startsWith('--'))) {
   const columns = header.split(',');
   for (const line of lines) {
     const values = line.split(','), r = Object.fromEntries(columns.map((c, i) => [c, c === 'arm' ? values[i] : Number(values[i])]));
-    if (r.t <= after) continue;
+    if (r.t <= after || r.t > until) continue;
     const windowKey = r.arm + ':' + r.seed + ':' + r.t;
     if (windows.has(windowKey)) throw new Error('Duplicate run/window (do not pool different modes or replay checks): ' + windowKey);
     windows.add(windowKey);

@@ -2598,3 +2598,84 @@ occupancy, full releases, assembly bonds and original-block retention. `softFree
 `softFree15`; as in section 44, this removes physical mature-product binding as well as catalysis. The 5° persistent and 15°
 free-bending arms differ in both angle and switching rule, so their direct contrast cannot isolate either factor. No claim of
 selection on shape is possible here: shape parameters are fixed for the whole run, not heritable competing alleles.
+
+Completed results, four fresh seeds, 20k–50k; equal-weight seed means:
+
+| arm | capped births | exact parent-snapshot copies | capped offspring of non-producing parents | recipient occupancy | same original block |
+|---|---:|---:|---:|---:|---:|
+| straight, flexible | 36.25 | 31.25 | 8.75 | 10.32% | 85.54% |
+| persistent 5° bend | 43.25 | 36.50 | 5.00 | 16.04% | 80.85% |
+| face-free 15° bend | 35.75 | 33.50 | 6.50 | 18.02% | 81.15% |
+| face-free 15°, no binding | 11.00 | 10.00 | 6.50 | 0.00% | — |
+
+The mild-bend birth lead survives in three of four seeds: 40/53/28/52 versus straight 23/40/39/43. Exact copies also rise
+in three seeds (29/44/27/46 versus 19/37/33/36), but neither result is uniform. The initially concerning accuracy cost is
+seed-dependent: the mean per-seed non-exact fraction is 14.90% versus straight 14.14%. Face-free bending gives 6.45%, lower
+in each seed, a **post-hoc accuracy lead**, not the prespecified primary result. No capped offspring differs in length from
+a capped parent in this late window; one mild-bend birth has an uncapped parent snapshot and cannot be classified as exact.
+
+Face-free bending raises recipient occupancy in three seeds (13.33/5.94/31.38/21.45% versus 10.69/8.37/6.55/15.70%),
+but births from non-producing parents are 11/8/6/1 versus straight 8/10/14/3. The matched no-binding values are 10/6/6/4,
+with the **same mean of 6.5**. Binding strongly benefits total reproduction, mostly by producers; there is no replicated
+recipient reproductive gain from this shape rule. High occupancy can coexist with a dwindling recipient population:
+the face-free arm has no armed capped non-producer sites at all in seed 6's final 10k window.
+
+Additional diagnostics, added while the fresh-seed batch ran: `product_parent_summary.js` separates capped offspring
+produced by non-producing templates from non-producer offspring arising from producer templates. It also compares each
+offspring with the reversed parent sequence, swapping P/Q as required by capped copying. These are comparisons to the
+**parent snapshot at release**, not proof of a particular mutation mechanism. This guards against treating extra births
+as extra faithful copies. In the screen's last 10k steps, mild-bend exact copies were 19/11 versus straight 13/7; changed
+same-length sequences were 1/3 versus 0/1. There were no capped length changes in those windows.
+
+### 45d. Existing rigid controls isolate product flexibility
+
+The section 44 `PE_durable` runs use the same seeds and parameters as `PS_confirm`'s `soft0` arm except product stiffness
+(1 versus 0.8). The new research subclass's neutral `productShape=face` parameter is an implementation difference verified
+to leave trajectories unchanged. Compare only the shared interval, 10k–30k, never the old 30k runs against the new 50k runs:
+
+```sh
+node experiments/product_exchange_summary.js experiments/out/PE_durable.csv experiments/out/PS_confirm.csv --after=10000 --until=30000
+```
+
+The relevant rows are `durable` and `soft0`. This reuses matched controls to distinguish material compliance from changing
+rest shape. It is a descriptive comparison using earlier seeds, not an independent replication of the durability finding.
+
+| product stiffness | recipient occupancy, seeds 3 / 4 / 5 / 6 | mean recipient occupancy | mean capped births | offspring of non-producing parents, seeds 3 / 4 / 5 / 6 |
+|---|---:|---:|---:|---:|
+| 1 (rigid) | 0.07 / 0.00 / 1.13 / 4.63% | 1.45% | 20.25 | 5 / 3 / 7 / 1 |
+| 0.8 (flexible) | 10.09 / 7.51 / 4.03 / 8.88% | 7.63% | 21.75 | 6 / 6 / 10 / 4 |
+
+Both recipient occupancy and reproduction by non-producing templates increase in **all four matched seeds**. Original-block
+retention falls from 98.07% to 85.14%; host occupancy stays similar (59.89% versus 60.89%). Mean per-seed snapshot disagreement
+is also similar, 7.35% versus 6.97%. This is the clearest lead of this session: modest material compliance improves transfer
+without changing preferred shape or introducing a new chemical rule. Four reused seeds do not establish generality, selection
+on an inherited trait, or an arms race. A direct flexibility × binding ablation remains unrun; the face-free no-binding arm
+is not that ablation because it changes shape too.
+
+### 45e. Substitution-disabled check and decision
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PS_exact --steps 20000 --seeds 3,4 --arms soft0Exact,softSide5Exact --workers 4
+node experiments/product_parent_summary.js experiments/out/PS_exact.births.jsonl
+```
+
+These four post-hoc diagnostic runs change only `pSoft=0` relative to their straight/mild-bend arms. Of 53 capped births,
+52 have a capped parent snapshot and all 52 match it exactly (27 straight, 25 mild-bend). The remaining mild-bend birth's
+recorded parent is the single cap `Q`, so its copying fidelity is unknown. This checks for an obvious geometry-induced
+copying failure under these settings; it does not establish perfect long-run fidelity or identify the cause of every earlier
+sequence difference. Parent-at-release observation needs this explicit unknown category.
+
+**Decision.** Keep shape switches in the research module, not the standard chemistry. The measured material-compliance
+lead uses existing `stiff1`/`stiff2`; expose those controls in the viewer with neutral defaults of 1. Do not add a new preset
+or an evolutionary success claim. Next, isolate flexibility with a matched binding ablation and additional seeds, then ask
+whether mixed-stiffness products make inherited composition or arrangement affect function. The new shape rules have
+not earned an expansion into a larger ecology yet. SpudCell remains background inspiration, not a specification.
+
+**Validation and cost.** The engine source is unchanged from `4218cea`, and its five 1,500-step fingerprints remain identical.
+All three affected product checks pass, including actual curling, neutral-subclass trajectory equality, conservation,
+locality and exact saved-state continuation; 39 checks are now registered. The unchanged general suite was not rerun.
+The viewer build and script syntax pass; stiffness controls reset to 1. Three completed batches contain 34 runs and
+1,160,000 steps, using about 3,600 process CPU seconds. The stopped rigid diagnostic retains another 90k measured steps,
+excluding unfinished work. CSVs, birth logs and full parameter/source-hash manifests are retained. Every raw birth reconciles
+with its CSV window and every planned job/window is present in the completed batches. Incomplete-batch, duplicate-window
+and invalid-range guards were exercised successfully.

@@ -66,7 +66,7 @@ run.js              headless runner: CSV every --every steps, JSON summary on st
                     --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted;
                     --save FILE (the whole world state, rewritten every interval: open it in the viewer, or continue it) and
                     --load FILE (continue a saved world; knobs given override its own: a branch under a changed rule)
-test.js             invariant tests (38); --list and --match=REGEX select checks, with CPU time printed per check
+test.js             invariant tests (39); --list and --match=REGEX select checks, with CPU time printed per check
 LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
 experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
                     what worked, what failed and what is open; add a row for every new experiment
@@ -82,6 +82,9 @@ tools/killnode.sh     kill node processes by a pattern without killing your own 
 experiments/product_exchange.js  portable worker batch (44), at most four workers; CSV, raw births, source hashes and full
                     parameters in *.manifest.json; fails instead of overwriting an existing batch. Summary via product_exchange_summary.js
 experiments/product_latches.js   parked release/activation variants (44); experimental subclass, not standard viewer/CLI knobs
+experiments/product_shapes.js    experimental rest-shape switches (45), with accepted-bond diagnostics; standard engine unchanged
+experiments/product_shape_summary.js  actual bound/free wedge angles, assembly and binding events, occupancy and births
+experiments/product_parent_summary.js  parent/child production classes from raw births; distinguishes mutation from recipient reproduction
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -213,7 +216,36 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26): product lifetime is a transport lead; release alone hurts
+## Handoff (2026-09-26, later): product flexibility is the clearest mechanical lead
+
+The user: continue where evidence is promising; SpudCell is interesting, only integrate it where useful. Section 45 tests
+assembly-triggered rest shapes instead. 34 completed runs (1.16M steps), plus a stopped 90k-window solver diagnostic.
+
+- **Most useful result:** existing `stiff1=stiff2=0.8`, with durable straight products (`productFray=0.03`), increases
+  non-producer occupancy in all four matched seeds: mean 7.63% versus 1.45% at stiffness 1 over 10k–30k. Capped offspring
+  of non-producing templates increase from 5/3/7/1 to 6/6/10/4. Total births and snapshot fidelity stay similar. It uses
+  existing physics; engine source is unchanged. Viewer stiffness controls were exposed, neutral default 1.
+- **Shapes remain experimental:** `product_shapes.js` selects folded rest shape on a lateral bond (`lateral`), or requires
+  that plus a free face (`lateralFree`). Mild persistent 5° bends increase births in 3/4 fresh seeds; 15° free-only bends
+  increase recipient occupancy in 3/4 but do not consistently benefit recipient reproduction. Their mean recipient-parent
+  births equal the matched no-binding arm (6.5). No shape switch was promoted to the normal chemistry or viewer.
+- **Physical activation trap:** at stiffness 1 without `snapCorners`, bonded blocks skip shape matching. The first screen
+  was dynamically identical to straight controls. Tests now check actual curling and the assay measures corner-derived
+  bound/free bend angles. Section 34e used `snapCorners=1` and is not invalidated by this finding.
+- **Observation:** parent-at-release can be a fragment. Of 53 capped births in the substitution-disabled probe, 52 have
+  capped parents and are exact; one reports parent `Q` and is unknown. `product_parent_summary.js` separates template
+  reproduction, producer-to-non-producer births, sequence changes and unclassifiable parents. Never turn extra occupancy,
+  binding events, or mutant offspring into a claim of recipient fitness.
+- **Next:** straight flexible versus rigid products with a direct binding ablation and new seeds. Then mixed-stiffness
+  products could give inherited composition/order a function without a new motif reward. The stiffness finding reused
+  four historical controls and is a lead, not generality or an arms race. Do not compare old 30k runs with new 50k totals:
+  the summaries now accept `--until=30000`; incomplete batches require explicit `--partial`.
+
+All three affected product checks and the viewer build passed. There are 39 registered checks; the unchanged general
+suite was not rerun. Default fingerprints are identical. Research classes must resume their own saved states;
+the standard viewer does not implement their experimental shape switches.
+
+## Previous handoff (2026-09-26): product lifetime is a transport lead; release alone hurts
 
 Section 44 contains 34 runs (1.08M steps) separating product release, lifetime, recipient occupancy and births. The original
 suggestion to remember a maker's identity was deliberately avoided: chemistry still never reads `parentOf` or components.
