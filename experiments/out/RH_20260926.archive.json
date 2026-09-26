@@ -1,0 +1,41 @@
+{
+  "created": "2026-09-26T20:07:52.399Z",
+  "files": {
+    "experiments/out/RH_20260926.calibrate.manifest.json": "c6452c60fb88bd471037565eeaee5ea1511cd25af91f8731e640532d9b1a388b",
+    "experiments/out/RH_20260926.calibrate_copy_v0_201_seeded.json": "d408b041e479e7396619d0ed4fff31e03e90635c44e7ea4b446f4f0a4b2b107b",
+    "experiments/out/RH_20260926.calibrate_copy_v1_201_seeded.json": "0fec48633c4b46595ffdb9a2b6c96fb20d1ff0e96965200629c296127a7f4b02",
+    "experiments/out/RH_20260926.protocol.json": "2210932ac7e59e6cfe7645493c0ef8b5134c61206717d1b7d9cbc78faf250bf2",
+    "experiments/out/RH_20260926.recovery.json": "90fd9e061a7ef89e0affbc15575e4944d0bee94d84c8284827b7231b836f71f6",
+    "experiments/out/RH_20260926.screen.manifest.json": "79f2c048df0ce5def15fb374d5712e7f82a3ab7fa1caec46aaddc2ffcfa1fd08",
+    "experiments/out/RH_20260926.screen_copy_v0_202_disrupted.json": "9918f1ec10a5d4dc2344f2618a3df29746a257ba37f772d85116f9dc80a724ec",
+    "experiments/out/RH_20260926.screen_copy_v0_202_plain.json": "3ef11b7119b6ee50b8847c46c80ed285a10c986f22f42b8e2046bda0eadaaf8b",
+    "experiments/out/RH_20260926.screen_copy_v0_202_seeded.json": "806a9a03955d11ae15a4f88e995748e8d6afac156a01305f9f6c5ef2ef273615",
+    "experiments/out/RH_20260926.screen_copy_v0_203_disrupted.json": "c3903f3423f31031e968914943318bc880f2c666d9a8be715aa4f98bae9b226d",
+    "experiments/out/RH_20260926.screen_copy_v0_203_plain.json": "17da4e21ab785473400cba3d5b4ce393f37a702d9d2d9b7354fde3dbf1471f20",
+    "experiments/out/RH_20260926.screen_copy_v0_203_seeded.json": "5c74fc128ff716e16510a777287c46bdaf9490204cf790de0695541f116dcaf5",
+    "experiments/out/RH_20260926.screen_copy_v1_202_disrupted.json": "fd286609297cfde7dc462468a602ea9f1372b0248efdd7774b261cdf73a1613f",
+    "experiments/out/RH_20260926.screen_copy_v1_202_plain.json": "d850b0886833553d626a02ec55ae69d7fd127cd8360ec903d422b3d482977cc1",
+    "experiments/out/RH_20260926.screen_copy_v1_202_seeded.json": "c2866cec2fb18bcc045502ffeb872ce2ffb5c2ffd0f1f923f8b2d543cdabdc49",
+    "experiments/out/RH_20260926.screen_copy_v1_203_disrupted.json": "f3d3b00d13d65799cb8afc59447a3099b31c3167ed8ee8291e39f18e8b3c3750",
+    "experiments/out/RH_20260926.screen_copy_v1_203_plain.json": "4fbf1c56d648d46e4e4f99873c3e0231b1a2031b359237e0ea2812887c934152",
+    "experiments/out/RH_20260926.screen_copy_v1_203_seeded.json": "689c3f9262669bfbf79aa8c9ee03a4b7b6fb4e039de632afa061558a0f1aa873",
+    "experiments/out/RH_20260926.screen_table55_v0_202_disrupted.json": "b153f8d9498e3d66d590865dde256d541b694d772d95b9fc7fa4e4c918bcba18",
+    "experiments/out/RH_20260926.screen_table55_v0_202_plain.json": "1fca48165b869cb7e63604db5d2e836f98348faae7cdc17e3bff71ca3539c686",
+    "experiments/out/RH_20260926.screen_table55_v0_202_seeded.json": "cfa59f4f96fbe6c70138cc4ebaa1163547129727a63ed78b041e497a31721ba9",
+    "experiments/out/RH_20260926.screen_table55_v0_203_disrupted.json": "19b6123d8c83713ef017c0bca108c9df425d329aa0ed59975827fc56d458cdd3",
+    "experiments/out/RH_20260926.screen_table55_v0_203_plain.json": "ece40c68d516ea986bb065eca7c80cd2689cb05ea6a206426c3e631f4bd40cac",
+    "experiments/out/RH_20260926.screen_table55_v0_203_seeded.json": "e098f0fb0304956970b8adb523354cd166d2548348af64add956200925e906f9",
+    "experiments/out/RH_20260926.screen_table55_v1_202_disrupted.json": "f662a68bac98ac3eb9e31346f872a0102b24e6904110fa29a0c88d3f55f19ff8",
+    "experiments/out/RH_20260926.screen_table55_v1_202_plain.json": "dbb9c3546f454a8bd2c83492406b8a8ffb8b7d683a85d9658b868bf9f164b79b",
+    "experiments/out/RH_20260926.screen_table55_v1_202_seeded.json": "174eb2c3221e89f71536641292782c9723ef0306fa767e5369956673100ea97e",
+    "experiments/out/RH_20260926.screen_table55_v1_203_disrupted.json": "c9225588795066bb20c417be91bc45895034ef23c9bfd47cf109692756fba634",
+    "experiments/out/RH_20260926.screen_table55_v1_203_plain.json": "a328ecb8542cfbb79b0d3be57cb35d656f9b243a6b58c077d7323503cad9d793",
+    "experiments/out/RH_20260926.screen_table55_v1_203_seeded.json": "00c766ccfd0655c9d4d84ad1fe636133be165c069c5e252e45d1fb3f55e67772",
+    "experiments/out/RH_20260926.summary.json": "30fda7d89fd476bce5041a42d501fae00713afc45ba1f0efa98de97b430eeafd",
+    "experiments/out/RH_20260926.summary.txt": "ad670e3f871aa3f4d309fa5797caebb64579b944a70b3aa00a00103956e44763"
+  },
+  "analysisSources": {
+    "experiments/random_heredity_summary.js": "877b24c69db6bdb5c4183fe951181f57a2c1c8df2b3388cc467cab8638653686",
+    "experiments/random_heredity_analysis_test.js": "c370c0c02256d68185ad2654b363ec1f5719a583c8390e41de81616c351be4e3"
+  }
+}

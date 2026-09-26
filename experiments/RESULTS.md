@@ -4607,3 +4607,174 @@ discrimination next**, before the twelve-type geometry/kinetics investment.
 P3 still needs inherited reproductive benefit beyond fit or capture. This
 portfolio decision preserves the P2 theoretical lead and its explicit gaps;
 it does not conclude that resource-based selection is impossible.
+
+## 64. Exact-structure heredity screen for random chemistry table 55
+
+2026-09-26, ROADMAP P4, baseline `0f2dbed`; [prospective plan](random_heredity_plan.md).
+This closes one of section 32's missing discrimination tests. Recurrence and
+three-round graph hashes alone cannot distinguish copying from repeated
+self-assembly. No chemistry or simulator source changes were made.
+
+### Recovery, controls and the measured outcome
+
+All six archived candidate parameter vectors (55,57,4,15,1,54) match `drawR`.
+The protocol stores their explicit generated tables and hashes. Only table 55,
+first in the existing queue, was run. The historical base engine used 16 solver
+passes and lacked body jostling; these new runs use the current accepted physics:
+`bodyJostle=true`, `iters=4`, `snapCorners=true`, 25x25, 300 conserved blocks.
+They are not exact replays of the historical trajectories.
+
+Recovering table 55 at seed 1 for 30k steps, with 5k samples, identifies two
+four-block chains of equal composition (two type-0 and two type-1 blocks):
+V0 has type order ABBA, V1 AABB up to reversal. Their particular local side
+connections also differ and are part of the exact target definitions. V0/V1
+have 13/3 total sampled occurrences, including the final sample. The pair is
+selected by the fixed ranking, not by its subsequent transplant performance.
+The archive contains actual corner offsets, orientations, states and bonds.
+
+The positive control is unchanged `copyTable(0.00003,0.01)`, `rBreak=0.000005`,
+150 each A/B. Prepared AAB and ABA trimers have identical type inventories;
+each target includes its reversed copy orientation. For random targets, side
+numbers remain exact. Neither internal-state switching nor global rotation
+creates a new structural identity. Canonical rooted traversals encode the
+entire labelled graph, rather than accepting a finite-round hash match.
+
+Four prepared founders use existing free blocks in each seeded bath. Disrupted
+controls have exactly the same members, positions, corners, orientations and
+states, with only their bonds removed before the run. Plain baths retain their
+original arrangement. All three conserve identical type counts. Initial actual
+polygon overlaps are recorded; preparation changes geometry relative to plain,
+and disrupted controls share that preparation. Subsequent conditional RNG use
+can diverge: this is initial matching, not event-by-event pairing.
+
+The two control variants pass the seed-201 10k viability check: 38/42 distinct
+founder-disjoint target member sets, of which 35/38 persist for at least 100
+steps. The screen then runs both tables, both variants, fresh bath seeds
+202/203, three arms, 50k steps each. Plain runs repeated under the two variant
+labels must have identical physical final states and RNG; the analyzer checks this.
+
+Primary output is the number of distinct founder-disjoint target member sets
+that remain a detached exact component continuously for at least 100 steps.
+Any incident bond event interrupts persistence, even if attachment and release
+occur within one step. Reappearance of the same members is deduplicated. These
+are distinct member sets, not necessarily mutually disjoint material or new
+pedigrees; the report also gives distinct participating blocks and final standing
+targets. Founder material stays excluded even if it later recycles. Opposite
+variant output is recorded in every world.
+
+A renewal contact witness requires an already persistent new target to contact
+material of a later persistent, member-disjoint target of the same variant,
+before the latter separates. This is necessary exposure evidence, not sufficient
+proof of copying or a parent-child relationship. No IDs, signatures, membership
+or ancestry enter a reaction. The fixed screen gate requires >=3 extra persistent
+outputs above each control and at least one witness in both variants and both
+bath seeds. No physical advantage or evolved novelty follows from passing it alone.
+
+### Outcome
+
+| Table / target | Bath seed | Seeded persistent new targets | Disrupted | Plain | Renewal contact witnesses in seeded | Fixed case gate |
+|---|---:|---:|---:|---:|---:|---|
+| copy / AAB | 202 | 24 | 0 | 0 | 2 | pass |
+| copy / AAB | 203 | 23 | 0 | 0 | 5 | pass |
+| copy / ABA | 202 | 50 | 0 | 0 | 11 | pass |
+| copy / ABA | 203 | 38 | 0 | 0 | 7 | pass |
+| 55 / V0 | 202 | 8 | 10 | 5 | 0 | fail |
+| 55 / V0 | 203 | 3 | 3 | 8 | 0 | fail |
+| 55 / V1 | 202 | 0 | 0 | 1 | 0 | fail |
+| 55 / V1 | 203 | 0 | 2 | 0 | 0 | fail |
+
+**Table 55 fails all four cases; the positive control passes all four.** The
+V0 effects against disruption are -2/0 and against plain +3/-5. V1 produces
+no new persistent own-variant structures in either seeded bath, while 7/6
+persistent V0 member sets appear there. V0-seeded worlds also produce one V1
+each. No table-55 arm supplies a renewal contact witness. All eight V1 founders
+reach a 100-step intact episode, so the V1 result is not simply inability of
+the prepared organization to survive the persistence criterion.
+
+This supports recurrence and a preference for some structures over the tested
+variant-specific inheritance hypothesis. It does not establish a unique
+equilibrium, prove that table 55 has no other heritable organization, or reject
+the other random tables. There are only two independent bath seeds per contrast;
+repeated contacts and member sets are not additional replicates.
+
+The copying control establishes sensitivity to designed copying under the same
+observation rules. It is not evidence of indefinite exact-population maintenance:
+at 50k its four seeded worlds have only 0/1/1/1 standing persistent new targets,
+with 5/1/2/2 free blocks and largest components of 17/15/16/13. Its disrupted
+and plain controls finish with all 300 blocks free. Most material in seeded
+controls is therefore in other structures or attached complexes, consistent
+with the old fragment/assembly problem rather than an indefinitely sustained
+target population. New qualifying targets do still appear after 30k in every
+seeded control. Off-target persistent output is 0/1 for AAB-seeded worlds and
+1/0 for ABA-seeded worlds; the assay does not erase variation.
+
+Table-55 worlds finish with 57–79 free blocks, 221–243 bonded blocks and largest
+components of 11–28. The archive gives every arm's inventory. All 1k samples
+conserve 100/100/100 blocks for table 55 or 150/150 for copyTable. Actual polygon
+SAT finds 64 initially overlapping pairs in each plain bath and 72–82 in the
+prepared screen baths; seeded/disrupted values match exactly. These overlaps
+are preparation and bath-packing effects, not new material, and are left for
+the unchanged physics to resolve. They limit comparison to these preparations.
+
+### Reproduction and validation
+
+```sh
+node experiments/random_heredity_test.js
+node experiments/random_heredity.js prepare experiments/scratch/RH_20260926
+node experiments/random_heredity.js recover experiments/scratch/RH_20260926
+node experiments/random_heredity.js calibrate experiments/scratch/RH_20260926
+node experiments/random_heredity.js screen experiments/scratch/RH_20260926
+node experiments/random_heredity_summary.js experiments/out/RH_20260926
+node experiments/random_heredity_analysis_test.js experiments/out/RH_20260926
+node tools/fingerprint.js 1500
+node test.js --match='mass is conserved|determinism'
+node tools/ledger_index.js
+```
+
+Archive: `out/RH_20260926.*` includes the prospective protocol, recovery samples
+and selected captures, launch manifests, all 26 complete world records, summary
+and file-hash index. Each world retains initial/final RChem states, every actual
+bond event, target episodes with member IDs and observed internal states,
+inventories and process CPU time. Explicit tables and effective parameters are
+saved; replay with RChem, not the default Sim class. Output stems refuse reuse.
+
+Cost: **1,250,000 simulation steps, 796.719 process CPU seconds** (30k recovery,
+20k calibration, 1.2M screen), two assay workers, below the 3,600-second budget.
+No runs are incomplete, skipped, zero-suppressed or budget-censored. Verification
+cost is separate: the two core tests use 43.91 and 10.08 CPU seconds; source
+inspection, observer tests, fingerprints and bond replay are not included in
+the assay CPU figure. At most four simulation processes ran at once when the
+two independent core/fingerprint checks accompanied the two assay workers.
+
+The analyzer reconstructs every bond and target episode from initial conditions
+and the raw bond history, confirms final bonds/types, checks all inventories,
+recomputes counts/witnesses and validates the full matrix against the frozen
+protocol. Tests reject altered events, inflated counts, missing cases, absent
+witnesses, subthreshold differences and censored runs. Exact identity tests
+cover reordered IDs, state changes and the control's reversal convention;
+member reuse and same-step attachment/release do not inflate persistence.
+
+Observer neutrality passes for both tables, including all typed arrays and RNG.
+RChem restart matches physical arrays, counters and RNG; rebuilding the pin
+cache increments `pinsVersion`, which is explicitly excluded from restart
+equality as cache bookkeeping. It is not a physical discrepancy. Both selected
+core tests pass, and all five default fingerprints match the audit baseline.
+The full 39-test physics suite was not rerun; core and historical hashed sources
+are byte-unchanged. No positive new mechanical claim requires a P0 sensitivity
+batch from these negative random-table results.
+
+### Disposition
+
+Park this table-55 pair: no rate tuning, longer run, extra seeds or new states
+to rescue it. The previously unclosed recurrence-versus-heredity question now
+has a negative two-variant screen for this pair and a working positive control.
+No unengineered reproductive closure or inherited benefit is established.
+
+One additional already-listed candidate is a reasonable bounded next test:
+recover **table 57**, first checking whether it supplies two distinct persistent
+structures of equal composition. Reuse the exact-graph and disrupted/plain
+controls, with a new prospective protocol; do not manufacture a second variant
+or resume the unfinished 69-table search. If this independent candidate cannot
+advance heredity evidence, reassess P4 against P3 before testing more tables.
+P2 still lacks physical turnover advantage and P1 remains parked; neither
+negative result justifies adding mechanisms to the core.

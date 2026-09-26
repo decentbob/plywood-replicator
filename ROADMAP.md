@@ -5,12 +5,13 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P2's bounded derivation is complete (63): a fixed twelve-type
-table reduces gross scarce-part demand, but independent fragments cost additional
-contacts and recycling makes net retention depend on the cut arrangement. The
-physical renewal/advantage gate remains incomplete; no mechanism was added.
-**P4's existing random-chemistry heredity assay is next.** P1 remains parked after
-its failed fresh confirmation (62). Retain body jostling and targeted P0 checks; no
+**Current status:** P4's table-55 heredity screen fails all four variant/seed cases
+(64), while the designed copying control passes all four. Exact structures,
+founder-disjoint material and complete bond histories replace recurrence hashes
+as the evidence. Park the tested pair. **Next: recover table 57 and check for
+two comparable variants before one more bounded heredity assay.** P2's physical
+turnover gate remains incomplete (63); P1 remains parked (62). No mechanism was
+added. Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
 probability of achieving open-ended evolution. Confidence in that ultimate outcome remains low
@@ -21,7 +22,7 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P4 | Heredity test for existing random chemistries | Medium / low, but potentially high information gain | Next: recover candidate tables and predeclare a small discrimination assay | Tests emergence with existing simple rules, before investing in twelve new contact types. |
+| P4 | Heredity test for existing random chemistries | Medium / low, but high diagnostic value | Table 55 pair fails (64); next recover 57 before a new bounded assay | Exact assay detects the copying control; random recurrence alone fails to transmit the tested variants. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / conditional theoretical lead, low for physical renewal | Derivation complete (63); implementation held at turnover gate | Gross economy survives; common-part costs and scarce-part recycling prevent a per-child advantage claim. |
 | P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Small controls; choose one bottleneck | Closest to a machine of parts; fit already works, sustained advantage does not. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
@@ -214,6 +215,25 @@ material and descendant turnover. Only then test differential persistence or a n
 **Stop:** extra founders merely catalyze one unique equilibrium shape, counts are all founder
 fragments, or no candidate exceeds controls. Table optimization by the researcher remains outer
 design search; it must never be reported as the simulated population evolving its rules.
+
+**2026-09-26 screen (64):** all six archived parameter vectors recovered exactly.
+Table 55 supplies two distinct four-block side-labelled chains with identical
+type inventories. At 50k, seeded/disrupted/plain persistent new target counts
+are V0: 8/10/5 and 3/3/8; V1: 0/0/1 and 0/2/0. No renewal contact witnesses.
+V1-seeded worlds instead produce 7/6 persistent V0 member sets. The matched
+copying control passes all four cases (24/23/50/38 own-target outputs versus
+zero in both controls), with renewal contact witnesses. This validates screen
+sensitivity, not indefinite exact-population maintenance or a full pedigree.
+
+**Disposition:** park the tested table-55 pair; no new states, rate tuning,
+longer run or extra seeds. Before one further independent P4 screen, recover
+table 57 under a new prospective protocol and require two distinct persistent
+structures of equal composition. Do not invent a variant if absent. Keep
+prepared/disrupted/plain controls, exact side graphs, source hashes and raw
+bond histories; follow any lead with fresh confirmation and stronger causal
+descendant reconstruction. If 57 does not advance heredity evidence, reassess
+P4 against P3 before testing more tables. The remaining 69-table search stays
+parked. One failed pair does not disprove random-chemistry heredity generally.
 
 ## P5 — coupled replication modes, only after the parts work
 

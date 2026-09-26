@@ -18,6 +18,8 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 52–55 | `end_protection.js`, `end_protection_natural.js`, `patch_completion.js`, `anchor_access.js`, `assembly_front.js` | Protected intermediates and measured completion barriers. |
 | 56–60 | `placement_release.js`, `local_redocking.js`, `local_redocking_screen.js`, `registration_fit.js`, `second_contact.js`, `contact_handoff.js` | Selected interventions versus autonomous reuse; stock births are insufficient. |
 | 61–62 | `recipient_dependence.js`, `recipient_dependence_summary.js`, `recipient_confirmation_summary.js` | Shared-product ecology with independent production and binding ablations; fresh confirmation with a frozen decision protocol. |
+| 63 | `resource_economy.js`, `resource_economy_derivation.md` | Offline fixed-table material and contact accounting, including fragment recycling; no simulator rule changes. |
+| 64 | `random_heredity.js`, `random_heredity_summary.js` | Exact side-labelled structures, conserved prepared/disrupted/plain baths, founder exclusion and bond-history replay; random-table heredity screen. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
 Read the plan and script's CLI rather than assuming identical options across runners.
