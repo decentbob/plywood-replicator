@@ -1,0 +1,602 @@
+{
+  "options": {
+    "out": "scratch/CF_confirm",
+    "steps": 20000,
+    "seeds": "23,24,25,26,27,28,29,30",
+    "profiles": "square,opposed",
+    "sequences": "ABBABA,BABAAB",
+    "iters": 4,
+    "bodyJostle": 1,
+    "workers": 3
+  },
+  "jobs": [
+    {
+      "seed": 23,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 23,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 24,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 25,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 26,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 27,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 28,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 29,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "square",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "square",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "ABBABA",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "square",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "square",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "opposed",
+      "complement": false,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    },
+    {
+      "seed": 30,
+      "profile": "opposed",
+      "complement": true,
+      "sequence": "BABAAB",
+      "steps": 20000,
+      "iters": 4,
+      "bodyJostle": true
+    }
+  ],
+  "complete": true,
+  "completed": 64,
+  "started": "2026-09-26T12:45:16.602Z",
+  "node": "v24.6.0",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "geometric_bottleneck.js": "55aefa1d45ef8cf0d2f28cfc2d9a037ac737e0d13953582193feec29b5634bd9",
+    "complementary_fit.js": "080e5d0ee85f39ca7a4f010750193c1f831414ab5969ca4f353c87b5fa9fdcd2"
+  },
+  "finished": "2026-09-26T12:48:26.978Z",
+  "cpuSeconds": 389.64,
+  "wallSeconds": 190.371
+}

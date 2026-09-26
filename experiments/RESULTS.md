@@ -2932,3 +2932,144 @@ CSV, parameters and window counters. A first harness attempt accidentally import
 duplicate results; it was discarded in full. The corrected observer is self-contained, worker entry points are guarded,
 and the batch was rerun. Only the valid 16 runs (320k steps, 94.250 CPU seconds) are retained as results. Raw births,
 all counters, parameters and source hashes accompany the CSV. All five default 1,500-step fingerprints are unchanged.
+
+## 49. Complementary shapes restore curved copying; the strength depends on deformation resolution
+
+**Question.** Could the obstruction in 48 be removed by matching the shapes of the two rows, without a brace or a
+new chemical reward? Existing `compCopy` pairs A with B. Existing negative `bendA` makes A widen toward its back,
+while positive `bendB` makes B narrow. Pairing such opposing wedges should reduce the lateral joint mismatch that
+stalls identical wedges. This hypothesis and the sequence of checks were recorded in `complementary_fit_plan.md`.
+
+### 49a. An isolated, balanced comparison
+
+`complementary_fit.js` uses the ordinary Sim: 60 A, 60 B, one six-letter founder in 18x18, stiffness 0.5, no fuel,
+turnover, substitutions, ligation or products. Only the founder can template. Each pairing mode has probability 1
+for its intended docking and lateral links; complementary mode changes partner identity, not bond probability.
+The founder contains three of each letter, so the two modes have equal material demand. Within a shape condition,
+starting positions, corners and internal states are identical across pairing modes. Both free and bonded shape effects
+are measured; a test verifies that the actual A back edge is wider than its face and B's is narrower.
+
+Four profiles test shape and partner identity separately. Two seeds, 21-22; full 20k outcomes, self / complementary:
+
+| profile | bendA / bendB | exact copies, seed 21 | exact copies, seed 22 |
+|---|---|---:|---:|
+| square | 0 / 0 | 11 / 10 | 10 / 9 |
+| B only | 0 / 20 | 0 / 1 | 0 / 0 |
+| positive | 20 / 20 | 0 / 0 | 0 / 0 |
+| opposed | -20 / 20 | 0 / 9 | 0 / 9 |
+
+Complementary recognition alone does not rescue all-positive wedges. Opposing shapes with self-pairing also fail.
+Together they copy repeatedly. The opposed profile passes the prospective screen rule and is selected with the
+square control; the screen is not pooled into confirmation.
+
+```sh
+node experiments/complementary_fit.js --out experiments/out/CF_screen --seeds 21,22 --workers 4
+node experiments/complementary_fit.js --out experiments/out/CF_confirm --seeds 23,24,25,26,27,28,29,30 --profiles square,opposed --sequences ABBABA,BABAAB --workers 3
+node experiments/complementary_fit_summary.js experiments/out/CF_confirm
+```
+
+### 49b. Eight fresh seeds, and both directions
+
+Complementary copying maps ABBABA to BABAAB and back again. Prepare each founder in separate matched assays so a
+one-way fit cannot masquerade as a cycle. Exact self-pairing children are ABABBA and BAABAB, respectively. All released
+births in these assays match their mode's expected sequence and founder snapshot.
+
+| founder | profile | mean exact copies, self / complementary | complementary yield wins / ties / losses |
+|---|---|---:|---:|
+| ABBABA | square | 9.625 / 9.750 | 3 / 2 / 3 |
+| ABBABA | opposed | 0 / 10.125 | 8 / 0 / 0 |
+| BABAAB | square | 10.375 / 9.375 | 3 / 1 / 4 |
+| BABAAB | opposed | 0.625 / 7.750 | 8 / 0 / 0 |
+
+Subtract the square mode contrast from the opposed mode contrast within each seed: the mean shape-specific gains
+are +10.0 and +8.125 copies for the two founders, positive in every seed in both directions. This demonstrates a
+repeatable physical compatibility effect under default physics, not a higher copy rate than square letters.
+
+At ABBABA's BB site, self-pairing opposed rows spend 88-96% of samples with both faces occupied but the two docked
+letters still unjoined. Of these eligible samples, approximately 99.8-100% fail the angular gate. The complementary
+rows spend much less time in that stalled state and repeatedly release exact copies. These are per-run dwell samples,
+not independent trials; a near-zero number of unjoined samples can mean rapid linking, not lack of opportunities.
+The founder remains visibly bent with complementary pairing (mean 7.09 degrees), so rescue does not require a
+straight row. The intended fit is between two deformed rows.
+
+### 49c. The solver and jostling controls limit the claim
+
+```sh
+node experiments/complementary_fit.js --out experiments/out/CF_solver --seeds 23,24,25,26 --profiles square,opposed --sequences ABBABA,BABAAB --iters 8 --workers 3
+node experiments/complementary_fit.js --out experiments/out/CF_local --seeds 23,24,25,26 --profiles square,opposed --sequences ABBABA,BABAAB --bodyJostle 0 --workers 3
+node experiments/complementary_fit.js --out experiments/out/CF_local16 --seeds 23,24 --profiles square,opposed --sequences ABBABA,BABAAB --iters 16 --bodyJostle 0 --workers 3
+```
+
+Means, self / complementary, 20k. These reuse confirmation seeds and are not additional independent replications.
+
+| jostling / passes | seeds | founder | opposed copies | square copies | opposed mean bend |
+|---|---:|---|---:|---:|---:|
+| body / 8 | 4 | ABBABA | 0 / 10.50 | 10.50 / 10.75 | 8.10 / 5.97 degrees |
+| body / 8 | 4 | BABAAB | 0 / 6.50 | 10.00 / 10.75 | 6.61 / 5.67 degrees |
+| individual / 4 | 4 | ABBABA | 3.75 / 7.25 | 6.25 / 5.75 | 14.51 / 14.33 degrees |
+| individual / 4 | 4 | BABAAB | 5.25 / 4.75 | 7.25 / 6.75 | 13.19 / 13.87 degrees |
+| individual / 16 | 2 | ABBABA | 4.00 / 8.50 | 8.50 / 8.50 | 8.42 / 7.88 degrees |
+| individual / 16 | 2 | BABAAB | 3.00 / 7.50 | 9.00 / 10.00 | 10.14 / 6.96 degrees |
+
+Doubling the default solver passes preserves the rescue in every seed and direction. At four passes with individual
+kicks, however, the reverse-direction advantage disappears; its square-adjusted effect is exactly zero on average.
+This result stays in the record. The source documents 8-24 passes for individual kicks, so a post-hoc 16-pass diagnostic
+was specified before its outcomes. It recovers a positive effect in both directions and both seeds, including after
+subtracting the square contrast (+4.5 and +3.5 copies). Two seeds do not establish convergence. Absolute sterility of
+self-paired wedges is **not** robust to noise/solver settings; the strength of the fit advantage depends on deformation.
+
+This is enough to motivate a short descendant-viability probe, not a new preset, a claim of selection, or another
+support ecology. No core code, chemistry, fitness reward or viewer setting has changed.
+
+### 49d. Descendants reproduce, but the population still shortens
+
+After the isolated checks, a prospective 50k viability probe used seeds 41-42, 24x24, 120 A + 120 B + 40 E,
+three ABBABA founders, ordinary fuel reload, `pFray=0.00003`, `pUnzip=1`, `pSoft=0`, default body jostling and
+four solver passes. Cross square/opposed shapes with both pairing modes. This is a small viability test, not a race
+between inherited variants or a measurement of selection for complexity. All material is conserved.
+This probe uses the default `pUndock=0` (the isolated assay used 0.1): docked monomers can remain trapped.
+Together with the changed density and founder count, this precludes attributing cross-assay differences to fuel alone.
+The four population arms themselves have matched conditions except shape and partner identity.
+
+```sh
+node experiments/complementary_population.js --out experiments/out/CF_population --seeds 41,42 --workers 3
+node experiments/complementary_population_summary.js experiments/out/CF_population
+```
+
+Each pair of numbers is seed 41 / seed 42. Later births are strictly after 20k through 50k.
+
+| shapes / pairing | births at 20k | births at 50k | later births | maximum generation | later mean birth length |
+|---|---:|---:|---:|---:|---:|
+| square / self | 28 / 26 | 39 / 33 | 11 / 7 | 5 / 5 | 4.00 / 5.43 |
+| square / complementary | 29 / 27 | 41 / 40 | 12 / 13 | 4 / 5 | 4.08 / 3.92 |
+| opposed / self | 8 / 3 | 12 / 10 | 4 / 7 | 3 / 2 | 6.00 / 5.29 |
+| opposed / complementary | 30 / 24 | 42 / 34 | 12 / 10 | 4 / 5 | 4.08 / 4.50 |
+
+Opposed complementary populations produce 29/24 births at generation 2 or later and continue reproducing in the
+late window. Both six-letter forms remain among late offspring in both seeds. Thus the result is more than repeated
+copying by prepared founders. It is also not absolute dependence: crowded, active, turning-over self-paired populations
+produce some descendants despite the strong isolated bottleneck.
+
+There is **no complexity gain** here. Complementary opposed populations shorten from their six-letter founders,
+and perform near the square controls rather than exceeding them. Free letters are exhausted at 50k in both opposed
+complementary runs; the small finite pool and low turnover constrain late output. No claim of indefinite persistence
+follows from 50k. Different sequences can arise without substitutions through fragmentation and geometric errors;
+parent-at-release snapshots can themselves be fragments. The analyzer therefore calls the 208/251 whole-probe
+parent/child matches *snapshot exact*, not an independently established fidelity rate. All raw births remain available.
+
+**Decision and next question.** Geometry can impose and relieve a large reproductive obstruction using only existing
+shapes and the existing partner table. The stronger lesson is to measure the two-row fit, not assume that straightening
+one row is the useful operation. The next mechanical question is whether a persistently curved, copying sequence can
+perform another measurable function (for example fuel capture through the existing pocket geometry). Measure that
+function and its same-physics control before an evolutionary race. This work neither makes length pay nor supplies a
+new product catalyst. Keep these as assays, with no new preset or core rule.
+
+**Validation and cost.** The 160 isolated runs cover 3.2M steps and 1,066.779 process CPU seconds; all 1,062 births
+match the intended founder/child mapping. The eight population runs add 400k steps, 438.688 CPU seconds and 251 births.
+Manifests retain every job, full parameters, source hashes, CPU time and completion state. CSV, raw births and every
+geometry window are committed. The analyzers reject incomplete, duplicate, missing or parameter-mismatched pairs;
+they reconcile window counts and raw births, keep undefined geometric denominators explicit, and report square-adjusted
+paired effects. `geometry_analysis_test.js` checks malformed datasets as well as valid ones. The two assay tests check
+actual shapes, equal chemical probabilities, conserved single-founder setups and non-invasive observation. Seven relevant
+existing tests pass (exact copying, translation/catalysis, shared catalysts, complementary copying and three product checks).
+The unchanged full 39-check suite was not rerun. All five default fingerprints remain identical; `src/sim.js` is unchanged.

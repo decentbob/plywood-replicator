@@ -411,11 +411,25 @@ Keep entries short: date, what changed, why, what evidence.
   seeds under both body and individual jostling. Under individual kicks, first copying is earlier in 7/8 folded cases,
   but 20k yield does not increase. Keep that onset result conditional, not a new catalytic function. No core change;
   preserve the one-founder assay and seek a measured geometric bottleneck before constructing another ecology.
+- 2026-09-26. **Measure both rows' fit (48-49).** A straight brace cannot rescue permanent wedges whose incoming
+  monomers still miss the link angle tolerance. Existing complementary pairing plus opposing A/B wedges restores
+  copying in eight fresh seeds and both directions; no new chemistry. The effect survives doubling default solver
+  passes but is weaker under individual kicks and sensitive to their resolution. Small fueled populations reproduce
+  through generations 4-5 yet shorten. Keep the assays and next measure a persistent shape's physical function;
+  do not promote a catalyst or claim length selection. All default fingerprints remain unchanged.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
 
 ## 15. Ideas not yet tried
+
+**2026-09-26, complementary shape fit (49).** Existing `compCopy` plus opposed `bendA=-20`, `bendB=20` restores
+copying of curved rows in eight fresh seeds, both directions. Self-pairing of those shapes stalls; complementary
+pairing of all-positive wedges also stalls. No new reward or rule. Body-jostling results survive 8 solver passes;
+individual kicks need a resolution check (reverse gain absent at 4 passes, recovered in a 2-seed 16-pass diagnostic).
+Small fueled populations reach generations 4-5 but still shorten. Next measure an actual persistent-shape function,
+such as existing pocket-mediated fuel capture, before any shape race. Neither complexity nor a product catalyst
+has been demonstrated. The prior permanent-wedge obstruction below now has a concrete fit-based partial solution.
 
 **2026-09-26, measured geometric obstruction (48).** Permanent `bendB` 20/30 prevents copying in a two-seed
 single-founder assay. A prepared straight brace reduces founder curvature to about two degrees but does not restore

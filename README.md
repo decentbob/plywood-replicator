@@ -86,6 +86,13 @@ equal, and no energy particles prevent copies from becoming active templates. Su
 `node experiments/mechanical_brace_summary.js experiments/out/MY_BRACE`. RESULTS 47 finds strong straightening but
 no confirmed increase in 20k copy yield; earlier first copying under individual kicks is a separate, conditional lead.
 
+The follow-up `geometric_bottleneck.js` measures why permanent wedges stall: a straight support does not align the
+incoming wedges' lateral edges (48). `complementary_fit.js` tests existing complementary copying with opposing A/B
+wedges. It restores copying in eight fresh seeds and both directions under default physics (49), with explicit solver
+and jostling controls. `complementary_population.js` checks descendants with fuel and turnover; the small populations
+reproduce but still shorten. These are research assays, not new chemistry or presets. Each has a `_summary.js` analyzer;
+the prospective protocol is `experiments/complementary_fit_plan.md`.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

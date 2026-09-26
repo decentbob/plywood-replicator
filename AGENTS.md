@@ -87,6 +87,9 @@ experiments/product_shape_summary.js  actual bound/free wedge angles, assembly a
 experiments/product_parent_summary.js  parent/child production classes from raw births; distinguishes mutation from recipient reproduction
 experiments/flexibility_summary.js  complete four-arm comparison (46); validates raw counts, windows and parameters, prints paired effects
 experiments/mechanical_brace.js  one-founder copying assay (47), prepared attached/free support, equal link probability; summary and test alongside
+experiments/geometric_bottleneck.js  permanent-wedge support assay (48), with per-joint geometric dwell counters
+experiments/complementary_fit.js  shape x partner-identity assay (49), reciprocal founders and solver controls
+experiments/complementary_population.js  small fueled descendant-viability probe (49); each assay has a _summary.js
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -218,7 +221,36 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): physical straightening is not sustained copying improvement
+## Handoff (2026-09-26, latest): complementary shapes relieve a real copying bottleneck
+
+Sections 48-49 follow the user's open exploration request. The engine and default trajectories are unchanged.
+
+- Permanent `bendB=20/30` wedges fail to copy in the prepared-support assay even when a brace straightens the founder
+  to about two degrees. At the BB site, incoming wedges' lateral edges still fail the 10-degree linking angle gate.
+  The 10-degree support result did not pass its two-seed criterion. Measure both rows' fit, not straightness alone.
+- **A confirmed geometric compatibility result:** existing `compCopy` with `bendA=-20`, `bendB=20`, stiffness 0.5
+  restores copying in eight fresh seeds. ABBABA exact copies average 0 self / 10.125 complementary; the reverse
+  founder BABAAB gives 0.625 / 7.75. Square-adjusted gains are positive in every seed, both directions. Opposing shapes
+  without complementary recognition fail, as do same-sign wedges with complementary recognition. No new rule/reward.
+- Solver dependence matters: default body jostling at 8 passes preserves the result in four seeds. Individual kicks
+  at 4 passes erase the reverse-direction benefit; a post-hoc 16-pass diagnostic recovers both directions in two seeds.
+  This is not convergence proof, and self-paired sterility is not universal. Keep all controls visible.
+- A two-seed, 50k fueled/turning-over probe gives 42/34 births and generations 4/5 with opposed complementary shapes,
+  versus 12/10 births self-paired. Descendants reproduce, but late newborn length falls to 4.08/4.50 from six.
+  Free letters are exhausted. **No complexity gain, indefinite persistence, or selection for length is established.**
+  The population probe uses default pUndock=0, versus 0.1 in the isolated assay; do not attribute cross-assay changes
+  to fuel alone. Within each factorial population comparison, the other parameters match.
+- `geometric_bottleneck.js`, `complementary_fit.js` and `complementary_population.js` have prospective plans, bounded
+  workers, raw results, full parameters and hashes; each has a `_summary.js`. Geometry samples are dwell times, not
+  independent reaction attempts. Snapshot parent differences under turnover are not automatically copying errors.
+- 184 valid runs, 3.92M steps, 1,599.717 simulation CPU seconds. All 1,062 isolated complementary-fit assay births
+  match expectations. Seven relevant existing checks plus new assay/analyzer tests pass; all five default fingerprints
+  are unchanged. The full 39-check suite was not rerun. No new preset or viewer feature.
+- **Next:** give a persistently curved but copying-compatible sequence a measured physical function, possibly fuel
+  capture via existing pocket geometry. Test that operation and solver controls first. Do not assume this fit result
+  makes length pay or resurrects the failed brace/product ecology. Newborns now need not be straight to copy.
+
+## Previous handoff (2026-09-26): physical straightening is not sustained copying improvement
 
 Section 47 follows the user-approved mechanical-bracing test. One active `ABBABA` founder and a prepared six-block
 product row; attached vs free support, equal initial geometry and conserved material. `pLinkBare=1` removes the chemical
