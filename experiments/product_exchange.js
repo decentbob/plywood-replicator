@@ -9,7 +9,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
-const { Sim, isProd, LETTERS, I_TPL, I_REPEL, F, K, L, R } = require('../src/sim.js');
+const { isProd, LETTERS, I_TPL, I_REPEL, K, L, R } = require('../src/sim.js');
+const { ProductLatchSim: Sim } = require('./product_latches.js');
 
 const arms = {
   baseline: {},
@@ -24,6 +25,9 @@ const arms = {
   resetNospec: { productReset: true, pPReady: 0.001, pMisMelt: -1 },
   delayFold: { pPReady: 0.01, fold1: 45, fold2: 45 },
   noBind: { pBindP: 0 },
+  durable: { productFray: 0.03 },
+  durableReset: { productFray: 0.03, productReset: true, pPReady: 0.001 },
+  durableNoBind: { productFray: 0.03, pBindP: 0 },
 };
 const base = {
   W: 40, H: 40, nA: 150, nB: 150, nC: 150, nD: 150, nP: 120, nQ: 120,
@@ -47,7 +51,7 @@ function sample(s, row) {
     for (const v of chain) seen.add(v);
     const category = kind(chain.map(v => s._letter(v)).join(''));
     for (const v of chain) {
-      // Opportunity-normalized exposure: an armed, non-cap back that accepts a catalyst.
+      // Armed non-cap positions: a site-exposure denominator, not a count of collision opportunities.
       if (s.is[v] !== I_TPL || s.type[v] === 7 || s.type[v] === 8) continue;
       row[category + 'Sites']++;
       const q = s.bond[v * 4 + K];
@@ -103,13 +107,15 @@ if (!isMainThread) {
   const seeds = options.seeds.split(',').map(Number), selected = options.arms.split(',');
   if (!options.out || !['race', 'probe'].includes(options.mode) ||
       ![options.steps, options.every, options.workers].every(x => Number.isInteger(x) && x > 0) || options.workers > 4 ||
-      !seeds.every(Number.isInteger) || selected.some(a => !Object.hasOwn(arms, a))) throw new Error('Invalid batch options');
+      !seeds.every(Number.isInteger) || new Set(seeds).size !== seeds.length || new Set(selected).size !== selected.length ||
+      selected.some(a => !Object.hasOwn(arms, a))) throw new Error('Invalid batch options');
   fs.mkdirSync(path.dirname(options.out), { recursive: true });
   const csv = options.out + '.csv', manifest = options.out + '.manifest.json', births = options.out + '.births.jsonl';
   if ([csv, manifest, births].some(f => fs.existsSync(f))) throw new Error('Output exists; choose a new --out prefix');
   const jobs = seeds.flatMap(seed => selected.map(arm => ({ ...options, seed, arm })));
   const metadata = { options, node: process.version, platform: process.platform, started: new Date().toISOString(),
     simSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, '../src/sim.js'))).digest('hex'),
+    modelSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, 'product_latches.js'))).digest('hex'),
     scriptSha256: crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex'),
     // CPU usage is process-wide for worker threads: report only once for the whole batch below.
     jobs: [], complete: false };
@@ -124,13 +130,15 @@ if (!isMainThread) {
       const worker = new Worker(__filename, { workerData: job });
       let received = false;
       worker.on('message', msg => {
-        if (msg.progress) console.error(JSON.stringify(msg.progress));
+        if (msg.progress) {
+          console.error(JSON.stringify(msg.progress));
+          fs.appendFileSync(csv, columns.map(c => msg.progress[c]).join(',') + '\n');
+        }
         if (msg.births && msg.births.length) fs.appendFileSync(births,
           msg.births.map(b => JSON.stringify({ arm: job.arm, seed: job.seed, ...b })).join('\n') + '\n');
         if (!msg.result) return;
         received = true;
-        const { rows, params } = msg.result;
-        fs.appendFileSync(csv, rows.map(r => columns.map(c => r[c]).join(',')).join('\n') + '\n');
+        const { params } = msg.result;
         metadata.jobs.push({ arm: job.arm, seed: job.seed, params });
         fs.writeFileSync(manifest, JSON.stringify(metadata, null, 2));
       });

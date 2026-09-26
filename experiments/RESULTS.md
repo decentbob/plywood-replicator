@@ -2347,3 +2347,137 @@ lets go at `pMisMelt`; it moved the ratio only to 70%, because the wrong unit le
 And in the hosts' own world products seldom meet other strands at all: released beside their template, they rebind to it in
 register and hold (no product unit was found on a wrong letter in 10,000 steps of a mixed `DABBAB`/`DABBAA` world), so a shared
 catalyst at this density is mostly private to its maker, which limits what mimics can take.
+
+## 44. Escape is not delivery: product latches and lifetime (2026-09-26)
+
+**Question.** Is immediate rebinding the only obstacle to a useful shared catalyst? Section 43 suggested remembering a
+product's maker and forbidding binding there. That would introduce identity into the chemistry. Instead, try a local latch:
+a linked product block stays in its existing `REPEL` state until a stochastic activation exposes `PBIND` (`pPReady`, default 1).
+With `productReset` (default false), a melting bound face returns to `REPEL`. Neither transition reads a clock, a parent,
+a component, or a sequence. A third parameter, `productFray` (default 1), multiplies product end-fraying, just as `capFray`
+sets cap end-fraying; it does not change processive unzip. All blocks and types remain conserved.
+
+**Assay and reproducibility.** `product_exchange.js` runs bounded worker batches on Windows or Unix, at most four workers.
+Each output has a CSV and a manifest with full parameters, source hashes, Node version, completion status, and batch CPU/wall
+time. The lifetime probe and subsequent batches also retain individual birth records. Simulation implementations for the first
+two screens are in commits `617cb1d` and `da2f406`; later default-only additions preserve their trajectories. Hashes identify
+the actual file bytes, so line-ending conversion can change a hash without changing the simulation.
+
+All race worlds: 40×40, A/B/C/D 150 each, P/Q 120 each, products 1/2 150 each, E 100; `PDABBABQ` and `PCABBABQ`, six of
+each, `transStart D`, code A1/B2, shared binding, mismatch melting 0.05, `pLinkBare 0.05`, `endLoss`, `pUndock 0.1`,
+`pFray 0.001`, `capFray 0.03`, `pUnzip 1`, `pSoft 0.002`. Hosts and seeded non-producers have equal length and the same
+five-letter key. Samples every 100 steps count mature product binding, not product monomers still being assembled.
+
+Definitions and limits:
+
+- **Host/non-producer:** capped sequences with/without D. Historical CSV columns say `mimic`, but that class includes
+  mutations with other keys: it is not proof of matching keys or parasitism. Uncapped births are recorded separately.
+- **Occupancy:** summed bound mature units divided by summed armed non-cap positions of that class. The denominator is
+  an armed-site exposure measure; isolated coded positions need not expose a binding back. It is not a count of independent
+  encounters. Report seed-level ratios, with equal weight per seed, not significance tests on thousands of serial samples.
+- **Same block:** fraction of bound product units on the exact block recorded in `parentOf` when they formed. This observer
+  never affects dynamics. It is not whole-maker or lineage identity; block recycling can change who contains that block.
+- **Products:** the engine's logged full-release events, not total synthesis. Products can assemble and rebind piecemeal
+  without a full release being logged. The standing `productUnits` samples therefore matter too.
+- The no-binding control sets `pBindP=0`; it disables physical mature-product binding as well as catalysis, not catalysis
+  alone. Non-producers can reproduce at the bare rate, so survival or increasing birth share does not establish exploitation.
+
+### 44a. One-time delays and faster melting do not reliably deliver catalysts
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PE_screen --steps 50000 --seeds 1,2
+node experiments/product_exchange_summary.js experiments/out/PE_screen.csv --after=20000
+```
+
+The last 30,000 steps; equal-weight means of two seeds:
+
+| arm | capped births | non-producer birth share | host occupancy | non-producer occupancy | same block |
+|---|---:|---:|---:|---:|---:|
+| immediate activation | 34.0 | 21.88% | 59.24% | 0.02% | 99.87% |
+| activation probability 0.01 | 24.0 | 26.35% | 55.64% | 1.97% | 97.60% |
+| activation probability 0.001 | 13.5 | 22.53% | 32.53% | 0.00% | 96.58% |
+| in-run melting 0.05 | 16.0 | 68.75% | 22.38%* | 0.00% | 83.96%* |
+
+`*` Only seed 1 has a nonzero denominator: in seed 2 there are no armed host sites in this window. Do not treat missing
+occupancy as zero. The apparent strong "parasite success" under fast melting is host loss without observed catalyst delivery.
+The 100-step mean delay gives non-producers 3.94% occupancy in seed 1 and zero in seed 2: a weak, non-replicated lead.
+The longer delay reduces births in both seeds. A mean activation time is per block, not a synchronized timer for the polymer.
+
+### 44b–c. Repeated latch retraction, and a folding failure
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PE_reset_screen --steps 20000 --seeds 1,2 --arms reset100,reset1000,delayFold --workers 3
+```
+
+| arm | host occupancy, seeds 1 / 2 | non-producer occupancy | logged releases, seeds 1 / 2 |
+|---|---:|---:|---:|
+| reset, activation 0.01 | 19.27% / 25.11% | 0 / 0 | 7 / 7 |
+| reset, activation 0.001 | 2.58% / 1.43% | 0 / 0 | 32 / 26 |
+| activation 0.01, fold1=fold2=45° | 0 / 0 | 0 / 0 | 0 / 0 |
+
+Repeated retraction frees the host surface but does not deliver catalysts in this turnover regime. At activation 0.001,
+only about 14% of linked product-unit samples are mature. Products can fray while waiting. The folding arm has **zero linked
+product-unit samples**, not merely zero logged releases: it fails before catalytic delivery. Inspection of `_restSlot` shows
+that free monomers fold too; all product monomers in this arm are wedges before docking. The plausible geometry explanation
+is not yet an isolated causal test. Do not conclude that every folding product fails (34e used different folds).
+
+### 44d. Remove turnover to isolate whether the latch can permit exchange
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PE_lifetime_probe --steps 20000 --seeds 1,2 --arms baseline,reset1000 --workers 3 --mode probe
+```
+
+`probe` disables both fraying and mutation, not just product fraying. Across the full 20,000 steps:
+
+| arm | host occupancy | non-producer occupancy, seeds 1 / 2 | same block, seeds 1 / 2 | logged releases |
+|---|---:|---:|---:|---:|
+| baseline | 52.48% | 0 / 0 | 100.00% / 99.98% | 0 / 0 |
+| reset, activation 0.001 | 1.20% | 0.92% / 0.51% | 17.44% / 47.67% | 27 / 14 |
+
+Here exchange occurs in both reset seeds. The latch can break original-site retention, but productive occupancy is tiny.
+This is an isolation probe, not evidence for a viable ecology: immortality removes genome turnover as well. It motivated the
+next assay, which changes only product fragility while keeping genomes mortal and mutation active.
+
+### 44e. Matched controls favor durability over forced escape
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PE_durable --steps 30000 --seeds 3,4,5,6 --arms durable,durableReset,durableNoBind --workers 3
+node experiments/product_exchange.js --out experiments/out/PE_durable_control --steps 30000 --seeds 3,4,5,6 --arms baseline --workers 3
+node experiments/product_exchange_summary.js experiments/out/PE_durable.csv experiments/out/PE_durable_control.csv --after=10000
+```
+
+Four fresh seeds, restoring mutation and genome turnover. Durable products have `productFray=0.03`; the reset arm also has
+activation 0.001 and repeated retraction; the no-binding arm has `pBindP=0`. The ordinary-lifetime arm is the **same-seed**
+control, not the earlier seeds 1–2. Last 20,000 steps; means of seed-level values:
+
+| arm | capped births | non-producer birth share | host occupancy | non-producer occupancy | same block |
+|---|---:|---:|---:|---:|---:|
+| ordinary lifetime | 20.75 | 14.36% | 57.57% | 0.00% | 99.88% |
+| durable products | 20.25 | 21.59% | 59.89% | 1.45% | 98.07% |
+| durable + reset | 8.25 | 47.72% | 1.93% | 0.43% | 39.26% |
+| durable, no mature-product binding | 8.50 | 31.62% | 0.00% | 0.00% | — |
+
+Durable products without reset give non-producer occupancy **0.07, 0, 1.13, 4.63%**, against zero in every ordinary-lifetime
+late window. Total capped births are similar; the per-seed non-producer birth-share differences have mixed signs. This is a
+**transport lead**, not established selection. The reset arm loses capped births in every paired seed (6/14/4/9 against
+17/19/28/19); it frees products but reduces productive host occupancy to approximately the no-binding regime. Its higher
+non-producer share is mainly a smaller host denominator, not evidence of a successful parasite population. Non-producer
+births also occur with binding disabled.
+
+**Decision.** Keep `productFray` in the normal simulator: it separates product lifetime from genome turnover, with a measured
+transport lead and default 1. Park `pPReady` and `productReset` in `experiments/product_latches.js`, a research subclass using
+two single-block transition hooks. They remain reproducible, but are not new viewer/CLI options or an evolutionary preset.
+This keeps the negative findings without accumulating unsuccessful rules in the main chemistry. No extra relay, identity
+memory, block creation, sequence-specific reward, or organism-level action was added.
+
+**What to predict next.** Measure encounter-to-binding efficiency before increasing world size or running millions of steps.
+Survival after release is necessary in the tested regime, but release alone is costly; durable products with moderate
+affinity changes deserve more seeds. A different mechanical direction is a shape change triggered by a block's lateral
+bond: free monomers remain dockable, while the joined block retains curvature even on rebinding. Test assembly yield,
+release, useful recipient occupancy, and births independently. This geometry is **not implemented or established** here.
+See the 2025 templating paper and the 2024 mechanical construction reference added to `LITERATURE.md`.
+
+**Scope.** 34 experimental runs, 1,080,000 total steps; two-seed screens and four-seed follow-up, not a search-wide statistical
+claim. The five batch manifests record about 3,088 process CPU seconds in total. No arms race, new heritable function, or
+increase in evolved complexity was demonstrated. The useful outcome is the distinction between release, survival, delivery,
+and reproductive benefit, plus a reproducible assay that prevents mistaking host suppression for parasitism.

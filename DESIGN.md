@@ -389,11 +389,32 @@ Keep entries short: date, what changed, why, what evidence.
   rule a mimic (a host's key without the start) can exist, and a host that changes its key keeps its own catalyst (it is made from
   that key) while leaving its mimics behind: the ingredients of an arms race (tag-based cooperation, Riolo, Cohen and Axelrod
   2001), with no rule about keys. Evidence in `experiments/RESULTS.md`, section 43.
+- 2026-09-26. Product lifetime separated from genome turnover with `productFray` (default 1). Section 44: 34 runs show that
+  reducing product fragility permits some recipient binding without the large reproductive cost of delayed activation or
+  repeated latch retraction; it does not establish selection. The unsuccessful latch variants live in an experimental
+  subclass, not the standard chemistry. Added single-block transition hooks, bounded portable batches, source/parameter
+  manifests, raw birth records for later batches, and equal-weight seed summaries. Observer provenance never enters rules.
+  Default trajectory hashes remain identical. SpudCell prompted a separate, unimplemented crowding hypothesis in section 15.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
 
 ## 15. Ideas not yet tried
+
+**2026-09-26, SpudCell-inspired surface crowding (unbuilt).** Before another compartment ecology, test whether bulky blocks
+attaching to one side of an arc or ribbon cause curvature and strain through collisions alone. Controls: no attachment,
+smaller attached blocks, identical physics. Keep this separate from prescribing rest-shape changes below. If it works,
+test local growth and fragmentation with both fragments retaining function over repeated cycles. A broken ring is not two
+compartments; closure and co-inheritance must be measured independently. Resource capture must affect actual assembly and
+offspring production, with no component-level division or fitness rule. See `LITERATURE.md`, SpudCell, for primary sources,
+limitations and predictions about linkage and renewal.
+
+**2026-09-26 addition: bond-triggered rest shape.** Section 44 finds that both product kinds folding 45 degrees prevents linked
+product formation; `_restSlot` folds free monomers too. A candidate mechanical alternative: a block uses its curved rest shape
+only when a lateral side is bonded, irrespective of its face. Its unlinked form can dock, joining introduces strain, and binding
+again cannot flatten it automatically. This reads only its own bonds. It has not been implemented. Test small bends first, with
+the same-shape and face-dependent-fold controls, and separate assembly yield, detachment, recipient occupancy and births.
+Release alone already failed to improve ecological performance (44); curvature needs an independently measured function.
 
 **Added 2026-09-25 (later): shape directions put to the user** (the user: "shapes I think are a very promising direction";
 the decision log's assembly-level fit, mechanical AND, graded fit). Four options, recommendation B, refined:

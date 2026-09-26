@@ -348,3 +348,77 @@ chromodynamics").
 - COT/RAF analysis of the random tables in RESULTS 32 (a tool, not a mechanism).
 
 **Overall reading of the literature.** No local-physics replicator world has shown open-ended growth of complexity from replication alone: evoloops, Squirm3 and Tierra all shrank. Where complexity did grow, it came from graded rewards for intermediate functions (Avida), from ecology and parasites (Mizuuchi, Könnyű, Hogeweg), or from coupling to a second system (Hutton's enzymes, Gánti, Cairns-Smith). The first three shortlist items target the first two causes at low cost. Items 4 and 5 are the bigger bets on the third.
+
+## Release, lifetime and mechanical assembly (2026-09-26)
+
+**Cabello-Garcia et al., "Information propagation through enzyme-free catalytic templating of DNA dimerization with weak
+product inhibition", Nature Chemistry 17, 1179–1187 (2025).**
+[Paper](https://www.nature.com/articles/s41557-025-01831-x), [open full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC12313520/).
+The authors couple dimerization to disruption of template binding. Their DNA system makes nine sequence-specific dimers,
+with weak product inhibition and downstream reactions. This is engineered information transfer, not open-ended evolution.
+The useful design lesson here is to distinguish assembling a product, releasing it, and getting it to do useful work elsewhere.
+**Our inference:** a polygon changing its resting shape when a lateral bond forms could convert local assembly into strain
+against its supporting surface. Unlike the present face-dependent folding, binding again would not automatically flatten it.
+Monomers could stay flat for docking. Test small bends and measure assembly yield, escape and recipient catalysis separately;
+do not infer fitness from escape alone. Section 44's delayed latches test the temporal alternative, not this shape mechanism.
+
+**Ralph P. Lano, "Mechanical Self-replication" (2024 preprint).**
+[arXiv:2407.14556v2](https://arxiv.org/abs/2407.14556v2).
+This theoretical model and its simulations decompose replication into block-built machines for sorting, copying and building,
+and discuss spatial, timing and complexity constraints. It is a useful construction reference, not evidence that such machines
+evolve spontaneously. For this project's stricter rules, any imported operation must reduce to a block's own contacts and
+state; the existence of a working whole machine does not justify giving that machine a programmed action.
+
+**Prediction from our experiments, not a claim of either paper:** local detachment must be matched to both product lifetime
+and the rate of productive encounters. A short-lived released product is recycled; a long-lived but poorly rebinding one is
+idle inventory. Section 44 measures these separately before proposing a larger evolutionary world.
+
+## SpudCell: a coupled reproductive cycle, and its mechanical lessons (2026-09-26)
+
+**Gaut et al., "A Chemically Defined Synthetic Cell Capable of Growth and Replication" (2026 preprint).**
+[Authors' overview](https://www.biotic.org/research/spudcell/),
+[authors' FAQ and limitations](https://biotic.org/faq),
+[preprint](https://www.biorxiv.org/content/10.64898/2026.07.01.735724v1).
+The overview reports genetically controlled recruitment of feeder liposomes, genome replication, and membrane division
+driven by crowding. An introduced expression variant outcompeted its ancestor over five generations, especially under
+resource scarcity. The FAQ describes outside provision of ribosomes and enzymes, unreliable inheritance of all genome
+parts, and continuing peer review. This is engineered cycle integration and selection, not spontaneous open-ended evolution.
+The preprint server blocked retrieval here; these statements are from the authors' accessible account, not an independent
+evaluation of the underlying data.
+
+**A physical precedent rather than a special "division machine".** Stachowiak et al.,
+["Membrane bending by protein–protein crowding" (2012)](https://www.nature.com/articles/ncb2561), show that collisions
+between surface-bound proteins generate lateral pressure and membrane bending; even a protein without a specialized
+curvature function can bend a sufficiently crowded membrane. Snead et al.,
+["Membrane fission by protein crowding" (2017)](https://pmc.ncbi.nlm.nih.gov/articles/PMC5402459/), extend this mechanism
+to fission. This supports testing steric geometry as a source of collective behavior. It does not establish that our discrete
+2D polygons can reproduce the fluid bilayer's topology changes.
+
+**Persistence can also obstruct renewal.** In an
+[interview with Kate Adamala](https://www.asimov.press/p/spudcell-adamala), she describes inherited surface decorations,
+unresolved protein recycling, and uncertain effects on subsequent divisions. She also identifies random genome partition
+as a limitation and proposes mechanical anchoring; that proposal is not an established SpudCell result.
+
+**Our hypotheses and experiment order:**
+
+1. **Surface attachment can become mechanical work.** Start with a small arc or ribbon and freely moving bulky blocks
+   from a conserved pool. Test whether attachment on one side causes measurable bending or strain, using identical
+   physics with attachment disabled and with smaller attached blocks as controls. No curvature or division command may
+   depend on an assembly's size, identity, sequence, or counted attachments. The force must arise from existing contacts.
+   This is distinct from prescribing a bond-triggered rest shape: test the steric mechanism separately first.
+2. **Growth and fragmentation must close a cycle.** Only after the first assay succeeds, allow local recruitment and bond
+   failure. Measure whether both descendants can recruit and split again. In 2D, snapping a ring makes arcs, not two closed
+   compartments; closure and retention of contents need separate evidence. A growing ribbon whose fragments remain
+   functional may be the smaller first target. More fragments alone is not replication of a functional assembly.
+3. **Inheritance can give linkage a benefit.** Observe whether complementary functions stay together across fragmentation,
+   and compare linked with unlinked material under the same local chemistry. Losing a necessary part should impair its
+   actual physical function; there must be no global "complete genome" fitness check. This could make length pay through
+   reliable inheritance, a different pressure from the existing motif rewards. It remains untested here.
+4. **Select on a repeated cycle.** Couple resource capture to something an inherited sequence physically assembles, then
+   compete variants for the same material. Measure descendant production and retained function, not just uptake or the
+   first split. Include turnover: section 44 already shows that escape, lifetime and useful occupancy can move in opposite
+   directions. Neither permanent binding nor faster breakage is automatically better.
+
+SpudCell strengthens the case for coupling a few individually measurable physical functions. It does not supply a recipe
+for complexity in this world. The immediate candidate is the controlled crowding assay; evolutionary claims wait for
+repeatable growth, partition and renewed function.

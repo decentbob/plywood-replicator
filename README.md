@@ -3,7 +3,7 @@
 The working name, *plywood replicator*, is after L. S. and R. Penrose's self-reproducing wooden blocks (1957–59):
 passive units that copy a seed configuration when shaken, with all the logic in their mechanics. That is the spirit here.
 
-An artificial life experiment: a 2D world of small rigid squares governed by one
+An artificial life experiment: a 2D world of small deformable polygons governed by one
 fixed, universal rule table, in which template replication, copy errors, and
 selection come out of the rules rather than being programmed into the creatures.
 
@@ -16,7 +16,8 @@ seeds), after which genomes expand. A genome can also build a second polymer by 
 need it for copying; shared, that catalyst feeds parasites. A second mode of replication exists beside strand copying: with
 two-faced letters, copies made on a strand's back stay on as rows and pile into stacks, crystals that grow row by row and split
 (`backCopy`, `stack`); they copy exactly, but do not by themselves make length pay or protect a population (40). Not yet: compartments that keep their contents and divide,
-specific recognition between strands, and a third gene. `AGENTS.md` is the working guide for whoever continues
+whole-key recognition between strands, and open-ended complexity. Proofreading supplies a third selected function (38).
+`AGENTS.md` is the working guide for whoever continues
 (`CLAUDE.md` imports it); `experiments/LEDGER.md` lists every experiment with its verdict.
 See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
@@ -57,10 +58,17 @@ node run.js --help            # any key of DEFAULTS in src/sim.js is a flag
 node run.js --steps 200000 --save world.json ...   # keep the world's state (open it in the viewer: "Open state")
 node run.js --steps 100000 --load world.json --pBreak 0.0001   # continue it, here under a changed rule (a branch)
 node test.js                  # invariants: no junk chains, exact copies, energy accounting, conservation, determinism
+node test.js --list           # list checks; --match=REGEX runs a selected group and reports its CPU time
 node build.js                 # single-file dist/polygon-chemistry.html
 ./experiments/genes.sh        # one experiment batch per script; RESULTS.md names each section's script
 node experiments/summarize.js # tables from experiments/out/*.csv
 ```
+
+The portable product-exchange assay is `node experiments/product_exchange.js --out experiments/out/MY_BATCH
+--steps 30000 --seeds 3,4,5,6 --arms baseline,durable --workers 3` (one command). It records parameters, source hashes,
+occupancy, births and CPU time; summarize with `node experiments/product_exchange_summary.js experiments/out/MY_BATCH.csv`.
+See RESULTS 44 for the measured release/lifetime tradeoff, and [LITERATURE.md](LITERATURE.md#spudcell-a-coupled-reproductive-cycle-and-its-mechanical-lessons-2026-09-26)
+for SpudCell's implications and an untested mechanical-crowding hypothesis.
 
 ## The whole chemistry
 
@@ -156,6 +164,7 @@ sequence.
 | `catalysis`, `pBindP`, `pPMelt`, `pPMeltRun`, `pLinkBare` | a finished product binds back onto strands it matches; a template face whose back holds one is catalysed, and monomers docked there link at once, elsewhere at `pLinkBare`: the genome needs the part it builds (34) |
 | `bindAny`, `pMisMelt` | a finished product binds any armed back (a shared catalyst: strands that make none are parasites); with `pMisMelt` a mismatched bound unit lets go fast (graded specificity) (36) |
 | `transStart` | (with translate) only a strand carrying a start motif (`CDC`, or one letter, `D`) translates: a template unit in the motif marks itself and the mark runs along its strand one block per pass. With a shared catalyst and graded specificity, a strand that carries a host's key but no start is a mimic: catalysed, making nothing (43) |
+| `productFray` | product end-fraying relative to `pFray` (default 1); lower values let products survive longer between encounters without changing genome turnover or processive unzip. Section 44 tests durability and release separately. The unsuccessful delayed/retracting latch variants remain in `experiments/product_latches.js`, not the normal chemistry. |
 | `bareCaps` | caps have no back: no energy particle docks on a cap, so caps are armed only through their bond (the `feed` relay) and a capped genome re-arms only if it carries the energy gene `ABA`; `PQ` is sterile (33) |
 | `radBand` | radiation acts only where x < `radBand` × W: a world with a lit and a dark part (33) |
 | `proof`, `proofMotif`, `pProof` | proofreading: a template unit in `BDB` flags its face (relayed along its strand); a wrong monomer docked on a flagged face lets go before it links (38) |

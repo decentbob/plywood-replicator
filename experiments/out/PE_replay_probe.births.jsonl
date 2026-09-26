@@ -1,0 +1,16 @@
+{"arm":"baseline","seed":1,"t":4771,"seq":"PBABBADQ","gen":1,"parent":"PDABBABQ","x":28.603827691895415,"y":11.862368586774942}
+{"arm":"baseline","seed":1,"t":7797,"seq":"PBABBADQ","gen":1,"parent":"PDABBABQ","x":19.288718189201703,"y":5.146974229975215}
+{"arm":"baseline","seed":1,"t":8695,"seq":"PBABBADQ","gen":1,"parent":"PDABBABQ","x":13.880916735738767,"y":17.324584726148494}
+{"arm":"reset1000","seed":1,"t":2128,"seq":"12212","prod":1,"parent":"PDABBABQ","x":5.524139221003772,"y":12.183768848234696}
+{"arm":"reset1000","seed":1,"t":3388,"seq":"12212","prod":1,"parent":"PDABBABQ","x":32.11052408774192,"y":25.043921725949865}
+{"arm":"reset1000","seed":1,"t":3443,"seq":"12212","prod":1,"parent":"PDABBABQ","x":22.108449824502287,"y":8.010255390555809}
+{"arm":"reset1000","seed":1,"t":4206,"seq":"12212","prod":1,"parent":"PDABBABQ","x":3.226978212328367,"y":39.434391069340194}
+{"arm":"reset1000","seed":1,"t":4759,"seq":"12212","prod":1,"parent":"PDABBABQ","x":31.756764953604634,"y":6.551208667422821}
+{"arm":"reset1000","seed":1,"t":5572,"seq":"12212","prod":1,"parent":"PDABBABQ","x":2.5352658918868842,"y":13.530256384923343}
+{"arm":"reset1000","seed":1,"t":5736,"seq":"PBABBADQ","gen":1,"parent":"PDABBABQ","x":6.2702861176858,"y":16.69829724921851}
+{"arm":"reset1000","seed":1,"t":6524,"seq":"12212","prod":1,"parent":"PDABBABQ","x":18.883151068508155,"y":14.333971169810802}
+{"arm":"reset1000","seed":1,"t":7536,"seq":"PBABBADQ","gen":1,"parent":"PDABBABQ","x":18.236087952425013,"y":3.283912478707668}
+{"arm":"reset1000","seed":1,"t":7837,"seq":"12212","prod":1,"parent":"PDABBABQ","x":25.075438024252783,"y":18.866136764970893}
+{"arm":"reset1000","seed":1,"t":8178,"seq":"12212","prod":1,"parent":"PDABBABQ","x":2.3356416660355035,"y":16.689860562315204}
+{"arm":"reset1000","seed":1,"t":9277,"seq":"PBABBADQ","gen":1,"parent":"PDABBABQ","x":1.2547912998877577,"y":32.266536974423126}
+{"arm":"reset1000","seed":1,"t":9411,"seq":"21221","prod":1,"parent":"PBABBADQ","x":7.491275037886803,"y":13.105019227474088}

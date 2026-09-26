@@ -190,6 +190,7 @@ const $ = (id) => document.getElementById(id);
 // the walls let monomers through but not strands or energy.
 const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1, backCopy: false, stack: false, pSBind: 0, pSNuc: -1, bindAny: false, pMisMelt: -1, transStart: '', transCode: 'A1,B2,C3,D4', pLinkBare: 0.01, mobS: 1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
+Object.assign(ZERO, { productFray: 1 });
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
   evo:   Object.assign({}, ZERO, EVO),
@@ -231,6 +232,7 @@ const KNOBS = [
   ['pMisMelt', 'p mismatch lets go', 'a bound product unit on a letter it does not match lets go at this rate (graded specificity); -1 off'],
   ['transStart', 'start motif', 'only strands carrying it translate (CDC, or one letter D); empty: all do. With graded specificity a key without the start is a mimic', 'text'],
   ['pLinkBare', 'bare linking', 'with catalysis: how often two docked monomers link without a product on their template'],
+  ['productFray', 'product end fragility', 'product end-fraying relative to the normal rate; 1 is unchanged, lower values give released products longer to travel'],
   ['bareCaps', 'bare caps', 'caps have no back: armed only through their bond by the feed relay, so a capped strand re-arms only if it carries ABA', 'bool'],
   ['endLoss', 'end-replication loss', 'a template unit with a free side shows no face, so every copy lacks its template\'s open ends; strands capped P...Q copy whole (telomeres)', 'bool'],
   ['pCapture', 'p end capture', 'insertion, gap substitution'],

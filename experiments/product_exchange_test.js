@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const assert = require('assert');
-const { Sim, isProd, I_REPEL, I_TPL, I_DOCK, F, K, R, L, S } = require('../src/sim.js');
+const { isProd, I_REPEL, I_TPL, I_DOCK, F, K, R, L, S } = require('../src/sim.js');
+const { ProductLatchSim: Sim } = require('./product_latches.js');
 const { kind, sample } = require('./product_exchange.js');
 
 function testProductReady() {

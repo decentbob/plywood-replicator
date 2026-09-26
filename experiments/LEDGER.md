@@ -54,6 +54,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
     Run a same-physics control (e.g. no folds) beside every race: in 41a it matched the "effect".
 11. **Most answers show early.** Winners were clear within 50,000 of 500,000 steps (33b); run long only for slow decay
     or rare events (33c, 33i).
+12. **Release is not delivery, and relative success is not exploitation.** A retracting product latch can reduce original-block
+    retention from nearly 100% to 39%, yet reduce productive host occupancy from 60% to 2% and capped births from 20 to 8
+    (44e, four seeds). Non-producer share rises mainly because hosts lose births. Products must survive the journey and bind
+    usefully afterwards. Product durability alone gives a small transport lead without reducing total births (44e), not evidence
+    of evolved complexity. Measure recipient occupancy and include a no-binding control before calling non-producers parasites.
 
 ## Viability atlas (will a new world live?)
 
@@ -186,6 +191,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 42b | Parasites arise by themselves | With only hosts seeded, do non-producers arise, and does space hold them down? | as 42a, mutation 0.005 | works | short B/C/D strands arise within 50k and take 58–62% creeping vs 72% mixed | hostparasite.sh (`HM_*`) | — | hosts shrink to `AAB`, `AAAB` (regularity 1) |
 | 43a | Keys and mimics, open world | With a start letter for translation and graded specificity, do hosts escape mimics by changing keys (a Red Queen)? | `transStart` D, `transCode` A1,B2, `bindAny`, `pMisMelt` 0.05 | negative | mimics 12–29% of births; mimic load does not predict a key's fall (pooled r = +0.05, p = 0.72; +0.15 without specificity); keys shrink to 2–3 letters | armsrace.sh, keys.js, redqueen.js (`AR_*`) | capped world, where keys cannot shrink (`CR_*`) | 2 seeds, 1M steps; one striking cycle in seed 1 is drift by the test |
 | 43b | Keys and mimics, capped world | Where keys cannot shrink, do mimics spread and drive key changes? | as 43a, capped (`endLoss`, caps), `pLinkBare` 0.05 | negative | capped mimics 0.1–2.7% of capped births over 2M steps in both arms; keys drift as much without specificity; r = +0.02 | armsrace.sh (`CR_*`), keys.js, redqueen.js `--capped` | products that leave their maker; whole-key recognition | products stay on their maker, so mimics copy at the bare rate |
+| 44a | Activation delay and melting | Does preventing immediate rebinding deliver catalysts? | experimental pPReady 0.01/0.001; `pPMeltRun` 0.05 | negative | 100-step delay gives 3.94% non-producer occupancy in one seed, zero in the other; fast melting raises share by host loss | product_exchange.js (`PE_screen`) | repeated retraction and lifetime | 2 seeds, 50k; last 30k analyzed |
+| 44b | Retracting product latch | Does melting into an inactive state permit sharing? | experimental productReset, pPReady 0.01/0.001 | negative | non-producer occupancy zero in both seeds; 1000-step activation leaves only about 14% of linked product units mature | product_exchange.js (`PE_reset_screen`) | survival between encounters | 2 seeds, 20k; prototypes parked outside normal chemistry |
+| 44c | Both product kinds folded | Can curvature plus a delay prevent rebinding? | `fold1` 45, `fold2` 45, experimental pPReady 0.01 | negative | zero linked product-unit samples in both seeds | product_exchange.js (`delayFold`) | flat monomers, shape changed on joining | 2 seeds, 20k; free monomers fold too; causal geometry ablation still needed |
+| 44d | No-turnover exchange probe | Can retraction permit exchange if products survive? | `pFray` 0, `pSoft` 0, experimental productReset | lead | recipient occupancy 0.92/0.51% vs 0/0; original-block retention 17/48% vs nearly 100% | product_exchange.js (`PE_lifetime_probe`) | restore genome turnover, change product lifetime only | 2 seeds, 20k; not an evolutionary world |
+| 44e | Product durability with matched controls | Does useful delivery survive genome turnover? | `productFray` 0.03; `pBindP` 0 control; experimental reset ablation | lead | late recipient occupancy 0.07/0/1.13/4.63% vs 0/0/0/0; capped births 20.25 vs 20.75; reset reduces births to 8.25 | product_exchange.js (`PE_durable`, `PE_durable_control`) | more seeds, encounter efficiency, bond-triggered shape | 4 fresh seeds, 30k; transport lead only, no selection or complexity claim |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -211,7 +221,8 @@ the rows that used it). Rerun it after adding rows.
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
-| `fold1` | 34b (works), 34e (negative), 39a (works) |
+| `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative) |
+| `fold2` | 44c (negative) |
 | `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative) |
 | `foldB` | 39c (works), 41a (negative) |
 | `foldD` | 28b (works) |
@@ -253,11 +264,11 @@ the rows that used it). Rerun it after adding rows.
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
-| `pBindP` | 34c (works) |
+| `pBindP` | 34c (works), 44e (lead) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
-| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial) |
+| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead) |
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
@@ -268,13 +279,15 @@ the rows that used it). Rerun it after adding rows.
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works), 43a (negative) |
 | `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial), 41a (negative), 41b (works), 41c (inconclusive) |
+| `pPMeltRun` | 44a (negative) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
+| `productFray` | 44e (lead) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
 | `pSBind` | 40a (works), 40b (negative), 40c (negative) |
 | `pSMeltEnd` | 40a (works) |
 | `pSNuc` | 40a (works), 40b (negative) |
-| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works) |
 | `pUnzip` | 13b (works), 15b (works) |
@@ -306,6 +319,10 @@ the rows that used it). Rerun it after adding rows.
 <!-- /knob-index -->
 
 ## Open gaps (worth trying, with the reason)
+
+- **Product survival and productive encounters** (44): durability permits a little delivery without removing genome turnover;
+  forced release loses host function. Extend the matched durability assay before long arms-race runs. A lateral-bond-triggered
+  rest shape could leave monomers flat but generate curvature after assembly; test synthesis, release and useful binding separately.
 
 - **A third gene in expanded genomes** (33i, 33j): genomes of 11–13 units carry spare letters; give them a third
   pressure with a private gene and see whether a third gene arises (regularity 5, 6).

@@ -1,11 +1,22 @@
 #!/usr/bin/env node
-// Invariant checks for the chemistry. Run: node test.js
+// Invariant checks: node test.js; --list or --match=REGEX for a focused rerun.
 const { Sim, S, T_E, T_M, T_X, T_J, T_G, I_TPL, I_RAW, I_DOCK, I_ON, F, K, L, R, NV } = require('./src/sim.js');
 const assert = require('assert');
 const rev = (s) => s.split('').reverse().join('');
 const base = { nA: 200, nB: 200, nE: 150, W: 60, H: 60 };
-let passed = 0;
-function test(name, fn) { fn(); passed++; console.log('ok  ' + name); }
+let passed = 0, selected = 0;
+const args = process.argv.slice(2);
+if (args.some(a => a !== '--list' && !a.startsWith('--match='))) throw new Error('usage: node test.js [--list] [--match=REGEX]');
+const filterArg = args.find(a => a.startsWith('--match='));
+const filter = filterArg ? new RegExp(filterArg.slice(8)) : null;
+function test(name, fn) {
+  if (filter && !filter.test(name)) return;
+  selected++;
+  if (args.includes('--list')) { console.log(name); return; }
+  const start = process.cpuUsage(); fn(); passed++;
+  const cpu = process.cpuUsage(start);
+  console.log('ok  ' + name + ` (${((cpu.user + cpu.system) / 1e6).toFixed(2)} CPU s)`);
+}
 
 test('free monomers never join each other (no seed, no capture)', () => {
   const s = new Sim(Object.assign({}, base, { seed: 3, seedCount: 0 }));
@@ -533,5 +544,7 @@ test('transStart: only strands carrying the start motif (relayed along the stran
 });
 
 test('product activation, refractory melting, exposure accounting and saved-state continuation', require('./experiments/product_exchange_test.js'));
+test('product durability preserves genome turnover and processive unzip', require('./experiments/product_durability_test.js'));
 
-console.log(passed + ' tests passed');
+if (!selected) throw new Error('No tests matched');
+console.log(args.includes('--list') ? selected + ' tests listed' : passed + ' tests passed');

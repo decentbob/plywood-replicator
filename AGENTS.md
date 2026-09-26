@@ -66,7 +66,7 @@ run.js              headless runner: CSV every --every steps, JSON summary on st
                     --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted;
                     --save FILE (the whole world state, rewritten every interval: open it in the viewer, or continue it) and
                     --load FILE (continue a saved world; knobs given override its own: a branch under a changed rule)
-test.js             invariant tests (36; about 10 minutes on one core)
+test.js             invariant tests (38); --list and --match=REGEX select checks, with CPU time printed per check
 LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
 experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
                     what worked, what failed and what is open; add a row for every new experiment
@@ -79,6 +79,9 @@ tools/screenshot.js   drive the viewer headless and screenshot it (Playwright + 
 tools/snap.js         render a Sim in Node to PNG (colorOf callback for custom colours)
 tools/queue.sh        job queue: runs a file of jobs (OUTDIR NAME --knobs...), at most 4 run.js processes on the machine
 tools/killnode.sh     kill node processes by a pattern without killing your own shell (matches only lines starting "node")
+experiments/product_exchange.js  portable worker batch (44), at most four workers; CSV, raw births, source hashes and full
+                    parameters in *.manifest.json; fails instead of overwriting an existing batch. Summary via product_exchange_summary.js
+experiments/product_latches.js   parked release/activation variants (44); experimental subclass, not standard viewer/CLI knobs
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -195,7 +198,8 @@ viability atlas, the knob index). The short version:
   parasites about ten points lower (50–65% of births against 71–72% well mixed, 8 vs 4 runs, no overlap); parasites arise by
   mutation within 50,000 steps. With `transStart` (only strands carrying a start letter translate) and graded specificity, mimics
   (a host's key without the start) arise and live on hosts' products, but in an open world the keys shrink to two letters and
-  mimics do not drive key changes (43a). The capped version, where keys cannot shrink, is the open test (`CR_*`).
+  mimics do not drive key changes (43a). The capped tests also failed to establish an arms race (43); section 44 isolates
+  catalyst transport and warns that capped non-producers can reproduce without borrowed catalysts at the tested bare rate.
 - **The engine is 2–2.5 times faster** (37). Saved states: `--save`, `--load`, the viewer's "Open state".
 - Failed or parked, with reasons in the ledger: compartments and walls (16, 24, 25), recognition between strands (18, 26),
   public goods (9, 14, 17, 21), composition as a phenotype at small scale (35), stacks as a reason for length (40).
@@ -206,7 +210,36 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-25, night): pick up here
+## Handoff (2026-09-26): product lifetime is a transport lead; release alone hurts
+
+Section 44 contains 34 runs (1.08M steps) separating product release, lifetime, recipient occupancy and births. The original
+suggestion to remember a maker's identity was deliberately avoided: chemistry still never reads `parentOf` or components.
+
+- **Main addition:** `productFray` (default 1) scales product end-fraying, independently of genome turnover. At 0.03, late
+  non-producer occupancy is 0.07/0/1.13/4.63% in four seeds versus zero in matched ordinary-lifetime controls; capped births
+  remain similar. Small transport lead, no demonstrated selection or complexity increase.
+- **Negative:** delayed activation and melting into a temporarily inactive state reduce original-site retention, but useful
+  binding and births fall. Parked in `experiments/product_latches.js`; do not add them back as viewer presets. Its
+  `pPReady`/`productReset` are experiment parameters, not normal `run.js` options. The base engine has `_productReady` and
+  `_productMelt` single-block hooks for that subclass; default trajectories are unchanged.
+- **Geometry lead, unbuilt:** both product kinds folding 45 degrees prevent linked product formation in the tested world.
+  `_restSlot` folds free monomers too. Test a rest-shape change triggered by a lateral bond, leaving monomers flat and
+  retaining curvature when the product binds again. Read LITERATURE's new release section; do not infer a benefit from shape alone.
+- **SpudCell lead, unbuilt:** user asked about it; see LITERATURE and DESIGN 15. Surface crowding suggests an attachment-to-strain
+  assay using existing contacts. Start with arcs/ribbons, controls for attachment and bulk, then require repeated functional
+  growth and fragmentation. Do not label ring breakage compartment reproduction, or its introduced-variant selection open-ended evolution.
+- **Critical measurement:** a rising non-producer birth share can simply be host collapse. Count mature product occupancy
+  and use a no-binding control. "Same block" in section 44 is original-block provenance, not whole-maker identity. Full product
+  release logs undercount synthesis when products rebind piecemeal. Do not confuse zero logged releases with no product material.
+- **Workflow:** portable `product_exchange.js --out PREFIX --steps N --seeds 1,2 --arms baseline,durable --workers 3`;
+  at most four simulation workers across all batches/tests. Manifests are tracked; raw birth logs remain ignored unless
+  deliberately staged. First two screens predate birth-log capture. Test filtering avoids rerunning the entire suite for every probe.
+
+Best next step: characterize productive encounter rates and extend the durability comparison, or test the bond-triggered
+geometry in a small assay. Avoid another million-step arms-race run until catalyst delivery is appreciable and demonstrably
+benefits recipients. Default fidelity plus the existing evolutionary regimes remain intact.
+
+## Historical handoff (2026-09-25, night)
 
 Session of 2026-09-25 night (branch `claude/youthful-clarke-pmu31b`, merged into `main` as it went). The user this session:
 don't follow the handoff blindly, think about what is promising or underexplored; perhaps several kinds of replication with
