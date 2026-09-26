@@ -183,6 +183,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 42a | Shared catalyst in space | Do creeping polymers let hosts and parasites separate and hold parasites down (80×80)? | `bindAny`, `translate`, `catalysis`, `mobS` 0.1, 0.3, 1 | works | parasites at the end 50–65% creeping, 60–63% at 0.3, 71–72% well mixed (8 vs 4 runs, no overlap); segregation 0.03–0.10 vs 0.01–0.03; host births equal | hostparasite.sh, spatial.js, hostmap.js (`HP_*`) | hosts that can evolve against parasites (43) | 2 seeds per mobility; no travelling front; a ~10-point effect |
 | 42b | Parasites arise by themselves | With only hosts seeded, do non-producers arise, and does space hold them down? | as 42a, mutation 0.005 | works | short B/C/D strands arise within 50k and take 58–62% creeping vs 72% mixed | hostparasite.sh (`HM_*`) | — | hosts shrink to `AAB`, `AAAB` (regularity 1) |
 | 43a | Keys and mimics, open world | With a start letter for translation and graded specificity, do hosts escape mimics by changing keys (a Red Queen)? | `transStart` D, `transCode` A1,B2, `bindAny`, `pMisMelt` 0.05 | negative | mimics 12–29% of births; mimic load does not predict a key's fall (pooled r = +0.05, p = 0.72; +0.15 without specificity); keys shrink to 2–3 letters | armsrace.sh, keys.js, redqueen.js (`AR_*`) | capped world, where keys cannot shrink (`CR_*`) | 2 seeds, 1M steps; one striking cycle in seed 1 is drift by the test |
+| 43b | Keys and mimics, capped world | Where keys cannot shrink, do mimics spread and drive key changes? | as 43a, capped (`endLoss`, caps), `pLinkBare` 0.05 | negative | capped mimics 0.1–2.7% of capped births over 2M steps in both arms; keys drift as much without specificity; r = +0.02 | armsrace.sh (`CR_*`), keys.js, redqueen.js `--capped` | products that leave their maker; whole-key recognition | products stay on their maker, so mimics copy at the bare rate |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -205,7 +206,7 @@ the rows that used it). Rerun it after adding rows.
 | `compCopy` | 29 (partial) |
 | `cut` | 26 (negative) |
 | `cutMotif` | 26 (negative), 26b (inconclusive) |
-| `endLoss` | 33a (partial), 33a' (negative), 33b (works) |
+| `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works) |
@@ -258,7 +259,7 @@ the rows that used it). Rerun it after adding rows.
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
-| `pLinkBare` | 34c (works) |
+| `pLinkBare` | 34c (works), 43b (negative) |
 | `pMelt` | 18 (negative) |
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |

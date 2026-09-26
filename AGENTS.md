@@ -218,13 +218,11 @@ always run the same-physics control (released back copies, no folds) before beli
 
 Next steps, ranked:
 
-1. **The arms race where keys cannot shrink** (`CR_*` in `experiments/armsrace.sh`, 2,000,000 steps, running at the end of the
-   session; outputs in the session scratchpad were not copied: rerun if missing). Read with `experiments/keys.js --start=D` and
-   `redqueen.js`: does mimic load on a key predict its fall among hosts, with specificity and not without? If yes, the next step is
-   longer keys (more specific) and space (42) together. If no, the likely reasons are measured in 43: recognition is by runs (a
-   strand one letter off is bound 74% as much; a relayed mismatch mark did not change it and was removed), and products mostly stay
-   on their maker. All-or-nothing recognition would need binding that holds only when a whole product is matched (e.g. a product
-   that binds only after every unit has found its letter, as a copy is released only when every unit is linked).
+1. **An arms race needs a good that reaches others** (43). With `transStart` mimics arise, but in an open world keys shrink to two
+   letters, and in the capped world (keys cannot shrink) mimics stay at 1–3% because products stay on their maker (they rebind it in
+   register). Next: products that leave their maker (e.g. a finished product may not bind the strand it was made on for a while),
+   with capped keys and space (42); then whole-key recognition (a product binds only once every unit has found its letter). Read
+   with `experiments/keys.js --capped` and `redqueen.js --capped`.
 2. **Bigger effective populations** for graded effects: the shape races need 96×96 worlds or genomes whose shapes differ more
    (composition, not only order); two-faced letters (`backCopy` without `stack`) double births per genome and could be used as
    a speed-up of evolution in any world (with `endLoss` the back follows the face's end rule).

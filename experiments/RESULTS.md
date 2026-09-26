@@ -2322,11 +2322,22 @@ keys turn over as often without specificity. The keys shrink to two or three let
 key wins (regularity 1), and a two-letter key recurs in almost any strand, so there is no specificity left to escape by.
 
 What this says: the parts of an arms race exist (mimics arise and live on hosts' products; hosts can change keys and keep their
-catalyst), but in an open world the keys shrink until they recognise nothing. What it does not say: what happens where keys cannot
-shrink. `CR_*` (the capped world of section 33, hosts `PDABBABQ`, where a genome keeps its length and a key changes only by
-substitution; `pLinkBare` 0.05, since at 0.01 that world died; 2,000,000 steps, specificity on and off, 2 seeds) was running at
-the end of the session. A caution for reading it: a product holds on four of five matching letters (bound runs are cooperative),
-so one substitution barely escapes a mimic, and escapes will take several.
+catalyst), but in an open world the keys shrink until they recognise nothing.
+
+**Capped world** (`CR_*`: section 33's capped world with the same machine, hosts `PDABBABQ`, so a genome keeps its length and its
+pieces are sterile; `pLinkBare` 0.05, since at 0.01 this world died; 2,000,000 steps, specificity on and off, 2 seeds). Capped
+births per 500,000-step window: 750 to 940, of which mimics (a host key, no `D`) 1 to 23, that is 0.1 to 2.7%, in both arms and all
+windows. The hosts' keys still change (capped genomes gain and lose letters now and then: `ABBAB` → `ABBA` → `ABB`, `ABBAB` → `AABA`
+→ `ABAB`, `ABBAB` → `AA` → `ABBAB`), as much without specificity as with it, and mimic load does not predict a key's fall (capped
+genomes only, 100,000-step windows, r = +0.02 in both arms). No arms race starts, because mimics never become common: a mimic is
+catalysed only by a product that reaches it, and products stay on their makers (the probe above), so a mimic copies at the bare rate,
+twenty times slower than a host, and loses.
+
+What the two worlds say together: tag-based cooperation needs a good that actually reaches others; here the shared catalyst is, in
+practice, private. Where products were free to wander (the `A`-only code of section 36, hosts making short products that fell
+off) parasites took 60 to 70% of births; with keys, products bind their maker in register and stay. What would test the arms race:
+products that leave their maker after they are made (they may not bind the strand they were made on, or not for a while), keys
+that cannot shrink (capped), and a binding that recognises whole keys (above).
 
 **How specific is a product?** (Probes, 24×24, strands without the start letter so they make nothing, seeded finished products
 `12212` made from key `ABBAB`, 4,000 steps, 6 seeds.) Strands one letter off (`ABBAA`) hold 74% as many bound product units as
