@@ -3574,8 +3574,12 @@ node experiments/anchor_access.js experiments/scratch/AA_selected.json
 node experiments/anchor_access_summary.js experiments/out/AA_selected.json
 ```
 
-**Cost/provenance:** 100k executed steps (50k observed plus 50k neutrality replay),
-46.859 process CPU seconds. `AA_selected.json` contains gate counts, inventories,
+**Cost/provenance:** each execution uses 100k steps (50k observed plus 50k neutrality
+replay). The initial execution cost 46.859 process CPU seconds; a repeat after fixing
+automatic output-directory creation cost 61.500, giving 200k steps and 108.359 CPU
+seconds total. Every observation and the final-state hash match between executions;
+these are repetitions of the same selected world, not new evidence across seeds.
+`AA_selected.json` retains the latter execution's gate counts, inventories,
 full parameters, reference/source hashes and the final-state hash. Its analyzer
 checks gate partitions, occupancy totals, archived records and source provenance.
 Section 55 tests a contact-gated recruitment hypothesis rather than treating
@@ -3653,6 +3657,12 @@ is derived from the validated raw records. The graph analyzer independently
 reconstructs all patch histories and 150-block inventories. Tests cover exact
 off-state/RNG identity, both contact polarities, previous-pass reads, no contactless
 propagation, bound-side preservation, gate reset, malformed data and provenance.
+All 39 standard invariant checks also pass: the first 27 completed in the sequential
+run, then the remaining 12 completed in three independent `--match` partitions
+(`bindAny|compCopy|chiral`, `droplets|heat|proof`, and the six grip/stack/transStart/product
+checks). The sequential process was stopped after its first 27 successes to avoid
+duplicating those partitions. All five 1500-step default trajectory fingerprints
+match the pre-change values. Core simulation, viewer and presets remain unchanged.
 
 **Next direction:** test reversible positioning of a linked part while preserving
 its lateral structure, before inventing a constructor interpreter. The selected

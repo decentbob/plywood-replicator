@@ -1782,12 +1782,12 @@
   "referenceSha256": "453e40378631ee6987be96bb2af8c86a0e3ce8fe822e1bb46a82fe77845a43a8",
   "finalStateSha256": "f93b074274a3f19aa366e3191051d1a63fd608a638745d6ba2ee137f0e8c1a0f",
   "neutral": true,
-  "cpuSeconds": 46.859,
+  "cpuSeconds": 61.5,
   "sources": {
     "src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
     "experiments/patch_completion.js": "d1ab884d9a597821879014b2cb5d632d470aa80ca8a091c602087fd7d33a3d90",
     "experiments/end_protection.js": "1b1be017f98d8b8e73032ee83eac132e6f8c3b975dbf355484a5ecce387f306d",
     "experiments/end_protection_natural.js": "e3aa0a3f80784af0efd94343037cf22e7f12cb0797788ef6f8e1050da839b654",
-    "experiments/anchor_access.js": "a38f55893a6cd14e80929dc9498884797359916d7e1a3aa17b49c7b363f2a70d"
+    "experiments/anchor_access.js": "7cf77eafb9802310e4e04dd4e824f29c3439cd7a059e09595e89a78e70fc2aaa"
   }
 }

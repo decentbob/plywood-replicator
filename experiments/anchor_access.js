@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Observation only: hooks call the original method once and consume no randomness.
-const fs=require('fs'),assert=require('assert/strict'),crypto=require('crypto');
+const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
 const {setup,instrument}=require('./patch_completion');
 const {inventory}=require('./end_protection_natural');
 const {F,L,R}=require('../src/sim');
@@ -52,7 +52,8 @@ function run(){
     windows,births:s.births,referenceSha256:hash(reference),finalStateSha256:hash(JSON.stringify(s.saveState())),neutral:true};
 }
 if(require.main===module){
-  const out=process.argv[2];assert(out&&!fs.existsSync(out));const cpu=process.cpuUsage(),r=run(),c=process.cpuUsage(cpu);
+  const out=process.argv[2];assert(out&&!fs.existsSync(out));fs.mkdirSync(path.dirname(out),{recursive:true});
+  const cpu=process.cpuUsage(),r=run(),c=process.cpuUsage(cpu);
   const sources=Object.fromEntries(['src/sim.js','experiments/patch_completion.js','experiments/end_protection.js','experiments/end_protection_natural.js','experiments/anchor_access.js'].map(f=>[f,hash(fs.readFileSync(f))]));
   fs.writeFileSync(out,JSON.stringify({...r,cpuSeconds:(c.user+c.system)/1e6,sources},null,2)+'\n',{flag:'wx'});
   console.log(JSON.stringify({counts:r.counts,occupancy:r.occupancy,neutral:r.neutral,cpuSeconds:(c.user+c.system)/1e6},null,2));

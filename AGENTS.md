@@ -251,9 +251,12 @@ to `LITERATURE.md`. Read `experiments/assembly_front_plan.md` for prospective ch
 - All 45 births exact generation 1. Neither direction meets the predeclared confirmation criterion.
   Seven/eight gated worlds have no unfinished row at 50k but output falls in seven/eight comparisons.
   Controls retain productive mergers. No follow-up tuning, confirmation, long run, core knob or preset.
-- 600k screening steps, 199.407 CPU seconds, plus 100k diagnostic/replay steps, 46.859 CPU seconds.
+- 600k screening steps, 199.407 CPU seconds. Each diagnostic execution includes 50k observed plus
+  50k uninstrumented steps; two executions (the second after an output-directory fix) cost 108.359 CPU seconds.
   Data: `AF_screen` manifest/raw histories/CSV and `AA_selected.json`. Tests independently reconstruct
   patch histories/material, check provenance and reject malformed data. Core/default trajectories unchanged.
+  All 39 standard invariant checks pass (27 sequential, remaining 12 in three partitions); all five
+  1500-step default fingerprints match. No simulation remains running at this checkpoint.
 - **Next:** isolate the actual neighbors excluding placement, then test a local detach/reorient/reattach
   operation for an intact linked part. Useful reattachment and retained fidelity matter, not escape alone.
   Construction universality, self-construction and evolved machines are not demonstrated. No ecology sweep.
