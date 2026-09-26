@@ -5,8 +5,9 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** meta audit complete; no new simulation direction started. P0 is the next
-implementation/validation task. After that, choose a bounded test from the ranked portfolio;
+**Current status:** meta audit complete; no new simulation direction started. Following the
+user's clarification, retain body jostling for exploration and apply P0 checks to the relevant
+research. P0 is not a prerequisite physics rewrite. Choose a bounded test from P1 onward;
 do not automatically resume section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
 probability of achieving open-ended evolution. Confidence in that ultimate outcome remains low
@@ -16,7 +17,7 @@ for every route.
 
 | Order | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
-| P0 | Reconcile locality claims and validate local physics | Essential / high chance of clarifying validity | Small audit + bounded controls; ready | Without this, positive results can miss the defining constraint. |
+| P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
 | P1 | Contact-mediated ecological feedback using existing products | High / medium for measurable dependence, low for cumulative novelty | Small causal assay, then fresh worlds; conditional | Strongest measured endogenous pressure: parasitism and spatial effects (36, 42). |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / medium for a decisive theoretical result, low for a working evolving world | Paper/rule analysis first; ready for deep dive | Could make additional organization pay without a new reward motif. |
 | P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Small controls; choose one bottleneck | Closest to a machine of parts; fit already works, sustained advantage does not. |
@@ -30,31 +31,35 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## P0 — make the locality claim testable
+## P0 — local rules, with targeted physics validation
 
-**Question:** which current results survive a world with individual block jostling and an
-explicit bonded-side information boundary? See the audit for code locations and distinctions.
+**User-approved distinction (2026-09-26):** strictly local simple reaction rules and emergent
+mechanics are fundamental; strict locality of every numerical physics operation is not.
+Keep body jostling for fast exploration. It supplies aggregate random motion, not copying
+instructions, but it omits relative random kicks inside a bonded assembly. Do not claim it
+is universally equivalent to individual kicks or automatically more accurate than them.
 
-1. Write a read/write inventory for `_derive`, `_transition`, `compat`, physics and research
-   overrides. Separate immutable side identity from partner-private state, relayed messages,
-   contact geometry and observational bookkeeping. Audit live `ss`/`cat`/`stk` dependencies.
-   A function-name grep is a starting point, not the test.
-2. Define a conservative assay configuration using existing options: `bodyJostle=false`,
-   `snapCorners=false`, no G attraction, no temperature cycle or radiation band. This removes
-   known exceptions but is **not yet certification**. Validate actual constraints, copying and
-   solver resolution on a small square baseline and complementary curved baseline, drawing
-   on section 49's individual-kick/16-pass evidence. Do not assume 4 passes remain adequate.
-3. Add focused contract tests where behavior is uncertain: distant graph/ID changes must not
-   affect a block reaction given the same local inputs and controlled random draws; observer
-   toggles must not alter dynamics; relayed marks must advance/withdraw one bond per derive pass.
-   Derive-order checks should isolate derivation from bond-scan order and RNG assignment.
-4. If explicit typed side labels can be introduced with identical behavior, refactor narrowly.
-   Any timing/physics change gets a new measured baseline; preserve the old path for replay.
+1. For rules being introduced or investigated, review their read/write interface. Keep immutable
+   side identity, previous-pass relayed signals and contact geometry separate from observer
+   metadata. No whole-organism action, ancestor reader or global completion/stall predicate.
+   Audit live derived-state dependencies when relevant; avoid a broad refactor without a defect.
+2. Explore with the current physics and matched controls. For a promising mechanical claim,
+   compare the effect with individual kicks and sufficient solver passes, preserving the
+   experimental contrast in each setting. Measure useful output and the proposed physical
+   mechanism, not identical trajectories or identical births per step.
+3. Check solver sensitivity before attributing differences to the jostling scheme. Section 49
+   recovered the qualitative fit benefit at 16 individual-kick passes in two seeds; this is
+   useful prior evidence, not a universal convergence setting. Section 47's onset effect also
+   differed between schemes. Neither path is an unquestionable physical ground truth.
+4. If the claimed mechanism survives, proceed with the faster setting and report quantitative
+   sensitivity. If it disappears or reverses, isolate why and limit the claim before scaling.
+   Change the physics only when that discrepancy matters to the research question. A suspected
+   mechanically suppressed effect can also justify a small individual-kick diagnostic.
 
-**Gate:** documented interface and exceptions, viable reference copying, and stable qualitative
-results at increased solver resolution. If an effect only exists with aggregate kicks, label it
-accordingly. Default changes require their own evidence-backed change, not a quiet cleanup.
-Do not spend weeks optimizing speed before a viable local configuration is demonstrated.
+**Gate for a strong mechanical claim:** a matched causal effect with adequate solver resolution
+and a documented sensitivity check, or an explicitly limited conclusion under the tested motion
+model. This does not require replaying all historical results, disabling every optional physical
+force, or migrating defaults. Rule/observer locality checks remain mandatory for relevant changes.
 
 ## P1 — ecology that can generate its own next problem
 
@@ -125,7 +130,7 @@ Choose **one** of these hypotheses, justified by a measured bottleneck:
 
 - **Geometric specificity:** at fixed composition, inherited arrangements create different
   contact selectivity or fuel access. First demonstrate a reproductive consequence under matched
-  local physics, not another uptake-only race. Section 41's drift and section 50's missing second
+  physics, followed by the P0 sensitivity check, not another uptake-only race. Section 41's drift and section 50's missing second
   generation must be addressed explicitly. Complementary pairing alone is not evolved division of labor.
 - **Steric work from attachment:** existing contacts between an arc/ribbon and attached bulky
   parts cause bending or useful access, without prescribing the desired bend. Compare no-binding
@@ -188,8 +193,8 @@ useful outcome; suppression of all completion does not count.
 
 If the operation has no useful advantage there, mark the branch parked and preserve its operation
 library. If it succeeds, it earns a bounded generalization test, not immediate core promotion or
-an evolved-machine claim. Historical body-jostle fixtures remain historical-physics tests; a
-separate local-physics demonstration would still be required for the stronger claim.
+an evolved-machine claim. Historical fixtures retain their recorded physics; a promising
+mechanical result needs the P0 sensitivity check before a strong general claim.
 
 ## Parked or lower-value work
 
@@ -209,5 +214,8 @@ For each completed item record: date, evidence link, achieved evidence level, co
 and a specific next test or parked status. Keep likelihood qualitative and revise it after
 failed controls. Results are cumulative evidence; the queue is allowed to change.
 
-- **2026-09-26:** audit and instruction cleanup completed; P0 implementation and all proposed
-  assays remain unrun. Baseline engine, experimental sources and archived results preserved.
+- **2026-09-26:** audit and instruction cleanup completed; proposed assays remain unrun.
+  Baseline engine, experimental sources and archived results preserved.
+- **2026-09-26, user clarification:** body jostling retained for exploration. P0 revised from
+  a locality-first physics project to rule-locality review and targeted mechanical validation.
+  No new simulation or claim of equivalence between jostling schemes.

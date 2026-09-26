@@ -3,7 +3,7 @@
 The project has convincing examples of template copying, physical variation and selection
 under designed local chemistry. It has not demonstrated sustained evolution of increasingly
 capable machines. The best next investment is to make that distinction enforceable in the
-workflow, resolve the physics/locality mismatch, and pursue a few mechanisms that could make
+workflow, distinguish local reaction logic from numerical motion approximations, and pursue mechanisms that could make
 new organization useful without adding a new reward for each function.
 
 This is a static audit of commit `144ccd0`, not a new simulation experiment or a proof that
@@ -12,12 +12,21 @@ the SEEK and handoff mechanisms, experiment ledger, design decisions, literature
 selected result sections (especially 32–60). The section-60 raw-data summary was rerun successfully.
 The ranked decisions are in [ROADMAP](../ROADMAP.md); this report explains them.
 
+**Subsequent user clarification (2026-09-26):** mechanics and strictly local rules matter more
+than strict locality of the numerical physics. The user accepted keeping body jostling for
+exploration, checking promising mechanical effects with individual kicks and adequate solver
+resolution, and reworking physics only if a relevant discrepancy warrants it. This supersedes
+the audit's original recommendation to make a local-physics project the first research task.
+The implementation findings remain; aggregate motion is an accepted approximation, not a
+reaction-locality violation or established equivalence to individual-block motion.
+
 ## What “following intent” must mean
 
 Three tests are independent:
 
 1. **Permitted dynamics:** fixed, simple rules; conserved blocks; block-local chemistry and
-   contact/constraint physics; no organism-level controller hidden in a helper or relay.
+   contact-driven mechanics with documented numerical approximations; no organism-level
+   controller hidden in a helper or relay.
 2. **Autonomous operation:** the required parts encounter, assemble, operate and become available
    again under those rules. A selected bond placement only establishes physical possibility.
 3. **Evolutionary consequence:** physical variation produces inherited differences in useful
@@ -33,7 +42,7 @@ References below name functions and baseline line numbers; use function names af
 
 | Finding | Evidence at `144ccd0` | Interpretation and required disposition |
 |---|---|---|
-| Whole-body jostling is enabled by default | `src/sim.js:243`, `_jostleBodies` at 1371, `_physics` at 1430: traverse all bonded blocks, compute center/inertia/size-dependent motion, move all members together | A clear relaxation of DESIGN 2's per-block physics commitment. DESIGN 14's 2026-09-25 speed entry explicitly acknowledges it; it is not an undisclosed discovery or an organism-level reaction. Preserve the baseline, label the assumption, validate `bodyJostle=false` before claiming strict per-block dynamics. |
+| Whole-body jostling is enabled by default | `src/sim.js:243`, `_jostleBodies` at 1371, `_physics` at 1430: traverse all bonded blocks, compute center/inertia/size-dependent motion, move all members together | A clear relaxation of DESIGN 2's per-block physics commitment. DESIGN 14's 2026-09-25 speed entry explicitly acknowledges it; it is not an undisclosed discovery or an organism-level reaction. The subsequent user clarification accepts this motion approximation. Preserve the baseline and check mechanical sensitivity when relevant; do not describe it as strictly per-block motion or as proven equivalent to individual kicks. |
 | The exposed-side contract is incompletely represented | `_derive` at 850–947 reads bonded neighbors' types for hub exclusion, motifs and translation; `_transition` reads partner type for proofreading/resistance | Bounded neighboring information, not a whole-strand lookup. The code describes type as color, but `ss` alone does not carry it. Specify a typed side interface or publish an explicit immutable label; do not call this a proof of nonlocal computation, or silently generalize access to private partner data. |
 | Some derived reads are live | `_derive` reads current `ss` for fuel WANT/GIVE, catalyst PBIND, and partner-face context; `stk` is also live | Dedicated relay channels use previous-pass buffers correctly, but this is not a blanket synchronous-side guarantee. Trace dependency chains and permute derive order with fixed bonds/states/RNG before claiming one-hop semantics for all channels. The audit did not demonstrate an actual multi-hop leak in these paths. |
 | Optional physics/environment exceptions exist | `_stick` at 1336 attracts unbonded nearby G/letter pairs; `_cornerGroups` at 574 plus `snapCorners` at 1568 averages transitively pinned corners; `step` at 1328 computes global `_hot`; radiation uses position with `radBand` | Separate short-range physical forces, a shared-junction numerical constraint, and imposed environmental schedules from chemical messages. These are not all equivalent to a global organism controller. They nevertheless need explicit scope labels, and cannot be cited as a strict bonded-side-only world. `snapCorners` groups are common corner constraints, not necessarily whole bodies. |
@@ -43,9 +52,10 @@ References below name functions and baseline line numbers; use function names af
 | Random chemistry has a cleaner state interface, but limited evidence | `src/rchem.js:_chemistry` stages next states from bonded-side colors; `assemblies` is an observer; `rsearch.js` ranks repeated hashes | Rules are fixed per world and local at the reaction level; inherited base physics includes body jostling. Three-round graph hashes and repeated shapes are screening heuristics, not exact identity, genealogy or heredity. `autocat.js` is a first probe, not a sufficient evolutionary assay. |
 
 **Disposition:** do not rewrite the engine as part of this meta task. No runtime source, numerical
-default, assay implementation or archived data was changed. Resolving P0 is substantive physics and
-interface work, with its own controls and new baseline if needed. Existing findings remain evidence
-under their recorded assumptions; this audit does not invalidate them wholesale.
+default, assay implementation or archived data was changed. P0 now calls for focused interface
+review and mechanical sensitivity checks alongside research, not a compulsory physics rewrite.
+Existing findings remain evidence under their recorded assumptions; this audit does not invalidate
+them wholesale. Any future semantic change needs its own controls and baseline.
 
 The side-interface cleanup must not become a pretext for adding dozens of states. If a typed side
 label merely makes an existing immutable color explicit, seek trajectory-equivalent refactoring.
@@ -135,5 +145,6 @@ All five fingerprints were rerun after the edits and match exactly. Section-60 r
 validation passed; the suite lists 39 checks. Local document links, preserved archive content,
 unchanged runtime/assay/data files and whitespace were checked. The full invariant suite was
 not rerun for documentation-only changes. This audit does not remeasure old-engine experiments, prove
-absence of all observation leaks, or certify a fully local physics configuration. Those limits
-are why P0 is first. Literature-derived hypotheses are identified separately from project results.
+absence of all observation leaks, or certify a fully local physics configuration. The accepted
+policy is targeted validation under P0, not a prerequisite physics migration. Literature-derived
+hypotheses are identified separately from project results.

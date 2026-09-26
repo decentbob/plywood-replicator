@@ -25,8 +25,9 @@ handoffs, is preserved in [the archive](docs/archive/AGENTS-2026-09-26.md).
 - **Locality comes first.** A reaction reads its block's own type/state/bonds and the derived
   state exposed by its bonded partner side. It changes its own state or requests a change to
   an incident bond. No component traversal, sequence/length/completion/age reader, global
-  signal, organism counter, parent identity, or correct-position memory in dynamics.
-  Pair contact/geometry checks are physics; they must not become whole-assembly operations.
+  signal, organism counter, parent identity, or correct-position memory in reaction logic.
+  Numerical motion approximations may group connected material, as described below; they must
+  not supply organism-level actions or feed global information into reactions.
 - **Signals move one bond per derive pass.** Relayed marks use previous-pass buffers
   (`ss0`, `tip0`, `prf0`, `trs0`, or the assay's explicit equivalent). A simulation step has
   several derive passes: do not claim one bond per step. Test propagation and withdrawal.
@@ -48,10 +49,14 @@ handoffs, is preserved in [the archive](docs/archive/AGENTS-2026-09-26.md).
   mechanisms that add nothing; preserve their evidence and reproducibility before code removal.
   Keep few viewer presets. Biology and theory suggest hypotheses, not implementation requirements.
 - **Only polygon physics.** No lattice replacement or resurrection of the removed rigid engine.
-  Existing `bodyJostle=true` aggregates whole bonded bodies: DESIGN 14 records this speed
-  relaxation, but it does not satisfy the stricter per-block physics commitment. Do not conceal
-  that conflict or silently change historical defaults. ROADMAP P0 defines the local-path audit.
-  Direct neighbor-type reads and optional physics exceptions are also catalogued in the audit.
+  **User clarification (2026-09-26):** mechanics and strictly local reaction rules matter more
+  than strict locality of the numerical physics. Keep `bodyJostle=true` for fast exploration;
+  no physics rewrite is a prerequisite. It groups connected material for random motion and
+  omits relative random kicks, so equivalence to individual-block motion is not assumed.
+  Check promising mechanical effects with individual kicks and adequate solver resolution.
+  Rework physics only when a discrepancy affects the mechanism being investigated. Preserve
+  local signals, contact-driven behavior and conserved material. ROADMAP P0 specifies these
+  targeted checks; it is an ongoing standard, not a separate project blocking research.
 - **Preserve the user's research style.** Try varied ideas in small worlds; scale promising
   leads. Screen ordinary population questions in 50k–150k steps, with an early viability look;
   prepared mechanical tests may be much shorter. Two seeds are a lead, not confirmation.

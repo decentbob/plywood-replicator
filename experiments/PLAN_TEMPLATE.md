@@ -14,6 +14,7 @@ For each changed block behavior: own inputs, bonded-side inputs, state/bond writ
 previous-pass timing. New types/states/side marks/rule cases/knobs, and why each is necessary:
 
 Physics assumptions (`bodyJostle`, solver, `snapCorners`, forces, environment):
+For a promising mechanical claim, targeted individual-kick/solver sensitivity check (ROADMAP P0):
 Prepared interventions and observer-only IDs/classifications:
 Conserved block/type inventory; energy drive and recycling assumptions:
 Simpler existing mechanism or control this must beat:

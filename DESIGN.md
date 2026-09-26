@@ -23,10 +23,11 @@ Prior art worth reading before building: Lionel Penrose's mechanical self-replic
 
 ## 2. Core commitments (do not change without a very good reason)
 
-**2026-09-26 audit note:** these are the intended constraints, not certification of every
-current path. Section 14 explicitly records the later whole-body-jostling speed relaxation;
-current defaults therefore do not satisfy the strict per-block physics statement below.
-See [docs/RESEARCH_AUDIT.md](docs/RESEARCH_AUDIT.md) and ROADMAP P0. Particle counts are
+**2026-09-26 clarification:** strict locality applies to reaction logic and signals. The user
+accepted keeping whole-body jostling as a numerical motion approximation for exploration,
+with targeted individual-kick and solver checks for promising mechanical effects. This
+supersedes the earlier demand that every physics operation be per block; no physics rewrite
+is required first. See [docs/RESEARCH_AUDIT.md](docs/RESEARCH_AUDIT.md) and ROADMAP P0. Particle counts are
 conserved; recharge/jostling drive the system, so “energy conserved” below is not a claim
 of thermodynamic energy conservation. Preserve historical results under their actual assumptions.
 
@@ -40,7 +41,7 @@ of thermodynamic energy conservation. Preserve historical results under their ac
 - **Minimal environment.** Random jostling (the only "temperature"), soft repulsion between bodies, and an energy reload rule. Nothing else. No gradients, no chemistry zones, unless an experiment shows they are needed. (A sun patch was tried as such an experiment and removed, section 8.)
 - **Biology is guidance, not a spec.** Where biology has solved a problem this world runs into (copy straight and fold free; let the shield self-assemble instead of being encoded; keep a public good inside a compartment), take the shape of the solution and find the smallest local rule that has it. Never import the mechanism itself, and never add a rule because biology has one; add it because a measurement here says the problem exists.
 - **Space is exclusive.** Two squares cannot occupy the same place, and a bond cannot form into a spot that is occupied. Added in the second draft after the build showed what happens without it (section 10).
-- **Nothing bigger than a square exists in the dynamics.** Not in the rules and not in the physics. A bond is a constraint between the two squares it joins and nothing else; jostling, repulsion and bond constraints act on one square at a time. Chains, strands, templates and copies are words for what an observer sees. The code that counts them (`componentOf`, `stats`, the birth log) is observation and never feeds back. Added in the third draft: the second draft's physics moved bonded squares as one rigid body, which was faster and exact but broke this principle.
+- **No organism-level behavior in the rules.** Components, sequences, lineage and completion are observation, never reaction inputs. Numerical physics may group bonded material for motion (`bodyJostle`); this does not authorize copying, positioning or coordinating an organism as a programmed action. Contact constraints and deformation still determine assembly mechanics. Retain the fast approximation for exploration and test important mechanical effects under individual kicks with adequate solver resolution. This 2026-09-26 user clarification replaces the earlier blanket prohibition on aggregate physics, not the local-rule commitment.
 
 ---
 
@@ -510,6 +511,13 @@ Keep entries short: date, what changed, why, what evidence.
   pressures, and handoff remains an operation without a demonstrated waiting-control benefit.
   Next priorities are locality/interface validation, causal ecological dependence, and a
   theoretical resource-economy test before another speculative mechanism. No new experiment.
+
+- 2026-09-26 (after the audit). **User-approved motion approximation.** The user emphasized
+  mechanics and strictly local rules over strict locality of numerical physics, then accepted
+  retaining body jostling for exploration. Revised P0: check promising mechanical effects with
+  individual kicks and adequate solver resolution; rework physics only if a discrepancy matters
+  to the mechanism. The prior audit's physics-first ordering is superseded. No equivalence claim,
+  relaxation of reaction/signal locality, runtime change or new simulation follows.
 
 ---
 

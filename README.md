@@ -23,7 +23,9 @@ See [experiments/RESULTS.md](experiments/RESULTS.md) for the measurements.
 
 **Intent audit (2026-09-26).** These are results under designed local chemistry, not yet
 sustained evolution of increasingly capable machines. Default physics includes whole-body
-jostling, a documented speed trade-off that relaxes the stricter per-block commitment.
+jostling, a documented motion approximation. The user clarified that this is acceptable for
+exploration: preserve strictly local reaction rules and check promising mechanical effects
+with individual kicks and adequate solver resolution; no physics rewrite is required first.
 The [audit](docs/RESEARCH_AUDIT.md) distinguishes that exception, side-interface gaps,
 and demonstrated operations from evolved complexity. [ROADMAP.md](ROADMAP.md) ranks
 next work; historical handoffs and literature shortlists are not the current queue.

@@ -393,8 +393,9 @@ the rows that used it). Rerun it after adding rows.
 intent audit. Earlier rows' “points to” fields preserve the decision made at that time;
 later tests may have completed or rejected it. Do not treat every historical lead as active.
 
-- **P0 — locality and physics:** default body jostling groups bonded assemblies. Validate
-  the individual-block path and side-information contract before claiming strict locality.
+- **P0 — local rules and mechanical validation:** body jostling is accepted for exploration.
+  Check promising mechanical effects with individual kicks and adequate solver resolution;
+  retain strictly local reaction logic. No prerequisite physics rewrite.
 - **P1 — causal ecology:** shared catalysts and space have strong effects (36, 42), but
   useful recipient dependence must be measured before another arms-race search (43–46).
 - **P2 — resource-efficient assembly:** ask whether extra organization can economize a
