@@ -4107,3 +4107,120 @@ checks plus full HOLD/exposed controls, event-reconstructed contact lifetimes,
 complete 150-block and settled-row inventories, explicit HOLD handling and 20
 malformed datasets. Section 57 and 58 analysis tests still pass; all five default
 fingerprints match. Core chemistry, physics, viewer and presets are unchanged.
+
+## 60. A local handshake acquires support, but does not beat waiting
+
+**Question.** Can support be acquired before release using only a block's own
+state/bonds and previous-pass marks from bonded partner sides? Section 59's
+prepared contact worked, but late face exposure did not. Protocol:
+`contact_handoff_plan.md`. These are research-only states, not standard knobs.
+
+Replay the two section-58 worlds to one step before the selected release:
+square 5,315 and opposed20 28,183. Four identical-state forks each run +5k.
+The original 0.0001 endpoint hazard now either releases into SEEK (control) or
+enters REQUEST. No ID is read by a reaction; no prepared bond, pose/RNG edit,
+kick, geometry override, lateral cut or new material is supplied.
+
+### 60a. The block-local operation
+
+REQUEST retains its face and ordinary DOCK lateral behavior while it has exactly
+one lateral bond. It publishes a request only on bonded laterals. A REPEL block
+whose face is free reads that mark from the previous derive pass and enters
+OFFER: a receptive DOCK face, bonded laterals BONDED, free laterals INERT.
+
+If OFFER's face binds, retained capture enters LATCH, holds its face and
+publishes support on bonded laterals. A REQUEST reading that support releases
+its own face into SEEK. LATCH returns to ordinary DOCK when it no longer reads
+a request. OFFER withdraws if the request disappears; REQUEST returns to ordinary
+DOCK if its own face is absent or lateral bond count changes. Ordinary local
+release and redocking then apply. No state reads a correct position or sequence.
+
+Two ablations separate waiting, exposure and retention: **wait** never exposes
+the neighbor's face; **pulse** lets a captured OFFER immediately run the ordinary
+DOCK transition instead of retaining it. Every side mark is derived from its
+owner's state/contact and stored separately from the previous-pass array. No
+signal propagates through an unbonded side or a second neighbor in one pass.
+
+### 60b. Physical outcomes
+
+| fixture | arm | supporting LATCH physics phases | phases overlapping primary face | original target outcome / absolute step | all new exact / nonexact |
+|---|---|---:|---:|---|---:|
+| square | seek | 0 | 0 | PAAAABBBQ / 6,714 | 1 / 1 |
+| square | wait | 0 | 0 | PAAAABBBBQ / 6,619 | 1 / 0 |
+| square | pulse | 0 | 0 | PAAAABBBBQ / 6,048 | 1 / 0 |
+| square | hold | 2 | 1 | PAAAABBBBQ / 7,728 | 1 / 0 |
+| opposed20 | seek | 0 | 0 | PAAAABBBQ / 28,274 | 0 / 1 |
+| opposed20 | wait | 0 | 0 | unfinished PAAAABB / 33,183 | 0 / 0 |
+| opposed20 | pulse | 0 | 0 | unfinished PAAAABB / 33,183 | 0 / 0 |
+| opposed20 | hold | 0 | 0 | unfinished PAAAABB / 33,183 | 0 / 0 |
+
+The square handoff is autonomous after switching the universal research rule:
+
+- At 5,316 endpoint 114 enters REQUEST while retaining founder site 3.
+- At 5,317 its bonded neighbor 107 enters OFFER.
+- At 5,318 ordinary formation binds neighbor 107 to site 2; it enters LATCH.
+- Physics at 5,319 has both contacts. Endpoint 114 reads support and releases.
+- Physics at 5,320 still has the secondary contact. Endpoint 114 returns to
+  site 3; the secondary loses its request and releases during chemistry.
+- The exact product at 7,728 contains all four original target members.
+
+Thus the protocol closes the acquisition gap left by section 59. But **it does
+not establish a useful advantage over waiting**: the wait control lets ordinary
+growth finish without releasing the primary face, and completes sooner. The
+pulse arm also completes sooner, with no target handoff. Its 519 accepted
+OFFER captures across the world release within their capture step; they provide
+repeated placements rather than retained physical constraints. It finishes the
+window with a separate request/offer pair still unresolved. These are correlated
+events within one selected trajectory, not hundreds of independent trials.
+
+In the curved world the request appears at 28,184 and neighbor 111 opens its
+face at 28,185. Neither pulse nor hold acquires that face contact within the
+window. The primary remains attached and the original seven-member PAAAABB
+remains unfinished. Zero erroneous products here is not a fidelity success:
+the alternative is no completed product. This is censoring at +5k, not proof
+that the request can never resolve.
+
+**Verdict.** One local, contact-mediated handoff now works without forced
+placement and preserves exact completion. No efficiency benefit or general
+curved registration solution is established. No rate search, additional state,
+fresh-seed screen, long confirmation, core feature or preset follows.
+
+**Next bounded question.** Apply the same unmodified handshake to the original
+two-prefix obstruction (section 56), alongside unchanged, SEEK and waiting
+controls. Require useful exact output and intact original-member reuse beyond
+waiting; mere retention or suppression of errors earns nothing. If supporting
+contact cannot be acquired usefully there, park handoff rather than add a
+whole-part search or global stall detector. Constructor universality and
+self-construction remain unshown.
+
+### Reproduction and validation
+
+```sh
+node experiments/contact_handoff.js experiments/scratch/CH_selected.json
+node experiments/contact_handoff_summary.js experiments/out/CH_selected.json experiments/out/CH_selected.csv
+node experiments/contact_handoff_test.js
+```
+
+`CH_selected.json` archives initial/final states, current/previous side marks,
+ordered bond and state changes with local input marks, raw stock births,
+independent settled member sets and five 1k inventories per arm. Primary
+completion requires all-REPEL, face-free rows and does not feed back into rules.
+All 150 blocks and every original lateral bond reconcile; the analyzer rebuilds
+states and bonds step by step and finds exactly the recorded completed rows.
+Stock birth counts remain separate from physical completion.
+
+Both continuous prefix replays exactly reproduce section 58's saved states.
+Restored one-step replays differ only by the documented cache `pinsVersion`
+increment and added research mark arrays; physical arrays and RNG match. Saved
+marks are restored explicitly. Eight full unobserved forks equal the observed
+final worlds. Eight additional short observer and restart checks pass, including
+restart during the square capture. Unit tests check previous-pass latency,
+absence of second-hop propagation, contact loss, immediate versus held capture
+and signal withdrawal; the analyzer rejects 19 corrupted datasets.
+
+Archived execution: **113,500 steps, 54.156 process CPU seconds**, including
+33,500 prefix steps and 40k each of observed and unobserved forks, at most four
+workers. Section 57 and 59 analysis regressions and all five 1500-step default
+fingerprints pass. Core chemistry, physics, viewer and presets are unchanged;
+the full 39-check suite was last run in section 55. Do not load these research
+states in the standard viewer.

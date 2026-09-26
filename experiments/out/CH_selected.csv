@@ -1,0 +1,9 @@
+profile,arm,heldPhases,overlapPhases,targetExact,exact,nonExact
+square,seek,0,0,false,1,1
+square,wait,0,0,true,1,0
+square,pulse,0,0,true,1,0
+square,hold,2,1,true,1,0
+opposed20,seek,0,0,false,0,1
+opposed20,wait,0,0,false,0,0
+opposed20,pulse,0,0,false,0,0
+opposed20,hold,0,0,false,0,0

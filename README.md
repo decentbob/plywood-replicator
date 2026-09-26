@@ -135,6 +135,12 @@ alone (59). Prepared contact rescues the square piece in both placement orders; 
 consistently better. `second_contact_exposure.js` shows that merely exposing the face after release does
 not acquire the same benefit. These remain prepared fixtures, with no new core rule.
 
+`contact_handoff.js` tests a research-only local request/capture/release handshake (60).
+It autonomously acquires support and completes the selected square part exactly, but waiting
+alone also succeeds sooner; the curved part acquires no support within 5k. No population screen
+or standard knob is justified. See `contact_handoff_plan.md` and the companion summary/test.
+Its REQUEST/OFFER/LATCH states require the research subclass, not the standard viewer.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

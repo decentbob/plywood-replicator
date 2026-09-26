@@ -105,6 +105,7 @@ experiments/local_redocking.js  research-only SEEK endpoint state and selected r
 experiments/local_redocking_screen.js  fresh matched off/drop/seek worlds (57b); summary checks full physical completion, not stock births alone
 experiments/registration_fit.js  selected post-release stiffness x solver forks (58); actual corner deformation, docking checks, summary/tests
 experiments/second_contact.js  secondary-contact availability and prepared DOCK/HOLD fixtures (59a); order and exposure variants, summary/tests alongside
+experiments/contact_handoff.js  local REQUEST/OFFER/LATCH handshake in pre-release fixtures (60); previous-pass marks, raw state/bond histories, summary/tests
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -238,7 +239,41 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): prepared support works; natural face exposure is too late
+## Handoff (2026-09-26, latest): autonomous handoff works once, but waiting also succeeds
+
+Section 60 tests a local request/capture/release handshake. Read `experiments/contact_handoff_plan.md`.
+
+- Replay the section-58 fixtures to one step before release: square 5,315, curved 28,183. Identical
+  four-way +5k forks: original seek, request/wait without face exposure, immediate-release capture
+  pulse, retained capture. No selected-ID intervention, prepared bond, position or RNG edit.
+- Research-only REQUEST keeps an endpoint attached and advertises on its bonded lateral. A REPEL
+  neighbor reads the previous-pass request and enters OFFER (receptive face, inert free laterals).
+  Captured OFFER enters LATCH and advertises support; requester reads it and releases into SEEK.
+  LATCH returns to ordinary DOCK once the request disappears. A request cancels if its own lateral
+  count changes. Pulse omits retention; wait omits exposure. All reaction reads are block-local.
+- Square: neighbor 107 captures site 2 at 5,318, endpoint 114 releases site 3 at 5,319, returns to site 3
+  at 5,320; support lasts two physics phases, one overlapping the old attachment. Original four
+  members complete exactly at 7,728. No lateral loss; all 150 blocks conserved.
+- **Control limits:** waiting alone also completes exactly, at 6,619; pulse at 6,048. Seek makes
+  PAAAABBBQ at 6,714. The handshake demonstrates an operation, not a completion advantage. Pulse
+  repeatedly binds/releases (519 captures world-wide) without retained support or target handoff.
+- Curved: seek makes PAAAABBBQ; all three request arms remain PAAAABB through +5k. The exposed
+  neighbor never acquires a supporting contact. Unfinished is censored, not permanent arrest.
+- Data: `CH_selected.json` / CSV; raw state and bond events, side marks, full worlds, inventories,
+  input/source hashes. 113,500 steps / 54.156 CPU seconds includes both prefixes and eight full
+  unobserved controls. Unit-local latency/capture/withdrawal, eight-arm restart and observer checks,
+  raw reconstruction and 19 corruptions pass. Section 57/59 regressions and five fingerprints pass.
+  Core/viewer/presets unchanged. Full 39-check suite last passed section 55; not rerun for this assay.
+- **Next:** same unmodified handshake in the original selected two-prefix obstruction (section 56),
+  with unchanged/seek/wait controls. Require useful exact output and intact original-member reuse
+  beyond waiting. No fresh-seed screen, rate search or extra states earned by section 60. If it cannot
+  acquire useful support there either, park this direction rather than add a global stall detector.
+  Research states require the subclass; do not open them in the standard viewer.
+
+Resume: `node experiments/contact_handoff_test.js`,
+`node experiments/contact_handoff_summary.js experiments/out/CH_selected.json`.
+
+## Previous handoff (2026-09-26): prepared support works; natural face exposure is too late
 
 Section 59 tests the secondary-contact idea. Read `experiments/second_contact_plan.md`.
 

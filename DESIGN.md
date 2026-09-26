@@ -484,9 +484,28 @@ Keep entries short: date, what changed, why, what evidence.
   before release. No core change or fresh screen yet. Do not mistake a geometrically possible fixture
   for autonomous acquisition, or ignore the equal-bond-count placement routine's pair-order sensitivity.
 
+- 2026-09-26. **Autonomous handoff is possible, but its advantage is unproven (60).** Research-only
+  REQUEST/OFFER/LATCH states publish own contact status on bonded laterals and read previous-pass
+  partner marks. The square endpoint requests at 5,316; its neighbor captures at 5,318; the old face
+  releases at 5,319 and returns to the same site at 5,320. Support acts in two physics phases, one
+  overlapping the old contact. Exact target completion is 7,728 versus 6,619 for waiting alone and
+  6,048 for immediate-release contact pulses. In the curved fixture all request variants remain
+  unfinished through +5k; there is no supporting capture. This establishes a local operation, not
+  an efficiency gain or general registration solution. Keep it outside core and test the original
+  obstruction before any fresh screen; no rate search or additional signaling states.
+
 ---
 
 ## 15. Ideas not yet tried
+
+**2026-09-26, useful handoff versus waiting (60).** A contact-only handshake now acquires a
+secondary contact before releasing the old one, retaining support for two physics phases and
+completing the selected square part exactly. Waiting alone also succeeds sooner, and the curved
+part acquires no support in 5k. No new rate, state or fresh-seed sweep is earned. The next bounded
+test is the original two-prefix obstruction (section 56): does this same unmodified handshake
+permit useful progress that a request/wait control cannot? Keep unchanged and SEEK controls,
+require exact output and original-member reuse, and treat failure as a reason to park handoff.
+Do not add global stall detection or broaden the signal to search along a whole part.
 
 **2026-09-26, mechanical assembly operations (54–55).** Contact-triggered recruitment is now tested,
 not an unbuilt promise: both directions lose output. A universal constructor needs description copying,
@@ -500,9 +519,9 @@ The next untested operation is contact/fit that retains registration without kno
 Section 58 rejects higher stiffness in the selected shift fixtures at both 4 and 8 passes. Next test
 whether a second actual contact can retain position while permitting useful rearrangement, rather than
 assuming stiffer material or an unfinished endpoint inventory means accurate assembly.
-Section 59 now establishes that a prepared supporting bond can help, while late face exposure cannot
-acquire its benefit in the selected square fixture. The untested primitive is a local contact handoff,
-with support acquired before release and retained through a physics phase; no whole-row coordinator.
+Section 59 establishes that a prepared supporting bond can help, while late face exposure cannot
+acquire its benefit in the selected square fixture. Section 60 implements local acquisition before
+release, but has not shown an advantage over waiting. That is the next gap; no whole-row coordinator.
 Any new state must read only its own bonds and bonded-side states. No ID-specific rescue in chemistry,
 global assembly-age threshold, nonlocal completion detector, or lateral severing as a free cleanup.
 
