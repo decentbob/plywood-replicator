@@ -71,7 +71,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
     births 5.25 with flexible binding vs 5.5 without it; only one of four seeds improves. Binding benefits producers much more.
     In the uncapped PY setting, a fresh two-seed production/binding screen does support recipient dependence (61):
     18/24 recipient-parent births versus 0/1 without binding and 2/1 without production, with continuing producer output.
-    Detached exact recipient output has the same direction. This is a lead awaiting fresh confirmation, not a rescue of flexibility.
+    Detached exact recipient output has the same direction. Fresh confirmation (62) gives binding effects +16/-1/+22/+4:
+    mean benefit remains positive, but only 2/4 worlds pass the predeclared gate. Producers remain viable in all four.
+    Park this setting for frequency competition; it does not rescue flexibility or establish reliable delivery in every world.
 
 ## Viability atlas (will a new world live?)
 
@@ -266,6 +268,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 60a | Autonomous contact handoff | Can a neighbor acquire support before local release? | research REQUEST/OFFER/LATCH, previous-pass side marks | works | square capture 5318, release 5319, correct return 5320; support 2 physics phases, exact target at 7728 | contact_handoff.js (`CH_selected`) | test usefulness against waiting in the original two-prefix obstruction | one selected state; no prepared bond, ID read, kick or new material |
 | 60b | Handoff benefit and availability | Does the handshake outperform waiting and work when curved? | matched seek/wait/pulse/hold, +5k | negative | square wait exact at 6619 and pulse at 6048, both sooner than hold; curved request arms acquire no support and remain unfinished | contact_handoff.js (`CH_selected`) | no fresh screen, extra states or rate tuning | no efficiency benefit demonstrated; curved outcomes censored, not permanent arrest; default engine unchanged |
 | 61 | Uncapped recipient dependence | Does recipient reproduction require shared-product interactions? | `pBindP` 0/0.2, `transStart` absent P/off, `pLinkBare` 0.01, `bindAny` | lead | recipient-parent births 18/24 on, 0/1 no binding, 2/1 no production; detached exact output 15/18 versus 0/1 and 2/1 | recipient_dependence.js (`RD_dependence_screen`) | unchanged four-arm confirmation, fresh seeds 105–108 | two screen seeds plus two viability; fixed 1,000 blocks; producer-parent output 48/58; no frequency dependence or novelty |
+| 62 | Fresh recipient-dependence confirmation | Does the fixed dependence criterion hold across four fresh worlds? | `pBindP` 0/0.2, `transStart` absent P/off, `pLinkBare` 0.01, `bindAny` | negative | 2/4 pass; recipient binding effects +16/-1/+22/+4, production +21/+3/+21/+4; producers reproduce in all four | recipient_dependence.js, recipient_confirmation_summary.js (`RD_dependence_confirm`) | park this setting; P2 material-budget derivation next | positive means +10.25/+12.25 do not pass the all-four gate; 106 reverses detached exact binding effect, 108 misses +5 threshold |
 
 ## Knob index
 
@@ -279,7 +282,7 @@ the rows that used it). Rerun it after adding rows.
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works) |
 | `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works) |
-| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead) |
+| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative) |
 | `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
 | `catalysis` | 34c (works), 42a (works) |
@@ -334,7 +337,7 @@ the rows that used it). Rerun it after adding rows.
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
-| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead) |
+| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead), 62 (negative) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
@@ -343,7 +346,7 @@ the rows that used it). Rerun it after adding rows.
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
-| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead) |
+| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative) |
 | `pMelt` | 18 (negative) |
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |
@@ -390,7 +393,7 @@ the rows that used it). Rerun it after adding rows.
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
 | `transCode` | 34a (works), 43a (negative) |
 | `translate` | 34a (works), 42a (works) |
-| `transStart` | 43a (negative), 61 (lead) |
+| `transStart` | 43a (negative), 61 (lead), 62 (negative) |
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 
@@ -404,10 +407,12 @@ later tests may have completed or rejected it. Do not treat every historical lea
   Check promising mechanical effects with individual kicks and adequate solver resolution;
   retain strictly local reaction logic. No prerequisite physics rewrite.
 - **P1 — causal ecology:** shared catalysts and space have strong effects (36, 42), but
-  the new recipient-dependence lead (61) still needs four fresh confirmation seeds before
-  frequency competition. The uncapped result does not reopen the failed flexibility setting (46).
-- **P2 — resource-efficient assembly:** ask whether extra organization can economize a
-  scarce part under conserved material and local renewal; ordinary stacks did not (40).
+  the recipient-dependence lead (61) fails its fresh confirmation gate (62, 2/4 pass).
+  Park this setting for frequency competition; no rate tuning or new states. Positive
+  mean benefits remain evidence, not a rescue of the failed flexibility setting (46).
+- **P2 — resource-efficient assembly, next:** derive whether extra organization can economize
+  a scarce part under conserved material and local renewal, including simpler competitors
+  and recycling before implementation; ordinary stacks did not supply this mechanism (40).
 - **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);
   inherited reproductive advantage remains open (41, 47, 51). No more uptake-only claims.
 - **P4 — random-chemistry heredity:** resolve recurrence versus variant-specific descendants

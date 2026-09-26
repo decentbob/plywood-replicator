@@ -4374,3 +4374,131 @@ rules. Confirm the unchanged four-arm comparison at 50k in four fresh seeds
 worlds and continuing producer reproduction; a failed confirmation parks this
 setting without rate tuning or new states. This does not establish a heritable
 advantage, frequency dependence, sustained ecological closure or evolved complexity.
+
+## 62. Fresh recipient-dependence confirmation fails its consistency gate
+
+2026-09-26, ROADMAP P1; [prospective confirmation plan](recipient_confirmation_plan.md).
+**Negative confirmation decision:** two of four fresh seeds meet all criteria.
+The mean recipient effect remains positive, but one seed reverses the binding
+contrast and another misses the minimum effect. Park this setting for advancement
+to frequency competition. This does not erase the successful worlds or prove
+that shared products have no benefit.
+
+### Frozen comparison and outcome
+
+The section-61 runner, observer, rules, parameters and original plan are
+byte-identical. Seeds 105–108 each run on/noBind/noSource/neither for 50k;
+the primary window remains (10k,50k]. There are 1,000 fixed blocks, identical
+initial material/poses within each seed, body jostling and four solver passes.
+Production is disabled with absent-P translation initiation; binding is disabled
+with pBindP=0. The ablations' construction/contact effects and the live cat-side
+read remain as described in 61. No new mechanism or signal is introduced.
+
+Before launch, `.protocol.json` froze the seed/arm matrix, criteria, timestamp,
+baseline commit `71042ca` and hashes of the unchanged sources, new plan and
+confirmation analyzer. Every fresh seed had to retain the original +5-birth
+advantage against both ablations, >=5 producer-parent births, >=1 recorded
+later-generation producer birth, and nonzero recipient occupancy. The detached
+exact recipient advantage, post-hoc in 61, was an additional prospective guard
+here. Neither earlier screen seed enters this decision. No seed was replaced,
+no horizon extended, and all 16 runs finished.
+
+All counts below are in seed order **105 / 106 / 107 / 108**. Parent snapshots
+with AA are producer-potential; other length>=2 parents are recipients. Missing
+or one-unit parents remain unknown, including 3/1/4/2 in the on arm.
+
+| arm | recipient-parent births | producer-parent births | detached exact recipient output |
+|---|---:|---:|---:|
+| production + binding | 24 / 4 / 23 / 8 | 49 / 56 / 53 / 55 | 22 / 2 / 21 / 7 |
+| no binding | 8 / 5 / 1 / 4 | 1 / 2 / 3 / 0 | 5 / 4 / 1 / 3 |
+| no production | 3 / 1 / 2 / 4 | 1 / 0 / 5 / 0 | 3 / 1 / 2 / 4 |
+| neither | 3 / 1 / 2 / 4 | 1 / 0 / 5 / 0 | 3 / 1 / 2 / 4 |
+
+| seed | binding effect | production effect | detached exact binding effect | detached exact production effect | decision |
+|---|---:|---:|---:|---:|---|
+| 105 | +16 | +21 | +17 | +19 | passes |
+| 106 | -1 | +3 | -2 | +1 | fails both +5 thresholds and detached binding advantage |
+| 107 | +22 | +21 | +20 | +19 | passes |
+| 108 | +4 | +4 | +4 | +3 | positive direction, below both +5 thresholds |
+
+Equal-weight fresh-seed means are 14.75 recipient-parent births on, 4.5 without
+binding and 2.5 without production: mean effects +10.25 and +12.25. Three of four
+worlds have positive effects against both controls. Those observations do not
+satisfy the predeclared all-four confirmation requirement; no significance claim
+is made from the many correlated contacts or pooled birth events.
+
+All four on worlds pass the producer and occupancy conditions. Producer-parent
+output at recorded gen>=2 is 39/56/44/47. Thus the failed recipient effect is
+not accompanied by donor collapse over the measured window. In seed 106,
+recipient occupancy is only **17/3,053 armed-site samples (0.56%)**, versus
+3,109/16,593 (18.74%), 3,203/12,573 (25.48%) and 728/9,482 (7.68%) in the other
+on worlds. This identifies low observed recipient binding, not its cause:
+encounters, delivery, recipient loss and competition were not separately ablated.
+No rate or identity-aware recognition change follows this observation.
+
+### Physical output and material
+
+The on arm records 76/61/80/65 non-product releases in the primary interval;
+74/58/78/64 have all member F faces unbound at logging. None are fully TPL at
+that instant. Known-parent exact copies number 65/54/66/54, same-length changes
+6/2/7/8 and length changes 2/4/3/1. Variation is retained and classified; this is
+not a claim that every altered row remains viable.
+
+At the first sample at least 5k after release, **54/63, 35/52, 46/65 and 40/55**
+eligible on rows retain their original members/order/endpoints; every such row
+is fully TPL. Another 13/9/15/10 releases are age-censored. These are sampled
+integrity/activation measurements, not continuous survival or a verified pedigree
+through recycling. Stock generations alone do not establish reproductive closure.
+
+| on seed | free letters | docked single letters | unfinished linked letters | released linked letters | free products | docked single products | unfinished linked products | released linked products |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 105 | 302 | 7 | 59 | 232 | 137 | 2 | 2 | 159 |
+| 106 | 412 | 5 | 29 | 154 | 177 | 1 | 4 | 118 |
+| 107 | 350 | 6 | 44 | 200 | 142 | 2 | 4 | 152 |
+| 108 | 411 | 2 | 28 | 159 | 163 | 0 | 4 | 133 |
+
+The archived report gives the same inventory for every control, together with
+all occupancy denominators. All 8,000 sampled inventories conserve 600 letters,
+300 product units and 100 energy particles. Production-off worlds retain all
+300 products as free monomers; their neither controls match final physical state
+and RNG exactly in all four seeds. Other arms diverge after conditional RNG use.
+Released linked product inventory can include bound mature material, and no
+claim of free circulation or indefinitely sustainable turnover is made.
+
+### Reproduction, validation and disposition
+
+```sh
+node experiments/recipient_confirmation_summary.js --prepare experiments/scratch/RD_dependence_confirm
+node experiments/recipient_dependence.js --out experiments/scratch/RD_dependence_confirm --seeds 105,106,107,108 --arms on,noBind,noSource,neither --steps 50000 --workers 4
+node experiments/recipient_confirmation_summary.js experiments/out/RD_dependence_confirm
+node experiments/recipient_confirmation_test.js
+node experiments/recipient_dependence_analysis_test.js
+node tools/fingerprint.js 1500
+```
+
+Archive: `out/RD_dependence_confirm.{protocol.json,manifest.json,runs.jsonl,summary.txt}`.
+It retains all raw births, member follow-ups, 100-step samples, final states,
+parameters, launch command and source hashes. The analyzer verifies that the
+protocol precedes launch and its sources/specification are unchanged, then
+validates the complete 16-world matrix and reconstructs each final state.
+Boundary fixtures reject changed criteria, missing/duplicate/old seeds, late
+protocols, incomplete batches, source changes and detached-output failures.
+
+Cost: **800,000 steps, 1,673.093 process CPU seconds**, four workers at most,
+below the declared 3,600-second ceiling. No outcome-dependent stopping. Both
+analysis test scripts pass; all five default fingerprints match the audit baseline.
+The section-61 observer/restart/local-signal tests and three core regressions
+were not rerun because their simulation/observer sources did not change. The
+full physics suite was not rerun. Core, viewer and historical evidence are intact.
+
+**Decision:** park this uncapped setting for frequency competition and retain
+the operation/evidence library. The two-stage P1 exercise improves causal
+evidence but does not advance beyond autonomous interaction on the audit ladder;
+reliable recipient benefit under the stated confirmation criterion remains unmet.
+Choose **P2 next**, as already ranked: a bounded material-budget derivation and
+candidate block-level table for two or three organizations, including recycling
+and simpler resource-free competitors, before implementing a new mechanism.
+P4's heredity discrimination is an independent fallback; P3 still needs net
+reproductive benefit rather than another uptake/fit result. Reopen this P1
+setting only with independent evidence of a distinct causal bottleneck, not
+another rate sweep, more confirmation seeds or an easier retrospective threshold.

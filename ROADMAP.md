@@ -5,25 +5,25 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P1's first causal screen passes in two fresh uncapped worlds (61):
-recipient-parent births fall from 18/24 to 0/1 without binding and 2/1 without production,
-while producer reproduction continues. This is a lead awaiting four fresh confirmation
-seeds, not frequency dependence or evolved complexity. Retain body jostling for exploration
-and apply P0 checks to relevant research; no prerequisite physics rewrite. Do not
-automatically resume section 60. Ranking reflects evidence, goal fit, cost and added
+**Current status:** P1's fresh confirmation fails its predeclared consistency gate (62):
+2/4 seeds pass; one reverses the binding benefit and another falls below the +5-birth
+threshold, despite continuing producer reproduction. Mean effects remain positive.
+Park this setting for frequency competition. **P2's material-budget derivation is next**;
+P4 is an independent alternative. Retain body jostling and targeted P0 checks; no
+prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
 probability of achieving open-ended evolution. Confidence in that ultimate outcome remains low
 for every route.
 
 ## Ordered portfolio
 
-| Order | Direction | Importance / next-stage likelihood | Cost and status | Why here |
+| Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P1 | Contact-mediated ecological feedback using existing products | High / medium for measurable dependence, low for cumulative novelty | Two-seed causal lead (61); fresh confirmation next | Recipient dependence survives production/binding ablations in the uncapped setting; no new rules. |
-| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / medium for a decisive theoretical result, low for a working evolving world | Paper/rule analysis first; ready for deep dive | Could make additional organization pay without a new reward motif. |
+| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / medium for a decisive theoretical result, low for a working evolving world | Next: bounded material/rule derivation before implementation | Could make additional organization pay without a new reward motif. |
 | P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Small controls; choose one bottleneck | Closest to a machine of parts; fit already works, sustained advantage does not. |
 | P4 | Heredity test for existing random chemistries | Medium / low, but potentially high information gain | Small bounded assay; no broad search yet | Directly tests emergence from unselected simple rules and an old unclosed gap. |
+| P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
 | P5 | Coupling replication modes and evolving dependencies | High long-term / low until prerequisites pass | Park implementation | Two modes alone failed (40); coupling needs a real material/function exchange. |
 | C1 | Close the handoff branch with its one outstanding test | Low strategic priority / high diagnostic value, low expected advantage | Optional short closure, no extensions | Good way to finish a loose end; not a prerequisite for P1–P4. |
 
@@ -102,11 +102,20 @@ production control retains all blocks and binding compatibility using an absent
 translation-start type; it also changes back exposure and construction contacts.
 This does not reopen the capped flexibility hypothesis (46).
 
-**Next discriminating test:** unchanged four arms, 50k, fresh seeds 105–108;
-predeclare confirmation criteria before running. Keep the (10k,50k] primary
-window, separate detached/exact output and sampled integrity, and report producer
-renewal and unfinished inventory. The positive two-seed screen earns confirmation,
-not rare/common frequency competition yet. A failed confirmation parks this setting.
+**2026-09-26 confirmation outcome (62):** unchanged four arms, 50k, seeds
+105–108, primary window (10k,50k]. Recipient binding contrasts are +16/-1/+22/+4;
+production contrasts +21/+3/+21/+4. Seeds 105/107 pass; 106 loses the binding
+benefit, and 108 misses the minimum effect despite positive direction. All four
+retain producer reproduction and nonzero recipient occupancy. Detached exact
+output also reverses the binding contrast in 106. Mean benefits are positive,
+but the predeclared all-four gate fails. No retrospective threshold change.
+
+**Disposition:** park this setting for frequency competition. No rate tuning,
+extra confirmation seeds, longer runs or new states. Low occupancy in seed 106
+is an observation, not an isolated causal obstruction that reopens the branch.
+P2 is the next main question; P4 remains an independent fallback. The two assays
+strengthen evidence for autonomous interaction but do not establish reliable
+recipient benefit by the fixed criterion, full reproductive closure or novelty.
 
 ## P2 — extra organization that economizes scarce material
 
@@ -216,6 +225,7 @@ mechanical result needs the P0 sensitivity check before a strong general claim.
 
 | Idea | Why parked | Evidence that would reopen it |
 |---|---|---|
+| Frequency competition in the section-61 uncapped shared-product setting | Fresh confirmation passes only 2/4 seeds (62), despite positive mean benefits | Independent evidence isolating a distinct causal bottleneck; not more seeds, a new rate or a relaxed threshold. |
 | More motif-specific genes or a prescribed multi-stage energy pathway | Can demonstrate selection of designed pressures; complexity ceiling still supplied by the designer | A clear use as a calibration, or spontaneous new organization beyond the specified pathway. |
 | More endpoint states, stiffness sweeps, assembly-front gates | Sections 55, 57, 58, 60 fail their respective output/fidelity/benefit gates | A distinct causal obstruction or a successful C1 result; not merely a new rate. |
 | Product flexibility as a recipient benefit | Failed fresh-seed binding control (46) | A different measured mechanism, not reuse of the original positive seeds. |
@@ -238,3 +248,7 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
 - **2026-09-26, section 61:** P1 causal reproductive-effect **lead**, ten runs including
   viability, 420k steps / 795.203 CPU seconds. No new chemistry. Both seeds pass;
   fresh four-seed confirmation is next. No frequency dependence or complexity claim.
+- **2026-09-26, section 62:** fresh P1 confirmation **fails its consistency gate**,
+  16 runs / 800k steps / 1,673.093 CPU seconds. Two of four seeds pass; mean effects
+  remain positive. Park the tested setting, retain the evidence and make P2's
+  material-budget/local-contact derivation next. No new simulation mechanism.

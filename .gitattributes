@@ -1,3 +1,6 @@
-# Preserve the bytes recorded by the section-61 launch manifests on Windows.
+# Preserve the bytes recorded by recipient-dependence launch protocols on Windows.
 experiments/recipient_dependence.js text eol=lf
 experiments/recipient_dependence_plan.md text eol=lf
+experiments/recipient_dependence_summary.js text eol=lf
+experiments/recipient_confirmation_plan.md text eol=lf
+experiments/recipient_confirmation_summary.js text eol=lf
