@@ -4,8 +4,9 @@
 // window: births, the share that translate (hosts), how many distinct keys hosts carry and the commonest, the non-translators
 // (mimics if their key is one some host in the window carries, else other), and whether the hosts' commonest key changed since the
 // last window (a key turnover). Keys are read either way round (a copy reads reversed).
-//   node experiments/keys.js out/AR_*.births.jsonl [--start=D] [--coded=AB] [--window=50000] [--top=3]
+//   node experiments/keys.js out/AR_*.births.jsonl [--start=D] [--coded=AB] [--window=50000] [--capped] [--top=3]
 const fs = require('fs');
+const capped = process.argv.includes('--capped');   // only genomes capped at both ends (the capped worlds of section 33)
 const opt = (k, d) => { const a = process.argv.find((x) => x.startsWith('--' + k + '=')); return a ? a.split('=')[1] : d; };
 const start = opt('start', 'D'), coded = opt('coded', 'AB'), win = Number(opt('window', 50000)), ntop = Number(opt('top', 3));
 const rv = (q) => q.split('').reverse().join('');
@@ -15,7 +16,7 @@ const hasStart = (q) => (start.length === 3 ? q.includes(start) || q.includes(rv
 console.log('| run | window | births | hosts | host keys (distinct) | commonest host keys | mimics | other non-hosts | turnover |');
 console.log('|---|---|---:|---:|---:|---|---:|---:|---|');
 for (const f of process.argv.slice(2).filter((a) => !a.startsWith('--'))) {
-  const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((b) => !b.prod && b.seq.length >= 2);
+  const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((b) => !b.prod && b.seq.length >= 2 && (!capped || (b.seq[0] === 'P' && b.seq.endsWith('Q')) || (b.seq[0] === 'Q' && b.seq.endsWith('P'))));
   const tmax = rows.length ? rows[rows.length - 1].t : 0;
   let prevTop = null;
   for (let w0 = 0; w0 <= tmax; w0 += win) {

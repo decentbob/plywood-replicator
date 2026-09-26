@@ -28,7 +28,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 3. **A gene pays only where its pressure acts, and only if the benefit stays with its carrier.** Private goods are
    selected (feed 14b, shield 19, relay 19c, 33b); public goods are not, in any world size or mobility tried (9, 14, 17,
    21); a shared catalyst feeds parasites, which take the majority but not everything (36a, 36b); graded specificity
-   (a good that favours kin) holds parasites down (36c).
+   (a good that favours kin) holds parasites down (36c). In space, creeping polymers keep a shared catalyst near its makers and
+   parasites about ten points lower (42); a catalyst that carries its maker's key rebinds its maker and stays, so it is private in
+   practice and mimics of the key cannot spread (43b).
 4. **Without its pressure a gene decays by point mutation, slowly** (shield 74 → 32% of births over 500k steps, 33c):
    genes are kept for a few hundred thousand steps after their pressure ends.
 5. **New genes need raw material: length variation comes from density, not population size.** At ordinary density
@@ -175,13 +177,15 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 40c | Treadmilling stacks | Same with stack bottoms fraying (they grow at the top, die at the bottom)? | `stack`, `stackHold` off, `pSBind` 0 to 0.5 | negative | never lock up; length 2.1–2.8 at every zip rate; with aggregation (no barrier) 4.4–4.8 but letters locked again | stacks.sh (`ST_tread_*`) | stacks where free strands are punished (radiation) | melting is not death: a row that comes off copies at once |
 | 40d | Stacks keep a two-gene genome? | Is `ABACDC` kept longer with stacks (section 22 world)? | `stack` (held, zip 0.02) with `feed`, `shield`, `relay` | inconclusive | seed 2: plain lost it by 76–78k, stacks kept it to 165–192k; seed 1: no difference | stacks.sh (`ST_K*`) | more seeds | the plain world now keeps it far longer than section 22 said |
 | 40e | Stacks under radiation | Do stacks keep a population alive where radiation kills it? | `stack`, `backCopy`, `pBreak` 3e-5 to 3e-4 | negative | at 3e-4 plain extinct (2 of 2) but back copies released without stacks live as well (665–684 births per 15k vs 602–619 with stacks); length 2.0 everywhere | stacks.sh (`ST_rad*`) | — | two-faced templating (two copy sites per strand) is the rescue, not stacking; first reading was wrong |
-| 40g | Heritable stacking (sticky and slippery letters) | Is the stacking mode selected under radiation when a letter sets it? | `smeltA` 20, `stack`, `pBreak` 0 to 3e-4 | negative | `B` share 0.47–0.55 in every arm | stacks.sh (`ST_slip*`) | — | follows from 40e: stacks give nothing to select |
 | 40f | Shape-limited stacks | Do wedge rows limit stack height? | `stack`, `bendA` 0 to 20 | negative | heights 6–10 at 0–10°; 15° and more: no copying at all | probe (RESULTS 40) | — | geometry is a switch again |
+| 40g | Heritable stacking (sticky and slippery letters) | Is the stacking mode selected under radiation when a letter sets it? | `smeltA` 20, `stack`, `pBreak` 0 to 3e-4 | negative | `B` share 0.47–0.55 in every arm | stacks.sh (`ST_slip*`) | — | follows from 40e: stacks give nothing to select |
 | 41a | Pocket races, 8 seeds | Does fuel size decide which of three same-letter genomes wins (section 39 world)? | `pocket`, `foldA` 45, `foldB` 30, `sizeU`, `nU` 40 | negative | shares within drift (per-seed 0–70%); the one nominal effect (p = 0.05) is matched by the no-fold control | races.js, permtest.js (`RC*`, `RN*`) | an energy-limited world (41b) | births limited by letters: fuel arms more templates but births stay (105–129 vs 122 without fuel) |
 | 41b | Who makes pockets; energy-limited world | Are pockets one strand or two? Where does energy limit births? | `pocket`; 48×48, 400 letters each, `nE` 8 to 64 | works | 81–92% of fuel armings in one folded strand; dense world: births 39/68/86/127 at 8/16/32/64 energy particles | pockets.js, `EL*` | races in the dense world (41c) | harvest order differs from the section 39 spectrum (context) |
 | 41c | Pocket races, energy-limited, 12 seeds | Does fold decide same-letter races where energy limits births? | `pocket`, folds on/off, fuel 0.5/1.2, dense 48×48 | inconclusive | `ABABABAB` 50% with folds vs 24% without at fuel 1.2 (p = 0.09), 49% with folds and no fuel; nothing significant | races.js, permtest.js (`DR*`, `DS*`) | 96×96 worlds, or genomes differing in composition | 20–40 births per lineage per seed: drift swings shares 0–100% |
 | 42a | Shared catalyst in space | Do creeping polymers let hosts and parasites separate and hold parasites down (80×80)? | `bindAny`, `translate`, `catalysis`, `mobS` 0.1, 0.3, 1 | works | parasites at the end 50–65% creeping, 60–63% at 0.3, 71–72% well mixed (8 vs 4 runs, no overlap); segregation 0.03–0.10 vs 0.01–0.03; host births equal | hostparasite.sh, spatial.js, hostmap.js (`HP_*`) | hosts that can evolve against parasites (43) | 2 seeds per mobility; no travelling front; a ~10-point effect |
 | 42b | Parasites arise by themselves | With only hosts seeded, do non-producers arise, and does space hold them down? | as 42a, mutation 0.005 | works | short B/C/D strands arise within 50k and take 58–62% creeping vs 72% mixed | hostparasite.sh (`HM_*`) | — | hosts shrink to `AAB`, `AAAB` (regularity 1) |
+| 43a | Keys and mimics, open world | With a start letter for translation and graded specificity, do hosts escape mimics by changing keys (a Red Queen)? | `transStart` D, `transCode` A1,B2, `bindAny`, `pMisMelt` 0.05 | negative | mimics 12–29% of births; mimic load does not predict a key's fall (pooled r = +0.05, p = 0.72; +0.15 without specificity); keys shrink to 2–3 letters | armsrace.sh, keys.js, redqueen.js (`AR_*`) | capped world, where keys cannot shrink (`CR_*`) | 2 seeds, 1M steps; one striking cycle in seed 1 is drift by the test |
+| 43b | Keys and mimics, capped world | Where keys cannot shrink, do mimics spread and drive key changes? | as 43a, capped (`endLoss`, caps), `pLinkBare` 0.05 | negative | capped mimics 0.1–2.7% of capped births over 2M steps in both arms; keys drift as much without specificity; r = +0.02 | armsrace.sh (`CR_*`), keys.js, redqueen.js `--capped` | products that leave their maker; whole-key recognition | products stay on their maker, so mimics copy at the bare rate |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 
 ## Knob index
@@ -196,7 +200,7 @@ the rows that used it). Rerun it after adding rows.
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative) |
 | `bendB` | 15c (lead), 15d (works) |
-| `bindAny` | 36a (works), 36b (works), 42a (works) |
+| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative) |
 | `bodyJostle` | 37 (works) |
 | `capFray` | 28c (lead), 33a (partial) |
 | `catalysis` | 34c (works), 42a (works) |
@@ -204,7 +208,7 @@ the rows that used it). Rerun it after adding rows.
 | `compCopy` | 29 (partial) |
 | `cut` | 26 (negative) |
 | `cutMotif` | 26 (negative), 26b (inconclusive) |
-| `endLoss` | 33a (partial), 33a' (negative), 33b (works) |
+| `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works) |
@@ -257,12 +261,12 @@ the rows that used it). Rerun it after adding rows.
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
-| `pLinkBare` | 34c (works) |
+| `pLinkBare` | 34c (works), 43b (negative) |
 | `pMelt` | 18 (negative) |
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
-| `pMisMelt` | 36c (works) |
+| `pMisMelt` | 36c (works), 43a (negative) |
 | `pocket` | 39b (works), 39c (works), 39d (inconclusive), 39e (inconclusive), 39f (partial), 41a (negative), 41b (works), 41c (inconclusive) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
@@ -289,14 +293,15 @@ the rows that used it). Rerun it after adding rows.
 | `slack` | 10b (superseded), 12 (works) |
 | `snapCorners` | 23 (works), 23b (works) |
 | `spend` | 14d (negative) |
-| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (negative), 40g (negative), 40f (negative) |
+| `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (negative), 40f (negative), 40g (negative) |
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiffA` | 15 (works), 15b (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `sun` | 3 (negative) |
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
-| `transCode` | 34a (works) |
+| `transCode` | 34a (works), 43a (negative) |
 | `translate` | 34a (works), 42a (works) |
+| `transStart` | 43a (negative) |
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 

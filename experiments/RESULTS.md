@@ -2288,3 +2288,62 @@ Every creeping or half-creeping run ends below every well-mixed one (8 against 4
 0.03). Parasites arise by themselves within 50,000 steps: short strands of the letters that make no product (`BDC`, `BCC`, `CD`,
 `BD`; mean length 3.1), and the hosts shrink too (`AAB`, `AAAB`, `AAA`), so shortest wins on both sides. Space holds the
 parasites down by about ten percentage points and no more; it does not stop them, and it does not make anything evolve against them.
+
+## 43. Keys and mimics: can hosts evolve against parasites? (`transStart`, `armsrace.sh`, `keys.js`, `redqueen.js`)
+
+Section 42's hosts can escape parasites only by being elsewhere. For hosts to evolve a defence, the catalyst must recognise
+sequence, and making product must be separable from being catalysed. With the full code (`A`→`1`, `B`→`2`) a product carries its
+maker's key (its run of `A` and `B`), and with graded specificity (`pMisMelt`) it binds strongly only where that key recurs; but
+every strand with coded letters translates, so every strand that is catalysed also makes product. **`transStart`** (new, default off):
+only a strand carrying a start motif translates (here one letter, `D`); a template unit carrying it marks itself and the mark runs
+along the strand one block per pass, as the proofreading flag does. A mimic is then possible: a strand with a host's key and no
+`D`, copied on others' products and making none. A host that mutates its key keeps its own catalyst (made from the new key) and
+leaves its mimics behind: the ingredients of tag-based cooperation (Riolo, Cohen and Axelrod 2001), whose cheaters and escapes cycle
+without end, with no rule about keys.
+
+**Open world** (`AR_*`: 40×40, four letters, 150 of each, 150 blocks of each product kind, hosts `DABBAB` ×6, shared catalyst,
+1,000,000 steps, 2 seeds; controls without specificity and without the start rule). Births from step 500,000:
+
+| run | births | hosts (with `D`) | commonest host keys | mimics (a host key, no `D`) |
+|---|---:|---:|---|---:|
+| specificity, seed 1 | 1,732 | 1,166 | `AB` 329, `ABA` 287, `ABB` 279 | 499 |
+| specificity, seed 2 | 1,899 | 1,627 | `AB` 706, `ABB` 333, `ABA` 173 | 236 |
+| no specificity, seed 1 | 2,747 | 1,872 | `BAB` 349, `AAB` 275, `AB` 227 | 656 |
+| no specificity, seed 2 | 2,551 | 1,881 | `AB` 469, `BAB` 397, `AA` 242 | 368 |
+| no start rule, seed 1 | 2,099 | 1,257 | `AB` 928, `ABB` 182 | (785, all translate) |
+| no start rule, seed 2 | 2,116 | 1,089 | `AB` 909, `ABB` 37 | (889, all translate) |
+
+Mimics arise at once (15 to 25% of births in the first 200,000 steps, by losing the `D` or as pieces without it) and stay (12 to
+29% of births late). Keys do change: in seed 1 with specificity the hosts' commonest key went `AB` → `ABBA` → `AB` → `ABA`, with
+`AB` mimics peaking (38 per 50,000 steps) just before the hosts moved to `ABBA` and dying away while `ABBA` led. But that is what
+the eye picks out of drift: across all windows and keys, the mimic load on a key does not predict its fall among hosts (`redqueen.js`,
+50,000-step windows, pooled over two seeds: r = +0.05, p = 0.72 with specificity; +0.15 without; +0.12 without the start rule), and
+keys turn over as often without specificity. The keys shrink to two or three letters (`AB`, `ABA`, `ABB`) in every arm: the shortest
+key wins (regularity 1), and a two-letter key recurs in almost any strand, so there is no specificity left to escape by.
+
+What this says: the parts of an arms race exist (mimics arise and live on hosts' products; hosts can change keys and keep their
+catalyst), but in an open world the keys shrink until they recognise nothing.
+
+**Capped world** (`CR_*`: section 33's capped world with the same machine, hosts `PDABBABQ`, so a genome keeps its length and its
+pieces are sterile; `pLinkBare` 0.05, since at 0.01 this world died; 2,000,000 steps, specificity on and off, 2 seeds). Capped
+births per 500,000-step window: 750 to 940, of which mimics (a host key, no `D`) 1 to 23, that is 0.1 to 2.7%, in both arms and all
+windows. The hosts' keys still change (capped genomes gain and lose letters now and then: `ABBAB` → `ABBA` → `ABB`, `ABBAB` → `AABA`
+→ `ABAB`, `ABBAB` → `AA` → `ABBAB`), as much without specificity as with it, and mimic load does not predict a key's fall (capped
+genomes only, 100,000-step windows, r = +0.02 in both arms). No arms race starts, because mimics never become common: a mimic is
+catalysed only by a product that reaches it, and products stay on their makers (the probe above), so a mimic copies at the bare rate,
+twenty times slower than a host, and loses.
+
+What the two worlds say together: tag-based cooperation needs a good that actually reaches others; here the shared catalyst is, in
+practice, private. Where products were free to wander (the `A`-only code of section 36, hosts making short products that fell
+off) parasites took 60 to 70% of births; with keys, products bind their maker in register and stay. What would test the arms race:
+products that leave their maker after they are made (they may not bind the strand they were made on, or not for a while), keys
+that cannot shrink (capped), and a binding that recognises whole keys (above).
+
+**How specific is a product?** (Probes, 24×24, strands without the start letter so they make nothing, seeded finished products
+`12212` made from key `ABBAB`, 4,000 steps, 6 seeds.) Strands one letter off (`ABBAA`) hold 74% as many bound product units as
+exact ones (`ABBAB`): recognition is by runs, not by whole keys, which is also why keys can shrink to two letters. A stricter rule
+was tried and removed: a bound product unit on a wrong letter marks its product, the mark is relayed along it, and every marked unit
+lets go at `pMisMelt`; it moved the ratio only to 70%, because the wrong unit lets go within a few steps and its mark goes with it.
+And in the hosts' own world products seldom meet other strands at all: released beside their template, they rebind to it in
+register and hold (no product unit was found on a wrong letter in 10,000 steps of a mixed `DABBAB`/`DABBAA` world), so a shared
+catalyst at this density is mostly private to its maker, which limits what mimics can take.
