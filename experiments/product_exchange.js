@@ -10,7 +10,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 const { isProd, LETTERS, I_TPL, I_REPEL, K, L, R } = require('../src/sim.js');
-const { ProductLatchSim: Sim } = require('./product_latches.js');
+const { ProductShapeSim: Sim } = require('./product_shapes.js');
 
 const arms = {
   baseline: {},
@@ -28,6 +28,12 @@ const arms = {
   durable: { productFray: 0.03 },
   durableReset: { productFray: 0.03, productReset: true, pPReady: 0.001 },
   durableNoBind: { productFray: 0.03, pBindP: 0 },
+  shapeFace15: { productFray: 0.03, fold1: 15, fold2: 15 },
+  shapeSide5: { productFray: 0.03, fold1: 5, fold2: 5, productShape: 'lateral' },
+  shapeSide15: { productFray: 0.03, fold1: 15, fold2: 15, productShape: 'lateral' },
+  shapeSide30: { productFray: 0.03, fold1: 30, fold2: 30, productShape: 'lateral' },
+  shapeSideNeg15: { productFray: 0.03, fold1: -15, fold2: -15, productShape: 'lateral' },
+  shapeFree15: { productFray: 0.03, fold1: 15, fold2: 15, productShape: 'lateralFree' },
 };
 const base = {
   W: 40, H: 40, nA: 150, nB: 150, nC: 150, nD: 150, nP: 120, nQ: 120,
@@ -39,7 +45,8 @@ const base = {
 };
 const columns = ['arm', 'seed', 't', 'hostBirths', 'mimicBirths', 'otherBirths', 'products',
   'hostSites', 'mimicSites', 'otherSites', 'hostBound', 'mimicBound', 'otherBound',
-  'matchedBound', 'mismatchedBound', 'productUnits', 'readyUnits', 'waitingUnits', 'sameSiteBound'];
+  'matchedBound', 'mismatchedBound', 'productUnits', 'readyUnits', 'waitingUnits', 'sameSiteBound',
+  'productLateralEvents', 'productDockEvents', 'productBindEvents'];
 
 function capped(q) { return /^P.*Q$|^Q.*P$/.test(q); }
 function kind(q) { return !capped(q) ? 'other' : q.includes('D') ? 'host' : 'mimic'; }
@@ -74,6 +81,8 @@ function run(job) {
   const params = { ...base, ...arms[job.arm], seed: job.seed };
   if (job.mode === 'probe') Object.assign(params, { pFray: 0, pSoft: 0 });
   const s = new Sim(params), initialTypes = Array.from(s.type);
+  const eventKeys = ['productLateralEvents', 'productDockEvents', 'productBindEvents'];
+  const previous = Object.fromEntries(eventKeys.map(k => [k, s[k]]));
   const rows = [];
   for (let end = Math.min(job.every, job.steps); ; end = Math.min(end + job.every, job.steps)) {
     const row = Object.fromEntries(columns.map(c => [c, 0]));
@@ -83,6 +92,7 @@ function run(job) {
       if (b.prod) row.products++;
       else row[kind(b.seq) + 'Births']++;
     }
+    for (const k of eventKeys) { row[k] = s[k] - previous[k]; previous[k] = s[k]; }
     const errors = s.check();
     if (errors.length || s.n !== initialTypes.length || initialTypes.some((t, i) => s.type[i] !== t)) {
       throw new Error('Invariant failure: ' + JSON.stringify(errors));
@@ -116,6 +126,7 @@ if (!isMainThread) {
   const metadata = { options, node: process.version, platform: process.platform, started: new Date().toISOString(),
     simSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, '../src/sim.js'))).digest('hex'),
     modelSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, 'product_latches.js'))).digest('hex'),
+    shapeSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, 'product_shapes.js'))).digest('hex'),
     scriptSha256: crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex'),
     // CPU usage is process-wide for worker threads: report only once for the whole batch below.
     jobs: [], complete: false };
