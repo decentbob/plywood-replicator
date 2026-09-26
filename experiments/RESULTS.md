@@ -3219,3 +3219,49 @@ duplicate/missing arms, parameter mismatch and out-of-window events). Source che
 conversion when comparing current source to the recorded byte hash. The existing `grip and pocket` check
 passes. The full 39-check suite was not rerun; the engine is unchanged and all five 1500-step default fingerprints
 are identical. No browser or build changes were made.
+
+## 51. Fully active offspring can still stall among unfinished rows
+
+### 51a. Replaying the same worlds with block identities
+
+Section 50 leaves two possibilities: curved offspring cannot fully rearm, or they cannot assemble another row
+from the remaining material. `offspring_recovery.js` replays the eight grip-enabled 100k worlds of 50c, seeds
+73-76, square/opposed20. These are **the same worlds**, not eight new confirmations. The ordinary birth logs,
+every 10k statistic and every fuel arming match the archived records exactly. The observer keeps member IDs at
+birth, parent-member provenance, exact time of complete rearming, and a 100-step sample of incoming monomers
+and joined incoming material. No identity or row count enters a simulation rule.
+
+The fixed world has 120 letters, 40 U, four initially inactive AAAABBBB founders, no turnover or substitutions.
+The prospective protocol is `offspring_recovery_plan.md`. A fully rearmed row is an observational milestone;
+partially active rows can already recruit material under the existing per-block rules.
+
+| seed | released offspring, square / curved | fully rearmed by 100k, square / curved | offspring ever observed with joined incoming material, square / curved | free letters at 100k, square / curved | letters in unlogged linked rows, square / curved |
+|---:|---:|---:|---:|---:|---:|
+| 73 | 7 / 6 | 4 / 5 | 3 / 3 | 2 / 7 | 30 / 33 |
+| 74 | 4 / 4 | 1 / 0 | 2 / 2 | 28 / 18 | 28 / 35 |
+| 75 | 7 / 6 | 7 / 3 | 3 / 3 | 0 / 5 | 32 / 35 |
+| 76 | 7 / 5 | 6 / 2 | 3 / 2 | 0 / 9 | 32 / 39 |
+
+Thus **10/21 curved offspring fully rearm**, yet none produces a logged child by 100k. Square has 18/25 fully
+rearmed offspring and two productive parents. This rules out failure to complete rearming as the sole explanation.
+Late-born offspring have less time; in the prespecified cohort born by 50k, six of seven curved offspring fully
+rearm with at least 50k follow-up, but none produces a child. The square cohort has 12/12 fully rearmed and one
+productive parent. Those rows occur in only two worlds per shape, so they are not independent replicates.
+
+All 31 curved and 26 square unlogged linked rows at 100k still have at least one docked unit. They are neither
+free pool material nor missed detached births at that snapshot. Their lengths range from 2 to 7. They contain
+80 active units in curved worlds and 53 in square worlds: release and rearming happen block by block before
+a whole-row birth is logged. It would be wrong to call all of this material chemically inert. Conversely, its
+activity does not establish a completed reproductive cycle. Each world reconciles exactly to 32 founder units,
+logged offspring, free monomers, isolated docked monomers, unlogged linked rows and other units (zero here).
+
+```sh
+node experiments/offspring_recovery.js --out experiments/out/OR_replay
+node experiments/offspring_recovery_summary.js experiments/out/OR_replay
+node experiments/offspring_recovery_test.js
+```
+
+**What this says:** whole-world fuel use and birth totals conceal the obstruction. Some mature offspring are
+active and initiate joined material, while a substantial part of the conserved pool remains in unfinished rows.
+**What it does not say:** this inventory alone proves that freeing monomers restores exact reproduction, or that
+energy no longer matters. Full rearming can occur late; the next probe changes those constraints separately.
