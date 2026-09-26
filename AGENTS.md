@@ -187,6 +187,11 @@ viability atlas, the knob index). The short version:
   many-to-many map no rule lists). But in races between same-letter genomes the fitness differences are within drift, in a
   letter-limited world (8 seeds) and in an energy-limited one (12 seeds, `ABABABAB` 50% with folds vs 24% without at fuel
   1.2, p = 0.09). Pockets are mostly one strand folded on itself (81–92% of fuel armings).
+- **Ecology in space (42, 43).** The shared catalyst in an 80×80 world: creeping polymers separate hosts and parasites and hold
+  parasites about ten points lower (50–65% of births against 71–72% well mixed, 8 vs 4 runs, no overlap); parasites arise by
+  mutation within 50,000 steps. With `transStart` (only strands carrying a start letter translate) and graded specificity, mimics
+  (a host's key without the start) arise and live on hosts' products, but in an open world the keys shrink to two letters and
+  mimics do not drive key changes (43a). The capped version, where keys cannot shrink, is the open test (`CR_*`).
 - **The engine is 2–2.5 times faster** (37). Saved states: `--save`, `--load`, the viewer's "Open state".
 - Failed or parked, with reasons in the ledger: compartments and walls (16, 24, 25), recognition between strands (18, 26),
   public goods (9, 14, 17, 21), composition as a phenotype at small scale (35), stacks as a reason for length (40).
@@ -202,16 +207,18 @@ open-ended complexity is most likely to start.
 Session of 2026-09-25 night (branch `claude/youthful-clarke-pmu31b`, merged into `main` as it went). The user this session:
 don't follow the handoff blindly, think about what is promising or underexplored; perhaps several kinds of replication with
 mutation and a reason for selection are enough; mechanical designs at the core; theory may hold a missing link. Done: stacks
-(40), many-seed shape races (41), tools (`experiments/stacks.js`, `races.js`, `permtest.js`, `pockets.js`, `order.js`,
-`spatial.js`), regularities 1 and 10 revised. A claim was corrected by its control (40e: stacks are not a radiation shield);
+(40), many-seed shape races (41), a shared catalyst in space (42), keys and mimics with `transStart` (43), tools
+(`experiments/stacks.js`, `races.js`, `permtest.js`, `pockets.js`, `order.js`, `spatial.js`, `hostmap.js`, `keys.js`,
+`redqueen.js`), viewer presets `stacks` and `parasites`, regularities 1 and 10 revised. A claim was corrected by its control (40e: stacks are not a radiation shield);
 always run the same-physics control (released back copies, no folds) before believing a difference.
 
 Next steps, ranked:
 
-1. **Ecology in space** (42, running at the end of the session): the shared catalyst of section 36 in an 80×80 world with
-   creeping polymers (`mobS` 0.1) against well mixed; `experiments/spatial.js` measures whether hosts and parasites segregate
-   or form travelling fronts (host centre moving). Then parasites that arise by mutation instead of being seeded, and graded
-   specificity (`pMisMelt`) with mutation: can discrimination and mimicry coevolve (an arms race, the open-ended pressure)?
+1. **The arms race where keys cannot shrink** (`CR_*` in `experiments/armsrace.sh`, 2,000,000 steps, running at the end of the
+   session; outputs in the session scratchpad were not copied: rerun if missing). Read with `experiments/keys.js --start=D` and
+   `redqueen.js`: does mimic load on a key predict its fall among hosts, with specificity and not without? If yes, the next step is
+   longer keys (more specific) and space (42) together. If no, the likely reason is weak specificity (a product holds on four of
+   five matching letters): make a mismatch break the whole bound run, not one unit.
 2. **Bigger effective populations** for graded effects: the shape races need 96×96 worlds or genomes whose shapes differ more
    (composition, not only order); two-faced letters (`backCopy` without `stack`) double births per genome and could be used as
    a speed-up of evolution in any world (with `endLoss` the back follows the face's end rule).
