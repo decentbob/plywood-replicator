@@ -1,0 +1,97 @@
+{
+  "options": {
+    "out": "experiments/scratch/PC_screen",
+    "seeds": "83,84",
+    "profiles": "square,opposed20",
+    "undocks": "0.1,0.3,1",
+    "steps": 50000,
+    "workers": 4
+  },
+  "jobs": [
+    {
+      "seed": 83,
+      "profile": "square",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 83,
+      "profile": "square",
+      "undock": 0.3,
+      "steps": 50000
+    },
+    {
+      "seed": 83,
+      "profile": "square",
+      "undock": 1,
+      "steps": 50000
+    },
+    {
+      "seed": 83,
+      "profile": "opposed20",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 83,
+      "profile": "opposed20",
+      "undock": 0.3,
+      "steps": 50000
+    },
+    {
+      "seed": 83,
+      "profile": "opposed20",
+      "undock": 1,
+      "steps": 50000
+    },
+    {
+      "seed": 84,
+      "profile": "square",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 84,
+      "profile": "square",
+      "undock": 0.3,
+      "steps": 50000
+    },
+    {
+      "seed": 84,
+      "profile": "square",
+      "undock": 1,
+      "steps": 50000
+    },
+    {
+      "seed": 84,
+      "profile": "opposed20",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 84,
+      "profile": "opposed20",
+      "undock": 0.3,
+      "steps": 50000
+    },
+    {
+      "seed": 84,
+      "profile": "opposed20",
+      "undock": 1,
+      "steps": 50000
+    }
+  ],
+  "complete": true,
+  "completed": 12,
+  "node": "v24.6.0",
+  "started": "2026-09-26T15:21:49.901Z",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "end_protection.js": "1b1be017f98d8b8e73032ee83eac132e6f8c3b975dbf355484a5ecce387f306d",
+    "end_protection_natural.js": "e3aa0a3f80784af0efd94343037cf22e7f12cb0797788ef6f8e1050da839b654",
+    "patch_completion.js": "3b1bf9ade7ee79e1490046b52614ef84de073924302a1335ab832d3b34ed53c9"
+  },
+  "cpuSeconds": 185.344,
+  "wallSeconds": 65.539,
+  "finished": "2026-09-26T15:22:55.446Z"
+}

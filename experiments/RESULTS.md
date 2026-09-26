@@ -3436,3 +3436,94 @@ matched initial conditions, anchor chemistry, exposed-end recycling and conserve
 paired parameters, first-loss records, inventories and raw counts; malformed manifests, missing shape controls,
 parameter changes and count corruption are rejected. All five default 1500-step fingerprints remain unchanged;
 core code, chemistry and presets are unchanged. The full 39-check suite was not rerun.
+
+## 53. Stronger lone-monomer undocking suppresses copying; separate patches often join productively
+
+Prospective protocol: `patch_completion_plan.md`. Keep section 52's one active PAAAABBBBQ founder,
+20x20, 60 A + 60 B + 15 P + 15 Q, no fuel/rearming, complementary recognition and stiffness 0.5.
+P/Q are square; A/B are square or opposed -20/+20-degree wedges. No turnover or substitutions.
+Only pUndock changes: 0.1 control, 0.3, or 1. This existing local reaction removes an isolated docked
+monomer; it cannot detach a linked anchor. Seeds 83/84, 50k steps, at most four workers.
+
+An observer tracks each new lateral bond as nucleation (two isolated units), extension (one linked
+patch plus a monomer), or merger (two linked patches). A patch is a lateral component of at least
+two units. Released offspring retain the identities of their constituent nucleation events. Histories
+remaining unfinished at the endpoint are right-censored. Sample unfinished component counts every
+100 steps and reconcile a full material inventory every 5k. These observations never feed the engine.
+
+### 53a. Neither stronger rate earns confirmation
+
+Primary outcome is exact completed copies, not fewer visible intermediates. All 47 births across the
+screen are exact PAAAABBBBQ generation-1 copies. The finite pool allows at most 14 copies per world;
+none reaches that ceiling. Counts below are seed 83 / seed 84, with each same-seed arm paired.
+
+| shape | pUndock | exact copies at 20k | exact copies at 50k | nucleation events through 50k | patch mergers through 50k |
+|---|---:|---:|---:|---:|---:|
+| square | 0.1 | 5 / 3 | 8 / 8 | 11 / 12 | 2 / 4 |
+| square | 0.3 | 3 / 3 | 6 / 7 | 8 / 9 | 1 / 2 |
+| square | 1 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+| opposed wedges | 0.1 | 4 / 2 | 7 / 6 | 13 / 11 | 5 / 5 |
+| opposed wedges | 0.3 | 1 / 1 | 1 / 4 | 3 / 5 | 0 / 1 |
+| opposed wedges | 1 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+
+At 0.3 every matched 50k output is lower. At 1 no linked patch forms in these four runs; its clean
+inventory reflects suppressed assembly. Neither candidate passes the predeclared advancement criterion
+(higher curved 50k output in both seeds without reducing either 20k count). No fresh confirmation,
+solver sweep or longer run is warranted by this screen. This does not locate an optimum or rule out
+lower undocking rates; it rejects this proposed increase in the tested regime.
+
+### 53b. Several patches can contribute to one exact copy
+
+At pUndock=0.1, **10 of 13 curved offspring** incorporate two independently nucleated patches, versus
+5 of 16 square offspring. These are descriptive within-world counts, not independent replicates or a
+confirmed shape contrast. A second patch is often a productive part of assembly, not necessarily a
+competitor to eliminate. Merger totals also include one still-unfinished square row in seed 83.
+
+| shape | pUndock | samples with at least two unfinished patches, %, seed 83 / 84 | median first-nucleation-to-release time among completed rows, seed 83 / 84 |
+|---|---:|---:|---:|
+| square | 0.1 | 14.8 / 16.0 | 3,681 / 3,854 |
+| square | 0.3 | 2.6 / 9.2 | 5,493 / 5,260 |
+| opposed wedges | 0.1 | 29.2 / 39.8 | 4,684 / 9,121 |
+| opposed wedges | 0.3 | 80.8 / 5.0 | 6,439 / 7,346 |
+
+Each percentage uses 500 time samples in one world; temporal autocorrelation precludes treating them
+as 500 trials. Completed-only medians omit unfinished histories and cannot alone establish faster
+completion. At 0.3, curved seed 83 has just one completed row and two censored patches aged 42,984
+and 36,327 steps at the endpoint. Its median therefore describes the one success, not typical assembly.
+
+The same two partial sequences, PAAAABB and PAAAAB, appear at every 5k inventory from 15k through
+50k, each with a single anchor at template indices 3 and 4 respectively (zero-based along PAAAABBBBQ).
+They are overlapping prefixes, not complementary pieces of one copy. Their 13 linked units coexist
+with **117 free monomers** at 50k, plus the founder and one released ten-unit offspring. This excludes
+exhaustion of the total free pool as the explanation for this observed stall. It does not establish
+which local encounter or geometric gate prevents progress, permanent arrest, or scarcity of a specific
+needed species near the endpoint. Stronger lone-monomer undocking does not release either linked anchor.
+
+The other endpoint censoring records are curved/control seed 83: length 9, age 7,772; square/control
+seed 83: length 9 from two nuclei, age 7,819; square/0.3 seed 83: length 9, age 1,066. Seed 84 has
+no linked unfinished rows at 50k, although curved/control retains an isolated docked monomer.
+
+```sh
+node experiments/patch_completion.js --out experiments/scratch/PC_screen
+node experiments/patch_completion_summary.js experiments/out/PC_screen
+node experiments/patch_completion_test.js
+node experiments/patch_completion_analysis_test.js
+```
+
+**Decision / handoff.** Keep the core and pUndock settings unchanged. Do not label all multiple-patch
+assembly as harmful, add a completion detector, or launch capped population experiments. The next
+focused diagnostic is the overlapping-prefix case: exactly replay seed 83/opposed20/pUndock=0.3,
+measure exposed template sites and accepted/rejected incoming geometry around the two anchors, and
+distinguish occupied sites from failed fit or local monomer delivery. This is a selected diagnostic,
+not an independent replication. The section 23 warning about fragmenting ongoing copies remains.
+
+**Validation and cost.** Twelve runs, 600k steps, 185.344 process CPU seconds. Full parameters, source
+hashes, raw lateral events, birth membership, inventories and censored histories are retained in
+`PC_screen.manifest.json` and `PC_screen.runs.jsonl`. The observer exactly matches uninstrumented
+saved state including RNG, births and statistics at 20k, and reproduces an archived section-52 run.
+Synthetic fixtures exercise nucleation, extension, merger, release attribution and unfinished histories.
+The analyzer independently reconstructs connected components from the raw edges, verifies all samples,
+birth memberships, source provenance, complete paired grid and 150-unit accounting, and rejects
+malformed histories, parameters, counts and manifests. Relevant existing determinism, caps and
+complementary-copying checks pass. All five 1500-step default fingerprints remain identical. The
+engine, viewer and presets are unchanged; the full 39-check suite was not rerun.

@@ -436,12 +436,24 @@ Keep entries short: date, what changed, why, what evidence.
   versus completion of separate growing patches. Existing undocking may change nucleation; breaking linked face
   bonds already damaged fidelity in section 23 and should not be automatically restored.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
+- 2026-09-26. **Patches are not necessarily competitors (53).** Stronger existing pUndock lowers exact
+  copying in both tested shapes/seeds; 1 suppresses all nucleation. Ten of thirteen curved control offspring
+  join two nuclei. One intermediate-rate world instead retains overlapping prefixes despite abundant free
+  monomers. Keep chemistry unchanged; next distinguish occupied template sites, failed incoming fit and local
+  delivery at those anchors. Do not infer efficiency from fewer intermediates or completed-only lifetimes.
 
 ---
 
 ## 15. Ideas not yet tried
 
-**2026-09-26, growing patches versus completed rows (52).** End protection has now been tested: caps also protect
+**2026-09-26, overlapping prefixes rather than patch count (53).** The proposed stronger-undocking screen
+failed: it suppresses exact copying. Multiple patches often merge productively. A selected curved seed 83
+at pUndock=0.3 has PAAAABB and PAAAAB anchored at template sites 3 and 4, unchanged across 15k–50k
+inventories despite 117 free monomers. Replay it exactly and instrument incoming geometry/local availability
+around the anchored ends. Determine the actual obstruction before changing a rule; permanent arrest and a
+shape-specific mechanism are unproven. No fresh confirmation or larger population run is warranted yet.
+
+**2026-09-26, growing patches versus completed rows (52; tested in 53).** End protection has now been tested: caps also protect
 unfinished rows, and two docked ends can protect a capless patch. Measure patch formation, growth and completion
 on individual templates under existing lone-monomer undocking before adding a release mechanism. Stronger
 pUndock can change how patches start but cannot undo an already linked anchor. A useful effect must increase

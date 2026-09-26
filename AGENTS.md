@@ -97,6 +97,7 @@ experiments/offspring_recovery.js  exact section-50 replay with member IDs, per-
 experiments/offspring_forks.js  identical-state energy/turnover diagnostic; _summary.js and _test.js alongside both assays
 experiments/offspring_analysis_test.js  validates section-51 lineage, material partitions, arm contrasts and source hashes
 experiments/end_protection.js  capped copying viability and matched completed/attached/detached lifetime fixtures (52)
+experiments/patch_completion.js  single-template nucleation/growth/merger histories under existing undocking (53); summary/tests alongside
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -230,7 +231,34 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): caps also protect unfinished rows; docking closes the other escape route
+## Handoff (2026-09-26, latest): stronger undocking fails; patches often merge productively
+
+Section 53 completes the authorized next assay before the user switches instances. Everything is committed;
+no simulation remains running. Start from `patch_completion_plan.md` and RESULTS section 53.
+
+- One active PAAAABBBBQ, no fuel/turnover, same section-52 physics; square/opposed20, seeds 83/84,
+  pUndock 0.1/0.3/1, 50k. Curved exact output 7/6 control versus 1/4 at 0.3; square 8/8 versus 6/7.
+  At 1, no patches or births in either shape. Neither stronger rate passes the prospective criterion.
+  No confirmation or long run was launched; no new rule, viewer control or preset.
+- **Multiple patches often help:** 10/13 curved control copies combine two nuclei (square 5/16).
+  All 47 births exact generation 1. Events within a world are correlated; no confirmed shape contrast.
+- **Selected obstruction:** curved seed 83 at 0.3 retains PAAAABB and PAAAAB at all 5k inventories
+  from 15k through 50k, anchored to template indices 3 and 4. At 50k their ages are 42,984/36,327,
+  with 117 free monomers. These are overlapping prefixes, not pieces of one copy waiting to merge.
+  This rules out total free-pool exhaustion in that world, not poor local delivery or geometric blockage.
+- 12 runs, 600k steps, 185.344 CPU seconds; `experiments/out/PC_screen` raw events, full parameters,
+  manifests, source hashes and inventories retained. Analyzer reconstructs every connected component,
+  completion and sample from edges and checks all 150 units. Assay/analyzer tests plus existing caps,
+  compCopy and determinism checks pass; all five default fingerprints unchanged. Full suite not rerun.
+- **Next:** exactly replay that selected world using `patch_completion.setup({seed:83,profile:'opposed20',
+  undock:0.3,steps:50000})`; measure open sites and incoming bond attempts/rejections near its two
+  anchors. Separate occupied sites, failed fit and local delivery before proposing chemistry. This is a
+  diagnostic of a selected run, not a new independent replicate. Keep merger successes visible and preserve
+  section 23's warning about fragmenting ongoing copies. No capped ecology sweep is justified.
+- Resume checks: `node experiments/patch_completion_summary.js experiments/out/PC_screen`,
+  `node experiments/patch_completion_test.js`, `node experiments/patch_completion_analysis_test.js`.
+
+## Previous handoff (2026-09-26): caps also protect unfinished rows; docking closes the other escape route
 
 Section 52 tests the end-protection idea with existing rules only. Protocol: `end_protection_plan.md`.
 

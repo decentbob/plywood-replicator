@@ -90,6 +90,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   Turnover restores some exact descendant copying in two seeds, but newborns shorten and original rows die.
   Perfect caps protect incomplete rows too (52): a cap can close the free end while a docked end blocks fraying;
   capless patches with both ends docked also lack a place to start end-fraying. Capping is not selective cleanup.
+  Stronger lone-monomer undocking suppresses copying (53); multiple patches often merge into exact copies.
+  One curved world retains overlapping prefixes despite 117 free monomers, so total pool depletion is not
+  required for a stall. The local geometric or delivery obstruction in that selected case remains unmeasured.
 - **Seeds must be viable under the rules**: a translation seed needs adjacent coded letters or it makes no product
   (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
 - **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold (on the new engine half or more of 11-unit capped copies then carry a
@@ -240,6 +243,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 52a | Capped curved copying | Can the protected ten-letter sequence copy? | `compCopy`, `capFray` 0, `bendA` -20, `bendB` 20, `stiffP` 0.5, `stiffQ` 0.5 | works | 20k exact copies: square 5/5, curved 3/2; all 15 births exact generation 1 | end_protection.js (`EP_copy`) | copying viability before turnover | 2 seeds; no fuel/rearming; different sequence and material from earlier worlds |
 | 52b | Selective end protection | Do caps preserve full rows while clearing incomplete ones? | `capFray` 0/1, `pFray` 0.00003, `pUnzip` 1 | negative | capFray=0 preserves full and attached-partial rows at 50k; detached partials lose an original bond at 11,074/11,299 | end_protection.js (`EP_lifetime`) | docking protects the other end; no capped ecology sweep | prepared no-spare-material fixture; 2 seeds; completed/partial fixtures differ in mass; fragile attached seed 82 censored |
 | 52c | Naturally protected unfinished ends | Does the protected arrangement arise in ordinary copying? | `capFray` 0, `pUndock` 0.1 | works | all 21 row-samples lack fray-eligible ends: 15 cap-ended, six capless with both ends docked | end_protection_natural.js (`EP_natural`) | patch formation versus exact completion | exact replays, repeated 5k snapshots in four worlds; protection from fraying is not proof of permanent arrest |
+| 53a | Undocking versus exact completion | Does stronger lone-monomer undocking improve capped copying? | `pUndock` 0.1/0.3/1 | negative | curved 50k copies 7/6 at 0.1, 1/4 at 0.3, 0/0 at 1; square also loses yield | patch_completion.js (`PC_screen`) | neither stronger rate earns confirmation | two seeds, no fuel/turnover; no optimum or lower-rate claim |
+| 53b | Productive mergers and overlapping prefixes | Are separate patches necessarily wasted assembly? | `pUndock` 0.1/0.3 | works | 10/13 curved control copies combine two nuclei; one 0.3 world has two overlapping prefixes aged over 36k despite 117 free monomers | patch_completion_summary.js (`PC_screen`) | measure local endpoint obstruction in selected stalled world | correlated within-world histories; completed-only times exclude censoring; no permanent-arrest or shape-benefit claim |
 
 ## Knob index
 
@@ -334,7 +339,7 @@ the rows that used it). Rerun it after adding rows.
 | `pSNuc` | 40a (works), 40b (negative) |
 | `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
 | `pSpont` | 7 (works), 11b (negative) |
-| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works) |
+| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
@@ -370,11 +375,11 @@ the rows that used it). Rerun it after adding rows.
 
 ## Open gaps (worth trying, with the reason)
 
-- **Growing patches versus completed rows** (50–52): turnover permits some exact curved descendants but shortens
-  rows; perfect caps protect unfinished material too. Both docked ends also protect capless patches. Measure
-  patch formation, growth and completion on one template under existing pUndock variants. Fewer intermediates
-  must not merely mean suppressed copying. Keep solver controls; section 23's breaks inside ongoing copies
-  caused fragmentation and copying errors. Neither caps nor a new release rule has earned a population sweep.
+- **Overlapping-prefix obstruction** (50–53): stronger pUndock suppresses copying, while separate patches often
+  merge productively. Exactly replay curved seed 83/pUndock=0.3 from PC_screen: PAAAABB and PAAAAB retain
+  anchors at template sites 3/4, with 117 free monomers at 50k. Measure available sites, incoming encounters and
+  geometric rejection before proposing a release rule. Selected diagnostic, not fresh confirmation. Caps protect
+  unfinished material too; section 23's breaks inside copies damaged fidelity. No population sweep is earned.
 
 - **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
   brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an
