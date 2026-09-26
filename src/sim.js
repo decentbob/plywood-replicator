@@ -164,6 +164,7 @@ const DEFAULTS = {
   pPMelt: 0.05, pPMeltRun: 0.0005, // the template's face is catalysed: two monomers docked there link side to side at once; elsewhere only at
   pPReady: 1,                   // a linked product in REPEL exposes PBIND at this probability per step; 1 preserves immediate activation.
                                 // Lower values give its released face time to diffuse before binding. No clock or maker identity is read.
+  productReset: false,          // a bound product whose face melts returns to REPEL, then reactivates at pPReady: a retracting local latch
   pLinkBare: 0.01,              // pLinkBare per step of contact. The genome needs the machine it builds to be copied
   bindAny: false,               // (with catalysis) a finished product binds the back of any armed letter, whether it matches or has a product
                                 // in the code at all: the catalyst is shared, and a strand that makes none can use others' (a parasite)
@@ -348,6 +349,7 @@ class Sim {
     this.pairs = [];                              // unit pairs close enough this step to touch or to bond (one neighbour scan per step)
     this.ox = new Float64Array(n * NV); this.oy = new Float64Array(n * NV);   // corner offsets from the centre, world frame
     this.births = []; this.birthCount = 0; this.maxGen = 0;
+    this.productReadyEvents = 0; this.productResetEvents = 0;
     this.events = [];
     this.energyUsed = 0; this.energyCharged = 0; this.dockEvents = 0; this.captureEvents = 0; this.ligateEvents = 0; this.frayEvents = 0; this.softDockEvents = 0; this.undockEvents = 0; this.spontEvents = 0; this.breakEvents = 0; this.unzipEvents = 0; this.fedEvents = 0; this.makeEvents = 0; this.hybEvents = 0; this.meltEvents = 0; this.actEvents = 0; this.strainEvents = 0; this.strainFace = 0; this.rayHits = 0; this.strainBackbone = 0; this.cutEvents = 0; this.prodCount = 0; this.proofEvents = 0; this.fuelUsed = 0; this.stackMelts = 0; this.stackRows = 0;
     this._seen = new Uint8Array(n);
@@ -1067,7 +1069,7 @@ class Sim {
       else if (isProd(this.type[u])) {
         if (p.catalysis && (p.pPReady >= 1 || (p.pPReady > 0 && this.rng() < p.pPReady))) {
           this.is[u] = I_TPL;
-          if (p.pPReady < 1) this._event('productReady', u);
+          if (p.pPReady < 1) { this.productReadyEvents++; this._event('productReady', u); }
         }
       }   // a product exposes its binding face without taking energy; REPEL keeps lateral bonds while it waits
       else if (!p.energyGate || (bK && (this.ss[b[o + K]] === S.ON || this.ss[b[o + K]] === S.GIVE))) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy, or fuel held in a pocket)
@@ -1083,7 +1085,10 @@ class Sim {
         const nh = (bL && isH(this.ss[b[o + L]]) ? 1 : 0) + (bR && isH(this.ss[b[o + R]]) ? 1 : 0);
         let pm = nh === 0 ? p.pPMelt : p.pPMeltRun;
         if (p.pMisMelt >= 0 && this._code[this.type[b[o + F] >> 2]] !== this.type[u]) pm = Math.max(pm, p.pMisMelt);   // graded: a mismatch lets go
-        if (this.rng() < pm) this.pendingUnlink.push(o + F);
+        if (this.rng() < pm) {
+          this.pendingUnlink.push(o + F);
+          if (p.productReset) { this.is[u] = I_REPEL; this.productResetEvents++; this._event('productReset', u); }
+        }
       }
       else if (bF && this.ss[b[o + F]] !== S.DOCK && (b[o + F] >> 2) > u && !(p.backCopy && isKT(this.ss[b[o + F]]))) {
         // binding melts: fast where no neighbour is bound, slowly where one is (rolled once per bond, by its lower end)
@@ -1784,6 +1789,7 @@ class Sim {
       docks: this.dockEvents, softDocks: this.softDockEvents, captures: this.captureEvents,
       ligations: this.ligateEvents, frays: this.frayEvents, undocks: this.undockEvents, spont: this.spontEvents, breaks: this.breakEvents, unzips: this.unzipEvents, fed: this.fedEvents, made: this.makeEvents, binds: this.hybEvents, melts: this.meltEvents, activations: this.actEvents, inactive, totalAct, snaps: this.strainEvents, rayHits: this.rayHits, cuts: this.cutEvents, snapsFace: this.strainFace, snapsBackbone: this.strainBackbone, proofs: this.proofEvents, held1, held2, fuelUsed: this.fuelUsed,
       held, stacked, stackMelts: this.stackMelts, stackRows: this.stackRows, nStacks, maxStack, meanStack: nStacks ? stackRowsNow / nStacks : 0,
+      productReady: this.productReadyEvents, productResets: this.productResetEvents,
       energyCharged: this.energyCharged, products: this.prodCount, prodChains, prodUnits, bodies: components, rings, meanRingLen: rings ? ringLen / rings : 0,
       memRings, meanMemRingLen: memRings ? memRingLen / memRings : 0, memActive, memArcs, memFree, enclosedAB, enclosedE, enclosedTPL, enclosedMotif, totalMotif, ringsWithStrand,
     };

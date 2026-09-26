@@ -532,4 +532,6 @@ test('transStart: only strands carrying the start motif (relayed along the stran
   assert.ok(off.host >= 3 && off.other >= 3 && !off.marks, `without it both translate: ${off.host}, ${off.other}`);
 });
 
+test('product activation, refractory melting, exposure accounting and saved-state continuation', require('./experiments/product_exchange_test.js'));
+
 console.log(passed + ' tests passed');

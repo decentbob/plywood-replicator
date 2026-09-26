@@ -63,6 +63,16 @@ function testProductReady() {
   const before = row(); sample(c, before); assert.strictEqual(before.hostBound, 0);
   c.is[p] = I_TPL;
   const after = row(); sample(c, after); assert.strictEqual(after.hostBound, 1); assert.strictEqual(after.matchedBound, 1);
+  // A melting latch becomes unbindable, keeps its lateral connection, and can reactivate later.
+  const p2 = p + 1;
+  c.bond[p * 4 + R] = p2 * 4 + L; c.bond[p2 * 4 + L] = p * 4 + R;
+  c.p.productReset = true; c.p.pPReady = 0; c.p.pPMelt = 1; c.p.pPMeltRun = 1;
+  c._deriveAll(); c._transition(p);
+  assert.strictEqual(c.is[p], I_REPEL);
+  assert.strictEqual(c.productResetEvents, 1);
+  assert(c.pendingUnlink.includes(p * 4 + F));
+  assert.strictEqual(c.bond[p * 4 + R], p2 * 4 + L);
+  c._derive(p); assert.strictEqual(c.ss[p * 4 + F], S.REPEL);
 }
 if (require.main === module) { testProductReady(); console.log('product activation and exposure checks passed'); }
 module.exports = testProductReady;

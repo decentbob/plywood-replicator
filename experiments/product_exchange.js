@@ -3,6 +3,8 @@
 // node experiments/product_exchange.js --out experiments/out/PE_screen --steps 50000 --seeds 1,2
 // --arms baseline,delay100,delay1000,melt --workers 4 --mode race|probe
 // probe has no turnover or mutation; race has both. Each seed is an independent replicate.
+// Historical column name "mimic" means any capped sequence without D. It does NOT prove
+// key identity, catalyst dependence, or parasitism; use the birth log for finer classification.
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -17,6 +19,11 @@ const arms = {
   nospec: { pMisMelt: -1 },
   delayNospec: { pPReady: 0.001, pMisMelt: -1 },
   fold: { fold1: 45, fold2: 45 },
+  reset100: { productReset: true, pPReady: 0.01 },
+  reset1000: { productReset: true, pPReady: 0.001 },
+  resetNospec: { productReset: true, pPReady: 0.001, pMisMelt: -1 },
+  delayFold: { pPReady: 0.01, fold1: 45, fold2: 45 },
+  noBind: { pBindP: 0 },
 };
 const base = {
   W: 40, H: 40, nA: 150, nB: 150, nC: 150, nD: 150, nP: 120, nQ: 120,
@@ -62,7 +69,7 @@ function sample(s, row) {
 function run(job) {
   const params = { ...base, ...arms[job.arm], seed: job.seed };
   if (job.mode === 'probe') Object.assign(params, { pFray: 0, pSoft: 0 });
-  const s = new Sim(params), initialTypes = Array.from(s.type), start = process.cpuUsage();
+  const s = new Sim(params), initialTypes = Array.from(s.type);
   const rows = [];
   for (let end = Math.min(job.every, job.steps); ; end = Math.min(end + job.every, job.steps)) {
     const row = Object.fromEntries(columns.map(c => [c, 0]));
@@ -72,18 +79,16 @@ function run(job) {
       if (b.prod) row.products++;
       else row[kind(b.seq) + 'Births']++;
     }
-    s.births.length = 0;
     const errors = s.check();
     if (errors.length || s.n !== initialTypes.length || initialTypes.some((t, i) => s.type[i] !== t)) {
       throw new Error('Invariant failure: ' + JSON.stringify(errors));
     }
     rows.push(row);
-    parentPort.postMessage({ progress: { arm: job.arm, seed: job.seed, t: end,
-      births: row.hostBirths + row.mimicBirths + row.otherBirths } });
+    parentPort.postMessage({ progress: row, births: s.births });
+    s.births.length = 0;
     if (end === job.steps) break;
   }
-  const cpu = process.cpuUsage(start);
-  return { rows, params: s.p, cpuSeconds: (cpu.user + cpu.system) / 1e6 };
+  return { rows, params: s.p };
 }
 
 if (!isMainThread) {
@@ -100,8 +105,8 @@ if (!isMainThread) {
       ![options.steps, options.every, options.workers].every(x => Number.isInteger(x) && x > 0) || options.workers > 4 ||
       !seeds.every(Number.isInteger) || selected.some(a => !Object.hasOwn(arms, a))) throw new Error('Invalid batch options');
   fs.mkdirSync(path.dirname(options.out), { recursive: true });
-  const csv = options.out + '.csv', manifest = options.out + '.manifest.json';
-  if (fs.existsSync(csv) || fs.existsSync(manifest)) throw new Error('Output exists; choose a new --out prefix');
+  const csv = options.out + '.csv', manifest = options.out + '.manifest.json', births = options.out + '.births.jsonl';
+  if ([csv, manifest, births].some(f => fs.existsSync(f))) throw new Error('Output exists; choose a new --out prefix');
   const jobs = seeds.flatMap(seed => selected.map(arm => ({ ...options, seed, arm })));
   const metadata = { options, node: process.version, platform: process.platform, started: new Date().toISOString(),
     simSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, '../src/sim.js'))).digest('hex'),
@@ -110,6 +115,7 @@ if (!isMainThread) {
     jobs: [], complete: false };
   const cpuStart = process.cpuUsage(), wallStart = Date.now();
   fs.writeFileSync(csv, columns.join(',') + '\n', { flag: 'wx' });
+  fs.writeFileSync(births, '', { flag: 'wx' });
   fs.writeFileSync(manifest, JSON.stringify(metadata, null, 2));
   let next = 0, active = 0, completed = 0, failed = false;
   const launch = () => {
@@ -119,6 +125,8 @@ if (!isMainThread) {
       let received = false;
       worker.on('message', msg => {
         if (msg.progress) console.error(JSON.stringify(msg.progress));
+        if (msg.births && msg.births.length) fs.appendFileSync(births,
+          msg.births.map(b => JSON.stringify({ arm: job.arm, seed: job.seed, ...b })).join('\n') + '\n');
         if (!msg.result) return;
         received = true;
         const { rows, params } = msg.result;
