@@ -406,6 +406,11 @@ Keep entries short: date, what changed, why, what evidence.
   inherited stiffness races, test a physical function in isolation: attachment with `pLinkBare=1` retains geometry while
   removing the designed catalytic probability advantage. This assay is unrun. Added validated paired analysis and explicit
   occupancy-denominator reporting; README distinguishes existing restoring stiffness from a hard deformation bound.
+- 2026-09-26. **A prepared mechanical brace changes shape but not sustained yield (47).** With `pLinkBare=1`, attached
+  products straighten folding templates while giving no chemical link advantage. A two-seed yield lead fails eight fresh
+  seeds under both body and individual jostling. Under individual kicks, first copying is earlier in 7/8 folded cases,
+  but 20k yield does not increase. Keep that onset result conditional, not a new catalytic function. No core change;
+  preserve the one-founder assay and seek a measured geometric bottleneck before constructing another ecology.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---

@@ -2775,3 +2775,109 @@ totals enter the tables above. Complete paired windows are required for final cl
 manifest. CSV, manifest and raw birth log are retained. Every interval checked bond invariants, conserved block count and
 unchanged block types. All three product checks and the analysis fixture pass. The unchanged general suite was not rerun.
 The engine is unchanged from `d189ee2`; all five 1,500-step fingerprints match the earlier session exactly.
+
+## 47. A mechanical brace straightens a template, but does not increase sustained copying
+
+**Question.** Can an attached product help copying by its physics, with the programmed catalytic link advantage removed?
+Section 46 left this untested. `experiments/mechanical_brace.js` now isolates the operation in a small world using the
+unchanged `Sim`, existing parameters, and seeded initial bonds. The prospective protocol is `mechanical_brace_plan.md`.
+
+### 47a. One active founder, equal chemistry, matched initial geometry
+
+An 18×18 world contains 60 A, 60 B, three product-1 and three product-2 blocks. One active `ABBABA` founder and one
+preassembled `122121` product row are seeded. Both arms start with **identical positions, angles, shapes and internal
+states**. In one arm all six product faces are bonded to the corresponding founder backs; in the other they are unbound
+and `pBindP=0`. The free row remains in the world: mass is identical. In the attached arm `pBindP=0.2`, but existing bonds
+never melt (`pPMelt=pPMeltRun=0`). Neither strand frays. Product stiffness is 1; letter stiffness is 0.5.
+
+Both arms use **`pLinkBare=1`**. A test verifies that two adjacent docked letters link with probability 1 both with and
+without support, and that reducing this parameter restores the usual chemical contrast. `catalysis` stays enabled to
+retain product attachment; it confers no linking-probability advantage in this assay.
+
+There are no energy particles and `energyGate=true`: the seeded founder remains active, but its copies cannot rearm.
+There is no mutation, capture, ligation or turnover. Thus exact released `ABABBA` chains measure repeated copying by
+one founder, not descendant population growth. All material comes from the fixed initial pool. Every run verifies
+unchanged types, conserved mass, bond invariants, the assigned support bonds and absence of active offspring at its end.
+
+`foldB=0,15,30` changes B's preferred shape while its face is free; docking straightens that preferred shape through the
+existing local rule. The product row itself stays straight. The bend observer measures mean angle between neighbouring
+founder-face normals every 100 steps; it is actual geometry, not the prescribed fold angle. The same samples record
+founder face and back occupancy. Observers never affect the simulation. These are prepared substrates, not a demonstration
+of spontaneous brace assembly, a free catalyst finding a client, or inherited support.
+
+### 47b. The two-seed yield lead fails fresh-seed confirmation
+
+```sh
+node experiments/mechanical_brace.js --out experiments/out/MB_screen --seeds 1,2 --steps 20000 --workers 4
+node experiments/mechanical_brace_summary.js experiments/out/MB_screen
+```
+
+Each cell lists **free support / attached support**. Full 20k runs, equal seed weights:
+
+| foldB | exact copies, seed 1 | exact copies, seed 2 | mean measured bend | mean first-copy time |
+|---|---:|---:|---:|---:|
+| 0° | 10 / 9 | 10 / 9 | 3.81° / 1.40° | 976 / 610 |
+| 15° | 10 / 9 | 9 / 10 | 8.42° / 1.55° | 1,208 / 1,083 |
+| 30° | 7 / 11 | 7 / 10 | 14.27° / 2.09° | 1,768 / 1,016 |
+
+The 30° condition met the prewritten selection rule: yield increased in both seeds and the support physically
+straightened the founder. It and the straight control were selected for seeds 3–10 before those outcomes were available.
+A second confirmation uses `bodyJostle=false`, giving blocks their individual kicks instead of the default body's
+combined kick. This checks dependence on the body's noise calculation; it does not remove all physical damping or
+transport effects of attachment. Batches ran sequentially, at most four workers in total.
+
+```sh
+node experiments/mechanical_brace.js --out experiments/out/MB_confirm --seeds 3,4,5,6,7,8,9,10 --folds 0,30 --steps 20000 --workers 4
+node experiments/mechanical_brace.js --out experiments/out/MB_local --seeds 3,4,5,6,7,8,9,10 --folds 0,30 --steps 20000 --workers 4 --bodyJostle 0
+node experiments/mechanical_brace_summary.js experiments/out/MB_confirm experiments/out/MB_local
+```
+
+Fresh-seed means, full 20k, free / attached:
+
+| jostling | foldB | exact copies | attachment yield wins / ties / losses | measured bend | first exact copy, steps | earlier first copy with attachment |
+|---|---|---:|---:|---:|---:|---:|
+| body (default) | 0° | 10.00 / 9.50 | 1 / 5 / 2 | 4.11° / 1.39° | 1,344 / 1,154 | 2/8 |
+| body (default) | 30° | 9.50 / 9.25 | 3 / 1 / 4 | 14.59° / 2.13° | 1,001 / 988 | 4/8 |
+| individual blocks | 0° | 6.625 / 6.375 | 4 / 0 / 4 | 11.94° / 5.22° | 2,671 / 2,027 | 6/8 |
+| individual blocks | 30° | 7.125 / 6.50 | 2 / 1 / 5 | 18.55° / 5.27° | 2,721 / 1,425 | 7/8 |
+
+The support reduces bending in every fresh matched run, but does **not** increase mean exact-copy yield in any of the
+four cells. Its folding-specific yield effect, subtracting its effect on straight templates, is only +0.25 copies under
+default jostling and -0.375 under individual kicks, with mixed signs across seeds. The selected screen is not pooled into
+these confirmation means. No fresh-seed evidence supports sustained copying improvement at the tested fold/stiffness.
+
+### 47c. A narrower onset lead under individual kicks
+
+First-copy time was a separate prespecified outcome, not substituted for the failed yield prediction. All runs produced
+at least one exact copy, so the 20k censoring limit was unused. Under individual kicks, support at fold 30 shortens mean
+first-copy time by 47.6%, improving seven of eight seeds. It also shortens first-copy time for straight templates in six
+of eight seeds (24.1% mean reduction). This is a conditional, transient lead; the advantage is not general to the default
+noise scheme, and the straight control shows it is not exclusively a rescue of preferred curvature.
+
+Post-hoc timing diagnostic, mean cumulative exact copies for fold 30, free / attached:
+
+| time | default body jostling | individual kicks |
+|---|---:|---:|
+| 1,000 | 0.625 / 0.375 | 0 / 0.25 |
+| 2,000 | 1.375 / 1.375 | 0.375 / 0.875 |
+| 5,000 | 3.25 / 2.875 | 1.75 / 2.00 |
+| 10,000 | 5.375 / 5.25 | 3.375 / 3.625 |
+| 20,000 | 9.50 / 9.25 | 7.125 / 6.50 |
+
+The individual-kick lead is visible early but is gone by the end. It does not demonstrate faster steady copying, selection,
+or a new heritable function. A finite pool and accumulated inactive copies also make this a bounded assay rather than a
+measurement of an infinite-reservoir steady rate. Supports start assembled and permanently attached; their construction,
+delivery, release and inheritance costs are unmeasured.
+
+**Decision.** Keep this as a reproducible mechanical assay, not a chemistry feature or preset. Do not turn straightening
+alone into a claim of catalysis. Before another support ecology, identify a step whose failure is actually caused by geometry
+and measure its rescue separately from encounters and first-copy timing. The conditional onset lead remains worth tracking
+if a later mechanism makes rapid initial copying valuable, but does not justify an evolutionary expansion by itself.
+
+**Validation and cost.** 76 runs × 20k = 1.52M steps, 564.485 process CPU seconds and 198.266 summed batch wall seconds.
+All 630 logged letter births match the expected copy and founder snapshot; none is classified as another sequence.
+CSV, full-parameter/raw-birth JSONL and source-hash manifests are retained. The analyzer reconciles them, rejects incomplete
+or duplicate runs and unexpected paired parameters, and reports paired folding-specific effects. Matched initial geometry,
+equal chemical linking probability, support retention, single-founder behaviour and exact saved-state continuation are
+tested by `mechanical_brace_test.js`. The core engine is unchanged from `ec8a1c7`; all five default 1,500-step fingerprints
+match. The unchanged general suite was not rerun. No new rule, material type or deformation clamp was added.

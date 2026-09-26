@@ -45,6 +45,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    copying (28). Slow letters copy about five times slower (35). Stiffness below ~0.3 lets neighbouring copies link.
    Verify that a proposed shape change physically happens: at stiffness 1 without `snapCorners`, bonded shape matching
    is skipped, so changing the selected rest shape does nothing until the block becomes unbonded (45a).
+   A prepared support can straighten a folding template (14.59° → 2.13°) without raising its sustained copy yield (47).
 8. **Walls and compartments have not paid in any form** (11b, 12b, 16, 16b–d, 24, 24b, 25d): they are slow to build,
    seal only when everything is slow, shut copies in, and walled worlds died. Parked, not disproved.
 9. **Recognition between strands has not given specificity** (18, 18b, 26, 26b): with two letters binding is
@@ -207,6 +208,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 45e | Shape without substitutions | Does mild bending still copy faithfully at pSoft 0? | `pSoft` 0, `fold1` 5, `fold2` 5, `stiff1` 0.8, `stiff2` 0.8 | works | 52/52 classifiable capped births exact; one parent snapshot only Q, fidelity unknown | product_exchange.js (`PS_exact`); product_parent_summary.js | separate snapshot differences from known copying errors | 2 seeds × 2 arms × 20k; post-hoc diagnostic, not long-run proof |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
 | 46 | Independent flexibility control | Does flexibility improve recipient reproduction through binding? | `stiff1` 0.8 vs 1, `stiff2` 0.8 vs 1, `pBindP`, `productFray` 0.03 | negative | flexible recipient-parent births 5.25 vs 5.5 without binding, improves in 1/4 seeds; total births 34 vs 12 | product_exchange.js (`PF_binding`); flexibility_summary.js | controlled mechanical-bracing assay with pLinkBare 1 before another ecology | 4 fresh seeds × 4 arms × 50k; prespecified 20k–50k; fails to confirm 45d, not proof of zero effect |
+| 47a | Prepared mechanical support | Does attachment straighten a template with no chemical link advantage? | `pLinkBare` 1, `foldB` 30, `stiffA` 0.5, `stiffB` 0.5, `stiff1` 1, `stiff2` 1 | works | fresh-seed bend 14.59° → 2.13°; individual kicks 18.55° → 5.27° | mechanical_brace.js (`MB_confirm`, `MB_local`) | physical effect must improve copying separately | prepared support, single active founder, 8 seeds per setting; same runs as 47b/c |
+| 47b | Mechanical support yield | Does straightening improve sustained exact copying? | `pLinkBare` 1, `foldB` 0/30, `bodyJostle` | negative | folded exact yield 9.50 free vs 9.25 attached; individual kicks 7.125 vs 6.50 | mechanical_brace.js; mechanical_brace_summary.js | find a genuine geometric bottleneck before support ecology | 2-seed screen selected 30°; 8 fresh seeds failed confirmation; all 630 births across 76 runs exact |
+| 47c | Mechanical support onset | Does attachment speed the first exact copy? | `pLinkBare` 1, `foldB` 30, `bodyJostle` false | lead | individual kicks: 2,721 → 1,425 steps, faster in 7/8; default jostling 1,001 → 988, 4/8 | mechanical_brace_summary.js (`MB_local`) | conditional transient benefit, no sustained yield gain | first-copy timing prespecified; straight control also faster in 6/8; prepared supports have unmeasured costs |
 
 ## Knob index
 
@@ -221,7 +225,7 @@ the rows that used it). Rerun it after adding rows.
 | `bendA` | 15c (lead), 40f (negative) |
 | `bendB` | 15c (lead), 15d (works) |
 | `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative) |
-| `bodyJostle` | 37 (works) |
+| `bodyJostle` | 37 (works), 47b (negative), 47c (lead) |
 | `capFray` | 28c (lead), 33a (partial) |
 | `catalysis` | 34c (works), 42a (works) |
 | `chiral` | 30 (partial) |
@@ -234,7 +238,7 @@ the rows that used it). Rerun it after adding rows.
 | `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
 | `fold2` | 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
 | `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative) |
-| `foldB` | 39c (works), 41a (negative) |
+| `foldB` | 39c (works), 41a (negative), 47a (works), 47b (negative), 47c (lead) |
 | `foldD` | 28b (works) |
 | `gRange` | 31 (partial) |
 | `grip` | 39a (works) |
@@ -282,7 +286,7 @@ the rows that used it). Rerun it after adding rows.
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
-| `pLinkBare` | 34c (works), 43b (negative) |
+| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead) |
 | `pMelt` | 18 (negative) |
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |
@@ -318,9 +322,10 @@ the rows that used it). Rerun it after adding rows.
 | `spend` | 14d (negative) |
 | `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (negative), 40f (negative), 40g (negative) |
 | `stackHold` | 40b (negative), 40c (negative) |
-| `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative) |
-| `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative) |
-| `stiffA` | 15 (works), 15b (works) |
+| `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
+| `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
+| `stiffA` | 15 (works), 15b (works), 47a (works) |
+| `stiffB` | 47a (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `sun` | 3 (negative) |
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
@@ -332,11 +337,10 @@ the rows that used it). Rerun it after adding rows.
 
 ## Open gaps (worth trying, with the reason)
 
-- **Material compliance before more chemical rules** (45d): stiffness 0.8 improves recipient binding and reproduction in
-  four reused seeds, but the direct fresh-seed binding control fails to confirm the benefit (46). Test attachment as a
-  physical brace in a small copying assay with `pLinkBare=1`, removing the chemical probability advantage but retaining
-  binding. Compare attachment/no attachment under identical physics. Only a measured benefit would justify inherited
-  stiffness/order races. Shape switching alone also remains mixed (45c).
+- **Measure the geometric bottleneck first** (46–47): product flexibility did not reliably benefit recipients; a physical
+  brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an
+  operation whose geometric failure can actually be rescued before inherited stiffness/order races or a larger ecology.
+  Earlier first copying under individual kicks is a conditional lead (47c), not evidence that support construction pays.
 
 - **Product survival and productive encounters** (44): durability permits a little delivery without removing genome turnover;
   forced release loses host function. Extend the matched durability assay before long arms-race runs. A lateral-bond-triggered

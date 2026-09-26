@@ -11,6 +11,8 @@ function load(prefix) {
   rows.forEach((r,i)=>{
     assert(expected.has(key(r))&&!seen.has(key(r)),'Unknown or duplicate job');seen.add(key(r));
     assert.equal(csv[i],cols.map(k=>r[k]??'').join(','),'CSV/raw result mismatch');
+    assert.equal(r.steps,m.options.steps);assert.equal(r.params.seed,r.seed);
+    assert.equal(r.params.foldB,r.fold);assert.equal(r.params.bodyJostle,r.bodyJostle);
     const births=r.births.filter(b=>!b.prod),exact=births.filter(b=>b.seq==='ABABBA'&&b.parent==='ABBABA');
     assert.equal(r.total,births.length);assert.equal(r.exact,exact.length);assert.equal(r.other,r.total-r.exact);
     assert.equal(r.firstExact,exact.length?exact[0].t:null);
@@ -53,6 +55,15 @@ if(require.main===module) {
       bend:[mean('off','meanBend'),mean('on','meanBend')],faceOccupancy:[mean('off','faceOccupancy'),mean('on','faceOccupancy')],
       wins:g.pairs.filter(p=>p.difference>0).length,ties:g.pairs.filter(p=>p.difference===0).length,
       noExact:[g.pairs.filter(p=>!p.off.exact).length,g.pairs.filter(p=>!p.on.exact).length]}));
+  }
+  console.log('\nFolding-specific yield effect: (attached minus free at fold 30) minus (attached minus free at fold 0).');
+  for(const bodyJostle of [true,false]) {
+    const straight=groups.find(g=>g.fold===0&&g.bodyJostle===bodyJostle);
+    const folded=groups.find(g=>g.fold===30&&g.bodyJostle===bodyJostle);
+    if(!straight||!folded)continue;
+    const effects=folded.pairs.map(p=>{const q=straight.pairs.find(q=>q.seed===p.seed);assert(q,'Missing straight control seed');
+      return {seed:p.seed,straight:q.difference,folded:p.difference,interaction:p.difference-q.difference};});
+    console.log(JSON.stringify({bodyJostle,effects,meanInteraction:effects.reduce((s,r)=>s+r.interaction,0)/effects.length}));
   }
 }
 module.exports={load,summarize};

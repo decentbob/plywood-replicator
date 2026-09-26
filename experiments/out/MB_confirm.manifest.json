@@ -1,0 +1,245 @@
+{
+  "options": {
+    "out": "experiments/out/MB_confirm",
+    "steps": 20000,
+    "seeds": "3,4,5,6,7,8,9,10",
+    "folds": "0,30",
+    "workers": 4,
+    "bodyJostle": 1
+  },
+  "jobs": [
+    {
+      "seed": 3,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 3,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 3,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 3,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 4,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 4,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 4,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 4,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 5,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 5,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 5,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 5,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 6,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 6,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 6,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 6,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 7,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 7,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 7,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 7,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 8,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 8,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 8,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 8,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 9,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 9,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 9,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 9,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 10,
+      "fold": 0,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 10,
+      "fold": 0,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 10,
+      "fold": 30,
+      "attached": false,
+      "steps": 20000,
+      "bodyJostle": true
+    },
+    {
+      "seed": 10,
+      "fold": 30,
+      "attached": true,
+      "steps": 20000,
+      "bodyJostle": true
+    }
+  ],
+  "complete": true,
+  "completed": 32,
+  "started": "2026-09-26T12:20:31.675Z",
+  "node": "v24.6.0",
+  "simSha256": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+  "scriptSha256": "114f8adb89f35be36fc4d80da1da961941b6d871d0f6f00204c72a7af7aaabac",
+  "finished": "2026-09-26T12:22:00.337Z",
+  "cpuSeconds": 239.594,
+  "wallSeconds": 88.657
+}

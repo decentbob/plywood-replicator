@@ -86,6 +86,7 @@ experiments/product_shapes.js    experimental rest-shape switches (45), with acc
 experiments/product_shape_summary.js  actual bound/free wedge angles, assembly and binding events, occupancy and births
 experiments/product_parent_summary.js  parent/child production classes from raw births; distinguishes mutation from recipient reproduction
 experiments/flexibility_summary.js  complete four-arm comparison (46); validates raw counts, windows and parameters, prints paired effects
+experiments/mechanical_brace.js  one-founder copying assay (47), prepared attached/free support, equal link probability; summary and test alongside
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -217,7 +218,31 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): flexibility's recipient benefit did not replicate
+## Handoff (2026-09-26, latest): physical straightening is not sustained copying improvement
+
+Section 47 follows the user-approved mechanical-bracing test. One active `ABBABA` founder and a prepared six-block
+product row; attached vs free support, equal initial geometry and conserved material. `pLinkBare=1` removes the chemical
+linking advantage. No energy means offspring cannot rearm: this measures one founder's copying, not population growth.
+
+- A two-seed screen at `foldB=30` increased exact yield from 7/7 to 11/10. Fresh seeds 3–10 **did not confirm** it:
+  mean 9.50 free vs 9.25 supported, despite bend falling from 14.59° to 2.13°. Straight controls also did not gain yield.
+- The planned `bodyJostle=false` control gives the same sustained-yield conclusion: 7.125 free vs 6.50 supported at
+  fold 30, despite 18.55° → 5.27° bending. No new physics/chemistry or preset was introduced.
+- **Conditional onset lead:** individual kicks plus fold 30 give first exact copies at mean 2,721 vs 1,425 steps,
+  faster with support in 7/8 seeds. Straight templates also start faster in 6/8. This is not specific to folding and does
+  not survive as increased 20k output. Default body jostling gives nearly identical first-copy times at fold 30.
+- All 630 logged letter births are exact founder copies. 76 small runs, 1.52M steps, about 564 CPU seconds. Data,
+  full parameter/raw birth records and source hashes are committed. Do not pool the selected screen with fresh seeds.
+- `mechanical_brace_plan.md` records the prospective protocol and selection. `mechanical_brace_summary.js PREFIX...`
+  validates complete paired data and reports yield, onset, physical bend and folding-specific contrasts. The assay test
+  checks identical initial geometry, equal linking probability, support retention, inactive offspring and exact resume.
+  Core engine and five default fingerprints are unchanged; the general suite was not rerun.
+- **Next:** measure an actual geometric bottleneck before another support ecology. A structure that makes a template
+  straighter has not earned a catalytic function if removal leaves copying intact. Keep the early-copy lead conditional;
+  delivery, construction, turnover and inheritance of the prepared brace are all untested. Do not automatically expand
+  into mixed-stiffness races or add a new reward rule.
+
+## Previous handoff (2026-09-26): flexibility's recipient benefit did not replicate
 
 Section 46 completes the direct stiffness × binding comparison on fresh seeds 7–10: 16 runs × 50k steps, with the
 20k–50k analysis and primary outcome specified before launch in `experiments/flexibility_plan.md`.

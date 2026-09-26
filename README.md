@@ -80,6 +80,12 @@ The four-arm flexibility control (46) has a pre-run plan in `experiments/flexibi
 reconciles raw births with every CSV window, checks the parameter contrast and reports paired binding
 effects. It preserves zero births and undefined occupancy when no recipient sites remain.
 
+For a smaller physical assay, `node experiments/mechanical_brace.js --out experiments/out/MY_BRACE --seeds 1,2`
+compares a prepared attached product support with an unbound one. `pLinkBare=1` makes the chemical linking probability
+equal, and no energy particles prevent copies from becoming active templates. Summarize with
+`node experiments/mechanical_brace_summary.js experiments/out/MY_BRACE`. RESULTS 47 finds strong straightening but
+no confirmed increase in 20k copy yield; earlier first copying under individual kicks is a separate, conditional lead.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and
