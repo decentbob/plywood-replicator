@@ -255,6 +255,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 57a | Intact local redocking | Can released material dock again and complete? | research-only SEEK, endpoint rate 0.0001/0.001 | works | 1 exact reused product at each rate versus 0 off/irreversible; original six-member prefix completes at 31,568 at low rate | local_redocking.js (`RD_selected`) | fresh screen at predeclared lower rate | one selected state; full detachment/member retention reconstructed; stock births can miss later completion |
 | 57b | Redocking yield and fidelity | Does general endpoint release improve ordinary assembly? | research-only SEEK, endpoint rate 0.0001, `pUndock` 0.1 | negative | curved exact 5/7 vs 2/5 off, square 7/8 vs 8/10; two nine-unit errors after one-site shifts; confirmation criterion fails | local_redocking_screen.js (`RD_screen`) | physical registration on repeated letters | two-seed curved yield lead, 5 fully detached parts reused in exact curved products; no promotion, tuning or long confirmation |
 | 58 | Shape retention after release | Does higher stiffness prevent the selected shifted returns? | `stiffA`/`stiffB`/`stiffP`/`stiffQ` 0.5/0.8, `iters` 4/8 | negative | all 8 first returns shift; 0 intact exact target completions; curved +100 corner RMS falls about fivefold but alternatives stall | registration_fit.js (`RF_selected`) | test availability/usefulness of a second contact before adding a rule | two selected post-release states, +5k; square errors persist, unfinished curved outcomes are censored; no new chemistry |
+| 59a | Prepared supporting contact | Can a real second contact preserve useful alignment? | existing DOCK/HOLD fixture, unchanged chemistry | works | square 1/9 candidates fits, curved 0/21; DOCK/HOLD rescue exact target in both placement orders, placement-only does not | second_contact.js, second_contact_order.js (`SC_selected`, `SC_scan_order`) | establish support before release using local state transitions | selected square fixture; 1 physics phase suffices; longer HOLD not consistently faster; no autonomous capture mechanism |
+| 59b | Natural secondary-face exposure | Does exposing an available face acquire the useful contact? | prepared REPEL→SEEK only | negative | neighbor docks at shifted site3 and releases within step5329; zero constraint phases; target still PAAAABBBQ | second_contact_exposure.js (`SC_exposure`) | local contact handoff, retaining support through physics | same selected state; no bond/pose/RNG edit; no fresh screen or extra exposed members |
 
 ## Knob index
 
@@ -397,6 +399,11 @@ the rows that used it). Rerun it after adding rows.
   first returns remain shifted, despite physically lower curved deformation. Stop stiffness tuning. A
   second retained contact is the next fixture question; 8 partly attached historical returns versus 17
   fully detached ones are correlated observations, not proof that a second contact solves registration.
+  A prepared admissible secondary contact now rescues the square part in both placement orders (59a),
+  including a one-physics-phase DOCK contact. Mere alignment does not. Exposing the face without a prepared
+  bond instead captures at a shifted site and releases before another physics phase (59b). Next test a
+  local contact handoff that establishes support before releasing the old attachment, without assuming
+  that support is available in the curved fixture or that a longer hold is better.
 
 - **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
   brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an

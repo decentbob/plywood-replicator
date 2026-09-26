@@ -104,6 +104,7 @@ experiments/placement_release.js  selected-state release forks and actual placem
 experiments/local_redocking.js  research-only SEEK endpoint state and selected reuse assay (57a); summary/test/analysis test alongside
 experiments/local_redocking_screen.js  fresh matched off/drop/seek worlds (57b); summary checks full physical completion, not stock births alone
 experiments/registration_fit.js  selected post-release stiffness x solver forks (58); actual corner deformation, docking checks, summary/tests
+experiments/second_contact.js  secondary-contact availability and prepared DOCK/HOLD fixtures (59a); order and exposure variants, summary/tests alongside
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -237,7 +238,40 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): stiffness does not restore attachment position
+## Handoff (2026-09-26, latest): prepared support works; natural face exposure is too late
+
+Section 59 tests the secondary-contact idea. Read `experiments/second_contact_plan.md`.
+
+- At the section 58 release snapshots, expose each other member's face in isolated clones and enumerate
+  matching founder faces. Rebuild clone spatial hashes. Square has 1/9 admissible contacts (107→site 2);
+  curved has 0/21 geometry passes. This is fork-instant potential fit, not later opportunity or active capture.
+- Square +5k: unchanged/placement-only make PAAAABBBQ; prepared ordinary DOCK and existing HOLD both
+  make exact PAAAABBBBQ containing all original four members. Same physical alignment in the three
+  intervention arms; only bonding/state differ. No lateral loss or new material. No new reaction/state.
+- Repeat all four in the observed cell-scan pair order: same fidelity result. `_formBond` moves its
+  second argument on equal bond counts; member-first moves founder 1, scan order moves member 107.
+  DOCK lasts 1 physics phase, primary returns correctly at 5,317, support releases that step. HOLD lasts 14
+  phases, 13 with both contacts, melts at 5,330. Longer HOLD is not consistently faster across pair orders.
+- Natural exposure follow-up changes only neighbor 107 REPEL→SEEK, no bond/pose/RNG edit. It captures
+  at shifted site 3 at 5,329, releases in the same step, and never acts as a physics constraint. Primary
+  also shifts to site 4; target settles PAAAABBBQ at 5,823. Thus prepared rescue is not autonomous capture.
+- Independent completion explicitly permits face-free HOLD as inactive only in these fixtures; SEEK
+  remains unfinished. Stock births stay separate. Shared validator defaults remain REPEL-only. No global
+  completion criterion feeds back. All150 blocks and original lateral bonds reconcile in raw histories.
+- Data: SC_selected/SC_exposure/SC_scan_order JSON plus derived CSVs, source/input hashes and full
+  states. Total 65k executed steps, 23.549 CPU seconds including full unobserved HOLD/exposed controls.
+  Eight-arm short observer tests, contact-lifetime reconstruction, pure exposure checks and 20 corruptions
+  pass, as do section 57/58 analyses. Five default fingerprints match; core/viewer/presets unchanged.
+- **Next:** a local contact handoff: acquire a supporting contact before releasing the old one, and let
+  support survive into a physics phase. Judge each block's own transitions and read bonded-side signals
+  from the previous derive pass. No index/correct-site reader, global coordinator, permanent clamp or
+  forced curved contact. The selected preparation establishes a useful operation, not generality or a
+  mechanism for acquiring it. No fresh screen is justified before an autonomous prepared assay succeeds.
+
+Resume: `node experiments/second_contact_test.js`,
+`node experiments/second_contact_summary.js experiments/out/SC_scan_order.json`.
+
+## Previous handoff (2026-09-26): stiffness does not restore attachment position
 
 Section 58 completes the selected physical-fit diagnostic; read `experiments/registration_fit_plan.md`.
 
@@ -287,7 +321,7 @@ prospective stages. Core simulation, default trajectories, viewer and presets ar
   **2/5 off, 3/5 drop, 5/7 seek**; square **8/10, 6/3, 7/8**. Five exact curved seek products reuse a
   fully face-free part (1/4), not merely an endpoint whose other end stayed attached.
 - **Criterion fails:** seek produces PAAAABBBQ once in square seed87 and once in curved seed87.
-  Square endpoint114 shifts founder site3→4 at 5,329; curved endpoint107 shifts site3→2 at 28,208.
+  Square endpoint 114 shifts founder site 3→4 at 5,329; curved endpoint 107 shifts site 3→2 at 28,208.
   Both new sites have the same letter as the old one. No lateral loss or missing blocks. This traces
   shifted assembly, not a new intervention proving the shift alone causes every omission. Two-seed
   curved yield lead; no rate tuning, long confirmation, population sweep or standard knob.

@@ -475,6 +475,15 @@ Keep entries short: date, what changed, why, what evidence.
   an availability/fit fixture and useful-motion measurement before any new reaction. Historical partly
   attached episodes are correlated and do not prove protection from shifts.
 
+- 2026-09-26. **A supporting contact must act during physics (59).** One of nine potential square
+  secondary contacts fits; none of 21 curved candidates does at the release snapshot. Prepared ordinary
+  DOCK and HOLD contacts both rescue the square target beyond placement-only controls, in both pair
+  orders. DOCK acts for one physics phase and already suffices; longer HOLD has no consistent speed
+  advantage. Exposing the face without preparing a bond captures only at a shifted site and releases in
+  the same step, with no constraint phase. Next test a local contact handoff that establishes support
+  before release. No core change or fresh screen yet. Do not mistake a geometrically possible fixture
+  for autonomous acquisition, or ignore the equal-bond-count placement routine's pair-order sensitivity.
+
 ---
 
 ## 15. Ideas not yet tried
@@ -491,6 +500,9 @@ The next untested operation is contact/fit that retains registration without kno
 Section 58 rejects higher stiffness in the selected shift fixtures at both 4 and 8 passes. Next test
 whether a second actual contact can retain position while permitting useful rearrangement, rather than
 assuming stiffer material or an unfinished endpoint inventory means accurate assembly.
+Section 59 now establishes that a prepared supporting bond can help, while late face exposure cannot
+acquire its benefit in the selected square fixture. The untested primitive is a local contact handoff,
+with support acquired before release and retained through a physics phase; no whole-row coordinator.
 Any new state must read only its own bonds and bonded-side states. No ID-specific rescue in chemistry,
 global assembly-age threshold, nonlocal completion detector, or lateral severing as a free cleanup.
 

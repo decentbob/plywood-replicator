@@ -130,6 +130,11 @@ plans, summaries and tests live beside these scripts.
 (58). All eight first reattachments still shift; reduced deformation does not restore exact completion.
 The assay records actual corner geometry, accepted/rejected docking and intact target membership.
 
+`second_contact.js` and `second_contact_order.js` test an admissible supporting contact against placement
+alone (59). Prepared contact rescues the square piece in both placement orders; longer holding is not
+consistently better. `second_contact_exposure.js` shows that merely exposing the face after release does
+not acquire the same benefit. These remain prepared fixtures, with no new core rule.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

@@ -3980,3 +3980,130 @@ cases. The shared analyzer now accepts an explicit sampling interval and initial
 SEEK units; all section-57 analysis tests (25 corruptions) still pass. All five
 default fingerprints match. No core, viewer, preset or reaction change; focused
 standard tests last passed in section57 and the full suite in section55.
+
+## 59. A prepared supporting contact rescues alignment; late face exposure does not
+
+**Question.** Does a physically admissible second contact retain useful
+alignment, rather than merely inhibit assembly? Protocol: `second_contact_plan.md`.
+Use section 58's two post-release states. No new reaction or state is introduced;
+all edits below are prepared fixtures, not rules selecting IDs or whole parts.
+
+### 59a. Availability at the release instant
+
+For each other original member, enumerate chemically matching founder faces
+after hypothetically exposing that member's docking face in a separate clone.
+Retain the real world's state. Rebuild each restored clone's spatial hash;
+check occupancy, ordinary geometry and ordinary placement without bypassing gates.
+The actual inactive faces are not already receptive: this tests potential
+physical contacts, not spontaneous capture under current chemistry.
+
+| selected fixture | matching candidate pairs | geometry passes | unoccupied, admissible placement |
+|---|---:|---:|---:|
+| square BBBQ, endpoint 114 released | 9 | 1 | member 107 → founder site 2 |
+| opposed20 PAAAABB, endpoint 107 released | 21 | 0 | none |
+
+All curved candidates fail the midpoint-gap gate, including cap contacts; some
+sites are also occupied. This is only the fork instant, not a statement about
+later encounters. Do not force a curved bond or infer that a second contact is
+universally available. Continue the prepared test only for the available square pair.
+
+### 59b. Contact constraint versus placement alone
+
+Four matched fixtures run from step 5,316 to 10,316: unchanged; admissible alignment
+then immediate bond removal and REPEL restoration; the same alignment with an
+ordinary DOCK bond; the same alignment with the existing HOLD state. No manual
+displacement, kick, new material or permanent clamp. Existing chemistry controls
+later release/melting. All three placement arms have identical initial physical
+arrays and RNG within a placement-order comparison. Their bonding/state differs.
+
+There is an ordering sensitivity in `_formBond`: with equal bond counts it moves
+the second argument's block. The first prepared assay calls member 107 first,
+moving founder 1. The neighbor scan at this saved snapshot lists founder 1 first,
+moving member 107 instead. Retain both assays and repeat all four arms in that
+observed scan order, reconstructed from spatial cells (not numeric ID sorting).
+Both orders pass ordinary geometry and placement. This is a post-hoc control of
+the fixture's placement operation, not an independent world or new seed.
+
+| placement order | fixture | physics steps with secondary contact | steps with both contacts | primary returns to site | intact original part settles as / at |
+|---|---|---:|---:|---:|---|
+| either (identical replay) | unchanged | 0 | 0 | 4 | PAAAABBBQ / 6,714 |
+| member first | placement only | 0 | 0 | 4 | PAAAABBBQ / 6,848 |
+| member first | ordinary DOCK | 1 | 0 | 3 | PAAAABBBBQ / 7,713 |
+| member first | HOLD | 14 | 13 | 3 | PAAAABBBBQ / 6,120 |
+| scan order | placement only | 0 | 0 | 4 | PAAAABBBQ / 10,007 |
+| scan order | ordinary DOCK | 1 | 0 | 3 | PAAAABBBBQ / 6,473 |
+| scan order | HOLD | 14 | 13 | 3 | PAAAABBBBQ / 9,429 |
+
+The original primary site is 3. Both bond-retention fixtures return there at 5,317,
+while unchanged and placement-only arms return to site 4 at 5,329. All four original
+members remain in each eventual product; every original lateral bond and all 150
+blocks survive. Exact output from other parts is retained separately in the raw
+records and is not counted as target rescue.
+
+**The rescue survives placement order, but the speed ranking does not.** A
+single physics phase under an ordinary contact already suffices in this selected
+fixture. A long-lived HOLD contact is not established as superior. With ordinary
+DOCK, the primary reattaches after that physics phase and the secondary releases
+during chemistry in the same step. Thus there are zero physics phases with both
+contacts, despite a successful transfer of attachment. HOLD supplies 13 overlapping
+physics phases and melts at 5,330. Do not confuse simultaneous contact in a
+bond/chemistry phase with force constraints acting during a physics phase.
+
+HOLD remains an inactive internal state after losing its face in this no-energy
+assay. Independent settled-row observation therefore accepts face-free rows
+entirely REPEL or HOLD, while SEEK remains unfinished. The extension is explicitly
+enabled only for these HOLD fixtures; older analyzers' default remains REPEL-only.
+No observer condition feeds into chemistry, and raw stock births remain separate.
+
+### 59c. Natural capture after exposing the available face fails
+
+After the prepared rescue, declare a two-arm follow-up: unchanged versus only
+changing member 107 from REPEL to SEEK at 5,316, with no bond, coordinate or RNG
+edit. Let ordinary formation act for +5k. This tests a receptive face, not an
+autonomous way to choose or activate that face.
+
+| arm | accepted secondary contact | physics phases retaining that contact | primary return | target outcome |
+|---|---|---:|---|---|
+| unchanged | none | 0 | site 4 at 5,329 | PAAAABBBQ at 6,714 |
+| expose face | site 3 at 5,329; breaks in the same step | 0 | site 4 at 5,329 | PAAAABBBQ at 5,823 |
+
+The extra contact forms at the shifted location and undergoes ordinary local
+release immediately. It never constrains a subsequent physics phase. Exposure
+alone fails the prospective advancement criterion. Do not treat the prepared
+contact's effect as evidence that present chemistry can acquire it naturally.
+
+**Verdict/next.** A real supporting bond can causally rescue this selected square
+part beyond the effect of placement alone, in either placement order. No fresh
+screen or core feature is justified yet. The next candidate is a local contact
+handoff: establish support before releasing the old attachment, and allow that
+support to persist into a physics phase. Each block may read only its own bonds
+and previous-pass states on bonded partner sides. A prepared rescue does not
+authorize a correct-site reader, global row coordination or permanent clamp.
+The curved fixture lacks an admissible second contact at the tested instant;
+availability and the cost of waiting remain open. No constructor universality,
+sustained reproduction or evolved machine is demonstrated.
+
+```sh
+node experiments/second_contact.js experiments/scratch/SC_selected.json
+node experiments/second_contact_exposure.js experiments/scratch/SC_exposure.json
+node experiments/second_contact_order.js experiments/scratch/SC_scan_order.json
+node experiments/second_contact_summary.js experiments/out/SC_selected.json experiments/out/SC_selected.csv
+node experiments/second_contact_summary.js experiments/out/SC_exposure.json experiments/out/SC_exposure.csv
+node experiments/second_contact_summary.js experiments/out/SC_scan_order.json experiments/out/SC_scan_order.csv
+node experiments/second_contact_test.js
+```
+
+**Cost/provenance:** first four fixtures plus unobserved HOLD control, 25k steps,
+10.657 CPU seconds; exposure pair plus unobserved exposed control, 15k/4.735;
+scan-order fixtures plus unobserved HOLD control, 25k/8.157. Total 65k steps,
+23.549 process CPU seconds, at most four workers. Availability clones do not run
+simulation steps. Archives retain input/source hashes, full initial/final states,
+all candidate probes, ordered bond/state events, raw births, settled members and
+1k inventories. CSVs are derived from validated raw records.
+
+Tests check candidate availability, both placement orders, matched physical
+controls, pure state-only exposure, eight prepared-arm short observer-neutrality
+checks plus full HOLD/exposed controls, event-reconstructed contact lifetimes,
+complete 150-block and settled-row inventories, explicit HOLD handling and 20
+malformed datasets. Section 57 and 58 analysis tests still pass; all five default
+fingerprints match. Core chemistry, physics, viewer and presets are unchanged.

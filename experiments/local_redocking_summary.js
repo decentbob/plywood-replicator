@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 const fs=require('fs'),assert=require('assert/strict');
-const {Sim,F,L,R,I_DOCK,I_REPEL,I_TPL}=require('../src/sim');
+const {Sim,F,L,R,I_DOCK,I_REPEL,I_TPL,I_HOLD}=require('../src/sim');
 const {rows,hash}=require('./placement_release');
 const {SEEK,jobs,sourceFiles}=require('./local_redocking');
 const exact=x=>x.seq==='PAAAABBBBQ';
 function fileHash(file,h){const raw=fs.readFileSync(file,'utf8'),lf=raw.replace(/\r\n/g,'\n');assert([raw,lf,lf.replace(/\n/g,'\r\n')].some(s=>hash(s)===h),'Hash mismatch: '+file);}
-function validateRun(r,p,end=50000,every=5000){
+function validateRun(r,p,end=50000,every=5000,extraInactive=[]){
+  assert(extraInactive.every(st=>st===I_HOLD));const inactive=st=>st===I_REPEL||extraInactive.includes(st);
   const s=Sim.fromState(p.state),start=s.t,bonds=Array.from(s.bond),n=s.n;assert.equal(n,150);
-  const ready=row=>row.units.length>1&&row.states.every(st=>st===I_REPEL)&&row.faces.every(q=>q<0);
+  const ready=row=>row.units.length>1&&row.states.every(inactive)&&row.faces.every(q=>q<0);
   const previous=new Set(rows(s).filter(ready).map(row=>row.units.join(',')));
   const unit=u=>assert(Number.isInteger(u)&&u>=0&&u<n),pending=new Set(Array.from({length:n},(_,u)=>u).filter(u=>s.is[u]===SEEK));let pos=0,last=start;
   const apply=e=>{
@@ -41,7 +42,7 @@ function validateRun(r,p,end=50000,every=5000){
       const ids=c.rows.flatMap(x=>x.units);assert.equal(ids.length,n);assert.equal(new Set(ids).size,n);let free=0,docked=0;
       for(const row of c.rows){assert.equal(row.seq,row.units.map(u=>s._letter(u)).join(''));assert.equal(row.states.length,row.units.length);
         assert.deepEqual(row.faces,row.units.map(u=>bonds[u*4+F]));
-        row.units.forEach((u,i)=>{const st=row.states[i];assert([I_DOCK,I_REPEL,I_TPL,SEEK].includes(st));
+        row.units.forEach((u,i)=>{const st=row.states[i];assert([I_DOCK,I_REPEL,I_TPL,SEEK,...extraInactive].includes(st));
           assert.equal(st===SEEK,pending.has(u));if(st===I_TPL)assert(p.parent.includes(u));
           if(st===I_DOCK&&row.faces[i]>=0)docked++;if(st===I_DOCK&&row.faces[i]<0&&row.units.length===1)free++;
         });}
@@ -52,7 +53,7 @@ function validateRun(r,p,end=50000,every=5000){
   assert.equal(pos,r.events.length);const final=Sim.fromState(r.final);assert.deepEqual(final.check(),[]);
   assert.deepEqual(Array.from(final.bond),bonds);assert.deepEqual(rows(final),r.windows.at(-1).rows);
   assert.deepEqual(r.final.arrays.type,p.state.arrays.type);assert.deepEqual(r.final.p,p.state.p);assert.equal(final.t,end);
-  for(const x of r.settled){assert.deepEqual(final.strandOf(x.units[0]),x.units);assert(x.units.every(u=>final.is[u]===I_REPEL));}
+  for(const x of r.settled){assert.deepEqual(final.strandOf(x.units[0]),x.units);assert(x.units.every(u=>inactive(final.is[u])));}
   assert.deepEqual(r.settled.map(x=>x.units.join(',')).sort(),rows(final).filter(ready).map(x=>x.units.join(',')).filter(k=>!previous.has(k)).sort(),'Missing or extra settled assembly');
   assert.equal(r.stockBirths.length,r.births.length);
   r.births.forEach((b,i)=>{const m=r.stockBirths[i];assert.equal(b.t,m.t);assert.equal(b.seq,m.units.map(u=>final._letter(u)).join(''));});
