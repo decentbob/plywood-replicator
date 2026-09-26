@@ -252,6 +252,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 54 | Anchor accessibility in a selected stall | Is progress blocked by occupancy, fit or delivery? | `pUndock` 0.3, unchanged chemistry | works | 35k samples: one next site always occupied; the other sees 8,146 compatible geometry checks but only 4 dockings; 428 anchor linking checks all fail gap | anchor_access.js (`AA_selected`) | separate local attachment and useful placement | exact replay of selected seed 83; repeated checks, no causal removal experiment; full saved-state/RNG neutrality |
 | 55 | Contact-gated assembly fronts | Can neighbor-triggered exposure improve completed assembly? | research-only L/R face gate, `pUndock` 0.1 | negative | curved 50k output 7/4 control, 3/2 L, 3/4 R; all 45 births exact; neither gate qualifies | assembly_front.js (`AF_screen`) | reversible positioning of linked parts, not an interpreter | two seeds; fewer unfinished rows and fewer mergers do not mean better output; no new core rule or universal-construction claim |
 | 56 | Selected placement blocker and release | Can freeing an attachment rescue the stalled assembly without fragmentation? | prepared DOCK→REPEL + F release, `pUndock` 0.3 | works | all 43 rejected placements excluded by anchor 87; release 87/107/both gives 3/3/2 new exact copies versus 0; retained original prefix completes | placement_release.js (`PR_selected`) | test local reversible docking and useful reattachment separately | one selected 15k state; released pieces remain inactive; forced partial birth logs excluded; all 150 blocks and lateral bonds preserved |
+| 57a | Intact local redocking | Can released material dock again and complete? | research-only SEEK, endpoint rate 0.0001/0.001 | works | 1 exact reused product at each rate versus 0 off/irreversible; original six-member prefix completes at 31,568 at low rate | local_redocking.js (`RD_selected`) | fresh screen at predeclared lower rate | one selected state; full detachment/member retention reconstructed; stock births can miss later completion |
+| 57b | Redocking yield and fidelity | Does general endpoint release improve ordinary assembly? | research-only SEEK, endpoint rate 0.0001, `pUndock` 0.1 | negative | curved exact 5/7 vs 2/5 off, square 7/8 vs 8/10; two nine-unit errors after one-site shifts; confirmation criterion fails | local_redocking_screen.js (`RD_screen`) | physical registration on repeated letters | two-seed curved yield lead, 5 fully detached parts reused in exact curved products; no promotion, tuning or long confirmation |
 
 ## Knob index
 
@@ -346,7 +348,7 @@ the rows that used it). Rerun it after adding rows.
 | `pSNuc` | 40a (works), 40b (negative) |
 | `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
 | `pSpont` | 7 (works), 11b (negative) |
-| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works) |
+| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
@@ -382,13 +384,14 @@ the rows that used it). Rerun it after adding rows.
 
 ## Open gaps (worth trying, with the reason)
 
-- **Reversible placement without lateral fragmentation** (50–56): the selected replay now identifies anchor
-  87 as the sole blocker in all 43 rejected placements. Releasing either prefix restores three exact copies
-  versus zero, and the retained original prefix completes intact. Released pieces remain inactive: causal
-  rescue is demonstrated in one selected fixture, useful reattachment is not. Test a local reversible docking
-  state in a prepared fixture before a fresh-seed screen, counting reuse and exact completion separately from
-  cleanup. Contact gates lower output despite cleaner inventories (55); do not promote them. Keep successful
-  patch mergers and section 23's fragmentation warning visible. No population sweep or universal interpreter.
+- **Physical registration after release** (50–57): release rescues a selected obstruction (56), and a local
+  SEEK state now reuses an intact, fully detached part in an exact product (57a). Fresh curved output rises
+  2/5→5/7, but square output falls and two products omit a B after redocking one site away among repeated
+  letters (57b). The fidelity criterion fails; do not promote or rate-tune the general release rule. Next
+  isolate how contact and physical fit can retain position without an index or completion reader. Keep
+  whole-part reuse distinct from releasing one endpoint while another stays bound, and use independent
+  physical completion records because stock births count temporary detachments. Preserve productive
+  mergers and section 23's fragmentation warning. No population sweep or universal interpreter.
 
 - **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
   brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an

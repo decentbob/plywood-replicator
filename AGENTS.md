@@ -101,6 +101,8 @@ experiments/patch_completion.js  single-template nucleation/growth/merger histor
 experiments/anchor_access.js  exact selected-stall replay with docking/linking gate diagnostics (54); _summary.js validates counts/provenance
 experiments/assembly_front.js  research-only local contact gates, both polarities (55); plan, summary and tests alongside; not standard chemistry
 experiments/placement_release.js  selected-state release forks and actual placement blockers (56); full state/raw events, summary and tests; no new rule
+experiments/local_redocking.js  research-only SEEK endpoint state and selected reuse assay (57a); summary/test/analysis test alongside
+experiments/local_redocking_screen.js  fresh matched off/drop/seek worlds (57b); summary checks full physical completion, not stock births alone
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -234,7 +236,45 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): releasing either competing prefix restores exact copying
+## Handoff (2026-09-26, latest): local redocking reuses parts, but shifted assembly loses fidelity
+
+Section 57 follows the promising release result. `experiments/local_redocking_plan.md` records both
+prospective stages. Core simulation, default trajectories, viewer and presets are unchanged.
+
+- Research subclass: after the ordinary transition, a DOCK letter with face bound and exactly one lateral
+  bond releases at a fixed probability. Reversible arm enters SEEK (face DOCK, back IDLE, bonded laterals
+  BONDED, free laterals INERT); face bonding restores ordinary DOCK. Irreversible control enters REPEL.
+  No kick, type edit, lateral cut, geometry override, ID, sequence, component or age read in the reaction.
+  Only the no-energy/no-turnover assay is supported; do not load this state into the standard viewer.
+- Selected section-56 state, five 35k forks: off, drop/seek at 0.0001/0.001. Both seek rates make one
+  exact product reusing a fully detached part versus zero off/drop. At low rate, original six-unit prefix
+  releases at 18,280 and completes at 31,568 with all members retained. Both qualify for the prepared
+  criterion; lower rate chosen as declared. This is one selected state, not confirmation across seeds.
+- Fresh seeds 87/88, square/opposed20, off/drop/seek at 0.0001, pUndock=0.1, 50k. Curved exact output
+  **2/5 off, 3/5 drop, 5/7 seek**; square **8/10, 6/3, 7/8**. Five exact curved seek products reuse a
+  fully face-free part (1/4), not merely an endpoint whose other end stayed attached.
+- **Criterion fails:** seek produces PAAAABBBQ once in square seed87 and once in curved seed87.
+  Square endpoint114 shifts founder site3→4 at 5,329; curved endpoint107 shifts site3→2 at 28,208.
+  Both new sites have the same letter as the old one. No lateral loss or missing blocks. This traces
+  shifted assembly, not a new intervention proving the shift alone causes every omission. Two-seed
+  curved yield lead; no rate tuning, long confirmation, population sweep or standard knob.
+- Stock birth logs count temporary detachments and can miss later exact completion. Primary observer
+  records new all-REPEL, face-free lateral rows, once per physical member set, without affecting rules.
+  Event-order reconstruction checks all new final settled rows, physical membership, full-detachment
+  episodes, source hashes, matching initial states and all 150 blocks. Do not rely on stock generations.
+- Archives `RD_selected.json` and `RD_screen.json`, companion derived CSVs. Total 1.01M executed steps,
+  336.312 process CPU seconds including ordinary off controls. Local-state/observer/restart tests and
+  corrupted-data analysis tests pass. Focused standard checks and all five default fingerprints checked;
+  full 39-check suite last passed in section55. No simulation remains running at the checkpoint.
+- **Next direction:** physical registration among repeated letters. Keep productive reuse as a working
+  operation, but park the general endpoint-release rule. Diagnose same-site versus shifted redocking
+  using existing histories before adding a contact/fit mechanism. No index-aware correction, global
+  completed-row detector or lateral fragmentation. Successful multiple-patch mergers must remain visible.
+
+Resume: `node experiments/local_redocking_test.js`, `node experiments/local_redocking_analysis_test.js`,
+`node experiments/local_redocking_screen_summary.js experiments/out/RD_screen.json`.
+
+## Previous handoff (2026-09-26): releasing either competing prefix restores exact copying
 
 Section 56 completes the selected causal diagnostic. Read `experiments/placement_release_plan.md`.
 

@@ -3760,3 +3760,129 @@ four-arm observer neutrality, event-time birth membership, raw graph/material
 reconstruction, provenance and 21 malformed-data cases. Focused standard checks
 and all five default fingerprints are also checked; the full 39-check suite was
 passed in section 55 and is not rerun for this observer-only addition.
+
+## 57. Local redocking reuses intact parts, but permits shifted assembly
+
+Section 56 established that attachment release can rescue a selected stall,
+while ordinary released material remains inactive. Here a research-only state
+tests whether a released endpoint can bind again and contribute to completion.
+Prospective protocol: `local_redocking_plan.md`. The standard engine is unchanged.
+
+**Rule, in block terms.** After the ordinary transition, a letter still DOCK,
+with its face bound and exactly one lateral bond, can lose its face bond at a
+fixed probability per step. An irreversible control changes to REPEL. The
+reversible arm changes to SEEK: face DOCK, back IDLE, bonded laterals BONDED,
+free laterals INERT. While linked but face-free it stays SEEK. A face bond returns
+it to ordinary DOCK and its usual transition; losing all lateral bonds also
+returns it to DOCK. No kick or lateral break, no component/sequence/age/identity
+read, no geometry override. Ordinary chemical compatibility, distance, angle
+and placement gates apply. This subclass supports only the no-energy,
+no-turnover assay; it is not a general viewer feature or standard knob.
+
+**Accounting matters.** The unchanged stock logger can label temporary
+detachment a birth, clear freshness and later miss a completed product. It is
+retained as raw data, but does not define the primary outcome. An independent
+observer records each newly detached lateral row with all units REPEL and no
+face bonds, once per physical member set. It records exact PAAAABBBBQ and
+non-exact rows separately. This criterion never feeds back into a transition.
+The analyzer reconstructs bonds in event order and verifies every new settled
+row against the final material inventory. No lateral losses or rearming occur,
+so settled identities remain intact. Generation counters after temporary
+detachments are not used as evidence of reproduction.
+
+### 57a. Prepared selected-state test: productive reuse occurs
+
+Restore the same section-56 state at 15k, then run to 50k. Five arms: off,
+irreversible/reversible release at 0.0001 and 0.001. Release applies to every
+eligible endpoint, not to the previously selected IDs. The rates were declared
+before running. No additional prepared release or movement is applied.
+
+| mode | rate | endpoint releases | redock transitions | new exact settled rows | non-exact settled rows | exact rows containing a fully detached, redocked part |
+|---|---:|---:|---:|---:|---:|---:|
+| off | 0 | 0 | 0 | 0 | 0 | 0 |
+| irreversible | 0.0001 | 4 | 0 | 0 | 4 | 0 |
+| reversible | 0.0001 | 8 | 6 | 1 | 0 | 1 |
+| irreversible | 0.001 | 14 | 0 | 0 | 9 | 0 |
+| reversible | 0.001 | 47 | 42 | 1 | 0 | 1 |
+
+At the lower rate, the original six-member PAAAAB with endpoint 107 releases
+at 18,280. It fully detaches, redocks and retains all six original members in
+the exact product completed at 31,568. That eventual product also experiences
+two later endpoint-release episodes. At the higher rate a different assembly
+completes exactly at 30,693. Both rates meet the prepared criterion, so the
+predeclared lower-rate choice earns the fresh screen below. This is feasibility
+in one selected state, not two independent confirmations.
+
+At 50k the low/high reversible branches still contain two/five SEEK units;
+not every attempt succeeds. Repeated releases/redocks are correlated events.
+The high-rate stock log contains zero exact births despite one exact settled
+product, illustrating why ordinary birth counts would misclassify this test.
+
+### 57b. Fresh screen: curved yield improves, but fidelity criterion fails
+
+Before this screen, declare seeds 87/88, square/opposed20, off/irreversible/
+reversible at 0.0001, pUndock=0.1, 50k. Same 150 conserved blocks, single active
+PAAAABBBBQ, stiffness 0.5, no energy or turnover. Every arm starts with identical
+physical state/RNG for its seed/shape. Confirmation requires a curved exact-output
+gain in both seeds, no worse curved 20k output, intact reuse and no non-exact
+settled rows in the reversible arm. Square controls remain visible.
+
+| shape | mode | exact at 20k, seeds 87 / 88 | exact at 50k | non-exact at 50k | exact products reusing a fully detached part |
+|---|---|---:|---:|---:|---:|
+| square | off | 4 / 5 | 8 / 10 | 0 / 0 | 0 / 0 |
+| square | irreversible | 3 / 1 | 6 / 3 | 4 / 7 | 0 / 0 |
+| square | reversible | 3 / 2 | 7 / 8 | 1 / 0 | 1 / 4 |
+| opposed wedges | off | 2 / 2 | 2 / 5 | 0 / 0 | 0 / 0 |
+| opposed wedges | irreversible | 1 / 3 | 3 / 5 | 4 / 4 | 0 / 0 |
+| opposed wedges | reversible | 3 / 4 | 5 / 7 | 1 / 0 | 1 / 4 |
+
+Curved exact output increases in both seeds, and five of those exact products
+reuse a part that became completely face-free and subsequently redocked.
+Releasing one endpoint while another remains bound is not counted as full-part
+reuse. Square exact output decreases in both seeds. Irreversible release strands
+substantially more non-exact material. These are two-seed leads, not established
+fitness effects, independent per-event samples, or sustained descendant reproduction.
+
+**Both non-exact reversible products are nine-unit PAAAABBBQ.** In square seed
+87, endpoint 114 leaves founder site 3 at 5,316 and redocks at site 4 at 5,329;
+the resulting member set settles at 6,714. In curved seed 87, endpoint 107 leaves
+site 3 at 28,184 and redocks at site 2 at 28,208; its row settles at 28,274.
+The new sites carry the same letter as the old one. These observed shifts are
+consistent with loss of position along repeated letters. No existing lateral
+bond breaks and no block disappears: the final sequence omits a B during assembly.
+This tracing is not a separate intervention proving that the shift alone caused
+the omission, or proof that all wrong placements have this form.
+
+**Verdict.** Productive reuse is demonstrated as a local mechanical/chemical
+operation, and curved yield is a lead. The predeclared fidelity criterion fails.
+Do not promote the rule, tune rates or launch longer confirmation. The next
+question is physical registration on repeated letters: can contact and fit
+retain position without an index reader, global completion detector or severing
+the part? Keep this primitive available only in the research assay. Neither a
+universal constructor nor a self-constructing machine has been demonstrated.
+
+```sh
+node experiments/local_redocking_test.js
+node experiments/local_redocking.js experiments/scratch/RD_selected.json
+node experiments/local_redocking_summary.js experiments/out/RD_selected.json experiments/out/RD_selected.csv
+node experiments/local_redocking_screen.js experiments/scratch/RD_screen.json
+node experiments/local_redocking_screen_summary.js experiments/out/RD_screen.json experiments/out/RD_screen.csv
+node experiments/local_redocking_analysis_test.js
+```
+
+**Cost/provenance.** Selected batch: five 35k forks plus a 35k ordinary control,
+210k steps, 48.687 CPU seconds. Fresh batch: twelve 50k worlds plus four ordinary
+off-arm neutrality replays, 800k steps, 287.625 CPU seconds. Total archived work
+1.01M steps, 336.312 process CPU seconds, at most four workers. Tests are additional.
+Both JSON archives retain executed-source hashes, full initial/final states (the
+selected initial state is referenced by hash), ordered bond/release/redock events,
+raw stock births, settled member IDs and 5k inventories of all 150 blocks.
+The companion CSVs are derived from validated raw records.
+
+Tests cover local eligibility/state changes, no kicks/global reads, free SEEK
+persistence, contact-triggered return, ordinary compatibility, off trajectory
+identity, active observer neutrality and restart. The analyzer checks source
+provenance, exact input/parameter matching, raw bond reconstruction, complete
+settled inventories and rejects corrupted data. Focused determinism/caps/compCopy
+checks pass, with all five default fingerprints unchanged. The full 39-check
+suite last passed in section 55; core source, viewer and presets remain unchanged.

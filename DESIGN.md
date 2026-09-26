@@ -458,6 +458,15 @@ Keep entries short: date, what changed, why, what evidence.
   state that can detach and dock again, retaining ordinary fit gates. Require actual reuse before screening
   fresh seeds, preserve productive mergers, and keep global observer identities out of the rule.
 
+- 2026-09-26. **Reversible attachment exposes a registration problem (57).** A research-only SEEK state
+  lets a linked endpoint retain a docking face after release. In the selected fixture an original six-unit
+  part fully detaches, redocks and completes intact. A fresh two-seed screen at the predeclared lower rate
+  raises curved exact output 2/5→5/7, but square output falls 8/10→7/8. Two PAAAABBBQ products follow
+  one-site shifts among repeated letters. The fidelity criterion fails: no standard knob, rate tuning or
+  long confirmation. Preserve the reusable operation in the assay and investigate physical registration,
+  without an index-aware repair or global completion state. Temporary detachments also invalidate the
+  stock birth logger as the sole measure; independent member-based completion is required.
+
 ---
 
 ## 15. Ideas not yet tried
@@ -468,7 +477,9 @@ interpreted construction and a route for its own functional parts to be construc
 translation rule alone does not demonstrate that closure. The smaller useful next operation is
 reversible positioning. Section 56 identifies anchor 87 as the placement blocker and shows that freeing
 either overlapping attachment rescues exact assembly. Test productive reattachment of the released intact
-part next; ordinary REPEL release instead leaves it inactive. Begin with a matched prepared fixture.
+part next; ordinary REPEL release instead leaves it inactive. Section 57 now demonstrates that reuse with
+a local SEEK state, but the fresh screen fails fidelity through shifted docking among repeated letters.
+The next untested operation is contact/fit that retains registration without knowing a template index.
 Any new state must read only its own bonds and bonded-side states. No ID-specific rescue in chemistry,
 global assembly-age threshold, nonlocal completion detector, or lateral severing as a free cleanup.
 

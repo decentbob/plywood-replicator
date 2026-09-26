@@ -120,6 +120,12 @@ either attachment released (56). Both single releases restore exact copying; the
 completes, while the released row remains inactive. This prepared intervention is not a new reaction.
 Its `_summary.js` and `_test.js` reconstruct bond histories, physical membership and all 150 blocks.
 
+`local_redocking.js` tests an experimental endpoint state that preserves docking ability after release (57).
+Intact released parts can reattach and complete. The fresh `local_redocking_screen.js` screen improves
+curved output but also permits shortened products after shifted reattachment, so the rule stays outside
+the standard engine. Independent completion records avoid counting temporary detachments as offspring;
+plans, summaries and tests live beside these scripts.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

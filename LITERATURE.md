@@ -493,3 +493,12 @@ would establish an operation, not a constructor; only afterwards ask whether a
 translated part can perform it, whether its production pays, and whether that
 function survives into descendants. Do not add a universal interpreter or a
 special completed-machine rule to skip these tests.
+
+**Project follow-up (RESULTS 56–57):** a local reversible docking state now lets
+an intact, fully detached part return and complete an exact product in the
+selected fixture. Fresh curved worlds gain exact output, but shifted redocking
+among repeated letters produces shortened products and fails the prospective
+fidelity test. This supports reusable attachment as an operation while exposing
+registration as the next problem. It does not supply a constructor interpreter,
+self-construction, or evidence of evolving machines. No new external claim is
+inferred from the prepared rescue.

@@ -1,0 +1,6 @@
+seed,profile,mode,rate,exact20,exact,partial,releases,redocks,reused,stockExact,stockTotal,seeking
+83,opposed20,off,0,0,0,0,0,0,0,0,0,0
+83,opposed20,drop,0.0001,0,0,4,4,0,0,0,4,0
+83,opposed20,seek,0.0001,0,1,0,8,6,1,1,6,2
+83,opposed20,drop,0.001,0,0,9,14,0,0,0,7,0
+83,opposed20,seek,0.001,0,1,0,47,42,1,0,10,5
