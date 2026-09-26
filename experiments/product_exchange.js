@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
-const { isProd, LETTERS, I_TPL, I_REPEL, K, L, R } = require('../src/sim.js');
+const { isProd, LETTERS, I_TPL, I_REPEL, F, K, L, R } = require('../src/sim.js');
 const { ProductShapeSim: Sim } = require('./product_shapes.js');
 
 const arms = {
@@ -35,6 +35,12 @@ const arms = {
   shapeSideNeg15: { productFray: 0.03, fold1: -15, fold2: -15, productShape: 'lateral' },
   shapeFree15: { productFray: 0.03, fold1: 15, fold2: 15, productShape: 'lateralFree' },
 };
+// Same-physics shape controls: at stiffness 1 and without snapCorners, bonded rest shapes do not update.
+for (const [name, source] of Object.entries({ soft0:'durable', softFace15:'shapeFace15', softSide5:'shapeSide5',
+  softSide15:'shapeSide15', softSide30:'shapeSide30', softSideNeg15:'shapeSideNeg15', softFree15:'shapeFree15' })) {
+  arms[name] = { ...arms[source], stiff1:0.8, stiff2:0.8 };
+}
+arms.softFree15NoBind = { ...arms.softFree15, pBindP:0 };
 const base = {
   W: 40, H: 40, nA: 150, nB: 150, nC: 150, nD: 150, nP: 120, nQ: 120,
   n1: 150, n2: 150, nE: 100, capFray: 0.03, pUnzip: 1, pFray: 0.001,
@@ -46,7 +52,8 @@ const base = {
 const columns = ['arm', 'seed', 't', 'hostBirths', 'mimicBirths', 'otherBirths', 'products',
   'hostSites', 'mimicSites', 'otherSites', 'hostBound', 'mimicBound', 'otherBound',
   'matchedBound', 'mismatchedBound', 'productUnits', 'readyUnits', 'waitingUnits', 'sameSiteBound',
-  'productLateralEvents', 'productDockEvents', 'productBindEvents'];
+  'productLateralEvents', 'productDockEvents', 'productBindEvents',
+  'boundBendDeg', 'boundShapeSamples', 'freeBendDeg', 'freeShapeSamples'];
 
 function capped(q) { return /^P.*Q$|^Q.*P$/.test(q); }
 function kind(q) { return !capped(q) ? 'other' : q.includes('D') ? 'host' : 'mimic'; }
@@ -75,6 +82,12 @@ function sample(s, row) {
     row.productUnits++;
     if (s.is[u] === I_TPL) row.readyUnits++;
     if (s.is[u] === I_REPEL) row.waitingUnits++;
+    if (s.is[u] === I_TPL && 'boundBendDeg' in row) {
+      const left = s._side(u, L, [0,0,0,0]), right = s._side(u, R, [0,0,0,0]);
+      const bend = Math.acos(Math.max(-1, Math.min(1, -left[2]*right[2]-left[3]*right[3]))) * 180/Math.PI;
+      const prefix = s.bond[u*4+F] >= 0 ? 'bound' : 'free';
+      row[prefix+'BendDeg'] += bend; row[prefix+'ShapeSamples']++;
+    }
   }
 }
 function run(job) {

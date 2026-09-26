@@ -2503,3 +2503,98 @@ four workers, duplicated analysis windows and a test selector matching no checks
 `PE_replay_probe` repeats seed 1 baseline/reset1000 in probe mode for 10,000 steps; `PE_durable_replay` repeats seed 3
 durable/durableReset in race mode for 10,000 steps. All four CSV rows match the corresponding earlier rows exactly after
 the subclass extraction. Their manifests and birth logs are retained as verification, **not additional experimental seeds**.
+
+## 45. Does an assembly-triggered shape preserve building and improve delivery? (2026-09-26)
+
+**Hypothesis.** Section 44's folding screen changed free monomers as well as assembled products. A block that stays flat
+until it has a lateral bond could assemble readily, then retain curvature even when its face binds again. Test that physical
+tradeoff before another ecological arms-race run. This is motivated by the measured assembly and retention problems; it does
+not implement SpudCell or add compartment behavior.
+
+`experiments/product_shapes.js` is a research subclass. `productShape=lateral` selects the existing folded rest shape when
+either of the block's lateral sides is bonded, regardless of its face. `lateralFree` also requires an unbound face, separating
+the monomer-shape issue from persistent curvature on rebinding. `face` preserves the original rule. Every decision reads only
+the block's own type and bonds; there is no completion flag, timer, provenance check or extra relay. The normal engine is
+unchanged. All arms keep the mortal-genome, durable-product world of section 44 (`productFray=0.03`).
+
+### 45a. Physical activation check: rigid bonded blocks do not adopt a new rest shape
+
+The initial screen used the section 44 defaults (`stiff1=stiff2=1`, `snapCorners=false`). It was stopped when independent shape
+arms produced identical rows. The rigid branch of `_physics` skips shape matching for bonded units. A selected folded rest
+shape is therefore **not an actual shape change** in this regime. Free monomers are reset to their rest shape, so the old
+face-fold rule instead gives initially wedged blocks that remain wedged after bonding.
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PS_screen --steps 20000 --seeds 1,2 --arms durable,shapeFace15,shapeSide5,shapeSide15,shapeSide30,shapeSideNeg15,shapeFree15 --workers 4
+```
+
+Nine complete 10k windows were retained before stopping (90k measured steps, plus unrecorded partial work). Seed 1's
+straight, lateral-5-degree and lateral-15-degree arms have identical values in **every diagnostic column** at both 10k and
+20k; the lateral-30-degree arm also matches at 10k. The face-fold arm does differ. The stopped manifest explains why the
+batch is incomplete; it is a solver diagnostic, not evidence that working shape changes have no benefit. Its implementation
+is preserved at `dc4f7b4`.
+
+The updated test checks physical curling of an eight-block chain, not just `_restSlot`. At stiffness 0.8 the chain's end-to-end
+span falls below 80% of its initial span; at stiffness 1 it stays above 95%. Subsequent arms all use `stiff1=stiff2=0.8`,
+including their straight control. Genome stiffness stays at 1. No strain-triggered bond break is enabled: this assay tests
+assembly and rebinding geometry, not active mechanical ejection. The existing section 34e folding experiment used
+`snapCorners=1` (`prodshape.sh`); this diagnosis does not invalidate that separate result.
+
+### 45b. Deformable products: assembly survives mild bends, but large bends cost function
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PS_flexible --steps 20000 --seeds 1,2 --arms soft0,softFace15,softSide5,softSide15,softSide30,softSideNeg15,softFree15 --workers 4
+node experiments/product_shape_summary.js experiments/out/PS_flexible.csv
+node experiments/product_exchange_summary.js experiments/out/PS_flexible.csv --after=10000
+```
+
+All shape changes are product-only. The controls separate when the same rest shape is selected:
+
+| mode | unlinked, free | laterally linked, face free | laterally linked, face bound |
+|---|---|---|---|
+| straight | flat | flat | flat |
+| face | bent | bent | flat |
+| lateralFree | flat | bent | flat |
+| lateral | flat | bent | bent |
+
+The observer counts accepted product–product lateral bonds, product-monomer dockings, and mature-product bindings.
+Repeated bonding of the same blocks counts repeatedly; these are **events**, not independently produced molecules.
+The measured bend is the absolute angle between the opposed normals of each linked mature block's two lateral edges,
+sampled every 100 steps. It measures the block's physical wedge, not polymer curvature or a prescribed target angle.
+Summed angles are divided by block-samples separately for face-bound and face-free blocks. These observers never feed back.
+
+Full 20k windows; equal-weight means across the two seeds:
+
+| arm | lateral bonds | full releases | actual bound / free bend | capped births | host occupancy | non-producer occupancy |
+|---|---:|---:|---:|---:|---:|---:|
+| straight (`soft0`) | 49.5 | 6.0 | 0.15° / 0.19° | 16.5 | 49.50% | 0.02% |
+| face 15° | 52.5 | 3.5 | 0.17° / 14.95° | 15.0 | 60.34% | 0.68% |
+| lateralFree 15° | 42.5 | 5.5 | 0.18° / 14.94° | 14.0 | 50.93% | 5.77% |
+| lateral 5° | 65.0 | 3.5 | 4.85° / 4.99° | 22.5 | 57.19% | 1.41% |
+| lateral 15° | 57.0 | 5.5 | 14.66° / 15.00° | 18.0 | 55.39% | 1.10% |
+| lateral 30° | 28.5 | 5.5 | 29.59° / 29.98° | 8.0 | 13.73% | 0.56% |
+| lateral −15° | 44.0 | 3.5 | 14.75° / 15.01° | 9.5 | 57.15% | 1.43% |
+
+The bend now physically occurs while bound, and does not necessarily prevent assembly. A persistent 30° bend nevertheless
+roughly halves lateral-bond formation and births, with low host occupancy. Its many mature binding events (1,870.5 versus
+1,311 for straight) do not mean sustained useful attachment: repeated contacts and occupied-site time are different measures.
+
+The **mild-bend lead** is higher births in both seeds (25/20 versus 20/13), without a repeated delivery increase. The
+**free-bending lead** is higher non-producer occupancy in both seeds (1.00/10.53% versus 0/0.05%), but fewer total births
+(19/9). Its late-window non-producer births are 0/4 versus straight 1/3, so there is no replicated reproductive benefit.
+In particular, the strongest delivery screen straightens on binding: it does not support the initial prediction that retaining
+curvature while bound is necessary for escape. These are selected, two-seed leads, not established improvements.
+
+### 45c. Fresh-seed comparison (analysis specified before outcomes)
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PS_confirm --steps 50000 --seeds 3,4,5,6 --arms soft0,softSide5,softFree15,softFree15NoBind --workers 4
+node experiments/product_shape_summary.js experiments/out/PS_confirm.csv --after=20000
+node experiments/product_exchange_summary.js experiments/out/PS_confirm.csv --after=20000
+```
+
+Compare the last 30k steps per seed, equal seed weights: capped births and absolute non-producer births, host and recipient
+occupancy, full releases, assembly bonds and original-block retention. `softFree15NoBind` sets only `pBindP=0` relative to
+`softFree15`; as in section 44, this removes physical mature-product binding as well as catalysis. The 5° persistent and 15°
+free-bending arms differ in both angle and switching rule, so their direct contrast cannot isolate either factor. No claim of
+selection on shape is possible here: shape parameters are fixed for the whole run, not heritable competing alleles.

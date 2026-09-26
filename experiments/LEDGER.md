@@ -43,6 +43,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    copied); a strongly wedged letter is purged, a mild one kept apart from its own kind (15d); folding letters copy
    exactly (28b); a folding product straightens as it binds, so its free shape has no effect (34e). Mixed sizes break
    copying (28). Slow letters copy about five times slower (35). Stiffness below ~0.3 lets neighbouring copies link.
+   Verify that a proposed shape change physically happens: at stiffness 1 without `snapCorners`, bonded shape matching
+   is skipped, so changing the selected rest shape does nothing until the block becomes unbonded (45a).
 8. **Walls and compartments have not paid in any form** (11b, 12b, 16, 16b–d, 24, 24b, 25d): they are slow to build,
    seal only when everything is slow, shut copies in, and walled worlds died. Parked, not disproved.
 9. **Recognition between strands has not given specificity** (18, 18b, 26, 26b): with two letters binding is

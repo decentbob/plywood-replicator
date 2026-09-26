@@ -157,6 +157,9 @@ big world when drift decides races (41).
   has read the last line are not (it only waits for its children then). Check the log for `ALLDONE`; start a new queue if so.
 - A difference is not a result until its same-physics control has run (40e: stacks looked like a radiation shield until released
   back copies, without stacks, did as well; 41a: a fuel "effect" matched by the no-fold control).
+- Verify physical shape changes before population runs: at stiffness 1 and without `snapCorners`, bonded blocks skip rest-shape
+  matching (45a). Checking `_restSlot` alone is insufficient. Use an actual curling test and measure bound/free corner geometry;
+  any softer-block or `snapCorners` experiment needs a straight control with those same physics settings.
 - Measure speed in CPU time (`process.cpuUsage()`), not wall time: the machine is usually shared by several runs.
 - A birth's parent is the strand its template unit sits in (`strandOf`), not the longest chain of its component (fixed
   2026-09-25: a template bound to another strand, or bridged to another template by a copy, was sometimes read as the parent).

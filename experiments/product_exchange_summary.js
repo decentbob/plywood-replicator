@@ -6,6 +6,11 @@ const args = process.argv.slice(2), after = Number((args.find(a => a.startsWith(
 const groups = new Map();
 const windows = new Set();
 for (const file of args.filter(a => !a.startsWith('--'))) {
+  const manifest = file.replace(/\.csv$/, '.manifest.json');
+  if (fs.existsSync(manifest) && !JSON.parse(fs.readFileSync(manifest,'utf8')).complete) {
+    if (!args.includes('--partial')) throw new Error('Incomplete batch; --partial is for progress inspection only: '+file);
+    console.error('PARTIAL: unequal run lengths may make these rows incomparable: '+file);
+  }
   const [header, ...lines] = fs.readFileSync(file, 'utf8').trim().split(/\r?\n/);
   const columns = header.split(',');
   for (const line of lines) {
