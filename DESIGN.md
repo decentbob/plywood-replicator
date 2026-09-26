@@ -442,11 +442,28 @@ Keep entries short: date, what changed, why, what evidence.
   monomers. Keep chemistry unchanged; next distinguish occupied template sites, failed incoming fit and local
   delivery at those anchors. Do not infer efficiency from fewer intermediates or completed-only lifetimes.
 
+- 2026-09-26. **Construction order has a cost (54–55).** The selected stalled world has both a next site
+  occupied by another partial row and an open site whose docking/placement and lateral distance gates
+  mostly fail. A constructor-inspired contact gate reads only previous-pass occupancy on a bonded
+  neighbor's side; both polarities assemble exact copies but reduce output in the prospective two-seed
+  screen. Fewer unfinished intermediates is not success. Keep the gate out of the core; preserve its
+  research assay and primary-source review. Next examine reversible positioning of linked parts with
+  useful reattachment, not a programmed constructor or automatic fragmentation of unfinished material.
+
 ---
 
 ## 15. Ideas not yet tried
 
-**2026-09-26, overlapping prefixes rather than patch count (53).** The proposed stronger-undocking screen
+**2026-09-26, mechanical assembly operations (54–55).** Contact-triggered recruitment is now tested,
+not an unbuilt promise: both directions lose output. A universal constructor needs description copying,
+interpreted construction and a route for its own functional parts to be constructed; the present
+translation rule alone does not demonstrate that closure. The smaller useful next operation is
+reversible positioning. Identify polygons responsible for `_slotFree` rejections at the selected open
+site, then test an intact linked part's detachment and productive reattachment in a matched fixture.
+Any new state must read only its own bonds and bonded-side states. No ID-specific rescue in chemistry,
+global assembly-age threshold, nonlocal completion detector, or lateral severing as a free cleanup.
+
+**2026-09-26, overlapping prefixes rather than patch count (53; replay completed in 54).** The proposed stronger-undocking screen
 failed: it suppresses exact copying. Multiple patches often merge productively. A selected curved seed 83
 at pUndock=0.3 has PAAAABB and PAAAAB anchored at template sites 3 and 4, unchanged across 15k–50k
 inventories despite 117 free monomers. Replay it exactly and instrument incoming geometry/local availability

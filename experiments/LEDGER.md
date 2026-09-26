@@ -92,7 +92,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   capless patches with both ends docked also lack a place to start end-fraying. Capping is not selective cleanup.
   Stronger lone-monomer undocking suppresses copying (53); multiple patches often merge into exact copies.
   One curved world retains overlapping prefixes despite 117 free monomers, so total pool depletion is not
-  required for a stall. The local geometric or delivery obstruction in that selected case remains unmeasured.
+  required for a stall. Its selected replay (54) finds occupied sites, excluded docking placements and failed
+  linking distance. Contact-gated recruitment reduces unfinished inventory but lowers exact output (55).
 - **Seeds must be viable under the rules**: a translation seed needs adjacent coded letters or it makes no product
   (36b); with bare caps a seed needs `ABA`; with `pUndock` 0 half-finished copies can lock templates.
 - **Mutation**: `pSoft` 0.002 is gentle, 0.01 fivefold (on the new engine half or more of 11-unit capped copies then carry a
@@ -245,6 +246,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 52c | Naturally protected unfinished ends | Does the protected arrangement arise in ordinary copying? | `capFray` 0, `pUndock` 0.1 | works | all 21 row-samples lack fray-eligible ends: 15 cap-ended, six capless with both ends docked | end_protection_natural.js (`EP_natural`) | patch formation versus exact completion | exact replays, repeated 5k snapshots in four worlds; protection from fraying is not proof of permanent arrest |
 | 53a | Undocking versus exact completion | Does stronger lone-monomer undocking improve capped copying? | `pUndock` 0.1/0.3/1 | negative | curved 50k copies 7/6 at 0.1, 1/4 at 0.3, 0/0 at 1; square also loses yield | patch_completion.js (`PC_screen`) | neither stronger rate earns confirmation | two seeds, no fuel/turnover; no optimum or lower-rate claim |
 | 53b | Productive mergers and overlapping prefixes | Are separate patches necessarily wasted assembly? | `pUndock` 0.1/0.3 | works | 10/13 curved control copies combine two nuclei; one 0.3 world has two overlapping prefixes aged over 36k despite 117 free monomers | patch_completion_summary.js (`PC_screen`) | measure local endpoint obstruction in selected stalled world | correlated within-world histories; completed-only times exclude censoring; no permanent-arrest or shape-benefit claim |
+| 54 | Anchor accessibility in a selected stall | Is progress blocked by occupancy, fit or delivery? | `pUndock` 0.3, unchanged chemistry | works | 35k samples: one next site always occupied; the other sees 8,146 compatible geometry checks but only 4 dockings; 428 anchor linking checks all fail gap | anchor_access.js (`AA_selected`) | separate local attachment and useful placement | exact replay of selected seed 83; repeated checks, no causal removal experiment; full saved-state/RNG neutrality |
+| 55 | Contact-gated assembly fronts | Can neighbor-triggered exposure improve completed assembly? | research-only L/R face gate, `pUndock` 0.1 | negative | curved 50k output 7/4 control, 3/2 L, 3/4 R; all 45 births exact; neither gate qualifies | assembly_front.js (`AF_screen`) | reversible positioning of linked parts, not an interpreter | two seeds; fewer unfinished rows and fewer mergers do not mean better output; no new core rule or universal-construction claim |
 
 ## Knob index
 
@@ -339,7 +342,7 @@ the rows that used it). Rerun it after adding rows.
 | `pSNuc` | 40a (works), 40b (negative) |
 | `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
 | `pSpont` | 7 (works), 11b (negative) |
-| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works) |
+| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
@@ -375,11 +378,13 @@ the rows that used it). Rerun it after adding rows.
 
 ## Open gaps (worth trying, with the reason)
 
-- **Overlapping-prefix obstruction** (50–53): stronger pUndock suppresses copying, while separate patches often
-  merge productively. Exactly replay curved seed 83/pUndock=0.3 from PC_screen: PAAAABB and PAAAAB retain
-  anchors at template sites 3/4, with 117 free monomers at 50k. Measure available sites, incoming encounters and
-  geometric rejection before proposing a release rule. Selected diagnostic, not fresh confirmation. Caps protect
-  unfinished material too; section 23's breaks inside copies damaged fidelity. No population sweep is earned.
+- **Reversible placement without lateral fragmentation** (50–55): the selected overlapping-prefix replay is
+  diagnosed: one next site is occupied, the other admits only four dockings despite many encounters, and all
+  428 compatible linking checks at its anchor fail distance. The blocker identities and causal rescue are not
+  measured. Constructor-inspired contact gates lower output despite cleaner inventories (55); do not tune or
+  promote them on that basis. Next isolate which physical neighbors exclude placement, then test a local
+  detach/reorient/reattach operation that preserves the linked part. Keep successful patch mergers visible and
+  section 23's fragmentation warning. No population sweep or universal interpreter is justified.
 
 - **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
   brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an

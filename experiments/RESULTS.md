@@ -3527,3 +3527,136 @@ birth memberships, source provenance, complete paired grid and 150-unit accounti
 malformed histories, parameters, counts and manifests. Relevant existing determinism, caps and
 complementary-copying checks pass. All five 1500-step default fingerprints remain identical. The
 engine, viewer and presets are unchanged; the full 39-check suite was not rerun.
+
+## 54. A selected stall has both an occupied site and a placement/geometry barrier
+
+Protocol: `assembly_front_plan.md`, first stage. Exactly replay the selected section-53
+world: seed 83, opposed20, pUndock 0.3, 50k. This is the same world, not a fresh
+replicate. `anchor_access.js` wraps the existing compatibility, geometry and placement
+methods; each original call runs once, and observation draws no random numbers.
+Count gates during steps 15,001–50,000, and sample occupancy after each step.
+The final saved state including RNG matches an uninstrumented 50k replay exactly;
+births, lateral events, parameters and all 5k inventories match the archive.
+
+The PAAAABB anchor is block 87 on founder site 3; it needs growth toward site 2.
+The PAAAAB anchor is block 107 on site 4; it needs site 3, already held by block 87.
+These IDs and positions are observer labels, never inputs to a reaction.
+
+| observation in the 35k-step interval | count |
+|---|---:|
+| site 3 occupied by linked material, post-step samples | 35,000 / 35,000 |
+| site 2 free / occupied by an isolated monomer, post-step samples | 34,992 / 8 |
+| site 2 compatible docking geometry checks | 8,146 |
+| first failure: midpoint gap / bearing / opposing-side angle | 8,014 / 57 / 28 |
+| checks passing all docking geometry | 47 |
+| placement rejected by `_slotFree` / docking accepted | 43 / 4 |
+| block 87 compatible lateral geometry checks / gap failures | 428 / 428 |
+| block 107 compatible lateral checks | 0 |
+
+The smaller prefix has an occupied next site. The larger one's next site is
+usually open and sees compatible incoming material, but successful docking is
+rare and no lateral geometry check at its anchor passes. Placement rejects 43
+of 47 otherwise geometrically admissible docking attempts. Thus absence of
+material encounters is not the only explanation. There are 117 free monomers
+at 50k, as in section 53. No completed copying occurs after the single early birth.
+
+**Limits.** Gate counts are repeated calls within one correlated trajectory,
+not independent arrival rates or unique monomers. Post-step occupancy omits
+contacts formed and lost within a step. Geometry failures use the first failed
+test, so later tests may also fail. Lateral candidates are all actual compatible
+candidates at that anchor, not exclusively arrivals docked on site 2. We do not
+identify which neighboring polygon excludes each placement, prove permanent
+arrest, or establish that removing either partial row would restore copying.
+No chemistry or geometry tolerance was changed to obtain this diagnosis.
+
+```sh
+node experiments/anchor_access.js experiments/scratch/AA_selected.json
+node experiments/anchor_access_summary.js experiments/out/AA_selected.json
+```
+
+**Cost/provenance:** 100k executed steps (50k observed plus 50k neutrality replay),
+46.859 process CPU seconds. `AA_selected.json` contains gate counts, inventories,
+full parameters, reference/source hashes and the final-state hash. Its analyzer
+checks gate partitions, occupancy totals, archived records and source provenance.
+Section 55 tests a contact-gated recruitment hypothesis rather than treating
+this selected diagnosis as evidence for a general release rule.
+
+## 55. Contact-gated assembly works, but reduces completed output
+
+The user's constructor suggestion led to a primary-source review of mechanical
+constructors and signal-passing tile assembly; see the dated addition to
+`LITERATURE.md`. The testable idea is contact-triggered exposure of another
+binding site. This is one assembly primitive, not a universal constructor.
+
+**Rule in block terms.** An armed letter advertises whether its own face is bound
+on each bonded lateral side. Its free face is receptive when its designated
+lateral side is unbonded, or its partner's bonded side advertised occupancy in
+the previous derive pass. Otherwise that free face shows IDLE. Bound faces keep
+their normal identity, so holding and release conditions are unchanged. Test
+both fixed polarities L and R; no block reads a sequence, component, coordinate,
+counter, observer identity or completion flag. A mark does not propagate past
+an unoccupied face merely because its neighbor received a mark.
+
+`assembly_front.js` implements the gate in a research-only subclass. The off
+arm is bit-identical to ordinary physics; no standard rule, knob or preset changes.
+The initial fixture remains one active PAAAABBBBQ, complementary recognition,
+stiffness 0.5, 150 conserved blocks in 20x20, no energy, substitutions or turnover.
+Square versus opposed -20/+20-degree A/B wedges, square caps. New seeds 85/86,
+pUndock 0.1, 50k, four workers. Protocol and advancement criterion were written
+before the screen. All arms use the same starting geometry and RNG for a seed/shape;
+only the experimental face receptivity/derived contact marks differ.
+
+| shape | gate | exact offspring at 20k, seeds 85 / 86 | at 50k | nuclei at 50k | mergers at 50k |
+|---|---|---:|---:|---:|---:|
+| square | off | 5 / 2 | 9 / 4 | 16 / 9 | 6 / 1 |
+| square | L | 1 / 1 | 3 / 2 | 3 / 2 | 0 / 0 |
+| square | R | 1 / 0 | 2 / 2 | 2 / 3 | 0 / 1 |
+| opposed wedges | off | 2 / 1 | 7 / 4 | 13 / 7 | 5 / 2 |
+| opposed wedges | L | 2 / 0 | 3 / 2 | 3 / 3 | 0 / 0 |
+| opposed wedges | R | 1 / 1 | 3 / 4 | 3 / 4 | 0 / 0 |
+
+All 45 offspring are exact generation 1. Gating substantially reduces nucleation
+and usually eliminates mergers; **neither direction passes the prospective
+advancement test** (higher curved 50k output in both seeds, no lower 20k output,
+no errors). Seven of eight gated worlds finish with no linked unfinished row,
+but output is lower in seven comparisons and tied in one. The remaining gated
+world has a four-unit patch aged 3,611 steps. Control square seed 86 retains four
+patches (lengths 9/8/7/2, ages 30,538/27,630/19,797/1,831). Cleaner endpoint
+inventories alone would give the wrong verdict. Successful multiple-patch
+assembly remains visible in the controls, and even one R-gated world has a merger.
+
+**What this says.** Contact-only state changes can bias assembly order while
+preserving exact output. In this screen the restriction costs more completed
+output than it gains. A spatially ordered assembly operation must earn its
+transport and initiation cost; it is not automatically better because it looks
+more machine-like. This screen does not separately attribute the cost to initial
+docking, contact lifetime, or subsequent extension.
+
+**What it does not say.** Two seeds do not establish general inferiority, universal
+construction, selection, or a shape advantage. No descendants rearm in this assay.
+The gate changes opportunities to dock, not local detachment chemistry, and is
+not a causal rescue of section 54's particular stalled state. No rate tuning,
+fresh confirmation, solver sweep or long run was launched after it failed.
+Keep it out of the standard engine. The retained research code reproduces the negative.
+
+```sh
+node experiments/assembly_front_test.js
+node experiments/assembly_front.js --out experiments/scratch/AF_screen
+node experiments/assembly_front_summary.js experiments/out/AF_screen
+node experiments/assembly_front_analysis_test.js
+```
+
+**Cost/validation:** 12 runs, 600k steps, 199.407 process CPU seconds. Raw lateral
+events, physical birth membership, censored patches, inventories, full parameters
+and executed-source hashes are in `AF_screen.runs.jsonl` and its manifest; the CSV
+is derived from the validated raw records. The graph analyzer independently
+reconstructs all patch histories and 150-block inventories. Tests cover exact
+off-state/RNG identity, both contact polarities, previous-pass reads, no contactless
+propagation, bound-side preservation, gate reset, malformed data and provenance.
+
+**Next direction:** test reversible positioning of a linked part while preserving
+its lateral structure, before inventing a constructor interpreter. The selected
+stall now provides a concrete placement obstruction. Identify actual blocking
+neighbors in a matched fixture, then assess a strictly local reversible attachment
+cycle, recording useful reattachment and fidelity as well as escape. Section 23's
+fragmentation warning still applies. No ecological sweep is warranted.

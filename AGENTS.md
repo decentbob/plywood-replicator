@@ -98,6 +98,8 @@ experiments/offspring_forks.js  identical-state energy/turnover diagnostic; _sum
 experiments/offspring_analysis_test.js  validates section-51 lineage, material partitions, arm contrasts and source hashes
 experiments/end_protection.js  capped copying viability and matched completed/attached/detached lifetime fixtures (52)
 experiments/patch_completion.js  single-template nucleation/growth/merger histories under existing undocking (53); summary/tests alongside
+experiments/anchor_access.js  exact selected-stall replay with docking/linking gate diagnostics (54); _summary.js validates counts/provenance
+experiments/assembly_front.js  research-only local contact gates, both polarities (55); plan, summary and tests alongside; not standard chemistry
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -231,7 +233,37 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): stronger undocking fails; patches often merge productively
+## Handoff (2026-09-26, latest): constructor-inspired contact gates cost output
+
+The user's open research/innovation request led to sections 54–55 and the final dated addition
+to `LITERATURE.md`. Read `experiments/assembly_front_plan.md` for prospective choices.
+
+- Section 54 exactly replays selected seed 83/opposed20/pUndock=0.3. From 15k–50k, the next site for
+  anchor 107 is always occupied by anchor 87. Anchor 87's next site is free in 34,992/35,000 post-step
+  samples: 8,146 compatible docking checks, 47 geometry passes, 43 placement rejections, 4 accepted.
+  All 428 compatible lateral checks at anchor 87 fail midpoint distance. Actual blocker identities
+  and causal removal/rescue remain unknown. Full saved state/RNG, births and archived inventories match.
+- Section 55 tests a research-only gate: an armed letter advertises its own face occupancy on bonded
+  laterals; a free face opens if the selected lateral side is free or its partner advertised occupancy
+  on the previous derive pass. No contactless propagation, counters, sequence/row reads or observer feedback.
+  Existing holding/release is unchanged. Both L/R polarities versus off; new seeds 85/86, square/opposed20,
+  pUndock=0.1, 50k. Curved exact output 7/4 control, 3/2 L, 3/4 R; square 9/4, 3/2, 2/2.
+- All 45 births exact generation 1. Neither direction meets the predeclared confirmation criterion.
+  Seven/eight gated worlds have no unfinished row at 50k but output falls in seven/eight comparisons.
+  Controls retain productive mergers. No follow-up tuning, confirmation, long run, core knob or preset.
+- 600k screening steps, 199.407 CPU seconds, plus 100k diagnostic/replay steps, 46.859 CPU seconds.
+  Data: `AF_screen` manifest/raw histories/CSV and `AA_selected.json`. Tests independently reconstruct
+  patch histories/material, check provenance and reject malformed data. Core/default trajectories unchanged.
+- **Next:** isolate the actual neighbors excluding placement, then test a local detach/reorient/reattach
+  operation for an intact linked part. Useful reattachment and retained fidelity matter, not escape alone.
+  Construction universality, self-construction and evolved machines are not demonstrated. No ecology sweep.
+
+Resume checks: `node experiments/assembly_front_test.js`,
+`node experiments/assembly_front_analysis_test.js`,
+`node experiments/assembly_front_summary.js experiments/out/AF_screen`,
+`node experiments/anchor_access_summary.js experiments/out/AA_selected.json`.
+
+## Previous handoff (2026-09-26): stronger undocking fails; patches often merge productively
 
 Section 53 completes the authorized next assay before the user switches instances. Everything is committed;
 no simulation remains running. Start from `patch_completion_plan.md` and RESULTS section 53.

@@ -4,6 +4,10 @@
 
 # Literature survey: mechanisms for emergent complexity under strict locality
 
+**Historical context:** the original survey below predates translation and stacks.
+Its statements that the project has only copying or one replication mode describe
+that earlier state. See the dated updates and RESULTS 34–55 for subsequent tests.
+
 **How this was researched.** WebSearch worked, but WebFetch was blocked for every host I tried (arxiv, PMC, PLOS, university sites), so no full papers could be read. Citations and headline results below were checked against search abstracts. Finer details, such as exact rule sets, come from my own knowledge of the papers and are marked "(check)" where they matter. No files in the repo were modified.
 
 **How each item is judged.** Read against the repo's RESULTS 33, the current blockers are three:
@@ -425,3 +429,67 @@ as a limitation and proposes mechanical anchoring; that proposal is not an estab
 SpudCell strengthens the case for coupling a few individually measurable physical functions. It does not supply a recipe
 for complexity in this world. The immediate candidate is the controlled crowding assay; evolutionary claims wait for
 repeatable growth, partition and renewed function.
+
+## Constructors as local assembly operations (2026-09-26)
+
+The useful distinction is **copying a description versus using that description to
+build functional parts**. Translation already provides the second kind of output
+here; a universal constructor would additionally need a sufficiently general
+description-to-structure map and construction of the machinery that interprets it.
+We have demonstrated neither universality nor that closure. A machine assembled
+by a researcher is also different evidence from one arising through selection.
+
+Primary sources checked in this session:
+
+- **Lano, Mechanical Self-replication (2024), full text**, especially sections
+  1.1, 2.1 and 6: [paper](https://arxiv.org/html/2407.14556v2).
+  Sorting, copying, decoding and building are separate mechanical operations.
+  Its assumptions include synchronized movement within a machine, no rotation,
+  dissolving support blocks and effectively unlimited supplied parts. The author
+  leaves coordination and material transport partly unresolved. We can borrow
+  the decomposition into operations, but these assumptions do not meet our
+  conserved-parts, contact-only world. This is a design reference, not a proof
+  of spontaneous machine evolution or a drop-in mechanism for this engine.
+- **Alseth, Hader & Patitz, Self-Replication via Tile Self-Assembly (2021),
+  published abstract**: [paper](https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.DNA.27.3).
+  Tiles activate or deactivate glues after other glues bind. Their STAM* model
+  adds 3D geometry, flexible bonds and multiple shapes; engineered constructions
+  can reproduce descriptions and the structures they encode. This supports local
+  binding-triggered activation as a possible construction primitive. It does not
+  establish that our four-sided polygons, noise or finite pool realize their proof.
+- **Schulman & Winfree, Synthesis of crystals with a programmable kinetic barrier
+  to nucleation (2007), primary paper**:
+  [PDF](https://www.dna.caltech.edu/Papers/zigzag_ribbons.pdf).
+  The DNA-tile experiments separate seeded growth from unwanted initiation using
+  an assembly barrier. Our inference is to measure initiation and completed
+  output separately. Suppressing initiation is useful only if productive growth
+  survives; an empty surface is not evidence of efficient construction.
+
+**Experiment derived from these ideas:** an armed block advertises its own face
+occupancy through its bonded sides. A neighbor uses the previous-pass mark to
+make its free face receptive. A free lateral edge supplies a starting location;
+there is no sequence reader, global clock, machine identity or completion test.
+Both directions are tested in `assembly_front.js`, outside the standard engine.
+
+```mermaid
+flowchart LR
+  A[Face occupied] --> B[Bonded side advertises contact]
+  B --> C[Neighbor opens face on a later derive pass]
+  C --> D[Incoming block must fit and link physically]
+```
+
+**Outcome (RESULTS 55):** both directions can assemble exact offspring, but neither
+beats ordinary assembly in the two-seed screen. Curved output is 7/4 control,
+3/2 with L gating, 3/4 with R gating. The criterion for confirmation fails.
+This is a negative efficiency result for this primitive, not a rejection of
+signal-passing construction. Multi-patch assembly was often productive already.
+
+**Next worthwhile mechanical operation:** reversible placement of a linked part
+without breaking that part's lateral structure. Section 54 distinguishes occupied
+sites, placement exclusion and failed linking distance in a real stall. First use
+a matched physical fixture to show that a conserved assembled part can detach,
+reorient and reattach usefully under contact-only state changes. A prepared rescue
+would establish an operation, not a constructor; only afterwards ask whether a
+translated part can perform it, whether its production pays, and whether that
+function survives into descendants. Do not add a universal interpreter or a
+special completed-machine rule to skip these tests.

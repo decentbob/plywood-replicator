@@ -108,6 +108,13 @@ fragments. Run `node experiments/offspring_analysis_test.js` to validate the com
 replays capped copying to inventory protected unfinished ends (RESULTS 52). The `_summary.js` and
 `_analysis_test.js` files retain censored lifetimes and distinguish repeated snapshots from independent runs.
 
+`anchor_access.js` exactly replays a selected stalled world and distinguishes occupied sites, docking
+placement rejection and failed lateral geometry (54). `assembly_front.js` tests research-only contact-gated
+recruitment inspired by signal-passing construction (55). Both gate directions assemble exact offspring but
+reduce output in the two-seed screen. They are not standard knobs or a universal constructor. Protocol:
+`experiments/assembly_front_plan.md`; analysis: `assembly_front_summary.js` and
+`assembly_front_analysis_test.js`. The normal engine and viewer are unchanged.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

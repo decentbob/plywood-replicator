@@ -1,0 +1,111 @@
+{
+  "options": {
+    "out": "experiments/scratch/AF_screen",
+    "seeds": "85,86",
+    "profiles": "square,opposed20",
+    "arms": "off,L,R",
+    "undock": 0.1,
+    "steps": 50000,
+    "workers": 4
+  },
+  "jobs": [
+    {
+      "seed": 85,
+      "profile": "square",
+      "arm": "off",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 85,
+      "profile": "square",
+      "arm": "L",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 85,
+      "profile": "square",
+      "arm": "R",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 85,
+      "profile": "opposed20",
+      "arm": "off",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 85,
+      "profile": "opposed20",
+      "arm": "L",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 85,
+      "profile": "opposed20",
+      "arm": "R",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 86,
+      "profile": "square",
+      "arm": "off",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 86,
+      "profile": "square",
+      "arm": "L",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 86,
+      "profile": "square",
+      "arm": "R",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 86,
+      "profile": "opposed20",
+      "arm": "off",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 86,
+      "profile": "opposed20",
+      "arm": "L",
+      "undock": 0.1,
+      "steps": 50000
+    },
+    {
+      "seed": 86,
+      "profile": "opposed20",
+      "arm": "R",
+      "undock": 0.1,
+      "steps": 50000
+    }
+  ],
+  "complete": true,
+  "completed": 12,
+  "node": "v24.6.0",
+  "started": "2026-09-26T15:42:49.455Z",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "end_protection.js": "1b1be017f98d8b8e73032ee83eac132e6f8c3b975dbf355484a5ecce387f306d",
+    "end_protection_natural.js": "e3aa0a3f80784af0efd94343037cf22e7f12cb0797788ef6f8e1050da839b654",
+    "patch_completion.js": "d1ab884d9a597821879014b2cb5d632d470aa80ca8a091c602087fd7d33a3d90",
+    "assembly_front.js": "55cc21140cac06e713fb1a02f17c5cdfbc8820f546bf3c52f57bdb76508ee09a"
+  },
+  "cpuSeconds": 199.407,
+  "wallSeconds": 70.769,
+  "finished": "2026-09-26T15:44:00.229Z"
+}
