@@ -417,11 +417,25 @@ Keep entries short: date, what changed, why, what evidence.
   passes but is weaker under individual kicks and sensitive to their resolution. Small fueled populations reproduce
   through generations 4-5 yet shorten. Keep the assays and next measure a persistent shape's physical function;
   do not promote a catalyst or claim length selection. All default fingerprints remain unchanged.
+- 2026-09-26. **Fuel contacts are a collective resource (50).** Existing opposed wedges capture fuel in isolation,
+  but usually only rearm B sites. Other rows supply the missing second contacts, including for square material.
+  Four inactive founders start exact copying in four fresh seeds when grip is enabled; every grip-off control is
+  sterile. Curved runs show no generation-2 birth by 100k and no output advantage over square. Keep the local
+  chemistry unchanged: acquisition, whole-row recovery and descendant reproduction are different measurements.
+  Next diagnose offspring rearming and trapped material, not a new reward or an ecological race.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
 
 ## 15. Ideas not yet tried
+
+**2026-09-26, shared-contact startup (50).** Persistent curvature has a measured fuel function, yet full recovery
+requires encounters with other rows in the tested isolated assay. Square material also benefits. Four inactive
+founders with free letters start copying, but curved offspring have no second-generation births by 100k in four
+fresh seeds. Observe the rearming state of each released offspring and monomers trapped in incomplete copies;
+those distinguish an energy-contact obstruction from finite-pool sequestration. Do not infer that every offspring
+is active from world fuel totals, or infer a shape advantage from isolated uptake. Prior shape-fit results remain
+valid, but capture has now been tested rather than assumed.
 
 **2026-09-26, complementary shape fit (49).** Existing `compCopy` plus opposed `bendA=-20`, `bendB=20` restores
 copying of curved rows in eight fresh seeds, both directions. Self-pairing of those shapes stalls; complementary

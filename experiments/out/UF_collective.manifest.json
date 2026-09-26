@@ -1,0 +1,109 @@
+{
+  "options": {
+    "out": "scratch/UF_collective",
+    "seeds": "61,62",
+    "rows": "1,2,4",
+    "profiles": "square,opposed20",
+    "steps": 50000,
+    "iters": 4,
+    "workers": 4
+  },
+  "jobs": [
+    {
+      "seed": 61,
+      "rows": 1,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 61,
+      "rows": 1,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 61,
+      "rows": 2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 61,
+      "rows": 2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 61,
+      "rows": 4,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 61,
+      "rows": 4,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 62,
+      "rows": 1,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 62,
+      "rows": 1,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 62,
+      "rows": 2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 62,
+      "rows": 2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 62,
+      "rows": 4,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4
+    },
+    {
+      "seed": 62,
+      "rows": 4,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4
+    }
+  ],
+  "complete": true,
+  "completed": 12,
+  "node": "v24.6.0",
+  "started": "2026-09-26T13:26:38.972Z",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "curved_collective.js": "2859ebad85f30c3659e4f9a3ec67c89541bb44006ca7236f58fc0161e808976c",
+    "curved_fuel.js": "9accd859765a8ffa2fe5c479e525749ff2e5bec69421bc3bcba7981d5613a2a7"
+  },
+  "finished": "2026-09-26T13:27:29.620Z",
+  "cpuSeconds": 137.766,
+  "wallSeconds": 50.639
+}

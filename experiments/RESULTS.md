@@ -3073,3 +3073,149 @@ paired effects. `geometry_analysis_test.js` checks malformed datasets as well as
 actual shapes, equal chemical probabilities, conserved single-founder setups and non-invasive observation. Seven relevant
 existing tests pass (exact copying, translation/catalysis, shared catalysts, complementary copying and three product checks).
 The unchanged full 39-check suite was not rerun. All five default fingerprints remain identical; `src/sim.js` is unchanged.
+
+## 50. Persistent shapes capture fuel; shared contacts complete recovery
+
+### 50a. A curved row captures fuel but cannot fully reactivate itself
+
+Following 49, test a physical function of copying-compatible curvature using **only existing rules**.
+The prospective protocol is `curved_fuel_plan.md`. One initially REPEL eight-letter row, 12x12 world,
+40 U particles, no E or free letters, stiffness 0.5, complementary pairing, pUndock 0.1, no fraying or
+substitutions. All blocks and the seeded lateral bonds are conserved. Each actual REPEL-to-TPL transition
+is logged with its fuel particle and the sides holding that particle. Two contacts are required by the
+existing fuel rule; one consumption arms one letter. There is no state reset or artificial fuel placement.
+
+The 36-run screen crosses two seeds (51,52), three balanced self-reverse-complementary sequences,
+fuel sizes 0.5/1.2, and square/opposed-20/opposed-40 shapes, 50k steps. Entries are units rearmed in seed 51/52;
+every square control rearms zero. No row completely rearms in this screen.
+
+| sequence | fuel size | opposed 20 | opposed 40 |
+|---|---:|---:|---:|
+| AAAABBBB | 0.5 | 0 / 0 | 4 / 4 |
+| AAAABBBB | 1.2 | 4 / 3 | 5 / 5 |
+| AABBAABB | 0.5 | 0 / 0 | 4 / 4 |
+| AABBAABB | 1.2 | 0 / 0 | 5 / 4 |
+| ABABABAB | 0.5 | 0 / 0 | 0 / 0 |
+| ABABABAB | 1.2 | 0 / 0 | 2 / 0 |
+
+Select AAAABBBB, opposed 20, size 1.2 before fresh outcomes: the angle has previous copying evidence;
+40 degrees does not. Fresh seeds 53-60 rearm **4,2,4,4,4,2,4,5** units versus zero in every square control.
+Mean 3.625/8; 28 of 29 events arm B, one arms the adjacent A. Actual mean bend is 19.33 degrees versus
+5.26 square. None fully recovers. Doubling solver passes in seeds 53-56 retains partial capture, but reduces
+it to 2,2,1,3 units, all B (mean 2), versus zero square. This magnitude is resolution-sensitive, not a
+convergence result. Same-mass grip-off controls in seeds 53,54 produce zero events with either shape.
+
+```sh
+node experiments/curved_fuel.js --out experiments/out/UF_screen
+node experiments/curved_fuel.js --out experiments/out/UF_confirm --seeds 53,54,55,56,57,58,59,60 --sequences AAAABBBB --profiles square,opposed20 --sizes 1.2
+node experiments/curved_fuel.js --out experiments/out/UF_solver --seeds 53,54,55,56 --sequences AAAABBBB --profiles square,opposed20 --sizes 1.2 --iters 8
+node experiments/curved_fuel.js --out experiments/out/UF_off --seeds 53,54 --sequences AAAABBBB --profiles square,opposed20 --sizes 1.2 --grip 0
+node experiments/curved_fuel_summary.js experiments/out/UF_confirm experiments/out/UF_solver experiments/out/UF_off
+```
+
+**What this says:** persistent geometry has a measurable fuel-acquisition function without a motif reward.
+**What it does not say:** partial capture is neither full recovery nor reproductive benefit. Opposite bends
+put the two letter types in different contact geometries; a good inward-facing pocket does not supply every site.
+
+### 50b. Other rows provide the missing contacts, including for straight material
+
+Screen seeds 61,62 with 1/2/4 inactive AAAABBBB rows in the same 12x12 world and 40 size-1.2 U particles,
+50k, square/opposed20. There are still no free letters or births. More rows add letter material and density;
+this comparison cannot separate them from encounter frequency. Holder-row identities are **observation only**.
+
+| rows | square rearmed / total, seeds 61 / 62 | curved rearmed / total, seeds 61 / 62 | full rows: square; curved |
+|---|---|---|---|
+| 1 | 0/8; 0/8 | 4/8; 4/8 | 0/0; 0/0 |
+| 2 | 13/16; 13/16 | 13/16; 16/16 | 0/0; 0/2 |
+| 4 | 31/32; 30/32 | 30/32; 31/32 | 3/2; 2/3 |
+
+Every curved A arming in this screen uses a fuel particle held across different rows. Straight material
+also recovers with those contacts. Select four rows to confirm recovery, **not** superiority of curvature.
+
+| fresh seed | square / curved units per row | square / curved completely recovered rows (of 4) |
+|---:|---:|---:|
+| 63 | 6 / 8 | 1 / 4 |
+| 64 | 8 / 7.75 | 4 / 3 |
+| 65 | 7.25 / 7.75 | 3 / 3 |
+| 66 | 7 / 7.75 | 2 / 3 |
+| 67 | 6 / 7.5 | 1 / 2 |
+| 68 | 7.75 / 8 | 3 / 4 |
+| 69 | 8 / 7.25 | 4 / 2 |
+| 70 | 8 / 8 | 4 / 4 |
+
+```sh
+node experiments/curved_collective.js --out experiments/out/UF_collective --seeds 61,62 --rows 1,2,4
+node experiments/curved_collective.js --out experiments/out/UF_collective_confirm --seeds 63,64,65,66,67,68,69,70 --rows 4
+node experiments/curved_collective.js --out experiments/out/UF_collective_solver --seeds 63,64,65,66 --rows 4 --iters 8
+node experiments/curved_collective_summary.js experiments/out/UF_collective_confirm experiments/out/UF_collective_solver
+```
+
+At eight solver passes, seeds 63-66 still yield full recovery: square 2,3,2,2 rows; curved 3,4,1,2.
+Across the eight fresh four-pass seeds, mean rearmed units per row are 7.25 square / 7.75 curved;
+22/32 square and 25/32 curved rows completely recover. Cross-row contacts supply 115/116 square A armings
+and all 124 curved A armings. These events come from eight worlds, not 124 independent replicates.
+Thus shared contacts can close the missing-contact problem under both resolutions. Curvature is not necessary.
+This is physical facilitation in a finite prepared assembly, not selection for cooperation, inherited partnerships,
+or evidence that longer sequences pay. Whether it supports reproduction needs a separate assay.
+
+### 50c. Shared-contact startup works, but curved descendants do not yet reproduce
+
+First verify this particular eight-letter sequence can copy. One armed AAAABBBB founder in 18x18,
+60 A + 60 B, no U/E, 20k: seeds 71/72 give 7/8 exact square copies and 4/1 curved copies. All 20 births
+are generation 1 and exact; no offspring can rearm. This establishes viability, not equal copying speed.
+
+Next use the same fixed 120-letter pool with 40 size-1.2 U, no E, and 1 or 4 initially inactive founders.
+All arms use compCopy, stiffness 0.5, pUndock 0.1, four passes and body jostling; no turnover/substitutions.
+Cross shape and pGrip 0/0.2. More founders consume more of the fixed letter pool; normalize any per-founder
+claim and do not compare these totals directly to the smaller no-monomer acquisition world.
+
+| 50k screen, seeds 71 / 72 | square births | curved births | curved fuel consumed |
+|---|---:|---:|---:|
+| 1 inactive founder, grip on | 0 / 0 | 0 / 0 | 4 / 3 |
+| 4 inactive founders, grip on | 4 / 0 | 1 / 1 | 30 / 40 |
+| either founder count, grip off | 0 / 0 | 0 / 0 | 0 / 0 |
+
+All six births are exact AAAABBBB from AAAABBBB parents and generation 1. No world has a birth by 20k;
+an early viability check therefore sees acquisition in progress rather than immediate reproduction.
+Choose four founders, fresh seeds 73-76, 100k to allow this slow startup, with both shapes and grip ablations.
+The planned endpoints are exact family births and generation-2-or-later births. Screen and confirmation stay separate.
+
+| fresh seed | births at 50k, square / curved | exact births at 100k, square / curved | generation >=2 births, square / curved | free letters at 100k, square / curved |
+|---:|---:|---:|---:|---:|
+| 73 | 0 / 5 | 7 / 6 | 1 / 0 | 2 / 7 |
+| 74 | 0 / 0 | 4 / 4 | 0 / 0 | 28 / 18 |
+| 75 | 7 / 2 | 7 / 6 | 1 / 0 | 0 / 5 |
+| 76 | 5 / 0 | 7 / 5 | 0 / 0 | 0 / 9 |
+
+Every grip-off control has zero fuel consumption and zero births. All 46 confirmation births are exact
+eight-letter founder-family sequences. The curved arms consume 96/68/99/86 fuel; square 92/47/107/105.
+More energy use is not more output: curved mean 5.25 births versus 6.25 square. Four seeds are not a
+shape-fitness study, and initial onset varies strongly: square seed 73 is still at zero births at 50k but
+overtakes curved by 100k. Only two square runs have a generation-2 birth; none of the four curved runs does.
+
+```sh
+node experiments/curved_fuel_reproduction.js --out experiments/out/UF_copy
+node experiments/curved_fuel_reproduction.js --out experiments/out/UF_bootstrap --mode bootstrap --rows 1,4 --grips 0,1 --steps 50000
+node experiments/curved_fuel_reproduction.js --out experiments/out/UF_bootstrap_confirm --mode bootstrap --seeds 73,74,75,76 --rows 4 --grips 0,1 --steps 100000
+node experiments/curved_fuel_reproduction_summary.js experiments/out/UF_copy experiments/out/UF_bootstrap experiments/out/UF_bootstrap_confirm
+```
+
+**Decision.** An existing local two-contact reaction plus encounters among rows can start reproduction from
+inactive material. No rule recognizes a partner row, provides a whole-row reward, or creates blocks. The
+shape-only fuel advantage of an isolated row does not establish superior reproduction in a shared world.
+Keep the assays, add no preset or chemistry. No length selection, evolved cooperation or indefinite persistence
+has been demonstrated. This no-turnover world increasingly binds up its finite material.
+
+**Next useful measurement:** follow each released offspring's incomplete rearming and count material trapped
+in unfinished copies. Separate the contact/energy bottleneck from monomer availability before changing turnover,
+density or chemistry. Do not jump from a fuel pocket to another support ecology or an arms-race sweep.
+
+**Validation and cost.** 136 runs, 7.48M steps, 2,223.877 process CPU seconds. Manifests retain source byte hashes,
+full parameters, job lists, completion status and CPU costs; raw events/births and windows accompany every CSV.
+All three assay checks pass: observer neutrality, actual curvature, local one-fuel/one-arming accounting,
+matched grip ablation, conserved material, single-row reference trajectory and inactive/active founder setups.
+`curved_fuel_analysis_test.js` validates all batches and rejects malformed copies (incomplete manifests,
+duplicate/missing arms, parameter mismatch and out-of-window events). Source checks allow only Git newline
+conversion when comparing current source to the recorded byte hash. The existing `grip and pocket` check
+passes. The full 39-check suite was not rerun; the engine is unchanged and all five 1500-step default fingerprints
+are identical. No browser or build changes were made.

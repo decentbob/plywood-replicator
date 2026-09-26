@@ -1,0 +1,9 @@
+seed,sequence,size,profile,steps,iters,bodyJostle,grip,armed,armedA,armedB,firstArming,completeTime,meanBend,meanArmed
+53,AAAABBBB,1.2,square,50000,8,true,true,0,0,0,,,3.3872320920689596,0
+54,AAAABBBB,1.2,square,50000,8,true,true,0,0,0,,,3.147202962112313,0
+53,AAAABBBB,1.2,opposed20,50000,8,true,true,2,0,2,6440,,17.85054031904734,1.26
+54,AAAABBBB,1.2,opposed20,50000,8,true,true,2,0,2,1970,,17.709843809735084,1.748
+55,AAAABBBB,1.2,square,50000,8,true,true,0,0,0,,,3.2866010034569295,0
+55,AAAABBBB,1.2,opposed20,50000,8,true,true,1,0,1,30593,,17.957283633865757,0.39
+56,AAAABBBB,1.2,square,50000,8,true,true,0,0,0,,,3.4189141993217964,0
+56,AAAABBBB,1.2,opposed20,50000,8,true,true,3,0,3,6421,,17.79562918626644,1.704

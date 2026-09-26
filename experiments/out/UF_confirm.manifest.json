@@ -1,0 +1,187 @@
+{
+  "options": {
+    "out": "scratch/UF_confirm",
+    "seeds": "53,54,55,56,57,58,59,60",
+    "sequences": "AAAABBBB",
+    "profiles": "square,opposed20",
+    "sizes": "1.2",
+    "steps": 50000,
+    "iters": 4,
+    "bodyJostle": 1,
+    "grip": 1,
+    "workers": 3
+  },
+  "jobs": [
+    {
+      "seed": 53,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 53,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 54,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 54,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 55,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 55,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 56,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 56,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 57,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 57,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 58,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 58,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 59,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 59,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 60,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "square",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    },
+    {
+      "seed": 60,
+      "sequence": "AAAABBBB",
+      "size": 1.2,
+      "profile": "opposed20",
+      "steps": 50000,
+      "iters": 4,
+      "bodyJostle": true,
+      "grip": true
+    }
+  ],
+  "complete": true,
+  "completed": 16,
+  "node": "v24.6.0",
+  "started": "2026-09-26T13:21:17.068Z",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "curved_fuel.js": "9accd859765a8ffa2fe5c479e525749ff2e5bec69421bc3bcba7981d5613a2a7"
+  },
+  "finished": "2026-09-26T13:22:11.888Z",
+  "cpuSeconds": 124.11,
+  "wallSeconds": 54.815
+}

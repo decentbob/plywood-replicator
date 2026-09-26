@@ -90,6 +90,9 @@ experiments/mechanical_brace.js  one-founder copying assay (47), prepared attach
 experiments/geometric_bottleneck.js  permanent-wedge support assay (48), with per-joint geometric dwell counters
 experiments/complementary_fit.js  shape x partner-identity assay (49), reciprocal founders and solver controls
 experiments/complementary_population.js  small fueled descendant-viability probe (49); each assay has a _summary.js
+experiments/curved_fuel.js  isolated inactive-row fuel assay (50); curved_collective.js logs shared fuel contacts
+experiments/curved_fuel_reproduction.js  active copying control and inactive-founder startup (50), matched grip ablations
+experiments/curved_fuel_analysis_test.js  validates all section-50 batches, provenance and malformed-data rejection
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -221,7 +224,30 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): complementary shapes relieve a real copying bottleneck
+## Handoff (2026-09-26, latest): fuel capture leads to shared-contact startup, not a curvature advantage
+
+Section 50 uses only the existing engine, with prospective choices in `curved_fuel_plan.md`.
+
+- **Partial physical function:** one inactive AAAABBBB with opposing 20-degree wedges, stiffness 0.5 and 40 U
+  rearms 3.625/8 units on average in eight fresh seeds; matched square material rearms zero. Almost all events
+  arm B; none fully recovers. Eight solver passes retain capture but reduce its magnitude to 2/8 in four seeds.
+- **Shared contacts complete recovery:** four rows in 12x12, no free letters, give 22/32 full square recoveries
+  and 25/32 curved across eight fresh seeds. Every one of 124 curved A armings uses cross-row fuel contacts.
+  Square material works too. More rows change density/material; do not call this evolved cooperation or shape selection.
+- **Startup with free material:** in 18x18 with 60 A + 60 B + 40 U, four initially inactive founders produce
+  exact eight-letter offspring by 100k in all four fresh seeds. Square births 7/4/7/7; curved 6/4/6/5.
+  All grip-disabled controls stay sterile. One-founder 50k screens absorb some fuel but make no offspring.
+- **Limit:** only two square runs have a generation-2 birth; curved runs have none. Fuel use alone overstates
+  function. This no-turnover world binds up its finite letters; no sustained curved reproduction or length selection.
+  Do not pool the two selected screen seeds with fresh confirmation. At 50k some successful 100k runs still have no births.
+- 136 runs, 7.48M steps, 2,223.877 process CPU seconds, full manifests/raw events/windows/CSV committed.
+  All three assay tests, malformed-data analyzer checks and existing grip/pocket test pass. Core source and all
+  five default fingerprints are unchanged; full 39-check suite not rerun. No new rule, preset or viewer feature.
+- **Next:** observe each released offspring's progress toward full rearming and material trapped in incomplete
+  copies. Separate missing contacts from missing monomers before altering density/turnover or adding chemistry.
+  Keep mechanical exploration open; no new reaction is yet justified by this evidence.
+
+## Previous handoff (2026-09-26): complementary shapes relieve a real copying bottleneck
 
 Sections 48-49 follow the user's open exploration request. The engine and default trajectories are unchanged.
 

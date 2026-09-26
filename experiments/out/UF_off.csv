@@ -1,0 +1,5 @@
+seed,sequence,size,profile,steps,iters,bodyJostle,grip,armed,armedA,armedB,firstArming,completeTime,meanBend,meanArmed
+53,AAAABBBB,1.2,square,50000,4,true,false,0,0,0,,,5.232450780078397,0
+53,AAAABBBB,1.2,opposed20,50000,4,true,false,0,0,0,,,18.582468689680418,0
+54,AAAABBBB,1.2,square,50000,4,true,false,0,0,0,,,5.495057902184018,0
+54,AAAABBBB,1.2,opposed20,50000,4,true,false,0,0,0,,,18.51933987326027,0

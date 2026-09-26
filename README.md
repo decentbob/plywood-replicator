@@ -93,6 +93,12 @@ and jostling controls. `complementary_population.js` checks descendants with fue
 reproduce but still shorten. These are research assays, not new chemistry or presets. Each has a `_summary.js` analyzer;
 the prospective protocol is `experiments/complementary_fit_plan.md`.
 
+Fuel acquisition is isolated in `curved_fuel.js` (one inactive row, no free letters), and
+`curved_collective.js` (several rows, with actual cross-row fuel-contact diagnostics).
+`curved_fuel_reproduction.js` couples acquisition to ordinary complementary copying from inactive founders.
+Each has a `_summary.js` analyzer; `curved_fuel_plan.md` records the prospective choices and RESULTS 50 the outcomes.
+These assays use the ordinary engine. Row identity is recorded only by observers, never read by a rule.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

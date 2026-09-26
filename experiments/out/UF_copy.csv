@@ -1,0 +1,5 @@
+seed,rows,profile,grip,mode,steps,iters,total,family,fuelUsed,maxGen,free
+71,1,opposed20,true,copy,20000,4,4,4,0,1,76
+72,1,opposed20,true,copy,20000,4,1,1,0,1,89
+71,1,square,true,copy,20000,4,7,7,0,1,50
+72,1,square,true,copy,20000,4,8,8,0,1,45
