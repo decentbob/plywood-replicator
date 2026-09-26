@@ -5,11 +5,12 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P1's fresh confirmation fails its predeclared consistency gate (62):
-2/4 seeds pass; one reverses the binding benefit and another falls below the +5-birth
-threshold, despite continuing producer reproduction. Mean effects remain positive.
-Park this setting for frequency competition. **P2's material-budget derivation is next**;
-P4 is an independent alternative. Retain body jostling and targeted P0 checks; no
+**Current status:** P2's bounded derivation is complete (63): a fixed twelve-type
+table reduces gross scarce-part demand, but independent fragments cost additional
+contacts and recycling makes net retention depend on the cut arrangement. The
+physical renewal/advantage gate remains incomplete; no mechanism was added.
+**P4's existing random-chemistry heredity assay is next.** P1 remains parked after
+its failed fresh confirmation (62). Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
 probability of achieving open-ended evolution. Confidence in that ultimate outcome remains low
@@ -20,9 +21,9 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / medium for a decisive theoretical result, low for a working evolving world | Next: bounded material/rule derivation before implementation | Could make additional organization pay without a new reward motif. |
+| P4 | Heredity test for existing random chemistries | Medium / low, but potentially high information gain | Next: recover candidate tables and predeclare a small discrimination assay | Tests emergence with existing simple rules, before investing in twelve new contact types. |
+| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / conditional theoretical lead, low for physical renewal | Derivation complete (63); implementation held at turnover gate | Gross economy survives; common-part costs and scarce-part recycling prevent a per-child advantage claim. |
 | P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Small controls; choose one bottleneck | Closest to a machine of parts; fit already works, sustained advantage does not. |
-| P4 | Heredity test for existing random chemistries | Medium / low, but potentially high information gain | Small bounded assay; no broad search yet | Directly tests emergence from unselected simple rules and an old unclosed gap. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
 | P5 | Coupling replication modes and evolving dependencies | High long-term / low until prerequisites pass | Park implementation | Two modes alone failed (40); coupling needs a real material/function exchange. |
 | C1 | Close the handoff branch with its one outstanding test | Low strategic priority / high diagnostic value, low expected advantage | Optional short closure, no extensions | Good way to finish a loose end; not a prerequisite for P1–P4. |
@@ -144,6 +145,25 @@ Track functional organization separately from width; the latter is only a paper-
 **Stop:** the argument depends on chemostatting, scripted dilution/scission, or increasingly
 special-case state logic. No new engine and no large crystal population before the derivation
 and a small physical cycle work. Passing the gate would materially raise this route's priority.
+
+**2026-09-26 derivation (63):** table 670873, all 1,020 boundary states for
+n=1..8, gives no T1-free periodic ribbon in that scope. For n=1,2,3, gross T1
+per three-column increment is 1/2, 3/8, 3/10, but retained fragments cost
+5/8/11 blocks and separation costs 6/7/8 bond losses. Two-column increments
+fail the ideal cooperative restart test. A three-column cut returns one edge
+part; one narrow-pattern alignment returns all T1. There is therefore no
+unconditional scarce trapping advantage per child. Common-stock limits can
+also remove the apparent wider-pattern yield advantage.
+
+**Disposition:** bounded theoretical deliverable complete; physical/turnover gate
+incomplete. See [the derivation](experiments/resource_economy_derivation.md).
+No core change or population assay earned. A future P2 fixture must check both
+growth ends, single-contact intermediates, uncontrolled individual bond losses,
+active fragments and full material return, including the narrow recycling
+competitor. No scripted cut, selected phase or orientation lock in reactions.
+After the two P1 assays and this analysis, choose P4 next: it tests an existing
+heredity gap without first adding this palette and unverified geometry. This
+is a portfolio choice, not a disproof of resource-based selection.
 
 ## P3 — an inherited mechanical part must earn its keep
 

@@ -4,3 +4,6 @@ experiments/recipient_dependence_plan.md text eol=lf
 experiments/recipient_dependence_summary.js text eol=lf
 experiments/recipient_confirmation_plan.md text eol=lf
 experiments/recipient_confirmation_summary.js text eol=lf
+experiments/resource_economy_plan.md text eol=lf
+experiments/resource_economy.js text eol=lf
+experiments/resource_economy_test.js text eol=lf

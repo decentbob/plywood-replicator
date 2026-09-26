@@ -4502,3 +4502,108 @@ P4's heredity discrimination is an independent fallback; P3 still needs net
 reproductive benefit rather than another uptake/fit result. Reopen this P1
 setting only with independent evidence of a distinct causal bottleneck, not
 another rate sweep, more confirmation seeds or an easier retrospective threshold.
+
+## 63. Resource-economy derivation: gross savings, unresolved renewal advantage
+
+2026-09-26, ROADMAP P2, baseline `19cd4e6`. Analytical assay under the
+[fixed plan](resource_economy_plan.md), with the full block-level contract and
+derivation in [resource_economy_derivation.md](resource_economy_derivation.md).
+No simulator, observer, physics, core state or default changed. No world seeds
+or simulation workers. The source reference, inspected figures and encoding
+are recorded in the derivation; this section reports our calculations.
+
+### Enumeration and material accounting
+
+The fixed twelve-type table 670873 has **122 cycles across all 1,020 boundary
+states** at interior widths n=1..8, with no transients. Every cycle uses T1 and
+B1; treating T0 or B0 as scarce instead admits a zero-use cycle at odd n.
+Independent parity/rotation algebra agrees with every decoded transition.
+This is exhaustive only for the stated ideal ribbon patterns, not for rotated,
+malformed or zero-interior-row physical competitors.
+
+For the minimum-T1-use cycle at each of the first three widths:
+
+| n | Columns per repeat | T1 per repeat | Gross T1 per 3 columns | Blocks in retained 3-column strip | Internal contacts | Bond losses for separation | Net retained T1 per strip across cut alignments |
+|---|---:|---:|---:|---:|---:|---:|---|
+| 1 | 6 | 1 | 1/2 | 5 | 6 | 6 | 1/2, 1/2, 0 |
+| 2 | 8 | 1 | 3/8 | 8 | 11 | 7 | 1/4 in all three |
+| 3 | 10 | 1 | 3/10 | 11 | 16 | 8 | 1/5 in all three |
+
+Calling a full repeat a child gives one scarce part per child at every width.
+Two-column growth increments have a one-contact boundary overhang; removing
+it leaves no two-contact restart site. They cannot be counted as independently
+renewing output under the assumed retention criterion. Three-column strips
+have minimum contact degree two and growth sites on both ends in the ideal
+graph. Reversible local port constraints support either direction. No physical
+retention, collision, deformation or growth-rate measurement was performed.
+
+Adding three columns costs 6/9/12 blocks and 12/18/24 contact formations.
+Separating two three-column strips returns one straddling boundary block after
+four incident losses, plus n interior and one boundary-to-boundary bond loss.
+All retained parts keep at least two contacts along this particular sequence.
+The program validates the material and contact balance by independently
+constructing and partitioning periodic contact graphs. This is an existence
+path, not a reaction that chooses a cut or evidence of its probability.
+
+The returned boundary part matters: one alignment of the narrow pattern returns
+every T1, whereas the wider examples retain some. The narrow fragments still
+need T1 during subsequent growth; they are not a zero-scarce-inventory growing
+cycle. Uniform cut alignment would restore a decreasing *average* retention
+cost, but no dynamics here establishes that distribution or complete recycling.
+Prescribed cuts or phase-sensitive hazards would violate this assay's intent.
+
+Finite-stock bounds use four T1 and the same C copies of each common type for
+every candidate. With C=12 (136 total blocks), complete-repeat count vectors
+fit **24/24/10 columns** at n=1/2/3; with C=48 (532 total), **24/32/40**.
+These packing bounds include all material, including any founder allocation;
+they do not count births. The archive lists each of the twelve demands and
+remainders. Nothing is replenished or converted. No-recycling packing and
+ideal full-return partitions bound bookkeeping, not turnover times or fitness.
+
+### Reproduction and checks
+
+```sh
+node experiments/resource_economy_test.js
+node experiments/resource_economy.js experiments/scratch/RE_670873_20260926
+node experiments/resource_economy_test.js experiments/out/RE_670873_20260926.json
+node tools/ledger_index.js
+```
+
+Archive: `out/RE_670873_20260926.{json,txt}`. The JSON retains every cycle's
+states and twelve-type counts, edge sequence, all three cut phases, finite
+stock vectors, source/plan/test hashes, exact command and input. The runner
+refuses an existing output stem. Enumeration/archive cost: **0.031 process CPU
+seconds**; no outcome-dependent stopping, incomplete or zero runs suppressed.
+The CPU figure excludes development, tests, source reading and rendering.
+
+Tests pass for all decoded transitions against independent algebra, state-space
+coverage, direct cut graphs, both exposed ends, conservation, finite-stock
+maximality and replay of the archive with hash checks. During validation, a
+proposed assertion that a two-column strip without its overhang had degree one
+was rejected: it actually has degree two but no cooperative restart site. The
+corrected distinction is retained above. No simulator or hashed historical
+source changed. The full physics suite is inapplicable and was not run; default
+fingerprints were not rerun for this analytical-only change.
+
+### Decision and portfolio checkpoint
+
+**Bounded derivation complete; physical/renewal gate incomplete.** A fixed local
+palette can exhibit a conditional gross-material trade-off. The three-column
+contact path identifies a concrete possible renewal operation, but larger
+organization also costs more parts and cut contacts. Scarce fraction alone
+does not establish reduced consumption per independent offspring, especially
+when the narrow pattern can return its scarce parts. No new inherited function,
+autonomous physical renewal, sustained advantage or evolved complexity is shown.
+
+Hold implementation. A future P2 fixture must jointly measure growth, naturally
+released active fragments and trapped/returned material under generic incident
+bond losses, including the narrow recycling competitor, then apply P0 to any
+promising mechanical effect. Selected cuts are calibration only. Do not add
+states to force the desired phase or impose a lattice/whole-pattern operation.
+
+After the P1 screen and failed confirmation (61–62), this analysis completes
+the next bounded alternative. **Choose P4's existing random-chemistry heredity
+discrimination next**, before the twelve-type geometry/kinetics investment.
+P3 still needs inherited reproductive benefit beyond fit or capture. This
+portfolio decision preserves the P2 theoretical lead and its explicit gaps;
+it does not conclude that resource-based selection is impossible.

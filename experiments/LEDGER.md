@@ -269,6 +269,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 60b | Handoff benefit and availability | Does the handshake outperform waiting and work when curved? | matched seek/wait/pulse/hold, +5k | negative | square wait exact at 6619 and pulse at 6048, both sooner than hold; curved request arms acquire no support and remain unfinished | contact_handoff.js (`CH_selected`) | no fresh screen, extra states or rate tuning | no efficiency benefit demonstrated; curved outcomes censored, not permanent arrest; default engine unchanged |
 | 61 | Uncapped recipient dependence | Does recipient reproduction require shared-product interactions? | `pBindP` 0/0.2, `transStart` absent P/off, `pLinkBare` 0.01, `bindAny` | lead | recipient-parent births 18/24 on, 0/1 no binding, 2/1 no production; detached exact output 15/18 versus 0/1 and 2/1 | recipient_dependence.js (`RD_dependence_screen`) | unchanged four-arm confirmation, fresh seeds 105–108 | two screen seeds plus two viability; fixed 1,000 blocks; producer-parent output 48/58; no frequency dependence or novelty |
 | 62 | Fresh recipient-dependence confirmation | Does the fixed dependence criterion hold across four fresh worlds? | `pBindP` 0/0.2, `transStart` absent P/off, `pLinkBare` 0.01, `bindAny` | negative | 2/4 pass; recipient binding effects +16/-1/+22/+4, production +21/+3/+21/+4; producers reproduce in all four | recipient_dependence.js, recipient_confirmation_summary.js (`RD_dependence_confirm`) | park this setting; P2 material-budget derivation next | positive means +10.25/+12.25 do not pass the all-four gate; 106 reverses detached exact binding effect, 108 misses +5 threshold |
+| 63 | Scarce-material contact-table accounting | Does wider organization save material per renewing fragment? | offline table 670873, n=1..8, T1 scarcity, three-column cuts | partial | all 1,020 states: no T1-free ideal cycle; gross T1 1/2,3/8,3/10 for n=1,2,3; narrow cut can return every T1 | resource_economy.js (`RE_670873_20260926`) | physical turnover gate incomplete; P4 heredity assay next | analytical deliverable complete; no physical runs, autonomous cuts, survival rates or reproductive advantage; fixed finite-stock budgets and all cut phases retained |
 
 ## Knob index
 
@@ -410,12 +411,13 @@ later tests may have completed or rejected it. Do not treat every historical lea
   the recipient-dependence lead (61) fails its fresh confirmation gate (62, 2/4 pass).
   Park this setting for frequency competition; no rate tuning or new states. Positive
   mean benefits remain evidence, not a rescue of the failed flexibility setting (46).
-- **P2 — resource-efficient assembly, next:** derive whether extra organization can economize
-  a scarce part under conserved material and local renewal, including simpler competitors
-  and recycling before implementation; ordinary stacks did not supply this mechanism (40).
+- **P2 — resource-efficient assembly:** derivation complete (63), physical turnover gate
+  incomplete. Gross scarce demand falls with width, but narrow fragments can recycle every
+  scarce part under one ideal cut arrangement; no per-child advantage established. Keep the
+  contact graph and finite-stock accounting; no new simulator mechanism yet.
 - **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);
   inherited reproductive advantage remains open (41, 47, 51). No more uptake-only claims.
-- **P4 — random-chemistry heredity:** resolve recurrence versus variant-specific descendants
+- **P4 — random-chemistry heredity, next:** resolve recurrence versus variant-specific descendants
   in existing candidates (32) before broadening the search.
 - **P5 — coupled modes:** conditional on a measured useful exchange and self-renewal of
   the participating assemblies; not justified merely by having two copying modes.
