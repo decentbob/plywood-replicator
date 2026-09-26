@@ -423,11 +423,24 @@ Keep entries short: date, what changed, why, what evidence.
   sterile. Curved runs show no generation-2 birth by 100k and no output advantage over square. Keep the local
   chemistry unchanged: acquisition, whole-row recovery and descendant reproduction are different measurements.
   Next diagnose offspring rearming and trapped material, not a new reward or an ecological race.
+- 2026-09-26. **Track a completed cycle, not fuel totals (51).** Exact replays show ten curved offspring fully
+  active yet without children, and 33-39 letters/world in unfinished linked rows. Identical-state turnover forks
+  enable two exact children from original curved offspring in each of two seeds, but mostly yield shorter rows
+  and destroy nine of ten original offspring. Energy bypass alone is mixed. No new rule: next measure whether
+  existing end protection can preserve completed rows without retaining stalled partial rows. Count physical
+  parent membership through turnover; a recycled unit ID is not survival of its previous assembly.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
 
 ## 15. Ideas not yet tried
+
+**2026-09-26, end protection versus recycling (51).** Turnover can restore exact copying by original curved
+offspring, but erodes the eight-letter structure. Existing caps could protect a completed row while an exposed
+ordinary end frays. However, an unfinished row may already have its free end capped and its other end protected
+by docking, trapping material even more effectively. Test both lifetimes and copying in a small matched assay
+before assuming caps solve the obstruction. No new assembly-completion signal is allowed. The turnover lead
+uses two previously measured seeds; a broad selection claim would require fresh worlds and retained function.
 
 **2026-09-26, shared-contact startup (50).** Persistent curvature has a measured fuel function, yet full recovery
 requires encounters with other rows in the tested isolated assay. Square material also benefits. Four inactive

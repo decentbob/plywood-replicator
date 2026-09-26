@@ -1,0 +1,55 @@
+{
+  "options": {
+    "out": "scratch/OR_forks",
+    "seeds": "73,74",
+    "profiles": "square,opposed20",
+    "forkAt": 100000,
+    "steps": 50000,
+    "workers": 4,
+    "reference": "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\out\\UF_bootstrap_confirm.runs.jsonl"
+  },
+  "jobs": [
+    {
+      "seed": 73,
+      "profile": "square",
+      "forkAt": 100000,
+      "steps": 50000,
+      "reference": "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\out\\UF_bootstrap_confirm.runs.jsonl"
+    },
+    {
+      "seed": 73,
+      "profile": "opposed20",
+      "forkAt": 100000,
+      "steps": 50000,
+      "reference": "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\out\\UF_bootstrap_confirm.runs.jsonl"
+    },
+    {
+      "seed": 74,
+      "profile": "square",
+      "forkAt": 100000,
+      "steps": 50000,
+      "reference": "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\out\\UF_bootstrap_confirm.runs.jsonl"
+    },
+    {
+      "seed": 74,
+      "profile": "opposed20",
+      "forkAt": 100000,
+      "steps": 50000,
+      "reference": "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\out\\UF_bootstrap_confirm.runs.jsonl"
+    }
+  ],
+  "complete": true,
+  "completed": 4,
+  "node": "v24.6.0",
+  "started": "2026-09-26T14:35:57.446Z",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "curved_fuel_reproduction.js": "275a38d8e06220935760c35dc13339902f82117d9af10341d2e1ac1927b23a5f",
+    "curved_fuel.js": "c362624baedd86e062e5b1db170538e2374ac797d37398da96c805b61fc22170",
+    "offspring_recovery.js": "3604ba82ea5b5569e3516bb5335f27a69c67ebd655e0abdd41e696a2a48ac495",
+    "offspring_forks.js": "c4759e500a15eef2cb7d7379395215219f04b336d193d2897e4e2154bf14f78d"
+  },
+  "cpuSeconds": 1071.219,
+  "wallSeconds": 357.88,
+  "finished": "2026-09-26T14:41:55.332Z"
+}

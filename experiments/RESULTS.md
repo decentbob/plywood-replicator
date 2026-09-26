@@ -3265,3 +3265,64 @@ node experiments/offspring_recovery_test.js
 active and initiate joined material, while a substantial part of the conserved pool remains in unfinished rows.
 **What it does not say:** this inventory alone proves that freeing monomers restores exact reproduction, or that
 energy no longer matters. Full rearming can occur late; the next probe changes those constraints separately.
+
+### 51b. Turnover restores some exact descendant copying, while destroying most original rows
+
+Recreate seeds 73,74 of both shapes through 100k; require the archived birth log and final statistics to match.
+Save each world and fork its **identical state and RNG** four ways for 50k: unchanged; `energyGate=false`;
+`pFray=0.00003,pUnzip=1`; both changes. The energy bypass is a diagnostic ablation, not a proposed new chemistry.
+No blocks are added, removed or repositioned. The four branches differ only in the stated existing parameters.
+These are deliberately reused seeds for a causal diagnostic, not independent confirmation.
+
+Primary outcome: an exact AAAABBBB birth from a still-intact offspring row that already existed at the fork.
+The observer tracks the original member IDs, retires that row at its first fray event, and checks parent provenance
+at each birth. Recycled IDs cannot count as survival of the original row. All whole-world birth sequences are also
+retained. The table gives seeds 73 / 74; counts refer only to the 100k-150k continuation.
+
+| shape / intervention | all births | exact births from original offspring | mean newborn length | original offspring intact at 150k | free letters at 150k |
+|---|---:|---:|---:|---:|---:|
+| square / unchanged | 1 / 3 | 0 / 2 | 8 / 8 | 7 / 4 | 0 / 0 |
+| square / energy bypass | 0 / 2 | 0 / 1 | undefined / 8 | 7 / 4 | 0 / 0 |
+| square / turnover | 25 / 33 | 0 / 2 | 5.96 / 5.64 | 0 / 0 | 24 / 14 |
+| square / both | 25 / 31 | 2 / 2 | 6.64 / 6.42 | 0 / 0 | 8 / 16 |
+| curved / unchanged | 1 / 1 | 0 / 0 | 8 / 8 | 6 / 4 | 2 / 12 |
+| curved / energy bypass | 3 / 1 | 1 / 0 | 8 / 8 | 6 / 4 | 0 / 7 |
+| curved / turnover | 24 / 27 | 2 / 2 | 5.13 / 4.37 | 1 / 0 | 38 / 22 |
+| curved / both | 12 / 33 | 3 / 2 | 6.58 / 4.70 | 1 / 0 | 25 / 32 |
+
+Energy bypass alone does not reliably rescue exact copying: the primary outcome improves in one curved seed and
+not the other, while square is unchanged or lower. Existing turnover, with the ordinary energy requirement still
+on, permits two exact births from original curved offspring in each seed. This demonstrates that those offspring
+are not intrinsically sterile. It is a **two-seed lead**, not a robust estimate of turnover's benefit. Turnover also
+changes row lengths, contact geometry, template competition and fuel access, so it is not a pure monomer-supply
+intervention; the experiment cannot attribute the improvement exclusively to freed monomers.
+
+The larger birth total is mostly a different outcome. Curved turnover produces only 2/5 whole-world exact
+eight-letter parent/child matches among 24/27 births; newborn means fall to 5.13/4.37. These whole-world matches
+use parent-at-release snapshots, whereas the primary original-offspring endpoint additionally checks physical
+membership and uninterrupted survival. Nine of ten original curved offspring and all eleven square offspring
+lose their original rows by 150k under turnover. Combining turnover with bypass does not consistently increase
+total output. No selection for length, persistence of the eight-letter lineage, or complexity gain follows.
+
+```sh
+node experiments/offspring_forks.js --out experiments/out/OR_forks
+node experiments/offspring_forks_summary.js experiments/out/OR_forks
+node experiments/offspring_forks_test.js
+node experiments/offspring_analysis_test.js
+```
+
+**Decision and next question.** Energy acquisition is one obstruction, but completing a second cycle also depends
+on how conserved material turns over. Existing turnover can enable exact curved descendant copying, while eroding
+the structure whose reproduction we wanted. Keep this as a diagnostic lead, with no new mechanism or preset.
+A useful next small assay is whether existing local end protection can preserve a completed row **without also
+preserving stalled intermediates**. Caps already exist, but an unfinished row may also have a protected free end;
+do not assume capping solves the problem. Establish those two lifetimes and copying viability before a population race.
+
+**Validation and cost.** Eight 100k diagnostic replays, four reconstructed 100k fork points and sixteen 50k
+continuations: 2M steps, 1,592.984 process CPU seconds. Raw per-row histories, inventories, every continuation
+birth with member provenance, full parameters, source hashes, source-state hashes and manifests are retained.
+The two assay tests pass, including exact observer neutrality, control continuation, immutable fork sources,
+parameter-only contrasts and rejecting recycled IDs as intact parents. The analyzer validates all pairs, material
+counts, windows, birth/lineage accounting and source hashes (allowing Git newline conversion); malformed manifests,
+missing pairs, parameter changes and corrupted counters are rejected. The engine is unchanged and all five default
+1500-step fingerprints remain identical. The unchanged full 39-check suite was not rerun.

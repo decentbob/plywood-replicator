@@ -99,6 +99,11 @@ Fuel acquisition is isolated in `curved_fuel.js` (one inactive row, no free lett
 Each has a `_summary.js` analyzer; `curved_fuel_plan.md` records the prospective choices and RESULTS 50 the outcomes.
 These assays use the ordinary engine. Row identity is recorded only by observers, never read by a rule.
 
+`offspring_recovery.js` replays those worlds with per-offspring identities and a complete material inventory.
+`offspring_forks.js` branches identical saved states to test energy gating and turnover separately (RESULTS 51).
+Their `_summary.js` analyzers distinguish exact copying by original intact offspring from reproduction of shorter
+fragments. Run `node experiments/offspring_analysis_test.js` to validate the committed datasets and provenance.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

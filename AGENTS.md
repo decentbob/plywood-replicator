@@ -93,6 +93,9 @@ experiments/complementary_population.js  small fueled descendant-viability probe
 experiments/curved_fuel.js  isolated inactive-row fuel assay (50); curved_collective.js logs shared fuel contacts
 experiments/curved_fuel_reproduction.js  active copying control and inactive-founder startup (50), matched grip ablations
 experiments/curved_fuel_analysis_test.js  validates all section-50 batches, provenance and malformed-data rejection
+experiments/offspring_recovery.js  exact section-50 replay with member IDs, per-row rearming and material inventories (51)
+experiments/offspring_forks.js  identical-state energy/turnover diagnostic; _summary.js and _test.js alongside both assays
+experiments/offspring_analysis_test.js  validates section-51 lineage, material partitions, arm contrasts and source hashes
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -224,7 +227,30 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): fuel capture leads to shared-contact startup, not a curvature advantage
+## Handoff (2026-09-26, latest): turnover can restore exact descendant copying, but destroys the rows
+
+Section 51 diagnoses section 50 without adding rules. All worlds/seeds are reused, not fresh confirmation.
+
+- Eight exact 100k replays retain physical offspring IDs and reconcile all 120 letters. Every archived birth,
+  fuel arming and 10k statistic matches. **10/21 curved offspring fully rearm but none produces a child** by 100k;
+  among seven born by 50k, six fully rearm. The whole-row energy barrier is not the only obstruction.
+- Curved worlds contain 33-39 letters in unlogged linked rows at 100k. All 31 such rows across four worlds
+  remain attached somewhere. They contain 80 active units: unfinished material is not necessarily inert, and
+  partial release/rearming precedes the logged birth. Do not treat world fuel use as mature offspring function.
+- Identical-state forks at 100k, seeds 73,74, square/curved, run another 50k with control, energyGate=false,
+  pFray=0.00003+pUnzip=1, or both. Bypassing energy alone gives original curved offspring 1/0 exact children
+  versus 0/0 control. Turnover with normal energy gives 2/2. **A two-seed diagnostic lead**, not generality.
+- Turnover also gives 24/27 curved births with mean length 5.13/4.37, and destroys nine of ten original curved
+  offspring. It changes competition, geometry and fuel contacts as well as material availability. Do not claim
+  pure monomer rescue, persistent eight-letter lineages, or increased complexity. Intact original-parent attribution
+  retires a row at its first fray event; recycled block IDs cannot count as survival.
+- 2M steps, 1,592.984 CPU seconds; full member histories/raw births/manifests/source and fork-state hashes retained.
+  Both assay tests and analyzer corruption tests pass; default fingerprints/core unchanged. Full suite not rerun.
+- **Next:** a small assay of existing local end protection: can it preserve completed rows without protecting
+  stalled intermediates too? Caps can protect the free end of an unfinished row as well; measure lifetimes and
+  copying viability before any race. No new reward, chemistry, preset or full population sweep is warranted yet.
+
+## Previous handoff (2026-09-26): fuel capture leads to shared-contact startup, not a curvature advantage
 
 Section 50 uses only the existing engine, with prospective choices in `curved_fuel_plan.md`.
 
