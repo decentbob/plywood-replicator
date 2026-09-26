@@ -162,6 +162,8 @@ const DEFAULTS = {
   catalysis: false,             // (with translate) a finished product binds back onto the backs of a strand it matches by the code (pBindP per step
   pBindP: 0.2,                  // of contact; a lone bound unit lets go at pPMelt, one in a bound run at pPMeltRun), and where a product is bound
   pPMelt: 0.05, pPMeltRun: 0.0005, // the template's face is catalysed: two monomers docked there link side to side at once; elsewhere only at
+  pPReady: 1,                   // a linked product in REPEL exposes PBIND at this probability per step; 1 preserves immediate activation.
+                                // Lower values give its released face time to diffuse before binding. No clock or maker identity is read.
   pLinkBare: 0.01,              // pLinkBare per step of contact. The genome needs the machine it builds to be copied
   bindAny: false,               // (with catalysis) a finished product binds the back of any armed letter, whether it matches or has a product
                                 // in the code at all: the catalyst is shared, and a strand that makes none can use others' (a parasite)
@@ -1062,7 +1064,12 @@ class Sim {
       }
     } else if (st === I_REPEL || st === I_HOLD) {
       if (nl === 0) this.is[u] = pool;                                     // R3 lost its strand: back to the pool (a held unit is then docked again)
-      else if (isProd(this.type[u])) { if (p.catalysis) this.is[u] = I_TPL; }   // a product is never armed; with catalysis it is finished
+      else if (isProd(this.type[u])) {
+        if (p.catalysis && (p.pPReady >= 1 || (p.pPReady > 0 && this.rng() < p.pPReady))) {
+          this.is[u] = I_TPL;
+          if (p.pPReady < 1) this._event('productReady', u);
+        }
+      }   // a product exposes its binding face without taking energy; REPEL keeps lateral bonds while it waits
       else if (!p.energyGate || (bK && (this.ss[b[o + K]] === S.ON || this.ss[b[o + K]] === S.GIVE))) { this.is[u] = I_TPL; this._event('rearm', u); }  // R4 re-arm (energy, or fuel held in a pocket)
       else if (p.feed && ((bL && (this.ss[b[o + L]] === S.FEED || this.ss[b[o + L]] === S.FSH)) || (bR && (this.ss[b[o + R]] === S.FEED || this.ss[b[o + R]] === S.FSH)))) { this.is[u] = I_TPL; this.fedEvents++; this._event('rearm', u); }  // R4b re-arm through a bond (feed rule)
     } else { // I_TPL
