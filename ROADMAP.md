@@ -5,13 +5,13 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P4's table-55 heredity screen fails all four variant/seed cases
-(64), while the designed copying control passes all four. Exact structures,
-founder-disjoint material and complete bond histories replace recurrence hashes
-as the evidence. Park the tested pair. **Next: recover table 57 and check for
-two comparable variants before one more bounded heredity assay.** P2's physical
-turnover gate remains incomplete (63); P1 remains parked (62). No mechanism was
-added. Retain body jostling and targeted P0 checks; no
+**Current status:** P4's second candidate supplies persistent comparable variants
+but fails its fixed two-variant heredity gate (65), following table 55's failure
+(64). The designed copying control succeeds. Park further random-table screening
+pending a distinct rationale. **Next: P3, an equal-composition sequence/shape
+comparison using the existing fuel and turnover rules.** P2's physical turnover
+gate remains incomplete (63); P1 remains parked (62). No mechanism was added.
+Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
 probability of achieving open-ended evolution. Confidence in that ultimate outcome remains low
@@ -22,9 +22,9 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P4 | Heredity test for existing random chemistries | Medium / low, but high diagnostic value | Table 55 pair fails (64); next recover 57 before a new bounded assay | Exact assay detects the copying control; random recurrence alone fails to transmit the tested variants. |
+| P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Next: equal-composition sequence/shape feasibility and viability under existing rules | Tests reproductive consequences of inherited arrangement without adding a new mechanism. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / conditional theoretical lead, low for physical renewal | Derivation complete (63); implementation held at turnover gate | Gross economy survives; common-part costs and scarce-part recycling prevent a per-child advantage claim. |
-| P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Small controls; choose one bottleneck | Closest to a machine of parts; fit already works, sustained advantage does not. |
+| P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
 | P5 | Coupling replication modes and evolving dependencies | High long-term / low until prerequisites pass | Park implementation | Two modes alone failed (40); coupling needs a real material/function exchange. |
 | C1 | Close the handoff branch with its one outstanding test | Low strategic priority / high diagnostic value, low expected advantage | Optional short closure, no extensions | Good way to finish a loose end; not a prerequisite for P1–P4. |
@@ -193,6 +193,22 @@ building and occupying the support. Only then test inheritance and selection.
 make a polymerase/walker simply because it can be implemented as many local states. Introduce
 one only if a named physical operation cannot be supplied more simply and the cost is measurable.
 
+**Next after the P4 checkpoint (65):** select the geometric-specificity route.
+Predeclare a small comparison of `AAAABBBB` and `ABABABAB` (same length and
+composition) in the existing opposed20, complementary-copying, pocket/fuel
+setup from 50–51. Square geometry and grip-disabled worlds retaining all fuel
+material are controls. Section 51's slow-turnover setting is a candidate viable
+baseline, not a new rate sweep or evidence that those two arrangements already
+have different fitness. Fix the exact preparation, rates and early viability
+gate before running, retaining current polygon mechanics.
+
+Measure released, rearmed offspring that themselves reproduce, original-parent
+survival and material trapped in unfinished rows; report length/sequence changes
+separately. A fuel-uptake difference alone fails. A promising benefit needs P0
+solver/individual-kick checks and fresh confirmation. Prepared variants test a
+possible inherited function, not spontaneous novelty. Stop if neither closes
+the second cycle; do not rescue the comparison with added states or helpers.
+
 ## P4 — distinguish heredity from recurring shapes in random chemistry
 
 Section 32 lists candidates 55, 57, 4, 15, 1 and 54. Confirm the archived table definitions and
@@ -234,6 +250,23 @@ bond histories; follow any lead with fresh confirmation and stronger causal
 descendant reconstruction. If 57 does not advance heredity evidence, reassess
 P4 against P3 before testing more tables. The remaining 69-table search stays
 parked. One failed pair does not disprove random-chemistry heredity generally.
+
+**2026-09-26 second candidate (65):** table 57 passes the persistent-pair
+prerequisite and calibration, but all four screen cases fail while the copying
+control passes all four. Seeded V0 output is below its plain bath in both seeds;
+V1's partial effect in one seed misses the plain threshold and renewal witness.
+New structures and renewal contact witnesses occur without prepared seeds;
+neither alone demonstrates transmission. Full counts and the matched copying
+control are in RESULTS 65.
+
+**Portfolio decision:** park both tested pairs and further candidate screening.
+Do not automatically advance to 4/15/1/54 or the remaining 69 tables. The
+operation and exact-observation library remain available. Reopen only with a
+distinct mechanism or discriminator supported by evidence, not another table
+because it is next in the old list. P3 now offers the more direct bounded
+question using existing rules; P2 would first require additional geometry and
+turnover work, and P1's failed confirmation remains closed. These two screens
+do not prove that all random chemistries lack heredity.
 
 ## P5 — coupled replication modes, only after the parts work
 

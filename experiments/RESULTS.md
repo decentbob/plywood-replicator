@@ -4778,3 +4778,169 @@ or resume the unfinished 69-table search. If this independent candidate cannot
 advance heredity evidence, reassess P4 against P3 before testing more tables.
 P2 still lacks physical turnover advantage and P1 remains parked; neither
 negative result justifies adding mechanisms to the core.
+
+## 65. Table 57: a second bounded random-chemistry heredity test
+
+2026-09-26, ROADMAP P4, baseline `50b147e`;
+[prospective plan](random_57_plan.md). Section 64's table-55 pair failed its
+screen while the designed copying control passed. This assay uses only the
+next already-listed table, 57. No broad random-table search, rule change or
+simulator modification is made. All historical hashed assay sources remain
+unchanged; the new launcher reuses the section-64 worker and bond-history validator.
+
+### Persistent-variant prerequisite
+
+`drawR(57)` and its full generated table match the parameters and table archived
+in the section-64 protocol. A 30k recovery at bath seed 1 uses the same current
+physics: body jostling, four solver passes, snapped corners, 25x25, 150 A and
+150 B. As in section 64, this is not historical trajectory replication.
+
+Six 5k catalogs rank exact type-and-side graphs of 3–10 blocks by accumulated
+occurrence and canonical string. A final 100-step observed interval requires
+the same isolated members and topology, with no incident bond event. Internal
+state changes alone do not change structural identity. Final structures and
+all failed persistence candidates are retained. The pair selection is an
+experimenter operation; no simulation rule reads these classifications.
+
+There are ten final structural signatures, nine with a qualifying persistent
+member set. The first eligible equal-composition pair consists of **two BBB
+trimers**. V0 links R-to-F twice; V1 has a central B linked F-to-F and K-to-F.
+They therefore differ in local side connectivity, even though their unlabelled
+three-node graphs and type inventories agree. V0's captured internal states
+are 1/1/1, V1's 0/1/1; the target definitions do not require those states.
+The actual corner offsets and orientations are captured from surviving members.
+
+| Selected variant | Total occurrences in six snapshots | Final count | Member sets intact through final 100 steps |
+|---|---:|---:|---:|
+| V0 | 8 | 1 | 1 |
+| V1 | 3 | 2 | 2 |
+
+Occurrences across snapshots in this one recovery world are not independent
+samples. The selected pair is chosen before transplant outcomes; neither the
+ranking nor the persistence requirement is relaxed. Both observed and
+unobserved replay of the saved final window reproduce physical arrays and RNG.
+
+### Calibration and fixed screen
+
+Four prepared founders per world consume existing free blocks. Bath seed 204,
+10k, tests both random variants and the unchanged AAB/ABA copying controls.
+The random variants need at least two original founder sets to attain an intact
+100-step episode; controls need at least one persistent founder-disjoint target.
+All four pass:
+
+| Calibration target | Founders with a 100-step episode | Persistent new own-target member sets |
+|---|---:|---:|
+| copy AAB | 2/4 | 38 |
+| copy ABA | 3/4 | 39 |
+| table 57 V0 | 2/4 | 11 |
+| table 57 V1 | 4/4 | 1 |
+
+The random calibration counts alone do not distinguish copying from spontaneous
+assembly. The screen uses fresh bath seeds 205/206, 50k, both variants, both
+tables, and seeded/disrupted/plain arms: 24 worlds. Seeded and disrupted arms
+have identical initial members, positions, corners, orientations and internal
+states; disruption removes only founder bonds. All counts and types are fixed.
+Plain baths keep their original initial arrangement. Initial physical overlaps
+are recorded, and comparisons are limited to these preparations.
+
+The primary metric and decision rule are unchanged from section 64: distinct
+founder-disjoint exact target member sets persisting >=100 steps, with a >=3
+seeded advantage above each control in both variants and both bath seeds, plus
+at least one same-variant renewal contact witness per seeded case. Any incident
+bond change interrupts persistence, including same-step binding and release.
+Member-set reappearance is deduplicated; the first qualifying target assignment
+is retained if the same material later changes topology. Witnesses use the first
+qualifying episodes and are conservative exposure evidence, not full pedigrees.
+All episodes, off-target signatures and contact histories remain in the archive.
+Only two bath seeds are independent samples per contrast.
+
+### Outcome
+
+Counts are cumulative persistent new own-target member sets. Witnesses are
+same-variant renewal contact witnesses in the seeded arm.
+
+| Table / target | Bath seed | Seeded | Disrupted | Plain | Witnesses | Fixed gate |
+|---|---:|---:|---:|---:|---:|---|
+| copy AAB | 205 | 31 | 0 | 0 | 3 | pass |
+| copy AAB | 206 | 13 | 0 | 0 | 2 | pass |
+| copy ABA | 205 | 48 | 0 | 0 | 10 | pass |
+| copy ABA | 206 | 42 | 0 | 0 | 2 | pass |
+| table 57 V0 | 205 | 37 | 31 | 64 | 1 | fail |
+| table 57 V0 | 206 | 34 | 49 | 40 | 7 | fail |
+| table 57 V1 | 205 | 8 | 2 | 7 | 0 | fail |
+| table 57 V1 | 206 | 2 | 2 | 5 | 0 | fail |
+
+**Table 57 fails all four cases; the copying control passes all four.** V0
+produces fewer targets than the plain bath in both seeds. V1 has a partial
+seeding effect in 205 (+6 above disrupted, +1 above plain), but misses the
+predeclared +3 plain threshold and has no qualifying renewal witness. Seed
+206 has no advantage above disrupted and is below plain. Do not erase the
+partial effect or promote it after changing the gate.
+
+Random-table contact witnesses all concern V0. Plain baths also supply four
+witnesses in 205 and one in 206, with identical results in the duplicate plain
+jobs. Thus repeated exact structures and contact witnesses can arise without
+prepared founders. Witnesses alone cannot establish causal descent. V1-seeded
+worlds also make 25/24 persistent V0 member sets; these are off-target output,
+not transmission of V1. No two-variant inherited reproductive benefit is shown.
+
+All worlds retain 150 A and 150 B. Random screen worlds end with 95–121 free
+blocks (179–205 bonded), largest components of 4–6 blocks. This is not a
+large-component sequestration result. Copying seeded worlds finish with only
+0–2 free blocks and 0–2 standing persistent own-target structures: their
+cumulative output does not prove indefinite population renewal either.
+Initial random-world overlap counts are 62–65 in seeded/disrupted preparations
+and 51 in plain baths; preparation geometry limits interpretation of the plain
+contrast. No mid-run intervention changes geometry or material.
+
+### Reproduction, validation and cost
+
+The archive is `experiments/out/R57_20260926.*`: recovery and screen protocols,
+captured states, full bond histories, both job manifests, all 28 calibration and
+screen worlds, and machine-readable/text summaries. Its separate archive index
+records the SHA-256 of each evidence file. Protocols freeze source/input hashes,
+seeds, parameters and the actual invocation arguments. Historical assay sources
+and the core remain unchanged.
+
+```sh
+node experiments/random_57_test.js
+node experiments/random_57_screen_test.js
+node experiments/random_57.js prepare experiments/scratch/R57_20260926
+node experiments/random_57.js recover experiments/scratch/R57_20260926
+node experiments/random_57.js validate experiments/scratch/R57_20260926
+node experiments/random_57_screen.js prepare experiments/scratch/R57_20260926
+node experiments/random_57_screen.js calibrate experiments/scratch/R57_20260926
+node experiments/random_57_screen.js screen experiments/scratch/R57_20260926
+node experiments/random_57_screen.js summary experiments/scratch/R57_20260926 experiments/scratch/R57_20260926.summary
+node experiments/random_57_screen.js summary experiments/out/R57_20260926
+node tools/fingerprint.js 1500
+```
+
+Use a fresh output stem for new runs; launchers reject existing outputs. Tests
+cover ranking, equal composition, distinct structures, interrupted persistence,
+the 99/100-step boundary, calibration, censoring and gate/matrix validation.
+Complete bond-history replay verifies every world's inventory, bonds and target
+episodes, and checks matched preparations and duplicate plain outcomes. Recovery
+replay verifies observer neutrality of physical arrays and RNG. Both new test
+suites pass; all five 1500-step default fingerprints match the baseline. The
+full core invariant suite was not rerun because core rules are unchanged.
+
+Total cost is **1,270,000 steps and 769.351 process CPU seconds**: recovery
+30k/15.984 s, calibration 40k/35.361 s, screen 1.2M/718.006 s. All 28 worlds
+complete without censoring or skipped jobs. Two assay workers run concurrently;
+the fingerprint check brings the maximum to three simulation processes. Cost
+excludes analysis, tests and fingerprints, and is not shared-machine wall time.
+
+### Portfolio decision
+
+Park both tested random-table pairs and further candidate screening. Sections
+64–65 do not rule out heredity in every random chemistry, but they do not earn
+another unguided candidate. Reopening P4 needs a distinct, evidence-backed
+mechanism or discriminator. Preserve the exact-observation library and failures.
+
+**P3 is next:** compare equal-composition arrangements using existing geometry,
+fuel and turnover rules, measuring released, rearmed offspring that themselves
+reproduce. Fix preparations and an early viability gate before running. Uptake
+alone is insufficient; neither added states nor further rate tuning is a rescue.
+P2 still requires physical turnover evidence, and P1's failed confirmation remains
+parked. These are prepared-function tests, not claims of evolved complexity.

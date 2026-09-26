@@ -1,0 +1,11 @@
+Table 57 heredity screen: complete bond-history replay
+table variant seed seeded disrupted plain contactWitnesses pass
+copy 0 205 31 0 0 3 true
+copy 0 206 13 0 0 2 true
+copy 1 205 48 0 0 10 true
+copy 1 206 42 0 0 2 true
+table57 0 205 37 31 64 1 false
+table57 0 206 34 49 40 7 false
+table57 1 205 8 2 7 0 false
+table57 1 206 2 2 5 0 false
+steps=1270000 CPU_seconds=769.351

@@ -271,6 +271,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 62 | Fresh recipient-dependence confirmation | Does the fixed dependence criterion hold across four fresh worlds? | `pBindP` 0/0.2, `transStart` absent P/off, `pLinkBare` 0.01, `bindAny` | negative | 2/4 pass; recipient binding effects +16/-1/+22/+4, production +21/+3/+21/+4; producers reproduce in all four | recipient_dependence.js, recipient_confirmation_summary.js (`RD_dependence_confirm`) | park this setting; P2 material-budget derivation next | positive means +10.25/+12.25 do not pass the all-four gate; 106 reverses detached exact binding effect, 108 misses +5 threshold |
 | 63 | Scarce-material contact-table accounting | Does wider organization save material per renewing fragment? | offline table 670873, n=1..8, T1 scarcity, three-column cuts | partial | all 1,020 states: no T1-free ideal cycle; gross T1 1/2,3/8,3/10 for n=1,2,3; narrow cut can return every T1 | resource_economy.js (`RE_670873_20260926`) | physical turnover gate incomplete; P4 heredity assay next | analytical deliverable complete; no physical runs, autonomous cuts, survival rates or reproductive advantage; fixed finite-stock budgets and all cut phases retained |
 | 64 | Exact-structure random-chemistry heredity | Does table 55 propagate two prepared variants beyond founder material? | fixed table 55, copyTable control, bodyJostle, seeded/disrupted/plain | negative | 0/4 random cases pass: V0 seeded 8/3 vs disrupted 10/3 and plain 5/8; V1 seeded 0/0; copying control 4/4 pass | random_heredity.js, random_heredity_summary.js (`RH_20260926`) | park this pair; recover existing table 57 before one further bounded assay | two bath seeds, same-composition variants, exact graphs and full bond replay; no random renewal witnesses; contact witnesses are not sufficient pedigrees |
+| 65 | Second random-chemistry heredity candidate | Does table 57 transmit two persistent equal-composition variants? | fixed table 57, copyTable control, bodyJostle, seeded/disrupted/plain | negative | 0/4 random cases pass: V0 seeded 37/34 vs plain 64/40; V1 seeded 8/2 vs disrupted 2/2 and plain 7/5; copying control 4/4 pass | random_57.js, random_57_screen.js (`R57_20260926`) | park further candidate screening; P3 inherited geometry next | two BBB side-graph variants pass calibration; full bond replay; V1 partial effect misses gate; V0 witnesses also arise in plain baths, not sufficient pedigrees |
 
 ## Knob index
 
@@ -417,11 +418,13 @@ later tests may have completed or rejected it. Do not treat every historical lea
   scarce part under one ideal cut arrangement; no per-child advantage established. Keep the
   contact graph and finite-stock accounting; no new simulator mechanism yet.
 - **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);
-  inherited reproductive advantage remains open (41, 47, 51). No more uptake-only claims.
-- **P4 — random-chemistry heredity:** table 55's two-variant screen fails all four cases
-  while the copying control passes (64). Park this pair. Next recover table 57 and check
-  for comparable variants before one more bounded assay; reassess against P3 if it also
-  fails. No broad search, new states or rate tuning to rescue table 55.
+  inherited reproductive advantage remains open (41, 47, 51). Next compare equal-composition
+  arrangements under existing fuel/turnover rules, with early viability and reproducing
+  offspring as gates. No more uptake-only claims.
+- **P4 — random-chemistry heredity:** tables 55 and 57 each fail all four two-variant
+  cases while copying controls pass (64–65). Park both pairs and further unguided candidate
+  screening. Table 57's contact witnesses also occur in plain baths. Reopening needs a
+  distinct evidence-backed discriminator; no broad search, new states or rescue tuning.
 - **P5 — coupled modes:** conditional on a measured useful exchange and self-renewal of
   the participating assemblies; not justified merely by having two copying modes.
 - **C1 — handoff closure:** the unchanged mechanism's selected two-prefix test remains
