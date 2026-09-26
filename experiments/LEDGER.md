@@ -28,7 +28,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 3. **A gene pays only where its pressure acts, and only if the benefit stays with its carrier.** Private goods are
    selected (feed 14b, shield 19, relay 19c, 33b); public goods are not, in any world size or mobility tried (9, 14, 17,
    21); a shared catalyst feeds parasites, which take the majority but not everything (36a, 36b); graded specificity
-   (a good that favours kin) holds parasites down (36c).
+   (a good that favours kin) holds parasites down (36c). In space, creeping polymers keep a shared catalyst near its makers and
+   parasites about ten points lower (42); a catalyst that carries its maker's key rebinds its maker and stays, so it is private in
+   practice and mimics of the key cannot spread (43b).
 4. **Without its pressure a gene decays by point mutation, slowly** (shield 74 → 32% of births over 500k steps, 33c):
    genes are kept for a few hundred thousand steps after their pressure ends.
 5. **New genes need raw material: length variation comes from density, not population size.** At ordinary density
