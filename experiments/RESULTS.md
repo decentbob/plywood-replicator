@@ -3886,3 +3886,97 @@ provenance, exact input/parameter matching, raw bond reconstruction, complete
 settled inventories and rejects corrupted data. Focused determinism/caps/compCopy
 checks pass, with all five default fingerprints unchanged. The full 39-check
 suite last passed in section 55; core source, viewer and presets remain unchanged.
+
+## 58. Stronger shape retention does not restore registration
+
+**Question.** Can greater stiffness stop the shifted reattachments seen in
+section 57 without losing completion? Protocol: `registration_fit_plan.md`.
+This is a selected-state physics diagnostic, not a fresh-seed confirmation or
+a new reaction. Keep the research SEEK rule and its rate 0.0001 unchanged.
+
+First classify **all 25** redocking episodes in the four section-57 fresh seek
+worlds: 23 return to the same founder site, two shift; 21 return on the next
+step. The other delays are 2 and 7 steps for same-site returns, 13 and 24 for
+the shifts. Seventeen episodes fully detach their lateral part; eight retain
+another face contact. Both shifts are in the fully detached group. These are
+correlated events, not 25 independent trials or evidence that a retained
+contact guarantees fidelity. A later shift can spoil material that previously
+returned correctly, as in the square seed-87 shortened product.
+
+Replay seed87 square to 5,316 (endpoint114, original four-member BBBQ) and
+opposed20 to 28,184 (endpoint107, original seven-member PAAAABB). Each is the
+state just after the selected release: all faces of that part are free. Fork
+the full state/RNG into stiffness 0.5/0.8 for A/B/P/Q, crossed with 4/8 solver
+passes, and run 5,000 more steps. All other parameters, rest shapes, material,
+recognition, noise and chemistry remain unchanged. No kick or prepared position
+edit. Controls exactly reconcile to the archived continuous trajectories.
+
+| selected fixture | stiffness | passes | first return: delay / site | original part's outcome by +5k | other exact products |
+|---|---:|---:|---|---|---:|
+| square, former site 3 | 0.5 | 4 | 13 / 4 | PAAAABBBQ at 6,714 | 1 |
+| square | 0.8 | 4 | 13 / 4 | PAAAABBBQ at 6,029 | 1 |
+| square | 0.5 | 8 | 13 / 4 | PAAAABBBQ at 7,454 | 1 |
+| square | 0.8 | 8 | 13 / 4 | PAAAABBBQ at 7,167 | 0 |
+| opposed20, former site 3 | 0.5 | 4 | 24 / 2 | PAAAABBBQ at 28,274 | 0 |
+| opposed20 | 0.8 | 4 | 7 / 2 | PAAAABB, face-free and unfinished at 33,184 | 0 |
+| opposed20 | 0.5 | 8 | 23 / 2 | PAAAABB, one face attached at 33,184 | 0 |
+| opposed20 | 0.8 | 8 | 25 / 2 | PAAAABB, one face attached at 33,184 | 0 |
+
+**All eight first returns still shift one site; none of the original parts
+completes exactly.** The square error survives both stiffness and solver changes.
+The curved alternatives suppress the completed error within this window by
+leaving the part unfinished, not by making it exact. Other exact square output
+comes from different material and is not a rescue of the tracked part. Every
+original lateral bond and all 150 blocks survive; unfinished outcomes are
+censored at +5k, not declared permanently arrested.
+
+**The physical change is real.** Measure RMS corner displacement from the
+best-fit rotated rest shape of the original target members, after removing
+translation. At +100 in the curved fixture, stiffness 0.5→0.8 changes RMS
+0.01665→0.00346 at four passes and 0.01009→0.00177 at eight. These are point
+samples in diverging trajectories, not independent samples or isolated material
+constants. Square deformation is not uniformly lower at every sample: at +100
+and four passes it is 0.00189→0.00205. Full per-unit measurements at the fork,
++1/+10/+100 and each +1000 step are retained. Stronger rest-shape matching can
+reduce deformation without selecting the former attachment site.
+
+Geometry observations keep all selected-endpoint checks, both successes and
+failures, and match passing geometry to placement calls and accepted bonds.
+They do not override the gates. In the square branches the shifted return
+passes ordinary geometry and placement in every setting. The curved branches
+also all admit a shifted return. This is not evidence that every possible
+geometry would fail; it rules out this stiffness change in these two fixtures.
+
+**Verdict/next direction.** Neither stiffness nor additional passes passes the
+prospective rescue test, so no fresh population screen, stiffness tuning or
+long continuation is launched. A useful next mechanical operation is retaining
+a second contact during repositioning. First establish whether an actual second
+contact is geometrically available and whether it preserves useful motion in
+a matched fixture. The eight partly attached historical episodes motivate this
+question but do not answer it. Do not add a correct-site/index reader, global
+registration memory, whole-part positioning rule or lateral fragmentation.
+
+```sh
+node experiments/registration_fit.js experiments/scratch/RF_selected.json
+node experiments/registration_fit_summary.js experiments/out/RF_selected.json experiments/out/RF_selected.csv
+node experiments/registration_fit_test.js
+node experiments/local_redocking_analysis_test.js
+```
+
+**Cost/provenance:** eight 5k forks, two original prefix replays (5,316+28,184),
+two 5k continuous controls and two 5k unobserved restored controls: 93,500 steps,
+31.515 process CPU seconds, at most four workers. `RF_selected.json` retains
+input/source hashes, full fork/initial/final states, ordered bond and state
+events, raw births, settled members, five 150-block inventories per fork,
+geometry/placement checks and actual deformation. The CSV is derived from
+validated raw records. Both controls match archived events and every continuous
+saved-state field/RNG bit; cache-version deltas are zero in these snapshots.
+
+Tests verify only the intended initial parameters change, observer neutrality
+in all eight conditions, the deformation metric's response and rotation/
+translation invariance, graph reconstruction from an already-SEEK snapshot,
+complete settled inventories, gate/event reconciliation and 16 corrupted-data
+cases. The shared analyzer now accepts an explicit sampling interval and initial
+SEEK units; all section-57 analysis tests (25 corruptions) still pass. All five
+default fingerprints match. No core, viewer, preset or reaction change; focused
+standard tests last passed in section57 and the full suite in section55.

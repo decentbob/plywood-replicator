@@ -126,6 +126,10 @@ curved output but also permits shortened products after shifted reattachment, so
 the standard engine. Independent completion records avoid counting temporary detachments as offspring;
 plans, summaries and tests live beside these scripts.
 
+`registration_fit.js` forks two selected released-part states with stiffness 0.5/0.8 and 4/8 solver passes
+(58). All eight first reattachments still shift; reduced deformation does not restore exact completion.
+The assay records actual corner geometry, accepted/rejected docking and intact target membership.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

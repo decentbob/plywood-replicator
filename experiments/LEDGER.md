@@ -254,6 +254,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 56 | Selected placement blocker and release | Can freeing an attachment rescue the stalled assembly without fragmentation? | prepared DOCK→REPEL + F release, `pUndock` 0.3 | works | all 43 rejected placements excluded by anchor 87; release 87/107/both gives 3/3/2 new exact copies versus 0; retained original prefix completes | placement_release.js (`PR_selected`) | test local reversible docking and useful reattachment separately | one selected 15k state; released pieces remain inactive; forced partial birth logs excluded; all 150 blocks and lateral bonds preserved |
 | 57a | Intact local redocking | Can released material dock again and complete? | research-only SEEK, endpoint rate 0.0001/0.001 | works | 1 exact reused product at each rate versus 0 off/irreversible; original six-member prefix completes at 31,568 at low rate | local_redocking.js (`RD_selected`) | fresh screen at predeclared lower rate | one selected state; full detachment/member retention reconstructed; stock births can miss later completion |
 | 57b | Redocking yield and fidelity | Does general endpoint release improve ordinary assembly? | research-only SEEK, endpoint rate 0.0001, `pUndock` 0.1 | negative | curved exact 5/7 vs 2/5 off, square 7/8 vs 8/10; two nine-unit errors after one-site shifts; confirmation criterion fails | local_redocking_screen.js (`RD_screen`) | physical registration on repeated letters | two-seed curved yield lead, 5 fully detached parts reused in exact curved products; no promotion, tuning or long confirmation |
+| 58 | Shape retention after release | Does higher stiffness prevent the selected shifted returns? | `stiffA`/`stiffB`/`stiffP`/`stiffQ` 0.5/0.8, `iters` 4/8 | negative | all 8 first returns shift; 0 intact exact target completions; curved +100 corner RMS falls about fivefold but alternatives stall | registration_fit.js (`RF_selected`) | test availability/usefulness of a second contact before adding a rule | two selected post-release states, +5k; square errors persist, unfinished curved outcomes are censored; no new chemistry |
 
 ## Knob index
 
@@ -294,7 +295,7 @@ the rows that used it). Rerun it after adding rows.
 | `heatPeriod` | 29 (partial) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
-| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works) |
+| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |
 | `maxStrainStrand` | 23 (works) |
@@ -369,11 +370,11 @@ the rows that used it). Rerun it after adding rows.
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
 | `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
-| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works) |
-| `stiffB` | 47a (works), 48 (negative), 49a (works) |
+| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative) |
+| `stiffB` | 47a (works), 48 (negative), 49a (works), 58 (negative) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
-| `stiffP` | 52a (works) |
-| `stiffQ` | 52a (works) |
+| `stiffP` | 52a (works), 58 (negative) |
+| `stiffQ` | 52a (works), 58 (negative) |
 | `sun` | 3 (negative) |
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
 | `transCode` | 34a (works), 43a (negative) |
@@ -392,6 +393,10 @@ the rows that used it). Rerun it after adding rows.
   whole-part reuse distinct from releasing one endpoint while another stays bound, and use independent
   physical completion records because stock births count temporary detachments. Preserve productive
   mergers and section 23's fragmentation warning. No population sweep or universal interpreter.
+  Stronger stiffness with matched 4/8-pass controls does not rescue either selected shift (58): all eight
+  first returns remain shifted, despite physically lower curved deformation. Stop stiffness tuning. A
+  second retained contact is the next fixture question; 8 partly attached historical returns versus 17
+  fully detached ones are correlated observations, not proof that a second contact solves registration.
 
 - **Measure the geometric bottleneck first** (46–48): product flexibility did not reliably benefit recipients; a physical
   brace straightens a template but does not increase sustained copying under either tested noise scheme. Identify an

@@ -467,6 +467,14 @@ Keep entries short: date, what changed, why, what evidence.
   without an index-aware repair or global completion state. Temporary detachments also invalidate the
   stock birth logger as the sole measure; independent member-based completion is required.
 
+- 2026-09-26. **Shape retention is not registration (58).** Fork the two shifted-release states with
+  stiffness 0.5/0.8 crossed with 4/8 passes. All eight first returns still shift a site; no original part
+  completes exactly within 5k. Square errors persist; curved alternatives leave unfinished material.
+  Actual curved deformation falls at higher stiffness, so the failure is not an inactive parameter.
+  Stop this tuning direction. A second retained contact is a different mechanical hypothesis, requiring
+  an availability/fit fixture and useful-motion measurement before any new reaction. Historical partly
+  attached episodes are correlated and do not prove protection from shifts.
+
 ---
 
 ## 15. Ideas not yet tried
@@ -480,6 +488,9 @@ either overlapping attachment rescues exact assembly. Test productive reattachme
 part next; ordinary REPEL release instead leaves it inactive. Section 57 now demonstrates that reuse with
 a local SEEK state, but the fresh screen fails fidelity through shifted docking among repeated letters.
 The next untested operation is contact/fit that retains registration without knowing a template index.
+Section 58 rejects higher stiffness in the selected shift fixtures at both 4 and 8 passes. Next test
+whether a second actual contact can retain position while permitting useful rearrangement, rather than
+assuming stiffer material or an unfinished endpoint inventory means accurate assembly.
 Any new state must read only its own bonds and bonded-side states. No ID-specific rescue in chemistry,
 global assembly-age threshold, nonlocal completion detector, or lateral severing as a free cleanup.
 

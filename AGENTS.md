@@ -103,6 +103,7 @@ experiments/assembly_front.js  research-only local contact gates, both polaritie
 experiments/placement_release.js  selected-state release forks and actual placement blockers (56); full state/raw events, summary and tests; no new rule
 experiments/local_redocking.js  research-only SEEK endpoint state and selected reuse assay (57a); summary/test/analysis test alongside
 experiments/local_redocking_screen.js  fresh matched off/drop/seek worlds (57b); summary checks full physical completion, not stock births alone
+experiments/registration_fit.js  selected post-release stiffness x solver forks (58); actual corner deformation, docking checks, summary/tests
 experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
 experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
@@ -236,7 +237,39 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): local redocking reuses parts, but shifted assembly loses fidelity
+## Handoff (2026-09-26, latest): stiffness does not restore attachment position
+
+Section 58 completes the selected physical-fit diagnostic; read `experiments/registration_fit_plan.md`.
+
+- All 25 section-57 fresh seek episodes: 23 same-site, 2 shifted; 21 redock next step. Seventeen fully
+  detach, eight retain another face contact; both shifts occur after full detachment. Correlated events,
+  not evidence that a retained contact guarantees fidelity. Correct early returns can precede later errors.
+- Exact seed 87 replays to square step 5,316 / endpoint 114 (BBBQ) and opposed20 step 28,184 / endpoint 107
+  (PAAAABB), just after release. Eight forks: stiffness 0.5/0.8 for A/B/P/Q crossed with 4/8 passes,
+  +5000 steps. Only those existing physics settings change; initial physical arrays/RNG match.
+- **All eight first returns shift one site; no tracked part completes exactly.** Square returns to site 4
+  after 13 steps in every arm and makes PAAAABBBQ. Curved returns to site 2 after 24/7/23/25 steps;
+  0.5/4 makes PAAAABBBQ, other arms retain unfinished PAAAABB at 33,184. No lateral loss, all 150 blocks.
+  Unfinished outcomes are censored, not permanent arrest. No fresh screen or parameter tuning follows.
+- Physical effect verified: curved +100 corner RMS 0.01665→0.00346 at 4 passes, 0.01009→0.00177 at 8.
+  These are snapshots of diverging trajectories; square deformation is not uniformly reduced.
+- `RF_selected.json` stores full fork/initial/final states, source/input hashes, ordered bonds/state
+  events, geometry/placement calls, settled membership and 1k inventories; derived CSV. 93,500 steps,
+  31.515 CPU seconds including prefix, continuous and unobserved controls. Both control saved states/RNG
+  match continuous replay exactly (cache delta 0). Eight-arm observer-neutrality tests, metric fixtures,
+  16 corruption checks and all section-57 analysis checks pass. Five default fingerprints unchanged.
+  Core/viewer/presets/reactions unchanged; focused standard checks last passed section 57, full suite 55.
+- **Next:** a second retained contact is the next mechanical hypothesis. First measure availability and
+  fit of a real second contact in the selected released states, and whether holding it allows useful
+  motion. Do not infer success from the eight partly attached historical episodes or from fewer completed
+  errors. No correct-site/index reader, global registration memory, whole-part positioning, lateral cuts,
+  population sweep or interpreter. Keep useful reuse and productive mergers visible.
+
+Resume: `node experiments/registration_fit_test.js`,
+`node experiments/registration_fit_summary.js experiments/out/RF_selected.json`,
+`node experiments/local_redocking_analysis_test.js`.
+
+## Previous handoff (2026-09-26): local redocking reuses parts, but shifted assembly loses fidelity
 
 Section 57 follows the promising release result. `experiments/local_redocking_plan.md` records both
 prospective stages. Core simulation, default trajectories, viewer and presets are unchanged.

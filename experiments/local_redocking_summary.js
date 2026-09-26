@@ -5,11 +5,11 @@ const {rows,hash}=require('./placement_release');
 const {SEEK,jobs,sourceFiles}=require('./local_redocking');
 const exact=x=>x.seq==='PAAAABBBBQ';
 function fileHash(file,h){const raw=fs.readFileSync(file,'utf8'),lf=raw.replace(/\r\n/g,'\n');assert([raw,lf,lf.replace(/\n/g,'\r\n')].some(s=>hash(s)===h),'Hash mismatch: '+file);}
-function validateRun(r,p,end=50000){
+function validateRun(r,p,end=50000,every=5000){
   const s=Sim.fromState(p.state),start=s.t,bonds=Array.from(s.bond),n=s.n;assert.equal(n,150);
   const ready=row=>row.units.length>1&&row.states.every(st=>st===I_REPEL)&&row.faces.every(q=>q<0);
   const previous=new Set(rows(s).filter(ready).map(row=>row.units.join(',')));
-  const unit=u=>assert(Number.isInteger(u)&&u>=0&&u<n),pending=new Set();let pos=0,last=start;
+  const unit=u=>assert(Number.isInteger(u)&&u>=0&&u<n),pending=new Set(Array.from({length:n},(_,u)=>u).filter(u=>s.is[u]===SEEK));let pos=0,last=start;
   const apply=e=>{
     assert(Number.isInteger(e.t)&&e.t>start&&e.t<=end&&e.t>=last);last=e.t;unit(e.u);
     if(['link','unlink'].includes(e.kind)){
@@ -28,8 +28,9 @@ function validateRun(r,p,end=50000){
     }
   };
   const checkpoints=[...r.windows.map(x=>({kind:'window',...x})),...r.settled.map(x=>({kind:'settled',...x}))].sort((a,b)=>a.t-b.t);
-  const seen=new Set();assert.equal(r.windows.length,(end-start)/5000);
-  r.windows.forEach((w,i)=>assert.equal(w.t,start+(i+1)*5000));
+  assert(Number.isInteger(every)&&every>0);
+  const seen=new Set();assert.equal(r.windows.length,(end-start)/every);
+  r.windows.forEach((w,i)=>assert.equal(w.t,start+(i+1)*every));
   for(const c of checkpoints){assert(c.t>start&&c.t<=end);while(pos<r.events.length&&r.events[pos].t<=c.t)apply(r.events[pos++]);s.bond.set(bonds);
     if(c.kind==='settled'){
       assert.deepEqual(c.units,s.strandOf(c.units[0]));assert(c.units.length>=2);assert.equal(c.seq,c.units.map(u=>s._letter(u)).join(''));
