@@ -518,4 +518,18 @@ test('backCopy and stack: a copy made on a back lies parallel (same sequence); s
   assert.ok(ho > 3 * hs, `units standing in stacks: slippery ${hs}, ordinary ${ho}`);
 });
 
+test('transStart: only strands carrying the start motif (relayed along the strand) translate; others still take a shared catalyst', () => {
+  const run = (ts) => {
+    const s = new Sim({ seed: 1, W: 30, H: 30, nA: 100, nB: 100, nC: 100, nD: 100, n1: 150, n2: 150, nE: 80, seedSeq: 'CDCABBAB,CCCABBAB', seedCount: 3, pUndock: 0.1, translate: true, transCode: 'A1,B2', transStart: ts });
+    s.run(6000);
+    let host = 0, other = 0;
+    for (const b of s.births) if (b.prod) { if (b.parent.includes('CDC')) host++; else if (b.parent.includes('CCC')) other++; }
+    assert.deepStrictEqual(s.check(), []);
+    return { host, other, marks: s.trs.some((x) => x === 1) };
+  };
+  const on = run('CDC'), off = run('');
+  assert.ok(on.host >= 3 && on.other === 0 && on.marks, `with the start rule: products of CDC strands ${on.host}, of CCC strands ${on.other}`);
+  assert.ok(off.host >= 3 && off.other >= 3 && !off.marks, `without it both translate: ${off.host}, ${off.other}`);
+});
+
 console.log(passed + ' tests passed');

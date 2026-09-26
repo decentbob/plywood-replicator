@@ -66,7 +66,7 @@ run.js              headless runner: CSV every --every steps, JSON summary on st
                     --change T:k=v,k=v (environment change mid-run, repeatable); per-type knobs (--mobC, --fold1) accepted;
                     --save FILE (the whole world state, rewritten every interval: open it in the viewer, or continue it) and
                     --load FILE (continue a saved world; knobs given override its own: a branch under a changed rule)
-test.js             invariant tests (35; about 10 minutes on one core)
+test.js             invariant tests (36; about 10 minutes on one core)
 LITERATURE.md       survey of self-replication work mapped onto this world (2026-09-25), ranked shortlist at the end
 experiments/LEDGER.md  one row per experiment: question, verdict, key number, script, what it points to. Start here to see
                     what worked, what failed and what is open; add a row for every new experiment

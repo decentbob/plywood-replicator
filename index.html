@@ -128,6 +128,7 @@ footer code{font:11px var(--mono);background:var(--panel);padding:1px 4px;border
           <option value="cells">Preset: cells (strands grow their own walls)</option>
           <option value="genomes">Preset: capped genomes (telomeres; energy and shield genes)</option>
           <option value="stacks">Preset: stacks (two-faced letters; copies pile into crystals that grow and split)</option>
+          <option value="parasites">Preset: parasites of a shared catalyst, in space (slow polymers)</option>
           <option value="random">Preset: random chemistry (a random rule table; change the table seed)</option>
         </select>
         <button id="bAddSeed">Add seed strand</button>
@@ -187,7 +188,7 @@ const $ = (id) => document.getElementById(id);
 // origins and gentle mutation, no ligation.
 // "cells": strands whose sequence carries BAB anchor membrane on their backs and grow walls around themselves (make + tether);
 // the walls let monomers through but not strands or energy.
-const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1, backCopy: false, stack: false, pSBind: 0, pSNuc: -1 };
+const ZERO = { pSoft: 0, pCapture: 0, pFray: 0, pUnzip: 0, pUndock: 0, pSpont: 0, pBreak: 0, resA: 0, resB: 0, resM: 0.7, motif: false, feed: false, shield: false, relay: false, proof: false, make: false, tether: false, memPerm: false, memLinkTol: 0, stiffM: 0.7, cut: false, nX: 0, mobM: 1, energyGate: true, pMemDecay: 0, pHyb: 0, pLigate: 0, pReload: 0.002, nA: 400, nB: 400, seedSeq: 'ABBABA', seedCount: 1, nM: 0, memAngle: 30, pMem: 0.2, chiral: 0, endLoss: false, bareCaps: false, translate: false, catalysis: false, n1: 0, n2: 0, n3: 0, n4: 0, nG: 0, gRange: 2.2, gStick: 1, backCopy: false, stack: false, pSBind: 0, pSNuc: -1, bindAny: false, pMisMelt: -1, transStart: '', transCode: 'A1,B2,C3,D4', pLinkBare: 0.01, mobS: 1 };
 const EVO = { W: 60, H: 60, pSpont: 0.001, pSoft: 0.01, pCapture: 0.01, pFray: 0.00003, pUnzip: 1, pUndock: 0.1, seedCount: 3 };
 const PRESETS = {
   copy:  Object.assign({}, ZERO),
@@ -201,6 +202,9 @@ PRESETS.genomes = Object.assign({}, ZERO, { W: 40, H: 40, nA: 200, nB: 200, nC: 
 // "stacks": two-faced letters. A strand's back templates too, and a finished back copy stays on it as a new row, so copies pile into
 // stacks (crystals of one sequence) that grow row by row and lose rows by melting; a melted row can zip back, strangers rarely bind.
 PRESETS.stacks = Object.assign({}, ZERO, { W: 40, H: 40, nA: 256, nB: 256, nE: 60, seedSeq: 'ABBABAAB', seedCount: 3, pUndock: 0.05, pSoft: 0.002, pCapture: 0.002, pFray: 0.0003, pUnzip: 1, backCopy: true, stack: true, pSBind: 0.02, pSNuc: 0 });
+// "parasites": the shared catalyst of RESULTS 36/42. Strands with a run of A make product (code A->1) and any armed back takes it, so
+// strands without one (C, D, B) are copied on others' products; polymers creep (mobS 0.1), so makers and their products stay together
+PRESETS.parasites = Object.assign({}, ZERO, { W: 60, H: 60, nA: 340, nB: 340, nC: 340, nD: 340, n1: 680, nE: 220, seedSeq: 'BAAAAB,BCDDCB', seedCount: 7, pUndock: 0.1, pFray: 0.00003, pUnzip: 1, pSoft: 0.002, translate: true, transCode: 'A1', catalysis: true, pLinkBare: 0.01, bindAny: true, mobS: 0.1 });
 // "random": the rule table replaced by a random one (src/rchem.js): side colours, colour attractions and state switches drawn from
 // the table seed. Fill: the block's type, lighter by state; side lines: the colour each side shows.
 PRESETS.random = Object.assign({}, ZERO, { mode: 'random', W: 30, H: 30, nE: 0, seedCount: 0, chemSeed: 1, K: 3, NS: 3, NC: 4, pAff: 0.3, pRule: 0.2, pRuleFree: 0.05, pInert: 0.3, rBreak: 0.0002, nEach: 80 });
@@ -223,6 +227,9 @@ const KNOBS = [
   ['compCopy', 'complementary copying', 'A docks on B and C on D (as in DNA): a copy is the reversed complement', 'bool'],
   ['translate', 'translation', 'an armed letter\'s back templates a product block by the code A→1, B→2, C→3, D→4: the genome builds a second polymer', 'bool'],
   ['catalysis', 'catalysis', 'finished products bind back onto matching strands; monomers docked there link at once, elsewhere only at the bare rate', 'bool'],
+  ['bindAny', 'shared catalyst', 'a finished product binds the back of any armed letter: strands that make none are parasites', 'bool'],
+  ['pMisMelt', 'p mismatch lets go', 'a bound product unit on a letter it does not match lets go at this rate (graded specificity); -1 off'],
+  ['transStart', 'start motif', 'only strands carrying it translate (CDC, or one letter D); empty: all do. With graded specificity a key without the start is a mimic', 'text'],
   ['pLinkBare', 'bare linking', 'with catalysis: how often two docked monomers link without a product on their template'],
   ['bareCaps', 'bare caps', 'caps have no back: armed only through their bond by the feed relay, so a capped strand re-arms only if it carries ABA', 'bool'],
   ['endLoss', 'end-replication loss', 'a template unit with a free side shows no face, so every copy lacks its template\'s open ends; strands capped P...Q copy whole (telomeres)', 'bool'],
@@ -300,7 +307,7 @@ const KNOBS = [
   ['seedCount', 'seed strands ×'],
   ['W', 'world width'], ['H', 'world height'],
 ];
-const RESET_KEYS = new Set(['seed', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'n1', 'n2', 'n3', 'n4', 'nU', 'sizeU', 'foldA', 'foldB', 'foldC', 'foldD', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
+const RESET_KEYS = new Set(['seed', 'transStart', 'transCode', 'nA', 'nB', 'nE', 'nM', 'nX', 'nP', 'nQ', 'nJ', 'seedSeq', 'seedCount', 'W', 'H', 'shapeA', 'shapeB', 'shapeC', 'shapeD', 'shapeM', 'bendA', 'bendB', 'bendC', 'bendD', 'memAngle', 'nC', 'nD', 'chiral', 'nG', 'n1', 'n2', 'n3', 'n4', 'nU', 'sizeU', 'foldA', 'foldB', 'foldC', 'foldD', 'chemSeed', 'K', 'NS', 'NC', 'pAff', 'pRule', 'pRuleFree', 'pInert', 'nEach']);
 
 let sim, running = true, speed = 4, series = [], selected = -1, seedUnit = -1;
 const cam = { x: 24, y: 24, zoom: 16, follow: false };

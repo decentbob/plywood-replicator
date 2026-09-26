@@ -156,6 +156,9 @@ const DEFAULTS = {
                                 // docked products link side to side where the template continues, and a finished product chain is released,
   transCode: 'A1,B2,C3,D4',     // as a copy is on the face. Products never become templates. The genome builds a polymer that is not itself
   pMisTrans: 0,                 // a product of the wrong kind docks on a back at this fraction of the rate (mistranslation)
+  transStart: '',               // (with translate) a start motif ('CDC': the middle letter between two of the outer one; or one letter, 'D'): only a strand that carries it
+                                // translates. A template unit in the motif marks itself and the mark is passed along its strand, one block per
+                                // pass, as the proofreading flag is; a unit without the mark shows a plain back. '' : every strand translates
   catalysis: false,             // (with translate) a finished product binds back onto the backs of a strand it matches by the code (pBindP per step
   pBindP: 0.2,                  // of contact; a lone bound unit lets go at pPMelt, one in a bound run at pPMeltRun), and where a product is bound
   pPMelt: 0.05, pPMeltRun: 0.0005, // the template's face is catalysed: two monomers docked there link side to side at once; elsewhere only at
@@ -326,6 +329,8 @@ class Sim {
     this.tip0 = new Uint8Array(n * 4);            // the tips as the last derive pass left them, which is what a neighbour reads
     this.prf = new Uint8Array(n * 4);             // proof rule: a lateral side shows whether it passes on the proofreading flag, a face whether
     this.prf0 = new Uint8Array(n * 4);            // its unit proofreads (derived like the state); prf0 is the last pass's, read by neighbours
+    this.trs = new Uint8Array(n * 4);             // transStart: a lateral side shows whether it passes on the start mark, a face whether its unit
+    this.trs0 = new Uint8Array(n * 4);            // carries it (derived like the state); trs0 is the last pass's, read by neighbours
     this.stk = new Uint8Array(n * 4);             // stack rule: a lateral side shows, beside its state, whether its unit is stacked (its face holds a back)
     this.heldNew = [];                            // units that finished a copy on a back this step (observation: a row's birth)
     this.open = new Uint8Array(n);                // bitmask of bondable sides
@@ -354,6 +359,7 @@ class Sim {
     this._cutOut = letterType(cm[0]); this._cutMid = letterType(cm[1]);   // cut rule
     const pm = String(p.proofMotif || 'BDB');
     this._prfOut = letterType(pm[0]); this._prfMid = letterType(pm[1]);   // proof rule
+    const ts = String(p.transStart || ''); this._ts = ts.length === 3 || ts.length === 1; this._tsOut = ts.length === 3 ? letterType(ts[0]) : -1; this._tsMid = this._ts ? letterType(ts.length === 3 ? ts[1] : ts[0]) : -1;   // transStart
 
     this._initTypes();
     this._initGeometry();
@@ -837,12 +843,24 @@ class Sim {
       if (this.p.catalysis) this.cat[o + F] = 0;
       if (this.p.endLoss) this.tip[o + L] = this.tip[o + R] = 0;
       if (this.p.stack) this.stk[o + L] = this.stk[o + R] = 0;
+      if (this._ts) this.trs[o + F] = this.trs[o + L] = this.trs[o + R] = 0;
       if (this.type[u] === T_P || this.type[u] === T_Q) this._capSides(u);
       return;
     }
     const bF = b[o + F] >= 0, bL = b[o + L] >= 0 && this.type[b[o + L] >> 2] !== T_J, bR = b[o + R] >= 0 && this.type[b[o + R] >> 2] !== T_J, nl = (bL ? 1 : 0) + (bR ? 1 : 0);
     const st = this.is[u];
     if (this.p.stack) this.stk[o + L] = this.stk[o + R] = 0;
+    if (this._ts) {
+      // transStart: a template unit in the start motif marks itself; the mark runs along the strand one block per pass (read from trs0)
+      const tr = this.trs; tr[o + F] = tr[o + L] = tr[o + R] = 0;
+      if (st === I_TPL && !isProd(this.type[u])) {
+        const src = this.type[u] === this._tsMid && (this._tsOut < 0 || (bL && bR && this.type[b[o + L] >> 2] === this._tsOut && this.type[b[o + R] >> 2] === this._tsOut));
+        const inL = bL && this.trs0[b[o + L]] === 1, inR = bR && this.trs0[b[o + R]] === 1;
+        if (bL && (src || inR)) tr[o + L] = 1;
+        if (bR && (src || inL)) tr[o + R] = 1;
+        if (src || inL || inR) tr[o + F] = 1;
+      }
+    }
     if (this.p.proof) {
       // proof rule: a template unit in the motif flags its face; with the relay it also shows the flag on each lateral side if it is a
       // source or its neighbour on the other side showed it toward it on the last pass (one block per pass), and flags its face if either
@@ -921,7 +939,7 @@ class Sim {
     else if (this.p.motif && st === I_TPL && bL && bR && this.type[u] === T_B && this.type[b[o + L] >> 2] === T_A && this.type[b[o + R] >> 2] === T_A) this.ss[o + K] = S.CHARGE;
     else if (this.p.make && st === I_TPL && bL && bR && this.type[u] === T_A && this.type[b[o + L] >> 2] === T_B && this.type[b[o + R] >> 2] === T_B) this.ss[o + K] = S.MAKE;
     else if (this.p.act && st === I_TPL && bL && bR && this.type[u] === this._actMid && this.type[b[o + L] >> 2] === this._actOut && this.type[b[o + R] >> 2] === this._actOut) this.ss[o + K] = S.ACT;
-    else if (this.p.translate && st === I_TPL && this._code[this.type[u]] >= 0) {
+    else if (this.p.translate && st === I_TPL && this._code[this.type[u]] >= 0 && (!this._ts || this.trs[o + F])) {
       // translate rule: my back templates a product; it says along which sides the template continues (bonded neighbours whose letter
       // has a product in the code; one not yet armed will be, and the product waits for it)
       const eL = bL && this._code[this.type[b[o + L] >> 2]] >= 0, eR = bR && this._code[this.type[b[o + R] >> 2]] >= 0;
@@ -956,7 +974,7 @@ class Sim {
   /** Caps lack one lateral side (and, with bareCaps, the back): that side shows IDLE and never bonds. */
   _capSides(u) { const t = this.type[u]; if (t === T_P) this.ss[u * 4 + L] = S.IDLE; else if (t === T_Q) this.ss[u * 4 + R] = S.IDLE; if (this.p.bareCaps) this.ss[u * 4 + K] = S.IDLE; }
 
-  _deriveAll() { const p = this.p; if (p.endLoss) this.tip0.set(this.tip); if (p.proof) this.prf0.set(this.prf); if (p.relay || p.cutRelay || p.tether) this.ss0.set(this.ss); for (let u = 0; u < this.n; u++) this._derive(u); }
+  _deriveAll() { const p = this.p; if (p.endLoss) this.tip0.set(this.tip); if (p.proof) this.prf0.set(this.prf); if (this._ts) this.trs0.set(this.trs); if (p.relay || p.cutRelay || p.tether) this.ss0.set(this.ss); for (let u = 0; u < this.n; u++) this._derive(u); }
 
   // ------------------------------------------------------------- the rule table
   /**

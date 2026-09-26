@@ -296,6 +296,17 @@ What they show:
 
 ---
 
+**Tag-based cooperation and the Red Queen** (added 2026-09-25, night): Riolo, Cohen & Axelrod, "Evolution of cooperation without
+reciprocity", *Nature* 414:441, 2001; the greenbeard literature (Jansen & van Baalen, *Nature* 440:663, 2006, "Altruism through beard
+chromodynamics").
+- **Mechanism.** Agents help others whose arbitrary tag is similar to their own. Cheaters that carry a common tag invade it; the
+  cooperators that happen to change their tag escape; tags cycle and diversify without end.
+- **Mapping.** A product carries its maker's key (translation), and with graded specificity binds strongly only where the key
+  recurs, so a host helps whatever carries its key. A mimic is a strand with the key and no translation, which needs a start signal
+  to be possible (`transStart`, 43). A host that mutates its key keeps its own catalyst (made from the new key) and leaves its mimics
+  behind: an arms race whose space of keys is open, with no rule about keys. Crystal genes (Cairns-Smith, section 2 above) were
+  built as `stack` (40).
+
 ## Ranked shortlist: most likely to produce emergent complexity here
 
 **1. A stepwise shared pathway on the energy particle (Horowitz, the metabolic replicator model, Lenski's stepping stones).**

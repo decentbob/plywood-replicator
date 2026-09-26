@@ -2243,3 +2243,48 @@ whose shapes differ more (compositions: `AAAAAAAA` against `ABABABAB` harvest 3 
 pocket that pays more (fuel the only energy, which made worlds fragile in section 39). What it does not say: that shape cannot be
 selected; the order effects may be real at a size these runs cannot resolve. The planned evolution runs (letter order adapting
 under mutation) were not run: they would be drift-dominated for the same reason.
+
+## 42. Ecology in space: a shared catalyst and its parasites in a large world (`hostparasite.sh`, `spatial.js`, `hostmap.js`)
+
+Where complexity grew in replicator systems it came from ecology (Könnyű, Hogeweg, Mizuuchi; `LITERATURE.md`), and section 36's
+shared catalyst gives the strongest ecological effect in this project: strands that make no product take 60 to 70% of births.
+It ran in a 40×40 world, where slow polymers (`mobS` 0.3) only delayed the takeover. The theory (Boerlijst and Hogeweg; Colizzi
+and Hogeweg 2016) says that a catalyst acting locally, in a world where offspring stay near their parents, lets cooperators and
+parasites separate in space, which holds parasites down, sometimes as travelling waves. Here: section 36's `PY` world (code `A`→`1`,
+`bindAny`, hosts `BAAAAB` and parasites `BCDDCB`, 12 of each) four times larger (80×80, 600 of each letter, 1,200 product blocks,
+400 energy particles), with polymers that creep (`mobS` 0.1) against well mixed; 300,000 steps, 2 seeds. Births of strands with
+an `AA` run (hosts: they make product) and without (parasites), and the segregation index of `spatial.js` (for each birth, the
+share of births within 8 sides in the same 50,000-step window that are of its own kind, minus its kind's share; 0 is well mixed):
+
+| run | parasites among births, windows 0 / 100k / 250k | host births per 50k (last) | segregation, 0 / 100k / 250k |
+|---|---|---:|---|
+| HP_mix_1 | 27% / 67% / 71% | 305 | 0.073 / 0.013 / 0.021 |
+| HP_mix_2 | 19% / 66% / 72% | 317 | 0.036 / 0.002 / 0.018 |
+| HP_slow_1 | 9% / 50% / 65% | 267 | 0.010 / 0.066 / 0.033 |
+| HP_slow_2 | 8% / 42% / 50% | 313 | -0.001 / 0.070 / 0.036 |
+
+With creeping polymers hosts and parasites sit apart (segregation 0.03 to 0.10 against 0.01 to 0.02 well mixed; a picture of the
+saved world shows host patches with their products and parasite patches), and parasites rise more slowly and less far (50 to 65%
+of births at the end against 71 to 72%). Host births are the same in both worlds (about 300 per 50,000 steps): space costs the
+parasites, not the hosts, because the catalyst stays near its makers. The segregation falls in the second half as the parasites
+catch up; no travelling front was found (the host births' centre is spread, concentration 0.07 to 0.12, and moves without a
+steady direction). What it says: the classic result that spatial structure protects a shared good holds for this machine made of
+physical parts, weakly, in two seeds. What it does not say: whether it lasts (the effect is shrinking at 300,000 steps), whether
+it holds when parasites must arise by mutation, or that anything evolves in response; the hosts cannot yet do anything against
+the parasites except be elsewhere.
+
+**More mobilities, and parasites that arise** (`HP_mid_*`: polymers at `mobS` 0.3; `HM_*`: only hosts seeded, 24 of them, mutation
+0.005, so strands that make no product have to arise; 300,000 steps, 2 seeds). Parasites among births in the last 50,000 steps:
+
+| world | seed 1 | seed 2 |
+|---|---:|---:|
+| seeded parasites, creeping (`mobS` 0.1) | 65% | 50% |
+| seeded parasites, `mobS` 0.3 | 60% | 63% |
+| seeded parasites, well mixed | 71% | 72% |
+| parasites from mutation, creeping | 62% | 58% |
+| parasites from mutation, well mixed | 72% | 72% |
+
+Every creeping or half-creeping run ends below every well-mixed one (8 against 4 runs; segregation 0.03 to 0.10 against 0.01 to
+0.03). Parasites arise by themselves within 50,000 steps: short strands of the letters that make no product (`BDC`, `BCC`, `CD`,
+`BD`; mean length 3.1), and the hosts shrink too (`AAB`, `AAAB`, `AAA`), so shortest wins on both sides. Space holds the
+parasites down by about ten percentage points and no more; it does not stop them, and it does not make anything evolve against them.
