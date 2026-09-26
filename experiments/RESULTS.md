@@ -2327,3 +2327,12 @@ shrink. `CR_*` (the capped world of section 33, hosts `PDABBABQ`, where a genome
 substitution; `pLinkBare` 0.05, since at 0.01 that world died; 2,000,000 steps, specificity on and off, 2 seeds) was running at
 the end of the session. A caution for reading it: a product holds on four of five matching letters (bound runs are cooperative),
 so one substitution barely escapes a mimic, and escapes will take several.
+
+**How specific is a product?** (Probes, 24×24, strands without the start letter so they make nothing, seeded finished products
+`12212` made from key `ABBAB`, 4,000 steps, 6 seeds.) Strands one letter off (`ABBAA`) hold 74% as many bound product units as
+exact ones (`ABBAB`): recognition is by runs, not by whole keys, which is also why keys can shrink to two letters. A stricter rule
+was tried and removed: a bound product unit on a wrong letter marks its product, the mark is relayed along it, and every marked unit
+lets go at `pMisMelt`; it moved the ratio only to 70%, because the wrong unit lets go within a few steps and its mark goes with it.
+And in the hosts' own world products seldom meet other strands at all: released beside their template, they rebind to it in
+register and hold (no product unit was found on a wrong letter in 10,000 steps of a mixed `DABBAB`/`DABBAA` world), so a shared
+catalyst at this density is mostly private to its maker, which limits what mimics can take.
