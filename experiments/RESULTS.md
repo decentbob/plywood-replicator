@@ -2481,3 +2481,25 @@ See the 2025 templating paper and the 2024 mechanical construction reference add
 claim. The five batch manifests record about 3,088 process CPU seconds in total. No arms race, new heritable function, or
 increase in evolved complexity was demonstrated. The useful outcome is the distinction between release, survival, delivery,
 and reproductive benefit, plus a reproducible assay that prevents mistaking host suppression for parasitism.
+
+**Validation and replay.** All 38 checks were covered across runs. The serial suite passed its first 27 checks before the
+final extraction of research latches; it was stopped during the long shared-catalyst check to avoid duplicating work.
+The final source passed translation, shared catalysis, both new product checks, and the eight remaining checks in these batches:
+
+```sh
+node test.js '--match=^(translate:|bindAny:|product)'
+node test.js '--match=^(compCopy:|chiral:|heat:)'
+node test.js '--match=^(droplets:|proof:|grip and pocket:)'
+node test.js '--match=^(backCopy and stack:|transStart:)'
+node tools/fingerprint.js 1500
+node build.js
+```
+
+All five default trajectory fingerprints match the starting commit `775189d`. The new checks exercise local activation,
+face retraction, occupancy classification, exact saved-state continuation, conserved blocks/types, independent genome
+turnover, and unchanged processive unzip. Build and whitespace checks pass. CLI guards reject output overwrite, more than
+four workers, duplicated analysis windows and a test selector matching no checks.
+
+`PE_replay_probe` repeats seed 1 baseline/reset1000 in probe mode for 10,000 steps; `PE_durable_replay` repeats seed 3
+durable/durableReset in race mode for 10,000 steps. All four CSV rows match the corresponding earlier rows exactly after
+the subclass extraction. Their manifests and birth logs are retained as verification, **not additional experimental seeds**.
