@@ -4,8 +4,9 @@
 // the start, over all births of k). If mimics push hosts off a key, the key's share falls in the next window after a high load: a
 // negative correlation between load now and the change in share. Pairs are pooled over the files given; a permutation test (loads
 // shuffled over pairs) gives the p-value. Run it on each arm separately (specificity on, off).
-//   node experiments/redqueen.js out/AR_spec_*.births.jsonl [--start=D] [--coded=AB] [--window=50000] [--min=5]
+//   node experiments/redqueen.js out/AR_spec_*.births.jsonl [--start=D] [--coded=AB] [--window=50000] [--capped] [--min=5]
 const fs = require('fs');
+const capped = process.argv.includes('--capped');   // only genomes capped at both ends (the capped worlds of section 33)
 const opt = (k, d) => { const a = process.argv.find((x) => x.startsWith('--' + k + '=')); return a ? a.split('=')[1] : d; };
 const start = opt('start', 'D'), coded = opt('coded', 'AB'), win = Number(opt('window', 50000)), min = Number(opt('min', 5));
 const rv = (q) => q.split('').reverse().join('');
@@ -13,7 +14,7 @@ const canon = (q) => (q < rv(q) ? q : rv(q));
 const key = (q) => { let best = '', cur = ''; for (const c of q + '.') { if (coded.includes(c)) cur += c; else { if (cur.length > best.length) best = cur; cur = ''; } } return canon(best); };
 const pairs = [];
 for (const f of process.argv.slice(2).filter((a) => !a.startsWith('--'))) {
-  const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((b) => !b.prod && b.seq.length >= 2);
+  const rows = fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((b) => !b.prod && b.seq.length >= 2 && (!capped || (b.seq[0] === 'P' && b.seq.endsWith('Q')) || (b.seq[0] === 'Q' && b.seq.endsWith('P'))));
   const tmax = rows.length ? rows[rows.length - 1].t : 0, W = [];
   for (let w0 = 0; w0 + win <= tmax + 1; w0 += win) {
     const h = {}, m = {}; let ht = 0;
