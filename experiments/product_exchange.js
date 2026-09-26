@@ -41,6 +41,7 @@ for (const [name, source] of Object.entries({ soft0:'durable', softFace15:'shape
   arms[name] = { ...arms[source], stiff1:0.8, stiff2:0.8 };
 }
 arms.softFree15NoBind = { ...arms.softFree15, pBindP:0 };
+arms.soft0NoBind = { ...arms.soft0, pBindP:0 };
 arms.soft0Exact = { ...arms.soft0, pSoft:0 };
 arms.softSide5Exact = { ...arms.softSide5, pSoft:0 };
 const base = {

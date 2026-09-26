@@ -207,6 +207,13 @@ and the shape restoring force are then solved together by nudging the blocks inv
 step (`iters`); a pin moves each block rigidly and, by its softness, deforms the pinned corner. No
 rule reads a body: bonds, contacts and shapes are per block, and every rule is read by one block.
 
+Deformation and changing the rest shape are separate controls: `stiff1=0.8`, for example,
+lets a product polygon deform while pulling it back toward its current preferred shape;
+`fold1` changes that preferred shape. Stiffness is a restoring strength, **not a hard maximum
+deformation bound**. `maxStrain` limits the residual gap between bonded corners by breaking
+eligible bonds; it does not cap a polygon's distance from its rest shape. Pins are solved
+approximately unless `snapCorners` performs the final exact corner projection.
+
 Chains are straight because a row of pinned squares is straight, not because anything holds a
 chain. A wedge-shaped block (`bendA`, `bendB`) curls a strand where it sits, so shape follows
 sequence. Membrane blocks are wedges whose rest state is a ring. Stiffness 0.5 is safe (exact
