@@ -2679,3 +2679,99 @@ The viewer build and script syntax pass; stiffness controls reset to 1. Three co
 excluding unfinished work. CSVs, birth logs and full parameter/source-hash manifests are retained. Every raw birth reconciles
 with its CSV window and every planned job/window is present in the completed batches. Incomplete-batch, duplicate-window
 and invalid-range guards were exercised successfully.
+
+## 46. Independent flexibility × binding control: recipient benefit does not replicate
+
+**Question.** Does the section 45d material-compliance lead survive fresh seeds and a direct binding ablation?
+The earlier result reused four historical rigid controls. Here all four combinations are run together: straight durable
+products at stiffness 1 or 0.8, with mature-product binding enabled or disabled. No new physics or chemistry is introduced.
+Only `soft0NoBind` is added to the experimental arm table. The world and all other settings remain those of sections 44–45:
+`productFray=0.03`, `pLinkBare=0.05`, mutation and turnover enabled, six seeds of each capped founder sequence.
+
+The protocol in `experiments/flexibility_plan.md` was written before launching the batch. Four fresh random seeds (7–10),
+50k steps each, primary interval **20k < t <= 50k**. Primary outcome: absolute capped offspring with a capped non-producing
+parent snapshot. Compute binding-on minus binding-off within each stiffness and seed, then subtract the rigid effect from
+the flexible effect. More recipient occupancy alone was explicitly not a successful outcome.
+
+```sh
+node experiments/product_exchange.js --out experiments/out/PF_binding --steps 50000 --seeds 7,8,9,10 --arms durable,durableNoBind,soft0,soft0NoBind --workers 4
+node experiments/flexibility_summary.js experiments/out/PF_binding
+node experiments/product_exchange_summary.js experiments/out/PF_binding.csv --after=20000
+node experiments/product_parent_summary.js experiments/out/PF_binding.births.jsonl --after=20000
+```
+
+### 46a. The earlier recipient benefit is not reliable
+
+All vectors below list seeds **7 / 8 / 9 / 10**, in that order. Means weight seeds equally.
+
+| arm | capped offspring of non-producing parents | mean | total capped births | mean total | mean producer-parent births |
+|---|---:|---:|---:|---:|---:|
+| rigid, binding (`durable`) | 7 / 0 / 7 / 10 | 6.00 | 42 / 42 / 41 / 39 | 41.00 | 34.25 |
+| rigid, no binding (`durableNoBind`) | 4 / 6 / 8 / 3 | 5.25 | 7 / 12 / 11 / 14 | 11.00 | 5.75 |
+| flexible, binding (`soft0`) | 15 / 0 / 4 / 2 | 5.25 | 36 / 26 / 42 / 32 | 34.00 | 28.25 |
+| flexible, no binding (`soft0NoBind`) | 2 / 5 / 12 / 3 | 5.50 | 8 / 18 / 16 / 6 | 12.00 | 6.50 |
+
+| seed | rigid binding effect on recipient-parent births | flexible binding effect | flexible minus rigid effect |
+|---|---:|---:|---:|
+| 7 | +3 | +13 | +10 |
+| 8 | -6 | -5 | +1 |
+| 9 | -1 | -8 | -7 |
+| 10 | +7 | -1 | -8 |
+| mean | +0.75 | -0.25 | -1.00 |
+
+Flexible binding increases recipient-parent births over its own no-binding control in **one of four seeds**. Its mean
+effect is slightly negative, and its additional benefit relative to rigid binding also has mixed signs. With binding on,
+flexibility beats rigidity for recipient-parent births in one seed, ties in one and loses in two. This does not confirm the
+prediction from 45d. Four seeds do not prove the true effect is zero or negative; they do show the earlier four-seed pattern
+was insufficient grounds for promoting flexibility as a reliable ecological improvement.
+
+Binding does increase total capped births in every seed at both stiffnesses: mean +30 for rigid and +22 for flexible.
+Most additional births have producer parents. This is a population-level intervention, not a per-template causal effect:
+binding also changes population sizes, resource competition and physical attachment. The protocol measures productive
+recipient exchange at the population level; it cannot identify which individual birth was helped by a borrowed product.
+
+### 46b. Occupancy and fidelity do not rescue the primary prediction
+
+| binding-enabled arm | recipient occupancy, seeds 7 / 8 / 9 / 10 | mean host occupancy | mean original-block retention | exact capped parent-snapshot copies |
+|---|---:|---:|---:|---:|
+| rigid | 5.61 / 3.50 / 15.38 / 9.78% | 55.66% | 85.05% | 34 / 34 / 34 / 34 |
+| flexible | 21.84 / undefined / 15.14 / 7.28% | 55.56% | 78.51% | 34 / 22 / 36 / 29 |
+
+Flexible seed 8 has **zero armed capped non-producer site-samples throughout the primary interval**. Its occupancy is
+undefined, not zero; its recipient-parent births are zero. Among the three seeds with defined occupancy under both
+stiffnesses, flexibility increases occupancy only in seed 7. The generic summary's flexible occupancy mean of 14.75%
+uses just three seeds, while rigid 8.57% uses all four: those means cannot establish a replicated improvement. The summary
+now explicitly prints how many seeds have a defined recipient-occupancy denominator; the paired report prints the actual
+site-sample counts as well. No-binding occupancy is zero with nonzero denominators in every run.
+
+Of 164 rigid-binding capped births, 136 match a capped parent snapshot exactly, 25 have same-length changes and three
+have uncapped parent snapshots. Flexible binding gives 121 exact, 13 same-length changes and two unknown out of 136.
+There are no measured capped-parent length changes. These are observations at release, not proof of the mutation mechanism;
+unknown parent snapshots are never silently counted as faithful copies. Exact-copy counts improve in only one flexible seed,
+tie in one and fall in two, so an accuracy observation does not reverse the reproductive conclusion.
+
+### 46c. Decision, workflow and next discriminating hypothesis
+
+**Downgrade the flexibility lead.** Keep the existing controls and physics, but do not promote a new preset, enlarge this
+into an arms-race experiment, or assume mixed stiffness will now be selected. The next missing evidence is a function that
+helps the recipient under controlled physical conditions, not another occupancy increase. A separate mechanical-bracing
+probe is worth considering: retain product attachment but set `pLinkBare=1`, making docked-letter link probability equal
+with and without an attached product. This removes the existing programmed catalytic advantage while retaining geometry.
+Use matched attachment/no-attachment controls and a small copying assay before a population competition. Turning
+`catalysis=false` is **not** that control: it also removes mature-product binding. This new probe is unrun, not a result.
+
+The user's description of flexible polygons was already implemented: corner deformation plus restoration toward a rest
+shape. README now explicitly distinguishes stiffness from a hard deformation bound, and approximate pins from the exact
+`snapCorners` projection. No hard deformation clamp was added without evidence that one is needed.
+
+The new paired analyzer rejects incomplete batches/windows and unexpected arm differences, reconciles every raw birth
+against its CSV interval, preserves zero outcomes, and prints the four paired contrasts. Its fixture exercises missing and
+duplicate windows, mismatched raw counts, unexpected parameters, incomplete manifests and partial-window requests.
+During progress inspection, one preliminary report used unequal final intervals and was corrected immediately; no partial
+totals enter the tables above. Complete paired windows are required for final claims.
+
+**Validation and cost.** Sixteen completed runs, 800,000 steps, 80 validated windows; 2,404.063 process CPU seconds and
+900.240 wall seconds with at most four simulation workers. All four simulation-source hashes still match the launch
+manifest. CSV, manifest and raw birth log are retained. Every interval checked bond invariants, conserved block count and
+unchanged block types. All three product checks and the analysis fixture pass. The unchanged general suite was not rerun.
+The engine is unchanged from `d189ee2`; all five 1,500-step fingerprints match the earlier session exactly.

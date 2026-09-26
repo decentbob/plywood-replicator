@@ -75,6 +75,11 @@ assembly events; `product_parent_summary.js` reads the adjacent birth log to dis
 non-producers, and sequence changes. Shape switches live in `experiments/product_shapes.js`; they are experimental batch
 options, not standard viewer or `run.js` knobs. Summaries reject incomplete batches unless `--partial` is explicitly used.
 
+The four-arm flexibility control (46) has a pre-run plan in `experiments/flexibility_plan.md`.
+`node experiments/flexibility_summary.js experiments/out/PF_binding` validates the complete batch,
+reconciles raw births with every CSV window, checks the parameter contrast and reports paired binding
+effects. It preserves zero births and undefined occupancy when no recipient sites remain.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

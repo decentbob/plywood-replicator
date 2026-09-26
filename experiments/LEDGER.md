@@ -61,6 +61,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
     (44e, four seeds). Non-producer share rises mainly because hosts lose births. Products must survive the journey and bind
     usefully afterwards. Product durability alone gives a small transport lead without reducing total births (44e), not evidence
     of evolved complexity. Measure recipient occupancy and include a no-binding control before calling non-producers parasites.
+    Flexibility's recipient benefit in four reused seeds (45d) failed a fresh-seed binding control (46): mean recipient-parent
+    births 5.25 with flexible binding vs 5.5 without it; only one of four seeds improves. Binding benefits producers much more.
 
 ## Viability atlas (will a new world live?)
 
@@ -204,6 +206,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 45d | Product material compliance | Is flexibility alone enough to improve transfer? | `stiff1` 0.8, `stiff2` 0.8 vs 1; `productFray` 0.03 | lead | recipient occupancy 7.63% vs 1.45%; recipient-parent births 6.5 vs 4, both increase in 4/4 seeds; total births similar | product_exchange_summary.js (`PE_durable`, `PS_confirm`, 10k–30k) | flexibility × binding ablation, independent seeds, inherited mixed stiffness | reuses four matched historical controls; no new chemistry needed |
 | 45e | Shape without substitutions | Does mild bending still copy faithfully at pSoft 0? | `pSoft` 0, `fold1` 5, `fold2` 5, `stiff1` 0.8, `stiff2` 0.8 | works | 52/52 classifiable capped births exact; one parent snapshot only Q, fidelity unknown | product_exchange.js (`PS_exact`); product_parent_summary.js | separate snapshot differences from known copying errors | 2 seeds × 2 arms × 20k; post-hoc diagnostic, not long-run proof |
 | 38c | Proofreading in the jammed world | Does it rescue a meltdown at 5x mutation? | `proof` 0.5, old engine, dense | negative | both arms melt down; half the errors are length changes | PR_* | measure the error spectrum first | seed 1, stopped at 60–70k |
+| 46 | Independent flexibility control | Does flexibility improve recipient reproduction through binding? | `stiff1` 0.8 vs 1, `stiff2` 0.8 vs 1, `pBindP`, `productFray` 0.03 | negative | flexible recipient-parent births 5.25 vs 5.5 without binding, improves in 1/4 seeds; total births 34 vs 12 | product_exchange.js (`PF_binding`); flexibility_summary.js | controlled mechanical-bracing assay with pLinkBare 1 before another ecology | 4 fresh seeds × 4 arms × 50k; prespecified 20k–50k; fails to confirm 45d, not proof of zero effect |
 
 ## Knob index
 
@@ -271,7 +274,7 @@ the rows that used it). Rerun it after adding rows.
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
-| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive) |
+| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
@@ -289,7 +292,7 @@ the rows that used it). Rerun it after adding rows.
 | `pPMeltRun` | 44a (negative) |
 | `pProof` | 38a (works) |
 | `pReload` | 9 (negative), 14 (negative), 19b (inconclusive) |
-| `productFray` | 44e (lead), 45d (lead) |
+| `productFray` | 44e (lead), 45d (lead), 46 (negative) |
 | `proof` | 38a (works), 38b (lead), 38d (works), 38c (negative) |
 | `pSBind` | 40a (works), 40b (negative), 40c (negative) |
 | `pSMeltEnd` | 40a (works) |
@@ -315,8 +318,8 @@ the rows that used it). Rerun it after adding rows.
 | `spend` | 14d (negative) |
 | `stack` | 40a (works), 40b (negative), 40c (negative), 40d (inconclusive), 40e (negative), 40f (negative), 40g (negative) |
 | `stackHold` | 40b (negative), 40c (negative) |
-| `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works) |
-| `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works) |
+| `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative) |
+| `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative) |
 | `stiffA` | 15 (works), 15b (works) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `sun` | 3 (negative) |
@@ -330,8 +333,10 @@ the rows that used it). Rerun it after adding rows.
 ## Open gaps (worth trying, with the reason)
 
 - **Material compliance before more chemical rules** (45d): stiffness 0.8 improves recipient binding and reproduction in
-  all four matched seeds versus rigid durable products. Add the direct straight-flexible binding ablation and new seeds;
-  then test whether mixed product stiffness makes inherited composition/order matter. Shape switching alone remains mixed (45c).
+  four reused seeds, but the direct fresh-seed binding control fails to confirm the benefit (46). Test attachment as a
+  physical brace in a small copying assay with `pLinkBare=1`, removing the chemical probability advantage but retaining
+  binding. Compare attachment/no attachment under identical physics. Only a measured benefit would justify inherited
+  stiffness/order races. Shape switching alone also remains mixed (45c).
 
 - **Product survival and productive encounters** (44): durability permits a little delivery without removing genome turnover;
   forced release loses host function. Extend the matched durability assay before long arms-race runs. A lateral-bond-triggered

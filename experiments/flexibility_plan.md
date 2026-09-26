@@ -28,4 +28,10 @@ Command:
 node experiments/product_exchange.js --out experiments/out/PF_binding --steps 50000 --seeds 7,8,9,10 --arms durable,durableNoBind,soft0,soft0NoBind --workers 4
 node experiments/product_exchange_summary.js experiments/out/PF_binding.csv --after=20000
 node experiments/product_parent_summary.js experiments/out/PF_binding.births.jsonl --after=20000
+node experiments/flexibility_summary.js experiments/out/PF_binding
 ```
+
+The last command validates complete windows, reconciles every raw birth against the CSV,
+checks that arm parameters differ only in stiffness/binding, and prints paired effects.
+While a batch runs, do not compare whole-run totals from `--partial` summaries: different
+workers can have different final recorded intervals even within the same seed.

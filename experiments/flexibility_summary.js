@@ -74,9 +74,9 @@ if (require.main === module) {
   assert(process.argv.length === 3, 'usage: flexibility_summary.js PREFIX (fixed primary interval 20k–50k)');
   const { rows, contrasts, windows } = analyze(process.argv[2]);
   console.log(`Validated ${windows} windows against raw births and the four-arm parameter contrast. Interval: 20k–50k.`);
-  console.log('| arm | seed | capped births | recipient-parent births | exact | unknown parent | recipient occupancy |');
-  console.log('|---|---:|---:|---:|---:|---:|---:|');
-  for (const r of rows) console.log(`| ${r.arm} | ${r.seed} | ${r.capped} | ${r.recipientParents} | ${r.exact} | ${r.unknown} | ${r.sites ? (100*r.bound/r.sites).toFixed(2)+'%' : 'undefined'} |`);
+  console.log('| arm | seed | capped births | recipient-parent births | exact | unknown parent | recipient site-samples | recipient occupancy |');
+  console.log('|---|---:|---:|---:|---:|---:|---:|---:|');
+  for (const r of rows) console.log(`| ${r.arm} | ${r.seed} | ${r.capped} | ${r.recipientParents} | ${r.exact} | ${r.unknown} | ${r.sites} | ${r.sites ? (100*r.bound/r.sites).toFixed(2)+'%' : 'undefined'} |`);
   console.log('\nBinding effect on recipient-parent births (on minus off), paired within seed:');
   console.log('| seed | rigid | flexible | flexible minus rigid effect |\n|---|---:|---:|---:|');
   for (const r of contrasts) console.log(`| ${r.seed} | ${r.rigid} | ${r.flexible} | ${r.interaction} |`);

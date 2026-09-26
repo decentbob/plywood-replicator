@@ -85,6 +85,7 @@ experiments/product_latches.js   parked release/activation variants (44); experi
 experiments/product_shapes.js    experimental rest-shape switches (45), with accepted-bond diagnostics; standard engine unchanged
 experiments/product_shape_summary.js  actual bound/free wedge angles, assembly and binding events, occupancy and births
 experiments/product_parent_summary.js  parent/child production classes from raw births; distinguishes mutation from recipient reproduction
+experiments/flexibility_summary.js  complete four-arm comparison (46); validates raw counts, windows and parameters, prints paired effects
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -216,7 +217,30 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, later): product flexibility is the clearest mechanical lead
+## Handoff (2026-09-26, latest): flexibility's recipient benefit did not replicate
+
+Section 46 completes the direct stiffness × binding comparison on fresh seeds 7–10: 16 runs × 50k steps, with the
+20k–50k analysis and primary outcome specified before launch in `experiments/flexibility_plan.md`.
+
+- Flexible products with binding produce 15/0/4/2 capped offspring from non-producing parents, versus 2/5/12/3 without
+  binding. Mean effect -0.25 births; positive in only one seed. Rigid binding's effect is +0.75; the interaction is -1,
+  with mixed signs. The earlier four reused seeds in 45d did not establish a reliable recipient benefit.
+- Binding increases total births in every seed, mostly from producer parents: rigid mean 41 vs 11 without binding;
+  flexible 34 vs 12. This does not establish dependence or parasitism among recipients.
+- Flexible seed 8 has no armed capped recipient site-samples throughout 20k–50k. Occupancy is undefined, not zero.
+  Never compare occupancy means that silently exclude different seeds; summaries now show denominator availability.
+- Keep existing flexibility controls, but do not promote a preset or expand into an arms race. A better discriminating
+  next probe is attachment as a mechanical brace: use `pLinkBare=1` to remove the programmed catalytic link advantage
+  while preserving attachment, with matched no-binding controls. Begin with a small physical copying assay, not another
+  ecology sweep. `catalysis=false` removes binding too and is not the same ablation. This probe remains unrun.
+- The user's flexible-polygon idea already exists. Stiffness controls restoration, not an explicit maximum deformation;
+  `maxStrain` breaks eligible bonds by residual pin gap, not by shape deviation. README clarifies this; no engine change.
+- `flexibility_summary.js PREFIX` validates complete 20k–50k windows, all raw birth counts and the four-arm parameter
+  contrast, then reports paired effects. Partial progress summaries may have unequal endpoints even within one seed;
+  never use their whole-run totals as paired results. The new analysis fixture and three product checks pass; the general
+  suite was not rerun. All five default fingerprints are unchanged. Raw data and manifests are committed.
+
+## Previous handoff (2026-09-26, later): product flexibility was the clearest mechanical lead
 
 The user: continue where evidence is promising; SpudCell is interesting, only integrate it where useful. Section 45 tests
 assembly-triggered rest shapes instead. 34 completed runs (1.16M steps), plus a stopped 90k-window solver diagnostic.

@@ -49,5 +49,6 @@ for (const arm of [...new Set(rows.map(r=>r.arm))]) {
   const rs = rows.filter(r=>r.arm===arm), mean = k => {
     const xs = rs.map(r=>r[k]).filter(x=>x!==null); return xs.length ? xs.reduce((a,b)=>a+b,0)/xs.length : null;
   };
-  console.log(`${arm}, n=${rs.length}: births ${mean('births').toFixed(1)}, non-producer share ${pct(mean('mimicShare'))}, host occupancy ${pct(mean('hostOccupancy'))}, non-producer occupancy ${pct(mean('mimicOccupancy'))}, same block ${pct(mean('sameSite'))}`);
+  const recipientN = rs.filter(r=>r.mimicOccupancy!==null).length;
+  console.log(`${arm}, n=${rs.length}: births ${mean('births').toFixed(1)}, non-producer share ${pct(mean('mimicShare'))}, host occupancy ${pct(mean('hostOccupancy'))}, non-producer occupancy ${pct(mean('mimicOccupancy'))} (defined in ${recipientN}/${rs.length} seeds), same block ${pct(mean('sameSite'))}`);
 }

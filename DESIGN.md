@@ -400,6 +400,12 @@ Keep entries short: date, what changed, why, what evidence.
   in four matched seeds versus rigid products, without a new chemical rule. Exposed existing `stiff1`/`stiff2` in the viewer,
   default 1. Shape switches remain experimental: mild bends improve births in 3/4 seeds, but delivery does not reliably
   translate to recipient reproduction. Added physical-shape tests, parent/offspring analysis and incomplete-batch guards.
+- 2026-09-26. **Flexibility lead downgraded by its fresh-seed control (46).** The direct 2 × 2 stiffness/binding assay gives
+  recipient-parent births 5.25 with flexible binding versus 5.5 without, improving in only 1/4 seeds. Binding still benefits
+  total reproduction, mainly producers. Do not promote flexibility into a preset or larger arms-race experiment. Before
+  inherited stiffness races, test a physical function in isolation: attachment with `pLinkBare=1` retains geometry while
+  removing the designed catalytic probability advantage. This assay is unrun. Added validated paired analysis and explicit
+  occupancy-denominator reporting; README distinguishes existing restoring stiffness from a hard deformation bound.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
