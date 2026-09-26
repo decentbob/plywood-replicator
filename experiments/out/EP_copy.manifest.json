@@ -1,0 +1,52 @@
+{
+  "options": {
+    "out": "scratch/EP_copy",
+    "modes": "copy",
+    "seeds": "81,82",
+    "profiles": "square,opposed20",
+    "caps": "0",
+    "steps": 20000,
+    "workers": 4
+  },
+  "jobs": [
+    {
+      "seed": 81,
+      "profile": "square",
+      "mode": "copy",
+      "capFray": 0,
+      "steps": 20000
+    },
+    {
+      "seed": 81,
+      "profile": "opposed20",
+      "mode": "copy",
+      "capFray": 0,
+      "steps": 20000
+    },
+    {
+      "seed": 82,
+      "profile": "square",
+      "mode": "copy",
+      "capFray": 0,
+      "steps": 20000
+    },
+    {
+      "seed": 82,
+      "profile": "opposed20",
+      "mode": "copy",
+      "capFray": 0,
+      "steps": 20000
+    }
+  ],
+  "complete": true,
+  "completed": 4,
+  "node": "v24.6.0",
+  "started": "2026-09-26T14:56:29.363Z",
+  "sources": {
+    "../src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "end_protection.js": "d0296535bde19202f93d3942a4bb33669ce3c46fde9a76692d0b7d03175fb6b4"
+  },
+  "cpuSeconds": 28.563,
+  "wallSeconds": 9.132,
+  "finished": "2026-09-26T14:56:38.499Z"
+}

@@ -104,6 +104,10 @@ These assays use the ordinary engine. Row identity is recorded only by observers
 Their `_summary.js` analyzers distinguish exact copying by original intact offspring from reproduction of shorter
 fragments. Run `node experiments/offspring_analysis_test.js` to validate the committed datasets and provenance.
 
+`end_protection.js` tests capped copying and completed/unfinished row lifetimes. `end_protection_natural.js`
+replays capped copying to inventory protected unfinished ends (RESULTS 52). The `_summary.js` and
+`_analysis_test.js` files retain censored lifetimes and distinguish repeated snapshots from independent runs.
+
 ## The whole chemistry
 
 **The fundamental rule: locality.** A block reads only its own type and state, which of its sides are bonded, and

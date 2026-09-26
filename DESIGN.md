@@ -429,11 +429,23 @@ Keep entries short: date, what changed, why, what evidence.
   and destroy nine of ten original offspring. Energy bypass alone is mixed. No new rule: next measure whether
   existing end protection can preserve completed rows without retaining stalled partial rows. Count physical
   parent membership through turnover; a recycled unit ID is not survival of its previous assembly.
+- 2026-09-26. **End protection is not completion-specific (52).** Perfect caps protect a finished row and a
+  capped partial row whose other end remains docked. A matched detached partial row recycles. In ordinary capped
+  copying, all 21 unfinished row-samples lack a fray-eligible end, including six capless patches with both ends
+  docked. Caps are therefore not selective cleanup here. Keep the core unchanged and next measure formation
+  versus completion of separate growing patches. Existing undocking may change nucleation; breaking linked face
+  bonds already damaged fidelity in section 23 and should not be automatically restored.
 - 2026-09-21. Viewer rebuilt for visibility: zoom and pan, side colours on every square, bond ties, event rings and an event feed, and a default view zoomed on the seed strand. Reason: at the old zoom nothing could be seen happening even while births were being logged.
 
 ---
 
 ## 15. Ideas not yet tried
+
+**2026-09-26, growing patches versus completed rows (52).** End protection has now been tested: caps also protect
+unfinished rows, and two docked ends can protect a capless patch. Measure patch formation, growth and completion
+on individual templates under existing lone-monomer undocking before adding a release mechanism. Stronger
+pUndock can change how patches start but cannot undo an already linked anchor. A useful effect must increase
+exact completed copying, not merely lower the number of visible intermediates by preventing all assembly.
 
 **2026-09-26, end protection versus recycling (51).** Turnover can restore exact copying by original curved
 offspring, but erodes the eight-letter structure. Existing caps could protect a completed row while an exposed

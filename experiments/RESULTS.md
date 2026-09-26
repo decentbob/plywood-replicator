@@ -3326,3 +3326,113 @@ parameter-only contrasts and rejecting recycled IDs as intact parents. The analy
 counts, windows, birth/lineage accounting and source hashes (allowing Git newline conversion); malformed manifests,
 missing pairs, parameter changes and corrupted counters are rejected. The engine is unchanged and all five default
 1500-step fingerprints remain identical. The unchanged full 39-check suite was not rerun.
+
+## 52. Caps protect completed rows and unfinished intermediates alike
+
+### 52a. Capped curved rows can copy
+
+Following 51, test existing end protection before a population experiment. The prospective protocol is
+`end_protection_plan.md`; no engine or rule change. One active PAAAABBBBQ founder in 20x20, 60 A + 60 B +
+15 P + 15 Q, no E/U, pFray=0, pUndock=0.1, complementary pairing, stiffness 0.5 for all four types.
+P/Q remain square; A/B are square or opposed -20/+20-degree wedges. No offspring can rearm.
+
+| shape | exact PAAAABBBBQ copies at 20k, seed 81 / 82 | other births |
+|---|---:|---:|
+| square | 5 / 5 | 0 / 0 |
+| opposed wedges | 3 / 2 | 0 / 0 |
+
+All 15 births are exact generation-1 copies. This establishes copying viability in two seeds, not a rate
+advantage or fitness benefit from caps. Do not compare these totals directly with earlier eight-letter worlds:
+the sequence, material pool and world size differ.
+
+```sh
+node experiments/end_protection.js --out experiments/out/EP_copy --modes copy --caps 0 --steps 20000
+```
+
+### 52b. A protected free end plus one docked end blocks recycling
+
+Three prepared lifetime fixtures contain only their row material, no spare monomers, energy or spontaneous links:
+a completed inactive PAAAABBBBQ; an inactive PAAAABBB partial row whose last B remains DOCK on the matching A of
+an active PAAAABBBBQ parent; and the same partial/parent pair with that single face bond absent and the last B
+REPEL. All other partial units are REPEL. The incomplete row lacks two units. These are prepared states, not
+claims about their natural frequency. All material is conserved throughout a run.
+
+Use pFray=0.00003, pUnzip=1, capFray=0 or 1, seeds 81/82, both shapes, 50k. Cap-susceptibility pairs start with
+identical positions, internal states, bonds, types and RNG. Attached/detached pairs have identical material and
+geometry and differ only at the anchor and its DOCK/REPEL state. The completed fixture has 10 blocks, versus
+18 for the partial-plus-parent fixture; cross-fixture lifetimes are not a controlled density comparison.
+
+Primary outcome: first loss of an original target lateral bond. Reassembly of recycled IDs cannot restore its
+continuous-survival record. First-loss times happen to be identical across the two shapes for each seed; they
+are **not four independent stochastic observations**. An em dash means no loss by 50k, not an estimated lifetime.
+
+| prepared target | capFray | first original bond loss, seed 81 / 82 | target links remaining at 50k, seed 81 / 82 |
+|---|---:|---:|---:|
+| completed, 10 units | 0 | — / — | 9 / 9 |
+| completed, 10 units | 1 | 22,189 / 22,565 | 0 / 0 |
+| attached partial, 8 units | 0 | — / — | 7 / 7 |
+| attached partial, 8 units | 1 | 7,605 / — | 0 / 7 |
+| detached partial, 8 units | 0 | 11,074 / 11,299 | 0 / 0 |
+| detached partial, 8 units | 1 | 4,445 / 11,299 | 0 / 0 |
+
+Perfect caps preserve **both** completed rows and attached incomplete rows. Removing the partial row's one
+anchor exposes an ordinary end and permits turnover despite the cap at its other end. The protected attached
+cases never lose their anchor or free any target material. In fragile-cap seed 82, the parent changes and the
+original face bond breaks at 18,518 square / 22,925 curved, yet the target's lateral bonds survive to the endpoint;
+this remains a censored outcome. Parent susceptibility changes with the same cap knob, so this arm does not isolate
+the partial row's intrinsic lifetime. The raw `anchorLostAt` also records later breaks of that designated pair
+in initially detached runs; the summary uses it as an original-anchor lifetime only for initially attached cases.
+
+The protected fixture has a simple local explanation. One end cannot initiate fraying because it is a cap.
+The other cannot because it is DOCK and face-bound. Its lateral bond excludes the lone-monomer undocking rule,
+while its missing lateral neighbor prevents ordinary release. There is no FRAY source to start unzipping. With
+no spare monomers, energy, cutting or mechanical bond breaking enabled, no tested reaction opens an escape path.
+This conditional rule argument is stronger than merely observing zero losses in two seeds. It is not a claim
+that such a row must remain unfinished in a world where additional monomers can arrive.
+
+```sh
+node experiments/end_protection.js --out experiments/out/EP_lifetime
+node experiments/end_protection_summary.js experiments/out/EP_copy experiments/out/EP_lifetime
+```
+
+### 52c. Ordinary copying also leaves no exposed end to recycle
+
+Replay the four copying worlds exactly, retaining member IDs of completed births so they are excluded from the
+unfinished inventory. Sample every 5k through 20k. Births and every archived 10k statistic match. For each unlogged
+linked row, count ends that could initiate fraying if pFray were positive, under its actual state, face bonds and
+capFray=0. This is a counterfactual eligibility count; no turnover is enabled in these copying replays.
+
+| shape / seed | unfinished row-samples | with one cap and a docked end | capless, both ends docked | row-samples with an eligible fraying end |
+|---|---:|---:|---:|---:|
+| square / 81 | 6 | 4 | 2 | 0 |
+| square / 82 | 6 | 3 | 3 | 0 |
+| curved / 81 | 4 | 3 | 1 | 0 |
+| curved / 82 | 5 | 5 | 0 | 0 |
+
+These 21 row-samples are repeated observations within four worlds, not 21 independent trials. Typical examples
+are PAAAABBBB with its final unit still docked, and an internal AAA patch with DOCK units at both ends. The latter
+has no caps at all and is nevertheless protected from initiating end-fraying. Every inventory reconciles to the
+150 original letters, including complete rows, free monomers and isolated docked monomers. Protection from this
+one reaction does not prove kinetic arrest: the same worlds continue completing exact copies.
+
+```sh
+node experiments/end_protection_natural.js --out experiments/out/EP_natural --reference experiments/out/EP_copy.runs.jsonl
+node experiments/end_protection_summary.js experiments/out/EP_natural
+node experiments/end_protection_test.js
+node experiments/end_protection_analysis_test.js
+```
+
+**Decision.** Caps are not selective cleanup in this regime. They preserve finished material but also remove
+one of the ways incomplete material could recycle; docking can protect the other end. Stop before a capped
+population sweep. The next useful measurement is the formation and completion of separate growing patches on
+one template, including whether stronger existing lone-monomer undocking changes that balance. Measure joined
+patches and completion times before proposing a release mechanism. Section 23 already found that breaking face
+bonds inside ongoing copies causes fragments and copying errors; do not reinstate that rule casually.
+
+**Validation and cost.** Four copying runs, 24 lifetime fixtures and four exact replays: 1.36M steps, 146.595
+process CPU seconds. Full parameters, source hashes, raw birth records, target IDs, original-bond losses and
+inventories are retained. Tests check actual wedge curvature, observer neutrality including saved RNG state,
+matched initial conditions, anchor chemistry, exposed-end recycling and conserved material. The analyzer checks
+paired parameters, first-loss records, inventories and raw counts; malformed manifests, missing shape controls,
+parameter changes and count corruption are rejected. All five default 1500-step fingerprints remain unchanged;
+core code, chemistry and presets are unchanged. The full 39-check suite was not rerun.

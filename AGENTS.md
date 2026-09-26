@@ -96,6 +96,9 @@ experiments/curved_fuel_analysis_test.js  validates all section-50 batches, prov
 experiments/offspring_recovery.js  exact section-50 replay with member IDs, per-row rearming and material inventories (51)
 experiments/offspring_forks.js  identical-state energy/turnover diagnostic; _summary.js and _test.js alongside both assays
 experiments/offspring_analysis_test.js  validates section-51 lineage, material partitions, arm contrasts and source hashes
+experiments/end_protection.js  capped copying viability and matched completed/attached/detached lifetime fixtures (52)
+experiments/end_protection_natural.js  exact copying replays with unfinished-row end-fraying eligibility inventories
+experiments/end_protection_summary.js  complete paired analysis; _test.js and _analysis_test.js validate assays and data
 experiments/peek.js   quick look at any birth log, finished or running: births, length, top sequences per window, --has=ABA
 experiments/capped.js, caplen.js, letters.js   capped-genome worlds (33, 35): genes per window, length, letter make-up
 experiments/stacks.js  the standing population of a saved world (--save): rows, stacks, heights, letters by sequence (40)
@@ -227,7 +230,30 @@ so the number of genes follows the number of designed pressures. Graded function
 populations of 20 to 100 genomes (regularity 10). Strong, self-renewing pressures come from ecology (parasites), which is where
 open-ended complexity is most likely to start.
 
-## Handoff (2026-09-26, latest): turnover can restore exact descendant copying, but destroys the rows
+## Handoff (2026-09-26, latest): caps also protect unfinished rows; docking closes the other escape route
+
+Section 52 tests the end-protection idea with existing rules only. Protocol: `end_protection_plan.md`.
+
+- PAAAABBBBQ copies exactly in the one-founder/no-energy assay: seeds 81/82 give 5/5 square and 3/2 curved
+  copies by 20k. This is two-seed viability, not a cap fitness advantage or a direct comparison to earlier worlds.
+- Prepared lifetime fixtures, pFray=0.00003,pUnzip=1, capFray=0/1: perfect caps preserve both completed rows
+  and attached PAAAABBB intermediates for 50k. Remove the partial row's single face anchor and it loses its
+  first original lateral bond at 11,074/11,299 steps even with capFray=0. Both shapes show the same first-loss times.
+- The protection is local: the free end is a cap; the other is linked DOCK, excluded from fraying and lone
+  undocking, yet missing the neighbor required for release. No spare monomers exist in this fixture. Its closed
+  reaction paths do not imply permanent arrest in a world with additional monomers. Fragile-cap seed 82's attached
+  row retains its lateral bonds despite losing its anchor; keep this censored control visible.
+- Exact replays of ordinary copying show 21 unfinished row-samples: 15 cap-ended/one-anchor and six capless/
+  two-anchor. All lack an end eligible to initiate fraying. These are repeated snapshots, not independent samples,
+  and copies still complete in these worlds. Every 150-letter inventory and archived birth/statistic reconciles.
+- 32 runs including four replays, 1.36M steps, 146.595 CPU seconds. Raw IDs/losses/inventories and provenance
+  committed; assay/analyzer tests pass. Core/default fingerprints unchanged; full 39-check suite not rerun.
+- **Next:** measure the formation and completion of separate growing patches on one template. Existing stronger
+  pUndock changes lone-monomer survival and may affect this balance, but does not release an already linked anchor.
+  Caps have not earned a population sweep. Section 23's mechanical breaks inside copies caused fragmentation/
+  copying errors; do not automatically resurrect that rule as cleanup. No new chemistry or preset was introduced.
+
+## Previous handoff (2026-09-26): turnover can restore exact descendant copying, but destroys the rows
 
 Section 51 diagnoses section 50 without adding rules. All worlds/seeds are reused, not fresh confirmation.
 
