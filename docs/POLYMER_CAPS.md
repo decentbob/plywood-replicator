@@ -1,120 +1,98 @@
-# Integrated polymer caps: revised cell candidate
+# Two half-cells joined temporarily by their copying faces
 
-2026-09-27, following the user's clarification. **Working sides are not limited
-to four.** That is an implementation detail of today's core, not a design
-constraint. The separate-J preference in `BLOCK_ARCHITECTURES.md` was too strongly
-based on that detail. That byte-hashed historical brief and RESULTS 81 remain
-unchanged; this memo supersedes their architectural preference. No experiment
-or new chemistry is claimed here. ROADMAP is the current queue.
+2026-09-27, corrected after the user's drawing clarification. This is the current
+Q8 candidate. The previous version of this memo mistakenly put both curved arcs
+on one chain. The user means two separate D-shaped assemblies, each with its own
+chain as the straight boundary and its own polymer arc. No physical assay or
+new chemistry has been implemented yet. ROADMAP controls execution.
 
-## The small candidate
+## Topology and sequence
 
-Keep ordinary A/B copying tiles. Give an integrated cap enough polygon edges
-for an inward rail connection, a copying contact, two rim connections and fuel
-access. These are five functional ports; the actual polygon can have additional
-inert edges to provide clearance. Extra ports remove a connectivity restriction,
-but their positions and mating orientations still have to fit physically.
-
-Use two complementary cap variants, C_L and C_R, with the rail attachment on
-opposite local sides. They are a reasonable way to encode end polarity, as with
-existing P/Q. Left/right describe the drawn pose; runtime reads immutable port
-labels, not world directions. Antiparallel copying rotates the complementary
-cap, so check the resulting rim orientation as well as the rail orientation.
-Two types are a design choice, not a proof that a rotatable single type cannot
-work. They prevent specified unwanted bond matches; they do not by themselves
-prevent steric obstruction or premature rim closure.
+Start with one prepared half-cell: ordinary chain blocks form the straight edge;
+special caps form its two corners; ordinary rim polymers form its curved edge.
+Its copying faces point outward, away from its own curved arc. Copying recruits
+another chain on that exposed side, including complementary cap blocks.
 
 ```text
-           W—W—W—W
-         /         \
-       C_L—A—B—C_R
-         \         /
-           W—W—W—W
+                W—W—W
+              /       \
+             P—A—B—A—Q       original straight boundary
+             : : : : :       temporary copying contacts
+             Q—A—B—A—P       newly assembled straight boundary
+              \       /
+                W—W—W
 ```
 
-Connectivity sketch only: no validated polygon outline or division sequence.
-W is an ordinary rim segment with two compatible end ports. It may be possible
-to use the cap variants themselves as rim material, giving a smaller alphabet;
-then their extra rail/copy ports remain present along the rim and may nucleate
-unwanted structures. Do not silently disable those sites using an observer's
-classification of which cap is a strip endpoint. A separate W type avoids that
-particular ambiguity and remains an option, not a mandated extra type.
+W denotes rim material. Solid strokes show within-assembly connections; colons
+show the temporary face bonds. P/Q identify complementary cap types, not global
+left/right. The lower caps are rotated relative to the upper ones. The sketch
+is connectivity, not a validated polygon packing or an animation of outcomes.
 
-The core will need additional-side support for this candidate. Scope that work
-to an isolated polygon assay first and preserve default behavior. Neither four
-ports nor eight corners is a user-imposed upper bound. No engine-wide rewrite
-or extra chemical state is justified merely by choosing a new block outline.
+The second curved arc grows from free conserved rim blocks on the far side of
+the new chain. It may close while copying contacts remain or after ordinary
+chain release. Breaking those temporary contacts should leave two independent
+D-shaped assemblies. Each can in principle repeat the same outward copying
+operation. Exact semicircular shape is optional; the essential feature is a
+separate curved boundary attached to each straight chain.
 
-## Growth can be simple; specify which kind
+**There is no shared old rim to split.** The parent's closed arc need not enlarge
+or open to produce this offspring. The daughter constructs its own arc from bath
+material. RESULTS 81's fixed-membership single-cycle cut/rejoin accounting does
+not test this pathway and is not an admission gate for it. It remains valid
+historical accounting for the different topology that was actually enumerated.
 
-At a free rim end, a nearby compatible free block binds and exposes its other
-end. That is ordinary local end growth using conserved bath material. Fixed
-curvature can turn the growing rim away from the copying region; growth is not
-guaranteed to close around the right contents.
+## Blocks and local actions
 
-A closed two-port rim has no free ends. A third attachment to a saturated rim
-block makes a branch, not a longer perimeter. Continuing to enlarge such a rim
-requires opening a bond and sequential attachment/reclosure, or a distinct
-growth topology. There must be no primitive that inserts a new block into an
-occupied bond or shifts the whole rim to make room. Existing flush edge pins
-also do not provide a stretchable gap automatically.
+- A/B: retain ordinary chain copying, lateral joining and local release rules.
+- P/Q variants: each carries one inward chain port, one rim-attachment port,
+  a complementary copying port and, if required, a fuel port. Each cap connects
+  to one curved arc, not both upper and lower arcs. Extra polygon sides remain
+  allowed for geometry; four is not a user-imposed limit. Cap complementarity
+  and actual rotated geometry must place each arc opposite its copying face.
+- W: two end ports for local end growth and closure by compatible ends meeting.
+  Start with one rim type with complementary end labels; fixed curvature or
+  flexibility is a proposed mechanical property, not a ring-completion rule.
 
-After strip copying, two strips attached to one rim still form one connected
-assembly. A candidate division pathway must give each strip its own wall
-continuation and separate them through incident-bond changes. The prior audit's
-fixed-membership cut/rejoin bound describes one topology only; it neither proves
-that a growing-rim route is complicated nor supplies that route. A small rule
-set may suffice. A retained common wall, open fragments and inaccessible copies
-must remain possible recorded outcomes rather than being repaired by setup.
+Association reads immutable contacting port labels and actual geometry. Each
+block can change its own state or request an incident bond change. Runtime must
+not label caps or W blocks by parent, half-cell, correct position or ancestry.
+No primitive inserts a block into an occupied bond, creates material, schedules
+a division, or commands an entire arc to move. A closed daughter boundary emerges
+only if growing ends meet and bind under the same local rules.
 
-## Try geometry before adding a timing mechanism
+## Why timing need not be the first mechanism
 
-First place the rim ports and initial rim segments outward of the cap's copying
-contact. Test copying access with rim binding available throughout. Growth may
-be harmless in that layout, eliminating the need to delay it.
+Both arcs should lie behind their respective chain copying faces. In that
+layout concurrent arc growth might leave chain assembly and release accessible.
+Begin without the previously suggested copy-face-occupancy gate. Closing after
+release is explicitly allowed, so no completion signal or synchronized closure
+is required by the architecture. A separated chain without its arc is an
+unfinished descendant, not a completed half-cell or an automatic failure.
 
-If cap-local recruitment obstructs copying, a minimal candidate gate is:
+If a specific contact conflict occurs, compare a minimal local gate only against
+that measured conflict. Do not preemptively add a relay or cap clock. Ordinary
+release is a proposed reuse of existing chemistry, not yet evidence that attached
+arcs preserve it. Accidental polymer bridges between the two sides would prevent
+separation and must be counted rather than forbidden by an ancestry check.
 
-```
-accept a new rim contact only if my rail port is bonded
-and my copying port is unoccupied
-```
+## Next small test
 
-This reads only the cap's own bonds, changes only eligibility for an incident
-contact, adds no mutable state and retains existing rim bonds. It prevents an
-unattached cap from starting rim recruitment and suppresses recruitment at the
-cap while its copying face is occupied. It is a hypothesis to test, not a
-guarantee of useful timing: the rail bond can exist before the rest of a strip
-assembles; a free copying face can mean detachment or failure, not completion;
-an already formed rim can still block incoming material.
+Freeze actual cap shapes and ports for a paired-end fixture: each cap has its
+immediate ordinary chain neighbor, one rim stub and fuel access as needed.
+Check both P/Q orientations, actual-corner collision exclusion, copying access,
+and release with the rim neighbors behind their own chain faces. Compare the
+same inventory with rim stubs unbound. The old four-stub/two-cap preparation
+represented the mistaken two-rim-ports-per-cap design and is superseded.
 
-Crucially, this gate does **not** stop a distant W tip growing. Doing that would
-need a signal propagated through previous-pass side buffers, with propagation
-and withdrawal checked, or another genuinely local physical cause. No relay is
-admitted now. A cap must never read “the chain has finished replicating.”
-More ports and simple side-dependent behavior are allowed; a whole-cell schedule
-hidden in many local states is still contrary to intent.
+Then prepare one complete D-shaped seed plus conserved free material and test
+ordinary chain copying together with new-arc growth. Measure detached complete
+chains, partial/closed arcs, persistent cross-links, rearming and descendants
+that repeat both operations. Do not require rim closure before release. A
+bare-chain equal-material control distinguishes an added boundary from a copying
+improvement. Prepared seed construction is not autonomous acquisition.
 
-## First physical question
-
-Specify a pair of complementary integrated caps with their immediate rail,
-rim and fuel neighbors. A ten-block prepared fixture (two caps, two rail tiles,
-four rim stubs, two fuel blocks) can expose simultaneous-contact crowding.
-Freeze polygon coordinates and all port assignments before outcomes. Check both
-complementary orientations, actual corners, collision-free approach and release,
-and the true copying placement of neighboring ordinary tiles. Compare with the
-same cap shapes/inventory but rim bonds absent. It is a prepared geometry test,
-not a dividing cell; rates, seeds and horizon are not frozen in this memo.
-
-Then test ordinary end growth with copying in the same small world, initially
-without a timing gate. Add the gate only if a measured local conflict warrants
-the comparison; keep the ungated control. Use accepted body motion for exploration
-and individual kicks/solver controls for promising mechanics. Keep material
-inventory matched, and do not turn shape changes into selected-position memory.
-
-Before a cell-cycle batch, specify a literal local pathway for wall growth,
-reclosure and separation, with exposed copying/fuel access and replenishment
-from conserved free material. Test whether both resulting assemblies repeat it.
-That is the proposed simple cell's reproductive closure; useful retention and
-inherited variation follow as separate questions. The open-frame alternative
-remains available if a complete rim adds cost without useful function.
+Open uncertainties are concrete: cap/arc clearance, arc length and curvature
+compatible with the chain span, tip encounter and closure, monomer/fuel access,
+and whether whole half-cells renew rather than only their chains. No rate, seed,
+horizon or success gate is frozen yet. Use a proportional plan before simulation,
+accepted body jostling for exploration, and targeted individual-kick/solver checks.

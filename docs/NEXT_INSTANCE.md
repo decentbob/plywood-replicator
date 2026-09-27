@@ -1,25 +1,27 @@
 # Next-instance handoff — 2026-09-27
 
-Read [ROADMAP](../ROADMAP.md), the sole current queue. The user clarified that
-blocks are not limited to four sides and proposed integrated polymer caps with
-two end polarities. This supersedes the separate-J preference from `b890d63`.
-The explicit clarification is now in AGENTS and DESIGN.
+Read [ROADMAP](../ROADMAP.md), the sole current queue. The user corrected the
+Q8 drawing: TWO separate D-shaped half-cells. Each has its own chain as the
+straight boundary and its own polymer arc between special end caps. Copying
+faces point outward. The daughter builds a separate arc from free material;
+ordinary chain face release separates the halves. Closure may occur after
+release. This replaces the mistaken shared-rim interpretation from `3ee2bdc`.
 
-[POLYMER_CAPS](POLYMER_CAPS.md) is the current design memo. Give C_L/C_R enough
-ports for inward rail, copy, two rim contacts and fuel; extra sides are allowed.
-Two cap types encode local polarity, but actual antiparallel-copy orientations
-must fit. End growth can be simple; a closed rim needs an explicit enlargement
-route, and copying inside a common rim does not itself produce two cells.
+[POLYMER_CAPS](POLYMER_CAPS.md) now depicts that topology. Each cap needs ONE arc
+port, not two. More working sides remain allowed; the four-port implementation
+is not a design limit. No shared old wall needs cutting, enlargement or a
+programmed division sequence. RESULTS 81's fixed-membership single-cycle audit
+remains unchanged but is not a gate for this different growth pathway.
 
-Next: freeze an isolated integrated-cap geometry fixture, including adjacent
-ordinary tiles, rim stubs and fuel, before growth chemistry. Test spatial
-clearance first with no timing gate. A candidate gate based on own rail occupancy
-and free copying face only affects recruitment at the cap; it neither stops
-remote polymer tips nor detects completed copying. No relay or cell schedule
-is admitted. The physical plan, rates, seeds and horizon are not frozen yet.
+Next is Q8a: freeze actual cap polygons/ports and a small paired-end geometry
+fixture with adjacent ordinary tiles, one rim stub per cap and fuel access.
+Check both complementary cap orientations and actual copying/release clearance.
+Then test new-arc end growth/closure alongside copying without a timing gate;
+closure after release is allowed. Count detached chains, incomplete arcs,
+complete half-cells, cross-links and descendants that rebuild their own arcs.
+No ancestor matching or organism-level completion check is permitted.
 
-The old brief, topology plan/runner and raw RESULTS 81 evidence are byte-hashed
-and unchanged. Their four-port restriction is historical implementation scope.
-This slice adds design clarification only; no experiments, core modifications,
-physics-suite or fingerprint reruns. Q7b remains deferred; old failures remain
-failed. No task-owned simulation or subagent is active.
+This slice corrected documentation only. Physical plan, seeds, rates, horizon
+and gates are not frozen. No experiments or core modifications; full physics
+suite/fingerprints skipped. Historical hashed evidence remains unchanged.
+Q7b is still deferred. No task-owned simulation or subagent is active.

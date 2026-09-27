@@ -13,21 +13,22 @@ status pointer, not a second queue.
 
 ## Current evidence and next slice
 
-**Q8 clarification: integrated polymer caps, with more working sides allowed.**
-The user explicitly rejects a four-side design limit. The revised
-[polymer-cap memo](docs/POLYMER_CAPS.md) takes direct C_L/C_R caps first: inward
-rail, copy, two rim contacts and fuel, with extra polygon sides as needed.
-The earlier [portfolio](docs/BLOCK_ARCHITECTURES.md) and RESULTS 81 remain
-historical; their port counts do not justify preferring a separate J under this
-clarification. End growth is distinct from enlargement of a closed rim and from
-division. No new chemistry or physical result is claimed. No simulation is active.
+**Q8 correction: two independent half-cells, joined by temporary copying bonds.**
+The user's clarified design is in the [polymer-cap memo](docs/POLYMER_CAPS.md).
+Each chain is the straight boundary of its own D-shaped assembly; special caps
+connect its ends to its own curved polymer arc. A daughter chain copies outward
+from the seed and grows a separate arc, possibly closing after ordinary chain
+release. No shared old rim has to split or enlarge. Each cap needs one arc port,
+not two; more working sides remain allowed. The earlier portfolio and RESULTS 81
+addressed a different topology. Their fixed-rim cut/rejoin bound is not a gate
+for this route. No chemistry or physical result is claimed; no simulation is active.
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8a: integrated-cap geometry and copying access | Freeze actual polygons/ports and a small paired-cap fixture, including adjacent ordinary tiles, rim stubs and fuel. Allow more working sides in an isolated assay. Check both complementary orientations, approach/release, actual exclusion and pin residuals against the same unbound rim material. |
-| 2, only if access passes | Local polymer growth alongside copying | Test ordinary end growth without timing gates first. A cap-local occupancy gate is a candidate only for a measured conflict; it cannot halt distant tips or detect completion. Specify wall enlargement/reclosure/separation as literal incident-bond operations before a cell-cycle batch. |
-| 3, only after a local cycle is specified and passes | Reproductive closure and useful inheritance | Both resulting assemblies must repeat acquisition, copying, wall growth and separation from conserved free material. Charge rim costs, compare equal-material independent strips, and measure retained function/variant transmission through turnover. |
+| 1 | Q8a: half-cell cap geometry and copying access | Freeze polygons/ports and a paired-end fixture with one rim stub per cap, adjacent ordinary tiles and fuel access. Both arcs must project behind their own copying faces. Check complementary orientations, approach/release, actual exclusion and pin residuals against the same unbound rim material. Extra working sides are allowed. |
+| 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
+| 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
 No Q8 physical plan is frozen. The brief's alternatives are a design portfolio,
