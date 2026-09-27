@@ -1,0 +1,5 @@
+seed,sequence,profile,grip,births,detached,exact,founderChildren,primary,earlyPrimary,secondCycle,full,persistent5k,censored5k,lengthChanged,otherEight,intactFounders,unfinished,fuel,meanBend
+201,AAAABBBB,opposed20,true,10,10,2,2,0,0,0,0,2,0,8,0,1,11,23,19.314804808497236
+202,ABABABAB,opposed20,true,19,19,9,9,0,0,0,0,5,1,10,0,0,3,28,5.144136249212588
+202,AAAABBBB,opposed20,true,7,7,3,3,0,0,0,0,3,0,3,0,1,13,30,19.321603158520148
+201,ABABABAB,opposed20,true,17,17,9,9,0,0,0,0,3,2,7,0,1,16,36,5.367917432435087

@@ -4944,3 +4944,145 @@ reproduce. Fix preparations and an early viability gate before running. Uptake
 alone is insufficient; neither added states nor further rate tuning is a rescue.
 P2 still requires physical turnover evidence, and P1's failed confirmation remains
 parked. These are prepared-function tests, not claims of evolved complexity.
+
+## 66. Equal-composition arrangements renew descendants, but miss the fixed benefit gate
+
+**2026-09-27, ROADMAP P3.** `sequence_shape_plan.md` fixes a comparison of
+AAAABBBB and ABABABAB under existing complementary copying, fuel and turnover.
+No new reaction, state, type or physics mechanism is introduced. Each 18×18 world
+contains 60 A, 60 B and 40 U (size 1.2), with four prepared eight-unit rows.
+Founders start **active**; offspring must acquire fuel normally. Unlike section
+50's inactive bootstrap and section 51's late intervention, slow turnover
+(`pFray=0.00003,pUnzip=1`) operates from time zero. Other relevant settings are
+`pUndock=0.1,pSoft=0,pReloadU=0.002`, stiffness 0.5, body jostling and four passes.
+
+Cross both sequences with square/opposed20 (-20/+20 degrees) and `pGrip=0.2/0`.
+Grip-off controls retain all fuel material. Same-seed arms share bath generation
+and composition, but seed arrangement and conditional RNG consumption differ;
+later contacts are not event-matched. The independent replicate is the world.
+
+### Measurement and viability
+
+The observer captures each unit's physical parent when it releases. An exact
+lineage requires the reversed-complement sequence, reverse member mapping to
+one still-intact parent, disjoint child material, and all child face bonds free
+at its logged birth. A row is retired at its first fray or actual letter-lateral
+bond edit; reusing its block IDs cannot restore its identity. Primary outcome:
+distinct exact offspring that fully rearm and produce an exact detached child
+before retirement. Stock generation numbers and parent strings do not define it.
+Full arming can precede whole-row birth. The full-face-detachment criterion is
+conservative: it can exclude a row already recruiting material on its own face,
+as well as a row retaining an old attachment. Those cases are not called deaths.
+
+The first pilot had a measurement defect: the observer treated a fuel particle's
+L/R contact to a letter's K side as a lateral edit to the letter. Dynamics were
+unchanged, but parent lifetimes and lineage counts were invalid. The rejected
+four 20k records, manifest and exact source remain in
+`out/SS_observer_rejected_20260927/`. After checking each endpoint's type and side,
+a regression fixture covers both link orientations and unbinding. Rerunning
+the same four worlds gives exactly the same final physical-state hashes.
+This correction is not another independent sample or a biological gate failure.
+
+Corrected viability seeds 201/202, opposed20/grip-on, 20k: AAAABBBB produces
+2/3 exact founder children and ABABABAB 9/9. Both pass the prospective initial
+copying gate; none has a fully rearmed exact offspring by 20k. Proceed with fresh
+seeds 203/204, all eight arms, 100k. No rate, horizon or threshold is retuned.
+
+### Fresh screen
+
+Paired entries below are **203 / 204**. Exact output includes all observed depths
+of the original exact lineage; second-cycle output has depth at least two.
+Unfinished inventory counts letters in linked, unregistered rows containing a
+docked unit at 100k. All 120 letters reconcile in every 100-step snapshot.
+
+| arrangement | shape / grip | all births | exact lineage output | reproducing rearmed offspring (primary) | second-cycle output | unfinished letters |
+|---|---|---:|---:|---:|---:|---:|
+| AAAABBBB | square / on | 68 / 66 | 14 / 11 | 1 / 1 | 2 / 3 | 16 / 15 |
+| AAAABBBB | square / off | 33 / 48 | 4 / 8 | 0 / 0 | 0 / 0 | 0 / 0 |
+| AAAABBBB | opposed20 / on | 68 / 55 | 11 / 2 | 2 / 0 | 3 / 0 | 5 / 20 |
+| AAAABBBB | opposed20 / off | 30 / 37 | 16 / 9 | 0 / 0 | 0 / 0 | 0 / 0 |
+| ABABABAB | square / on | 74 / 84 | 11 / 12 | 0 / 0 | 0 / 0 | 23 / 25 |
+| ABABABAB | square / off | 22 / 40 | 12 / 17 | 0 / 0 | 0 / 0 | 0 / 0 |
+| ABABABAB | opposed20 / on | 56 / 58 | 14 / 15 | 3 / 3 | 4 / 6 | 17 / 39 |
+| ABABABAB | opposed20 / off | 12 / 15 | 7 / 8 | 0 / 0 | 0 / 0 | 0 / 0 |
+
+ABABABAB reaches exact lineage depth three in both opposed20/grip-on worlds:
+two depth-three births in 203, one in 204. All six productive parents in those
+worlds were born by 50k; this is not a late-cohort denominator change. Exact
+offspring fully rearmed at some time are 5/6 there, versus 0/0 with square
+geometry; AAAABBBB has 2/1 opposed20 and 3/3 square. Every grip-off world has
+zero fuel use, fully rearmed offspring and primary output. Its stock births
+come from the prepared active material and subsequent physical histories;
+they are not fuel-independent renewal of an intact exact offspring lineage.
+
+**The fixed promotion gate fails.** Alternating-minus-clustered primary output
+is +1/+3 in opposed20. The plan requires at least +2 in **both** seeds, in
+addition to >=2 productive offspring, a stronger contrast than square geometry,
+and >=2 improvement over grip-off. Seed 203 fails the between-sequence minimum.
+The opposite sequence cannot pass either. Keep the positive matched-control
+differences and the failed full criterion; do not lower the threshold afterward.
+
+### Shape, material and persistence
+
+The shape setting actually acts. Mean absolute angle between adjacent face
+normals, pooled across intact tracked joints at 100-step samples, is
+17.35/17.00 degrees for opposed20 AAAABBBB and 5.06/4.77 for ABABABAB with grip.
+Square values are 4.69/4.80 and 4.91/4.63. These are survivor- and time-weighted
+measurements of deforming rows, not isolated rest shapes or independent contacts.
+Opposed20 fuel use is 188/185 versus 247/238; square use is 249/223 versus
+248/268. Uptake totals alone do not predict exact renewal.
+
+All prepared founders lose their original organization in all sixteen worlds.
+Opposed20/grip-on short births are 56/51 of 68/55 for AAAABBBB and 34/39 of
+56/58 for ABABABAB. No longer-than-eight or changed-sequence eight-letter birth
+occurs. Same-sequence births with incomplete/retired/mixed parent provenance
+are retained but excluded from the exact lineage, not called substitutions.
+Stock births exceed the strict face-detached count in six grip-on worlds
+(square AAA: 67/64 detached; square ABA: 70/81; opposed20 AAA: 68/52;
+opposed20 ABA: 56/57). All grip-off births meet the detachment check.
+
+At 100k, only opposed20/grip-on ABABABAB seed 204 retains intact exact descendants:
+four, of which three have fully rearmed. It has 15 free letters and 39 in
+unfinished rows. All other grip-on exact lineages have lost their tracked intact
+rows. There are no still-intact exact births with less than 5k follow-up at the
+horizon; raw lifetimes retain all earlier losses and censoring. This is finite
+descendant renewal, not sustained preservation of the eight-letter organization.
+
+### Reproduction, validation and decision
+
+```sh
+node experiments/sequence_shape.js --out experiments/scratch/SS_viability_fixed_20260927 --seeds 201,202 --profiles opposed20 --grips 1 --steps 20000 --workers 4
+node experiments/sequence_shape.js --out experiments/scratch/SS_screen_20260927 --seeds 203,204 --steps 100000 --workers 4
+node experiments/sequence_shape_summary.js experiments/out/SS_viability_fixed_20260927
+node experiments/sequence_shape_summary.js experiments/out/SS_screen_20260927
+node experiments/sequence_shape_test.js
+node experiments/sequence_shape_analysis_test.js experiments/out/SS_screen_20260927
+node test.js --match='mass is conserved|processive fraying:|compCopy:|grip and pocket:'
+node tools/fingerprint.js 1500
+```
+
+Completed raw JSONL, CSV and manifests are archived with those stems. Manifests
+record exact commands, parameters and source hashes; runs retain release/rearm
+events, lateral edits, row lifetimes, sampled material/shape, birth logs and full
+final states. Corrected viability costs 45.672 CPU seconds and the screen
+833.672: **20 valid worlds, 1.68M steps, 879.344 CPU seconds**. Including the
+rejected observer pilot gives 24 runs, 1.76M steps, 927.969 CPU seconds. Tests and
+analysis are excluded from these costs; no more than four simulation workers ran.
+
+Observer tests verify exact dynamics/RNG neutrality, state continuation (excluding
+the pin-cache rebuild counter), matched grip ablation, conservation, physical
+parent registration, partial-rearming exclusion and rejection of recycled IDs.
+The analyzer validates job coverage, sources, initial/final states, immutable
+types, counters, per-unit release histories, row retirement, primary metrics and
+material partitions, and rejects corrupted/missing records. All four selected
+core invariant checks pass; all five 1500-step default fingerprints match the
+audit baseline exactly. The full 39-check suite was not rerun; the engine is unchanged.
+
+**Disposition:** exact descendant renewal is demonstrated in prepared worlds,
+including three generations under the tested motion model. The inherited-benefit
+screen is negative by its unchanged gate. No evolved novelty, sustained selection,
+solver-independent shape advantage or new core mechanism is claimed. Park this
+preparation; do not add states, tune rates or run extra confirmation to rescue it.
+The full gate did not earn P0 solver/individual-kick comparisons. P2's distinct
+polygon-port feasibility and conserved growth/turnover question is next, including
+the narrow recycling competitor. P1/P4 remain parked; C1 is optional closure.

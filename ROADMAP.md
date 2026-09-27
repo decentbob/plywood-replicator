@@ -1,16 +1,17 @@
-# Research priorities — 2026-09-26
+# Research priorities — 2026-09-27
 
 **Goal:** useful, heritable organization and eventually cumulative complexity arising from
 simple fixed local rules on conserved physical parts. This is the current queue. Older “next”
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P4's second candidate supplies persistent comparable variants
-but fails its fixed two-variant heredity gate (65), following table 55's failure
-(64). The designed copying control succeeds. Park further random-table screening
-pending a distinct rationale. **Next: P3, an equal-composition sequence/shape
-comparison using the existing fuel and turnover rules.** P2's physical turnover
-gate remains incomplete (63); P1 remains parked (62). No mechanism was added.
+**Current status:** P3's equal-composition screen closes exact descendant cycles
+but fails its fixed inherited-benefit gate (66). Opposed20 ABABABAB has three
+reproducing offspring in each seed and reaches generation three; AAAABBBB has
+two/zero. The first seed's difference of one misses the required two. Park this
+preparation without retuning or extra confirmation. **Next: P2's polygon-port
+and turnover feasibility gate**, including the narrow recycling competitor.
+P4's tested pairs remain parked (64–65), as does P1 (62). No mechanism was added.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -22,8 +23,8 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P3 | Mechanical function that closes a reproductive cycle | High / low–medium for a useful operation, low for inherited net benefit | Next: equal-composition sequence/shape feasibility and viability under existing rules | Tests reproductive consequences of inherited arrangement without adding a new mechanism. |
-| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / conditional theoretical lead, low for physical renewal | Derivation complete (63); implementation held at turnover gate | Gross economy survives; common-part costs and scarce-part recycling prevent a per-child advantage claim. |
+| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / conditional theoretical lead, low for physical renewal | Next: minimal polygon-port feasibility, then a bounded growth/turnover fixture if feasible (63, 66) | A distinct physical hypothesis after ecology, heredity and shape screens; include common-part costs and narrow recycling. |
+| P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
 | P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
 | P5 | Coupling replication modes and evolving dependencies | High long-term / low until prerequisites pass | Park implementation | Two modes alone failed (40); coupling needs a real material/function exchange. |
@@ -166,6 +167,16 @@ After the two P1 assays and this analysis, choose P4 next: it tests an existing
 heredity gap without first adding this palette and unverified geometry. This
 is a portfolio choice, not a disproof of resource-based selection.
 
+**Next after section 66 (2026-09-27):** first map the section-63 contact graph
+onto actual deformable polygon ports. Test whether both growth fronts and the
+boundary parts can make their required contacts without orientation locks,
+global placement or a table interpreter. If feasible, predeclare one small
+conserved-material growth/turnover fixture: measure first-contact survival,
+second-contact acquisition, naturally released active fragments and returned
+versus trapped T1, including the narrow recycling competitor. If geometry or
+retention requires increasingly special-case machinery, park the route. No
+population race or new core mechanism is authorized by the accounting alone.
+
 ## P3 — an inherited mechanical part must earn its keep
 
 **Starting evidence:** complementary shapes restore curved copying (49); shape holds fuel (50);
@@ -193,21 +204,23 @@ building and occupying the support. Only then test inheritance and selection.
 make a polymerase/walker simply because it can be implemented as many local states. Introduce
 one only if a named physical operation cannot be supplied more simply and the cost is measurable.
 
-**Next after the P4 checkpoint (65):** select the geometric-specificity route.
-Predeclare a small comparison of `AAAABBBB` and `ABABABAB` (same length and
-composition) in the existing opposed20, complementary-copying, pocket/fuel
-setup from 50–51. Square geometry and grip-disabled worlds retaining all fuel
-material are controls. Section 51's slow-turnover setting is a candidate viable
-baseline, not a new rate sweep or evidence that those two arrangements already
-have different fitness. Fix the exact preparation, rates and early viability
-gate before running, retaining current polygon mechanics.
+**2026-09-27 outcome (66):** same-composition AAAABBBB/ABABABAB, four active
+prepared founders, existing slow turnover from time zero, square/opposed20 and
+grip-on/off controls. Both variants pass the 20k copying gate. In fresh 100k
+worlds, opposed20 fully rearmed exact offspring that reproduce are 2/0 versus
+3/3 (seeds 203/204); square gives 1/1 versus 0/0, grip-off always zero.
+Alternating exact lineages reach generation three in both opposed20 worlds,
+but its between-sequence advantage is only +1 in seed 203, below the fixed +2
+gate. All founders disappear; only one of eight grip-on worlds retains intact
+exact descendants at 100k. Most births shorten. No inherited-benefit promotion.
 
-Measure released, rearmed offspring that themselves reproduce, original-parent
-survival and material trapped in unfinished rows; report length/sequence changes
-separately. A fuel-uptake difference alone fails. A promising benefit needs P0
-solver/individual-kick checks and fresh confirmation. Prepared variants test a
-possible inherited function, not spontaneous novelty. Stop if neither closes
-the second cycle; do not rescue the comparison with added states or helpers.
+**Disposition:** park this preparation without rate/state/helper changes,
+extra confirmation or a retrospective threshold reduction. Retain the measured
+renewal and matched-control differences as evidence under body jostling/4 passes;
+no strong solver-independent mechanical claim or spontaneous novelty follows.
+P0 sensitivity was not earned by the full gate. P2's distinct physical feasibility
+question is next; P1/P4 remain parked. The steric-work alternative still needs a
+specific bottleneck and useful-output prediction before an assay, not a new walker.
 
 ## P4 — distinguish heredity from recurring shapes in random chemistry
 
@@ -325,3 +338,9 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   16 runs / 800k steps / 1,673.093 CPU seconds. Two of four seeds pass; mean effects
   remain positive. Park the tested setting, retain the evidence and make P2's
   material-budget/local-contact derivation next. No new simulation mechanism.
+- **2026-09-27, section 66:** P3 equal-composition screen completes 20 valid
+  worlds / 1.68M steps / 879.344 CPU seconds. Exact alternating lineages reach
+  generation three in both opposed20 seeds, but the full benefit gate fails.
+  Preserve the rejected observer pilot (another 80k / 48.625 CPU seconds) and
+  its corrected, physically identical replay. Park the preparation and make
+  P2's polygon-port/turnover feasibility next. No core changes or new rewards.
