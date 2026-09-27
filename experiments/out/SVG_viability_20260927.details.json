@@ -1,0 +1,468 @@
+{
+  "decision": {
+    "kind": "viability",
+    "pass": true
+  },
+  "cpuSeconds": 47.142,
+  "worlds": [
+    {
+      "seed": 301,
+      "sequence": "AABAB",
+      "profile": "opposed20",
+      "grip": true,
+      "metrics": {
+        "births": 19,
+        "detached": 19,
+        "founderChildren": 15,
+        "exact": 15,
+        "primary": 0,
+        "earlyPrimary": 0,
+        "secondCycle": 0,
+        "full": 0,
+        "maxDepth": 1,
+        "intactExact": 7,
+        "intactFounders": 1,
+        "persistent5k": 11,
+        "censored5k": 3,
+        "shorter": 4,
+        "other": 0,
+        "allVariantPrimary": 0,
+        "allVariantChains": 0,
+        "unfinished": 8,
+        "fuel": 45,
+        "meanBend": 8.340755577725593
+      },
+      "material": {
+        "founders": 5,
+        "offspring": 44,
+        "free": 50,
+        "dockedSingle": 1,
+        "unfinishedLinked": 8,
+        "releasedOther": 12,
+        "other": 0
+      },
+      "fuel": {
+        "sameRow": 0,
+        "differentRows": 31,
+        "untracked": 14,
+        "knownCross": 32,
+        "waitCount": 45,
+        "waitSum": 267783,
+        "waitMax": 18951
+      },
+      "primaryFuel": {
+        "parents": [],
+        "events": 0,
+        "outsideParent": 0,
+        "beforeRegistration": 0
+      },
+      "sameFamilyOutsideExactLineage": 0
+    },
+    {
+      "seed": 302,
+      "sequence": "ABABA",
+      "profile": "opposed20",
+      "grip": true,
+      "metrics": {
+        "births": 33,
+        "detached": 33,
+        "founderChildren": 17,
+        "exact": 17,
+        "primary": 0,
+        "earlyPrimary": 0,
+        "secondCycle": 0,
+        "full": 2,
+        "maxDepth": 1,
+        "intactExact": 7,
+        "intactFounders": 1,
+        "persistent5k": 12,
+        "censored5k": 0,
+        "shorter": 16,
+        "other": 0,
+        "allVariantPrimary": 2,
+        "allVariantChains": 0,
+        "unfinished": 9,
+        "fuel": 59,
+        "meanBend": 4.413345861262745
+      },
+      "material": {
+        "founders": 5,
+        "offspring": 61,
+        "free": 32,
+        "dockedSingle": 1,
+        "unfinishedLinked": 9,
+        "releasedOther": 12,
+        "other": 0
+      },
+      "fuel": {
+        "sameRow": 0,
+        "differentRows": 35,
+        "untracked": 24,
+        "knownCross": 36,
+        "waitCount": 59,
+        "waitSum": 248856,
+        "waitMax": 15946
+      },
+      "primaryFuel": {
+        "parents": [],
+        "events": 0,
+        "outsideParent": 0,
+        "beforeRegistration": 0
+      },
+      "sameFamilyOutsideExactLineage": 0
+    },
+    {
+      "seed": 302,
+      "sequence": "AABAB",
+      "profile": "opposed20",
+      "grip": true,
+      "metrics": {
+        "births": 17,
+        "detached": 17,
+        "founderChildren": 16,
+        "exact": 16,
+        "primary": 0,
+        "earlyPrimary": 0,
+        "secondCycle": 0,
+        "full": 2,
+        "maxDepth": 1,
+        "intactExact": 8,
+        "intactFounders": 3,
+        "persistent5k": 11,
+        "censored5k": 3,
+        "shorter": 1,
+        "other": 0,
+        "allVariantPrimary": 0,
+        "allVariantChains": 0,
+        "unfinished": 17,
+        "fuel": 47,
+        "meanBend": 8.372003811316203
+      },
+      "material": {
+        "founders": 15,
+        "offspring": 44,
+        "free": 33,
+        "dockedSingle": 0,
+        "unfinishedLinked": 17,
+        "releasedOther": 11,
+        "other": 0
+      },
+      "fuel": {
+        "sameRow": 1,
+        "differentRows": 29,
+        "untracked": 17,
+        "knownCross": 30,
+        "waitCount": 47,
+        "waitSum": 221787,
+        "waitMax": 14599
+      },
+      "primaryFuel": {
+        "parents": [],
+        "events": 0,
+        "outsideParent": 0,
+        "beforeRegistration": 0
+      },
+      "sameFamilyOutsideExactLineage": 0
+    },
+    {
+      "seed": 301,
+      "sequence": "ABABA",
+      "profile": "opposed20",
+      "grip": true,
+      "metrics": {
+        "births": 25,
+        "detached": 25,
+        "founderChildren": 22,
+        "exact": 24,
+        "primary": 2,
+        "earlyPrimary": 2,
+        "secondCycle": 2,
+        "full": 5,
+        "maxDepth": 2,
+        "intactExact": 15,
+        "intactFounders": 1,
+        "persistent5k": 16,
+        "censored5k": 3,
+        "shorter": 1,
+        "other": 0,
+        "allVariantPrimary": 2,
+        "allVariantChains": 0,
+        "unfinished": 15,
+        "fuel": 61,
+        "meanBend": 4.19038314262546
+      },
+      "material": {
+        "founders": 5,
+        "offspring": 78,
+        "free": 18,
+        "dockedSingle": 1,
+        "unfinishedLinked": 15,
+        "releasedOther": 3,
+        "other": 0
+      },
+      "fuel": {
+        "sameRow": 0,
+        "differentRows": 52,
+        "untracked": 9,
+        "knownCross": 53,
+        "waitCount": 61,
+        "waitSum": 240764,
+        "waitMax": 14718
+      },
+      "primaryFuel": {
+        "parents": [
+          {
+            "id": 9,
+            "seq": "ABABA",
+            "born": 3372,
+            "firstChild": 26,
+            "witnesses": [
+              {
+                "unit": 41,
+                "event": 12284,
+                "t": 14224,
+                "fuel": 143,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 41,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 4,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  4
+                ],
+                "beforeRegistration": false,
+                "wait": 11396
+              },
+              {
+                "unit": 88,
+                "event": 3844,
+                "t": 5715,
+                "fuel": 149,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 88,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 0,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  0
+                ],
+                "beforeRegistration": false,
+                "wait": 2856
+              },
+              {
+                "unit": 33,
+                "event": 4765,
+                "t": 6875,
+                "fuel": 149,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 33,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 40,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  40
+                ],
+                "beforeRegistration": false,
+                "wait": 3675
+              },
+              {
+                "unit": 114,
+                "event": 9491,
+                "t": 11553,
+                "fuel": 157,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 114,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 48,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  48
+                ],
+                "beforeRegistration": false,
+                "wait": 8181
+              },
+              {
+                "unit": 34,
+                "event": 5060,
+                "t": 7163,
+                "fuel": 159,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 112,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 3,
+                    "unit": 34,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  112
+                ],
+                "beforeRegistration": false,
+                "wait": 3791
+              }
+            ]
+          },
+          {
+            "id": 5,
+            "seq": "ABABA",
+            "born": 1200,
+            "firstChild": 27,
+            "witnesses": [
+              {
+                "unit": 18,
+                "event": 1785,
+                "t": 3134,
+                "fuel": 139,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 6,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 18,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  6
+                ],
+                "beforeRegistration": false,
+                "wait": 1934
+              },
+              {
+                "unit": 82,
+                "event": 7134,
+                "t": 9285,
+                "fuel": 121,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 82,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 52,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  52
+                ],
+                "beforeRegistration": false,
+                "wait": 8085
+              },
+              {
+                "unit": 17,
+                "event": 6134,
+                "t": 8428,
+                "fuel": 142,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 52,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 17,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  52
+                ],
+                "beforeRegistration": false,
+                "wait": 7270
+              },
+              {
+                "unit": 115,
+                "event": 1833,
+                "t": 3209,
+                "fuel": 156,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 5,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 115,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  5
+                ],
+                "beforeRegistration": false,
+                "wait": 2116
+              },
+              {
+                "unit": 38,
+                "event": 2106,
+                "t": 3565,
+                "fuel": 148,
+                "holders": [
+                  {
+                    "fuelSide": 0,
+                    "unit": 38,
+                    "side": 2
+                  },
+                  {
+                    "fuelSide": 2,
+                    "unit": 66,
+                    "side": 2
+                  }
+                ],
+                "outsideParentMembers": [
+                  66
+                ],
+                "beforeRegistration": false,
+                "wait": 2472
+              }
+            ]
+          }
+        ],
+        "events": 10,
+        "outsideParent": 10,
+        "beforeRegistration": 0
+      },
+      "sameFamilyOutsideExactLineage": 0
+    }
+  ]
+}

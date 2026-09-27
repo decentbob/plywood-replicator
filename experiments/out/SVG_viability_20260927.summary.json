@@ -1,0 +1,3068 @@
+{
+  "decision": {
+    "kind": "viability",
+    "pass": true
+  },
+  "cpuSeconds": 47.142,
+  "worlds": [
+    {
+      "seed": 301,
+      "sequence": "AABAB",
+      "profile": "opposed20",
+      "grip": true,
+      "births": 19,
+      "detached": 19,
+      "founderChildren": 15,
+      "exact": 15,
+      "primary": 0,
+      "earlyPrimary": 0,
+      "secondCycle": 0,
+      "full": 0,
+      "maxDepth": 1,
+      "intactExact": 7,
+      "intactFounders": 1,
+      "persistent5k": 11,
+      "censored5k": 3,
+      "shorter": 4,
+      "other": 0,
+      "allVariantPrimary": 0,
+      "allVariantChains": 0,
+      "unfinished": 8,
+      "fuel": {
+        "sameRow": 0,
+        "differentRows": 31,
+        "untracked": 14,
+        "knownCross": 32,
+        "waitCount": 45,
+        "waitSum": 267783,
+        "waitMax": 18951
+      },
+      "meanBend": 8.340755577725593,
+      "fuelEvents": [
+        {
+          "event": 1334,
+          "t": 2312,
+          "u": 78,
+          "fuel": 154,
+          "owners": [
+            3,
+            null
+          ],
+          "category": "untracked",
+          "wait": 2140
+        },
+        {
+          "event": 1610,
+          "t": 2621,
+          "u": 33,
+          "fuel": 149,
+          "owners": [
+            5,
+            0
+          ],
+          "category": "differentRows",
+          "wait": 1471
+        },
+        {
+          "event": 1659,
+          "t": 2695,
+          "u": 70,
+          "fuel": 149,
+          "owners": [
+            0,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 1948
+        },
+        {
+          "event": 2246,
+          "t": 3571,
+          "u": 102,
+          "fuel": 134,
+          "owners": [
+            6,
+            8
+          ],
+          "category": "differentRows",
+          "wait": 1736
+        },
+        {
+          "event": 2313,
+          "t": 3652,
+          "u": 35,
+          "fuel": 131,
+          "owners": [
+            5,
+            1
+          ],
+          "category": "differentRows",
+          "wait": 2502
+        },
+        {
+          "event": 2869,
+          "t": 4457,
+          "u": 53,
+          "fuel": 144,
+          "owners": [
+            9,
+            0
+          ],
+          "category": "differentRows",
+          "wait": 4219
+        },
+        {
+          "event": 3394,
+          "t": 5337,
+          "u": 19,
+          "fuel": 156,
+          "owners": [
+            null,
+            4
+          ],
+          "category": "untracked",
+          "wait": 1004
+        },
+        {
+          "event": 4656,
+          "t": 6713,
+          "u": 110,
+          "fuel": 128,
+          "owners": [
+            3,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 3265
+        },
+        {
+          "event": 4692,
+          "t": 6770,
+          "u": 37,
+          "fuel": 121,
+          "owners": [
+            7,
+            null
+          ],
+          "category": "untracked",
+          "wait": 4268
+        },
+        {
+          "event": 4983,
+          "t": 7168,
+          "u": 113,
+          "fuel": 120,
+          "owners": [
+            1,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 4633
+        },
+        {
+          "event": 5101,
+          "t": 7310,
+          "u": 55,
+          "fuel": 146,
+          "owners": [
+            10,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 3525
+        },
+        {
+          "event": 5630,
+          "t": 8105,
+          "u": 13,
+          "fuel": 132,
+          "owners": [
+            9,
+            null
+          ],
+          "category": "untracked",
+          "wait": 4042
+        },
+        {
+          "event": 5858,
+          "t": 8399,
+          "u": 23,
+          "fuel": 122,
+          "owners": [
+            8,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 8227
+        },
+        {
+          "event": 6051,
+          "t": 8649,
+          "u": 40,
+          "fuel": 122,
+          "owners": [
+            8,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 5784
+        },
+        {
+          "event": 6123,
+          "t": 8773,
+          "u": 91,
+          "fuel": 146,
+          "owners": [
+            null,
+            9
+          ],
+          "category": "untracked",
+          "wait": 4921
+        },
+        {
+          "event": 6337,
+          "t": 9120,
+          "u": 94,
+          "fuel": 135,
+          "owners": [
+            11,
+            10
+          ],
+          "category": "differentRows",
+          "wait": 1570
+        },
+        {
+          "event": 6383,
+          "t": 9167,
+          "u": 21,
+          "fuel": 138,
+          "owners": [
+            null,
+            9
+          ],
+          "category": "untracked",
+          "wait": 8717
+        },
+        {
+          "event": 6399,
+          "t": 9184,
+          "u": 50,
+          "fuel": 136,
+          "owners": [
+            4,
+            3
+          ],
+          "category": "differentRows",
+          "wait": 8901
+        },
+        {
+          "event": 6643,
+          "t": 9472,
+          "u": 13,
+          "fuel": 127,
+          "owners": [
+            9,
+            null
+          ],
+          "category": "untracked",
+          "wait": 187
+        },
+        {
+          "event": 7145,
+          "t": 10148,
+          "u": 32,
+          "fuel": 133,
+          "owners": [
+            4,
+            null
+          ],
+          "category": "untracked",
+          "wait": 9865
+        },
+        {
+          "event": 7274,
+          "t": 10370,
+          "u": 101,
+          "fuel": 155,
+          "owners": [
+            2,
+            0,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 9951
+        },
+        {
+          "event": 7647,
+          "t": 10832,
+          "u": 93,
+          "fuel": 150,
+          "owners": [
+            4,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 10727
+        },
+        {
+          "event": 7746,
+          "t": 10936,
+          "u": 76,
+          "fuel": 132,
+          "owners": [
+            10,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 7867
+        },
+        {
+          "event": 7933,
+          "t": 11151,
+          "u": 15,
+          "fuel": 143,
+          "owners": [
+            14,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 1077
+        },
+        {
+          "event": 8971,
+          "t": 12242,
+          "u": 99,
+          "fuel": 134,
+          "owners": [
+            5,
+            4
+          ],
+          "category": "differentRows",
+          "wait": 12057
+        },
+        {
+          "event": 9022,
+          "t": 12282,
+          "u": 24,
+          "fuel": 147,
+          "owners": [
+            13,
+            4
+          ],
+          "category": "differentRows",
+          "wait": 5356
+        },
+        {
+          "event": 9403,
+          "t": 12708,
+          "u": 20,
+          "fuel": 132,
+          "owners": [
+            16,
+            3
+          ],
+          "category": "differentRows",
+          "wait": 714
+        },
+        {
+          "event": 9824,
+          "t": 13143,
+          "u": 17,
+          "fuel": 120,
+          "owners": [
+            15,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 1741
+        },
+        {
+          "event": 10115,
+          "t": 13439,
+          "u": 10,
+          "fuel": 127,
+          "owners": [
+            7,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 6887
+        },
+        {
+          "event": 10480,
+          "t": 13837,
+          "u": 71,
+          "fuel": 122,
+          "owners": [
+            0,
+            null,
+            2
+          ],
+          "category": "untracked",
+          "wait": 7361
+        },
+        {
+          "event": 10740,
+          "t": 14084,
+          "u": 74,
+          "fuel": 159,
+          "owners": [
+            7,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 11608
+        },
+        {
+          "event": 10857,
+          "t": 14205,
+          "u": 11,
+          "fuel": 133,
+          "owners": [
+            null,
+            null
+          ],
+          "category": "untracked",
+          "wait": 4935
+        },
+        {
+          "event": 11342,
+          "t": 14686,
+          "u": 87,
+          "fuel": 138,
+          "owners": [
+            13,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 6965
+        },
+        {
+          "event": 11636,
+          "t": 15033,
+          "u": 62,
+          "fuel": 123,
+          "owners": [
+            15,
+            16
+          ],
+          "category": "differentRows",
+          "wait": 5201
+        },
+        {
+          "event": 11675,
+          "t": 15066,
+          "u": 119,
+          "fuel": 154,
+          "owners": [
+            12,
+            13
+          ],
+          "category": "differentRows",
+          "wait": 8659
+        },
+        {
+          "event": 12856,
+          "t": 16402,
+          "u": 51,
+          "fuel": 122,
+          "owners": [
+            18,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 1523
+        },
+        {
+          "event": 13323,
+          "t": 16937,
+          "u": 52,
+          "fuel": 159,
+          "owners": [
+            13,
+            null
+          ],
+          "category": "untracked",
+          "wait": 9072
+        },
+        {
+          "event": 14370,
+          "t": 18094,
+          "u": 47,
+          "fuel": 138,
+          "owners": [
+            17,
+            11
+          ],
+          "category": "differentRows",
+          "wait": 3815
+        },
+        {
+          "event": 14820,
+          "t": 18750,
+          "u": 72,
+          "fuel": 158,
+          "owners": [
+            18,
+            4
+          ],
+          "category": "differentRows",
+          "wait": 3871
+        },
+        {
+          "event": 15058,
+          "t": 19042,
+          "u": 117,
+          "fuel": 152,
+          "owners": [
+            11,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 14709
+        },
+        {
+          "event": 15152,
+          "t": 19138,
+          "u": 84,
+          "fuel": 149,
+          "owners": [
+            4,
+            18
+          ],
+          "category": "differentRows",
+          "wait": 18951
+        },
+        {
+          "event": 15210,
+          "t": 19188,
+          "u": 99,
+          "fuel": 131,
+          "owners": [
+            13,
+            null
+          ],
+          "category": "untracked",
+          "wait": 2758
+        },
+        {
+          "event": 15380,
+          "t": 19410,
+          "u": 54,
+          "fuel": 131,
+          "owners": [
+            null,
+            13
+          ],
+          "category": "untracked",
+          "wait": 11863
+        },
+        {
+          "event": 15393,
+          "t": 19421,
+          "u": 98,
+          "fuel": 154,
+          "owners": [
+            17,
+            null
+          ],
+          "category": "untracked",
+          "wait": 12945
+        },
+        {
+          "event": 15806,
+          "t": 19817,
+          "u": 63,
+          "fuel": 135,
+          "owners": [
+            11,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 4245
+        }
+      ],
+      "variants": {
+        "seed": 301,
+        "sequence": "AABAB",
+        "profile": "opposed20",
+        "grip": true,
+        "steps": 20000,
+        "totals": {
+          "births": 19,
+          "detached": 19,
+          "full": 2,
+          "unassignedParent": 4,
+          "primary": 0,
+          "earlyPrimary": 0,
+          "edges": 0,
+          "chains": 0,
+          "intactAtHorizon": 10,
+          "persistent5k": 13,
+          "censored5k": 4
+        },
+        "families": [
+          {
+            "family": "AAB",
+            "length": 3,
+            "births": 1,
+            "detached": 1,
+            "full": 1,
+            "unassignedParent": 1,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 1,
+            "persistent5k": 1,
+            "censored5k": 0
+          },
+          {
+            "family": "AABAB",
+            "length": 5,
+            "births": 15,
+            "detached": 15,
+            "full": 0,
+            "unassignedParent": 0,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 7,
+            "persistent5k": 11,
+            "censored5k": 3
+          },
+          {
+            "family": "AB",
+            "length": 2,
+            "births": 2,
+            "detached": 2,
+            "full": 1,
+            "unassignedParent": 2,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 1,
+            "persistent5k": 1,
+            "censored5k": 0
+          },
+          {
+            "family": "ABAB",
+            "length": 4,
+            "births": 1,
+            "detached": 1,
+            "full": 0,
+            "unassignedParent": 1,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 1,
+            "persistent5k": 0,
+            "censored5k": 1
+          }
+        ],
+        "edges": [],
+        "chains": [],
+        "calibrationEightParents": 0,
+        "exactShortEdgesWithoutFuel": 0,
+        "finalMaterial": {
+          "founders": 5,
+          "offspring": 44,
+          "free": 50,
+          "dockedSingle": 1,
+          "unfinishedLinked": 8,
+          "releasedOther": 12,
+          "other": 0
+        }
+      }
+    },
+    {
+      "seed": 302,
+      "sequence": "ABABA",
+      "profile": "opposed20",
+      "grip": true,
+      "births": 33,
+      "detached": 33,
+      "founderChildren": 17,
+      "exact": 17,
+      "primary": 0,
+      "earlyPrimary": 0,
+      "secondCycle": 0,
+      "full": 2,
+      "maxDepth": 1,
+      "intactExact": 7,
+      "intactFounders": 1,
+      "persistent5k": 12,
+      "censored5k": 0,
+      "shorter": 16,
+      "other": 0,
+      "allVariantPrimary": 2,
+      "allVariantChains": 0,
+      "unfinished": 9,
+      "fuel": {
+        "sameRow": 0,
+        "differentRows": 35,
+        "untracked": 24,
+        "knownCross": 36,
+        "waitCount": 59,
+        "waitSum": 248856,
+        "waitMax": 15946
+      },
+      "meanBend": 4.413345861262745,
+      "fuelEvents": [
+        {
+          "event": 643,
+          "t": 1354,
+          "u": 95,
+          "fuel": 140,
+          "owners": [
+            3,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 304
+        },
+        {
+          "event": 1346,
+          "t": 2238,
+          "u": 41,
+          "fuel": 158,
+          "owners": [
+            7,
+            3
+          ],
+          "category": "differentRows",
+          "wait": 1366
+        },
+        {
+          "event": 1885,
+          "t": 3143,
+          "u": 13,
+          "fuel": 134,
+          "owners": [
+            3,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 1321
+        },
+        {
+          "event": 1975,
+          "t": 3277,
+          "u": 57,
+          "fuel": 150,
+          "owners": [
+            6,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1583
+        },
+        {
+          "event": 1983,
+          "t": 3289,
+          "u": 15,
+          "fuel": 138,
+          "owners": [
+            null,
+            6
+          ],
+          "category": "untracked",
+          "wait": 25
+        },
+        {
+          "event": 2675,
+          "t": 4379,
+          "u": 63,
+          "fuel": 156,
+          "owners": [
+            9,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 1115
+        },
+        {
+          "event": 3031,
+          "t": 4887,
+          "u": 52,
+          "fuel": 131,
+          "owners": [
+            6,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 3528
+        },
+        {
+          "event": 3133,
+          "t": 5022,
+          "u": 74,
+          "fuel": 147,
+          "owners": [
+            3,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 4997
+        },
+        {
+          "event": 3188,
+          "t": 5106,
+          "u": 115,
+          "fuel": 142,
+          "owners": [
+            6,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 3838
+        },
+        {
+          "event": 4753,
+          "t": 6798,
+          "u": 100,
+          "fuel": 157,
+          "owners": [
+            5,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 6686
+        },
+        {
+          "event": 5411,
+          "t": 7463,
+          "u": 119,
+          "fuel": 136,
+          "owners": [
+            null,
+            9
+          ],
+          "category": "untracked",
+          "wait": 106
+        },
+        {
+          "event": 5705,
+          "t": 7758,
+          "u": 4,
+          "fuel": 133,
+          "owners": [
+            null,
+            7
+          ],
+          "category": "untracked",
+          "wait": 226
+        },
+        {
+          "event": 5800,
+          "t": 7845,
+          "u": 104,
+          "fuel": 135,
+          "owners": [
+            11,
+            8
+          ],
+          "category": "differentRows",
+          "wait": 2909
+        },
+        {
+          "event": 5957,
+          "t": 8042,
+          "u": 19,
+          "fuel": 143,
+          "owners": [
+            15,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1024
+        },
+        {
+          "event": 5987,
+          "t": 8082,
+          "u": 108,
+          "fuel": 129,
+          "owners": [
+            5,
+            null
+          ],
+          "category": "untracked",
+          "wait": 7021
+        },
+        {
+          "event": 6247,
+          "t": 8388,
+          "u": 93,
+          "fuel": 122,
+          "owners": [
+            18,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 278
+        },
+        {
+          "event": 6260,
+          "t": 8407,
+          "u": 97,
+          "fuel": 120,
+          "owners": [
+            3,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 1121
+        },
+        {
+          "event": 6328,
+          "t": 8565,
+          "u": 113,
+          "fuel": 124,
+          "owners": [
+            15,
+            18
+          ],
+          "category": "differentRows",
+          "wait": 1031
+        },
+        {
+          "event": 6398,
+          "t": 8649,
+          "u": 47,
+          "fuel": 129,
+          "owners": [
+            5,
+            null
+          ],
+          "category": "untracked",
+          "wait": 3501
+        },
+        {
+          "event": 6597,
+          "t": 8855,
+          "u": 84,
+          "fuel": 133,
+          "owners": [
+            18,
+            16
+          ],
+          "category": "differentRows",
+          "wait": 2178
+        },
+        {
+          "event": 6765,
+          "t": 9015,
+          "u": 102,
+          "fuel": 154,
+          "owners": [
+            3,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 1194
+        },
+        {
+          "event": 7076,
+          "t": 9417,
+          "u": 20,
+          "fuel": 139,
+          "owners": [
+            8,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 6902
+        },
+        {
+          "event": 7721,
+          "t": 10008,
+          "u": 96,
+          "fuel": 138,
+          "owners": [
+            null,
+            17
+          ],
+          "category": "untracked",
+          "wait": 508
+        },
+        {
+          "event": 7824,
+          "t": 10084,
+          "u": 36,
+          "fuel": 123,
+          "owners": [
+            15,
+            null
+          ],
+          "category": "untracked",
+          "wait": 3002
+        },
+        {
+          "event": 8347,
+          "t": 10623,
+          "u": 86,
+          "fuel": 133,
+          "owners": [
+            null,
+            18
+          ],
+          "category": "untracked",
+          "wait": 3166
+        },
+        {
+          "event": 8596,
+          "t": 10892,
+          "u": 110,
+          "fuel": 137,
+          "owners": [
+            12,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 5091
+        },
+        {
+          "event": 8607,
+          "t": 10897,
+          "u": 32,
+          "fuel": 127,
+          "owners": [
+            11,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 5961
+        },
+        {
+          "event": 8629,
+          "t": 10913,
+          "u": 3,
+          "fuel": 157,
+          "owners": [
+            10,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 6516
+        },
+        {
+          "event": 8883,
+          "t": 11129,
+          "u": 12,
+          "fuel": 157,
+          "owners": [
+            5,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 10068
+        },
+        {
+          "event": 9365,
+          "t": 11596,
+          "u": 90,
+          "fuel": 143,
+          "owners": [
+            null,
+            5
+          ],
+          "category": "untracked",
+          "wait": 928
+        },
+        {
+          "event": 9464,
+          "t": 11683,
+          "u": 79,
+          "fuel": 137,
+          "owners": [
+            20,
+            11
+          ],
+          "category": "differentRows",
+          "wait": 2194
+        },
+        {
+          "event": 9720,
+          "t": 11979,
+          "u": 83,
+          "fuel": 140,
+          "owners": [
+            20,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 2931
+        },
+        {
+          "event": 9747,
+          "t": 12017,
+          "u": 99,
+          "fuel": 150,
+          "owners": [
+            null,
+            21
+          ],
+          "category": "untracked",
+          "wait": 1311
+        },
+        {
+          "event": 9791,
+          "t": 12066,
+          "u": 28,
+          "fuel": 146,
+          "owners": [
+            null,
+            10
+          ],
+          "category": "untracked",
+          "wait": 5103
+        },
+        {
+          "event": 9959,
+          "t": 12295,
+          "u": 54,
+          "fuel": 150,
+          "owners": [
+            16,
+            null
+          ],
+          "category": "untracked",
+          "wait": 4474
+        },
+        {
+          "event": 10672,
+          "t": 13032,
+          "u": 89,
+          "fuel": 145,
+          "owners": [
+            7,
+            10
+          ],
+          "category": "differentRows",
+          "wait": 8635
+        },
+        {
+          "event": 10858,
+          "t": 13253,
+          "u": 92,
+          "fuel": 139,
+          "owners": [
+            2,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 4525
+        },
+        {
+          "event": 10931,
+          "t": 13300,
+          "u": 34,
+          "fuel": 129,
+          "owners": [
+            5,
+            null
+          ],
+          "category": "untracked",
+          "wait": 13059
+        },
+        {
+          "event": 12185,
+          "t": 14510,
+          "u": 103,
+          "fuel": 133,
+          "owners": [
+            3,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 6563
+        },
+        {
+          "event": 12794,
+          "t": 15133,
+          "u": 16,
+          "fuel": 136,
+          "owners": [
+            null,
+            11
+          ],
+          "category": "untracked",
+          "wait": 10880
+        },
+        {
+          "event": 12903,
+          "t": 15268,
+          "u": 30,
+          "fuel": 120,
+          "owners": [
+            10,
+            23
+          ],
+          "category": "differentRows",
+          "wait": 2845
+        },
+        {
+          "event": 13451,
+          "t": 15958,
+          "u": 33,
+          "fuel": 158,
+          "owners": [
+            null,
+            28
+          ],
+          "category": "untracked",
+          "wait": 1325
+        },
+        {
+          "event": 13502,
+          "t": 16018,
+          "u": 51,
+          "fuel": 135,
+          "owners": [
+            22,
+            21
+          ],
+          "category": "differentRows",
+          "wait": 5510
+        },
+        {
+          "event": 13982,
+          "t": 16533,
+          "u": 48,
+          "fuel": 124,
+          "owners": [
+            28,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 7485
+        },
+        {
+          "event": 14363,
+          "t": 16945,
+          "u": 110,
+          "fuel": 135,
+          "owners": [
+            null,
+            31
+          ],
+          "category": "untracked",
+          "wait": 6
+        },
+        {
+          "event": 14703,
+          "t": 17315,
+          "u": 62,
+          "fuel": 157,
+          "owners": [
+            23,
+            21
+          ],
+          "category": "differentRows",
+          "wait": 4892
+        },
+        {
+          "event": 14781,
+          "t": 17427,
+          "u": 88,
+          "fuel": 154,
+          "owners": [
+            23,
+            21
+          ],
+          "category": "differentRows",
+          "wait": 6555
+        },
+        {
+          "event": 15129,
+          "t": 17801,
+          "u": 27,
+          "fuel": 137,
+          "owners": [
+            null,
+            null
+          ],
+          "category": "untracked",
+          "wait": 10680
+        },
+        {
+          "event": 15177,
+          "t": 17845,
+          "u": 46,
+          "fuel": 121,
+          "owners": [
+            8,
+            null
+          ],
+          "category": "untracked",
+          "wait": 15714
+        },
+        {
+          "event": 15219,
+          "t": 17905,
+          "u": 90,
+          "fuel": 120,
+          "owners": [
+            29,
+            31,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1871
+        },
+        {
+          "event": 15455,
+          "t": 18225,
+          "u": 80,
+          "fuel": 146,
+          "owners": [
+            21,
+            25
+          ],
+          "category": "differentRows",
+          "wait": 7402
+        },
+        {
+          "event": 15675,
+          "t": 18461,
+          "u": 117,
+          "fuel": 128,
+          "owners": [
+            8,
+            30
+          ],
+          "category": "differentRows",
+          "wait": 15946
+        },
+        {
+          "event": 15723,
+          "t": 18507,
+          "u": 23,
+          "fuel": 147,
+          "owners": [
+            3,
+            31,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 1568
+        },
+        {
+          "event": 15879,
+          "t": 18671,
+          "u": 101,
+          "fuel": 136,
+          "owners": [
+            32,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1238
+        },
+        {
+          "event": 15941,
+          "t": 18742,
+          "u": 17,
+          "fuel": 154,
+          "owners": [
+            31,
+            null
+          ],
+          "category": "untracked",
+          "wait": 956
+        },
+        {
+          "event": 16420,
+          "t": 19213,
+          "u": 53,
+          "fuel": 138,
+          "owners": [
+            17,
+            3
+          ],
+          "category": "differentRows",
+          "wait": 11266
+        },
+        {
+          "event": 16684,
+          "t": 19473,
+          "u": 37,
+          "fuel": 156,
+          "owners": [
+            null,
+            23
+          ],
+          "category": "untracked",
+          "wait": 179
+        },
+        {
+          "event": 16912,
+          "t": 19706,
+          "u": 116,
+          "fuel": 147,
+          "owners": [
+            28,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 4850
+        },
+        {
+          "event": 16923,
+          "t": 19716,
+          "u": 5,
+          "fuel": 128,
+          "owners": [
+            34,
+            31
+          ],
+          "category": "differentRows",
+          "wait": 1399
+        }
+      ],
+      "variants": {
+        "seed": 302,
+        "sequence": "ABABA",
+        "profile": "opposed20",
+        "grip": true,
+        "steps": 20000,
+        "totals": {
+          "births": 33,
+          "detached": 33,
+          "full": 7,
+          "unassignedParent": 14,
+          "primary": 2,
+          "earlyPrimary": 2,
+          "edges": 2,
+          "chains": 0,
+          "intactAtHorizon": 18,
+          "persistent5k": 17,
+          "censored5k": 7
+        },
+        "families": [
+          {
+            "family": "AB",
+            "length": 2,
+            "births": 3,
+            "detached": 3,
+            "full": 1,
+            "unassignedParent": 3,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 3,
+            "persistent5k": 1,
+            "censored5k": 2
+          },
+          {
+            "family": "ABA",
+            "length": 3,
+            "births": 7,
+            "detached": 7,
+            "full": 2,
+            "unassignedParent": 6,
+            "primary": 1,
+            "earlyPrimary": 1,
+            "edges": 1,
+            "chains": 0,
+            "intactAtHorizon": 4,
+            "persistent5k": 3,
+            "censored5k": 2
+          },
+          {
+            "family": "ABABA",
+            "length": 5,
+            "births": 17,
+            "detached": 17,
+            "full": 2,
+            "unassignedParent": 0,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 7,
+            "persistent5k": 12,
+            "censored5k": 0
+          },
+          {
+            "family": "BA",
+            "length": 2,
+            "births": 6,
+            "detached": 6,
+            "full": 2,
+            "unassignedParent": 5,
+            "primary": 1,
+            "earlyPrimary": 1,
+            "edges": 1,
+            "chains": 0,
+            "intactAtHorizon": 4,
+            "persistent5k": 1,
+            "censored5k": 3
+          }
+        ],
+        "edges": [
+          {
+            "parent": 24,
+            "child": 26,
+            "family": "BA",
+            "length": 2,
+            "t": 13996,
+            "exact": true,
+            "active": true,
+            "fueled": true
+          },
+          {
+            "parent": 23,
+            "child": 33,
+            "family": "ABA",
+            "length": 3,
+            "t": 18147,
+            "exact": true,
+            "active": true,
+            "fueled": true
+          }
+        ],
+        "chains": [],
+        "calibrationEightParents": 0,
+        "exactShortEdgesWithoutFuel": 0,
+        "finalMaterial": {
+          "founders": 5,
+          "offspring": 61,
+          "free": 32,
+          "dockedSingle": 1,
+          "unfinishedLinked": 9,
+          "releasedOther": 12,
+          "other": 0
+        }
+      }
+    },
+    {
+      "seed": 302,
+      "sequence": "AABAB",
+      "profile": "opposed20",
+      "grip": true,
+      "births": 17,
+      "detached": 17,
+      "founderChildren": 16,
+      "exact": 16,
+      "primary": 0,
+      "earlyPrimary": 0,
+      "secondCycle": 0,
+      "full": 2,
+      "maxDepth": 1,
+      "intactExact": 8,
+      "intactFounders": 3,
+      "persistent5k": 11,
+      "censored5k": 3,
+      "shorter": 1,
+      "other": 0,
+      "allVariantPrimary": 0,
+      "allVariantChains": 0,
+      "unfinished": 17,
+      "fuel": {
+        "sameRow": 1,
+        "differentRows": 29,
+        "untracked": 17,
+        "knownCross": 30,
+        "waitCount": 47,
+        "waitSum": 221787,
+        "waitMax": 14599
+      },
+      "meanBend": 8.372003811316203,
+      "fuelEvents": [
+        {
+          "event": 945,
+          "t": 1670,
+          "u": 31,
+          "fuel": 139,
+          "owners": [
+            null,
+            5
+          ],
+          "category": "untracked",
+          "wait": 24
+        },
+        {
+          "event": 1045,
+          "t": 1815,
+          "u": 11,
+          "fuel": 121,
+          "owners": [
+            null,
+            5
+          ],
+          "category": "untracked",
+          "wait": 901
+        },
+        {
+          "event": 1215,
+          "t": 2158,
+          "u": 13,
+          "fuel": 148,
+          "owners": [
+            5,
+            6
+          ],
+          "category": "differentRows",
+          "wait": 1137
+        },
+        {
+          "event": 1885,
+          "t": 3554,
+          "u": 43,
+          "fuel": 141,
+          "owners": [
+            null,
+            8
+          ],
+          "category": "untracked",
+          "wait": 535
+        },
+        {
+          "event": 2106,
+          "t": 3932,
+          "u": 41,
+          "fuel": 140,
+          "owners": [
+            5,
+            6
+          ],
+          "category": "differentRows",
+          "wait": 2040
+        },
+        {
+          "event": 2249,
+          "t": 4241,
+          "u": 20,
+          "fuel": 121,
+          "owners": [
+            9,
+            9
+          ],
+          "category": "sameRow",
+          "wait": 824
+        },
+        {
+          "event": 2290,
+          "t": 4308,
+          "u": 81,
+          "fuel": 145,
+          "owners": [
+            6,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 2261
+        },
+        {
+          "event": 3381,
+          "t": 5752,
+          "u": 115,
+          "fuel": 124,
+          "owners": [
+            null,
+            7
+          ],
+          "category": "untracked",
+          "wait": 633
+        },
+        {
+          "event": 4148,
+          "t": 6474,
+          "u": 49,
+          "fuel": 128,
+          "owners": [
+            null,
+            5
+          ],
+          "category": "untracked",
+          "wait": 498
+        },
+        {
+          "event": 4392,
+          "t": 6699,
+          "u": 103,
+          "fuel": 147,
+          "owners": [
+            9,
+            3
+          ],
+          "category": "differentRows",
+          "wait": 3397
+        },
+        {
+          "event": 4559,
+          "t": 6928,
+          "u": 87,
+          "fuel": 134,
+          "owners": [
+            7,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 4761
+        },
+        {
+          "event": 5007,
+          "t": 7627,
+          "u": 80,
+          "fuel": 142,
+          "owners": [
+            13,
+            11
+          ],
+          "category": "differentRows",
+          "wait": 1012
+        },
+        {
+          "event": 5045,
+          "t": 7683,
+          "u": 70,
+          "fuel": 151,
+          "owners": [
+            5,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 6257
+        },
+        {
+          "event": 5100,
+          "t": 7757,
+          "u": 111,
+          "fuel": 145,
+          "owners": [
+            13,
+            11
+          ],
+          "category": "differentRows",
+          "wait": 1142
+        },
+        {
+          "event": 5180,
+          "t": 7874,
+          "u": 24,
+          "fuel": 152,
+          "owners": [
+            5,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 6837
+        },
+        {
+          "event": 5183,
+          "t": 7875,
+          "u": 53,
+          "fuel": 124,
+          "owners": [
+            10,
+            7
+          ],
+          "category": "differentRows",
+          "wait": 3653
+        },
+        {
+          "event": 5549,
+          "t": 8276,
+          "u": 74,
+          "fuel": 152,
+          "owners": [
+            7,
+            13
+          ],
+          "category": "differentRows",
+          "wait": 6892
+        },
+        {
+          "event": 5672,
+          "t": 8472,
+          "u": 92,
+          "fuel": 155,
+          "owners": [
+            9,
+            10
+          ],
+          "category": "differentRows",
+          "wait": 5749
+        },
+        {
+          "event": 5912,
+          "t": 8769,
+          "u": 78,
+          "fuel": 136,
+          "owners": [
+            8,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 6746
+        },
+        {
+          "event": 6125,
+          "t": 9067,
+          "u": 114,
+          "fuel": 141,
+          "owners": [
+            13,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 3064
+        },
+        {
+          "event": 6408,
+          "t": 9449,
+          "u": 12,
+          "fuel": 140,
+          "owners": [
+            10,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 6430
+        },
+        {
+          "event": 6591,
+          "t": 9597,
+          "u": 104,
+          "fuel": 136,
+          "owners": [
+            null,
+            5
+          ],
+          "category": "untracked",
+          "wait": 2412
+        },
+        {
+          "event": 6634,
+          "t": 9651,
+          "u": 32,
+          "fuel": 140,
+          "owners": [
+            10,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 6786
+        },
+        {
+          "event": 7275,
+          "t": 10368,
+          "u": 72,
+          "fuel": 142,
+          "owners": [
+            9,
+            10
+          ],
+          "category": "differentRows",
+          "wait": 6146
+        },
+        {
+          "event": 7328,
+          "t": 10437,
+          "u": 75,
+          "fuel": 142,
+          "owners": [
+            9,
+            10
+          ],
+          "category": "differentRows",
+          "wait": 7544
+        },
+        {
+          "event": 7979,
+          "t": 11182,
+          "u": 94,
+          "fuel": 128,
+          "owners": [
+            8,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 6276
+        },
+        {
+          "event": 8066,
+          "t": 11303,
+          "u": 85,
+          "fuel": 156,
+          "owners": [
+            null,
+            9
+          ],
+          "category": "untracked",
+          "wait": 1007
+        },
+        {
+          "event": 8514,
+          "t": 11842,
+          "u": 101,
+          "fuel": 136,
+          "owners": [
+            null,
+            12
+          ],
+          "category": "untracked",
+          "wait": 1348
+        },
+        {
+          "event": 8997,
+          "t": 12530,
+          "u": 19,
+          "fuel": 152,
+          "owners": [
+            5,
+            10,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1081
+        },
+        {
+          "event": 9265,
+          "t": 12787,
+          "u": 26,
+          "fuel": 149,
+          "owners": [
+            12,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 6812
+        },
+        {
+          "event": 10268,
+          "t": 14235,
+          "u": 25,
+          "fuel": 139,
+          "owners": [
+            null,
+            7
+          ],
+          "category": "untracked",
+          "wait": 4383
+        },
+        {
+          "event": 10277,
+          "t": 14243,
+          "u": 10,
+          "fuel": 145,
+          "owners": [
+            2,
+            0,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 8268
+        },
+        {
+          "event": 10303,
+          "t": 14272,
+          "u": 39,
+          "fuel": 133,
+          "owners": [
+            null,
+            15
+          ],
+          "category": "untracked",
+          "wait": 6722
+        },
+        {
+          "event": 11118,
+          "t": 15546,
+          "u": 14,
+          "fuel": 151,
+          "owners": [
+            7,
+            null
+          ],
+          "category": "untracked",
+          "wait": 299
+        },
+        {
+          "event": 11467,
+          "t": 15982,
+          "u": 22,
+          "fuel": 132,
+          "owners": [
+            14,
+            null
+          ],
+          "category": "untracked",
+          "wait": 7915
+        },
+        {
+          "event": 11660,
+          "t": 16224,
+          "u": 37,
+          "fuel": 123,
+          "owners": [
+            0,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 11318
+        },
+        {
+          "event": 11773,
+          "t": 16356,
+          "u": 96,
+          "fuel": 155,
+          "owners": [
+            null,
+            18
+          ],
+          "category": "untracked",
+          "wait": 2122
+        },
+        {
+          "event": 11839,
+          "t": 16472,
+          "u": 30,
+          "fuel": 123,
+          "owners": [
+            0,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 8405
+        },
+        {
+          "event": 11893,
+          "t": 16556,
+          "u": 51,
+          "fuel": 130,
+          "owners": [
+            7,
+            18
+          ],
+          "category": "differentRows",
+          "wait": 1551
+        },
+        {
+          "event": 12005,
+          "t": 16709,
+          "u": 42,
+          "fuel": 130,
+          "owners": [
+            18,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1704
+        },
+        {
+          "event": 12079,
+          "t": 16836,
+          "u": 48,
+          "fuel": 153,
+          "owners": [
+            11,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 14599
+        },
+        {
+          "event": 12248,
+          "t": 17074,
+          "u": 47,
+          "fuel": 143,
+          "owners": [
+            11,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 14125
+        },
+        {
+          "event": 13764,
+          "t": 18792,
+          "u": 116,
+          "fuel": 154,
+          "owners": [
+            null,
+            14
+          ],
+          "category": "untracked",
+          "wait": 473
+        },
+        {
+          "event": 14145,
+          "t": 19261,
+          "u": 97,
+          "fuel": 130,
+          "owners": [
+            14,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 2573
+        },
+        {
+          "event": 14155,
+          "t": 19265,
+          "u": 102,
+          "fuel": 136,
+          "owners": [
+            19,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 14426
+        },
+        {
+          "event": 14306,
+          "t": 19446,
+          "u": 55,
+          "fuel": 128,
+          "owners": [
+            17,
+            null
+          ],
+          "category": "untracked",
+          "wait": 13009
+        },
+        {
+          "event": 14674,
+          "t": 19986,
+          "u": 118,
+          "fuel": 128,
+          "owners": [
+            17,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 5690
+        }
+      ],
+      "variants": {
+        "seed": 302,
+        "sequence": "AABAB",
+        "profile": "opposed20",
+        "grip": true,
+        "steps": 20000,
+        "totals": {
+          "births": 17,
+          "detached": 17,
+          "full": 2,
+          "unassignedParent": 1,
+          "primary": 0,
+          "earlyPrimary": 0,
+          "edges": 0,
+          "chains": 0,
+          "intactAtHorizon": 9,
+          "persistent5k": 12,
+          "censored5k": 3
+        },
+        "families": [
+          {
+            "family": "AABAB",
+            "length": 5,
+            "births": 16,
+            "detached": 16,
+            "full": 2,
+            "unassignedParent": 0,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 8,
+            "persistent5k": 11,
+            "censored5k": 3
+          },
+          {
+            "family": "ABAB",
+            "length": 4,
+            "births": 1,
+            "detached": 1,
+            "full": 0,
+            "unassignedParent": 1,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 1,
+            "persistent5k": 1,
+            "censored5k": 0
+          }
+        ],
+        "edges": [],
+        "chains": [],
+        "calibrationEightParents": 0,
+        "exactShortEdgesWithoutFuel": 0,
+        "finalMaterial": {
+          "founders": 15,
+          "offspring": 44,
+          "free": 33,
+          "dockedSingle": 0,
+          "unfinishedLinked": 17,
+          "releasedOther": 11,
+          "other": 0
+        }
+      }
+    },
+    {
+      "seed": 301,
+      "sequence": "ABABA",
+      "profile": "opposed20",
+      "grip": true,
+      "births": 25,
+      "detached": 25,
+      "founderChildren": 22,
+      "exact": 24,
+      "primary": 2,
+      "earlyPrimary": 2,
+      "secondCycle": 2,
+      "full": 5,
+      "maxDepth": 2,
+      "intactExact": 15,
+      "intactFounders": 1,
+      "persistent5k": 16,
+      "censored5k": 3,
+      "shorter": 1,
+      "other": 0,
+      "allVariantPrimary": 2,
+      "allVariantChains": 0,
+      "unfinished": 15,
+      "fuel": {
+        "sameRow": 0,
+        "differentRows": 52,
+        "untracked": 9,
+        "knownCross": 53,
+        "waitCount": 61,
+        "waitSum": 240764,
+        "waitMax": 14718
+      },
+      "meanBend": 4.19038314262546,
+      "fuelEvents": [
+        {
+          "event": 1314,
+          "t": 2151,
+          "u": 110,
+          "fuel": 150,
+          "owners": [
+            null,
+            null
+          ],
+          "category": "untracked",
+          "wait": 227
+        },
+        {
+          "event": 1785,
+          "t": 3134,
+          "u": 18,
+          "fuel": 139,
+          "owners": [
+            2,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 1934
+        },
+        {
+          "event": 1833,
+          "t": 3209,
+          "u": 115,
+          "fuel": 156,
+          "owners": [
+            2,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 2116
+        },
+        {
+          "event": 2106,
+          "t": 3565,
+          "u": 38,
+          "fuel": 148,
+          "owners": [
+            5,
+            2
+          ],
+          "category": "differentRows",
+          "wait": 2472
+        },
+        {
+          "event": 2466,
+          "t": 4042,
+          "u": 71,
+          "fuel": 120,
+          "owners": [
+            11,
+            1
+          ],
+          "category": "differentRows",
+          "wait": 377
+        },
+        {
+          "event": 2704,
+          "t": 4366,
+          "u": 80,
+          "fuel": 141,
+          "owners": [
+            10,
+            12
+          ],
+          "category": "differentRows",
+          "wait": 727
+        },
+        {
+          "event": 2938,
+          "t": 4607,
+          "u": 16,
+          "fuel": 131,
+          "owners": [
+            10,
+            11
+          ],
+          "category": "differentRows",
+          "wait": 782
+        },
+        {
+          "event": 3844,
+          "t": 5715,
+          "u": 88,
+          "fuel": 149,
+          "owners": [
+            9,
+            0
+          ],
+          "category": "differentRows",
+          "wait": 2856
+        },
+        {
+          "event": 3967,
+          "t": 5882,
+          "u": 87,
+          "fuel": 135,
+          "owners": [
+            12,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 1968
+        },
+        {
+          "event": 4424,
+          "t": 6494,
+          "u": 40,
+          "fuel": 146,
+          "owners": [
+            9,
+            8
+          ],
+          "category": "differentRows",
+          "wait": 4461
+        },
+        {
+          "event": 4765,
+          "t": 6875,
+          "u": 33,
+          "fuel": 149,
+          "owners": [
+            9,
+            8
+          ],
+          "category": "differentRows",
+          "wait": 3675
+        },
+        {
+          "event": 4901,
+          "t": 7012,
+          "u": 112,
+          "fuel": 159,
+          "owners": [
+            12,
+            1
+          ],
+          "category": "differentRows",
+          "wait": 2796
+        },
+        {
+          "event": 5060,
+          "t": 7163,
+          "u": 34,
+          "fuel": 159,
+          "owners": [
+            12,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 3791
+        },
+        {
+          "event": 5449,
+          "t": 7610,
+          "u": 37,
+          "fuel": 156,
+          "owners": [
+            10,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 1822
+        },
+        {
+          "event": 6028,
+          "t": 8343,
+          "u": 52,
+          "fuel": 148,
+          "owners": [
+            0,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 2805
+        },
+        {
+          "event": 6134,
+          "t": 8428,
+          "u": 17,
+          "fuel": 142,
+          "owners": [
+            14,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 7270
+        },
+        {
+          "event": 6215,
+          "t": 8535,
+          "u": 92,
+          "fuel": 153,
+          "owners": [
+            null,
+            16
+          ],
+          "category": "untracked",
+          "wait": 253
+        },
+        {
+          "event": 7134,
+          "t": 9285,
+          "u": 82,
+          "fuel": 121,
+          "owners": [
+            5,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 8085
+        },
+        {
+          "event": 7505,
+          "t": 9601,
+          "u": 71,
+          "fuel": 154,
+          "owners": [
+            17,
+            16
+          ],
+          "category": "differentRows",
+          "wait": 2007
+        },
+        {
+          "event": 7542,
+          "t": 9629,
+          "u": 106,
+          "fuel": 146,
+          "owners": [
+            0,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 603
+        },
+        {
+          "event": 7725,
+          "t": 9818,
+          "u": 103,
+          "fuel": 138,
+          "owners": [
+            19,
+            0,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 739
+        },
+        {
+          "event": 7756,
+          "t": 9851,
+          "u": 57,
+          "fuel": 159,
+          "owners": [
+            19,
+            0
+          ],
+          "category": "differentRows",
+          "wait": 1569
+        },
+        {
+          "event": 8120,
+          "t": 10235,
+          "u": 24,
+          "fuel": 151,
+          "owners": [
+            16,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 2683
+        },
+        {
+          "event": 8229,
+          "t": 10329,
+          "u": 89,
+          "fuel": 124,
+          "owners": [
+            17,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 2644
+        },
+        {
+          "event": 8965,
+          "t": 11051,
+          "u": 84,
+          "fuel": 141,
+          "owners": [
+            20,
+            15
+          ],
+          "category": "differentRows",
+          "wait": 1251
+        },
+        {
+          "event": 9048,
+          "t": 11133,
+          "u": 75,
+          "fuel": 153,
+          "owners": [
+            16,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 3959
+        },
+        {
+          "event": 9290,
+          "t": 11358,
+          "u": 21,
+          "fuel": 147,
+          "owners": [
+            15,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 960
+        },
+        {
+          "event": 9428,
+          "t": 11506,
+          "u": 53,
+          "fuel": 124,
+          "owners": [
+            16,
+            2
+          ],
+          "category": "differentRows",
+          "wait": 4574
+        },
+        {
+          "event": 9433,
+          "t": 11508,
+          "u": 45,
+          "fuel": 152,
+          "owners": [
+            12,
+            0
+          ],
+          "category": "differentRows",
+          "wait": 7442
+        },
+        {
+          "event": 9474,
+          "t": 11539,
+          "u": 97,
+          "fuel": 143,
+          "owners": [
+            null,
+            18
+          ],
+          "category": "untracked",
+          "wait": 7
+        },
+        {
+          "event": 9491,
+          "t": 11553,
+          "u": 114,
+          "fuel": 157,
+          "owners": [
+            9,
+            22
+          ],
+          "category": "differentRows",
+          "wait": 8181
+        },
+        {
+          "event": 9519,
+          "t": 11605,
+          "u": 90,
+          "fuel": 128,
+          "owners": [
+            9,
+            22
+          ],
+          "category": "differentRows",
+          "wait": 862
+        },
+        {
+          "event": 9558,
+          "t": 11651,
+          "u": 67,
+          "fuel": 125,
+          "owners": [
+            14,
+            21
+          ],
+          "category": "differentRows",
+          "wait": 6105
+        },
+        {
+          "event": 9574,
+          "t": 11655,
+          "u": 118,
+          "fuel": 138,
+          "owners": [
+            14,
+            21
+          ],
+          "category": "differentRows",
+          "wait": 392
+        },
+        {
+          "event": 9612,
+          "t": 11712,
+          "u": 48,
+          "fuel": 157,
+          "owners": [
+            22,
+            9
+          ],
+          "category": "differentRows",
+          "wait": 976
+        },
+        {
+          "event": 9782,
+          "t": 11910,
+          "u": 86,
+          "fuel": 120,
+          "owners": [
+            5,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 5294
+        },
+        {
+          "event": 9836,
+          "t": 11951,
+          "u": 58,
+          "fuel": 149,
+          "owners": [
+            5,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 4266
+        },
+        {
+          "event": 10009,
+          "t": 12060,
+          "u": 111,
+          "fuel": 127,
+          "owners": [
+            23,
+            18
+          ],
+          "category": "differentRows",
+          "wait": 3716
+        },
+        {
+          "event": 10197,
+          "t": 12258,
+          "u": 27,
+          "fuel": 133,
+          "owners": [
+            5,
+            17
+          ],
+          "category": "differentRows",
+          "wait": 4689
+        },
+        {
+          "event": 10232,
+          "t": 12290,
+          "u": 79,
+          "fuel": 137,
+          "owners": [
+            0,
+            13
+          ],
+          "category": "differentRows",
+          "wait": 7764
+        },
+        {
+          "event": 10285,
+          "t": 12350,
+          "u": 44,
+          "fuel": 143,
+          "owners": [
+            15,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 7266
+        },
+        {
+          "event": 10427,
+          "t": 12468,
+          "u": 77,
+          "fuel": 152,
+          "owners": [
+            12,
+            0
+          ],
+          "category": "differentRows",
+          "wait": 8160
+        },
+        {
+          "event": 10936,
+          "t": 12854,
+          "u": 47,
+          "fuel": 132,
+          "owners": [
+            22,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 2111
+        },
+        {
+          "event": 11401,
+          "t": 13264,
+          "u": 9,
+          "fuel": 148,
+          "owners": [
+            21,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 2001
+        },
+        {
+          "event": 11508,
+          "t": 13373,
+          "u": 72,
+          "fuel": 147,
+          "owners": [
+            1,
+            9,
+            null
+          ],
+          "category": "untracked",
+          "wait": 278
+        },
+        {
+          "event": 11953,
+          "t": 13838,
+          "u": 99,
+          "fuel": 123,
+          "owners": [
+            null,
+            19
+          ],
+          "category": "untracked",
+          "wait": 1446
+        },
+        {
+          "event": 11960,
+          "t": 13863,
+          "u": 83,
+          "fuel": 136,
+          "owners": [
+            17,
+            20,
+            5
+          ],
+          "category": "differentRows",
+          "wait": 4123
+        },
+        {
+          "event": 12174,
+          "t": 14096,
+          "u": 109,
+          "fuel": 146,
+          "owners": [
+            16,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 8292
+        },
+        {
+          "event": 12284,
+          "t": 14224,
+          "u": 41,
+          "fuel": 143,
+          "owners": [
+            9,
+            1
+          ],
+          "category": "differentRows",
+          "wait": 11396
+        },
+        {
+          "event": 12589,
+          "t": 14653,
+          "u": 29,
+          "fuel": 138,
+          "owners": [
+            24,
+            null
+          ],
+          "category": "untracked",
+          "wait": 1693
+        },
+        {
+          "event": 12978,
+          "t": 15104,
+          "u": 25,
+          "fuel": 152,
+          "owners": [
+            12,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 5304
+        },
+        {
+          "event": 13158,
+          "t": 15392,
+          "u": 116,
+          "fuel": 134,
+          "owners": [
+            null,
+            19
+          ],
+          "category": "untracked",
+          "wait": 2696
+        },
+        {
+          "event": 13352,
+          "t": 15640,
+          "u": 73,
+          "fuel": 137,
+          "owners": [
+            16,
+            2
+          ],
+          "category": "differentRows",
+          "wait": 8088
+        },
+        {
+          "event": 13465,
+          "t": 15819,
+          "u": 80,
+          "fuel": 124,
+          "owners": [
+            null,
+            14
+          ],
+          "category": "untracked",
+          "wait": 3308
+        },
+        {
+          "event": 14211,
+          "t": 16723,
+          "u": 74,
+          "fuel": 126,
+          "owners": [
+            26,
+            19
+          ],
+          "category": "differentRows",
+          "wait": 748
+        },
+        {
+          "event": 14287,
+          "t": 16849,
+          "u": 78,
+          "fuel": 156,
+          "owners": [
+            23,
+            14
+          ],
+          "category": "differentRows",
+          "wait": 6383
+        },
+        {
+          "event": 15441,
+          "t": 18430,
+          "u": 42,
+          "fuel": 142,
+          "owners": [
+            18,
+            16
+          ],
+          "category": "differentRows",
+          "wait": 10085
+        },
+        {
+          "event": 15495,
+          "t": 18486,
+          "u": 96,
+          "fuel": 138,
+          "owners": [
+            14,
+            13
+          ],
+          "category": "differentRows",
+          "wait": 13335
+        },
+        {
+          "event": 16015,
+          "t": 19026,
+          "u": 11,
+          "fuel": 124,
+          "owners": [
+            12,
+            20
+          ],
+          "category": "differentRows",
+          "wait": 14718
+        },
+        {
+          "event": 16230,
+          "t": 19369,
+          "u": 31,
+          "fuel": 138,
+          "owners": [
+            19,
+            22
+          ],
+          "category": "differentRows",
+          "wait": 7845
+        },
+        {
+          "event": 16292,
+          "t": 19444,
+          "u": 61,
+          "fuel": 135,
+          "owners": [
+            null,
+            18
+          ],
+          "category": "untracked",
+          "wait": 2388
+        }
+      ],
+      "variants": {
+        "seed": 301,
+        "sequence": "ABABA",
+        "profile": "opposed20",
+        "grip": true,
+        "steps": 20000,
+        "totals": {
+          "births": 25,
+          "detached": 25,
+          "full": 5,
+          "unassignedParent": 1,
+          "primary": 2,
+          "earlyPrimary": 2,
+          "edges": 2,
+          "chains": 0,
+          "intactAtHorizon": 16,
+          "persistent5k": 16,
+          "censored5k": 4
+        },
+        "families": [
+          {
+            "family": "ABA",
+            "length": 3,
+            "births": 1,
+            "detached": 1,
+            "full": 0,
+            "unassignedParent": 1,
+            "primary": 0,
+            "earlyPrimary": 0,
+            "edges": 0,
+            "chains": 0,
+            "intactAtHorizon": 1,
+            "persistent5k": 0,
+            "censored5k": 1
+          },
+          {
+            "family": "ABABA",
+            "length": 5,
+            "births": 24,
+            "detached": 24,
+            "full": 5,
+            "unassignedParent": 0,
+            "primary": 2,
+            "earlyPrimary": 2,
+            "edges": 2,
+            "chains": 0,
+            "intactAtHorizon": 15,
+            "persistent5k": 16,
+            "censored5k": 3
+          }
+        ],
+        "edges": [
+          {
+            "parent": 9,
+            "child": 26,
+            "family": "ABABA",
+            "length": 5,
+            "t": 15975,
+            "exact": true,
+            "active": true,
+            "fueled": true
+          },
+          {
+            "parent": 5,
+            "child": 27,
+            "family": "ABABA",
+            "length": 5,
+            "t": 18245,
+            "exact": true,
+            "active": true,
+            "fueled": true
+          }
+        ],
+        "chains": [],
+        "calibrationEightParents": 0,
+        "exactShortEdgesWithoutFuel": 0,
+        "finalMaterial": {
+          "founders": 5,
+          "offspring": 78,
+          "free": 18,
+          "dockedSingle": 1,
+          "unfinishedLinked": 15,
+          "releasedOther": 3,
+          "other": 0
+        }
+      }
+    }
+  ]
+}

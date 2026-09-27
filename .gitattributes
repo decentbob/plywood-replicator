@@ -25,3 +25,4 @@ experiments/out/SS_screen_20260927.runs.jsonl text eol=lf
 experiments/out/SV_census_20260927.json text eol=lf
 experiments/portfolio_checkpoint.md text eol=lf
 experiments/short_variant* text eol=lf
+experiments/out/SVG_*_20260927.* text eol=lf

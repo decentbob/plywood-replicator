@@ -1,65 +1,76 @@
 # Next-instance handoff — 2026-09-27
 
 Start with `git status`, AGENTS, [ROADMAP](../ROADMAP.md),
-[LEDGER](../experiments/LEDGER.md) and the research audit. ROADMAP is the
-queue. Q0 is complete as RESULTS 71; Q1 is next. Earlier P1–P4/C1 failed
-settings remain parked, including section 66's eight-letter benefit gate.
+[LEDGER](../experiments/LEDGER.md) and the research audit. Q1 is complete as
+RESULTS 72 and parked. Q2, an offline fuel-support audit, is next. No
+simulation batch is queued; no task-owned simulation process remains.
 
-## Completed work
+## Completed five-letter assay
 
-Baseline `153ea31` on main; find this session's commit in `git log`.
-[Portfolio comparison](../experiments/portfolio_checkpoint.md) chose the
-short-variant census over delivery timing and resource-recycling hypotheses.
-All sixteen archived section-66 worlds were reanalyzed; no simulator step,
-historical source edit, new rule or parameter change occurred.
+Session baseline `9fc9d4a` on main; find the delivered commit with `git log`.
+The [frozen plan](../experiments/short_variant_garden_plan.md) was implemented
+without changing its bytes, historical assays, simulator rules or defaults.
+Four active five-letter founders consume 10 A + 10 B from 120 letters, with
+40 U. ABABA/BABAB versus AABAB/ABABB, square/opposed20, grip on/off.
 
-- Eight grip-on worlds contain 83 distinct short fueled productive parents
-  and 39 overlapping two-link renewal chains; grip-off gives zero.
-- Four preparation/shape/family combinations pass the retrospective candidate
-  gate: AAA, AAAAB and AB in square worlds; ABABA in opposed20.
-- ABABA/BABAB has one two-link chain in each reused seed (203/204), with 5/2
-  fueled productive parents. Square dimers also qualify: no length payoff.
-- These are physical parent/release/fuel witnesses, not repeated strings.
-  They do not establish intrinsic shape benefit, novelty or cumulative complexity.
-- Short fragments not registered as stock births remain an ancestry blind spot;
-  whole communities may supply the required fuel contacts.
+- Viability 301/302, 20k, four worlds: both arrangements copy; gate passes.
+- Fresh screen 303/304, 100k, sixteen worlds: **fixed benefit gate fails**.
+  Opposed20 primary alternating/rearranged: 10/3 and 9/8. Square: 12/18 and
+  10/2. Seed 304 misses both the minimum difference and shape interaction.
+- Both arrangements renew exact descendants; all initial founders disappear.
+  Shorter registered rows also renew and remain in the evidence.
+- Across 72 productive exact parents, 359/360 arming witnesses involve
+  outside member IDs; 30 armings precede the parent's whole-row registration.
+  This is shared-contact evidence, not proof of a specific dependency.
+- 20 worlds / 1.68M steps / 803.455 process CPU seconds excluding validation.
+  Viability used four workers; screen used three while one check/replay ran.
+  No outcome-dependent stopping, missing arm, rate tuning or P0 batch.
 
-Evidence: `experiments/out/SV_census_20260927.json`, referencing the unchanged
-tracked `SS_screen_20260927` manifest/runs by hash. The frozen census plan and
-sources are hashed; do not tidy their bytes. Scratch originals are retained.
-Cost 0.562 CPU seconds, zero simulation steps; no simulation queue was launched.
+Archives in `experiments/out/`: `SVG_viability_20260927` and
+`SVG_screen_20260927`, each `.manifest.json`, `.runs.jsonl`, `.summary.json`,
+`.details.json`. Raw screen JSONL is about 50.5 MB; it is evidence, not clutter.
+Scratch originals are preserved. The summary's `fuel` field is the contact
+breakdown; scalar fuel totals remain in raw `metrics.fuel` and `.details.json`.
+Do not edit byte-hashed run sources just to change presentation.
 
-## Validation
+## Validation and reproduction
 
-Original archive/source validation passes. New synthetic lineage/fuel/order
-tests, independent indexed edge/chain reconstruction, exact eight-letter
-calibration and six report-corruption tests pass. The report recomputes exactly.
-Core bytes are unchanged; full physics suite and default fingerprints were
-not rerun for offline analysis. No new solver/individual-kick result is claimed.
+All four selected core checks and five baseline fingerprints pass. Observer
+neutrality covers both arrangements/shapes; full unobserved replays match
+301 and 303 alternating/opposed20 worlds at 20k and 100k. All twenty saved
+checkpoints resume for 500 steps exactly (excluding pin-cache version).
+Independent primaries, complete bond/fuel-holder reconstruction and twelve
+corruptions per batch pass. No full 39-check suite or new individual-kick
+comparison was run; the failed gate earns neither confirmation nor tuning.
 
 ```sh
-node experiments/short_variant_test.js experiments/out/SV_census_20260927.json
-node experiments/short_variant_analysis_test.js experiments/out/SV_census_20260927.json
-node experiments/short_variant_summary.js --verify experiments/out/SV_census_20260927.json
+node experiments/short_variant_garden_summary.js experiments/out/SVG_screen_20260927
+node experiments/short_variant_garden_analysis_test.js experiments/out/SVG_screen_20260927
+node experiments/short_variant_garden_report.js experiments/out/SVG_screen_20260927
+node experiments/short_variant_garden_report_test.js
 ```
 
-## Next: Q1, one frozen common-environment assay
+Use fresh stems for reruns. Manifests contain source hashes, commands, exact
+parameters and CPU costs; states, ordered events, fuel holders, shape samples,
+material inventories, censoring and all descendants are retained.
 
-Read [short_variant_garden_plan.md](../experiments/short_variant_garden_plan.md).
-Implement its separate runner/observer and tests; no Q1 runner or simulation
-exists yet. Compare ABABA/BABAB to AABAB/ABABB at equal material/composition,
-both shapes and grip on/off. Four five-letter active founders consume 10 A
-and 10 B from the fixed 120-letter pool. Log actual fuel holders as well as
-uninterrupted physical parentage, full rearming, useful output and material.
+## Next: Q2, offline support-partner audit
 
-Viability seeds 301/302, opposed20/grip-on, 20k. Only if its fixed gate passes:
-seeds 303/304, all eight arms, 100k. The plan fixes benefit gates, CPU budget,
-validation and stop rules. Check machine simulation processes before launch;
-at most four workers total. Use fresh stems if the listed paths already exist.
+Read ROADMAP Q2. Before counting pairs, freeze a small plan for distinguishing
+recurring renewing partners from incidental interchangeable contacts. Use
+all sixteen screen worlds. Define identities at actual fuel consumption;
+separate tracked intact rows, untracked material and pre-registration arming.
+Never revive a retired row from reused block IDs. Measure partner turnover,
+reciprocity and helper renewal, with world-level denominators, coverage and a
+stated contact-opportunity null respecting lifetimes.
 
-A positive screen earns a separately planned P0 sensitivity check and fresh
-confirmation. A failed screen parks the candidate, without tuning or extra
-seeds. Even positive arrangement benefit would not show that five letters
-beat the observed dimer competitor. No population race or core promotion is
-authorized by this census. Standing approval permits committing/pushing
-validated work; inspect local/remote status before acting.
+Section 50b already establishes cross-row contact facilitation. Merely counting
+it again does not justify new mechanisms, cooperation or selection. This audit
+may nominate a causal contrast, not rescue Q1 or prove a dependency. If it
+cannot distinguish partner-specific benefit from contact opportunity, record
+that no new candidate is justified and reassess the portfolio. No automatic
+population race, fresh confirmation, helper state or selective exclusion is
+queued. All earlier failed P1–P4/C1 settings remain parked.
+
+Standing approval permits committing and pushing validated work. Inspect
+local/remote status before delivery; main is the only long-lived branch.

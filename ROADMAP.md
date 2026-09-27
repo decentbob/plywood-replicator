@@ -5,16 +5,17 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** Q0's portfolio comparison and short-variant census are
-complete (71). Reanalysis of all sixteen section-66 worlds finds four short
-families with two consecutive fuel-supported renewal links in both seeds;
-square dimers qualify too. This is inherited renewal in the archived community,
-not causal arrangement benefit or increased complexity. The failed P1–P4/C1
-settings stay parked, including the original eight-letter benefit gate.
-**Next: Q1, the frozen five-letter common-environment assay.** Implement and
-validate the observer, then run the fixed viability gate before its screen.
-Compare observed ABABA/BABAB with an equal-composition rearrangement under
-matched shape/fuel controls. No P2 geometry repair, handoff states or core change.
+**Current status:** Q1's five-letter common-environment screen is complete
+and fails its fixed benefit gate (72). Opposed20 alternating/rearranged
+productive offspring are 10/3 and 9/8; square controls give 12/18 and 10/2.
+Renewal is real, but the arrangement advantage is not consistent by the gate.
+Park Q1 with the earlier failed settings; no rate/seed/state rescue or P0
+confirmation is earned. Of 360 arming witnesses for productive exact parents,
+359 involve a holder outside the eventual parent's members.
+**Next: Q2, a bounded offline fuel-support audit before another simulation.**
+Distinguish recurring renewing partners from transient contacts in the saved
+event histories. External holders alone do not establish a selected dependency
+or justify another designed mechanism. No simulation batch is currently queued.
 The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed batch,
 validation and exact starting point.
 Retain body jostling and targeted P0 checks; no
@@ -28,7 +29,8 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| Q1 | Test the observed five-letter variant in a common environment | High diagnostic value / unconfirmed arrangement benefit | Next: frozen plan, implementation and viability | Section 71 identifies inherited short renewal; equal-composition and fuel/shape controls must isolate whether organization pays. |
+| Q2 | Audit actual fuel-support partners and their renewal | High diagnostic value / no dependency lead yet | Next: bounded offline analysis/design | Section 72 records external support for almost every productive-parent arming; recurrent inherited partnerships remain unmeasured. |
+| Q1 | Test the observed five-letter variant in a common environment | Renewal measured / tested arrangement benefit fails | Park after fixed screen gate fails (72) | One seed passes; the other misses both the minimum arrangement contrast and shape interaction. No solver or fresh-seed confirmation earned. |
 | Q0 | Compare distinct hypotheses before another assay | Completed decision checkpoint | Comparison and archive census complete (71) | Four candidate families recur through physical renewal; candidate selection is retrospective and does not rescue earlier gates. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High long-term / low for tested acquisition setting | Park after actual first/second-contact gate fails (69) | Prepared geometry passes, but robust acquisition does not; reopening needs a distinct causal explanation rather than tolerance/rate tuning. |
 | P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
@@ -43,7 +45,42 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## Q1 — observed short variant, common-environment test
+## Q2 — fuel-support audit, before another simulation
+
+Use all sixteen section-72 worlds and their ordered fuel-holder/bond/row
+histories. The question is whether repeated contacts link **renewing partners**,
+or whether available material supplies interchangeable incidental support.
+Section 50b already establishes that other rows can supply contacts; measuring
+that again is not a new lead. Section 72's 359/360 outside-member witnesses do
+not identify partner persistence, reciprocity or reproductive benefit to helpers.
+
+Before counting pairs, freeze a small offline plan. Define a support edge only
+from an actual fuel consumption with actor and helper identities justified at
+that event. Separate same-row, different intact tracked rows, untracked material
+and arming before row registration; do not assign an old row identity to a reused
+block. Report partner turnover, reciprocal support and each participant's actual
+renewal, with world-level denominators and observation coverage. Compare against
+a stated contact-opportunity null that respects row lifetimes; repeated events
+in one world cannot supply independent replicates. Do not optimize a null until
+it declares cooperation. If archive gaps preclude the question, report that.
+
+This can nominate a causal contrast, not prove a dependency or rescue Q1.
+A new simulation requires a concrete matched intervention that separates
+partner-specific benefit from ordinary contact opportunity while conserving
+material and retaining local rules. If the audit supplies no such distinction,
+record that no new candidate is justified and reassess the portfolio. No
+automatic product ecology, selective helper state, founder-ID exclusion,
+frequency race, dimer competition or mechanism tuning is queued.
+
+## Q1 — observed short variant, common-environment test (completed, 72)
+
+**Outcome:** viability passed; the fresh 16-world screen fails. Alternating
+minus rearranged primary is +7/+1 under opposed20 versus -6/+8 under squares.
+Seed 304 misses the >=2 difference and the required shape interaction. Park the
+arrangement-benefit hypothesis. Exact descendant renewal remains evidence;
+all founders disappear and many shorter rows also renew. No new rules, P0
+comparison, fresh confirmation or length-payoff claim is earned. The following
+records the original comparison; Q2 above is the next work.
 
 Use the [frozen plan](experiments/short_variant_garden_plan.md), selected after
 the [Q0 comparison](experiments/portfolio_checkpoint.md) and section-71 census.
@@ -51,7 +88,8 @@ ABABA/BABAB has a witnessed two-link fuel-supported chain in both opposed20
 worlds, with 5/2 productive parents. Compare it with AABAB/ABABB at the same
 composition, total material and four active founder positions. Cross square /
 opposed20 and grip on/off. Viability: seeds 301/302, 20k; if it passes, screen
-303/304, 100k. No simulation from this plan has run yet.
+303/304, 100k. All planned worlds are complete and archived as SVG_viability /
+SVG_screen_20260927.
 
 The question is arrangement-dependent descendant renewal versus facilitation
 by the surrounding fragment community. Log actual fuel-holder contacts as well
@@ -67,7 +105,7 @@ variant renewal, not a retest of the parked eight-letter preparation.
 The following was the checkpoint brief. It is complete: the comparison chose
 the no-simulation short-variant census over unisolated delivery timing and
 resource recycling hypotheses. See RESULTS 71 for counts and limits, and Q1
-for the sole next experimental question. No other batch is queued.
+for its completed follow-up; Q2 is now the next question.
 
 Produce one short evidence-backed comparison of two or three distinct causal
 hypotheses, then one prospective assay plan. Start with the measured footholds:
@@ -508,3 +546,9 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   39 overlapping two-link chains occur across eight grip-on worlds, zero with
   grip off. No causal benefit estimate or gate rescue. Q1's five-letter
   common-environment plan is frozen; implementation/viability are next.
+- **2026-09-27, section 72:** Q1 finishes four viability and sixteen screen
+  worlds, 1.68M steps / 803.455 CPU seconds. Its fixed gate fails in seed 304;
+  exact descendant renewal occurs with both arrangements, and shorter rows
+  also renew. Of 360 fuel witnesses for productive exact parents, 359 involve
+  outside material. Park Q1 without tuning or P0 confirmation. Next: a bounded
+  offline support-partner audit, not another population batch.

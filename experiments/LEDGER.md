@@ -57,6 +57,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    A separate retrospective census (71) finds inherited fuel-supported renewal among shorter rows:
    four families have two-link chains in both archived seeds, including square dimers. Loss of the
    exact founder lineage is not loss of all inherited renewal; no arrangement benefit or length payoff follows.
+   The five-letter common-environment follow-up (72) also misses its fixed benefit gate:
+   opposed20 alternating/rearranged primary 10/3 and 9/8 versus square 12/18 and 10/2.
+   Both arrangements renew; 359/360 productive-parent fuel witnesses involve outside material.
+   These contacts do not establish a persistent partnership or a private shape function.
    Noncircular parts also need a check of numerical exclusion and search bounds (67): split-edge rectangle
    ports fit, but circular contact forces and centre-distance filters miss overlap or reject valid growth
    placements. More solver passes do not fix that deterministic geometry mismatch.
@@ -302,6 +306,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 69 | Actual first/second port acquisition | Can unbound parts acquire and persist at two intended contacts under local rules? | immutable face labels, `associationEnabled`, `portLoss` 0.001, `linkDistTol` 0.15 endpoint check, `iters` 4/16/32, `bodyJostle` on/off | negative | body4 success free 2/6, prepared 12/12; individual16/32 free 0/6, prepared 1/12 each (square); controls 0/54 | port_acquisition.js, port_acquisition_summary.js (`PA_screen_20260927`) | park tested P2 setting; C1 unchanged original-obstruction closure next | 12 viability + 108 conserved 500-step worlds; full replay and bond histories; no protected scaffold; two off-target compatible contacts; no growth/turnover or core change |
 | 70 | Original-obstruction handoff closure | Does retained support beat waiting and reuse an original prefix intact? | unchanged SEEK/request hazard 0.0001, REQUEST/OFFER/LATCH, `bodyJostle` true, `iters` 4 | negative | useful exact ordinary/SEEK/wait/pulse/hold 0/1/0/1/0; hold makes four supported releases and same-site returns without completion | handoff_closure.js, handoff_closure_summary.js (`HC_original_20260927`) | park C1; Q0 evidence synthesis and one prospective distinct-hypothesis assay plan next | one selected 150-block state, five 35k forks; no new rules; full replay/neutrality/restart and independent reconstruction; no active or reproducing descendants |
 | 71 | Q0 portfolio and short-variant census | Does shortening preserve witnessed inherited renewal beyond the exact founder family? | offline existing `pGrip` on/off and square/opposed `bendA`/`bendB` histories; no simulation | lead | 83 fueled productive short parents and 39 overlapping two-link chains across eight on worlds; zero off; four family/preparation/shape candidates repeat across both seeds | short_variant_summary.js, short_variant_analysis_test.js (`SV_census_20260927`) | Q1 frozen five-letter common-environment assay; earlier benefit gates remain failed | all 16 archived section-66 worlds, reused seeds 203/204; retrospective selection; square dimers qualify; unregistered fragments limit ancestry; no causal benefit or complexity claim |
+| 72 | Five-letter common-environment test | Does the observed alternating variant have an inherited arrangement benefit under matched shape/fuel controls? | `bendA`/`bendB` square/opposed20, `pGrip` 0/0.2, fixed `pFray` 0.00003 and `pUnzip` 1 | negative | opposed20 primary 10/3 and 9/8 alternating/rearranged; square 12/18 and 10/2; seed 304 fails minimum contrast and interaction; 359/360 primary fuel witnesses involve outside holders | short_variant_garden.js, short_variant_garden_summary.js, short_variant_garden_report.js (`SVG_screen_20260927`) | park Q1; offline Q2 fuel-support partner/renewal audit before any simulation | 2 viability + 2 fresh seeds, 20 worlds / 1.68M steps; strict exact/fueled parent mapping; all founders lost, short variants retained; core unchanged; no P0 promotion |
 
 ## Knob index
 
@@ -313,8 +318,8 @@ the rows that used it). Rerun it after adding rows.
 |---|---|
 | `backCopy` | 40a (works), 40e (negative) |
 | `bareCaps` | 33b (works), 33d (works) |
-| `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead) |
-| `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead) |
+| `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative) |
+| `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative) |
 | `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative) |
 | `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead), 67 (partial), 68 (works), 69 (negative), 70 (negative) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
@@ -375,8 +380,8 @@ the rows that used it). Rerun it after adding rows.
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
-| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative) |
-| `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead) |
+| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
+| `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative) |
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
@@ -398,7 +403,7 @@ the rows that used it). Rerun it after adding rows.
 | `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative) |
-| `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative), 66 (negative) |
+| `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
 | `relay` | 19c (works), 19d (negative), 22 (negative), 33b (works), 40d (inconclusive) |
@@ -471,9 +476,12 @@ later tests may have completed or rejected it. Do not treat every historical lea
 - **Q0 — completed portfolio checkpoint:** compared three hypotheses and completed the
   archived short-variant census (71). Four families retain witnessed renewal in both
   reused seeds; this is candidate evidence, not arrangement benefit or greater complexity.
-- **Q1 — next common-environment test:** implement the frozen five-letter variant plan,
-  then viability seeds 301/302 before screen 303/304. Equal-composition rearrangement,
-  shape and fuel controls must isolate benefit; square dimers remain a simpler competitor.
+- **Q1 — completed common-environment test:** the five-letter screen fails its fixed
+  benefit gate (72). Park arrangement-benefit tuning and confirmation; retain measured
+  renewal and external fuel support. Square dimers remain a simpler competitor.
+- **Q2 — next offline support audit:** distinguish recurring renewing partners from
+  transient contacts using the section-72 histories, with explicit opportunity controls
+  and unknown ancestry. No new simulation until a distinct causal contrast is justified.
 
 The old third-gene item is superseded by proofreading (38); further designed pressures
 are calibrations, not the main route to open-ended novelty. Product shape switches were

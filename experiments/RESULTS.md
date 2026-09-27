@@ -5779,3 +5779,142 @@ primary) are rejected, and the archived report recomputes exactly.
 Core source bytes are unchanged. The full physics suite and default
 fingerprints were not rerun for offline analysis; no new motion comparison
 was performed or claimed.
+
+## 72. Five-letter variants renew, but the arrangement-benefit screen fails
+
+**2026-09-27, Q1; [frozen plan](short_variant_garden_plan.md).** Section 71's
+retrospective ABABA/BABAB candidate earns a common-environment test, not a
+reopening of the failed eight-letter contrast. Compare ABABA/BABAB with the
+equal-composition rearrangement AABAB/ABABB. Four active prepared five-unit
+founders alternate complementary orientations at the fixed four positions,
+using 10 A and 10 B from the same 60 A / 60 B / 40 U pool in 18×18. Cross
+square/opposed20 and grip on/off. Ordinary fuel, complementary copying and
+slow turnover are unchanged; body jostling, four solver passes, stiffness 0.5.
+No new simulator rules, states, types or physical forces.
+
+The new observer wraps the unchanged section-66 row tracker. It logs every
+bond edit and records the full set of holders at each actual fuel arming,
+before unlinking. Offline analysis reconstructs all bonds, retirement,
+detachment, full activation and physical parent/member mapping. Primary:
+distinct nonfounder exact-founder-lineage parents that fully rearm with a
+fuel witness for **every** member after its release, then produce an exact
+detached child while intact. Row registration may follow arming; event order
+resolves same-step cases. Additional shorter and other lineages are retained
+separately rather than called failures of all heredity.
+
+### Viability and fixed screen
+
+Viability seeds 301/302, opposed20/grip-on, 20k: alternating founders give
+22/17 exact detached children; rearranged give 15/16. Both pass. Alternating
+has 2/0 productive rearmed exact offspring; rearranged 0/0. These pilot
+renewals do not count as fresh screen evidence. No parameters were changed.
+
+Fresh seeds 303/304, all eight arms, 100k. Entries are **303 / 304**; the
+independent unit is the world, not a birth or fuel contact.
+
+| arrangement | shape / grip | all births | exact lineage output | fueled productive exact offspring (primary) | second-cycle output | unfinished letters |
+|---|---|---:|---:|---:|---:|---:|
+| alternating | square / on | 140 / 124 | 42 / 43 | 12 / 10 | 24 / 18 | 9 / 6 |
+| alternating | square / off | 46 / 28 | 20 / 23 | 0 / 0 | 0 / 0 | 0 / 0 |
+| alternating | opposed20 / on | 150 / 119 | 43 / 37 | 10 / 9 | 23 / 20 | 11 / 13 |
+| alternating | opposed20 / off | 47 / 51 | 28 / 28 | 0 / 0 | 0 / 0 | 0 / 0 |
+| rearranged | square / on | 111 / 152 | 66 / 13 | 18 / 2 | 45 / 2 | 7 / 5 |
+| rearranged | square / off | 50 / 34 | 32 / 29 | 0 / 0 | 0 / 0 | 0 / 0 |
+| rearranged | opposed20 / on | 130 / 113 | 22 / 44 | 3 / 8 | 8 / 17 | 12 / 13 |
+| rearranged | opposed20 / off | 40 / 45 | 27 / 20 | 0 / 0 | 0 / 0 | 0 / 0 |
+
+**The unchanged gate fails.** Opposed20 alternating-minus-rearranged is
++7/+1; square contrasts are -6/+8. Seed 303 passes all conditions. Seed 304
+misses both the >=2 arrangement difference and the requirement that this
+difference exceed the square contrast. Both seeds exceed grip-off by >=2;
+that does not rescue the failed conditions. No averaging across seeds or
+lowering the threshold. Wedges also do not increase alternating primary
+relative to squares: 10/9 versus 12/10.
+
+Both arrangements genuinely renew in these prepared environments. Exact
+lineage depths reach 4/4 for opposed20 alternating and 3/3 for rearranged;
+square depths are 5/4 and 5/2. All original founders lose their organization
+in all sixteen worlds. Intact exact descendants at 100k are 1/0 and 2/1
+under opposed20, 2/3 and 10/0 under squares. These are finite histories,
+not sustained preservation or selection. Each 100-step snapshot reconciles
+all 120 letters. Short births dominate several on arms (for example 104/67
+alternating opposed20); every shorter/other registered family and its fueled
+renewal is retained in the summary. No longer-than-five or different-family
+five-letter stock birth occurs; same-family births with uncertain/mixed
+parentage are reported outside the exact lineage. Some stock births are
+not fully face-detached (149/150 in alternating opposed20 seed 303, for example).
+
+### What supplied the fuel contacts?
+
+There are 2,611 arming events in the eight grip-on worlds, zero in the off
+controls. At event time, 1,680 have holders on different intact tracked rows,
+931 include untracked material, and zero have all holders on one tracked row.
+Untracked includes material before its first whole-row registration and
+fragments after retirement; it is not equivalent to a free monomer.
+
+A descriptive membership query added after the pilot, without changing the
+gate, traces the actual arming events of the 72 productive exact parents.
+For each parent's first qualifying child, select each member's fuel event
+after its release and before that child's registration. **359 of 360** events
+involve at least one holder outside the eventual parent's members. Thirty
+of these 360 armings precede parent registration. The one event whose holders
+are all eventual parent members is therefore compatible with the zero count
+for a single already-tracked row. Neither classification establishes an
+isolated self-fueling pocket or proves that a particular helper is necessary.
+Event witnesses and member IDs are retained in `.details.json`.
+
+The imposed shape acts, but actual geometry also depends on arrangement:
+mean adjacent face-normal angles are 4.05/4.34 degrees for alternating
+opposed20 and 6.95/7.45 for rearranged; squares give 4.14/4.31 and 4.40/3.41.
+These are time/survivor-weighted intact-row observations, not preferred rest
+angles or independent replicates. Outside support and these angles cannot
+establish a causal arrangement advantage that the primary comparison failed.
+
+### Validation, cost and disposition
+
+```sh
+node experiments/short_variant_garden_test.js
+node experiments/short_variant_garden.js --out experiments/scratch/SVG_viability_20260927 --seeds 301,302 --profiles opposed20 --grips 1 --steps 20000 --workers 4
+node experiments/short_variant_garden_summary.js experiments/out/SVG_viability_20260927
+node experiments/short_variant_garden_analysis_test.js experiments/out/SVG_viability_20260927 --replay
+node experiments/short_variant_garden.js --out experiments/scratch/SVG_screen_20260927 --seeds 303,304 --steps 100000 --workers 3 --priorCpu 47.142
+node experiments/short_variant_garden_summary.js experiments/out/SVG_screen_20260927
+node experiments/short_variant_garden_analysis_test.js experiments/out/SVG_screen_20260927
+node experiments/short_variant_garden_report.js experiments/out/SVG_screen_20260927
+node experiments/short_variant_garden_report_test.js
+node test.js --match='mass is conserved|processive fraying:|compCopy:|grip and pocket:'
+node tools/fingerprint.js 1500
+```
+
+Use fresh output stems for reproduction. Both batches' manifests, raw JSONL,
+summaries and detailed witnesses are archived under the shown names. They
+contain exact commands, complete parameters/source hashes, initial/final
+states, mid-run checkpoints plus their 500-step continuations, bond/fuel/row
+events, actual geometry, material and censoring records. Scratch originals
+remain. Viability costs **47.142** CPU seconds; screen **756.313**, total
+**803.455 CPU seconds / 1.68M steps / 20 worlds**, excluding validation.
+No zero/failed arm is omitted and there was no outcome-dependent stopping.
+The sole scheduling deviation is three screen workers, leaving one slot for
+core checks and then replay; no more than four simulation workers ran.
+
+Observer tests compare all arrays/counters/RNG for both arrangements/shapes,
+check fuel-side L/R contacts do not retire letter rows, and reject recycled
+parents and activity without per-member fuel. Full plain replays match the
+301 alternating/opposed20 20k world and the corresponding 303 100k world.
+All twenty checkpoint continuations match, excluding only the derived
+pin-cache version. Independent parent-centric queries reproduce every primary;
+full bond reconstruction verifies every fuel-holder endpoint. Twelve malformed
+batch/parameter/lineage/fuel records are rejected in each batch. The additional
+report test covers arming before registration, outside-member classification
+and temporal exclusions. All four selected core checks pass (152.80 CPU s),
+and all five default fingerprints match. The unchanged full 39-check suite
+was not rerun. No individual-kick/solver comparison was earned or run.
+
+**Decision:** park Q1's arrangement-benefit hypothesis, with no rate, seed,
+horizon or state rescue. Preserve its evidence of finite renewal and shared
+contacts; no shape benefit, selected dependency, new function or complexity
+gain is demonstrated. Next is ROADMAP Q2's bounded offline audit: do actual
+fuel contacts connect recurring renewing partners, or merely available
+material? Fix opportunity controls and identity coverage before counting
+partnerships. A new simulation needs a distinct causal contrast; neither
+more fuel contacts nor a renamed copying mechanism supplies one.
