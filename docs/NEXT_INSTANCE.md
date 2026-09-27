@@ -1,24 +1,25 @@
 # Next-instance handoff — 2026-09-27
 
-Read [ROADMAP](../ROADMAP.md), the sole current queue. This slice began at
-`420acbf`. The user asked to explore new block alphabets and replication beyond
-chains, recalling Squirm3's cap-attached dividing cells. Q7b is deferred, not
-failed; its geometry result and kinetic constraints remain in ROADMAP.
+Read [ROADMAP](../ROADMAP.md), the sole current queue. The user clarified that
+blocks are not limited to four sides and proposed integrated polymer caps with
+two end polarities. This supersedes the separate-J preference from `b890d63`.
+The explicit clarification is now in AGENTS and DESIGN.
 
-[BLOCK_ARCHITECTURES](BLOCK_ARCHITECTURES.md) proposes open cap-attached frames,
-closed rims, branched tool strips and ribbons. First candidate: an outward cap
-anchor plus separate three-way J, preserving copying/fuel faces. Squirm3's source
-supports end-to-membrane junctions but also uses many division reactions; the
-linked video and full PDF were not inspected. Do not import that state machine.
+[POLYMER_CAPS](POLYMER_CAPS.md) is the current design memo. Give C_L/C_R enough
+ports for inward rail, copy, two rim contacts and fuel; extra sides are allowed.
+Two cap types encode local polarity, but actual antiparallel-copy orientations
+must fit. End growth can be simple; a closed rim needs an explicit enlargement
+route, and copying inside a common rim does not itself produce two cells.
 
-RESULTS 81 / `out/JT_20260927.json` is offline port/topology accounting only.
-Cap/J needs 4/3 ports; direct cap needs 5 with fuel. Cutting a simple rim alone
-never yields two closed rims; cut-and-rejoin graph witnesses exist. All counts
-recompute, match a segment-length oracle, and reject corrupted summaries.
+Next: freeze an isolated integrated-cap geometry fixture, including adjacent
+ordinary tiles, rim stubs and fuel, before growth chemistry. Test spatial
+clearance first with no timing gate. A candidate gate based on own rail occupancy
+and free copying face only affects recruitment at the cap; it neither stops
+remote polymer tips nor detects completed copying. No relay or cell schedule
+is admitted. The physical plan, rates, seeds and horizon are not frozen yet.
 
-Next is Q8a: freeze actual port coordinates and a seven-block access fixture
-(cap, rail tile, J, two rim stubs, complementary cap, fuel). Test actual copy/fuel
-approach and exclusion before acquisition chemistry. No physical plan or new
-state is frozen. Old wall, stack and repair failures remain failed. No task-owned
-simulation or subagent is active. Core/historical sources are unchanged; no
-full physics suite or fingerprint rerun was needed.
+The old brief, topology plan/runner and raw RESULTS 81 evidence are byte-hashed
+and unchanged. Their four-port restriction is historical implementation scope.
+This slice adds design clarification only; no experiments, core modifications,
+physics-suite or fingerprint reruns. Q7b remains deferred; old failures remain
+failed. No task-owned simulation or subagent is active.

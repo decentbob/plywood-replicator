@@ -41,6 +41,10 @@ handoffs, is preserved in [the archive](docs/archive/AGENTS-2026-09-26.md).
   they are not autonomous replication. Keep material counts and types fixed in comparisons.
 - **Prefer state changes to type changes.** Any block type is allowed if its behavior meets
   these constraints. The user disliked precursor-to-new-type conversion.
+- **Block sides are not limited to four.** The user clarified this on 2026-09-27.
+  The core's four working ports and eight-corner storage are implementation details,
+  not design constraints. New polygons may have more working sides; test them in
+  isolated assays and preserve the default chemistry. Separate junctions are optional.
 - **Prefer mechanical function and internally generated selection pressures.** Environment
   scarcity/density and deliberate environmental controls are allowed, but adding a rewarded
   motif for each desired function is evidence about designed pressures, not open-ended invention.

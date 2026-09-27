@@ -290,6 +290,7 @@ Still open:
 
 Keep entries short: date, what changed, why, what evidence.
 
+- 2026-09-27. User correction: polygon working sides are not limited to four. Treat the current port/corner arity as implementation, not intent. [Integrated polymer caps](docs/POLYMER_CAPS.md) supersede the separate-junction preference below: two complementary cap variants can carry chain/copy/rim/fuel roles directly. Start with geometry and ungated end growth; a local occupancy gate cannot read completion or stop distant tips. No dynamics or frozen assay inputs changed.
 - 2026-09-27. User-directed new-block exploration: [architecture brief](docs/BLOCK_ARCHITECTURES.md). Test a separate three-way junction on a cap's outward edge before a dividing rim; it preserves the four-port budget for copying and fuel. RESULTS 81 is offline port/topology accounting only. No core types, rules or defaults changed. Q7b is deferred in ROADMAP with its gate preserved.
 - 2026-09-15. Switched from thermal bond breaking to digital, rule-driven bonds. Reason: earlier build could not find an attraction strength that both formed chains and released them. Digital bonds make release a logic problem.
 - 2026-09-15. Dropped the "size sieve" idea for membrane permeability. Reason: flush-bonded rings have no gaps. Replaced with an energy-openable cap-cap latch.

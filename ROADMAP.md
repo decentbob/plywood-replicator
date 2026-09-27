@@ -13,20 +13,21 @@ status pointer, not a second queue.
 
 ## Current evidence and next slice
 
-**User-directed Q8: new blocks and non-chain architectures (RESULTS 81).**
-The [design brief](docs/BLOCK_ARCHITECTURES.md) compares open frames, cap-anchored
-rims, branched tool-bearing strips and ribbons. A separate three-way junction
-is first: cap rail/copy/fuel/anchor uses four ports and J uses three. A directly
-rim-bearing cap needs five with fuel. The offline audit finds possible rim
-reclosures, but cuts alone never yield two closed rims. No new block chemistry
-or autonomous operation is claimed. No task-owned simulation is active.
+**Q8 clarification: integrated polymer caps, with more working sides allowed.**
+The user explicitly rejects a four-side design limit. The revised
+[polymer-cap memo](docs/POLYMER_CAPS.md) takes direct C_L/C_R caps first: inward
+rail, copy, two rim contacts and fuel, with extra polygon sides as needed.
+The earlier [portfolio](docs/BLOCK_ARCHITECTURES.md) and RESULTS 81 remain
+historical; their port counts do not justify preferring a separate J under this
+clarification. End growth is distinct from enlargement of a closed rim and from
+division. No new chemistry or physical result is claimed. No simulation is active.
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8a: specify and test cap–junction access | Freeze the seven-block geometry preparation in the brief. Does an outward J with two rim stubs preserve copying and fuel contacts versus the same material around a bare cap? Check actual corners, approach, exclusion and pin residuals before acquisition chemistry. |
-| 2, only if access passes | One useful open-frame operation | Specify a mechanical retention/contact benefit and minimal incident-bond rules. Test acquisition, action and release against untethered material and doing nothing. No automatic full-rim implementation. |
-| 3, only after autonomous operation | Descendant rebuilding and net benefit | Charge rim/junction sequestration and copying time; compare equal-material independent strips, variant transmission and persistence through turnover. |
+| 1 | Q8a: integrated-cap geometry and copying access | Freeze actual polygons/ports and a small paired-cap fixture, including adjacent ordinary tiles, rim stubs and fuel. Allow more working sides in an isolated assay. Check both complementary orientations, approach/release, actual exclusion and pin residuals against the same unbound rim material. |
+| 2, only if access passes | Local polymer growth alongside copying | Test ordinary end growth without timing gates first. A cap-local occupancy gate is a candidate only for a measured conflict; it cannot halt distant tips or detect completion. Specify wall enlargement/reclosure/separation as literal incident-bond operations before a cell-cycle batch. |
+| 3, only after a local cycle is specified and passes | Reproductive closure and useful inheritance | Both resulting assemblies must repeat acquisition, copying, wall growth and separation from conserved free material. Charge rim costs, compare equal-material independent strips, and measure retained function/variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
 No Q8 physical plan is frozen. The brief's alternatives are a design portfolio,
