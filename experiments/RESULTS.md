@@ -6486,3 +6486,121 @@ The broader next direction still requires a distinct inherited physical
 operation with a same-material benefit prediction against simple renewal.
 Core and historical sources/data remain unchanged; no full physics suite,
 default fingerprint rerun or core promotion was needed for this isolated assay.
+
+## 78. Passive support restores a broken bond in prepared duplexes
+
+2026-09-27; Q6, baseline `dd38352`. **Physical-effect lead, not autonomous
+repair or inherited benefit.** The [prospective plan](duplex_repair_plan.md)
+tests a distinct operation: whether an intact face-bound row holds adjacent
+broken ends for ordinary ligation. Existing rules only; no repair state, damage
+sensor, new force, whole-key match or core change. Sections 18/29 measured
+binding/sequestration, not this exact damage-and-reconnection contrast. Q5's
+failed discrimination gate remains failed.
+
+### Preparation, controls and commands
+
+Sixty eight-block worlds (4 A + 4 B, no fuel), 24x24: seeds 601/602, ABAB/AABB
+and reverse-complement supports, body4/individual4/individual16, five arms.
+All begin with identical square poses, two active four-block rows, and selected
+bonds. The first row's middle bond is cut in every arm except uncut:
+
+- bridge: four face bonds and an intact opposite row;
+- split: same face occupancy, with the opposite middle bond also cut;
+- unbound: intact opposite row but all four face bonds removed;
+- noLigate: bridge with ligation disabled;
+- uncut: intact duplex stability control.
+
+`pLigate=0.02` except noLigate; acquisition, melting, fraying, background damage,
+spontaneous joining and capture are disabled. There are no mid-run observer
+interventions. Both dimers remain active after the imposed middle cut. The
+split arm has more imposed damage, explicitly testing load-path continuity,
+not equal damage. Permanent face bonds deliberately isolate mechanics while
+preventing release. All parameters and full states are in the raw record.
+
+```sh
+node experiments/duplex_repair.js experiments/scratch/DR_20260927.json
+node experiments/duplex_repair_test.js experiments/scratch/DR_20260927.json
+node experiments/duplex_repair_report.js experiments/scratch/DR_20260927.json experiments/scratch/DR_20260927.report.json
+```
+
+Those exact outputs already exist; choose a new stem for reproduction. Every
+writer refuses overwrites. Archive: `out/DR_20260927.json`, its `.cpu.json` and
+`.validation.json`, plus `DR_20260927.report.json` and the earlier one-off
+`DR_20260927.summary.json` (auxiliary analysis/cost retained). Archive copies
+are byte-identical to scratch. Raw SHA-256:
+`2ec6805064943277cd7745b0af649ab2520991f5894d6190271c3c677762fc1c`.
+The raw record hashes core, prospective plan, runner and validator; the report
+hashes its own source and requires a matching successful validation record.
+
+### Result and physical witness
+
+Primary: the original missing bond reconnects and remains at step 500.
+Connectivity through the support alone does not count as repair. Each table
+cell combines both contexts and seeds for presentation; the gate was applied
+separately to every seed/physics stratum, requiring both bridge contexts and
+at most one successful context in each split/unbound control.
+
+| Physics | Bridge repairs | Split repairs | Unbound repairs | No-ligation repairs | Uncut bonds retained | Bridge first repair steps (601 ABAB/AABB, 602 ABAB/AABB) |
+|---|---|---|---|---|---|---|
+| body4 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 1, 1, 19, 19 |
+| individual4 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 42, 127, 220, 432 |
+| individual16 | 4/4 | 0/4 | 0/4 | 0/4 | 4/4 | 103, 88, 70, 55 |
+
+**All six seed/physics strata pass.** Twelve bridge repairs, no original-row
+repairs in either negative topology control, and no repair without ligation.
+All uncut controls retain every prepared bond. All 36 non-uncut negative
+cases are right-censored at 500 for target repair; zero is not an infinite-time
+impossibility. One split support itself reconnects (seed 601, AABB,
+individual4, step 19), but its first row does not repair within the horizon.
+No new-neighbor lateral joining or births occur in any world.
+
+Actual side-midpoint gaps and antiparallel normals are sampled before every
+ordinary bond scan. Before repair, bridge geometry is eligible on 40/40 scans
+under body4, 88/821 under individual4, and 215/316 under individual16. Without
+ligation, the supported gap remains eligible on 2000/2000, 198/2000 and
+1144/2000 scans respectively. Unbound target ends have 0/2000 eligible scans
+in each mode; split targets have 2/2000, 38/2000 and 1/2000. These are correlated
+within-world physical witnesses, not independent trials or comparable exposure
+rates after stopping at repair. Body motion strongly changes retention/timing;
+the qualitative reconnection contrast survives independent kicks and solver
+resolution. Sixteen passes are a sensitivity check, not a convergence proof.
+
+### Scope, validity and cost
+
+The chemistry reads local side state/bonds and uses ordinary local geometry
+and ligation. The observer remembers original members/edges; reactions do not.
+It wraps link/unlink and geometry sampling without changing their outcomes.
+Sixty observed/plain full final states and RNGs match, as do sixty midpoint
+restarts (only the known pin-cache revision is excluded). Conservation,
+prepared face geometry, END-END compatibility and bond symmetry pass. The
+independent validator reconstructs midpoint/final bonds, recalculates geometric
+predicates and the fixed gate, and rejects corrupt outcome, tape, geometry and
+summary records. Initial/final source and parameter checks pass.
+
+One simulation process, no workers; the process inventory showed no other
+simulation before launch. Steps: 60 setup checks + 30,000 observed + 30,000
+plain + 15,000 restart continuation = **75,060 ordinary steps**. CPU: run
+13.030 s, validation 2.640 s, initial one-off analysis 0.280 s, final report
+0.171 s = **16.121 measured seconds**, within the 120 s cap and 40 s final-QA
+reserve. Final small QA/report serialization and shell/Git/docs/workspace
+inventory overhead are outside these intervals; no strict whole-session CPU
+claim. A zero-step side-orientation inspection preceded execution. No failed
+assay, invalid placement, retuning, extra seed or horizon change occurred.
+
+Every bound case ends with **8/8 faces occupied**, versus 0/8 in unbound.
+There are no active detached repaired outputs and no descendants. We supplied
+support, alignment and a break; the retained material cannot copy while bound.
+The experiment does not show self-acquisition, natural damage recovery,
+release, protection from continuing damage, reproductive payoff or evolved
+novelty. Two seeds and two prepared sequences are a lead, not confirmation.
+Independent dimers can renew without protecting the original four-letter order;
+this remains a simpler competitor, not a failed control of this experiment.
+
+**Next:** a small fresh-seed plan for ordinary acquisition, repair and release,
+with intact-support, no-binding and no-ligation contrasts and a release/use
+criterion. Only a completed autonomous operation can earn an equal-material
+reproductive test against independent renewal. No population batch or new repair
+state is yet admitted. Core and all historical assay/data bytes are unchanged;
+the full physics suite and default fingerprints were not rerun for this isolated
+assay. The current roadmap was shortened, with all old briefs retained in its
+dated snapshot, so those historical next steps cannot compete with Q6b.

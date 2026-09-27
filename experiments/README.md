@@ -25,13 +25,14 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 68 | `polygon_contact.js`, `polygon_contact_physics.js`, `polygon_contact_summary.js` | Research-only convex-envelope correction with unchanged kick/pin/deformation code, paired archived fixtures and full replay. Geometry eligibility only; chemistry/bond formation deliberately disabled. |
 | 69 | `port_acquisition.js`, `port_acquisition_summary.js` | Local complementary-face acquisition and uniform bond loss, unbound versus one-contact preparations, actual residual/persistence gate, negative solver-controlled screen. Uses a new subclass; historical physics-only class remains unchanged. |
 | 70 | `handoff_closure.js`, `handoff_closure_summary.js` | Original section-56 obstruction forked into five unchanged section-60/control arms; actual support physics, intact reuse, persistent completion, full observer/restart replay. Negative benefit gate closes C1. |
-| 71 | `short_variant_summary.js`, `portfolio_checkpoint.md` | Q0 comparison and offline census of all section-66 short births: ordered physical parent/fuel witnesses and two-link renewal. Retrospective candidates, not a new simulation or rescue of the eight-letter gate. Next plan: `short_variant_garden_plan.md`. |
+| 71 | `short_variant_summary.js`, `portfolio_checkpoint.md` | Q0 comparison and offline census of all section-66 short births: ordered physical parent/fuel witnesses and two-link renewal. Retrospective candidates, not a new simulation or rescue of the eight-letter gate. Follow-up completed in 72 under `short_variant_garden_plan.md`. |
 | 72 | `short_variant_garden.js`, `short_variant_garden_summary.js`, `short_variant_garden_report.js` | Fresh equal-composition five-letter common environment, strict fueled lineage renewal and complete fuel-holder/bond tapes. One of two screen seeds passes; fixed benefit gate fails. External support is measured, partner-specific dependency remains open. |
 | 73 | `fuel_support.js`, `fuel_support_analysis_test.js`, `portfolio_after_support.md` | Offline event-time support identities, contact episodes, reciprocal renewal and lifetime-respecting opportunity resampling. No candidate passes; few alternative helper sets limit identification. No simulation or new rules. |
-| 74 | `delivery_diagnostic.js`, `delivery_diagnostic_test.js`, `delivery_replay_plan.md` | Observer-only delivery stages: scanned geometry, binding episodes, supported lateral links and detached exact output. Twelve prepared fixtures and eight small neutrality worlds pass; ecological replay is planned, not yet run. |
+| 74 | `delivery_diagnostic.js`, `delivery_diagnostic_test.js`, `delivery_replay_plan.md` | Observer-only delivery stages: scanned geometry, binding episodes, supported lateral links and detached exact output. Twelve prepared fixtures and eight small neutrality worlds pass; subsequent replay is complete in 75. |
 | 75 | `delivery_replay.js`, `delivery_replay_summary.js`, `delivery_replay_test.js`, `delivery_replay_analysis_test.js` | Frozen sixteen-world archived replay, exact historical state/RNG and observation checks, continuous physical support attribution and censored stage rates. Coverage/denominator gates fail; park this diagnostic route. Full lossless records and report: `out/DD_replay_20260927/`. |
 | 76 | `portfolio_after_delivery.md` | Static Q4 comparison: efficacy-off binding versus pairing-mode mechanical renewal. Neither earns an assay; no simulation or new empirical result. Reopening requires a causal benefit of inherited physical organization against simple renewal. |
 | 77 | `geometric_error.js`, `geometric_error_test.js`, `geometric_error_report.js` | Prepared error discrimination under unchanged physics/chemistry, all two-letter contexts with square controls and individual-kick sensitivity. Wrong joining falls but selective wrong-member loss fails; AA context favors wrong joining. 96 conserved cases with neutral observation, restart and bond-tape validation. |
+| 78 | `duplex_repair.js`, `duplex_repair_test.js`, `duplex_repair_report.js` | Prepared passive repair using existing ligation: 12/12 intact-support cases restore the cut bond; split/unbound controls 0/12 each, across body4 and individual4/16. Physical-effect lead only: supporting face bonds are imposed and permanent; autonomous acquisition/release and reproductive benefit remain untested. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
 Read the plan and script's CLI rather than assuming identical options across runners.
@@ -57,10 +58,17 @@ Useful read-only checks:
 
 ```sh
 git status --short
+node tools/workspace_status.js
+node tools/workspace_status.js --verify-scratch
 git ls-files experiments/out
 node experiments/contact_handoff_summary.js experiments/out/CH_selected.json
 node test.js --list
 ```
+
+The inventory tool never modifies evidence. Its optional verification lists same-name scratch
+files whose SHA-256 matches a tracked archive on disk; unmatched names remain unverified.
+It is not a deletion list or a simulation-process detector. A missing tracked archive makes
+the command fail. Keep unique or failed records until their provenance is understood.
 
 The optional second output argument of some summary scripts **writes** a CSV. Omit it for
 read-only validation. Research saved states may need an assay's subclass and extra mark buffers;

@@ -1,0 +1,862 @@
+{
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\duplex_repair_report.js",
+    "experiments/scratch/DR_20260927.json",
+    "experiments/scratch/DR_20260927.report.json"
+  ],
+  "inputSha256": "2ec6805064943277cd7745b0af649ab2520991f5894d6190271c3c677762fc1c",
+  "scriptSha256": "06a00a52390e2c4b9e000b5ff7be509578287279977c1d3a8909a6ce6eaac01c",
+  "rows": [
+    {
+      "mode": "body4",
+      "arm": "bridge",
+      "n": 4,
+      "repaired": 4,
+      "times": [
+        1,
+        1,
+        19,
+        19
+      ],
+      "eligibleOpenScans": 40,
+      "totalScansBeforeRepair": 40,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "body4",
+      "arm": "split",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 2,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "body4",
+      "arm": "unbound",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 0,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "body4",
+      "arm": "noLigate",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 2000,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "body4",
+      "arm": "uncut",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 0,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual4",
+      "arm": "bridge",
+      "n": 4,
+      "repaired": 4,
+      "times": [
+        42,
+        127,
+        220,
+        432
+      ],
+      "eligibleOpenScans": 88,
+      "totalScansBeforeRepair": 821,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual4",
+      "arm": "split",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 38,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        19,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual4",
+      "arm": "unbound",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 0,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual4",
+      "arm": "noLigate",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 198,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual4",
+      "arm": "uncut",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 0,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual16",
+      "arm": "bridge",
+      "n": 4,
+      "repaired": 4,
+      "times": [
+        103,
+        88,
+        70,
+        55
+      ],
+      "eligibleOpenScans": 215,
+      "totalScansBeforeRepair": 316,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual16",
+      "arm": "split",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 1,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual16",
+      "arm": "unbound",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 0,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual16",
+      "arm": "noLigate",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 1144,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    },
+    {
+      "mode": "individual16",
+      "arm": "uncut",
+      "n": 4,
+      "repaired": 0,
+      "times": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "eligibleOpenScans": 0,
+      "totalScansBeforeRepair": 2000,
+      "finalOccupiedFaces": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "supportRepairs": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "changedNeighbors": 0,
+      "births": 0
+    }
+  ],
+  "gate": {
+    "worlds": 60,
+    "rows": [
+      {
+        "seed": 601,
+        "mode": "body4",
+        "bridge": {
+          "n": 2,
+          "repaired": 2,
+          "retained": 2,
+          "times": [
+            1,
+            1
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "split": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "unbound": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            0,
+            0
+          ]
+        },
+        "noLigate": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "uncut": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "pass": true
+      },
+      {
+        "seed": 601,
+        "mode": "individual4",
+        "bridge": {
+          "n": 2,
+          "repaired": 2,
+          "retained": 2,
+          "times": [
+            42,
+            127
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "split": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "unbound": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            0,
+            0
+          ]
+        },
+        "noLigate": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "uncut": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "pass": true
+      },
+      {
+        "seed": 601,
+        "mode": "individual16",
+        "bridge": {
+          "n": 2,
+          "repaired": 2,
+          "retained": 2,
+          "times": [
+            103,
+            88
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "split": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "unbound": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            0,
+            0
+          ]
+        },
+        "noLigate": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "uncut": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "pass": true
+      },
+      {
+        "seed": 602,
+        "mode": "body4",
+        "bridge": {
+          "n": 2,
+          "repaired": 2,
+          "retained": 2,
+          "times": [
+            19,
+            19
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "split": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "unbound": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            0,
+            0
+          ]
+        },
+        "noLigate": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "uncut": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "pass": true
+      },
+      {
+        "seed": 602,
+        "mode": "individual4",
+        "bridge": {
+          "n": 2,
+          "repaired": 2,
+          "retained": 2,
+          "times": [
+            220,
+            432
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "split": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "unbound": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            0,
+            0
+          ]
+        },
+        "noLigate": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "uncut": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "pass": true
+      },
+      {
+        "seed": 602,
+        "mode": "individual16",
+        "bridge": {
+          "n": 2,
+          "repaired": 2,
+          "retained": 2,
+          "times": [
+            70,
+            55
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "split": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "unbound": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            0,
+            0
+          ]
+        },
+        "noLigate": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "uncut": {
+          "n": 2,
+          "repaired": 0,
+          "retained": 2,
+          "times": [
+            null,
+            null
+          ],
+          "occupiedFaces": [
+            8,
+            8
+          ]
+        },
+        "pass": true
+      }
+    ],
+    "lead": true
+  },
+  "runCpuSeconds": 13.03,
+  "validationCpuSeconds": 2.64,
+  "reportCpuSeconds": 0.171,
+  "accountingScope": "Process CPU through calculation; excludes final small report serialization/write and any separate auxiliary commands."
+}

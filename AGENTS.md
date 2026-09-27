@@ -131,6 +131,9 @@ Do not edit a hashed source merely to tidy comments: historical analyzers may re
 
 - Read `git status` first; preserve user changes. Avoid broad file moves: assay source hashes and
   hard-coded paths are part of provenance. Never delete raw data because `.gitignore` matches it.
+- `node tools/workspace_status.js` gives a read-only archive/scratch inventory. Its optional
+  `--verify-scratch` checks same-name archived copies by SHA-256; it never deletes files and
+  does not determine which simulations are running. Keep ROADMAP current and the handoff brief.
 - Use `experiments/scratch/` for runs in progress, unique output stems, no overwrites. Archive a
   completed batch in `experiments/out/` with its raw evidence and manifests. Many JSON/JSONL files
   there are already tracked despite generic ignore patterns. Verify with `git ls-files`.

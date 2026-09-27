@@ -65,6 +65,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    wedges, but selective wrong-member loss misses its gate in both noise/solver strata.
    Every AA correct case loses a member first while both wrong placements join. Shape
    can filter incoming material without preferring the intended complementary identity.
+   Prepared passive support can restore a cut lateral bond through ordinary ligation (78):
+   12/12 intact-support cases reconnect versus 0/12 split-support and 0/12 unbound,
+   under body4 and individual4/16. This retains arrangement without fresh material, but
+   all bound faces stay occupied and there are no births. Acquisition/release and payoff
+   against independently renewing fragments remain untested; two seeds are only a lead.
    The offline partner audit (73) finds one repeated reciprocal renewing pair, but no
    candidate above its fixed opportunity reference. Only 3.3–6.2% of covered events have
    alternative helpers; this limits identification rather than proving interchangeable support.
@@ -322,6 +327,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 75 | Archived ecological delivery replay | Do failed worlds share a qualifying delivery-stage bottleneck? | observer-only existing `catalysis`/`bindAny`, `pBindP` 0/0.2; unchanged historical parameters | inconclusive | all 16 histories reproduce exactly; on coverage 75.95–79.80% misses >=80%; seed 106 has 13 geometric opportunities/2 ended bindings; no signature | delivery_replay.js, delivery_replay_summary.js (`DD_replay_20260927`) | park Q3; Q4 offline causal-contrast portfolio checkpoint before any new assay | 800k steps / 3,581.703 run + 39.328 final-QA CPU seconds (unreserved QA exceeds total cap); continuous supported recipient output 16/0/13/3; full physical tapes, original follow-ups, all controls and unknown/censored categories retained; no core change or benefit claim |
 | 76 | Portfolio after delivery (static design review) | Does either causal contrast earn another assay? | no executed intervention; compare efficacy suppression with retained binding and pairing-mode mechanical renewal | inconclusive | 2 options compared, 0 plans earned, 0 simulation steps; no new empirical outcome | portfolio_after_delivery.md | identify an inherited physical operation and same-material causal benefit against simple renewal before admitting a plan | efficacy can change producer supply; fit rescue lacks a predicted extra function; cost ceilings are design admission conditions, not launched batches; all prior failed gates retained |
 | 77 | Prepared geometric error discrimination | Can unchanged shape and ordinary undocking reject a wrong docked letter while retaining correct joining? | existing `compCopy`, opposed `bendA`/`bendB`, `pUndock` 0.1, `pSoft` 0.002; proof off; body4/individual16 | negative | 96 valid cases; square/opposed correct joining 4/4 vs 3/4; wrong joining 8/8 vs 2/8 body, 4/8 individual; wrong-member loss only 1–3/8 (<4) in every stratum | geometric_error.js, geometric_error_test.js, geometric_error_report.js (`GE_20260927`) | park this preparation; no context selection, shape/rate tuning, proof rule or population follow-up | AA favors both wrong placements over correct; no censoring or simultaneous-loss ambiguity; 48k steps including neutrality/restart plus 9.6k prepared physics passes, 11.948 measured CPU seconds including QA/report; fixed 16-block inventory, unchanged core |
+| 78 | Prepared passive duplex repair | Can an intact face-bound support retain broken ends for ordinary ligation? | existing `pLigate` 0.02/0, `pHyb` 0, `pMelt`/`pMeltEnd`/`pMeltRun` 0; body4/individual4/individual16 | lead | bridge repair 12/12; split/unbound/no-ligation 0/12 each; uncut stability 12/12; every seed/physics gate passes | duplex_repair.js, duplex_repair_test.js, duplex_repair_report.js (`DR_20260927`) | freeze a small autonomous acquisition/repair/release plan before reproductive testing | 60 eight-block worlds, 75,060 ordinary steps including QA continuations; 16.121 measured CPU seconds including analysis; all bound faces remain occupied, zero births; no core change, two seeds not confirmation |
 
 ## Knob index
 
@@ -397,12 +403,13 @@ the rows that used it). Rerun it after adding rows.
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
+| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead) |
 | `physics` | 15 (works) |
-| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
+| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead) |
 | `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative), 74 (works) |
-| `pMelt` | 18 (negative) |
-| `pMeltEnd` | 18b (negative) |
+| `pMelt` | 18 (negative), 78 (lead) |
+| `pMeltEnd` | 18b (negative), 78 (lead) |
+| `pMeltRun` | 78 (lead) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works), 43a (negative) |
@@ -453,68 +460,14 @@ the rows that used it). Rerun it after adding rows.
 | `W` | 17 (inconclusive) |
 <!-- /knob-index -->
 
-## Open gaps (current navigation)
+## Current navigation
 
-[ROADMAP.md](../ROADMAP.md) is the single ranked queue, updated after the 2026-09-26
-intent audit. Earlier rows' “points to” fields preserve the decision made at that time;
-later tests may have completed or rejected it. Do not treat every historical lead as active.
+[ROADMAP.md](../ROADMAP.md) is the only ranked queue. This ledger records
+observations and historical dispositions; a row's old "Points to" field is not
+a current assignment. Follow later evidence when a lead has failed confirmation.
 
-- **P0 — local rules and mechanical validation:** body jostling is accepted for exploration.
-  Check promising mechanical effects with individual kicks and adequate solver resolution;
-  retain strictly local reaction logic. No prerequisite physics rewrite.
-- **P1 — causal ecology:** shared catalysts and space have strong effects (36, 42), but
-  the recipient-dependence lead (61) fails its fresh confirmation gate (62, 2/4 pass).
-  Park this setting for frequency competition; no rate tuning or new states. Positive
-  mean benefits remain evidence, not a rescue of the failed flexibility setting (46).
-- **P2 — resource-efficient assembly:** derivation complete (63), physical turnover gate
-  incomplete. Gross scarce demand falls with width, but narrow fragments can recycle every
-  scarce part under one ideal cut arrangement; no per-child advantage established. Keep the
-  contact graph and finite-stock accounting; no core promotion. Port geometry passes
-  the preflight (67), and an isolated convex-envelope correction resolves the prepared search,
-  exclusion and placement failures (68), but actual local face acquisition/loss fails its
-  fixed gate (69). Body-prepared successes do not generalize to individual kicks or most
-  unbound encounters. Park this setting without further rate/tolerance/solver sweeps;
-  growth/turnover remains gated. Retain the narrow-recycling and common-stock objections.
-- **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);
-  inherited reproductive advantage remains open (41, 47, 51, 66). The equal-composition
-  screen achieves exact descendant renewal but misses its fixed benefit gate (66).
-  Park that preparation without retuning or extra confirmation; no more uptake-only claims.
-- **P4 — random-chemistry heredity:** tables 55 and 57 each fail all four two-variant
-  cases while copying controls pass (64–65). Park both pairs and further unguided candidate
-  screening. Table 57's contact witnesses also occur in plain baths. Reopening needs a
-  distinct evidence-backed discriminator; no broad search, new states or rescue tuning.
-- **P5 — coupled modes:** conditional on a measured useful exchange and self-renewal of
-  the participating assemblies; not justified merely by having two copying modes.
-- **C1 — handoff closure:** complete and parked (70). Four retained capture/release/
-  redocking cycles yield no new completed row; SEEK/pulse each yield one persistent
-  exact row with intact original-cohort reuse. No hazard/state/seed rescue earned.
-- **Q0 — completed portfolio checkpoint:** compared three hypotheses and completed the
-  archived short-variant census (71). Four families retain witnessed renewal in both
-  reused seeds; this is candidate evidence, not arrangement benefit or greater complexity.
-- **Q1 — completed common-environment test:** the five-letter screen fails its fixed
-  benefit gate (72). Park arrangement-benefit tuning and confirmation; retain measured
-  renewal and external fuel support. Square dimers remain a simpler competitor.
-- **Q2 — completed offline support audit:** one reciprocal renewing pair, no candidate
-  above the reference, and only 3.3–6.2% of covered events with alternative helpers (73).
-  Park this candidate source; sparse alternatives limit identification rather than prove
-  interchangeability. Q1 stays failed; no partner manipulation or extra seeds earned.
-- **Q3 — replay complete; route parked (75):** all sixteen worlds reproduce their
-  complete historical states and observations. Every on world misses >=80% known-site
-  coverage, and seed 106 also misses both minimum denominators. Supported output is
-  witnessed but no qualifying explanation or causal benefit is earned.
-- **Q4 — comparison complete (76):** neither efficacy suppression with binding retained
-  nor a pairing-mode renewal test earns an assay. This is a design disposition, not
-  a new empirical negative. Reopening needs a physical operation and same-material
-  benefit prediction against simple renewal, with a path to descendant inheritance.
-  No automatic ablation, census, coverage repair, new population or tuning is queued.
-- **Q5 — prepared error discrimination complete (77):** reduced wrong joining does not
-  give selective wrong-letter removal; every seed/physics stratum fails the frozen gate.
-  In AA context the wrong placements join while the correct pair fails first. Park this
-  preparation; a new physical-function hypothesis is needed, not favored-context selection.
-
-The old third-gene item is superseded by proofreading (38); further designed pressures
-are calibrations, not the main route to open-ended novelty. Product shape switches were
-built (45), and flexibility's recipient benefit failed fresh confirmation (46).
-Chirality, droplets, compartments and unrestricted combinations are parked pending a
-specific causal hypothesis; see ROADMAP for reopening conditions. Historical detail
-survives in RESULTS, DESIGN and the [archived guide](../docs/archive/AGENTS-2026-09-26.md).
+The latest physical-effect lead is prepared passive repair (78); it does not
+establish autonomous acquisition/release or inherited benefit. Q5 and all earlier
+failed gates remain failed. Use the roadmap for the next admitted slice and
+[the brief handoff](../docs/NEXT_INSTANCE.md) for operational status. Detailed
+completed briefs remain in the [Q5 roadmap snapshot](../docs/archive/ROADMAP-2026-09-27-Q5.md).
