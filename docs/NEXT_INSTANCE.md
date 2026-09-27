@@ -1,76 +1,79 @@
 # Next-instance handoff — 2026-09-27
 
-Q4's offline portfolio comparison is complete (RESULTS 76), following the
-completed Q3 replay (75). **No simulation is active and no executable assay
-is admitted.** Read ROADMAP, LEDGER and the research audit first. This slice
-started at `c710056`; find its delivered documentation commit with git log.
+Q5's prepared geometric-error assay is complete (RESULTS 77), after Q4's
+portfolio comparison (76). **No task-owned simulation remains.** Baseline was
+`9fa730d`; find the delivered commit with git log. Read ROADMAP and LEDGER.
 
-## Current decision
+## What was tested
 
-[The comparison](../experiments/portfolio_after_delivery.md) evaluates two
-concrete contrasts with local contracts, state/rule costs, simpler competitors,
-inheritance paths and CPU/viability/stop gates:
+A distinct hypothesis: existing wedge geometry might prevent wrong docked
+letters joining long enough for ordinary undocking to remove them. This uses
+no new proof rule, state, force or core change. Unlike section 49 (pSoft=0),
+it explicitly supplies a wrong letter; unlike 66/72 it measures discrimination,
+not arrangement/fuel benefit. The prospective plan is
+[geometric_error_plan.md](../experiments/geometric_error_plan.md).
 
-- Suppress chemical efficacy while retaining production and physical product
-  binding. This is possible with one research compatibility override and no
-  new mutable states. It identifies a total rule effect, but changed producer
-  output also changes recipient exposure. It does not isolate an inherited
-  recipient function. Neither disabling catalysis nor raising bare linking to
-  1 is the proposed ablation. No implementation is earned.
-- Cross complementary/self recognition with opposed/square shape and measure
-  descendant renewal. This uses existing rules, but mainly extends a known fit
-  rescue. It predicts no useful operation beyond copying or benefit over simple
-  square renewal. Self/complementary modes also produce different sequences.
-  No reopening of the failed arrangement screens is earned.
+96 conserved 16-block prepared worlds: every AA/AB/BA/BB context, both correct
+or one wrong incoming letter at either site, square/opposed20, seeds 501/502,
+body4/individual16. Template relaxation is 100 zero-kick physics-only passes;
+two face bonds are prepared by ordinary placement, then 200 ordinary steps.
+Acquisition is supplied, not demonstrated. First lateral joining, wrong-member
+loss and correct-neighbor loss are separate outcomes.
 
-Neither candidate earns a prospective plan. This is a research-priority
-decision, **not a newly measured zero effect**. No simulation, chemistry or
-historical evidence changed. Documentation references, ledger index and
-whitespace were checked; no physics suite or fingerprint rerun was needed.
+## Result: park this preparation
 
-## What can reopen research
+Correct joining is square 4/4 and opposed 3/4 in every seed/physics stratum.
+Square wrong joining is 8/8; opposed gives 2/8 for both body seeds and 4/8 for
+both individual-kick seeds. The square-adjusted contrast passes. However,
+wrong-member loss is only 2/2/3/1 of eight (body501/body502/individual501/
+individual502), below the frozen >=4 gate throughout. Neighbor losses are
+4/4/1/3. No censoring or simultaneous-first-loss ambiguity.
 
-Name a distinct inherited physical operation and its smallest same-material
-causal contrast against simple renewal. For ecology, explain how to distinguish
-recipient action from changed producer supply; for mechanics, identify a use
-beyond making distorted templates copyable. Either route can qualify. A
-prepared operation may be tested first, but must name an autonomous acquisition
-and renewal path before earning a population screen.
+Every AA correct pair loses a member first, while both AA wrong placements
+join, in every stratum. Actual corner-derived side geometry supports that
+reversal. Fewer wrong joins in aggregate is not a useful general error filter.
+No causal reproductive benefit, natural acquisition, inherited fidelity or
+complexity is demonstrated. Do not select favorable contexts, tune angles or
+undocking, add proofreading, or run a population extension. Q4's general
+reopening condition remains: a distinct physical operation with a measurable
+same-material benefit prediction against simple renewal. No assay is queued.
 
-Use a concrete physical witness or a new local-mechanics hypothesis, with an
-explicit prediction for the simpler competitor. Do not rerun Q4 unchanged or
-automatically launch a census, replay, literature survey, table search, parameter
-sweep or efficacy fixture. Cost ceilings in the comparison are admission
-conditions, not frozen run plans. All later plans must reserve final-analysis
-CPU and aggregate all processes, including QA, inside the total cap.
+## Evidence and checks
 
-## Preserved Q3 evidence
+`experiments/out/GE_20260927.json` is 13,114,085 bytes; `.json.cpu.json`,
+`.json.validation.json` and `GE_20260927.summary.json` accompany it. Scratch
+originals are preserved and byte-identical. Source/plan hashes, parameters,
+full initial/mid/final states, ordered edits and actual geometry are retained.
+The offline report includes every context and checks loss timing.
 
-Archive: `experiments/out/DD_replay_20260927/`, sixteen lossless records,
-manifest and full summary. All section-62 worlds (105–108 × four arms) replayed
-exactly through 50k, including full state/RNG, old samples, births and member
-follow-ups. Ordered tapes independently reconstruct physical events. Core,
-historical sources, section-74 observer and frozen replay plan remain unchanged.
+All 96 observed/plain comparisons and halfway restarts match saved state/RNG
+(excluding the known restored pin-cache revision). Bond reconstruction,
+conservation, fixed parameters, geometry calculations and four corruption
+checks pass. Core and all historical assay/data files are unchanged. No full
+physics suite or default fingerprint rerun. One process, no workers.
 
-Known-site coverage is 79.6534/76.8809/75.9505/79.7978%, below the fixed 80%
-in every on world; seed 106 has only 13 geometric opportunities and two ended
-recipient bindings. No diagnostic signature qualifies. Supported exact recipient
-output 16/0/13/3 is attribution, not necessity or inherited benefit. Section 62,
-Q1 and Q2 keep their failed gates; Q3 remains parked.
-
-Run cost was 3,581.703 CPU seconds; unreserved final QA added 39.328, for a
-measured minimum of 3,621.031, exceeding the frozen 3,600 cap by 21.031.
-Earlier auxiliary checks were not separately metered. Do not claim compliance
-or rerun to repair this accounting error. Five default fingerprints and relevant
-replay/observer/analysis tests passed in Q3; no task-owned simulation remains.
-
-Historical validation commands (not a request to repeat them):
+Cost: 48,000 ordinary steps including neutrality/restart, plus 9,600 prepared
+physics passes. Measured execution 9.405 CPU seconds, validation 1.858, timing
+inspection 0.233, report calculation 0.452 = 11.948. Cap 120, with 40 reserved
+for QA. Last report write and shell/Git/docs overhead are outside those tiny
+measured intervals. No parameter/horizon/seed changes or partial runs.
 
 ```sh
-node experiments/delivery_replay_test.js experiments/out/DD_replay_20260927
-node experiments/delivery_replay_analysis_test.js
-node experiments/delivery_replay_summary.js experiments/out/DD_replay_20260927
+node experiments/geometric_error.js experiments/scratch/GE_NEW.json
+node experiments/geometric_error_test.js experiments/scratch/GE_NEW.json
+node experiments/geometric_error_report.js experiments/scratch/GE_NEW.json experiments/scratch/GE_NEW.summary.json
 ```
 
-Preserve scratch and archived raw records, including failed and censored cases.
-Do not relaunch `delivery_replay.js` merely to continue the project.
+These are reproduction commands, not a request to rerun a parked test. Outputs
+refuse overwrites. The archived context report includes the original one-off
+timing-inspection cost; distinguish historical accounting from a fresh run.
+
+## Earlier decisions remain
+
+Q3 archive `experiments/out/DD_replay_20260927/` preserves sixteen exact
+historical trajectories, but all on worlds miss >=80% identity coverage;
+seed 106 also misses both denominator gates. Supported output is attribution,
+not necessity. Its run plus unreserved QA cost at least 3,621.031 CPU seconds,
+21.031 above its 3,600 cap; do not erase that deviation. Section 62, Q1 and Q2
+remain failed/parked. Q4's rejected efficacy and pairing-renewal candidates
+were not implemented. Preserve all raw evidence and historical source bytes.

@@ -61,6 +61,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    opposed20 alternating/rearranged primary 10/3 and 9/8 versus square 12/18 and 10/2.
    Both arrangements renew; 359/360 productive-parent fuel witnesses involve outside material.
    These contacts do not establish a persistent partnership or a private shape function.
+   A distinct prepared error-discrimination test (77) reduces wrong joining with opposing
+   wedges, but selective wrong-member loss misses its gate in both noise/solver strata.
+   Every AA correct case loses a member first while both wrong placements join. Shape
+   can filter incoming material without preferring the intended complementary identity.
    The offline partner audit (73) finds one repeated reciprocal renewing pair, but no
    candidate above its fixed opportunity reference. Only 3.3–6.2% of covered events have
    alternative helpers; this limits identification rather than proving interchangeable support.
@@ -317,6 +321,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 74 | Delivery diagnostic fixture gate | Can an unchanged observer separate opportunity, binding, supported linking and physical output? | observer-only existing `catalysis`, `bindAny`, prepared `pBindP` 0/1 and `pLinkBare` 1 | works | all 12 prepared signatures pass; supported/bare output 1/1 but supported attribution 1/0; eight small neutrality/restart worlds, all prepared controls and active-binding restart match | delivery_diagnostic.js, delivery_diagnostic_test.js, delivery_diagnostic_analysis_test.js (`DD_fixtures_20260927`) | fixed Q3 retrospective replay plan; no original world replayed yet | 11.781 CPU seconds / 20k suite steps plus scheduled phases; six corruptions rejected; small worlds have no deliveries, positive paths tested in prepared cases; measurement only, no benefit or locality promotion |
 | 75 | Archived ecological delivery replay | Do failed worlds share a qualifying delivery-stage bottleneck? | observer-only existing `catalysis`/`bindAny`, `pBindP` 0/0.2; unchanged historical parameters | inconclusive | all 16 histories reproduce exactly; on coverage 75.95–79.80% misses >=80%; seed 106 has 13 geometric opportunities/2 ended bindings; no signature | delivery_replay.js, delivery_replay_summary.js (`DD_replay_20260927`) | park Q3; Q4 offline causal-contrast portfolio checkpoint before any new assay | 800k steps / 3,581.703 run + 39.328 final-QA CPU seconds (unreserved QA exceeds total cap); continuous supported recipient output 16/0/13/3; full physical tapes, original follow-ups, all controls and unknown/censored categories retained; no core change or benefit claim |
 | 76 | Portfolio after delivery (static design review) | Does either causal contrast earn another assay? | no executed intervention; compare efficacy suppression with retained binding and pairing-mode mechanical renewal | inconclusive | 2 options compared, 0 plans earned, 0 simulation steps; no new empirical outcome | portfolio_after_delivery.md | identify an inherited physical operation and same-material causal benefit against simple renewal before admitting a plan | efficacy can change producer supply; fit rescue lacks a predicted extra function; cost ceilings are design admission conditions, not launched batches; all prior failed gates retained |
+| 77 | Prepared geometric error discrimination | Can unchanged shape and ordinary undocking reject a wrong docked letter while retaining correct joining? | existing `compCopy`, opposed `bendA`/`bendB`, `pUndock` 0.1, `pSoft` 0.002; proof off; body4/individual16 | negative | 96 valid cases; square/opposed correct joining 4/4 vs 3/4; wrong joining 8/8 vs 2/8 body, 4/8 individual; wrong-member loss only 1–3/8 (<4) in every stratum | geometric_error.js, geometric_error_test.js, geometric_error_report.js (`GE_20260927`) | park this preparation; no context selection, shape/rate tuning, proof rule or population follow-up | AA favors both wrong placements over correct; no censoring or simultaneous-loss ambiguity; 48k steps including neutrality/restart plus 9.6k prepared physics passes, 11.948 measured CPU seconds including QA/report; fixed 16-block inventory, unchanged core |
 
 ## Knob index
 
@@ -328,14 +333,14 @@ the rows that used it). Rerun it after adding rows.
 |---|---|
 | `backCopy` | 40a (works), 40e (negative) |
 | `bareCaps` | 33b (works), 33d (works) |
-| `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
+| `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive), 77 (negative) |
+| `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive), 77 (negative) |
 | `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative), 74 (works), 75 (inconclusive) |
 | `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead), 67 (partial), 68 (works), 69 (negative), 70 (negative) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
 | `catalysis` | 34c (works), 42a (works), 74 (works), 75 (inconclusive) |
 | `chiral` | 30 (partial) |
-| `compCopy` | 29 (partial), 49a (works), 49b (lead), 49c (lead), 50c (lead), 52a (works) |
+| `compCopy` | 29 (partial), 49a (works), 49b (lead), 49c (lead), 50c (lead), 52a (works), 77 (negative) |
 | `cut` | 26 (negative) |
 | `cutMotif` | 26 (negative), 26b (inconclusive) |
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
@@ -410,9 +415,9 @@ the rows that used it). Rerun it after adding rows.
 | `pSBind` | 40a (works), 40b (negative), 40c (negative) |
 | `pSMeltEnd` | 40a (works) |
 | `pSNuc` | 40a (works), 40b (negative) |
-| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works), 77 (negative) |
 | `pSpont` | 7 (works), 11b (negative) |
-| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative) |
+| `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative), 77 (negative) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `radBand` | 33g (lead) |
 | `rayHit` | 25b (works), 25d (negative) |
@@ -502,6 +507,10 @@ later tests may have completed or rejected it. Do not treat every historical lea
   a new empirical negative. Reopening needs a physical operation and same-material
   benefit prediction against simple renewal, with a path to descendant inheritance.
   No automatic ablation, census, coverage repair, new population or tuning is queued.
+- **Q5 — prepared error discrimination complete (77):** reduced wrong joining does not
+  give selective wrong-letter removal; every seed/physics stratum fails the frozen gate.
+  In AA context the wrong placements join while the correct pair fails first. Park this
+  preparation; a new physical-function hypothesis is needed, not favored-context selection.
 
 The old third-gene item is superseded by proofreading (38); further designed pressures
 are calibrations, not the main route to open-ended novelty. Product shape switches were

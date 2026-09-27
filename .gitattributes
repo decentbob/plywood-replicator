@@ -32,3 +32,5 @@ experiments/delivery_* text eol=lf
 experiments/out/DD_fixtures_20260927.json text eol=lf
 experiments/out/DD_replay_20260927/*.json text eol=lf
 experiments/out/DD_replay_20260927/*.gz binary
+experiments/geometric_error* text eol=lf
+experiments/out/GE_20260927*.json text eol=lf

@@ -6382,3 +6382,107 @@ frozen plans and raw evidence are unchanged. No simulation or archive reanalysis
 no fingerprints, build or physics suite rerun for documentation-only work. Cost
 estimates in the comparison use archived run CPU, not new timings, and include
 explicit future QA reserves; they are not measured costs for unimplemented arms.
+
+## 77. Geometry reduces wrong joining but fails selective error rejection
+
+2026-09-27, Q5; baseline `9fa730d`, [frozen plan](geometric_error_plan.md).
+Q4 required a different physical function with a causal prediction. This test
+asks whether shape can reject wrong incoming material using existing undocking,
+without the designed proofreading rule. Section 49 disabled substitutions;
+the fuel/arrangement tests did not isolate this discrimination. This is a
+prepared physical-effect test, not a reopened arrangement-benefit screen.
+
+### Fixed preparation and local contract
+
+Every world contains eight A and eight B blocks, no energy, in 24x24. A central
+AA/AB/BA/BB dimer is relaxed with 100 zero-kick physics-only passes, then two
+selected existing letters are placed using ordinary face alignment and vacancy.
+Both are complementary, or one supplied letter is wrong at site 0 or site 1.
+This deliberately bypasses initial recognition/acquisition; it is conditional
+on already docked material. Unused letters remain in a remote spaced grid;
+types and counts never change. No incoming lateral link is prepared.
+
+Square/opposed20 shapes, seeds 501/502 and body4/individual16 physics give
+96 cases. All use complementary recognition, stiffness 0.5, pSoft 0.002,
+pUndock 0.1, zero fraying, energy gate on and proofreading/catalysis off.
+No chemistry, force, mutable state or relay is added. Each case runs 200
+ordinary steps; classification observes the first incoming lateral join or
+loss of an imposed face bond. Correct/wrong identities are observer-only.
+Subsequent events cannot replace the first outcome. Existing side-interface,
+radial exclusion and body-jostling qualifications remain.
+
+### Frozen outcome
+
+Counts in each row are separate balanced prepared cases, not independent
+population contacts. Censored outcomes are zero throughout.
+
+| seed / physics | square correct joins / 4 | opposed correct joins / 4 | square wrong joins / 8 | opposed wrong joins / 8 | opposed wrong-member losses / 8 | opposed correct-neighbor losses / 8 | promotion |
+|---|---:|---:|---:|---:|---:|---:|---|
+| 501 / body4 | 4 | 3 | 8 | 2 | 2 | 4 | fail |
+| 502 / body4 | 4 | 3 | 8 | 2 | 2 | 4 | fail |
+| 501 / individual16 | 4 | 3 | 8 | 4 | 3 | 1 | fail |
+| 502 / individual16 | 4 | 3 | 8 | 4 | 1 | 3 | fail |
+
+All strata pass the >=3/4 correct-joining viability criterion, the positive
+square error-opportunity control, the halving of wrong joins, and the >=0.25
+square-adjusted discrimination contrast (body 0.5; individual 0.25). **All fail
+the required >=4/8 losses of the wrong member itself.** Losing the correct
+neighbor is not successful rejection; fewer wrong joins alone does not pass.
+The independent timing check finds no simultaneous first-face losses to make
+these labels ambiguous. Joins followed by normal release within the same step
+remain incorporation, as required by the ordered physical tape.
+
+The context-specific counterexample matters: **every AA correct preparation
+loses a member before joining, while both AA wrong placements join in every
+seed/physics stratum**. With body kicks the first actual side gaps are about
+0.1635 for the correct pair versus 0.0186–0.0239 for the wrong placements;
+the engine's geometry predicate fails the former and passes the latter.
+These are measured deformed sides, not selected rest shapes. Individual-kick
+cases keep this first-outcome reversal, despite different geometries/timing.
+The result is a context-dependent compatibility filter, not a general preference
+for correct chemical identity. No useful-output, inheritance, selection or
+complexity claim follows. It does not show that every possible shape filter fails.
+
+### Validation, cost and disposition
+
+For all 96 cases, observed versus plain 200-step dynamics and a 100+100 restart
+match full saved state/RNG, excluding only the known restored pin-cache revision.
+All invariants and type inventories pass. The independent analyzer reconstructs
+final bonds from ordered edits, checks initial material and fixed parameters,
+reclassifies first outcomes and recalculates side geometry from raw values.
+Four corrupt outcome/tape/geometry/decision records are rejected. All sources,
+plan hashes, parameters, initial/mid/final states, samples and tapes are archived.
+
+```sh
+node experiments/geometric_error.js experiments/scratch/GE_20260927.json
+node experiments/geometric_error_test.js experiments/scratch/GE_20260927.json
+node experiments/geometric_error_report.js experiments/scratch/GE_20260927.json experiments/scratch/GE_20260927.summary.json
+node tools/ledger_index.js
+```
+
+Creation/validation outputs refuse overwrites; reproduction needs a fresh path.
+Archive `out/GE_20260927.json` (13,114,085 bytes), its `.cpu.json` and
+`.validation.json` companions, and `out/GE_20260927.summary.json` are identical
+to retained scratch originals. The report preserves every context, including
+negative outcomes, and checks simultaneous-loss ambiguity. The sources and
+plan were frozen before the run; the context/timing report is subsequent
+descriptive analysis and does not change the decision criteria.
+
+One simulation process, no workers; the machine process inventory contained
+only tool servers before launch. Ordinary steps: 19,200 observed + 19,200
+plain + 9,600 restart continuation = **48,000**, plus **9,600 prepared
+physics-only passes**. Execution including setup/neutrality/restart/raw writing
+used 9.405 process CPU seconds; validation 1.858, one read-only timing inspection
+0.233, and final report calculation 0.452: **11.948 measured CPU seconds**.
+This leaves ample room under the 120-second cap with its 40-second QA reserve;
+the last tiny report write and shell/Git/documentation overhead are outside
+those measured intervals. No wall time is used as CPU cost. No failed placement,
+invariant, partial case, extra seed or parameter revision occurred.
+
+**Park this preparation.** Do not select only favorable contexts, tune angles,
+undocking or solver passes, add a proofreading rule, or launch population work.
+Correct-neighbor loss and AA's reversal defeat the proposed useful filter.
+The broader next direction still requires a distinct inherited physical
+operation with a same-material benefit prediction against simple renewal.
+Core and historical sources/data remain unchanged; no full physics suite,
+default fingerprint rerun or core promotion was needed for this isolated assay.

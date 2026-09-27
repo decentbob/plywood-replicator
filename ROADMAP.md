@@ -5,20 +5,19 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** Q4's offline portfolio comparison is complete (76).
-Neither efficacy-off product binding nor a pairing-mode renewal comparison
-earns an assay. The first isolates a programmed rate effect but leaves producer
-mediation unresolved; the second extends known fit rescue without predicting
-benefit over simple square renewal. See the
-[comparison](experiments/portfolio_after_delivery.md) for contracts and gates.
-**Next: identify a distinct inherited physical operation and its smallest
-same-material causal contrast against simple renewal. No executable assay is
-currently admitted.** A concrete physical witness or new local-mechanics
-hypothesis must satisfy Q4's reopening condition before a plan is queued.
-No automatic census, replay, efficacy implementation, arrangement tuning or
-coverage repair. Q3 remains inconclusive/parked; section 62, Q1 and Q2 keep
-their failed gates. The [handoff](docs/NEXT_INSTANCE.md) records this decision
-and the preserved replay evidence. No simulation remains active.
+**Current status:** Q5's prepared geometric-error test is complete (77).
+The distinct hypothesis was physical rejection of incorrect docked letters
+under unchanged rules, rather than another correct-fit or fuel-renewal test.
+All 96 cases and neutrality/restart checks pass validity. Opposed shapes reduce
+wrong joining, but often lose the correct neighbor; every seed/physics stratum
+fails the selective-rejection gate. Park this preparation. In AA context both
+wrong placements join while the correct pair fails first, in both physics modes.
+**Next: a distinct physical function with a benefit prediction against simple
+renewal; no executable assay is currently admitted.** Q4's reopening conditions
+still apply. Do not select favorable contexts, add proofreading, tune shapes or
+undocking, or extend this assay to population work. Q3 remains inconclusive/
+parked; section 62, Q1 and Q2 keep their failed gates. The
+[handoff](docs/NEXT_INSTANCE.md) records the new evidence. No simulation remains active.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -30,6 +29,7 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
+| Q5 | Mechanical rejection of a wrong docked letter | New physical-function hypothesis / failed selective rejection | Complete, parked (77); 96 prepared cases, unchanged rules | Wrong joining falls but correct neighbors are often lost; AA context favors wrong joining. No population or shape/rate tuning earned. |
 | Q4 | Choose a causal contrast after Q1–Q3 | Goal fit unresolved / no candidate admitted | Complete (76); two contrasts rejected for current priority | Reopening requires a physical operation with a same-material benefit prediction against simple renewal; no assay plan earned. |
 | Q3 | Distinguish ecological delivery from recipient opportunity | Measurement validated / explanation unresolved | Complete; park after coverage/denominator failure (75) | All sixteen trajectories replay exactly; no qualified stage signature. No threshold repair, extra seeds or automatic efficacy ablation. |
 | Q2 | Audit actual fuel-support partners and their renewal | Finite reciprocal renewal measured / no candidate earned | Complete; park candidate source (73) | One primary pair, none above reference; alternatives in only 3.3–6.2% of covered events limit identification. |
@@ -47,6 +47,33 @@ question active, plus a cheap independent literature/analysis task if useful. Re
 four-worker machine limit. After at most three new assays in a direction without advancing
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
+
+## Q5 — geometric error discrimination fails its prepared gate (77)
+
+The [frozen plan](experiments/geometric_error_plan.md) tests whether opposing
+wedges prevent an incorrectly docked letter from joining before ordinary
+monomer undocking removes it. This differs from Q4's rejected pairing-mode
+renewal comparison: recognition is fixed, wrong material is explicitly supplied,
+and the proposed function is error discrimination without a designed proof rule.
+No new state, rule, type or force. Prepared acquisition is not autonomous.
+
+All AA/AB/BA/BB contexts, correct/wrong-left/wrong-right, square/opposed20,
+seeds 501/502, body4/individual16: 96 cases, 200 ordinary steps each. Correct
+joining is 4/4 square and 3/4 opposed in every seed/physics stratum. Square wrong
+joining is 8/8; opposed gives 2/8 with body kicks and 4/8 with individual kicks.
+But wrong-member loss is only 2/2/3/1 of eight (body501/body502/individual501/
+individual502), below the required four in every stratum. Correct-neighbor loss
+accounts for 4/4/1/3. No censored outcomes; no simultaneous-loss ambiguity.
+
+All AA correct cases lose a member before linking; both AA wrong placements
+link in all four strata. Thus less wrong joining in aggregate cannot establish
+a generally useful filter or preserve useful variation. No replacement by a
+favorable context, smaller angle, stronger undocking or new proofreading rule.
+No autonomous/population test is earned. The raw archive is
+`experiments/out/GE_20260927.json`; measured execution/validation/report CPU
+is 11.948 seconds (120-second cap, explicit QA reserve). See RESULTS 77 for
+scope, actual geometry, validation and limits. Q4's general reopening criterion
+remains, not an instruction to repeat another portfolio review unchanged.
 
 ## Q4 — comparison complete; no new assay justified (76)
 
