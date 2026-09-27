@@ -1,81 +1,85 @@
 # Next-instance handoff — 2026-09-27
 
-Start with `git status`, AGENTS, [ROADMAP](../ROADMAP.md),
-[LEDGER](../experiments/LEDGER.md) and the research audit. Q2 is complete as
-RESULTS 73 and parked as a candidate source. Next is Q3's ecological delivery
-diagnostic **design**, before replay. No simulation batch is queued and no
-task-owned simulation process remains.
+The user is switching instances after this completed slice. Start with
+`git status`, AGENTS, [ROADMAP](../ROADMAP.md), [LEDGER](../experiments/LEDGER.md)
+and the research audit. **Q3's fixture gate is complete (RESULTS 74). The
+archived-world replay has not started.** No task-owned simulation remains.
 
-## Completed support audit
+## Delivered slice
 
-Baseline `1874b38` on main; find the delivered commit with `git log`.
-The [frozen plan](../experiments/fuel_support_plan.md) preceded pair counting.
-`fuel_support.js` analyzes all sixteen section-72 screen worlds, using the
-unchanged original source/hash/bond-tape validation. No rules, physical arrays,
-simulation RNG, material, states or historical assay sources were changed.
+Baseline `98838fc` on main; find this slice's delivered commit with `git log`.
+New observer: `experiments/delivery_diagnostic.js`. It wraps existing methods
+without changing chemistry, state, material, probabilities, forces or RNG.
+Historical sources and core bytes are unchanged.
 
-- 2,611 fuel events: 1,680 fully identified, 443 untracked actors, 488 tracked
-  actors with unknown holders; zero same-row-only support. All eight off worlds
-  have zero events/edges. Event-time identity never borrows later membership.
-- 1,421 within-world pairs: 117 reciprocal, eight repeated both ways, one
-  nonfounder pair with subsequent fueled exact renewal of both participants.
-  Helper sets change in 684/889 successive covered events.
-- The sole primary is ABABA/opposed20 seed 304, rows 70 (ABAB) and 71 (BABAB).
-  Both renew and later fray; no inherited association is shown.
-- Fixed opportunity reference: same actor row/unit, helper cardinality, 10k
-  bin, prior contact episodes, helpers still live at consumption, duration
-  weighting and 199 draws. Charge is unknown, so this is not a causal null.
-- No candidate passes. Primary one versus reference median two/q95 three in
-  that world; all other primaries zero. Only 3.3–6.2% of covered events have an
-  alternative helper set, below the fixed 20% gate. Sparse alternatives limit
-  identification, not proof that partners are interchangeable.
-- 9.327 process CPU seconds, zero simulation steps, no plan deviations.
-  Q1 remains failed; no confirmation, null retuning or pair manipulation.
+- Measures armed recipient availability, engine-scanned mature product/open-
+  back geometry (also at pBindP=0), actual binding episodes and placement
+  failures, cat-supported local lateral links, and detached exact output.
+- Support requires the actual mature product bond plus a witnessed binding
+  episode. Stale cat signals remain unknown. Row IDs retire on lateral edits/
+  fraying; a broken/replaced bond cannot reuse an old support witness.
+- All twelve prepared stage/control fixtures pass. Supported and bare cases
+  both produce one exact child, but only the supported case gets attribution.
+  Retired parent, severed link and stale signal cases are correctly excluded.
+- Eight small worlds (411/412, four arms, 1k) match unobserved state, typed
+  arrays, numeric counters and RNG; a 500-step restart matches observation.
+  These worlds have NO mature deliveries or births. All twelve prepared
+  cases therefore also have explicit unobserved controls, and a restart
+  during an active binding episode checks the positive observation path.
+- Independent reconstruction of 20 bond/row/release histories, six corruption
+  checks and a complete deterministic suite rerun pass. Twenty-four actual-
+  corner geometry cases agree with the engine predicate.
+- Completed suite: 11.781 process CPU seconds, 20k simulation steps including
+  plain/restarted comparisons, plus scheduled fixture phases. Validation
+  rerun cost excluded. One process, no workers. No core fingerprint/full-suite
+  rerun was needed; core unchanged and fixture invariants pass.
 
-Archive `experiments/out/FS_audit_20260927.json` (10,540,542 bytes) includes
-input/source/plan hashes, exact command, receipts, lifetimes, opportunities,
-pairs, all reference draws and decision. Scratch original is preserved and
-byte-identical. Inputs remain `SVG_screen_20260927.manifest.json` and
-`.runs.jsonl`; the raw JSONL is about 50.5 MB and must not be discarded.
-Historical SVG viability/screen evidence and all hashed sources are unchanged.
-
-## Validation and reproduction
+Archive: `experiments/out/DD_fixtures_20260927.json` (3,522,308 bytes), identical
+to the retained scratch copy. Contains source/plan hashes, exact command,
+initial/final states and complete observer records. Do not tidy hashed files.
+This is measurement validation, not an ecological benefit or complexity claim.
+The live cat-side dependency remains the existing audit caveat.
 
 ```sh
-node experiments/fuel_support_test.js
-node experiments/fuel_support.js --verify experiments/out/FS_audit_20260927.json
-node experiments/fuel_support_analysis_test.js experiments/out/FS_audit_20260927.json
+node experiments/delivery_diagnostic_analysis_test.js experiments/out/DD_fixtures_20260927.json
+node experiments/delivery_diagnostic_analysis_test.js experiments/out/DD_fixtures_20260927.json --replay
 ```
 
-Creation requires a fresh output stem; the report preserves the actual
-`node experiments/fuel_support.js experiments/scratch/FS_audit_20260927`
-command. Synthetic ordered-identity/readiness/episode/renewal/reference tests
-pass. Complete hash validation and deterministic recomputation pass. Independent
-raw-lifetime/holder queries reproduce all sixteen worlds; pool/draw/quantile/gate
-checks pass and ten corrupted records are rejected. No core suite, fingerprint
-rerun or individual-kick test was needed or run for this offline-only change.
-Section 72 retains its earlier successful core checks and default fingerprints.
+To recreate evidence use `node experiments/delivery_diagnostic_test.js` with a
+fresh output stem; it refuses overwrites. The original command is in the archive.
 
-## Next: Q3 observer design, before replay
+## Next slice: implement and execute the frozen replay protocol
 
-Read [the portfolio reassessment](../experiments/portfolio_after_support.md).
-It compares the exhausted support/shape route, ecological delivery and the
-parked acquisition/random-table routes. Section 62's low recipient occupancy
-has not been separated into encounter, binding, recipient loss or downstream
-assembly failure. The existing observer saves only 100-step aggregate occupancy,
-birth members and sampled 5k follow-up; no contact/link tape. Aggregate lag
-correlations cannot fill that gap.
+Read [delivery_replay_plan.md](../experiments/delivery_replay_plan.md), written
+before any replay outcomes. No runner for the full replay exists yet.
 
-Design event witnesses for physical contact opportunity, mature-product
-binding, supported lateral linking and complete detached output with continuous
-member history. Include recipient availability and unknown classifications.
-First demonstrate discriminating signatures and observer neutrality on small
-fixtures. Freeze worlds/controls, horizon, CPU cap and stop gate before any
-deterministic archived-world replay; include successful and failed confirmation
-worlds, not only seed 106. Keep all IDs in observation and use existing local
-rules. Explain the possible later material-matched causal contrast. If no
-discriminator survives, stop design and record why. No replay or new population
-batch has yet been queued. All earlier failed gates remain failed.
+1. Validate `experiments/out/RD_dependence_confirm` protocol, manifest and raw
+   runs. Keep all seeds 105–108 and on/noBind/noSource/neither, original 50k
+   horizon and (10k,50k] window. Original batch cost was 1,673.093 CPU seconds.
+2. Attach the new observer and original birth/member observer. Reproduce the
+   original initial physical hash, full final state/RNG, old 100-step samples,
+   births and member follow-ups exactly before interpreting new records.
+3. First 105/on to 10k is a cost-only preflight: <=45 CPU seconds, <=1 GiB RSS,
+   projected 80-fold CPU <=3,600 seconds. Continue the same instance if it
+   passes. Stop on cost/measurement failure and preserve partial evidence.
+   Prefer one process initially, at most three workers thereafter, always
+   within the machine-wide four-simulation limit. Inspect active processes;
+   many Node processes are Codex/MCP services, not simulations.
+4. Freeze launch hashes/commands before stepping. Keep original chemistry and
+   `delivery_diagnostic.js` unchanged. Store full records losslessly; no raw
+   data deletion. A replay mismatch or coverage failure is an honest stop.
+5. Plan fixes availability/encounter/binding/use rates, censoring and output
+   witnesses. Both previously failed worlds must be strictly below both
+   passed worlds for a retrospective stage signature. Require >=80% known
+   site coverage and minimum denominators (20 contacts or ended bindings).
+   No pooling, threshold tuning or choosing only seed 106. A signature is
+   not causal proof; no signature/coverage means no isolated explanation.
 
-Standing approval permits committing and pushing validated work. Inspect
-local/remote status before delivery; main is the only long-lived branch.
+A possible later catalytic-efficacy ablation would keep production/binding but
+make docked letters use their existing bare linking rate. It is NOT implemented
+or yet earned. It would require its own causal plan and prepared control;
+later contacts can diverge. No new population screen, confirmation, frequency
+race or reward motif is queued. Section 62 and Q1 remain failed; Q2 is parked.
+
+Standing approval permits committing/pushing validated work. Main is the only
+long-lived branch. Confirm clean local status and remote agreement at delivery.

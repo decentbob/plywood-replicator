@@ -311,6 +311,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 71 | Q0 portfolio and short-variant census | Does shortening preserve witnessed inherited renewal beyond the exact founder family? | offline existing `pGrip` on/off and square/opposed `bendA`/`bendB` histories; no simulation | lead | 83 fueled productive short parents and 39 overlapping two-link chains across eight on worlds; zero off; four family/preparation/shape candidates repeat across both seeds | short_variant_summary.js, short_variant_analysis_test.js (`SV_census_20260927`) | Q1 frozen five-letter common-environment assay; earlier benefit gates remain failed | all 16 archived section-66 worlds, reused seeds 203/204; retrospective selection; square dimers qualify; unregistered fragments limit ancestry; no causal benefit or complexity claim |
 | 72 | Five-letter common-environment test | Does the observed alternating variant have an inherited arrangement benefit under matched shape/fuel controls? | `bendA`/`bendB` square/opposed20, `pGrip` 0/0.2, fixed `pFray` 0.00003 and `pUnzip` 1 | negative | opposed20 primary 10/3 and 9/8 alternating/rearranged; square 12/18 and 10/2; seed 304 fails minimum contrast and interaction; 359/360 primary fuel witnesses involve outside holders | short_variant_garden.js, short_variant_garden_summary.js, short_variant_garden_report.js (`SVG_screen_20260927`) | park Q1; offline Q2 fuel-support partner/renewal audit before any simulation | 2 viability + 2 fresh seeds, 20 worlds / 1.68M steps; strict exact/fueled parent mapping; all founders lost, short variants retained; core unchanged; no P0 promotion |
 | 73 | Fuel-support partner audit | Do recurring renewing partners stand out from available contact opportunities? | offline `pGrip` on/off, square/opposed `bendA`/`bendB` archives; no simulation | inconclusive | 1680/2611 events covered; 117 reciprocal pairs, 8 repeated both ways, 1 renewing primary; none above reference q95; alternatives in 3.3–6.2% of covered events | fuel_support.js, fuel_support_analysis_test.js (`FS_audit_20260927`) | park Q2 candidate source; Q3 ecological delivery diagnostic design before replay | all 16 section-72 worlds; 199 lifetime-respecting reference draws per world; 9.327 CPU seconds, zero steps; unknown charge/identity and sparse alternatives limit inference; fixed nomination gate fails |
+| 74 | Delivery diagnostic fixture gate | Can an unchanged observer separate opportunity, binding, supported linking and physical output? | observer-only existing `catalysis`, `bindAny`, prepared `pBindP` 0/1 and `pLinkBare` 1 | works | all 12 prepared signatures pass; supported/bare output 1/1 but supported attribution 1/0; eight small neutrality/restart worlds, all prepared controls and active-binding restart match | delivery_diagnostic.js, delivery_diagnostic_test.js, delivery_diagnostic_analysis_test.js (`DD_fixtures_20260927`) | fixed Q3 retrospective replay plan; no original world replayed yet | 11.781 CPU seconds / 20k suite steps plus scheduled phases; six corruptions rejected; small worlds have no deliveries, positive paths tested in prepared cases; measurement only, no benefit or locality promotion |
 
 ## Knob index
 
@@ -324,10 +325,10 @@ the rows that used it). Rerun it after adding rows.
 | `bareCaps` | 33b (works), 33d (works) |
 | `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
 | `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative) |
+| `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative), 74 (works) |
 | `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead), 67 (partial), 68 (works), 69 (negative), 70 (negative) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
-| `catalysis` | 34c (works), 42a (works) |
+| `catalysis` | 34c (works), 42a (works), 74 (works) |
 | `chiral` | 30 (partial) |
 | `compCopy` | 29 (partial), 49a (works), 49b (lead), 49c (lead), 50c (lead), 52a (works) |
 | `cut` | 26 (negative) |
@@ -380,7 +381,7 @@ the rows that used it). Rerun it after adding rows.
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
-| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead), 62 (negative) |
+| `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead), 62 (negative), 74 (works) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
@@ -389,7 +390,7 @@ the rows that used it). Rerun it after adding rows.
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial) |
 | `physics` | 15 (works) |
 | `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative) |
-| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative) |
+| `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative), 74 (works) |
 | `pMelt` | 18 (negative) |
 | `pMeltEnd` | 18b (negative) |
 | `pMemDecay` | 16c (negative) |
@@ -487,9 +488,10 @@ later tests may have completed or rejected it. Do not treat every historical lea
   above the reference, and only 3.3–6.2% of covered events with alternative helpers (73).
   Park this candidate source; sparse alternatives limit identification rather than prove
   interchangeability. Q1 stays failed; no partner manipulation or extra seeds earned.
-- **Q3 — next diagnostic design:** distinguish ecological delivery from recipient
-  availability and productive use. Section-62 aggregate occupancy cannot resolve this;
-  validate observer fixtures and freeze a plan before considering deterministic replay.
+- **Q3 — measurement gate passed (74):** stage fixtures, physical event reconstruction,
+  observer neutrality and restart pass. Next is the frozen retrospective replay of all
+  section-62 worlds, with exact historical agreement, cost cap and coverage gates.
+  No delivery obstruction or causal benefit has yet been measured in those worlds.
 
 The old third-gene item is superseded by proofreading (38); further designed pressures
 are calibrations, not the main route to open-ended novelty. Product shape switches were

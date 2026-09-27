@@ -6055,3 +6055,126 @@ delivery-versus-recipient-opportunity question from section 62. Existing ecology
 archives lack the ordered contacts needed to answer it. Design and validate
 that discriminator before considering deterministic replay; no new mechanism,
 population batch or confirmation is queued.
+
+## 74. Delivery-stage observation passes prepared fixtures and neutrality
+
+2026-09-27, ROADMAP Q3; baseline `98838fc`,
+[fixture plan](delivery_diagnostic_plan.md). Section 62's aggregate occupancy
+cannot distinguish scarce recipient sites, failed delivery or unproductive
+binding. Section 73 supplies no partner-specific candidate. This task builds
+and validates a measurement under unchanged chemistry, not an explanation of
+either result. No archived ecology world has been replayed yet.
+
+### Read/write contract and physical witnesses
+
+`delivery_diagnostic.js` wraps existing methods and calls each original once.
+All row IDs, classifications and histories stay in observer closures. The
+simulator reads none of them. No new state, side mark, type, probability,
+force or material operation. Core and historical assay sources remain byte-
+identical. Existing body jostling/four passes and the live cat-side derivation
+caveat remain; this is not a new locality or mechanical accuracy claim.
+
+At each bond-formation phase the observer records armed known-recipient,
+producer and unknown site counts, their free backs, and mature products. It
+records mature product/open-back pairs at actual `_tryBond` calls, evaluates
+their ordinary centre and actual-corner side geometry before probability,
+then records formation attempts and successful binding episodes. The pBindP=0
+control still has geometric opportunities. This counts engine-scanned pairs,
+not every possible polygon collision; vacancy tests occur later and remain
+separate. Geometry uses private scratch arrays and does not touch Sim caches.
+
+A supported lateral letter link must be sticky, read a true cat flag on an
+incident template face, and have a physically present mature product with a
+witnessed active binding episode. Stale/unidentified signals remain unknown.
+Each internal lateral bond carries its current link-event witness until that
+bond breaks. Row identity ends on fraying or lateral edits. Exact detached
+output requires release witnesses mapping every member to the same still-live
+parent in reverse order, correct sequence and fully unbound F faces. Support
+attribution additionally requires a surviving internal link supported on that
+parent. A broken and later replaced link cannot reuse its old attribution.
+
+### Fixed prepared fixtures
+
+Every case conserves four B blocks and two product blocks. Setup explicitly
+prepares a BB recipient and a two-unit product; selected cases prepare two
+docked copy units. Pose/state edits and phase scheduling are fixture
+interventions, not autonomous acquisition. Binding probability is 0 or 1;
+bare linking is 1 to exercise output without catalytic support. These are
+calibrations, not the original ecology parameters or a benefit comparison.
+
+| prepared case | geometric opportunities | bindings | placement failures | known supported links | detached exact output | supported exact output |
+|---|---:|---:|---:|---:|---:|---:|
+| no armed recipient | 0 | 0 | 0 | 0 | 0 | 0 |
+| product too far | 0 | 0 | 0 | 0 | 0 | 0 |
+| product misoriented | 0 | 0 | 0 | 0 | 0 | 0 |
+| immature product | 0 | 0 | 0 | 0 | 0 | 0 |
+| binding disabled | 1 | 0 | 0 | 0 | 0 | 0 |
+| binding without docked copy | 1 | 1 | 0 | 0 | 0 | 0 |
+| placement blocked | 1 | 0 | 1 | 0 | 0 | 0 |
+| supported linking and release | 1 | 1 | 0 | 1 | 1 | 1 |
+| bare linking and release | 0 | 0 | 0 | 0 | 1 | 0 |
+| parent retired before release | 1 | 1 | 0 | 1 | 0 | 0 |
+| supported bond severed and replaced bare | 1 | 1 | 0 | 1 | 1 | 0 |
+| product unlinked before cat signal refresh | 1 | 1 | 0 | 0 | 1 | 0 |
+
+Availability distinguishes the first two rows: zero versus two armed recipient
+sites. Misorientation reaches the scan once but fails side geometry. The stale
+signal case has one unknown-support link and does not receive physical-support
+credit. Retired-parent output still exists as a detached row, but exact ancestry
+is unassigned. All twelve expected signatures pass. This does not establish
+that these are the causes of the earlier ecological failures.
+
+### Neutrality, restart and independent validation
+
+Seeds 411/412, on/noBind/noSource/neither, 1,000 steps: eight 68-block worlds
+in 16x16 with 12 each A/B/C/D, 12 products, eight energy particles and the
+two original six-letter seed sequences. Instrumented/plain runs match all
+saved state, typed arrays, numeric counters and RNG. Observer records also
+match a restart at step 500 through step 1,000; state comparison excludes only
+the derived pin-cache revision on restored instances. All final invariants
+and type inventories pass. These small worlds produce no mature deliveries
+or births, so they alone cannot validate the positive observation paths.
+
+The independent check therefore also pairs **every prepared case** with the
+same actions without observation: all arrays/counters/RNG match and reproduce
+the archived fixture states. An active binding episode survives observer/Sim
+restart and produces identical link/output records. Twenty ordered event tapes
+(12 prepared, eight small worlds) reconstruct final bonds, continuous row
+ownership, release parents and surviving support witnesses independently.
+Six altered counts, parents, witnesses, episode endings or bond endpoints are
+rejected. A full deterministic suite rerun reproduces the archived evidence,
+excluding wall timestamp/CPU measurement. Twenty-four orientation/offset/seam
+geometry cases agree with the engine's actual-corner predicate.
+
+```sh
+node experiments/delivery_diagnostic_test.js experiments/scratch/DD_fixtures_20260927
+node experiments/delivery_diagnostic_analysis_test.js experiments/out/DD_fixtures_20260927.json --replay
+```
+
+Creation refuses overwrites; use a fresh stem. The archive
+`out/DD_fixtures_20260927.json` (3,522,308 bytes) is byte-identical to the retained
+scratch original. It records the exact command, source/plan SHA-256 hashes,
+parameters through saved states, all initial/final states, observer records,
+zero outcomes, counts and CPU cost. Completed suite cost: **11.781 process CPU
+seconds and 20,000 simulation steps**, including plain/restarted comparisons,
+plus manually scheduled fixture phases; validation reruns are excluded from
+that cost. One process, no workers or archived population replay. No fixture
+failure or rule change was needed. No default fingerprint or full core-suite
+rerun was required; core bytes are unchanged and relevant invariants pass.
+
+### Disposition
+
+**Measurement gate passes.** It earns the
+[fixed retrospective replay plan](delivery_replay_plan.md), not a new ecological
+benefit claim. That plan retains all four confirmation seeds and four controls,
+the original 50k horizon and (10k,50k] window, exact original-state/observation
+agreement, a 3,600 CPU-second cap and cost-only preflight. It freezes coverage,
+denominator and failed-versus-passed-world stage comparisons before replay.
+
+A later research-only catalytic-efficacy ablation could retain production and
+product binding while making docked letters use the existing bare linking rate.
+That would separate chemical acceleration from physical bound-product presence
+at the rule level, with no ID reads or material change; subsequent contacts
+would still diverge. It is a proposed causal contrast, not implemented or earned
+by these fixtures. Section 62 remains failed, Q2 remains parked, and no new
+mechanism, population screen, heritable dependency or complexity is demonstrated.

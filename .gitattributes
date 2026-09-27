@@ -28,3 +28,5 @@ experiments/short_variant* text eol=lf
 experiments/out/SVG_*_20260927.* text eol=lf
 experiments/fuel_support* text eol=lf
 experiments/out/FS_audit_20260927.json text eol=lf
+experiments/delivery_* text eol=lf
+experiments/out/DD_fixtures_20260927.json text eol=lf

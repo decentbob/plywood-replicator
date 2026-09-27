@@ -5,17 +5,16 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** Q2's offline support audit is complete (73): one repeated
-reciprocal renewing pair, no candidate above the fixed opportunity reference,
-and only 3.3–6.2% of covered events with alternative helpers. Park this candidate
-source; limited alternatives do not prove absence of partner preference.
-Q1's arrangement-benefit gate remains failed (72). No tuning or confirmation.
-**Next: Q3, design an event-level ecological delivery diagnostic before replay.**
-The [portfolio reassessment](experiments/portfolio_after_support.md) selects
-delivery versus recipient opportunity as the unresolved distinction; aggregate
-section-62 occupancy cannot answer it. Validate the measurement on small
-fixtures before any archived-world replay. No simulation batch is queued.
-The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed audit,
+**Current status:** Q3's delivery diagnostic passes its fixture gate (74).
+Twelve prepared cases distinguish recipient availability, scanned geometry,
+binding, supported linking and physical output; observer neutrality/restart
+and independent event reconstruction pass. No original ecology world has yet
+been replayed. Q1/Q2 and section 62's benefit gate remain failed or parked.
+**Next: implement the bounded Q3 archived-world replay under its frozen plan.**
+The [replay protocol](experiments/delivery_replay_plan.md) fixes all sixteen
+confirmation worlds, exact historical agreement, a cost-only preflight and
+3,600 CPU-second cap. No new chemistry, population screen or benefit claim.
+The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed fixtures,
 validation and exact starting point.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
@@ -28,7 +27,7 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| Q3 | Distinguish ecological delivery from recipient opportunity | High diagnostic value / causal explanation unresolved | Next: bounded observer design and fixtures, before replay | Section 62 has low occupancy in a failed world but no ordered delivery/linking tape; distinguish possible obstructions before another population run. |
+| Q3 | Distinguish ecological delivery from recipient opportunity | Measurement validated / causal explanation unresolved | Fixtures pass (74); next bounded archived replay | Preserve all section-62 worlds and exact historical trajectories; frozen coverage/denominator gates constrain interpretation. |
 | Q2 | Audit actual fuel-support partners and their renewal | Finite reciprocal renewal measured / no candidate earned | Complete; park candidate source (73) | One primary pair, none above reference; alternatives in only 3.3–6.2% of covered events limit identification. |
 | Q1 | Test the observed five-letter variant in a common environment | Renewal measured / tested arrangement benefit fails | Park after fixed screen gate fails (72) | One seed passes; the other misses both the minimum arrangement contrast and shape interaction. No solver or fresh-seed confirmation earned. |
 | Q0 | Compare distinct hypotheses before another assay | Completed decision checkpoint | Comparison and archive census complete (71) | Four candidate families recur through physical renewal; candidate selection is retrospective and does not rescue earlier gates. |
@@ -45,7 +44,30 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## Q3 — ecological delivery diagnostic design, before replay
+## Q3 — fixture gate passed; bounded archived replay next
+
+**Completed (74):** observer-only diagnostic plus twelve prepared stage/control
+fixtures, eight small instrumented/plain/restarted worlds, all prepared cases
+matched without observation, active-binding restart, independent event replay
+and corruption tests. Core and historical sources unchanged. The small worlds
+have no mature deliveries; positive path validation comes from the prepared
+cases. This validates measurement, not an ecological obstruction or benefit.
+
+Implement the [frozen replay plan](experiments/delivery_replay_plan.md).
+Use all sixteen original confirmation worlds, 50k and the (10k,50k] window.
+Before interpreting new records, reproduce the initial hash, full final state/
+RNG, old samples, births and member follow-ups. First 105/on to 10k is a cost-
+only check; <=45 CPU seconds and <=1 GiB RSS earn continuation, with 3,600
+CPU seconds total. Keep partial/negative evidence. No threshold or rate tuning.
+
+Stage comparisons are retrospective: both failed worlds must lie below both
+passed worlds, with the plan's identity coverage and minimum denominators.
+No coverage, no signature or conflicting stages means no isolated explanation;
+do not pool or relabel the failure. A possible later local catalytic-efficacy
+ablation is described but remains unimplemented and requires a separate causal
+plan. No fresh confirmation, frequency race or new mechanism is queued.
+
+The following preserves the original design brief, now satisfied.
 
 Follow the [post-support comparison](experiments/portfolio_after_support.md).
 Section 62's failed confirmation stays parked: low recipient occupancy could

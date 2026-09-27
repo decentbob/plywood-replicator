@@ -28,6 +28,7 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 71 | `short_variant_summary.js`, `portfolio_checkpoint.md` | Q0 comparison and offline census of all section-66 short births: ordered physical parent/fuel witnesses and two-link renewal. Retrospective candidates, not a new simulation or rescue of the eight-letter gate. Next plan: `short_variant_garden_plan.md`. |
 | 72 | `short_variant_garden.js`, `short_variant_garden_summary.js`, `short_variant_garden_report.js` | Fresh equal-composition five-letter common environment, strict fueled lineage renewal and complete fuel-holder/bond tapes. One of two screen seeds passes; fixed benefit gate fails. External support is measured, partner-specific dependency remains open. |
 | 73 | `fuel_support.js`, `fuel_support_analysis_test.js`, `portfolio_after_support.md` | Offline event-time support identities, contact episodes, reciprocal renewal and lifetime-respecting opportunity resampling. No candidate passes; few alternative helper sets limit identification. No simulation or new rules. |
+| 74 | `delivery_diagnostic.js`, `delivery_diagnostic_test.js`, `delivery_replay_plan.md` | Observer-only delivery stages: scanned geometry, binding episodes, supported lateral links and detached exact output. Twelve prepared fixtures and eight small neutrality worlds pass; ecological replay is planned, not yet run. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
 Read the plan and script's CLI rather than assuming identical options across runners.
