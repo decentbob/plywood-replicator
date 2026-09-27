@@ -1,0 +1,979 @@
+{
+  "viabilityPass": true,
+  "controlPass": true,
+  "acquisitionPass": false,
+  "groups": [
+    {
+      "kind": "left",
+      "start": "free",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "free",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "free",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 1,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "free",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "free",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 1,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "free",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one0",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 2,
+      "success": 2,
+      "longest": [
+        457,
+        500
+      ],
+      "rawLongest": [
+        457,
+        500
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one0",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one0",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one0",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one0",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one0",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one1",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 2,
+      "success": 2,
+      "longest": [
+        457,
+        500
+      ],
+      "rawLongest": [
+        457,
+        500
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one1",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one1",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one1",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one1",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "left",
+      "start": "one1",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "free",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 1,
+      "success": 1,
+      "longest": [
+        301,
+        0
+      ],
+      "rawLongest": [
+        301,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "free",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "free",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "free",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "free",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "free",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one0",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 2,
+      "success": 2,
+      "longest": [
+        500,
+        500
+      ],
+      "rawLongest": [
+        500,
+        500
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one0",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one0",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one0",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one0",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one0",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one1",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 2,
+      "success": 2,
+      "longest": [
+        500,
+        500
+      ],
+      "rawLongest": [
+        500,
+        500
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one1",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one1",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one1",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one1",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "right",
+      "start": "one1",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "free",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 1,
+      "second": 1,
+      "success": 1,
+      "longest": [
+        293,
+        0
+      ],
+      "rawLongest": [
+        293,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "free",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "free",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "free",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "free",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "free",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 0,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one0",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 2,
+      "success": 2,
+      "longest": [
+        356,
+        500
+      ],
+      "rawLongest": [
+        356,
+        500
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one0",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one0",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 1,
+      "success": 1,
+      "longest": [
+        356,
+        0
+      ],
+      "rawLongest": [
+        365,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one0",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one0",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 1,
+      "success": 1,
+      "longest": [
+        292,
+        0
+      ],
+      "rawLongest": [
+        365,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one0",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one1",
+      "scheme": "body4",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 2,
+      "success": 2,
+      "longest": [
+        356,
+        500
+      ],
+      "rawLongest": [
+        356,
+        500
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one1",
+      "scheme": "body4",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one1",
+      "scheme": "individual16",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one1",
+      "scheme": "individual16",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one1",
+      "scheme": "individual32",
+      "enabled": true,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    },
+    {
+      "kind": "square",
+      "start": "one1",
+      "scheme": "individual32",
+      "enabled": false,
+      "n": 2,
+      "first": 2,
+      "second": 0,
+      "success": 0,
+      "longest": [
+        0,
+        0
+      ],
+      "rawLongest": [
+        0,
+        0
+      ]
+    }
+  ]
+}

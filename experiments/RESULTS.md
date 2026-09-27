@@ -5362,3 +5362,151 @@ old rotation-unaware call. Growth and turnover remain gated. After two
 geometry assays the next advance must be autonomous contact acquisition,
 not another geometry-only success or added state machinery. Retain the
 section-63 common-stock and narrow-recycling objections for any later economy claim.
+
+## 69. Actual port acquisition fails the fixed robustness gate
+
+**2026-09-27, ROADMAP P2/P0; negative by its predeclared gate.** The prospective
+`port_acquisition_plan.md` tests actual binding after the prepared-geometry
+successes in 67–68. There are limited successful operations under body jostling,
+but the tested setting does not establish robust acquisition. Park it; do not
+rescue it with more seeds, higher solver counts, new states or looser tolerances.
+
+### Local rule and physical implementation
+
+`AcquisitionSim` inherits the unchanged research polygon mechanics from 68.
+The twelve immutable section-63 label patterns are installed as four saved
+labels per block, alongside the three geometric aliases. Reactions compare
+only a facing label and its complementary polarity. Square controls use the
+same orthogonal X/Y face palette on every square. The setup sweep, target
+contacts, intended positions and original membership never enter reactions.
+There are no mutable chemical states, relays or type conversions.
+
+After physics, complementary free faces within the existing geometry tolerance
+may form one incident bond. A free block can align to the contacting edge by
+one rigid rotation/translation; the proposed **rotated** pose must pass polygon
+vacancy before it moves. If both blocks already have bonds, neither is moved
+by association. Reversed endpoint gaps must fit `linkDistTol=0.15` times the
+mean actual edge length, including after a proposed projection. This uses a
+local geometric constraint, not knowledge of a correct pose. Several events
+can occur sequentially in one step; no artificial delay coordinates them.
+
+Every bond has uniform loss probability 0.001 per step, after association.
+Canonical endpoint ordering merely avoids duplicate random draws. There is
+no degree-dependent loss rate, selected cut, original-scaffold exemption or
+organism-level retention action. The alternative arm disables association,
+retaining identical loss and physics rules. Stock copying/energy chemistry and
+birth classification are not run. All core and older assay sources are unchanged.
+
+### Fixed worlds, viability and outcome
+
+Use the n=1 three-column left/right boundary fixtures (six blocks including
+the incoming rectangle) and the four-square corner control. Area-size mapping,
+mass/inertia, stiffness 0.5 and kicks match the previous geometry assays.
+Starts are either one of two prepared first contacts or an unbound incoming
+part displaced 0.35 outward on both axes and turned +10/-10 degrees for seeds
+221/222. This is a prepared near-encounter with conserved material, not a
+random-bath recruitment test. All bonds in the substrate can be lost.
+
+Twelve zero-kick/zero-loss, 20-step viability worlds pass: all six enabled
+preparations acquire the second intended bond; all six disabled controls
+preserve their original bond arrays. The frozen screen then runs 108 worlds,
+500 steps each: three fixtures × three starts × two arms × body4/individual16/
+individual32 × two fresh seeds. No failed batch or censoring occurred.
+
+A world succeeds only after **100 consecutive steps** with both exact target
+bonds, no other incoming contact, maximum incoming endpoint gap <=0.15, and
+incoming hull overlap <=0.02 square units. These observer criteria do not
+affect binding. Raw double binding, single-contact duration, all bond changes
+and physical residuals are also recorded. The gate requires every enabled
+case to succeed under body4 and individual32; individual16 is the fixed
+sensitivity comparison. It passes only **15/36** required cases and fails.
+
+| Motion | Start | Enabled worlds | Any intended first contact | Any intended double contact | Persistent physical success |
+|---|---|---:|---:|---:|---:|
+| body4 | unbound | 6 | 3 | 2 | 2 |
+| body4 | prepared one contact | 12 | 12 prepared | 12 | 12 |
+| individual16 | unbound | 6 | 1 | 0 | 0 |
+| individual16 | prepared one contact | 12 | 12 prepared | 1 | 1 |
+| individual32 | unbound | 6 | 1 | 0 | 0 |
+| individual32 | prepared one contact | 12 | 12 prepared | 1 | 1 |
+
+All **54 disabled-association worlds** remain negative for double acquisition
+and persistent success. Their prepared contacts are not counted as new births
+or acquisition. The independent unit is a world; related preparations and
+repeated events are not additional seeds. Shared initial seeds do not imply
+identical later loss draws after bond histories and random consumption diverge.
+
+The two unbound successes are right-boundary/body4/221 and square/body4/221.
+Both acquire their first target at step 1 and second at step 2. Their longest
+acceptable double-contact intervals are 301 and 293 steps; both retain two
+contacts at step 500 with roundoff-scale residuals. Neither left-boundary
+unbound body case succeeds. The prepared square `one0/221` is the sole success
+under each individual-kick setting, with acceptable runs of 356 steps at 16
+passes and 292 at 32; raw double-binding intervals last 365 in both. No
+prepared rectangle acquires its second intended contact under either setting.
+
+Single-contact histories are retained, including the failed intermediates:
+the longest single-contact interval reaches 355 steps among unbound body cases
+and 210 among unbound individual-kick cases. Disabled prepared contacts last
+148–500 steps with body jostling and 208–500 with individual kicks. Uniform
+loss also dismantles scaffolds: enabled unbound worlds retain 19/28 original
+scaffold bonds at the end under body4, 11/28 under individual16 and 10/28 under
+individual32. These are standing original contacts, not uninterrupted survival
+or material loss; all blocks and types remain present.
+
+Two enabled worlds make a label-compatible incoming contact outside the
+observer's intended registration: right/one1/222 at individual16 and
+square/one1/221 at individual32. This physical error channel is measured rather
+than suppressed with an identity or correct-position predicate.
+
+Association rejection totals over all enabled worlds are, respectively,
+geometry/endpoints/vacancy: body4 **28,677 / 1 / 757**, individual16
+**32,052 / 1,952 / 3,280**, individual32 **31,486 / 1,216 / 5,826**.
+These are repeated attempted face pairs across whole worlds, not independent
+samples or an isolated causal diagnosis of the target failure. Hull vacancy
+remains conservative for concave deformations, and finite-pass pin/contact
+residuals remain. The data do not justify selecting one tolerance to loosen.
+
+### Evidence, validation and portfolio decision
+
+```sh
+node experiments/port_acquisition_test.js
+node experiments/port_acquisition.js experiments/scratch/PA_screen_20260927
+node experiments/port_acquisition_analysis_test.js experiments/out/PA_screen_20260927.json.gz
+node experiments/port_acquisition_summary.js experiments/out/PA_screen_20260927.json.gz
+node tools/fingerprint.js 1500
+```
+
+Archive: `PA_screen_20260927.json.gz` and its original `.summary.json`, with
+full initial/final states and labels, snapshots, every-step physical metrics,
+bond event histories, exact command, parameters, seeds and source hashes.
+Cost: **54,240 physics steps / 36.953 CPU seconds**, including viability and
+excluding validation/replay. One simulation worker was used. No outcome-based
+change to rules, horizon, seeds or gate was made.
+
+All 120 trajectories replay; independent bond-event reconstruction agrees with
+final arrays. Tests cover rotated vacancy, rejection without movement, no
+bonded-block repositioning, uniform loss/conservation and face specificity.
+Poisoned setup metadata, observer graph helpers and the unused core `open`
+cache can remain inaccessible throughout runtime without changing the result.
+Saved research checkpoints resume with identical physical arrays, labels,
+events, diagnostics and RNG. Core restore rebuilds the unused `open` cache and
+pin-cache version; only those two derived caches are excluded from checkpoint
+comparison. Full from-initial replay retains exact recorded state equality.
+The poisoning test removes forbidden-read getters before serialization, which
+enumerates private fields; that pre-run test-harness correction changed no
+simulation rule. Corrupt source metadata, coverage, targets, states, observations,
+events and gate summaries are rejected. All five default fingerprints match;
+the unchanged full core suite was not rerun.
+
+**Decision:** park this tested P2 acquisition setting. One rectangle and one
+square near-encounter demonstrate a limited local operation under body4;
+they do not establish solver-robust assembly, growing ribbons, turnover,
+descendants, resource savings or inherited benefit. After three P2 geometry/
+acquisition assays, compare alternatives: P1 failed fresh confirmation, P3
+failed inherited benefit, and both tested P4 pairs failed heredity. C1 remains
+one concrete bounded test of existing rules at the original obstruction.
+Make that unchanged handoff-versus-waiting closure next, without fresh-seed
+sweeps or hazard tuning. Further P2 work requires distinct causal evidence,
+not another stage added to prolong this setting. The narrow-recycling and
+common-stock objections from 63 remain unresolved.

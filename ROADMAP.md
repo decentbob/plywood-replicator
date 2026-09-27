@@ -5,16 +5,15 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** the isolated P0 polygon-contact correction passes its fixed
-prepared-geometry gates (68), resolving the rectangle discrepancy from 67.
-All 192 exact front placements are admitted; all 24 individual16 targets pass
-the existing geometry predicate. That predicate can still accept substantially
-deformed edges, so this is not demonstrated bond acquisition. **Next: a bounded
-P2 first/second-contact acquisition assay**, with actual bond/pin output,
-conserved material and matched solver/square controls. No turnover or population
-test yet; core/default physics is unchanged. P3 remains parked after its fixed
-benefit gate failed (66), along with the tested P4 pairs (64–65) and P1 (62).
-No chemistry or core mechanism was added.
+**Current status:** P2's actual acquisition setting fails its fixed gate (69).
+Body jostling gives persistent double attachment in 2/6 unbound near-encounters
+and 12/12 prepared one-contact cases; individual32 gives 0/6 and 1/12 (a square
+control). Park this setting despite the prepared-geometry successes in 67–68.
+**Next: C1's single bounded closure test**, applying the unchanged section-60
+handoff to the original section-56 obstruction against waiting/SEEK controls.
+No P2 growth, turnover, tolerance/rate tuning or new states. P1, P3 and the
+tested P4 pairs remain parked. Core/default physics is unchanged; section 69
+adds only isolated local face binding and uniform individual-bond loss.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -26,12 +25,12 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / prepared contact geometry verified, physical renewal still low | Research-only contact correction passes (68); next bounded first/second-contact acquisition | Resolve actual contact formation and retention before growth, economy or turnover; geometric eligibility alone does not establish usable bonds. |
+| C1 | Close the handoff branch with its one outstanding test | Low strategic priority / high diagnostic value, low expected advantage | Next: one selected original-obstruction comparison, no new mechanism | After the P2 acquisition failure, test existing rules at a known bottleneck without extending the geometry-repair chain. |
+| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High long-term / low for tested acquisition setting | Park after actual first/second-contact gate fails (69) | Prepared geometry passes, but robust acquisition does not; reopening needs a distinct causal explanation rather than tolerance/rate tuning. |
 | P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
 | P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
 | P5 | Coupling replication modes and evolving dependencies | High long-term / low until prerequisites pass | Park implementation | Two modes alone failed (40); coupling needs a real material/function exchange. |
-| C1 | Close the handoff branch with its one outstanding test | Low strategic priority / high diagnostic value, low expected advantage | Optional short closure, no extensions | Good way to finish a loose end; not a prerequisite for P1–P4. |
 
 These are alternatives, not seven simultaneous batches. Keep at most one main experimental
 question active, plus a cheap independent literature/analysis task if useful. Respect the
@@ -210,7 +209,7 @@ prepared ports remain exact; individual16 gives 24/24 eligible targets versus
 final existing-pin gap is 0.2328. The hull approximation and solver residuals
 remain real limitations. No autonomous contact is formed by this assay.
 
-**Next after 68:** predeclare one small first/second-contact acquisition assay
+**Section-68 follow-up, completed by 69:** predeclare one small first/second-contact acquisition assay
 using immutable complementary side labels and local incident-bond operations.
 Integrate proposed-pose vacancy correctly with rotation; the physics-only
 subclass intentionally rejects bond formation. Start the incoming conserved
@@ -222,6 +221,26 @@ target ID, correct-position memory or assembly-level retention rule. A positive
 result earns growth/turnover planning, not a core promotion or economy claim.
 This is the next evidence-ladder step after two geometry assays; if autonomous
 acquisition fails, reassess P2 against the parked alternatives before extending it.
+
+**2026-09-27 acquisition (69):** all 12 deterministic viability controls pass,
+but the 108-world screen fails its all-case gate. Under body4, unbound left/right/
+square cases succeed 0/2, 1/2, 1/2; all 12 prepared cases succeed. Neither
+individual16 nor individual32 acquires double contact from an unbound start;
+only one prepared square case succeeds in each. All 54 no-association controls
+remain negative. Every original bond is subject to the same loss rate; the
+assay does not protect scaffolds. Events include two label-compatible contacts
+outside the observer's intended registration. All trajectories and labels replay.
+
+**Portfolio decision after three geometry/acquisition assays (67–69):** park
+the tested P2 setting, retain its operation and evidence, and do not launch
+growth/turnover, extra seeds, higher solver counts or tolerance/loss-rate sweeps.
+The body4 right-end near-encounter is a limited operation example, not a robust
+mechanical result or inherited benefit. Rejection counts mix geometry, endpoint
+fit and vacancy across all contacts; they do not isolate a cause warranting
+another repair. P1 has failed fresh confirmation; P3 has failed its inherited-
+benefit gate; P4's two candidates fail heredity. C1 is the remaining concrete
+bounded test using an unchanged mechanism. Run that closure once, with its
+existing useful-output gate; then reassess direction before inventing more rules.
 
 ## P3 — an inherited mechanical part must earn its keep
 
@@ -340,7 +359,7 @@ system must retain its benefit after loss of the originally prepared helpers. Re
 must be observed, not enforced by a rule testing partner species or complete assemblies.
 First candidates should reuse P1/P3 successes, not add a second speculative subsystem.
 
-## C1 — optional closure of contact handoff
+## C1 — next bounded closure of contact handoff
 
 Apply the **unchanged** section-60 handshake to the original selected two-prefix obstruction
 (56), with unchanged chemistry, SEEK and request/wait controls. Predeclare a common finite
@@ -358,6 +377,7 @@ mechanical result needs the P0 sensitivity check before a strong general claim.
 | Idea | Why parked | Evidence that would reopen it |
 |---|---|---|
 | Frequency competition in the section-61 uncapped shared-product setting | Fresh confirmation passes only 2/4 seeds (62), despite positive mean benefits | Independent evidence isolating a distinct causal bottleneck; not more seeds, a new rate or a relaxed threshold. |
+| P2 rectangle acquisition under the section-69 local binding/loss setting | Fixed gate fails; body-prepared successes do not carry to individual16/32 or most unbound encounters | A distinct causal explanation demonstrated without target-aware rules; not looser vacancy/endpoints, another loss rate or extra seeds. |
 | More motif-specific genes or a prescribed multi-stage energy pathway | Can demonstrate selection of designed pressures; complexity ceiling still supplied by the designer | A clear use as a calibration, or spontaneous new organization beyond the specified pathway. |
 | More endpoint states, stiffness sweeps, assembly-front gates | Sections 55, 57, 58, 60 fail their respective output/fidelity/benefit gates | A distinct causal obstruction or a successful C1 result; not merely a new rate. |
 | Product flexibility as a recipient benefit | Failed fresh-seed binding control (46) | A different measured mechanism, not reuse of the original positive seeds. |
@@ -402,3 +422,9 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   convex envelopes remain approximate for concave deformations. Next is actual
   local contact acquisition with pin/overlap/retention measurements; no autonomous
   operation, growth, turnover or inherited benefit has yet been demonstrated.
+- **2026-09-27, section 69:** actual acquisition screen is **negative by its
+  fixed gate**: 12 viability + 108 screen worlds / 54,240 steps / 36.953 CPU
+  seconds. Persistent output is 14/18 enabled body4, 1/18 individual16 and
+  1/18 individual32; unbound successes occur only in two body4 near-encounters.
+  All trajectories replay; core/fingerprints unchanged. Park this P2 setting
+  and make C1's unchanged original-obstruction closure next; no new P2 tuning.

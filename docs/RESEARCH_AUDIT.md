@@ -41,6 +41,16 @@ retains the core's direct-bond exclusion exemption and has finite solver
 residuals. Passing its geometry predicates does not establish acquisition,
 autonomous operation, exact nonoverlap or evolved complexity.
 
+**Actual local association (2026-09-27, RESULTS 69):** a separate subclass
+adds immutable complementary face labels, single-free-block docking projection,
+current-pose binding between already bonded blocks, and uniform individual-bond
+loss. Runtime uses face labels, incident bonds and contact geometry; setup IDs,
+the pattern generator and observer target classifications are excluded by
+poisoned-metadata tests. No new mutable chemical state or relay is added.
+The prepared acquisition gate fails despite limited near-encounter successes
+under body jostling. This is not a rule-locality failure or evidence of robust
+autonomous assembly. Core chemistry and historical assay classes are unchanged.
+
 ## What “following intent” must mean
 
 Three tests are independent:
