@@ -5642,3 +5642,140 @@ complexity have not advanced here. P1's failed confirmation, P2's failed
 acquisition gate, P3's failed benefit gate and both P4 failures remain parked.
 The next task is ROADMAP Q0: compare distinct causal hypotheses using these
 records and freeze one small discriminating assay plan before more simulation.
+
+## 71. Short variants retain inherited renewal after the exact founder family erodes
+
+**2026-09-27, Q0 portfolio checkpoint and retrospective analysis.** The
+[comparison](portfolio_checkpoint.md) considers three causal hypotheses:
+shortening preserves function, delivery timing limits ecological benefit,
+and recycling cancels gross scarce-part savings. Choose the first because
+the existing section-66 archive can distinguish physical renewal from mere
+short births without another simulation or rule. The other hypotheses lack
+an isolated causal obstruction or a working physical prerequisite.
+
+The [census plan](short_variant_plan.md) was written before computing these
+counts. The outcomes of section 66 were already known, so this is a new
+retrospective endpoint on reused worlds, not a fresh confirmation. Its
+eight-letter arrangement-benefit gate remains failed. No historical source,
+simulator, parameters, raw trajectories or rule table changed.
+
+### What counts
+
+Analyze all sixteen 100k section-66 worlds, seeds 203/204, both preparations,
+square/opposed20, grip on/off. A short parent is a nonfounder logged row of
+length 2–7, detached at registration. Reconstruct its child's reversed member
+mapping from ordered release events and still-live parents; require exact
+reversed-complement sequence, disjoint material and detached child. Every
+parent unit must have a fuel-rearming event after its latest release at parent
+registration and before child registration, and the parent must have fully
+rearmed. Arming before the parent's whole-row birth is allowed. Retirement
+ends identity, including when it shares a step number with another event.
+
+Primary counts distinct fueled productive parents, not births or contacts.
+A two-link chain A→B→C additionally requires B to fuel-rearm and reproduce
+before retirement. A and B can subsequently disappear; this is a historical
+renewal witness, not survival to the horizon. Overlapping chains are retained
+and explicitly not independent samples.
+
+### All worlds, including controls
+
+Paired entries are **203 / 204**. Short births include non-detached stock births;
+only the strict detached/mapped/fueled subset can contribute to the primary.
+
+| founder preparation | shape / grip | short births | fueled productive short parents | two-link chains |
+|---|---|---:|---:|---:|
+| AAAABBBB | square / on | 53 / 51 | 16 / 9 | 3 / 4 |
+| AAAABBBB | square / off | 28 / 38 | 0 / 0 | 0 / 0 |
+| AAAABBBB | opposed20 / on | 56 / 51 | 10 / 9 | 3 / 4 |
+| AAAABBBB | opposed20 / off | 12 / 25 | 0 / 0 | 0 / 0 |
+| ABABABAB | square / on | 54 / 64 | 7 / 15 | 5 / 15 |
+| ABABABAB | square / off | 6 / 21 | 0 / 0 | 0 / 0 |
+| ABABABAB | opposed20 / on | 34 / 39 | 6 / 11 | 1 / 4 |
+| ABABABAB | opposed20 / off | 4 / 6 | 0 / 0 | 0 / 0 |
+
+Across the eight grip-on worlds: 402 short births, 395 detached, **83**
+distinct fueled productive short parents and **39** overlapping two-link
+chains. Counts are descriptive sums of worlds, not 83 or 39 replicates.
+Grip-off worlds have short births but no such renewal. Per-world/family
+full-arming, born-by-50k, survival, 5k censoring and final material partitions
+are retained in the report, including zeros and all observed short families.
+
+The fixed candidate gate requires a two-link chain in both seeds under the
+same preparation/shape, and a higher family primary than the matched off arm
+in both. Four preparation/shape/family combinations pass:
+
+| preparation / shape | canonical family (sequence or reversed complement) | primary, 203 / 204 | chains, 203 / 204 |
+|---|---|---:|---:|
+| AAAABBBB / square | AAA / BBB | 5 / 2 | 2 / 2 |
+| AAAABBBB / square | AAAAB / ABBBB | 3 / 3 | 1 / 1 |
+| ABABABAB / square | AB | 2 / 4 | 2 / 4 |
+| ABABABAB / opposed20 | ABABA / BABAB | 5 / 2 | 1 / 1 |
+
+Matched off-arm primary counts are all zero. Families were selected from the
+same archive; there is no multiple-testing-corrected benefit estimate. For
+ABABA/BABAB, exact row-ID witnesses are 23→32→56 at steps
+36,206→51,106→95,884 in 203, and 42→51→58 at
+59,483→83,508→92,112 in 204. The bodies are physically distinct along each
+edge, with uninterrupted parent membership and fuel witnesses. These are not
+string-frequency matches. Square AB dimers also renew, so a five-letter
+witness does not establish a reason for greater organization.
+
+### Limits and next decision
+
+Shortening does not erase every inherited reproductive function in these
+worlds. The exact eight-letter lineage endpoint in 66 correctly answers its
+own question but cannot stand for all viable variation. This revises that
+interpretation, not its counts or failed gate. No new mechanical capability,
+net benefit of arrangement, sustained selection or cumulative complexity is
+demonstrated. The fuel-supported function already existed in the rules/world;
+retaining it in a shorter row is not evidence of a new function.
+
+Most importantly, these short rows live among a changing community. The census
+does not distinguish self-generated fuel geometry from contacts supplied by
+other rows or fragments. The original observer registers stock births, not
+each fragment created by a lateral edit. Many short births have no identifiable
+registered parent (counts are archived); ancestry through those gaps is unknown.
+Negative family counts are lower bounds on witnessed renewal, not sterility.
+Body4 results make no solver-independent mechanical claim.
+
+Select ABABA/BABAB for a small **common-environment** test because it is an
+observed five-letter renewing family in the wedge setting, not because it is
+the most frequent family. The [prospective next plan](short_variant_garden_plan.md)
+compares an equal-composition rearrangement, both shapes and grip controls,
+with actual fuel-holder measurements. It is frozen; implementation and
+viability are next. No new simulation has run. Square dimers remain a simpler
+competitor, and any later claim that extra organization pays must address them.
+All earlier failed settings stay parked; no handoff or P2 repair is queued.
+
+### Reproduction and validation
+
+```sh
+node experiments/short_variant_test.js
+node experiments/short_variant_summary.js experiments/scratch/SV_census_20260927
+node experiments/short_variant_test.js experiments/out/SV_census_20260927.json
+node experiments/short_variant_analysis_test.js experiments/out/SV_census_20260927.json
+node experiments/short_variant_summary.js --verify experiments/out/SV_census_20260927.json
+node tools/ledger_index.js
+```
+
+Use a fresh output stem for another run; the analyzer refuses overwrite.
+Archive: `out/SV_census_20260927.json`, referencing the unchanged tracked
+`SS_screen_20260927.manifest.json` and `.runs.jsonl` by SHA-256. The report
+also hashes its plan/comparison/analyzer/test, records the exact command and
+every family, edge and two-link witness. Cost: **zero simulation steps,
+0.562 process CPU seconds**, including original archive validation but
+excluding development and later validation. One analysis process; no workers.
+
+The original validator checks sources, parameters, all sixteen worlds,
+physical final-state invariants, release provenance and original metrics.
+New fixtures cover recurrence without heredity, mixed parents, pre-release
+and late fuel, same-step event ordering, retired/recycled identity,
+detachment, missing full activation and decision controls. A second analyzer
+independently queries historical child lists and indexed fuel intervals;
+every edge/chain matches the streaming reconstruction. Its eight-letter
+positive-control counts equal all sixteen original primary counts. Six
+corrupted reports (input/source hashes, decision, witness, world coverage,
+primary) are rejected, and the archived report recomputes exactly.
+Core source bytes are unchanged. The full physics suite and default
+fingerprints were not rerun for offline analysis; no new motion comparison
+was performed or claimed.

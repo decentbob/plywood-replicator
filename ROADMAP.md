@@ -5,15 +5,16 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** C1's original-obstruction closure fails its fixed gate (70).
-Retained handoff performs four physical capture/release/redocking cycles but
-produces no new completed row. SEEK and pulse each give one persistent exact
-completion; ordinary chemistry and waiting give none. Park C1 alongside the
-tested P1–P4 settings. The operation library and negative evidence remain.
-**Next: Q0, a bounded portfolio reassessment before another simulation.** Compare
-distinct causal hypotheses against the accumulated failures, then choose one
-small discriminating assay and freeze its plan. No automatic return to P2
-geometry repair or handoff states, no rate/seed rescue, and no core change.
+**Current status:** Q0's portfolio comparison and short-variant census are
+complete (71). Reanalysis of all sixteen section-66 worlds finds four short
+families with two consecutive fuel-supported renewal links in both seeds;
+square dimers qualify too. This is inherited renewal in the archived community,
+not causal arrangement benefit or increased complexity. The failed P1–P4/C1
+settings stay parked, including the original eight-letter benefit gate.
+**Next: Q1, the frozen five-letter common-environment assay.** Implement and
+validate the observer, then run the fixed viability gate before its screen.
+Compare observed ABABA/BABAB with an equal-composition rearrangement under
+matched shape/fuel controls. No P2 geometry repair, handoff states or core change.
 The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed batch,
 validation and exact starting point.
 Retain body jostling and targeted P0 checks; no
@@ -27,7 +28,8 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| Q0 | Compare distinct hypotheses before another assay | High decision value / no new empirical lead yet | Next: evidence synthesis and one prospective plan | All tested portfolio settings have failed a fixed gate; continuing the latest mechanism is not the default. |
+| Q1 | Test the observed five-letter variant in a common environment | High diagnostic value / unconfirmed arrangement benefit | Next: frozen plan, implementation and viability | Section 71 identifies inherited short renewal; equal-composition and fuel/shape controls must isolate whether organization pays. |
+| Q0 | Compare distinct hypotheses before another assay | Completed decision checkpoint | Comparison and archive census complete (71) | Four candidate families recur through physical renewal; candidate selection is retrospective and does not rescue earlier gates. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High long-term / low for tested acquisition setting | Park after actual first/second-contact gate fails (69) | Prepared geometry passes, but robust acquisition does not; reopening needs a distinct causal explanation rather than tolerance/rate tuning. |
 | P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
 | P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
@@ -41,7 +43,31 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## Q0 — next portfolio checkpoint
+## Q1 — observed short variant, common-environment test
+
+Use the [frozen plan](experiments/short_variant_garden_plan.md), selected after
+the [Q0 comparison](experiments/portfolio_checkpoint.md) and section-71 census.
+ABABA/BABAB has a witnessed two-link fuel-supported chain in both opposed20
+worlds, with 5/2 productive parents. Compare it with AABAB/ABABB at the same
+composition, total material and four active founder positions. Cross square /
+opposed20 and grip on/off. Viability: seeds 301/302, 20k; if it passes, screen
+303/304, 100k. No simulation from this plan has run yet.
+
+The question is arrangement-dependent descendant renewal versus facilitation
+by the surrounding fragment community. Log actual fuel-holder contacts as well
+as exact physical ancestry, active offspring and material turnover. Follow the
+plan's unchanged benefit gate and stop on failure. A positive screen earns
+targeted P0 checks and fresh confirmation, not a complexity claim. The renewing
+square dimer remains a simpler competitor; no evidence yet says five letters
+repay their cost. This is a distinct five-letter hypothesis grounded in observed
+variant renewal, not a retest of the parked eight-letter preparation.
+
+## Q0 — completed portfolio checkpoint (71)
+
+The following was the checkpoint brief. It is complete: the comparison chose
+the no-simulation short-variant census over unisolated delivery timing and
+resource recycling hypotheses. See RESULTS 71 for counts and limits, and Q1
+for the sole next experimental question. No other batch is queued.
 
 Produce one short evidence-backed comparison of two or three distinct causal
 hypotheses, then one prospective assay plan. Start with the measured footholds:
@@ -476,3 +502,9 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   yield no useful completion; SEEK/pulse each yield one. All fork replays,
   observer and checkpoint checks pass; default fingerprints unchanged. Park
   C1 and make Q0's evidence synthesis and prospective assay choice next.
+- **2026-09-27, section 71:** Q0 comparison and retrospective census complete,
+  zero simulation steps / 0.562 analysis CPU seconds. Four short families pass
+  the candidate gate across the two reused seeds; 83 short fueled parents and
+  39 overlapping two-link chains occur across eight grip-on worlds, zero with
+  grip off. No causal benefit estimate or gate rescue. Q1's five-letter
+  common-environment plan is frozen; implementation/viability are next.

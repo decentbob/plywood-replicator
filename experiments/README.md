@@ -25,6 +25,7 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 68 | `polygon_contact.js`, `polygon_contact_physics.js`, `polygon_contact_summary.js` | Research-only convex-envelope correction with unchanged kick/pin/deformation code, paired archived fixtures and full replay. Geometry eligibility only; chemistry/bond formation deliberately disabled. |
 | 69 | `port_acquisition.js`, `port_acquisition_summary.js` | Local complementary-face acquisition and uniform bond loss, unbound versus one-contact preparations, actual residual/persistence gate, negative solver-controlled screen. Uses a new subclass; historical physics-only class remains unchanged. |
 | 70 | `handoff_closure.js`, `handoff_closure_summary.js` | Original section-56 obstruction forked into five unchanged section-60/control arms; actual support physics, intact reuse, persistent completion, full observer/restart replay. Negative benefit gate closes C1. |
+| 71 | `short_variant_summary.js`, `portfolio_checkpoint.md` | Q0 comparison and offline census of all section-66 short births: ordered physical parent/fuel witnesses and two-link renewal. Retrospective candidates, not a new simulation or rescue of the eight-letter gate. Next plan: `short_variant_garden_plan.md`. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
 Read the plan and script's CLI rather than assuming identical options across runners.

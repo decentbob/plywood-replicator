@@ -19,3 +19,9 @@ experiments/random_57_plan.md text eol=lf
 experiments/random_57_screen.js text eol=lf
 experiments/random_57_screen_test.js text eol=lf
 experiments/out/R57_20260926.* text eol=lf
+# Preserve byte-hashed inputs and sources for the offline short-variant census.
+experiments/out/SS_screen_20260927.manifest.json text eol=lf
+experiments/out/SS_screen_20260927.runs.jsonl text eol=lf
+experiments/out/SV_census_20260927.json text eol=lf
+experiments/portfolio_checkpoint.md text eol=lf
+experiments/short_variant* text eol=lf
