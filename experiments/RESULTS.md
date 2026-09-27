@@ -6890,3 +6890,125 @@ failed, and its admission constraints remain in ROADMAP. Prior wall/stack/repair
 failures are unchanged. Evidence level: necessary-condition design accounting,
 below physical effect. Full physics suite and fingerprints were skipped because
 runtime and historical assay source bytes are unchanged.
+
+## 82. Half-cell caps preserve prepared copying and fuel access
+
+**Q8a passes its prepared geometry gate, not an autonomous-operation gate.**
+The corrected user proposal has two independent D-shaped half-cells, each with
+its own chain as the straight boundary and its own curved arc. Ordinary copying
+faces temporarily join them. The daughter arc may close after release; there
+is no shared old rim to divide. This assay tests the first local geometry only.
+
+Frozen plan: `half_cell_geometry_plan.md`. A new physics-only subclass keeps
+the existing solver and changes only P/Q rest polygons/edge maps and W stub
+geometry (C is the experimental carrier). The caps retain unit copying/rail
+edges, a .5 fuel edge and a sqrt(5)/4 angled rim edge. Each fixture has P/Q,
+two A, two W and two E: eight conserved blocks, with identical shapes/material
+in attached and unbound-rim arms. One unused lateral slot carries each rim pin
+only in this fixture. Normal chemistry would misread that bond as a chain
+neighbor, so `step`, chemistry and binding throw. No core rule is promoted.
+More working sides remain allowed; this is a temporary mechanical representation,
+not an argument for a four-side limit.
+
+### Protocol and results
+
+```
+node experiments/half_cell_geometry.js experiments/scratch/HC_geometry_20260927_v2.json
+node experiments/half_cell_geometry.js --validate experiments/scratch/HC_geometry_20260927_v2.json
+node experiments/half_cell_geometry_report.js experiments/out/HC_geometry_20260927_v2.json experiments/out/HC_geometry_20260927.json
+```
+
+Output paths refuse overwrites. The initial unsuccessful command used
+`experiments/scratch/HC_geometry_20260927.json`; its failure is retained below.
+The report accepts an optional new output path; the archived report is
+`out/HC_geometry_20260927.report.json`.
+
+Both cap orientations at fixture rotations 0/90 degrees pass all **84 sampled
+approach/release placements** (21 displacements from 0 to 2 per orientation).
+Actual polygon overlap is at most 1.42e-14; intended pins coincide and the
+copying/fuel poses pass geometry checks. These are prepared sampled placements,
+not a continuous swept-volume proof, binding events, or independent worlds.
+An SVG generated from actual initial corners is archived beside the valid raw.
+
+Twenty-four worlds use seeds 611/613, parent P/Q, attached/unbound W, and
+body4/individual4/individual16. Kicks remain sigma .3 / sigmaRot .45;
+A/P/Q/W stiffness is .8, with snapCorners and strain breaking off. The first
+five steps of the same instances pass viability. Run 100 held physics steps,
+then impose removal of the two F-F contacts and run another 100 steps.
+No ordinary chemistry, monomer recruitment, growth or reproduction occurs.
+
+The frozen held gate requires at least 24 of steps 76–100 in each world to have
+pin residual <=.1, overlap area <=.02, eligible copying faces and fuel placement
+overlap <=.02. Body4 and individual16 are required; individual4 is the declared
+numerical sensitivity diagnostic. The sample totals below are descriptive.
+
+| Motion / solver | Rim arm | Worlds passing | Good held samples | Maximum held-tail pin residual | Maximum held-tail overlap area |
+|---|---|---:|---:|---:|---:|
+| body4 | attached | 4/4 | 100/100 | 0.000111 | 0.000419 |
+| body4 | unbound | 4/4 | 99/100 | <1e-9 | 0.021808 |
+| individual4 | attached | 0/4 | 63/100 | 0.202024 | 0.042394 |
+| individual4 | unbound | 4/4 | 100/100 | 0.042615 | 0.006684 |
+| individual16 | attached | 4/4 | 100/100 | 0.001092 | 0.000230 |
+| individual16 | unbound | 4/4 | 100/100 | <4.1e-7 | <1.5e-7 |
+
+The body4 unbound outlier occupies one sample, within the fixed per-world gate;
+it is not discarded. Attached individual4 fails in every seed/end combination.
+Increasing resolution is therefore material to this fixture; no claim of
+kinetic equivalence between body and individual motion is made. All observed
+polygons remain convex within numerical error (max hull excess 5.69e-14).
+
+After **prepared** face removal, all 24 worlds reach a cross-side structural
+clearance of .1 by steps 102–114, retaining their supplied rail/rim bonds.
+However, later collisions allow cross-side polygon overlap up to **0.261316**.
+The worst recorded pair is ordinary A/A in body4, attached, seed 611, parent Q,
+step 115. This is an existing exclusion limitation, not proof of a cap-specific
+obstruction or reliable nonoverlap during separation. The clearance events do
+not establish autonomous release, irreversibility, non-crossing or a stable wall.
+Fuel probes show available local poses; they do not show actual fuel capture or
+feeding through a completed enclosure. There are no measured descendants.
+
+### Validation, failed attempt and provenance
+
+All 24 observer/plain physical-array/RNG comparisons and midpoint subclass
+restarts match, ignoring only the pinsVersion cache. All 4,824 dynamic frames
+replay exactly; their geometry and gates recompute from stored actual corners.
+Synthetic overlap/distance checks pass; altered corners and an altered aggregate
+are rejected. Type inventory and retained bonds are checked. Core and historical
+assay sources remain byte-identical; full physics suite/default fingerprints
+were not rerun for this isolated fixture.
+
+The first command stopped after its first world's neutrality assertion: setup
+left the `open` cache stale whereas restore recomputed it. Setup and prepared
+release now refresh the cache. Shapes, parameters and gates were not retuned.
+The old runner also counted only completed records, reporting zero steps despite
+200 observed + 200 plain + 100 restart steps executed before the assertion.
+The failed JSON, CPU record and exact failed source/frozen-plan snapshots are
+archived. That first attempt did not retain its failed world's frame trace;
+this provenance limitation is not concealed by the successful rerun.
+
+Valid raw: `out/HC_geometry_20260927_v2.json`, SHA-256
+`4063556df0f259fbb2aea077d423137911b39322c328981ab2d2f5a9d0124f80`.
+Raw/CPU/validation/SVG and failed-attempt files match scratch byte-for-byte.
+The report records their hashes and checks both current and failed source inputs.
+One simulation process at a time, no workers; process inspection found no other
+simulation in this repository. Total physics steps including failure, plain,
+restart and validation: **17,300**. Measured CPU: failure .734 s, valid execution
+6.234 s, validation 3.749 s, report .421 s = **11.138 s**. A preliminary read-only
+aggregation was not CPU-instrumented; the fully inclusive 90 s budget is therefore
+not independently verified. Shell, documentation, Git and final report writing
+are outside these measured intervals. No parameter search or seed extension ran.
+
+**Next:** the geometry earns an isolated reaction-interface design, with rim bonds
+kept distinct from chain-neighbor ports. Before interpreting moving acquisition/
+release, compare the existing research polygon-exclusion approach against these
+archived core-contact fixtures; do not rewrite unrelated physics or add states
+to cover numerical overlap. Then test ordinary chain copying and new-arc growth,
+allowing closure after release. ROADMAP holds that order.
+
+The user's proposed radiation payoff remains a hypothesis. Global `pBreak`
+ignores walls; physically excluded rays are the relevant existing route, and a
+new W needs explicit opacity rather than an enclosure-classification bonus.
+The straight copying boundary is exposed, so shielding could be partial. Only
+after half-cells renew should ray/opacity ablations and equal-material competitors
+measure damage, usable descendants and rim costs. Section 25's earlier walled
+extinctions are not overturned by this access result.

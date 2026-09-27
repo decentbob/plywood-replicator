@@ -1,27 +1,34 @@
 # Next-instance handoff — 2026-09-27
 
-Read [ROADMAP](../ROADMAP.md), the sole current queue. The user corrected the
-Q8 drawing: TWO separate D-shaped half-cells. Each has its own chain as the
-straight boundary and its own polymer arc between special end caps. Copying
-faces point outward. The daughter builds a separate arc from free material;
-ordinary chain face release separates the halves. Closure may occur after
-release. This replaces the mistaken shared-rim interpretation from `3ee2bdc`.
+Read [ROADMAP](../ROADMAP.md), the sole current queue. Q8 is the user's two
+independent D-shaped half-cells: each chain is its own straight boundary and
+its own curved arc connects the special caps. Copy outward, build a new arc,
+release ordinary face bonds; closure may occur after release. More working
+sides are allowed. There is no shared old wall to cut.
 
-[POLYMER_CAPS](POLYMER_CAPS.md) now depicts that topology. Each cap needs ONE arc
-port, not two. More working sides remain allowed; the four-port implementation
-is not a design limit. No shared old wall needs cutting, enlargement or a
-programmed division sequence. RESULTS 81's fixed-membership single-cycle audit
-remains unchanged but is not a gate for this different growth pathway.
+Q8a is complete (RESULTS 82). `half_cell_geometry.js` is physics-only; its
+chamfered cap shapes preserve copy/rail/fuel access with one rim stub per cap.
+84 static placements pass. Held attached fixtures pass 4/4 under body4 and
+4/4 under individual16; individual4 fails 0/4. Later released A/A collisions
+can overlap by .2613 area, so forced-clearance observations are not proof of
+reliable exclusion or autonomous release. No chemistry, growth or births ran.
 
-Next is Q8a: freeze actual cap polygons/ports and a small paired-end geometry
-fixture with adjacent ordinary tiles, one rim stub per cap and fuel access.
-Check both complementary cap orientations and actual copying/release clearance.
-Then test new-arc end growth/closure alongside copying without a timing gate;
-closure after release is allowed. Count detached chains, incomplete arcs,
-complete half-cells, cross-links and descendants that rebuild their own arcs.
-No ancestor matching or organism-level completion check is permitted.
+Evidence: `out/HC_geometry_20260927_v2.json`, CPU/validation/SVG companions,
+plus report and failed first attempt/source snapshots. The initial cache bug
+was corrected without parameter changes; all valid trajectories, neutrality
+checks and subclass restarts match. See RESULTS for the failed-attempt step
+counter limitation and incomplete CPU timing of one preliminary aggregation.
+Core/historical sources are unchanged. No full physics suite/fingerprint rerun.
 
-This slice corrected documentation only. Physical plan, seeds, rates, horizon
-and gates are not frozen. No experiments or core modifications; full physics
-suite/fingerprints skipped. Historical hashed evidence remains unchanged.
-Q7b is still deferred. No task-owned simulation or subagent is active.
+Next Q8b: compare the existing research polygon-exclusion method with archived
+core-contact fixtures at body4/individual16. Keep this targeted; the worst
+released overlap was ordinary A/A, not a new cap collision. Before chemistry,
+provide a distinct rim bond interface: Q8a reused a spare lateral slot solely
+as a pin carrier, which ordinary chemistry would misread as a chain neighbor.
+No gate/timer/state is needed to repair numerical contact behavior.
+
+User hypothesis: rays blocked by polymers might make half-cells competitive.
+Global pBreak ignores walls; explicit ray exclusion and exposed straight-boundary
+geometry matter. After reproduction works, use ray/opacity and equal-material
+controls, count damage/descendants/costs, and preserve old wall negatives (25).
+No task-owned simulation or agent is active. Q7b remains deferred.

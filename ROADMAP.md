@@ -21,18 +21,37 @@ from the seed and grows a separate arc, possibly closing after ordinary chain
 release. No shared old rim has to split or enlarge. Each cap needs one arc port,
 not two; more working sides remain allowed. The earlier portfolio and RESULTS 81
 addressed a different topology. Their fixed-rim cut/rejoin bound is not a gate
-for this route. No chemistry or physical result is claimed; no simulation is active.
+for this route.
+
+**Q8a passes its prepared geometry gate (RESULTS 82).** Chamfered P/Q caps keep
+unit-length copying/rail edges, a half-length fuel edge and an angled rim edge.
+All 84 sampled placements are free of polygon overlap. Attached stubs pass in
+4/4 body4 and 4/4 individual16 worlds; individual4 passes 0/4 and is inadequate
+for this fixture. Chemistry was disabled and face removal was imposed. Later
+released collisions overlap by up to 0.2613 area (worst pair: ordinary A tiles),
+so clear separation is not proof of reliable exclusion or autonomous release.
+The [frozen plan](experiments/half_cell_geometry_plan.md) and
+[actual starting geometry](experiments/out/HC_geometry_20260927_v2.json.svg)
+record the scope. Core/historical sources are unchanged; no simulation is active.
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8a: half-cell cap geometry and copying access | Freeze polygons/ports and a paired-end fixture with one rim stub per cap, adjacent ordinary tiles and fuel access. Both arcs must project behind their own copying faces. Check complementary orientations, approach/release, actual exclusion and pin residuals against the same unbound rim material. Extra working sides are allowed. |
+| 1 | Q8b: released-contact check and distinct rim interface | Compare the existing research polygon-exclusion approach with the archived core-contact fixture, especially released A/A contacts, retaining body4 and individual16 controls. Scope any correction to this assay. Then give rim bonds a distinct interface before enabling chemistry: Q8a's spare lateral slot is only a pin carrier and must not masquerade as a chain bond. No new chemical state is justified by the numerical issue. |
 | 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-No Q8 physical plan is frozen. The brief's alternatives are a design portfolio,
+Q8a's plan is frozen and complete; Q8b's is not. The brief's alternatives are a design portfolio,
 not concurrent experimental queues. Do not add states just to finish a cell outline.
+
+**User benefit hypothesis: radiation protection.** After half-cell reproduction
+works, compare equal-material competitors with/without physical ray exclusion
+and with/without radiation. The global `pBreak` hazard ignores walls. Existing
+ray particles can be blocked by M; a new W needs that explicit physical behavior,
+not an observer's enclosure bonus. The straight copying boundary remains exposed,
+so protection may be partial. Charge rim construction, sequestration, feeding and
+copying costs; old walled-world extinctions (25) remain relevant negative evidence.
 
 ## Deferred Q7b: admission and constraints preserved
 

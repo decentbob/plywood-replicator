@@ -49,6 +49,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    After prepared face loss, existing fold45 at stiffness 0.8 turns two endpoints out of binding alignment (80);
    rigid-fold and straight controls stay aligned. This is zero-kick relaxation with reactions off: acquisition,
    rebinding competition and preserved repair have not been demonstrated.
+   Half-cell cap polygons preserve prepared copying/fuel access (82): 84 static
+   placements and all body4/individual16 held fixtures pass, while attached
+   individual4 fails. Forced face removal is not autonomous release; later A/A
+   overlaps expose the core contact approximation. No arc growth or shielding
+   benefit is established.
    Permanent wedges expose a two-row joint mismatch that straight supports do not remove (48). Opposing A/B wedges
    with complementary pairing restore copying under default physics in both directions (49); the benefit weakens with
    poorly resolved individual kicks. Shape and pairing must be tested together, with solver controls.
@@ -338,6 +343,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 79 | Passive repair acquisition/release prerequisites | Can ordinary binding acquire support and ordinary melting free repaired material? | existing `pHyb` 0.2/0, `pLigate` 0.02/0, `pMelt` 0.1/0, `pMeltRun` 0.001/0, `pMeltEnd` -1/0; body4/individual16 | negative | all 8 on gate cells fail; acquired bridge 2/8, acquisition-release 0/8, prepared repair 8/8 but release 0/8; noBind prepared repair-release 7/8 | duplex_cycle.js, duplex_cycle_test.js, duplex_cycle_report.js (`DC_20260927`) | park setting; require a distinct passive-escape geometry prediction before another assay | 64 eight-block worlds, 800k steps including neutrality/restart; 131.184 measured CPU seconds with QA; 6 synthetic and 5 corruption checks pass; zero births, no new-neighbor joins; acquisition supplied in release controls, no natural-damage cycle |
 | 80 | Passive escape geometry admission | Does the existing free-face fold physically prevent endpoint reattachment? | `foldA`/`foldB` 0/45, `stiffA`/`stiffB` 0.8/1, `iters` 4/16, `sigma`/`sigmaRot` 0; reactions off | lead | both solver gates pass: fold45 ineligible after 3/1 steps; controls eligible; final mismatch 43.81 degrees, retained-pin residual 0.0633 | passive_escape.js (`PE_geometry_20260927`) | freeze one matched kinetic acquisition/rebinding test; no repair or population promotion | six prepared four-block worlds, 2100 steps including neutrality/restart/replay, 1.326 measured CPU seconds; no stochastic replicates, chemistry or turnover; core unchanged; geometry only |
 | 81 | Junction-cap architecture admission | Can caps retain copy/fuel access in a four-port budget, and can cuts alone divide a rim? | offline four-port counts; cycles 8/12/16; zero simulation knobs | works | separate cap/J requires 4/3 ports versus direct cap 5 with fuel; cuts alone 0/253 two-cycle outcomes; reclosure gives 4/9/16 anchor-complete graph witnesses | junction_topology.js (`JT_20260927`) | actual cap/J copying and fuel access geometry; Q7b deferred by user direction | exact static enumeration, not physical fit, acquisition, division or evolution; 534 reconnection pairings, length oracle and corruption check; unchanged core |
+| 82 | Half-cell cap access geometry | Can angled rim ports coexist with ordinary copying/rail and fuel contacts? | research cap/rest polygons; `stiffA`/`stiffP`/`stiffQ`/`stiffC` .8; `sigma` .3, `sigmaRot` .45, body4/individual4/16; chemistry off | lead | 84 static placements pass; attached held gate body4 4/4, individual16 4/4, individual4 0/4; all 24 fixtures clear after imposed face loss, but released overlap reaches .2613 area | half_cell_geometry.js, half_cell_geometry_report.js (`HC_geometry_20260927_v2`) | targeted released-contact comparison and distinct rim interface before chemistry; radiation benefit remains hypothetical | 24 eight-block fixtures, 17,300 physics steps including failed attempt/QA; 11.138 measured CPU s plus untimed preliminary aggregation; exact replay/neutrality/restart pass; first cache failure/source snapshots retained; no arc growth, ordinary release, descendants or core change |
 
 ## Knob index
 
@@ -444,8 +450,8 @@ the rows that used it). Rerun it after adding rows.
 | `resM` | 11 (superseded), 11b (negative), 16 (negative) |
 | `shapeA` | 15c (lead) |
 | `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works), 40d (inconclusive) |
-| `sigma` | 80 (lead) |
-| `sigmaRot` | 80 (lead) |
+| `sigma` | 80 (lead), 82 (lead) |
+| `sigmaRot` | 80 (lead), 82 (lead) |
 | `sizeA` | 28 (lead) |
 | `sizeB` | 67 (partial), 68 (works) |
 | `sizeC` | 67 (partial), 68 (works) |
@@ -459,11 +465,12 @@ the rows that used it). Rerun it after adding rows.
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
 | `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
-| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead) |
+| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead), 82 (lead) |
 | `stiffB` | 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead) |
+| `stiffC` | 82 (lead) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
-| `stiffP` | 52a (works), 58 (negative) |
-| `stiffQ` | 52a (works), 58 (negative) |
+| `stiffP` | 52a (works), 58 (negative), 82 (lead) |
+| `stiffQ` | 52a (works), 58 (negative), 82 (lead) |
 | `sun` | 3 (negative) |
 | `tether` | 24 (negative), 24b (negative), 25d (negative), 27b (negative) |
 | `transCode` | 34a (works), 43a (negative) |

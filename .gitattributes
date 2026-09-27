@@ -43,3 +43,5 @@ experiments/out/PE_geometry_20260927*.json text eol=lf
 experiments/junction_topology* text eol=lf
 docs/BLOCK_ARCHITECTURES.md text eol=lf
 experiments/out/JT_20260927*.json text eol=lf
+experiments/half_cell_geometry* text eol=lf
+experiments/out/HC_geometry_20260927* text eol=lf

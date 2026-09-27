@@ -1,0 +1,111 @@
+{
+  "scope": "Prepared geometry and numerical mechanics only",
+  "groups": [
+    {
+      "mode": "body4",
+      "arm": "attached",
+      "worlds": 4,
+      "passing": 4,
+      "goodHeldSamples": 100,
+      "heldSamples": 100,
+      "maxTailPin": 0.00011058456307635319,
+      "maxTailOverlap": 0.00041921603011019215,
+      "maxTailFuelOverlap": 9.729944849823369e-9
+    },
+    {
+      "mode": "body4",
+      "arm": "unbound",
+      "worlds": 4,
+      "passing": 4,
+      "goodHeldSamples": 99,
+      "heldSamples": 100,
+      "maxTailPin": 9.591369580003272e-10,
+      "maxTailOverlap": 0.021808107856244874,
+      "maxTailFuelOverlap": 1.4210854715202004e-14
+    },
+    {
+      "mode": "individual4",
+      "arm": "attached",
+      "worlds": 4,
+      "passing": 0,
+      "goodHeldSamples": 63,
+      "heldSamples": 100,
+      "maxTailPin": 0.202023735228201,
+      "maxTailOverlap": 0.042394002238538064,
+      "maxTailFuelOverlap": 0.03697892054442775
+    },
+    {
+      "mode": "individual4",
+      "arm": "unbound",
+      "worlds": 4,
+      "passing": 4,
+      "goodHeldSamples": 100,
+      "heldSamples": 100,
+      "maxTailPin": 0.0426150142667964,
+      "maxTailOverlap": 0.006683709788930514,
+      "maxTailFuelOverlap": 0.00008995073212503257
+    },
+    {
+      "mode": "individual16",
+      "arm": "attached",
+      "worlds": 4,
+      "passing": 4,
+      "goodHeldSamples": 100,
+      "heldSamples": 100,
+      "maxTailPin": 0.0010924154559930226,
+      "maxTailOverlap": 0.000230157184574864,
+      "maxTailFuelOverlap": 5.584667874813931e-7
+    },
+    {
+      "mode": "individual16",
+      "arm": "unbound",
+      "worlds": 4,
+      "passing": 4,
+      "goodHeldSamples": 100,
+      "heldSamples": 100,
+      "maxTailPin": 4.002140865275403e-7,
+      "maxTailOverlap": 1.406005765147711e-7,
+      "maxTailFuelOverlap": 2.842170943040401e-14
+    }
+  ],
+  "staticPlacements": 84,
+  "staticPass": true,
+  "physicalPass": true,
+  "clearAfterPreparedRelease": 24,
+  "firstClearRange": [
+    102,
+    114
+  ],
+  "maxReleasedCrossOverlap": 0.26131638419630576,
+  "maxHullExcess": 5.684341886080802e-14,
+  "failedAttempt": {
+    "reason": "Setup left the open eligibility cache stale; restore recomputed it. Setup/release now refresh it.",
+    "rawStepCounterLimitation": "Old counters included completed records only: 0 reported despite 500 executed physics steps before the neutrality assertion.",
+    "reconstructedSteps": {
+      "observed": 200,
+      "plain": 200,
+      "restart": 100
+    },
+    "cpuSeconds": 0.734
+  },
+  "physicsSteps": 17300,
+  "measuredCpuSeconds": {
+    "failed": 0.734,
+    "execution": 6.234,
+    "validation": 3.749,
+    "report": 0.421,
+    "total": 11.138
+  },
+  "timingLimit": "One preliminary read-only aggregation was not CPU-instrumented; shell/docs/Git and final report serialization excluded. Inclusive CPU total is not fully measured.",
+  "files": {
+    "experiments/out/HC_geometry_20260927_v2.json": "4063556df0f259fbb2aea077d423137911b39322c328981ab2d2f5a9d0124f80",
+    "experiments/out/HC_geometry_20260927_v2.json.cpu.json": "b0b41e5a84cc22de5ef16acf49c05e6200ac226d2bb387c3a524084f55045472",
+    "experiments/out/HC_geometry_20260927_v2.json.validation.json": "f2d3b7890c06219a7aade648abc8fa49640239f87e621efb4ea507abea87f1bd",
+    "experiments/out/HC_geometry_20260927_v2.json.svg": "503340476fb7ccefd0d810d3240faad9d2956bd35e52cddc446f5c62c90292eb",
+    "experiments/out/HC_geometry_20260927.json": "4b995de2582a36d4515277ed03706659f035517ca18bbf3b9f311c8df398d694",
+    "experiments/out/HC_geometry_20260927.json.cpu.json": "2af3f23280e308407baac14a0927db613fc45dc673ed9c0f42a6658c5deb95a5",
+    "experiments/out/HC_geometry_20260927.failed-source.js": "636d129502588bca49a93678066c48b7b6efa18021a0844075381a0f6055e19e",
+    "experiments/out/HC_geometry_20260927.frozen-plan.md": "29f8dc7741d4415025a77a3a745f19ab8881564b69e8c737b2a71a237be74bce"
+  },
+  "reportSourceHash": "e3adc282451ab7db10682182245bb131505d8908574ed6329c926de88f0438b1"
+}

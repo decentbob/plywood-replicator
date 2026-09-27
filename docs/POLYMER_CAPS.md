@@ -3,8 +3,9 @@
 2026-09-27, corrected after the user's drawing clarification. This is the current
 Q8 candidate. The previous version of this memo mistakenly put both curved arcs
 on one chain. The user means two separate D-shaped assemblies, each with its own
-chain as the straight boundary and its own polymer arc. No physical assay or
-new chemistry has been implemented yet. ROADMAP controls execution.
+chain as the straight boundary and its own polymer arc. A prepared cap-geometry
+assay is now complete (RESULTS 82); growth chemistry remains unimplemented.
+ROADMAP controls execution.
 
 ## Topology and sequence
 
@@ -77,11 +78,20 @@ separation and must be counted rather than forbidden by an ancestry check.
 
 ## Next small test
 
-Freeze actual cap shapes and ports for a paired-end fixture: each cap has its
-immediate ordinary chain neighbor, one rim stub and fuel access as needed.
-Check both P/Q orientations, actual-corner collision exclusion, copying access,
-and release with the rim neighbors behind their own chain faces. Compare the
-same inventory with rim stubs unbound. The old four-stub/two-cap preparation
+**Q8a completed:** see `experiments/half_cell_geometry_plan.md` and RESULTS 82.
+The measured fixture uses chamfered caps, one rim stub per cap and actual square
+rail/fuel neighbors. Prepared geometry passes under body4/individual16, with a
+failed individual4 sensitivity check. No ordinary copying or arc growth ran.
+Forced release exposes overlap in the core contact approximation, including
+ordinary A/A collisions. ROADMAP requires a targeted contact comparison before
+using release/contact outcomes to assess chemistry. The fixture's unused lateral
+slot carries a rim pin only while chemistry is disabled; a real rim interface
+must remain distinct from the chain-neighbor ports.
+
+The completed paired-end fixture includes each cap's immediate ordinary chain
+neighbor, one rim stub and fuel access. It checks both P/Q orientations,
+actual-corner overlap, copying access and prepared release, against the same
+inventory with rim stubs unbound. The old four-stub/two-cap preparation
 represented the mistaken two-rim-ports-per-cap design and is superseded.
 
 Then prepare one complete D-shaped seed plus conserved free material and test
@@ -93,6 +103,23 @@ improvement. Prepared seed construction is not autonomous acquisition.
 
 Open uncertainties are concrete: cap/arc clearance, arc length and curvature
 compatible with the chain span, tip encounter and closure, monomer/fuel access,
-and whether whole half-cells renew rather than only their chains. No rate, seed,
-horizon or success gate is frozen yet. Use a proportional plan before simulation,
+and whether whole half-cells renew rather than only their chains. For these next
+tests, no rate, seed, horizon or success gate is frozen yet. Use a proportional plan before simulation,
 accepted body jostling for exploration, and targeted individual-kick/solver checks.
+
+## Radiation as a possible benefit
+
+The user proposes that protective polymers could repay their costs under stronger
+radiation. Treat this as a physical hypothesis. The current global `pBreak`
+hazard cannot be blocked by a wall; existing X particles interact physically with
+M and can be excluded. A future W must explicitly obstruct those particles via
+contacts, without an observer granting protection to a recognized half-cell.
+The straight chain remains exposed from its copying side, so a curved wall may
+provide only partial shielding. Local cap fuel access in Q8a also does not prove
+that a closed half-cell can acquire/recycle enough fuel or monomers.
+
+After reproductive closure, compare matched material and physics under rays on/off
+and polymer opacity on/off, measuring damage, usable descendants and sequestration.
+This would be a designed environmental pressure, not evidence of open-ended
+complexity by itself. RESULTS 25 demonstrated prepared shielding but walled-world
+extinction; the new outward-copying topology must earn its own benefit result.
