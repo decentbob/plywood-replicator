@@ -5,13 +5,14 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P3's equal-composition screen closes exact descendant cycles
-but fails its fixed inherited-benefit gate (66). Opposed20 ABABABAB has three
-reproducing offspring in each seed and reaches generation three; AAAABBBB has
-two/zero. The first seed's difference of one misses the required two. Park this
-preparation without retuning or extra confirmation. **Next: P2's polygon-port
-and turnover feasibility gate**, including the narrow recycling competitor.
-P4's tested pairs remain parked (64–65), as does P1 (62). No mechanism was added.
+**Current status:** P2's polygon-port layout passes (67), but its physical gate
+is blocked by a measured numerical discrepancy: centre/radius approximations
+miss rectangle overlap and reject legal growth contacts or placements. **Next:
+a targeted P0 contact/placement correction in the isolated P2 fixtures**, with
+unchanged core/default physics and matched square controls. No turnover or
+population test yet. P3's tested preparation remains parked after its fixed
+benefit gate failed (66), along with the tested P4 pairs (64–65) and P1 (62).
+No chemistry or core mechanism was added.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -23,7 +24,7 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / conditional theoretical lead, low for physical renewal | Next: minimal polygon-port feasibility, then a bounded growth/turnover fixture if feasible (63, 66) | A distinct physical hypothesis after ecology, heredity and shape screens; include common-part costs and narrow recycling. |
+| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / port layout verified, physical renewal still low | Geometry preflight complete (67); next a targeted research-only contact/placement comparison under P0 | Scalar size/radius checks conflict with required rectangle contacts; resolve this specific discrepancy before testing economy or turnover. |
 | P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
 | P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
@@ -176,6 +177,27 @@ second-contact acquisition, naturally released active fragments and returned
 versus trapped T1, including the narrow recycling competitor. If geometry or
 retention requires increasingly special-case machinery, park the route. No
 population race or new core mechanism is authorized by the accounting alone.
+
+**2026-09-27 preflight (67):** six-corner boundary rectangles fit four immutable
+ports; all 96 ideal layouts match the section-63 graph, including both fronts
+and rotated configurations. With area-based size, 72/960 internal contacts and
+one contact at every growth front fail the centre-distance filter. Size set to
+the long dimension admits those distances but rejects all 96 prepared front
+placements. A true 0.4-area overlap survives zero-kick solving at 4 and 16 passes
+under area sizing. The current single-size geometry checks therefore do not
+validate physical growth. Prepared first-contact probes and full replay are
+archived; no bonds form or turn over in this assay.
+
+**Next discriminating test:** isolate polygon-aware contact exclusion and vacant
+placement checks, with conservative shape-aware search bounds, in a research
+subclass. Keep existing pin/deformation mechanics and body jostling; do not
+change core defaults or add chemistry. Reuse the exact overlap/separation,
+two-contact front and square-control fixtures under matched solver settings.
+Require elimination of false overlap/placement results and usable second-contact
+geometry before any growth test. A correction that needs assembly classification,
+orientation locks or global placement fails. This is the specific P0 discrepancy
+that now matters, not a general physics rewrite prerequisite. Later autonomous
+retention/turnover still needs its own plan and the narrow recycling competitor.
 
 ## P3 — an inherited mechanical part must earn its keep
 
@@ -344,3 +366,9 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   Preserve the rejected observer pilot (another 80k / 48.625 CPU seconds) and
   its corrected, physically identical replay. Park the preparation and make
   P2's polygon-port/turnover feasibility next. No core changes or new rewards.
+- **2026-09-27, section 67:** P2 port representation passes all 96 prepared
+  layouts; physical feasibility remains incomplete because centre/radius checks
+  miss rectangle overlap or reject legal contacts. The 120 first-contact and
+  16 steric fixtures cost 12,160 steps / 10.469 CPU seconds and replay exactly.
+  Next is the isolated P0 polygon-contact/placement comparison above; growth
+  and turnover remain gated. No core or chemistry changes.

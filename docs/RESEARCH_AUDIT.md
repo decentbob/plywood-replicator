@@ -20,6 +20,17 @@ the audit's original recommendation to make a local-physics project the first re
 The implementation findings remain; aggregate motion is an accepted approximation, not a
 reaction-locality violation or established equivalence to individual-block motion.
 
+**Targeted follow-up (2026-09-27, RESULTS 67):** the P2 boundary-rectangle
+preflight identifies another numerical approximation relevant to that candidate.
+`_physics` excludes unbonded material using size-derived circular radii, while
+`_slotFree` and the outer `_formBonds` filter use centre distances. They do not
+test actual polygon overlap. Exact split-edge rectangle ports fit the existing
+corner representation, but these filters reject required contacts/placements;
+an overlapping rectangle pair also remains overlapped after 16-pass zero-kick
+solving. README's blanket no-overlap wording has been corrected. This earns a
+targeted research-only contact/placement comparison before P2 growth, not a
+prerequisite rewrite of all physics or a retrospective rejection of every assay.
+
 ## What “following intent” must mean
 
 Three tests are independent:

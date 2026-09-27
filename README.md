@@ -208,7 +208,10 @@ force whose strength is a per-type stiffness. A bond pins the two corners of one
 corners of its partner's edge, so bonded edges coincide and a strand moves as one body. A free
 block gets its own Brownian kick; a set of bonded blocks is kicked as the rigid body it forms, by
 the move and turn its blocks' own kicks would give it (`bodyJostle`, default since 2026-09-25; it
-made the engine about twice as fast). Two blocks that are not bonded may not overlap. Pins, contacts
+made the engine about twice as fast). Unbonded contact forces use a circular approximation based
+on block size; bonding and pin constraints use polygon edges. This does **not** guarantee that
+noncircular outlines cannot overlap: the rectangle preflight in RESULTS 67 measures both missed
+overlap and rejection of legal placements. Pins, contacts
 and the shape restoring force are then solved together by nudging the blocks involved, 4 passes per
 step (`iters`); a pin moves each block rigidly and, by its softness, deforms the pinned corner.
 Chemical rules do not read a whole body, but the jostling routine does. This is the documented
@@ -241,7 +244,8 @@ fragments (`experiments/RESULTS.md`, section 23). `mobS` slows bonded blocks rel
 
 Bonds never break from jostling (with `maxStrain` off). A bond forms only if the compatibility table allows it, the two
 sides face each other within a tolerance (30° for docking, 10° for side-to-side links), and the
-moving block would land in an empty spot. A monomer that undocks is pushed off the face it
+moving block passes a size-based centre-distance vacancy check. That check is approximate,
+not a polygon-intersection test (67). A monomer that undocks is pushed off the face it
 left. All soft probabilities are per step of contact. The functions that find connected
 components for statistics and birth records are observation only. Separately, default
 `_jostleBodies` traverses bonded components for physical motion; see the locality audit.

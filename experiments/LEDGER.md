@@ -54,6 +54,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    Equal-composition active-founder worlds with slow turnover can renew exact descendants (66): opposed20
    ABABABAB reaches generation three in both screen seeds. Its fixed between-sequence benefit gate still fails;
    AAAABBBB versus ABABABAB gives 2/0 versus 3/3 reproducing offspring, with extensive shortening and founder loss.
+   Noncircular parts also need a check of numerical exclusion and search bounds (67): split-edge rectangle
+   ports fit, but circular contact forces and centre-distance filters miss overlap or reject valid growth
+   placements. More solver passes do not fix that deterministic geometry mismatch.
 8. **Walls and compartments have not paid in any form** (11b, 12b, 16, 16b–d, 24, 24b, 25d): they are slow to build,
    seal only when everything is slow, shut copies in, and walled worlds died. Parked, not disproved.
 9. **Recognition between strands has not given specificity** (18, 18b, 26, 26b): with two letters binding is
@@ -281,6 +284,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 64 | Exact-structure random-chemistry heredity | Does table 55 propagate two prepared variants beyond founder material? | fixed table 55, copyTable control, bodyJostle, seeded/disrupted/plain | negative | 0/4 random cases pass: V0 seeded 8/3 vs disrupted 10/3 and plain 5/8; V1 seeded 0/0; copying control 4/4 pass | random_heredity.js, random_heredity_summary.js (`RH_20260926`) | park this pair; recover existing table 57 before one further bounded assay | two bath seeds, same-composition variants, exact graphs and full bond replay; no random renewal witnesses; contact witnesses are not sufficient pedigrees |
 | 65 | Second random-chemistry heredity candidate | Does table 57 transmit two persistent equal-composition variants? | fixed table 57, copyTable control, bodyJostle, seeded/disrupted/plain | negative | 0/4 random cases pass: V0 seeded 37/34 vs plain 64/40; V1 seeded 8/2 vs disrupted 2/2 and plain 7/5; copying control 4/4 pass | random_57.js, random_57_screen.js (`R57_20260926`) | park further candidate screening; P3 inherited geometry next | two BBB side-graph variants pass calibration; full bond replay; V1 partial effect misses gate; V0 witnesses also arise in plain baths, not sufficient pedigrees |
 | 66 | Equal-composition shape and descendant renewal | Does inherited arrangement improve exact offspring renewal under matched fuel/shape controls? | `bendA`/`bendB` 0 or opposed20, `pGrip` 0/0.2, `pFray` 0.00003, `pUnzip` 1 | negative | opposed20 AAAABBBB/ABABABAB reproducing offspring 2/0 vs 3/3; first seed's +1 misses fixed +2; alternating reaches generation three in both | sequence_shape.js, sequence_shape_summary.js (`SS_screen_20260927`) | park preparation; P2 polygon-port and physical turnover feasibility next | 2 viability + 2 fresh seeds; 16 matched 100k worlds; active founders, all lost; rejected observer pilot preserved, corrected replay physically identical; no core change or P0 promotion |
+| 67 | Resource-economy polygon-port preflight | Can the proposed contacts fit and remain accessible under existing numerical mechanics? | prepared six-corner rectangles, `sizeB`/`sizeC` sqrt(2)/2, `iters` 4/16, `bodyJostle` on/off | partial | all 96 port layouts fit; area sizing excludes 72/960 internal contacts; long sizing rejects 96/96 front placements; 0.4 overlap persists at 16 passes | resource_ports.js, resource_ports_summary.js (`RP_preflight_20260927`) | targeted research-only polygon contact/placement correction before growth | 120 prepared 100-step fixtures + 16 steric probes; all replay exactly; zero autonomous bonds or turnover; square controls, conserved material, unchanged core |
 
 ## Knob index
 
@@ -295,7 +299,7 @@ the rows that used it). Rerun it after adding rows.
 | `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative) |
 | `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative) |
 | `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative) |
-| `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead) |
+| `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead), 67 (partial) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
 | `catalysis` | 34c (works), 42a (works) |
 | `chiral` | 30 (partial) |
@@ -321,7 +325,7 @@ the rows that used it). Rerun it after adding rows.
 | `heatPeriod` | 29 (partial) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
-| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative) |
+| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |
 | `maxStrainStrand` | 23 (works) |
@@ -386,6 +390,8 @@ the rows that used it). Rerun it after adding rows.
 | `shapeA` | 15c (lead) |
 | `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works), 40d (inconclusive) |
 | `sizeA` | 28 (lead) |
+| `sizeB` | 67 (partial) |
+| `sizeC` | 67 (partial) |
 | `sizeD` | 28 (lead) |
 | `sizeU` | 39a (works), 39e (inconclusive), 41a (negative) |
 | `sizeX` | 25b (works) |
@@ -425,9 +431,11 @@ later tests may have completed or rejected it. Do not treat every historical lea
 - **P2 — resource-efficient assembly:** derivation complete (63), physical turnover gate
   incomplete. Gross scarce demand falls with width, but narrow fragments can recycle every
   scarce part under one ideal cut arrangement; no per-child advantage established. Keep the
-  contact graph and finite-stock accounting; no new simulator mechanism yet. Next after 66:
-  check actual polygon-port feasibility before a bounded conserved growth/turnover fixture,
-  including first-contact survival, naturally active fragments and narrow-pattern recycling.
+  contact graph and finite-stock accounting; no new simulator mechanism yet. Port geometry passes
+  the preflight (67), but circular exclusion and centre-distance search/placement fail for the
+  required rectangles. Next: a targeted research-only polygon-aware correction under P0,
+  with unchanged pins/jostling and matched square controls. Growth/turnover remains gated;
+  retain first-contact survival, naturally active fragments and narrow-pattern recycling.
 - **P3 — mechanical function with renewal:** fit and fuel capture are established (49–50);
   inherited reproductive advantage remains open (41, 47, 51, 66). The equal-composition
   screen achieves exact descendant renewal but misses its fixed benefit gate (66).

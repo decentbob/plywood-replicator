@@ -5086,3 +5086,148 @@ preparation; do not add states, tune rates or run extra confirmation to rescue i
 The full gate did not earn P0 solver/individual-kick comparisons. P2's distinct
 polygon-port feasibility and conserved growth/turnover question is next, including
 the narrow recycling competitor. P1/P4 remain parked; C1 is optional closure.
+
+## 67. Boundary ports fit, but radial geometry blocks the resource-economy preflight
+
+**2026-09-27, ROADMAP P2/P0; partial.** Section 63 supplies a material/contact
+argument, not a physical ribbon. `resource_ports_plan.md` fixes this preflight
+before measurement. The proposed boundary parts are 2×1 rectangles with two
+independent contacts along their inward long face and one contact at each end.
+The interior parts are unit squares. No new chemistry, state, growth rule,
+turnover rate or simulator-core code is introduced.
+
+### Port representation passes
+
+Use six vertices for each rectangle: split both long edges, leaving the outward
+segments inert. This keeps the vertex mean at the area centroid and fits within
+the existing eight-corner storage. Four active length-one ports map directly to
+existing side/corner accessors and pin constraints. There is no multi-part
+placement operation or world-orientation lock. All twelve immutable label patterns
+from section 63 are defined offline; the selected minimum-scarce cycles exercise
+ten of them (D11 and U00 are absent). Geometry has only three archetypes, represented
+by A/B/C aliases in the physical fixture; those aliases carry no new reactions.
+
+Enumerate n=1,2,3, both strip parities, lengths 3/6 and four quarter-turn rotations,
+with two scalar-size choices: **96 ideal layouts**. Actual corner coincidence
+discovers exactly the section-63 contact graph in every case. All internal and
+front contacts match their immutable labels, all pin residuals are below 1e-8,
+there is no double-booked side, and polygon overlap area is below 1e-8. Every
+tested strip has two exposed two-contact growth sites. These are prepared
+geometric possibilities; neither assembly nor fragmentation has occurred.
+
+### Current search and vacancy checks disagree with those polygons
+
+The engine's `_formBonds` outer filter uses centre distance and one scalar `size`;
+`_slotFree` is another centre-distance test. `_physics` uses size-derived circles
+for unbonded exclusion. Edge geometry and corner constraints are polygonal, but
+those three checks are not polygon intersection tests. README's unconditional
+no-overlap claim has been corrected; the core remains byte-identical.
+
+The default-like rectangle mapping uses `size=sqrt(area)=sqrt(2)`. The fixed
+diagnostic alternative uses `size=2`, the long dimension. Both retain the same
+2×1 polygon, mass 2 and inverse inertia 1.2; squares retain unit mass and size.
+Thus size sensitivity here changes search/radius proxies, not material or inertia.
+
+| rectangle size mapping | ideal internal contacts inspected | rejected by outer distance/search gate | candidate growth fronts | excluded front contacts | rejected exact front placements |
+|---|---:|---:|---:|---:|---:|
+| sqrt(area) | 960 | 72 | 96 | 96 | 0 |
+| long dimension | 960 | 0 | 96 | 0 | 96 |
+
+All of these contacts pass `_geomOK` at their exact pose. Under area sizing,
+an end-to-end rectangle contact has centre distance 2, beyond the outer
+`1.35*sqrt(2)=1.9092` limit. Each front needs one such contact. Under long-dimension
+sizing, the legal rectangle/square centre distance is `sqrt(1.25)=1.1180`, less
+than `_slotFree`'s exclusion threshold `0.75*(2+1)/2=1.125`. It rejects the
+geometrically empty placement. Repeated rotations and ports are diagnostic cases,
+not independent statistical replicates.
+
+There is also an explicit scalar-size conflict at the default repulsion margin:
+admitting the end contact requires `size >= 2/1.35 = 1.48148`, while avoiding
+false repulsion at the legal rectangle/square contact requires
+`size <= sqrt(5)-1 = 1.23607`. No one size satisfies both. This is a certificate
+about these existing checks and shapes, not a proof against every geometry or
+parameterization. Separating search bounds from polygon contact geometry is the
+next hypothesis; widening a tolerance is not evidence that the geometry is sound.
+
+### Steric witnesses and prepared single-contact fixtures
+
+Two unbound rectangles with centres 1.6 apart along their long dimension overlap
+by 0.4 square units. Centres 1.2 apart along the short dimension give a genuine
+0.2 gap. Run ten zero-kick physics steps, with identical results at 4 and 16 passes:
+
+| size mapping | witness | vacant according to `_slotFree`? | centre distance before → after | actual overlap before → after |
+|---|---|---|---|---|
+| sqrt(area) | long-axis overlap | yes | 1.6 → 1.6 | 0.4 → 0.4 |
+| sqrt(area) | short-axis separation | yes | 1.2 → 1.4142 | 0 → 0 |
+| long dimension | long-axis overlap | yes | 1.6 → 2 | 0.4 → 0 |
+| long dimension | short-axis separation | no | 1.2 → 2 | 0 → 0 |
+
+The square calibration pairs remain separated and unmoved. For identical
+rectangles, no orientation-independent radial cutoff can both reject the
+overlap at distance 1.6 and permit the separation at 1.2. Increasing solver
+passes cannot change a missing or incorrectly applied contact condition.
+
+The 100-step prepared probes use a three-column n=1 strip, an incoming boundary
+at either end, and either of its two contacts already pinned. No second bond
+forms: this assay measures only its geometric availability. Seeds 211/212,
+area/long sizing and body4, individual4, individual16, zero4 and zero16 give
+80 boundary fixtures. Forty four-square corner controls use the same solver
+conditions; their different mass/shape makes them numerical calibrations, not
+material-matched tests of a reproductive benefit. Chemical labels are unused
+throughout these physics-only runs.
+
+With area sizing and zero kicks, a missing end contact stays exactly aligned
+but excluded by the centre filter. A missing inward contact remains within
+the geometry tolerance despite a false repulsive displacement. With long sizing,
+the missing inward contact fails `_geomOK` after one physics step in both end
+fixtures. Its corner gap is about 0.463–0.466 by step 100 at four passes.
+The same qualitative failure persists at sixteen zero-kick passes; prepared
+square controls remain exact. These are local contact distortions, not a
+failure to acquire an unmeasured organism-level program.
+
+Individual kicks add solver sensitivity: at step 100, square second-contact
+eligibility is 1/4 at four passes and 4/4 at sixteen (two seeds × two first
+contacts, correlated conditions). Boundary eligibility varies with end and
+first contact, and the deterministic search/placement failures remain. Body
+jostling keeps the bonded fixture together; it cannot validate excluded or
+missed contacts. Raw snapshots include all pin gaps and convex-hull overlap
+bounds. Hull overlaps in deformed outlines are conservative diagnostics;
+the exact overlap claims above concern the undeformed convex rectangles.
+
+### Reproduction, checks and disposition
+
+```sh
+node experiments/resource_ports_test.js
+node experiments/resource_ports.js experiments/scratch/RP_preflight_20260927
+node experiments/resource_ports_summary.js experiments/out/RP_preflight_20260927.json.gz
+node experiments/resource_ports_analysis_test.js experiments/out/RP_preflight_20260927.json.gz
+node tools/fingerprint.js 1500
+```
+
+Raw output is archived losslessly as `RP_preflight_20260927.json.gz`, alongside
+the original `.summary.json`. It includes exact command, baseline, input/source
+hashes, all ideal polygons and ports, parameters, full initial/final states and
+sampled physical output. Counts/types and every prepared bond are conserved.
+Cost: **120 × 100 + 16 × 10 = 12,160 physics steps, 10.469 CPU seconds**, plus
+the static layouts; validation/replay and fingerprints are excluded from cost.
+One assay process was used; unrelated Node processes were identified before running.
+
+Tests check overlap against independent rectangle areas, all graph/rotation
+cases, port perturbations, exact observer/RNG neutrality, material conservation
+and geometry restart. All 136 physical fixtures replay exactly from saved states
+(apart from the pin-cache version counter). Corrupted source metadata, geometry,
+coverage, state hashes and vacancy results are rejected. All five default
+1500-step fingerprints match the baseline. The unchanged full invariant suite
+was not rerun. An early fixture test caught a stale open-side cache after prepared
+bond insertion; setup now recomputes it before measurement, and restart passes.
+
+**Decision:** port representation passes; current numerical mechanics do not
+validate this candidate's physical growth. No turnover run or population test
+is earned. The smallest next test is a research-only polygon-aware contact and
+placement correction, with conservative search bounds, unchanged pin/deformation
+rules and body jostling, reusing these exact witnesses and square controls.
+It must resolve this measured discrepancy before cooperative retention and
+natural fragmentation are tested. This is a targeted P0 case, not a prerequisite
+whole-engine rewrite. The narrow recycling competitor and section-63 finite-stock
+accounting remain mandatory later; no per-child economy, heredity or complexity
+claim follows from fitting the ports.
