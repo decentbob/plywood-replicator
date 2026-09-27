@@ -5918,3 +5918,140 @@ fuel contacts connect recurring renewing partners, or merely available
 material? Fix opportunity controls and identity coverage before counting
 partnerships. A new simulation needs a distinct causal contrast; neither
 more fuel contacts nor a renamed copying mechanism supplies one.
+
+## 73. Repeated fuel support does not nominate a partner-specific candidate
+
+2026-09-27, ROADMAP Q2; [frozen plan](fuel_support_plan.md), baseline
+`1874b38`. Offline analysis of all sixteen section-72 screen worlds, seeds
+303/304, 100k, both arrangements/shapes and grip controls. No pilot selection,
+new simulation, changed rule, state, knob, material or physical approximation.
+Body4 limitations remain those of the original runs. The archived report is
+`out/FS_audit_20260927.json`; original input and scratch files are preserved.
+
+### Measurement and coverage
+
+At actual fuel consumption, a helper-to-actor edge requires intact registered
+identities for the actor and every holder. Registration/retirement ordering
+resolves same-step events. Reused members never revive an old identity, and
+later row membership never fills an earlier unknown. Multiple holder blocks
+on one helper row count once per consumption. Every fuel bond edit changes
+the contact episode, so repeated observation of an unchanged holder set does
+not establish another encounter. All classifications remain offline.
+
+Of 2,611 fuel events, **1,680 (64.3%)** enter the primary graph. The exclusions
+are 443 untracked actors (58 never previously registered) and 488 tracked
+actors with at least one unknown holder. Of the latter, 82 also have an
+identifiable external helper, retained only as partial coverage. Zero events
+have all holders on a single tracked row. Unknown material includes both
+pre-registration assemblies and fragments after retirement, not just free
+monomers. These exclusions reconcile the earlier 931 partly untracked events.
+
+| seed | preparation / shape | all fuel events | covered | untracked actor | unknown holder with tracked actor | covered helper-set changes / successive events |
+|---|---|---:|---:|---:|---:|---:|
+| 303 | ABABA / square | 325 | 214 | 46 | 65 | 83 / 105 |
+| 303 | ABABA / opposed20 | 369 | 242 | 54 | 73 | 101 / 126 |
+| 303 | AABAB / square | 310 | 195 | 67 | 48 | 74 / 115 |
+| 303 | AABAB / opposed20 | 307 | 183 | 55 | 69 | 76 / 92 |
+| 304 | ABABA / square | 336 | 229 | 65 | 42 | 103 / 128 |
+| 304 | ABABA / opposed20 | 355 | 205 | 60 | 90 | 79 / 111 |
+| 304 | AABAB / square | 301 | 228 | 26 | 47 | 99 / 109 |
+| 304 | AABAB / opposed20 | 308 | 184 | 70 | 54 | 69 / 103 |
+
+All eight grip-off worlds have zero fuel events, support edges and primary
+pairs. Across on worlds there are 1,783 directed event edges, 1,421 distinct
+unordered within-world pairs and 791 receiving row identities. Helper sets
+change in 684/889 successive covered events (76.9%); excluded events may
+intervene, so these are not all successive physical contacts. Counts pool
+descriptions only; worlds, not contacts or pairs, are independent units.
+
+### Recurrence, renewal and opportunity reference
+
+The fixed primary counts nonfounder pairs with >=2 distinct fuel episodes
+in each direction, with each partner producing a fueled exact detached child
+after first receiving support from that partner and before retirement. All
+registered lengths enter; founder-lineage membership is not required.
+
+Reconstruct geometric/readiness opportunities from the complete bond tape:
+a REPEL unit on a live row co-holds fuel with known external rows. Compare
+each actual consumption with opportunities for the **same actor row/unit**
+and helper cardinality in its fixed 10k bin, begun by the consumption, with
+helpers still live at its event index. Inclusive duration weights are clipped
+to the bin and consumption time. The report saves 2,093 configurations,
+all pools and 199 weighted draws per world using a separate fixed RNG.
+Observed renewal is held fixed in the reference; counterfactual births are
+not simulated. Fuel charge is unlogged. This is a conditional geometric/
+readiness reference, not an exchangeable causal null or significance test.
+
+| seed | preparation / shape | pairs | repeated one-way or more | reciprocal | repeated both ways | primary | primary reference median / q95 | events with alternative helper sets |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| 303 | ABABA / square | 183 | 21 | 15 | 1 | 0 | 0 / 0 | 9/214 (4.2%) |
+| 303 | ABABA / opposed20 | 209 | 24 | 17 | 0 | 0 | 0 / 0 | 15/242 (6.2%) |
+| 303 | AABAB / square | 147 | 32 | 13 | 3 | 0 | 0 / 0 | 8/195 (4.1%) |
+| 303 | AABAB / opposed20 | 164 | 17 | 10 | 0 | 0 | 0 / 0 | 9/183 (4.9%) |
+| 304 | ABABA / square | 201 | 28 | 19 | 1 | 0 | 0 / 0 | 12/229 (5.2%) |
+| 304 | ABABA / opposed20 | 161 | 23 | 17 | 2 | 1 | 2 / 3 | 7/205 (3.4%) |
+| 304 | AABAB / square | 221 | 15 | 13 | 0 | 0 | 0 / 0 | 9/228 (3.9%) |
+| 304 | AABAB / opposed20 | 135 | 35 | 13 | 1 | 0 | 0 / 0 | 6/184 (3.3%) |
+
+There are 117 reciprocal pairs and eight repeated in both directions. Of all
+1,421 pairs, 873 have neither participant's qualifying renewal after received
+support, 523 have one, and 25 have both; absence is no observed qualifying
+renewal, not proof of incapacity. For one-way pairs, the helper has no received
+support from that partner and cannot meet that temporal criterion. Both rows
+remain intact at the horizon in 140 pairs; all endpoint lifetimes and encounter
+spans remain in the report/input, including censored observations.
+
+The sole primary pair is seed 304 ABABA/opposed20, rows **70 (ABAB)** and
+**71 (BABAB)**, neither with assigned ancestry. Four episodes support 71 and
+two support 70, spanning steps 58,518–61,163. They produce exact fueled
+children 83 at 70,927 and 88 at 73,448, then retire by fraying at 78,080 and
+80,822. This establishes a finite reciprocal-renewal witness, not continuous
+association, inherited pairing or mutual reproductive benefit. Its observed
+count is below the reference median two and q95 three; all 199 reference
+draws have at least one primary pair. Other worlds' primary upper fractions
+are also one because their observed primary is zero.
+
+**No candidate passes.** Every world fails the fixed >=20% opportunity-
+alternative condition (75/1,680 events overall, 4.5%). Only one has a primary
+pair, and none exceeds its reference q95. No preparation/shape qualifies in
+both seeds. Few available alternatives mean weak identifiability; do not
+interpret failure as evidence that partners are biologically interchangeable
+or that all possible partnerships are absent. Lifetime conditioning, the
+same-unit pool, coarse time bins, unknown charge and incomplete identity
+coverage limit the reference. No null tuning or pooled-seed rescue occurred.
+
+### Validation, cost and disposition
+
+```sh
+node experiments/fuel_support_test.js
+node experiments/fuel_support.js experiments/scratch/FS_audit_20260927
+node experiments/fuel_support.js --verify experiments/out/FS_audit_20260927.json
+node experiments/fuel_support_analysis_test.js experiments/out/FS_audit_20260927.json
+```
+
+Use a fresh stem when rerunning creation. The report records the exact command,
+source/plan/input SHA-256 hashes, ordered receipts, lifetimes, opportunities,
+pair witnesses, every reference draw and fixed decision. Complete deterministic
+recomputation passes, including the original archive's source validation and
+physical bond/fuel-holder reconstruction. Synthetic checks cover ordering,
+retired/future helpers, readiness, episode boundaries, within-step weighting,
+time bins, deduplication, renewal and deterministic draws. An independent
+static query of raw row lifetimes/holders reproduces all 16 coverage and pair
+counts, checks before-retirement renewal, pool membership/weights, quantiles
+and the gate; ten corrupted records are rejected. The core and historical
+hashed sources are unchanged. No physics suite, fingerprint rerun or solver
+comparison was required or run for this offline-only analysis.
+
+Analysis cost: **9.327 process CPU seconds, zero new simulation steps**, below
+the 120-second cap, excluding development and verification. All sixteen worlds
+and zero controls are retained. No measurement defect or plan departure arose.
+
+**Decision:** park Q2 as a source of partner-specific candidates. Q1 remains
+failed; there is no selected dependency or complexity gain. The
+[portfolio reassessment](portfolio_after_support.md) compares shared-product
+delivery diagnostics against further partner/shape tuning, resource acquisition
+and random chemistry. It selects an observation-design task for the unresolved
+delivery-versus-recipient-opportunity question from section 62. Existing ecology
+archives lack the ordered contacts needed to answer it. Design and validate
+that discriminator before considering deterministic replay; no new mechanism,
+population batch or confirmation is queued.

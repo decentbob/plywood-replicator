@@ -5,18 +5,17 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** Q1's five-letter common-environment screen is complete
-and fails its fixed benefit gate (72). Opposed20 alternating/rearranged
-productive offspring are 10/3 and 9/8; square controls give 12/18 and 10/2.
-Renewal is real, but the arrangement advantage is not consistent by the gate.
-Park Q1 with the earlier failed settings; no rate/seed/state rescue or P0
-confirmation is earned. Of 360 arming witnesses for productive exact parents,
-359 involve a holder outside the eventual parent's members.
-**Next: Q2, a bounded offline fuel-support audit before another simulation.**
-Distinguish recurring renewing partners from transient contacts in the saved
-event histories. External holders alone do not establish a selected dependency
-or justify another designed mechanism. No simulation batch is currently queued.
-The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed batch,
+**Current status:** Q2's offline support audit is complete (73): one repeated
+reciprocal renewing pair, no candidate above the fixed opportunity reference,
+and only 3.3–6.2% of covered events with alternative helpers. Park this candidate
+source; limited alternatives do not prove absence of partner preference.
+Q1's arrangement-benefit gate remains failed (72). No tuning or confirmation.
+**Next: Q3, design an event-level ecological delivery diagnostic before replay.**
+The [portfolio reassessment](experiments/portfolio_after_support.md) selects
+delivery versus recipient opportunity as the unresolved distinction; aggregate
+section-62 occupancy cannot answer it. Validate the measurement on small
+fixtures before any archived-world replay. No simulation batch is queued.
+The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed audit,
 validation and exact starting point.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
@@ -29,7 +28,8 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| Q2 | Audit actual fuel-support partners and their renewal | High diagnostic value / no dependency lead yet | Next: bounded offline analysis/design | Section 72 records external support for almost every productive-parent arming; recurrent inherited partnerships remain unmeasured. |
+| Q3 | Distinguish ecological delivery from recipient opportunity | High diagnostic value / causal explanation unresolved | Next: bounded observer design and fixtures, before replay | Section 62 has low occupancy in a failed world but no ordered delivery/linking tape; distinguish possible obstructions before another population run. |
+| Q2 | Audit actual fuel-support partners and their renewal | Finite reciprocal renewal measured / no candidate earned | Complete; park candidate source (73) | One primary pair, none above reference; alternatives in only 3.3–6.2% of covered events limit identification. |
 | Q1 | Test the observed five-letter variant in a common environment | Renewal measured / tested arrangement benefit fails | Park after fixed screen gate fails (72) | One seed passes; the other misses both the minimum arrangement contrast and shape interaction. No solver or fresh-seed confirmation earned. |
 | Q0 | Compare distinct hypotheses before another assay | Completed decision checkpoint | Comparison and archive census complete (71) | Four candidate families recur through physical renewal; candidate selection is retrospective and does not rescue earlier gates. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High long-term / low for tested acquisition setting | Park after actual first/second-contact gate fails (69) | Prepared geometry passes, but robust acquisition does not; reopening needs a distinct causal explanation rather than tolerance/rate tuning. |
@@ -45,7 +45,36 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## Q2 — fuel-support audit, before another simulation
+## Q3 — ecological delivery diagnostic design, before replay
+
+Follow the [post-support comparison](experiments/portfolio_after_support.md).
+Section 62's failed confirmation stays parked: low recipient occupancy could
+reflect few encounters, failed binding, lost recipients or unproductive bound
+support. The old 100-step aggregate samples cannot resolve those alternatives.
+
+Design observer-only witnesses for physical contact opportunity, mature-product
+binding, supported local lateral linking and complete detached output with
+continuous member history. Record recipient availability and explicit unknowns.
+No observer IDs in reactions, new states, rates or chemistry. Small neutral
+fixtures must distinguish the proposed obstructions and preserve arrays,
+counters and RNG. Keep historical hashed sources unchanged.
+
+Before replay, freeze a proportional plan covering failed and successful worlds,
+the existing production/binding controls, horizon, CPU cap and stop criteria.
+Explain what later matched intervention could distinguish delivery opportunity
+from product action with conserved material and local rules. If the measurement
+cannot discriminate them, stop design and record the gap. No automatic replay,
+frequency race, parameter repair or new population batch is queued.
+
+## Q2 — fuel-support audit (completed, 73)
+
+**Outcome:** all sixteen worlds analyzed without simulation. Covered events
+form 117 reciprocal pairs, eight repeated both ways and one qualifying renewing
+pair. None exceeds its reference primary q95; all worlds miss the >=20%
+alternative-helper gate. No candidate and no causal partner intervention
+earned. Sparse alternatives mean limited identification, not a proof of
+interchangeability. The portfolio was reassessed; Q3 above is next. The
+following preserves the original brief.
 
 Use all sixteen section-72 worlds and their ordered fuel-holder/bond/row
 histories. The question is whether repeated contacts link **renewing partners**,
@@ -80,7 +109,7 @@ Seed 304 misses the >=2 difference and the required shape interaction. Park the
 arrangement-benefit hypothesis. Exact descendant renewal remains evidence;
 all founders disappear and many shorter rows also renew. No new rules, P0
 comparison, fresh confirmation or length-payoff claim is earned. The following
-records the original comparison; Q2 above is the next work.
+records the original comparison; Q2 is also complete and Q3 above is next.
 
 Use the [frozen plan](experiments/short_variant_garden_plan.md), selected after
 the [Q0 comparison](experiments/portfolio_checkpoint.md) and section-71 census.
@@ -105,7 +134,7 @@ variant renewal, not a retest of the parked eight-letter preparation.
 The following was the checkpoint brief. It is complete: the comparison chose
 the no-simulation short-variant census over unisolated delivery timing and
 resource recycling hypotheses. See RESULTS 71 for counts and limits, and Q1
-for its completed follow-up; Q2 is now the next question.
+for its completed follow-up; Q2 is also complete and Q3 is now next.
 
 Produce one short evidence-backed comparison of two or three distinct causal
 hypotheses, then one prospective assay plan. Start with the measured footholds:
