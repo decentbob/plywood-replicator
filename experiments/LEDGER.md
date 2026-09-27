@@ -46,6 +46,9 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    Verify that a proposed shape change physically happens: at stiffness 1 without `snapCorners`, bonded shape matching
    is skipped, so changing the selected rest shape does nothing until the block becomes unbonded (45a).
    A prepared support can straighten a folding template (14.59° → 2.13°) without raising its sustained copy yield (47).
+   After prepared face loss, existing fold45 at stiffness 0.8 turns two endpoints out of binding alignment (80);
+   rigid-fold and straight controls stay aligned. This is zero-kick relaxation with reactions off: acquisition,
+   rebinding competition and preserved repair have not been demonstrated.
    Permanent wedges expose a two-row joint mismatch that straight supports do not remove (48). Opposing A/B wedges
    with complementary pairing restore copying under default physics in both directions (49); the benefit weakens with
    poorly resolved individual kicks. Shape and pairing must be tested together, with solver controls.
@@ -333,6 +336,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 77 | Prepared geometric error discrimination | Can unchanged shape and ordinary undocking reject a wrong docked letter while retaining correct joining? | existing `compCopy`, opposed `bendA`/`bendB`, `pUndock` 0.1, `pSoft` 0.002; proof off; body4/individual16 | negative | 96 valid cases; square/opposed correct joining 4/4 vs 3/4; wrong joining 8/8 vs 2/8 body, 4/8 individual; wrong-member loss only 1–3/8 (<4) in every stratum | geometric_error.js, geometric_error_test.js, geometric_error_report.js (`GE_20260927`) | park this preparation; no context selection, shape/rate tuning, proof rule or population follow-up | AA favors both wrong placements over correct; no censoring or simultaneous-loss ambiguity; 48k steps including neutrality/restart plus 9.6k prepared physics passes, 11.948 measured CPU seconds including QA/report; fixed 16-block inventory, unchanged core |
 | 78 | Prepared passive duplex repair | Can an intact face-bound support retain broken ends for ordinary ligation? | existing `pLigate` 0.02/0, `pHyb` 0, `pMelt`/`pMeltEnd`/`pMeltRun` 0; body4/individual4/individual16 | lead | bridge repair 12/12; split/unbound/no-ligation 0/12 each; uncut stability 12/12; every seed/physics gate passes | duplex_repair.js, duplex_repair_test.js, duplex_repair_report.js (`DR_20260927`) | freeze a small autonomous acquisition/repair/release plan before reproductive testing | 60 eight-block worlds, 75,060 ordinary steps including QA continuations; 16.121 measured CPU seconds including analysis; all bound faces remain occupied, zero births; no core change, two seeds not confirmation |
 | 79 | Passive repair acquisition/release prerequisites | Can ordinary binding acquire support and ordinary melting free repaired material? | existing `pHyb` 0.2/0, `pLigate` 0.02/0, `pMelt` 0.1/0, `pMeltRun` 0.001/0, `pMeltEnd` -1/0; body4/individual16 | negative | all 8 on gate cells fail; acquired bridge 2/8, acquisition-release 0/8, prepared repair 8/8 but release 0/8; noBind prepared repair-release 7/8 | duplex_cycle.js, duplex_cycle_test.js, duplex_cycle_report.js (`DC_20260927`) | park setting; require a distinct passive-escape geometry prediction before another assay | 64 eight-block worlds, 800k steps including neutrality/restart; 131.184 measured CPU seconds with QA; 6 synthetic and 5 corruption checks pass; zero births, no new-neighbor joins; acquisition supplied in release controls, no natural-damage cycle |
+| 80 | Passive escape geometry admission | Does the existing free-face fold physically prevent endpoint reattachment? | `foldA`/`foldB` 0/45, `stiffA`/`stiffB` 0.8/1, `iters` 4/16, `sigma`/`sigmaRot` 0; reactions off | lead | both solver gates pass: fold45 ineligible after 3/1 steps; controls eligible; final mismatch 43.81 degrees, retained-pin residual 0.0633 | passive_escape.js (`PE_geometry_20260927`) | freeze one matched kinetic acquisition/rebinding test; no repair or population promotion | six prepared four-block worlds, 2100 steps including neutrality/restart/replay, 1.326 measured CPU seconds; no stochastic replicates, chemistry or turnover; core unchanged; geometry only |
 
 ## Knob index
 
@@ -360,8 +364,8 @@ the rows that used it). Rerun it after adding rows.
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
 | `fold2` | 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
-| `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative) |
-| `foldB` | 39c (works), 41a (negative), 47a (works), 47b (negative), 47c (lead) |
+| `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative), 80 (lead) |
+| `foldB` | 39c (works), 41a (negative), 47a (works), 47b (negative), 47c (lead), 80 (lead) |
 | `foldD` | 28b (works) |
 | `gRange` | 31 (partial) |
 | `grip` | 39a (works) |
@@ -373,7 +377,7 @@ the rows that used it). Rerun it after adding rows.
 | `heatPeriod` | 29 (partial) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
-| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative) |
+| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative), 80 (lead) |
 | `linkDistTol` | 69 (negative) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |
@@ -439,6 +443,8 @@ the rows that used it). Rerun it after adding rows.
 | `resM` | 11 (superseded), 11b (negative), 16 (negative) |
 | `shapeA` | 15c (lead) |
 | `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works), 40d (inconclusive) |
+| `sigma` | 80 (lead) |
+| `sigmaRot` | 80 (lead) |
 | `sizeA` | 28 (lead) |
 | `sizeB` | 67 (partial), 68 (works) |
 | `sizeC` | 67 (partial), 68 (works) |
@@ -452,8 +458,8 @@ the rows that used it). Rerun it after adding rows.
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
 | `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
-| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative) |
-| `stiffB` | 47a (works), 48 (negative), 49a (works), 58 (negative) |
+| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead) |
+| `stiffB` | 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `stiffP` | 52a (works), 58 (negative) |
 | `stiffQ` | 52a (works), 58 (negative) |

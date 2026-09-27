@@ -6745,3 +6745,80 @@ after partial detachment, for example whether the existing bond-dependent rest
 shape could reduce reattachment while preserving repair. That is an untested
 mechanical hypothesis requiring a source/geometry prediction and its own
 matched-control plan; it is not a newly admitted simulation or a gate rescue.
+
+## 80. A freed endpoint can fold out of binding alignment, in prepared geometry
+
+**Q7 passes its geometry admission gate, not an autonomous-operation gate.**
+Source review identifies a mechanical route distinct from retuning section 79:
+the existing free-face fold changes the back corners, and lateral pins can turn
+the face away. It does not directly retract the face or recognize completion.
+The review and fixed comparison with leaving repair parked are in
+`passive_escape_plan.md`, written before outcomes. No simulator code changed.
+
+```
+node experiments/passive_escape.js experiments/scratch/PE_geometry_20260927.json
+node experiments/passive_escape.js --validate experiments/scratch/PE_geometry_20260927.json
+```
+
+Six four-block worlds contain two AB dimers, two supplied lateral bonds and one
+remaining face bond after a prepared face loss. Initial actual square corners,
+positions, orientations and states match in every arm. Compare free-face fold
+0 versus 45 at stiffness 0.8, with fold45/stiffness1 as the rigid activation
+control; use four and sixteen solver iterations. All worlds have zero random
+kicks and disabled binding, melting, ligation and damage. Seed 605 is a setup
+identifier, not a stochastic replicate. Same instances pass the first-five-step
+viability check and continue to 100; no pilot reset or tuning.
+
+| Solver iterations | Arm | First ineligible step | Eligible samples, steps 76–100 | Final face gap | Final normal mismatch | Maximum retained-pin residual, steps 76–100 |
+|---|---|---:|---:|---:|---:|---:|
+| 4 | straight, stiffness 0.8 | none | 25/25 | 0 | 0° | 0 |
+| 4 | fold45, stiffness 0.8 | 3 | 0/25 | 0.24644 | 43.80867° | 0.06326 |
+| 4 | fold45, stiffness 1 | none | 25/25 | 0 | 0° | <1e-15 |
+| 16 | straight, stiffness 0.8 | none | 25/25 | 0 | 0° | 0 |
+| 16 | fold45, stiffness 0.8 | 1 | 0/25 | 0.24644 | 43.80867° | 0.06326 |
+| 16 | fold45, stiffness 1 | none | 25/25 | 0 | 0° | <1e-15 |
+
+Both prespecified gates pass: missing faces become ineligible throughout the
+last 25 samples only in the flexible folded arm, while all three existing bonds
+remain and their pin residuals stay below 0.1 in that window. Actual corner
+measurements establish deformation, unlike the selected-rest-shape failure in
+45a. The final mismatch exceeds the existing 40-degree antiparallel tolerance;
+the face-midpoint gap remains below 0.35. Increasing solver iterations speeds
+relaxation without changing its final shape in this fixture.
+
+**What this does not establish.** The remaining face is supplied and never melts;
+there is no autonomous acquisition, release, repair, output or reproduction.
+Turning away can prevent useful initial attachment too. At four iterations a
+face remains eligible during early relaxation, so ordinary per-step binding can
+intervene before the measured exclusion develops. Matching final shapes across
+solvers does not prove matching kinetics. Relative random kicks, repair at
+stiffness 0.8 and the energy accounting of the prescribed shape switch remain
+untested. Samples within a world are not independent evidence. Section 79's
+failed operation gate remains failed, and section 47 still warns that a shape
+effect is not a reproductive benefit.
+
+All worlds conserve the same two A/two B blocks and three retained bonds. All
+observed/plain and midpoint-restart state/RNG comparisons pass (excluding the
+nonphysical `pinsVersion` cache revision). Independent calculations from stored
+corners agree with engine contact flags, gaps and angles. All 606 saved samples
+replay exactly; a corrupted contact flag is rejected. Raw source/plan hashes
+are checked, including exact core bytes against `DC_20260927.json`.
+
+Archive: `out/PE_geometry_20260927.json`, its `.cpu.json` and `.validation.json`.
+Raw SHA-256: `9670225a4ebe4c3847f28916a2d5e61d425edaecc42537de2cc7b73f66b3f1a7`.
+One process, no workers; no other Node process was found before launch. Steps:
+600 observed + 600 plain + 300 restart + 600 validation replay = **2,100**.
+CPU: 0.702 s execution/analysis/raw write + 0.624 s validation = **1.326 measured
+seconds**, within the 30 s budget and its 20 s QA reserve. Final validation
+serialization and shell/Git/documentation/archive-copy overhead are outside
+these intervals. There were no failed runs or plan deviations. Historical
+source/data bytes remain unchanged; full physics suite and default fingerprint
+reruns were skipped because no core code changed.
+
+**Next decision:** this physical effect earns one bounded kinetic comparison
+of folding versus straight material, with acquisition cost as a co-primary
+prerequisite and targeted individual-kick/solver controls. Freeze that plan
+before execution. Do not tune rates, fold, stiffness or horizon to rescue it;
+a failed tradeoff parks the candidate. Even a kinetic pass would still require
+the repair operation at matched stiffness before natural damage or population
+work. The sole current queue is ROADMAP, not this historical next paragraph.

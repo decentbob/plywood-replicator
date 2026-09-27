@@ -38,3 +38,5 @@ experiments/duplex_repair* text eol=lf
 experiments/out/DR_20260927*.json text eol=lf
 experiments/duplex_cycle* text eol=lf
 experiments/out/DC_20260927*.json text eol=lf
+experiments/passive_escape* text eol=lf
+experiments/out/PE_geometry_20260927*.json text eol=lf

@@ -13,43 +13,44 @@ status pointer, not a second queue.
 
 ## Current evidence and next slice
 
-**Q6b fails its acquisition/release prerequisite gate (RESULTS 79).** All 64
-worlds and their validation checks complete. Prepared support repairs 8/8
-on cases, but none achieves 25-step exposed release. Disabling future binding
-allows 7/8 prepared repairs to release; that control cannot autonomously acquire
-support. Only 2/8 enabled near-encounters acquire a sustained bridge, both under
-body4 in one seed. All eight seed/physics/preparation gate cells fail.
+**Q7 passes its prepared geometry gate (RESULTS 80).** At identical stiffness
+0.8, existing free-face fold 45 turns two freed endpoints out of binding alignment
+after 3 steps with four solver iterations, or 1 step with sixteen. Straight and
+rigid-fold controls remain eligible. Final face mismatch is 43.81 degrees; maximum
+retained-pin residual is 0.0633. All six four-block fixtures replay exactly.
 
-Park this rate/preparation combination. No natural-damage search or population
-batch is earned. Q6's prepared physical effect (78) remains evidence, not a
-completed autonomous cycle. All on cases have zero primary successes, not a
-proof that release is impossible at arbitrarily long times. Archive and plan:
-[duplex_cycle_plan.md](experiments/duplex_cycle_plan.md),
-[out/DC_20260927.json](experiments/out/DC_20260927.json). No task-owned simulation is active.
+This establishes physical relaxation only: binding, melting and random kicks
+were disabled. It does not show that folding wins the race against rebinding,
+preserves acquisition or supports repair. Q6b's failed gate (79) stays failed:
+prepared repair 8/8 but usable release 0/8; disabling future binding permits
+7/8 release while removing acquisition. No natural-damage or population batch
+is earned. [Q7 plan](experiments/passive_escape_plan.md),
+[raw](experiments/out/PE_geometry_20260927.json). No task-owned simulation is active.
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanical validation | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q7: source/geometry admission review for passive escape after partial detachment | Can existing bond-dependent rest shapes reduce immediate reattachment while preserving lateral integrity and repair? Require a concrete prediction and smallest matched control before admitting any run. |
+| 1 | Q7b: freeze and test the competition between relaxation, rebinding and initial acquisition | Keep the admitted fold45/stiffness0.8 contrast and smallest same-material preparation. Does ordinary binding erase the geometry effect before it acts, or does folding prevent useful acquisition? Both costs must be measured. |
 | 2, only if a distinct mechanism is admitted and passes | Autonomous acquisition, repair and usable release | Ordinary rules must acquire support, survive uniform damage, reconnect and free intact active material. No observer-triggered intervention. |
 | 3, only after the autonomous operation passes | Equal-material benefit and inherited variation | Compare reproducing descendants with independent dimers/fragments; charge support sequestration and copying time, then test persistence through material turnover. |
 
-**No next executable assay is frozen.** Q7 is a bounded design question grounded
-in the newly measured reattachment obstruction, not a rerun of an unchanged
-portfolio review. Read the existing rest-shape/physics implementation and
-RESULTS 34e/45a/47: a selected rest shape is not actual deformation, and restoring
-fit alone has not established benefit. The prospective action must be describable
-as one block changing its physical shape when its own face becomes free, with
-no completed-repair reader, original-partner memory or release program.
+**No kinetic assay is frozen yet.** Q7's plan compares this third small diagnostic
+with leaving repair parked. Its positive actual-geometry result earns one bounded
+kinetic test, not another parameter search. Freeze endpoints, seeds, horizon and
+failure criteria first. Compare fold on/off at identical stiffness, material,
+initial geometry and ordinary binding/melting rates; include body4, individual4
+and individual16 to separate relative kicks from solver speed. Record actual
+pre-binding geometry and ordered contacts, not rest-slot selection alone.
 
-Before proposing a fixture, predict actual corner/contact changes and the cost
-to acquisition and repair. Compare shape on/off at identical stiffness, material,
-initial geometry and binding/melting rates; account for default rigid bonded
-blocks skipping shape matching. If no credible asymmetry is available, reject
-the candidate and identify a different physical function. Do not spend a third
-assay in this direction without explicitly comparing its goal fit and cost with
-leaving the repair branch parked. No rate, heat-cycle, horizon or context tuning
-of section 79 is queued. No new repair state is justified.
+Initial acquisition is a co-primary prerequisite, not a later optional check:
+the same fold acts before acquisition and after loss. Include physically relaxed
+free rows; resetting folded rows to squares immediately before contact would
+hide this cost. Faster relaxation at sixteen
+iterations also changes its race against a per-step binding hazard. Do not infer
+kinetic robustness from the matching final shapes. If this tradeoff fails, park
+the fold candidate without rate/angle/stiffness/horizon or context rescue. Even
+a pass would still need the eight-block repair operation at matched stiffness
+before natural damage or inherited benefit. No new repair state is justified.
 
 ## Parked portfolio: evidence and reopening conditions
 
@@ -58,7 +59,7 @@ All section numbers refer to [RESULTS](experiments/RESULTS.md).
 
 | Item | Disposition | What could reopen it |
 |---|---|---|
-| Q6b acquisition/release | 0/16 on successes; all eight cells fail (79). Prepared repair persists but enabled rebinding sequesters material. | Distinct passive escape mechanism with an actual geometry prediction; no rate/heat/horizon rescue. Q7 is design admission only. |
+| Q6b acquisition/release | 0/16 on successes; all eight cells fail (79). Prepared repair persists but enabled rebinding sequesters material. | Q7 establishes a distinct prepared shape effect (80); kinetic acquisition/rebinding and matched-stiffness repair remain prerequisites. No rate/heat/horizon rescue. |
 | Q5 geometric error rejection | Failed selective wrong-member removal in every stratum (77); AA favors wrong joining | Distinct causal evidence, not favored contexts, angle/undocking tuning or proofreading. |
 | Q4 causal-contrast comparison | Neither efficacy ablation nor pairing-mode renewal earned a run (76) | A physical operation with a same-material benefit prediction against simple renewal; Q6 is a distinct hypothesis, not a rescue of those contrasts. |
 | Q3 delivery replay | All 16 trajectories reproduce; coverage/denominators fail (75) | Independent causal evidence, not threshold repair, extra seeds or automatic efficacy ablation. |
