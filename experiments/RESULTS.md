@@ -6178,3 +6178,161 @@ at the rule level, with no ID reads or material change; subsequent contacts
 would still diverge. It is a proposed causal contrast, not implemented or earned
 by these fixtures. Section 62 remains failed, Q2 remains parked, and no new
 mechanism, population screen, heritable dependency or complexity is demonstrated.
+
+## 75. Archived delivery replay: exact histories, limited identification
+
+2026-09-27, ROADMAP Q3; baseline `428b37a`,
+[frozen replay protocol](delivery_replay_plan.md). This is a retrospective
+measurement of section 62, with no new chemistry, population, seed, horizon,
+state or rate. The original failed benefit gate remains failed.
+
+**Outcome: complete but inconclusive.** All sixteen original worlds completed
+50k (800,000 steps), with exact historical agreement and no partial/failed
+replay. Main execution used 3,581.703 CPU seconds; required final QA takes the
+measured total to 3,621.031, above the frozen all-work budget (see below). The diagnostic gate fails: all four on
+worlds have <80% known-site coverage, seed 106 misses both minimum denominators,
+and episode-use ordering differs from earlier stages. Park Q3; no causal
+explanation or benefit is earned.
+
+### Contract and interpretation
+
+`delivery_replay.js` validates the sixteen original inputs and their source
+hashes, attaches the unchanged section-74 observer alongside the original
+birth/member observer, and reproduces the original 100-step sampling schedule.
+Initial physical hashes, full final saved arrays/counters/RNG, samples, births
+and 5k member follow-ups must agree before a completed world's measurements
+are interpreted. Every saved event tape independently reconstructs its final
+bonds, row retirements, release parents and surviving support witnesses.
+
+The launch manifest freezes commands, parameters through original inputs,
+source/input/plan hashes, all sixteen jobs and unchanged criteria before the
+first step. One process runs sequentially; process CPU is checked between 1k
+chunks. Completed and stopped records are losslessly gzipped, with initial and
+final states, full observer records, original observations, progress and hashes.
+Scratch evidence is retained. No historical source or frozen plan is edited.
+
+The report keeps producer, recipient and unknown sites/events separate. Zero
+denominators yield null rates. Geometry rejections, probability nonformation
+and actual failed vacancy tests are different outcomes. Binding episodes keep
+the category known at onset; links use their live identity at the link event.
+The report also separates episode use with the same live row from use after
+identity loss/change (these subsidiary categories may overlap). Primary use
+remains the frozen fraction of ended episodes with any witnessed supported link.
+
+Exact supported output requires a continuous physical internal-bond witness on
+the same intact parent. Original stock exact/variant/unknown birth classes and
+sampled 5k integrity/activation remain separate from this stricter attribution.
+The fixed 5k support follow-up includes links through 45k and records later
+links as age-censored. Open binding episodes are reported separately from ended
+ones; repeated contacts are not independent replicates. Neither supported
+output nor a retrospective rate ordering proves catalytic necessity, heritable
+benefit or renewal. Existing body jostling and live cat-side derivation caveats
+remain; no mechanical/locality promotion or P0 comparison is claimed.
+
+### Validated on-world measurements
+
+These four worlds each completed 50k and passed full historical agreement.
+Counts below are in (10k,50k]; binding use includes only episodes beginning in
+that window and ending by 50k. The table is descriptive: every world misses
+the fixed >=80% known-site coverage requirement.
+
+| seed (old benefit gate) | known / all armed site-steps | coverage | recipient geometric opportunities | recipient bindings | used / ended recipient bindings | supported exact recipient output |
+|---|---:|---:|---:|---:|---:|---:|
+| 105 (pass) | 5,420,180 / 6,804,706 | 79.6534% | 1,617 | 254 | 62 / 227 | 16 |
+| 106 (fail) | 2,563,530 / 3,334,419 | 76.8809% | 13 | 2 | 0 / 2 | 0 |
+| 107 (pass) | 4,619,105 / 6,081,730 | 75.9505% | 1,373 | 237 | 52 / 218 | 13 |
+| 108 (fail) | 4,488,598 / 5,624,964 | 79.7978% | 444 | 68 | 19 / 60 | 3 |
+
+| seed | recipient armed site-steps / mature product-unit-steps | geometric opportunities / free-back site-steps | formation attempts / vacancy failures | open bindings / used open bindings | eligible support links / outputs within 5k / late links |
+|---|---:|---:|---:|---:|---:|
+| 105 | 1,128,127 / 4,515,511 | 1,617 / 860,489 | 306 / 52 | 27 / 5 | 39 / 10 / 27 |
+| 106 | 137,074 / 2,222,428 | 13 / 137,049 | 4 / 2 | 0 / 0 | 0 / 0 / 0 |
+| 107 | 835,210 / 3,962,972 | 1,373 / 563,928 | 301 / 64 | 19 / 8 | 31 / 7 / 20 |
+| 108 | 579,426 / 3,708,808 | 444 / 507,674 | 89 / 21 | 8 / 3 | 7 / 2 / 12 |
+
+Observed availability, encounter and binding-conversion rates are lower in
+both formerly failed on worlds than in either formerly passed world. This is
+**not a qualifying signature**: coverage fails everywhere, and seed 106 has
+fewer than the required 20 geometric opportunities and 20 ended bindings.
+Episode use does not have that ordering: seed 108's 19/60 exceeds 62/227 and
+52/218 in the passed worlds. Do not pool worlds or lower the gates.
+
+Recipient supported output is physically witnessed in three worlds; its absence
+in the covered seed-106 recipient history is not proof of catalytic inefficacy.
+Stock detached-exact recipient counts (22/2/21/7 in section 62) differ from the
+stricter support-attributed counts because continuous parent/bond identity,
+not just an old parent sequence, is required here. Unknown retired fragments
+can alter apparent stage rates. This archive does not isolate the cause of the
+old benefit failure, and supports no inherited-benefit or complexity claim.
+
+### Controls, archive and validation
+
+All four noBind controls retain geometric recipient opportunities (493/79/
+1,613/1,720), each with probability zero and no actual recipient binding.
+Production-disabled and neither controls have no mature-product delivery.
+Every control's supported exact output is zero. The full report includes
+producer, recipient and unknown categories in **all sixteen worlds**, with
+raw availability/encounter/binding/use numerators and denominators, geometric
+rejections, attempts, vacancy failures, retirement counts, mutation classes,
+material inventory and censored follow-ups. Zero denominators remain null.
+On-world producer supported exact output is 32/39/30/39; unknown-parent births
+are 20/17/30/16. The narrower recipient result is not the whole population.
+
+```sh
+node experiments/delivery_replay.js experiments/scratch/DD_replay_20260927
+node experiments/delivery_replay_summary.js experiments/out/DD_replay_20260927 experiments/out/DD_replay_20260927/summary.json
+node experiments/delivery_replay_analysis_test.js
+node experiments/delivery_diagnostic_analysis_test.js experiments/out/DD_fixtures_20260927.json
+node tools/fingerprint.js 1500
+node tools/ledger_index.js
+```
+
+Creation refuses overwrites. Archive: `out/DD_replay_20260927/manifest.json`,
+sixteen `.json.gz` records totaling **16,803,302 compressed bytes**, and
+`summary.json`. Raw records and manifest are byte-identical to retained scratch
+copies. The summary records its own command, input-manifest/analyzer hashes,
+per-world results and unchanged decision gates; it rejects incomplete matrices
+for the full-stage decision. No raw record was deleted or selected away.
+
+The final archive validator passes source/input/raw hashes, complete job/sample
+coverage, historical arrays/counters/RNG, all births and member follow-ups,
+ordered bond/row/release reconstruction, and three corruptions in each of the
+sixteen records. Separate analysis fixtures pass zero denominators, strict
+world ordering, coverage/denominator boundaries, open/ended episodes, window
+and 5k follow-up boundaries, changed/unknown identity, and bare/retired/severed/
+stale support controls. The section-74 fixture analyzer passes its six
+corruptions, twelve prepared neutrality comparisons and active-binding restart.
+All five default 1500-step fingerprints match the audit baseline. The full
+physics suite and a second full ecological replay were not run. Core, viewer,
+historical assay sources, diagnostic observer and frozen plan are unchanged.
+
+### Cost accounting and disposition
+
+The cost-only 105/on preflight used **41.234 CPU seconds**, 149,856,256-byte
+peak RSS, with an 80-fold projection of 3,298.72 seconds; the same instance
+continued. One process, no simulation workers. All sixteen trajectories
+finished after **3,581.703 process CPU seconds**; peak recorded RSS was
+618,663,936 bytes. All checks inside that runner and raw serialization are
+included. The cap was checked every 1k steps and was not raised; no partial
+or failed run occurred.
+
+**Accounting deviation:** the runner enforced its own 3,600-second execution
+cap, but failed to reserve CPU for the required final offline archive QA and
+analysis. That process added **39.328 CPU seconds**, giving a measured replay
+plus final-QA total of **3,621.031 seconds**, 21.031 over the frozen all-work
+budget. Earlier auxiliary checks were not CPU-metered separately, so this is
+a lower bound on total task cost, not an all-work compliance claim. No extra
+simulation steps followed the cap check. Future bounded runners must reserve
+and aggregate final-analysis cost rather than silently exclude it. The raw
+launch/run records and analyzer accounting are retained unchanged; no rerun
+is justified to repair this administrative miss.
+
+**Decision:** no qualifying bottleneck signature; park this diagnostic route.
+The stage counts describe physical deliveries but cannot isolate the old
+benefit failure with the fixed coverage/denominator requirements. No threshold
+relaxation, new seed, frequency race, identity-aware reaction, coverage repair
+or catalytic-efficacy implementation follows automatically. Section 62 stays
+failed; Q1 and Q2 remain parked. ROADMAP Q4 is an offline portfolio comparison
+of distinct causal contrasts and their path to inherited function before
+another prospective assay. More observation or births alone is not progress
+up the research audit's evidence ladder.

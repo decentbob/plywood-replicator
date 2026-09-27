@@ -30,3 +30,5 @@ experiments/fuel_support* text eol=lf
 experiments/out/FS_audit_20260927.json text eol=lf
 experiments/delivery_* text eol=lf
 experiments/out/DD_fixtures_20260927.json text eol=lf
+experiments/out/DD_replay_20260927/*.json text eol=lf
+experiments/out/DD_replay_20260927/*.gz binary

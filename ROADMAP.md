@@ -5,17 +5,17 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** Q3's delivery diagnostic passes its fixture gate (74).
-Twelve prepared cases distinguish recipient availability, scanned geometry,
-binding, supported linking and physical output; observer neutrality/restart
-and independent event reconstruction pass. No original ecology world has yet
-been replayed. Q1/Q2 and section 62's benefit gate remain failed or parked.
-**Next: implement the bounded Q3 archived-world replay under its frozen plan.**
-The [replay protocol](experiments/delivery_replay_plan.md) fixes all sixteen
-confirmation worlds, exact historical agreement, a cost-only preflight and
-3,600 CPU-second cap. No new chemistry, population screen or benefit claim.
-The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed fixtures,
-validation and exact starting point.
+**Current status:** Q3's bounded archived replay is complete (75).
+All sixteen worlds reproduce their full historical states/RNG and observations.
+Known-site coverage is only 75.95–79.80% in the four on worlds (required >=80%);
+seed 106 also misses the encounter/episode denominator gates. No qualifying
+bottleneck signature or causal explanation is earned. Park this diagnostic
+route; section 62, Q1 and Q2 remain failed or parked.
+**Next: a no-simulation portfolio checkpoint (Q4), before any new assay.**
+Compare distinct causal contrasts and their path to inherited function. Do not
+retune the coverage threshold, repair this preparation, or automatically run
+the proposed catalytic-efficacy ablation. The [handoff](docs/NEXT_INSTANCE.md)
+records the completed archive and checks. No simulation remains active.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -27,7 +27,8 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| Q3 | Distinguish ecological delivery from recipient opportunity | Measurement validated / causal explanation unresolved | Fixtures pass (74); next bounded archived replay | Preserve all section-62 worlds and exact historical trajectories; frozen coverage/denominator gates constrain interpretation. |
+| Q4 | Choose a causal contrast after Q1–Q3 | High decision value / candidate uncertain | Next: offline comparison and at most one prospective plan | Recent assays measured renewal and interaction but did not earn inherited benefit or an isolated ecological explanation. |
+| Q3 | Distinguish ecological delivery from recipient opportunity | Measurement validated / explanation unresolved | Complete; park after coverage/denominator failure (75) | All sixteen trajectories replay exactly; no qualified stage signature. No threshold repair, extra seeds or automatic efficacy ablation. |
 | Q2 | Audit actual fuel-support partners and their renewal | Finite reciprocal renewal measured / no candidate earned | Complete; park candidate source (73) | One primary pair, none above reference; alternatives in only 3.3–6.2% of covered events limit identification. |
 | Q1 | Test the observed five-letter variant in a common environment | Renewal measured / tested arrangement benefit fails | Park after fixed screen gate fails (72) | One seed passes; the other misses both the minimum arrangement contrast and shape interaction. No solver or fresh-seed confirmation earned. |
 | Q0 | Compare distinct hypotheses before another assay | Completed decision checkpoint | Comparison and archive census complete (71) | Four candidate families recur through physical renewal; candidate selection is retrospective and does not rescue earlier gates. |
@@ -44,49 +45,60 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## Q3 — fixture gate passed; bounded archived replay next
+## Q4 — portfolio checkpoint after Q1–Q3
 
-**Completed (74):** observer-only diagnostic plus twelve prepared stage/control
-fixtures, eight small instrumented/plain/restarted worlds, all prepared cases
-matched without observation, active-binding restart, independent event replay
-and corruption tests. Core and historical sources unchanged. The small worlds
-have no mature deliveries; positive path validation comes from the prepared
-cases. This validates measurement, not an ecological obstruction or benefit.
+Before another simulation, compare two or three concrete causal contrasts using
+the existing evidence. Include the proposed **catalytic-efficacy ablation with
+physical product binding retained** (74–75) and an alternative grounded in
+the **mechanical fit / physical renewal evidence** (49–51, 66, 72). A parked
+arrangement or port-acquisition setting cannot be reopened by new seeds,
+threshold changes or more rate/solver tuning. Identify a genuinely different
+causal prediction, or reject the candidate.
 
-Implement the [frozen replay plan](experiments/delivery_replay_plan.md).
-Use all sixteen original confirmation worlds, 50k and the (10k,50k] window.
-Before interpreting new records, reproduce the initial hash, full final state/
-RNG, old samples, births and member follow-ups. First 105/on to 10k is a cost-
-only check; <=45 CPU seconds and <=1 GiB RSS earn continuation, with 3,600
-CPU seconds total. Keep partial/negative evidence. No threshold or rate tuning.
+For each option state the observation it explains, the smallest matched
+intervention, the block-level read/write contract, added rule/state/knob cost,
+how useful function would reach descendants, the measurable benefit and the
+CPU/viability/stop gates. Include the simplest existing competitor. Distinguish
+more completed copies from inherited function and causal necessity from
+physical attribution. Q3's incomplete identity coverage cannot nominate a
+particular failed world's cause or a selective partner intervention.
 
-Stage comparisons are retrospective: both failed worlds must lie below both
-passed worlds, with the plan's identity coverage and minimum denominators.
-No coverage, no signature or conflicting stages means no isolated explanation;
-do not pool or relabel the failure. A possible later local catalytic-efficacy
-ablation is described but remains unimplemented and requires a separate causal
-plan. No fresh confirmation, frequency race or new mechanism is queued.
+Choose by goal fit, discrimination, rule simplicity and cost; write at most one
+proportional prospective plan if a candidate earns it. If none does, record
+that no new assay is justified and name the missing causal measurement. This
+checkpoint is analysis/design only: no simulation, new chemistry or automatic
+continuation of the delivery diagnostic is queued.
 
-The following preserves the original design brief, now satisfied.
+## Q3 — archived replay complete; diagnostic route parked
 
-Follow the [post-support comparison](experiments/portfolio_after_support.md).
-Section 62's failed confirmation stays parked: low recipient occupancy could
-reflect few encounters, failed binding, lost recipients or unproductive bound
-support. The old 100-step aggregate samples cannot resolve those alternatives.
+**Outcome (75):** all sixteen section-62 worlds completed 50k with unchanged
+chemistry and the section-74 observer. Initial hashes, full final saved state/
+RNG, all old samples, births and member follow-ups agree exactly; ordered
+physical tapes also validate. Main replay cost: 3,581.703 CPU seconds. Final
+offline QA adds 39.328; the measured sum 3,621.031 exceeds the frozen all-work
+budget by 21.031 because final QA was not reserved. Earlier auxiliary checks
+were not metered separately. Preserve this accounting deviation; future caps
+must include final analysis. The cost-only preflight passed and continued on
+the same instance.
 
-Design observer-only witnesses for physical contact opportunity, mature-product
-binding, supported local lateral linking and complete detached output with
-continuous member history. Record recipient availability and explicit unknowns.
-No observer IDs in reactions, new states, rates or chemistry. Small neutral
-fixtures must distinguish the proposed obstructions and preserve arrays,
-counters and RNG. Keep historical hashed sources unchanged.
+Known-site coverage in on seeds 105/106/107/108 is 79.6534/76.8809/75.9505/
+79.7978%, below the frozen >=80% in every world. Seed 106 has only 13 geometric
+recipient opportunities and two ended bindings, below both minimum-20 gates.
+Observed availability, encounter and binding-conversion rates put both failed
+worlds below both passed worlds, but none qualifies. Episode use does not have
+that ordering: 108's 19/60 exceeds 105's 62/227 and 107's 52/218.
 
-Before replay, freeze a proportional plan covering failed and successful worlds,
-the existing production/binding controls, horizon, CPU cap and stop criteria.
-Explain what later matched intervention could distinguish delivery opportunity
-from product action with conserved material and local rules. If the measurement
-cannot discriminate them, stop design and record the gap. No automatic replay,
-frequency race, parameter repair or new population batch is queued.
+Supported exact recipient output is 16/0/13/3 under continuous parent/bond
+witnesses; this is physical attribution, not causal necessity or inherited
+benefit. Keep all producer/unknown categories, censored episodes, mutation
+classes and original member follow-ups in the archived report. No pooling or
+threshold relaxation rescues the gate. The [frozen plan](experiments/delivery_replay_plan.md)
+and the fixture evidence (74) remain unchanged.
+
+**Disposition:** park the diagnostic route. No fresh population, frequency race,
+mechanism tuning, coverage repair or catalytic-efficacy implementation is
+earned automatically. Q4 must compare any proposed causal follow-up with an
+independent alternative before another prospective assay.
 
 ## Q2 — fuel-support audit (completed, 73)
 

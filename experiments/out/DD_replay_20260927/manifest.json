@@ -1,0 +1,394 @@
+{
+  "schema": 1,
+  "kind": "delivery-replay",
+  "started": "2026-09-27T16:14:31.409Z",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\delivery_replay.js",
+    "experiments/scratch/DD_replay_20260927"
+  ],
+  "node": "v24.6.0",
+  "platform": "win32",
+  "criteria": {
+    "seeds": [
+      105,
+      106,
+      107,
+      108
+    ],
+    "arms": [
+      "on",
+      "noBind",
+      "noSource",
+      "neither"
+    ],
+    "steps": 50000,
+    "after": 10000,
+    "preflightSteps": 10000,
+    "preflightCpu": 45,
+    "projectionFactor": 80,
+    "cpuCap": 3600,
+    "rssCap": 1073741824,
+    "chunk": 1000,
+    "minimumCoverage": 0.8,
+    "minimumOpportunities": 20,
+    "minimumEnded": 20
+  },
+  "jobs": [
+    {
+      "seed": 105,
+      "arm": "on"
+    },
+    {
+      "seed": 105,
+      "arm": "noBind"
+    },
+    {
+      "seed": 105,
+      "arm": "noSource"
+    },
+    {
+      "seed": 105,
+      "arm": "neither"
+    },
+    {
+      "seed": 106,
+      "arm": "on"
+    },
+    {
+      "seed": 106,
+      "arm": "noBind"
+    },
+    {
+      "seed": 106,
+      "arm": "noSource"
+    },
+    {
+      "seed": 106,
+      "arm": "neither"
+    },
+    {
+      "seed": 107,
+      "arm": "on"
+    },
+    {
+      "seed": 107,
+      "arm": "noBind"
+    },
+    {
+      "seed": 107,
+      "arm": "noSource"
+    },
+    {
+      "seed": 107,
+      "arm": "neither"
+    },
+    {
+      "seed": 108,
+      "arm": "on"
+    },
+    {
+      "seed": 108,
+      "arm": "noBind"
+    },
+    {
+      "seed": 108,
+      "arm": "noSource"
+    },
+    {
+      "seed": 108,
+      "arm": "neither"
+    }
+  ],
+  "sources": {
+    "src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "experiments/recipient_dependence.js": "8ec264ea0d41869b970525a877d1fa30e59ee6d71c3991c3df1b367fb23a2ee1",
+    "experiments/recipient_dependence_plan.md": "07d225e4e8d5b6288a2cec0f10812f237883a7bb118fd711e6a88d0d47692e76",
+    "experiments/recipient_dependence_summary.js": "70a797bc58a376cb4ee4d09d3615a31bf42f9bb190a8da4d4916e08c03f4db60",
+    "experiments/recipient_confirmation_plan.md": "92c7223ce2d13091bd20b87c06e228823bfaf35fca418b0dc985a68b4c79dffe",
+    "experiments/recipient_confirmation_summary.js": "6f45d368cf564b822c28e7d7662e5f26e446c98118108f48d143ae2803548bb4",
+    "experiments/delivery_diagnostic.js": "fecc709fd48ba433c82994cba6081c9627dd7e1c58cec4f2f6067066af81b792",
+    "experiments/delivery_diagnostic_test.js": "9f8d07b8d85db1eafd1f33066e41a16630c3bbebde04262c47da8af982fc143a",
+    "experiments/delivery_diagnostic_analysis_test.js": "2a92b22e9d66b23fa71bd5764df06592a0da1c3246082c19953d7d0c917c29a3",
+    "experiments/delivery_replay.js": "7c994609bd79ff260f8400351eb8e99d2d48a575c19d1dab48b286230d123a3e",
+    "experiments/delivery_replay_plan.md": "22dae8b7690b8d8da7bf3f036249b1939bc59daaf1f1628c010499363717bc54"
+  },
+  "inputs": {
+    "experiments/out/RD_dependence_confirm.protocol.json": "43e4837a3f536c859efdbdee2a17e4abdc2759a3c1b020f61b4054aaa8f6672f",
+    "experiments/out/RD_dependence_confirm.manifest.json": "253dded5c2cb6bb662bb77c842411eabf6f4d1bdc930c08464b6ed470ca47652",
+    "experiments/out/RD_dependence_confirm.runs.jsonl": "24c6ba4b18fc2ca2a8d697239a20ffde32ef4989a6ee2aa7c9f10d3d9bd69b7f"
+  },
+  "originalCpuSeconds": 1673.093,
+  "workers": 1,
+  "records": [
+    {
+      "file": "105_on_50000.json.gz",
+      "sha256": "84659224bd2ce256c0b14adc851a2381cfa0c9affc2f20f9ac1cb29941445648",
+      "seed": 105,
+      "arm": "on",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 1999820
+    },
+    {
+      "file": "105_noBind_50000.json.gz",
+      "sha256": "d620b5837eb192afd2910449144a01271cb038ccf85ce875c16c1ac021f9a8c6",
+      "seed": 105,
+      "arm": "noBind",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 1299739
+    },
+    {
+      "file": "105_noSource_50000.json.gz",
+      "sha256": "3131102831a183d1a0702dc6d9df70524cd68ceab1f9b764ec5deeb63cdcbd63",
+      "seed": 105,
+      "arm": "noSource",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 429115
+    },
+    {
+      "file": "105_neither_50000.json.gz",
+      "sha256": "8f7def5dc9e2b40d992e129e64df7ad8e083b16a3b557826a1eed4b19af60702",
+      "seed": 105,
+      "arm": "neither",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 429126
+    },
+    {
+      "file": "106_on_50000.json.gz",
+      "sha256": "1551878a8bf9ad33c003bede9cca85ea325eb3bdb0a92ed9cafc43d1e2122211",
+      "seed": 106,
+      "arm": "on",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 1269935
+    },
+    {
+      "file": "106_noBind_50000.json.gz",
+      "sha256": "061ec081e794f55277c644a246beb335a541b0d95685d3a2c59bccaa576eca58",
+      "seed": 106,
+      "arm": "noBind",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 1369851
+    },
+    {
+      "file": "106_noSource_50000.json.gz",
+      "sha256": "8a0b99a3bff529792fb719e7d14ea86fbb295f4e7d04d310b952cec5ea85f5f7",
+      "seed": 106,
+      "arm": "noSource",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 427082
+    },
+    {
+      "file": "106_neither_50000.json.gz",
+      "sha256": "cc4f048232c0c837e51a0a73093fd144aa18cd6da18f8930fb52812691260e45",
+      "seed": 106,
+      "arm": "neither",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 427077
+    },
+    {
+      "file": "107_on_50000.json.gz",
+      "sha256": "3a0d8130fc69f88479f51d9fd4b22e8ec4428ac999b388b6ae40c6a18e0e4750",
+      "seed": 107,
+      "arm": "on",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 2104806
+    },
+    {
+      "file": "107_noBind_50000.json.gz",
+      "sha256": "6b237321b251753ac7d018616f16de4acf4245ee8827202cf340e94b24f947e7",
+      "seed": 107,
+      "arm": "noBind",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 2433208
+    },
+    {
+      "file": "107_noSource_50000.json.gz",
+      "sha256": "18f83719a386b493f5612a751873634f6be51ebbe6671ae4223e2a95602ecdf8",
+      "seed": 107,
+      "arm": "noSource",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 455773
+    },
+    {
+      "file": "107_neither_50000.json.gz",
+      "sha256": "90804b8f9afa9bfe1bcb1a4fb2e61878aa373a46df2b14dc1e89fc320894ead2",
+      "seed": 107,
+      "arm": "neither",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 455770
+    },
+    {
+      "file": "108_on_50000.json.gz",
+      "sha256": "69a35c0979c1da4a09c0f34cc28e668a07436398e9e799e8ad9b57e5899c8c2e",
+      "seed": 108,
+      "arm": "on",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 1692484
+    },
+    {
+      "file": "108_noBind_50000.json.gz",
+      "sha256": "acb719b2b7e03cd49fcab4678f459b2e2cecc122d0ef93ecdb5464e66a7d7710",
+      "seed": 108,
+      "arm": "noBind",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 1156603
+    },
+    {
+      "file": "108_noSource_50000.json.gz",
+      "sha256": "d2ecd0cd11b6992e67974f5f90682042f2f3d04f826c26eee1d8825714a26abb",
+      "seed": 108,
+      "arm": "noSource",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 426458
+    },
+    {
+      "file": "108_neither_50000.json.gz",
+      "sha256": "d0d00e63ca26dd0ed98a2c4f1eeef70c6c4fda5f73bf160092543ec094a5ccb6",
+      "seed": 108,
+      "arm": "neither",
+      "steps": 50000,
+      "agreement": {
+        "initial": true,
+        "samples": true,
+        "births": true,
+        "members": true,
+        "fullFinalState": true
+      },
+      "validation": "ordered physical tape passed",
+      "bytes": 426455
+    }
+  ],
+  "preflight": {
+    "cpuSeconds": 41.234,
+    "rssBytes": 149856256,
+    "projectedCpu": 3298.7200000000003,
+    "pass": true
+  },
+  "complete": true,
+  "status": "complete",
+  "cpuAccounting": "One process, no workers; process.cpuUsage from before archive validation, includes serialization and validation.",
+  "cpuSeconds": 3581.703,
+  "peakRssBytes": 618663936,
+  "finished": "2026-09-27T17:55:45.849Z",
+  "simulationSteps": 800000
+}

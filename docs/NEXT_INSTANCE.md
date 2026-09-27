@@ -1,85 +1,71 @@
 # Next-instance handoff — 2026-09-27
 
-The user is switching instances after this completed slice. Start with
-`git status`, AGENTS, [ROADMAP](../ROADMAP.md), [LEDGER](../experiments/LEDGER.md)
-and the research audit. **Q3's fixture gate is complete (RESULTS 74). The
-archived-world replay has not started.** No task-owned simulation remains.
+Q3's bounded archived-world replay is complete (RESULTS 75). **No task-owned
+simulation remains.** Read ROADMAP, LEDGER and the research audit first.
+Baseline was `428b37a` on main; find the delivered commit with git log.
 
-## Delivered slice
+## Delivered result
 
-Baseline `98838fc` on main; find this slice's delivered commit with `git log`.
-New observer: `experiments/delivery_diagnostic.js`. It wraps existing methods
-without changing chemistry, state, material, probabilities, forces or RNG.
-Historical sources and core bytes are unchanged.
+All sixteen section-62 worlds (105–108, on/noBind/noSource/neither) completed
+50k, 800,000 steps total. Initial hashes, full final saved state/RNG, old
+100-step samples, births and original 5k member follow-ups agree exactly.
+Ordered tapes reconstruct final bonds, row retirements, releases and physical
+support witnesses. Core, historical sources, the section-74 observer and
+frozen replay plan are byte-identical.
 
-- Measures armed recipient availability, engine-scanned mature product/open-
-  back geometry (also at pBindP=0), actual binding episodes and placement
-  failures, cat-supported local lateral links, and detached exact output.
-- Support requires the actual mature product bond plus a witnessed binding
-  episode. Stale cat signals remain unknown. Row IDs retire on lateral edits/
-  fraying; a broken/replaced bond cannot reuse an old support witness.
-- All twelve prepared stage/control fixtures pass. Supported and bare cases
-  both produce one exact child, but only the supported case gets attribution.
-  Retired parent, severed link and stale signal cases are correctly excluded.
-- Eight small worlds (411/412, four arms, 1k) match unobserved state, typed
-  arrays, numeric counters and RNG; a 500-step restart matches observation.
-  These worlds have NO mature deliveries or births. All twelve prepared
-  cases therefore also have explicit unobserved controls, and a restart
-  during an active binding episode checks the positive observation path.
-- Independent reconstruction of 20 bond/row/release histories, six corruption
-  checks and a complete deterministic suite rerun pass. Twenty-four actual-
-  corner geometry cases agree with the engine predicate.
-- Completed suite: 11.781 process CPU seconds, 20k simulation steps including
-  plain/restarted comparisons, plus scheduled fixture phases. Validation
-  rerun cost excluded. One process, no workers. No core fingerprint/full-suite
-  rerun was needed; core unchanged and fixture invariants pass.
+The cost-only 105/on 10k preflight passed: 41.234 CPU seconds, 149,856,256-byte
+peak RSS, 3,298.72-second projection. It continued on the same instance. The
+one-process batch finished at **3,581.703 CPU seconds**; peak RSS was
+618,663,936 bytes. Final offline QA/analysis added **39.328 seconds**, so the
+measured sum is **3,621.031**, above the frozen all-work budget by 21.031.
+The runner did not reserve final-analysis cost. Earlier auxiliary checks were
+not metered separately; do not claim total-budget compliance. Record this
+deviation and reserve/aggregate final QA in future caps. No worker pool,
+extra seed, horizon extension, threshold adjustment or chemistry change.
 
-Archive: `experiments/out/DD_fixtures_20260927.json` (3,522,308 bytes), identical
-to the retained scratch copy. Contains source/plan hashes, exact command,
-initial/final states and complete observer records. Do not tidy hashed files.
-This is measurement validation, not an ecological benefit or complexity claim.
-The live cat-side dependency remains the existing audit caveat.
+**No diagnostic signature qualifies.** Known-site coverage in on worlds is
+79.6534/76.8809/75.9505/79.7978%, all below >=80%. Seed 106 also has only
+13 geometric recipient opportunities and two ended bindings (<20 each).
+Observed availability/encounter/binding rates order failed below passed
+worlds, but the gates prevent nomination. Episode use does not share that
+ordering: 108's 19/60 exceeds both passed worlds. Supported exact recipient
+output 16/0/13/3 is attribution, not causal necessity or inherited benefit.
+
+## Evidence and verification
+
+Archive: `experiments/out/DD_replay_20260927/`: launch/final manifest, sixteen
+lossless raw records (16,803,302 compressed bytes), and full per-world summary.
+Raw files and manifest are byte-identical to retained scratch evidence.
+The summary includes producer/recipient/unknown categories, raw denominators,
+open/ended bindings, fixed 5k support follow-up, original mutation/follow-up
+classes, source/input hashes and exact commands. No raw evidence was deleted.
+
+`delivery_replay_test.js` verifies hashes, historical agreement, physical
+tapes, sample completeness, cost boundaries and corruptions.
+`delivery_replay_analysis_test.js` covers attribution, unknown row identities,
+censoring, zero denominators and strict world-level gates. The section-74
+fixture analyzer passes prepared neutrality and active-binding restart.
+All five 1500-step default fingerprints match the audit baseline; no full
+physics-suite rerun or P0 promotion. No complete simulation rerun for QA.
 
 ```sh
-node experiments/delivery_diagnostic_analysis_test.js experiments/out/DD_fixtures_20260927.json
-node experiments/delivery_diagnostic_analysis_test.js experiments/out/DD_fixtures_20260927.json --replay
+node experiments/delivery_replay_test.js experiments/out/DD_replay_20260927
+node experiments/delivery_replay_analysis_test.js
+node experiments/delivery_replay_summary.js experiments/out/DD_replay_20260927
 ```
 
-To recreate evidence use `node experiments/delivery_diagnostic_test.js` with a
-fresh output stem; it refuses overwrites. The original command is in the archive.
+Creation command was `node experiments/delivery_replay.js experiments/scratch/DD_replay_20260927`.
+It refuses existing destinations. Do not launch it again merely to continue
+this task; the bounded assay is finished and its diagnostic route is parked.
 
-## Next slice: implement and execute the frozen replay protocol
+## Next: Q4, offline portfolio comparison
 
-Read [delivery_replay_plan.md](../experiments/delivery_replay_plan.md), written
-before any replay outcomes. No runner for the full replay exists yet.
-
-1. Validate `experiments/out/RD_dependence_confirm` protocol, manifest and raw
-   runs. Keep all seeds 105–108 and on/noBind/noSource/neither, original 50k
-   horizon and (10k,50k] window. Original batch cost was 1,673.093 CPU seconds.
-2. Attach the new observer and original birth/member observer. Reproduce the
-   original initial physical hash, full final state/RNG, old 100-step samples,
-   births and member follow-ups exactly before interpreting new records.
-3. First 105/on to 10k is a cost-only preflight: <=45 CPU seconds, <=1 GiB RSS,
-   projected 80-fold CPU <=3,600 seconds. Continue the same instance if it
-   passes. Stop on cost/measurement failure and preserve partial evidence.
-   Prefer one process initially, at most three workers thereafter, always
-   within the machine-wide four-simulation limit. Inspect active processes;
-   many Node processes are Codex/MCP services, not simulations.
-4. Freeze launch hashes/commands before stepping. Keep original chemistry and
-   `delivery_diagnostic.js` unchanged. Store full records losslessly; no raw
-   data deletion. A replay mismatch or coverage failure is an honest stop.
-5. Plan fixes availability/encounter/binding/use rates, censoring and output
-   witnesses. Both previously failed worlds must be strictly below both
-   passed worlds for a retrospective stage signature. Require >=80% known
-   site coverage and minimum denominators (20 contacts or ended bindings).
-   No pooling, threshold tuning or choosing only seed 106. A signature is
-   not causal proof; no signature/coverage means no isolated explanation.
-
-A possible later catalytic-efficacy ablation would keep production/binding but
-make docked letters use their existing bare linking rate. It is NOT implemented
-or yet earned. It would require its own causal plan and prepared control;
-later contacts can diverge. No new population screen, confirmation, frequency
-race or reward motif is queued. Section 62 and Q1 remain failed; Q2 is parked.
-
-Standing approval permits committing/pushing validated work. Main is the only
-long-lived branch. Confirm clean local status and remote agreement at delivery.
+Compare distinct causal contrasts before any new assay. Include catalytic
+efficacy with physical binding retained and an independent alternative grounded
+in the existing mechanical fit/renewal evidence. Name a new causal prediction,
+the simplest control, rule cost, path to inherited function, viability and
+CPU/stop gates. A failed arrangement/port setting cannot be reopened by more
+seeds or tuning. Write at most one prospective plan if a candidate earns it;
+otherwise state the missing evidence. No simulation, efficacy implementation,
+coverage repair, new state or population screen is queued. Sections 62, Q1
+and Q2 remain failed/parked. ROADMAP contains the authoritative assignment.

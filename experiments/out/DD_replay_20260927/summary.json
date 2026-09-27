@@ -1,0 +1,4098 @@
+{
+  "status": "complete",
+  "interpretable": true,
+  "rows": [
+    {
+      "seed": 105,
+      "arm": "on",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 4292053,
+        "recipient": 1128127,
+        "unknown": 1384526,
+        "freeProducer": 1642079,
+        "freeRecipient": 860489,
+        "freeUnknown": 926788,
+        "mature": 4515511
+      },
+      "coverage": {
+        "numerator": 5420180,
+        "denominator": 6804706,
+        "value": 0.7965340457030766
+      },
+      "retirements": 45,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 45
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 4292053,
+          "freeBackSiteSteps": 1642079,
+          "matureProductUnitSteps": 4515511,
+          "scanned": 89532,
+          "geometryRejected": 76417,
+          "geometric": 13115,
+          "probabilities": {
+            "0.2": 13115
+          },
+          "attempts": 2703,
+          "vacancyFailures": 398,
+          "bindings": 2305,
+          "endedBindings": 2233,
+          "usedEndedBindings": 227,
+          "usedEndedWithSameRow": 224,
+          "usedEndedAfterIdentityLossOrChange": 3,
+          "openBindings": 72,
+          "usedOpenBindings": 6,
+          "usedOpenWithSameRow": 5,
+          "usedOpenAfterIdentityLossOrChange": 1,
+          "bindingsStartedBeforeWindow": 24,
+          "supportedLinks": 240,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 38,
+            "detached": 37,
+            "exact": 32,
+            "supportedExact": 32,
+            "unsupported": 6
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 221,
+            "linksWithOutputWithin5k": 126,
+            "exactOutputsWithin5k": 30,
+            "lateSupportLinks": 19
+          },
+          "rates": {
+            "availability": {
+              "numerator": 4292053,
+              "denominator": 4515511,
+              "value": 0.9505132420228851
+            },
+            "encounter": {
+              "numerator": 13115,
+              "denominator": 1642079,
+              "value": 0.007986826455974408
+            },
+            "binding": {
+              "numerator": 2305,
+              "denominator": 13115,
+              "value": 0.17575295463210064
+            },
+            "use": {
+              "numerator": 227,
+              "denominator": 2233,
+              "value": 0.10165696372592924
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 1128127,
+          "freeBackSiteSteps": 860489,
+          "matureProductUnitSteps": 4515511,
+          "scanned": 21548,
+          "geometryRejected": 19931,
+          "geometric": 1617,
+          "probabilities": {
+            "0.2": 1617
+          },
+          "attempts": 306,
+          "vacancyFailures": 52,
+          "bindings": 254,
+          "endedBindings": 227,
+          "usedEndedBindings": 62,
+          "usedEndedWithSameRow": 62,
+          "usedEndedAfterIdentityLossOrChange": 2,
+          "openBindings": 27,
+          "usedOpenBindings": 5,
+          "usedOpenWithSameRow": 5,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 66,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 18,
+            "detached": 18,
+            "exact": 18,
+            "supportedExact": 16,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 39,
+            "linksWithOutputWithin5k": 31,
+            "exactOutputsWithin5k": 10,
+            "lateSupportLinks": 27
+          },
+          "rates": {
+            "availability": {
+              "numerator": 1128127,
+              "denominator": 4515511,
+              "value": 0.24983373974728443
+            },
+            "encounter": {
+              "numerator": 1617,
+              "denominator": 860489,
+              "value": 0.0018791640567165878
+            },
+            "binding": {
+              "numerator": 254,
+              "denominator": 1617,
+              "value": 0.15708101422387136
+            },
+            "use": {
+              "numerator": 62,
+              "denominator": 227,
+              "value": 0.27312775330396477
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 1384526,
+          "freeBackSiteSteps": 926788,
+          "matureProductUnitSteps": 4515511,
+          "scanned": 28812,
+          "geometryRejected": 24274,
+          "geometric": 4538,
+          "probabilities": {
+            "0.2": 4538
+          },
+          "attempts": 892,
+          "vacancyFailures": 147,
+          "bindings": 745,
+          "endedBindings": 726,
+          "usedEndedBindings": 40,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 40,
+          "openBindings": 19,
+          "usedOpenBindings": 2,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 2,
+          "bindingsStartedBeforeWindow": 3,
+          "supportedLinks": 42,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 20,
+            "detached": 19,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 20
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 32,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 10
+          },
+          "rates": {
+            "availability": {
+              "numerator": 1384526,
+              "denominator": 4515511,
+              "value": 0.306615574627102
+            },
+            "encounter": {
+              "numerator": 4538,
+              "denominator": 926788,
+              "value": 0.004896481180162022
+            },
+            "binding": {
+              "numerator": 745,
+              "denominator": 4538,
+              "value": 0.16416923754958132
+            },
+            "use": {
+              "numerator": 40,
+              "denominator": 726,
+              "value": 0.05509641873278237
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 76,
+        "detached": 74,
+        "exact": 50,
+        "unknownParent": 20,
+        "variantKnownParent": 5,
+        "supportedExact": 48,
+        "unsupported": 28
+      },
+      "originalBirthClasses": {
+        "exact": 65,
+        "sameLengthVariant": 6,
+        "lengthVariant": 2,
+        "unknown": 3,
+        "products": 44
+      },
+      "originalFollowup": {
+        "births": 76,
+        "assessed": 63,
+        "intact": 54,
+        "active": 54,
+        "censored": 13
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 302,
+          "dockedSingle": 7,
+          "unfinishedLinked": 59,
+          "releasedLinked": 232,
+          "other": 0
+        },
+        "products": {
+          "free": 137,
+          "dockedSingle": 2,
+          "unfinishedLinked": 2,
+          "releasedLinked": 159,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 105,
+      "arm": "noBind",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 183785,
+        "recipient": 681700,
+        "unknown": 535885,
+        "freeProducer": 168703,
+        "freeRecipient": 681700,
+        "freeUnknown": 531002,
+        "mature": 898826
+      },
+      "coverage": {
+        "numerator": 865485,
+        "denominator": 1401370,
+        "value": 0.6175992064907911
+      },
+      "retirements": 8,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 8
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 183785,
+          "freeBackSiteSteps": 168703,
+          "matureProductUnitSteps": 898826,
+          "scanned": 51405,
+          "geometryRejected": 32905,
+          "geometric": 18500,
+          "probabilities": {
+            "0": 18500
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 183785,
+              "denominator": 898826,
+              "value": 0.2044722782830047
+            },
+            "encounter": {
+              "numerator": 18500,
+              "denominator": 168703,
+              "value": 0.10966017201828064
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 18500,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 681700,
+          "freeBackSiteSteps": 681700,
+          "matureProductUnitSteps": 898826,
+          "scanned": 13024,
+          "geometryRejected": 12531,
+          "geometric": 493,
+          "probabilities": {
+            "0": 493
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 4,
+            "detached": 3,
+            "exact": 3,
+            "supportedExact": 0,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 681700,
+              "denominator": 898826,
+              "value": 0.7584337791741672
+            },
+            "encounter": {
+              "numerator": 493,
+              "denominator": 681700,
+              "value": 0.0007231920199501247
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 493,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 535885,
+          "freeBackSiteSteps": 531002,
+          "matureProductUnitSteps": 898826,
+          "scanned": 21876,
+          "geometryRejected": 16530,
+          "geometric": 5346,
+          "probabilities": {
+            "0": 5346
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 5,
+            "detached": 4,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 5
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 535885,
+              "denominator": 898826,
+              "value": 0.5962054947231166
+            },
+            "encounter": {
+              "numerator": 5346,
+              "denominator": 531002,
+              "value": 0.010067758690174424
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 5346,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 10,
+        "detached": 8,
+        "exact": 4,
+        "unknownParent": 5,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 10
+      },
+      "originalBirthClasses": {
+        "exact": 7,
+        "sameLengthVariant": 0,
+        "lengthVariant": 2,
+        "unknown": 1,
+        "products": 16
+      },
+      "originalFollowup": {
+        "births": 10,
+        "assessed": 10,
+        "intact": 9,
+        "active": 9,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 558,
+          "dockedSingle": 2,
+          "unfinishedLinked": 7,
+          "releasedLinked": 33,
+          "other": 0
+        },
+        "products": {
+          "free": 288,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 12,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 105,
+      "arm": "noSource",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 352508,
+        "recipient": 148480,
+        "unknown": 226712,
+        "freeProducer": 352508,
+        "freeRecipient": 148480,
+        "freeUnknown": 226712,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 500988,
+        "denominator": 727700,
+        "value": 0.6884540332554624
+      },
+      "retirements": 4,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 4
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 352508,
+          "freeBackSiteSteps": 352508,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 352508,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 352508,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 148480,
+          "freeBackSiteSteps": 148480,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 148480,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 148480,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 226712,
+          "freeBackSiteSteps": 226712,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 4,
+            "detached": 4,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 226712,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 226712,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 5,
+        "detached": 5,
+        "exact": 1,
+        "unknownParent": 4,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 5
+      },
+      "originalBirthClasses": {
+        "exact": 4,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 1,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 5,
+        "assessed": 4,
+        "intact": 3,
+        "active": 3,
+        "censored": 1
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 587,
+          "dockedSingle": 1,
+          "unfinishedLinked": 0,
+          "releasedLinked": 12,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 105,
+      "arm": "neither",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 352508,
+        "recipient": 148480,
+        "unknown": 226712,
+        "freeProducer": 352508,
+        "freeRecipient": 148480,
+        "freeUnknown": 226712,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 500988,
+        "denominator": 727700,
+        "value": 0.6884540332554624
+      },
+      "retirements": 4,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 4
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 352508,
+          "freeBackSiteSteps": 352508,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 352508,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 352508,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 148480,
+          "freeBackSiteSteps": 148480,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 148480,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 148480,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 226712,
+          "freeBackSiteSteps": 226712,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 4,
+            "detached": 4,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 226712,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 226712,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 5,
+        "detached": 5,
+        "exact": 1,
+        "unknownParent": 4,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 5
+      },
+      "originalBirthClasses": {
+        "exact": 4,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 1,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 5,
+        "assessed": 4,
+        "intact": 3,
+        "active": 3,
+        "censored": 1
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 587,
+          "dockedSingle": 1,
+          "unfinishedLinked": 0,
+          "releasedLinked": 12,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 106,
+      "arm": "on",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 2426456,
+        "recipient": 137074,
+        "unknown": 770889,
+        "freeProducer": 1127047,
+        "freeRecipient": 137049,
+        "freeUnknown": 489822,
+        "mature": 2222428
+      },
+      "coverage": {
+        "numerator": 2563530,
+        "denominator": 3334419,
+        "value": 0.7688085990392929
+      },
+      "retirements": 37,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 37
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 2426456,
+          "freeBackSiteSteps": 1127047,
+          "matureProductUnitSteps": 2222428,
+          "scanned": 49034,
+          "geometryRejected": 42136,
+          "geometric": 6898,
+          "probabilities": {
+            "0.2": 6898
+          },
+          "attempts": 1323,
+          "vacancyFailures": 231,
+          "bindings": 1092,
+          "endedBindings": 1018,
+          "usedEndedBindings": 167,
+          "usedEndedWithSameRow": 165,
+          "usedEndedAfterIdentityLossOrChange": 2,
+          "openBindings": 74,
+          "usedOpenBindings": 16,
+          "usedOpenWithSameRow": 16,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 12,
+          "supportedLinks": 194,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 43,
+            "detached": 41,
+            "exact": 40,
+            "supportedExact": 39,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 159,
+            "linksWithOutputWithin5k": 115,
+            "exactOutputsWithin5k": 35,
+            "lateSupportLinks": 35
+          },
+          "rates": {
+            "availability": {
+              "numerator": 2426456,
+              "denominator": 2222428,
+              "value": 1.091804098940438
+            },
+            "encounter": {
+              "numerator": 6898,
+              "denominator": 1127047,
+              "value": 0.006120419112956248
+            },
+            "binding": {
+              "numerator": 1092,
+              "denominator": 6898,
+              "value": 0.15830675558132792
+            },
+            "use": {
+              "numerator": 167,
+              "denominator": 1018,
+              "value": 0.16404715127701375
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 137074,
+          "freeBackSiteSteps": 137049,
+          "matureProductUnitSteps": 2222428,
+          "scanned": 539,
+          "geometryRejected": 526,
+          "geometric": 13,
+          "probabilities": {
+            "0.2": 13
+          },
+          "attempts": 4,
+          "vacancyFailures": 2,
+          "bindings": 2,
+          "endedBindings": 2,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 137074,
+              "denominator": 2222428,
+              "value": 0.06167758865529052
+            },
+            "encounter": {
+              "numerator": 13,
+              "denominator": 137049,
+              "value": 0.00009485658414143847
+            },
+            "binding": {
+              "numerator": 2,
+              "denominator": 13,
+              "value": 0.15384615384615385
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 2,
+              "value": 0
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 770889,
+          "freeBackSiteSteps": 489822,
+          "matureProductUnitSteps": 2222428,
+          "scanned": 18227,
+          "geometryRejected": 14017,
+          "geometric": 4210,
+          "probabilities": {
+            "0.2": 4210
+          },
+          "attempts": 841,
+          "vacancyFailures": 137,
+          "bindings": 704,
+          "endedBindings": 689,
+          "usedEndedBindings": 25,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 25,
+          "openBindings": 15,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 24,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 17,
+            "detached": 16,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 17
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 20,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 4
+          },
+          "rates": {
+            "availability": {
+              "numerator": 770889,
+              "denominator": 2222428,
+              "value": 0.34686793002967925
+            },
+            "encounter": {
+              "numerator": 4210,
+              "denominator": 489822,
+              "value": 0.00859495898510071
+            },
+            "binding": {
+              "numerator": 704,
+              "denominator": 4210,
+              "value": 0.1672209026128266
+            },
+            "use": {
+              "numerator": 25,
+              "denominator": 689,
+              "value": 0.036284470246734396
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 61,
+        "detached": 58,
+        "exact": 41,
+        "unknownParent": 17,
+        "variantKnownParent": 1,
+        "supportedExact": 39,
+        "unsupported": 22
+      },
+      "originalBirthClasses": {
+        "exact": 54,
+        "sameLengthVariant": 2,
+        "lengthVariant": 4,
+        "unknown": 1,
+        "products": 50
+      },
+      "originalFollowup": {
+        "births": 61,
+        "assessed": 52,
+        "intact": 35,
+        "active": 35,
+        "censored": 9
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 412,
+          "dockedSingle": 5,
+          "unfinishedLinked": 29,
+          "releasedLinked": 154,
+          "other": 0
+        },
+        "products": {
+          "free": 177,
+          "dockedSingle": 1,
+          "unfinishedLinked": 4,
+          "releasedLinked": 118,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 106,
+      "arm": "noBind",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 211143,
+        "recipient": 182669,
+        "unknown": 370113,
+        "freeProducer": 193643,
+        "freeRecipient": 182669,
+        "freeUnknown": 358409,
+        "mature": 2035154
+      },
+      "coverage": {
+        "numerator": 393812,
+        "denominator": 763925,
+        "value": 0.5155113394639527
+      },
+      "retirements": 7,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 7
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 211143,
+          "freeBackSiteSteps": 193643,
+          "matureProductUnitSteps": 2035154,
+          "scanned": 51802,
+          "geometryRejected": 34324,
+          "geometric": 17478,
+          "probabilities": {
+            "0": 17478
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 211143,
+              "denominator": 2035154,
+              "value": 0.10374792276161902
+            },
+            "encounter": {
+              "numerator": 17478,
+              "denominator": 193643,
+              "value": 0.09025887845158359
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 17478,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 182669,
+          "freeBackSiteSteps": 182669,
+          "matureProductUnitSteps": 2035154,
+          "scanned": 5531,
+          "geometryRejected": 5452,
+          "geometric": 79,
+          "probabilities": {
+            "0": 79
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 182669,
+              "denominator": 2035154,
+              "value": 0.08975684395382365
+            },
+            "encounter": {
+              "numerator": 79,
+              "denominator": 182669,
+              "value": 0.00043247622749344444
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 79,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 370113,
+          "freeBackSiteSteps": 358409,
+          "matureProductUnitSteps": 2035154,
+          "scanned": 41820,
+          "geometryRejected": 28627,
+          "geometric": 13193,
+          "probabilities": {
+            "0": 13193
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 4,
+            "detached": 4,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 370113,
+              "denominator": 2035154,
+              "value": 0.1818599476992896
+            },
+            "encounter": {
+              "numerator": 13193,
+              "denominator": 358409,
+              "value": 0.036809901537070776
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 13193,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 7,
+        "detached": 7,
+        "exact": 2,
+        "unknownParent": 4,
+        "variantKnownParent": 1,
+        "supportedExact": 0,
+        "unsupported": 7
+      },
+      "originalBirthClasses": {
+        "exact": 5,
+        "sameLengthVariant": 1,
+        "lengthVariant": 1,
+        "unknown": 0,
+        "products": 30
+      },
+      "originalFollowup": {
+        "births": 7,
+        "assessed": 6,
+        "intact": 4,
+        "active": 4,
+        "censored": 1
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 586,
+          "dockedSingle": 2,
+          "unfinishedLinked": 0,
+          "releasedLinked": 12,
+          "other": 0
+        },
+        "products": {
+          "free": 262,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 38,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 106,
+      "arm": "noSource",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 199296,
+        "recipient": 487681,
+        "unknown": 102213,
+        "freeProducer": 199296,
+        "freeRecipient": 487681,
+        "freeUnknown": 102213,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 686977,
+        "denominator": 789190,
+        "value": 0.8704836604619927
+      },
+      "retirements": 4,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 4
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 199296,
+          "freeBackSiteSteps": 199296,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 199296,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 199296,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 487681,
+          "freeBackSiteSteps": 487681,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 487681,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 487681,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 102213,
+          "freeBackSiteSteps": 102213,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 102213,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 102213,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 1,
+        "detached": 1,
+        "exact": 1,
+        "unknownParent": 0,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 1
+      },
+      "originalBirthClasses": {
+        "exact": 1,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 0,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 1,
+        "assessed": 1,
+        "intact": 1,
+        "active": 1,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 593,
+          "dockedSingle": 1,
+          "unfinishedLinked": 0,
+          "releasedLinked": 6,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 106,
+      "arm": "neither",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 199296,
+        "recipient": 487681,
+        "unknown": 102213,
+        "freeProducer": 199296,
+        "freeRecipient": 487681,
+        "freeUnknown": 102213,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 686977,
+        "denominator": 789190,
+        "value": 0.8704836604619927
+      },
+      "retirements": 4,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 4
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 199296,
+          "freeBackSiteSteps": 199296,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 199296,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 199296,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 487681,
+          "freeBackSiteSteps": 487681,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 487681,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 487681,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 102213,
+          "freeBackSiteSteps": 102213,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 102213,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 102213,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 1,
+        "detached": 1,
+        "exact": 1,
+        "unknownParent": 0,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 1
+      },
+      "originalBirthClasses": {
+        "exact": 1,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 0,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 1,
+        "assessed": 1,
+        "intact": 1,
+        "active": 1,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 593,
+          "dockedSingle": 1,
+          "unfinishedLinked": 0,
+          "releasedLinked": 6,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 107,
+      "arm": "on",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 3783895,
+        "recipient": 835210,
+        "unknown": 1462625,
+        "freeProducer": 1636569,
+        "freeRecipient": 563928,
+        "freeUnknown": 860626,
+        "mature": 3962972
+      },
+      "coverage": {
+        "numerator": 4619105,
+        "denominator": 6081730,
+        "value": 0.7595051079215946
+      },
+      "retirements": 51,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 51
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 3783895,
+          "freeBackSiteSteps": 1636569,
+          "matureProductUnitSteps": 3962972,
+          "scanned": 87993,
+          "geometryRejected": 69134,
+          "geometric": 18859,
+          "probabilities": {
+            "0.2": 18859
+          },
+          "attempts": 3747,
+          "vacancyFailures": 656,
+          "bindings": 3091,
+          "endedBindings": 3031,
+          "usedEndedBindings": 209,
+          "usedEndedWithSameRow": 204,
+          "usedEndedAfterIdentityLossOrChange": 7,
+          "openBindings": 60,
+          "usedOpenBindings": 10,
+          "usedOpenWithSameRow": 10,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 27,
+          "supportedLinks": 222,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 36,
+            "detached": 36,
+            "exact": 30,
+            "supportedExact": 30,
+            "unsupported": 6
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 183,
+            "linksWithOutputWithin5k": 113,
+            "exactOutputsWithin5k": 26,
+            "lateSupportLinks": 39
+          },
+          "rates": {
+            "availability": {
+              "numerator": 3783895,
+              "denominator": 3962972,
+              "value": 0.9548124488389017
+            },
+            "encounter": {
+              "numerator": 18859,
+              "denominator": 1636569,
+              "value": 0.011523498245414645
+            },
+            "binding": {
+              "numerator": 3091,
+              "denominator": 18859,
+              "value": 0.16390052494830054
+            },
+            "use": {
+              "numerator": 209,
+              "denominator": 3031,
+              "value": 0.06895414054767403
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 835210,
+          "freeBackSiteSteps": 563928,
+          "matureProductUnitSteps": 3962972,
+          "scanned": 20122,
+          "geometryRejected": 18749,
+          "geometric": 1373,
+          "probabilities": {
+            "0.2": 1373
+          },
+          "attempts": 301,
+          "vacancyFailures": 64,
+          "bindings": 237,
+          "endedBindings": 218,
+          "usedEndedBindings": 52,
+          "usedEndedWithSameRow": 52,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 19,
+          "usedOpenBindings": 8,
+          "usedOpenWithSameRow": 8,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 1,
+          "supportedLinks": 51,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 14,
+            "detached": 13,
+            "exact": 13,
+            "supportedExact": 13,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 31,
+            "linksWithOutputWithin5k": 19,
+            "exactOutputsWithin5k": 7,
+            "lateSupportLinks": 20
+          },
+          "rates": {
+            "availability": {
+              "numerator": 835210,
+              "denominator": 3962972,
+              "value": 0.21075344463700477
+            },
+            "encounter": {
+              "numerator": 1373,
+              "denominator": 563928,
+              "value": 0.002434707976904853
+            },
+            "binding": {
+              "numerator": 237,
+              "denominator": 1373,
+              "value": 0.1726147123088128
+            },
+            "use": {
+              "numerator": 52,
+              "denominator": 218,
+              "value": 0.23853211009174313
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 1462625,
+          "freeBackSiteSteps": 860626,
+          "matureProductUnitSteps": 3962972,
+          "scanned": 35996,
+          "geometryRejected": 27404,
+          "geometric": 8592,
+          "probabilities": {
+            "0.2": 8592
+          },
+          "attempts": 1704,
+          "vacancyFailures": 319,
+          "bindings": 1385,
+          "endedBindings": 1360,
+          "usedEndedBindings": 55,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 55,
+          "openBindings": 25,
+          "usedOpenBindings": 8,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 8,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 53,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 30,
+            "detached": 29,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 30
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 44,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 9
+          },
+          "rates": {
+            "availability": {
+              "numerator": 1462625,
+              "denominator": 3962972,
+              "value": 0.3690727565069852
+            },
+            "encounter": {
+              "numerator": 8592,
+              "denominator": 860626,
+              "value": 0.009983430665585283
+            },
+            "binding": {
+              "numerator": 1385,
+              "denominator": 8592,
+              "value": 0.16119646182495345
+            },
+            "use": {
+              "numerator": 55,
+              "denominator": 1360,
+              "value": 0.04044117647058824
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 80,
+        "detached": 78,
+        "exact": 43,
+        "unknownParent": 30,
+        "variantKnownParent": 6,
+        "supportedExact": 43,
+        "unsupported": 37
+      },
+      "originalBirthClasses": {
+        "exact": 66,
+        "sameLengthVariant": 7,
+        "lengthVariant": 3,
+        "unknown": 4,
+        "products": 56
+      },
+      "originalFollowup": {
+        "births": 80,
+        "assessed": 65,
+        "intact": 46,
+        "active": 46,
+        "censored": 15
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 350,
+          "dockedSingle": 6,
+          "unfinishedLinked": 44,
+          "releasedLinked": 200,
+          "other": 0
+        },
+        "products": {
+          "free": 142,
+          "dockedSingle": 2,
+          "unfinishedLinked": 4,
+          "releasedLinked": 152,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 107,
+      "arm": "noBind",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 612569,
+        "recipient": 194565,
+        "unknown": 362472,
+        "freeProducer": 557093,
+        "freeRecipient": 194565,
+        "freeUnknown": 323923,
+        "mature": 2611263
+      },
+      "coverage": {
+        "numerator": 807134,
+        "denominator": 1169606,
+        "value": 0.6900905091116154
+      },
+      "retirements": 7,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 7
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 612569,
+          "freeBackSiteSteps": 557093,
+          "matureProductUnitSteps": 2611263,
+          "scanned": 158357,
+          "geometryRejected": 97208,
+          "geometric": 61149,
+          "probabilities": {
+            "0": 61149
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 2,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 612569,
+              "denominator": 2611263,
+              "value": 0.23458724762691463
+            },
+            "encounter": {
+              "numerator": 61149,
+              "denominator": 557093,
+              "value": 0.10976443789457056
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 61149,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 194565,
+          "freeBackSiteSteps": 194565,
+          "matureProductUnitSteps": 2611263,
+          "scanned": 15876,
+          "geometryRejected": 14263,
+          "geometric": 1613,
+          "probabilities": {
+            "0": 1613
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 194565,
+              "denominator": 2611263,
+              "value": 0.07450992106118763
+            },
+            "encounter": {
+              "numerator": 1613,
+              "denominator": 194565,
+              "value": 0.008290288592501222
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 1613,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 362472,
+          "freeBackSiteSteps": 323923,
+          "matureProductUnitSteps": 2611263,
+          "scanned": 74789,
+          "geometryRejected": 36911,
+          "geometric": 37878,
+          "probabilities": {
+            "0": 37878
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 362472,
+              "denominator": 2611263,
+              "value": 0.13881098916501325
+            },
+            "encounter": {
+              "numerator": 37878,
+              "denominator": 323923,
+              "value": 0.11693519756238366
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 37878,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 5,
+        "detached": 5,
+        "exact": 3,
+        "unknownParent": 2,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 5
+      },
+      "originalBirthClasses": {
+        "exact": 4,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 1,
+        "products": 55
+      },
+      "originalFollowup": {
+        "births": 5,
+        "assessed": 4,
+        "intact": 3,
+        "active": 3,
+        "censored": 1
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 578,
+          "dockedSingle": 0,
+          "unfinishedLinked": 9,
+          "releasedLinked": 13,
+          "other": 0
+        },
+        "products": {
+          "free": 232,
+          "dockedSingle": 0,
+          "unfinishedLinked": 2,
+          "releasedLinked": 66,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 107,
+      "arm": "noSource",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 491021,
+        "recipient": 153093,
+        "unknown": 464962,
+        "freeProducer": 491021,
+        "freeRecipient": 153093,
+        "freeUnknown": 464962,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 644114,
+        "denominator": 1109076,
+        "value": 0.5807663316129823
+      },
+      "retirements": 10,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 10
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 491021,
+          "freeBackSiteSteps": 491021,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 2,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 491021,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 491021,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 153093,
+          "freeBackSiteSteps": 153093,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 153093,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 153093,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 464962,
+          "freeBackSiteSteps": 464962,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 4,
+            "detached": 4,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 464962,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 464962,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 7,
+        "detached": 7,
+        "exact": 3,
+        "unknownParent": 4,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 7
+      },
+      "originalBirthClasses": {
+        "exact": 7,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 0,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 7,
+        "assessed": 7,
+        "intact": 5,
+        "active": 5,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 586,
+          "dockedSingle": 1,
+          "unfinishedLinked": 0,
+          "releasedLinked": 13,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 107,
+      "arm": "neither",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 491021,
+        "recipient": 153093,
+        "unknown": 464962,
+        "freeProducer": 491021,
+        "freeRecipient": 153093,
+        "freeUnknown": 464962,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 644114,
+        "denominator": 1109076,
+        "value": 0.5807663316129823
+      },
+      "retirements": 10,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 10
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 491021,
+          "freeBackSiteSteps": 491021,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 2,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 491021,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 491021,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 153093,
+          "freeBackSiteSteps": 153093,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 1,
+            "detached": 1,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 1
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 153093,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 153093,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 464962,
+          "freeBackSiteSteps": 464962,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 4,
+            "detached": 4,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 4
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 464962,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 464962,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 7,
+        "detached": 7,
+        "exact": 3,
+        "unknownParent": 4,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 7
+      },
+      "originalBirthClasses": {
+        "exact": 7,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 0,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 7,
+        "assessed": 7,
+        "intact": 5,
+        "active": 5,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 586,
+          "dockedSingle": 1,
+          "unfinishedLinked": 0,
+          "releasedLinked": 13,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 108,
+      "arm": "on",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 3909172,
+        "recipient": 579426,
+        "unknown": 1136366,
+        "freeProducer": 1526366,
+        "freeRecipient": 507674,
+        "freeUnknown": 766546,
+        "mature": 3708808
+      },
+      "coverage": {
+        "numerator": 4488598,
+        "denominator": 5624964,
+        "value": 0.7979780848375208
+      },
+      "retirements": 47,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 47
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 3909172,
+          "freeBackSiteSteps": 1526366,
+          "matureProductUnitSteps": 3708808,
+          "scanned": 73264,
+          "geometryRejected": 58051,
+          "geometric": 15213,
+          "probabilities": {
+            "0.2": 15213
+          },
+          "attempts": 2965,
+          "vacancyFailures": 439,
+          "bindings": 2526,
+          "endedBindings": 2452,
+          "usedEndedBindings": 254,
+          "usedEndedWithSameRow": 249,
+          "usedEndedAfterIdentityLossOrChange": 7,
+          "openBindings": 74,
+          "usedOpenBindings": 9,
+          "usedOpenWithSameRow": 9,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 20,
+          "supportedLinks": 259,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 46,
+            "detached": 45,
+            "exact": 39,
+            "supportedExact": 39,
+            "unsupported": 7
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 236,
+            "linksWithOutputWithin5k": 150,
+            "exactOutputsWithin5k": 36,
+            "lateSupportLinks": 23
+          },
+          "rates": {
+            "availability": {
+              "numerator": 3909172,
+              "denominator": 3708808,
+              "value": 1.0540238265232387
+            },
+            "encounter": {
+              "numerator": 15213,
+              "denominator": 1526366,
+              "value": 0.009966810057351906
+            },
+            "binding": {
+              "numerator": 2526,
+              "denominator": 15213,
+              "value": 0.1660422007493591
+            },
+            "use": {
+              "numerator": 254,
+              "denominator": 2452,
+              "value": 0.10358890701468189
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 579426,
+          "freeBackSiteSteps": 507674,
+          "matureProductUnitSteps": 3708808,
+          "scanned": 13071,
+          "geometryRejected": 12627,
+          "geometric": 444,
+          "probabilities": {
+            "0.2": 444
+          },
+          "attempts": 89,
+          "vacancyFailures": 21,
+          "bindings": 68,
+          "endedBindings": 60,
+          "usedEndedBindings": 19,
+          "usedEndedWithSameRow": 19,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 8,
+          "usedOpenBindings": 3,
+          "usedOpenWithSameRow": 3,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 19,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 3,
+            "detached": 3,
+            "exact": 3,
+            "supportedExact": 3,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 7,
+            "linksWithOutputWithin5k": 4,
+            "exactOutputsWithin5k": 2,
+            "lateSupportLinks": 12
+          },
+          "rates": {
+            "availability": {
+              "numerator": 579426,
+              "denominator": 3708808,
+              "value": 0.1562297104622294
+            },
+            "encounter": {
+              "numerator": 444,
+              "denominator": 507674,
+              "value": 0.0008745769923218443
+            },
+            "binding": {
+              "numerator": 68,
+              "denominator": 444,
+              "value": 0.15315315315315314
+            },
+            "use": {
+              "numerator": 19,
+              "denominator": 60,
+              "value": 0.31666666666666665
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 1136366,
+          "freeBackSiteSteps": 766546,
+          "matureProductUnitSteps": 3708808,
+          "scanned": 22090,
+          "geometryRejected": 15819,
+          "geometric": 6271,
+          "probabilities": {
+            "0.2": 6271
+          },
+          "attempts": 1295,
+          "vacancyFailures": 209,
+          "bindings": 1086,
+          "endedBindings": 1068,
+          "usedEndedBindings": 20,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 20,
+          "openBindings": 18,
+          "usedOpenBindings": 1,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 1,
+          "bindingsStartedBeforeWindow": 1,
+          "supportedLinks": 22,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 16,
+            "detached": 16,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 16
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 16,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 6
+          },
+          "rates": {
+            "availability": {
+              "numerator": 1136366,
+              "denominator": 3708808,
+              "value": 0.3063965565216641
+            },
+            "encounter": {
+              "numerator": 6271,
+              "denominator": 766546,
+              "value": 0.00818085281248614
+            },
+            "binding": {
+              "numerator": 1086,
+              "denominator": 6271,
+              "value": 0.17317812151172063
+            },
+            "use": {
+              "numerator": 20,
+              "denominator": 1068,
+              "value": 0.018726591760299626
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 65,
+        "detached": 64,
+        "exact": 42,
+        "unknownParent": 16,
+        "variantKnownParent": 6,
+        "supportedExact": 42,
+        "unsupported": 23
+      },
+      "originalBirthClasses": {
+        "exact": 54,
+        "sameLengthVariant": 8,
+        "lengthVariant": 1,
+        "unknown": 2,
+        "products": 31
+      },
+      "originalFollowup": {
+        "births": 65,
+        "assessed": 55,
+        "intact": 40,
+        "active": 40,
+        "censored": 10
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 411,
+          "dockedSingle": 2,
+          "unfinishedLinked": 28,
+          "releasedLinked": 159,
+          "other": 0
+        },
+        "products": {
+          "free": 163,
+          "dockedSingle": 0,
+          "unfinishedLinked": 4,
+          "releasedLinked": 133,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 108,
+      "arm": "noBind",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 114264,
+        "recipient": 484414,
+        "unknown": 239122,
+        "freeProducer": 106831,
+        "freeRecipient": 484414,
+        "freeUnknown": 234758,
+        "mature": 1393600
+      },
+      "coverage": {
+        "numerator": 598678,
+        "denominator": 837800,
+        "value": 0.714583432800191
+      },
+      "retirements": 9,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 9
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 114264,
+          "freeBackSiteSteps": 106831,
+          "matureProductUnitSteps": 1393600,
+          "scanned": 20318,
+          "geometryRejected": 13419,
+          "geometric": 6899,
+          "probabilities": {
+            "0": 6899
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 114264,
+              "denominator": 1393600,
+              "value": 0.08199196326061997
+            },
+            "encounter": {
+              "numerator": 6899,
+              "denominator": 106831,
+              "value": 0.06457863354269829
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 6899,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 484414,
+          "freeBackSiteSteps": 484414,
+          "matureProductUnitSteps": 1393600,
+          "scanned": 16796,
+          "geometryRejected": 15076,
+          "geometric": 1720,
+          "probabilities": {
+            "0": 1720
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 1,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 484414,
+              "denominator": 1393600,
+              "value": 0.34759902411021815
+            },
+            "encounter": {
+              "numerator": 1720,
+              "denominator": 484414,
+              "value": 0.0035506818547771123
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 1720,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 239122,
+          "freeBackSiteSteps": 234758,
+          "matureProductUnitSteps": 1393600,
+          "scanned": 16000,
+          "geometryRejected": 10152,
+          "geometric": 5848,
+          "probabilities": {
+            "0": 5848
+          },
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 239122,
+              "denominator": 1393600,
+              "value": 0.17158582089552238
+            },
+            "encounter": {
+              "numerator": 5848,
+              "denominator": 234758,
+              "value": 0.0249107591647569
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 5848,
+              "value": 0
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 4,
+        "detached": 4,
+        "exact": 1,
+        "unknownParent": 2,
+        "variantKnownParent": 1,
+        "supportedExact": 0,
+        "unsupported": 4
+      },
+      "originalBirthClasses": {
+        "exact": 3,
+        "sameLengthVariant": 1,
+        "lengthVariant": 0,
+        "unknown": 0,
+        "products": 6
+      },
+      "originalFollowup": {
+        "births": 4,
+        "assessed": 4,
+        "intact": 3,
+        "active": 3,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 590,
+          "dockedSingle": 0,
+          "unfinishedLinked": 3,
+          "releasedLinked": 7,
+          "other": 0
+        },
+        "products": {
+          "free": 284,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 16,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 108,
+      "arm": "noSource",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 36320,
+        "recipient": 422619,
+        "unknown": 171480,
+        "freeProducer": 36320,
+        "freeRecipient": 422619,
+        "freeUnknown": 171480,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 458939,
+        "denominator": 630419,
+        "value": 0.7279904317604641
+      },
+      "retirements": 8,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 8
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 36320,
+          "freeBackSiteSteps": 36320,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 36320,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 36320,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 422619,
+          "freeBackSiteSteps": 422619,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 2,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 422619,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 422619,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 171480,
+          "freeBackSiteSteps": 171480,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 3,
+            "detached": 2,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 3
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 171480,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 171480,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 5,
+        "detached": 4,
+        "exact": 2,
+        "unknownParent": 3,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 5
+      },
+      "originalBirthClasses": {
+        "exact": 4,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 1,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 5,
+        "assessed": 5,
+        "intact": 5,
+        "active": 5,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 593,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 7,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    },
+    {
+      "seed": 108,
+      "arm": "neither",
+      "window": {
+        "after": 10000,
+        "end": 50000
+      },
+      "siteSteps": {
+        "producer": 36320,
+        "recipient": 422619,
+        "unknown": 171480,
+        "freeProducer": 36320,
+        "freeRecipient": 422619,
+        "freeUnknown": 171480,
+        "mature": 0
+      },
+      "coverage": {
+        "numerator": 458939,
+        "denominator": 630419,
+        "value": 0.7279904317604641
+      },
+      "retirements": 8,
+      "episodeCategory": "Category at binding onset; link categories are at use. Same-row and lost/changed-row use are reported separately and can overlap.",
+      "retirementReasons": {
+        "fray": 8
+      },
+      "categories": {
+        "producer": {
+          "siteSteps": 36320,
+          "freeBackSiteSteps": 36320,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 0,
+            "detached": 0,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 0
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 36320,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 36320,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "recipient": {
+          "siteSteps": 422619,
+          "freeBackSiteSteps": 422619,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 2,
+            "detached": 2,
+            "exact": 2,
+            "supportedExact": 0,
+            "unsupported": 2
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 422619,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 422619,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        },
+        "unknown": {
+          "siteSteps": 171480,
+          "freeBackSiteSteps": 171480,
+          "matureProductUnitSteps": 0,
+          "scanned": 0,
+          "geometryRejected": 0,
+          "geometric": 0,
+          "probabilities": {},
+          "attempts": 0,
+          "vacancyFailures": 0,
+          "bindings": 0,
+          "endedBindings": 0,
+          "usedEndedBindings": 0,
+          "usedEndedWithSameRow": 0,
+          "usedEndedAfterIdentityLossOrChange": 0,
+          "openBindings": 0,
+          "usedOpenBindings": 0,
+          "usedOpenWithSameRow": 0,
+          "usedOpenAfterIdentityLossOrChange": 0,
+          "bindingsStartedBeforeWindow": 0,
+          "supportedLinks": 0,
+          "unknownSignalLinks": 0,
+          "output": {
+            "births": 3,
+            "detached": 2,
+            "exact": 0,
+            "supportedExact": 0,
+            "unsupported": 3
+          },
+          "fixedFollowup": {
+            "eligibleSupportLinks": 0,
+            "linksWithOutputWithin5k": 0,
+            "exactOutputsWithin5k": 0,
+            "lateSupportLinks": 0
+          },
+          "rates": {
+            "availability": {
+              "numerator": 171480,
+              "denominator": 0,
+              "value": null
+            },
+            "encounter": {
+              "numerator": 0,
+              "denominator": 171480,
+              "value": 0
+            },
+            "binding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "use": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          }
+        }
+      },
+      "output": {
+        "births": 5,
+        "detached": 4,
+        "exact": 2,
+        "unknownParent": 3,
+        "variantKnownParent": 0,
+        "supportedExact": 0,
+        "unsupported": 5
+      },
+      "originalBirthClasses": {
+        "exact": 4,
+        "sameLengthVariant": 0,
+        "lengthVariant": 0,
+        "unknown": 1,
+        "products": 0
+      },
+      "originalFollowup": {
+        "births": 5,
+        "assessed": 5,
+        "intact": 5,
+        "active": 5,
+        "censored": 0
+      },
+      "finalMaterial": {
+        "letters": {
+          "free": 593,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 7,
+          "other": 0
+        },
+        "products": {
+          "free": 300,
+          "dockedSingle": 0,
+          "unfinishedLinked": 0,
+          "releasedLinked": 0,
+          "other": 0
+        },
+        "energy": 100
+      }
+    }
+  ],
+  "decision": {
+    "coverage": false,
+    "stages": {
+      "availability": {
+        "values": [
+          {
+            "seed": 105,
+            "numerator": 1128127,
+            "denominator": 4515511,
+            "value": 0.24983373974728443
+          },
+          {
+            "seed": 106,
+            "numerator": 137074,
+            "denominator": 2222428,
+            "value": 0.06167758865529052
+          },
+          {
+            "seed": 107,
+            "numerator": 835210,
+            "denominator": 3962972,
+            "value": 0.21075344463700477
+          },
+          {
+            "seed": 108,
+            "numerator": 579426,
+            "denominator": 3708808,
+            "value": 0.1562297104622294
+          }
+        ],
+        "coverage": false,
+        "denominators": true,
+        "ordering": true,
+        "signature": false
+      },
+      "encounter": {
+        "values": [
+          {
+            "seed": 105,
+            "numerator": 1617,
+            "denominator": 860489,
+            "value": 0.0018791640567165878
+          },
+          {
+            "seed": 106,
+            "numerator": 13,
+            "denominator": 137049,
+            "value": 0.00009485658414143847
+          },
+          {
+            "seed": 107,
+            "numerator": 1373,
+            "denominator": 563928,
+            "value": 0.002434707976904853
+          },
+          {
+            "seed": 108,
+            "numerator": 444,
+            "denominator": 507674,
+            "value": 0.0008745769923218443
+          }
+        ],
+        "coverage": false,
+        "denominators": true,
+        "ordering": true,
+        "signature": false
+      },
+      "binding": {
+        "values": [
+          {
+            "seed": 105,
+            "numerator": 254,
+            "denominator": 1617,
+            "value": 0.15708101422387136
+          },
+          {
+            "seed": 106,
+            "numerator": 2,
+            "denominator": 13,
+            "value": 0.15384615384615385
+          },
+          {
+            "seed": 107,
+            "numerator": 237,
+            "denominator": 1373,
+            "value": 0.1726147123088128
+          },
+          {
+            "seed": 108,
+            "numerator": 68,
+            "denominator": 444,
+            "value": 0.15315315315315314
+          }
+        ],
+        "coverage": false,
+        "denominators": false,
+        "ordering": true,
+        "signature": false
+      },
+      "use": {
+        "values": [
+          {
+            "seed": 105,
+            "numerator": 62,
+            "denominator": 227,
+            "value": 0.27312775330396477
+          },
+          {
+            "seed": 106,
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0
+          },
+          {
+            "seed": 107,
+            "numerator": 52,
+            "denominator": 218,
+            "value": 0.23853211009174313
+          },
+          {
+            "seed": 108,
+            "numerator": 19,
+            "denominator": 60,
+            "value": 0.31666666666666665
+          }
+        ],
+        "coverage": false,
+        "denominators": false,
+        "ordering": false,
+        "signature": false
+      }
+    },
+    "signatures": [],
+    "caveat": "Retrospective world ordering is not causal necessity or a rescue of section 62."
+  },
+  "provenance": {
+    "created": "2026-09-27T17:57:04.885Z",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\delivery_replay_summary.js",
+      "experiments/out/DD_replay_20260927",
+      "experiments/out/DD_replay_20260927/summary.json"
+    ],
+    "node": "v24.6.0",
+    "inputManifest": {
+      "file": "experiments\\out\\DD_replay_20260927\\manifest.json",
+      "sha256": "b5be65d3b0f2510e34113637d9f0ddb2a578147bb5e0b6c5397417616794c390"
+    },
+    "sources": {
+      "experiments/delivery_replay_summary.js": "1075912a4c2b323c89bb1bcf114c2f97ec2c5204d0122e02fcad3736f984abc3",
+      "experiments/delivery_replay_test.js": "9c89e4157a0132961e2343a9527779b7c1bcd16eb1d88b940541353d8dfd0df0",
+      "experiments/delivery_replay_analysis_test.js": "2e52e2c82f6375e4e54e4a570ec14620373041c2a779ef787a394f5bcab28fde"
+    },
+    "replayCpuSeconds": 3581.703
+  },
+  "analysisCpuSeconds": 39.328
+}
