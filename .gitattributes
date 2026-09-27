@@ -40,3 +40,6 @@ experiments/duplex_cycle* text eol=lf
 experiments/out/DC_20260927*.json text eol=lf
 experiments/passive_escape* text eol=lf
 experiments/out/PE_geometry_20260927*.json text eol=lf
+experiments/junction_topology* text eol=lf
+docs/BLOCK_ARCHITECTURES.md text eol=lf
+experiments/out/JT_20260927*.json text eol=lf

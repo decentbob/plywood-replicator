@@ -78,6 +78,11 @@ do not open SEEK/REQUEST/OFFER/LATCH worlds in the standard viewer.
 
 ## Platforms and compute
 
+Block-architecture design: `../docs/BLOCK_ARCHITECTURES.md` compares new cap,
+junction and rim roles. `junction_topology.js` and `junction_topology_plan.md`
+(RESULTS 81) are offline necessary-condition accounting, not a simulator or
+alternative lattice physics. The current physical follow-up is in ROADMAP.
+
 Use portable Node entry points on Windows. Historical `.sh` scripts and `tools/queue.sh` need
 Bash/WSL and may contain older paths; inspect before running. `tools/screenshot.js` expects
 Playwright and a Linux browser path, so it is not a portable default QA command.

@@ -6822,3 +6822,71 @@ before execution. Do not tune rates, fold, stiffness or horizon to rescue it;
 a failed tradeoff parks the candidate. Even a kinetic pass would still require
 the repair operation at matched stiffness before natural damage or population
 work. The sole current queue is ROADMAP, not this historical next paragraph.
+
+## 81. Junction caps and non-chain architectures: port and topology admission
+
+The user's new question prompted a block-design slice, not another repair assay.
+`docs/BLOCK_ARCHITECTURES.md` compares open frames, cap-anchored closed rims,
+branched tool-bearing strips and ribbons, with concrete cap/junction/rim roles.
+The preferred first candidate attaches a separate three-way junction to a cap's
+otherwise inert outward edge. This preserves a cap's rail, copying and fuel
+contacts within four ports. A direct cap with both rim bonds needs five ports
+when fuel access is retained. Polygon corner count does not increase the core's
+four working sides. These are proposed roles, not implemented new blocks.
+
+The Squirm3 author's source supports strip ends attached to membrane junctions,
+but its cell division also uses a pulling/division reaction sequence. The design
+brief links the source and plausible video; the video and full paper were not
+inspectable. It distinguishes that reference from our proposed local contract.
+
+### Fixed offline check
+
+Plan: `junction_topology_plan.md`, written before enumeration. Commands:
+
+```
+node experiments/junction_topology.js experiments/scratch/JT_20260927.json
+node experiments/junction_topology.js --validate experiments/scratch/JT_20260927.json
+```
+
+This executable never imports the simulator. It enumerates removals of zero,
+one or two edges of a simple rim cycle, then the three pairings of exposed ports
+for each disjoint two-edge cut. Duplicate bonds are rejected. All vertices are
+retained. Four prepared anchor labels distinguish the two intended strip-end
+pairs; these labels and graph traversal are observation only.
+
+| Rim vertices | Cut-only cases | Cut-only two closed rims | Reconnection pairings | Rejected duplicate-edge pairings | Two closed rims | Two rims with intended anchor pairs |
+|---|---:|---:|---:|---:|---:|---:|
+| 8 | 37 | 0 | 60 | 8 | 12 | 4 |
+| 12 | 79 | 0 | 162 | 12 | 42 | 9 |
+| 16 | 137 | 0 | 312 | 16 | 88 | 16 |
+
+These are exact combinatorial counts, not success probabilities or independent
+worlds. No geometry, rates, seeds, horizon, dynamics, births or descendants are
+measured. Rejoining original endpoints always restores one cycle. A segment-
+length calculation independently matches the two-cycle totals. With fixed rim
+membership, two closed rims require at least two removals and two new joins;
+cutting alone cannot suffice. The enumeration admits a graph witness, not a
+local chemical pathway or physical ability to bring the new ends into contact.
+
+### Validation and disposition
+
+All counts recompute; inventory, degree, edge counts and anchor distributions
+pass. Synthetic malformed/open graphs are rejected, and an altered result fails
+validation. Archives `out/JT_20260927.json` and its `.validation.json` match
+scratch byte-for-byte. Raw SHA-256:
+`eb2ba76681ddb862e7ce53c453ec3e9056f0b4e9565d17dd0e17f5d3a0370dcd`.
+Runner, plan, design brief and unchanged core hashes are in the raw report.
+Measured CPU: 0.140 s enumeration/self-checks + 0.218 s validation = **0.358 s**,
+within the 10 s cap; final serialization, shell, documentation and Git overhead
+are outside these intervals. One Node process at a time, zero simulation workers.
+No failed enumeration or parameter changes occurred.
+
+**Q8a is geometry next, not cell division.** Specify and freeze a seven-block
+cap/J fixture to check simultaneous copy/fuel access, approach and actual polygon
+exclusion. Start with an open fork; require a useful autonomous operation and
+rebuilding in descendants before a full rim. No new mutable states or core
+chemistry were added. Q7b is deferred in response to the user's direction, not
+failed, and its admission constraints remain in ROADMAP. Prior wall/stack/repair
+failures are unchanged. Evidence level: necessary-condition design accounting,
+below physical effect. Full physics suite and fingerprints were skipped because
+runtime and historical assay source bytes are unchanged.

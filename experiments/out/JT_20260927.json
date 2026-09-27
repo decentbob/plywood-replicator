@@ -1,0 +1,253 @@
+{
+  "kind": "junction-topology",
+  "complete": true,
+  "created": "2026-09-27T20:30:27.659Z",
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\junction_topology.js",
+    "experiments/scratch/JT_20260927.json"
+  ],
+  "sources": {
+    "src/sim.js": "6d54f8ebfd241a96c5dc06fe305fc36c1e58abd51f446aaaf3d53fe9a38bc114",
+    "experiments/junction_topology.js": "4fc735c5f0b5d6f6eafc8db3b4dcadf5a656a8e2cec5ccaf87860f61df806ef4",
+    "experiments/junction_topology_plan.md": "837c2486a5ff552784585b205c9e86565c525df329498e232f4ee46735bcb8a5",
+    "docs/BLOCK_ARCHITECTURES.md": "3be5ec4fdb0e9729050c72e7078dcfa9bcaafaaf75a5d688a6448f5501e96db2"
+  },
+  "result": {
+    "scope": "necessary topology only; no physical or autonomous-operation evidence",
+    "portBudgets": [
+      {
+        "name": "direct cap with fuel",
+        "roles": [
+          "rail",
+          "copy",
+          "fuel",
+          "rim1",
+          "rim2"
+        ],
+        "required": 5,
+        "fitsFour": false
+      },
+      {
+        "name": "direct cap without fuel",
+        "roles": [
+          "rail",
+          "copy",
+          "rim1",
+          "rim2"
+        ],
+        "required": 4,
+        "fitsFour": true
+      },
+      {
+        "name": "separate-junction cap",
+        "roles": [
+          "rail",
+          "copy",
+          "fuel",
+          "anchor"
+        ],
+        "required": 4,
+        "fitsFour": true
+      },
+      {
+        "name": "separate junction",
+        "roles": [
+          "anchor",
+          "rim1",
+          "rim2"
+        ],
+        "required": 3,
+        "fitsFour": true
+      }
+    ],
+    "rows": [
+      {
+        "n": 8,
+        "anchors": {
+          "parent": [
+            0,
+            6
+          ],
+          "daughter": [
+            2,
+            4
+          ]
+        },
+        "cutOnlyCases": 37,
+        "cutOnlyTwoCycles": 0,
+        "disjointCutPairs": 20,
+        "pairings": 60,
+        "rejectedPairings": 8,
+        "twoCycles": 12,
+        "anchorCompleteTwoCycles": 4,
+        "originalRejoins": 20,
+        "lengthOracleTwoCycles": 12,
+        "witness": {
+          "removed": [
+            [
+              0,
+              1
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "added": [
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              4
+            ]
+          ],
+          "components": [
+            [
+              0,
+              5,
+              6,
+              7
+            ],
+            [
+              1,
+              2,
+              3,
+              4
+            ]
+          ]
+        }
+      },
+      {
+        "n": 12,
+        "anchors": {
+          "parent": [
+            0,
+            9
+          ],
+          "daughter": [
+            3,
+            6
+          ]
+        },
+        "cutOnlyCases": 79,
+        "cutOnlyTwoCycles": 0,
+        "disjointCutPairs": 54,
+        "pairings": 162,
+        "rejectedPairings": 12,
+        "twoCycles": 42,
+        "anchorCompleteTwoCycles": 9,
+        "originalRejoins": 54,
+        "lengthOracleTwoCycles": 42,
+        "witness": {
+          "removed": [
+            [
+              0,
+              1
+            ],
+            [
+              6,
+              7
+            ]
+          ],
+          "added": [
+            [
+              0,
+              7
+            ],
+            [
+              1,
+              6
+            ]
+          ],
+          "components": [
+            [
+              0,
+              7,
+              8,
+              9,
+              10,
+              11
+            ],
+            [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ]
+          ]
+        }
+      },
+      {
+        "n": 16,
+        "anchors": {
+          "parent": [
+            0,
+            12
+          ],
+          "daughter": [
+            4,
+            8
+          ]
+        },
+        "cutOnlyCases": 137,
+        "cutOnlyTwoCycles": 0,
+        "disjointCutPairs": 104,
+        "pairings": 312,
+        "rejectedPairings": 16,
+        "twoCycles": 88,
+        "anchorCompleteTwoCycles": 16,
+        "originalRejoins": 104,
+        "lengthOracleTwoCycles": 88,
+        "witness": {
+          "removed": [
+            [
+              0,
+              1
+            ],
+            [
+              8,
+              9
+            ]
+          ],
+          "added": [
+            [
+              0,
+              9
+            ],
+            [
+              1,
+              8
+            ]
+          ],
+          "components": [
+            [
+              0,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "cpuSeconds": 0.14
+}

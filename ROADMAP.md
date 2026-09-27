@@ -13,6 +13,29 @@ status pointer, not a second queue.
 
 ## Current evidence and next slice
 
+**User-directed Q8: new blocks and non-chain architectures (RESULTS 81).**
+The [design brief](docs/BLOCK_ARCHITECTURES.md) compares open frames, cap-anchored
+rims, branched tool-bearing strips and ribbons. A separate three-way junction
+is first: cap rail/copy/fuel/anchor uses four ports and J uses three. A directly
+rim-bearing cap needs five with fuel. The offline audit finds possible rim
+reclosures, but cuts alone never yield two closed rims. No new block chemistry
+or autonomous operation is claimed. No task-owned simulation is active.
+
+| Order | Work | Gate and reason |
+|---|---|---|
+| Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
+| 1 | Q8a: specify and test cap–junction access | Freeze the seven-block geometry preparation in the brief. Does an outward J with two rim stubs preserve copying and fuel contacts versus the same material around a bare cap? Check actual corners, approach, exclusion and pin residuals before acquisition chemistry. |
+| 2, only if access passes | One useful open-frame operation | Specify a mechanical retention/contact benefit and minimal incident-bond rules. Test acquisition, action and release against untethered material and doing nothing. No automatic full-rim implementation. |
+| 3, only after autonomous operation | Descendant rebuilding and net benefit | Charge rim/junction sequestration and copying time; compare equal-material independent strips, variant transmission and persistence through turnover. |
+
+Q8 follows the user's new direction; old repair/wall failures remain failed.
+No Q8 physical plan is frozen. The brief's alternatives are a design portfolio,
+not concurrent experimental queues. Do not add states just to finish a cell outline.
+
+## Deferred Q7b: admission and constraints preserved
+
+Q7b is deferred, not executed or failed, and is not a prerequisite for Q8.
+
 **Q7 passes its prepared geometry gate (RESULTS 80).** At identical stiffness
 0.8, existing free-face fold 45 turns two freed endpoints out of binding alignment
 after 3 steps with four solver iterations, or 1 step with sixteen. Straight and
@@ -27,14 +50,7 @@ prepared repair 8/8 but usable release 0/8; disabling future binding permits
 is earned. [Q7 plan](experiments/passive_escape_plan.md),
 [raw](experiments/out/PE_geometry_20260927.json). No task-owned simulation is active.
 
-| Order | Work | Gate and reason |
-|---|---|---|
-| Always | P0: local reaction contract and targeted mechanical validation | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q7b: freeze and test the competition between relaxation, rebinding and initial acquisition | Keep the admitted fold45/stiffness0.8 contrast and smallest same-material preparation. Does ordinary binding erase the geometry effect before it acts, or does folding prevent useful acquisition? Both costs must be measured. |
-| 2, only if a distinct mechanism is admitted and passes | Autonomous acquisition, repair and usable release | Ordinary rules must acquire support, survive uniform damage, reconnect and free intact active material. No observer-triggered intervention. |
-| 3, only after the autonomous operation passes | Equal-material benefit and inherited variation | Compare reproducing descendants with independent dimers/fragments; charge support sequestration and copying time, then test persistence through material turnover. |
-
-**No kinetic assay is frozen yet.** Q7's plan compares this third small diagnostic
+**No Q7 kinetic assay is frozen yet.** Q7's plan compares this third small diagnostic
 with leaving repair parked. Its positive actual-geometry result earns one bounded
 kinetic test, not another parameter search. Freeze endpoints, seeds, horizon and
 failure criteria first. Compare fold on/off at identical stiffness, material,
