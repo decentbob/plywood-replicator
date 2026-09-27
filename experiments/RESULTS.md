@@ -6336,3 +6336,49 @@ failed; Q1 and Q2 remain parked. ROADMAP Q4 is an offline portfolio comparison
 of distinct causal contrasts and their path to inherited function before
 another prospective assay. More observation or births alone is not progress
 up the research audit's evidence ladder.
+
+## 76. Portfolio after delivery: neither causal contrast earns an assay
+
+2026-09-27, ROADMAP Q4; baseline `c710056`. This is a **static design review**,
+not a simulation result or an empirical rejection of either proposed effect.
+The full [comparison](portfolio_after_delivery.md) records evidence, local
+read/write contracts, rule cost, simpler competitors, inheritance paths and
+admission/CPU/stop conditions. No new rules, states, seeds or assay plan.
+
+| Candidate | Distinct causal prediction | Decision |
+|---|---|---|
+| Keep physical product binding, suppress supported letter linking to the original bare rate | Ordinary rules produce more output than efficacy-off rules at the same initial material and geometry. This separates efficacy from attachment at the rule level. | Clean total-effect contrast, but both producer and recipient linking change. Producer-mediated supply and direct recipient action remain mixed; no inherited functional organization is identified. Retain as a possible later calibration, not the next assay. |
+| Cross complementary/self recognition with opposed/square geometry and measure descendant renewal | Opposed material loses more renewal on removing complementary recognition than square material does. | Mechanically relevant and no new rules, but extends section 49's known fit rescue to an endpoint already demonstrated under complementary rules in 66/72. No additional useful operation or benefit over square renewal is predicted. Reject for current priority. |
+
+Source inspection confirms that `catalysis=false` also prevents mature product
+binding, whereas `pLinkBare=1` raises unsupported linking. Neither implements
+the first proposed ablation. A research override could change only the eligible
+letter-letter STICKY lateral probability while preserving product linking and
+all binding/geometry rules. Subsequent physical histories would still diverge;
+the comparison would not preserve recipient exposure or isolate named helpers.
+Section 75's failed coverage/denominator gates cannot nominate such helpers.
+
+For the second contrast, self and complementary recognition generate different
+child sequences. Equal composition does not hold descendant arrangement fixed.
+Section 49 establishes a fit interaction, not superiority over square copying;
+sections 50–51 separate capture, arming and productive renewal. Sections 66/72
+fail their benefit gates, and 71 supplies renewing square dimers as a simpler
+competitor. No new seeds or mechanical tuning are earned by joining these facts.
+
+**Disposition:** zero plans and zero simulation steps. The missing causal
+measurement is a benefit of inherited physical organization over simple renewal
+with equal material, retained through descendant turnover. A new proposal must
+identify the physical operation and its smallest counterfactual: separate useful
+recipient action from changed producer supply, or identify a mechanical use beyond
+restoring copy compatibility. Either route may qualify independently. This is not
+a demand for a positive result before testing; it is a demand for a discriminating
+hypothesis before paying for another assay. No currently admitted executable
+experiment remains. Prior failures and Q3's cost-accounting deviation stand.
+
+**Verification and limits.** Reviewed the cited result sections, ledger, audit,
+DESIGN commitments and actual compatibility branches; checked document references,
+the rebuilt ledger index and whitespace. Runtime, historical assay sources,
+frozen plans and raw evidence are unchanged. No simulation or archive reanalysis;
+no fingerprints, build or physics suite rerun for documentation-only work. Cost
+estimates in the comparison use archived run CPU, not new timings, and include
+explicit future QA reserves; they are not measured costs for unimplemented arms.

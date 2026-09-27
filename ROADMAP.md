@@ -5,17 +5,20 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** Q3's bounded archived replay is complete (75).
-All sixteen worlds reproduce their full historical states/RNG and observations.
-Known-site coverage is only 75.95–79.80% in the four on worlds (required >=80%);
-seed 106 also misses the encounter/episode denominator gates. No qualifying
-bottleneck signature or causal explanation is earned. Park this diagnostic
-route; section 62, Q1 and Q2 remain failed or parked.
-**Next: a no-simulation portfolio checkpoint (Q4), before any new assay.**
-Compare distinct causal contrasts and their path to inherited function. Do not
-retune the coverage threshold, repair this preparation, or automatically run
-the proposed catalytic-efficacy ablation. The [handoff](docs/NEXT_INSTANCE.md)
-records the completed archive and checks. No simulation remains active.
+**Current status:** Q4's offline portfolio comparison is complete (76).
+Neither efficacy-off product binding nor a pairing-mode renewal comparison
+earns an assay. The first isolates a programmed rate effect but leaves producer
+mediation unresolved; the second extends known fit rescue without predicting
+benefit over simple square renewal. See the
+[comparison](experiments/portfolio_after_delivery.md) for contracts and gates.
+**Next: identify a distinct inherited physical operation and its smallest
+same-material causal contrast against simple renewal. No executable assay is
+currently admitted.** A concrete physical witness or new local-mechanics
+hypothesis must satisfy Q4's reopening condition before a plan is queued.
+No automatic census, replay, efficacy implementation, arrangement tuning or
+coverage repair. Q3 remains inconclusive/parked; section 62, Q1 and Q2 keep
+their failed gates. The [handoff](docs/NEXT_INSTANCE.md) records this decision
+and the preserved replay evidence. No simulation remains active.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -27,7 +30,7 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| Q4 | Choose a causal contrast after Q1–Q3 | High decision value / candidate uncertain | Next: offline comparison and at most one prospective plan | Recent assays measured renewal and interaction but did not earn inherited benefit or an isolated ecological explanation. |
+| Q4 | Choose a causal contrast after Q1–Q3 | Goal fit unresolved / no candidate admitted | Complete (76); two contrasts rejected for current priority | Reopening requires a physical operation with a same-material benefit prediction against simple renewal; no assay plan earned. |
 | Q3 | Distinguish ecological delivery from recipient opportunity | Measurement validated / explanation unresolved | Complete; park after coverage/denominator failure (75) | All sixteen trajectories replay exactly; no qualified stage signature. No threshold repair, extra seeds or automatic efficacy ablation. |
 | Q2 | Audit actual fuel-support partners and their renewal | Finite reciprocal renewal measured / no candidate earned | Complete; park candidate source (73) | One primary pair, none above reference; alternatives in only 3.3–6.2% of covered events limit identification. |
 | Q1 | Test the observed five-letter variant in a common environment | Renewal measured / tested arrangement benefit fails | Park after fixed screen gate fails (72) | One seed passes; the other misses both the minimum arrangement contrast and shape interaction. No solver or fresh-seed confirmation earned. |
@@ -45,29 +48,37 @@ four-worker machine limit. After at most three new assays in a direction without
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
 
-## Q4 — portfolio checkpoint after Q1–Q3
+## Q4 — comparison complete; no new assay justified (76)
 
-Before another simulation, compare two or three concrete causal contrasts using
-the existing evidence. Include the proposed **catalytic-efficacy ablation with
-physical product binding retained** (74–75) and an alternative grounded in
-the **mechanical fit / physical renewal evidence** (49–51, 66, 72). A parked
-arrangement or port-acquisition setting cannot be reopened by new seeds,
-threshold changes or more rate/solver tuning. Identify a genuinely different
-causal prediction, or reject the candidate.
+The [portfolio comparison](experiments/portfolio_after_delivery.md) evaluates
+two concrete interventions, their local contracts, added rule cost, inheritance
+path, simple competitors and CPU/viability/stop gates. No simulation or new
+chemistry was used; no prospective assay plan was written.
 
-For each option state the observation it explains, the smallest matched
-intervention, the block-level read/write contract, added rule/state/knob cost,
-how useful function would reach descendants, the measurable benefit and the
-CPU/viability/stop gates. Include the simplest existing competitor. Distinguish
-more completed copies from inherited function and causal necessity from
-physical attribution. Q3's incomplete identity coverage cannot nominate a
-particular failed world's cause or a selective partner intervention.
+- **Efficacy off, physical binding retained:** one isolated compatibility
+  override could keep production/binding rules while reducing supported letter
+  linking to the original bare rate. This identifies a total chemical-efficacy
+  effect, but changed producer output also changes recipient opportunity. No
+  organization-specific inherited benefit is isolated. Do not use Q3's failed
+  coverage gate to choose a recipient or helper for intervention.
+- **Pairing-mode effect on mechanical renewal:** existing complementary/self
+  recognition crossed with opposed/square shapes would extend the known fit
+  rescue to descendant output. It adds no rules, but lacks a predicted useful
+  operation beyond copying or an advantage over simple square renewal. This
+  does not reopen the failed arrangement settings in 66/72.
 
-Choose by goal fit, discrimination, rule simplicity and cost; write at most one
-proportional prospective plan if a candidate earns it. If none does, record
-that no new assay is justified and name the missing causal measurement. This
-checkpoint is analysis/design only: no simulation, new chemistry or automatic
-continuation of the delivery diagnostic is queued.
+**Reopening condition:** name a physically grounded operation, its smallest
+same-material counterfactual and a measurable benefit over simple renewal that
+can reach descendants under fixed local rules. For ecology, distinguish useful
+recipient action from changed producer supply; for mechanics, identify a use
+beyond restoring compatibility of distorted templates. Either route can qualify
+independently. A prepared operation must also name an autonomous acquisition
+and renewal path before population work is earned. No new states are justified
+merely to satisfy this condition.
+
+Do not rerun this comparison unchanged. New causal evidence or a distinct
+local-mechanics hypothesis is needed before another plan, census or batch.
+This decision does not assert a zero effect or impossibility of complexity.
 
 ## Q3 — archived replay complete; diagnostic route parked
 

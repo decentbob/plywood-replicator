@@ -316,6 +316,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 73 | Fuel-support partner audit | Do recurring renewing partners stand out from available contact opportunities? | offline `pGrip` on/off, square/opposed `bendA`/`bendB` archives; no simulation | inconclusive | 1680/2611 events covered; 117 reciprocal pairs, 8 repeated both ways, 1 renewing primary; none above reference q95; alternatives in 3.3–6.2% of covered events | fuel_support.js, fuel_support_analysis_test.js (`FS_audit_20260927`) | park Q2 candidate source; Q3 ecological delivery diagnostic design before replay | all 16 section-72 worlds; 199 lifetime-respecting reference draws per world; 9.327 CPU seconds, zero steps; unknown charge/identity and sparse alternatives limit inference; fixed nomination gate fails |
 | 74 | Delivery diagnostic fixture gate | Can an unchanged observer separate opportunity, binding, supported linking and physical output? | observer-only existing `catalysis`, `bindAny`, prepared `pBindP` 0/1 and `pLinkBare` 1 | works | all 12 prepared signatures pass; supported/bare output 1/1 but supported attribution 1/0; eight small neutrality/restart worlds, all prepared controls and active-binding restart match | delivery_diagnostic.js, delivery_diagnostic_test.js, delivery_diagnostic_analysis_test.js (`DD_fixtures_20260927`) | fixed Q3 retrospective replay plan; no original world replayed yet | 11.781 CPU seconds / 20k suite steps plus scheduled phases; six corruptions rejected; small worlds have no deliveries, positive paths tested in prepared cases; measurement only, no benefit or locality promotion |
 | 75 | Archived ecological delivery replay | Do failed worlds share a qualifying delivery-stage bottleneck? | observer-only existing `catalysis`/`bindAny`, `pBindP` 0/0.2; unchanged historical parameters | inconclusive | all 16 histories reproduce exactly; on coverage 75.95–79.80% misses >=80%; seed 106 has 13 geometric opportunities/2 ended bindings; no signature | delivery_replay.js, delivery_replay_summary.js (`DD_replay_20260927`) | park Q3; Q4 offline causal-contrast portfolio checkpoint before any new assay | 800k steps / 3,581.703 run + 39.328 final-QA CPU seconds (unreserved QA exceeds total cap); continuous supported recipient output 16/0/13/3; full physical tapes, original follow-ups, all controls and unknown/censored categories retained; no core change or benefit claim |
+| 76 | Portfolio after delivery (static design review) | Does either causal contrast earn another assay? | no executed intervention; compare efficacy suppression with retained binding and pairing-mode mechanical renewal | inconclusive | 2 options compared, 0 plans earned, 0 simulation steps; no new empirical outcome | portfolio_after_delivery.md | identify an inherited physical operation and same-material causal benefit against simple renewal before admitting a plan | efficacy can change producer supply; fit rescue lacks a predicted extra function; cost ceilings are design admission conditions, not launched batches; all prior failed gates retained |
 
 ## Knob index
 
@@ -496,9 +497,11 @@ later tests may have completed or rejected it. Do not treat every historical lea
   complete historical states and observations. Every on world misses >=80% known-site
   coverage, and seed 106 also misses both minimum denominators. Supported output is
   witnessed but no qualifying explanation or causal benefit is earned.
-- **Q4 — next portfolio checkpoint:** compare distinct causal contrasts grounded in
-  existing interaction/renewal evidence, with an explicit path to inherited function.
-  No automatic efficacy ablation, coverage repair, new population or tuning is queued.
+- **Q4 — comparison complete (76):** neither efficacy suppression with binding retained
+  nor a pairing-mode renewal test earns an assay. This is a design disposition, not
+  a new empirical negative. Reopening needs a physical operation and same-material
+  benefit prediction against simple renewal, with a path to descendant inheritance.
+  No automatic ablation, census, coverage repair, new population or tuning is queued.
 
 The old third-gene item is superseded by proofreading (38); further designed pressures
 are calibrations, not the main route to open-ended novelty. Product shape switches were
