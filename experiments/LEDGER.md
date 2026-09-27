@@ -70,6 +70,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    under body4 and individual4/16. This retains arrangement without fresh material, but
    all bound faces stay occupied and there are no births. Acquisition/release and payoff
    against independently renewing fragments remain untested; two seeds are only a lead.
+   Ordinary acquisition/melting fails the next prerequisite (79): all 8 prepared on
+   cases repair but none achieves sustained release; disabling future binding gives 7/8
+   repair-and-release controls but removes acquisition. Only 2/8 on near-encounters
+   sustain a bridge. The rate/preparation combination is parked, without a population test.
    The offline partner audit (73) finds one repeated reciprocal renewing pair, but no
    candidate above its fixed opportunity reference. Only 3.3–6.2% of covered events have
    alternative helpers; this limits identification rather than proving interchangeable support.
@@ -328,6 +332,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 76 | Portfolio after delivery (static design review) | Does either causal contrast earn another assay? | no executed intervention; compare efficacy suppression with retained binding and pairing-mode mechanical renewal | inconclusive | 2 options compared, 0 plans earned, 0 simulation steps; no new empirical outcome | portfolio_after_delivery.md | identify an inherited physical operation and same-material causal benefit against simple renewal before admitting a plan | efficacy can change producer supply; fit rescue lacks a predicted extra function; cost ceilings are design admission conditions, not launched batches; all prior failed gates retained |
 | 77 | Prepared geometric error discrimination | Can unchanged shape and ordinary undocking reject a wrong docked letter while retaining correct joining? | existing `compCopy`, opposed `bendA`/`bendB`, `pUndock` 0.1, `pSoft` 0.002; proof off; body4/individual16 | negative | 96 valid cases; square/opposed correct joining 4/4 vs 3/4; wrong joining 8/8 vs 2/8 body, 4/8 individual; wrong-member loss only 1–3/8 (<4) in every stratum | geometric_error.js, geometric_error_test.js, geometric_error_report.js (`GE_20260927`) | park this preparation; no context selection, shape/rate tuning, proof rule or population follow-up | AA favors both wrong placements over correct; no censoring or simultaneous-loss ambiguity; 48k steps including neutrality/restart plus 9.6k prepared physics passes, 11.948 measured CPU seconds including QA/report; fixed 16-block inventory, unchanged core |
 | 78 | Prepared passive duplex repair | Can an intact face-bound support retain broken ends for ordinary ligation? | existing `pLigate` 0.02/0, `pHyb` 0, `pMelt`/`pMeltEnd`/`pMeltRun` 0; body4/individual4/individual16 | lead | bridge repair 12/12; split/unbound/no-ligation 0/12 each; uncut stability 12/12; every seed/physics gate passes | duplex_repair.js, duplex_repair_test.js, duplex_repair_report.js (`DR_20260927`) | freeze a small autonomous acquisition/repair/release plan before reproductive testing | 60 eight-block worlds, 75,060 ordinary steps including QA continuations; 16.121 measured CPU seconds including analysis; all bound faces remain occupied, zero births; no core change, two seeds not confirmation |
+| 79 | Passive repair acquisition/release prerequisites | Can ordinary binding acquire support and ordinary melting free repaired material? | existing `pHyb` 0.2/0, `pLigate` 0.02/0, `pMelt` 0.1/0, `pMeltRun` 0.001/0, `pMeltEnd` -1/0; body4/individual16 | negative | all 8 on gate cells fail; acquired bridge 2/8, acquisition-release 0/8, prepared repair 8/8 but release 0/8; noBind prepared repair-release 7/8 | duplex_cycle.js, duplex_cycle_test.js, duplex_cycle_report.js (`DC_20260927`) | park setting; require a distinct passive-escape geometry prediction before another assay | 64 eight-block worlds, 800k steps including neutrality/restart; 131.184 measured CPU seconds with QA; 6 synthetic and 5 corruption checks pass; zero births, no new-neighbor joins; acquisition supplied in release controls, no natural-damage cycle |
 
 ## Knob index
 
@@ -403,13 +408,13 @@ the rows that used it). Rerun it after adding rows.
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead) |
+| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative) |
 | `physics` | 15 (works) |
-| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead) |
+| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative) |
 | `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative), 74 (works) |
-| `pMelt` | 18 (negative), 78 (lead) |
-| `pMeltEnd` | 18b (negative), 78 (lead) |
-| `pMeltRun` | 78 (lead) |
+| `pMelt` | 18 (negative), 78 (lead), 79 (negative) |
+| `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative) |
+| `pMeltRun` | 78 (lead), 79 (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works), 43a (negative) |
@@ -466,8 +471,8 @@ the rows that used it). Rerun it after adding rows.
 observations and historical dispositions; a row's old "Points to" field is not
 a current assignment. Follow later evidence when a lead has failed confirmation.
 
-The latest physical-effect lead is prepared passive repair (78); it does not
-establish autonomous acquisition/release or inherited benefit. Q5 and all earlier
-failed gates remain failed. Use the roadmap for the next admitted slice and
+Prepared passive repair remains a physical-effect lead (78), but its ordinary
+acquisition/release prerequisites fail (79). No autonomous cycle or inherited
+benefit is established. Q5 and all earlier failed gates remain failed. Use the roadmap for the next admitted slice and
 [the brief handoff](../docs/NEXT_INSTANCE.md) for operational status. Detailed
 completed briefs remain in the [Q5 roadmap snapshot](../docs/archive/ROADMAP-2026-09-27-Q5.md).

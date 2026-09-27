@@ -13,42 +13,43 @@ status pointer, not a second queue.
 
 ## Current evidence and next slice
 
-**Q6 prepared passive repair passes its physical-effect gate (RESULTS 78).**
-Under unchanged rules an intact face-bound row holds broken ends for ordinary
-ligation. All 12 bridge cases repair; split-support and unbound controls repair
-0/12 each. No-ligation controls repair 0/12; all uncut controls remain intact.
-The result holds for both seeds/arrangements under body4, individual4 and
-individual16. Actual geometry, full state/RNG neutrality, restart, bond tapes
-and corruption checks validate. No new core rule or state.
+**Q6b fails its acquisition/release prerequisite gate (RESULTS 79).** All 64
+worlds and their validation checks complete. Prepared support repairs 8/8
+on cases, but none achieves 25-step exposed release. Disabling future binding
+allows 7/8 prepared repairs to release; that control cannot autonomously acquire
+support. Only 2/8 enabled near-encounters acquire a sustained bridge, both under
+body4 in one seed. All eight seed/physics/preparation gate cells fail.
 
-This is a **prepared physical-effect lead**, not autonomous repair or inherited
-benefit. Acquisition and damage were imposed; melting and further binding were
-disabled. Every bound arm finishes with all eight faces occupied, and no world
-produces a birth. Independent fragments remain a serious simpler competitor.
-Two seeds are a lead, not confirmation. Sources, plan and raw evidence:
-[duplex_repair_plan.md](experiments/duplex_repair_plan.md),
-[out/DR_20260927.json](experiments/out/DR_20260927.json).
+Park this rate/preparation combination. No natural-damage search or population
+batch is earned. Q6's prepared physical effect (78) remains evidence, not a
+completed autonomous cycle. All on cases have zero primary successes, not a
+proof that release is impossible at arbitrarily long times. Archive and plan:
+[duplex_cycle_plan.md](experiments/duplex_cycle_plan.md),
+[out/DC_20260927.json](experiments/out/DC_20260927.json). No task-owned simulation is active.
 
 | Order | Work | Gate and reason |
 |---|---|---|
-| Always | P0: local reaction contract and targeted mechanical validation | Keep body jostling for exploration; test relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q6b: design and test autonomous acquisition, repair and release | Freeze a small fresh-seed plan first. Use existing binding, melting, ligation and uniform damage. Establish useful operation without setup-supplied supporting bonds or observer-triggered interventions. |
-| 2, only if Q6b passes | Equal-material repair versus independent renewal | Count active reproducing descendants and retained function through material turnover, with dimers/fragments as controls. Charge support sequestration and lost copying time. Survival or repair alone is insufficient. |
-| 3, only if benefit passes | Physical variation and inheritance under fixed rules | Test new organization arising and persisting through descendant replacement. Do not add a reward for a prescribed motif. |
+| Always | P0: local reaction contract and targeted mechanical validation | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
+| 1 | Q7: source/geometry admission review for passive escape after partial detachment | Can existing bond-dependent rest shapes reduce immediate reattachment while preserving lateral integrity and repair? Require a concrete prediction and smallest matched control before admitting any run. |
+| 2, only if a distinct mechanism is admitted and passes | Autonomous acquisition, repair and usable release | Ordinary rules must acquire support, survive uniform damage, reconnect and free intact active material. No observer-triggered intervention. |
+| 3, only after the autonomous operation passes | Equal-material benefit and inherited variation | Compare reproducing descendants with independent dimers/fragments; charge support sequestration and copying time, then test persistence through material turnover. |
 
-**The next executable assay is not yet frozen.** Q6b is the admitted planning
-question; no broad population batch, extra confirmation of the permanently bound
-fixture, or new repair state is queued. It must distinguish intact load-path
-support from occupancy and spontaneous rejoining, using no-binding/no-ligation
-controls and the same material/physics. Observe the actual contact/break/rejoin/
-release sequence. A repaired assembly must become usable again; a support that
-never releases has not completed the operation. Acquisition and release may be
-tested as cheap prerequisites before investing in spontaneous damage encounters.
+**No next executable assay is frozen.** Q7 is a bounded design question grounded
+in the newly measured reattachment obstruction, not a rerun of an unchanged
+portfolio review. Read the existing rest-shape/physics implementation and
+RESULTS 34e/45a/47: a selected rest shape is not actual deformation, and restoring
+fit alone has not established benefit. The prospective action must be describable
+as one block changing its physical shape when its own face becomes free, with
+no completed-repair reader, original-partner memory or release program.
 
-Start with a small viable world, bounded CPU and an early stop; define all
-rates, horizons, seeds and gates before outcomes. If existing rules cannot
-complete the cycle, report and park that preparation rather than adding
-repair memory, a whole-assembly release action or a new state machine.
+Before proposing a fixture, predict actual corner/contact changes and the cost
+to acquisition and repair. Compare shape on/off at identical stiffness, material,
+initial geometry and binding/melting rates; account for default rigid bonded
+blocks skipping shape matching. If no credible asymmetry is available, reject
+the candidate and identify a different physical function. Do not spend a third
+assay in this direction without explicitly comparing its goal fit and cost with
+leaving the repair branch parked. No rate, heat-cycle, horizon or context tuning
+of section 79 is queued. No new repair state is justified.
 
 ## Parked portfolio: evidence and reopening conditions
 
@@ -57,6 +58,7 @@ All section numbers refer to [RESULTS](experiments/RESULTS.md).
 
 | Item | Disposition | What could reopen it |
 |---|---|---|
+| Q6b acquisition/release | 0/16 on successes; all eight cells fail (79). Prepared repair persists but enabled rebinding sequesters material. | Distinct passive escape mechanism with an actual geometry prediction; no rate/heat/horizon rescue. Q7 is design admission only. |
 | Q5 geometric error rejection | Failed selective wrong-member removal in every stratum (77); AA favors wrong joining | Distinct causal evidence, not favored contexts, angle/undocking tuning or proofreading. |
 | Q4 causal-contrast comparison | Neither efficacy ablation nor pairing-mode renewal earned a run (76) | A physical operation with a same-material benefit prediction against simple renewal; Q6 is a distinct hypothesis, not a rescue of those contrasts. |
 | Q3 delivery replay | All 16 trajectories reproduce; coverage/denominators fail (75) | Independent causal evidence, not threshold repair, extra seeds or automatic efficacy ablation. |

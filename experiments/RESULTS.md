@@ -6604,3 +6604,144 @@ state is yet admitted. Core and all historical assay/data bytes are unchanged;
 the full physics suite and default fingerprints were not rerun for this isolated
 assay. The current roadmap was shortened, with all old briefs retained in its
 dated snapshot, so those historical next steps cannot compete with Q6b.
+
+## 79. Repair survives ordinary melting, but acquisition and usable release fail
+
+2026-09-27; Q6b, baseline `d8d1bbc`. **Negative by the frozen prerequisite
+gate.** Section 78's prepared repair effect survives, but the same local rules
+do not reliably acquire support and return repaired material to exposed use
+in this setting. No natural-damage cycle or reproductive assay is earned.
+
+### Prospective comparison and evidence
+
+The [plan](duplex_cycle_plan.md) separates two prerequisites instead of hiding
+acquisition and release inside a long damage search. Both use eight squares
+(4 A + 4 B), 24x24, ABAB/AABB and reverse-complement rows, fresh seeds 603/604,
+and matched body4/individual16 physics. No new chemistry, state, force or type.
+
+- **Acquire:** two intact unbound rows begin in the same favorable near-facing
+  poses as section 78. No face bonds are supplied. This tests contact-mediated
+  acquisition from a prepared near-encounter, not unbiased encounters in a bath.
+- **Release:** four face bonds are prepared and the first row's middle bond is
+  cut. This tests repair followed by release, with acquisition deliberately supplied.
+
+Each preparation has on/noBind/noLigate/noMelt arms. On uses `pHyb=0.2` from
+section 29, `pLigate=0.02` from 78, and ordinary `pMelt=0.1`,
+`pMeltRun=0.001`, `pMeltEnd=-1`. No heat, fraying, background damage, fresh
+monomers or fuel. No mid-run pose/state edits or observer-triggered interventions.
+The noBind release control keeps its initially prepared bonds and disables
+**future** binding; it is not a no-support comparison.
+
+The four release/on seed-603 pilots passed the step-500 repair gate in both
+physics modes and continued on those exact instances. All 64 worlds completed
+5,000 steps. Primary prerequisite success requires the earlier acquisition
+or supported repair, then both original rows exact/active, no extra lateral
+bonds and all eight faces unbound for 25 consecutive steps. Initial unbound
+acquisition poses never count as release. Support is witnessed immediately
+before the repair link; later binding cannot retrospectively supply it.
+
+```sh
+node experiments/duplex_cycle_test.js
+node experiments/duplex_cycle.js experiments/scratch/DC_20260927.json
+node experiments/duplex_cycle_test.js experiments/scratch/DC_20260927.json
+node experiments/duplex_cycle_report.js experiments/scratch/DC_20260927.json experiments/scratch/DC_20260927.report.json
+```
+
+Existing output paths refuse overwrites; use a new stem for reproduction.
+Archive: `out/DC_20260927.json`, its `.cpu.json` and `.validation.json`, plus
+`DC_20260927.fixtures.json` and `DC_20260927.report.json`. All five archives
+match scratch byte-for-byte. Raw SHA-256:
+`f7fea2d7cb57c31d5b209bda1e122a8a455260fd944f9f322aea584cbe041c44`.
+Core, imported section-78 helper, frozen plan, runner and validator hashes
+are recorded; the derived report also hashes its own source.
+
+### Result
+
+Counts below combine contexts/seeds only for display. The frozen gate was
+applied to each seed/physics/preparation cell (two contexts per cell): at least
+one on success, with the specified negative controls. **All eight cells fail.**
+Repeated events and the two contexts are not independent population replicates.
+
+| Physics / preparation | Arm | New face contact | Sustained bridge with both rows exact | Supported original repair | Qualifying release | Final occupied faces across four worlds |
+|---|---|---|---|---|---|---|
+| body4 / acquire | on | 3/4 | 2/4 | — | 0/4 | 8, 8, 0, 0 |
+| body4 / acquire | noBind | 0/4 | 0/4 | — | 0/4 | 0, 0, 0, 0 |
+| body4 / acquire | noLigate | 3/4 | 2/4 | — | 0/4 | 8, 8, 0, 0 |
+| body4 / acquire | noMelt | 3/4 | 3/4 | — | 0/4 | 8, 4, 0, 4 |
+| individual16 / acquire | on | 2/4 | 0/4 | — | 0/4 | 0, 0, 0, 0 |
+| individual16 / acquire | noBind | 0/4 | 0/4 | — | 0/4 | 0, 0, 0, 0 |
+| individual16 / acquire | noLigate | 2/4 | 0/4 | — | 0/4 | 0, 0, 0, 0 |
+| individual16 / acquire | noMelt | 2/4 | 2/4 | — | 0/4 | 0, 4, 8, 0 |
+| body4 / release | on | 4/4 | 4/4 | 4/4 | 0/4 | 8, 8, 8, 8 |
+| body4 / release | noBind | 0/4 | 4/4 | 4/4 | 4/4 | 0, 0, 0, 0 |
+| body4 / release | noLigate | 4/4 | 0/4 | 0/4 | 0/4 | 4, 0, 0, 4 |
+| body4 / release | noMelt | 0/4 | 4/4 | 4/4 | 0/4 | 8, 8, 8, 8 |
+| individual16 / release | on | 4/4 | 4/4 | 4/4 | 0/4 | 8, 8, 6, 6 |
+| individual16 / release | noBind | 0/4 | 3/4 | 3/4 | 3/4 | 0, 0, 0, 0 |
+| individual16 / release | noLigate | 4/4 | 0/4 | 0/4 | 0/4 | 4, 0, 4, 4 |
+| individual16 / release | noMelt | 0/4 | 4/4 | 4/4 | 0/4 | 8, 8, 8, 8 |
+
+The sustained-bridge metric requires both original rows to be exact, so a
+broken noLigate row does not qualify despite its initially supplied support.
+The separate supported-repair metric uses the actual support immediately
+before the original bond reconnects.
+
+Both successful acquire/on bridges occur in body4 seed 603; neither releases.
+The other six on acquisition worlds never sustain a bridge. Individual kicks
+permit some first contacts but none of the on contacts become a 25-step bridge.
+A near-encounter is therefore not sufficient evidence of useful acquisition.
+
+All eight release/on worlds reconnect while physically supported, yet none
+returns both rows to sustained exposed availability. Their face occupancy over
+time is 159,016/160,000 possible face-steps in body4 (99.39%) and
+158,728/160,000 in individual16 (99.21%). Disabling future binding allows
+repair-and-release in 7/8, with much lower occupancy (13.52% and 7.65%). The
+remaining noBind individual16 AABB seed-603 world releases fragments without
+repair, so it correctly fails. Successful release intervals begin at steps
+512–1291 in body4 and 542–729 in individual16; the full per-case report is archived.
+
+All release/on tapes contain new face links after the initially supplied
+contacts, demonstrating actual rebinding. The noBind contrast identifies its
+importance for sequestration in this preparation. It does not provide a
+solution: disabling the acquisition route is incompatible with autonomous
+support acquisition. Same-seed branches match preparation, not later individual
+RNG events or exact melting histories. No claim is made about an infinite-time
+failure to separate, or a universal optimum of binding/melting rates.
+
+Every noMelt world fails qualifying release; every acquire/noBind world fails
+bridge acquisition; every release/noLigate world fails repair. No new-neighbor
+lateral join or birth occurs. All 16 on cases and 41 other cases are censored
+for the primary outcome at 5,000; only seven noBind release controls succeed.
+A censored initial-acquisition failure is distinct from retained repaired material.
+
+### Validation, cost and disposition
+
+All 64 observed/plain final state/RNG comparisons and midpoint restarts match
+(excluding only the known pinsVersion cache revision). The validator checks
+prepared states/geometry, fixed parameters/types, conservation, ordered bond
+reconstruction at every step and checkpoint, physical support before links,
+all exact/active/bridge/free flags, sustained-window event ordering, actual
+side geometry and the independently recalculated promotion gate. Six synthetic
+cases cover acquisition/release order, interrupted holds and unsupported repair;
+five corruptions of frames, outcomes, tapes, geometry and gate summaries are
+rejected. No validity failure, truncated world, retuning or extra seed occurred.
+
+One process, no workers; no other Node process was present before launch.
+Ordinary steps: 320,000 observed + 320,000 plain + 160,000 restart continuation
+= **800,000**. Pilot steps are already included because the instances continued.
+CPU: initial fixtures 0.093 s; execution/raw writing 123.718 s; final validation
+6.968 s; report calculation 0.405 s = **131.184 measured seconds**, within the
+240 s cap and 80 s QA reserve. Final small validation/report serialization and
+shell/Git/documentation/archive-copy overhead are outside these intervals.
+Core/historical source and data bytes are unchanged; no default fingerprints
+or full physics-suite rerun was needed.
+
+**Park this rate/preparation combination.** No natural-damage search, population
+screen, longer horizon, faster melting, stronger binding, heat-cycle rescue or
+new repair state is earned. Section 78 retains its prepared physical-effect
+lead; section 79 does not establish an autonomous repair cycle or inherited
+benefit. The next admissible design question is physically different escape
+after partial detachment, for example whether the existing bond-dependent rest
+shape could reduce reattachment while preserving repair. That is an untested
+mechanical hypothesis requiring a source/geometry prediction and its own
+matched-control plan; it is not a newly admitted simulation or a gate rescue.
