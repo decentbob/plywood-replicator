@@ -114,6 +114,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
   In the selected state, releasing either overlapping prefix restores three exact copies versus zero;
   the retained prefix completes intact, but the released piece remains inactive (56). This is one fixture,
   not evidence for a general release rule or reuse of parts.
+  The unchanged retained handoff also fails the original-obstruction benefit gate (70): four
+  physical capture/release/redocking cycles return to the original site, with no new settled row.
+  SEEK and pulse each complete one original cohort intact; waiting and ordinary chemistry do not.
+  Local operation is not useful completion, and persistent inactive output is not reproductive closure.
 - **Equal-composition renewal screen** (66): four initially active eight-letter rows, 120 letters/40 U in
   18×18, pFray 0.00003/pUnzip 1 from time zero pass the 20k exact-copy gate for AAAABBBB and ABABABAB.
   At 100k, opposed20 ABABABAB has three fully rearmed exact offspring that reproduce in each seed;
@@ -293,6 +297,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 67 | Resource-economy polygon-port preflight | Can the proposed contacts fit and remain accessible under existing numerical mechanics? | prepared six-corner rectangles, `sizeB`/`sizeC` sqrt(2)/2, `iters` 4/16, `bodyJostle` on/off | partial | all 96 port layouts fit; area sizing excludes 72/960 internal contacts; long sizing rejects 96/96 front placements; 0.4 overlap persists at 16 passes | resource_ports.js, resource_ports_summary.js (`RP_preflight_20260927`) | targeted research-only polygon contact/placement correction before growth | 120 prepared 100-step fixtures + 16 steric probes; all replay exactly; zero autonomous bonds or turnover; square controls, conserved material, unchanged core |
 | 68 | Polygon-aware contact comparison | Does correcting exclusion/search/placement resolve the measured rectangle failures? | research convex envelopes, `sizeB`/`sizeC` sqrt(2)/2, `iters` 4/16, `bodyJostle` on/off | works | all 192 front placements pass; steric witnesses corrected; body/zero 72/72 exact; individual16 eligible 24/24 vs 15/24 baseline | polygon_contact.js, polygon_contact_summary.js (`PC_compare_20260927`) | bounded actual first/second-contact acquisition with pin and retention measurements | prepared geometry only; 272 paired trajectories replay; worst individual16 target gap 0.7515, existing-pin gap 0.2328; convex envelopes approximate concavities; no chemistry or core change |
 | 69 | Actual first/second port acquisition | Can unbound parts acquire and persist at two intended contacts under local rules? | immutable face labels, `associationEnabled`, `portLoss` 0.001, `linkDistTol` 0.15 endpoint check, `iters` 4/16/32, `bodyJostle` on/off | negative | body4 success free 2/6, prepared 12/12; individual16/32 free 0/6, prepared 1/12 each (square); controls 0/54 | port_acquisition.js, port_acquisition_summary.js (`PA_screen_20260927`) | park tested P2 setting; C1 unchanged original-obstruction closure next | 12 viability + 108 conserved 500-step worlds; full replay and bond histories; no protected scaffold; two off-target compatible contacts; no growth/turnover or core change |
+| 70 | Original-obstruction handoff closure | Does retained support beat waiting and reuse an original prefix intact? | unchanged SEEK/request hazard 0.0001, REQUEST/OFFER/LATCH, `bodyJostle` true, `iters` 4 | negative | useful exact ordinary/SEEK/wait/pulse/hold 0/1/0/1/0; hold makes four supported releases and same-site returns without completion | handoff_closure.js, handoff_closure_summary.js (`HC_original_20260927`) | park C1; Q0 evidence synthesis and one prospective distinct-hypothesis assay plan next | one selected 150-block state, five 35k forks; no new rules; full replay/neutrality/restart and independent reconstruction; no active or reproducing descendants |
 
 ## Knob index
 
@@ -307,7 +312,7 @@ the rows that used it). Rerun it after adding rows.
 | `bendA` | 15c (lead), 40f (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative) |
 | `bendB` | 15c (lead), 15d (works), 48 (negative), 49a (works), 49b (lead), 49c (lead), 50a (works), 50b (works), 50c (lead), 51a (negative), 52a (works), 66 (negative) |
 | `bindAny` | 36a (works), 36b (works), 42a (works), 43a (negative), 61 (lead), 62 (negative) |
-| `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead), 67 (partial), 68 (works), 69 (negative) |
+| `bodyJostle` | 37 (works), 47b (negative), 47c (lead), 49b (lead), 67 (partial), 68 (works), 69 (negative), 70 (negative) |
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
 | `catalysis` | 34c (works), 42a (works) |
 | `chiral` | 30 (partial) |
@@ -333,7 +338,7 @@ the rows that used it). Rerun it after adding rows.
 | `heatPeriod` | 29 (partial) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
-| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative) |
+| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative) |
 | `linkDistTol` | 69 (negative) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |
@@ -456,9 +461,12 @@ later tests may have completed or rejected it. Do not treat every historical lea
   distinct evidence-backed discriminator; no broad search, new states or rescue tuning.
 - **P5 — coupled modes:** conditional on a measured useful exchange and self-renewal of
   the participating assemblies; not justified merely by having two copying modes.
-- **C1 — handoff closure:** next after the section-69 portfolio checkpoint: apply the
-  unchanged mechanism to the original selected two-prefix obstruction (56, 60). It must
-  beat waiting with useful completion/reuse or be parked; no mechanism or hazard tuning.
+- **C1 — handoff closure:** complete and parked (70). Four retained capture/release/
+  redocking cycles yield no new completed row; SEEK/pulse each yield one persistent
+  exact row with intact original-cohort reuse. No hazard/state/seed rescue earned.
+- **Q0 — next portfolio checkpoint:** compare distinct causal hypotheses against the
+  parked settings, choose the smallest discriminating test, and freeze one prospective
+  plan before another simulation. See ROADMAP; no new batch is currently queued.
 
 The old third-gene item is superseded by proofreading (38); further designed pressures
 are calibrations, not the main route to open-ended novelty. Product shape switches were

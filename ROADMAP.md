@@ -5,15 +5,17 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P2's actual acquisition setting fails its fixed gate (69).
-Body jostling gives persistent double attachment in 2/6 unbound near-encounters
-and 12/12 prepared one-contact cases; individual32 gives 0/6 and 1/12 (a square
-control). Park this setting despite the prepared-geometry successes in 67–68.
-**Next: C1's single bounded closure test**, applying the unchanged section-60
-handoff to the original section-56 obstruction against waiting/SEEK controls.
-No P2 growth, turnover, tolerance/rate tuning or new states. P1, P3 and the
-tested P4 pairs remain parked. Core/default physics is unchanged; section 69
-adds only isolated local face binding and uniform individual-bond loss.
+**Current status:** C1's original-obstruction closure fails its fixed gate (70).
+Retained handoff performs four physical capture/release/redocking cycles but
+produces no new completed row. SEEK and pulse each give one persistent exact
+completion; ordinary chemistry and waiting give none. Park C1 alongside the
+tested P1–P4 settings. The operation library and negative evidence remain.
+**Next: Q0, a bounded portfolio reassessment before another simulation.** Compare
+distinct causal hypotheses against the accumulated failures, then choose one
+small discriminating assay and freeze its plan. No automatic return to P2
+geometry repair or handoff states, no rate/seed rescue, and no core change.
+The [next-instance handoff](docs/NEXT_INSTANCE.md) records the completed batch,
+validation and exact starting point.
 Retain body jostling and targeted P0 checks; no
 prerequisite physics rewrite or automatic return to section 60. Ranking reflects evidence, goal fit, cost and added
 rule complexity. Likelihood below means chance of a useful next-stage result, not a numerical
@@ -25,18 +27,45 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| C1 | Close the handoff branch with its one outstanding test | Low strategic priority / high diagnostic value, low expected advantage | Next: one selected original-obstruction comparison, no new mechanism | After the P2 acquisition failure, test existing rules at a known bottleneck without extending the geometry-repair chain. |
+| Q0 | Compare distinct hypotheses before another assay | High decision value / no new empirical lead yet | Next: evidence synthesis and one prospective plan | All tested portfolio settings have failed a fixed gate; continuing the latest mechanism is not the default. |
 | P2 | Resource-efficient assembly logic, beyond ordinary stacks | High long-term / low for tested acquisition setting | Park after actual first/second-contact gate fails (69) | Prepared geometry passes, but robust acquisition does not; reopening needs a distinct causal explanation rather than tolerance/rate tuning. |
 | P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
 | P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
+| C1 | Close the handoff branch at the original obstruction | Operation measured / no useful advantage in selected world | Closure complete; park after fixed gate fails (70) | Four supported releases return to the same site without completion; simpler controls produce useful output. |
 | P5 | Coupling replication modes and evolving dependencies | High long-term / low until prerequisites pass | Park implementation | Two modes alone failed (40); coupling needs a real material/function exchange. |
 
-These are alternatives, not seven simultaneous batches. Keep at most one main experimental
+These are alternatives, not simultaneous batches. Keep at most one main experimental
 question active, plus a cheap independent literature/analysis task if useful. Respect the
 four-worker machine limit. After at most three new assays in a direction without advancing
 an evidence-ladder level, explicitly compare it with the alternatives and park or justify it.
 This is a planning checkpoint, not a ban on longer confirmation once a lead earns it.
+
+## Q0 — next portfolio checkpoint
+
+Produce one short evidence-backed comparison of two or three distinct causal
+hypotheses, then one prospective assay plan. Start with the measured footholds:
+ecological interaction (36, 42, 61–62), exact descendant renewal with physical
+variation (49–51, 66), and the resource/recycling accounting (63, 67–69).
+Use the completed handoff chain (52–60, 70) as a cost/benefit warning, not the
+default source of another mechanism. P4's recurrence controls (64–65) also
+constrain claims of heredity.
+
+For each candidate name the existing observation it explains, how its causal
+prediction differs from a parked setting, the smallest matched-control test,
+the path to inherited function, and additional states/knobs required. Prefer
+reanalysis or existing rules when they can distinguish the hypotheses. Reject
+proposals that merely add seeds, extend a horizon, retune a failed mechanism,
+reward another prescribed motif, or substitute more births for inherited
+benefit. Reopening a parked setting requires distinct causal evidence, not a
+new label. Do not treat candidate enumeration as evidence for any mechanism.
+
+Choose by goal fit, discrimination, rule complexity and CPU cost; write the
+read/write contract, viability check, fixed controls/horizon and stop gate
+before launching anything. If existing evidence cannot justify a candidate,
+record that explicitly and identify the missing causal measurement. No broad
+search or new population batch is currently queued. ROADMAP remains the queue;
+this checkpoint is a concrete analysis/design task, not a request for approval.
 
 ## P0 — local rules, with targeted physics validation
 
@@ -359,9 +388,9 @@ system must retain its benefit after loss of the originally prepared helpers. Re
 must be observed, not enforced by a rule testing partner species or complete assemblies.
 First candidates should reuse P1/P3 successes, not add a second speculative subsystem.
 
-## C1 — next bounded closure of contact handoff
+## C1 — closure completed; tested handoff parked
 
-Apply the **unchanged** section-60 handshake to the original selected two-prefix obstruction
+**Completed closure contract:** apply the **unchanged** section-60 handshake to the original selected two-prefix obstruction
 (56), with unchanged chemistry, SEEK and request/wait controls. Predeclare a common finite
 horizon and compare useful exact output, original-member intact reuse and actual support
 acquisition. Do not run a fresh-seed sweep or tune the hazard. Beat waiting by the specified
@@ -372,14 +401,28 @@ library. If it succeeds, it earns a bounded generalization test, not immediate c
 an evolved-machine claim. Historical fixtures retain their recorded physics; a promising
 mechanical result needs the P0 sensitivity check before a strong general claim.
 
+**2026-09-27 closure outcome (70):** five forks of the exact section-56 state,
+15k to 50k, unchanged hazard/rules and archived body4 physics. Useful exact
+output for ordinary/SEEK/wait/pulse/hold is **0/1/0/1/0**; original-cohort reuse
+has the same counts. Hold captures four times, retains each contact through
+two physics passes, releases anchor 107 and redocks it at the same original
+site. Neither original prefix completes in hold. The benefit gate fails even
+though the local operation occurs. One selected world establishes no general
+effect size; no energy-driven rearming or descendants are tested here.
+
+**Disposition:** park C1. No extra hazard, state, horizon or seed; no P0 sweep
+earned by this negative benefit result. Preserve the operation/reconstruction
+library. Q0 is now the sole next analysis/design task.
+
 ## Parked or lower-value work
 
 | Idea | Why parked | Evidence that would reopen it |
 |---|---|---|
 | Frequency competition in the section-61 uncapped shared-product setting | Fresh confirmation passes only 2/4 seeds (62), despite positive mean benefits | Independent evidence isolating a distinct causal bottleneck; not more seeds, a new rate or a relaxed threshold. |
 | P2 rectangle acquisition under the section-69 local binding/loss setting | Fixed gate fails; body-prepared successes do not carry to individual16/32 or most unbound encounters | A distinct causal explanation demonstrated without target-aware rules; not looser vacancy/endpoints, another loss rate or extra seeds. |
+| Retained contact handoff at the original two-prefix obstruction | Section 70 performs four physical cycles but yields no useful completion, versus one each for SEEK/pulse | Distinct causal evidence for a useful role beyond repeated return to the original attachment; no hazard/state/seed rescue. |
 | More motif-specific genes or a prescribed multi-stage energy pathway | Can demonstrate selection of designed pressures; complexity ceiling still supplied by the designer | A clear use as a calibration, or spontaneous new organization beyond the specified pathway. |
-| More endpoint states, stiffness sweeps, assembly-front gates | Sections 55, 57, 58, 60 fail their respective output/fidelity/benefit gates | A distinct causal obstruction or a successful C1 result; not merely a new rate. |
+| More endpoint states, stiffness sweeps, assembly-front gates | Sections 55, 57, 58, 60, 70 fail their respective output/fidelity/benefit gates | A distinct causal obstruction with a simpler discriminating test; not merely a new rate. |
 | Product flexibility as a recipient benefit | Failed fresh-seed binding control (46) | A different measured mechanism, not reuse of the original positive seeds. |
 | Compartments/droplets | Retention, useful exchange and renewal all unresolved; optional ranged forces also need scope review | A small autonomous retention-and-renewal cycle with advantage over no wall. |
 | Recombination as a new reaction | Variation channels already exist; registration and junk remain problems | Existing physical recombination yields inherited useful combinations; no different-template identity test. |
@@ -428,3 +471,8 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   1/18 individual32; unbound successes occur only in two body4 near-encounters.
   All trajectories replay; core/fingerprints unchanged. Park this P2 setting
   and make C1's unchanged original-obstruction closure next; no new P2 tuning.
+- **2026-09-27, section 70:** C1 closure is **negative by its fixed gate**:
+  five matched forks / 175k steps / 133.250 CPU seconds. Four physical handoffs
+  yield no useful completion; SEEK/pulse each yield one. All fork replays,
+  observer and checkpoint checks pass; default fingerprints unchanged. Park
+  C1 and make Q0's evidence synthesis and prospective assay choice next.

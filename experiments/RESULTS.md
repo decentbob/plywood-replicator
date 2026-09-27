@@ -5510,3 +5510,135 @@ Make that unchanged handoff-versus-waiting closure next, without fresh-seed
 sweeps or hazard tuning. Further P2 work requires distinct causal evidence,
 not another stage added to prolong this setting. The narrow-recycling and
 common-stock objections from 63 remain unresolved.
+
+## 70. Retained handoff operates at the original obstruction but gives no completion benefit
+
+2026-09-27; baseline `f013101`. This is C1's single outstanding closure test,
+following the prospective `handoff_closure_plan.md`. It applies the unchanged
+section-60 rules to the original section-56 two-prefix obstruction, not the
+later prepared handoff fixture. No core, historical assay, rule or physics
+source changed. The result is negative by the fixed useful-output/reuse gate.
+
+### Fixed comparison and local contract
+
+Fork `PR_selected.json`'s exact 150-block state and RNG at step 15,000 into
+ordinary Sim, SEEK, request/wait, pulse capture and retained handoff. Preserve
+seed 83, opposed20 shapes, pUndock 0.3, body jostling, four solver passes and
+all other saved parameters. Request/SEEK hazard stays 0.0001. Each arm runs
+35,000 further steps to absolute 50,000; these are five branches of one selected
+world, not five independent samples. Conditional RNG use diverges after the
+initial state. No new bond, release, pose edit, supporting part or type is
+prepared. No extra seed, failed pilot, truncation or censored arm occurred.
+
+SEEK/REQUEST/OFFER/LATCH remain the existing research states. Each block reads
+its own state/bonds and previous-pass marks from an incident lateral partner;
+it changes its own state or requests release of its own face bond. Marks move
+one bond per derive pass, with several passes per step. Original cohort IDs,
+founder sites, sequences and completion classes are observers only. The new
+runner adds observation/orchestration, not reactions. Ordinary Sim receives
+zero mark buffers solely for the shared observer. Its final state, excluding
+only those added arrays, exactly matches section 56's original keep-control hash.
+
+The primary useful output is a new exact `PAAAABBBBQ` row, fully detached and
+all REPEL by 49,000, still the same settled member set at 50,000. Existing
+output at 15,000 is excluded. Promotion requires hold to exceed wait, equal
+or exceed ordinary/SEEK, reuse more original cohorts than wait, and link at
+least one such completion to retained physical support, release and redocking.
+Pulse tests whether retaining the support adds anything. Inactive completion
+does not mean rearming or reproduction; this fixture has no energy supply.
+
+### Outcome and physical events
+
+| Arm | Stock births | New settled exact | Useful persistent exact | Original cohorts completed intact | New settled nonexact | Free blocks at 50k | Unfinished row material |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ordinary | 0 | 0 | 0 | 0 | 0 | 117 | 13 |
+| SEEK | 6 | 1 | 1 | 1 | 0 | 94 | 26 |
+| request/wait | 0 | 0 | 0 | 0 | 0 | 108 | 22 |
+| pulse capture | 1 | 1 | 1 | 1 | 0 | 102 | 18 |
+| retained handoff | 0 | 0 | 0 | 0 | 0 | 112 | 18 |
+
+Unfinished material counts members of non-settled multi-block rows excluding
+the founder template; it includes attached and research-state rows. It is not
+destroyed material. All 150 blocks, their types and the initial lateral bonds
+are conserved. Free counts alone do not measure productive availability.
+
+SEEK completes the original anchor-107 `PAAAAB` cohort intact at 31,568;
+pulse completes anchor-87 `PAAAABB` intact at 27,819. Both exact rows remain
+detached/all REPEL at 50,000. No other new row settles in any arm. SEEK's six
+stock births therefore greatly overstate its one physical completion. The
+uncompleted original cohort in SEEK retains a SEEK endpoint; pulse retains
+REQUEST/OFFER on its uncompleted original cohort.
+
+Hold has five requests, five offers, four captures, four REQUEST-to-SEEK
+releases and four redocking events. Every capture is block 44 binding founder
+block 60; endpoint 107 then releases founder block 3 and redocks to that same
+site on the following step:
+
+| Capture | Supported release | Same-site return |
+|---:|---:|---:|
+| 18,287 | 18,288 | 18,289 |
+| 22,318 | 22,319 | 22,320 |
+| 34,640 | 34,641 | 34,642 |
+| 39,498 | 39,499 | 39,500 |
+
+Each supporting face remains bonded through two actual physics passes: eight
+contact observations in total, with maximum endpoint gaps after those passes
+ranging from 0.0778 to 0.2001. These are measured finite-solver residuals, not
+a claim of exact pin coincidence or a newly imposed tolerance. Captures and
+release signals occur autonomously under the existing rules, but the cycle
+returns to the obstruction. At 50,000 both original prefixes are still intact
+and attached; anchor 87 retains REQUEST with adjacent OFFER, and anchor 107
+is ordinary DOCK at its original site. No original-cohort completion follows
+the physical handoffs, so the completion-linked `physicalHandoff` gate is
+false despite the four observed operations.
+
+Pulse makes 6,586 transient captures across 6,589 offers, with no LATCH state
+surviving a physics pass. Those repeated contacts are not independent samples
+and do not establish a unique retention benefit. Waiting makes six requests
+but no capture; its original cohorts grow to incomplete nine- and seven-block
+rows. Fewer errors or fewer unfinished members cannot rescue hold's zero output.
+
+### Reproduction, validation and decision
+
+```sh
+node experiments/contact_handoff_test.js
+node experiments/handoff_closure_test.js
+node experiments/handoff_closure.js experiments/scratch/HC_original_20260927
+node experiments/handoff_closure_analysis_test.js experiments/out/HC_original_20260927.json.gz
+node experiments/handoff_closure_summary.js experiments/out/HC_original_20260927.json.gz
+node tools/fingerprint.js 1500
+```
+
+Use a fresh output stem when reproducing; the runner refuses overwrites.
+Archive: `HC_original_20260927.json.gz` and `.summary.json`. The gzip round-trip
+matches the original 4,075,539-byte raw JSON exactly (522,732 compressed bytes).
+It includes the prepared input, five complete initial/final worlds, mark buffers,
+ordered events, physical support records, 5k inventories, restart checkpoints,
+parameters, exact command, source/input hashes and CPU cost. Scratch originals
+are retained. The observed experiment costs **175,000 steps / 133.250 CPU
+seconds**, excluding input validation, regression tests and validation replays.
+The five arms run sequentially in one simulation process.
+
+The existing section-60 propagation/withdrawal, capture/release, restart and
+19-corruption suite passes. New short tests verify all five observer modes and
+calibrate the physics observer against the archived square handoff. Independent
+event reconstruction recovers all state/bond/mark inventories, settled output
+and original cohort membership. Every full observed fork replays exactly, and
+every unobserved full fork has identical final arrays/RNG. The five saved
+25,000-step checkpoints restart to their recorded 25,300-step state; only the
+derived pin-cache version is excluded. Corrupt input/source metadata, arms,
+membership, events, inventories, marks and fabricated support records are
+rejected; synthetic decision checks reject equal waiting output and missing
+physical evidence. All five 1,500-step default fingerprints match the audit
+baseline. The unchanged full core suite and a new individual-kick batch were
+not run; no general mechanical benefit is claimed.
+
+**Decision:** park C1 and preserve its operation library. This closes the
+specified question in one selected world; it is not a universal disproof of
+handoff or a population effect estimate. No hazard tuning, additional states,
+longer run or fresh-seed rescue is earned. Local action has been measured,
+but useful completion, reproductive closure, inherited benefit and evolved
+complexity have not advanced here. P1's failed confirmation, P2's failed
+acquisition gate, P3's failed benefit gate and both P4 failures remain parked.
+The next task is ROADMAP Q0: compare distinct causal hypotheses using these
+records and freeze one small discriminating assay plan before more simulation.

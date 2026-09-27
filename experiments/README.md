@@ -24,6 +24,7 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 67 | `resource_ports.js`, `resource_ports_summary.js` | Prepared polygon-port feasibility, centre/radius approximation failures, first-contact fixtures and exact physics replay. Raw JSON is losslessly gzipped; the analyzer reads `.json.gz`. |
 | 68 | `polygon_contact.js`, `polygon_contact_physics.js`, `polygon_contact_summary.js` | Research-only convex-envelope correction with unchanged kick/pin/deformation code, paired archived fixtures and full replay. Geometry eligibility only; chemistry/bond formation deliberately disabled. |
 | 69 | `port_acquisition.js`, `port_acquisition_summary.js` | Local complementary-face acquisition and uniform bond loss, unbound versus one-contact preparations, actual residual/persistence gate, negative solver-controlled screen. Uses a new subclass; historical physics-only class remains unchanged. |
+| 70 | `handoff_closure.js`, `handoff_closure_summary.js` | Original section-56 obstruction forked into five unchanged section-60/control arms; actual support physics, intact reuse, persistent completion, full observer/restart replay. Negative benefit gate closes C1. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
 Read the plan and script's CLI rather than assuming identical options across runners.
