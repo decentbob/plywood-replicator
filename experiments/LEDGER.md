@@ -52,8 +52,12 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    Half-cell cap polygons preserve prepared copying/fuel access (82): 84 static
    placements and all body4/individual16 held fixtures pass, while attached
    individual4 fails. Forced face removal is not autonomous release; later A/A
-   overlaps expose the core contact approximation. No arc growth or shielding
-   benefit is established.
+   overlaps expose the core contact approximation. Research polygon contacts
+   reduce these but fail one four-pass fixture (83): pin/shape correction
+   reintroduces overlap. A fixed body16 follow-up and individual16 reference
+   pass all eight worlds each, including fuel/all-pair overlap bounds. This
+   admits an isolated chemistry test, not exact continuous exclusion. No arc
+   growth or shielding benefit is established.
    Permanent wedges expose a two-row joint mismatch that straight supports do not remove (48). Opposing A/B wedges
    with complementary pairing restore copying under default physics in both directions (49); the benefit weakens with
    poorly resolved individual kicks. Shape and pairing must be tested together, with solver controls.
@@ -344,6 +348,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 80 | Passive escape geometry admission | Does the existing free-face fold physically prevent endpoint reattachment? | `foldA`/`foldB` 0/45, `stiffA`/`stiffB` 0.8/1, `iters` 4/16, `sigma`/`sigmaRot` 0; reactions off | lead | both solver gates pass: fold45 ineligible after 3/1 steps; controls eligible; final mismatch 43.81 degrees, retained-pin residual 0.0633 | passive_escape.js (`PE_geometry_20260927`) | freeze one matched kinetic acquisition/rebinding test; no repair or population promotion | six prepared four-block worlds, 2100 steps including neutrality/restart/replay, 1.326 measured CPU seconds; no stochastic replicates, chemistry or turnover; core unchanged; geometry only |
 | 81 | Junction-cap architecture admission | Can caps retain copy/fuel access in a four-port budget, and can cuts alone divide a rim? | offline four-port counts; cycles 8/12/16; zero simulation knobs | works | separate cap/J requires 4/3 ports versus direct cap 5 with fuel; cuts alone 0/253 two-cycle outcomes; reclosure gives 4/9/16 anchor-complete graph witnesses | junction_topology.js (`JT_20260927`) | actual cap/J copying and fuel access geometry; Q7b deferred by user direction | exact static enumeration, not physical fit, acquisition, division or evolution; 534 reconnection pairings, length oracle and corruption check; unchanged core |
 | 82 | Half-cell cap access geometry | Can angled rim ports coexist with ordinary copying/rail and fuel contacts? | research cap/rest polygons; `stiffA`/`stiffP`/`stiffQ`/`stiffC` .8; `sigma` .3, `sigmaRot` .45, body4/individual4/16; chemistry off | lead | 84 static placements pass; attached held gate body4 4/4, individual16 4/4, individual4 0/4; all 24 fixtures clear after imposed face loss, but released overlap reaches .2613 area | half_cell_geometry.js, half_cell_geometry_report.js (`HC_geometry_20260927_v2`) | targeted released-contact comparison and distinct rim interface before chemistry; radiation benefit remains hypothetical | 24 eight-block fixtures, 17,300 physics steps including failed attempt/QA; 11.138 measured CPU s plus untimed preliminary aggregation; exact replay/neutrality/restart pass; first cache failure/source snapshots retained; no arc growth, ordinary release, descendants or core change |
+| 83 | Half-cell contact and solver check | Can existing polygon exclusion control released overlap while retaining cap access? | core/polygon contacts; body4/individual16, then separately frozen body16; same Q8a inventory/kicks/stiffness; chemistry off | lead | original polygon gate 15/16 (fails); body4 A/A overlap .07367 after final pin correction, A/E .21565; body16 follow-up 8/8 plus individual16 reference 8/8 pass all-pair bound, maxima .001207/.000678 | half_cell_contact.js, half_cell_contact_validate.js, half_cell_resolution.js (`HC_contact_20260927_v2`, `HC_resolution_20260927`) | Q8c distinct rim interface and local association at body16/individual16; body4 parked for this assay | 32 paired worlds plus 8 resolution worlds; 28,116 physics steps including replay/diagnosis; 28.539 measured CPU s including failures/archive; full replay, neutrality/restarts and corruption checks; two harness failures retained; reused seeds, no chemistry, descendants or core edits |
 
 ## Knob index
 

@@ -32,17 +32,30 @@ released collisions overlap by up to 0.2613 area (worst pair: ordinary A tiles),
 so clear separation is not proof of reliable exclusion or autonomous release.
 The [frozen plan](experiments/half_cell_geometry_plan.md) and
 [actual starting geometry](experiments/out/HC_geometry_20260927_v2.json.svg)
-record the scope. Core/historical sources are unchanged; no simulation is active.
+record the scope.
+
+**Q8b identifies and bounds the contact error (RESULTS 83).** Reusing research
+polygon contacts preserves held access but fails its original gate in 1/16
+worlds: four-pass pin/shape corrections reintroduce A/A overlap after contact
+correction; A/E overlap also persists. That failed setting remains failed.
+A separately frozen, single-setting body16 follow-up passes 8/8, alongside
+8/8 archived individual16 references, including the added all-pair/fuel overlap
+bound. Maximum released all-pair overlap is .001207/.000678 respectively.
+Use this isolated polygon-contact setting for the next assay; body4 is parked
+for moving half-cell tests. No core defaults changed, no chemistry ran, and
+these are reused numerical fixtures, not fresh-seed biological confirmation.
+Core/historical sources are unchanged; no simulation is active.
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8b: released-contact check and distinct rim interface | Compare the existing research polygon-exclusion approach with the archived core-contact fixture, especially released A/A contacts, retaining body4 and individual16 controls. Scope any correction to this assay. Then give rim bonds a distinct interface before enabling chemistry: Q8a's spare lateral slot is only a pin carrier and must not masquerade as a chain bond. No new chemical state is justified by the numerical issue. |
+| 1 | Q8c: distinct rim interface and local association | Keep polygon contacts at body16 with individual16 controls. Store rim bonds separately from ordinary chain neighbors; check cap derivation, local release and rearming with/without a rim. Mechanics must still include rim constraints and must not treat a rim-attached cap as a freely movable monomer during docking. Test conserved W recruitment to compatible exposed ends, with no copy-completion gate or ancestry filter. Freeze the small assay before running. |
 | 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a's plan is frozen and complete; Q8b's is not. The brief's alternatives are a design portfolio,
+Q8a/Q8b and the targeted resolution follow-up are complete; Q8c is not frozen.
+The brief's alternatives are a design portfolio,
 not concurrent experimental queues. Do not add states just to finish a cell outline.
 
 **User benefit hypothesis: radiation protection.** After half-cell reproduction

@@ -7012,3 +7012,125 @@ The straight copying boundary is exposed, so shielding could be partial. Only
 after half-cells renew should ray/opacity ablations and equal-material competitors
 measure damage, usable descendants and rim costs. Section 25's earlier walled
 extinctions are not overturned by this access result.
+
+## 83. Half-cell contacts: four passes fail, targeted sixteen-pass comparison passes
+
+**Prepared numerical mechanics only.** Q8b reuses the exact eight-block cap
+fixtures from 82. Existing research convex-envelope contacts preserve access,
+but the original release gate fails in 1/16 polygon worlds. An observer-neutral
+solver trace identifies pin/shape corrections reintroducing overlap. A separately
+frozen body16 follow-up passes 8/8, alongside 8/8 archived individual16 references,
+including an added all-pair overlap bound. The original failure remains failed.
+
+Plans: `half_cell_contact_plan.md`, then `half_cell_resolution_plan.md` after
+the measured failure/diagnosis. `HalfCellContactSim` inherits Q8a polygons and
+delegates physics to `PolygonContactSim` (68), extending its supported types to
+P/Q and E. Actual convex envelopes, inverse masses and incident bonds determine
+pair correction. Directly bonded pairs retain their exclusion exemption. No
+membrane/ray/droplet cases, strain breaking or snapping are enabled. Unchanged
+kick/pin/deformation/wrapping source spans are checked against the core.
+
+All worlds conserve P,Q,two A,two W(C carrier),two E, with .8 stiffness and
+sigma .3/sigmaRot .45. Rim pins remain lateral-slot carriers; chemistry, ordinary
+steps and binding throw. Run 100 held steps, impose removal of two copying-face
+links, run 100 released steps. No reactions read observer IDs; no copying,
+growth, autonomous release, descendants or radiation effects are measured.
+Body jostling retains its accepted grouped-motion approximation.
+
+Initial comparison: seeds 611/613 × P/Q × attached/unbound × body4/individual16
+× core/polygon =32 worlds. Every core frame matches the Q8a archive; all viability
+checks pass. Held access requires 24/25 good t76–100 samples, as in 82. Release
+requires cross-side overlap <=.02 throughout t101–200, pin <=.1 in at least 99/100
+frames and structural clearance >=.1 at least once. These reused worlds are a
+paired numerical test, not fresh biological confirmation or independent contacts.
+
+| Contacts / motion | Rim | Worlds passing | Held access pass | Released frames with cross overlap >.02 | Max cross overlap | Max all-pair overlap |
+|---|---|---:|---:|---:|---:|---:|
+| core / body4 | attached | 0/4 | 4/4 | 27/400 | .261316 | .261316 |
+| core / body4 | unbound | 0/4 | 4/4 | 23/400 | .116788 | .116788 |
+| core / individual16 | attached | 0/4 | 4/4 | 30/400 | .115990 | .115990 |
+| core / individual16 | unbound | 0/4 | 4/4 | 49/400 | .114837 | .114837 |
+| polygon / body4 | attached | 3/4 | 4/4 | 1/400 | .073665 | .215652 |
+| polygon / body4 | unbound | 4/4 | 4/4 | 0/400 | .000179 | .205565 |
+| polygon / individual16 | attached | 4/4 | 4/4 | 0/400 | .000004754 | .000678 |
+| polygon / individual16 | unbound | 4/4 | 4/4 | 0/400 | .000000124 | .0000371 |
+
+All 32 worlds reach clearance. Polygon contacts reduce cross-overlap failures
+from 129 to 1 of 1600 released frames, but fail the all-world gate. All-pair
+measurements expose fuel conflicts missed by the narrower structural measure.
+No failed sample/world is removed.
+
+The worst polygon cross case is seed 611/body4/Q/attached/t115, ordinary A/A:
+overlap .723739 after kicking, zero after the fourth contact sweep, .073665
+after final pin/shape correction (pin residual .192910). The worst all-pair
+case is seed 611/P/attached/t143, A/E, .215652. The checked report stores actual
+corners and each solver-phase trace; instrumented and plain replay match.
+This specific constraint conflict earns one fixed body16 comparison, not a
+solver sweep or a change to the failed gate. Its eight initial states differ
+only by `iters:16`; shapes, kicks, material and horizon stay fixed. The follow-up
+adds all-pair overlap <=.02 in every released frame, including E and bonded
+neighbors, also applied retrospectively to the eight individual16 references.
+
+| Polygon contacts | Passing strengthened gate | Held good samples | Max released cross overlap | Max released all-pair overlap | Max released pin |
+|---|---:|---:|---:|---:|---:|
+| body16 | 8/8 new | 200/200 | .000052244 | .001207 | .006578 |
+| individual16 | 8/8 archived references | 200/200 | .000004754 | .000678 | .001739 |
+
+Body 16 clearance occurs at t102–105; every released pin in both settings
+satisfies .1. This admits a small rim-interface/association assay at body16
+with individual16 controls. Body 4 stays parked for this fixture. Finite
+residuals, direct-bond exemption, convex-envelope conservatism and possible
+between-step tunneling remain; this is not exact nonoverlap or stable wall proof.
+No core-default change or chemical timing state is earned.
+
+Validation: all 40 observed/plain physical-array/RNG checks and t100 subclass
+restarts match. Replayed 6,432 comparison plus 1,608 follow-up frames reproduce
+actual corners and metrics; material and retained bonds pass. Geometry checks
+cover containment, touching, torus and mass-weighted correction. Altered
+corners, summaries and job labels are rejected. Two diagnostic traces are neutral.
+
+Two harness failures survive. Initial execution stopped at t0 because the finite
+array check treated serialized base64 descriptors as arrays; no physics steps
+ran. Its partial record/CPU/source snapshot are archived. Correcting the array
+check and decoding initial bonds did not change the protocol. The valid v2
+batch's built-in validator then stopped before replay because `fromState`
+sets `bondsDirty=true`, unlike the pre-restore archive. The standalone validator
+compares with the same restored initial state the runner saves, without globally
+ignoring that field. Its full replay passes. The original failed validation
+JSON/CPU record and hashed runner remain unchanged: use the standalone validator.
+
+Exact executed commands (use new output stems for repetition):
+
+```
+node experiments/half_cell_contact.js experiments/scratch/HC_contact_20260927.json.gz
+node experiments/half_cell_contact.js experiments/scratch/HC_contact_20260927_v2.json.gz
+node experiments/half_cell_contact.js --validate experiments/scratch/HC_contact_20260927_v2.json.gz
+node experiments/half_cell_contact_validate.js experiments/scratch/HC_contact_20260927_v2.json.gz experiments/scratch/HC_contact_20260927_v2.checked.json
+node experiments/half_cell_resolution.js experiments/scratch/HC_resolution_20260927.json.gz
+node experiments/half_cell_resolution.js --validate experiments/scratch/HC_resolution_20260927.json.gz
+node experiments/half_cell_archive.js
+```
+
+First and third commands are retained failures. On a fresh checkout, restore
+the resolution runner's fixed scratch inputs by copying
+`HC_contact_20260927_v2.json.gz` and `HC_contact_20260927_v2.checked.json` from
+`out/` to `scratch/` unchanged if absent, refusing overwrites. The standalone
+validator also accepts the archived raw path plus a new report path. The archive
+utility is completed-batch packaging, not required for replay, and refuses overwrites.
+
+`out/HC_contact_resolution_20260927.manifest.json` records all 13 archived file
+hashes/sizes and matching scratch paths, source/input hashes and costs. CPU:
+initial failure .358 s, execution 10.374, failed validation 1.311, corrected
+validation/diagnosis 8.046, body16 execution 4.311, validation 3.296, archive .843
+=**28.539 measured seconds**. Total 28,116 physics steps includes all plain,
+restart/replay and 116 diagnostic steps. One process, no workers; command-line
+inspection found no other repository simulation. CPU covers startup, analysis
+and compression; final CPU-companion writes, manifest serialization, shell,
+editing and Git are unmeasured, so fully inclusive caps are not independently
+verified. No simulation is active. Core/historical bytes are unchanged; the
+full core invariant suite/default fingerprints were not rerun.
+
+Next Q8c: keep rim bonds chemically separate from chain neighbors but present
+for mechanics, especially attached-cap docking. Then test local W recruitment
+without ancestry, enclosure or completion predicates. Radiation benefit still
+requires autonomous half-cell renewal and equal-material controls.

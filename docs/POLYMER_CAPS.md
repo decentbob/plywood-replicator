@@ -4,7 +4,8 @@
 Q8 candidate. The previous version of this memo mistakenly put both curved arcs
 on one chain. The user means two separate D-shaped assemblies, each with its own
 chain as the straight boundary and its own polymer arc. A prepared cap-geometry
-assay is now complete (RESULTS 82); growth chemistry remains unimplemented.
+assay and targeted contact comparison are complete (RESULTS 82–83); growth
+chemistry remains unimplemented.
 ROADMAP controls execution.
 
 ## Topology and sequence
@@ -83,10 +84,24 @@ The measured fixture uses chamfered caps, one rim stub per cap and actual square
 rail/fuel neighbors. Prepared geometry passes under body4/individual16, with a
 failed individual4 sensitivity check. No ordinary copying or arc growth ran.
 Forced release exposes overlap in the core contact approximation, including
-ordinary A/A collisions. ROADMAP requires a targeted contact comparison before
-using release/contact outcomes to assess chemistry. The fixture's unused lateral
+ordinary A/A collisions. Q8b's polygon-contact comparison retains a four-pass
+failure; its separately frozen body16 follow-up passes, as do the individual16
+references, including fuel overlap checks (83). Use those resolved research
+settings for the next small chemistry test. The fixture's unused lateral
 slot carries a rim pin only while chemistry is disabled; a real rim interface
 must remain distinct from the chain-neighbor ports.
+
+The next interface must keep ordinary chain bonds and rim bonds logically
+separate. Rim occupancy must not change a cap's advertised chain end, substitute
+for its inward rail bond, satisfy ordinary release requirements, or keep a cap
+armed after its rail is lost. Conversely, mechanical pinning, collision checks
+and body jostling must include rim attachments. A cap attached to a rim is not
+a free monomer that can be snapped alone onto a copying face. Check both these
+chemical and mechanical views; hiding a rim bond during chemistry alone is
+insufficient. W end compatibility should use fixed local port labels and actual
+contact geometry, with no ancestry or half-cell identity test. No new timing
+state is justified by the contact result. Implementation and kinetic gates are
+still to be frozen in Q8c.
 
 The completed paired-end fixture includes each cap's immediate ordinary chain
 neighbor, one rim stub and fuel access. It checks both P/Q orientations,

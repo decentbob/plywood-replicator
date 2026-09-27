@@ -45,3 +45,10 @@ docs/BLOCK_ARCHITECTURES.md text eol=lf
 experiments/out/JT_20260927*.json text eol=lf
 experiments/half_cell_geometry* text eol=lf
 experiments/out/HC_geometry_20260927* text eol=lf
+experiments/half_cell_contact* text eol=lf
+experiments/half_cell_resolution* text eol=lf
+experiments/half_cell_archive.js text eol=lf
+experiments/out/HC_contact* text eol=lf
+experiments/out/HC_resolution* text eol=lf
+experiments/out/HC_contact*.gz binary
+experiments/out/HC_resolution*.gz binary

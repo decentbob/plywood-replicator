@@ -83,8 +83,9 @@ not be loaded in the standard viewer.
 
 The four-side description below documents the current implementation. It is not
 a design limit: new blocks may have more working polygon sides. The current
-[integrated polymer-cap proposal](docs/POLYMER_CAPS.md) explores that extension;
-it has not been implemented or simulated.
+[integrated polymer-cap proposal](docs/POLYMER_CAPS.md) explores that extension.
+Prepared cap geometry and research polygon contacts have been tested (RESULTS
+82–83); polymer growth and half-cell reproduction have not been implemented.
 
 **The fundamental rule: locality.** The intended reaction contract is that a block reads its own type and state, which of its sides are bonded, and
 the state shown by the side it is bonded to, and changes its own state by simple rules on those.
