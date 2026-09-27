@@ -5,12 +5,14 @@ simple fixed local rules on conserved physical parts. This is the current queue.
 paragraphs in DESIGN, LITERATURE and experiment reports are history, not competing assignments.
 The [intent audit](docs/RESEARCH_AUDIT.md) gives the evidence and unresolved compliance questions.
 
-**Current status:** P2's polygon-port layout passes (67), but its physical gate
-is blocked by a measured numerical discrepancy: centre/radius approximations
-miss rectangle overlap and reject legal growth contacts or placements. **Next:
-a targeted P0 contact/placement correction in the isolated P2 fixtures**, with
-unchanged core/default physics and matched square controls. No turnover or
-population test yet. P3's tested preparation remains parked after its fixed
+**Current status:** the isolated P0 polygon-contact correction passes its fixed
+prepared-geometry gates (68), resolving the rectangle discrepancy from 67.
+All 192 exact front placements are admitted; all 24 individual16 targets pass
+the existing geometry predicate. That predicate can still accept substantially
+deformed edges, so this is not demonstrated bond acquisition. **Next: a bounded
+P2 first/second-contact acquisition assay**, with actual bond/pin output,
+conserved material and matched solver/square controls. No turnover or population
+test yet; core/default physics is unchanged. P3 remains parked after its fixed
 benefit gate failed (66), along with the tested P4 pairs (64–65) and P1 (62).
 No chemistry or core mechanism was added.
 Retain body jostling and targeted P0 checks; no
@@ -24,7 +26,7 @@ for every route.
 | Item (priority order) | Direction | Importance / next-stage likelihood | Cost and status | Why here |
 |---|---|---|---|---|
 | P0 | Preserve local rules; check mechanical sensitivity | Essential validation standard / high diagnostic value | Targeted checks alongside research | Motion approximations must not supply or suppress the claimed function. |
-| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / port layout verified, physical renewal still low | Geometry preflight complete (67); next a targeted research-only contact/placement comparison under P0 | Scalar size/radius checks conflict with required rectangle contacts; resolve this specific discrepancy before testing economy or turnover. |
+| P2 | Resource-efficient assembly logic, beyond ordinary stacks | High / prepared contact geometry verified, physical renewal still low | Research-only contact correction passes (68); next bounded first/second-contact acquisition | Resolve actual contact formation and retention before growth, economy or turnover; geometric eligibility alone does not establish usable bonds. |
 | P3 | Mechanical function that closes a reproductive cycle | High / measured renewal, low for inherited net benefit | Equal-composition preparation parked after its fixed benefit gate fails (66) | Exact descendant cycles occur, including generation three, but no sequence passes the full matched-control criterion. |
 | P4 | Heredity test for existing random chemistries | Medium / low for another unguided candidate | Tested pairs 55/57 fail (64–65); further screening parked | Exact assay detects designed copying; recurrence and contact witnesses also occur in unseeded baths. |
 | P1 | Contact-mediated ecological feedback using existing products | High / uncertain for reliable recipient dependence, low for cumulative novelty | Tested setting parked after fresh confirmation (62) | Positive average effect, but only 2/4 worlds meet the fixed consistency gate; no frequency competition earned. |
@@ -188,7 +190,7 @@ under area sizing. The current single-size geometry checks therefore do not
 validate physical growth. Prepared first-contact probes and full replay are
 archived; no bonds form or turn over in this assay.
 
-**Next discriminating test:** isolate polygon-aware contact exclusion and vacant
+**Section-67 follow-up, completed by 68:** isolate polygon-aware contact exclusion and vacant
 placement checks, with conservative shape-aware search bounds, in a research
 subclass. Keep existing pin/deformation mechanics and body jostling; do not
 change core defaults or add chemistry. Reuse the exact overlap/separation,
@@ -198,6 +200,28 @@ geometry before any growth test. A correction that needs assembly classification
 orientation locks or global placement fails. This is the specific P0 discrepancy
 that now matters, not a general physics rewrite prerequisite. Later autonomous
 retention/turnover still needs its own plan and the narrow recycling competitor.
+
+**2026-09-27 targeted correction (68):** convex-envelope exclusion, current-corner
+search bounds and pose-aware vacancy pass all four predeclared geometry gates.
+All 272 paired trajectories replay, including exact reproduction of the 136
+original controls. No core changes or chemistry. Under body/zero kicks the
+prepared ports remain exact; individual16 gives 24/24 eligible targets versus
+15/24 baseline, but the worst unbound endpoint gap is 0.7515 and the largest
+final existing-pin gap is 0.2328. The hull approximation and solver residuals
+remain real limitations. No autonomous contact is formed by this assay.
+
+**Next after 68:** predeclare one small first/second-contact acquisition assay
+using immutable complementary side labels and local incident-bond operations.
+Integrate proposed-pose vacancy correctly with rotation; the physics-only
+subclass intentionally rejects bond formation. Start the incoming conserved
+part unbound, include a prepared one-contact calibration, both ends and square
+controls, and compare body motion with sufficiently resolved individual kicks.
+Measure actual acquired bonds, endpoint residuals, overlap, persistence and
+single-contact survival rather than only `_geomOK`. No multi-block placement,
+target ID, correct-position memory or assembly-level retention rule. A positive
+result earns growth/turnover planning, not a core promotion or economy claim.
+This is the next evidence-ladder step after two geometry assays; if autonomous
+acquisition fails, reassess P2 against the parked alternatives before extending it.
 
 ## P3 — an inherited mechanical part must earn its keep
 
@@ -372,3 +396,9 @@ failed controls. Results are cumulative evidence; the queue is allowed to change
   16 steric fixtures cost 12,160 steps / 10.469 CPU seconds and replay exactly.
   Next is the isolated P0 polygon-contact/placement comparison above; growth
   and turnover remain gated. No core or chemistry changes.
+- **2026-09-27, section 68:** targeted P0 prepared-geometry correction passes:
+  96 layouts / 192 fronts and 272 paired physics trajectories, 24,320 steps /
+  7.517 CPU seconds. All replay; default fingerprints unchanged. Research-only
+  convex envelopes remain approximate for concave deformations. Next is actual
+  local contact acquisition with pin/overlap/retention measurements; no autonomous
+  operation, growth, turnover or inherited benefit has yet been demonstrated.

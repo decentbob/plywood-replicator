@@ -22,6 +22,7 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 64–65 | `random_heredity.js`, `random_heredity_summary.js`, `random_57.js`, `random_57_screen.js` | Exact side-labelled structures, conserved prepared/disrupted/plain baths, founder exclusion and bond-history replay; bounded random-table heredity screens. |
 | 66 | `sequence_shape.js`, `sequence_shape_summary.js` | Equal-composition arrangements, actual shape, fuel controls, uninterrupted row identities and exact descendant renewal under existing turnover. |
 | 67 | `resource_ports.js`, `resource_ports_summary.js` | Prepared polygon-port feasibility, centre/radius approximation failures, first-contact fixtures and exact physics replay. Raw JSON is losslessly gzipped; the analyzer reads `.json.gz`. |
+| 68 | `polygon_contact.js`, `polygon_contact_physics.js`, `polygon_contact_summary.js` | Research-only convex-envelope correction with unchanged kick/pin/deformation code, paired archived fixtures and full replay. Geometry eligibility only; chemistry/bond formation deliberately disabled. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
 Read the plan and script's CLI rather than assuming identical options across runners.

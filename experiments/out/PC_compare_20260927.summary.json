@@ -1,0 +1,904 @@
+{
+  "gates": {
+    "staticPass": true,
+    "stericPass": true,
+    "quietPass": true,
+    "individualPass": true,
+    "pass": true
+  },
+  "counts": {
+    "ideal": 96,
+    "fronts": 192,
+    "runs": 272,
+    "quiet": 72,
+    "individual16": 24
+  },
+  "groups": [
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.10721748134137983,
+      "maxSamplePin": 0.02645209345155961,
+      "maxHullExcess": 0.001796818099705888
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 1,
+      "maxFinalTargetGap": 0.7935795561297355,
+      "maxSamplePin": 0.42434923822879367,
+      "maxHullExcess": 0.02883668213871715
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.2557064431009149,
+      "maxSamplePin": 0.16811822867482296,
+      "maxHullExcess": 0.007082411635792596
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.10721748134137236,
+      "maxSamplePin": 0.02645209345155616,
+      "maxHullExcess": 0.0017968180995922012
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.10721748134137397,
+      "maxSamplePin": 0.024807757964373917,
+      "maxHullExcess": 0.0006366769022179142
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.10571354709922945,
+      "maxSamplePin": 0.02513585540615311,
+      "maxHullExcess": 0.0018850588567147497
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 0,
+      "maxFinalTargetGap": 0.6804438571783681,
+      "maxSamplePin": 0.8072411014627595,
+      "maxHullExcess": 0.02402068061735463
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 1,
+      "maxFinalTargetGap": 0.4998976038427225,
+      "maxSamplePin": 0.2641076828216727,
+      "maxHullExcess": 0.01167253883511421
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.1057135470992233,
+      "maxSamplePin": 0.025135855406152638,
+      "maxHullExcess": 0.0018850588566010629
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.10571354709923096,
+      "maxSamplePin": 0.022969621139134193,
+      "maxHullExcess": 0.000636028796861865
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 5.504022322595451e-14,
+      "maxSamplePin": 5.3521530654230266e-14,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 1,
+      "maxFinalTargetGap": 0.7830367079321587,
+      "maxSamplePin": 0.4056323912879533,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.08720916384545292,
+      "maxSamplePin": 0.13485984791570463,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "baseline",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.46554765816107535,
+      "maxSamplePin": 0.11660576554108903,
+      "maxHullExcess": 0.006916466001598565
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.9638329885539855,
+      "maxSamplePin": 0.5618825472758575,
+      "maxHullExcess": 0.021203395672273473
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.46745233695541777,
+      "maxSamplePin": 0.18187236041149002,
+      "maxHullExcess": 0.007576138480430927
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.4655476581610627,
+      "maxSamplePin": 0.11660576554108007,
+      "maxHullExcess": 0.0069164660017122515
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.4655476581610687,
+      "maxSamplePin": 0.1084791493607478,
+      "maxHullExcess": 0.0023121068367117914
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.4628325591714946,
+      "maxSamplePin": 0.11071950383651182,
+      "maxHullExcess": 0.0073430472743893915
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 1,
+      "maxFinalTargetGap": 1.1291452196431975,
+      "maxSamplePin": 0.8890308373264356,
+      "maxHullExcess": 0.01883760420116687
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.5161182008088163,
+      "maxSamplePin": 0.2745100192261115,
+      "maxHullExcess": 0.010784177007053586
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.462832559171493,
+      "maxSamplePin": 0.11071950383649459,
+      "maxHullExcess": 0.0073430472743893915
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.4628325591714972,
+      "maxSamplePin": 0.09953802332622519,
+      "maxHullExcess": 0.002309358670004258
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 5.504022322595451e-14,
+      "maxSamplePin": 5.3521530654230266e-14,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 1,
+      "maxFinalTargetGap": 0.7830367079321587,
+      "maxSamplePin": 0.4056323912879533,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.08720916384545292,
+      "maxSamplePin": 0.13485984791570463,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "baseline",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 4.0175042800045383e-14,
+      "maxSamplePin": 5.4736810008738094e-14,
+      "maxHullExcess": 2.2737367544323206e-13
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 1,
+      "maxFinalTargetGap": 1.0058062195293773,
+      "maxSamplePin": 0.5566801339279387,
+      "maxHullExcess": 0.029597118177093762
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.32638814675470923,
+      "maxSamplePin": 0.18457211137806812,
+      "maxHullExcess": 0.007818910275204871
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "left",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 2.8644614660403534e-14,
+      "maxSamplePin": 5.232496544615099e-14,
+      "maxHullExcess": 1.1368683772161603e-13
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 1.3609616327018659,
+      "maxSamplePin": 0.787581845616424,
+      "maxHullExcess": 0.031017193182037772
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.7514913894311714,
+      "maxSamplePin": 0.2366186687650233,
+      "maxHullExcess": 0.015634687351962384
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "right",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 3.255377619421318e-14,
+      "maxSamplePin": 5.105589661969835e-14,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.7403080774643884,
+      "maxSamplePin": 0.4491930740311422,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.22100470039671274,
+      "maxSamplePin": 0.1368663116934571,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "area",
+      "fixture": "square",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 4.0175042800045383e-14,
+      "maxSamplePin": 5.4736810008738094e-14,
+      "maxHullExcess": 2.2737367544323206e-13
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 3,
+      "maxFinalTargetGap": 1.0058062195293773,
+      "maxSamplePin": 0.5566801339279387,
+      "maxHullExcess": 0.029597118177093762
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.32638814675470923,
+      "maxSamplePin": 0.18457211137806812,
+      "maxHullExcess": 0.007818910275204871
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "left",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 2.8644614660403534e-14,
+      "maxSamplePin": 5.232496544615099e-14,
+      "maxHullExcess": 1.1368683772161603e-13
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 1.3609616327018659,
+      "maxSamplePin": 0.787581845616424,
+      "maxHullExcess": 0.031017193182037772
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.7514913894311714,
+      "maxSamplePin": 0.2366186687650233,
+      "maxHullExcess": 0.015634687351962384
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "right",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "body4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 3.255377619421318e-14,
+      "maxSamplePin": 5.105589661969835e-14,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "individual4",
+      "n": 4,
+      "eligible100": 2,
+      "maxFinalTargetGap": 0.7403080774643884,
+      "maxSamplePin": 0.4491930740311422,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "individual16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0.22100470039671274,
+      "maxSamplePin": 0.1368663116934571,
+      "maxHullExcess": 5.684341886080802e-14
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "zero4",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    },
+    {
+      "arm": "polygon",
+      "proxy": "long",
+      "fixture": "square",
+      "scheme": "zero16",
+      "n": 4,
+      "eligible100": 4,
+      "maxFinalTargetGap": 0,
+      "maxSamplePin": 0,
+      "maxHullExcess": 0
+    }
+  ],
+  "steric": [
+    {
+      "arm": "baseline",
+      "key": "area/B/long/4",
+      "slotFree": true,
+      "before": 0.39999999999997726,
+      "after": 0.39999999999997726
+    },
+    {
+      "arm": "polygon",
+      "key": "area/B/long/4",
+      "slotFree": false,
+      "before": 0.39999999999997726,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/B/long/16",
+      "slotFree": true,
+      "before": 0.39999999999997726,
+      "after": 0.39999999999997726
+    },
+    {
+      "arm": "polygon",
+      "key": "area/B/long/16",
+      "slotFree": false,
+      "before": 0.39999999999997726,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/B/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "area/B/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/B/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "area/B/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/I/long/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "area/I/long/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/I/long/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "area/I/long/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/I/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "area/I/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "area/I/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "area/I/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/B/long/4",
+      "slotFree": true,
+      "before": 0.39999999999997726,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/B/long/4",
+      "slotFree": false,
+      "before": 0.39999999999997726,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/B/long/16",
+      "slotFree": true,
+      "before": 0.39999999999997726,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/B/long/16",
+      "slotFree": false,
+      "before": 0.39999999999997726,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/B/short/4",
+      "slotFree": false,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/B/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/B/short/16",
+      "slotFree": false,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/B/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/I/long/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/I/long/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/I/long/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/I/long/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/I/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/I/short/4",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "baseline",
+      "key": "long/I/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "arm": "polygon",
+      "key": "long/I/short/16",
+      "slotFree": true,
+      "before": 0,
+      "after": 0
+    }
+  ]
+}

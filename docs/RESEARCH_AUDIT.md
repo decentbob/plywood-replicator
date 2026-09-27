@@ -31,6 +31,16 @@ solving. README's blanket no-overlap wording has been corrected. This earns a
 targeted research-only contact/placement comparison before P2 growth, not a
 prerequisite rewrite of all physics or a retrospective rejection of every assay.
 
+**Isolated comparison (2026-09-27, RESULTS 68):** current-corner bounds,
+convex-envelope exclusion and pose-aware vacancy resolve those prepared
+rectangle witnesses in a research subclass. Copied kick/pin/deformation spans
+are checked against the unchanged core. The subclass reads pair geometry and
+incident bonds, with the accepted inherited body-jostling exception; it adds
+no chemistry and refuses bond formation. It is conservative for concave shapes,
+retains the core's direct-bond exclusion exemption and has finite solver
+residuals. Passing its geometry predicates does not establish acquisition,
+autonomous operation, exact nonoverlap or evolved complexity.
+
 ## What “following intent” must mean
 
 Three tests are independent:

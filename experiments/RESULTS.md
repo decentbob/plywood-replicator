@@ -5231,3 +5231,134 @@ natural fragmentation are tested. This is a targeted P0 case, not a prerequisite
 whole-engine rewrite. The narrow recycling competitor and section-63 finite-stock
 accounting remain mandatory later; no per-child economy, heredity or complexity
 claim follows from fitting the ports.
+
+## 68. Polygon contact correction resolves the prepared rectangle witnesses
+
+**2026-09-27, ROADMAP P0/P2; works for the specified prepared geometry.**
+The prospective `polygon_contact_plan.md` follows section 67's measured
+rectangle discrepancy. All four fixed gates pass. This is a numerical
+geometry result; no second bond, autonomous acquisition, growth, fragmentation,
+descendant or scarce-material benefit is demonstrated.
+
+### Isolated correction and unchanged mechanics
+
+`PolygonContactSim` extends the section-67 geometry fixture. Its only physical
+changes are candidate enumeration, unbonded exclusion and vacancy checking.
+Actual corner radii plus existing side-distance tolerances bound candidate
+pairs. Small worlds use pair enumeration instead of the fixed spatial grid;
+collision bounds are evaluated from current corners on each solver pass and
+candidate pairs refreshed after solving. There is no orientation lock, target
+lookup, pattern reader, component-based placement or chemical state addition.
+
+For exclusion, edge-normal projections of each block's convex hull give the
+smallest separating translation. The two centres share it by inverse mass,
+as in the old translation-only radial response. Directly bonded neighbors
+retain the existing exemption. Vacancy checks use the proposed translation
+and rotation against other blocks, including bonded neighbors. The subclass
+supports only the three fixture archetypes and deliberately throws on `step`,
+`_formBonds` or `_formBond`: the future bonding path is **not integrated**.
+
+Kicks, pin solving, shape restoration and final wrapping/strain code are copied
+verbatim from the core method; tests compare the source spans. Brownian body
+jostling is inherited unchanged. Deformable polygons and their ordinary pin
+constraints remain in use. All original core and section-67 sources are
+byte-identical; this is not a core/default physics migration.
+
+Convex hulls equal the actual polygons when outlines are convex, but conservatively
+fill concave dents. The assay records hull area minus polygon area and does not
+call this exact collision resolution for arbitrary deformable outlines. Collision
+corrections precede pin/shape corrections in each pass, so finite-pass residual
+overlap is also possible. Neither those limitations nor bonded-pair exemptions
+are hidden by the pass criteria.
+
+### Frozen paired comparison
+
+Use the exact initial states from `RP_preflight_20260927.json.gz`: 120 prepared
+first-contact fixtures for 100 steps plus 16 free-pair steric witnesses for ten,
+under both baseline and corrected mechanics. The 272 trajectories total
+**24,320 physics steps, 7.517 CPU seconds**; validation, replay and fingerprints
+are excluded from this cost. One simulation worker was used after checking
+the machine's Node processes. No failed or censored batch occurred.
+The steric records additionally retain step 1 as a diagnostic sample; the
+planned step-0/10 endpoints and all decision thresholds are unchanged.
+
+Material, mass/inertia, prepared bonds, stiffness, seeds 211/212, both size
+proxies and all five motion/solver settings match section 67. Every baseline
+final physical state and RNG reproduces its archived original. The two arms
+start from the same state, but later geometry can diverge; this is a reused-seed
+diagnostic, not fresh statistical confirmation. Square cases repeat under the
+two proxy settings; the repeated controls and ports are not independent samples.
+
+| Fixed gate | Baseline evidence | Polygon correction |
+|---|---|---|
+| Ideal search/geometry and vacancy, 96 layouts / 192 fronts | Area proxy excludes required end contacts; long proxy rejects all 96 placements | All contacts eligible and all 192 exact front placements admitted |
+| 16 steric witnesses, ten zero-kick steps | Area proxy leaves 0.4 overlap; both proxies push separated rectangles; long proxy rejects the empty placement | All overlaps rejected by vacancy and resolved to zero; separated rectangles and squares unchanged within 1e-8 |
+| Body4/zero4/zero16 target geometry and pin precision | 48/72 target predicates pass; some deterministic pin distortions remain | 72/72 pass with final target and existing-pin gaps below 1e-7 |
+| Individual16 target eligibility at step 100 | 15/24 | 24/24 |
+
+For the overlapping long-axis rectangle pairs, the corrected centre distance
+changes from 1.6 to 2 and overlap from 0.4 to zero. Separated short-axis pairs
+stay at 1.2, rather than moving to sqrt(2) or 2. Results hold for both size
+proxies and 4/16 solver passes. Independent unit checks additionally exercise
+arbitrary rotation, periodic crossing, tangency, containment, diagonal gaps,
+mass weighting, rotated placement and search bounds after actual shape expansion.
+
+### What geometric eligibility leaves unresolved
+
+| Motion / solver | Baseline eligible at 100 | Corrected eligible at 100 | Corrected largest final target endpoint gap | Corrected largest final existing-pin gap |
+|---|---:|---:|---:|---:|
+| body4 | 16/24 | 24/24 | <6e-14 | <6e-14 |
+| zero4 | 16/24 | 24/24 | 0 | 0 |
+| zero16 | 16/24 | 24/24 | 0 | 0 |
+| individual4 | 6/24 | 12/24 | 1.3610 | 0.5288 |
+| individual16 | 15/24 | 24/24 | 0.7515 | 0.2328 |
+
+Eligibility means a conservative candidate passes the unchanged `_geomOK`
+midpoint, direction and angle test. It does **not** require reversed endpoints
+to coincide. The worst individual16 target endpoint gap is 0.751491 in
+`long/right/0/212/individual16`; that same physical configuration also occurs
+with area sizing. The gate fixed before outcomes measured eligibility, so it
+passes as written; the result cannot be upgraded to a well-aligned acquired
+bond. Four passes remain inadequate for the tested individual kicks, even
+for some square controls.
+
+Across sampled corrected individual16 states, maximum hull excess is 0.015635
+square units; individual4 reaches 0.031017. Maximum hull overlap at the final
+individual16 sample is 0.029940, including directly bonded pairs. Thus the
+analytic overlap witnesses are resolved, but arbitrary moving fixtures are
+not proven nonoverlapping. Under zero kicks the prepared shapes stay exact;
+under body jostling their numerical residuals are at roundoff scale. This
+supports the targeted correction without treating aggregate motion as ground truth.
+
+### Reproduction, validation and next decision
+
+```sh
+node experiments/polygon_contact_test.js
+node experiments/polygon_contact.js experiments/scratch/PC_compare_20260927
+node experiments/polygon_contact_analysis_test.js experiments/out/PC_compare_20260927.json.gz
+node experiments/polygon_contact_summary.js experiments/out/PC_compare_20260927.json.gz
+node tools/fingerprint.js 1500
+```
+
+Archive: `PC_compare_20260927.json.gz` (lossless raw JSON) and its original
+`.summary.json`. The raw record includes exact command, Node version, baseline,
+input/source hashes, complete cases, initial/final states and sampled polygons.
+Both methods conserve every block/type and every prepared bond. All 272
+trajectories replay exactly, including final RNG (the restore-only pin-cache
+version is excluded when comparing to section 67). Tests verify neutral
+observation/restart and reject altered input, source metadata, coverage,
+placement, state, observations, targets and gate summaries. All five default
+1500-step fingerprints match; the unchanged full core suite was not rerun.
+No outcome-dependent parameter or gate change was made.
+
+**Decision:** keep the correction research-only. It earns a separately planned
+first/second-contact acquisition assay with immutable complementary port labels,
+one-block/incident-bond operations, actual bond and endpoint measurements,
+overlap, persistence and single-contact survival. Start the incoming part
+unbound, retain a prepared first-contact calibration and square controls,
+and compare body motion with resolved individual kicks. Correctly integrate
+the rotated candidate pose into vacancy checking; do not silently reuse the
+old rotation-unaware call. Growth and turnover remain gated. After two
+geometry assays the next advance must be autonomous contact acquisition,
+not another geometry-only success or added state machinery. Retain the
+section-63 common-stock and narrow-recycling objections for any later economy claim.
