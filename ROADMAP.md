@@ -41,12 +41,18 @@ The default step understates binding and overstates release. No earlier gate is
 reopened, but default-step acquisition/release rates are qualitative until checked.
 The repair branch's escape measurements (79, 92) were made where escape is overstated.
 
+**Q10: double-strand repair is not damage-specific (RESULTS 94).** Binding, heat
+cycles and ligation keep reproducing templates longer under radiation (L 6.9/5.6 vs
+4.0/4.2). Without radiation the advantage is larger still (14/18 vs 7.2/5.8), with
+12–18 against 85–88 late births. This is ligation accumulation plus sequestration,
+not protection of an arrangement. Closed without rescue.
+
 ## Queue
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Choose the next causal question (small, logic-first) | The user values mechanics and logic over simulation precision, and fast screening (AGENTS QA tiers, default dt). Q7b/Q9 lesson: a hold-then-release operation needs a driven or history-carrying cycle; a memoryless shape switch trades acquisition for release. The existing copy cycle already has one (dock, link, energy-gated REPEL, rearm). Leading candidate: can ordinary copying replace repair, where a damaged strand's fragments are re-copied instead of held? Other candidates: P1 recipient function (62), P3 useful mechanical operation (66). Freeze a proportional plan; screen tier. |
+| 1 | Choose the next causal question (small, logic-first) | Q10 (double strands under damage) was the first pick and fails. Every length gain so far is accumulation with sequestration or a designed gene. The remaining candidates need a useful operation, not length: P1 recipient function (62) and P3 useful mechanical operation (66). A user steer on which kind of function to pursue would help; otherwise screen P3's opposed20 renewal lead for a mechanical operation beyond fit. |
 | Decided | Exploration time step | Keep dt 1 for exploration (user delegated, 2026-09-28). Finer-step rung only for confirmation-tier claims resting on a quantitative binding/release race. Core micro-optimisation was tried on a scratch copy: hoisting solver loop lookups kept fingerprints identical but gave no measurable speedup, so core code is unchanged. |
 | Retired | Q9b finer-step convergence and RESULTS 79 re-screen | Not pursued (user direction 2026-09-28): the default step stays; RESULTS 93 marks default-step contact rates as qualitative. Q7b's failure is logical (no latch), not a step artifact. |
 

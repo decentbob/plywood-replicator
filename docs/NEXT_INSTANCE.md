@@ -18,7 +18,8 @@ The frozen verdict is sensitive (more acquisition). No earlier gate reopens.
 
 User direction (2026-09-28): mechanics and logic over simulation precision, and fast
 tests. Default dt stays 1 (Q9b retired). Screens use the AGENTS QA tiers and
-`experiments/screen_kit.js`. Next: choose a small logic-first causal question (ROADMAP order 1).
+`experiments/screen_kit.js`. Q10 (RESULTS 94): double strands with heat and ligation lengthen templates but not
+specifically under damage; closed. Next: ROADMAP order 1.
 Evidence:
 `experiments/out/PF_20260928*` and `experiments/out/TR_20260928*`.
 

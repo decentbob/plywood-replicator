@@ -8364,3 +8364,66 @@ RESULTS 79 acquire/on at a finer step against default. Because convergence is no
 shown, that plan must also add one finer rung (dt 1/64) in this dimer fixture, or
 state why 1/16 suffices. Changing the exploration default step is a core-physics
 cost decision (4–16x CPU) for the user, not something to adopt silently.
+
+## 94. Double strands keep longer templates, but not because of damage repair
+
+2026-09-28, Q10; baseline `eea70dc`, plan and driver frozen first.
+[Plan](duplex_damage_plan.md). **Negative by the frozen gate** (screen tier, two seeds).
+
+### Question
+
+Can existing mechanics alone make length pay under damage? The combination is
+complementary copying, binding, heat cycles, ligation and radiation. RESULTS 29 left
+"do double strands protect anything?" open (no damage, no ligation). RESULTS 78 showed
+a bound complement lets ligation repair a break. No new state, type or knob.
+
+Base: the RESULTS 29 command (`compCopy`, 40x40, 256 A + 256 B, 60 E, heat cycles every
+5,000 steps in every arm; see the plan). Arms vary `pHyb` (0 / .2), `pLigate`
+(.02 / 0) and `pBreak` (0 / R). R = 1e-5 was calibrated on ssRad alone (seed 90, 20k
+steps: stock mean length -36% against no radiation, 71 births in 10k–20k). Seeds 1–2,
+150k steps. Primary: L = mean parent length of births in 100k–150k, and B = the
+count of those births.
+
+```sh
+node experiments/duplex_damage.js calibrate experiments/scratch/DD10_cal
+node experiments/duplex_damage.js screen experiments/scratch/DD10 0.00001
+node experiments/duplex_damage.js summary experiments/scratch/DD10
+```
+
+### Result
+
+| Arm (binding / ligation / radiation) | L seed 1 | L seed 2 | B seed 1 | B seed 2 | Final stock meanLen | maxLen |
+|---|---:|---:|---:|---:|---|---|
+| ss (0 / .02 / 0) | 7.18 | 5.81 | 88 | 85 | 7.8 / 9.5 | 24 / 51 |
+| ds (.2 / .02 / 0) | 13.94 | 18.00 | 18 | 12 | 20.6 / 24.1 | 49 / 44 |
+| ssRad (0 / .02 / R) | 4.00 | 4.18 | 282 | 237 | 3.8 / 4.0 | 14 / 12 |
+| dsRad (.2 / .02 / R) | 6.93 | 5.61 | 137 | 109 | 6.5 / 6.4 | 24 / 26 |
+| ssRadNoLig (0 / 0 / R) | 2.87 | 2.98 | 414 | 395 | 2.8 / 2.9 | 5 / 7 |
+| dsRadNoLig (.2 / 0 / R) | 2.48 | 2.48 | 357 | 394 | 2.4 / 2.4 | 4 / 4 |
+
+Gate per seed: dsRad is viable (B >= 20) and exceeds ssRad by 2.92/1.42 letters. With
+no ligation, double strands are shorter (-0.39/-0.49), so the double-strand advantage
+needs ligation. It is **not damage-specific**: without radiation the advantage is
+6.76/12.19 letters, far larger. Criterion 3 fails in both seeds; no lead.
+
+What it says: binding, heat cycling and ligation together keep reproducing templates
+much longer, with or without damage. Radiation shrinks everything and shrinks that
+advantage. Breaks (410–516) and ligations (594–618 in dsRad versus 202–221 in ssRad)
+are high under radiation, so double strands rejoin more ends. The benefit behaves
+like the long-standing ligation accumulation (regularity 1, 3b/27b): a bound
+complement aligns ends for joining. It does not measurably protect a specific
+arrangement against damage. The length comes with far fewer births (12–18 against
+85–88 late births without radiation), which is sequestration again.
+
+What it does not say: no repair events were attributed, sequences were not traced,
+and there were no fresh seeds or other R values (none are admitted). Longer is not
+more capable; no function was measured.
+
+### Cost and QA
+
+Twelve 150k-step worlds plus four 20k calibration worlds via unchanged `run.js`, at
+most four concurrent processes. From run.js steps/s, about 2,070 process-seconds of
+wall time on dedicated workers; CPU was not metered separately. `run.js` attaches no
+reaction-affecting observer, so no neutrality check was needed. Raw CSV, births and
+end-state JSON, calibration, summary and log are archived in `out/DD10*` (51 files,
+byte-identical to scratch). Core unchanged.

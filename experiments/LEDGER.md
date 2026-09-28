@@ -22,6 +22,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    hold length only by hoarding (long rows zipped into stacks are immortal, the letters lock up, births fall), and stacks that
    turn over let short rows win again (40c). More copy sites per strand (two-faced letters) make a population robust (40e),
    not longer.
+   Double strands with heat cycles and ligation (94) keep reproducing templates 2–3x longer, with or
+   without radiation, but with a sixth of the births; the gain is not damage-specific repair.
 2. **Any viable fragment of a genome defeats a genome that needs several genes.** (22, 19d, 33a'.) Make pieces
    sterile first (end loss on capped strands, 33a–d), and make the smallest viable genome already carry one gene (bare
    caps, 33b), or genes will not accumulate.
@@ -416,6 +418,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 91 | In-place half-cell face capture | Can incident pins settle admitted contacts while preserving existing joints and next-rail fit? | isolated pins/project/wait; body16/individual16; 60 physics steps, no chemistry | negative | target alignment38/38 both modes; full bath gate37/38 body and0/38 individual; moving prepared controls4/4 and0/4; final-window overlap .198082 | half_cell_capture.js, half_cell_capture_controls.js (`HC_capture_20260928`) | park candidate and current half-cell acquisition branch; portfolio favors freezing deferred Q7b acquisition/rebinding test | 42 correlated saved contacts x3 arms x2 modes plus24 corrected controls;58,222 total steps,549.494 measured CPU s;276 neutrality/restarts,16,836 replayed frames,3 corruptions; failed cache preflight and original stationary-control deviation retained; no censoring or live/core change |
 | 92 | Passive-fold kinetic race | Does the existing free-face fold beat rebinding while retaining bridge acquisition? | `foldA`/`foldB` 0/45, `stiffA`/`stiffB` .8, `pHyb` .2, `pMelt` .1, `pMeltRun` .001, `pMeltEnd` -1, `pLigate` .02; body4/individual4/individual16 | negative | direct escape straight/fold 5/11, 4/9, 4/12; sustained bridges 5/0, 7/2, 7/0; gate fails every mode (straight fixture validity and fold retention) | passive_fold_kinetics.js, passive_fold_kinetics_validate.js, passive_fold_kinetics_report.js (`PF_20260928`) | park fold candidate and the passive repair branch; no angle/stiffness/rate/horizon rescue | 192 four-block worlds, seeds 7301–7316, 1,000 kinetic steps; about 693,200 steps incl. neutrality/restart/replay, about 21.5 measured CPU s; built-in validator failed on a CRLF core-hash comparison, replaced by a separate normalized validator; no births or lateral changes; core unchanged |
 | 93 | Time-step resolution of near-encounter binding | Does prepared acquisition depend on the time step when kicks scale by sqrt(dt) and probabilities by 1-(1-p)^dt? | `sigma`/`sigmaRot` x sqrt(dt), `pHyb` .2, `pMelt` .1, `pMeltRun` .001, `pLigate` .02 rescaled; dt 1, 1/4, 1/16; body4/individual4/individual16 | works | sustained bridges /32 at dt 1/(1/4)/(1/16): body4 10/14/14, individual4 8/8/17 (p .039), individual16 9/9/15; direct escape falls 9–11 to 4 in every mode; frozen verdict sensitive toward more acquisition, not converged | time_resolution.js, time_resolution_validate.js, time_resolution_report.js (`TR_20260928`) | freeze one RESULTS 79 acquire/on re-screen at a finer step with a dt 1/64 dimer rung; default-step change is a user cost decision | 576 four-block worlds, seeds 7301–7332; dt 1 seeds 7301–7316 reproduce RESULTS 92 exactly; about 14.2M steps incl. neutrality/restart/replay, 411.7 measured CPU s; three concurrent workers; core unchanged; one fixture, no gate reopened |
+| 94 | Double strands under damage | Do binding, heat cycles and ligation let repair make length pay under radiation? | `compCopy`, `pHyb` .2/0, `pLigate` .02/0, `pBreak` 1e-5/0, `heatPeriod` 5000 | negative | late parent length dsRad/ssRad 6.9/4.0 and 5.6/4.2, but without radiation 13.9/7.2 and 18.0/5.8; no-ligation ds shorter; not damage-specific | duplex_damage.js (`DD10`) | no rescue; double-strand ligation length behaves like accumulation with sequestration (12–18 vs 85–88 late births) | 12 worlds x 150k plus 4 calibration worlds; about 2,070 process-seconds; screen tier, 2 seeds; core unchanged |
 
 ## Knob index
 
@@ -434,7 +437,7 @@ the rows that used it). Rerun it after adding rows.
 | `capFray` | 28c (lead), 33a (partial), 52a (works), 52b (negative), 52c (works) |
 | `catalysis` | 34c (works), 42a (works), 74 (works), 75 (inconclusive) |
 | `chiral` | 30 (partial) |
-| `compCopy` | 29 (partial), 49a (works), 49b (lead), 49c (lead), 50c (lead), 52a (works), 77 (negative) |
+| `compCopy` | 29 (partial), 49a (works), 49b (lead), 49c (lead), 50c (lead), 52a (works), 77 (negative), 94 (negative) |
 | `cut` | 26 (negative) |
 | `cutMotif` | 26 (negative), 26b (inconclusive) |
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
@@ -453,7 +456,7 @@ the rows that used it). Rerun it after adding rows.
 | `gStickS` | 31 (partial) |
 | `H` | 17 (inconclusive) |
 | `heatFrac` | 29 (partial) |
-| `heatPeriod` | 29 (partial) |
+| `heatPeriod` | 29 (partial), 94 (negative) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
 | `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative), 80 (lead), 86 (lead), 87 (negative) |
@@ -486,14 +489,14 @@ the rows that used it). Rerun it after adding rows.
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
 | `nX` | 25b (works), 25d (negative) |
 | `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead), 62 (negative), 74 (works), 75 (inconclusive) |
-| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative) |
+| `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative), 94 (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative), 93 (works) |
+| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative), 93 (works), 94 (negative) |
 | `physics` | 15 (works) |
-| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative), 92 (negative), 93 (works) |
+| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative), 92 (negative), 93 (works), 94 (negative) |
 | `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative), 74 (works) |
 | `pMelt` | 18 (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative), 93 (works) |
 | `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
