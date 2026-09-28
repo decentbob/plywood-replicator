@@ -8264,3 +8264,103 @@ RESULTS 79 failure (acquisition versus release) is now reproduced in its passive
 mechanical form. A mechanism that distinguishes "just lost" from "never formed"
 would need memory or a directional signal. That would be a new state program, and
 this branch has not earned one.
+
+## 93. Near-encounter binding depends on the time step
+
+2026-09-28, Q9 (P0 numerical check); baseline `d5af3d1`, plan frozen in `16de7b2`.
+[Plan](time_resolution_plan.md). **Verdict by the frozen rule: sensitive, toward
+more acquisition at finer steps.** Convergence is not established.
+
+### Question and method
+
+Acquisition from prepared near-encounters fails or is weak under individual kicks
+in RESULTS 69, 79, 84, 89, 91 and 92. A default step kicks a free block 0.3 sides
+and 26 degrees, as large as the whole binding window, and `pHyb` acts once per
+step. Only solver passes and body/individual motion had been varied before. This
+assay refines time with existing knobs only: kicks x sqrt(dt), per-step
+probabilities p -> 1-(1-p)^dt (`pHyb`, `pLigate`, `pMelt`, `pMeltRun`), horizon
+(1,000) and hold windows (25) in physical time units. Shape stiffness, pin/contact
+projection and derive passes remain per step, so they act more often per unit time
+at finer steps; the solver is not claimed to be a time-consistent integrator.
+
+Fixture: the RESULTS 92 straight AB dimer pair (fold 0, stiffness .8). **acquire**
+starts flush with no face bonds; **escape** has one face pair removed at t=0.
+dt 1, 1/4, 1/16; body4, individual4, individual16; seeds 7301–7332 (7301–7316 at
+dt 1 must reproduce RESULTS 92; 7317–7332 fresh). 576 worlds; the world is the unit.
+Rule per mode on sustained bridges B /32: sensitive if |B(1/16)-B(1)| >= 8 with
+two-sided Fisher p <= .05; converged if both differences from dt 1 are <= 3;
+intermediate otherwise. The individual modes decide the overall verdict.
+
+```sh
+node experiments/time_resolution.js body4 experiments/scratch/TR_20260928_body4.json.gz
+node experiments/time_resolution.js individual4 experiments/scratch/TR_20260928_individual4.json.gz
+node experiments/time_resolution.js individual16 experiments/scratch/TR_20260928_individual16.json.gz
+node experiments/time_resolution_validate.js experiments/scratch/TR_20260928
+node experiments/time_resolution_report.js experiments/scratch/TR_20260928 experiments/scratch/TR_20260928.report.json
+```
+
+### Result
+
+| Physics | Sustained bridges dt 1 / 1/4 / 1/16 | Any face link (acquire) | Fisher p (1 vs 1/16) | Verdict | Direct escapes dt 1 / 1/4 / 1/16 |
+|---|---|---|---:|---|---|
+| body4 | 10 / 14 / 14 | 16 / 17 / 16 | .44 | intermediate | 9 / 10 / 4 |
+| individual4 | 8 / 8 / 17 | 11 / 10 / 20 | .039 | sensitive (more) | 11 / 8 / 4 |
+| individual16 | 9 / 9 / 15 | 10 / 10 / 19 | .20 | intermediate | 9 / 5 / 4 |
+
+**Overall verdict: sensitive toward more acquisition** (individual4 meets the rule;
+individual16 and body4 move the same way below it). Under individual kicks, flush
+pairs that bind at all do so in the first time unit or two (median first link
+0.5–3 units). At dt 1 and 1/4 only 10–11 of 32 bind; at 1/16, 19–20 do. Mean face
+occupancy rises from .16/.21 to .42/.38. The jump appears only between 1/4 and
+1/16, so the finest step is not shown to be converged. A finer step might change
+acquisition again.
+
+Release moves the other way. Direct escape, where the retained face melts before
+the freed one rebinds, falls from 9–11 to 4 of 32 in every mode. In escape worlds
+the freed face rebinds first in 16–23 worlds at dt 1 and 18–20 at 1/16; face
+occupancy rises in both individual modes. The default step
+therefore both **understates acquisition and overstates escape** in this fixture,
+consistent with contact windows that last about one default step. No lateral bond
+change, extra join or birth occurred.
+
+### Consequences for earlier results
+
+This is one prepared four-block fixture, not a re-measurement of the parked assays.
+It does not reopen any failed gate. It does show that default-step acquisition and
+release rates are not numerically robust. Acquisition failures under individual
+kicks (69, 79, 84, 89, 91, 92) may partly reflect the step. RESULTS 79's release
+failure and RESULTS 92's fold escape advantage were both measured where escape is
+overstated. At finer steps sequestration may get worse, not better. Solver-pass
+comparisons (4 versus 16) did not detect this, because passes per step do not
+change the kick size.
+
+### Validity and cost
+
+The early viability pass (seed 7301, every cell, 50 units) passed. Every world's observed
+run matches a plain run and a midpoint restart (state and RNG, excluding
+`pinsVersion`). All 96 dt 1 worlds with seeds 7301–7316 reproduce the archived
+RESULTS 92 straight tapes and frames exactly. The separate validator recomputes every
+preparation and replays all 576 worlds through every frame, tape event, midpoint
+and final state. It also recomputes outcomes, verdicts and Fisher p by enumeration, and
+rejects a corrupted frame, tape event and summary. Seven synthetic scaled-window
+cases pass. The core matches RESULTS 80/92 after line-ending normalization.
+
+Archive (`out`): `TR_20260928_{body4,individual4,individual16}.json.gz` (SHA-256
+`dceb82948719654fb9d533b374003693a2bebe156dbf99abc598ff1bbf918ee1`,
+`5a17530864294cd8d1c9efce695889169c2a0f42fd1cec387846fef57113608b`,
+`05a8548f0572fc7f3d9515bed49d3c83460a48c9a43596472c396e9c9acd1316`), their `.cpu.json` and `.log`, `TR_20260928.validation.json`
+and `.report.json`, all byte-identical to scratch. Physics steps: 10,080,000
+kinetic (observed + plain + restart) plus 28,800 relaxation in runs, and about
+4.08 million in validation; **about 14.2 million**. Measured CPU: runs 58.215 +
+75.811 + 159.497 s, validation 117.760 s, report 0.447 s, so **411.7 s**, within
+the 900 s cap. Three simulation processes ran concurrently, then one validator;
+nothing else ran. Core bytes are unchanged, so the full suite and default
+fingerprints were skipped.
+
+### Next decision
+
+The frozen consequence of this verdict is one separately frozen re-screen of
+RESULTS 79 acquire/on at a finer step against default. Because convergence is not
+shown, that plan must also add one finer rung (dt 1/64) in this dimer fixture, or
+state why 1/16 suffices. Changing the exploration default step is a core-physics
+cost decision (4–16x CPU) for the user, not something to adopt silently.

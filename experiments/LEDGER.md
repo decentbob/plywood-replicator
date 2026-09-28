@@ -138,6 +138,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    release (92). Fold45 dimers escape directly in 11/9/12 of 16 worlds versus straight 5/4/4
    (body4/individual4/individual16), but sustain a full bridge in 0/2/0 versus 5/7/7. An
    own-face shape switch cannot tell a bond just lost from one not yet formed. Parked.
+   **Contact kinetics are not time-step converged (93).** Kicks per default step are as large as
+   the binding window. Refining time (kicks x sqrt(dt), probabilities 1-(1-p)^dt) raises
+   flush-pair acquisition under individual kicks from 8–9 to 15–17 of 32 at dt 1/16 and lowers
+   direct escape from 9–11 to 4. The default step understates binding and overstates release,
+   so default-step acquisition and release rates are qualitative until checked at a finer step.
    The offline partner audit (73) finds one repeated reciprocal renewing pair, but no
    candidate above its fixed opportunity reference. Only 3.3–6.2% of covered events have
    alternative helpers; this limits identification rather than proving interchangeable support.
@@ -410,6 +415,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 90 | Half-cell placement rejection replay | Which geometry rejects ordinary acquisition, and what earlier filters precede it? | unchanged Q8h body16; read-only placement/stage wrappers; stationary prepared contact and exact square controls | works | all34 free rejects hit an anchor neighbor, none the partner or W;5 bound caps miss .1 gap;44/6,499 compatible tests reach placement,5 bind; core accepts39 rejects but35 increase overlap | half_cell_placement.js, half_cell_placement_summary.js (`HC_placement_20260928`) | freeze current projection versus in-place edge-pin settling with unchanged exclusion and waiting controls; no bath promotion | four archived50k replays,200,274 total steps,1,679.275 measured CPU s;44 checkpoint and4 final matches, full successful-event tapes,44 restored attempts, prepared7/7 and square2/2, three corruptions rejected; no censoring/failures or runtime changes; geometry diagnosis only |
 | 91 | In-place half-cell face capture | Can incident pins settle admitted contacts while preserving existing joints and next-rail fit? | isolated pins/project/wait; body16/individual16; 60 physics steps, no chemistry | negative | target alignment38/38 both modes; full bath gate37/38 body and0/38 individual; moving prepared controls4/4 and0/4; final-window overlap .198082 | half_cell_capture.js, half_cell_capture_controls.js (`HC_capture_20260928`) | park candidate and current half-cell acquisition branch; portfolio favors freezing deferred Q7b acquisition/rebinding test | 42 correlated saved contacts x3 arms x2 modes plus24 corrected controls;58,222 total steps,549.494 measured CPU s;276 neutrality/restarts,16,836 replayed frames,3 corruptions; failed cache preflight and original stationary-control deviation retained; no censoring or live/core change |
 | 92 | Passive-fold kinetic race | Does the existing free-face fold beat rebinding while retaining bridge acquisition? | `foldA`/`foldB` 0/45, `stiffA`/`stiffB` .8, `pHyb` .2, `pMelt` .1, `pMeltRun` .001, `pMeltEnd` -1, `pLigate` .02; body4/individual4/individual16 | negative | direct escape straight/fold 5/11, 4/9, 4/12; sustained bridges 5/0, 7/2, 7/0; gate fails every mode (straight fixture validity and fold retention) | passive_fold_kinetics.js, passive_fold_kinetics_validate.js, passive_fold_kinetics_report.js (`PF_20260928`) | park fold candidate and the passive repair branch; no angle/stiffness/rate/horizon rescue | 192 four-block worlds, seeds 7301–7316, 1,000 kinetic steps; about 693,200 steps incl. neutrality/restart/replay, about 21.5 measured CPU s; built-in validator failed on a CRLF core-hash comparison, replaced by a separate normalized validator; no births or lateral changes; core unchanged |
+| 93 | Time-step resolution of near-encounter binding | Does prepared acquisition depend on the time step when kicks scale by sqrt(dt) and probabilities by 1-(1-p)^dt? | `sigma`/`sigmaRot` x sqrt(dt), `pHyb` .2, `pMelt` .1, `pMeltRun` .001, `pLigate` .02 rescaled; dt 1, 1/4, 1/16; body4/individual4/individual16 | works | sustained bridges /32 at dt 1/(1/4)/(1/16): body4 10/14/14, individual4 8/8/17 (p .039), individual16 9/9/15; direct escape falls 9–11 to 4 in every mode; frozen verdict sensitive toward more acquisition, not converged | time_resolution.js, time_resolution_validate.js, time_resolution_report.js (`TR_20260928`) | freeze one RESULTS 79 acquire/on re-screen at a finer step with a dt 1/64 dimer rung; default-step change is a user cost decision | 576 four-block worlds, seeds 7301–7332; dt 1 seeds 7301–7316 reproduce RESULTS 92 exactly; about 14.2M steps incl. neutrality/restart/replay, 411.7 measured CPU s; three concurrent workers; core unchanged; one fixture, no gate reopened |
 
 ## Knob index
 
@@ -485,13 +491,13 @@ the rows that used it). Rerun it after adding rows.
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative) |
+| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative), 93 (works) |
 | `physics` | 15 (works) |
-| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative), 92 (negative) |
+| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative), 92 (negative), 93 (works) |
 | `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative), 74 (works) |
-| `pMelt` | 18 (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
+| `pMelt` | 18 (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative), 93 (works) |
 | `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
-| `pMeltRun` | 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
+| `pMeltRun` | 78 (lead), 79 (negative), 88 (lead), 92 (negative), 93 (works) |
 | `pMem` | 85 (negative), 88 (lead), 89 (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
@@ -517,8 +523,8 @@ the rows that used it). Rerun it after adding rows.
 | `resM` | 11 (superseded), 11b (negative), 16 (negative) |
 | `shapeA` | 15c (lead) |
 | `shield` | 19 (works), 19c (works), 22 (negative), 27b (negative), 33b (works), 40d (inconclusive) |
-| `sigma` | 80 (lead), 82 (lead) |
-| `sigmaRot` | 80 (lead), 82 (lead) |
+| `sigma` | 80 (lead), 82 (lead), 93 (works) |
+| `sigmaRot` | 80 (lead), 82 (lead), 93 (works) |
 | `sizeA` | 28 (lead) |
 | `sizeB` | 67 (partial), 68 (works) |
 | `sizeC` | 67 (partial), 68 (works) |

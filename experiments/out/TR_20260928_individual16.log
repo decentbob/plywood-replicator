@@ -1,0 +1,7 @@
+{"mode":"individual16","done":32,"total":192,"cpuSeconds":6.170103}
+{"mode":"individual16","done":64,"total":192,"cpuSeconds":22.799514}
+{"mode":"individual16","done":96,"total":192,"cpuSeconds":84.982432}
+{"mode":"individual16","done":128,"total":192,"cpuSeconds":88.597017}
+{"mode":"individual16","done":160,"total":192,"cpuSeconds":102.732678}
+{"mode":"individual16","done":192,"total":192,"cpuSeconds":159.013142}
+{"mode":"individual16","complete":true,"cpuSeconds":159.496943,"summary":{"rows":[{"mode":"individual16","n":32,"bridges":{"1":9,"0.25":9,"0.0625":15},"directEscapes":{"1":9,"0.25":5,"0.0625":4},"fisherP":0.19629261962560973,"verdict":"intermediate"}],"overall":null}}

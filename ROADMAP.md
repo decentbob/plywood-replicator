@@ -30,21 +30,25 @@ integration and W growth work; bath acquisition, placement and in-place capture
 fail, especially under individual kicks. The isolated live lab
 (`node tools/half_cell_server.js`) is available and unchanged.
 
-**A cross-cutting observation motivates Q9.** Acquisition from prepared
-near-encounters fails or is weak under individual kicks in RESULTS 69, 79, 84, 89,
-91 and 92. In 92, straight dimers that start flush and eligible bind a face in only
-8/8/7 of 16 worlds. A default step kicks a free block 0.3 side lengths and 26
-degrees, as large as the whole binding tolerance window, and `pHyb` acts once per
-step. Earlier P0 checks varied solver passes and body versus individual kicks,
-never the time step.
+**Q9: contact kinetics depend on the time step (RESULTS 93).** A default step kicks
+a free block 0.3 sides and 26 degrees, as large as the binding window. Refining time
+with existing knobs (kicks x sqrt(dt), probabilities 1-(1-p)^dt, physical-time horizon
+and holds) changes the RESULTS 92 straight dimer fixture. Sustained bridges go from
+8/9 to 17/15 of 32 at dt 1/16 under individual4/16 (body4 10 to 14), and direct escape
+falls from 9–11 to 4 in every mode. The frozen verdict is sensitive toward more
+acquisition. dt 1/4 matches dt 1, so the finest step is not shown to be converged.
+The default step understates binding and overstates release. No earlier gate is
+reopened, but default-step acquisition/release rates are qualitative until checked.
+The repair branch's escape measurements (79, 92) were made where escape is overstated.
 
 ## Queue
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q9: time-step resolution of near-encounter acquisition ([plan](experiments/time_resolution_plan.md)) | Existing knobs only: kicks x sqrt(dt), per-step probabilities 1-(1-p)^dt, physical-time horizon and hold; dt 1, 1/4, 1/16; RESULTS 92 straight dimer fixture; body4/individual4/individual16; 32 seeds. Frozen sensitive/converged/intermediate rule and the decision each triggers. Diagnostic only: it reopens nothing automatically. |
-| 2, depends on Q9 | Either one frozen re-screen of RESULTS 79 acquire/on at a finer step (only if Q9 is sensitive toward more acquisition), or a portfolio choice among the parked alternatives below | If converged, time-step refinement does not explain acquisition failures and the next slice must be a different causal question, not another fixture in a parked branch. Candidates with the most prior foothold: P1 recipient function (62) and P3 useful mechanical operation (66). |
+| 1 | Q9b: finer-step convergence and the RESULTS 79 acquisition re-screen | Freeze before running. (a) Add dt 1/64 to the RESULTS 93 dimer fixture (same seeds and rule) to test whether 1/16 is converged. (b) Rerun RESULTS 79 acquire/on (eight-block rows, seeds 603/604, ABAB/AABB, body4/individual16) at default and at the finest adequate step, with the original sustained-bridge and release definitions in physical time. The failed 79 gate stays failed; this measures whether acquisition was step-limited. Expect release to get worse. |
+| 2, user decision | Exploration time step | If Q9b confirms step sensitivity, choosing a finer default (4–16x CPU) or a per-assay check is a core-physics cost decision for the user. Until then, report default-step contact rates as qualitative and include a finer-step rung for any acquisition or release claim. |
+| 3 | Portfolio choice among parked alternatives | If Q9b shows no rescue, the next slice is a different causal question, not another fixture in a parked branch. Candidates with the most prior foothold are P1 recipient function (62) and P3 useful mechanical operation (66). Both were measured at the default step. |
 
 **Standing user preferences carried from Q8.** Radiation protection is the
 hypothesised benefit of an enclosing wall, to test only after a wall reproduces,
@@ -86,6 +90,9 @@ All section numbers refer to [RESULTS](experiments/RESULTS.md).
 - Body jostling is accepted numerical motion, not strictly independent motion.
   Compare matched controls under individual kicks; separate solver resolution
   from kick changes. Use actual corner geometry, not only the selected rest shape.
+- Time step is a separate resolution axis (RESULTS 93): solver passes do not
+  change kick size. For contact kinetics, compare a finer step with kicks x sqrt(dt)
+  and probabilities 1-(1-p)^dt, and horizons and holds in physical time.
 - Keep one main experimental question active. The four-worker maximum covers
   every runner on the machine; it is not an instruction to launch four agents.
   Check process command lines; a scratch file or idle task does not prove activity.

@@ -71,7 +71,11 @@ incoming parts, but passes the complete geometry/access gate in37/38 body-motion
 bath fixtures and0/38 with individual kicks. Corrected moving positive controls
 also fail under individual kicks. The candidate stays out of the live runtime;
 the half-cell acquisition branch is parked pending a distinct mechanical cause.
-The roadmap now ranks the deferred passive-fold kinetic test next.
+The passive-fold kinetic test then failed: folding frees material by preventing
+bridges from completing (RESULTS92). A time-step check (RESULTS93) shows that
+default-step contact kinetics are not converged. Finer steps raise near-encounter
+binding and lower escape, so default-step acquisition and release rates are
+qualitative. See ROADMAP for the follow-up.
 
 ## Run it
 
