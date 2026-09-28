@@ -7134,3 +7134,138 @@ Next Q8c: keep rim bonds chemically separate from chain neighbors but present
 for mechanics, especially attached-cap docking. Then test local W recruitment
 without ancestry, enclosure or completion predicates. Radiation benefit still
 requires autonomous half-cell renewal and equal-material controls.
+
+## 84. Separate rim bonds preserve cap chemistry; passive recruitment fails
+
+**Q8c's combined gate fails.** The separate rim interface passes deterministic
+chemical/mechanical checks and all eight prepared ordinary-release fixtures.
+None of eight near/on worlds forms a new rim bond in 300 steps. Observer-neutral
+replay finds no eligible rim encounters at the actual binding phase; on/off
+trajectories are identical. Keep the interface, park this passive acquisition
+setting. This is not a complete half-cell or a test of shielding/fitness.
+
+Frozen protocol: `half_cell_rim_plan.md`. `HalfCellRimSim` is an isolated subclass
+of the Q8 contact solver. W uses the fixed C carrier and is inert to ordinary
+letter chemistry. P's outer rim connector is +, Q's is -, and W F/K ends are
+-/+. A complementary exposed pair, with at least one W, binds when reversed
+endpoint gaps are <=.1 and normals oppose within 10 degrees. Cap/cap rim bonds
+are incompatible. No mutable type, new internal state, relay, timer, ancestry,
+length or completion predicate is added. Rim bonds persist in this first assay;
+persistence is not evidence of material turnover.
+
+`rimBond` is a separate reciprocal table. Chemistry reads ordinary `bond`;
+physics temporarily sees their union, including pins, contacts and body
+jostling, and restores the ordinary graph before reactions/observation. The
+unused cap lateral slot is only a mechanical carrier in that temporary view.
+This does not establish a four-side design limit. Q's W is rotated 180 degrees
+to use its complementary K end, leaving the same rectangular outline.
+
+Ordinary compatibility/derive/transition rules remain in use for A/P/Q/E.
+Current-corner search/vacancy and a mechanically-free check govern docking:
+a free block may be projected, but if both participants are attached, a new
+pin is added in place only at endpoint gap <=.1. A rim-attached cap is never
+snapped alone onto a face. E docking moves neither participant. Shape reset
+requires freedom from both bond tables. Undocking kicks, proofreading, strain
+breaking and corner snapping are disabled/guarded; broader chemistry is not
+claimed supported. No core or historical source is edited.
+
+### Checks and kinetic screen
+
+Deterministic tests cover 12 P/Q × rail present/absent × DOCK/REPEL/TPL cases,
+plus supplied-fuel rearming, W's inert ordinary ports, correct/wrong rim labels,
+W/W end binding, attachment-off control, no attached-cap projection, poisoned
+observer metadata, mechanical-union equivalence, subclass restart and malformed
+rim rejection. End signals and ordinary transitions agree with the rim absent;
+rim occupancy cannot satisfy a missing rail or keep a rail-less cap armed.
+Mechanical union reproduces the prior contact solver's physical arrays/RNG.
+
+Seeds 701/703 × parent end P/Q × body16/individual16 give eight preparations.
+Each conserves P,Q,two A,two W,two E. Parent cap/letter begin TPL, daughter
+cap/letter DOCK and fuel ON. Both rails and two copying-face contacts are
+prepared; ordinary chemistry supplies release, with no imposed unlink. Use
+the established .8 stiffness, sigma .3/sigmaRot .45, 16 passes, 24×24 torus.
+Breaking, fraying, melting, undocking, spontaneous chain joining and fuel
+reload are off; rearming still requires energy.
+
+Each preparation has three arms: supplied rim bonds/new rim binding off
+(200 steps), or free W .06 outward from the matching rim faces with binding
+on/off (300 steps). This is a prepared near-contact opportunity, not a mixed
+bath. All first-five-step finite-state/conservation/pin checks pass. The frozen
+prepared gate requires release by t10, clearance >=.1, retained rims/rails and
+final20-frame pin <=.1 / overlap <=.02. Recruitment requires sustained parent-cap
+W attachment with those final-window bounds in at least one of two seeds per
+mode/end stratum. Off must recruit nothing. No rates/shapes/gates were retuned.
+
+| Motion / end | Prepared release gate | Near/on sustained recruitment | Near/off recruitment | Eligible post-motion rim contacts in on worlds |
+|---|---:|---:|---:|---:|
+| body16 / P | 2/2 | 0/2 | 0/2 | 0 |
+| body16 / Q | 2/2 | 0/2 | 0/2 | 0 |
+| individual16 / P | 2/2 | 0/2 | 0/2 | 0 |
+| individual16 / Q | 2/2 | 0/2 | 0/2 | 0 |
+
+All 24 worlds release both initial face bonds at t1. Prepared structural
+clearance occurs at t2–6 and all supplied rims/rails survive. All final-window
+geometry gates pass. Prepared worlds sequester both W blocks; near/on and off
+leave both W free. There are no W/W or cross-preparation cap/W bonds, no new
+rim bonds of any kind, and no newly acquired daughter arc. Final armed chain
+units number 2 or 3 out of 4; this is not full rearming or reproductive renewal.
+Stock birth counters are not used to call the supplied daughter autonomous.
+
+The [actual prepared release frames](out/HC_rim_20260928.svg) depict two
+chain-end fragments with rim stubs, not two complete D-shaped cells.
+
+### What failed, and physical limits
+
+At t0, every near/on world has two eligible prepared contacts at gap .06.
+After the first physical movement none is eligible, and there are zero eligible
+pairs across all 2,400 inspected binding phases. Per-world closest endpoint
+gaps during the run range .18023–.52310, always above .1 even before applying
+the opposing-normal requirement. The phase observer leaves every frame/final
+state unchanged; all near/on frames equal their matching off frames. Thus the
+failure occurs before bond acquisition, not because ordinary copying strips
+polymers off or because an arc closes too early. It does not show that no
+longer bath run could ever acquire a bond; the fixed screen still fails.
+
+Fresh worlds also expose transient overlap despite the previous numerical
+fixtures. The maximum is .235433 between W(C) and P at t1, seed703,
+individual16/P/on (and matching off). Replay observes exactly that overlap
+after physics, after binding and after chemistry: the binding rule did not
+create it. Some prepared body16 worlds also exceed .02 early. The declared
+gate checks the final20 frames, so prepared success is not all-time exclusion
+or an impermeable boundary. These limits qualify extrapolation from 83's
+specific fixtures. No added timing state or blanket solver guarantee follows.
+
+Next: freeze a separate comparison using the existing free-block docking
+operation to recruit mechanically free W, against this failed passive rule
+and binding-off. Retain in-place binding for attached parts and measure actual
+contact, vacancy, pin and overlap outcomes. Do not simply widen this rule's
+tolerances, extend its horizon or add a completion signal. Curvature, closure,
+whole-chain acquisition, descendant renewal and radiation payoff remain later.
+
+### Reproduction and cost
+
+```
+node experiments/half_cell_rim_test.js experiments/scratch/HC_rim_20260928.tests.json
+node experiments/half_cell_rim_assay.js experiments/scratch/HC_rim_20260928.json.gz
+node experiments/half_cell_rim_assay.js --validate experiments/scratch/HC_rim_20260928.json.gz
+node experiments/half_cell_rim_diagnose.js experiments/scratch/HC_rim_20260928.json.gz experiments/scratch/HC_rim_20260928.diagnosis.json
+node experiments/half_cell_rim_archive.js
+```
+
+Use unique output stems on rerun. The assay names the scratch tests input:
+restore `HC_rim_20260928.tests.json` from out to scratch unchanged if absent,
+refusing overwrite. The manifest records exact source/input/artifact hashes,
+matching scratch/archive bytes and costs. All 24 observed/plain physical-array
+and RNG comparisons and midpoint subclass restarts pass. Validation replays
+all 6,424 frames, recomputes actual-corner metrics and gates, checks both bond
+graphs, and rejects altered corners, rim lists, job labels and aggregates.
+No execution/test/validation attempt failed; the experimental gate did.
+
+Total **24,823 physics steps** includes 16,000 observed/plain/restart, 6,400
+validation, 22 tests and 2,401 diagnosis. Measured CPU: tests .468s, execution
+16.734, validation 10.687, read-only inspection .452, diagnosis 3.858, archive
+.781 = **32.980s**. Startup, analysis and compression are included; final small
+bookkeeping/manifest writes, shell, editing and Git are unmeasured. The fully
+inclusive cap is therefore not independently verified. One process/no workers,
+no other repository simulation found; none remains active. Core/historical
+bytes are unchanged; the full core suite/default fingerprints were not rerun.

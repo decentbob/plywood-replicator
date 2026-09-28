@@ -52,3 +52,6 @@ experiments/out/HC_contact* text eol=lf
 experiments/out/HC_resolution* text eol=lf
 experiments/out/HC_contact*.gz binary
 experiments/out/HC_resolution*.gz binary
+experiments/half_cell_rim* text eol=lf
+experiments/out/HC_rim_20260928* text eol=lf
+experiments/out/HC_rim_20260928*.gz binary

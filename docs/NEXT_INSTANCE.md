@@ -1,40 +1,38 @@
-# Next-instance handoff — 2026-09-27
+# Next-instance handoff — 2026-09-28
 
-Read [ROADMAP](../ROADMAP.md), the sole current queue. Q8 is the user's two
-independent D-shaped half-cells: each chain is its own straight boundary and
-its own curved arc connects the special caps. Copy outward, build a new arc,
-release ordinary face bonds; closure may occur after release. More working
-sides are allowed. There is no shared old wall to cut.
+Read ROADMAP.md, the sole queue. Q8 is the user's two independent D-shaped
+half-cells: each chain is its own straight boundary and its own arc connects
+its caps. Copy outward, build a separate arc, release ordinary face bonds;
+closure after release is allowed. No shared old wall must split; extra sides
+are allowed. No complete cell has yet been built or reproduced.
 
-Q8a geometry (82) and Q8b contacts (83) are complete. Research polygon contacts
-preserve access but fail one body4 fixture. Solver-phase replay shows final
-pin/shape correction reintroducing A/A overlap; E also overlaps at four passes.
-A separately frozen body16 follow-up passes 8/8, as do 8/8 individual16 references
-under the added all-pair bound. Use polygon contacts/body16 with individual16
-controls for the next isolated assay. Body4 is parked here. The original Q8b
-failure is not reclassified. No chemistry, growth or descendants ran.
+Q8c (RESULTS 84) is complete and its combined gate failed. The new research
+HalfCellRimSim keeps reciprocal rimBond separate from ordinary chemistry, while
+physics sees the mechanical union. P+/Q- and W-/+ end labels add no chemical
+states. In deterministic tests rim occupancy cannot replace the inward rail,
+change cap end signals or keep a rail-less cap armed. Supplied fuel rearms;
+attached caps are not snapped alone onto faces. Mechanical union and restart pass.
 
-Evidence: `out/HC_contact_resolution_20260927.manifest.json` maps all 13 archived
-artifacts and matching scratch copies. Standalone `half_cell_contact_validate.js`
-passes full replay and diagnoses the residuals. The original contact runner's
-built-in validation has a preserved initial-cache comparison bug; do not use
-that path. Its first t0 serialized-array check failure also survives with source.
-`half_cell_resolution.js` validates its own raw. Restore its two fixed scratch
-inputs from archived copies if needed; exact instructions are in RESULTS 83.
+Eight prepared fixtures release normally at t1 and retain rim stubs; final
+geometry passes. Near/on recruitment fails 0/8, with zero eligible encounters
+at 2,400 post-motion binding phases. Initial contacts were eligible but lost
+after kicking; on/off paths match. Park the .1-gap/10-degree passive acquisition
+setting. No arc timing gate, longer horizon or tolerance rescue is warranted.
+Fresh worlds show transient t1 overlap up to .235433 already after physics;
+final-window success does not establish all-time exclusion or a sealed wall.
 
-Next Q8c: separate rim bonds from chain-neighbor chemistry. Cap end signals,
-release requirements and rearming must reflect only the inward rail; mechanical
-pins, collision and jostling must still include the rim. A rim-attached cap cannot
-be docked by snapping it alone as a free monomer. W association should read local
-port labels and actual contact geometry; no ancestry checks, completion signals
-or timing states. Freeze a small contract and kinetic gate before running.
+Next Q8d: freeze one comparison using the existing free-block docking operation
+for mechanically free W, versus failed passive binding/off. Attached parts stay
+in place. Measure actual post-motion opportunities, polygon vacancy, pin and
+overlap outcomes before claiming acquisition. Use body16/individual16; default
+core remains unchanged. Curved rim growth and ordinary full-chain acquisition
+come only after this prerequisite. Radiation benefit remains hypothetical.
 
-28,116 physics steps and 28.539 measured CPU seconds this slice, including
-failures/QA/archive; small final bookkeeping writes and shell work unmeasured.
-Core/historical sources unchanged; no full core suite/fingerprint rerun.
-
-User hypothesis: rays blocked by polymers might make half-cells competitive.
-Global pBreak ignores walls; explicit ray exclusion and exposed straight-boundary
-geometry matter. After reproduction works, use ray/opacity and equal-material
-controls, count damage/descendants/costs, and preserve old wall negatives (25).
-No task-owned simulation or agent is active. Q7b remains deferred.
+Evidence: experiments/out/HC_rim_20260928.manifest.json and matching raw/tests/
+validation/diagnosis/SVG artifacts. Assay and validator name a fixed scratch
+tests file: restore its exact archived copy if absent, refuse overwrite.
+All 24 neutrality/restart checks and 6,424 frame replays pass; no harness run
+failed. 24,823 physics steps, 32.980 measured CPU seconds including QA/archive;
+small final bookkeeping and shell work unmeasured. Core/historical sources
+unchanged; no full core suite/fingerprint rerun. No task simulation or agent
+is active. Q7 remains deferred.

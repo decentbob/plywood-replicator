@@ -4,8 +4,10 @@
 Q8 candidate. The previous version of this memo mistakenly put both curved arcs
 on one chain. The user means two separate D-shaped assemblies, each with its own
 chain as the straight boundary and its own polymer arc. A prepared cap-geometry
-assay and targeted contact comparison are complete (RESULTS 82–83); growth
-chemistry remains unimplemented.
+assay and targeted contact comparison are complete (RESULTS 82–83). An isolated
+rim interface and passive end-binding rule are implemented (84): prepared
+release works, but the near-contact recruitment screen fails. Curved-arc growth
+and complete half-cell reproduction remain unimplemented.
 ROADMAP controls execution.
 
 ## Topology and sequence
@@ -91,8 +93,8 @@ settings for the next small chemistry test. The fixture's unused lateral
 slot carries a rim pin only while chemistry is disabled; a real rim interface
 must remain distinct from the chain-neighbor ports.
 
-The next interface must keep ordinary chain bonds and rim bonds logically
-separate. Rim occupancy must not change a cap's advertised chain end, substitute
+The tested Q8c interface keeps ordinary chain bonds and rim bonds logically
+separate. Its tests confirm rim occupancy does not change a cap's advertised chain end, substitute
 for its inward rail bond, satisfy ordinary release requirements, or keep a cap
 armed after its rail is lost. Conversely, mechanical pinning, collision checks
 and body jostling must include rim attachments. A cap attached to a rim is not
@@ -100,8 +102,24 @@ a free monomer that can be snapped alone onto a copying face. Check both these
 chemical and mechanical views; hiding a rim bond during chemistry alone is
 insufficient. W end compatibility should use fixed local port labels and actual
 contact geometry, with no ancestry or half-cell identity test. No new timing
-state is justified by the contact result. Implementation and kinetic gates are
-still to be frozen in Q8c.
+state is justified by the contact result.
+
+Q8c implements P+, Q-, W-minus/plus end labels with a separate reciprocal
+`rimBond` table. W cannot join ordinary letter chemistry. A temporary union
+supplies all pins and body motion to the existing solver; it is removed before
+reactions run. A rim-attached cap can only bind in its current pose, while a
+completely free ordinary monomer can use ordinary docking projection with a
+polygon vacancy check. No new chemical state or completion mark is added.
+
+All eight prepared chain-end fixtures release normally while retaining rims.
+None of eight near/on worlds recruits W in 300 steps. No post-motion contact
+meets the nearly flush endpoint criterion; initial prepared contact is lost
+on the first kick. The on/off paths are identical, so this is not evidence
+of polymer growth occurring at an inconvenient copying stage. The next bounded
+comparison is existing free-block docking for W versus this failed passive
+rule. Do not rescue it with a timing gate or quietly broaden its tolerances.
+Fresh worlds also expose transient overlap despite the previous prepared
+contact checks; actual acquisition needs geometry measured at the binding phase.
 
 The completed paired-end fixture includes each cap's immediate ordinary chain
 neighbor, one rim stub and fuel access. It checks both P/Q orientations,

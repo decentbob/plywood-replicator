@@ -1,4 +1,4 @@
-# Research priorities — 2026-09-27
+# Research priorities — 2026-09-28
 
 **Goal:** useful inherited organization, eventually cumulative complexity, from
 simple fixed local rules acting on conserved physical parts. More mechanisms,
@@ -46,15 +46,28 @@ for moving half-cell tests. No core defaults changed, no chemistry ran, and
 these are reused numerical fixtures, not fresh-seed biological confirmation.
 Core/historical sources are unchanged; no simulation is active.
 
+**Q8c interface works; recruitment fails (RESULTS 84).** A separate rim bond
+table preserves ordinary cap end/release/rearming semantics and remains present
+in mechanics. All eight prepared fixtures release both copying contacts at t1
+through ordinary chemistry and retain their rim stubs. This is prepared chain
+release, not chain assembly or a complete cell. Near/on recruitment is 0/8,
+with zero eligible post-motion encounters in all 2,400 inspected binding phases;
+on/off trajectories match. Initial poses are eligible, but the first kick loses
+the contact and it never returns within the fixed 300-step horizon. Park the
+passive, nearly flush two-endpoint acquisition setting; no longer runs or timing
+states. Fresh runs also expose transient first-step overlap up to .235433,
+already present after physics. The earlier geometry bound is not universal.
+Final-window geometry passes; no stable impermeable boundary is established.
+
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8c: distinct rim interface and local association | Keep polygon contacts at body16 with individual16 controls. Store rim bonds separately from ordinary chain neighbors; check cap derivation, local release and rearming with/without a rim. Mechanics must still include rim constraints and must not treat a rim-attached cap as a freely movable monomer during docking. Test conserved W recruitment to compatible exposed ends, with no copy-completion gate or ancestry filter. Freeze the small assay before running. |
+| 1 | Q8d: compare W recruitment with existing free-block docking | Keep the tested separate rim interface. Freeze one comparison between the failed passive edge-contact rule and the same single-free-block docking operation used by ordinary monomers, with binding disabled as control. Only mechanically free W may be projected; attached parts remain in place. Establish actual post-motion contact opportunities, vacancy and pin/overlap bounds before interpreting capture. Use body16/individual16, no timer/ancestry gate, tolerance sweep or longer-run rescue. |
 | 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a/Q8b and the targeted resolution follow-up are complete; Q8c is not frozen.
+Q8a–Q8c are complete; Q8c's combined gate failed. Q8d is not frozen.
 The brief's alternatives are a design portfolio,
 not concurrent experimental queues. Do not add states just to finish a cell outline.
 

@@ -1,0 +1,99 @@
+{
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\half_cell_rim_archive.js"
+  ],
+  "sourceHash": "4c6ec2fe5d5e28230f937bea4c52f1861fc88488916bf421a29af082d3e2119c",
+  "files": [
+    {
+      "source": "experiments/scratch/HC_rim_20260928.tests.json",
+      "target": "experiments/out/HC_rim_20260928.tests.json",
+      "sha256": "a8f385e8943e0968179ded03b37b74e03f4d0dc178519c690c6d0a704fd6ec3c",
+      "bytes": 1502
+    },
+    {
+      "source": "experiments/scratch/HC_rim_20260928.json.gz",
+      "target": "experiments/out/HC_rim_20260928.json.gz",
+      "sha256": "c0bb562341a3e4042da4aa43dbd01d9372a435defec5c5f85bac86c9dd9ac55c",
+      "bytes": 5668898
+    },
+    {
+      "source": "experiments/scratch/HC_rim_20260928.json.gz.cpu.json",
+      "target": "experiments/out/HC_rim_20260928.json.gz.cpu.json",
+      "sha256": "e3b4a4583b94ea048965110f3425543aec38fe3e5671b99654f7df00d252e89b",
+      "bytes": 103
+    },
+    {
+      "source": "experiments/scratch/HC_rim_20260928.json.gz.validation.json",
+      "target": "experiments/out/HC_rim_20260928.json.gz.validation.json",
+      "sha256": "15050e9dbecb6403781e0812334421a6718f2a3d8588bb3de5ab5321dda8c111",
+      "bytes": 12736
+    },
+    {
+      "source": "experiments/scratch/HC_rim_20260928.json.gz.validation.json.cpu.json",
+      "target": "experiments/out/HC_rim_20260928.json.gz.validation.json.cpu.json",
+      "sha256": "85f56e944667fea97aa414dd20a31fc4780d5b4a1af29a4138f6aeb12b0bc90e",
+      "bytes": 97
+    },
+    {
+      "source": "experiments/scratch/HC_rim_20260928.diagnosis.json",
+      "target": "experiments/out/HC_rim_20260928.diagnosis.json",
+      "sha256": "777a22cd71f8b3da7973a7c517cecbd04b90aaaa0562f404ce5897637580295a",
+      "bytes": 254302
+    },
+    {
+      "source": "experiments/scratch/HC_rim_20260928.diagnosis.json.cpu.json",
+      "target": "experiments/out/HC_rim_20260928.diagnosis.json.cpu.json",
+      "sha256": "8034651e96faf3be11849508c616608c154d01e4499f2e286155fe78ca997669",
+      "bytes": 57
+    },
+    {
+      "target": "experiments/out/HC_rim_20260928.svg",
+      "sha256": "da9bf73eedf3ac3ca878dffaef91d61662c22882f342223652459e49d6b67688",
+      "bytes": 8734
+    }
+  ],
+  "costs": [
+    {
+      "file": "experiments/out/HC_rim_20260928.json.gz.cpu.json",
+      "cpuSeconds": 16.734,
+      "count": {
+        "observed": 6400,
+        "plain": 6400,
+        "restart": 3200,
+        "replay": 0
+      },
+      "complete": true
+    },
+    {
+      "file": "experiments/out/HC_rim_20260928.json.gz.validation.json.cpu.json",
+      "cpuSeconds": 10.687,
+      "count": {
+        "observed": 0,
+        "plain": 0,
+        "restart": 0,
+        "replay": 6400
+      },
+      "complete": true
+    },
+    {
+      "file": "experiments/out/HC_rim_20260928.diagnosis.json.cpu.json",
+      "cpuSeconds": 3.858,
+      "physicsSteps": 2401,
+      "complete": true
+    }
+  ],
+  "testsCpuSeconds": 0.468,
+  "readOnlyInspectionCpuSeconds": 0.452,
+  "archiveCpuSeconds": 0.781,
+  "measuredCpuSeconds": 32.98,
+  "timingScope": "Includes process startup, tests, execution, replay, diagnosis, the logged read-only inspection, compression and archive. Final small bookkeeping/manifest writes, shell, editing and Git are unmeasured.",
+  "physicsSteps": 24823,
+  "outcome": {
+    "gate": false,
+    "prepared": 8,
+    "recruited": 0,
+    "onWorlds": 8,
+    "eligibleAtBinding": 0
+  },
+  "reproduce": "The assay names its scratch tests input. Copy HC_rim_20260928.tests.json from out to scratch unchanged if absent; refuse overwrite. Use new output stems for execution/replay/diagnosis."
+}
