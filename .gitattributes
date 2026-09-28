@@ -74,3 +74,6 @@ tools/half_cell_server* text eol=lf
 half-cell.html text eol=lf
 experiments/out/HC_live_20260928* text eol=lf
 experiments/out/HC_live_20260928*.gz binary
+experiments/half_cell_bath* text eol=lf
+experiments/out/HC_bath_20260928* text eol=lf
+experiments/out/HC_bath_20260928*.gz binary

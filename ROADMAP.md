@@ -119,16 +119,25 @@ as .194134; keep protection and robust mechanics unclaimed. W bonds persist.
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8h: free-material acquisition in the live runtime | Freeze a small50k–150k body-jostled population screen with an early viability/CPU look. The120-step integration check is too short to assess bath assembly. Use equal material with rim binding on/off, record actual encounter/binding rates, partial arcs, cross-links, physically detached complete chains/cells and rearming. Do not treat the prepared-contact pass as autonomous reproduction. New shapes/rates/timing states and energy changes need a separate cause. |
+| 1 | Q8i: diagnose ordinary placement failure before another bath run | Q8h finds39 rejected placements out of44 attempts, zero new rails in both on/off arms. Freeze a small replay/geometry diagnostic of actual rejected contacts: free-block slot overlap versus bound-edge gap, attempted side/types, blocking polygon and intended-partner contact. Compare prepared successful contacts and unchanged ordinary-chain placement. Record missing earlier encounter/filter denominators; do not infer them from placement attempts. No longer bath, timing state, rate/fuel rescue or collision relaxation without a demonstrated cause. |
 | 2, only for an earned operational lead | Targeted geometry check and repeated operation | Compare the relevant acquisition/release effect with individual kicks. Known overlap limits claims; source audit alone did not justify a bonded-contact correction. Check actual geometry and descendant operation before claiming robust reproduction or protection; no arbitrary solver sweep or gate relaxation. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8g are complete; Q8c/d's acquisition gates failed, Q8e's prepared
+Q8a–Q8h are complete; Q8c/d's acquisition gates failed, Q8e's prepared
 joint gate passed, Q8f's static geometry passes but both dynamic settings fail.
 Q8g passes software integration and prepared operation, not free-bath reproduction.
-No next assay is frozen. The local lab server may remain open, paused; it performs
-no steps without a request. Count an actively running viewer in the worker limit.
+Q8h (RESULTS89) runs fresh809/811 for50k steps with rim binding on/off. All four
+finish: no new capped chain, rail bond or complete D. On arms acquire6/7 rim bonds,
+including cap-bound and free arcs; no free W ring forms. Ordinary placement rejects
+14/15 and3/5 attempts on,4/5 and18/19 off; this is after compatibility/geometry/
+probability filtering. All E stays charged. Automatic W growth works, but the
+same-material controls also fail at chain assembly. Park this bath setting;
+placement failure is a distinct diagnostic lead, not yet a causal explanation.
+One offspring's inventory cannot test sustained turnover. Sampled overlap reaches
+.203795 in811/on; no protection or robust mechanical claim is earned.
+No next assay is frozen. No lab server was running at Q8h startup; check processes
+before another batch. Count an actively running viewer in the worker limit.
 The user's automatic-polymer correction supersedes the proposed free-W
 docking comparison; that comparison was not executed.
 The brief's alternatives are a design portfolio,

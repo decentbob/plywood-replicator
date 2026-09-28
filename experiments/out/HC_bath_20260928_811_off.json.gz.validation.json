@@ -1,0 +1,15 @@
+{
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\half_cell_bath.js",
+    "--validate",
+    "experiments/scratch/HC_bath_20260928_811_off.json.gz"
+  ],
+  "rawHash": "4ec082f23d7aea6ea96edeb3665cfb10ffb50ad53e3c2a95f9ef16d913213cee",
+  "sourceHash": "50cf9399a686de3b75393931c5524d1e4956a69f3661e18f403e9f73e213de76",
+  "complete": true,
+  "steps": 51000,
+  "frames": 101,
+  "neutral": true,
+  "restart": true,
+  "tapeEvents": 1
+}

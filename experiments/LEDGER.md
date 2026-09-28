@@ -86,6 +86,12 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    close its W rim; polymer-off controls acquire no rim. Moving120-step bath/
    contact starts yield0/8 new complete cells, one W bond in one world. This
    short software screen neither demonstrates nor rules out bath reproduction.
+   A fresh50k-step bath screen (89) acquires6/7 new rim bonds in two on worlds,
+   but zero new chain rails/capped chains/cells in all four on/off worlds.
+   Ordinary placement rejects39/44 post-filter attempts; no E is spent. Thus
+   automatic W growth is observed, while ordinary chain acquisition fails even
+   without further rim binding. Diagnose rejection geometry before any longer
+   run or new timing/fuel mechanism; these counts do not identify the cause.
    Permanent wedges expose a two-row joint mismatch that straight supports do not remove (48). Opposing A/B wedges
    with complementary pairing restore copying under default physics in both directions (49); the benefit weakens with
    poorly resolved individual kicks. Shape and pairing must be tested together, with solver controls.
@@ -382,6 +388,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 86 | Angled polymer joint mechanics | Do prepared eligible W joints align and leave the next end accessible? | prepared on/off; 30-degree corner contact; `iters`16, stiffness.8, body/individual kicks; native M benchmark | lead | final gate 16/16 W and 8/8 native M; unbound aligned 0/24; maximum final pin .080312/overlap .009121; transient Q-extension overlap .223063 | half_cell_settle.js, half_cell_settle_report.py (`HC_settle_20260928_v5`) | derive one curved W polygon and complete D-shaped seed geometry; no timing state or bath-growth promotion | 48 five-block worlds, fresh seeds733/739, 60 steps; 10,081 total physics steps with QA; 10.712 measured CPU s; 48 neutrality/restarts, 2,928-frame replay, four corruption checks; four zero-step harness failures/sources retained; imposed bonds, no chemistry/acquisition/descendants; core unchanged |
 | 87 | Complete paired D geometry | Can identical curved W close behind a capped chain and preserve copying/release space? | eight W per P-A-A-Q; closed/open control, body/individual kicks, `iters`16 then separately frozen32; physics only | negative | static fit/access passes; all pairs separate after imposed release; closed gate body16 2/2, individual16 0/2; at32 3/4 overall, seed769 held overlap .021333 > .02; all closed released windows pass at32 | half_cell_arc.js, half_cell_arc_diagnose.js, half_cell_arc_resolution.js (`HC_arc_20260928`, `HC_arc32_20260928`) | park dynamic settings; narrowly audit bonded A/A exclusion/constraint residual before any distinct correction; no third resolution or chemistry promotion | 16 prepared 28-block worlds, seeds761/769, 120 steps; 6,792 total physics steps, 121.401 measured CPU s; 16 neutrality/restarts, 1,936 replay frames, eight corruption checks, neutral diagnosis; no harness failures; imposed bonds/release, no acquisition/descendants; core unchanged |
 | 88 | Live half-cell chemistry integration | Can curved W, ordinary chain chemistry and the viewer run together without scheduled splitting? | ordinary Sim.step; `pMem` .2, `pMelt`/`pMeltRun`/`pMeltEnd` and `pReload` restored; body/individual16; paired/contact/bath starts | lead | prepared pair release4/4 at t1; stationary loose contacts form/release chain and rim with pMem=1, off controls no rim; moving acquisition0/8 complete cells, one W bond; maximum overlap .194134 | half_cell_live.js, half_cell_live_assay.js, tools/half_cell_server.js (`HC_live_20260928`) | bounded free-bath on/off screen before reproduction claims; keep geometry caveat and no timing program | 12 worlds, seeds787/797,120 steps; 5,112 timed physics steps plus123 untimed smoke/browser steps;64.326 measured CPU s;12 neutrality/restarts,1,452-frame replay, four invalid-save cases, HTTP/UI checks; no failed harness; manifest fuel-note erratum retained; core unchanged |
+| 89 | Free-bath half-cell acquisition | Can the live seed acquire a new half-cell from loose conserved material? | `rimBind` on/off, `pMem` .2, body16, unchanged Q8g runtime | negative | on acquires6/7 rim bonds; all four worlds have0 new rails/capped chains/cells; ordinary placement rejects39/44 attempts; E stays charged; sampled overlap .203795 | half_cell_bath.js, half_cell_bath_summary.js (`HC_bath_20260928`) | park bath setting; diagnose actual rejected placements before longer runs or timing/fuel changes | fresh809/811 x on/off x50k,28 blocks, one-offspring inventory;404,500 total physics steps,3,768.891 measured CPU s;4 full neutrality/restarts,404-frame and every-step bond-tape replay, three corruption checks; no censoring/harness failures; preflight/figure revisions preserved; core/runtime unchanged |
 
 ## Knob index
 
@@ -464,7 +471,7 @@ the rows that used it). Rerun it after adding rows.
 | `pMelt` | 18 (negative), 78 (lead), 79 (negative), 88 (lead) |
 | `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative), 88 (lead) |
 | `pMeltRun` | 78 (lead), 79 (negative), 88 (lead) |
-| `pMem` | 85 (negative), 88 (lead) |
+| `pMem` | 85 (negative), 88 (lead), 89 (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works), 43a (negative) |

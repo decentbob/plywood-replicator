@@ -54,6 +54,11 @@ Prepared pairs release through chemistry in 4/4 short checks; stationary loose
 contacts assemble a second chain and rim. No new complete cell appears in the
 120-step moving bath/contact checks (RESULTS88). This is an opt-in integration,
 not demonstrated autonomous half-cell reproduction. W bonds currently persist.
+The subsequent two-seed50,000-step bath screen forms6/7 new W bonds with binding
+enabled, but no new chain links or complete cells in either enabled or disabled
+arms. Ordinary placement rejection is the next diagnostic question; fuel is
+unused in these runs ([actual final worlds](experiments/out/HC_bath_20260928_v2.svg),
+RESULTS89). This does not yet establish why acquisition fails.
 
 ## Run it
 

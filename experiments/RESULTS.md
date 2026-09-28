@@ -7753,3 +7753,137 @@ Prepared local operation works; autonomous cell reproduction remains open.
 Next freeze a bounded free-bath on/off screen with early viability and actual
 encounter/attachment accounting before adding mechanisms. Promising operation
 still needs targeted individual-motion geometry checks and descendant turnover.
+
+## 89. Free-bath W growth without chain acquisition
+
+2026-09-28, Q8h. The user requested one bounded slice before an instance switch.
+[Frozen plan](half_cell_bath_plan.md), [summary](out/HC_bath_20260928.summary.json),
+[actual final polygons](out/HC_bath_20260928_v2.svg),
+[manifest](out/HC_bath_20260928.manifest.json).
+
+### Question and fixed contract
+
+Does the live runtime acquire a new complete half-cell in a small bath on an
+ordinary screening horizon? RESULTS88 tested only120 moving steps. This assay
+changes no runtime rule, shape, state, rate, fuel mechanism or core source.
+Fresh seeds809/811 each run50,000 ordinary steps with future rim binding on/off;
+body jostling,16 solver passes and all other Q8g settings remain fixed. The
+prepared founder D remains in both arms. Initial arrays/RNG match within each
+seed, but conditional RNG draws can diverge subsequent trajectories.
+
+Each24x24 world conserves28 blocks:4 A,16 W,2 P,2 Q,4 E. The founder is P-A-A-Q
+with8 W; the remaining structural material permits one offspring, not sustained
+turnover. W binds automatically through existing end-corner contacts with pMem=.2
+and persistent rim bonds. Reactions never read observer identities, components,
+completion, detachment or ancestry. Read-only observers record bonds, contact
+eligibility and physical outputs; they do not supply actions to the runtime.
+
+Primary success requires a new capped chain and cap-to-cap W rim, empty copying
+faces, no external structural bonds, actual gap>=.1 and100 consecutive steps of
+persistence. Active state, exact versus variant organization and an unpaired
+bare chain are distinct outputs. The bare-chain detachment metric excludes
+partial W attachments; a complete D includes its own rim when checking distance.
+Neither on world reaches even the earlier capped-chain condition.
+
+### Outcomes
+
+All four worlds finish50k without censoring. No new chain rail bond, capped
+chain, closed D, detached complete output or active offspring appears. The
+founder remains the only capped chain and closed D. The ordered bond tape also
+shows zero short rail fragments, so this zero is not merely an exact-copy filter.
+
+| Seed/arm | Phase-start eligible rim pairs (distinct port pairs) | New rim bonds | New copying bonds | Ordinary placement rejected/attempted | Charged E minimum |
+|---|---:|---:|---:|---:|---:|
+|809/on|44 (31)|6|1|14/15|4|
+|809/off|116 (57)|0|1|4/5|4|
+|811/on|15 (13)|7|2|3/5|4|
+|811/off|127 (56)|0|1|18/19|4|
+
+Phase-start counts include repeated contacts and are not independent samples.
+The on worlds actually test90,430/13,248 rim geometries, with44/15 eligible calls;
+off arms execute no rim-binding tests, but the neutral observer records their
+would-be eligible phase-start pairs. The6/7 successes are stochastic outcomes,
+not estimates from independent replicates. On/off exposure differences include
+changed shapes, occupied ports and divergent random draws.
+
+Ordinary placement is counted **after** candidate, compatible-side, geometry and
+probability filters. Across all worlds39/44 attempts fail:34 free-block projection
+rejections and5 attempts involving two mechanically bound blocks. These are not
+the total encounter opportunities. Existing code checks polygon slot overlap for
+a projected free part and a gap limit for two bound parts; this assay does not
+record the attempted sides or blocking polygon. Therefore the rejection counts
+identify a diagnostic stage, not the causal geometry or a proven algorithm bug.
+There are5 successful face bonds in total, no face removals, no new rail bonds
+or fuel bonds. Every E stays charged at every observed step. Fuel exhaustion is
+not implicated; failure occurs before a complete output needs rearming.
+
+W acquisition is real but incomplete. In809/on the spare caps become connected
+by a two-W arc; separate free W components contain2,3 and1 blocks. In811/on the
+spare caps carry2 and1 W respectively, with a separate five-W free arc. The
+founder's8 W remain attached. Thus2/3 additional W are cap-bound,6/5 are outside
+cap-bound components, and only1/0 W remain isolated. No free W ring appears at
+any step. Off arms keep all8 spare W isolated. This material sequestration may
+matter, but rim-off also fails to assemble rails; premature W growth alone does
+not explain the observed chain failure.
+
+Geometry is sampled every500 steps, not continuously. Maximum sampled convex
+overlap/pin gap is .016187/.037573 (809/on), .006209/.024692 (809/off),
+.203795/.263823 (811/on), .005853/.031694 (811/off). The known numerical issue
+persists. These data do not pass the old mechanical gate, establish a sealed
+wall, demonstrate radiation protection or compare reproductive fitness.
+
+### Validation and reproduction
+
+```
+node experiments/half_cell_bath.js --preflight experiments/scratch/UNIQUE.preflight.json
+node experiments/half_cell_bath.js 809 on experiments/scratch/UNIQUE_809_on.json.gz
+node experiments/half_cell_bath.js 809 off experiments/scratch/UNIQUE_809_off.json.gz
+node experiments/half_cell_bath.js 811 on experiments/scratch/UNIQUE_811_on.json.gz
+node experiments/half_cell_bath.js 811 off experiments/scratch/UNIQUE_811_off.json.gz
+node experiments/half_cell_bath.js --validate experiments/scratch/UNIQUE_809_on.json.gz
+```
+
+Validate each of the four raw files. Summary takes an unused output path followed
+by all four raw paths in809on/off,811on/off order. Report takes that summary and
+an unused output stem. The archive script preserves this completed batch and
+refuses overwrite. The manifest records exact executed commands, hashes and CPU
+costs; archived Q8g input is read directly, without a scratch-input prerequisite.
+At most four simulation processes ran at once. No new settings or longer run
+were introduced after the early viability looks or final zeros.
+
+Both100-step preflights pass observer/plain equality and50-step restart. The
+first source is preserved: before the full runs, the harness was extended to
+save/replay first qualifying milestone states, then the preflight passed again.
+No runtime parameter changed. Synthetic checks cover founder exclusion, cut rim,
+still-paired structures and corrupt sample rejection. Independent tape analysis
+reconstructs every saved ordinary/rim graph and final tables, reconciles event
+counts and rejects three deliberate corruptions.
+
+All four full plain replays pass: every-step bond tables, all404 sampled frames,
+all saved checkpoints, final physical arrays/RNG and outcome census agree.
+Each25k checkpoint also resumes exactly to the saved26k state. The full replay
+does not independently recount every rim-geometry query; instrument neutrality
+and aggregate/tape consistency are tested separately as described above.
+
+The manifest archives25 evidence files plus itself. Total **404,500 physics
+steps**:200,000 observed,200,000 plain replay,4,000 midpoint restart and500 across
+the two preflights. Measured Node CPU **3,768.891s**, within the5,000s budget;
+all execution and replay ceilings pass. Startup/compression are included;
+read/edit, shell/Git and visual inspection/conversion are unmeasured, so a fully
+inclusive cost is not independently verified. No simulation remains active.
+
+The first SVG had overlapping row labels. Its exact source, figure and report
+are retained; v2 corrects spacing and its raster preview was visually inspected.
+A browser-opening attempt timed out; bundled Sharp rendered both previews despite
+font-cache warnings. These UI/conversion checks ran no physics and are untimed.
+No simulation/harness failure occurred. Core/historical sources are unchanged;
+the full core suite, default fingerprints and generated viewer rebuild were not
+rerun for this observer/assay/documentation slice.
+
+**Decision:** the acquisition gate fails in both on worlds; park this bath setting.
+Automatic polymer growth works, but ordinary chain placement and assembly fail in
+both arms. Next freeze a small actual-rejection geometry diagnostic, comparing
+prepared successful contacts and ordinary-chain placement, before considering a
+change. Do not lengthen this batch, add a timing program or alter fuel on these
+results. No operational lead earns individual-motion or descendant confirmation.
+Stop after validation/archive/handoff for the user's instance switch.

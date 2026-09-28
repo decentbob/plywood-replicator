@@ -51,6 +51,14 @@ The viewer uses this same Node runtime, not a recorded animation. It starts
 paused; count it as a simulation process when stepping. Evidence and the fuel-note
 erratum are under `out/HC_live_20260928*`. No scratch input prerequisite.
 
+The bounded free-bath screen (RESULTS89) uses `half_cell_bath.js` (including
+`--preflight` and `--validate`), `_plan.md`, `_summary.js`, `_report.js` and
+`_archive.js`. Fresh809/811 x rim on/off x50k steps: automatic W growth6/7 bonds,
+no new chain rails or complete cells in any arm. Placement rejection motivates
+diagnosis, not another longer run. Full plain replays, midpoint restarts and an
+independent bond-tape audit accompany `out/HC_bath_20260928*`. Runtime and archived
+inputs are unchanged; use unique scratch stems and see RESULTS89 for commands.
+
 Read the plan and script's CLI rather than assuming identical options across runners.
 Recent assays validate exact input/source hashes: moving files or changing even comments can
 break historical validation. Keep runtime and assay source cleanup separate from documentation.
