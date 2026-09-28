@@ -1,0 +1,7 @@
+{
+  "record": "HC_live_20260928.manifest.json",
+  "field": "limitations[2]",
+  "correction": "The preliminary no-fuel-utilization note is incorrect. In seed787 individual/contacts, charged E falls to3 before returning to4; all other screened worlds retain4 charged E. Ordinary fuel use/reload occurs in one partial-assembly world. No second complete active half-cell is established. The original manifest is retained unchanged for provenance.",
+  "basis": "HC_live_20260928.json.gz records[*].samples[*].summary.charged; minimum3 only for seed787, motion individual, start contacts",
+  "simulationSteps": 0
+}

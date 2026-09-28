@@ -1,0 +1,80 @@
+{
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\half_cell_live_archive.js"
+  ],
+  "sourceHash": "a35efc6c3a6cb4cb09f654fb410b901012ede754db1ef0a5bb7c748541e403b5",
+  "files": [
+    {
+      "source": "experiments/scratch/HC_live_20260928.json.gz",
+      "target": "experiments/out/HC_live_20260928.json.gz",
+      "sha256": "120792bb42ca14043a1dc09961876505367886d88131c7325e85b8601cd6959e",
+      "bytes": 3994554
+    },
+    {
+      "source": "experiments/scratch/HC_live_20260928.json.gz.cpu.json",
+      "target": "experiments/out/HC_live_20260928.json.gz.cpu.json",
+      "sha256": "23255a4630d1525afc9d413e84fcf488ce9496cc30f8f964e9033b5c5254c1b6",
+      "bytes": 119
+    },
+    {
+      "source": "experiments/scratch/HC_live_20260928.json.gz.validation.json",
+      "target": "experiments/out/HC_live_20260928.json.gz.validation.json",
+      "sha256": "9732db49598d241d04b3d3c3f3c8713a5acec9837252bd4f713e0243d314d380",
+      "bytes": 9478
+    },
+    {
+      "source": "experiments/scratch/HC_live_20260928.json.gz.validation.json.cpu.json",
+      "target": "experiments/out/HC_live_20260928.json.gz.validation.json.cpu.json",
+      "sha256": "6226bcfbc28202e50750ccd0f7ce088a609ff1cb48e6cc4caaf02316161fc16c",
+      "bytes": 113
+    },
+    {
+      "source": "experiments/scratch/HC_live_20260928.http.json",
+      "target": "experiments/out/HC_live_20260928.http.json",
+      "sha256": "8c70dc6b725842e13561c084351f54b6b804559328b5b321bae1452fd8c90011",
+      "bytes": 848
+    }
+  ],
+  "measuredCpuSeconds": 64.326,
+  "costs": {
+    "execution": 41.546,
+    "validation": 19.953,
+    "http": 1.765,
+    "archive": 1.062
+  },
+  "measuredPhysicsSteps": 5112,
+  "untimedPhysicsSteps": {
+    "initialSmoke": 1,
+    "browserQA": 122
+  },
+  "timingScope": "Node assay/validation/HTTP/archive process CPU includes startup/compression. Initial smoke, live browser server and UI interactions, reading/editing/build/Git are unmeasured; fully inclusive cap not independently verified. Browser left paused; user-driven later steps are outside this assay.",
+  "failedHarnessExecutions": [],
+  "browserQA": {
+    "url": "http://127.0.0.1:8787/",
+    "checks": [
+      "initial bath shows one closed rim and28 conserved parts",
+      "paired reset shows4 copying contacts; Step releases to2 unpaired closed rims",
+      "+100 advances to101; Run/Pause reaches121 and stops",
+      "individual-contact reset/Step shows1 copying contact at t1",
+      "whole-world/follow-first controls render actual polygons and rim bonds",
+      "browser console errors/warnings empty"
+    ],
+    "saveLoad": "Exact continuation tested through HTTP; browser file picker not exercised"
+  },
+  "outcome": {
+    "preparedRelease": 4,
+    "preparedWorlds": 4,
+    "movingAcquiredClosed": 0,
+    "movingAcquisitionWorlds": 8,
+    "zeroMotionContactAssembly": true,
+    "autonomousCellReproduction": false
+  },
+  "limitations": [
+    "120-step integration check, not population viability",
+    "prepared contact functional test uses zero kicks and pMem=1",
+    "ordinary melting/reload restored but no fuel utilization in this short screen",
+    "contact/constraint overlap unresolved",
+    "rim bonds do not decay"
+  ],
+  "reproduce": "Run half_cell_live_assay.js with a unique output, then --validate that output. Run tools/half_cell_server_test.js with a unique report. Archived input is used directly; no scratch prerequisite. Archiver names this completed batch and refuses overwrite."
+}

@@ -92,22 +92,43 @@ bonded ordinary A/A joint still converging after sixteen constraint passes.
 One separately frozen 32-pass comparison improves closed results to 3/4 but
 still fails: seed769 individual32 held overlap .021333 exceeds .02. All four
 closed released windows pass. Both original and follow-up gates remain failed.
-No further resolution/threshold/shape rescue or chemistry promotion is admitted.
+No further resolution/threshold/shape rescue was admitted by that assay.
+The user's subsequent integration request admits exploratory live chemistry below;
+it does not convert either failed mechanical gate to a pass.
 The [actual full-D frames](experiments/out/HC_arc32_20260928.svg) illustrate
 seed761, not the failing seed. This is prepared geometry, not arc acquisition,
-autonomous division or a sealed barrier. The dynamic setting is parked.
+autonomous division or a sealed barrier. That mechanical claim remains parked.
+
+**Q8g integrates live chemistry at the user's request (RESULTS88).**
+`node tools/half_cell_server.js` serves the opt-in [live lab](http://127.0.0.1:8787/).
+It runs ordinary Sim.step with the curved W geometry, automatic rim attachment,
+ordinary chain release and E recycling; no scheduled bond removal. Default core
+chemistry is unchanged. The existing16-pass mechanics are retained and labelled
+exploratory; source audit confirms directly bonded contacts are excluded and
+pin/shape matching follows contact correction. No demonstrated correction yet.
+
+Prepared complete pairs release at t1 in4/4 moving worlds. At zero motion and
+pMem=1, initially loose daughter parts in prepared positions form a second chain,
+close its rim and release; pMem=0/rimBind=false controls form/release the chain
+but acquire no rim bonds. This is contact-function testing, not bath assembly.
+The12-world120-step integration screen has0/8 new complete cells in the moving
+bath/contact arms; one contact world acquires one W bond. All12 restarts and
+observer comparisons pass, with1,452 frames replayed. Overlap remains as high
+as .194134; keep protection and robust mechanics unclaimed. W bonds persist.
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8/P0 checkpoint: the bonded A/A contact discrepancy | Audit the contact exclusion and pin/shape update for the measured full-D failure. Decide whether a small, distinct mechanical correction is justified, versus retaining only the prepared body-jostled demonstration and parking dynamics. Start with source/archived-frame analysis, not another solver sweep. Any new intervention needs its own causal prediction and frozen control; no general physics rewrite, timing states or relaxed gate. |
-| 2, only after the targeted mechanical prerequisite passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
+| 1 | Q8h: free-material acquisition in the live runtime | Freeze a small50k–150k body-jostled population screen with an early viability/CPU look. The120-step integration check is too short to assess bath assembly. Use equal material with rim binding on/off, record actual encounter/binding rates, partial arcs, cross-links, physically detached complete chains/cells and rearming. Do not treat the prepared-contact pass as autonomous reproduction. New shapes/rates/timing states and energy changes need a separate cause. |
+| 2, only for an earned operational lead | Targeted geometry check and repeated operation | Compare the relevant acquisition/release effect with individual kicks. Known overlap limits claims; source audit alone did not justify a bonded-contact correction. Check actual geometry and descendant operation before claiming robust reproduction or protection; no arbitrary solver sweep or gate relaxation. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8f are complete; Q8c/d's acquisition gates failed, Q8e's prepared
+Q8a–Q8g are complete; Q8c/d's acquisition gates failed, Q8e's prepared
 joint gate passed, Q8f's static geometry passes but both dynamic settings fail.
-No next assay is frozen. No task simulation is active.
+Q8g passes software integration and prepared operation, not free-bath reproduction.
+No next assay is frozen. The local lab server may remain open, paused; it performs
+no steps without a request. Count an actively running viewer in the worker limit.
 The user's automatic-polymer correction supersedes the proposed free-W
 docking comparison; that comparison was not executed.
 The brief's alternatives are a design portfolio,

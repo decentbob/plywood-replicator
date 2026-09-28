@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\tools\\half_cell_server_test.js",
+    "experiments/scratch/HC_live_20260928.http.json"
+  ],
+  "sources": {
+    "tools/half_cell_server.js": "3e4b398dec97a383af940c527142bfbf72763f081125cc6c13410f38631fe720",
+    "tools/half_cell_server_test.js": "989aa8ca1181a2811c64d09c2b3bd79bbc1d9f7c050df6043ec4fc25066c5a85",
+    "half-cell.html": "371b6599e33ba1f277aacfb98ef5c050139ede0c80f4401e844555dbb2f1f0e8",
+    "experiments/half_cell_live.js": "2b95cd94c57b2f929acfdfb249d2b8dc6fe3d84306d3dfded34afe187ad1c840"
+  },
+  "complete": true,
+  "physicsSteps": 21,
+  "checks": [
+    "serves live viewer",
+    "ordinary release through step endpoint",
+    "save/load reproduces live state",
+    "invalid requests preserve world",
+    "bath and motion controls"
+  ],
+  "cpuSeconds": 1.765
+}

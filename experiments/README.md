@@ -43,6 +43,14 @@ Start with [../AGENTS.md](../AGENTS.md), [../ROADMAP.md](../ROADMAP.md), then
 | 87 | `half_cell_arc.js`, `_plan.md`, `_diagnose.js`, `_resolution.js`, `_resolution_plan.md`, `_report.py`, `half_cell_arc32_report.py`, `_archive.js` | Complete paired D shapes with eight identical W per arc: static fit/access passes, original dynamic gate 2/4; separate 32-pass gate 3/4, still fails. Physics only, prepared bonds/imposed release. Neutral diagnosis identifies bonded A/A solver residual. Full replay/restart and Python/Pillow actual-corner figures. Resolution runner requires exact original scratch input restored from archive if absent; see RESULTS. |
 
 Plans, `_summary.js`, `_test.js` and, where present, `_analysis_test.js` live beside the assay.
+The live half-cell integration (RESULTS88) uses `half_cell_live.js`,
+`half_cell_live_assay.js` (including `--validate`), `_plan.md` and `_archive.js`.
+Run `node tools/half_cell_server.js` for the opt-in viewer at127.0.0.1:8787;
+`tools/half_cell_server_test.js OUTPUT.json` checks HTTP save/load and controls.
+The viewer uses this same Node runtime, not a recorded animation. It starts
+paused; count it as a simulation process when stepping. Evidence and the fuel-note
+erratum are under `out/HC_live_20260928*`. No scratch input prerequisite.
+
 Read the plan and script's CLI rather than assuming identical options across runners.
 Recent assays validate exact input/source hashes: moving files or changing even comments can
 break historical validation. Keep runtime and assay source cleanup separate from documentation.

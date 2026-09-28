@@ -11,6 +11,12 @@ capture and prepared joint alignment have since been tested (85–86). Complete
 prepared D shapes now exist (87); their static fit passes, while the dynamic
 gate still fails after one resolution check. Autonomous curved-arc growth and
 complete half-cell reproduction remain unimplemented.
+The user subsequently requested live integration (RESULTS88), now available
+through `node tools/half_cell_server.js`. It uses actual ordinary chemistry and
+automatic W binding with the existing exploratory mechanics. Prepared complete
+pairs release automatically; stationary prepared loose contacts assemble a second
+chain/rim. The moving120-step bath/contact screen produces no new complete cell.
+This supersedes the prior integration stop below, not the failed geometry gate.
 ROADMAP controls execution.
 
 ## Topology and sequence

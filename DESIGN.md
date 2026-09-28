@@ -288,6 +288,8 @@ Still open:
 
 ## 14. Decision log
 
+- 2026-09-28. The user accepts the D geometry and explicitly asks for real-simulation integration. Q8g runs ordinary Sim.step through the existing rim chemistry and curved rest shape, with default ordinary melting/reload restored (RESULTS88). This overrides the prior queue's integration stop, not Q8f's failed overlap gates. Keep body-jostled exploratory operation available; no extra solver setting or speculative physics correction. A loopback Node viewer preserves research save/load and distinguishes prepared contact/release starts from a loose bath. Prepared pairs release4/4; stationary prepared contacts assemble a second chain/rim. Moving short-screen acquisition0/8 complete cells. No new states, imposed runtime splitting, block creation or default core changes. Next earn free-bath operation with a bounded screen; protection and inheritance remain unproved.
+
 - 2026-09-28. Q8f derives eight identical curved W trapezoids for a complete P-A-A-Q half-cell (RESULTS87). Static closure/copying/fuel access and outward separation fit without new states. Prepared dynamic gate fails at16 (2/4 closed), and a separately frozen32 check still fails (3/4, held overlap .021333 > .02). Neutral replay identifies a directly bonded ordinary A/A constraint residual at16; do not infer a polymer rule failure or fix it with timing. Park both settings, retain the geometric lead, and audit that narrow mechanical discrepancy before any distinct intervention. No third solver setting, threshold relaxation, chemistry promotion or core change.
 
 Keep entries short: date, what changed, why, what evidence.

@@ -69,3 +69,8 @@ experiments/half_cell_arc* text eol=lf
 experiments/out/HC_arc*_20260928* text eol=lf
 experiments/out/HC_arc*_20260928*.gz binary
 experiments/out/HC_arc*_20260928*.png binary
+experiments/half_cell_live* text eol=lf
+tools/half_cell_server* text eol=lf
+half-cell.html text eol=lf
+experiments/out/HC_live_20260928* text eol=lf
+experiments/out/HC_live_20260928*.gz binary

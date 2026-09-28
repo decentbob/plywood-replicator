@@ -7626,3 +7626,130 @@ the fully inclusive180s cap is not independently verified. One simulation
 process, no workers; no other repository simulation found and none remains
 active. Core/historical hashes unchanged; full core suite/default fingerprints
 were not rerun for this isolated geometry assay.
+
+## 88. Live half-cell chemistry and an opt-in viewer
+
+2026-09-28, Q8g. The user approved the shape and asked to integrate it into the
+real simulation. [Frozen plan](half_cell_live_plan.md),
+[runtime](half_cell_live.js), [assay/validator](half_cell_live_assay.js),
+[server](../tools/half_cell_server.js) and [viewer](../half-cell.html).
+This user direction supersedes the previous queue's chemistry-admission stop;
+RESULTS87's failed dynamic gates remain failed. Source inspection confirms the
+contact solver omits directly bonded pairs and finishes each pass with pin/shape
+correction. Applying generic separation to bonded pairs could fight the pins;
+no such correction or further resolution sweep was justified or implemented.
+
+### What is integrated
+
+LiveHalfCellSim reuses Q8f's curved W rest geometry and HalfCellPolymerSim's
+rim/chain interface, calling actual `Sim.step`: physics, binding, chemistry.
+P/Q/A/E run the existing ordinary rules. W automatically binds complementary
+empty ends at native-polymer corner contact with pMem=.2; it never enters
+letter chemistry. No new chemical state, relay, type conversion, scheduled
+release, target-position reader or material insertion occurs during stepping.
+Rim bonds currently do not decay. The numeric16-pass contact solver is unchanged;
+body jostling is the exploratory default, individual kicks a sensitivity check.
+
+The28-block inventory and24x24 world are unchanged from Q8f:4 A,16 W,2 P,2 Q,4 E.
+One D has P-A-A-Q plus8 W. The three starts use identical material: (1) one
+prepared D and nonoverlapping randomly placed free material, (2) one D and loose
+daughter parts already at compatible positions, (3) two complete prepared Ds
+joined by copying bonds. All relocation and imposed bonds belong to setup only.
+The second start is an encounter preparation, not random-bath acquisition.
+Ordinary pMelt=.1, pMeltRun=.001, pMeltEnd=-1 and pReload=.002 are restored from
+core defaults; energyGate=true. Sigma.3, sigmaRot.45, stiffness.8, iters16.
+No radiation or separate energy hypothesis is tested.
+
+The Node loopback server and browser page run this same runtime, with run/pause,
+step/+100, three starts, random seed, body/individual motion, follow/whole-world
+view and research save/load. Actual deformed corners and rim/copying bonds are
+drawn. Counts use read-only topology traversal; no observer classification feeds
+reactions. Closed-rim counts indicate connectivity, not an impermeable wall or
+a successful offspring. Unpaired means all chain copying faces are empty; a
+spatial gap, active state and descendant operation remain distinct properties.
+The standard viewer links to the local lab; default chemistry is unchanged.
+
+### Integration outcomes
+
+Seeds787/797 x body/individual x three starts =12 worlds,120 ordinary steps each.
+First5-step and final/material checks pass. No manual release occurs after setup.
+
+| Start | Worlds | Newly complete capped chains | Newly closed Ds | Prepared pair releases | New rim bonds by120 |
+|---|---:|---:|---:|---:|---:|
+|Random loose bath|4|0|0|not applicable|0|
+|Prepared loose contacts, moving|4|0|0|not applicable|1 total, seed787/body only|
+|Prepared complete pair|4|0 (already prepared)|0 (already prepared)|4/4 at t1|0 (already prepared)|
+
+In the paired start, all four copying contacts disappear at t1 through ordinary
+chemistry and both chain/rim graphs remain complete to120. One of the two closed
+assemblies is active at120; the prepared daughter is unpaired but not fully armed.
+The two seed787 moving-contact worlds reach up to2 copying contacts; seed797
+contact and all bath worlds reach0. These are short integration checks, not
+50k–150k population screens: no free-bath reproduction is demonstrated or ruled
+out. No longer run, rate rescue or new state was added after these zeros.
+
+Separate deterministic functional tests start with the same prepared loose
+contacts, but zero kicks and ordinary melting disabled for12 steps. All four
+pMem0/1 x rimBindfalse/true combinations assemble and release a second capped
+chain. Only pMem1/rimBindtrue acquires the9 missing cap/W and W/W bonds, including
+closure, yielding two closed Ds; the three off controls acquire0. This shows
+automatic attachment/extension/closure coexisting with ordinary copying and
+release, without a timing gate. It is **prepared-contact function**, not successful
+stochastic growth. Material, W type and ordinary/rim port separation stay fixed.
+
+Across moving worlds, largest convex-outline overlap is **.194134** (seed787
+body/contacts), largest pin gap **.583212**, both transient. Paired-world maxima
+range .020007–.034653 overlap and .061901–.211148 pin. The known exclusion problem
+persists; neither body mode nor this integration establishes a sealed boundary.
+
+Charged E briefly falls from4 to3 in seed787 individual/contacts and returns to4;
+other screened worlds retain4. Thus ordinary fuel use/reload occurs in one
+partial-assembly world, while no newly complete active daughter is established.
+The preliminary manifest's phrase "no fuel utilization" was wrong; its
+[explicit correction](out/HC_live_20260928.correction.json) accompanies the
+unchanged manifest for provenance. No evidence here requires a new fuel rule.
+
+### Validation, reproduction and disposition
+
+```
+node experiments/half_cell_live_assay.js experiments/scratch/HC_live_20260928.json.gz
+node experiments/half_cell_live_assay.js --validate experiments/scratch/HC_live_20260928.json.gz
+node tools/half_cell_server_test.js experiments/scratch/HC_live_20260928.http.json
+node experiments/half_cell_live_archive.js
+node tools/half_cell_server.js
+node build.js
+```
+
+Use unique output names. Archived Q8f inputs are read directly, no scratch
+prerequisite. Runtime still depends on the research modules and archived catalog;
+it is not bundled into the core or standalone generated HTML. Run the server
+from the repository root, then open http://127.0.0.1:8787. It starts paused and
+only steps on request; one shared world is served to its tabs. Ctrl+C stops it.
+
+All12 observer/plain and midpoint-restart comparisons pass. The validator
+reconstructs all initial worlds, replays1,452 frames, recomputes topology/geometry
+and summaries, matches final arrays/RNG and rejects a corrupted aggregate.
+Functional checks cover observer neutrality, exact save continuation, cut-rim
+classification and four invalid-save cases. HTTP checks verify ordinary release,
+save/load continuation, alternate setup/motion and invalid-request preservation.
+Browser checks exercise reset, one step, +100, run/pause and both view/motion
+controls; actual polygons render and the console has no errors/warnings.
+The browser file picker was not exercised; save/load continuation was checked
+through HTTP. Build passes. No failed harness executions occurred.
+
+[Manifest](out/HC_live_20260928.manifest.json) archives five raw/CPU/validation/HTTP
+files with exact source/input hashes. Measured **5,112 physics steps**, plus123
+untimed smoke/browser steps: assay3,651 (51 functional,1,440 observed,1,440 plain,
+720 restart), validation1,440, HTTP21. Measured CPU **64.326s**: execution41.546,
+validation19.953, HTTP1.765, archive1.062. Node costs include startup/compression;
+initial smoke, live UI/server, read/edit/build/Git are unmeasured, so the fully
+inclusive180s cap is not independently verified. One assay process at a time,
+then the local viewer server, left paused. Core/historical source hashes are
+unchanged; full core suite/default fingerprints were not rerun for this isolated
+runtime bridge and viewer link. Generated pages were rebuilt.
+
+**Decision:** deliver the exploratory live mode and keep the numerical caveat.
+Prepared local operation works; autonomous cell reproduction remains open.
+Next freeze a bounded free-bath on/off screen with early viability and actual
+encounter/attachment accounting before adding mechanisms. Promising operation
+still needs targeted individual-motion geometry checks and descendant turnover.

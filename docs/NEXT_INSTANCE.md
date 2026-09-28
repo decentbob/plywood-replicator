@@ -1,42 +1,45 @@
 # Next-instance handoff — 2026-09-28
 
-Read ROADMAP.md, the sole queue. The user's two independent D-shaped half-cells
-now have a concrete prepared geometry: P-A-A-Q plus eight identical curved W
-trapezoids per half; rotate180 degrees for the outward-facing second half.
-No new reaction state, timing program or fuel mechanism. Automatic native
-polymer end-corner binding remains the research rule; no autonomous full arc
-has yet assembled, copied or reproduced.
+Read ROADMAP.md, the sole queue. The user approved the two-D geometry and asked
+for real-simulation integration. Q8g (RESULTS88) now runs it through ordinary
+Sim.step in an opt-in live lab: node tools/half_cell_server.js, then127.0.0.1:8787.
+The server is left paused in this task (exec session91197); it only steps on
+request. Check processes before a new batch; an actively stepping viewer counts
+toward the four-worker limit. Core/default chemistry is unchanged.
 
-Q8f (RESULTS87) static actual-corner closure, copying/fuel access and outward
-translation all pass. Physics-only paired-D test: seeds761/769 x closed/open
-arcs x body16/individual16, 28 conserved blocks,120 steps; prepared bonds,
-imposed copying-face removal after40. All separate; closed gate body16 2/2,
-individual16 0/2. Original gate remains failed.
+Runtime: experiments/half_cell_live.js inherits curved W geometry and automatic
+native-polymer rim binding, restoring ordinary melting/reload rates. No new
+state, reaction, type change, scheduled splitting or block insertion. Three
+starts: one prepared seed + loose random bath; one seed + prepared loose contacts;
+two complete prepared Ds joined by face bonds. Same28 blocks,16 solver passes,
+body default or individual kicks. Rim bonds currently have no decay.
 
-Neutral diagnostic replay: largest closed overlap is seed769 t36, a directly
-bonded ordinary A/A joint omitted by contact correction, still converging
-through pass16. One separately frozen resolution comparison uses the exact
-same saved initial worlds, changing only iters32. Closed gate3/4, STILL FAILED:
-seed769 individual32 held overlap .021333 > .02. All four closed released
-windows pass; open controls body2/2, individual0/2. No third setting or relaxed
-threshold, no chemistry promotion. Full-D geometry remains a lead; this dynamic
-setting is parked. No sealed-wall or radiation-protection claim.
+Fresh integration screen: seeds787/797 x body/individual x three starts,120
+steps. Prepared pairs release at t1 in4/4 through ordinary chemistry. Moving
+bath/contact starts acquire0/8 new complete cells; seed787/body/contacts makes
+one W bond. Stationary prepared contacts at pMem=1 assemble/release a second
+chain and close its rim; polymer-off controls form the chain but not the rim.
+This is prepared-contact function, not random-bath reproduction or descendants.
+One partial-contact world spends/reloads E; the preliminary manifest's no-fuel
+note has an explicit correction.json beside it. No new fuel mechanism indicated.
 
-Next: narrow source/archived-frame audit of bonded A/A contact exclusion and
-pin/shape correction, deciding whether a distinct small mechanical correction
-is justified versus retaining the prepared demonstration and parking dynamics.
-Not a general physics rewrite or solver sweep. No new assay frozen. Q7 deferred.
+Q8f remains negative: static geometry fits, original dynamic2/4 and separate32
+comparison3/4. Source audit confirms bonded-pair contact exclusion then pin/shape
+correction, but does not justify a competing generic-separation fix. User's
+integration request overrides the old chemistry stop, not either mechanical
+gate. Live-screen maximum overlap .194134, pin .583212. No sealed-wall claim.
 
-Evidence: experiments/out/HC_arc_20260928.manifest.json covers original and
-HC_arc32_20260928 raw/CPU/validation/report/SVG/PNG plus neutral diagnosis.
-Both figures illustrate seed761, not failing769. 16 neutrality/restarts,
-1,936 replay frames, eight corruption checks pass; no harness failures.
-6,792 physics steps,121.401 measured CPU seconds (untimed scopes in manifest).
-Core/historical source hashes unchanged; full core suite/fingerprints not rerun.
+Next Q8h: freeze a bounded50k–150k free-bath rim-on/off screen with early viability
+and CPU look, encounter/attachment accounting, partial arcs/cross-links and
+actual released complete outputs.120 steps is not a bath-viability test. No new
+assay frozen, no retuning or timing program. Earn any later mechanical/descendant
+follow-up; no third resolution sweep. Q7 remains deferred.
 
-Reproduction: half_cell_arc.js uses archived catalog; resolution runner needs
-the fixed experiments/scratch/HC_arc_20260928.json.gz input. If absent, copy
-its byte-identical archived version with COPYFILE_EXCL; never overwrite.
-Use unique output stems. Python/Pillow figures used bundled Python. Raw and
-source hashes are preserved; do not tidy hashed sources. No task simulation
-is active. Fuel alternatives remain conditional options in the cap memo.
+Evidence: experiments/out/HC_live_20260928* raw/CPU/validation/HTTP/manifest and
+fuel-note correction.12 neutrality/restarts,1,452-frame replay, four invalid
+save cases, HTTP/browser checks pass; no failed harness executions.5,112 timed
+physics steps plus123 untimed smoke/UI steps;64.326 measured CPU s. Source hashes
+unchanged for core/historical modules; no full core suite/fingerprints rerun.
+node build.js passes. Browser file picker not tested; exact save/load via HTTP.
+Use unique output stems; live assay reads archived inputs directly. Research
+saves require the lab runtime, not the standard viewer. Do not tidy hashed files.

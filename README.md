@@ -43,6 +43,18 @@ at 32 solver passes ([full-D frames](experiments/out/HC_arc32_20260928.svg), RES
 Autonomous growth/division is not yet demonstrated.
 This research subclass does not change the default viewer chemistry.
 
+**Live half-cell lab:** run `node tools/half_cell_server.js`, then open
+[127.0.0.1:8787](http://127.0.0.1:8787/). The page runs actual ordinary chemistry
+with curved W attachment, conserved parts and no scheduled release. Choose a
+seed with a loose bath, prepared loose contacts, or a paired release diagnostic;
+pause/step and save/load retain the research runtime. Default motion is body
+jostling; individual kicks expose the known geometry limitations. The lab starts
+paused and steps only on request. Stop the server with Ctrl+C.
+Prepared pairs release through chemistry in 4/4 short checks; stationary loose
+contacts assemble a second chain and rim. No new complete cell appears in the
+120-step moving bath/contact checks (RESULTS88). This is an opt-in integration,
+not demonstrated autonomous half-cell reproduction. W bonds currently persist.
+
 ## Run it
 
 Open `index.html` in a browser (it loads `src/sim.js`; no build step, no
