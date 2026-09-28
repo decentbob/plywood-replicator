@@ -61,6 +61,12 @@ handoffs, is preserved in [the archive](docs/archive/AGENTS-2026-09-26.md).
   Rework physics only when a discrepancy affects the mechanism being investigated. Preserve
   local signals, contact-driven behavior and conserved material. ROADMAP P0 specifies these
   targeted checks; it is an ongoing standard, not a separate project blocking research.
+  **User direction (2026-09-28):** the mechanics, logic and their combinations matter most;
+  they should not depend on a "perfect" simulation, and simulation speed matters more, to get
+  many tests out fast. Keep the default time step (dt 1) for all exploration. RESULTS 93 shows
+  default-step contact rates are not step-converged, so report them as qualitative. Add a
+  finer-step rung (kicks x sqrt(dt), probabilities 1-(1-p)^dt) only for a confirmation-tier claim
+  that depends on a quantitative binding/release race. Prefer mechanisms whose logic works regardless.
 - **Preserve the user's research style.** Try varied ideas in small worlds; scale promising
   leads. Screen ordinary population questions in 50k–150k steps, with an early viability look;
   prepared mechanical tests may be much shorter. Two seeds are a lead, not confirmation.
@@ -89,6 +95,12 @@ Use [experiments/PLAN_TEMPLATE.md](experiments/PLAN_TEMPLATE.md), keeping the pl
    mutation/error classes; do not optimize perfect copying at the expense of all heritable variation.
 7. Run relevant invariants and analysis validation. Observer instrumentation must preserve physical
    arrays and RNG; research states must restart with their own subclass and side-mark buffers.
+   **QA tiers (user priority on speed, 2026-09-28).** Screens check observer neutrality and midpoint
+   restart on a sample (the first seed of every cell) and recompute outcomes from saved tapes/frames
+   with synthetic cases; they save each world's initial state so any world can be replayed later.
+   Per-world plain/restart runs and a full independent replay are for fresh-seed confirmation, core
+   promotion, or any autonomous-operation-or-higher claim. Full QA cost about 3.5x the science steps
+   in RESULTS 92–93. `experiments/screen_kit.js` has the shared observer/check/output helpers.
 8. Add a RESULTS section (script/command, table, what it says, what it does not) and LEDGER row;
    run `node tools/ledger_index.js` when the ledger table changes. Revise a regularity if contradicted.
    Update ROADMAP status and the next discriminating test. After a failed confirmation, park the

@@ -16,8 +16,10 @@ bridges under individual kicks from 8/9 to 17/15 of 32 at dt 1/16, and lowers
 direct escape from 9–11 to 4. dt 1/4 equals dt 1, so convergence is not shown.
 The frozen verdict is sensitive (more acquisition). No earlier gate reopens.
 
-Next: freeze Q9b (a dt 1/64 rung, plus a RESULTS 79 acquire/on re-screen at a
-finer step). Whether to adopt a finer default step is a user cost decision. Evidence:
+User direction (2026-09-28): mechanics and logic over simulation precision, and fast
+tests. Default dt stays 1 (Q9b retired). Screens use the AGENTS QA tiers and
+`experiments/screen_kit.js`. Next: choose a small logic-first causal question (ROADMAP order 1).
+Evidence:
 `experiments/out/PF_20260928*` and `experiments/out/TR_20260928*`.
 
 ```

@@ -46,9 +46,9 @@ The repair branch's escape measurements (79, 92) were made where escape is overs
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q9b: finer-step convergence and the RESULTS 79 acquisition re-screen | Freeze before running. (a) Add dt 1/64 to the RESULTS 93 dimer fixture (same seeds and rule) to test whether 1/16 is converged. (b) Rerun RESULTS 79 acquire/on (eight-block rows, seeds 603/604, ABAB/AABB, body4/individual16) at default and at the finest adequate step, with the original sustained-bridge and release definitions in physical time. The failed 79 gate stays failed; this measures whether acquisition was step-limited. Expect release to get worse. |
-| 2, user decision | Exploration time step | If Q9b confirms step sensitivity, choosing a finer default (4–16x CPU) or a per-assay check is a core-physics cost decision for the user. Until then, report default-step contact rates as qualitative and include a finer-step rung for any acquisition or release claim. |
-| 3 | Portfolio choice among parked alternatives | If Q9b shows no rescue, the next slice is a different causal question, not another fixture in a parked branch. Candidates with the most prior foothold are P1 recipient function (62) and P3 useful mechanical operation (66). Both were measured at the default step. |
+| 1 | Choose the next causal question (small, logic-first) | The user values mechanics and logic over simulation precision, and fast screening (AGENTS QA tiers, default dt). Q7b/Q9 lesson: a hold-then-release operation needs a driven or history-carrying cycle; a memoryless shape switch trades acquisition for release. The existing copy cycle already has one (dock, link, energy-gated REPEL, rearm). Leading candidate: can ordinary copying replace repair, where a damaged strand's fragments are re-copied instead of held? Other candidates: P1 recipient function (62), P3 useful mechanical operation (66). Freeze a proportional plan; screen tier. |
+| Decided | Exploration time step | Keep dt 1 for exploration (user delegated, 2026-09-28). Finer-step rung only for confirmation-tier claims resting on a quantitative binding/release race. Core micro-optimisation was tried on a scratch copy: hoisting solver loop lookups kept fingerprints identical but gave no measurable speedup, so core code is unchanged. |
+| Retired | Q9b finer-step convergence and RESULTS 79 re-screen | Not pursued (user direction 2026-09-28): the default step stays; RESULTS 93 marks default-step contact rates as qualitative. Q7b's failure is logical (no latch), not a step artifact. |
 
 **Standing user preferences carried from Q8.** Radiation protection is the
 hypothesised benefit of an enclosing wall, to test only after a wall reproduces,
@@ -96,6 +96,8 @@ All section numbers refer to [RESULTS](experiments/RESULTS.md).
 - Keep one main experimental question active. The four-worker maximum covers
   every runner on the machine; it is not an instruction to launch four agents.
   Check process command lines; a scratch file or idle task does not prove activity.
+- Screens use the AGENTS QA tiers (sampled neutrality/restart, `experiments/screen_kit.js`);
+  full per-world QA is for confirmations and promotions.
 - Use the [plan template](experiments/PLAN_TEMPLATE.md), fixed controls and gates,
   fresh seeds for earned confirmation, and an early viability look. Ordinary
   population screens use 50k–150k steps; prepared mechanical tests can be shorter.
