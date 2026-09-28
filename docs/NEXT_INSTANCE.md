@@ -1,41 +1,42 @@
 # Next-instance handoff — 2026-09-28
 
-Read ROADMAP.md, the sole queue. The user wants two independent D-shaped
-half-cells: each ordinary chain bounds its own polymer arc, copies outward,
-and releases through ordinary face bonds. Closure after release and extra
-polygon sides are allowed. No full half-cell has yet been built or reproduced.
+Read ROADMAP.md, the sole queue. The user's two independent D-shaped half-cells
+now have a concrete prepared geometry: P-A-A-Q plus eight identical curved W
+trapezoids per half; rotate180 degrees for the outward-facing second half.
+No new reaction state, timing program or fuel mechanism. Automatic native
+polymer end-corner binding remains the research rule; no autonomous full arc
+has yet assembled, copied or reproduced.
 
-Q8e (RESULTS86) passes prepared mechanics. Six fixtures x two fresh seeds733/739
-x body16/individual16 x bound/unbound =48 five-block worlds, 60 physics steps.
-16/16 W cap/extension cases and 8/8 native-M benchmarks pass final10-frame
-pin/overlap/free-end-fit gates; 0/24 unbound controls maintain candidate alignment.
-The bond is imposed at an eligible outward 30-degree contact, with no pose
-projection. Chemistry and all subsequent binding are off. No bath-growth claim.
+Q8f (RESULTS87) static actual-corner closure, copying/fuel access and outward
+translation all pass. Physics-only paired-D test: seeds761/769 x closed/open
+arcs x body16/individual16, 28 conserved blocks,120 steps; prepared bonds,
+imposed copying-face removal after40. All separate; closed gate body16 2/2,
+individual16 0/2. Original gate remains failed.
 
-Current W rule remains HalfCellPolymerSim (RESULTS85): automatic native-polymer
-corner capture, pMem=.2, no fuel/copying gate or new state. SettleSim only admits
-M to the same polygon-contact solver and forbids ordinary chemistry steps.
-It does not replace the growth subclass. Core/historical sources stay unchanged.
+Neutral diagnostic replay: largest closed overlap is seed769 t36, a directly
+bonded ordinary A/A joint omitted by contact correction, still converging
+through pass16. One separately frozen resolution comparison uses the exact
+same saved initial worlds, changing only iters32. Closed gate3/4, STILL FAILED:
+seed769 individual32 held overlap .021333 > .02. All four closed released
+windows pass; open controls body2/2, individual0/2. No third setting or relaxed
+threshold, no chemistry promotion. Full-D geometry remains a lead; this dynamic
+setting is parked. No sealed-wall or radiation-protection claim.
 
-Temporary exclusion errors remain: seed733/individual16/Qextend at t3 has
-.223063 overlap and .606927 pin residual. All final windows pass; this is not
-a continuously sealed wall. Actual SVG/PNG includes those transient errors,
-with dashed observer-only placements of an existing spare block at the tip.
+Next: narrow source/archived-frame audit of bonded A/A contact exclusion and
+pin/shape correction, deciding whether a distinct small mechanical correction
+is justified versus retaining the prepared demonstration and parking dynamics.
+Not a general physics rewrite or solver sweep. No new assay frozen. Q7 deferred.
 
-Next Q8f is not frozen: derive one curved W polygon with equal compatible
-edge lengths and a complete arc for a specified chain/cap span; then test
-actual D-shaped seed/duplicate geometry, copying access and release clearance
-under both motion modes. Current W is straight. No timing/energy program is
-indicated; no longer sparse-bath run is earned. Q8c/d acquisition failures
-remain negative. The earlier free-W docking proposal remains superseded.
+Evidence: experiments/out/HC_arc_20260928.manifest.json covers original and
+HC_arc32_20260928 raw/CPU/validation/report/SVG/PNG plus neutral diagnosis.
+Both figures illustrate seed761, not failing769. 16 neutrality/restarts,
+1,936 replay frames, eight corruption checks pass; no harness failures.
+6,792 physics steps,121.401 measured CPU seconds (untimed scopes in manifest).
+Core/historical source hashes unchanged; full core suite/fingerprints not rerun.
 
-Evidence: experiments/out/HC_settle_20260928.manifest.json; v5 raw/validation,
-report, SVG/PNG and four failed zero-step preflights with exact source snapshots.
-Failures: two unavailable-helper imports, dirty bond cache after restore, stale
-open ports after prepared M binding. Repairs changed setup/analysis only.
-48 neutrality/restarts, 2,928 frame replay and four corruption checks pass.
-10,081 physics steps, 10.712 measured CPU seconds; untimed scopes in manifest.
-Python/Pillow report used bundled Python. No scratch input required; use unique
-output stems. Core suite/fingerprints not rerun (historical source hashes fixed).
-No task simulation is active. Q7 deferred. Fuel alternatives remain conditional
-options in the cap memo; no energy settings changed in these mechanical tests.
+Reproduction: half_cell_arc.js uses archived catalog; resolution runner needs
+the fixed experiments/scratch/HC_arc_20260928.json.gz input. If absent, copy
+its byte-identical archived version with COPYFILE_EXCL; never overwrite.
+Use unique output stems. Python/Pillow figures used bundled Python. Raw and
+source hashes are preserved; do not tidy hashed sources. No task simulation
+is active. Fuel alternatives remain conditional options in the cap memo.

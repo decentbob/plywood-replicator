@@ -1,0 +1,325 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<title>Two complete prepared D assemblies under motion and imposed release</title>
+<rect width="1200" height="760" fill="white"/>
+<text x="24" y="39" font-family="Arial,sans-serif" font-size="25" fill="#253345">Two complete D-shaped assemblies with identical curved W blocks</text>
+<text x="24" y="67" font-family="Arial,sans-serif" font-size="16" fill="#253345">Actual geometry | seed 761 | 16 solver passes | purple: temporary copying-face bonds</text>
+<text x="24" y="104" font-family="Arial,sans-serif" font-size="16" fill="#253345">Body: Prepared pair, t=0</text>
+<polygon points="204.000,127.191 204.000,171.595 159.595,171.595 159.595,149.393 170.697,127.191" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="175.5774360724621" y="153.39300747035145" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="204.000,171.595 204.000,216.000 159.595,216.000 159.595,171.595" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="177.79766915678374" y="197.7976691567838" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,216.000 204.000,260.405 159.595,260.405 159.595,216.000" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="177.79766915678374" y="242.2023308432162" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,260.405 204.000,304.809 170.697,304.809 159.595,282.607 159.595,260.405" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="175.5774360724621" y="286.60699252964855" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="170.697,127.191 159.595,149.393 122.945,141.606 121.829,116.809" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="139.76632246674868" y="137.74964434785983" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="121.829,116.809 122.945,141.606 87.141,152.653 74.091,131.537" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="97.50142836565315" y="139.65129832907033" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="74.091,131.537 87.141,152.653 61.249,179.736 39.568,167.648" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="61.512388549869456" y="161.89374815769787" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="39.568,167.648 61.249,179.736 51.823,216.000 27.000,216.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="40.91006226682569" y="198.84617315211574" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="27.000,216.000 51.823,216.000 61.249,252.264 39.568,264.352" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="40.91006226682569" y="241.15382684788426" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="39.568,264.352 61.249,252.264 87.141,279.347 74.091,300.463" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="61.512388549869456" y="278.10625184230213" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="74.091,300.463 87.141,279.347 122.945,290.394 121.829,315.191" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="97.50142836565315" y="300.3487016709297" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="121.829,315.191 122.945,290.394 159.595,282.607 170.697,304.809" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="139.76632246674868" y="302.2503556521402" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="204.000,304.809 204.000,260.405 248.405,260.405 248.405,282.607 237.303,304.809" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="224.42256392753777" y="286.60699252964855" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="204.000,260.405 204.000,216.000 248.405,216.000 248.405,260.405" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="222.20233084321612" y="242.2023308432162" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,216.000 204.000,171.595 248.405,171.595 248.405,216.000" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="222.20233084321612" y="197.7976691567838" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,171.595 204.000,127.191 237.303,127.191 248.405,149.393 248.405,171.595" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="224.42256392753777" y="153.39300747035145" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="237.303,304.809 248.405,282.607 285.055,290.394 286.171,315.191" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="260.2336775332512" y="302.2503556521402" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="286.171,315.191 285.055,290.394 320.859,279.347 333.909,300.463" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="302.4985716343467" y="300.3487016709297" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="333.909,300.463 320.859,279.347 346.751,252.264 368.432,264.352" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="338.4876114501304" y="278.10625184230213" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="368.432,264.352 346.751,252.264 356.177,216.000 381.000,216.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="359.0899377331742" y="241.15382684788426" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="381.000,216.000 356.177,216.000 346.751,179.736 368.432,167.648" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="359.0899377331742" y="198.84617315211574" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="368.432,167.648 346.751,179.736 320.859,152.653 333.909,131.537" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="338.4876114501304" y="161.89374815769787" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="333.909,131.537 320.859,152.653 285.055,141.606 286.171,116.809" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="302.4985716343467" y="139.65129832907033" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="286.171,116.809 285.055,141.606 248.405,149.393 237.303,127.191" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="260.2336775332512" y="137.74964434785983" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<line x1="203.99999999999991" y1="127.19067662713525" x2="203.99999999999991" y2="171.59533831356762" stroke="#a54388" stroke-width="2"/>
+<line x1="203.99999999999991" y1="171.59533831356762" x2="203.99999999999991" y2="216.0" stroke="#a54388" stroke-width="2"/>
+<line x1="203.99999999999991" y1="216.0" x2="203.99999999999991" y2="260.4046616864324" stroke="#a54388" stroke-width="2"/>
+<line x1="203.99999999999991" y1="260.4046616864324" x2="203.99999999999991" y2="304.80932337286475" stroke="#a54388" stroke-width="2"/>
+<text x="24" y="339" font-family="Arial,sans-serif" font-size="13" fill="#253345">Pin 0.000 | overlap 0.000 | gap 0.000</text>
+<text x="420" y="104" font-family="Arial,sans-serif" font-size="16" fill="#253345">Body: Held faces, t=40</text>
+<polygon points="582.188,140.327 591.094,178.164 553.258,187.070 548.804,168.152 553.810,147.007" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="561.8306979700717" y="168.14404383116715" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="591.094,178.164 600.000,216.000 562.164,224.906 553.258,187.070" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="572.6287507303148" y="205.53499055481387" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="600.000,216.000 608.906,253.836 571.070,262.742 562.164,224.906" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="581.5349905548137" y="243.3712492696853" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="608.906,253.836 617.812,291.673 589.435,298.352 575.523,281.661 571.070,262.742" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="588.5494174435698" y="281.652819975782" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="553.810,147.007 548.804,168.152 516.013,168.868 510.089,147.962" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="528.1792288194658" y="161.9973025262608" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="510.089,147.962 516.013,168.868 487.722,185.462 472.367,170.087" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="492.5476347197572" y="172.09472784180238" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="472.367,170.087 487.722,185.462 471.092,213.732 450.193,207.781" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="466.34331326521067" y="198.26536087190212" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="450.193,207.781 471.092,213.732 470.333,246.522 449.182,251.501" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="456.2000586795341" y="233.88393583637043" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="449.182,251.501 470.333,246.522 485.638,275.531 469.589,290.179" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="464.68570176104663" y="269.933379071773" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="469.589,290.179 485.638,275.531 513.133,293.415 506.248,314.025" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="489.6520468330837" y="297.2875398125685" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="506.248,314.025 513.133,293.415 545.856,295.646 549.879,317.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="524.7787014362099" y="309.02153454931624" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="549.879,317.000 545.856,295.646 575.523,281.661 589.435,298.352" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="561.1731247424312" y="302.1648262795358" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="617.812,291.673 608.906,253.836 646.742,244.930 651.196,263.848 646.190,284.993" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="630.1693020299283" y="271.85595616883285" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="608.906,253.836 600.000,216.000 637.836,207.094 646.742,244.930" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="619.3712492696852" y="234.46500944518627" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="600.000,216.000 591.094,178.164 628.930,169.258 637.836,207.094" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="610.4650094451861" y="196.6287507303147" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="591.094,178.164 582.188,140.327 610.565,133.648 624.477,150.339 628.930,169.258" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="603.4505825564302" y="158.34718002421792" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="646.190,284.993 651.196,263.848 683.987,263.132 689.911,284.038" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="663.8207711805342" y="278.0026974737392" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="689.911,284.038 683.987,263.132 712.278,246.538 727.633,261.913" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="699.4523652802428" y="267.9052721581976" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="727.633,261.913 712.278,246.538 728.908,218.268 749.807,224.219" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="725.6566867347893" y="241.73463912809788" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="749.807,224.219 728.908,218.268 729.667,185.478 750.818,180.499" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="735.7999413204659" y="206.11606416362935" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="750.818,180.499 729.667,185.478 714.362,156.469 730.411,141.821" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="727.3142982389535" y="170.06662092822717" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="730.411,141.821 714.362,156.469 686.867,138.585 693.752,117.975" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="702.3479531669163" y="142.71246018743136" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="693.752,117.975 686.867,138.585 654.144,136.354 650.121,115.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="667.2212985637902" y="130.97846545068376" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="650.121,115.000 654.144,136.354 624.477,150.339 610.565,133.648" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="630.8268752575689" y="137.83517372046418" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<line x1="582.1875203510014" y1="140.32748257025665" x2="591.0937601755007" y2="178.16374128512828" stroke="#a54388" stroke-width="2"/>
+<line x1="591.0937601755008" y1="178.16374128512837" x2="600.0000000000002" y2="216.0" stroke="#a54388" stroke-width="2"/>
+<line x1="599.9999999999999" y1="215.9999999999998" x2="608.9062398244993" y2="253.83625871487143" stroke="#a54388" stroke-width="2"/>
+<line x1="608.9062398244996" y1="253.83625871487152" x2="617.812479648999" y2="291.67251742974315" stroke="#a54388" stroke-width="2"/>
+<text x="420" y="339" font-family="Arial,sans-serif" font-size="13" fill="#253345">Pin 0.000 | overlap 0.000 | gap 0.000</text>
+<text x="816" y="104" font-family="Arial,sans-serif" font-size="16" fill="#253345">Body: After imposed release, t=120</text>
+<polygon points="952.578,177.991 961.794,206.706 933.079,215.921 928.471,201.564 931.042,184.903" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="937.3928943802404" y="201.41717236770384" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="961.794,206.706 971.009,235.421 942.294,244.636 933.079,215.921" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="948.0439461253893" y="229.67127083279215" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="971.009,235.421 980.224,264.136 951.509,273.351 942.294,244.636" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="957.2592547138399" y="258.3861347118047" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="980.224,264.136 989.440,292.851 967.904,299.762 956.117,287.709 951.509,273.351" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="965.038820078336" y="287.56176401983197" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="931.042,184.903 928.471,201.564 903.155,204.135 897.287,188.331" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="910.9886920626329" y="198.7330716430903" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="897.287,188.331 903.155,204.135 882.294,218.709 869.473,207.762" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="884.0521878975" y="208.7340434621163" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="869.473,207.762 882.294,218.709 871.171,241.596 854.643,238.278" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="865.3953777387138" y="230.58623165876386" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="854.643,238.278 871.171,241.596 872.602,267.002 856.550,272.154" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="859.741354336448" y="258.7576127670692" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="856.550,272.154 872.602,267.002 886.223,288.497 874.711,300.813" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="868.5214704437282" y="286.11641858706344" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="874.711,300.813 886.223,288.497 908.587,300.637 904.530,317.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="889.512982547465" y="305.7365897157344" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="904.530,317.000 908.587,300.637 934.032,300.350 938.457,316.618" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="917.4017530183418" y="312.65115239385" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="938.457,316.618 934.032,300.350 956.117,287.709 967.904,299.762" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="945.1275584593277" y="305.1096401384916" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1060.564,261.930 1043.576,237.012 1068.494,220.025 1076.988,232.483 1079.252,249.189" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="1061.7746614221378" y="244.1277178827322" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="1043.576,237.012 1026.589,212.094 1051.507,195.107 1068.494,220.025" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="1043.54142061531" y="220.0593171724629" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="1026.589,212.094 1009.602,187.176 1034.519,170.189 1051.507,195.107" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="1026.5540682532185" y="195.1415488305599" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="1009.602,187.176 992.614,162.259 1011.302,149.518 1026.026,157.730 1034.519,170.189" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="1010.812604288859" y="169.37441286460566" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="1079.252,249.189 1076.988,232.483 1100.533,222.832 1110.646,236.320" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1087.8546338729393" y="239.20620056742212" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1110.646,236.320 1100.533,222.832 1116.398,202.936 1131.799,209.793" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1110.8441744311383" y="221.97031589957527" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1131.799,209.793 1116.398,202.936 1120.567,177.833 1137.357,176.322" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1122.5304749558861" y="195.72102875609974" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1137.357,176.322 1120.567,177.833 1111.983,153.878 1125.913,144.381" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1119.9550725764018" y="167.1035166737534" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1125.913,144.381 1111.983,153.878 1092.821,137.134 1100.363,122.057" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1103.7699471192573" y="143.36248870853888" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1100.363,122.057 1092.821,137.134 1067.931,131.842 1067.176,115.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1078.0724681894455" y="130.50814039336453" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1067.176,115.000 1067.931,131.842 1043.613,139.340 1034.753,124.997" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1049.368119578148" y="131.79463354292142" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1034.753,124.997 1043.613,139.340 1026.026,157.730 1011.302,149.518" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1024.9235936530772" y="146.89628403030878" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<text x="816" y="339" font-family="Arial,sans-serif" font-size="13" fill="#253345">Pin 0.000 | overlap 0.000 | gap 1.426</text>
+<text x="24" y="381" font-family="Arial,sans-serif" font-size="16" fill="#253345">Individual: Prepared pair, t=0</text>
+<polygon points="204.000,404.191 204.000,448.595 159.595,448.595 159.595,426.393 170.697,404.191" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="175.5774360724621" y="430.39300747035145" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="204.000,448.595 204.000,493.000 159.595,493.000 159.595,448.595" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="177.79766915678374" y="474.7976691567838" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,493.000 204.000,537.405 159.595,537.405 159.595,493.000" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="177.79766915678374" y="519.2023308432161" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,537.405 204.000,581.809 170.697,581.809 159.595,559.607 159.595,537.405" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="175.5774360724621" y="563.6069925296486" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="170.697,404.191 159.595,426.393 122.945,418.606 121.829,393.809" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="139.76632246674868" y="414.7496443478598" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="121.829,393.809 122.945,418.606 87.141,429.653 74.091,408.537" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="97.50142836565315" y="416.6512983290703" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="74.091,408.537 87.141,429.653 61.249,456.736 39.568,444.648" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="61.512388549869456" y="438.89374815769787" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="39.568,444.648 61.249,456.736 51.823,493.000 27.000,493.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="40.91006226682569" y="475.84617315211574" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="27.000,493.000 51.823,493.000 61.249,529.264 39.568,541.352" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="40.91006226682569" y="518.1538268478843" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="39.568,541.352 61.249,529.264 87.141,556.347 74.091,577.463" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="61.512388549869456" y="555.1062518423021" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="74.091,577.463 87.141,556.347 122.945,567.394 121.829,592.191" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="97.50142836565315" y="577.3487016709297" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="121.829,592.191 122.945,567.394 159.595,559.607 170.697,581.809" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="139.76632246674868" y="579.2503556521401" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="204.000,581.809 204.000,537.405 248.405,537.405 248.405,559.607 237.303,581.809" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="224.42256392753777" y="563.6069925296486" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="204.000,537.405 204.000,493.000 248.405,493.000 248.405,537.405" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="222.20233084321612" y="519.2023308432161" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,493.000 204.000,448.595 248.405,448.595 248.405,493.000" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="222.20233084321612" y="474.7976691567838" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="204.000,448.595 204.000,404.191 237.303,404.191 248.405,426.393 248.405,448.595" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="224.42256392753777" y="430.39300747035145" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="237.303,581.809 248.405,559.607 285.055,567.394 286.171,592.191" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="260.2336775332512" y="579.2503556521401" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="286.171,592.191 285.055,567.394 320.859,556.347 333.909,577.463" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="302.4985716343467" y="577.3487016709297" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="333.909,577.463 320.859,556.347 346.751,529.264 368.432,541.352" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="338.4876114501304" y="555.1062518423021" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="368.432,541.352 346.751,529.264 356.177,493.000 381.000,493.000" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="359.0899377331742" y="518.1538268478843" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="381.000,493.000 356.177,493.000 346.751,456.736 368.432,444.648" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="359.0899377331742" y="475.84617315211574" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="368.432,444.648 346.751,456.736 320.859,429.653 333.909,408.537" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="338.4876114501304" y="438.89374815769787" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="333.909,408.537 320.859,429.653 285.055,418.606 286.171,393.809" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="302.4985716343467" y="416.6512983290703" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="286.171,393.809 285.055,418.606 248.405,426.393 237.303,404.191" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="260.2336775332512" y="414.7496443478598" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<line x1="203.99999999999991" y1="404.19067662713525" x2="203.99999999999991" y2="448.5953383135676" stroke="#a54388" stroke-width="2"/>
+<line x1="203.99999999999991" y1="448.5953383135676" x2="203.99999999999991" y2="493.0" stroke="#a54388" stroke-width="2"/>
+<line x1="203.99999999999991" y1="493.0" x2="203.99999999999991" y2="537.4046616864324" stroke="#a54388" stroke-width="2"/>
+<line x1="203.99999999999991" y1="537.4046616864324" x2="203.99999999999991" y2="581.8093233728648" stroke="#a54388" stroke-width="2"/>
+<text x="24" y="616" font-family="Arial,sans-serif" font-size="13" fill="#253345">Pin 0.000 | overlap 0.000 | gap 0.000</text>
+<text x="420" y="381" font-family="Arial,sans-serif" font-size="16" fill="#253345">Individual: Held faces, t=40</text>
+<polygon points="596.120,403.262 594.070,446.969 550.356,444.922 551.388,423.086 563.312,401.725" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="567.0490793999293" y="427.99278749544646" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="593.613,447.318 591.076,490.999 547.418,488.509 549.959,444.806" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="566.5164253454233" y="471.90800768811334" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="590.438,490.828 589.307,534.580 545.592,533.524 546.706,489.714" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="564.0108853552961" y="516.1617579708449" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="588.502,534.555 588.843,578.315 556.064,578.546 544.912,556.829 544.760,534.859" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="560.6162244711854" y="560.6206788689836" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="561.928,400.503 551.816,422.735 515.455,416.558 513.312,392.190" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="531.6279803156394" y="411.9965340527021" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="512.475,392.018 515.921,416.216 481.914,430.552 467.053,411.114" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="490.3407935058213" y="416.47495539723417" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="467.585,411.558 481.791,431.423 458.133,459.814 436.035,449.276" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="456.885948270099" y="442.01763789467753" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="437.585,448.993 458.370,461.786 447.371,497.185 423.000,495.954" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="437.58155579441825" y="479.97935252849953" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="423.020,495.497 447.341,498.295 452.310,534.878 429.747,544.217" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="434.1046806274133" y="522.2218102572372" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="429.039,545.352 450.754,533.995 475.494,561.252 462.222,581.784" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="450.3771847318564" y="559.5957885430134" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="462.597,582.911 473.992,561.282 509.876,569.483 510.606,593.982" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="485.2676294837018" y="580.9143646191833" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="510.034,593.096 509.130,568.700 544.475,557.972 557.084,578.969" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="526.1808240784635" y="578.6843322358466" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="588.720,578.287 588.479,534.546 632.222,534.358 632.280,556.121 621.557,578.116" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="608.6515782319098" y="560.2853752481873" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="589.252,534.157 590.893,490.453 634.593,492.086 632.957,535.746" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="607.9237776781387" y="517.1103127281028" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="591.219,490.387 593.890,446.742 637.549,449.378 634.891,493.024" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="610.3872895927983" y="473.8825146835429" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="594.193,447.002 596.389,403.316 629.184,404.961 639.031,427.358 637.903,449.199" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="615.3400009366276" y="430.36729587470626" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="624.208,580.124 630.325,556.502 667.163,556.006 673.542,579.693" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="644.8092901533021" y="572.0813426081596" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="671.850,578.121 668.095,554.023 702.027,539.260 716.925,558.686" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="685.7242829783573" y="561.5226316501103" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="713.727,557.740 703.312,535.701 732.107,512.128 751.678,526.578" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="721.206270548026" y="537.0370589453717" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="751.666,527.233 733.551,510.743 751.014,478.218 774.740,483.781" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="748.7426332790299" y="503.99365735962715" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="777.000,482.130 752.462,481.490 744.017,445.783 765.556,434.142" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="755.7589021659746" y="464.88625779461296" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="765.261,432.132 745.875,446.926 716.611,424.512 726.172,401.966" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="734.479643754292" y="430.3839138994399" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="725.604,402.752 715.207,424.809 678.839,418.030 677.273,393.592" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="695.2306782037099" y="413.79562100988204" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="677.768,395.005 676.597,419.393 640.205,426.811 629.562,404.895" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="652.0329954108241" y="415.5260866030486" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<line x1="596.119758486736" y1="403.26221186570905" x2="594.0700938407342" y2="446.9685160964953" stroke="#a54388" stroke-width="2"/>
+<line x1="593.6131000007663" y1="447.31801405297364" x2="591.0757741774096" y2="490.99891121160346" stroke="#a54388" stroke-width="2"/>
+<line x1="590.4383731713701" y1="490.82815915053396" x2="589.3071921385507" y2="534.5803331704659" stroke="#a54388" stroke-width="2"/>
+<line x1="588.5022545386563" y1="534.5551057165287" x2="588.8430177306632" y2="578.3146679744048" stroke="#a54388" stroke-width="2"/>
+<text x="420" y="616" font-family="Arial,sans-serif" font-size="13" fill="#253345">Pin 0.086 | overlap 0.012 | gap 0.000</text>
+<text x="816" y="381" font-family="Arial,sans-serif" font-size="16" fill="#253345">Individual: After imposed release, t=120</text>
+<polygon points="953.276,443.994 960.663,474.610 930.056,481.932 926.403,466.691 930.307,449.526" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="936.1409421946023" y="467.3505751957379" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="960.305,475.418 966.132,506.386 935.228,512.193 929.399,481.311" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="943.7661231141697" y="497.8272061083648" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="965.568,506.971 970.419,538.062 939.344,542.950 934.478,511.853" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="948.4521533820715" y="528.9589608571" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="969.757,537.831 975.718,568.717 952.585,573.204 941.809,559.278 938.838,543.793" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="951.741497476836" y="560.5648529714052" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="928.498,448.697 927.163,466.210 901.091,471.162 893.598,455.217" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="908.587568710171" y="464.3214684665561" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="893.935,455.867 900.306,472.209 878.737,487.827 865.217,476.538" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="880.5488482262132" y="477.11027804835066" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="866.457,476.818 878.536,489.568 864.298,512.145 847.590,506.748" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="860.2203332113886" y="500.319818902145" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="847.999,506.501 864.256,513.284 860.370,539.603 842.921,541.507" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="849.8866832676758" y="529.2236261253435" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="842.305,542.081 859.762,539.777 869.692,564.383 855.671,574.943" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="852.8575007656168" y="559.2958687504911" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="855.706,576.571 867.966,563.918 891.037,576.816 886.657,593.893" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="871.3415552642537" y="581.7996001749325" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="887.170,594.000 889.918,576.667 916.323,573.901 922.427,590.428" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="899.9592668515575" y="587.7492672997349" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="921.333,589.335 917.504,572.233 941.269,560.077 952.842,573.286" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="929.2369109313663" y="577.7328097136007" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1000.747,502.186 1016.329,474.855 1043.671,490.431 1035.873,504.100 1021.241,513.876" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="1019.5723056267058" y="501.08972651308386" font-family="Arial,sans-serif" font-size="11" fill="#253345">P</text>
+<polygon points="1016.301,474.937 1031.669,447.499 1059.134,462.856 1043.738,490.329" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="1033.7103692269682" y="472.90535285645024" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="1031.494,447.792 1046.055,419.917 1073.955,434.478 1059.371,462.384" fill="#dce7f2" stroke="#253345" stroke-width="1"/>
+<text x="1048.7188672729337" y="445.1427265589516" font-family="Arial,sans-serif" font-size="11" fill="#253345">A</text>
+<polygon points="1046.083,419.988 1060.457,392.000 1081.445,402.782 1081.259,420.368 1074.068,434.372" fill="#f5d29a" stroke="#253345" stroke-width="1"/>
+<text x="1064.6623642499321" y="417.9020150973754" font-family="Arial,sans-serif" font-size="11" fill="#253345">Q</text>
+<polygon points="1021.004,514.009 1035.481,504.036 1055.543,521.394 1047.784,537.175" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1035.9531131745641" y="523.1534776656501" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1047.876,537.540 1055.019,521.461 1081.182,525.721 1082.824,543.255" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1062.725393954329" y="535.9943985687189" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1082.686,543.088 1080.884,525.603 1105.748,516.287 1115.836,530.708" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1092.2884861116636" y="532.9214347546947" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1115.299,530.601 1105.976,515.703 1124.281,496.408 1139.650,504.932" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1117.3016530007164" y="515.9111216996342" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1139.545,505.094 1124.417,496.100 1131.864,470.612 1149.438,471.118" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1132.3158291716295" y="489.7306260072919" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1149.695,471.000 1132.090,471.005 1125.402,445.339 1140.747,436.738" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1132.9835747558034" y="460.02056504117223" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1140.848,436.504 1125.728,445.491 1106.846,426.862 1115.650,411.622" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1118.267812014039" y="434.11973564912523" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<polygon points="1115.664,411.650 1107.072,426.989 1081.384,420.290 1081.418,402.693" fill="#c4e7ce" stroke="#253345" stroke-width="1"/>
+<text x="1092.3846025671216" y="419.40539360096795" font-family="Arial,sans-serif" font-size="11" fill="#253345">W</text>
+<text x="816" y="616" font-family="Arial,sans-serif" font-size="13" fill="#253345">Pin 0.065 | overlap 0.007 | gap 1.108</text>
+<text x="24" y="677" font-family="Arial,sans-serif" font-size="16" fill="#253345">Each half: P-A-A-Q plus eight W wedges. Four conserved free E blocks are outside these cropped panels.</text>
+<text x="24" y="705" font-family="Arial,sans-serif" font-size="16" fill="#253345">Both arcs and chains are prepared. Four copying-face bonds are removed experimentally after t40.</text>
+<text x="24" y="733" font-family="Arial,sans-serif" font-size="16" fill="#253345">This tests shape and separation; it does not show autonomous growth, replication or a sealed protective wall.</text>
+</svg>

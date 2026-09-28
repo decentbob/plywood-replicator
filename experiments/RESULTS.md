@@ -7486,3 +7486,143 @@ timed; the fully inclusive cap is not independently verified. One process,
 no workers or other repository simulation found; none remains active.
 Core/historical source hashes are unchanged. The full core suite and default
 fingerprints were not rerun for this isolated assay.
+
+## 87. Complete paired D geometry: static fit, unresolved dynamic overlap
+
+2026-09-28, Q8f/P0. [Frozen geometry plan](half_cell_arc_plan.md),
+[assay](half_cell_arc.js), [neutral diagnosis](half_cell_arc_diagnose.js),
+[separate resolution plan](half_cell_arc_resolution_plan.md) and
+[runner](half_cell_arc_resolution.js). This tests the user's two independent
+half-cells with their own straight copying boundaries and curved W arcs.
+
+### Design and intervention
+
+One fixed design, derived before simulation: P-A-A-Q has nominal cap origins
+(0,0),(0,3). Extending the existing angled rim edges gives center(-1.25,1.5),
+inner radius .75*sqrt(5), outer radius sqrt(5), exterior sweep233.130102 degrees.
+Eight identical convex W trapezoids each turn29.141263 degrees; both radial
+contact edges have length sqrt(5)/4, matching each cap's rim edge. The second
+assembly rotates180 degrees around(.5,1.5), placing its Q-A-A-P boundary on the
+first chain's four exposed copying faces and its own arc on the opposite side.
+It is a bulging D rather than an exact semicircle. No changed caps or handed
+W variant is needed. The design and centered polygon coordinates are in raw.
+
+ArcSim changes the research C/W rest polygon only; it inherits separate rim
+storage and native-polymer end compatibility. The two other W sides stay inert.
+No chemical state, side mark or runtime chain-length/closure predicate is added.
+Its area .53261744 determines sizeC=.72980644 so the inherited square-size mass
+proxy equals area; rotational inertia remains the inherited square-size proxy.
+Actual corner contact/shape matching, not an observer's circle, drives mechanics.
+All IDs and half-cell groups are observer/setup data. Core sources are unchanged.
+
+Each world has two prepared12-block halves (16 W,4 A,2 P,2 Q total), plus4 free E,
+in a24x24 torus: **28 conserved blocks**. No chemistry, binding, fraying, fuel
+consumption or spontaneous loss runs. All initial bonds are imposed. The four
+temporary copying-face bonds are removed experimentally after step40; physics
+continues to120. Fuel-access probes analytically place an existing E polygon
+without changing world state or creating material. Closed/open arms differ only
+by omission of the middle W/W joint in each arc; initial poses/material match.
+These controls diagnose closure mechanics, not reproductive fitness.
+
+Seeds761/769 x body/individual motion x closed/open =8 original worlds at16
+solver passes, sigma.3, sigmaRot.45, stiffness.8. All initial static tests pass:
+actual overlap/pin/closure gaps <=1e-9, all four ordinary copying pairs satisfy
+core geometry and compatibility, cap fuel probes fit, all rim pairs have correct
+labels and eligible native corner geometry. Observer translations of the second
+D by0,.1,...,2 produce no cross-overlap (168 checked placements, repeated
+geometry across8 worlds, not168 independent samples). All first5-step viability
+checks pass. Static probes preserve arrays and RNG.
+
+### Outcomes and separately frozen follow-up
+
+The gate requires **every closed world** to pass. In held frames31–40 and
+released frames111–120: pin residual <=.1 and structural pair overlap <=.02;
+held copying geometry remains eligible and cap fuel-probe overlap <=.02.
+All own bonds must persist, with an inter-half gap >=.1 at least once after
+release by120. Open controls need not fail. Overlap below is area, not distance.
+
+| Passes | Motion | Closed held gate | Closed released gate | Closed total gate | Open total gate | Largest closed overlap, whole run |
+|---|---|---:|---:|---:|---:|---:|
+|16, original|body|2/2|2/2|2/2|2/2|.010070|
+|16, original|individual|0/2|0/2|0/2|0/2|.048558|
+|32, separate comparison|body|2/2|2/2|2/2|2/2|.005455|
+|32, separate comparison|individual|1/2|2/2|1/2|0/2|.021333|
+
+Every world reaches the separation-gap condition, at t42–54. At16 the closed
+individual held maximum pins are .117121/.115866 and overlaps .023162/.048558
+for761/769; released maxima are pin .077983/.122984, overlap .024188/.020795.
+All-pair maxima including E equal the structural maxima in these runs. Full
+per-world maxima, fuel probes and open-arc gap/error controls remain in raw/report.
+
+The unchanged-parameter diagnostic replays seed769 individual16 t36. Its worst
+pair is **directly bonded ordinary A/A**, excluded by polygon contact correction;
+the pin/shape solver is still converging. Across the last five completed passes
+(12–16), max pin falls .154443,.143103,.133058,.124016,.115866 and largest overlap
+.062068,.058328,.054836,.051573,.048558. Instrumentation preserves the exact
+frame, final physical arrays and RNG. This is numerical evidence, not an arc
+self-collision or evidence that W needs a timing program.
+
+That distinct cause admitted one **separately frozen** P0 comparison at32, using
+the same saved eight initial worlds and every other parameter unchanged. It does
+not revise the original failed gate. Initial arrays/RNG are equal; later paths
+are not claimed event-by-event matched. The follow-up also fails its all-world
+gate: seed769 individual32 held overlap **.02133344184 > .02**, at t36. Its held
+pin .054567 and fuel-probe overlap .002576 pass; its released pin .072672 and
+overlap .013342 pass. All four closed released windows pass at32. The two open
+individual controls still fail, and their final mid-arc gaps reach1.25–2.15.
+No third resolution or threshold/angle/stiffness/horizon rescue is permitted.
+
+[Original actual frames](out/HC_arc_20260928.svg) and
+[32-pass actual frames](out/HC_arc32_20260928.svg)
+([PNG](out/HC_arc32_20260928.png)) show seed761 at0/40/120 in both motion modes.
+They illustrate the topology and separation, **not failing seed769**. All four
+free E are outside the structural crop, explicitly labelled. Neither prepared
+arc construction nor imposed release is autonomous growth/division. Bond
+retention with loss disabled is not chemical persistence. No radiation barrier,
+energy sufficiency, inherited function, descendants or selection is demonstrated.
+
+**Decision:** retain the static geometric lead; park this dynamic setting.
+Ordinary chemistry/growth is not promoted. Next is a narrow source/archived-frame
+audit of bonded A/A exclusion versus pin/shape correction, deciding whether a
+distinct small mechanical correction has a causal case. This does not license
+a general physics rewrite, another resolution sweep or new reaction states.
+
+### Reproduction, validation and cost
+
+```
+node experiments/half_cell_arc.js experiments/scratch/HC_arc_20260928.json.gz
+node experiments/half_cell_arc.js --validate experiments/scratch/HC_arc_20260928.json.gz
+python experiments/half_cell_arc_report.py experiments/scratch/HC_arc_20260928.json.gz experiments/scratch/HC_arc_20260928
+node experiments/half_cell_arc_diagnose.js experiments/scratch/HC_arc_20260928.json.gz experiments/scratch/HC_arc_20260928.diagnosis.json
+node experiments/half_cell_arc_resolution.js experiments/scratch/HC_arc32_20260928.json.gz
+node experiments/half_cell_arc_resolution.js --validate experiments/scratch/HC_arc32_20260928.json.gz
+python experiments/half_cell_arc32_report.py experiments/scratch/HC_arc32_20260928.json.gz experiments/scratch/HC_arc32_20260928
+node experiments/half_cell_arc_archive.js
+```
+
+Use unique output stems; no overwrites. The resolution runner requires the fixed
+original scratch input. If absent, restore the archived original with:
+
+```
+node -e "const f=require('fs');f.copyFileSync('experiments/out/HC_arc_20260928.json.gz','experiments/scratch/HC_arc_20260928.json.gz',f.constants.COPYFILE_EXCL)"
+```
+
+Python/Pillow reports used the bundled runtime Python on Windows. Both SVG/PNG
+renders were inspected. All16 observer/plain and midpoint-restart checks pass;
+validators replay1,936 frames including initial states, recompute metrics/gates,
+check final physical arrays/RNG, and reject eight corner/label/bond/aggregate
+corruptions. The original validator reconstructs static geometry; the32 validator
+also verifies its sole parameter change and exact reference initial arrays.
+No harness execution failed. Geometry gate failures are complete negative runs.
+
+The [manifest](out/HC_arc_20260928.manifest.json) preserves15 byte-identical raw,
+CPU, validation, diagnosis and figure files plus source/input hashes. Total
+**6,792 physics steps**: each resolution has2,400 observed/plain/restart and960
+replay; diagnosis adds72. Measured CPU **121.401s**: original execution29.296,
+validation15.952; comparison46.280/24.343; diagnosis2.437; reports1.0625/1.171875;
+archive.859. Node includes startup/compression; Python imports, read-only
+inspections, shell/editing/Git and final small bookkeeping are unmeasured, so
+the fully inclusive180s cap is not independently verified. One simulation
+process, no workers; no other repository simulation found and none remains
+active. Core/historical hashes unchanged; full core suite/default fingerprints
+were not rerun for this isolated geometry assay.

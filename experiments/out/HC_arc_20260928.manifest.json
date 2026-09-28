@@ -1,0 +1,175 @@
+{
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\half_cell_arc_archive.js"
+  ],
+  "sourceHash": "96e43ef96350c2a8bdf4c30f68a11e865cc87f5538f527c5eefcd551110fbd59",
+  "files": [
+    {
+      "source": "experiments/scratch/HC_arc_20260928.json.gz",
+      "target": "experiments/out/HC_arc_20260928.json.gz",
+      "sha256": "99f08b8433e6b6262a683299db0fc20ac000f0bb1c2d71e5119801520fbc0aca",
+      "bytes": 2867609
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.json.gz.cpu.json",
+      "target": "experiments/out/HC_arc_20260928.json.gz.cpu.json",
+      "sha256": "fb3fedb7ebf8b6bb6139b99afd06ccf1402045af3cc413253f5012f662f86f59",
+      "bytes": 101
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.json.gz.validation.json",
+      "target": "experiments/out/HC_arc_20260928.json.gz.validation.json",
+      "sha256": "282acc1225a59a53838c8fe756eb869d01830c72db71310aef738d66d42603ce",
+      "bytes": 6538
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.json.gz.validation.json.cpu.json",
+      "target": "experiments/out/HC_arc_20260928.json.gz.validation.json.cpu.json",
+      "sha256": "a62c0548e3392c25c9b040900fcfaa80eef1f8ab5b0ea4631329d83f2625d57a",
+      "bytes": 97
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.report.json",
+      "target": "experiments/out/HC_arc_20260928.report.json",
+      "sha256": "5aeaeeb153c964cda85b25332ddd7f98370dc7c91dd320a113a34539c082f780",
+      "bytes": 7044
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.svg",
+      "target": "experiments/out/HC_arc_20260928.svg",
+      "sha256": "31579d5dc98d6dcd41779285a76083ca6e3791958fe3bd01c1712271cc8f37f7",
+      "bytes": 41692
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.png",
+      "target": "experiments/out/HC_arc_20260928.png",
+      "sha256": "1d2afbf38e3a33aeea5cb614fc000d464349b4c17adc3792a0bce1f1e63353c5",
+      "bytes": 199804
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.json.gz",
+      "target": "experiments/out/HC_arc32_20260928.json.gz",
+      "sha256": "8164bcd33c8c4312a5fcd8f46903b3ac53fb5e19e3137363f1591fab5405ee5d",
+      "bytes": 2854256
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.json.gz.cpu.json",
+      "target": "experiments/out/HC_arc32_20260928.json.gz.cpu.json",
+      "sha256": "69c9f06312b3c2c4dc9ebaeeecd91c5851400beedda001745935795ba4c0dd1f",
+      "bytes": 100
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.json.gz.validation.json",
+      "target": "experiments/out/HC_arc32_20260928.json.gz.validation.json",
+      "sha256": "75efd1e14ebf36be851f33c516515b1b8fbb2ba82ec66359f559a5f6c103b204",
+      "bytes": 6395
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.json.gz.validation.json.cpu.json",
+      "target": "experiments/out/HC_arc32_20260928.json.gz.validation.json.cpu.json",
+      "sha256": "706479168618b634530498b6f98a79d92dbe166ae15f2a470848745dc42ca593",
+      "bytes": 97
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.report.json",
+      "target": "experiments/out/HC_arc32_20260928.report.json",
+      "sha256": "288977c37afea106c2414ad6c03edb6da0ce0f6b591c85bb883a7b0c57312b82",
+      "bytes": 7057
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.svg",
+      "target": "experiments/out/HC_arc32_20260928.svg",
+      "sha256": "5e520f05f7f54b2a589c61f45ba383d1df9f988483849f9a87f8199b86f881d3",
+      "bytes": 41701
+    },
+    {
+      "source": "experiments/scratch/HC_arc32_20260928.png",
+      "target": "experiments/out/HC_arc32_20260928.png",
+      "sha256": "1d773fdb7a0722d9d52ff46ace215a35c71fa43324a48661ef9771dd83516877",
+      "bytes": 197424
+    },
+    {
+      "source": "experiments/scratch/HC_arc_20260928.diagnosis.json",
+      "target": "experiments/out/HC_arc_20260928.diagnosis.json",
+      "sha256": "9e3e393a1db635cc04d74ffed08a00ba14a1f92b05e49f3b4ee3509983c6b407",
+      "bytes": 244070
+    }
+  ],
+  "costs": [
+    {
+      "file": "experiments/out/HC_arc_20260928.json.gz.cpu.json",
+      "cpuSeconds": 29.296,
+      "counts": {
+        "observed": 960,
+        "plain": 960,
+        "restart": 480,
+        "replay": 0
+      },
+      "complete": true
+    },
+    {
+      "file": "experiments/out/HC_arc_20260928.json.gz.validation.json.cpu.json",
+      "cpuSeconds": 15.952,
+      "counts": {
+        "observed": 0,
+        "plain": 0,
+        "restart": 0,
+        "replay": 960
+      },
+      "complete": true
+    },
+    {
+      "file": "experiments/out/HC_arc32_20260928.json.gz.cpu.json",
+      "cpuSeconds": 46.28,
+      "counts": {
+        "observed": 960,
+        "plain": 960,
+        "restart": 480,
+        "replay": 0
+      },
+      "complete": true
+    },
+    {
+      "file": "experiments/out/HC_arc32_20260928.json.gz.validation.json.cpu.json",
+      "cpuSeconds": 24.343,
+      "counts": {
+        "observed": 0,
+        "plain": 0,
+        "restart": 0,
+        "replay": 960
+      },
+      "complete": true
+    }
+  ],
+  "reportCpuSeconds": [
+    1.0625,
+    1.171875
+  ],
+  "diagnosisCpuSeconds": 2.437,
+  "archiveCpuSeconds": 0.859,
+  "measuredCpuSeconds": 121.40137499999999,
+  "physicsSteps": 6792,
+  "timingScope": "Node process CPU includes startup/compression. Python report CPU begins after imports. Read-only inspections, Python imports, shell/editing/Git and final small bookkeeping are unmeasured; fully inclusive CPU cap not independently verified.",
+  "outcomes": {
+    "original16": {
+      "pass": false,
+      "closedPassed": 2,
+      "closedWorlds": 4
+    },
+    "separate32": {
+      "pass": false,
+      "closedPassed": 3,
+      "closedWorlds": 4
+    },
+    "autonomousGrowth": false
+  },
+  "failedHarnessExecutions": [],
+  "validation": {
+    "replayedFrames": 1936,
+    "neutralityAndRestarts": 16,
+    "corruptionsRejected": 8,
+    "diagnosisNeutral": true
+  },
+  "visualQA": "Both PNGs inspected: six actual-frame panels at t0/40/120, seed761 in both motion modes. Four E particles are explicitly outside the crop. Seed769 failure is reported separately; these figures do not show the worst case.",
+  "reproduce": "Use unique output stems for assays, diagnosis, validation and Python/Pillow reports. The resolution runner requires experiments/scratch/HC_arc_20260928.json.gz: if absent restore that exact archived file using COPYFILE_EXCL, never overwrite. Archiver names this completed batch and refuses overwrite."
+}

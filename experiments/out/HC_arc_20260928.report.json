@@ -1,0 +1,262 @@
+{
+  "command": [
+    "experiments/half_cell_arc_report.py",
+    "experiments/scratch/HC_arc_20260928.json.gz",
+    "experiments/scratch/HC_arc_20260928"
+  ],
+  "sourceHash": "72d88c161f7dcd63dd20e191ccfb81b97f24877f99e375b3fe1869ad9161aec2",
+  "rawHash": "99f08b8433e6b6262a683299db0fc20ac000f0bb1c2d71e5119801520fbc0aca",
+  "passGate": false,
+  "closedPassed": 2,
+  "closedWorlds": 4,
+  "worstStructuralOverlap": {
+    "value": 0.048557541489984146,
+    "job": {
+      "seed": 769,
+      "mode": "individual16",
+      "arm": "closed"
+    },
+    "t": 36
+  },
+  "design": {
+    "arcBlocks": 8,
+    "innerRadius": 1.6770509831248424,
+    "outerRadius": 2.23606797749979,
+    "sweep": 4.068887871591405,
+    "turn": 0.5086109839489257,
+    "points": [
+      [
+        0.27051901443235016,
+        0.5625349954937932
+      ],
+      [
+        -0.27051901443234994,
+        0.4219012466203449
+      ],
+      [
+        -0.27051901443234994,
+        -0.4219012466203449
+      ],
+      [
+        0.27051901443235016,
+        -0.5625349954937932
+      ]
+    ],
+    "area": 0.5326174439764058,
+    "size": 0.7298064428164537
+  },
+  "rows": [
+    {
+      "seed": 761,
+      "mode": "body16",
+      "arm": "closed",
+      "heldGood": true,
+      "releasedGood": true,
+      "clearance": 48,
+      "maxPin": 0.02813644068513053,
+      "maxStructuralOverlap": 0.010069740367697477,
+      "maxAllOverlap": 0.010069740367697477,
+      "heldPin": 1.7763568394002505e-14,
+      "heldOverlap": 4.263256414560601e-14,
+      "heldFuelOverlap": 2.842170943040401e-14,
+      "releasedPin": 2.3456337232358197e-08,
+      "releasedOverlap": 3.699845763094345e-09,
+      "finalClosureGaps": [
+        9.55239216497976e-10,
+        6.353823129820479e-10
+      ],
+      "pass": true
+    },
+    {
+      "seed": 761,
+      "mode": "body16",
+      "arm": "open",
+      "heldGood": true,
+      "releasedGood": true,
+      "clearance": 48,
+      "maxPin": 0.027345805208117552,
+      "maxStructuralOverlap": 0.009983843729685304,
+      "maxAllOverlap": 0.009983843729685304,
+      "heldPin": 1.7763568394002505e-14,
+      "heldOverlap": 4.263256414560601e-14,
+      "heldFuelOverlap": 2.842170943040401e-14,
+      "releasedPin": 0.0019190323612765644,
+      "releasedOverlap": 0.00032265626845173756,
+      "finalClosureGaps": [
+        0.024732154537687893,
+        0.01820380776074509
+      ],
+      "pass": true
+    },
+    {
+      "seed": 761,
+      "mode": "individual16",
+      "arm": "closed",
+      "heldGood": false,
+      "releasedGood": false,
+      "clearance": 43,
+      "maxPin": 0.11787485280757404,
+      "maxStructuralOverlap": 0.04020339865654421,
+      "maxAllOverlap": 0.04020339865654421,
+      "heldPin": 0.1171208498660974,
+      "heldOverlap": 0.023162060060769818,
+      "heldFuelOverlap": 0.00756329283900925,
+      "releasedPin": 0.07798275043717151,
+      "releasedOverlap": 0.02418826495940607,
+      "finalClosureGaps": [
+        0.02676146893713004,
+        0.010715874230105853
+      ],
+      "pass": false
+    },
+    {
+      "seed": 761,
+      "mode": "individual16",
+      "arm": "open",
+      "heldGood": false,
+      "releasedGood": false,
+      "clearance": 43,
+      "maxPin": 0.22703994536936561,
+      "maxStructuralOverlap": 0.0440431364540359,
+      "maxAllOverlap": 0.0440431364540359,
+      "heldPin": 0.22703994536936561,
+      "heldOverlap": 0.027782637007405242,
+      "heldFuelOverlap": 0.040810581027628245,
+      "releasedPin": 0.1264007103134196,
+      "releasedOverlap": 0.023931389808510062,
+      "finalClosureGaps": [
+        0.7307520158124363,
+        1.7094861839330213
+      ],
+      "pass": false
+    },
+    {
+      "seed": 769,
+      "mode": "body16",
+      "arm": "closed",
+      "heldGood": true,
+      "releasedGood": true,
+      "clearance": 54,
+      "maxPin": 0.03725412214825688,
+      "maxStructuralOverlap": 0.010002599934011869,
+      "maxAllOverlap": 0.010002599934011869,
+      "heldPin": 2.5433559371059913e-14,
+      "heldOverlap": 4.263256414560601e-14,
+      "heldFuelOverlap": 2.842170943040401e-14,
+      "releasedPin": 0.03517137443046169,
+      "releasedOverlap": 0.007988309142263006,
+      "finalClosureGaps": [
+        0.005767492990290329,
+        0.003722472059110843
+      ],
+      "pass": true
+    },
+    {
+      "seed": 769,
+      "mode": "body16",
+      "arm": "open",
+      "heldGood": true,
+      "releasedGood": true,
+      "clearance": 54,
+      "maxPin": 0.03976097092318018,
+      "maxStructuralOverlap": 0.010334122573993909,
+      "maxAllOverlap": 0.010334122573993909,
+      "heldPin": 2.5433559371059913e-14,
+      "heldOverlap": 4.263256414560601e-14,
+      "heldFuelOverlap": 2.842170943040401e-14,
+      "releasedPin": 0.038305765706726405,
+      "releasedOverlap": 0.008240570919738843,
+      "finalClosureGaps": [
+        0.17957258250056346,
+        0.05829947121896556
+      ],
+      "pass": true
+    },
+    {
+      "seed": 769,
+      "mode": "individual16",
+      "arm": "closed",
+      "heldGood": false,
+      "releasedGood": false,
+      "clearance": 42,
+      "maxPin": 0.1311422026229124,
+      "maxStructuralOverlap": 0.048557541489984146,
+      "maxAllOverlap": 0.048557541489984146,
+      "heldPin": 0.11586560483766097,
+      "heldOverlap": 0.048557541489984146,
+      "heldFuelOverlap": 0.005297792274362223,
+      "releasedPin": 0.12298393075910269,
+      "releasedOverlap": 0.020795228290864998,
+      "finalClosureGaps": [
+        0.03710946624612111,
+        0.03710104809549771
+      ],
+      "pass": false
+    },
+    {
+      "seed": 769,
+      "mode": "individual16",
+      "arm": "open",
+      "heldGood": false,
+      "releasedGood": false,
+      "clearance": 42,
+      "maxPin": 0.23635835947190117,
+      "maxStructuralOverlap": 0.046964358566981446,
+      "maxAllOverlap": 0.046964358566981446,
+      "heldPin": 0.15645837384691685,
+      "heldOverlap": 0.046964358566981446,
+      "heldFuelOverlap": 0.022692532705050894,
+      "releasedPin": 0.155846652309827,
+      "releasedOverlap": 0.030500016475258462,
+      "finalClosureGaps": [
+        2.6532932377198057,
+        2.527366637689149
+      ],
+      "pass": false
+    }
+  ],
+  "panels": [
+    {
+      "mode": "body16",
+      "t": 0,
+      "scale": 44.40466168643238
+    },
+    {
+      "mode": "body16",
+      "t": 40,
+      "scale": 38.87034321111919
+    },
+    {
+      "mode": "body16",
+      "t": 120,
+      "scale": 30.15734271866483
+    },
+    {
+      "mode": "individual16",
+      "t": 0,
+      "scale": 44.40466168643238
+    },
+    {
+      "mode": "individual16",
+      "t": 40,
+      "scale": 43.74067989646997
+    },
+    {
+      "mode": "individual16",
+      "t": 120,
+      "scale": 31.465993579808316
+    }
+  ],
+  "figures": [
+    {
+      "path": "experiments/scratch/HC_arc_20260928.svg",
+      "sha256": "31579d5dc98d6dcd41779285a76083ca6e3791958fe3bd01c1712271cc8f37f7"
+    },
+    {
+      "path": "experiments/scratch/HC_arc_20260928.png",
+      "sha256": "1d2afbf38e3a33aeea5cb614fc000d464349b4c17adc3792a0bce1f1e63353c5"
+    }
+  ],
+  "cpuSeconds": 1.0625,
+  "physicsSteps": 0
+}

@@ -6,8 +6,11 @@ on one chain. The user means two separate D-shaped assemblies, each with its own
 chain as the straight boundary and its own polymer arc. A prepared cap-geometry
 assay and targeted contact comparison are complete (RESULTS 82–83). An isolated
 rim interface and passive end-binding rule are implemented (84): prepared
-release works, but the near-contact recruitment screen fails. Curved-arc growth
-and complete half-cell reproduction remain unimplemented.
+release works, but the near-contact recruitment screen fails. Automatic polymer
+capture and prepared joint alignment have since been tested (85–86). Complete
+prepared D shapes now exist (87); their static fit passes, while the dynamic
+gate still fails after one resolution check. Autonomous curved-arc growth and
+complete half-cell reproduction remain unimplemented.
 ROADMAP controls execution.
 
 ## Topology and sequence
@@ -145,9 +148,25 @@ Both body and individual kicks were tested at 16 solver passes. The new
 bonds were prepared at eligible angled contacts, not acquired from a bath.
 Temporary overlap still reaches .223063 in an individual-kick Q extension;
 the illustrated actual frames include that failure of all-time exclusion.
-The next question is geometric: derive a curved W polygon with compatible
-edge lengths and a complete arc for the cap-to-cap span. Current W is straight.
-No additional activation, fuel or timing state is indicated by this result.
+Q8f answers the static geometry question (RESULTS87). Eight identical convex
+W trapezoids, each turning 29.141 degrees, close an exterior arc behind P-A-A-Q.
+Their two radial contact edges match the existing cap rim edge exactly; the
+other sides are inert. The arc sweeps 233.130 degrees, giving a bulging D rather
+than an exact semicircle. A 180-degree rotated duplicate faces the original
+chain with its own arc on the far side. All actual-corner static overlap,
+copying, cap fuel-probe and outward-translation checks pass. These dimensions
+are prepared design choices, not a chain-length reader or block type conversion.
+
+The [actual full-D frames](../experiments/out/HC_arc32_20260928.svg) show seed761.
+Both halves separate in every tested world after imposed face removal, but
+the dynamic gate fails: closed body16 2/2, individual16 0/2. Neutral replay
+locates the largest overlap at a directly bonded ordinary A/A joint still
+converging after16 constraint passes. A separately frozen32 comparison improves
+closed results to3/4, yet seed769 still exceeds the held overlap bound
+(.021333 > .02); all four closed released windows pass. The original and
+follow-up remain negative. Park the dynamic setting and audit this narrow
+contact/constraint discrepancy; no further resolution or threshold rescue.
+No additional activation, fuel or timing state is indicated.
 
 The completed paired-end fixture includes each cap's immediate ordinary chain
 neighbor, one rim stub and fuel access. It checks both P/Q orientations,
@@ -155,15 +174,16 @@ actual-corner overlap, copying access and prepared release, against the same
 inventory with rim stubs unbound. The old four-stub/two-cap preparation
 represented the mistaken two-rim-ports-per-cap design and is superseded.
 
-Then prepare one complete D-shaped seed plus conserved free material and test
+Only after a justified mechanical prerequisite passes, prepare one complete
+D-shaped seed plus conserved free material and test
 ordinary chain copying together with new-arc growth. Measure detached complete
 chains, partial/closed arcs, persistent cross-links, rearming and descendants
 that repeat both operations. Do not require rim closure before release. A
 bare-chain equal-material control distinguishes an added boundary from a copying
 improvement. Prepared seed construction is not autonomous acquisition.
 
-Open uncertainties are concrete: cap/arc clearance, arc length and curvature
-compatible with the chain span, tip encounter and closure, monomer/fuel access,
+Static cap/arc clearance and one compatible arc shape are established. Open
+uncertainties are dynamic exclusion, spontaneous tip encounter and closure, monomer/fuel access,
 and whether whole half-cells renew rather than only their chains. For these next
 tests, no rate, seed, horizon or success gate is frozen yet. Use a proportional plan before simulation,
 accepted body jostling for exploration, and targeted individual-kick/solver checks.

@@ -82,16 +82,32 @@ The [actual frames](experiments/out/HC_settle_20260928.svg) show this limitation
 Prepared curvature/closure geometry is now admitted, not autonomous growth
 or a sealed radiation barrier. Existing straight W cannot itself make an arc.
 
+**Q8f constructs complete D shapes; its dynamic gate fails (RESULTS 87).**
+Eight identical curved W trapezoids close behind P-A-A-Q, with unchanged caps,
+automatic end labels and separate rim storage. All static copying/fuel-access,
+closure and outward-translation checks pass. Both prepared halves separate in
+all eight 16-pass worlds after imposed face removal; closed body16 passes 2/2,
+individual16 0/2. A neutral replay locates the largest overlap at a directly
+bonded ordinary A/A joint still converging after sixteen constraint passes.
+One separately frozen 32-pass comparison improves closed results to 3/4 but
+still fails: seed769 individual32 held overlap .021333 exceeds .02. All four
+closed released windows pass. Both original and follow-up gates remain failed.
+No further resolution/threshold/shape rescue or chemistry promotion is admitted.
+The [actual full-D frames](experiments/out/HC_arc32_20260928.svg) illustrate
+seed761, not the failing seed. This is prepared geometry, not arc acquisition,
+autonomous division or a sealed barrier. The dynamic setting is parked.
+
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8f: one curved W shape and a complete D-shaped seed | Derive one polygon/arc geometry from the existing cap endpoints and a specified ordinary chain span, with equal-length compatible contact edges. Keep automatic end binding and separate rim storage; no timing or completion state. Freeze actual-corner overlap, cap/rail/copying access, tip closure and held/released pin bounds before simulation. Test a prepared D-shaped seed and outward-facing duplicate, using body16/individual16. Report prepared closure separately from acquisition; do not claim a sealed wall from final-window geometry. |
-| 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
+| 1 | Q8/P0 checkpoint: the bonded A/A contact discrepancy | Audit the contact exclusion and pin/shape update for the measured full-D failure. Decide whether a small, distinct mechanical correction is justified, versus retaining only the prepared body-jostled demonstration and parking dynamics. Start with source/archived-frame analysis, not another solver sweep. Any new intervention needs its own causal prediction and frozen control; no general physics rewrite, timing states or relaxed gate. |
+| 2, only after the targeted mechanical prerequisite passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8e are complete; Q8c/d's acquisition gates failed, Q8e's prepared
-mechanical gate passed. Q8f is not frozen. No task simulation is active.
+Q8a–Q8f are complete; Q8c/d's acquisition gates failed, Q8e's prepared
+joint gate passed, Q8f's static geometry passes but both dynamic settings fail.
+No next assay is frozen. No task simulation is active.
 The user's automatic-polymer correction supersedes the proposed free-W
 docking comparison; that comparison was not executed.
 The brief's alternatives are a design portfolio,

@@ -288,6 +288,8 @@ Still open:
 
 ## 14. Decision log
 
+- 2026-09-28. Q8f derives eight identical curved W trapezoids for a complete P-A-A-Q half-cell (RESULTS87). Static closure/copying/fuel access and outward separation fit without new states. Prepared dynamic gate fails at16 (2/4 closed), and a separately frozen32 check still fails (3/4, held overlap .021333 > .02). Neutral replay identifies a directly bonded ordinary A/A constraint residual at16; do not infer a polymer rule failure or fix it with timing. Park both settings, retain the geometric lead, and audit that narrow mechanical discrepancy before any distinct intervention. No third solver setting, threshold relaxation, chemistry promotion or core change.
+
 Keep entries short: date, what changed, why, what evidence.
 
 - 2026-09-28. Q8e passes prepared angled-joint mechanics (RESULTS86): 16/16 W fixtures and 8/8 native-M benchmarks retain final alignment/free-end access; 0/24 unbound controls remain aligned. Use ordinary pins, no new timing state. Transient Q-extension overlap .223063 remains under individual kicks, so no sealed-wall claim. Admit one curved-W/full-D geometry design next; imposed bonds are not bath growth. Core unchanged.

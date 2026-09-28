@@ -36,6 +36,11 @@ gates. Functional attachment tests pass; autonomous arc growth and a reproducing
 half-cell remain unproven ([RESULTS 85](experiments/RESULTS.md#85-w-uses-ordinary-polymer-end-corner-capture)).
 Prepared angled joints also settle with an accessible free end in both tested
 motion modes, though temporary overlaps remain ([actual frames](experiments/out/HC_settle_20260928.svg), RESULTS86).
+Eight identical curved W blocks now form a complete prepared D behind P-A-A-Q.
+Two such assemblies fit and separate after imposed face removal; the targeted
+mechanical check still misses its overlap limit in one of four closed worlds
+at 32 solver passes ([full-D frames](experiments/out/HC_arc32_20260928.svg), RESULTS87).
+Autonomous growth/division is not yet demonstrated.
 This research subclass does not change the default viewer chemistry.
 
 ## Run it

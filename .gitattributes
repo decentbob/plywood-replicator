@@ -65,3 +65,7 @@ experiments/out/HC_settle_20260928*.png binary
 # Preserve the Python renderer's original Windows bytes recorded by the manifest.
 experiments/out/HC_settle_20260928.report.json -text !eol whitespace=cr-at-eol
 experiments/out/HC_settle_20260928.svg -text !eol whitespace=cr-at-eol
+experiments/half_cell_arc* text eol=lf
+experiments/out/HC_arc*_20260928* text eol=lf
+experiments/out/HC_arc*_20260928*.gz binary
+experiments/out/HC_arc*_20260928*.png binary
