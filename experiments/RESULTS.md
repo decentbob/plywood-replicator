@@ -7887,3 +7887,122 @@ prepared successful contacts and ordinary-chain placement, before considering a
 change. Do not lengthen this batch, add a timing program or alter fuel on these
 results. No operational lead earns individual-motion or descendant confirmation.
 Stop after validation/archive/handoff for the user's instance switch.
+
+## 90. Half-cell placement rejects neighboring material, not its partner
+
+2026-09-28, Q8i. [Frozen plan](half_cell_placement_plan.md),
+[summary](out/HC_placement_20260928.summary.json),
+[actual contact geometry](out/HC_placement_20260928.svg),
+[manifest](out/HC_placement_20260928.manifest.json).
+This continues the roadmap's diagnostic after RESULTS89, without changing any
+runtime rule, shape, rate, state, contact tolerance or solver setting.
+
+### Question, controls and observation contract
+
+Replay all four archived809/811 rim-on/off worlds for50k steps, with the same
+28 conserved blocks, body jostling and16 solver passes. Observer wrappers call
+the original methods once and consume no RNG. They count actual ordinary-binding
+candidate queries, open-side compatibility tests, geometry tests and placement
+outcomes. Physics and the separate rim search are excluded from those counters.
+Every placement retains its full phase state, sides/types, free/bound status,
+endpoint gap and proposed free-part pose. All blocking convex hulls are recorded
+with SAT penetration depth and independently clipped overlap area. Observer
+identities and neighbor classifications never feed reactions.
+
+The positive control reuses Q8g's prepared loose contacts, stationary for12
+ordinary steps, pMem=1 and melting disabled. It accepts7/7 chain placements,
+forms/releases the second capped chain and closes its rim. Two exact ordinary
+square controls (face docking and lateral joining) pass both unchanged core
+placement and research placement. These are prepared contacts, not bath success.
+The old core placement method is also called on disposable clones of all actual
+attempts. That comparison isolates an algorithm difference; its center vacancy
+check and ability to move a bound part are not an approved mechanical correction.
+
+### Complete replay outcomes
+
+| Seed/arm | Candidate passes | Open-side tests | Compatible / geometry tests | Geometry passes / placements | Accepted | Free rejects | Bound rejects |
+|---|---:|---:|---:|---:|---:|---:|---:|
+|809/on|1,022,110|254,614|1,528|15|1|10|4|
+|809/off|970,754|314,483|1,634|5|1|4|0|
+|811/on|1,380,505|305,638|1,702|5|2|2|1|
+|811/off|878,166|260,897|1,635|19|1|18|0|
+
+Each world makes18,900,000 ordinary-binding candidate tests;4,251,535 of the
+75,600,000 tests pass and enter the pair-side scan. In total1,135,632 open-side
+tests yield6,499 positive compatibilities. Only44 pass geometry; no probability
+draw rejects a geometry survivor. All44 placements are F/F docking (A/A or P/Q),
+not rail joining or fuel attachment. The only15 compatible rail tests are A:R/Q:L
+in811/on, and all15 fail geometry before placement. These are repeated calls
+within four worlds, not independent encounter samples or a kinetic rate estimate.
+
+**All34 free-projection rejections include an immediate bonded neighbor of the
+intended partner.** Thirty-two are blocked only by such neighbors; two809/off
+attempts also intersect another already-docked A. Across38 blocking-polygon
+occurrences there are35 A, two P and one Q; none is W, E or the intended partner.
+Thus the failure is a mismatch between single-edge rigid projection and the
+actual neighboring polygons, not a self-collision with the docking partner.
+
+Most intersections are thin wedges at an adjacent corner, but the range matters:
+maximum area is.021329329 and maximum SAT depth.034492988 (809/off,t41963).
+One809/on event at9768 is near tangency: SAT depth2.28e-9, clipped area1.39e-17,
+the latter near numerical precision. These measurements do not justify calling
+every rejection a rounding error or selecting a larger allowed-overlap threshold.
+Every free rejection has a measured neighbor blocker; the cause of the neighbor's
+deformation and a collision-preserving alternative still require a mechanical test.
+
+The five rejected bound contacts are all P/Q copying faces in rim-on worlds.
+Their endpoint gaps are.250714,.354059,.178305,.169104 (809) and.401563 (811),
+above the research .1 limit despite passing the earlier midpoint/normal filter.
+One bound-cap contact in811/on does pass at gap.099551; the other four successful
+placements are free A/A docking. The bound rule is therefore a distinct filter,
+not evidence that all rim-attached caps are chemically unavailable.
+
+Core placement accepts all39 rejected contacts, but increases overlap involving
+the attempted parts by more than1e-10 in35 cases (33 free, two bound), up to
+.021329329. This reporting cutoff is not a new runtime tolerance. Core acceptance
+is not a safe rescue. Earlier geometry failures, later rail acquisition and
+reproductive closure remain unresolved even if free placement can be improved.
+There are still zero new rails/capped chains/cells in the underlying trajectories.
+
+### Validation, reproduction and disposition
+
+```
+node experiments/half_cell_placement.js --preflight experiments/scratch/UNIQUE.preflight.json
+node experiments/half_cell_placement.js experiments/out/HC_bath_20260928_809_on.json.gz experiments/scratch/UNIQUE_809_on.json.gz
+node experiments/half_cell_placement_summary.js OUTPUT.summary.json PREFLIGHT.json RAW809on.json.gz RAW809off.json.gz RAW811on.json.gz RAW811off.json.gz
+node experiments/half_cell_placement_report.js OUTPUT.summary.json UNIQUE_FIGURE_STEM
+node experiments/half_cell_placement_archive.js
+```
+
+Repeat the replay command for809/off and811/on/off. Use unique outputs; the
+archive script names this completed batch and refuses overwrite. Exact executed
+commands, full parameters and source/input hashes are in the raw records and
+manifest. The report resolves archived summary inputs from out if scratch is absent.
+
+The100-step preflight passes observed/plain equality and50-step subclass restart.
+Prepared controls also match their plain run. All44 historical5k/26k checkpoints,
+four final physical arrays/RNG and complete ordered successful bond-event tapes
+match. All44 phase states restore with the research class, recompute their
+geometry and reproduce placement results. The analyzer rejects three deliberate
+corruptions: saved position, placement outcome and aggregate count. This extends
+Q8h's existing full plain-replay evidence; it is not fresh biological confirmation.
+
+All four50k replays finish uncensored, without harness failures. Total **200,274
+physics steps**, including274 preflight/control/neutrality/restart steps. Measured
+Node CPU **1,679.275s**, below2,800s; each replay is below650s. Startup and output
+serialization are included; shell/Git, editing, read-only inspections and SVG
+raster preview are unmeasured, so a fully inclusive cost is not independently
+verified. Four simulation processes maximum; all are now finished. The14 evidence
+files plus manifest are archived byte-for-byte. The SVG was rasterized with
+bundled Sharp and visually checked; Fontconfig issued cache warnings but rendering
+succeeded. No core/live/historical source changed. Full core invariants and default
+fingerprints were not rerun for this isolated observer-only diagnostic.
+
+**Decision:** Q8i achieves rejection attribution; the bath remains failed.
+Freeze a small current-projection versus in-place edge-pin settling comparison
+at the same admitted free contacts, with waiting/no-binding and successful-contact
+controls. Retain exclusion, the existing filters and bound-part gap rule; assess
+actual overlap, damage to existing pins and later rail access under body16 and
+individual16 before any new bath. This tests a distinct mechanical cause using
+existing pin dynamics. No correction, tolerance relaxation, new timing state or
+reproduction claim is made here.

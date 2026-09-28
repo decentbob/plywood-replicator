@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="1260" viewBox="0 0 1040 1260">
+<rect width="1040" height="1260" fill="#101923"/>
+<text x="24" y="34" font-family="Arial,sans-serif" font-size="26" fill="#edf3fa">Why ordinary placements were rejected</text>
+<text x="24" y="61" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Hull of actual corners; dashed cyan = proposed free-part pose. W uses carrier type C.</text>
+<text x="24" y="98" font-family="Arial,sans-serif" font-size="18" fill="#edf3fa">809/on first free rejection</text>
+<text x="24" y="121" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">t=572  P/Q  sides F/F  gap=0.36167</text>
+<polygon points="64.3737953736158,219.67518826901866 92.5184265685414,175.8144410983155 132.57843039276304,151.9836958397232 180.23992090994773,232.10370348816662 100.1199132615042,279.7651940053511" fill="#8598ad" fill-opacity=".55" stroke="#afc3d8" stroke-width="1.7" />
+<text x="106.96609730127443" y="215.86844454011504" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">27</text>
+<polygon points="71.541482671957,289.94397144215293 159.3114385413435,258.5386170774601 190.72776133807926,346.31046107234107 146.83459591970131,362.01630416027683 95.09360231973099,355.76829402462636" fill="#efb75c" fill-opacity=".55" stroke="#ffce8c" stroke-width="1.7" />
+<text x="125.70177615816243" y="326.5155295553715" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">24</text>
+<polygon points="159.18583414067692,258.54290643229103 246.86646183622406,226.90281964007255 278.5161276508277,314.5936496523707 190.81618932382267,346.23724354960393" fill="#ed6e83" fill-opacity=".55" stroke="#ff8999" stroke-width="1.7" />
+<text x="211.84615323788785" y="290.5691548185846" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">0</text>
+<polygon points="47.98369583972319,224.1137016583578 84.01935011499377,186.46643046343723 127.90678201317841,170.76287521760898 159.31389250483497,258.53773901397835 71.53902870846552,289.9448495056347" fill="#2aced9" fill-opacity=".55" stroke="#52f0f5" stroke-width="1.7" stroke-dasharray="6 4"/>
+<text x="24" y="403" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Blockers: 0</text>
+<text x="24" y="426" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Largest overlap area: 5.408e-7</text>
+<text x="534" y="98" font-family="Arial,sans-serif" font-size="18" fill="#edf3fa">809/off first free rejection</text>
+<text x="534" y="121" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">t=5212  A/A  sides F/F  gap=0.36933</text>
+<polygon points="554.8723677647805,311.0214944672738 608.9785055327262,262.7904705331796 657.2095294668204,316.8966083011253 603.1033916988747,365.12763223521944" fill="#8598ad" fill-opacity=".55" stroke="#afc3d8" stroke-width="1.7" />
+<text x="599.0409486158005" y="317.9590513841995" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">2</text>
+<polygon points="632.8455986141781,250.66659220663854 689.6055527238972,205.58742387897303 734.6835988530098,262.35731190651984 677.9167993236283,307.42544336667555" fill="#efb75c" fill-opacity=".55" stroke="#ffce8c" stroke-width="1.7" />
+<text x="676.7628873786783" y="260.50919283970177" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">0</text>
+<polygon points="587.6170070656528,194.13079682316277 644.2353193445235,148.8723677647805 689.4941214137148,205.4947158981589 632.8727713949938,250.7460705556007" fill="#ed6e83" fill-opacity=".55" stroke="#ff8999" stroke-width="1.7" />
+<text x="631.5548048047212" y="203.8109877604257" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">1</text>
+<polygon points="576.0812719166559,295.73894553696795 632.8440424583295,250.66463251582033 677.918355479477,307.42740305749396 621.1555849378035,352.5017160786416" fill="#2aced9" fill-opacity=".55" stroke="#52f0f5" stroke-width="1.7" stroke-dasharray="6 4"/>
+<text x="534" y="403" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Blockers: 1</text>
+<text x="534" y="426" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Largest overlap area: 4.392e-7</text>
+<text x="24" y="468" font-family="Arial,sans-serif" font-size="18" fill="#edf3fa">811/on first free rejection</text>
+<text x="24" y="491" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">t=2091  A/A  sides F/F  gap=0.16206</text>
+<polygon points="92.21959276382333,710.5853411397345 115.90430642613015,636.0587204018647 190.430927164,659.7434340641714 166.74621350169318,734.2700548020414" fill="#8598ad" fill-opacity=".55" stroke="#afc3d8" stroke-width="1.7" />
+<text x="134.32525996391166" y="689.164387601953" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">3</text>
+<polygon points="116.11966992700435,623.3876743974288 150.615331583292,553.2035735713233 220.81950630060368,587.7582815696252 186.2570817020715,657.9001985499114" fill="#efb75c" fill-opacity=".55" stroke="#ffce8c" stroke-width="1.7" />
+<text x="161.45289737824288" y="609.5624320220721" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">0</text>
+<polygon points="45.72994519795869,590.5476276261709 78.92232936207287,519.7299451979587 149.7529264983864,552.9487345172045 116.5190377369888,623.732925238336" fill="#ed6e83" fill-opacity=".55" stroke="#ff8999" stroke-width="1.7" />
+<text x="90.73105969885168" y="575.7398081449174" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">1</text>
+<polygon points="81.57975305075789,693.5459044122018 116.10586408636914,623.3808809558643 186.2708875427067,657.9069919914756 151.74477650709542,728.0720154478131" fill="#2aced9" fill-opacity=".55" stroke="#52f0f5" stroke-width="1.7" stroke-dasharray="6 4"/>
+<text x="24" y="773" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Blockers: 1</text>
+<text x="24" y="796" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Largest overlap area: 1.188e-5</text>
+<text x="534" y="468" font-family="Arial,sans-serif" font-size="18" fill="#edf3fa">811/off first free rejection</text>
+<text x="534" y="491" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">t=21  P/Q  sides F/F  gap=0.23907</text>
+<polygon points="640.6901112726396,723.0160604546013 653.870189825966,636.6905529123921 740.1956973681753,649.8706314657186 733.605658091512,693.0333852368232 705.4342419292965,732.9011193695962" fill="#8598ad" fill-opacity=".55" stroke="#afc3d8" stroke-width="1.7" />
+<text x="687.7591796975179" y="691.1023498878263" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">25</text>
+<polygon points="557.0988806304038,652.1233174015101 561.106392773362,608.6004192101758 648.0596576231866,616.6388326780292 640.0602812864103,703.5856037096571 574.8531791526469,697.5782666002893" fill="#efb75c" fill-opacity=".55" stroke="#ffce8c" stroke-width="1.7" />
+<text x="589.2356782932019" y="659.7052879199323" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">26</text>
+<polygon points="561.431330305394,608.0285522456794 570.3253934325003,521.0988806304038 657.1986381383537,530.0369550242873 648.3114242828249,616.8691427004323" fill="#ed6e83" fill-opacity=".55" stroke="#ff8999" stroke-width="1.7" />
+<text x="602.3166965397681" y="573.0083826502007" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">1</text>
+<polygon points="640.0597365648835,703.5915243934527 648.0602023447132,616.6329119942334 735.0188147439324,624.6333777740631 731.0185818540176,668.1126839736727 705.2786958642979,709.5918737283249" fill="#2aced9" fill-opacity=".55" stroke="#52f0f5" stroke-width="1.7" stroke-dasharray="6 4"/>
+<text x="534" y="773" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Blockers: 1</text>
+<text x="534" y="796" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Largest overlap area: 7.548e-6</text>
+<text x="24" y="838" font-family="Arial,sans-serif" font-size="18" fill="#edf3fa">First bound rejection (ordered worlds)</text>
+<text x="24" y="861" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">t=45092  P/Q  sides F/F  gap=0.25071</text>
+<polygon points="47.837119602981474,1048.7599733197549 71.65763445252915,983.7997429437963 158.27394049729668,1015.5558463173239 126.50906213020497,1102.1628803970186 83.2059895267337,1086.288061717155" fill="#efb75c" fill-opacity=".55" stroke="#ffce8c" stroke-width="1.7" />
+<text x="90.4967492419492" y="1051.3133009390097" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">24</text>
+<polygon points="80.50621290467335,962.9974638137019 103.95374688994426,897.9107443292851 155.1655632491649,891.8371196029815 198.55723798612223,907.4713914600129 167.29476162224228,994.2599401775818" fill="#8598ad" fill-opacity=".55" stroke="#afc3d8" stroke-width="1.7" />
+<text x="134.0955045304294" y="934.8953318767126" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">27</text>
+<text x="24" y="1143" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Endpoint gap 0.25071 exceeds 0.1</text>
+<text x="24" y="1166" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Bound parts acquire pins in place; no projection.</text>
+<text x="534" y="838" font-family="Arial,sans-serif" font-size="18" fill="#edf3fa">Prepared contact: successful free placement</text>
+<text x="534" y="861" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">t=1  A/A  sides F/F  gap=0.00000</text>
+<polygon points="754.5384615384614,905.4615384615385 937.6153846153845,905.4615384615385 937.6153846153845,1088.5384615384614 754.5384615384614,1088.5384615384614" fill="#8598ad" fill-opacity=".55" stroke="#afc3d8" stroke-width="1.7" />
+<text x="839.076923076923" y="1001" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">3</text>
+<polygon points="571.4615384615385,905.4615384615385 754.5384615384614,905.4615384615385 754.5384615384614,1088.5384615384614 571.4615384615385,1088.5384615384614" fill="#efb75c" fill-opacity=".55" stroke="#ffce8c" stroke-width="1.7" />
+<text x="656" y="1001" font-family="Arial,sans-serif" font-size="13" fill="#edf3fa">0</text>
+<polygon points="754.5384615384614,905.4615384615385 937.6153846153845,905.4615384615385 937.6153846153845,1088.5384615384614 754.5384615384614,1088.5384615384614" fill="#2aced9" fill-opacity=".55" stroke="#52f0f5" stroke-width="1.7" stroke-dasharray="6 4"/>
+<text x="534" y="1143" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Blockers: none</text>
+<text x="534" y="1166" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Largest overlap area: 0.000e+0</text>
+<text x="24" y="1230" font-family="Arial,sans-serif" font-size="15" fill="#edf3fa">Prepared success is a contact control. These replays establish neither reproduction nor reliable exclusion.</text>
+</svg>

@@ -119,12 +119,12 @@ as .194134; keep protection and robust mechanics unclaimed. W bonds persist.
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8i: diagnose ordinary placement failure before another bath run | Q8h finds39 rejected placements out of44 attempts, zero new rails in both on/off arms. Freeze a small replay/geometry diagnostic of actual rejected contacts: free-block slot overlap versus bound-edge gap, attempted side/types, blocking polygon and intended-partner contact. Compare prepared successful contacts and unchanged ordinary-chain placement. Record missing earlier encounter/filter denominators; do not infer them from placement attempts. No longer bath, timing state, rate/fuel rescue or collision relaxation without a demonstrated cause. |
+| 1 | Q8j: test contact settling before another bath run | Q8i attributes all34 free-placement rejections to projected overlap with neighboring chain pieces, never the intended partner or W. Freeze a small prepared comparison of current free-block projection versus in-place incident edge-pin settling at the same admitted contacts, with waiting/no-binding and successful-contact controls. Reuse saved rejected contacts without selecting favorable outcomes; retain polygon exclusion, existing contact filters, bound-part gap rule, material and rates. Measure actual overlap, existing-pin damage and later rail access under body16 and individual16. This is a mechanical hypothesis, not an implemented correction; no tolerance/solver sweep or bath promotion without a passed gate. |
 | 2, only for an earned operational lead | Targeted geometry check and repeated operation | Compare the relevant acquisition/release effect with individual kicks. Known overlap limits claims; source audit alone did not justify a bonded-contact correction. Check actual geometry and descendant operation before claiming robust reproduction or protection; no arbitrary solver sweep or gate relaxation. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8h are complete; Q8c/d's acquisition gates failed, Q8e's prepared
+Q8a–Q8i are complete; Q8c/d's acquisition gates failed, Q8e's prepared
 joint gate passed, Q8f's static geometry passes but both dynamic settings fail.
 Q8g passes software integration and prepared operation, not free-bath reproduction.
 Q8h (RESULTS89) runs fresh809/811 for50k steps with rim binding on/off. All four
@@ -136,7 +136,23 @@ same-material controls also fail at chain assembly. Park this bath setting;
 placement failure is a distinct diagnostic lead, not yet a causal explanation.
 One offspring's inventory cannot test sustained turnover. Sampled overlap reaches
 .203795 in811/on; no protection or robust mechanical claim is earned.
-No next assay is frozen. No lab server was running at Q8h startup; check processes
+
+**Q8i diagnoses placement without changing the runtime (RESULTS90).** All four
+50k replays match every archived checkpoint/final and successful bond event.
+Of6,499 compatible side tests,44 pass geometry and5 bind; probability rejects0.
+All44 placements are copying-face contacts, not rails. The15 compatible rail
+tests all fail earlier geometry. All34 rejected free projections intersect at
+least one immediate bonded neighbor of their intended partner;32 intersect only
+such neighbors. No intended-partner or W blocker occurs. Overlaps range from
+near numerical tangency to .021329 area; do not dismiss all as rounding.
+Five bound-cap attempts fail the .1 endpoint-gap gate (.169104–.401563).
+Core placement accepts all39 rejects but increases local overlap above1e-10 in35;
+it is not a collision-safe correction. Prepared contacts accept7/7 and form/release
+the second cell; ordinary square controls pass2/2. This identifies a projection/
+neighbor-fit mismatch, not a sufficient cause of failed reproduction. Both earlier
+geometry filtering and later rail acquisition remain unresolved. The next test
+above uses existing pin mechanics as a distinct hypothesis; it is not yet frozen.
+No simulation remains active. No lab server was running at Q8i startup; check processes
 before another batch. Count an actively running viewer in the worker limit.
 The user's automatic-polymer correction supersedes the proposed free-W
 docking comparison; that comparison was not executed.

@@ -59,6 +59,15 @@ diagnosis, not another longer run. Full plain replays, midpoint restarts and an
 independent bond-tape audit accompany `out/HC_bath_20260928*`. Runtime and archived
 inputs are unchanged; use unique scratch stems and see RESULTS89 for commands.
 
+The placement replay (RESULTS90) uses `half_cell_placement.js` (`--preflight`,
+or archived bath input followed by unique output), `_summary.js`, `_report.js`,
+`_plan.md` and `_archive.js`. All four historical trajectories replay exactly;
+34 free projections hit adjacent chain material and five bound-cap contacts miss
+the endpoint-gap gate. Earlier geometry filtering also limits acquisition.
+`out/HC_placement_20260928*` contains full attempted-contact states, counts,
+controls, hashes and actual-corner diagrams. The report accepts archived inputs
+without a scratch prerequisite. No runtime correction was made.
+
 Read the plan and script's CLI rather than assuming identical options across runners.
 Recent assays validate exact input/source hashes: moving files or changing even comments can
 break historical validation. Keep runtime and assay source cleanup separate from documentation.

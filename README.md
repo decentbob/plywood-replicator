@@ -60,6 +60,14 @@ arms. Ordinary placement rejection is the next diagnostic question; fuel is
 unused in these runs ([actual final worlds](experiments/out/HC_bath_20260928_v2.svg),
 RESULTS89). This does not yet establish why acquisition fails.
 
+The replay diagnostic (RESULTS90) identifies the rejected placements: all34 free
+projections intersect neighboring chain pieces, never the intended partner or W;
+five bound-cap attempts exceed the endpoint-gap limit. Earlier geometry filtering
+also rejects6,455 of6,499 compatible side tests. The old placement routine accepts
+these rejected contacts but often introduces overlap, so it has not been restored.
+The [contact diagrams](experiments/out/HC_placement_20260928.svg) show actual
+geometry. A prepared contact-settling comparison is next; runtime rules are unchanged.
+
 ## Run it
 
 Open `index.html` in a browser (it loads `src/sim.js`; no build step, no
