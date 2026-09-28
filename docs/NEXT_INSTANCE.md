@@ -1,44 +1,41 @@
 # Next-instance handoff — 2026-09-28
 
-Read ROADMAP.md, the sole queue. Q8 is the user's two independent D-shaped
-half-cells: a chain forms each straight boundary, its own arc connects its
-caps, and ordinary copying-face release separates them. Closure after release
-is allowed. Extra polygon sides are allowed. No complete cell has reproduced.
+Read ROADMAP.md, the sole queue. The user wants two independent D-shaped
+half-cells: each ordinary chain bounds its own polymer arc, copies outward,
+and releases through ordinary face bonds. Closure after release and extra
+polygon sides are allowed. No full half-cell has yet been built or reproduced.
 
-User correction implemented in Q8d (RESULTS 85): W should bind automatically
-like other polymers. HalfCellPolymerSim reuses native membrane end-corner
-geometry and pMem=.2, with fixed complementary rim labels and no fuel/copy
-state gate, new states or projection. It inherits the separate rim interface
-and mechanical union from Q8c; core and historical sources remain unchanged.
-Functional cap attachment and extension of cap-bound W in both directions pass.
-Twenty-four geometry decisions match the actual native-M branch. Those tests
-use pMem=1 and no physics steps; they do not establish angled relaxation.
+Q8e (RESULTS86) passes prepared mechanics. Six fixtures x two fresh seeds733/739
+x body16/individual16 x bound/unbound =48 five-block worlds, 60 physics steps.
+16/16 W cap/extension cases and 8/8 native-M benchmarks pass final10-frame
+pin/overlap/free-end-fit gates; 0/24 unbound controls maintain candidate alignment.
+The bond is imposed at an eligible outward 30-degree contact, with no pose
+projection. Chemistry and all subsequent binding are off. No bath-growth claim.
 
-The same sparse motion screen still recruits 0/8. Only one eligible encounter
-occurs in 2,400 on binding phases, at t6 seed703/body16/P, and its stochastic
-attempt fails. Seven on/off paths match; the eighth diverges at t7 after the
-extra RNG draw. Prepared release remains 8/8, and all 16 prepared/off final
-states and RNG match archived Q8c. Transient overlap up to .235433 remains;
-final-window geometry is not all-time exclusion or a sealed wall.
+Current W rule remains HalfCellPolymerSim (RESULTS85): automatic native-polymer
+corner capture, pMem=.2, no fuel/copying gate or new state. SettleSim only admits
+M to the same polygon-contact solver and forbids ordinary chemistry steps.
+It does not replace the growth subclass. Core/historical sources stay unchanged.
 
-Next Q8e is not frozen: short prepared angled cap/W and W/W capture followed
-by pin relaxation, with native membrane and binding-off controls, both motion
-modes, actual overlap/pins/free-end access. Keep automatic polymer chemistry;
-retire the sparse preparation. No longer run, fuel/timing gate or projection
-rescue. The previously proposed free-W docking comparison is superseded by the
-user correction and was never run. Curved arcs and bath growth remain later.
+Temporary exclusion errors remain: seed733/individual16/Qextend at t3 has
+.223063 overlap and .606927 pin residual. All final windows pass; this is not
+a continuously sealed wall. Actual SVG/PNG includes those transient errors,
+with dashed observer-only placements of an existing spare block at the tip.
 
-User also permits alternative fuel mechanisms. The cap memo records existing
-energyGate=false as a same-material diagnostic, plus unimplemented ambient
-recharge/exposed-edge E capture. No energy setting changed in Q8d; missing rim
-contacts do not implicate fuel. Explicit external drive is not harvesting.
+Next Q8f is not frozen: derive one curved W polygon with equal compatible
+edge lengths and a complete arc for a specified chain/cap span; then test
+actual D-shaped seed/duplicate geometry, copying access and release clearance
+under both motion modes. Current W is straight. No timing/energy program is
+indicated; no longer sparse-bath run is earned. Q8c/d acquisition failures
+remain negative. The earlier free-W docking proposal remains superseded.
 
-Evidence: experiments/out/HC_polymer_20260928.manifest.json, v2 raw/validation,
-extension tests and failed initial harness/source. Missing size in a native-M
-test adapter was fixed before any simulation step. No mechanism/gate retuning.
-24 neutrality/restart checks, 6,424 frame replays, four corruption checks pass.
-22,400 physics steps, 28.199 measured CPU seconds including failure/archive;
-one read-only inspection, shell/editing/Git and final bookkeeping unmeasured.
-Input is archived HC_rim_20260928.json.gz; no scratch prerequisite. Use unique
-rerun stems. Full core suite/default fingerprints not rerun (core hashes fixed).
-No task simulation or agent is active. Q7 remains deferred.
+Evidence: experiments/out/HC_settle_20260928.manifest.json; v5 raw/validation,
+report, SVG/PNG and four failed zero-step preflights with exact source snapshots.
+Failures: two unavailable-helper imports, dirty bond cache after restore, stale
+open ports after prepared M binding. Repairs changed setup/analysis only.
+48 neutrality/restarts, 2,928 frame replay and four corruption checks pass.
+10,081 physics steps, 10.712 measured CPU seconds; untimed scopes in manifest.
+Python/Pillow report used bundled Python. No scratch input required; use unique
+output stems. Core suite/fingerprints not rerun (historical source hashes fixed).
+No task simulation is active. Q7 deferred. Fuel alternatives remain conditional
+options in the cap memo; no energy settings changed in these mechanical tests.

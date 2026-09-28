@@ -34,6 +34,8 @@ The isolated half-cell prototype uses ordinary polymer end-corner capture for
 W blocks, including cap attachment and W/W growth, without fuel or copying-state
 gates. Functional attachment tests pass; autonomous arc growth and a reproducing
 half-cell remain unproven ([RESULTS 85](experiments/RESULTS.md#85-w-uses-ordinary-polymer-end-corner-capture)).
+Prepared angled joints also settle with an accessible free end in both tested
+motion modes, though temporary overlaps remain ([actual frames](experiments/out/HC_settle_20260928.svg), RESULTS86).
 This research subclass does not change the default viewer chemistry.
 
 ## Run it

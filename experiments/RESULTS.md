@@ -7369,3 +7369,120 @@ shell/editing/Git and final small bookkeeping writes are unmeasured. The fully
 inclusive 180s cap is not independently verified. One process/no workers,
 none remains active. Historical/core hashes verified unchanged; full core
 suite/default fingerprints were not rerun for this isolated research change.
+
+## 86. Prepared angled polymer joints settle and leave a usable end
+
+2026-09-28, Q8e, [frozen plan](half_cell_settle_plan.md). RESULTS85 establishes
+automatic W association but leaves post-capture mechanics untested. Here
+ordinary edge pins relax prepared angled cap/W and W/W joints, compared with
+native M end joints and the same parts left unbound. No chemistry or bath
+acquisition runs. This measures a physical prerequisite, not autonomous growth.
+
+### Fixture and contract
+
+`SettleSim` extends the unchanged `HalfCellPolymerSim`; its only physics
+adaptation admits M to the existing all-pair polygon-contact whitelist. Directly
+bonded pairs retain the inherited exclusion exemption; pins, deformation and
+body motion are unchanged. The assay forbids ordinary steps and calls physics
+alone. Observer IDs, probe poses and measured outcomes never enter reactions.
+No states, port labels, rates, energy rules or core changes are introduced.
+
+Pattach/Qattach prepare a cap/rail and one incoming W; Pextend/Qextend also
+prepare a cap-bound W and bring another W to its free end. Each contains one
+P or Q, one A and three W. M+/M- prepare an M dimer with another M contacting
+either end, plus a spare M and a parked A. All worlds contain five conserved
+blocks. On/off inventories and poses match exactly. Native M controls are
+different-shape mechanical benchmarks, not equal-material fitness comparisons.
+
+One complementary end corner touches with a 30-degree outward opening and
+zero initial overlap. The on arm **imposes the eligible bond** without moving
+either polygon; off leaves it absent. The native M geometry/compatibility and
+actual core M binding function are used; W uses the tested rim interface.
+Existing `pMem=.2` stays unchanged but its draw is bypassed by this prepared
+intervention. No later binding occurs. None of these attachments is counted
+as a birth or autonomous acquisition.
+
+Fresh seeds733/739 x body16/individual16 x six fixtures x on/off produce
+48 worlds, each 60 physics steps. Stiffness .8, sigma .3, sigmaRot .45,
+16 solver passes, 24x24 torus; W/caps retain their previous shapes, while
+native M uses wedge45, size.5, stiffness.8, mobility1. All initial geometry
+and first-five-step viability checks pass after the harness repairs below.
+
+### Outcome
+
+The frozen gate requires all bound worlds to retain every prepared bond and
+have pin <=.1, all-pair overlap <=.02 and usable free-end fit in every final10
+frame. An observer rigidly aligns the already conserved spare at the incoming
+block's other end using actual corners, measuring its overlap and pin fit
+without moving it in the world. The test requires at least one bound-versus-
+unbound alignment benefit per fixture/motion stratum, and all native controls
+to pass. All conditions pass.
+
+| Prepared joint | Bound final gate | Unbound candidate stays aligned | Maximum final-window pin | Maximum final-window overlap |
+|---|---:|---:|---:|---:|
+| P cap / W | 4/4 | 0/4 | .000146 | .000044 |
+| Q cap / W | 4/4 | 0/4 | .000077 | .000023 |
+| Extend P-bound W | 4/4 | 0/4 | .044847 | .005329 |
+| Extend Q-bound W | 4/4 | 0/4 | .080312 | .009121 |
+| Native M, positive end | 4/4 | 0/4 | .000278 | .000040 |
+| Native M, negative end | 4/4 | 0/4 | .000296 | .000070 |
+
+All 24 bound worlds leave their next port unoccupied. Maximum final-window
+probe overlap is below 4.5e-13 and probe pin gap below 8.8e-8. All material
+and all original/prepared bonds remain fixed; off makes no new bonds. Bond
+retention is expected because this fixture disables chemistry/loss. The result
+of interest is actual alignment and space for the next part, beyond waiting.
+
+Transient errors remain substantial in one Q extension (seed733/individual16,
+t3): overlap **.223063**, maximum pin **.606927**. The combined geometry/access
+criterion becomes permanently good between t1 and t50, depending on the world;
+this includes temporary probe obstruction, not just joint alignment. Native-M
+transient overlap stays below .000114. Thus the final-window pass does not
+establish continuous exclusion, a sealed wall or native-M-equivalent robustness.
+[Actual frames, including the overlap](out/HC_settle_20260928.svg)
+([PNG](out/HC_settle_20260928.png)) show both extension orientations. The dashed
+block is a hypothetical placement of the conserved spare, not a new attachment.
+
+This supports keeping ordinary polymer capture and edge pins without a timing
+or fuel gate. Admit one curved-W/full-D **prepared geometry** design next:
+derive compatible edge lengths and an arc for the chain/cap span, then check
+actual copying access and release clearance. Current W is straight. No longer
+bath run, growth claim, reproductive closure or radiation benefit follows from
+these prepared fixtures. The temporary exclusion error remains a limitation
+for any eventual protective-wall claim.
+
+### Reproduction and validation
+
+```
+node experiments/half_cell_settle.js experiments/scratch/HC_settle_20260928_v5.json.gz
+node experiments/half_cell_settle.js --validate experiments/scratch/HC_settle_20260928_v5.json.gz
+python experiments/half_cell_settle_report.py experiments/scratch/HC_settle_20260928_v5.json.gz experiments/scratch/HC_settle_20260928
+node experiments/half_cell_settle_archive.js
+```
+
+The figure script requires Pillow; this run used the bundled runtime Python
+named in the environment, since `python` need not resolve there on Windows.
+Use unique output stems. Four failed preflights are preserved with exact source
+snapshots: unexported metadata helper; unexported polygon/side/contact helpers;
+dirty-bond cache after restore; open-port cache not refreshed after prepared
+native-M binding. All occurred before any physics step. Repairs added local
+analysis helpers and synchronized setup caches; no geometry, rule, parameter,
+seed or gate was retuned. Each earlier raw/CPU/source remains archived.
+
+All 48 observer/plain and midpoint restart comparisons pass. Validation
+reconstructs each setup, replays **2,928 frames**, recomputes every metric/gate,
+checks full final arrays/RNG and rejects altered corners, labels, rim lists
+and aggregates. Source/artifact hashes and exact scratch/archive copies are
+verified in the [manifest](out/HC_settle_20260928.manifest.json).
+The SVG/PNG was inspected: six legible panels include both transient worst
+frames and clearly distinguish measured spare placement from simulation.
+
+Total **10,081 physics steps**: 7,200 observed/plain/restart plus 2,881 replay
+(including one corruption-test step). Measured CPU **10.712s**: failed attempts
+.515/.515/.733/.765, execution4.140, validation2.968, report.594, logged
+inspection.155, archive.327. Python imports/package checks, one additional
+read-only inspection, shell/editing/Git and final small bookkeeping are not
+timed; the fully inclusive cap is not independently verified. One process,
+no workers or other repository simulation found; none remains active.
+Core/historical source hashes are unchanged. The full core suite and default
+fingerprints were not rerun for this isolated assay.

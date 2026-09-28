@@ -290,6 +290,8 @@ Still open:
 
 Keep entries short: date, what changed, why, what evidence.
 
+- 2026-09-28. Q8e passes prepared angled-joint mechanics (RESULTS86): 16/16 W fixtures and 8/8 native-M benchmarks retain final alignment/free-end access; 0/24 unbound controls remain aligned. Use ordinary pins, no new timing state. Transient Q-extension overlap .223063 remains under individual kicks, so no sealed-wall claim. Admit one curved-W/full-D geometry design next; imposed bonds are not bath growth. Core unchanged.
+
 - 2026-09-28. User correction: W should associate automatically like polymers. Q8d reuses membrane end-corner geometry and pMem without copying/fuel gates, new states or projection (RESULTS 85). Both cap roles and both directions of extension pass functional tests. Sparse motion screen still recruits 0/8, with just one eligible failed attempt; keep the simple chemistry but retire that sparse preparation. Check angled-contact relaxation next. The queued free-W docking comparison is superseded, not executed; core unchanged.
 
 - 2026-09-28. User permits alternative fuel mechanisms. Physical E is not a design commitment. Prefer existing energyGate=false as a same-material diagnostic for a demonstrated rearming bottleneck; consider own-state ambient recharge or exposed-edge E capture before a charge-transport program. External drive must be explicit; motif feed is not generic energy-conserving transfer. This design note adds no mechanism/experiment and does not change Q8d's acquisition priority; see docs/POLYMER_CAPS.md.

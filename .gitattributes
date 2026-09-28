@@ -58,3 +58,10 @@ experiments/out/HC_rim_20260928*.gz binary
 experiments/half_cell_polymer* text eol=lf
 experiments/out/HC_polymer_20260928* text eol=lf
 experiments/out/HC_polymer_20260928*.gz binary
+experiments/half_cell_settle* text eol=lf
+experiments/out/HC_settle_20260928* text eol=lf
+experiments/out/HC_settle_20260928*.gz binary
+experiments/out/HC_settle_20260928*.png binary
+# Preserve the Python renderer's original Windows bytes recorded by the manifest.
+experiments/out/HC_settle_20260928.report.json -text !eol whitespace=cr-at-eol
+experiments/out/HC_settle_20260928.svg -text !eol whitespace=cr-at-eol

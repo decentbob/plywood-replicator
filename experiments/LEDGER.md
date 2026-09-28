@@ -68,6 +68,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    sparse screen still recruits 0/8, with just one eligible failed attempt.
    This does not establish kinetic growth or refute automatic association;
    angled-contact relaxation remains a separate mechanical prerequisite.
+   Prepared angled capture followed by physics passes final alignment/free-end
+   access in 16/16 W fixtures and 8/8 native-M benchmarks (86), while 0/24
+   unbound controls maintain edge alignment. Individual Q extension still
+   reaches transient overlap .223063; final fit is not continuous exclusion.
+   This admits curved-arc geometry planning, not bath growth or protection.
    Permanent wedges expose a two-row joint mismatch that straight supports do not remove (48). Opposing A/B wedges
    with complementary pairing restore copying under default physics in both directions (49); the benefit weakens with
    poorly resolved individual kicks. Shape and pairing must be tested together, with solver controls.
@@ -361,6 +366,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 83 | Half-cell contact and solver check | Can existing polygon exclusion control released overlap while retaining cap access? | core/polygon contacts; body4/individual16, then separately frozen body16; same Q8a inventory/kicks/stiffness; chemistry off | lead | original polygon gate 15/16 (fails); body4 A/A overlap .07367 after final pin correction, A/E .21565; body16 follow-up 8/8 plus individual16 reference 8/8 pass all-pair bound, maxima .001207/.000678 | half_cell_contact.js, half_cell_contact_validate.js, half_cell_resolution.js (`HC_contact_20260927_v2`, `HC_resolution_20260927`) | Q8c distinct rim interface and local association at body16/individual16; body4 parked for this assay | 32 paired worlds plus 8 resolution worlds; 28,116 physics steps including replay/diagnosis; 28.539 measured CPU s including failures/archive; full replay, neutrality/restarts and corruption checks; two harness failures retained; reused seeds, no chemistry, descendants or core edits |
 | 84 | Separate rim chemistry and recruitment | Can a cap retain chain semantics and acquire W through local end contacts? | research `rimBind` on/off; separate rim bonds; fixed end labels, .1 gap/10-degree normals; body16/individual16; seeds 701/703 | negative | prepared release 8/8 at t1, stubs retained; near/on recruitment 0/8 versus off 0/8; zero eligible encounters at 2,400 binding phases; transient initial overlap up to .235433 | half_cell_rim.js, half_cell_rim_assay.js, half_cell_rim_diagnose.js (`HC_rim_20260928`) | retain interface; freeze existing free-W docking comparison against failed passive rule/off control; no timing/tolerance/horizon rescue | 24 worlds; 24,823 physics steps including tests/QA/diagnosis; 32.980 measured CPU s; full replay/neutrality/restart, 12 chemical cases and four corruption checks; no curved arc, full chain acquisition or descendants; core unchanged |
 | 85 | Ordinary polymer capture for W | Does reusing native polymer attachment remove an unnecessary alignment restriction? | `pMem`=.2, existing `memLinkTol`/`linkDistTol`; W always sticky; same Q8c worlds; no fuel/state gate | negative | functional cap attachment 2/2 and W/W extension 2/2; native-M geometry 24/24; prepared release 8/8; sparse recruitment 0/8 with only one eligible attempt in 2,400 phases | half_cell_polymer.js, half_cell_polymer_assay.js, half_cell_polymer_test.js (`HC_polymer_20260928_v2`) | retain simple automatic binding; retire sparse preparation; check angled-contact relaxation against native M before curved growth | 24 worlds; 22,400 physics steps; 28.199 measured CPU s; full replay/neutrality/restart, 16 archived control state/RNG matches, four corruption checks; missing-size test-adapter failure/source retained; no kinetic promotion or core changes |
+| 86 | Angled polymer joint mechanics | Do prepared eligible W joints align and leave the next end accessible? | prepared on/off; 30-degree corner contact; `iters`16, stiffness.8, body/individual kicks; native M benchmark | lead | final gate 16/16 W and 8/8 native M; unbound aligned 0/24; maximum final pin .080312/overlap .009121; transient Q-extension overlap .223063 | half_cell_settle.js, half_cell_settle_report.py (`HC_settle_20260928_v5`) | derive one curved W polygon and complete D-shaped seed geometry; no timing state or bath-growth promotion | 48 five-block worlds, fresh seeds733/739, 60 steps; 10,081 total physics steps with QA; 10.712 measured CPU s; 48 neutrality/restarts, 2,928-frame replay, four corruption checks; four zero-step harness failures/sources retained; imposed bonds, no chemistry/acquisition/descendants; core unchanged |
 
 ## Knob index
 
@@ -401,7 +407,7 @@ the rows that used it). Rerun it after adding rows.
 | `heatPeriod` | 29 (partial) |
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
-| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative), 80 (lead) |
+| `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative), 80 (lead), 86 (lead) |
 | `linkDistTol` | 69 (negative), 85 (negative) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |

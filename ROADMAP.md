@@ -71,15 +71,27 @@ against automatic polymer chemistry. Prepared controls remain 8/8. Keep this
 simpler rule, retire the sparse near-contact screen, and check the mechanical
 consequence of angled capture before scaling. No kinetic promotion is earned.
 
+**Q8e passes prepared alignment/access (RESULTS 86).** All 16 W cap/extension
+fixtures and eight native-M benchmarks pass the final10-frame pin, overlap
+and next-end fit gate under body16/individual16. None of 24 unbound controls
+maintains the candidate edge alignment. This supports ordinary edge-pin
+mechanics without a timing program. Bonds were prepared at eligible 30-degree
+contacts; no spontaneous acquisition or chemistry ran. Individual Q extension
+still has transient overlap .223063/pin .606927, despite passing at the end.
+The [actual frames](experiments/out/HC_settle_20260928.svg) show this limitation.
+Prepared curvature/closure geometry is now admitted, not autonomous growth
+or a sealed radiation barrier. Existing straight W cannot itself make an arc.
+
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8e: mechanics of ordinary polymer end growth | Freeze a short prepared-contact test of angled cap/W and W/W capture followed by edge-pin relaxation, with native membrane and binding-off controls. Use existing rates/geometry and body16/individual16. Measure actual corner gaps, overlap, retained attachment and free-end access. Q8d's functional tests do not establish post-capture mechanics. Separate imposed contacts from bath recruitment; do not rerun the sparse screen longer or add a timer, fuel gate or projection rule. |
+| 1 | Q8f: one curved W shape and a complete D-shaped seed | Derive one polygon/arc geometry from the existing cap endpoints and a specified ordinary chain span, with equal-length compatible contact edges. Keep automatic end binding and separate rim storage; no timing or completion state. Freeze actual-corner overlap, cap/rail/copying access, tip closure and held/released pin bounds before simulation. Test a prepared D-shaped seed and outward-facing duplicate, using body16/individual16. Report prepared closure separately from acquisition; do not claim a sealed wall from final-window geometry. |
 | 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8d are complete; Q8c/d's combined gates failed. Q8e is not frozen.
+Q8a–Q8e are complete; Q8c/d's acquisition gates failed, Q8e's prepared
+mechanical gate passed. Q8f is not frozen. No task simulation is active.
 The user's automatic-polymer correction supersedes the proposed free-W
 docking comparison; that comparison was not executed.
 The brief's alternatives are a design portfolio,

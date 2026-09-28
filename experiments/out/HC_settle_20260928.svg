@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="710" viewBox="0 0 1120 710">
+<title>Prepared angled W extension, transient overlap and final fit</title>
+<rect width="1120" height="710" fill="white"/>
+<text x="24" y="40" font-family="Arial,sans-serif" font-size="24" fill="#253345">Angled W attachments: alignment and room for another block</text>
+<text x="24" y="65" font-family="Arial,sans-serif" font-size="16" fill="#253345">Actual polygons | seed 733 | individual kicks, 16 solver passes | prepared bonds, physics only</text>
+<text x="24" y="105" font-family="Arial,sans-serif" font-size="17" fill="#253345">P end: Prepared angle, t=0</text>
+<polygon points="259.558,240.410 259.558,296.000 203.968,296.000 203.968,240.410" fill="#e2e8f0" stroke="#253345" stroke-width="1.5"/>
+<text x="226.76269651786393" y="274.20513408281425" font-family="Arial,sans-serif" font-size="15" fill="#253345">A</text>
+<polygon points="217.865,184.821 203.968,212.615 179.107,200.185 193.005,172.390" fill="#c9e8d2" stroke="#253345" stroke-width="1.5"/>
+<text x="193.48630515671076" y="198.5028483282181" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="193.005,172.390 167.072,189.513 151.757,166.317 177.690,149.195" fill="#96d3ab" stroke="#253345" stroke-width="1.5"/>
+<text x="167.38095343876375" y="175.35389255587924" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="259.558,184.821 259.558,240.410 203.968,240.410 203.968,212.615 217.865,184.821" fill="#c5dcf2" stroke="#253345" stroke-width="1.5"/>
+<text x="223.98320992614532" y="218.6154022484429" font-family="Arial,sans-serif" font-size="15" fill="#253345">P</text>
+<polygon points="177.690,149.195 151.757,166.317 136.442,143.122 162.375,126.000" fill="none" stroke="#5d748c" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="24" y="323" font-family="Arial,sans-serif" font-size="14" fill="#253345">Overlap 0.0000; pin error 0.2894</text>
+<text x="392" y="105" font-family="Arial,sans-serif" font-size="17" fill="#253345">P end: Largest overlap, t=17</text>
+<polygon points="589.587,254.661 553.572,296.000 512.238,259.994 548.242,218.683" fill="#e2e8f0" stroke="#253345" stroke-width="1.5"/>
+<text x="545.9096580160914" y="263.3346095291069" font-family="Arial,sans-serif" font-size="15" fill="#253345">A</text>
+<polygon points="589.876,180.782 568.623,202.729 548.719,184.535 569.509,161.750" fill="#c9e8d2" stroke="#253345" stroke-width="1.5"/>
+<text x="564.1816095340258" y="188.4488351974266" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="568.689,161.142 548.996,184.552 527.932,167.088 547.550,143.547" fill="#96d3ab" stroke="#253345" stroke-width="1.5"/>
+<text x="543.2917107005752" y="170.08222658226396" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="625.123,211.707 591.046,254.676 548.116,220.529 565.149,199.193 592.878,186.128" fill="#c5dcf2" stroke="#253345" stroke-width="1.5"/>
+<text x="579.4623521208274" y="220.44652245586323" font-family="Arial,sans-serif" font-size="15" fill="#253345">P</text>
+<polygon points="547.550,143.547 527.932,167.088 506.877,149.540 526.495,126.000" fill="none" stroke="#5d748c" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="392" y="323" font-family="Arial,sans-serif" font-size="14" fill="#253345">Overlap 0.0111; pin error 0.1118</text>
+<text x="760" y="105" font-family="Arial,sans-serif" font-size="17" fill="#253345">P end: Final geometry, t=60</text>
+<polygon points="946.540,270.926 897.339,296.000 872.265,246.799 921.467,221.724" fill="#e2e8f0" stroke="#253345" stroke-width="1.5"/>
+<text x="904.402699728791" y="264.8621858715517" font-family="Arial,sans-serif" font-size="15" fill="#253345">A</text>
+<polygon points="977.082,209.114 946.214,208.878 946.458,181.238 977.320,181.512" fill="#c9e8d2" stroke="#253345" stroke-width="1.5"/>
+<text x="956.7685477178753" y="201.18557569626375" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="977.325,181.518 946.454,181.222 946.724,153.610 977.593,153.909" fill="#96d3ab" stroke="#253345" stroke-width="1.5"/>
+<text x="957.0240797150421" y="173.56453464155288" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="995.735,245.943 946.475,270.897 921.516,221.639 946.150,209.156 977.021,208.999" fill="#c5dcf2" stroke="#253345" stroke-width="1.5"/>
+<text x="952.3792867246813" y="237.32696618415594" font-family="Arial,sans-serif" font-size="15" fill="#253345">P</text>
+<polygon points="977.593,153.909 946.724,153.610 946.992,126.000 977.861,126.299" fill="none" stroke="#5d748c" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="760" y="323" font-family="Arial,sans-serif" font-size="14" fill="#253345">Overlap 0.0002; pin error 0.0052</text>
+<text x="24" y="365" font-family="Arial,sans-serif" font-size="17" fill="#253345">Q end: Prepared angle, t=0</text>
+<polygon points="259.558,386.000 259.558,441.590 203.968,441.590 203.968,386.000" fill="#e2e8f0" stroke="#253345" stroke-width="1.5"/>
+<text x="226.7626965178639" y="419.7948659171857" font-family="Arial,sans-serif" font-size="15" fill="#253345">A</text>
+<polygon points="193.005,509.610 179.107,481.815 203.968,469.385 217.865,497.179" fill="#c9e8d2" stroke="#253345" stroke-width="1.5"/>
+<text x="193.48630515671076" y="495.4971516717818" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="177.690,532.805 151.757,515.683 167.072,492.487 193.005,509.610" fill="#96d3ab" stroke="#253345" stroke-width="1.5"/>
+<text x="167.38095343876378" y="518.6461074441206" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="259.558,441.590 259.558,497.179 217.865,497.179 203.968,469.385 203.968,441.590" fill="#c5dcf2" stroke="#253345" stroke-width="1.5"/>
+<text x="223.9832099261453" y="475.384597751557" font-family="Arial,sans-serif" font-size="15" fill="#253345">Q</text>
+<polygon points="162.375,556.000 136.442,538.878 151.757,515.683 177.690,532.805" fill="none" stroke="#5d748c" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="24" y="583" font-family="Arial,sans-serif" font-size="14" fill="#253345">Overlap 0.0000; pin error 0.2894</text>
+<text x="392" y="365" font-family="Arial,sans-serif" font-size="17" fill="#253345">Q end: Largest overlap, t=3</text>
+<polygon points="635.275,426.556 594.580,490.071 531.400,449.457 572.158,386.000" fill="#e2e8f0" stroke="#253345" stroke-width="1.5"/>
+<text x="578.353279338413" y="444.02095662900035" font-family="Arial,sans-serif" font-size="15" fill="#253345">A</text>
+<polygon points="498.281,474.996 539.766,477.857 536.533,516.441 496.725,516.897" fill="#c9e8d2" stroke="#253345" stroke-width="1.5"/>
+<text x="512.8264166769918" y="502.5479184820776" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="561.256,434.469 587.798,466.937 557.915,490.936 531.417,458.279" fill="#96d3ab" stroke="#253345" stroke-width="1.5"/>
+<text x="554.5963529369869" y="468.65543504840525" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="593.135,500.282 541.804,556.000 500.372,517.127 512.277,477.906 537.767,449.752" fill="#c5dcf2" stroke="#253345" stroke-width="1.5"/>
+<text x="532.0710933964316" y="506.2134297478903" font-family="Arial,sans-serif" font-size="15" fill="#253345">Q</text>
+<polygon points="590.297,410.726 616.841,443.196 587.799,466.938 561.254,434.468" fill="none" stroke="#5d748c" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="392" y="583" font-family="Arial,sans-serif" font-size="14" fill="#253345">Overlap 0.2231; pin error 0.6069</text>
+<text x="760" y="365" font-family="Arial,sans-serif" font-size="17" fill="#253345">Q end: Final geometry, t=60</text>
+<polygon points="949.906,556.000 915.821,519.562 952.253,485.470 986.344,521.912" fill="#e2e8f0" stroke="#253345" stroke-width="1.5"/>
+<text x="946.0810413782962" y="526.7359286040345" font-family="Arial,sans-serif" font-size="15" fill="#253345">A</text>
+<polygon points="916.471,433.968 942.961,442.793 935.002,466.545 908.599,457.609" fill="#c9e8d2" stroke="#253345" stroke-width="1.5"/>
+<text x="920.7584117957488" y="456.22882322507485" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="922.172,410.053 949.064,417.458 942.440,441.532 915.562,434.105" fill="#96d3ab" stroke="#253345" stroke-width="1.5"/>
+<text x="927.3093969130932" y="431.7869935479377" font-family="Arial,sans-serif" font-size="15" fill="#253345">W</text>
+<polygon points="916.006,519.527 881.656,483.343 908.781,457.580 935.020,467.070 952.201,485.174" fill="#c5dcf2" stroke="#253345" stroke-width="1.5"/>
+<text x="913.7329902192449" y="488.5387991931388" font-family="Arial,sans-serif" font-size="15" fill="#253345">Q</text>
+<polygon points="928.794,386.000 955.687,393.404 949.064,417.458 922.172,410.053" fill="none" stroke="#5d748c" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="760" y="583" font-family="Arial,sans-serif" font-size="14" fill="#253345">Overlap 0.0005; pin error 0.0273</text>
+<text x="24" y="638" font-family="Arial,sans-serif" font-size="16" fill="#253345">Dashed polygon: possible placement of the existing spare W, measured without moving or bonding it.</text>
+<text x="24" y="665" font-family="Arial,sans-serif" font-size="16" fill="#253345">All 24 bound worlds pass the final 10-frame gate; 0/24 unbound controls maintain edge alignment.</text>
+<text x="24" y="692" font-family="Arial,sans-serif" font-size="16" fill="#253345">Temporary overlap remains. This is a mechanical fixture, not autonomous growth or a complete half-cell.</text>
+</svg>

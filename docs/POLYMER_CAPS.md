@@ -138,6 +138,17 @@ from observing enough physical encounters to assess growth. Keep the simple
 polymer rule; next check angled-contact relaxation and usable free-end geometry
 with actual membrane controls, before a larger bath or curved arc test.
 
+Q8e completes that prepared check (RESULTS86): 16/16 W cap/extension cases
+and 8/8 native-M controls have good final alignment and room for the next
+conserved block; 0/24 unbound controls maintain the candidate edge alignment.
+Both body and individual kicks were tested at 16 solver passes. The new
+bonds were prepared at eligible angled contacts, not acquired from a bath.
+Temporary overlap still reaches .223063 in an individual-kick Q extension;
+the illustrated actual frames include that failure of all-time exclusion.
+The next question is geometric: derive a curved W polygon with compatible
+edge lengths and a complete arc for the cap-to-cap span. Current W is straight.
+No additional activation, fuel or timing state is indicated by this result.
+
 The completed paired-end fixture includes each cap's immediate ordinary chain
 neighbor, one rim stub and fuel access. It checks both P/Q orientations,
 actual-corner overlap, copying access and prepared release, against the same
