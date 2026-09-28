@@ -80,3 +80,6 @@ experiments/out/HC_bath_20260928*.gz binary
 experiments/half_cell_placement* text eol=lf
 experiments/out/HC_placement_20260928* text eol=lf
 experiments/out/HC_placement_20260928*.gz binary
+experiments/half_cell_capture* text eol=lf
+experiments/out/HC_capture_20260928* text eol=lf
+experiments/out/HC_capture_20260928*.gz binary

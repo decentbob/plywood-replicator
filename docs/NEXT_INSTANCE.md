@@ -1,39 +1,61 @@
 # Next-instance handoff — 2026-09-28
 
-Read ROADMAP.md, the sole queue. Q8i / RESULTS90 is complete and validated.
-No runtime or historical source changed. No simulation/server remains active.
+Read ROADMAP.md, the sole queue. Q8j / RESULTS91 is complete, archived and
+validated. The user requested a stop here for another instance. No simulation
+or lab server remains running; check machine-wide workers before starting work.
+Core, live lab and historical sources are unchanged.
 
-Four exact50k replays recover all39 rejected placements:34 free projections hit
-neighboring chain material, always including an immediate bonded neighbor of the
-intended partner. None is blocked by that partner or W. Five bound-cap attempts
-fail the .1 endpoint-gap check (.169104–.401563). All44 attempted placements are
-face docking, not rail joining. Of6,499 compatible side tests, only44 pass geometry;
-the15 compatible rail tests all fail geometry. Thus projection is a demonstrated
-failure stage, not a sufficient explanation of the missing reproductive cycle.
+In-place face pins align all38 saved bath contacts under both body16 and
+individual16. The complete final10-frame geometry/access gate passes37/38 body
+and0/38 individual. All34 previously rejected free contacts pass under body
+motion, but relative kicks leave existing joints and neighboring rail fit faulty:
+geometry passes9/38, access1/38, their intersection0. Target-pair overlap stays
+within .02; final-window global overlap reaches .198082. One previously accepted
+body contact also loses rail fit. Thus local alignment works, while the frozen
+mechanical gate fails. No chemistry, rail growth or reproduction was tested.
 
-Core placement accepts all39 rejects but increases overlap above1e-10 in35.
-Blocker overlap spans near tangency (one clipped area near machine precision)
-through .021329; simply ignoring small collisions or restoring the core routine
-is not validated. Prepared stationary contacts accept7/7 and form/release a second
-cell; exact square controls pass2/2. Existing mechanical failures remain failed.
+Prepared moving controls pass4/4 body and0/4 individual. IMPORTANT: the main raw
+file's original24 prepared controls accidentally inherited zero kicks from Q8i.
+Those records remain preserved. The separately frozen correction reruns only
+those controls at sigma=.3/sigmaRot=.45. Use the **controls-file summary**, which
+combines unchanged bath results with corrected controls. Both gate summaries fail.
+The initial preflight also failed on a stale derived open-side cache; its source
+and output are retained, and the corrected preflight passes. See the control note
+and RESULTS91; do not interpret stationary controls as moving successes.
 
-Next Q8j is not frozen: a small prepared comparison of current free-block
-projection against in-place incident edge-pin settling at the same admitted
-contacts. Keep exclusion, contact filters and the bound-part gap rule; compare
-waiting and prepared successes, actual overlap/existing-pin damage/rail access,
-and body16/individual16. No rate/fuel/timing state, arbitrary resolution sweep
-or new bath without a passed mechanical gate. See the roadmap for the decision.
+The isolated CaptureSim is NOT integrated into live/core chemistry. Park this
+variant and the current half-cell acquisition branch: no new bath, solver,
+tolerance, horizon or timing-state rescue. The live prototype remains available.
+A distinct demonstrated cause could justify a new physical question, not merely
+continuing the latest fix. Existing failed Q8 dynamic and acquisition gates stand.
 
-Evidence: experiments/out/HC_placement_20260928* (14 files plus manifest).
-Source: half_cell_placement.js, _plan.md, _summary.js, _report.js, _archive.js.
-All44 historical checkpoints and4 final arrays/RNG match, as do successful bond
-tapes. All44 saved attempts restore/recompute; three corruptions are rejected.
-Preflight neutrality/restart and positive controls pass. Total200,274 physics
-steps and1,679.275 measured CPU seconds; no failure or censoring. Full core suite
-and default fingerprints were not rerun for this isolated observer-only assay;
-core/live/historical source hashes match archived evidence. Actual-corner SVG
-was rasterized and visually checked; Fontconfig warned about its cache only.
+**Next ranked slice: freeze Q7b, not yet planned or executed.** The portfolio
+reassessment favors the deferred passive-fold acquisition/rebinding test, using
+existing fold0/45 at matched stiffness .8 and ordinary rates/material. Read
+RESULTS79–80, passive_escape_plan.md and the Q7b roadmap constraints. Include
+relaxed free-row acquisition as co-primary, body4/individual4/individual16 and
+fixed seeds/horizon/stop criteria. Q7's prepared geometry lead is not an autonomous
+repair result. If the acquisition/release tradeoff fails, park without angle,
+stiffness, rate or horizon rescue. A pass only earns the matched eight-block
+operation; no population run or new state is admitted.
 
-Use unique scratch stems and the exact commands in RESULTS90. Archive report
-inputs have an out-directory fallback; no scratch restoration is needed.
-No next experiment has started.
+Evidence: experiments/out/HC_capture_20260928* (13 evidence files plus manifest).
+Reproduction uses archived Q8i inputs, with no scratch prerequisite:
+
+```
+node experiments/half_cell_capture.js --preflight UNIQUE.preflight.json.gz
+node experiments/half_cell_capture.js UNIQUE.json.gz
+node experiments/half_cell_capture.js --validate UNIQUE.json.gz
+node experiments/half_cell_capture_controls.js UNIQUE.json.gz UNIQUE.controls.json.gz
+node experiments/half_cell_capture_report.js UNIQUE.json.gz UNIQUE_FIGURE_STEM
+```
+
+Use unique scratch paths. The batch-specific archive script refuses overwrite.
+All276 original/corrected observed trajectories match plain and midpoint restart;
+all16,836 frames replay, three deliberate corruptions are rejected, and all six
+bound-branch controls match historical behavior. Total58,222 physics steps and
+549.494 measured CPU seconds, including failed preflight/correction/report/archive,
+below750s. Editing, shell/Git, read-only inspection and raster preview are untimed.
+No censoring. Actual-corner SVG was rasterized and visually checked; Fontconfig
+cache warnings did not prevent rendering. Full core suite/default fingerprints
+were not rerun for this isolated assay; historical/core/live bytes are unchanged.

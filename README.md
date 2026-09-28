@@ -66,7 +66,12 @@ five bound-cap attempts exceed the endpoint-gap limit. Earlier geometry filterin
 also rejects6,455 of6,499 compatible side tests. The old placement routine accepts
 these rejected contacts but often introduces overlap, so it has not been restored.
 The [contact diagrams](experiments/out/HC_placement_20260928.svg) show actual
-geometry. A prepared contact-settling comparison is next; runtime rules are unchanged.
+geometry. The subsequent prepared contact-settling comparison (RESULTS91) aligns
+incoming parts, but passes the complete geometry/access gate in37/38 body-motion
+bath fixtures and0/38 with individual kicks. Corrected moving positive controls
+also fail under individual kicks. The candidate stays out of the live runtime;
+the half-cell acquisition branch is parked pending a distinct mechanical cause.
+The roadmap now ranks the deferred passive-fold kinetic test next.
 
 ## Run it
 

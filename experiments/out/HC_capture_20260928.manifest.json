@@ -1,0 +1,158 @@
+{
+  "complete": true,
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\half_cell_capture_archive.js"
+  ],
+  "files": [
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight.json.gz",
+      "sha256": "4f17ee661af401a945a2b111df8a96e36ea7879f73312d79036e7e82c8cc67fd",
+      "bytes": 39542
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight.json.gz.cpu.json",
+      "sha256": "faee82666a0f9ec0879a2ca02a9224ec3726f71d2b3d192e71e6d37431bd2d6c",
+      "bytes": 158
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight-source-v1.js",
+      "sha256": "1fb87fef2c932be0ed8e9bcdb3fb679fd1fd4824bcffb20ea92f2eeb855ae7f9",
+      "bytes": 12434
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight-v2.json.gz",
+      "sha256": "bf125905010917b0d82de43686083b4d8e312694e5174f2a1e4cec0c0d5bd2e1",
+      "bytes": 443312
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight-v2.json.gz.cpu.json",
+      "sha256": "b7ca7e969f57757b910195d30f9c207258dfa90868ec96d583a4f0efedc7a314",
+      "bytes": 158
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.json.gz",
+      "sha256": "d0bedd43a05e53451c4e491bd0f77479423ad4b8ec9b073e0194dc923aa37c0c",
+      "bytes": 42498672
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.json.gz.cpu.json",
+      "sha256": "5bc3ccb3c8a97509a2865208a801355d4db2dd0c923b6620dec43cdc90c41ff2",
+      "bytes": 168
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.json.gz.validation.json",
+      "sha256": "527fcc99b7fc4ec8fdb08cebc2bd08f99dda73d21584055d30e5686fe59fdd5d",
+      "bytes": 149367
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.json.gz.validation.json.cpu.json",
+      "sha256": "e284bc546bbcb9d6b0c61a725d117e17db6732b45f37a5a7473c193d2f3941b4",
+      "bytes": 161
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.controls.json.gz",
+      "sha256": "cadffd83f6f27dc4712f88271bd6ddc8db31ae484d31bd9f4557c683980f64d5",
+      "bytes": 4363360
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.controls.json.gz.cpu.json",
+      "sha256": "7fbaf1e1cf245854badfd46368730534fb35e5dbff8fba4d6d195d6a4715b866",
+      "bytes": 146
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.svg",
+      "sha256": "78bfb1995433076f98e77464bc452ad0fb619d9bab097445965471a8d258d51c",
+      "bytes": 45923
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.report.json",
+      "sha256": "4237f90e7ce64e74ab5cff52bdf7cc94eb35cd2bb286e3d84ac653f1137e103b",
+      "bytes": 8311
+    }
+  ],
+  "costs": [
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight.json.gz.cpu.json",
+      "cpuSeconds": 1.687,
+      "counts": {
+        "observed": 10,
+        "plain": 10,
+        "restart": 6,
+        "replay": 0
+      },
+      "complete": false,
+      "censored": false
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.preflight-v2.json.gz.cpu.json",
+      "cpuSeconds": 3.171,
+      "counts": {
+        "observed": 90,
+        "plain": 90,
+        "restart": 54,
+        "replay": 0
+      },
+      "complete": true,
+      "censored": false
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.json.gz.cpu.json",
+      "cpuSeconds": 308.687,
+      "counts": {
+        "observed": 15120,
+        "plain": 15120,
+        "restart": 7560,
+        "replay": 0
+      },
+      "complete": true,
+      "censored": false
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.json.gz.validation.json.cpu.json",
+      "cpuSeconds": 163.859,
+      "counts": {
+        "observed": 0,
+        "plain": 0,
+        "restart": 0,
+        "replay": 15122
+      },
+      "complete": true,
+      "censored": false
+    },
+    {
+      "path": "experiments/out/HC_capture_20260928.controls.json.gz.cpu.json",
+      "cpuSeconds": 60.358,
+      "counts": {
+        "observed": 1440,
+        "plain": 1440,
+        "restart": 720,
+        "replay": 1440
+      },
+      "complete": true
+    }
+  ],
+  "pass": false,
+  "originalPass": false,
+  "physicsSteps": 58222,
+  "measuredCpuSeconds": 549.4939999999999,
+  "archiveCpuSeconds": 6.342,
+  "sources": {
+    "experiments/half_cell_capture.js": "7b4e88bdffc7b6bb854326def93669d02074dc2c4bbd865e170cb3e847a57495",
+    "experiments/half_cell_capture_plan.md": "6d1b3ef0cd29e8ad8aa3e95c963318ac806487813fdf03700acadd5e20c6e6d9",
+    "experiments/half_cell_capture_report.js": "5a5161e96a9988644c8105a8d27331da9f4b61eeba8f3a2297005810e73241bd",
+    "experiments/half_cell_capture_archive.js": "f7d100859b65bb826ea38c1d4d7f57bf2a0830d98baca3dae9dee49da8baecb6",
+    "experiments/half_cell_capture_controls.js": "5383d3a2e64ab7bf2ce67d9e72ff972e2906c69485180901c00d1bb80d11f641",
+    "experiments/half_cell_capture_control_note.md": "131c738e0c9fffe3ac437fcaa04fcd57a05c2cc49f71a05e14248ebd2ac9d86e"
+  },
+  "harnessFailure": "First preflight failed after26 physics passes because the open-side cache was not recomputed after the prepared bond. Source/output retained; v2 refreshes this derived cache before saving. No physics/rule/gate changed.",
+  "controlDeviation": "Original24 prepared-control trajectories retain saved zero kicks despite the plan specifying moving controls. A separate frozen correction repeats only these24 with sigma .3/sigmaRot .45, preserving original records and both summaries. The bath gate had already failed and stays failed.",
+  "validation": "Original252 plus corrected24 observed/plain and midpoint-restored trajectories; all16,836 frames independently replayed; three deliberate corruptions rejected. All six archived bound branches unchanged.",
+  "timingScope": "Measured Node process CPU includes startup/serialization and failed attempt. Editing, shell/Git, read-only inspections and raster preview are unmeasured; fully inclusive budget not independently verified.",
+  "reproduction": "node experiments/half_cell_capture.js --preflight UNIQUE.json.gz; node experiments/half_cell_capture.js UNIQUE.json.gz; node experiments/half_cell_capture.js --validate UNIQUE.json.gz; node experiments/half_cell_capture_controls.js RAW UNIQUE.controls.json.gz; node experiments/half_cell_capture_report.js RAW UNIQUE_STEM. Use the controls-file summary for the corrected moving-control comparison. Archived Q8i inputs only; no scratch prerequisite. Archive names this batch and refuses overwrite.",
+  "limitations": [
+    "Prepared phase-state interventions and physics only; no autonomous acquisition",
+    "Correlated archived contacts, not42 independent worlds",
+    "Existing bonded exclusion exemption and finite constraint resolution retained",
+    "No core or live integration; original failed mechanical gates remain failed"
+  ]
+}

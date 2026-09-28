@@ -119,12 +119,13 @@ as .194134; keep protection and robust mechanics unclaimed. W bonds persist.
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8j: test contact settling before another bath run | Q8i attributes all34 free-placement rejections to projected overlap with neighboring chain pieces, never the intended partner or W. Freeze a small prepared comparison of current free-block projection versus in-place incident edge-pin settling at the same admitted contacts, with waiting/no-binding and successful-contact controls. Reuse saved rejected contacts without selecting favorable outcomes; retain polygon exclusion, existing contact filters, bound-part gap rule, material and rates. Measure actual overlap, existing-pin damage and later rail access under body16 and individual16. This is a mechanical hypothesis, not an implemented correction; no tolerance/solver sweep or bath promotion without a passed gate. |
-| 2, only for an earned operational lead | Targeted geometry check and repeated operation | Compare the relevant acquisition/release effect with individual kicks. Known overlap limits claims; source audit alone did not justify a bonded-contact correction. Check actual geometry and descendant operation before claiming robust reproduction or protection; no arbitrary solver sweep or gate relaxation. |
-| 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
+| 1 | Q7b: freeze the deferred passive-fold kinetic test | Q8j fails its frozen mechanical gate. The portfolio reassessment in RESULTS91 favors the already-admitted Q7b question below: does existing free-face folding beat rebinding while retaining initial acquisition? Keep matched stiffness/material/rates, straight control, relaxed free rows, body4/individual4/individual16, fixed seeds/horizon and acquisition as co-primary. No new states, rate/angle rescue or population run. No Q7b assay is frozen yet. |
+| 2, only if Q7b passes | Complete the small repair operation | Require autonomous acquisition, repair and usable release in the matched-stiffness eight-block operation before natural-damage or population testing. Prepared ligation alone is already known and insufficient. Preserve the physical-motion sensitivity checks and doing-nothing competitor. |
+| 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Require repeated useful operation from conserved material, descendant renewal, a causal reproductive benefit and persistent variant transmission. If half-cells reopen, both must repeat chain copying, new-arc assembly and separation; charge rim costs and compare equal-material bare chains. |
 
-Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8i are complete; Q8c/d's acquisition gates failed, Q8e's prepared
+Q8 explored the user's half-cell direction; the isolated live prototype remains
+available. Old repair/wall failures remain failed.
+Q8a–Q8j are complete; Q8c/d's acquisition gates failed, Q8e's prepared
 joint gate passed, Q8f's static geometry passes but both dynamic settings fail.
 Q8g passes software integration and prepared operation, not free-bath reproduction.
 Q8h (RESULTS89) runs fresh809/811 for50k steps with rim binding on/off. All four
@@ -150,9 +151,32 @@ Core placement accepts all39 rejects but increases local overlap above1e-10 in35
 it is not a collision-safe correction. Prepared contacts accept7/7 and form/release
 the second cell; ordinary square controls pass2/2. This identifies a projection/
 neighbor-fit mismatch, not a sufficient cause of failed reproduction. Both earlier
-geometry filtering and later rail acquisition remain unresolved. The next test
-above uses existing pin mechanics as a distinct hypothesis; it is not yet frozen.
-No simulation remains active. No lab server was running at Q8i startup; check processes
+geometry filtering and later rail acquisition remain unresolved. Q8j tested
+existing pin mechanics as a distinct hypothesis and is complete below.
+
+**Q8j fails the prepared capture gate (RESULTS91).** In-place face pins align all
+38 bath contacts under both motion modes, but the complete final-window gate
+passes37/38 body16 and0/38 individual16. All34 formerly rejected contacts pass
+under body motion; one previously accepted contact loses next-rail fit. With
+individual kicks, existing joints and neighboring access fail despite target
+alignment: only9/38 pass the geometry conjunction and1/38 maintain rail access,
+with no joint passes. Actual final-window all-pair overlap reaches.198082.
+Corrected moving prepared controls pass4/4 body16 and0/4 individual16; waiting
+maintains alignment in none. The original controls accidentally retained zero
+kicks; those records and the separately frozen correction are preserved.
+Both gate summaries fail. This is a prepared physical effect, not autonomous
+acquisition or reproduction. Keep the new subclass out of core/live chemistry.
+No resolution, horizon, tolerance or timing-state rescue follows.
+
+**Portfolio decision:** the half-cell acquisition/capture branch is parked.
+Q8h–j do not earn another bath; source audit alone does not supply a sound
+bonded-contact correction. A distinct demonstrated numerical cause could reopen
+a narrowly frozen physical test, but repeating this solver/capture setting cannot.
+The deferred Q7b test already has a prepared shape lead under existing rules and
+asks a separate acquisition-versus-release question in small worlds. It is now
+the next ranked slice; it does not restore Q6b's failed gate or claim repair benefit.
+
+No simulation remains active. No lab server was running at Q8j startup; check processes
 before another batch. Count an actively running viewer in the worker limit.
 The user's automatic-polymer correction supersedes the proposed free-W
 docking comparison; that comparison was not executed.
@@ -176,9 +200,10 @@ as an explicit drive, not an evolved harvesting function. Q8c's W acquisition
 failure occurs before binding and does not implicate fuel. Keep polymer mechanics first;
 freeze any energy comparison separately, with actual repeat-copying outcomes.
 
-## Deferred Q7b: admission and constraints preserved
+## Q7b: admission and constraints preserved
 
-Q7b is deferred, not executed or failed, and is not a prerequisite for Q8.
+Q7b was deferred for Q8, has not been executed or failed, and is now next after
+the RESULTS91 portfolio reassessment. It is not a prerequisite for a future Q8 reopening.
 
 **Q7 passes its prepared geometry gate (RESULTS 80).** At identical stiffness
 0.8, existing free-face fold 45 turns two freed endpoints out of binding alignment
@@ -219,6 +244,7 @@ All section numbers refer to [RESULTS](experiments/RESULTS.md).
 
 | Item | Disposition | What could reopen it |
 |---|---|---|
+| Q8 half-cell acquisition/capture | Bath acquisition fails (89); placement cause is identified (90); in-place capture gate fails, especially individual-motion access (91). Live prototype remains exploratory and unchanged. | A distinct demonstrated mechanical/numerical cause with a bounded test preserving exclusion and existing joints; no longer bath, arbitrary solver/tolerance sweep or state program. |
 | Q6b acquisition/release | 0/16 on successes; all eight cells fail (79). Prepared repair persists but enabled rebinding sequesters material. | Q7 establishes a distinct prepared shape effect (80); kinetic acquisition/rebinding and matched-stiffness repair remain prerequisites. No rate/heat/horizon rescue. |
 | Q5 geometric error rejection | Failed selective wrong-member removal in every stratum (77); AA favors wrong joining | Distinct causal evidence, not favored contexts, angle/undocking tuning or proofreading. |
 | Q4 causal-contrast comparison | Neither efficacy ablation nor pairing-mode renewal earned a run (76) | A physical operation with a same-material benefit prediction against simple renewal; Q6 is a distinct hypothesis, not a rescue of those contrasts. |

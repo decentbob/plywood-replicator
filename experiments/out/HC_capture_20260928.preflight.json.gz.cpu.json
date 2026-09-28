@@ -1,0 +1,11 @@
+{
+  "cpuSeconds": 1.687,
+  "counts": {
+    "observed": 10,
+    "plain": 10,
+    "restart": 6,
+    "replay": 0
+  },
+  "complete": false,
+  "censored": false
+}

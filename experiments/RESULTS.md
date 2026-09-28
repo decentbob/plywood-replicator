@@ -8006,3 +8006,145 @@ actual overlap, damage to existing pins and later rail access under body16 and
 individual16 before any new bath. This tests a distinct mechanical cause using
 existing pin dynamics. No correction, tolerance relaxation, new timing state or
 reproduction claim is made here.
+
+## 91. In-place half-cell capture aligns faces but fails neighboring access
+
+2026-09-28, Q8j. [Frozen plan](half_cell_capture_plan.md),
+[post-outcome control correction](half_cell_capture_control_note.md),
+[actual corners](out/HC_capture_20260928.svg),
+[manifest](out/HC_capture_20260928.manifest.json).
+The gate fails. This finishes the prepared mechanical diagnostic admitted by
+RESULTS90; no live/core integration or autonomous acquisition follows.
+
+### Contract, fixed comparison and gate
+
+Use all38 free bath placement phases from Q8i (34 rejected, four accepted), plus
+four free prepared-control phases. Each saved28-block inventory is branched into
+current projection, in-place incident pins and waiting, under body16 and
+individual16, for60 physics steps. Repeated contacts in the four809/811 on/off
+worlds are correlated fixtures, not38 independent worlds or fresh confirmation.
+No chemistry, subsequent binding, imposed release or material change occurs.
+
+The isolated CaptureSim reads the two incident blocks' types and bond occupancy
+and adds their requested edge bond without projection when one is mechanically
+free. Fuel and already-bound branches delegate unchanged. No new state, mark,
+type, knob or observer identity enters reactions. The harness verifies that each
+saved contact passed the original compatibility/geometry filters; it applies a
+prepared intervention, not spontaneous capture. Numerical contacts, shapes and
+constraint ordering retain the live implementation and16 iterations.
+
+The final10 frames must all have target pin gap<=.1, pre-existing joint gap<=.1,
+global overlap<=.02 and a usable next rail-fit probe. The read-only probe uses
+an existing neighboring face partner, or projects a currently free conserved
+matching letter onto that neighbor. It checks copying and lateral endpoint gaps,
+ordinary lateral geometry and projected polygon overlaps. This is potential
+access, not measured rail assembly. Require every fixture/motion to pass, preserve
+accepted/prepared controls, and beat matched waiting in every bath-world/motion
+stratum. No tolerance, solver, horizon or rate adjustment is admitted on failure.
+
+### Outcomes, with corrected moving controls
+
+| Saved origin | Contacts | Pins gate body16 | Pins gate individual16 | Project gate body16 / individual16 | Wait sustained alignment body16 / individual16 |
+|---|---:|---:|---:|---:|---:|
+|809/on|11|11/11|0/11|1/11 / 0/11|0/11 / 0/11|
+|809/off|5|5/5|0/5|1/5 / 0/5|0/5 / 0/5|
+|811/on|3|2/3|0/3|0/3 / 0/3|0/3 / 0/3|
+|811/off|19|19/19|0/19|1/19 / 0/19|0/19 / 0/19|
+|Prepared, moving correction|4|4/4|0/4|4/4 / 0/4|0/4 / 0/4|
+
+Pins align the target in38/38 bath fixtures under **both** motion modes, with
+target-pair final-window overlap below .02 throughout. All34 previously rejected
+contacts pass the full gate under body motion. The one body failure is a
+previously accepted811/on contact (index3): neighboring rail-fit is obstructed
+at steps54–57, with prospective overlap up to .065217 and lateral gap .100543.
+Thus even the body result fails the requirement to retain existing successes.
+
+Under individual kicks, sustained existing-joint gaps pass18/38, global overlaps
+13/38 and their conjunction with target alignment9/38. Probe material is available
+in38/38, but sustained next-rail fit passes only1/38; no fixture passes both
+geometry and access. Maximum final-window all-pair overlap is .016509 body and
+.198082 individual; transient maxima are .264593/.293604. Target-pair final-window
+maxima are only .004883/.008900. The failure concerns existing joints and neighboring
+fit despite successful new-contact alignment, not failure of the new pins to bind.
+
+The figure shows the first rejected bath contact at step60 and the explicitly
+selected worst final-window target-involving overlap fixture (809/on/index8,
+individual16, step55), with all three arms. These are actual saved corners,
+not rest shapes or independent outcome samples.
+
+Adding a bond also changes which pair receives the existing direct-bond collision
+exemption and which components receive body jostling. Unchanged collision source
+does not mean identical forces across arms. Initial states/RNG are matched;
+later conditional consumption and component grouping can diverge. The results
+do not demonstrate robust exclusion, rail growth, descendants or reproduction.
+
+### Preserved failures and validation
+
+The first preflight fails after26 physics advances because preparation changes
+a bond without refreshing the derived open-side cache. Restoring the state
+recomputes that cache. The original source/output are archived; v2 recomputes
+open sides before saving. No physical rule or gate changed, and v2 passes.
+
+Post-run QA found that the four prepared phases retained Q8i's sigma=0 and
+sigmaRot=0. The plan both preserves saved parameters and explicitly specifies
+.3/.45 motion; the latter had not been applied to these controls. All24 stationary
+records and their validation remain preserved. After freezing the linked correction
+note, a separate runner repeats only those24 trajectories with .3/.45. Corrected
+moving controls pass4/4 body and0/4 individual, compared with the original stationary
+4/4 in both algorithm modes. Waiting also stayed aligned in all stationary
+controls, but none of the moving controls. Do not cite the original labels as
+individual-motion evidence. **Use the controls-file summary**, which replaces the
+24 stationary records while retaining all228 bath records. Both summaries fail;
+the already-failed bath gate was never reopened.
+
+All252 original and24 corrected observed trajectories match plain runs and
+30-step subclass restarts, including physical arrays and RNG. Independent replay
+recomputes all16,836 frames and metrics. Deliberately corrupted corner, bond and
+aggregate records are rejected. All six archived bound attempts preserve the
+historical branch and physical state (one accepted, five rejected). Material,
+bond and chemical-state invariants pass. Source/input hashes match the archive;
+there is no overwrite of historical code or raw evidence.
+
+```
+node experiments/half_cell_capture.js --preflight experiments/scratch/UNIQUE.preflight.json.gz
+node experiments/half_cell_capture.js experiments/scratch/UNIQUE.json.gz
+node experiments/half_cell_capture.js --validate experiments/scratch/UNIQUE.json.gz
+node experiments/half_cell_capture_controls.js experiments/scratch/UNIQUE.json.gz experiments/scratch/UNIQUE.controls.json.gz
+node experiments/half_cell_capture_report.js experiments/scratch/UNIQUE.json.gz experiments/scratch/UNIQUE
+node experiments/half_cell_capture_archive.js
+```
+
+Archive inputs are Q8i files in out, with no scratch prerequisite. Use unique
+outputs; the archive script names this completed batch and refuses overwrite.
+Exact executed commands, parameters and hashes are retained in raw/manifest.
+The13 evidence files plus manifest include both preflights, old source, main raw,
+full validation, corrected controls, CPU records and figure/report.
+
+Total **58,222 physics steps** and **549.494 measured CPU seconds**, including the
+failed preflight, all controls, replay, report and archive, below the750s budget.
+No run was censored. At most two simulation processes ran concurrently during
+validation/control correction, below the machine-wide four-worker cap; the plan
+had specified one, so this is a scheduling deviation. Editing, read-only inspection,
+shell/Git and raster preview remain untimed. The SVG was rasterized and visually
+checked; Fontconfig cache warnings did not prevent rendering. Core/live/historical
+sources are unchanged. The full core suite, default fingerprints and viewer build
+were not rerun for this isolated assay. No simulation or server remains active.
+
+### Portfolio decision and handoff
+
+Park this capture variant and the current half-cell acquisition branch. Q8h–j
+have not advanced autonomous operation: a new bath is not earned, and another
+solver/tolerance/horizon adjustment would prolong a failed confirmation. Keep
+the live prototype available and the numerical limitations recorded. A distinct
+demonstrated cause could reopen a narrowly frozen physical question; the current
+source audit is not itself a tested bonded-contact correction.
+
+The alternative next slice is the deferred Q7b passive-fold kinetic test. Q7
+(RESULTS80) already established actual shape relaxation with an existing rule,
+and Q7b asks a separate small-world question: can that relaxation beat rebinding
+without losing initial acquisition? It requires matched stiffness/material/rates,
+relaxed free rows, straight controls and body4/individual4/individual16. Freeze
+its outcomes/seeds/horizon first; no Q7b assay has started. Q6b's failed acquisition/
+release gate remains failed, and a kinetic pass would still need the complete
+eight-block repair operation before any inherited-function claim. ROADMAP ranks
+this next; NEXT_INSTANCE records the completed evidence and operational handoff.

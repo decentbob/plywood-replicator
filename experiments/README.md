@@ -68,6 +68,15 @@ the endpoint-gap gate. Earlier geometry filtering also limits acquisition.
 controls, hashes and actual-corner diagrams. The report accepts archived inputs
 without a scratch prerequisite. No runtime correction was made.
 
+The prepared capture comparison (RESULTS91) uses `half_cell_capture.js`
+(`--preflight`, normal run and `--validate`), `_plan.md`, `_report.js` and
+`_archive.js`. `_controls.js RAW OUTPUT` repeats the four prepared-control phases
+with moving parameters; read `_control_note.md` and use that file's corrected
+summary. Original stationary controls and a failed cache preflight are retained.
+Body-mode capture helps but the individual-motion gate fails; no live integration.
+`out/HC_capture_20260928*` includes exact phase inputs by hash, all sampled frames,
+replay/restart checks and actual-corner figures. No scratch input prerequisite.
+
 Read the plan and script's CLI rather than assuming identical options across runners.
 Recent assays validate exact input/source hashes: moving files or changing even comments can
 break historical validation. Keep runtime and assay source cleanup separate from documentation.
