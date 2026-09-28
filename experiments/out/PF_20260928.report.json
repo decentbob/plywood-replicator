@@ -1,0 +1,481 @@
+{
+  "command": [
+    "/opt/node22/bin/node",
+    "/home/user/plywood-replicator/experiments/passive_fold_kinetics_report.js",
+    "experiments/scratch/PF_20260928.json",
+    "experiments/scratch/PF_20260928.report.json"
+  ],
+  "scriptSha256": "78708104125622b4050606c77966160a7aa012e7c4354be2e96a1b73acbc9441",
+  "inputSha256": "7ec0a3a32d481d0d75a6fd23993ea8f4435069ff403a2479550cc462fd2b2d58",
+  "gate": {
+    "worlds": 192,
+    "rows": [
+      {
+        "mode": "body4",
+        "n": 16,
+        "bridges": {
+          "straight": 5,
+          "fold45": 0
+        },
+        "directEscapes": {
+          "straight": 5,
+          "fold45": 11
+        },
+        "fisherP": 0.03779873936662615,
+        "valid": false,
+        "retained": false,
+        "escape": true,
+        "pass": false
+      },
+      {
+        "mode": "individual4",
+        "n": 16,
+        "bridges": {
+          "straight": 7,
+          "fold45": 2
+        },
+        "directEscapes": {
+          "straight": 4,
+          "fold45": 9
+        },
+        "fisherP": 0.07444181135238832,
+        "valid": false,
+        "retained": false,
+        "escape": false,
+        "pass": false
+      },
+      {
+        "mode": "individual16",
+        "n": 16,
+        "bridges": {
+          "straight": 7,
+          "fold45": 0
+        },
+        "directEscapes": {
+          "straight": 4,
+          "fold45": 12
+        },
+        "fisherP": 0.006056855390008648,
+        "valid": false,
+        "retained": false,
+        "escape": true,
+        "pass": false
+      }
+    ],
+    "lead": false
+  },
+  "rows": [
+    {
+      "preparation": "escape",
+      "mode": "body4",
+      "arm": "straight",
+      "n": 16,
+      "firstEventRelink": 11,
+      "firstEventUnlink": 5,
+      "noFaceEvent": 0,
+      "directEscape": 5,
+      "releasedByHorizon": 7,
+      "medianFirstRelease": 7,
+      "anyFaceLink": 11,
+      "everFullBridge": 11,
+      "sustainedBridge": 10,
+      "medianFirstBridge": 3,
+      "faceLinks": 31,
+      "occupiedFaceFraction": 0.60328125,
+      "pair0EligibleFraction": 0.60825,
+      "pair1EligibleFraction": 0.6085,
+      "finalOccupied": {
+        "0": 7,
+        "2": 9
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": null,
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "escape",
+      "mode": "body4",
+      "arm": "fold45",
+      "n": 16,
+      "firstEventRelink": 3,
+      "firstEventUnlink": 13,
+      "noFaceEvent": 0,
+      "directEscape": 11,
+      "releasedByHorizon": 16,
+      "medianFirstRelease": 12,
+      "anyFaceLink": 8,
+      "everFullBridge": 3,
+      "sustainedBridge": 3,
+      "medianFirstBridge": 1,
+      "faceLinks": 10,
+      "occupiedFaceFraction": 0.09671875,
+      "pair0EligibleFraction": 0.1025625,
+      "pair1EligibleFraction": 0.0965,
+      "finalOccupied": {
+        "0": 16
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": null,
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "escape",
+      "mode": "individual4",
+      "arm": "straight",
+      "n": 16,
+      "firstEventRelink": 7,
+      "firstEventUnlink": 9,
+      "noFaceEvent": 0,
+      "directEscape": 4,
+      "releasedByHorizon": 12,
+      "medianFirstRelease": 21,
+      "anyFaceLink": 12,
+      "everFullBridge": 10,
+      "sustainedBridge": 10,
+      "medianFirstBridge": 3,
+      "faceLinks": 25,
+      "occupiedFaceFraction": 0.40753125,
+      "pair0EligibleFraction": 0.41325,
+      "pair1EligibleFraction": 0.411625,
+      "finalOccupied": {
+        "0": 12,
+        "2": 4
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": null,
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "escape",
+      "mode": "individual4",
+      "arm": "fold45",
+      "n": 16,
+      "firstEventRelink": 6,
+      "firstEventUnlink": 10,
+      "noFaceEvent": 0,
+      "directEscape": 9,
+      "releasedByHorizon": 13,
+      "medianFirstRelease": 9,
+      "anyFaceLink": 8,
+      "everFullBridge": 7,
+      "sustainedBridge": 6,
+      "medianFirstBridge": 2,
+      "faceLinks": 22,
+      "occupiedFaceFraction": 0.30434375,
+      "pair0EligibleFraction": 0.30775,
+      "pair1EligibleFraction": 0.307,
+      "finalOccupied": {
+        "0": 14,
+        "2": 2
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": null,
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "escape",
+      "mode": "individual16",
+      "arm": "straight",
+      "n": 16,
+      "firstEventRelink": 7,
+      "firstEventUnlink": 9,
+      "noFaceEvent": 0,
+      "directEscape": 4,
+      "releasedByHorizon": 12,
+      "medianFirstRelease": 10,
+      "anyFaceLink": 13,
+      "everFullBridge": 8,
+      "sustainedBridge": 8,
+      "medianFirstBridge": 2,
+      "faceLinks": 28,
+      "occupiedFaceFraction": 0.3440625,
+      "pair0EligibleFraction": 0.3498125,
+      "pair1EligibleFraction": 0.3498125,
+      "finalOccupied": {
+        "0": 12,
+        "2": 4
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": null,
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "escape",
+      "mode": "individual16",
+      "arm": "fold45",
+      "n": 16,
+      "firstEventRelink": 0,
+      "firstEventUnlink": 16,
+      "noFaceEvent": 0,
+      "directEscape": 12,
+      "releasedByHorizon": 16,
+      "medianFirstRelease": 6,
+      "anyFaceLink": 6,
+      "everFullBridge": 0,
+      "sustainedBridge": 0,
+      "medianFirstBridge": null,
+      "faceLinks": 9,
+      "occupiedFaceFraction": 0.00521875,
+      "pair0EligibleFraction": 0.0105625,
+      "pair1EligibleFraction": 0.002875,
+      "finalOccupied": {
+        "0": 16
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": null,
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "acquire",
+      "mode": "body4",
+      "arm": "straight",
+      "n": 16,
+      "firstEventRelink": 8,
+      "firstEventUnlink": 0,
+      "noFaceEvent": 8,
+      "directEscape": 0,
+      "releasedByHorizon": 12,
+      "medianFirstRelease": 1,
+      "anyFaceLink": 8,
+      "everFullBridge": 5,
+      "sustainedBridge": 5,
+      "medianFirstBridge": 3,
+      "faceLinks": 22,
+      "occupiedFaceFraction": 0.29259375,
+      "pair0EligibleFraction": 0.2949375,
+      "pair1EligibleFraction": 0.295625,
+      "finalOccupied": {
+        "0": 11,
+        "2": 5
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": [
+        {
+          "gap": 0,
+          "angle": 0,
+          "pass": true
+        },
+        {
+          "gap": 0,
+          "angle": 0,
+          "pass": true
+        }
+      ],
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "acquire",
+      "mode": "body4",
+      "arm": "fold45",
+      "n": 16,
+      "firstEventRelink": 11,
+      "firstEventUnlink": 0,
+      "noFaceEvent": 5,
+      "directEscape": 0,
+      "releasedByHorizon": 16,
+      "medianFirstRelease": 3,
+      "anyFaceLink": 11,
+      "everFullBridge": 0,
+      "sustainedBridge": 0,
+      "medianFirstBridge": null,
+      "faceLinks": 25,
+      "occupiedFaceFraction": 0.00634375,
+      "pair0EligibleFraction": 0.007,
+      "pair1EligibleFraction": 0.0114375,
+      "finalOccupied": {
+        "0": 16
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": [
+        {
+          "gap": 0.07612,
+          "angle": 45,
+          "pass": false
+        },
+        {
+          "gap": 0.07612,
+          "angle": 45,
+          "pass": false
+        }
+      ],
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "acquire",
+      "mode": "individual4",
+      "arm": "straight",
+      "n": 16,
+      "firstEventRelink": 8,
+      "firstEventUnlink": 0,
+      "noFaceEvent": 8,
+      "directEscape": 0,
+      "releasedByHorizon": 13,
+      "medianFirstRelease": 1,
+      "anyFaceLink": 8,
+      "everFullBridge": 7,
+      "sustainedBridge": 7,
+      "medianFirstBridge": 11,
+      "faceLinks": 26,
+      "occupiedFaceFraction": 0.24965625,
+      "pair0EligibleFraction": 0.2521875,
+      "pair1EligibleFraction": 0.2533125,
+      "finalOccupied": {
+        "0": 12,
+        "2": 4
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": [
+        {
+          "gap": 0,
+          "angle": 0,
+          "pass": true
+        },
+        {
+          "gap": 0,
+          "angle": 0,
+          "pass": true
+        }
+      ],
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "acquire",
+      "mode": "individual4",
+      "arm": "fold45",
+      "n": 16,
+      "firstEventRelink": 7,
+      "firstEventUnlink": 0,
+      "noFaceEvent": 9,
+      "directEscape": 0,
+      "releasedByHorizon": 16,
+      "medianFirstRelease": 1,
+      "anyFaceLink": 7,
+      "everFullBridge": 2,
+      "sustainedBridge": 2,
+      "medianFirstBridge": 5,
+      "faceLinks": 13,
+      "occupiedFaceFraction": 0.050375,
+      "pair0EligibleFraction": 0.052,
+      "pair1EligibleFraction": 0.0530625,
+      "finalOccupied": {
+        "0": 16
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": [
+        {
+          "gap": 0.07612,
+          "angle": 45,
+          "pass": false
+        },
+        {
+          "gap": 0.07612,
+          "angle": 45,
+          "pass": false
+        }
+      ],
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "acquire",
+      "mode": "individual16",
+      "arm": "straight",
+      "n": 16,
+      "firstEventRelink": 7,
+      "firstEventUnlink": 0,
+      "noFaceEvent": 9,
+      "directEscape": 0,
+      "releasedByHorizon": 14,
+      "medianFirstRelease": 1,
+      "anyFaceLink": 7,
+      "everFullBridge": 7,
+      "sustainedBridge": 7,
+      "medianFirstBridge": 9,
+      "faceLinks": 29,
+      "occupiedFaceFraction": 0.29415625,
+      "pair0EligibleFraction": 0.2986875,
+      "pair1EligibleFraction": 0.29875,
+      "finalOccupied": {
+        "0": 12,
+        "2": 4
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": [
+        {
+          "gap": 0,
+          "angle": 0,
+          "pass": true
+        },
+        {
+          "gap": 0,
+          "angle": 0,
+          "pass": true
+        }
+      ],
+      "relaxedIdentical": true
+    },
+    {
+      "preparation": "acquire",
+      "mode": "individual16",
+      "arm": "fold45",
+      "n": 16,
+      "firstEventRelink": 6,
+      "firstEventUnlink": 0,
+      "noFaceEvent": 10,
+      "directEscape": 0,
+      "releasedByHorizon": 16,
+      "medianFirstRelease": 1,
+      "anyFaceLink": 6,
+      "everFullBridge": 0,
+      "sustainedBridge": 0,
+      "medianFirstBridge": null,
+      "faceLinks": 7,
+      "occupiedFaceFraction": 0.0024375,
+      "pair0EligibleFraction": 0.0025625,
+      "pair1EligibleFraction": 0.004625,
+      "finalOccupied": {
+        "0": 16
+      },
+      "finalBothExact": 16,
+      "lateralEvents": 0,
+      "births": 0,
+      "relaxed": [
+        {
+          "gap": 0.07612,
+          "angle": 45,
+          "pass": false
+        },
+        {
+          "gap": 0.07612,
+          "angle": 45,
+          "pass": false
+        }
+      ],
+      "relaxedIdentical": true
+    }
+  ],
+  "runCpuSeconds": 14.342981,
+  "validationCpuSeconds": 6.76759,
+  "reportCpuSeconds": 0.150048
+}

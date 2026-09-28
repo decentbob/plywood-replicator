@@ -134,6 +134,10 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    cases repair but none achieves sustained release; disabling future binding gives 7/8
    repair-and-release controls but removes acquisition. Only 2/8 on near-encounters
    sustain a bridge. The rate/preparation combination is parked, without a population test.
+   The existing free-face fold changes that race, but without a latch it trades acquisition for
+   release (92). Fold45 dimers escape directly in 11/9/12 of 16 worlds versus straight 5/4/4
+   (body4/individual4/individual16), but sustain a full bridge in 0/2/0 versus 5/7/7. An
+   own-face shape switch cannot tell a bond just lost from one not yet formed. Parked.
    The offline partner audit (73) finds one repeated reciprocal renewing pair, but no
    candidate above its fixed opportunity reference. Only 3.3–6.2% of covered events have
    alternative helpers; this limits identification rather than proving interchangeable support.
@@ -405,6 +409,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 89 | Free-bath half-cell acquisition | Can the live seed acquire a new half-cell from loose conserved material? | `rimBind` on/off, `pMem` .2, body16, unchanged Q8g runtime | negative | on acquires6/7 rim bonds; all four worlds have0 new rails/capped chains/cells; ordinary placement rejects39/44 attempts; E stays charged; sampled overlap .203795 | half_cell_bath.js, half_cell_bath_summary.js (`HC_bath_20260928`) | park bath setting; diagnose actual rejected placements before longer runs or timing/fuel changes | fresh809/811 x on/off x50k,28 blocks, one-offspring inventory;404,500 total physics steps,3,768.891 measured CPU s;4 full neutrality/restarts,404-frame and every-step bond-tape replay, three corruption checks; no censoring/harness failures; preflight/figure revisions preserved; core/runtime unchanged |
 | 90 | Half-cell placement rejection replay | Which geometry rejects ordinary acquisition, and what earlier filters precede it? | unchanged Q8h body16; read-only placement/stage wrappers; stationary prepared contact and exact square controls | works | all34 free rejects hit an anchor neighbor, none the partner or W;5 bound caps miss .1 gap;44/6,499 compatible tests reach placement,5 bind; core accepts39 rejects but35 increase overlap | half_cell_placement.js, half_cell_placement_summary.js (`HC_placement_20260928`) | freeze current projection versus in-place edge-pin settling with unchanged exclusion and waiting controls; no bath promotion | four archived50k replays,200,274 total steps,1,679.275 measured CPU s;44 checkpoint and4 final matches, full successful-event tapes,44 restored attempts, prepared7/7 and square2/2, three corruptions rejected; no censoring/failures or runtime changes; geometry diagnosis only |
 | 91 | In-place half-cell face capture | Can incident pins settle admitted contacts while preserving existing joints and next-rail fit? | isolated pins/project/wait; body16/individual16; 60 physics steps, no chemistry | negative | target alignment38/38 both modes; full bath gate37/38 body and0/38 individual; moving prepared controls4/4 and0/4; final-window overlap .198082 | half_cell_capture.js, half_cell_capture_controls.js (`HC_capture_20260928`) | park candidate and current half-cell acquisition branch; portfolio favors freezing deferred Q7b acquisition/rebinding test | 42 correlated saved contacts x3 arms x2 modes plus24 corrected controls;58,222 total steps,549.494 measured CPU s;276 neutrality/restarts,16,836 replayed frames,3 corruptions; failed cache preflight and original stationary-control deviation retained; no censoring or live/core change |
+| 92 | Passive-fold kinetic race | Does the existing free-face fold beat rebinding while retaining bridge acquisition? | `foldA`/`foldB` 0/45, `stiffA`/`stiffB` .8, `pHyb` .2, `pMelt` .1, `pMeltRun` .001, `pMeltEnd` -1, `pLigate` .02; body4/individual4/individual16 | negative | direct escape straight/fold 5/11, 4/9, 4/12; sustained bridges 5/0, 7/2, 7/0; gate fails every mode (straight fixture validity and fold retention) | passive_fold_kinetics.js, passive_fold_kinetics_validate.js, passive_fold_kinetics_report.js (`PF_20260928`) | park fold candidate and the passive repair branch; no angle/stiffness/rate/horizon rescue | 192 four-block worlds, seeds 7301–7316, 1,000 kinetic steps; about 693,200 steps incl. neutrality/restart/replay, about 21.5 measured CPU s; built-in validator failed on a CRLF core-hash comparison, replaced by a separate normalized validator; no births or lateral changes; core unchanged |
 
 ## Knob index
 
@@ -432,8 +437,8 @@ the rows that used it). Rerun it after adding rows.
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
 | `fold2` | 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |
-| `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative), 80 (lead) |
-| `foldB` | 39c (works), 41a (negative), 47a (works), 47b (negative), 47c (lead), 80 (lead) |
+| `foldA` | 28b (works), 39b (works), 39c (works), 41a (negative), 80 (lead), 92 (negative) |
+| `foldB` | 39c (works), 41a (negative), 47a (works), 47b (negative), 47c (lead), 80 (lead), 92 (negative) |
 | `foldD` | 28b (works) |
 | `gRange` | 31 (partial) |
 | `grip` | 39a (works) |
@@ -480,13 +485,13 @@ the rows that used it). Rerun it after adding rows.
 | `pCut` | 26 (negative) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
-| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative) |
+| `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative) |
 | `physics` | 15 (works) |
-| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative) |
+| `pLigate` | 3b (lead), 8 (works), 10 (superseded), 12 (works), 19d (negative), 27b (negative), 33e (negative), 33f (negative), 78 (lead), 79 (negative), 92 (negative) |
 | `pLinkBare` | 34c (works), 43b (negative), 47a (works), 47b (negative), 47c (lead), 48 (negative), 61 (lead), 62 (negative), 74 (works) |
-| `pMelt` | 18 (negative), 78 (lead), 79 (negative), 88 (lead) |
-| `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative), 88 (lead) |
-| `pMeltRun` | 78 (lead), 79 (negative), 88 (lead) |
+| `pMelt` | 18 (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
+| `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
+| `pMeltRun` | 78 (lead), 79 (negative), 88 (lead), 92 (negative) |
 | `pMem` | 85 (negative), 88 (lead), 89 (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
@@ -527,8 +532,8 @@ the rows that used it). Rerun it after adding rows.
 | `stackHold` | 40b (negative), 40c (negative) |
 | `stiff1` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
 | `stiff2` | 45a (works), 45b (lead), 45d (lead), 45e (works), 46 (negative), 47a (works) |
-| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead), 82 (lead) |
-| `stiffB` | 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead) |
+| `stiffA` | 15 (works), 15b (works), 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead), 82 (lead), 92 (negative) |
+| `stiffB` | 47a (works), 48 (negative), 49a (works), 58 (negative), 80 (lead), 92 (negative) |
 | `stiffC` | 82 (lead) |
 | `stiffM` | 16d (negative), 23b (works), 24c (works) |
 | `stiffP` | 52a (works), 58 (negative), 82 (lead) |
@@ -548,7 +553,8 @@ observations and historical dispositions; a row's old "Points to" field is not
 a current assignment. Follow later evidence when a lead has failed confirmation.
 
 Prepared passive repair remains a physical-effect lead (78), but its ordinary
-acquisition/release prerequisites fail (79). No autonomous cycle or inherited
+acquisition/release prerequisites fail (79), and the passive fold trades
+acquisition for release (92). The repair branch is parked. No autonomous cycle or inherited
 benefit is established. Q5 and all earlier failed gates remain failed. Use the roadmap for the next admitted slice and
 [the brief handoff](../docs/NEXT_INSTANCE.md) for operational status. Detailed
 completed briefs remain in the [Q5 roadmap snapshot](../docs/archive/ROADMAP-2026-09-27-Q5.md).

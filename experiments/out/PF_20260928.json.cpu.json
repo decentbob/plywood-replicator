@@ -1,0 +1,1 @@
+{"command":["/opt/node22/bin/node","/home/user/plywood-replicator/experiments/passive_fold_kinetics.js","experiments/scratch/PF_20260928.json"],"cpuSeconds":14.342981,"steps":{"relaxation":9600,"observed":192000,"plain":192000,"restart":96000},"scope":"whole process: preparation/relaxation, viability, observed/plain/restart runs, analysis and raw serialization"}

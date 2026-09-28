@@ -8148,3 +8148,119 @@ its outcomes/seeds/horizon first; no Q7b assay has started. Q6b's failed acquisi
 release gate remains failed, and a kinetic pass would still need the complete
 eight-block repair operation before any inherited-function claim. ROADMAP ranks
 this next; NEXT_INSTANCE records the completed evidence and operational handoff.
+
+## 92. The free-face fold beats rebinding but prevents bridge completion
+
+2026-09-28, Q7b; baseline `66e8263`, plan frozen and committed first (`65fad20`).
+[Plan](passive_fold_kinetics_plan.md). **Negative by the frozen gate.** The fold
+candidate from RESULTS 80 is parked.
+
+### Question and contract
+
+RESULTS 80 showed that the existing free-face fold (fold 45, stiffness 0.8) turns
+a freed dimer endpoint out of binding alignment when reactions and kicks are off.
+This assay asks the kinetic question: with ordinary binding and melting running,
+does the fold win the race against rebinding, and does it keep the ability to
+acquire a bridge? There is no direction-sensitive latch: the same own-face rule
+acts before acquisition and after loss. The chemistry is ordinary `Sim.step`,
+with no new type, state, mark, reaction case or knob. Observer pair labels never
+enter reactions.
+
+Material: two AB dimers facing antiparallel, 2 A + 2 B, 24x24, no fuel. Rates are
+the RESULTS 79 values (`pHyb` .2, `pLigate` .02, `pMelt` .1, `pMeltRun` .001,
+`pMeltEnd` -1). Default kicks, `stiffA=stiffB=.8`, `snapCorners` false, `maxStrain` 0.
+Arms: straight (fold 0) and fold45. Physics: body4, individual4, individual16.
+Seeds 7301–7316 (fresh for this fixture), 1,000 kinetic steps, 192 worlds.
+
+- **escape**: the RESULTS 80 fixture, with one face pair removed at t=0 from
+  square actual corners. Primary outcome is **direct escape**: the first face-bond
+  event is the retained pair melting (not the freed pair rebinding), followed by 25
+  steps with no face bonds, exact dimers and all blocks `I_TPL`.
+- **acquire**: no face bonds. Both arms first relax for 100 steps with kicks and
+  reactions at zero, so folded dimers start from their actual free shape. Primary
+  outcome is a **sustained bridge**: both canonical faces bound, dimers exact, for
+  25 consecutive steps.
+
+Gate in every mode: straight bridges >= 8/16 (fixture validity); fold bridges
+>= half of straight's; fold direct escapes exceed straight's by >= 4, with one-sided
+Fisher p <= .05.
+
+```sh
+node experiments/passive_fold_kinetics.js experiments/scratch/PF_20260928.json
+node experiments/passive_fold_kinetics_validate.js experiments/scratch/PF_20260928.json
+node experiments/passive_fold_kinetics_report.js experiments/scratch/PF_20260928.json experiments/scratch/PF_20260928.report.json
+```
+
+### Result
+
+| Physics | Straight bridges | Fold45 bridges | Straight direct escapes | Fold45 direct escapes | Fisher p | Gate |
+|---|---:|---:|---:|---:|---:|---|
+| body4 | 5/16 | 0/16 | 5/16 | 11/16 | .038 | fails validity, retention |
+| individual4 | 7/16 | 2/16 | 4/16 | 9/16 | .074 | fails all three |
+| individual16 | 7/16 | 0/16 | 4/16 | 12/16 | .006 | fails validity, retention |
+
+**The gate fails in every mode.** The fold helps escape: in escape worlds, the
+first face event is a relink in 11/7/7 straight worlds and only 3/6/0 fold45 worlds
+(body4/individual4/individual16). Fold45 releases in 16/13/16 worlds by the horizon,
+against 7/12/12 straight. Occupied face fraction falls from .60/.41/.34 to
+.10/.30/.005. Acquisition fails for the reason the plan predicted. Relaxed fold45
+dimers start 45 degrees from antiparallel, beyond the 40-degree tolerance (gap
+.076), so neither pair is initially eligible. Kicks still permit single-face
+contacts in 11/7/6 fold45 worlds (straight 8/8/7). But binding one face straightens
+only that block, and the partner face stays turned away, as in RESULTS 80. A full
+bridge ever forms in only 0/2/0 fold45 worlds. The fold cannot tell a lost bond
+from one that has not formed yet.
+
+The straight fixture itself is weaker than expected. Although both pairs start
+flush, the first step's kicks move them before binding. Only 8/8/7 straight worlds
+ever bind a face and 5/7/7 sustain a bridge, below the validity floor of 8. That
+does not rescue the fold: its bridge count is lower in every mode and zero in two,
+and the retention criterion fails independently of the floor. Individual4 is the only mode
+where the escape difference misses significance, so the escape benefit is not
+uniform across solver resolution either.
+
+No lateral bond changes, extra joins or births occur. All worlds end with both
+dimers exact. Repeated contacts within a world are not replicates; the world is
+the unit. Sixteen seeds per cell in a prepared four-block fixture are a screen,
+not a population estimate.
+
+### Validity, deviations and cost
+
+The early viability pass (seed 7301 of all twelve cells to kinetic step 50) passed on
+the same instances. All 192 observed runs match plain runs and kinetic-step-500
+restarts (state and RNG, excluding only `pinsVersion`). The separate validator
+recomputes all 96 relaxations and every preparation. It replays all 192 worlds
+through every tape event, frame, midpoint and final state, then recomputes outcomes,
+the gate and Fisher p by independent enumeration. It rejects a corrupted frame,
+tape event and summary; seven synthetic analysis cases pass.
+
+**Deviation:** the runner's built-in `--validate` failed immediately, before any
+replay or output. It compared the current core hash with the RESULTS 80 record, and
+that record hashed a Windows CRLF checkout. Converting today's LF `src/sim.js` to
+CRLF reproduces the archived hash exactly, so the core is unchanged apart from line
+endings. Editing the runner would invalidate its own recorded source hash, so the
+new `passive_fold_kinetics_validate.js` performs the full validation with a
+line-ending-normalized core check. The frozen outcomes and gate are unchanged.
+
+Archive: `out/PF_20260928.json` (SHA-256
+`7ec0a3a32d481d0d75a6fd23993ea8f4435069ff403a2479550cc462fd2b2d58`), `.cpu.json`,
+`.validation.json`, `PF_20260928.report.json`; byte-identical to scratch.
+Physics steps: 9,600 relaxation + 192,000 observed + 192,000 plain + 96,000 restart
+in the run, plus about 203,600 in validation (relaxations, replays and two
+corruption replays), about **693,200** in total. Measured CPU: run 14.343 s,
+validation 6.768 s, report 0.150 s, failed built-in validation about 0.2 s
+(shell `time`), so **about 21.5 s**, far inside the 240 s cap. One process; no
+other simulation ran. Editing, shell/Git and documentation are untimed. Core
+bytes are unchanged (LF checkout), so the full physics suite and default
+fingerprints were not rerun.
+
+### What it says and does not say
+
+It says an own-face shape rule with no latch trades acquisition for release in
+this fixture: it lowers sequestration because it lowers binding. It does not
+test the eight-block repair operation, other fold angles or stiffnesses, bath
+encounters or any reproductive payoff. The plan forbids rescuing it that way. The
+RESULTS 79 failure (acquisition versus release) is now reproduced in its passive
+mechanical form. A mechanism that distinguishes "just lost" from "never formed"
+would need memory or a directional signal. That would be a new state program, and
+this branch has not earned one.
