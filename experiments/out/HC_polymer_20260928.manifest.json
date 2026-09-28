@@ -1,0 +1,174 @@
+{
+  "command": [
+    "C:\\Users\\Bob\\Documents\\plywood-replicator\\experiments\\half_cell_polymer_archive.js"
+  ],
+  "sourceHash": "c1956f57df09f23ed94b7842cfb920f415191c84e0afee6a671c025fd4230cb5",
+  "files": [
+    {
+      "source": "experiments/scratch/HC_polymer_20260928.json.gz",
+      "target": "experiments/out/HC_polymer_20260928.json.gz",
+      "sha256": "6d3e010dc5493fd6c9cde69f59abfdef37a10546e253d9d9e0b0ae80a336fc52",
+      "bytes": 1210
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928.json.gz.cpu.json",
+      "target": "experiments/out/HC_polymer_20260928.json.gz.cpu.json",
+      "sha256": "adfc8e144d748b3f6202bd9499e734b9744d96892e221500c1e01399bfdf2c2c",
+      "bytes": 94
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928.failed-source.js",
+      "target": "experiments/out/HC_polymer_20260928.failed-source.js",
+      "sha256": "e62e36c82673d104a9d6364281ddb0f86f6cf570c2882894cdf6b76100016053",
+      "bytes": 8899
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928_v2.json.gz",
+      "target": "experiments/out/HC_polymer_20260928_v2.json.gz",
+      "sha256": "34e37d9cae2827cf59a890961a137cef2d3034501b8e029b809ea91fca35f949",
+      "bytes": 5692862
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928_v2.json.gz.cpu.json",
+      "target": "experiments/out/HC_polymer_20260928_v2.json.gz.cpu.json",
+      "sha256": "e68429559be0fe6a3a22056c80265aec47fb2341194029ffc4c26dcdb68605b7",
+      "bytes": 103
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928_v2.json.gz.validation.json",
+      "target": "experiments/out/HC_polymer_20260928_v2.json.gz.validation.json",
+      "sha256": "6db8b176231e477667532c2dce0122ca373925d2195caa5d28911aa354cbbbb7",
+      "bytes": 14169
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928_v2.json.gz.validation.json.cpu.json",
+      "target": "experiments/out/HC_polymer_20260928_v2.json.gz.validation.json.cpu.json",
+      "sha256": "1ee4ce0e6c6a0e28ee2923d8de88160438d996bc6c851fa4426eac79b503d50e",
+      "bytes": 97
+    },
+    {
+      "source": "experiments/scratch/HC_polymer_20260928.extensions.json",
+      "target": "experiments/out/HC_polymer_20260928.extensions.json",
+      "sha256": "ff1bbd47ef137d049f589b2d79a2dc2112d590ec67160e9f7dc64b5198f3df5e",
+      "bytes": 896
+    }
+  ],
+  "costs": [
+    {
+      "file": "experiments/out/HC_polymer_20260928.json.gz.cpu.json",
+      "cpuSeconds": 0.608,
+      "steps": {
+        "observed": 0,
+        "plain": 0,
+        "restart": 0,
+        "replay": 0
+      },
+      "complete": false
+    },
+    {
+      "file": "experiments/out/HC_polymer_20260928_v2.json.gz.cpu.json",
+      "cpuSeconds": 15.859,
+      "steps": {
+        "observed": 6400,
+        "plain": 6400,
+        "restart": 3200,
+        "replay": 0
+      },
+      "complete": true
+    },
+    {
+      "file": "experiments/out/HC_polymer_20260928_v2.json.gz.validation.json.cpu.json",
+      "cpuSeconds": 10.234,
+      "steps": {
+        "observed": 0,
+        "plain": 0,
+        "restart": 0,
+        "replay": 6400
+      },
+      "complete": true
+    }
+  ],
+  "testsCpuSeconds": 0.124,
+  "archiveCpuSeconds": 1.374,
+  "measuredCpuSeconds": 28.198999999999998,
+  "timingScope": "Includes failed harness, execution, validation, extension tests and archive process CPU. Shell, editing, Git, one read-only summary inspection and final small bookkeeping writes are unmeasured.",
+  "physicsSteps": 22400,
+  "archivedControlStateAndRngMatches": 16,
+  "onOffFrameComparisons": [
+    {
+      "seed": 701,
+      "mode": "body16",
+      "end": "P",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    },
+    {
+      "seed": 701,
+      "mode": "body16",
+      "end": "Q",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    },
+    {
+      "seed": 701,
+      "mode": "individual16",
+      "end": "P",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    },
+    {
+      "seed": 701,
+      "mode": "individual16",
+      "end": "Q",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    },
+    {
+      "seed": 703,
+      "mode": "body16",
+      "end": "P",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": 7
+    },
+    {
+      "seed": 703,
+      "mode": "body16",
+      "end": "Q",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    },
+    {
+      "seed": 703,
+      "mode": "individual16",
+      "end": "P",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    },
+    {
+      "seed": 703,
+      "mode": "individual16",
+      "end": "Q",
+      "arm": "on",
+      "horizon": 300,
+      "firstDifferentFrame": null
+    }
+  ],
+  "outcome": {
+    "gate": false,
+    "prepared": 8,
+    "onRecruited": 0,
+    "onWorlds": 8,
+    "eligibleOnContacts": 1,
+    "automaticCapTests": 2,
+    "automaticExtensions": 2
+  },
+  "harnessFailure": "Missing size array in the native-M geometry test adapter; fixed before any simulation step. Exact failed source/report retained. No mechanism, parameter or gate change.",
+  "reproduce": "Use the v2 commands in RESULTS 85 with unique output stems. Input is the archived HC_rim_20260928.json.gz; no scratch dependency."
+}

@@ -115,11 +115,28 @@ All eight prepared chain-end fixtures release normally while retaining rims.
 None of eight near/on worlds recruits W in 300 steps. No post-motion contact
 meets the nearly flush endpoint criterion; initial prepared contact is lost
 on the first kick. The on/off paths are identical, so this is not evidence
-of polymer growth occurring at an inconvenient copying stage. The next bounded
-comparison is existing free-block docking for W versus this failed passive
-rule. Do not rescue it with a timing gate or quietly broaden its tolerances.
+of polymer growth occurring at an inconvenient copying stage. The proposed
+free-block docking comparison was superseded by the user's correction below.
 Fresh worlds also expose transient overlap despite the previous prepared
 contact checks; actual acquisition needs geometry measured at the binding phase.
+
+**W should bind automatically like ordinary polymers (user, 2026-09-28).**
+Q8d's `HalfCellPolymerSim` reuses the existing membrane end-corner contact
+criterion and `pMem=.2` association probability. Complementary tips meet;
+the added edge pins provide alignment. Neither copying progress nor fuel is
+consulted. W stays constitutively sticky; membrane raw/active ecology is not
+imported. No new states, tolerance knobs or docking projection are added.
+Both cap roles bind in angled functional tests, and a cap-bound W accepts
+another W on its free end in both directions. Those tests use `pMem=1` to
+verify the operation, without stepping physics or claiming autonomous growth.
+
+The original sparse motion screen remains negative at the normal rate:
+one eligible encounter in 2,400 binding phases, no new bonds in eight worlds.
+That single attempt misses at probability .2. All eight prepared release
+controls still pass. This distinguishes implementing automatic association
+from observing enough physical encounters to assess growth. Keep the simple
+polymer rule; next check angled-contact relaxation and usable free-end geometry
+with actual membrane controls, before a larger bath or curved arc test.
 
 The completed paired-end fixture includes each cap's immediate ordinary chain
 neighbor, one rim stub and fuel access. It checks both P/Q orientations,
@@ -139,6 +156,44 @@ compatible with the chain span, tip encounter and closure, monomer/fuel access,
 and whether whole half-cells renew rather than only their chains. For these next
 tests, no rate, seed, horizon or success gate is frozen yet. Use a proportional plan before simulation,
 accepted body jostling for exploration, and targeted individual-kick/solver checks.
+
+## Energy supply is an open design choice
+
+2026-09-28 user clarification: physical fuel particles are not a requirement;
+consider alternatives if fuel becomes a bottleneck. Q8c's failed W recruitment
+is not evidence of fuel limitation: rim association does not read charge, and
+the phase replay found no eligible rim encounters. Its partial rearming also
+is not a controlled energy-limitation test. Keep those questions separate.
+
+Start with the existing `energyGate=false` diagnostic when investigating repeat
+copying: after the ordinary release state, a rail-connected unit rearms without
+an E contact. This is already a block-local core option, not a new mechanism.
+Keep the same material, including E, in the paired control so fuel obstruction
+is not removed at the same time as the charge requirement. This represents
+externally maintained activation; it is not autonomous energy harvesting or
+an energetic-efficiency result. Do not enable it silently in a frozen assay.
+
+Two simple candidate mechanisms, neither implemented here:
+
+| Candidate | Local action and cost | Question it isolates |
+|---|---|---|
+| Ambient stochastic recharge | An existing released state becomes armed with a fixed per-step probability supplied by the environment. Reads own state and existing rail occupancy; no age, copy-completion or enclosure reader, and no new internal state. Energy comes from an explicitly imposed drive, analogous in role to environmental E recharge. | Can the assembly repeat its operation when recharge has a finite waiting time but no particle-transport requirement? |
+| Fuel on an exposed edge | A released unit accepts a charged E on a free exposed port, spends that E and rearms. For example the currently free copying face could accept E only while released; alternatively a new polygon edge can carry this contact. Keep ordinary letter compatibility distinct. | Does the current inward K-port location obstruct fuel access, rather than the polymer architecture inherently preventing feeding? |
+
+If useful later, charge could also pass across incident polymer/chain bonds,
+but that is a larger mechanism: a donor must spend its charge and any relayed
+availability advances through previous-pass buffers, one bond per derive pass.
+The existing motif-based `feed` rule rearms neighbors without spending a donor
+charge; it is not already this generic transport mechanism. Do not add a
+rewarded motif merely to make the half-cell work.
+
+Before choosing a replacement, compare fully rearmed, detached assemblies that
+copy again, not just the fraction of armed blocks. A radiation test would need
+separate charging and damaging environmental interactions: if polymers block
+the charging input too, its cost must be counted. None of these candidates
+justifies an enclosure bonus, bulk recharge, or exempting rim construction from
+equal-material comparisons. ROADMAP keeps W acquisition first; energy is a
+conditional diagnostic/design branch when repeated copying is tested.
 
 ## Radiation as a possible benefit
 

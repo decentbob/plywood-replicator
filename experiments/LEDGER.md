@@ -63,6 +63,11 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    end criterion. Initial contact is lost after kicking; on/off paths match.
    Fresh initial overlaps up to .235433 also limit generalization from 83's
    prepared contact gate. Retain the interface, park that acquisition setting.
+   Reusing ordinary membrane end-corner capture for W (85) passes cap binding
+   and W/W extension functional tests without fuel/copy-state gating. The same
+   sparse screen still recruits 0/8, with just one eligible failed attempt.
+   This does not establish kinetic growth or refute automatic association;
+   angled-contact relaxation remains a separate mechanical prerequisite.
    Permanent wedges expose a two-row joint mismatch that straight supports do not remove (48). Opposing A/B wedges
    with complementary pairing restore copying under default physics in both directions (49); the benefit weakens with
    poorly resolved individual kicks. Shape and pairing must be tested together, with solver controls.
@@ -355,6 +360,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 82 | Half-cell cap access geometry | Can angled rim ports coexist with ordinary copying/rail and fuel contacts? | research cap/rest polygons; `stiffA`/`stiffP`/`stiffQ`/`stiffC` .8; `sigma` .3, `sigmaRot` .45, body4/individual4/16; chemistry off | lead | 84 static placements pass; attached held gate body4 4/4, individual16 4/4, individual4 0/4; all 24 fixtures clear after imposed face loss, but released overlap reaches .2613 area | half_cell_geometry.js, half_cell_geometry_report.js (`HC_geometry_20260927_v2`) | targeted released-contact comparison and distinct rim interface before chemistry; radiation benefit remains hypothetical | 24 eight-block fixtures, 17,300 physics steps including failed attempt/QA; 11.138 measured CPU s plus untimed preliminary aggregation; exact replay/neutrality/restart pass; first cache failure/source snapshots retained; no arc growth, ordinary release, descendants or core change |
 | 83 | Half-cell contact and solver check | Can existing polygon exclusion control released overlap while retaining cap access? | core/polygon contacts; body4/individual16, then separately frozen body16; same Q8a inventory/kicks/stiffness; chemistry off | lead | original polygon gate 15/16 (fails); body4 A/A overlap .07367 after final pin correction, A/E .21565; body16 follow-up 8/8 plus individual16 reference 8/8 pass all-pair bound, maxima .001207/.000678 | half_cell_contact.js, half_cell_contact_validate.js, half_cell_resolution.js (`HC_contact_20260927_v2`, `HC_resolution_20260927`) | Q8c distinct rim interface and local association at body16/individual16; body4 parked for this assay | 32 paired worlds plus 8 resolution worlds; 28,116 physics steps including replay/diagnosis; 28.539 measured CPU s including failures/archive; full replay, neutrality/restarts and corruption checks; two harness failures retained; reused seeds, no chemistry, descendants or core edits |
 | 84 | Separate rim chemistry and recruitment | Can a cap retain chain semantics and acquire W through local end contacts? | research `rimBind` on/off; separate rim bonds; fixed end labels, .1 gap/10-degree normals; body16/individual16; seeds 701/703 | negative | prepared release 8/8 at t1, stubs retained; near/on recruitment 0/8 versus off 0/8; zero eligible encounters at 2,400 binding phases; transient initial overlap up to .235433 | half_cell_rim.js, half_cell_rim_assay.js, half_cell_rim_diagnose.js (`HC_rim_20260928`) | retain interface; freeze existing free-W docking comparison against failed passive rule/off control; no timing/tolerance/horizon rescue | 24 worlds; 24,823 physics steps including tests/QA/diagnosis; 32.980 measured CPU s; full replay/neutrality/restart, 12 chemical cases and four corruption checks; no curved arc, full chain acquisition or descendants; core unchanged |
+| 85 | Ordinary polymer capture for W | Does reusing native polymer attachment remove an unnecessary alignment restriction? | `pMem`=.2, existing `memLinkTol`/`linkDistTol`; W always sticky; same Q8c worlds; no fuel/state gate | negative | functional cap attachment 2/2 and W/W extension 2/2; native-M geometry 24/24; prepared release 8/8; sparse recruitment 0/8 with only one eligible attempt in 2,400 phases | half_cell_polymer.js, half_cell_polymer_assay.js, half_cell_polymer_test.js (`HC_polymer_20260928_v2`) | retain simple automatic binding; retire sparse preparation; check angled-contact relaxation against native M before curved growth | 24 worlds; 22,400 physics steps; 28.199 measured CPU s; full replay/neutrality/restart, 16 archived control state/RNG matches, four corruption checks; missing-size test-adapter failure/source retained; no kinetic promotion or core changes |
 
 ## Knob index
 
@@ -396,13 +402,13 @@ the rows that used it). Rerun it after adding rows.
 | `hinge` | 10 (superseded) |
 | `hingeMax` | 10 (superseded) |
 | `iters` | 37 (works), 49b (lead), 50a (works), 50b (works), 58 (negative), 67 (partial), 68 (works), 69 (negative), 70 (negative), 80 (lead) |
-| `linkDistTol` | 69 (negative) |
+| `linkDistTol` | 69 (negative), 85 (negative) |
 | `make` | 16c (negative), 24 (negative) |
 | `maxStrain` | 23 (works), 23b (works) |
 | `maxStrainStrand` | 23 (works) |
 | `memAngle` | 11 (superseded), 12b (inconclusive), 16 (negative), 16b (negative), 16d (negative), 24c (works) |
 | `memFlex` | 11 (superseded) |
-| `memLinkTol` | 24b (negative), 24c (works), 25c (works) |
+| `memLinkTol` | 24b (negative), 24c (works), 25c (works), 85 (negative) |
 | `memPerm` | 24 (negative) |
 | `mobA` | 28 (lead) |
 | `mobC` | 35 (inconclusive) |
@@ -437,6 +443,7 @@ the rows that used it). Rerun it after adding rows.
 | `pMelt` | 18 (negative), 78 (lead), 79 (negative) |
 | `pMeltEnd` | 18b (negative), 78 (lead), 79 (negative) |
 | `pMeltRun` | 78 (lead), 79 (negative) |
+| `pMem` | 85 (negative) |
 | `pMemDecay` | 16c (negative) |
 | `pMisDock` | 30 (partial) |
 | `pMisMelt` | 36c (works), 43a (negative) |

@@ -30,6 +30,12 @@ The [audit](docs/RESEARCH_AUDIT.md) distinguishes that exception, side-interface
 and demonstrated operations from evolved complexity. [ROADMAP.md](ROADMAP.md) ranks
 next work; historical handoffs and literature shortlists are not the current queue.
 
+The isolated half-cell prototype uses ordinary polymer end-corner capture for
+W blocks, including cap attachment and W/W growth, without fuel or copying-state
+gates. Functional attachment tests pass; autonomous arc growth and a reproducing
+half-cell remain unproven ([RESULTS 85](experiments/RESULTS.md#85-w-uses-ordinary-polymer-end-corner-capture)).
+This research subclass does not change the default viewer chemistry.
+
 ## Run it
 
 Open `index.html` in a browser (it loads `src/sim.js`; no build step, no

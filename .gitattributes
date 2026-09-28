@@ -55,3 +55,6 @@ experiments/out/HC_resolution*.gz binary
 experiments/half_cell_rim* text eol=lf
 experiments/out/HC_rim_20260928* text eol=lf
 experiments/out/HC_rim_20260928*.gz binary
+experiments/half_cell_polymer* text eol=lf
+experiments/out/HC_polymer_20260928* text eol=lf
+experiments/out/HC_polymer_20260928*.gz binary

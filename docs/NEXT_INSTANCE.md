@@ -1,38 +1,44 @@
 # Next-instance handoff — 2026-09-28
 
 Read ROADMAP.md, the sole queue. Q8 is the user's two independent D-shaped
-half-cells: each chain is its own straight boundary and its own arc connects
-its caps. Copy outward, build a separate arc, release ordinary face bonds;
-closure after release is allowed. No shared old wall must split; extra sides
-are allowed. No complete cell has yet been built or reproduced.
+half-cells: a chain forms each straight boundary, its own arc connects its
+caps, and ordinary copying-face release separates them. Closure after release
+is allowed. Extra polygon sides are allowed. No complete cell has reproduced.
 
-Q8c (RESULTS 84) is complete and its combined gate failed. The new research
-HalfCellRimSim keeps reciprocal rimBond separate from ordinary chemistry, while
-physics sees the mechanical union. P+/Q- and W-/+ end labels add no chemical
-states. In deterministic tests rim occupancy cannot replace the inward rail,
-change cap end signals or keep a rail-less cap armed. Supplied fuel rearms;
-attached caps are not snapped alone onto faces. Mechanical union and restart pass.
+User correction implemented in Q8d (RESULTS 85): W should bind automatically
+like other polymers. HalfCellPolymerSim reuses native membrane end-corner
+geometry and pMem=.2, with fixed complementary rim labels and no fuel/copy
+state gate, new states or projection. It inherits the separate rim interface
+and mechanical union from Q8c; core and historical sources remain unchanged.
+Functional cap attachment and extension of cap-bound W in both directions pass.
+Twenty-four geometry decisions match the actual native-M branch. Those tests
+use pMem=1 and no physics steps; they do not establish angled relaxation.
 
-Eight prepared fixtures release normally at t1 and retain rim stubs; final
-geometry passes. Near/on recruitment fails 0/8, with zero eligible encounters
-at 2,400 post-motion binding phases. Initial contacts were eligible but lost
-after kicking; on/off paths match. Park the .1-gap/10-degree passive acquisition
-setting. No arc timing gate, longer horizon or tolerance rescue is warranted.
-Fresh worlds show transient t1 overlap up to .235433 already after physics;
-final-window success does not establish all-time exclusion or a sealed wall.
+The same sparse motion screen still recruits 0/8. Only one eligible encounter
+occurs in 2,400 on binding phases, at t6 seed703/body16/P, and its stochastic
+attempt fails. Seven on/off paths match; the eighth diverges at t7 after the
+extra RNG draw. Prepared release remains 8/8, and all 16 prepared/off final
+states and RNG match archived Q8c. Transient overlap up to .235433 remains;
+final-window geometry is not all-time exclusion or a sealed wall.
 
-Next Q8d: freeze one comparison using the existing free-block docking operation
-for mechanically free W, versus failed passive binding/off. Attached parts stay
-in place. Measure actual post-motion opportunities, polygon vacancy, pin and
-overlap outcomes before claiming acquisition. Use body16/individual16; default
-core remains unchanged. Curved rim growth and ordinary full-chain acquisition
-come only after this prerequisite. Radiation benefit remains hypothetical.
+Next Q8e is not frozen: short prepared angled cap/W and W/W capture followed
+by pin relaxation, with native membrane and binding-off controls, both motion
+modes, actual overlap/pins/free-end access. Keep automatic polymer chemistry;
+retire the sparse preparation. No longer run, fuel/timing gate or projection
+rescue. The previously proposed free-W docking comparison is superseded by the
+user correction and was never run. Curved arcs and bath growth remain later.
 
-Evidence: experiments/out/HC_rim_20260928.manifest.json and matching raw/tests/
-validation/diagnosis/SVG artifacts. Assay and validator name a fixed scratch
-tests file: restore its exact archived copy if absent, refuse overwrite.
-All 24 neutrality/restart checks and 6,424 frame replays pass; no harness run
-failed. 24,823 physics steps, 32.980 measured CPU seconds including QA/archive;
-small final bookkeeping and shell work unmeasured. Core/historical sources
-unchanged; no full core suite/fingerprint rerun. No task simulation or agent
-is active. Q7 remains deferred.
+User also permits alternative fuel mechanisms. The cap memo records existing
+energyGate=false as a same-material diagnostic, plus unimplemented ambient
+recharge/exposed-edge E capture. No energy setting changed in Q8d; missing rim
+contacts do not implicate fuel. Explicit external drive is not harvesting.
+
+Evidence: experiments/out/HC_polymer_20260928.manifest.json, v2 raw/validation,
+extension tests and failed initial harness/source. Missing size in a native-M
+test adapter was fixed before any simulation step. No mechanism/gate retuning.
+24 neutrality/restart checks, 6,424 frame replays, four corruption checks pass.
+22,400 physics steps, 28.199 measured CPU seconds including failure/archive;
+one read-only inspection, shell/editing/Git and final bookkeeping unmeasured.
+Input is archived HC_rim_20260928.json.gz; no scratch prerequisite. Use unique
+rerun stems. Full core suite/default fingerprints not rerun (core hashes fixed).
+No task simulation or agent is active. Q7 remains deferred.

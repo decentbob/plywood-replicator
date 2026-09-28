@@ -7269,3 +7269,103 @@ bookkeeping/manifest writes, shell, editing and Git are unmeasured. The fully
 inclusive cap is therefore not independently verified. One process/no workers,
 no other repository simulation found; none remains active. Core/historical
 bytes are unchanged; the full core suite/default fingerprints were not rerun.
+
+## 85. W uses ordinary polymer end-corner capture
+
+2026-09-28, Q8d. The user asks why W does not attach automatically like other
+polymers. Q8c imposed an unnecessary nearly-flush edge requirement. The
+[frozen correction](half_cell_polymer_plan.md) replaces it with the existing
+membrane end-corner criterion and probability in an isolated subclass,
+`HalfCellPolymerSim`. This supersedes the proposed free-W docking comparison;
+no projection experiment was run. Core and historical source bytes stay fixed.
+
+### Rule and functional checks
+
+P+/W+ use the native membrane R endpoint role; Q-/W- use L. Unoccupied,
+complementary end corners can bind within `(memLinkTol || linkDistTol)` times
+mean size, if the side normals have dot product <=0. Existing defaults give
+distance .1125 for cap/W, .075 for W/W and `pMem=.2` per eligible contact.
+Binding writes one reciprocal incident rim bond without changing either pose.
+Existing edge pins subsequently act on it. W is always sticky: M's raw/active
+ecology is not imported. No copying-progress, fuel, ancestry or observer read,
+new state, conversion, tolerance knob or rule for a whole assembly is added.
+The inherited mechanical bond union/body jostling exception remains as in 84.
+
+Twenty-four geometry decisions (P/Q, angles 0/30/90/120 degrees, offsets
+0/.06/.2) match the actual core M geometry branch via a physical-array adapter.
+Both 30-degree cap encounters attach despite failing the old two-end gap
+criterion. Six state/energy settings, wrong labels, binding-off and unchanged
+poses pass. Additional functional tests extend an already cap-bound W at
+either free end, retain its cap attachment, reject occupied ports/zero rate,
+preserve poses/material/ordinary bonds and restore the newly formed bonds.
+These deterministic attachment tests use `pMem=1` and do not step physics;
+they establish association behavior, not stable angled relaxation or bath growth.
+
+### Same-world kinetic screen
+
+Reuse 84's 24 exact initial worlds: seeds 701/703, P/Q ends, body16/individual16,
+prepared 200 steps and near/on/off 300 steps. All inventories, shapes, kicks,
+ordinary chemistry and the gate are unchanged. Each world has P,Q, two A,
+two W and two E. Only the rim association method changes; kinetic `pMem=.2`.
+
+| Motion / end | Prepared release gate | Near/on sustained recruitment | Near/off recruitment | Eligible on encounters |
+|---|---:|---:|---:|---:|
+| body16 / P | 2/2 | 0/2 | 0/2 | 1 |
+| body16 / Q | 2/2 | 0/2 | 0/2 | 0 |
+| individual16 / P | 2/2 | 0/2 | 0/2 | 0 |
+| individual16 / Q | 2/2 | 0/2 | 0/2 | 0 |
+
+The combined gate fails, with no new bonds of any kind. One eligible encounter
+occurs at t6 in seed703/body16/P/on and the .2-probability attempt misses.
+The old criterion admits none. Across all eight on worlds there are 2,400
+binding phases, not 2,400 independent contact opportunities. Seven on/off
+frame sequences match; the eighth diverges at t7 after the extra RNG draw,
+despite no new bond. Do not claim later event-by-event matching. Prepared/off
+controls match all archived frames and all 16 final physical states/RNG.
+
+All prepared worlds release their initial face contacts at t1 and retain rims;
+all final-window geometry gates pass. Transient maximum overlap remains
+.235433 and maximum pin residual .106373 across the full batch, so this is
+not all-time exclusion. Prepared arms retain both W; all on/off W stay free.
+There is no new daughter arc, W/W product, autonomous full-chain assembly,
+complete half-cell, descendant renewal or evidence about radiation advantage.
+
+Keep the simpler automatic polymer rule, while recording this preparation's
+failed acquisition gate. A single failed stochastic contact is not evidence
+that W needs a copying timer or fuel. Retire the sparse near-contact screen;
+next freeze a short prepared cap/W and W/W angled-contact relaxation check
+against actual membrane/binding-off controls, measuring pins, overlap and
+free-end access under both motion modes. Do not promote to a longer bath run
+or add states on this evidence. Fuel alternatives are recorded separately in
+the cap memo; no energy mechanism or setting changed here.
+
+### Reproduction, failures and cost
+
+```
+node experiments/half_cell_polymer_assay.js experiments/scratch/HC_polymer_20260928_v2.json.gz
+node experiments/half_cell_polymer_assay.js --validate experiments/scratch/HC_polymer_20260928_v2.json.gz
+node experiments/half_cell_polymer_test.js experiments/scratch/HC_polymer_20260928.extensions.json
+node experiments/half_cell_polymer_archive.js
+```
+
+Use unique stems for assay/test reruns. Input is the archived 84 raw file, with
+no scratch dependency. The first attempt, stem without `_v2`, failed because
+the native-M test adapter omitted its size array. It ran zero physics steps.
+The exact failed source/raw/CPU record are retained; adding that array fixed
+only the test harness, without changing mechanism, parameters or gate.
+
+All 24 observer/plain comparisons and midpoint restarts pass. Validation
+replays 6,424 frames, recomputes metrics/gates and rejects four corruptions
+(corner, job label, rim list, aggregate). The manifest verifies source/input
+hashes and byte-identical archive copies, plus archived control state/RNG.
+[Manifest](out/HC_polymer_20260928.manifest.json),
+[raw](out/HC_polymer_20260928_v2.json.gz).
+
+Total **22,400 physics steps**: observed/plain/restart 16,000, validation 6,400;
+functional tests and failed attempt step no physics. Measured CPU **28.199s**:
+failed harness .608, execution 15.859, validation 10.234, extension tests .124,
+archive 1.374. Includes startup/compression; one read-only summary inspection,
+shell/editing/Git and final small bookkeeping writes are unmeasured. The fully
+inclusive 180s cap is not independently verified. One process/no workers,
+none remains active. Historical/core hashes verified unchanged; full core
+suite/default fingerprints were not rerun for this isolated research change.

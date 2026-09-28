@@ -59,15 +59,29 @@ states. Fresh runs also expose transient first-step overlap up to .235433,
 already present after physics. The earlier geometry bound is not universal.
 Final-window geometry passes; no stable impermeable boundary is established.
 
+**Q8d restores ordinary polymer capture (RESULTS 85).** The user correctly
+questioned Q8c's extra alignment restriction. W now uses the existing membrane
+end-corner geometry and `pMem` probability, independently of fuel/copying state.
+Functional tests attach W to both cap roles and extend cap-bound W at either
+end; binding adds pins without projecting parts. All 24 native-M geometry
+comparisons pass. The unchanged eight-world motion screen still recruits 0/8:
+only one eligible encounter occurs in 2,400 binding phases and its .2-probability
+attempt fails. This is failed acquisition in that preparation, not evidence
+against automatic polymer chemistry. Prepared controls remain 8/8. Keep this
+simpler rule, retire the sparse near-contact screen, and check the mechanical
+consequence of angled capture before scaling. No kinetic promotion is earned.
+
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8d: compare W recruitment with existing free-block docking | Keep the tested separate rim interface. Freeze one comparison between the failed passive edge-contact rule and the same single-free-block docking operation used by ordinary monomers, with binding disabled as control. Only mechanically free W may be projected; attached parts remain in place. Establish actual post-motion contact opportunities, vacancy and pin/overlap bounds before interpreting capture. Use body16/individual16, no timer/ancestry gate, tolerance sweep or longer-run rescue. |
+| 1 | Q8e: mechanics of ordinary polymer end growth | Freeze a short prepared-contact test of angled cap/W and W/W capture followed by edge-pin relaxation, with native membrane and binding-off controls. Use existing rates/geometry and body16/individual16. Measure actual corner gaps, overlap, retained attachment and free-end access. Q8d's functional tests do not establish post-capture mechanics. Separate imposed contacts from bath recruitment; do not rerun the sparse screen longer or add a timer, fuel gate or projection rule. |
 | 2, only if access passes | Daughter arc growth with ordinary chain copying/release | Prepare one D-shaped seed and conserved free material. Test end growth and tip closure without a timing gate first; closure after release is allowed. Record cross-links, partial arcs and chains separately from completed half-cells. No shared-wall division program is required by the proposed topology. |
 | 3, only after autonomous operation passes | Reproductive closure and useful inheritance | Both half-cells must repeat chain copying, new-arc assembly and separation from conserved free material. Charge rim costs, compare equal-material bare chains, and measure rearming, retained function and variant transmission through turnover. |
 
 Q8 follows the user's new direction; old repair/wall failures remain failed.
-Q8a–Q8c are complete; Q8c's combined gate failed. Q8d is not frozen.
+Q8a–Q8d are complete; Q8c/d's combined gates failed. Q8e is not frozen.
+The user's automatic-polymer correction supersedes the proposed free-W
+docking comparison; that comparison was not executed.
 The brief's alternatives are a design portfolio,
 not concurrent experimental queues. Do not add states just to finish a cell outline.
 
@@ -78,6 +92,15 @@ ray particles can be blocked by M; a new W needs that explicit physical behavior
 not an observer's enclosure bonus. The straight copying boundary remains exposed,
 so protection may be partial. Charge rim construction, sequestration, feeding and
 copying costs; old walled-world extinctions (25) remain relevant negative evidence.
+
+**Energy flexibility (user, 2026-09-28).** Physical E particles are not a design
+requirement. For a demonstrated rearming bottleneck, first use the existing
+`energyGate=false` option as a same-material diagnostic. The [cap memo](docs/POLYMER_CAPS.md)
+records ambient stochastic recharge and exposed-edge E capture as possible
+simple alternatives; neither is implemented. Treat environmental activation
+as an explicit drive, not an evolved harvesting function. Q8c's W acquisition
+failure occurs before binding and does not implicate fuel. Keep polymer mechanics first;
+freeze any energy comparison separately, with actual repeat-copying outcomes.
 
 ## Deferred Q7b: admission and constraints preserved
 
