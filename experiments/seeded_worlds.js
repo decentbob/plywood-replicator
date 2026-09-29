@@ -47,3 +47,11 @@ function census(s){
   return {chains,freeStruct};
 }
 module.exports={COMB,createWorld,census};
+// Enzyme cell (COMPLEXITY_MAP 3c, process M): W starts blank (kind 0), catchable only by a writer. B's back seeds a
+// D writer whose K port writes kind 1; kind-1 W carries the half-cell wall labels, so only a chain that carries B
+// makes its own wall material. Unattached wall-kind W forgets back to blank at pForget.
+const {HALF_CELL}=require('./seeded_growth');
+const ENZYME_CELL={structural:[T_C,T_D],labels:{[T_P]:HALF_CELL.labels[T_P],[T_Q]:HALF_CELL.labels[T_Q],
+  [T_B]:{[K]:{f:2,s:1,seed:true}},[T_D]:{[F]:{f:2,s:-1},[K]:{f:9,s:1,write:1}}},
+  programmable:{type:T_C,pForget:1e-4,kinds:{0:{[F]:{f:9,s:-1},[K]:{f:9,s:-1}},1:{[F]:{f:1,s:-1},[K]:{f:1,s:1}}}}};
+module.exports.ENZYME_CELL=ENZYME_CELL;

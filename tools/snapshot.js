@@ -15,7 +15,8 @@ const fill={A:'#9cc3e6',B:'#5f8fd6',C:'#8fcf9f',D:'#c9a0f0',E:'#ffe36e',J:'#f3b0
 const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+30}" viewBox="0 0 ${S} ${S+30}">`,`<rect width="${S}" height="${S+30}" fill="#f5f7f8"/>`,`<rect width="${S}" height="${S}" fill="#15222d"/>`];
 for(let u=0;u<s.n;u++){
   const pts=[];for(let q=u*NV,e=q+s.corners(u);q<e;q++)pts.push(`${((s.px[u]+s.ox[q])*k).toFixed(1)},${((s.py[u]+s.oy[q])*k).toFixed(1)}`);
-  svg.push(`<polygon points="${pts.join(' ')}" fill="${fill[TNAME[s.type[u]]]||'#ccc'}" stroke="#2c4452" stroke-width=".6"/>`);
+  const programmed=s.kind&&s.kind[u]>0;   // programmable blocks: a written kind is drawn darker
+  svg.push(`<polygon points="${pts.join(' ')}" fill="${programmed?'#2f9e5a':fill[TNAME[s.type[u]]]||'#ccc'}" stroke="#2c4452" stroke-width=".6"/>`);
 }
 svg.push(`<text x="8" y="${S+20}" font-family="Arial,sans-serif" font-size="14" fill="#233542">${(opt('--title')||path.basename(input)+' t='+s.t).replace(/</g,'&lt;')}</text></svg>`);
 const svgFile=out.endsWith('.png')?out.replace(/\.png$/,'.svg'):out;fs.writeFileSync(svgFile,svg.join('\n'));
