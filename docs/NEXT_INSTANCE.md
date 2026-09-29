@@ -35,3 +35,4 @@ byte identity (AGENTS). Q8k (RESULTS 95): the half-cell runtime is 6x faster
 because one inventory is too little material. Q8l (abundant soup) is next or running;
 see ROADMAP. Ideas live in `docs/IDEAS.md`.
 
+Q8m/n (RESULTS 97–98): the anchor rule gives daughters and grand-daughters (screen tier). Next: ROADMAP order 1.

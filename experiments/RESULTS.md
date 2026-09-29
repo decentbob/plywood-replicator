@@ -8555,3 +8555,63 @@ connectivity outline, not a sealed wall.
 **Next (earned by the lead):** more fresh seeds and a longer horizon under the anchor rule,
 with observer-only parent tracking from the face-bond tapes, to test whether daughters
 become parents (generation 2+) and how material limits the count.
+
+## 98. Daughters become parents: second-generation half-cells
+
+2026-09-29, Q8n. [Plan](half_cell_generations_plan.md). **Reproduction lead** by the
+frozen reading (screen tier, exploratory): a closed generation-2 D formed in 3/12 worlds.
+
+Setup as Q8m (anchor rule, K=4 soup in 24x24, founder D plus four loose inventories,
+body motion, 16 passes), with fresh seeds 1301–1306, 150,000 steps, arms anchorProject
+and anchorPins.
+
+**Parentage (observer only).** The live tracker sampled every 100 steps, but a finished
+copy releases within about 70 steps, so the first summary had every parent unknown. After
+that summary, parentage was computed post hoc from the tape (`parentage` in
+`half_cell_generations.js`). For each new chain, each unit's last face link before the
+chain's first sighting is mapped to the chain containing the partner, and the units vote.
+No lateral bond ever breaks in these worlds (no fraying or radiation), so chain
+identities are permanent and the mapping is unambiguous. The definitions of generation,
+closure and separation are unchanged from the plan.
+
+| Arm / seed | New chains (gen 1 / gen 2) | Closed D (gen 1 / gen 2) | Separated | Times: gen 1 born → closed; gen 2 born → closed |
+|---|---|---|---:|---|
+| project / 1301 | 1 / 1 | 0 / 0 | 0 | 66,600; 109,900 |
+| project / 1302 | 2 / 0 | 0 / 0 | 0 | 48,800; 68,000 |
+| project / 1303 | 1 / 1 | 0 / **1** | 1 | 29,800; 117,300 → 117,300 |
+| project / 1304 | 0 / 0 | 0 / 0 | 0 | – |
+| project / 1305 | 1 / 1 | 1 / 0 | 1 | 60,400 → 66,000; 103,200 |
+| project / 1306 | 1 / 0 | 0 / 0 | 0 | 121,600 |
+| pins / 1301 | 1 / 1 | 1 / 0 | 1 | 11,300 → 22,200; 22,400 |
+| pins / 1302 | 1 / 1 | 1 / **1** | 1 | 8,100 → 29,600; 31,400 → 79,400 |
+| pins / 1303 | 1 / 1 | 1 / 0 | 0 | 7,700 → 33,200; 19,800 |
+| pins / 1304 | 2 / 0 | 0 / 0 | 0 | 23,200; 48,600 |
+| pins / 1305 | 2 / 1 | 2 / **1** | 2 | 39,700 → 39,700; 76,800 → 82,000; 118,600 → 149,600 |
+| pins / 1306 | 2 / 0 | 2 / 0 | 0 | 22,300 → 38,400; 31,900 → 59,600 |
+
+Generation-2 chains (templated on a daughter) form in **7/12 worlds** (pins 4/6, project
+3/6), and closed generation-2 Ds in **3/12** (pins 1302 and 1305, project 1303). Pins
+reaches closed daughters sooner and more often (closed gen-1 in 5/6 worlds versus 1/6).
+Every world conserves its 72 blocks. With only four spare inventories, at most four new Ds
+can ever form, and chains never die, so these worlds cannot show sustained turnover.
+A figure of pins 1302 (actual polygons at the lineage events, from a deterministic
+replay checked against the saved final state) is in `out/HCG_20260929_gen2.svg`.
+
+**What it says:** under fixed local rules (ordinary chain copying and release, W
+end-capture, and the anchor condition), a D-shaped half-cell assembles copies of
+itself from loose conserved parts, and those copies make further copies. This is the
+project's first screen-tier evidence of multi-generation reproduction of an assembly
+with two distinct parts (chain and wall).
+
+**What it does not say:** it is a screen, exploratory body motion was used with overlap up
+to about .025, and a prepared founder starts it. Material is finite, with no death,
+turnover or selection. The sequence is fixed (P-A-A-Q), so there is no heritable
+variation yet. Individual-kick sensitivity, fresh-seed confirmation, closure persistence
+and a sealed-wall benefit are all untested. The parentage fix came after the first summary
+(declared here). QA: the first seed per arm passed plain and midpoint-restart checks.
+CPU: about 9,800 s across four workers.
+
+**Next:** a confirmation-tier plan per AGENTS. It needs fresh seeds, the full QA tier, and
+the rate-robustness (dt 1/4) or individual-kick check this claim calls for. It also needs a
+turnover setting (some decay) so reproduction can continue beyond four copies, and then
+heritable variation (e.g. a second letter type in the chain).

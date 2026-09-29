@@ -19,7 +19,7 @@ const W=r.initial.p.W,S=380,cols=Math.min(3,frames.length),rows=Math.ceil(frames
 const width=24+cols*PW,height=110+rows*PH+60,svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,`<rect width="${width}" height="${height}" fill="#f5f7f8"/>`];
 const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const text=(x,y,v,z=15,c='#233542')=>svg.push(`<text x="${x}" y="${y}" font-family="Arial,sans-serif" font-size="${z}" fill="${c}">${esc(v)}</text>`);
-text(24,32,`Half-cell soup with anchored rim growth (Q8m) · K=${r.job.k} · ${r.job.arm} · seed ${r.job.seed}`,22);
+text(24,32,`Half-cell soup with anchored rim growth · K=${r.job.k??4} · ${r.job.arm} · seed ${r.job.seed}`,22);
 text(24,56,'Actual polygons from a deterministic replay (final state matches the saved run). Body motion, 16 passes.',14);
 const fill={A:'#9cc3e6',P:'#f0a35e',Q:'#e4785a',C:'#8fcf9f',E:'#ffe36e'};
 frames.forEach((q,j)=>{

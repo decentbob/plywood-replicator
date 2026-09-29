@@ -47,19 +47,21 @@ cycles and ligation keep reproducing templates longer under radiation (L 6.9/5.6
 12–18 against 85–88 late births. This is ligation accumulation plus sequestration,
 not protection of an arrangement. Closed without rescue.
 
-**Q8 half-cells reopened (RESULTS 95, user interest 2026-09-29).** Under the speed/logic
-policy (body motion for exploration), the live half-cell runtime now has a 6x faster,
-bit-identical solver path (`experiments/half_cell_fast.js`). In-place capture was not
-the bottleneck. With one offspring's inventory, assembly is starved: 2–3 face dockings
-per 50k steps. Q8l tests an abundant soup (`half_cell_soup.js`: founder D plus K loose
-inventories). RESULTS 91's failed gate stays failed; this is exploration.
+**Q8 half-cells reproduce across generations in screens (RESULTS 95–98).** Speed:
+the half-cell runtime is 6.4x faster with bit-identical test trajectories. Diagnosis: with
+one inventory, assembly starves (95); in an abundant soup, loose caps sequester the rim W
+(96). Fix: rims grow only from anchored ends, a local own-bond condition (97). Result:
+daughters form, separate and template grand-daughters. Generation-2 chains appear in 7/12
+fresh worlds and closed generation-2 Ds in 3/12 (98). This is screen tier with
+exploratory body motion, finite material and no turnover or variation. RESULTS 91's
+failed gate is unchanged.
 
 ## Queue
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8l: half-cell copying in an abundant soup ([plan](experiments/half_cell_soup_plan.md)) | Running. A lead is a separated (unpaired) novel closed D in any world; novel chains without closure are partial. A lead earns a repeated-generation soup; a failure points to the W sequestration or chain-assembly step, diagnosed from the saved tapes before any new mechanism. Other candidates stay recorded in [docs/IDEAS.md](docs/IDEAS.md). |
+| 1 | Q8o: confirm half-cell reproduction, then add turnover | Freeze a confirmation-tier plan: fresh seeds, full QA, and a rate-robustness rung (dt 1/4) or individual kicks. Parentage comes from face-bond tapes at event resolution. Then a turnover setting (slow chain or rim decay recycling parts) to test sustained reproduction beyond the material limit, and heritable variation (a second letter) for selection. Compare with equal-material bare chains before any benefit claim (radiation protection is the user's hypothesis). |
 | Decided | Exploration time step | Keep dt 1 for exploration (user delegated, 2026-09-28). Finer-step rung only for confirmation-tier claims resting on a quantitative binding/release race. Core micro-optimisation was tried on a scratch copy: hoisting solver loop lookups kept fingerprints identical but gave no measurable speedup, so core code is unchanged. |
 | Retired | Q9b finer-step convergence and RESULTS 79 re-screen | Not pursued (user direction 2026-09-28): the default step stays; RESULTS 93 marks default-step contact rates as qualitative. Q7b's failure is logical (no latch), not a step artifact. |
 

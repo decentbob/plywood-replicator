@@ -42,14 +42,34 @@ function job(stem,arm,seed){
 }
 function all(stem){const list=jobs();let next=0,n=0;const go=()=>{while(n<4&&next<list.length){const j=list[next++];n++;
   spawn(process.execPath,[__filename,'job',stem,j.arm,String(j.seed)],{stdio:['ignore','inherit','inherit']}).on('exit',c=>{n--;if(c)console.error('FAILED',JSON.stringify(j));go();});}};go();}
+// Post-hoc parentage from the tape (observer only). The live tracker samples every 100 steps, but a finished copy
+// releases within about 70 steps, so it saw new chains only after release (all parents unknown; fixed 2026-09-29,
+// after the first summary). For each novel chain, take each unit's last face link at or before the chain's first
+// sighting, map the partner to the most recently born earlier identity containing it, and vote.
+function parentage(r){
+  const L=r.lineage.map(x=>({...x}));L[0].gen=0;
+  const order=L.map((x,i)=>i).sort((a,b)=>L[a].born-L[b].born);
+  for(const i of order){if(i===0)continue;const c=L[i],votes={};
+    for(const u of c.units){
+      const face=r.tape.filter(e=>e.op==='link'&&e.t<=c.born&&(e.a&3)===0&&(e.b&3)===0&&((e.a>>2)===u||(e.b>>2)===u)).at(-1);
+      if(!face)continue;const p=(face.a>>2)===u?face.b>>2:face.a>>2;
+      const cand=L.map((x,k)=>k).filter(k=>k!==i&&L[k].born<=c.born&&L[k].units.includes(p)).sort((a,b)=>L[b].born-L[a].born)[0];
+      if(cand!==undefined)votes[cand]=(votes[cand]||0)+1;}
+    const best=Object.entries(votes).sort((a,b)=>b[1]-a[1])[0];
+    c.parentIndex=best?+best[0]:null;c.gen=best&&L[best[0]].gen!=null?L[best[0]].gen+1:null;c.votes=votes;}
+  return L;
+}
 function summary(stem){
-  const rows=jobs().map(j=>{const r=kit.read(`${stem}_${j.arm}_${j.seed}.json.gz`),L=r.lineage;
+  const rows=jobs().map(j=>{const r=kit.read(`${stem}_${j.arm}_${j.seed}.json.gz`),L=parentage(r);
     const gens=g=>L.filter(x=>x.gen===g);
     return {...j,chains:L.length-1,gen1:gens(1).length,gen2:gens(2).length,gen3plus:L.filter(x=>x.gen>=3).length,unknownParent:L.filter(x=>x.gen===null).length,
       closedGen1:gens(1).filter(x=>x.closed).length,closedGen2:L.filter(x=>x.gen>=2&&x.closed).length,
-      separated:L.filter(x=>x.gen>0&&x.detached).length,checked:r.checked,cpu:Math.round(r.cpuSeconds)};});
+      closedAny:L.filter((x,i)=>i>0&&x.closed).length,separated:L.filter((x,i)=>i>0&&x.detached).length,
+      lineage:L.map(x=>({gen:x.gen,born:x.born,closed:x.closed,parent:x.parentIndex??null})),checked:r.checked,cpu:Math.round(r.cpuSeconds)};});
   const lead=rows.some(r=>r.closedGen2>0),partial=rows.some(r=>r.gen2>0);
   kit.write(stem+'.summary.json',{rows,lead,partial});for(const r of rows)console.log(JSON.stringify(r));console.log(JSON.stringify({lead,partial}));
 }
-const [mode,stem,...a]=process.argv.slice(2);
-if(mode==='all')all(stem);else if(mode==='job')job(stem,a[0],Number(a[1]));else if(mode==='summary')summary(stem);else throw Error('mode');
+if(require.main!==module)module.exports={parentage};
+const [mode,stem,...a]=require.main===module?process.argv.slice(2):[];
+if(require.main===module)
+{if(mode==='all')all(stem);else if(mode==='job')job(stem,a[0],Number(a[1]));else if(mode==='summary')summary(stem);else throw Error('mode');}

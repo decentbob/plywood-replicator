@@ -157,7 +157,8 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
    Actual acquisition under local face binding and uniform bond loss fails its gate (69): body4
    succeeds in 12/12 prepared one-contact cases but only 2/6 unbound near-encounters; individual32
    gives 1/12 (square only) and 0/6. More eligibility or prepared fit is not robust acquisition.
-8. **Walls and compartments have not paid in any form** (11b, 12b, 16, 16b–d, 24, 24b, 25d): they are slow to build,
+8. **Walls and compartments have not paid in any form** (but see 97–98: an anchored half-cell wall now
+   reproduces in screens; no benefit measured yet) (11b, 12b, 16, 16b–d, 24, 24b, 25d): they are slow to build,
    seal only when everything is slow, shut copies in, and walled worlds died. Parked, not disproved.
 9. **Recognition between strands has not given specificity** (18, 18b, 26, 26b): with two letters binding is
    self-complementary (autoimmune cutters); with four, partners rarely meet.
@@ -422,6 +423,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 95 | Half-cell in-place capture, live (reopened) | With body motion, does in-place capture let the live half-cell assemble a new D? | research pins versus projection; body16; `rimBind` on | negative | contacts novel chain 1/8 vs 0/8, closed 0/8 both; bath 0/4 both; 2–3 face docks per 50k; W sequestered in rims/rings | half_cell_fast.js (4x, bit-identical), half_cell_pins.js (`HCP_20260929`) | test an abundant soup (more loose material) before any other half-cell mechanism | 16 contacts + 8 bath worlds; about 1,000 CPU s; screen-tier QA; exploratory reopening, RESULTS 91 unchanged |
 | 96 | Half-cell abundant soup | Does the live half-cell copy when loose parts are abundant? | founder D + K loose inventories (K 4/8), body16, project/pins | negative | one novel chain in 8 worlds, no closed D; W cap-bound 35–40/40 and 53–65/72, free W rings 13–14; loose A dimers dock on the founder but bulky W-loaded caps rarely arrive | half_cell_soup.js, half_cell_soup_screen.js (`HCS_20260929`); fast runtime 6.4x (bit-identical) | Q8m: rim growth only from anchored ends | 8 worlds x 50k, 72/128 blocks; about 4,800 CPU s incl. QA; exploratory |
 | 97 | Half-cell anchored rim growth | Do rims that grow only from anchored ends (a cap in a chain, or a W already attached) let the soup copy? | research anchor rule (own bonds only), soup K 4/8, body16, project/pins | lead | novel chains 7/8 vs 1/8 ungated; novel closed D 3/8 vs 0/8; one separated active daughter D (K4 pins 1201, t 47,800); W stays free | half_cell_anchor.js, half_cell_anchor_figure.js (`HCA_20260929`) | fresh seeds, longer horizon, observer parent tracking for generation 2 | 8 worlds x 50k; about 5,000 CPU s; screen tier, one world; exploratory body motion, overlap up to .025 |
+| 98 | Half-cell generations | Do daughter half-cells template further copies under the anchor rule? | anchor rule, soup K 4, body16, project/pins, 150k | lead | generation-2 chains in 7/12 worlds, closed generation-2 D in 3/12 (pins 1302/1305, project 1303); pins faster (closed gen-1 5/6 vs 1/6); chains never break so parentage is exact | half_cell_generations.js (`HCG_20260929`, post-hoc tape parentage) | confirmation-tier plan; add turnover and heritable variation | 12 worlds, about 9,800 CPU s; first multi-generation assembly reproduction in the project; finite material, fixed sequence, exploratory physics |
 
 ## Knob index
 
