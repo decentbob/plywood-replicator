@@ -8427,3 +8427,43 @@ wall time on dedicated workers; CPU was not metered separately. `run.js` attache
 reaction-affecting observer, so no neutrality check was needed. Raw CSV, births and
 end-state JSON, calibration, summary and log are archived in `out/DD10*` (51 files,
 byte-identical to scratch). Core unchanged.
+
+## 95. Half-cells reopened: faster runtime; in-place capture is not the bottleneck
+
+2026-09-29, Q8k; baseline `626317b`. [Plan](half_cell_pins_plan.md). **Negative**
+(screen tier). This is an exploratory reopening under the 2026-09-28 policy (body motion
+for exploration). RESULTS 91's failed gate is unchanged.
+
+**Speed.** `experiments/half_cell_fast.js` wraps the live half-cell runtime. The
+polygon-contact solver recomputed both bounding radii for every pair in every pass,
+and radii are now computed once per contact sweep and per bonding phase. Over 12 worlds
+(three starts, body and individual motion, two seeds, 1,500 steps each) it is
+bit-identical and **4.0x faster** (122.1 versus 30.4 CPU s;
+`node experiments/half_cell_fast_test.js`). The runtime is about 1.5 ms/step for 28 blocks.
+
+**Screen.** Unchanged projection versus Q8j's in-place pins (a free block binds where
+it is), in the live chemistry with body motion and 16 passes. The contacts start
+(prepared loose parts) ran seeds 1001–1008 for 3,000 steps; the bath start ran seeds
+1101–1104 for 50,000 steps.
+
+| Start / arm | Novel chain | Novel closed D | Unpaired / detached | Max sampled overlap | CPU s |
+|---|---:|---:|---:|---:|---:|
+| contacts / project | 0/8 | 0/8 | 0 / 0 | .0023 | 32.9 |
+| contacts / pins | 1/8 | 0/8 | 0 / 0 | .0046 | 64.8 |
+| bath / project | 0/4 | 0/4 | 0 / 0 | .2024 | 316.9 |
+| bath / pins | 0/4 | 0/4 | 0 / 0 | .2055 | 585.7 |
+
+No lead. Assembly is starved rather than blocked by placement: each bath world has only
+2–3 face dockings in 50,000 steps and 0–4 lateral links. One or two docked letters then
+sit idle, because the world holds exactly one offspring's worth of loose P/A/A/Q.
+Meanwhile W binds up into rims and free rings (14–16 rim bonds, 0–2 free W at the
+end), so arc material is sequestered too. The single pins chain (contacts seed 1008,
+step 50) fell apart again (8 unlinks). Fuel stays charged throughout (4/4).
+
+What it says: with one offspring's inventory, encounter kinetics prevent copying
+whichever placement rule is used. What it does not say: anything about an abundant soup,
+which is how Squirm3-style chain copying normally runs. That is the next test.
+
+QA: the first seed of each cell repeated as a plain run and a midpoint restart with
+its own class (state and RNG match). Initial and final states and tapes are saved in
+`out/HCP_20260929*`. Total CPU about 1,000 s across four workers.

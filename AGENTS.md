@@ -141,12 +141,16 @@ See the audit before assuming all existing helpers satisfy this contract.
 For a promoted core rule: knob/default, unique side-state values, derive/compat/open/transition
 as needed, meaningful invariant, event counter/readout if useful, viewer knob/legend/ZERO default,
 README rule table and DESIGN decision. Compare five before/after 1500-step fingerprints.
-Do not edit a hashed source merely to tidy comments: historical analyzers may require its bytes.
+**User direction (2026-09-29):** byte-identical trajectories and preserved source bytes are not
+goals. Edit core or research code directly for speed or clarity, even if trajectories change, as
+long as the mechanics and local logic still hold (sound mechanisms should survive a slightly
+different simulation). Past observations stay reproducible from their recorded git commit; say
+in RESULTS when a change alters trajectories, and recheck any lead that depends on the changed part.
 
 ## Workspace and delivery
 
-- Read `git status` first; preserve user changes. Avoid broad file moves: assay source hashes and
-  hard-coded paths are part of provenance. Never delete raw data because `.gitignore` matches it.
+- Read `git status` first; preserve user changes. Avoid gratuitous file moves: hard-coded paths
+  still matter, but recorded commits (not frozen bytes) are the provenance for old assays. Never delete raw data because `.gitignore` matches it.
 - `node tools/workspace_status.js` gives a read-only archive/scratch inventory. Its optional
   `--verify-scratch` checks same-name archived copies by SHA-256; it never deletes files and
   does not determine which simulations are running. Keep ROADMAP current and the handoff brief.

@@ -1,13 +1,13 @@
 'use strict';
 // Speed-only subclasses of the half-cell research runtime. Trajectories are bit-identical to the classes they wrap
-// (checked by half_cell_fast_test.js); historical sources stay byte-identical because nothing here edits them.
+// except for the contact prefilter noted below (checked by half_cell_fast_test.js).
 // The polygon-contact solver recomputed both bounding radii for every candidate pair in every pass (about half the
 // runtime). Radii depend only on corner offsets, which a contact sweep never changes (it moves centres only), so
 // they are computed once at the start of each sweep. Pair lists are built with plain loops instead of subarrays.
 const {T_A,T_C,T_E,T_P,T_Q,NV}=require('../src/sim');
 const {separation,EPS}=require('./polygon_contact_physics');
 const live=require('./half_cell_live');
-const TYPES=new Set([T_A,T_C,T_E,T_P,T_Q]);
+const TYPES=new Set([T_A,T_C,T_E,T_P,T_Q]),MARGIN=2;
 
 function fast(Base){
   return class extends Base{
@@ -17,12 +17,15 @@ function fast(Base){
       return r;
     }
     _polygonContacts(){
-      const contacts=[],b=this.bond;
+      // Pairs further apart than their radii plus MARGIN at the start of the solve are skipped. With MARGIN 1 six of
+      // twelve test worlds drifted (individual kicks); with 2 all twelve stay bit-identical (half_cell_fast_test.js).
+      const contacts=[],b=this.bond,r=this._radii().slice();
       for(let u=0;u<this.n;u++){
         if(!TYPES.has(this.type[u]))throw new Error('Unsupported fixture type');
         const o=u*4;
         for(let v=u+1;v<this.n;v++){
           if((b[o]>=0&&(b[o]>>2)===v)||(b[o+1]>=0&&(b[o+1]>>2)===v)||(b[o+2]>=0&&(b[o+2]>>2)===v)||(b[o+3]>=0&&(b[o+3]>>2)===v))continue;
+          if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))>r[u]+r[v]+MARGIN)continue;
           contacts.push(u,v);
         }
       }

@@ -2,6 +2,7 @@
 'use strict';
 // Q8k screen: live half-cell chemistry with projection (unchanged) versus in-place capture. See half_cell_pins_plan.md.
 //   node experiments/half_cell_pins.js all STEM | job STEM START ARM SEED | summary STEM
+// Q8l reuses PinsLiveSim with the soup worlds (half_cell_soup_screen.js).
 const fs=require('fs'),path=require('path'),{spawn}=require('child_process'),assert=require('assert/strict');
 const {T_E}=require('../src/sim');
 const live=require('./half_cell_live'),{FastLiveHalfCellSim}=require('./half_cell_fast');
