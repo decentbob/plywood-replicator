@@ -8679,3 +8679,34 @@ variation, six worlds, exploratory body motion. Next: bounded structures (a term
 or geometric closure), and a structure with a physical benefit.
 
 QA: seed 1401 passed the plain and midpoint-restart checks. CPU about 4,200 s. Raw data in `out/COMB_20260929*`.
+
+## 101. Walls against rays: no benefit at this exposure; slow rays near the founder decide
+
+2026-09-29. [Plan](ray_walls_plan.md). **Negative / uninformative** by the frozen reading.
+Rays ported into the polygon engine (`seeded_rays.js`): the core `_rayHit` is unchanged,
+and rays collide only with W. The design is 2x2: walled (`rimBind` on) or bare (the same W,
+inert), crossed with rays `rayHit` .01 or 0. Two rays in every arm; K=4 soup in 24x24;
+`pFray` .002; pins; body16; seeds 1501–1506; 100,000 steps.
+
+| Seed | Chain-steps walled on / off | Chain-steps bare on / off | Distinct chains walled on / bare on | Ray hits walled / bare |
+|---|---|---|---|---|
+| 1501 | 500 / 279,000 | 500 / 344,500 | 1 / 1 | 2 / 2 |
+| 1502 | 3,500 / 178,500 | 3,500 / 218,500 | 1 / 1 | 2 / 1 |
+| 1503 | 0 / 245,000 | 0 / 258,000 | 0 / 0 | 1 / 1 |
+| 1504 | 500 / 249,000 | 500 / 312,000 | 1 / 1 | 2 / 2 |
+| 1505 | 97,500 / 216,500 | 77,500 / 260,500 | 2 / 4 | 7 / 12 |
+| 1506 | 34,000 / 291,500 | 92,000 / 263,500 | 2 / 3 | 3 / 9 |
+
+Gate: the walled on/off ratio is higher in 4/6 and walled/on beats bare/on in 1/6, so no
+benefit. In four seeds the founder dies in the first 500 steps in both arms (identical
+outcomes). One or two hits suffice, and they come from a ray that starts near the founder
+and lingers there (rays are slow, `mobX` .12), hitting through the always-exposed copying
+face. The bare-arm calibration measured only the time to the first hit and missed that a
+single early hit is fatal. This is a failed calibration, recorded, not rescued.
+
+Without rays, walled worlds have somewhat fewer chain-steps than bare ones (178,500–291,500
+against 218,500–344,500), so the wall costs some copying. Where chains survive the rays
+(1505–1506), the evidence is mixed. Walls behind a chain cannot shield its copying face;
+protection needs either an enclosure with copying inside, or rays that pass quickly, so
+that the wall blocks part of each trajectory. Either is a new frozen plan, not a retune.
+CPU about 8,000 s; raw data in `out/RW_20260929*`.

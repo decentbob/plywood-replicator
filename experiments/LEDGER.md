@@ -426,6 +426,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 98 | Half-cell generations | Do daughter half-cells template further copies under the anchor rule? | anchor rule, soup K 4, body16, project/pins, 150k | lead | generation-2 chains in 7/12 worlds, closed generation-2 D in 3/12 (pins 1302/1305, project 1303); pins faster (closed gen-1 5/6 vs 1/6); chains never break so parentage is exact | half_cell_generations.js (`HCG_20260929`, post-hoc tape parentage) | confirmation-tier plan; add turnover and heritable variation | 12 worlds, about 9,800 CPU s; first multi-generation assembly reproduction in the project; finite material, fixed sequence, exploratory physics |
 | 99 | Generic seeded-growth engine | Does one label-table rule (activation by attachment) reproduce the half-cell? | research engine `seeded_growth.js`, HALF_CELL config, pins, soup K 4 | works | gen-2 chains 4/6 (Q8n 4/6), closed gen-2 D 3/6 (Q8n 2/6) | seeded_growth.js, half_cell_generations.js (`SG_reg_20260929`) | comb configuration (sequence-encoded arms) | 6 worlds x 150k; about 3,900 CPU s; broader attachment rule, trajectories differ from Q8n |
 | 100 | Comb: sequence-encoded arms | Are arms seeded by B rebuilt on copies, and does form change reproduction? | engine COMB config, `energyGate` false, PBBQ vs PAAQ in one soup, body16 pins | works | PAAQ out-copies PBBQ 6/6 (3–4 vs 0–2); every PBBQ copy has an arm; unbounded J rods up to 23 blocks | seeded_worlds.js, comb_screen.js (`COMB_20260929`) | bounded structures; a structure with physical benefit | 6 worlds x 50k; about 4,200 CPU s; screen tier; selection by form without rewards |
+| 101 | Walls against rays (half-cell) | Do walls pay by blocking rays? | `nX` 2, `rayHit` .01/0, `rimBind` on/off, `pFray` .002, soup K 4 | negative | founder killed within 500 steps in 4/6 seeds in both arms (slow ray near start, exposed copying face); gate 4/6 and 1/6; walls cost some copying without rays | seeded_rays.js, ray_walls.js (`RW_20260929`) | a new plan: fast rays or enclosure with inside copying; no retune | 24 worlds x 100k; about 8,000 CPU s; calibration missed that one early hit is fatal |
 
 ## Knob index
 
@@ -494,12 +495,12 @@ the rows that used it). Rerun it after adding rows.
 | `nP` | 28c (lead) |
 | `nQ` | 28c (lead) |
 | `nU` | 39a (works), 39e (inconclusive), 39f (partial), 41a (negative) |
-| `nX` | 25b (works), 25d (negative) |
+| `nX` | 25b (works), 25d (negative), 101 (negative) |
 | `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead), 62 (negative), 74 (works), 75 (inconclusive) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative), 94 (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
 | `pCut` | 26 (negative) |
-| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
+| `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative), 101 (negative) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative), 93 (works), 94 (negative) |
 | `physics` | 15 (works) |
@@ -526,7 +527,7 @@ the rows that used it). Rerun it after adding rows.
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative), 77 (negative) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `radBand` | 33g (lead) |
-| `rayHit` | 25b (works), 25d (negative) |
+| `rayHit` | 25b (works), 25d (negative), 101 (negative) |
 | `relay` | 19c (works), 19d (negative), 22 (negative), 33b (works), 40d (inconclusive) |
 | `resB` | 8 (works), 12 (works) |
 | `resC` | 35 (inconclusive) |
