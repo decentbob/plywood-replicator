@@ -8761,3 +8761,36 @@ plausibly help, consistent with the user's expectation that halved exposure shou
 Six seeds cannot separate it from chance. **Next:** a separately frozen confirmation with
 more fresh seeds and a pre-specified paired test, not a relaxed reading of this screen.
 About 8,000 CPU s; raw in `out/FW_20260929*`.
+
+## 104. Field walls, 12-seed confirmation: favourable but not significant
+
+2026-09-29. [Plan](field_walls_confirm_plan.md). **Not confirmed.** It uses the same design as RESULTS 103
+with 12 fresh seeds (1531–1542), 48 worlds, 100,000 steps, and pre-specified one-sided paired sign tests.
+
+| Seed | Walled on / off | Bare on / off | Ratio walled / bare |
+|---|---|---|---|
+| 1531 | 162,500 / 284,000 | 135,000 / 313,000 | .57 / .43 |
+| 1532 | 14,000 / 327,000 | 13,500 / 215,000 | .04 / .06 |
+| 1533 | 1,000 / 231,500 | 1,000 / 273,000 | .00 / .00 |
+| 1534 | 133,500 / 239,000 | 158,500 / 266,500 | .56 / .59 |
+| 1535 | 141,500 / 270,500 | 183,500 / 211,000 | .52 / .87 |
+| 1536 | 200,500 / 231,500 | 7,000 / 303,500 | .87 / .02 |
+| 1537 | 41,000 / 331,500 | 156,000 / 198,500 | .12 / .79 |
+| 1538 | 166,500 / 194,500 | 149,000 / 325,000 | .86 / .46 |
+| 1539 | 158,000 / 231,000 | 46,000 / 280,500 | .68 / .16 |
+| 1540 | 151,500 / 264,000 | 24,500 / 273,000 | .57 / .09 |
+| 1541 | 5,500 / 204,000 | 5,500 / 284,000 | .03 / .02 |
+| 1542 | 131,000 / 153,500 | 126,000 / 251,500 | .85 / .50 |
+
+Net benefit: walled/on above bare/on in 7 of 10 non-tied seeds (p = .17). Protection: the walled ratio
+is higher in 8 of 12 (p = .19). The mean ratio is .47 walled against .33 bare. Both tests fail. Together
+with RESULTS 103 the direction is favourable in most seeds (protection 12/18), but the effect is
+modest and very noisy.
+
+**Why noisy (interpretation, not tested):** a single break kills a chain, so each world is
+decided largely by whether the founder survives its first hits. Halving exposure shifts those
+odds without removing the luck; ties (1532, 1533, 1541) are worlds where both founders died
+early. Protection should matter more where damage is not immediately fatal (repair or
+redundancy), or where many lineages compete over long times, so that small per-lineage
+advantages accumulate (selection within one world instead of paired worlds). About 16,000 CPU s;
+raw in `out/FWC_20260929*`.
