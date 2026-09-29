@@ -1,0 +1,12 @@
+{"f":"on","seed":1723,"Bshare":[0,null,null,null],"first":{"PAAQ":500},"final":[],"cpu":719}
+{"f":"on","seed":1724,"Bshare":[0.06,0.49,0.36,0.44],"first":{"PAAQ":500,"PABQ":40500,"PBAQ":57500,"PBBQ":75500},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]"],"cpu":879}
+{"f":"on","seed":1722,"Bshare":[0.51,1,0.95,0.19],"first":{"PAAQ":500,"PBAQ":18500,"PABQ":37500},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]"],"cpu":925}
+{"f":"on","seed":1725,"Bshare":[0.36,0.46,0.53,0.18],"first":{"PAAQ":500,"PABQ":14000,"PBAQ":15000},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]"],"cpu":920}
+{"f":"on","seed":1726,"Bshare":[0.2,0.45,0.33,0],"first":{"PAAQ":500,"PABQ":12000,"PBAQ":31000},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]"],"cpu":817}
+{"f":"on","seed":1721,"Bshare":[0,null,null,null],"first":{"PAAQ":500},"final":[],"cpu":2170}
+{"f":"off","seed":1722,"Bshare":[0.14,0.21,0.29,0.29],"first":{"PAAQ":500,"PABQ":19500,"PBBQ":82500},"final":["PAAQ[0,0,0,0]","PBBQ[0,1,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PABQ[0,0,1,0]","PAAQ[0,0,0,0]"],"cpu":1031}
+{"f":"off","seed":1723,"Bshare":[0.11,0.28,0.29,0.29],"first":{"PAAQ":500,"PBAQ":24500,"PABQ":52000},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PABQ[0,0,1,0]","PAAQ[0,0,0,0]","PBAQ[0,1,0,0]"],"cpu":1097}
+{"f":"off","seed":1724,"Bshare":[0.37,0.33,0.38,0.43],"first":{"PAAQ":500,"PBAQ":5500,"PABQ":15500,"PBBQ":130000},"final":["PAAQ[0,0,0,0]","PBAQ[0,1,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PBBQ[0,0,1,0]","PABQ[0,0,1,0]"],"cpu":1090}
+{"f":"off","seed":1721,"Bshare":[0.12,0.36,0.38,0.38],"first":{"PAAQ":500,"PBAQ":22500,"PABQ":50000},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PABQ[0,0,1,0]","PBAQ[0,1,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PABQ[0,0,1,0]"],"cpu":2611}
+{"f":"off","seed":1726,"Bshare":[0.2,0.33,0.33,0.33],"first":{"PAAQ":500,"PABQ":38500,"PBAQ":41000},"final":["PAAQ[0,0,0,0]","PABQ[0,0,1,0]","PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PBAQ[0,1,0,0]","PAAQ[0,0,0,0]"],"cpu":1023}
+{"f":"off","seed":1725,"Bshare":[0.69,0.71,0.71,0.71],"first":{"PAAQ":500,"PABQ":2500,"PBAQ":7000},"final":["PAAQ[0,0,0,0]","PAAQ[0,0,0,0]","PABQ[0,0,1,0]","PBAQ[0,1,0,0]","PABQ[0,0,1,0]","PBAQ[0,1,0,0]","PABQ[0,0,0,0]"],"cpu":1189}

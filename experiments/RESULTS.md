@@ -8816,3 +8816,30 @@ the plates cost little (mean S .46, much less than the comb's rods, RESULTS 100)
 working mode (AGENTS, 2026-09-29) this is taken as support for the working assumption that shields
 help under damage. The next layer lets shields *evolve*: start without B and allow copying errors.
 About 5,000 CPU s; raw in `out/SH_20260929*`.
+
+## 106. Shield evolution: variants arise and spread without selection; under the field they fade
+
+2026-09-29. [Plan](shield_evolve_plan.md) (working mode, steering only). The founder is PAAQ only;
+B (and with it a fan-shield seed) arises only by copying errors (`pSoft` .05). SHIELD
+configuration, field on (1e-5) or off, seeds 1721–1726, 200,000 steps. B-share = the fraction
+of chain-steps held by B-carrying sequences in each 50k window.
+
+| Seed | Field on: B-share per window | Field off: B-share per window |
+|---|---|---|
+| 1721 | founder killed at once | .12 .36 .38 .38 |
+| 1722 | .51 1.00 .95 .19 | .14 .21 .29 .29 |
+| 1723 | founder killed at once | .11 .28 .29 .29 |
+| 1724 | .06 .49 .36 .44 | .37 .33 .38 .43 |
+| 1725 | .36 .46 .53 .18 | .69 .71 .71 .71 |
+| 1726 | .20 .45 .33 .00 | .20 .33 .33 .33 |
+
+Variation works: PBAQ, PABQ and later PBBQ arise in every surviving world, with arms rebuilt on
+the mutants. Without the field nothing dies, so the variants accumulate and then freeze (7 immortal
+chains, no selection). Under the field, variants rise and sometimes dominate (1722), but every final
+population is plain PAAQ. A single spontaneous B gives one plate, about a 15% exposure cut, too
+weak to outweigh B→A back-mutation at the same rate and the random loss of lineages under
+turnover. Figure: `out/SE_20260929_off_1725.png` (mutants carrying plates).
+
+**Working-mode next steps (improve conditions, then build):** make one shield worth more (a
+larger plate, or the half-cell wall's 50%), lower the mutation rate so gains are kept, and
+give more material and time so several lineages compete. About 10,000 CPU s; raw in `out/SE_20260929*`.
