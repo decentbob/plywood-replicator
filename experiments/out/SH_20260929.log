@@ -1,0 +1,12 @@
+{"f":"on","seed":1714,"chainSteps":{"PBBQ":161500,"PAAQ":10000,"other":0},"distinct":{"PBBQ":5,"PAAQ":1},"breaks":11,"cpu":433}
+{"f":"on","seed":1712,"chainSteps":{"PBBQ":330500,"PAAQ":135500,"other":0},"distinct":{"PBBQ":6,"PAAQ":5},"breaks":11,"cpu":445}
+{"f":"on","seed":1713,"chainSteps":{"PBBQ":213500,"PAAQ":260000,"other":0},"distinct":{"PBBQ":5,"PAAQ":10},"breaks":25,"cpu":483}
+{"f":"on","seed":1715,"chainSteps":{"PBBQ":1000,"PAAQ":172000,"other":0},"distinct":{"PBBQ":1,"PAAQ":11},"breaks":12,"cpu":342}
+{"f":"on","seed":1716,"chainSteps":{"PBBQ":248500,"PAAQ":181000,"other":0},"distinct":{"PBBQ":6,"PAAQ":9},"breaks":20,"cpu":452}
+{"f":"on","seed":1711,"chainSteps":{"PBBQ":117000,"PAAQ":285000,"other":0},"distinct":{"PBBQ":4,"PAAQ":11},"breaks":15,"cpu":1165}
+{"f":"off","seed":1712,"chainSteps":{"PBBQ":371500,"PAAQ":321000,"other":0},"distinct":{"PBBQ":4,"PAAQ":4},"breaks":0,"cpu":478}
+{"f":"off","seed":1713,"chainSteps":{"PBBQ":244000,"PAAQ":429500,"other":0},"distinct":{"PBBQ":3,"PAAQ":5},"breaks":0,"cpu":419}
+{"f":"off","seed":1714,"chainSteps":{"PBBQ":314500,"PAAQ":383500,"other":0},"distinct":{"PBBQ":4,"PAAQ":5},"breaks":0,"cpu":420}
+{"f":"off","seed":1711,"chainSteps":{"PBBQ":467500,"PAAQ":381500,"other":0},"distinct":{"PBBQ":5,"PAAQ":4},"breaks":0,"cpu":1167}
+{"f":"off","seed":1715,"chainSteps":{"PBBQ":372500,"PAAQ":319500,"other":0},"distinct":{"PBBQ":4,"PAAQ":4},"breaks":0,"cpu":482}
+{"f":"off","seed":1716,"chainSteps":{"PBBQ":180500,"PAAQ":394500,"other":0},"distinct":{"PBBQ":2,"PAAQ":5},"breaks":0,"cpu":442}

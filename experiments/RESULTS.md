@@ -8794,3 +8794,25 @@ early. Protection should matter more where damage is not immediately fatal (repa
 redundancy), or where many lineages compete over long times, so that small per-lineage
 advantages accumulate (selection within one world instead of paired worlds). About 16,000 CPU s;
 raw in `out/FWC_20260929*`.
+
+## 105. Sequence-encoded shields: favoured under the field in 4/6 soups
+
+2026-09-29. [Plan](shield_plan.md). Screen tier. B's back seeds one convex fan plate (`SHIELD`,
+far edge 4); PBBQ (shielded) and PAAQ compete in one soup with the shadowing field on or off;
+seeds 1711–1716; 100k steps. S = PBBQ share of chain-steps.
+
+| Seed | S field on | S field off | Chain-steps on (PBBQ / PAAQ) | Off (PBBQ / PAAQ) |
+|---|---:|---:|---|---|
+| 1711 | .29 | .55 | 117,000 / 285,000 | 467,500 / 381,500 |
+| 1712 | .71 | .54 | 330,500 / 135,500 | 371,500 / 321,000 |
+| 1713 | .45 | .36 | 213,500 / 260,000 | 244,000 / 429,500 |
+| 1714 | .94 | .45 | 161,500 / 10,000 | 314,500 / 383,500 |
+| 1715 | .01 | .54 | 1,000 / 172,000 | 372,500 / 319,500 |
+| 1716 | .58 | .31 | 248,500 / 181,000 | 180,500 / 394,500 |
+
+The field raises the shielded share in 4/6 seeds (frozen rule 5/6 not met). In 1715 the shielded
+founder is destroyed at once, and without mutation a lost lineage never returns. Without the field
+the plates cost little (mean S .46, much less than the comb's rods, RESULTS 100). Under the user's
+working mode (AGENTS, 2026-09-29) this is taken as support for the working assumption that shields
+help under damage. The next layer lets shields *evolve*: start without B and allow copying errors.
+About 5,000 CPU s; raw in `out/SH_20260929*`.
