@@ -64,6 +64,10 @@ by form works, with no rewards. Reversible block programming (process M) is impl
 in a viability look an enzyme cell writes its own wall material. The missing piece is a
 structure that *helps*.
 
+**Working mode (user, 2026-09-29):** build on reasonable hypotheses. Walls and shields protecting
+against damage is adopted as a working assumption (RESULTS 103–104 favour it in most seeds); the
+aim is to strengthen conditions until it is obvious, then build on it, not to re-certify it.
+
 ## Queue
 
 | Order | Work | Gate and reason |

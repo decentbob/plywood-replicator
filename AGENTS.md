@@ -67,6 +67,13 @@ handoffs, is preserved in [the archive](docs/archive/AGENTS-2026-09-26.md).
   default-step contact rates are not step-converged, so report them as qualitative. Add a
   finer-step rung (kicks x sqrt(dt), probabilities 1-(1-p)^dt) only for a confirmation-tier claim
   that depends on a quantitative binding/release race. Prefer mechanisms whose logic works regardless.
+- **Build on reasonable hypotheses (user, 2026-09-29).** Exploration should climb toward a
+  global maximum rather than certify each local one. Adopt a sensible hypothesis as a working
+  assumption, improve the conditions until the effect is strong and obvious, and build the next
+  layer on it. Many sound hypotheses will not show in a given setting; do not spend rounds of
+  strict confirmation to decide that. Keep results honest (record what happened, including
+  negatives, and do not overclaim), but reserve frozen confirmations and significance tests for
+  claims that are reported as established, not for steering. Short plans and quick screens are fine.
 - **Preserve the user's research style.** Try varied ideas in small worlds; scale promising
   leads. Screen ordinary population questions in 50k–150k steps, with an early viability look;
   prepared mechanical tests may be much shorter. Two seeds are a lead, not confirmation.
