@@ -160,10 +160,10 @@ Each step is a screen (AGENTS QA tiers); promising ones get confirmation.
    soup at equal material.
 5. **Stack.** Coats on walls, adhesion between cells, theft. Each is a label and shape
    combination in the engine from step 1.
-7. **Environment, later (IDEAS).** Patchy hot and safe zones for turnover and supply;
-   fixed obstacles so directed movement can evolve.
 6. **Metabolism (M).** Programmable blanks reprogrammed by sequence-encoded enzyme
    structures, so organisms influence the part distribution themselves.
+7. **Environment, later (IDEAS).** Patchy hot and safe zones for turnover and supply;
+   fixed obstacles so directed movement can evolve.
 
 Speed matters for all of this (user direction 2026-09-28). The half-cell runtime is now
 6.4x faster; the next gains are in the polygon-contact sweep (IDEAS, Speed).
