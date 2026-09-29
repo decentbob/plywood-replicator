@@ -4,10 +4,10 @@
 const assert=require('assert/strict');
 const {NV,F,R,K,L,T_A,T_C,T_E,T_P,T_Q,I_TPL,I_ON}=require('../src/sim');
 const live=require('./half_cell_live'),{FastLiveHalfCellSim}=require('./half_cell_fast'),{overlap}=require('./half_cell_geometry');
-function createSoup({seed,extra=4,size=24,fuelPer=2,Cls=FastLiveHalfCellSim}={}){
+function createSoup({seed,extra=4,size=24,fuelPer=2,Cls=FastLiveHalfCellSim,rays=0,params={}}={}){
   const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s,p={...ref.p};
-  const counts={nA:2+2*extra,nB:0,nC:8+8*extra,nP:1+extra,nQ:1+extra,nE:4+fuelPer*extra};
-  const s=new Cls({...p,...counts,seed,W:size,H:size,seedCount:0});
+  const counts={nA:2+2*extra,nB:0,nC:8+8*extra,nP:1+extra,nQ:1+extra,nE:4+fuelPer*extra,nX:rays};
+  const s=new Cls({...p,...params,...counts,seed,W:size,H:size,seedCount:0});
   const units=t=>Array.from({length:s.n},(_,u)=>u).filter(u=>s.type[u]===t);
   const P=units(T_P),Q=units(T_Q),A=units(T_A),Wb=units(T_C),E=units(T_E);
   // Founder: copy the reference founder's relative poses, rim and chain bonds (reference ids are its group 0).
