@@ -425,6 +425,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 97 | Half-cell anchored rim growth | Do rims that grow only from anchored ends (a cap in a chain, or a W already attached) let the soup copy? | research anchor rule (own bonds only), soup K 4/8, body16, project/pins | lead | novel chains 7/8 vs 1/8 ungated; novel closed D 3/8 vs 0/8; one separated active daughter D (K4 pins 1201, t 47,800); W stays free | half_cell_anchor.js, half_cell_anchor_figure.js (`HCA_20260929`) | fresh seeds, longer horizon, observer parent tracking for generation 2 | 8 worlds x 50k; about 5,000 CPU s; screen tier, one world; exploratory body motion, overlap up to .025 |
 | 98 | Half-cell generations | Do daughter half-cells template further copies under the anchor rule? | anchor rule, soup K 4, body16, project/pins, 150k | lead | generation-2 chains in 7/12 worlds, closed generation-2 D in 3/12 (pins 1302/1305, project 1303); pins faster (closed gen-1 5/6 vs 1/6); chains never break so parentage is exact | half_cell_generations.js (`HCG_20260929`, post-hoc tape parentage) | confirmation-tier plan; add turnover and heritable variation | 12 worlds, about 9,800 CPU s; first multi-generation assembly reproduction in the project; finite material, fixed sequence, exploratory physics |
 | 99 | Generic seeded-growth engine | Does one label-table rule (activation by attachment) reproduce the half-cell? | research engine `seeded_growth.js`, HALF_CELL config, pins, soup K 4 | works | gen-2 chains 4/6 (Q8n 4/6), closed gen-2 D 3/6 (Q8n 2/6) | seeded_growth.js, half_cell_generations.js (`SG_reg_20260929`) | comb configuration (sequence-encoded arms) | 6 worlds x 150k; about 3,900 CPU s; broader attachment rule, trajectories differ from Q8n |
+| 100 | Comb: sequence-encoded arms | Are arms seeded by B rebuilt on copies, and does form change reproduction? | engine COMB config, `energyGate` false, PBBQ vs PAAQ in one soup, body16 pins | works | PAAQ out-copies PBBQ 6/6 (3–4 vs 0–2); every PBBQ copy has an arm; unbounded J rods up to 23 blocks | seeded_worlds.js, comb_screen.js (`COMB_20260929`) | bounded structures; a structure with physical benefit | 6 worlds x 50k; about 4,200 CPU s; screen tier; selection by form without rewards |
 
 ## Knob index
 
@@ -447,7 +448,7 @@ the rows that used it). Rerun it after adding rows.
 | `cut` | 26 (negative) |
 | `cutMotif` | 26 (negative), 26b (inconclusive) |
 | `endLoss` | 33a (partial), 33a' (negative), 33b (works), 43b (negative) |
-| `energyGate` | 51b (lead) |
+| `energyGate` | 51b (lead), 100 (works) |
 | `energyMode` | 3 (negative), 4 (negative) |
 | `feed` | 14b (works), 14c (works), 14d (negative), 19b (inconclusive), 19c (works), 22 (negative), 33b (works), 40d (inconclusive) |
 | `fold1` | 34b (works), 34e (negative), 39a (works), 44c (negative), 45b (lead), 45c (inconclusive), 45e (works) |

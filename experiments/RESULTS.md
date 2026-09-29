@@ -8644,3 +8644,38 @@ Generation-2 chains in 4/6 worlds (Q8n pins 4/6) and closed generation-2 Ds in 3
 about 3,900 CPU s. Every later structure (comb, coats, programmable blanks) is now a
 configuration of this engine. A new `tools/snapshot.js` renders any saved state to PNG
 for quick status images.
+
+## 100. Comb: sequence-encoded arms are rebuilt on copies and cost reproduction
+
+2026-09-29. [Plan](comb_plan.md). **Works as a demonstration of selection by form** (screen
+tier). The generic engine uses the `COMB` configuration (user's branching idea): B exposes
+a back seed, a D junction offers two ports of a second family, and J arm blocks extend in
+lines. There is no reward or penalty on any label. `energyGate=false`, because B's back
+carries the arm.
+
+Two founders compete in one 22x22 soup: PBBQ (seeds arms) and PAAQ (no seeds). Loose A 12,
+B 12, P 8, Q 8, D 40, J 40; body16, pins; seeds 1401–1406; 50,000 steps.
+
+| Seed | PBBQ copies | PAAQ copies | Arm blocks on PBBQ copies (per position) | Founder PBBQ arms |
+|---|---:|---:|---|---|
+| 1401 | 2 | 3 | [0,7,0,0], [0,7,0,0] | 0,10,6,0 |
+| 1402 | 1 | 4 | [0,3,7,0] | 0,5,13,0 |
+| 1403 | 1 | 4 | [0,12,0,0] | 0,7,12,0 |
+| 1404 | 2 | 4 | [0,9,0,0], [0,1,5,0] | 0,4,9,0 |
+| 1405 | 2 | 3 | [0,0,23,0], [0,3,0,0] | 0,5,0,0 |
+| 1406 | 0 | 4 | – | 0,12,0,0 |
+
+**PAAQ out-copies PBBQ in 6/6 worlds** (one-sided sign test p = 1/64 ≈ .016). Every
+PBBQ copy carries an arm on at least one B, and 2 of 8 on both, so structure is rebuilt
+from the sequence. Arms grow as long straight J rods (up to 23 blocks), because nothing
+limits their length; they cost material and hinder the armed chains' copying (see
+[figure](out/COMB_20260929_1402.png)). Structures appear only where the sequence has B, by
+construction. No mistranscribed chains occurred.
+
+What it says: in this engine, form feeds back on reproduction through physics alone,
+which is the precondition for adaptation. A structure that does nothing useful is selected
+against. What it does not say: no beneficial structure yet, no mutation or open-ended
+variation, six worlds, exploratory body motion. Next: bounded structures (a terminator part
+or geometric closure), and a structure with a physical benefit.
+
+QA: seed 1401 passed the plain and midpoint-restart checks. CPU about 4,200 s. Raw data in `out/COMB_20260929*`.
