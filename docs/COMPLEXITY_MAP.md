@@ -88,6 +88,15 @@ Otherwise every organism is capped by the soup we prepare. Two local routes:
   contract: it reads its own and the bonded partner's side state and writes its own state.
   Sequence then controls which parts exist, as genes control chemistry through enzymes.
   State change, not type change (the user's preference).
+  **Minimal design (user refinement, 2026-09-29):** one small integer *kind* per block
+  (0 = blank), and a fixed table mapping kind to side labels; type and shape never change.
+  A writer port exposes a kind k: a block bonded to it sets its own kind to k, and the
+  change is permanent, beyond the attachment-only influence of ordinary bonds. After the
+  write the block's labels no longer match the writer, so it releases that incompatible
+  bond itself: release is driven by the state change, which carries memory, avoiding the
+  RESULTS 92 trap. **Reversal is required**, or blanks run out: an eraser is a writer with
+  k=0, and/or unattached programmed blocks slowly decay back to blank. Keep programmability
+  this simple: a few kinds, no per-side editing.
 - **Sub-block assembly.** Blocks made of smaller conserved parts, joined by directed local
   bonding. This is deeper but heavier on the physics; keep it second.
 
