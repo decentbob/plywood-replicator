@@ -38,6 +38,22 @@ before it runs. Add new ideas at the top of their section, with date and evidenc
 - **Energy options** for rearming: `energyGate=false` diagnostic, ambient recharge, or
   exposed-edge E capture (POLYMER_CAPS.md).
 
+## Environment (user, 2026-09-29; for later, not now)
+
+- **Patchy environment: safe pockets and destructive pockets.** A homogeneous world tends
+  to be either hostile to replication or eaten up by replicators until it stalls (seen in
+  many runs here). Zones of high temperature or radiation break things apart, returning
+  fresh, mixed supply; cool zones are safe places to build and experiment. Material flows
+  between them by diffusion. Existing hooks: `radBand` (radiation only in part of the world)
+  and heat cycles (`heatPeriod`, currently global). This needs position-dependent heat,
+  decay or erasing, which also fits the reversible programming idea (erase to blank in
+  hot zones). Name and mechanism are open; local rules stay local, and the environment
+  is an explicit, labelled external drive.
+- **Fixed blocks in the environment.** Immovable obstacles (at least colliding, perhaps
+  binding) give organisms something to push against or hold on to. Directed movement could
+  then evolve (grip, crawl, ratchet against the fixed structure) instead of only random
+  drift. Needs an immovable block type in the physics (infinite mass or pinned position).
+
 ## Exploration method
 
 - **Pairwise mechanism-combination screen.** Toggle pairs of existing default-off
