@@ -1,6 +1,7 @@
 # Idea notebook
 
 Untested ideas and design lessons, recorded at the user's request (2026-09-29).
+The organizing view is [COMPLEXITY_MAP.md](COMPLEXITY_MAP.md); this file keeps the loose ends.
 Nothing here is a queue item: ROADMAP ranks work, and each idea needs a frozen plan
 before it runs. Add new ideas at the top of their section, with date and evidence.
 

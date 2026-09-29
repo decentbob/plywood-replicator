@@ -56,12 +56,20 @@ fresh worlds and closed generation-2 Ds in 3/12 (98). This is screen tier with
 exploratory body motion, finite material and no turnover or variation. RESULTS 91's
 failed gate is unchanged.
 
+**Direction (2026-09-29, user request for a bird's-eye view).** [docs/COMPLEXITY_MAP.md](docs/COMPLEXITY_MAP.md)
+abstracts the half-cell result as a copied seed, plus seeded structures rebuilt each
+generation, plus a coupling rule (activation by attachment). It proposes one generic
+seeding rule with many labels, so that sequence chooses structure and new functions are
+combinations rather than new rules. The queue below follows its program.
+
 ## Queue
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Q8o: confirm half-cell reproduction, then add turnover | Freeze a confirmation-tier plan: fresh seeds, full QA, and a rate-robustness rung (dt 1/4) or individual kicks. Parentage comes from face-bond tapes at event resolution. Then a turnover setting (slow chain or rim decay recycling parts) to test sustained reproduction beyond the material limit, and heritable variation (a second letter) for selection. Compare with equal-material bare chains before any benefit claim (radiation protection is the user's hypothesis). |
+| 1 | Generic seeded-growth engine (COMPLEXITY_MAP step 1) | Refactor the half-cell runtime so ports carry labels and anchored growth is one rule over a label table. Regression: the half-cell configuration reproduces as in RESULTS 98 (screen tier). Speed work on the contact sweep belongs here. |
+| 2 | Turnover and sequence variation (step 2; includes Q8o confirmation) | Slow decay of W and chain bonds, two chain letters, fresh seeds, full QA and a dt 1/4 rung. Does reproduction continue past the material limit, and do sequences drift and compete? |
+| 3 | Comb, then a first physical benefit (steps 3–4) | Sequence-encoded appendages rebuilt on copies; then ray-blocking walls or fuel-catching appendages competing at equal material. No per-function reward. |
 | Decided | Exploration time step | Keep dt 1 for exploration (user delegated, 2026-09-28). Finer-step rung only for confirmation-tier claims resting on a quantitative binding/release race. Core micro-optimisation was tried on a scratch copy: hoisting solver loop lookups kept fingerprints identical but gave no measurable speedup, so core code is unchanged. |
 | Retired | Q9b finer-step convergence and RESULTS 79 re-screen | Not pursued (user direction 2026-09-28): the default step stays; RESULTS 93 marks default-step contact rates as qualitative. Q7b's failure is logical (no latch), not a step artifact. |
 
