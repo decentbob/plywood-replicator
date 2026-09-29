@@ -28,3 +28,10 @@ node experiments/time_resolution.js MODE experiments/scratch/UNIQUE_MODE.json.gz
 node experiments/time_resolution_validate.js experiments/scratch/UNIQUE            # expects UNIQUE_<mode>.json.gz
 node experiments/time_resolution_report.js experiments/scratch/UNIQUE experiments/scratch/UNIQUE.report.json
 ```
+
+**2026-09-29.** The user asked about the half-cells and re-prioritised speed and logic over
+byte identity (AGENTS). Q8k (RESULTS 95): the half-cell runtime is 6x faster
+(`half_cell_fast.js`, bit-identical in tests); in-place capture does not fix acquisition,
+because one inventory is too little material. Q8l (abundant soup) is next or running;
+see ROADMAP. Ideas live in `docs/IDEAS.md`.
+

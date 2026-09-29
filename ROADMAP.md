@@ -47,12 +47,19 @@ cycles and ligation keep reproducing templates longer under radiation (L 6.9/5.6
 12–18 against 85–88 late births. This is ligation accumulation plus sequestration,
 not protection of an arrangement. Closed without rescue.
 
+**Q8 half-cells reopened (RESULTS 95, user interest 2026-09-29).** Under the speed/logic
+policy (body motion for exploration), the live half-cell runtime now has a 6x faster,
+bit-identical solver path (`experiments/half_cell_fast.js`). In-place capture was not
+the bottleneck. With one offspring's inventory, assembly is starved: 2–3 face dockings
+per 50k steps. Q8l tests an abundant soup (`half_cell_soup.js`: founder D plus K loose
+inventories). RESULTS 91's failed gate stays failed; this is exploration.
+
 ## Queue
 
 | Order | Work | Gate and reason |
 |---|---|---|
 | Always | P0: local reaction contract and targeted mechanics | Keep body jostling for exploration; compare relevant effects with individual kicks and solver controls. No prerequisite physics rewrite. |
-| 1 | Choose the next causal question (small, logic-first) | Q10 (double strands under damage) was the first pick and fails. Every length gain so far is accumulation with sequestration or a designed gene. The remaining candidates need a useful operation, not length: P1 recipient function (62) and P3 useful mechanical operation (66). A user steer on which kind of function to pursue would help; otherwise screen P3's opposed20 renewal lead for a mechanical operation beyond fit. |
+| 1 | Q8l: half-cell copying in an abundant soup ([plan](experiments/half_cell_soup_plan.md)) | Running. A lead is a separated (unpaired) novel closed D in any world; novel chains without closure are partial. A lead earns a repeated-generation soup; a failure points to the W sequestration or chain-assembly step, diagnosed from the saved tapes before any new mechanism. Other candidates stay recorded in [docs/IDEAS.md](docs/IDEAS.md). |
 | Decided | Exploration time step | Keep dt 1 for exploration (user delegated, 2026-09-28). Finer-step rung only for confirmation-tier claims resting on a quantitative binding/release race. Core micro-optimisation was tried on a scratch copy: hoisting solver loop lookups kept fingerprints identical but gave no measurable speedup, so core code is unchanged. |
 | Retired | Q9b finer-step convergence and RESULTS 79 re-screen | Not pursued (user direction 2026-09-28): the default step stays; RESULTS 93 marks default-step contact rates as qualitative. Q7b's failure is logical (no latch), not a step artifact. |
 
