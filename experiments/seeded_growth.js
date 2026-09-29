@@ -62,6 +62,12 @@ function seeded(Base,config){
     _derive(u){if(structural.has(this.type[u])){this.ss.fill(S.IDLE,u*4,u*4+4);return;}return Sim.prototype._derive.call(this,u);}
     _transition(u){
       if(!structural.has(this.type[u]))return Sim.prototype._transition.call(this,u);
+      // Structural decay (turnover; user's patchy-environment idea): config.decay = {pRim, band}. Each growth bond of a
+      // structural block breaks at pRim per step while the block is in the hot band x < band*W (band 1 = everywhere).
+      // Rolled once per bond (by the lower-index structural end). A local environmental drive, as core pBreak/radBand.
+      const dec=config.decay;
+      if(dec&&dec.pRim>0&&(dec.band>=1||this.px[u]<dec.band*this.p.W))for(let i=0;i<4;i++){const b=this.rimBond[u*4+i];
+        if(b>=0&&(!structural.has(this.type[b>>2])||(b>>2)>u)&&this.rng()<dec.pRim){this.rimBond[u*4+i]=-1;this.rimBond[b]=-1;}}
       if(!prog||this.type[u]!==prog.type)return;
       const kind=this._kinds(),rb=this.rimBond;
       // read the bonded partners' exposed write marks; adopt the first one that differs from my kind

@@ -4,7 +4,7 @@
 const assert=require('assert/strict');
 const {NV,F,R,K,L,T_A,T_C,T_E,T_P,T_Q,I_TPL,I_ON}=require('../src/sim');
 const live=require('./half_cell_live'),{FastLiveHalfCellSim}=require('./half_cell_fast'),{overlap}=require('./half_cell_geometry');
-function createSoup({seed,extra=4,size=24,fuelPer=2,Cls=FastLiveHalfCellSim,rays=0,params={}}={}){
+function createSoup({seed,extra=4,size=24,fuelPer=2,Cls=FastLiveHalfCellSim,rays=0,params={},founderX=0.5}={}){
   const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s,p={...ref.p};
   const counts={nA:2+2*extra,nB:0,nC:8+8*extra,nP:1+extra,nQ:1+extra,nE:4+fuelPer*extra,nX:rays};
   const s=new Cls({...p,...params,...counts,seed,W:size,H:size,seedCount:0});
@@ -14,7 +14,7 @@ function createSoup({seed,extra=4,size=24,fuelPer=2,Cls=FastLiveHalfCellSim,rays
   const rw=live.createWorld({seed:1,start:'paired',motion:'body'}),rs=rw.s,ids=rw.ids;
   const map=new Map(),take={[T_P]:P,[T_Q]:Q,[T_A]:A,[T_C]:Wb},used={[T_P]:0,[T_Q]:0,[T_A]:0,[T_C]:0};
   const founder=[...ids.chains[0],...ids.arcs[0]];
-  const cx=size/2-rs.px[ids.chains[0][1]],cy=size/2-rs.py[ids.chains[0][1]];
+  const cx=size*founderX-rs.px[ids.chains[0][1]],cy=size/2-rs.py[ids.chains[0][1]];
   for(const u of founder){const t=rs.type[u],v=take[t][used[t]++];map.set(u,v);
     s.px[v]=s._wx(rs.px[u]+cx);s.py[v]=s._wy(rs.py[u]+cy);s.pa[v]=rs.pa[u];
     for(let k=0;k<NV;k++){s.ox[v*NV+k]=rs.ox[u*NV+k];s.oy[v*NV+k]=rs.oy[u*NV+k];}
