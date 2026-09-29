@@ -60,3 +60,10 @@ module.exports.ENZYME_CELL=ENZYME_CELL;
 const {rod}=require('./seeded_growth');
 const COMB_ROD={structural:[T_J],shapes:{[T_J]:rod(3)},labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_J]:{[F]:{f:2,s:-1}}}};
 module.exports.COMB_ROD=COMB_ROD;
+// Shield (ROADMAP 1): B's back seeds ONE custom fan-shaped plate (J): its narrow edge (length 1, F) attaches to B's back
+// and it widens to a 3-long far edge, shading the chain from behind. Convex, so polygon contacts stay exact.
+function fan(near=1,far=3,depth=0.75){const pts=[[depth/2,-near/2],[depth/2,near/2],[-depth/2,far/2],[-depth/2,-far/2]];
+  let cx=0,cy=0,A=0;for(let k=0;k<4;k++){const [x0,y0]=pts[k],[x1,y1]=pts[(k+1)%4],c=x0*y1-x1*y0;A+=c;cx+=(x0+x1)*c;cy+=(y0+y1)*c;}
+  cx/=3*A;cy/=3*A;return pts.map(([x,y])=>[x-cx,y-cy]);}
+const SHIELD={structural:[T_J],shapes:{[T_J]:fan()},labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_J]:{[F]:{f:2,s:-1}}}};
+module.exports.SHIELD=SHIELD;module.exports.fan=fan;
