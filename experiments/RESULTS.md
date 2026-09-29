@@ -8507,3 +8507,51 @@ material alone does not produce copying under the current rim rule.
 This suggests a local logic fix rather than more material: rim growth only from
 anchored ends (Q8m, [plan](half_cell_anchor_plan.md)). Raw worlds, tapes and summaries:
 `out/HCS_20260929*`.
+
+## 97. Anchored rim growth: a daughter half-cell assembles and separates
+
+2026-09-29, Q8m. [Plan](half_cell_anchor_plan.md). **Lead** by the frozen reading
+(screen tier, exploratory; one world). First autonomous formation of a separated
+daughter D from loose conserved parts in this project.
+
+**Rule** (`half_cell_anchor.js`, isolated subclass): a rim bond forms only if at least
+one of the two contacting blocks is anchored. A cap is anchored when its own chain port
+is bonded (P at R, Q at L); a W is anchored when its other rim port is bonded. Each block
+reads only its own bonds; there is no new state, type, relay or knob. Arcs therefore grow
+only outward from caps already in a chain. The worlds, seeds, horizon, observation and QA
+are Q8l's (RESULTS 96), so Q8l is the matched ungated control.
+
+| K / arm / seed | Novel chain | Novel closed D | Unpaired / detached at end | Final W free / cap-bound | CPU s |
+|---|---|---|---|---|---:|
+| 4 / anchorProject / 1201 | 5,900 | – | – | 21 / 19 | 638 |
+| 4 / anchorProject / 1202 | 35,700 | 46,200 | – | 21 / 19 | 239 |
+| 4 / anchorPins / 1201 | 17,600 | 36,200 | **47,800 / yes (gap .53)** | 19 / 21 | 454 |
+| 4 / anchorPins / 1202 | 15,100 | – | – | 19 / 21 | 137 |
+| 8 / anchorProject / 1201 | 20,300 | – | – | 44 / 28 | 1492 |
+| 8 / anchorProject / 1202 | – | – | – | 62 / 10 | 585 |
+| 8 / anchorPins / 1201 | 15,400 | 45,700 | – | 37 / 35 | 1121 |
+| 8 / anchorPins / 1202 | 18,000 | – | – | 57 / 15 | 326 |
+
+Against the ungated Q8l arms: novel chains **7/8 versus 1/8**, novel closed D 3/8 versus
+0/8, and one separated daughter versus none. W no longer piles onto loose caps (free W
+19–62 at the end versus 0–1) and forms no free rings. Face links per world rise to 9–22,
+against 2–8 without the rule.
+
+**The daughter** (K=4, anchorPins, seed 1201): chain P64-A2-A5-Q69 with its own
+closed 8-W rim, all four chain blocks active templates (`I_TPL`), no face bonds, and no
+bond to other material (smallest gap .53 sides). The founder remains a closed D. A third
+complete chain (P65-A8-A3-Q68) has also been released by 48,000 without an arc yet, and
+the founder is copying again at 50,000. Figure: [actual polygons at t = 0, 17,600,
+36,200, 47,800 and 50,000](out/HCA_20260929_lead.svg), from a deterministic replay that
+reproduces the saved final state (`half_cell_anchor_figure.js`).
+
+**What it does not show.** One world out of eight, two seeds per cell. A prepared founder
+starts the process, and material is abundant and conserved. Exploratory body motion was
+used, with overlap up to .025. It has not been shown that the daughter itself copies
+(a second generation), that closed Ds persist, or that parent–child identity holds
+(observer tracking is needed). There is no benefit or selection. The arc is a
+connectivity outline, not a sealed wall.
+
+**Next (earned by the lead):** more fresh seeds and a longer horizon under the anchor rule,
+with observer-only parent tracking from the face-bond tapes, to test whether daughters
+become parents (generation 2+) and how material limits the count.
