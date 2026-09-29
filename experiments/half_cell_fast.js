@@ -4,10 +4,10 @@
 // The polygon-contact solver recomputed both bounding radii for every candidate pair in every pass (about half the
 // runtime). Radii depend only on corner offsets, which a contact sweep never changes (it moves centres only), so
 // they are computed once at the start of each sweep. Pair lists are built with plain loops instead of subarrays.
-const {T_A,T_B,T_C,T_D,T_E,T_P,T_Q,NV}=require('../src/sim');
+const {T_A,T_B,T_C,T_D,T_E,T_J,T_P,T_Q,NV}=require('../src/sim');
 const {separation,EPS}=require('./polygon_contact_physics');
 const live=require('./half_cell_live');
-const TYPES=new Set([T_A,T_B,T_C,T_D,T_E,T_P,T_Q]),MARGIN=2;
+const TYPES=new Set([T_A,T_B,T_C,T_D,T_E,T_J,T_P,T_Q]),MARGIN=2;
 
 function fast(Base){
   return class extends Base{

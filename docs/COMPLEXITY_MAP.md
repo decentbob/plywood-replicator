@@ -41,6 +41,8 @@ design space visible.
 | **D** | Decay / turnover | fraying, radiation | recycles material; enables selection | too fast kills; too slow freezes (79, 94) |
 | **P** | Physical effect on the world | walls block rays, parts catch fuel | makes structure matter | designed per-function rewards are not invention |
 
+| **M** | Modification (metabolism) | *proposed* | organisms shape their own supply of part types | must stay local: a block may change only its own state |
+
 The half-cell is **T + G + C + A + R** (no D, no P yet). Other combinations are
 open, and each new row can reuse the same rules.
 
@@ -67,6 +69,27 @@ With this, new "functions" are new *combinations* of labels and shapes that happ
 help. The rule set stays fixed while the design space grows combinatorially. That is the
 honest target for open-ended complexity here, and it matches the audit's requirement that
 novelty arise under fixed rules.
+
+## 3b. Only the chain replicates, and that may be enough (user, 2026-09-29)
+
+Only the chain is templated. Everything else is built around it by seeded growth, as in
+biology, where one molecule class is templated and the rest is constructed. A two-step
+route (chain copied, then a transcript that seeds structures) is optional. Crystal- or
+stack-like self-copying (RESULTS 40) stays available but is not required.
+
+## 3c. Organisms should shape their own supply (user, 2026-09-29)
+
+Otherwise every organism is capped by the soup we prepare. Two local routes:
+
+- **Programmable blanks (M).** Generic blocks carry a side-label *state* instead of a fixed
+  type. A structure grown from the chain (the enzyme, encoded by the sequence) binds a blank
+  through an ordinary incident bond. The blank reads the bonded partner's exposed mark and
+  sets its *own* label state, which persists after release. This is within the locality
+  contract: it reads its own and the bonded partner's side state and writes its own state.
+  Sequence then controls which parts exist, as genes control chemistry through enzymes.
+  State change, not type change (the user's preference).
+- **Sub-block assembly.** Blocks made of smaller conserved parts, joined by directed local
+  bonding. This is deeper but heavier on the physics; keep it second.
 
 ## 4. Combinations worth trying (the map)
 
@@ -128,6 +151,8 @@ Each step is a screen (AGENTS QA tiers); promising ones get confirmation.
    soup at equal material.
 5. **Stack.** Coats on walls, adhesion between cells, theft. Each is a label and shape
    combination in the engine from step 1.
+6. **Metabolism (M).** Programmable blanks reprogrammed by sequence-encoded enzyme
+   structures, so organisms influence the part distribution themselves.
 
 Speed matters for all of this (user direction 2026-09-28). The half-cell runtime is now
 6.4x faster; the next gains are in the polygon-contact sweep (IDEAS, Speed).
