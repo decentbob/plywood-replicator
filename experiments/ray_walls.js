@@ -3,10 +3,12 @@
 // Walls against rays (ray_walls_plan.md).  all STEM | job STEM WALL RAY SEED | summary STEM
 const {spawn}=require('child_process'),{T_C}=require('../src/sim'),live=require('./half_cell_live'),kit=require('./screen_kit');
 const {rays}=require('./seeded_rays'),{seeded,HALF_CELL}=require('./seeded_growth'),{PinsLiveSim}=require('./half_cell_pins'),{createSoup}=require('./half_cell_soup');
-const Cls=rays(seeded(PinsLiveSim,HALF_CELL),{walls:[T_C]}),SEEDS=[1501,1502,1503,1504,1505,1506],STEPS=100000;
+// Exposure can be set per plan: RESULTS 101 used the defaults; ray_walls_fast_plan.md sets RW_MOBX, RW_HIT, RW_SEEDS.
+const Cls=rays(seeded(PinsLiveSim,HALF_CELL),{walls:[T_C]}),SEEDS=(process.env.RW_SEEDS||'1501,1502,1503,1504,1505,1506').split(',').map(Number),STEPS=100000;
+const HIT=Number(process.env.RW_HIT||0.01),MOBX=process.env.RW_MOBX?Number(process.env.RW_MOBX):undefined;
 const jobs=()=>['walled','bare'].flatMap(wall=>['on','off'].flatMap(ray=>SEEDS.map(seed=>({wall,ray,seed}))));
 function job(stem,wall,ray,seed){
-  const w=createSoup({seed,extra:4,size:24,Cls,rays:2,params:{pFray:0.002,rayHit:ray==='on'?0.01:0,rimBind:wall==='walled'}}),initial=w.s.saveState();
+  const w=createSoup({seed,extra:4,size:24,Cls,rays:2,params:{pFray:0.002,rayHit:ray==='on'?HIT:0,rimBind:wall==='walled',...(MOBX!==undefined?{mobX:MOBX}:{})}}),initial=w.s.saveState();
   const seen=new Set(),samples=[];let chainSteps=0;
   const watch=s=>{if(s.t%500)return;const o=live.observe(s);for(const c of o.chains)seen.add(c.units.join(','));chainSteps+=o.chainCount*500;
     if(s.t%5000===0)samples.push({t:s.t,chains:o.chainCount,closed:o.closedCount,hits:s.rayHits});};
