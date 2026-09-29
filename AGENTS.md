@@ -163,6 +163,9 @@ in RESULTS when a change alters trajectories, and recheck any lead that depends 
 - Commit finished, validated work with descriptive messages. `main` is the only long-lived branch.
   Standing user approval permits pushing session work, merging it into `main`, pushing `main`, and
   deleting merged session branches once relevant checks pass and default fingerprints are unchanged.
+- **Show pictures (user, 2026-09-29):** periodically send a small image of interesting results
+  or current work to the chat (e.g. `node tools/snapshot.js STATE.json.gz OUT.png`, then send
+  the file). Not too many, but images often say more than text.
 - Give short progress notes, report negatives honestly, and recommend the next direction. Continue
   authorized work without repeated confirmations. Ask only when a real user decision is needed.
   Record skipped checks accurately; documentation-only work does not require the ten-minute physics suite.

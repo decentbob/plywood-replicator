@@ -8615,3 +8615,32 @@ CPU: about 9,800 s across four workers.
 the rate-robustness (dt 1/4) or individual-kick check this claim calls for. It also needs a
 turnover setting (some decay) so reproduction can continue beyond four copies, and then
 heritable variation (e.g. a second letter type in the chain).
+
+## 99. Generic seeded-growth engine reproduces the half-cell
+
+2026-09-29; COMPLEXITY_MAP step 1. **Works** (screen tier). `experiments/seeded_growth.js`
+replaces the hard-coded half-cell rim chemistry with one rule over a port-label table.
+A label is a family and sign on a (type, side); seed ports sit on chain blocks. Ports bind
+by the existing polymer end-contact if they share a family, have opposite signs and are
+not both seeds. A port can bind only if its block, or its partner's, is attached elsewhere
+by any other bond. Structural types are excluded from letter chemistry. The half-cell is
+now the configuration `HALF_CELL`. The attachment rule is broader than RESULTS 97's (a
+face-docked cap now counts as attached), so trajectories differ from Q8n.
+
+Regression, the same design as Q8n (RESULTS 98; pins, K=4 soup, seeds 1301–1306, 150,000
+steps, tape parentage). `HG_ARMS=seededPins node experiments/half_cell_generations.js all|summary experiments/scratch/SG_reg_20260929`
+
+| Seed | Gen-1 chains | Gen-2 chains | Closed gen-1 D | Closed gen-2 D | Separated |
+|---|---:|---:|---:|---:|---:|
+| 1301 | 1 | 1 | 1 | 1 | 1 |
+| 1302 | 2 | 0 | 0 | 0 | 0 |
+| 1303 | 2 | 0 | 2 | 0 | 0 |
+| 1304 | 1 | 1 | 0 | 1 | 0 |
+| 1305 | 1 | 1 | 1 | 0 | 1 |
+| 1306 | 1 | 1 | 1 | 1 | 1 |
+
+Generation-2 chains in 4/6 worlds (Q8n pins 4/6) and closed generation-2 Ds in 3/6
+(Q8n 2/6): reproduction is preserved under the generic rule. Raw in `out/SG_reg_20260929*`;
+about 3,900 CPU s. Every later structure (comb, coats, programmable blanks) is now a
+configuration of this engine. A new `tools/snapshot.js` renders any saved state to PNG
+for quick status images.
