@@ -100,6 +100,17 @@ Otherwise every organism is capped by the soup we prepare. Two local routes:
 - **Sub-block assembly.** Blocks made of smaller conserved parts, joined by directed local
   bonding. This is deeper but heavier on the physics; keep it second.
 
+## 3d. Custom parts, not repeating blocks (user, 2026-09-29)
+
+A structure meant to have a particular length and form should be **one custom block** with
+its own polygon, not a run of small repeating blocks. Repeats grow to unbounded length, or to
+random length if capped (the comb's J arms reached 23 blocks, RESULTS 100). With single parts,
+function, length and form are intentional. Repeats are for the few cases where open-ended
+growth is the point. The engine supports this (`config.shapes`, e.g. `rod(3)`; mass and
+inertia follow the polygon). Viability look: a comb whose B seeds one 3x1 rod is bounded as
+intended. In that world the armed founder stayed paired for 30k steps without finishing a
+copy (the partner B, attached by its face, may grow a rod that jams); PAAQ made 4.
+
 ## 4. Combinations worth trying (the map)
 
 Ordered by how directly each builds on what works. None is tested unless marked.

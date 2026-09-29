@@ -55,3 +55,8 @@ const ENZYME_CELL={structural:[T_C,T_D],labels:{[T_P]:HALF_CELL.labels[T_P],[T_Q
   [T_B]:{[K]:{f:2,s:1,seed:true}},[T_D]:{[F]:{f:2,s:-1},[K]:{f:9,s:1,write:1}}},
   programmable:{type:T_C,pForget:1e-4,kinds:{0:{[F]:{f:9,s:-1},[K]:{f:9,s:-1}},1:{[F]:{f:1,s:-1},[K]:{f:1,s:1}}}}};
 module.exports.ENZYME_CELL=ENZYME_CELL;
+// Comb with a custom rod (user, 2026-09-29): B's back seeds ONE rigid 3x1 rod (J), attached by its end (F). Length and
+// form are set by the part, not by supply; the rod carries no further ports.
+const {rod}=require('./seeded_growth');
+const COMB_ROD={structural:[T_J],shapes:{[T_J]:rod(3)},labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_J]:{[F]:{f:2,s:-1}}}};
+module.exports.COMB_ROD=COMB_ROD;

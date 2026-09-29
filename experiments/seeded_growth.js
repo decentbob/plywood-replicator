@@ -16,7 +16,14 @@
 //   - it then requests release of its own growth bonds that its new labels no longer match (the state change drives
 //     release; no timing program);
 //   - an unattached programmed block returns to blank with probability pForget per step (reversal and recycling).
-const {Sim,S,F,R,K,L,T_A,T_B,T_C,T_D,T_P,T_Q}=require('../src/sim');
+const {Sim,S,F,R,K,L,NV,T_A,T_B,T_C,T_D,T_P,T_Q}=require('../src/sim');
+// Custom parts (user, 2026-09-29): a structure meant to have a fixed length and form is ONE block with its own polygon,
+// not a run of small repeating blocks (which grows to random or unbounded length). config.shapes = {type: [[x,y],...]}
+// gives corners (counter-clockwise, about the centroid); edges 0..3 are F, R, K, L. Mass and moment of inertia follow
+// the polygon's area (unit density), so a unit square keeps the core's values (w 1, wr 6).
+function polyMass(pts){let A=0,I=0;for(let k=0;k<pts.length;k++){const [x0,y0]=pts[k],[x1,y1]=pts[(k+1)%pts.length],c=x0*y1-x1*y0;
+  A+=c/2;I+=c*(x0*x0+x0*x1+x1*x1+y0*y0+y0*y1+y1*y1)/12;}return {area:Math.abs(A),inertia:Math.abs(I)};}
+function rod(length,width=1){const a=length/2,b=width/2;return [[a,-b],[a,b],[-a,b],[-a,-b]];}
 
 // The half-cell (RESULTS 97–98) as a configuration: P and Q seed family 1 on their outer lateral sides; W carries it.
 const HALF_CELL={structural:[T_C],labels:{[T_P]:{[L]:{f:1,s:1,seed:true}},[T_Q]:{[R]:{f:1,s:-1,seed:true}},
@@ -26,6 +33,16 @@ function seeded(Base,config){
   const structural=new Set(config.structural),labels=config.labels,prog=config.programmable||null;
   const byType=(t,i)=>labels[t]&&labels[t][i]||null;
   return class extends Base{
+    _initGeometry(){
+      super._initGeometry();
+      for(const [key,pts] of Object.entries(config.shapes||{})){
+        const t=+key,{area,inertia}=polyMass(pts);this.nv[t]=pts.length;
+        pts.forEach((q,k)=>{this.rx[t*NV+k]=q[0];this.ry[t*NV+k]=q[1];});
+        for(let i=0;i<4;i++)this.edgeOf[t*4+i]=i;
+        for(let u=0;u<this.n;u++)if(this.type[u]===t){this.size[u]=Math.sqrt(area);this.w[u]=1/area;this.wr[u]=1/inertia;
+          if(this.vw)this.vw[u]=this.nv[t]*this.w[u];this._resetShape(u);}
+      }
+    }
     _kinds(){if(!this.kind||this.kind.length!==this.n)this.kind=new Int8Array(this.n);return this.kind;}
     labelOf(u,i){
       const t=this.type[u];
@@ -59,4 +76,4 @@ function seeded(Base,config){
     compat(u,i,v,j){if(structural.has(this.type[u])||structural.has(this.type[v]))return 0;return Sim.prototype.compat.call(this,u,i,v,j);}
   };
 }
-module.exports={seeded,HALF_CELL};
+module.exports={seeded,HALF_CELL,polyMass,rod};
