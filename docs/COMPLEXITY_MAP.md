@@ -157,7 +157,12 @@ Each step is a screen (AGENTS QA tiers); promising ones get confirmation.
    sequence specifies.
 4. **First physical benefit without a reward.** Walls behind the chain do *not* shield it from
    rays at either ray speed (RESULTS 101–102): the copying face must stay open, and one
-   break kills. Remaining candidates: an enclosure with copying inside; repair (a bound
+   break kills. **Leading candidate: a feeding arm.** Supply kinetics limit copying throughout
+   RESULTS 95–100. Arm tips bind free letters reversibly by their back, raising the local
+   concentration next to the chain. A held letter can still dock on the template by its face;
+   once the letter links into the copy, the arm bond is released by that state change
+   (release on incorporation, the same logic as block programming). The benefit stays with
+   the arm's own chain because of where the arm sits. Other candidates: an enclosure with copying inside; repair (a bound
    partner holds broken ends, RESULTS 78) combined with driven release; appendages that catch fuel. Compete morphologies in one
    soup at equal material.
 5. **Stack.** Coats on walls, adhesion between cells, theft. Each is a label and shape
