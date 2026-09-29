@@ -5,8 +5,11 @@
 const {spawn}=require('child_process'),{F}=require('../src/sim');
 const live=require('./half_cell_live'),bath=require('./half_cell_bath'),kit=require('./screen_kit');
 const {AnchorProjectSim,AnchorPinsSim}=require('./half_cell_anchor'),{createSoup}=require('./half_cell_soup');
-const CLASS={anchorProject:AnchorProjectSim,anchorPins:AnchorPinsSim},SEEDS=[1301,1302,1303,1304,1305,1306],STEPS=150000;
-const jobs=()=>Object.keys(CLASS).flatMap(arm=>SEEDS.map(seed=>({arm,seed})));
+const {seeded,HALF_CELL}=require('./seeded_growth'),{FastLiveHalfCellSim}=require('./half_cell_fast'),{PinsLiveSim}=require('./half_cell_pins');
+// seeded*: the generic seeded-growth engine configured as the half-cell (COMPLEXITY_MAP step 1 regression).
+const CLASS={anchorProject:AnchorProjectSim,anchorPins:AnchorPinsSim,seededProject:seeded(FastLiveHalfCellSim,HALF_CELL),seededPins:seeded(PinsLiveSim,HALF_CELL)};
+const SEEDS=[1301,1302,1303,1304,1305,1306],STEPS=150000,ARMS=(process.env.HG_ARMS||'anchorProject,anchorPins').split(',');
+const jobs=()=>ARMS.flatMap(arm=>SEEDS.map(seed=>({arm,seed})));
 const key=xs=>xs.join(',');
 function tracker(founder){
   const ids=new Map([[key(founder),{units:founder,gen:0,parent:null,born:0,closed:0,unpaired:null,detached:null,lastPartners:null}]]);
