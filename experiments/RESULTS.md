@@ -8467,3 +8467,43 @@ which is how Squirm3-style chain copying normally runs. That is the next test.
 QA: the first seed of each cell repeated as a plain run and a midpoint restart with
 its own class (state and RNG match). Initial and final states and tapes are saved in
 `out/HCP_20260929*`. Total CPU about 1,000 s across four workers.
+
+## 96. An abundant soup does not copy either: loose caps sequester the rim material
+
+2026-09-29, Q8l. [Plan](half_cell_soup_plan.md). **Negative for copying, with a clear
+mechanistic diagnosis** (screen tier, exploratory). Tapes show loose A letters docking
+on the founder and linking into an A–A pair, then waiting: matching caps arrive rarely because
+loose caps carry W arcs, and a partial copy that gets one cap releases incomplete.
+
+**Speed first.** `half_cell_fast.js` now also skips polygon-contact pairs further apart
+than their radii plus 2 sides at the start of each step. All 12 identity-test worlds stay
+bit-identical, now **6.4x faster** than the original runtime. A 1-side margin let six
+individual-kick worlds drift, so 2 is used. Soup worlds of 72/128 blocks run at about
+4/6.5 ms per step.
+
+**World.** `half_cell_soup.js` places one founder D (the RESULTS 87/88 geometry, active)
+plus K loose inventories (P, A, A, Q, eight W, two E each), without overlap: K=4 in
+24x24, K=8 in 32x32. Live chemistry, body motion, 16 passes, arms project and pins,
+seeds 1201–1202, 50,000 steps.
+
+| K / arm / seed | Novel chain | Novel closed D | Final W: cap-bound / free rings / free | Max overlap | CPU s |
+|---|---|---:|---|---:|---:|
+| 4 / project / 1201 | – | 0 | 40 / 0 / 0 | .0065 | 433 |
+| 4 / project / 1202 | – | 0 | 40 / 0 / 0 | .0071 | 121 |
+| 4 / pins / 1201 | – | 0 | 35 / 0 / 0 | .1669 | 625 |
+| 4 / pins / 1202 | – | 0 | 39 / 0 / 1 | .0194 | 242 |
+| 8 / project / 1201 | – | 0 | 65 / 0 / 1 | .0062 | 1057 |
+| 8 / project / 1202 | – | 0 | 59 / 13 / 0 | .0088 | 280 |
+| 8 / pins / 1201 | step 8,200 | 0 | 61 / 0 / 1 | .0082 | 1472 |
+| 8 / pins / 1202 | – | 0 | 53 / 14 / 0 | .0095 | 574 |
+
+(CPU includes the plain and restart QA runs for seed 1201.) One novel chain in eight
+worlds, and it never gains an arc. **Nearly all W ends up bound to caps**
+(35–40 of 40 at K=4, 53–65 of 72 at K=8), plus some free W rings. Loose P/Q caps grow
+W arcs on their rim ports before they ever join a chain, so by the time a chain could
+form, the arc material is used up. The capped blobs are also bulkier to dock. More
+material alone does not produce copying under the current rim rule.
+
+This suggests a local logic fix rather than more material: rim growth only from
+anchored ends (Q8m, [plan](half_cell_anchor_plan.md)). Raw worlds, tapes and summaries:
+`out/HCS_20260929*`.

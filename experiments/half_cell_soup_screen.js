@@ -4,9 +4,12 @@
 const {spawn}=require('child_process'),{T_C}=require('../src/sim');
 const live=require('./half_cell_live'),{FastLiveHalfCellSim}=require('./half_cell_fast'),{PinsLiveSim}=require('./half_cell_pins');
 const {createSoup}=require('./half_cell_soup'),bath=require('./half_cell_bath'),kit=require('./screen_kit');
-const CLASS={project:FastLiveHalfCellSim,pins:PinsLiveSim},SIZE={4:24,8:32},STEPS=50000,SEEDS=[1201,1202];
+const {AnchorProjectSim,AnchorPinsSim}=require('./half_cell_anchor');
+const CLASS={project:FastLiveHalfCellSim,pins:PinsLiveSim,anchorProject:AnchorProjectSim,anchorPins:AnchorPinsSim},SIZE={4:24,8:32},STEPS=50000,SEEDS=[1201,1202];
+// Q8l ran the default arms; Q8m sets HC_ARMS=anchorProject,anchorPins (half_cell_anchor_plan.md).
+const ARMS=(process.env.HC_ARMS||'project,pins').split(',');
 const key=xs=>xs.join(',');
-const jobs=()=>[4,8].flatMap(k=>['project','pins'].flatMap(arm=>SEEDS.map(seed=>({k,arm,seed}))));
+const jobs=()=>[4,8].flatMap(k=>ARMS.flatMap(arm=>SEEDS.map(seed=>({k,arm,seed}))));
 function wStats(s){
   let free=0,freeRing=0,capBound=0;const seen=new Set();
   for(let u=0;u<s.n;u++)if(s.type[u]===T_C&&!seen.has(u)){
