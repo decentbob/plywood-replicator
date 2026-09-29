@@ -8733,3 +8733,31 @@ is unpaired. **Conclusion for this geometry:** a wall behind the chain cannot pr
 part that has to stay open for copying. Radiation protection needs a different
 organization (an enclosure with copying inside, or repair), which is a design question
 for the complexity map, not a parameter. About 8,000 CPU s; raw in `out/RWF_20260929*`.
+
+## 103. Walls in a shadowing damage field: favourable, but below the 5/6 screen rule
+
+2026-09-29. [Plan](field_walls_plan.md) (the user's field design). **Not established by the frozen
+rule; a lead for a larger test.** The field (`seeded_field.js`) breaks chain lateral bonds at
+pField × exposure, where exposure is the fraction of 16 directions not shadowed by W within range 5.
+A founder chain inside its own D has exposure .44–.50. `pField` 1e-5 (calibrated on bare only);
+the 2x2 design is walled/bare x field on/off; HALF_CELL config, pins, K=4 soup, `pFray` .002, body16;
+seeds 1521–1526, 100,000 steps. A container restart killed four bare/off control runs, which were
+rerun from their seeds (deterministic), so the matrix is complete.
+
+| Seed | Walled on / off (chain-steps) | Bare on / off | On/off ratio walled / bare | Distinct chains on, walled / bare |
+|---|---|---|---|---|
+| 1521 | 219,500 / 143,000 | 50,000 / 238,000 | 1.53 / .21 | 4 / 1 |
+| 1522 | 175,500 / 217,000 | 161,000 / 197,500 | .81 / .82 | 4 / 6 |
+| 1523 | 129,000 / 157,000 | 116,000 / 100,000 | .82 / 1.16 | 3 / 5 |
+| 1524 | 2,000 / 247,500 | 2,000 / 248,000 | .01 / .01 | 1 / 1 |
+| 1525 | 157,000 / 244,500 | 1,500 / 276,500 | .64 / .01 | 4 / 1 |
+| 1526 | 151,500 / 242,500 | 165,000 / 276,000 | .62 / .60 | 4 / 5 |
+
+Protection (ratio higher for walled) 4/6 and net benefit (walled/on above bare/on) 4/6, so both
+miss the frozen 5/6. The direction is favourable. The mean on/off ratio is .74 walled against .47
+bare. The bare founder is killed early in 3/6 seeds, the walled founder in 1/6 (1524, where both
+die). Where both survive, the arms are close. This is the first damage model in which walls
+plausibly help, consistent with the user's expectation that halved exposure should matter.
+Six seeds cannot separate it from chance. **Next:** a separately frozen confirmation with
+more fresh seeds and a pre-specified paired test, not a relaxed reading of this screen.
+About 8,000 CPU s; raw in `out/FW_20260929*`.
