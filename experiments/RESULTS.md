@@ -8710,3 +8710,26 @@ against 218,500–344,500), so the wall costs some copying. Where chains survive
 protection needs either an enclosure with copying inside, or rays that pass quickly, so
 that the wall blocks part of each trajectory. Either is a new frozen plan, not a retune.
 CPU about 8,000 s; raw data in `out/RW_20260929*`.
+
+## 102. Fast rays: walls behind the chain still give no protection
+
+2026-09-29. [Plan](ray_walls_fast_plan.md), a new exposure after RESULTS 101. **Negative.**
+The design is the same 2x2, with `mobX` 1 (rays move like blocks, so none lingers), `rayHit`
+.003 (calibrated on bare worlds only), and fresh seeds 1511–1516.
+
+| Seed | Chain-steps walled on / off | Bare on / off | Ray hits walled / bare |
+|---|---|---|---|
+| 1511 | 5,000 / 265,500 | 43,500 / 255,000 | 2 / 5 |
+| 1512 | 54,500 / 196,500 | 8,500 / 231,000 | 6 / 2 |
+| 1513 | 21,000 / 270,000 | 44,000 / 282,000 | 5 / 7 |
+| 1514 | 151,500 / 208,000 | 82,500 / 283,500 | 5 / 6 |
+| 1515 | 29,500 / 282,500 | 10,000 / 197,000 | 1 / 1 |
+| 1516 | 500 / 228,000 | 3,000 / 229,500 | 1 / 1 |
+
+Walled beats bare in 3/6 seeds on both criteria: no benefit. Rays remove 70–99% of
+chain-steps in both arms. Hit counts are similar, so the wall does not stop hits that
+matter: one break kills a chain, and rays reach it from the open copying side or while it
+is unpaired. **Conclusion for this geometry:** a wall behind the chain cannot protect the
+part that has to stay open for copying. Radiation protection needs a different
+organization (an enclosure with copying inside, or repair), which is a design question
+for the complexity map, not a parameter. About 8,000 CPU s; raw in `out/RWF_20260929*`.

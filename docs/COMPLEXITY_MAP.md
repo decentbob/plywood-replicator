@@ -155,8 +155,10 @@ Each step is a screen (AGENTS QA tiers); promising ones get confirmation.
 3. **Comb: sequence-encoded appendages.** One letter exposes a back seed port; appendages
    are short straight polymers. Test that copies rebuild the appendage pattern their
    sequence specifies.
-4. **First physical benefit without a reward.** Candidates: walls blocking ray particles
-   (the user's hypothesis), or appendages that catch fuel. Compete morphologies in one
+4. **First physical benefit without a reward.** Walls behind the chain do *not* shield it from
+   rays at either ray speed (RESULTS 101–102): the copying face must stay open, and one
+   break kills. Remaining candidates: an enclosure with copying inside; repair (a bound
+   partner holds broken ends, RESULTS 78) combined with driven release; appendages that catch fuel. Compete morphologies in one
    soup at equal material.
 5. **Stack.** Coats on walls, adhesion between cells, theft. Each is a label and shape
    combination in the engine from step 1.

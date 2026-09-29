@@ -427,6 +427,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 99 | Generic seeded-growth engine | Does one label-table rule (activation by attachment) reproduce the half-cell? | research engine `seeded_growth.js`, HALF_CELL config, pins, soup K 4 | works | gen-2 chains 4/6 (Q8n 4/6), closed gen-2 D 3/6 (Q8n 2/6) | seeded_growth.js, half_cell_generations.js (`SG_reg_20260929`) | comb configuration (sequence-encoded arms) | 6 worlds x 150k; about 3,900 CPU s; broader attachment rule, trajectories differ from Q8n |
 | 100 | Comb: sequence-encoded arms | Are arms seeded by B rebuilt on copies, and does form change reproduction? | engine COMB config, `energyGate` false, PBBQ vs PAAQ in one soup, body16 pins | works | PAAQ out-copies PBBQ 6/6 (3–4 vs 0–2); every PBBQ copy has an arm; unbounded J rods up to 23 blocks | seeded_worlds.js, comb_screen.js (`COMB_20260929`) | bounded structures; a structure with physical benefit | 6 worlds x 50k; about 4,200 CPU s; screen tier; selection by form without rewards |
 | 101 | Walls against rays (half-cell) | Do walls pay by blocking rays? | `nX` 2, `rayHit` .01/0, `rimBind` on/off, `pFray` .002, soup K 4 | negative | founder killed within 500 steps in 4/6 seeds in both arms (slow ray near start, exposed copying face); gate 4/6 and 1/6; walls cost some copying without rays | seeded_rays.js, ray_walls.js (`RW_20260929`) | a new plan: fast rays or enclosure with inside copying; no retune | 24 worlds x 100k; about 8,000 CPU s; calibration missed that one early hit is fatal |
+| 102 | Walls against fast rays | With rays that pass quickly, does the half-cell wall shield? | `mobX` 1, `rayHit` .003/0, `rimBind` on/off, fresh seeds | negative | walled beats bare 3/6 on both criteria; rays remove 70–99% of chain-steps either way | ray_walls.js (`RWF_20260929`) | walls behind the chain cannot protect the open copying face; enclosure or repair is a design question | 24 worlds x 100k; about 8,000 CPU s |
 
 ## Knob index
 
@@ -482,7 +483,7 @@ the rows that used it). Rerun it after adding rows.
 | `mobE` | 14 (negative), 17 (inconclusive), 21 (negative), 25 (works) |
 | `mobM` | 25 (works), 25c (works), 25d (negative) |
 | `mobS` | 21 (negative), 25 (works), 25c (works), 26 (negative), 26b (inconclusive), 42a (works) |
-| `mobX` | 25b (works) |
+| `mobX` | 25b (works), 102 (negative) |
 | `motif` | 9 (negative), 12b (inconclusive), 14 (negative), 17 (inconclusive), 21 (negative), 24b (negative), 27b (negative) |
 | `n1` | 34a (works) |
 | `n4` | 34a (works) |
@@ -527,7 +528,7 @@ the rows that used it). Rerun it after adding rows.
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative), 77 (negative) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |
 | `radBand` | 33g (lead) |
-| `rayHit` | 25b (works), 25d (negative), 101 (negative) |
+| `rayHit` | 25b (works), 25d (negative), 101 (negative), 102 (negative) |
 | `relay` | 19c (works), 19d (negative), 22 (negative), 33b (works), 40d (inconclusive) |
 | `resB` | 8 (works), 12 (works) |
 | `resC` | 35 (inconclusive) |
