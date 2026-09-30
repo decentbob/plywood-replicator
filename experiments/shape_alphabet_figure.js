@@ -3,7 +3,7 @@
 // One 4-cornered block family: face F and laterals R, L always have unit length (always attachable);
 // the laterals tilt inward by theta and the back K shrinks to 1-2 sin(theta).
 //   theta=0   -> square   (chain goes straight)
-//   theta=15  -> wedge    (turns 30 degrees; optional third state)
+//   (no wedge state: a welded trapezoid of three triangles covers it, and 60-degree steps fit together better)
 //   theta=30  -> triangle (back collapses to a point; turns 60 degrees)
 // Usage: node experiments/shape_alphabet_figure.js [OUT.png]
 const fs=require('fs'),path=require('path'),{execFileSync}=require('child_process');
@@ -56,25 +56,31 @@ function drawPolys(cx,cy,sc,list){const bb=bbox(list.flatMap(p=>p.pts));
   for(const p of list)poly(V,p.pts,p.fill);}
 
 parts.push(`<rect width="${W}" height="${H}" fill="#fbfaf7"/>`);
-txt(30,42,'Base shapes: one block, one edge length, a few rest states',{size:26,weight:'bold'});
+txt(30,42,'Base shapes: one block, one edge length, two rest states',{size:26,weight:'bold'});
 txt(30,68,'Every working edge (face F, laterals R and L) is exactly one unit long, so any edge can bond to any edge. Larger forms come from combinations and sequences.',{size:15,fill:'#555'});
 
 // ---- Panel A: the family ----
 txt(30,112,'A. The block family (a state, not a type)',{size:19,weight:'bold'});
 const sc=95;
-[['S','square','tilt 0°, back 1','turn 0° (straight)'],['W','wedge (optional)','tilt 15°, back 0.48','turn 30°'],['T','triangle','tilt 30°, back 0','turn 60°']].forEach(([k,name,geo,turn],i)=>{
-  const cx=110+i*205,cy=170,V=view(cx,cy,sc);drawBlock(V,block(TILT[k]),COL[k]);
+[['S','square','tilt 0°, back 1','turn 0° (straight)'],['T','triangle','tilt 30°, back 0','turn 60°']].forEach(([k,name,geo,turn],i)=>{
+  const cx=110+i*220,cy=170,V=view(cx,cy,sc);drawBlock(V,block(TILT[k]),COL[k]);
   txt(cx,cy+sc+30,name,{anchor:'middle',weight:'bold'});txt(cx,cy+sc+50,geo,{anchor:'middle',size:13,fill:'#555'});
   txt(cx,cy+sc+68,turn,{anchor:'middle',size:13,fill:'#555'});
   if(i===0){txt(cx,cy-8,'F',{anchor:'middle',fill:FACE,weight:'bold'});txt(cx+sc*.5+12,cy+sc*.55,'R',{fill:LAT,weight:'bold'});
-    txt(cx-sc*.5-24,cy+sc*.55,'L',{fill:LAT,weight:'bold'});txt(cx,cy+sc+14,'K',{anchor:'middle',fill:BACK,weight:'bold',size:13});}
-  if(i<2)txt(cx+103,cy+sc*.5,'⇄',{anchor:'middle',size:30,fill:'#999'});
+    txt(cx-sc*.5-24,cy+sc*.55,'L',{fill:LAT,weight:'bold'});txt(cx,cy+sc+14,'K',{anchor:'middle',fill:BACK,weight:'bold',size:13});
+    txt(cx+110,cy+sc*.5,'⇄',{anchor:'middle',size:30,fill:'#999'});}
 });
+{const t0=reg(3,[0,0],[1,0]),t1=attach(t0,deg(30),3),t2=attach(t1,deg(-30),3);
+  drawPolys(565,205,40,[{pts:t0,fill:COL.T},{pts:t1,fill:COL.T},{pts:t2,fill:COL.T}]);
+  txt(565,268,'no wedge state:',{anchor:'middle',size:13,fill:'#555',weight:'bold'});
+  txt(565,286,'a welded trapezoid',{anchor:'middle',size:13,fill:'#555'});
+  txt(565,304,'covers it, and 60° steps',{anchor:'middle',size:13,fill:'#555'});
+  txt(565,322,'make parts fit together',{anchor:'middle',size:13,fill:'#555'});}
 const ax=30,ay=385;
 [['F face (copy pairing) — always 1',FACE],['R, L laterals (backbone) — always 1',LAT],['K back (structure seed) — shrinks, gone in the triangle',BACK]].forEach(([s,c],i)=>{
   parts.push(`<line x1="${ax}" y1="${ay+i*22-5}" x2="${ax+28}" y2="${ay+i*22-5}" stroke="${c}" stroke-width="4"/>`);txt(ax+38,ay+i*22,s,{size:14});});
 txt(30,462,'The switch is a local state (like the core fold rule, or the programmable kind):',{size:14,fill:'#333'});
-txt(30,481,'the laterals tilt and the back shrinks; F, R and L never change length.',{size:14,fill:'#333'});
+txt(30,481,'the laterals tilt and the back shrinks; F, R and L never change length. Chains turn only in 60° steps.',{size:14,fill:'#333'});
 
 // ---- Panel B: composite parts ----
 txt(700,112,'B. Bigger parts are bonded combinations (and can be split)',{size:19,weight:'bold'});

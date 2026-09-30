@@ -8,7 +8,7 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 - **Base-shape alphabet** (design, user direction) — not yet built. One block family with unit
   face and lateral edges; its state tilts the laterals and shrinks the back: square (straight),
-  triangle (60° turn), optional wedge. Parts are bonded combinations. Chains fold into the shape their
+  triangle (60° turn); no wedge (a welded trapezoid covers it, and 60° steps fit together better). Parts are bonded combinations. Chains fold into the shape their
   sequence encodes: letters stay square while face-paired and fold when free. Picture:
   `experiments/out/SHAPES_alphabet_20260930.png`; details in COMPLEXITY_MAP 3e. Next: `shapeStates`
   demo (hairpins, hexagon rings).

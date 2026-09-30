@@ -130,8 +130,10 @@ Stay simple and general; complex forms should come from combinations and sequenc
 - **One family, not several types.** A 4-cornered block whose face F and laterals R, L are
   always exactly one unit long, so any working edge can bond to any other. Its state tilts
   the laterals inward by an angle and shrinks the back K to `1 - 2 sin(tilt)`:
-  **square** (tilt 0, straight), **triangle** (tilt 30°, back collapses, turns 60°),
-  optionally a **wedge** (tilt 15°, turns 30°). No vertex count changes: the triangle is the
+  **square** (tilt 0, straight) and **triangle** (tilt 30°, back collapses, turns 60°).
+  **No wedge state** (user, 2026-09-30): a welded trapezoid of three triangles covers that
+  role, and restricting chain turns to 60° steps keeps folded chains and parts on a few shared
+  directions, so structures fit together edge to edge more easily. No vertex count changes: the triangle is the
   square with a zero-length back, so the switch is a rest-shape reset like the core fold.
   A tiny nonzero back (about 0.05) is safer numerically than exact collapse.
 - **Why squares and triangles.** Both have unit edges and similar size. Together they give

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1060" viewBox="0 0 1500 1060"><rect width="1500" height="1060" fill="#fbfaf7"/>
-<text x="30" y="42" font-family="Helvetica,Arial,sans-serif" font-size="26" fill="#222" text-anchor="start" font-weight="bold">Base shapes: one block, one edge length, a few rest states</text>
+<text x="30" y="42" font-family="Helvetica,Arial,sans-serif" font-size="26" fill="#222" text-anchor="start" font-weight="bold">Base shapes: one block, one edge length, two rest states</text>
 <text x="30" y="68" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#555" text-anchor="start" font-weight="normal">Every working edge (face F, laterals R and L) is exactly one unit long, so any edge can bond to any edge. Larger forms come from combinations and sequences.</text>
 <text x="30" y="112" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">A. The block family (a state, not a type)</text>
 <polygon points="62.5,170.0 157.5,170.0 157.5,265.0 62.5,265.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
@@ -14,23 +14,21 @@
 <text x="169.5" y="222.25" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#2b6fb3" text-anchor="start" font-weight="bold">R</text>
 <text x="38.5" y="222.25" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#2b6fb3" text-anchor="start" font-weight="bold">L</text>
 <text x="110" y="279" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="bold">K</text>
-<text x="213" y="217.5" font-family="Helvetica,Arial,sans-serif" font-size="30" fill="#999" text-anchor="middle" font-weight="normal">⇄</text>
-<polygon points="267.5,170.0 362.5,170.0 337.9,261.8 292.1,261.8" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
-<line x1="267.5" y1="170.0" x2="362.5" y2="170.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
-<line x1="362.5" y1="170.0" x2="337.9" y2="261.8" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="292.1" y1="261.8" x2="267.5" y2="170.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="337.9" y1="261.8" x2="292.1" y2="261.8" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<text x="315" y="295" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">wedge (optional)</text>
-<text x="315" y="315" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">tilt 15°, back 0.48</text>
-<text x="315" y="333" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">turn 30°</text>
-<text x="418" y="217.5" font-family="Helvetica,Arial,sans-serif" font-size="30" fill="#999" text-anchor="middle" font-weight="normal">⇄</text>
-<polygon points="472.5,170.0 567.5,170.0 520.0,252.3 520.0,252.3" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
-<line x1="472.5" y1="170.0" x2="567.5" y2="170.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
-<line x1="567.5" y1="170.0" x2="520.0" y2="252.3" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="520.0" y1="252.3" x2="472.5" y2="170.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<text x="520" y="295" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">triangle</text>
-<text x="520" y="315" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">tilt 30°, back 0</text>
-<text x="520" y="333" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">turn 60°</text>
+<text x="220" y="217.5" font-family="Helvetica,Arial,sans-serif" font-size="30" fill="#999" text-anchor="middle" font-weight="normal">⇄</text>
+<polygon points="282.5,170.0 377.5,170.0 330.0,252.3 330.0,252.3" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<line x1="282.5" y1="170.0" x2="377.5" y2="170.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
+<line x1="377.5" y1="170.0" x2="330.0" y2="252.3" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="330.0" y1="252.3" x2="282.5" y2="170.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<text x="330" y="295" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">triangle</text>
+<text x="330" y="315" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">tilt 30°, back 0</text>
+<text x="330" y="333" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">turn 60°</text>
+<polygon points="525.0,222.3 565.0,222.3 545.0,187.7" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="545.0,187.7 565.0,222.3 585.0,187.7" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="585.0,187.7 565.0,222.3 605.0,222.3" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<text x="565" y="268" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="bold">no wedge state:</text>
+<text x="565" y="286" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">a welded trapezoid</text>
+<text x="565" y="304" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">covers it, and 60° steps</text>
+<text x="565" y="322" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">make parts fit together</text>
 <line x1="30" y1="380" x2="58" y2="380" stroke="#e0672b" stroke-width="4"/>
 <text x="68" y="385" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">F face (copy pairing) — always 1</text>
 <line x1="30" y1="402" x2="58" y2="402" stroke="#2b6fb3" stroke-width="4"/>
@@ -38,7 +36,7 @@
 <line x1="30" y1="424" x2="58" y2="424" stroke="#777" stroke-width="4"/>
 <text x="68" y="429" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">K back (structure seed) — shrinks, gone in the triangle</text>
 <text x="30" y="462" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">The switch is a local state (like the core fold rule, or the programmable kind):</text>
-<text x="30" y="481" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">the laterals tilt and the back shrinks; F, R and L never change length.</text>
+<text x="30" y="481" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">the laterals tilt and the back shrinks; F, R and L never change length. Chains turn only in 60° steps.</text>
 <text x="700" y="112" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">B. Bigger parts are bonded combinations (and can be split)</text>
 <polygon points="718.0,211.0 760.0,211.0 760.0,169.0 718.0,169.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <polygon points="760.0,169.0 760.0,211.0 802.0,211.0 802.0,169.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
