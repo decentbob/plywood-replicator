@@ -229,6 +229,8 @@ function createTypedWorld({seed,founders=[],structures=[],supply={},size=18,para
     units.forEach(u=>s.setType(u,'---'));
     let fi=0;for(const u of units){const r=s._roles(u);if(r.role===SFACE){s.glue[u*3+r.free]=gcode(f.faces[fi++]||'-');}
       else if(r.role===SBACK&&f.backs)s.glue[u*3+r.free]=gcode(f.backs);}
+    // end seeds (f.ends = 'pu'): glue on the spare (inert) side of the first and the last triangle
+    if(f.ends){const r0=s._roles(units[0]),r1=s._roles(units[units.length-1]);if(r0.inert>=0)s.glue[units[0]*3+r0.inert]=gcode(f.ends[0]);if(r1.inert>=0&&f.ends[1])s.glue[units[units.length-1]*3+r1.inert]=gcode(f.ends[1]);}
     if(f.caps!==false){s.cap[units[0]]=1;s.cap[units[units.length-1]]=1;}
     placed.push(...units);out.founders.push(units);});
   for(const st of structures){const units=st.tris.map(()=>next++);buildStructure(s,units,st.tris,st.x,st.y,st.rot||0);placed.push(...units);out.structures.push(units);}
