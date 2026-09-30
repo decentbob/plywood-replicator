@@ -16,6 +16,19 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   own docker type (14 each of 106 free).
   `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
   Next: typed backs and ends (inherited only through the docker types), supply limits by type.
+- **Airlock with interlock (user: a double lock, one door closed while the other is open)** — partial (1 world).
+  One-row ring; below it a small lock section: inner door (ring-row panel, swings inward), a two-cell chamber, outer
+  door (swings outward). New: pulse doors (`#`): a key on the trigger opens the door and is let go at once; the door
+  swings 120 degrees, back again, and re-latches. A latch stays released while its door is in the open state (it
+  re-latched at once before, and the door stuck). Interlock: a door that is not latched emits a lock signal (range
+  12, relayed -1 per bond, previous pass); a closed pulse door ignores its key and keeps its latch while it hears
+  it. Without the interlock, 24 keys opened both doors together (26418 of 30000 steps) and the ring tore (doorway
+  strain 9). With it, 25 door pulses and never both doors unlatched; doorway strain 0.38 inner, 1.33 in the lock
+  section. Not yet: no key got through the chamber in 30000 steps (a key must slip in during a door's short
+  opening), so nothing was imported. `node experiments/tri_machines.js airlock 1 30000 OUT 24`. Picture:
+  `experiments/out/TYPED_airlock_20260930.png`.
+  Next: carry the cargo instead of waiting for diffusion, as in the conveyor. Hatch 1 moves a key from outside into
+  the chamber and hatch 2 moves it inside, under the same interlock.
 - **Physics fix: no tunnelling through structures (user: jumping single walls is a bug)** — works. Cause: a free
   triangle's jostle kick is large (20% of kicks exceed 0.8, the largest reach about 1.8), larger than a one-row wall
   (0.87). The kick puts its centre inside a wall block, and the contact solver pushes it out on the far side. Fix

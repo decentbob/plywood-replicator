@@ -91,5 +91,6 @@ to make it open with intention." Follow-up: "opening with intent" means a trigge
 maybe two hinges to capture better; a hatch that catches, closes, casts and opens again; blocks attached to
 hatches moved as a machine. Built (`tri_typed.js`, `tri_machines.js`): driven hinges switched by trigger sides,
 latches, hand-off and drop releases, the hatch pocket, a two-hatch conveyor and a key-gated ring membrane.
-Still open: two hinges as jaws; gates that close again; a pump (a conveyor through a wall); membranes at the
-default jostle (thicker walls or smaller free-block jumps).
+User (2026-09-30): wall jumping is a bug (fixed: no tunnelling through structures); a double lock with one door
+closed while the other is open (built: airlock with pulse doors and an interlock signal). Still open: carrying
+keys through the airlock; two hinges as jaws; a pump through a wall.
