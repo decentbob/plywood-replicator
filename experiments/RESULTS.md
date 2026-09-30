@@ -8906,3 +8906,23 @@ Engine gains: caps, intact-strand signals and dissolving make a damaged world tu
 **Next.** Parts and shape are coupled here, so the parts' own benefit cannot be isolated: the same shape always grows
 the same parts. It needs a heritable part choice on the same shape (a second site context or a triangle state), or
 the feeding route. About 10 CPU-hours in total.
+
+## 109. Heritable coats on one shape (marks): no benefit under the field, a cost without it
+
+2026-09-30. Follow-up of 108, where parts and shape were coupled. New mechanism: a mark state on the hidden triangle of
+an R letter is copied by relay. The face shows it, the docked triangle reads it across the face bond, and the fill
+placed beside it inherits it; exact in demos (`m1m1m` → `m1m1m`). Marked R backs grow fans. Plan: `mmmmm` (coat of 5
+fans) vs `11111` (same shape, bare), 2 seeds × field off/on (3e-5), caps + dissolving, 12,000 steps. Prediction:
+the coat wins under the field.
+
+| Seed | Field off: coated / bare | Field on: coated / bare (breaks) |
+|---|---|---|
+| 1 | 5 / 4 | 0 / 0 (14) |
+| 2 | 2 / 9 | 1 / 3 (25) |
+
+**What it says.** Not supported. Under the field one world lost both lineages, and in the other the bare lineage
+kept more strands. Without the field the coat is a cost in one world (2 vs 9: 5 fans take 15 triangles per organism
+from the shared supply). Copying and exact inheritance of the coat are verified; its protective value does not
+outweigh its material cost at this field strength and coat size. Geometric check of copies (separate, no field,
+`tri_verify.js`): every released strand matches its letters within 4° per turn, pin gaps ≤ .05
+(`experiments/out/TRI_verify_20260930.png`).

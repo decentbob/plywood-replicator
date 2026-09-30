@@ -28,6 +28,9 @@
 //           strand), and a copy end is done only at a capped template end: broken fragments stop being copied;
 //   dissolve (option pDissolve, with caps) strands missing a cap signal and orphaned parts fall apart, returning
 //           their material;
+//   marks    (states) a hidden triangle of an R letter may carry a mark; the face before it shows it, the docked
+//           triangle reads it across the face bond, and the fill placed next to it copies it (error pMarkErr); marked
+//           R backs are growth site 'Rm': heritable parts on an unchanged shape;
 //   refractory a released face (template and copy side) takes no new dock until the busy level around it (30 on any
 //           bonded face, relayed -1 per chain bond per pass) has fallen to 0, i.e. until the whole copy has let go:
 //           no second copy starts under a copy that is still peeling off.
@@ -61,7 +64,7 @@ const TRI_CONFIG={structural:[],shapes:{[T_A]:regular(3,1)},labels:{}};
 
 class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   _tri(){const n=this.n;if(!this.bkind||this.bkind.length!==n*4){this.bkind=new Int8Array(n*4);this.fill=new Int8Array(n);
-    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int8Array(n);this.gatt=new Int8Array(n);this.cap=new Int8Array(n);this.sigP=new Int8Array(n);this.sigN=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
+    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int8Array(n);this.gatt=new Int8Array(n);this.cap=new Int8Array(n);this.mark=new Int8Array(n);this.mAfter=new Int8Array(n);this.dm=new Int8Array(n);this.sigP=new Int8Array(n);this.sigN=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
   // edges of u by kind (from its own bonds): {prev, next, face} (-1 if none)
   _edges(u){const k=this.bkind,o=u*4;let prev=-1,next=-1,face=-1;
     for(let i=0;i<3;i++){if(this.bond[o+i]<0)continue;if(k[o+i]===PREV)prev=i;else if(k[o+i]===NEXT)next=i;else if(k[o+i]===FACE)face=i;}
@@ -93,11 +96,13 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
         if(e.prev>=0)a=Math.max(0,sp0[this._partner(u,e.prev)]-1);else if(e.next>=0&&this.cap[u]&&e.face<0&&!this.fill[u])a=BUSY;
         if(e.next>=0)b=Math.max(0,sn0[this._partner(u,e.next)]-1);else if(e.prev>=0&&this.cap[u]&&e.face<0&&!this.fill[u])b=BUSY;
         this.sigP[u]=a;this.sigN[u]=b;}}
-    for(let u=0;u<n;u++){const r=R[u];this.nb[u]=0;this.gap[u]=-1;this.need[u]=0;
+    const mA0=this.mAfter.slice();
+    for(let u=0;u<n;u++){const r=R[u];this.nb[u]=0;this.gap[u]=-1;this.need[u]=0;this.mAfter[u]=0;
       if(r.role===SFACE||r.role===SBACK){const nx=r.next>=0?this._partner(u,r.next):-1;
-        if(nx>=0){this.nb[u]=role[nx]===SBACK?1:0;if(r.role===SFACE)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+nb0[nx]:-1;}
+        if(nx>=0){this.nb[u]=role[nx]===SBACK?1:0;if(r.role===SFACE)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+nb0[nx]:-1;
+          if(this.gap[u]===1)this.mAfter[u]=this.mark[nx];}   // marks: a face shows the mark of its single hidden neighbour (R letter)
         if(r.fill&&nx>=0)this.need[u]=Math.max(0,need0[nx]-1);}
-      else if(r.role===DOCKED){const t=this._partner(u,r.face);this.need[u]=gap0[t]>=0?Math.max(0,2-gap0[t]):0;}}
+      else if(r.role===DOCKED){const t=this._partner(u,r.face);this.need[u]=gap0[t]>=0?Math.max(0,2-gap0[t]):0;this.dm[u]=mA0[t];}}
   }
   _flush(u,i,v,j,tol){  // edge i of u faces edge j of v: corner i of u meets corner j+1 of v and corner i+1 meets corner j
     const a0=u*NV+i,a1=u*NV+(i+1)%3,b0=v*NV+j,b1=v*NV+(j+1)%3,dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);
@@ -113,7 +118,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
         // growth: a site back (released strand) seeds its program; a grown triangle extends by its state
         const G=p.grow;
         if(G&&r.role===SBACK&&!r.fill&&r.free>=0&&!bnd(u,r.free)&&r.prev>=0&&r.next>=0){
-          const a=this._partner(u,r.prev),b=this._partner(u,r.next),site=R[a].role===SFACE&&R[b].role===SFACE?'R':R[a].role===SFACE&&R[b].role===SBACK?'Z':null;
+          const a=this._partner(u,r.prev),b=this._partner(u,r.next),site=R[a].role===SFACE&&R[b].role===SFACE?(this.mark[u]?'Rm':'R'):R[a].role===SFACE&&R[b].role===SBACK?'Z':null;
           if(site&&G[site]){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,GSEED,v,j,GUP);
             this.gstate[v]=code(G[site],'s0');this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};break;}}
           continue;}
@@ -127,7 +132,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
         if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
         // fill on the prev edge of a docked or fill triangle that still needs fills
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(this._flush(u,r.prev,v,j,tolF)&&this.rng()<pb){
-          this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
+          this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.mark[v]=(r.role===DOCKED&&this.need[u]===1?this.dm[u]:0)^(p.pMarkErr>0&&this.rng()<p.pMarkErr?1:0);this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // ring closure: a grown triangle's sticky edge binds another grown triangle's close edge
       if(ru.role===GROWN&&rv.role===GROWN){
@@ -157,7 +162,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
       const endOK=!this.p.caps||this.cap[t],pOK=e.prev>=0?done(e.prev):rt.next<0&&endOK,nOK=e.next>=0?done(e.next):rt.prev<0&&endOK;
       if(pOK&&nOK){const q=this.bond[u*4+e.face];this.refr[u]=1;this.refr[t]=1;this.bkind[u*4+e.face]=0;this.bkind[q]=0;this._unlink(u,e.face);this.releaseEvents=(this.releaseEvents||0)+1;}}
     this._environment();
-    for(let u=0;u<this.n;u++)if((this.fill[u]||this.gstate[u]||this.cap[u])&&this.bond[u*4]<0&&this.bond[u*4+1]<0&&this.bond[u*4+2]<0){this.fill[u]=0;this.gstate[u]=0;this.cap[u]=0;}   // a free triangle keeps no state
+    for(let u=0;u<this.n;u++)if((this.fill[u]||this.gstate[u]||this.cap[u]||this.mark[u])&&this.bond[u*4]<0&&this.bond[u*4+1]<0&&this.bond[u*4+2]<0){this.fill[u]=0;this.gstate[u]=0;this.cap[u]=0;this.mark[u]=0;}   // a free triangle keeps no state
   }
   _cut(u,i){const q=this.bond[u*4+i];if(q<0)return;this.bkind[u*4+i]=0;this.bkind[q]=0;this._unlink(u,i);}
   // Environment (explicit external drives, labelled as such; off by default):
@@ -200,7 +205,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
 }
 
 // ---------------- worlds ----------------
-const rolesFromGaps=gaps=>['F',...gaps.flatMap(c=>[...Array(c).fill('B'),'F'])];
+const rolesFromGaps=gaps=>['F',...gaps.flatMap(c=>c==='m'?['M','F']:[...Array(c).fill('B'),'F'])];   // 'm' = gap 1 with a marked hidden triangle
 function placeBand(s,units,tris,cx,cy){
   let mx=0,my=0;for(const t of tris)for(const p of t.v){mx+=p[0]/(3*tris.length);my+=p[1]/(3*tris.length);}
   const corner0=Math.atan2(regular(3,1)[0][1],regular(3,1)[0][0]);
@@ -216,7 +221,7 @@ function placeBand(s,units,tris,cx,cy){
 }
 function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
   // gaps: one founder's gap list, or a list of them (several founders, spread along a diagonal)
-  const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,all=Array.isArray(gaps[0])?gaps:[gaps],bands=all.map(g=>band(rolesFromGaps(g)));
+  const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,all=Array.isArray(gaps[0])?gaps:[gaps],rolesAll=all.map(g=>rolesFromGaps(g)),bands=rolesAll.map(r=>band(r.map(x=>x==='M'?'B':x)));
   const total=bands.reduce((a,b)=>a+b.length,0);
   const s=new TriSim({...ref,nA:total+free,nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
   s._tri();let next=0;const founders=bands.map((tris,k)=>{const units=tris.map(()=>next++);
@@ -226,7 +231,7 @@ function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
     for(let a=0;a<5000&&!ok;a++){s.px[u]=size*s.rng();s.py[u]=size*s.rng();s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
       ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
     if(!ok)throw Error('could not place');placed.push(u);}
-  for(const f of founders){s.cap[f[0]]=1;s.cap[f[f.length-1]]=1;}   // founder ends carry caps (used with option caps)
+  founders.forEach((f,k)=>{s.cap[f[0]]=1;s.cap[f[f.length-1]]=1;rolesAll[k].forEach((x,i)=>{if(x==='M')s.mark[f[i]]=1;});});   // founder ends carry caps (used with option caps)
   s.bondsDirty=true;for(let k=0;k<40;k++)s._derive3();   // settle the relayed signals (busy, cap signals) of the founders
   return {s,founder:units,founders};
 }
@@ -236,7 +241,7 @@ function triCensus(s){
   for(let u=0;u<s.n;u++){if(seen.has(u))continue;const e=s._edges(u);if(e.prev>=0||e.next<0)continue;   // strand starts
     const units=[];let x=u,guard=0;while(x>=0&&!seen.has(x)&&guard++<500){seen.add(x);units.push(x);const r=s._edges(x);x=r.next>=0?s._partner(x,r.next):-1;}
     const roles=units.map(v=>s._roles(v).role),gaps=[];let c=null;
-    for(const r of roles){if(r===SFACE||r===DOCKED){if(c!==null)gaps.push(c);c=0;}else if(c!==null)c++;}
+    let mk=0;for(let q=0;q<roles.length;q++){const r=roles[q];if(r===SFACE||r===DOCKED){if(c!==null)gaps.push(c===1&&mk?'m':c);c=0;mk=0;}else if(c!==null){c++;mk=s.mark[units[q]];}}
     out.push({units,gaps:gaps.join(''),n:units.length,paired:units.some(v=>s._edges(v).face>=0)});}
   return out;
 }
@@ -246,7 +251,7 @@ function render(s,out,title,focus=null){
   s._tri();let W=s.p.W,S=560,k=S/W;const keep=new Set();let fx=0,fy=0;
   if(focus){const u0=focus.units[0];let sx=0,sy=0;for(const u of focus.units){sx+=s._dx(s.px[u]-s.px[u0]);sy+=s._dy(s.py[u]-s.py[u0]);}
     fx=s.px[u0]+sx/focus.units.length;fy=s.py[u0]+sy/focus.units.length;
-    for(let u=0;u<s.n;u++)if(Math.hypot(s._dx(s.px[u]-fx),s._dy(s.py[u]-fy))<focus.radius)keep.add(u);k=S/(2*focus.radius);}
+    for(let u=0;u<s.n;u++)if((!focus.only||focus.units.includes(u))&&Math.hypot(s._dx(s.px[u]-fx),s._dy(s.py[u]-fy))<focus.radius)keep.add(u);k=S/(2*focus.radius);}
   const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+30}"><rect width="${S}" height="${S+30}" fill="#f5f7f8"/><rect width="${S}" height="${S}" fill="#15222d"/>`];
   // centre on the founder's first triangle (or the focus)
   const cx=focus?0:W/2-s.px[0],cy=focus?0:W/2-s.py[0];
