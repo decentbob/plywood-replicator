@@ -67,3 +67,9 @@ function fan(near=1,far=3,depth=0.75){const pts=[[depth/2,-near/2],[depth/2,near
   cx/=3*A;cy/=3*A;return pts.map(([x,y])=>[x-cx,y-cy]);}
 const SHIELD={structural:[T_J],shapes:{[T_J]:fan()},labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_J]:{[F]:{f:2,s:-1}}}};
 module.exports.SHIELD=SHIELD;module.exports.fan=fan;
+
+// Choice of structures (ROADMAP 1b): B seeds a fan shield plate (J), D seeds a plain 3x1 rod (C, reshaped). Copying errors
+// can turn A into either; with the damage field, which structure spreads? Maintenance by attachment frees debris.
+const CHOICE={structural:[T_J,T_C],shapes:{[T_J]:fan(1,6,1.5),[T_C]:rod(3)},release:true,
+  labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_J]:{[F]:{f:2,s:-1}},[T_D]:{[K]:{f:3,s:1,seed:true}},[T_C]:{[F]:{f:3,s:-1}}}};
+module.exports.CHOICE=CHOICE;
