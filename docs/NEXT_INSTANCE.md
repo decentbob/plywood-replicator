@@ -6,6 +6,17 @@ engine, show them in pictures (send images to the chat), log them in `docs/INNOV
 move on. Batches and confirmation rounds are the exception. The ROADMAP is an innovation
 backlog; take the top unblocked item.
 
+## Session 2 (2026-09-30): chain core with grown shapes
+
+User direction: the chain is the reproduction core, and its non-copying side grows appendages from drifting
+tiles; hinges later. User decisions: no shape switch (fixed supply ratio). Triangle-only is attractive (see
+COMPLEXITY_MAP 3e); a straight chain can be made of welded trapezoids (built: STRIP). The user's two routes to
+adaptation are protection and feeding (IDEAS). Built (INNOVATIONS session 2): accretion with reach
+(`seeded_accrete.js`), bent chains T/Z (`seeded_bent.js`), trapezoid strip, hinges (`seeded_ports.js`
+`hinge:true`), and a centring fix for custom shapes. Next: ROADMAP rows 0a–0d.
+Gotcha: to reload a saved state, use the wrapped class (`seeded(Base,config).fromState`, or `s.constructor`).
+The bare Base treats C as half-cell wall.
+
 ## State
 
 - **Engine:** `experiments/seeded_growth.js` (port labels, activation by attachment, custom

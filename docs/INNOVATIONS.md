@@ -6,6 +6,18 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 ## 2026-09-30 (session 2: chain core with grown shapes)
 
+- **Trapezoid strip: a one-shape chain** (`seeded_bent.js` STRIP, user idea) — works for straight strips (1 demo);
+  bends not yet. Every chain block, caps included, is the same welded trapezoid of three unit triangles, with
+  two face choices: U has its face on the long edge (legs lean in), N on the short edge (legs lean out). The
+  caps are N-shaped, because pentagon caps missed the 30° legs by more than the link tolerance. UNUN… is straight with
+  all faces on one side and all backs free. Each letter pairs with its own kind (U+U is a hexagon, N+N meets
+  short face to short face). `PCDCDCQ` was copied by t≈16k, and both strands were being copied again at 24k.
+  Pictures: `experiments/out/STRIP_copy_20260930.png`, `STRIP_copy_t6000_20260930.png`. Reproduce:
+  `node -e "const b=require('./experiments/seeded_bent');b.demo(4,24000,'OUT',['PCDCDCQ'],{C:10,D:10,P:5,Q:5},6000,b.STRIP,b.BentSim,22,{})"`.
+  A bent strip (`PCDCCDCQ`, UU turns 60° with the faces on the concave side) did not copy in 30k steps: the two
+  copy trapezoids at the bend crowd each other (`STRIP_bent_notyet_20260930.png`). Bends in strips need a
+  bend piece, the moulding problem again. The N trapezoid is exactly the Z that complements a triangle bend,
+  so a strip with triangle bends is the natural next try.
 - **Hinges** (`seeded_ports.js`, label `hinge:true`) — works (demo). A hinged weld pins only one corner of
   the shared edge and keeps the pair's contact, so the part swings about that corner and cannot pass through
   its base. Demo: one chain, B's back takes a rod arm (reach 4) by a hinge; the arm swings between 14° on one side
