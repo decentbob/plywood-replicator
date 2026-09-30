@@ -6,6 +6,15 @@ engine, show them in pictures (send images to the chat), log them in `docs/INNOV
 move on. Batches and confirmation rounds are the exception. The ROADMAP is an innovation
 backlog; take the top unblocked item.
 
+## Session 2b (2026-09-30): triangle-only replicator (current direction)
+
+The user chose one base shape: the unit triangle. `experiments/tri_chain.js` holds the whole chemistry (roles from
+bonds; dock, fill 2 − c, close, zipper release, refractory faces; growth programs on hidden backs). Letters T/R/Z
+by hidden backs; figure `experiments/out/TRI_alphabet_20260930.png`. Every complete strand was a correct copy in
+2 worlds. Parts: hex ring, plate, spike, fan (gallery). Next (ROADMAP row 00): parts with a job (protection under
+the damage field, funnelling), then mutation and selection. Growth should be intentional and bounded (user): use
+closure and stop states, not repeats.
+
 ## Session 2 (2026-09-30): chain core with grown shapes
 
 User direction: the chain is the reproduction core, and its non-copying side grows appendages from drifting
