@@ -31,7 +31,8 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   unlatches it, and it swings 120 degrees out carrying the key. Keyed world: door opened near t=3500, then 8
   crossings; no-key control: 0 crossings in 10k steps. At the default jostle (sigma 0.3) every wall leaked: a free
   triangle's jump (up to 1.8) is larger than a one-row wall (0.87); sigma 0.1 seals. A one-row ring with a notch cut
-  into it was an open C and bent open; the latch keeps a closed door part of the ring. Picture:
+  into it was an open C and bent open; the latch keeps a closed door part of the ring. Weakness: once open, the
+  ring bends at the doorway (the door's drive and the key push against the wall). Picture:
   `experiments/out/TYPED_gate_20260930.png`.
   Next: gates that close again (a key that is dropped or cast), a pump (conveyor through a wall), a replicator
   that carries a hatch.
