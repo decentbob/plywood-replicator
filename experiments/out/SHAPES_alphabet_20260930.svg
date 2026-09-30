@@ -1,46 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1070" viewBox="0 0 1500 1070"><rect width="1500" height="1070" fill="#fbfaf7"/>
-<text x="30" y="42" font-family="Helvetica,Arial,sans-serif" font-size="26" fill="#222" text-anchor="start" font-weight="bold">Base shapes: one block, one edge length, three rest states</text>
+<text x="30" y="42" font-family="Helvetica,Arial,sans-serif" font-size="26" fill="#222" text-anchor="start" font-weight="bold">Base shapes: two shapes (square, triangle), one edge length</text>
 <text x="30" y="68" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#555" text-anchor="start" font-weight="normal">Every working edge (face F, laterals R and L) is exactly one unit long, so any edge can bond to any edge. Larger forms come from combinations and sequences.</text>
-<text x="30" y="112" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">A. One block, three rest states (a state, not a type)</text>
-<polygon points="50.0,165.0 130.0,165.0 130.0,245.0 50.0,245.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
-<line x1="50.0" y1="165.0" x2="130.0" y2="165.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
-<line x1="130.0" y1="165.0" x2="130.0" y2="245.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="50.0" y1="245.0" x2="50.0" y2="165.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="130.0" y1="245.0" x2="50.0" y2="245.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<text x="90" y="275" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">square</text>
-<text x="90" y="295" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">tilt 0°, back 1</text>
-<text x="90" y="313" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">straight</text>
+<text x="30" y="112" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">A. Two base shapes, one edge length</text>
+<polygon points="47.5,165.0 132.5,165.0 132.5,250.0 47.5,250.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<line x1="47.5" y1="165.0" x2="132.5" y2="165.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
+<line x1="132.5" y1="165.0" x2="132.5" y2="250.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="47.5" y1="250.0" x2="47.5" y2="165.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="132.5" y1="250.0" x2="47.5" y2="250.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
 <text x="90" y="157" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#e0672b" text-anchor="middle" font-weight="bold">F</text>
-<text x="138" y="209" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#2b6fb3" text-anchor="start" font-weight="bold">R</text>
-<text x="30" y="209" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#2b6fb3" text-anchor="start" font-weight="bold">L</text>
-<text x="90" y="259" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="bold">K</text>
-<text x="190" y="205" font-family="Helvetica,Arial,sans-serif" font-size="28" fill="#999" text-anchor="middle" font-weight="normal">⇄</text>
-<polygon points="250.0,165.0 330.0,165.0 290.0,234.3 290.0,234.3" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
-<line x1="250.0" y1="165.0" x2="330.0" y2="165.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
-<line x1="330.0" y1="165.0" x2="290.0" y2="234.3" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="290.0" y1="234.3" x2="250.0" y2="165.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<text x="290" y="275" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">triangle</text>
-<text x="290" y="295" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">tilt +30°, back 0</text>
-<text x="290" y="313" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">turns 60°, face outside</text>
-<text x="390" y="205" font-family="Helvetica,Arial,sans-serif" font-size="28" fill="#999" text-anchor="middle" font-weight="normal">⇄</text>
-<polygon points="450.0,165.0 530.0,165.0 570.0,234.3 410.0,234.3" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
-<line x1="450.0" y1="165.0" x2="530.0" y2="165.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
-<line x1="530.0" y1="165.0" x2="570.0" y2="234.3" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="410.0" y1="234.3" x2="450.0" y2="165.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="570.0" y1="234.3" x2="410.0" y2="234.3" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<text x="490" y="275" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">trapezoid</text>
-<text x="490" y="295" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">tilt −30°, back 2</text>
-<text x="490" y="313" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">turns 60°, face inside</text>
+<text x="140.5" y="211.75" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#2b6fb3" text-anchor="start" font-weight="bold">R</text>
+<text x="27.5" y="211.75" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#2b6fb3" text-anchor="start" font-weight="bold">L</text>
+<text x="90" y="264" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="bold">K</text>
+<text x="90" y="282" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">square</text>
+<text x="90" y="300" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">straight</text>
+<polygon points="222.5,165.0 307.5,165.0 265.0,238.6 265.0,238.6" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<line x1="222.5" y1="165.0" x2="307.5" y2="165.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
+<line x1="307.5" y1="165.0" x2="265.0" y2="238.6" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="265.0" y1="238.6" x2="222.5" y2="165.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<text x="265" y="282" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#222" text-anchor="middle" font-weight="bold">triangle</text>
+<text x="265" y="300" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">bend T: turns 60°, face outside</text>
+<polygon points="456.0,165.0 422.0,223.9 490.0,223.9" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="456.0,165.0 490.0,223.9 524.0,165.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="524.0,165.0 490.0,223.9 558.0,223.9" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<line x1="456.0" y1="165.0" x2="524.0" y2="165.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
+<line x1="524.0" y1="165.0" x2="558.0" y2="223.9" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="422.0" y1="223.9" x2="456.0" y2="165.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="558.0" y1="223.9" x2="422.0" y2="223.9" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
+<text x="490" y="282" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#222" text-anchor="middle" font-weight="bold">welded trapezoid (3 triangles)</text>
+<text x="490" y="300" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle" font-weight="normal">bend Z: turns 60° the other way, face inside</text>
 <line x1="30" y1="367" x2="58" y2="367" stroke="#e0672b" stroke-width="4"/>
-<text x="68" y="372" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">F face (copy pairing) — always 1</text>
+<text x="68" y="372" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">F face (copy pairing) — unit</text>
 <line x1="30" y1="389" x2="58" y2="389" stroke="#2b6fb3" stroke-width="4"/>
-<text x="68" y="394" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">R, L laterals (backbone) — always 1</text>
+<text x="68" y="394" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">R, L laterals (backbone) — unit</text>
 <line x1="30" y1="411" x2="58" y2="411" stroke="#777" stroke-width="4"/>
-<text x="68" y="416" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">K back (structure seed) — 1, 0 or 2 (two unit sites)</text>
+<text x="68" y="416" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="start" font-weight="normal">K back (structure seed) — square only; Z has two unit sites</text>
 <text x="30" y="445" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="bold">Pairing complements: S↔S (a domino), T↔Z (a side-2 triangle).</text>
-<text x="30" y="464" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">The switch is a local state (programmable kind); F, R and L never change length.</text>
+<text x="30" y="464" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">A Z is built in place from supplied triangles; square⇄triangle switching is optional (supply balancing).</text>
 <text x="30" y="483" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">All turns are 60° steps, so parts share a few directions and fit together.</text>
-<text x="700" y="112" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">B. Bigger parts are bonded combinations (and can be split)</text>
+<text x="700" y="112" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">B. Welded shapes: bonded combinations (and can be split)</text>
 <polygon points="718.0,211.0 760.0,211.0 760.0,169.0 718.0,169.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <polygon points="760.0,169.0 760.0,211.0 802.0,211.0 802.0,169.0" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <text x="760" y="268" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">rod 2</text>
@@ -80,9 +77,10 @@
 <polygon points="1231.0,352.2 1231.0,394.2 1273.0,394.2 1273.0,352.2" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <polygon points="1231.0,352.2 1273.0,352.2 1252.0,315.8" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <text x="1210" y="433" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">saw / comb</text>
-<text x="700" y="500" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">Edge-to-edge bonds pinned at both corners are rigid; one corner would make a hinge.</text>
+<text x="700" y="500" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">The trapezoid is one of many welded shapes. Edge-to-edge bonds pinned at both corners are rigid;</text>
+<text x="700" y="519" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">one pinned corner would make a hinge.</text>
 <text x="30" y="560" font-family="Helvetica,Arial,sans-serif" font-size="19" fill="#222" text-anchor="start" font-weight="bold">C. A bent chain is copied by complementary shapes, so the copy is bent too</text>
-<text x="30" y="584" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">Each copy letter docks face to face; neighbouring copy letters must share whole laterals. Template drawn with a dark outline, copy lighter.</text>
+<text x="30" y="584" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#333" text-anchor="start" font-weight="normal">Each copy unit docks face to face; neighbouring copy units must share whole laterals. Template dark outline, copy lighter; one dot per block.</text>
 <polygon points="103.6,660.6 69.6,660.6 69.6,626.6 103.6,626.6" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="69.6" y1="660.6" x2="69.6" y2="626.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="103.6" y1="626.6" x2="103.6" y2="660.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
@@ -144,7 +142,9 @@
 <polygon points="407.6,660.6 373.6,660.6 373.6,626.6 407.6,626.6" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="373.6" y1="660.6" x2="373.6" y2="626.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="407.6" y1="626.6" x2="407.6" y2="660.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="437.0,677.6 407.6,660.6 407.6,626.6 466.4,660.6" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="437.0,677.6 466.4,660.6 437.0,643.6" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="437.0,677.6 437.0,643.6 407.6,660.6" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="407.6,660.6 437.0,643.6 407.6,626.6" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="407.6" y1="660.6" x2="407.6" y2="626.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="466.4" y1="660.6" x2="437.0" y2="677.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <polygon points="454.0,707.0 437.0,677.6 466.4,660.6 483.4,690.0" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
@@ -184,18 +184,22 @@
 <circle cx="447.8" cy="730.2" r="3.5" fill="#1d8f80"/>
 <circle cx="356.6" cy="643.6" r="3.5" fill="#1d8f80"/>
 <circle cx="390.6" cy="643.6" r="3.5" fill="#1d8f80"/>
-<circle cx="429.6" cy="656.3" r="3.5" fill="#6a4aa8"/>
+<circle cx="446.8" cy="660.6" r="3.5" fill="#c07a00"/>
+<circle cx="427.2" cy="660.6" r="3.5" fill="#c07a00"/>
+<circle cx="417.4" cy="643.6" r="3.5" fill="#c07a00"/>
 <circle cx="460.2" cy="683.8" r="3.5" fill="#1d8f80"/>
 <circle cx="477.2" cy="713.2" r="3.5" fill="#1d8f80"/>
-<text x="420" y="790" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#1a7f37" text-anchor="middle" font-weight="normal">✓ T pairs with Z: SSTSS / SSZSS</text>
-<text x="420" y="808" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="normal">paired: dominoes + a side-2 triangle, rigid</text>
+<text x="420" y="790" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#1a7f37" text-anchor="middle" font-weight="normal">✓ the bend is a mould: 1 triangle docks,</text>
+<text x="420" y="808" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="normal">2 fill the notches → rigid side-2 triangle</text>
 <polygon points="618.0,648.4 588.0,648.4 588.0,618.4 618.0,618.4" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="588.0" y1="648.4" x2="588.0" y2="618.4" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="618.0" y1="618.4" x2="618.0" y2="648.4" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <polygon points="648.0,648.4 618.0,648.4 618.0,618.4 648.0,618.4" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="618.0" y1="648.4" x2="618.0" y2="618.4" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="648.0" y1="618.4" x2="648.0" y2="648.4" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="674.0,663.4 648.0,648.4 648.0,618.4 700.0,648.4" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="674.0,663.4 700.0,648.4 674.0,633.4" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="674.0,663.4 674.0,633.4 648.0,648.4" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="648.0,648.4 674.0,633.4 648.0,618.4" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="648.0" y1="648.4" x2="648.0" y2="618.4" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="700.0" y1="648.4" x2="674.0" y2="663.4" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <polygon points="689.0,689.4 674.0,663.4 700.0,648.4 715.0,674.4" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
@@ -235,7 +239,9 @@
 <circle cx="665.5" cy="741.1" r="3.5" fill="#1d8f80"/>
 <circle cx="603.0" cy="633.4" r="3.5" fill="#1d8f80"/>
 <circle cx="633.0" cy="633.4" r="3.5" fill="#1d8f80"/>
-<circle cx="667.5" cy="644.7" r="3.5" fill="#6a4aa8"/>
+<circle cx="682.7" cy="648.4" r="3.5" fill="#c07a00"/>
+<circle cx="665.3" cy="648.4" r="3.5" fill="#c07a00"/>
+<circle cx="656.7" cy="633.4" r="3.5" fill="#c07a00"/>
 <circle cx="694.5" cy="668.9" r="3.5" fill="#1d8f80"/>
 <circle cx="709.5" cy="694.9" r="3.5" fill="#1d8f80"/>
 <text x="640" y="808" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="normal">separated: both strands bent</text>
@@ -248,7 +254,9 @@
 <polygon points="854.8,639.6 826.8,639.6 826.8,611.6 854.8,611.6" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="826.8" y1="639.6" x2="826.8" y2="611.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="854.8" y1="611.6" x2="854.8" y2="639.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="879.0,653.6 854.8,639.6 854.8,611.6 903.2,639.6" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="879.0,653.6 903.2,639.6 879.0,625.6" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="879.0,653.6 879.0,625.6 854.8,639.6" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="854.8,639.6 879.0,625.6 854.8,611.6" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="854.8" y1="639.6" x2="854.8" y2="611.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="903.2" y1="639.6" x2="879.0" y2="653.6" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <polygon points="893.0,677.9 879.0,653.6 903.2,639.6 917.2,663.9" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
@@ -306,7 +314,9 @@
 <line x1="921.0" y1="726.4" x2="896.8" y2="740.4" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="882.8" y1="716.1" x2="907.0" y2="702.1" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="896.8" y1="740.4" x2="882.8" y2="716.1" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="921.0,726.4 945.2,740.4 945.2,768.4 896.8,740.4" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="921.0,726.4 896.8,740.4 921.0,754.4" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="921.0,726.4 921.0,754.4 945.2,740.4" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="945.2,740.4 921.0,754.4 945.2,768.4" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="921.0" y1="726.4" x2="945.2" y2="740.4" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="945.2" y1="740.4" x2="945.2" y2="768.4" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="896.8" y1="740.4" x2="921.0" y2="726.4" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
@@ -333,14 +343,18 @@
 <circle cx="873.9" cy="672.8" r="3.5" fill="#1d8f80"/>
 <circle cx="887.9" cy="697.0" r="3.5" fill="#1d8f80"/>
 <circle cx="901.9" cy="721.2" r="3.5" fill="#1d8f80"/>
-<circle cx="927.1" cy="743.9" r="3.5" fill="#6a4aa8"/>
+<circle cx="912.9" cy="740.4" r="3.5" fill="#c07a00"/>
+<circle cx="929.1" cy="740.4" r="3.5" fill="#c07a00"/>
+<circle cx="937.2" cy="754.4" r="3.5" fill="#c07a00"/>
 <circle cx="959.2" cy="754.4" r="3.5" fill="#1d8f80"/>
 <circle cx="987.2" cy="754.4" r="3.5" fill="#1d8f80"/>
 <circle cx="1015.2" cy="754.4" r="3.5" fill="#1d8f80"/>
 <circle cx="784.8" cy="625.6" r="3.5" fill="#1d8f80"/>
 <circle cx="812.8" cy="625.6" r="3.5" fill="#1d8f80"/>
 <circle cx="840.8" cy="625.6" r="3.5" fill="#1d8f80"/>
-<circle cx="872.9" cy="636.1" r="3.5" fill="#6a4aa8"/>
+<circle cx="887.1" cy="639.6" r="3.5" fill="#c07a00"/>
+<circle cx="870.9" cy="639.6" r="3.5" fill="#c07a00"/>
+<circle cx="862.8" cy="625.6" r="3.5" fill="#c07a00"/>
 <circle cx="898.1" cy="658.8" r="3.5" fill="#1d8f80"/>
 <circle cx="912.1" cy="683.0" r="3.5" fill="#1d8f80"/>
 <circle cx="926.1" cy="707.2" r="3.5" fill="#1d8f80"/>
@@ -359,13 +373,19 @@
 <polygon points="1167.8,662.0 1139.8,662.0 1139.8,634.0 1167.8,634.0" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1139.8" y1="662.0" x2="1139.8" y2="634.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1167.8" y1="634.0" x2="1167.8" y2="662.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1192.0,676.0 1167.8,662.0 1167.8,634.0 1216.2,662.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1192.0,676.0 1216.2,662.0 1192.0,648.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1192.0,676.0 1192.0,648.0 1167.8,662.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1167.8,662.0 1192.0,648.0 1167.8,634.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1167.8" y1="662.0" x2="1167.8" y2="634.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1216.2" y1="662.0" x2="1192.0" y2="676.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1192.0,704.0 1192.0,676.0 1216.2,662.0 1216.2,718.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1192.0,704.0 1216.2,718.0 1216.2,690.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1192.0,704.0 1216.2,690.0 1192.0,676.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1192.0,676.0 1216.2,690.0 1216.2,662.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1192.0" y1="676.0" x2="1216.2" y2="662.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1216.2" y1="718.0" x2="1192.0" y2="704.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1167.8,718.0 1192.0,704.0 1216.2,718.0 1167.8,746.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1167.8,718.0 1167.8,746.0 1192.0,732.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1167.8,718.0 1192.0,732.0 1192.0,704.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1192.0,704.0 1192.0,732.0 1216.2,718.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1192.0" y1="704.0" x2="1216.2" y2="718.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1167.8" y1="746.0" x2="1167.8" y2="718.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <polygon points="1139.8,718.0 1167.8,718.0 1167.8,746.0 1139.8,746.0" fill="#9fd8cfaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
@@ -431,30 +451,48 @@
 <circle cx="1097.8" cy="648.0" r="3.5" fill="#1d8f80"/>
 <circle cx="1125.8" cy="648.0" r="3.5" fill="#1d8f80"/>
 <circle cx="1153.8" cy="648.0" r="3.5" fill="#1d8f80"/>
-<circle cx="1185.9" cy="658.5" r="3.5" fill="#6a4aa8"/>
-<circle cx="1204.1" cy="690.0" r="3.5" fill="#6a4aa8"/>
-<circle cx="1185.9" cy="721.5" r="3.5" fill="#6a4aa8"/>
+<circle cx="1200.1" cy="662.0" r="3.5" fill="#c07a00"/>
+<circle cx="1183.9" cy="662.0" r="3.5" fill="#c07a00"/>
+<circle cx="1175.8" cy="648.0" r="3.5" fill="#c07a00"/>
+<circle cx="1208.2" cy="704.0" r="3.5" fill="#c07a00"/>
+<circle cx="1200.1" cy="690.0" r="3.5" fill="#c07a00"/>
+<circle cx="1208.2" cy="676.0" r="3.5" fill="#c07a00"/>
+<circle cx="1175.8" cy="732.0" r="3.5" fill="#c07a00"/>
+<circle cx="1183.9" cy="718.0" r="3.5" fill="#c07a00"/>
+<circle cx="1200.1" cy="718.0" r="3.5" fill="#c07a00"/>
 <circle cx="1153.8" cy="732.0" r="3.5" fill="#1d8f80"/>
 <circle cx="1125.8" cy="732.0" r="3.5" fill="#1d8f80"/>
 <circle cx="1097.8" cy="732.0" r="3.5" fill="#1d8f80"/>
 <text x="1150" y="790" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">hairpin SSS TTT SSS in a</text>
-<text x="1150" y="808" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="normal">U of SSS ZZZ SSS; slides off</text>
-<polygon points="1383.0,667.5 1357.0,667.5 1344.0,645.0 1396.0,645.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<text x="1150" y="808" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="normal">U of 9 triangles; slides off</text>
+<polygon points="1383.0,667.5 1396.0,645.0 1370.0,645.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1383.0,667.5 1370.0,645.0 1357.0,667.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1357.0,667.5 1370.0,645.0 1344.0,645.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1357.0" y1="667.5" x2="1344.0" y2="645.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1396.0" y1="645.0" x2="1383.0" y2="667.5" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1396.0,690.0 1383.0,667.5 1396.0,645.0 1422.0,690.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1396.0,690.0 1422.0,690.0 1409.0,667.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1396.0,690.0 1409.0,667.5 1383.0,667.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1383.0,667.5 1409.0,667.5 1396.0,645.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1383.0" y1="667.5" x2="1396.0" y2="645.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1422.0" y1="690.0" x2="1396.0" y2="690.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1383.0,712.5 1396.0,690.0 1422.0,690.0 1396.0,735.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1383.0,712.5 1396.0,735.0 1409.0,712.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1383.0,712.5 1409.0,712.5 1396.0,690.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1396.0,690.0 1409.0,712.5 1422.0,690.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1396.0" y1="690.0" x2="1422.0" y2="690.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1396.0" y1="735.0" x2="1383.0" y2="712.5" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1357.0,712.5 1383.0,712.5 1396.0,735.0 1344.0,735.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1357.0,712.5 1344.0,735.0 1370.0,735.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1357.0,712.5 1370.0,735.0 1383.0,712.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1383.0,712.5 1370.0,735.0 1396.0,735.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1383.0" y1="712.5" x2="1396.0" y2="735.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1344.0" y1="735.0" x2="1357.0" y2="712.5" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1344.0,690.0 1357.0,712.5 1344.0,735.0 1318.0,690.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1344.0,690.0 1318.0,690.0 1331.0,712.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1344.0,690.0 1331.0,712.5 1357.0,712.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1357.0,712.5 1331.0,712.5 1344.0,735.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1357.0" y1="712.5" x2="1344.0" y2="735.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1318.0" y1="690.0" x2="1344.0" y2="690.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
-<polygon points="1357.0,667.5 1344.0,690.0 1318.0,690.0 1344.0,645.0" fill="#c9b6e8aa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1357.0,667.5 1344.0,645.0 1331.0,667.5" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1357.0,667.5 1331.0,667.5 1344.0,690.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="1344.0,690.0 1331.0,667.5 1318.0,690.0" fill="#f6cf8aaa" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="1344.0" y1="690.0" x2="1318.0" y2="690.0" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <line x1="1344.0" y1="645.0" x2="1357.0" y2="667.5" stroke="#2b6fb3" stroke-width="1.5" stroke-linecap="round"/>
 <polygon points="1357.0,667.5 1383.0,667.5 1370.0,690.0 1370.0,690.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
@@ -487,12 +525,24 @@
 <circle cx="1370.0" cy="701.3" r="3.5" fill="#c07a00"/>
 <circle cx="1360.3" cy="695.6" r="3.5" fill="#c07a00"/>
 <circle cx="1360.3" cy="684.4" r="3.5" fill="#c07a00"/>
-<circle cx="1370.0" cy="656.2" r="3.5" fill="#6a4aa8"/>
-<circle cx="1399.3" cy="673.1" r="3.5" fill="#6a4aa8"/>
-<circle cx="1399.3" cy="706.9" r="3.5" fill="#6a4aa8"/>
-<circle cx="1370.0" cy="723.8" r="3.5" fill="#6a4aa8"/>
-<circle cx="1340.8" cy="706.9" r="3.5" fill="#6a4aa8"/>
-<circle cx="1340.8" cy="673.1" r="3.5" fill="#6a4aa8"/>
+<circle cx="1383.0" cy="652.5" r="3.5" fill="#c07a00"/>
+<circle cx="1370.0" cy="660.0" r="3.5" fill="#c07a00"/>
+<circle cx="1357.0" cy="652.5" r="3.5" fill="#c07a00"/>
+<circle cx="1409.0" cy="682.5" r="3.5" fill="#c07a00"/>
+<circle cx="1396.0" cy="675.0" r="3.5" fill="#c07a00"/>
+<circle cx="1396.0" cy="660.0" r="3.5" fill="#c07a00"/>
+<circle cx="1396.0" cy="720.0" r="3.5" fill="#c07a00"/>
+<circle cx="1396.0" cy="705.0" r="3.5" fill="#c07a00"/>
+<circle cx="1409.0" cy="697.5" r="3.5" fill="#c07a00"/>
+<circle cx="1357.0" cy="727.5" r="3.5" fill="#c07a00"/>
+<circle cx="1370.0" cy="720.0" r="3.5" fill="#c07a00"/>
+<circle cx="1383.0" cy="727.5" r="3.5" fill="#c07a00"/>
+<circle cx="1331.0" cy="697.5" r="3.5" fill="#c07a00"/>
+<circle cx="1344.0" cy="705.0" r="3.5" fill="#c07a00"/>
+<circle cx="1344.0" cy="720.0" r="3.5" fill="#c07a00"/>
+<circle cx="1344.0" cy="660.0" r="3.5" fill="#c07a00"/>
+<circle cx="1344.0" cy="675.0" r="3.5" fill="#c07a00"/>
+<circle cx="1331.0" cy="682.5" r="3.5" fill="#c07a00"/>
 <text x="1370" y="790" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">closed ring TTTTTT</text>
 <text x="1370" y="808" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#777" text-anchor="middle" font-weight="normal">is enclosed by its copy</text>
 <text x="30" y="860" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#222" text-anchor="start" font-weight="bold">Released strands keep their shape (no folding rule needed):</text>
@@ -564,43 +614,67 @@
 <circle cx="305.3" cy="960.6" r="4" fill="#c07a00"/>
 <circle cx="305.3" cy="949.4" r="4" fill="#c07a00"/>
 <text x="315" y="1040" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">TTTTTT → hexagon, faces out</text>
-<polygon points="507.0,977.5 533.0,977.5 546.0,1000.0 494.0,1000.0" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="507.0,977.5 494.0,1000.0 520.0,1000.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="507.0,977.5 520.0,1000.0 533.0,977.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="533.0,977.5 520.0,1000.0 546.0,1000.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="507.0" y1="977.5" x2="533.0" y2="977.5" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="533.0" y1="977.5" x2="546.0" y2="1000.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="494.0" y1="1000.0" x2="507.0" y2="977.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="546.0" y1="1000.0" x2="494.0" y2="1000.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="533.0,977.5 546.0,955.0 572.0,955.0 546.0,1000.0" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="533.0,977.5 546.0,1000.0 559.0,977.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="533.0,977.5 559.0,977.5 546.0,955.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="546.0,955.0 559.0,977.5 572.0,955.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="533.0" y1="977.5" x2="546.0" y2="955.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="546.0" y1="955.0" x2="572.0" y2="955.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="546.0" y1="1000.0" x2="533.0" y2="977.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="572.0" y1="955.0" x2="546.0" y2="1000.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="546.0,955.0 533.0,932.5 546.0,910.0 572.0,955.0" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="546.0,955.0 572.0,955.0 559.0,932.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="546.0,955.0 559.0,932.5 533.0,932.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="533.0,932.5 559.0,932.5 546.0,910.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="546.0" y1="955.0" x2="533.0" y2="932.5" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="533.0" y1="932.5" x2="546.0" y2="910.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="572.0" y1="955.0" x2="546.0" y2="955.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="546.0" y1="910.0" x2="572.0" y2="955.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="533.0,932.5 507.0,932.5 494.0,910.0 546.0,910.0" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="533.0,932.5 546.0,910.0 520.0,910.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="533.0,932.5 520.0,910.0 507.0,932.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="507.0,932.5 520.0,910.0 494.0,910.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="533.0" y1="932.5" x2="507.0" y2="932.5" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="507.0" y1="932.5" x2="494.0" y2="910.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="546.0" y1="910.0" x2="533.0" y2="932.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="494.0" y1="910.0" x2="546.0" y2="910.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="507.0,932.5 494.0,955.0 468.0,955.0 494.0,910.0" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="507.0,932.5 494.0,910.0 481.0,932.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="507.0,932.5 481.0,932.5 494.0,955.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="494.0,955.0 481.0,932.5 468.0,955.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="507.0" y1="932.5" x2="494.0" y2="955.0" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="494.0" y1="955.0" x2="468.0" y2="955.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="494.0" y1="910.0" x2="507.0" y2="932.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="468.0" y1="955.0" x2="494.0" y2="910.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="494.0,955.0 507.0,977.5 494.0,1000.0 468.0,955.0" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="494.0,955.0 468.0,955.0 481.0,977.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="494.0,955.0 481.0,977.5 507.0,977.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="507.0,977.5 481.0,977.5 494.0,1000.0" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="494.0" y1="955.0" x2="507.0" y2="977.5" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="507.0" y1="977.5" x2="494.0" y2="1000.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="468.0" y1="955.0" x2="494.0" y2="955.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="494.0" y1="1000.0" x2="468.0" y2="955.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="520.0" cy="988.8" r="4" fill="#6a4aa8"/>
-<circle cx="549.3" cy="971.9" r="4" fill="#6a4aa8"/>
-<circle cx="549.3" cy="938.1" r="4" fill="#6a4aa8"/>
-<circle cx="520.0" cy="921.2" r="4" fill="#6a4aa8"/>
-<circle cx="490.8" cy="938.1" r="4" fill="#6a4aa8"/>
-<circle cx="490.8" cy="971.9" r="4" fill="#6a4aa8"/>
-<text x="520" y="1040" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">ZZZZZZ → ring, faces in</text>
+<circle cx="507.0" cy="992.5" r="4" fill="#c07a00"/>
+<circle cx="520.0" cy="985.0" r="4" fill="#c07a00"/>
+<circle cx="533.0" cy="992.5" r="4" fill="#c07a00"/>
+<circle cx="546.0" cy="985.0" r="4" fill="#c07a00"/>
+<circle cx="546.0" cy="970.0" r="4" fill="#c07a00"/>
+<circle cx="559.0" cy="962.5" r="4" fill="#c07a00"/>
+<circle cx="559.0" cy="947.5" r="4" fill="#c07a00"/>
+<circle cx="546.0" cy="940.0" r="4" fill="#c07a00"/>
+<circle cx="546.0" cy="925.0" r="4" fill="#c07a00"/>
+<circle cx="533.0" cy="917.5" r="4" fill="#c07a00"/>
+<circle cx="520.0" cy="925.0" r="4" fill="#c07a00"/>
+<circle cx="507.0" cy="917.5" r="4" fill="#c07a00"/>
+<circle cx="494.0" cy="925.0" r="4" fill="#c07a00"/>
+<circle cx="494.0" cy="940.0" r="4" fill="#c07a00"/>
+<circle cx="481.0" cy="947.5" r="4" fill="#c07a00"/>
+<circle cx="481.0" cy="962.5" r="4" fill="#c07a00"/>
+<circle cx="494.0" cy="970.0" r="4" fill="#c07a00"/>
+<circle cx="494.0" cy="985.0" r="4" fill="#c07a00"/>
+<text x="520" y="1040" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">ZZZZZZ → ring of 18 triangles</text>
 <polygon points="714.0,913.9 736.0,913.9 736.0,935.9 714.0,935.9" fill="#9fd8cf" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="714.0" y1="913.9" x2="736.0" y2="913.9" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="736.0" y1="913.9" x2="736.0" y2="935.9" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
@@ -692,7 +766,9 @@
 <line x1="943.0" y1="964.5" x2="920.5" y2="977.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="907.5" y1="955.0" x2="930.0" y2="942.0" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="920.5" y1="977.5" x2="907.5" y2="955.0" stroke="#777" stroke-width="2.5" stroke-linecap="round"/>
-<polygon points="943.0,964.5 965.5,977.5 965.5,1003.5 920.5,977.5" fill="#c9b6e8" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="943.0,964.5 920.5,977.5 943.0,990.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="943.0,964.5 943.0,990.5 965.5,977.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="965.5,977.5 943.0,990.5 965.5,1003.5" fill="#f6cf8a" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
 <line x1="943.0" y1="964.5" x2="965.5" y2="977.5" stroke="#e0672b" stroke-width="4" stroke-linecap="round"/>
 <line x1="965.5" y1="977.5" x2="965.5" y2="1003.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
 <line x1="920.5" y1="977.5" x2="943.0" y2="964.5" stroke="#2b6fb3" stroke-width="2.5" stroke-linecap="round"/>
@@ -712,7 +788,9 @@
 <circle cx="900.1" cy="922.7" r="4" fill="#c07a00"/>
 <circle cx="912.2" cy="937.2" r="4" fill="#1d8f80"/>
 <circle cx="925.2" cy="959.8" r="4" fill="#1d8f80"/>
-<circle cx="948.6" cy="980.8" r="4" fill="#6a4aa8"/>
+<circle cx="935.5" cy="977.5" r="4" fill="#c07a00"/>
+<circle cx="950.5" cy="977.5" r="4" fill="#c07a00"/>
+<circle cx="958.0" cy="990.5" r="4" fill="#c07a00"/>
 <circle cx="978.5" cy="990.5" r="4" fill="#1d8f80"/>
 <circle cx="1004.5" cy="990.5" r="4" fill="#1d8f80"/>
 <text x="930" y="1040" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#222" text-anchor="middle" font-weight="normal">SSTSSZSS → zigzag</text>

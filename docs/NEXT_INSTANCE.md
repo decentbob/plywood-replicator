@@ -27,10 +27,10 @@ backlog; take the top unblocked item.
   (rods won there: D share 0.71). Recorded in ROADMAP "Parked evidence"; start nothing like it.
 - Funnel: tune lean and length so both blades point at the copying face (some splay outward).
 - **Next build (user focus): the base-shape alphabet** (COMPLEXITY_MAP 3e, picture
-  `experiments/out/SHAPES_alphabet_20260930.png`). One block family (unit face and laterals):
-  square / triangle / trapezoid rest states (no wedge). Bent chains copy by complementary shapes
-  (S↔S, T↔Z; a paired bend is a side-2 triangle). Demo: a bent SSTSS founder copies into SSZSS.
-  Open: closed rings are enclosed by their copies.
+  `experiments/out/SHAPES_alphabet_20260930.png`). Base shapes: unit square and unit triangle only;
+  trapezoids and other parts are welded. A triangle in a chain is a 60° bend; the bend is a mould
+  whose copy is a trapezoid of three triangles (one docks, two fill notches). Demo: a bent SSTSS
+  founder copies. Open: closed rings are enclosed by their copies.
 
 ## User ideas to keep (also in ROADMAP/IDEAS)
 

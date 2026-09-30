@@ -122,40 +122,40 @@ inertia follow the polygon). Viability look: a comb whose B seeds one 3x1 rod is
 intended. In that world the armed founder stayed paired for 30k steps without finishing a
 copy (the partner B, attached by its face, may grow a rod that jams); PAAQ made 4.
 
-## 3e. Base shapes: one block, three rest states, complementary pairing (design, 2026-09-30)
+## 3e. Base shapes: square and triangle, one edge length; welded shapes; bends copied by moulding (design, 2026-09-30)
 
 Picture: `experiments/out/SHAPES_alphabet_20260930.png` (script `experiments/shape_alphabet_figure.js`,
 which also checks the copy geometry numerically). Stay simple and general; complex forms
-should come from combinations and sequences.
+come from combinations and sequences (user, 2026-09-30).
 
-- **One family, not several types.** A 4-cornered block whose face F and laterals R, L are always
-  exactly one unit long, so any working edge bonds to any other. Its state tilts the laterals, and
-  the back K becomes `1 - 2 sin(tilt)`:
-  - **square S** (tilt 0, back 1): straight;
-  - **triangle T** (tilt +30°, back 0): turns 60° with the face outside;
-  - **trapezoid Z** (tilt −30°, back 2, i.e. three welded unit triangles): turns 60° the other way, with the face inside.
-
-  The switch is a rest-shape change, like the core fold; the vertex count never changes (T has a zero-length back, and a tiny nonzero back is safer numerically).
-- **No wedge** (user, 2026-09-30). Every turn is a 60° step, so chains and parts share six
-  directions and meet edge to edge. Squares add 90° joints in combinations.
-- **Copying a bent chain (user correction, 2026-09-30).** A chain whose shape is its own must be copyable while bent.
-  - A square copy at a triangle letter cannot follow the bend: neighbouring copy letters leave a 60° gap (0.52 units).
-  - Instead, shapes pair as complements: **S↔S** (a 1×2 domino) and **T↔Z** (a side-2 triangle). The copy's squares attach to the trapezoid's angled legs.
-  - A bent double strand is then one rigid piece of dominoes and big triangles. Every pair of neighbouring copy letters shares a whole lateral (checked: gap 0).
-  - Shape is copied like a letter, by complementarity. The copy of a copy restores the original shapes.
-  - A wrong-shape docking at a bend physically cannot bond to both neighbours, so it is rejected mechanically.
+- **Two base shapes only: the unit square and the unit triangle.** Every working edge is one unit
+  long, so any edge bonds to any other. The square has a face F, laterals R and L, and a back K.
+  In a chain, a triangle uses one edge as its face and two as laterals, so it is a **bend T**:
+  it turns 60° with the face outside.
+  - No wedge, and no trapezoid shape.
+  - Every turn is a 60° step, so chains and parts share six directions and meet edge to edge. Squares add 90° joints.
+  - A square⇄triangle state switch is optional (supply balancing). Otherwise the simulation supplies both shapes.
+- **Welded shapes.** Bigger parts are bonded combinations: rods, corners, rhombi, trapezoids,
+  hexagon hubs, houses, kinked plates and saws. A two-corner pin is rigid, one pin is a hinge, and releasing bonds splits a part.
+  The trapezoid (three triangles) is just one of many useful welded shapes (user).
+- **Copying a bent chain (user corrections, 2026-09-30).**
+  - A square copy at a T bend leaves a 60° gap (0.52 units): the copy's neighbours cannot bond.
+  - The complement of a T bend is a trapezoid, a **Z bend**, which turns the other way with the face inside. The copy's squares attach to its angled legs.
+  - Paired, S+S is a domino and T+Z is a side-2 triangle, so a bent double strand is one rigid piece. Every pair of neighbouring copy units shares a whole lateral (checked: gap 0).
+  - The Z is built **in place from supplied triangles**. One triangle docks face to face on the T. That leaves two 60° notches between it and the neighbouring copy squares, each exactly one unit triangle, which free triangles fill. **The template bend is a mould.**
+  - Copying a Z bend back takes a single triangle on its short face, so the copy of a copy restores the T. Shape is inherited by complementarity.
+  - Copying costs triangles unevenly: 3 per T bend, 1 per Z bend. A simulation that wants such shapes must supply enough triangles (user).
 - **Consequences.**
   - No fold/unfold rule is needed: strands are bent while copied and after release.
-  - A strand can hold both T and Z, so S-curves and zigzags are possible. Faces sit on the outside at T bends and inside at Z bends.
-  - Examples: SSSSSS is a rod; TTTTTT is a hexagon with faces out; ZZZZZZ is a ring with faces in; (ST)×6 is a 12-ring; SSS TTT SSS is a hairpin, whose copy SSS ZZZ SSS is a U that slides off.
-  - Only S and Z keep a back port (Z has two unit sites), so structures seed from those.
+  - One strand can hold both bends, so S-curves and zigzags are possible.
+  - Examples: SSSSSS is a rod; TTTTTT is a hexagon with faces out; ZZZZZZ is a ring of 18 triangles with faces in; (ST)×6 is a 12-ring; SSS TTT SSS is a hairpin, whose copy (a U of 9 triangles and squares) slides off.
+  - Structure seeds sit on square backs (or the Z's two unit back sites).
 - **Open problems and questions.**
-  - **Closed rings cannot separate:** in 2D a TTTTTT ring is enclosed by its ZZZZZZ copy. Rings would have to be copied open and then close, or open to release. This might also be a feature: a ring copy as an enclosing wall.
-  - Does docking at bends work kinetically? The copy's bent geometry needs neighbours to rotate into place.
-  - Mass changes with state (areas 1, 0.43, 1.3): keep it constant, or follow the polygon.
-- **First demo.** Add `shapeStates` to the seeded engine (kind → tilt; T and Z pair faces). A bent
-  founder SSTSS copies into SSZSS, and a copy of that copy returns SSTSS; an S-curve founder copies
-  with both bends.
+  - **Closed rings cannot separate:** in 2D a TTTTTT ring is enclosed by its copy. Rings would have to be copied open and then close, or open to release. The copy could also be a feature, as an enclosing wall.
+  - Kinetics of notch filling: triangle edges must accept both face and lateral roles, and a notch triangle binds two open laterals at once (activation by attachment).
+  - Do free triangles weld into unwanted clumps? Triangles probably need to be inert until they touch an attached edge.
+- **First demo.** Square and triangle blocks, with triangle edges acting as face or lateral. A bent
+  SSTSS founder copies with a moulded Z bend, and a copy of the copy restores the T.
 
 ## 4. Combinations worth trying (the map)
 

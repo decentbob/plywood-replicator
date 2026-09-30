@@ -6,12 +6,13 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 ## 2026-09-30
 
-- **Base-shape alphabet** (design, user direction) — not yet built. One block family with unit
-  face and lateral edges and three rest states: square (straight), triangle (60° turn, face out),
-  trapezoid (60° turn, face in). No wedge. Bent chains are copied by complementary shapes: S↔S,
-  T↔Z, so a paired bend is a rigid side-2 triangle and the copy is bent too (user correction; a
-  square copy leaves a gap). Picture: `experiments/out/SHAPES_alphabet_20260930.png`; details in
-  COMPLEXITY_MAP 3e. Next: a `shapeStates` demo copying a bent founder.
+- **Base-shape alphabet** (design, user direction) — not yet built. Two base shapes (unit
+  square and unit triangle); everything else is welded (the trapezoid is one of many). A triangle in a
+  chain is a 60° bend. A bent chain is copied because the bend is a mould: one triangle docks on the
+  bend's face and two fill the notches, forming the complementary trapezoid bend. Paired, the bend is a
+  rigid side-2 triangle (a square copy would leave a gap). Picture:
+  `experiments/out/SHAPES_alphabet_20260930.png`; details in COMPLEXITY_MAP 3e. Next: demo copying a
+  bent founder.
 - **Funnel on the caps** (user idea) — partial/promising. Each cap's outer side seeds one custom
   parallelogram blade (C on P, mirrored D on Q) that leans toward the copying face. Blades are
   rebuilt on every copy. Demo (one seed each, 30k steps, 2 PAAQ founders): 7 chains and 26 face
