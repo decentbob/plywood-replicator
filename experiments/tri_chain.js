@@ -35,13 +35,28 @@ const {seeded}=require('./seeded_growth'),{regular}=require('./seeded_ports'),{P
 const {band}=require('./triangle_alphabet_figure');
 
 const PREV=1,NEXT=2,FACE=3,TFACE=4;   // FACE on the copy (docked) end of a face bond, TFACE on the template end
-const FREE=0,SFACE=1,SBACK=2,DOCKED=3,BUSY=30;   // BUSY: range of the relayed busy level (bonds)
+const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=5,BUSY=30;
+const GSEED=5,GUP=6,GDOWN=7,GRING=8;   // growth bond kinds: seed edge on a chain back, child's attach edge, parent's sticky edge, ring closure   // BUSY: range of the relayed busy level (bonds)
 const m3=x=>((x%3)+3)%3;
+
+// ---------------- growth programs (grown parts on hidden backs) ----------------
+// A grown triangle has a state; its edges are named relative to the edge it attached by (rel 1 = next counter-clockwise,
+// rel 2 = the other). stick: [rel, child state] = that edge takes one free triangle, which is given the child state
+// (the parent writes it; the child keeps it). close: rel edges that bind a ring partner's sticky edge (closure).
+// Parts end by closure (a ring has no free slot left) or by stop states (no sticky edge); nothing counts.
+const PROGRAMS={
+  hex:{s0:{stick:[[1,'r']],close:[2]},r:{stick:[[2,'r']]}},                  // 6 triangles around one point, closes itself
+  plate:{s0:{stick:[[1,'c']]},c:{stick:[[1,'x'],[2,'x']]},x:{stick:[]}},       // side-2 triangle: corner, centre, 2 corners
+  spike:{s0:{stick:[[1,'a']]},a:{stick:[[2,'b']]},b:{stick:[[1,'x']]},x:{stick:[]}},   // straight strip of 4
+  fan:{s0:{stick:[[1,'f'],[2,'f']]},f:{stick:[]}},                          // trapezoid: a triangle with two stop wings
+};
+const CODES=[];for(const [pn,pr] of Object.entries(PROGRAMS))for(const st of Object.keys(pr))CODES.push([pn,st]);
+const code=(pn,st)=>1+CODES.findIndex(([a,b])=>a===pn&&b===st);
 const TRI_CONFIG={structural:[],shapes:{[T_A]:regular(3,1)},labels:{}};
 
 class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   _tri(){const n=this.n;if(!this.bkind||this.bkind.length!==n*4){this.bkind=new Int8Array(n*4);this.fill=new Int8Array(n);
-    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
+    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int8Array(n);this.gatt=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
   // edges of u by kind (from its own bonds): {prev, next, face} (-1 if none)
   _edges(u){const k=this.bkind,o=u*4;let prev=-1,next=-1,face=-1;
     for(let i=0;i<3;i++){if(this.bond[o+i]<0)continue;if(k[o+i]===PREV)prev=i;else if(k[o+i]===NEXT)next=i;else if(k[o+i]===FACE)face=i;}
@@ -50,6 +65,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   _roles(u){
     const e=this._edges(u);
     if(e.face>=0)return {role:DOCKED,prev:m3(e.face+1),next:m3(e.face+2),free:-1,face:e.face};
+    if(this.gstate&&this.gstate[u])return {role:GROWN,att:this.gatt[u]};
     if(e.prev<0&&e.next<0)return {role:FREE};
     if(e.prev>=0&&e.next>=0)return {role:e.next===m3(e.prev+1)?SFACE:SBACK,prev:e.prev,next:e.next,free:3-e.prev-e.next};
     if(e.next>=0&&this.fill[u])return {role:SBACK,prev:m3(e.next+1),next:e.next,free:m3(e.next+2),fill:true};
@@ -82,11 +98,30 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;
       if(free(u)||free(v)){if(free(u)){[u,v]=[v,u];}const r=R[u];   // u attached, v free
+        // growth: a site back (released strand) seeds its program; a grown triangle extends by its state
+        const G=p.grow;
+        if(G&&r.role===SBACK&&!r.fill&&r.free>=0&&!bnd(u,r.free)&&r.prev>=0&&r.next>=0){
+          const a=this._partner(u,r.prev),b=this._partner(u,r.next),site=R[a].role===SFACE&&R[b].role===SFACE?'R':R[a].role===SFACE&&R[b].role===SBACK?'Z':null;
+          if(site&&G[site]){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,GSEED,v,j,GUP);
+            this.gstate[v]=code(G[site],'s0');this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};break;}}
+          continue;}
+        if(r.role===GROWN){const [pn,st]=CODES[this.gstate[u]-1],rule=PROGRAMS[pn][st];let done=false;
+          for(const [rel,child] of rule.stick){const e=m3(r.att+rel);if(bnd(u,e))continue;
+            for(let j=0;j<3&&!done;j++)if(this._flush(u,e,v,j,tolF)&&this.rng()<pb){this._bind(u,e,GDOWN,v,j,GUP);
+              this.gstate[v]=code(pn,child);this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};done=true;}
+            if(done)break;}
+          continue;}
         // dock on a free face
         if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
         // fill on the prev edge of a docked or fill triangle that still needs fills
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(this._flush(u,r.prev,v,j,tolF)&&this.rng()<pb){
           this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
+        continue;}
+      // ring closure: a grown triangle's sticky edge binds another grown triangle's close edge
+      if(ru.role===GROWN&&rv.role===GROWN){
+        for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]]){const [pa_,sa]=CODES[this.gstate[a]-1],[pb_,sb]=CODES[this.gstate[b]-1],cl=PROGRAMS[pb_][sb].close||[];
+          for(const [rel] of PROGRAMS[pa_][sa].stick){const e=m3(ra.att+rel);if(bnd(a,e))continue;
+            for(const c of cl){const f=m3(rb.att+c);if(!bnd(b,f)&&this._flush(a,e,b,f,tolC)&&this.rng()<pb){this._bind(a,e,GRING,b,f,GRING);this.ringEvents=(this.ringEvents||0)+1;}}}}
         continue;}
       // close: two copy triangles (docked or fill), prev edge of one to next edge of the other
       const cp=r=>r.role===DOCKED||r.fill;if(!cp(ru)||!cp(rv))continue;
@@ -158,7 +193,8 @@ function render(s,out,title,focus=null){
   const cx=focus?0:W/2-s.px[0],cy=focus?0:W/2-s.py[0];
   const X0=u=>focus?s._dx(s.px[u]-fx)+focus.radius:((s.px[u]+cx)%W+W)%W,Y0=u=>focus?s._dy(s.py[u]-fy)+focus.radius:((s.py[u]+cy)%W+W)%W;
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s._roles(u);
-    const col=r.role===FREE?'#56646e':r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':'#c98f2e';
+    const GC={hex:'#b58ae6',plate:'#e78ac0',spike:'#8ab4e6',fan:'#7fd18f'};
+    const col=r.role===GROWN?GC[CODES[s.gstate[u]-1][0]]:r.role===FREE?'#56646e':r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':'#c98f2e';
     const pts=[];for(let q=0;q<3;q++){const x=X0(u)+s.ox[u*NV+q],y=Y0(u)+s.oy[u*NV+q];pts.push(`${(x*k).toFixed(1)},${(y*k).toFixed(1)}`);}
     svg.push(`<polygon points="${pts.join(' ')}" fill="${r.fill?'#3f9e8f':col}" stroke="#1b2a33" stroke-width="0.8"/>`);
     if((r.role===SFACE)&&r.free>=0){const a=u*NV+r.free,b=u*NV+(r.free+1)%3,X=v=>(X0(u)+s.ox[v])*k,Y=v=>(Y0(u)+s.oy[v])*k;
@@ -182,4 +218,4 @@ function demo(seed,steps,stem,gaps,free=120,size=18,every=0,params={}){
 }
 if(require.main===module){const [cmd,seed,steps,stem,g,free,size]=process.argv.slice(2);
   if(cmd==='demo')demo(+seed,+steps,stem,[...(g||'11111')].map(Number),free?+free:120,size?+size:18,+steps/4|0);}
-module.exports={TriSim,createTriWorld,triCensus,render,demo,PREV,NEXT,FACE,TFACE,rolesFromGaps};
+module.exports={PROGRAMS,TriSim,createTriWorld,triCensus,render,demo,PREV,NEXT,FACE,TFACE,rolesFromGaps};

@@ -4,6 +4,42 @@ One short entry per new capability: what is new, how to see it, a picture, statu
 it enables next. Newest first. Status: **works** (does what was intended in demos or
 screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LEDGER.
 
+## 2026-09-30 (session 2b: triangle-only chains)
+
+- **Triangle-only replicator** (`experiments/tri_chain.js`, user direction) — works (demos; every complete strand
+  correct in 2 worlds: 6/6 and 7/7 by t=4000). One block type, the unit triangle. Bonds use the ordinary bond table,
+  so pins and rigid-body jostling are unchanged. A chain is a band of triangles. Each triangle reads its roles from its
+  own bonds: its free edge is a face (copying side) or a hidden back. Letters are one face plus the backs that follow:
+  T (1 triangle), R (rhombus, 2), Z (trapezoid, 3). The information is the gap sequence (0/1/2 backs between faces).
+  Copying uses local rules:
+  - a free triangle docks on a face;
+  - fills bind a docked triangle's prev side, exactly 2 − c of them. The count is read from the template's
+    hidden neighbours, one bond per pass;
+  - closure happens only when no fill is needed;
+  - a docked triangle releases (zipper) once both sides are bonded to complete partners;
+  - released faces stay refractory until a relayed busy level falls to 0.
+
+  So T↔Z, R↔R: `1101121` (RRTRRZRR) → `1011211` → `1101121`. Design figure (geometry checked):
+  `experiments/out/TRI_alphabet_20260930.png` (`experiments/triangle_alphabet_figure.js`). Frames:
+  `experiments/out/TRI_copy_frames_20260930.png` (`node experiments/tri_frames.js 2 1101121 OUT 100 22`).
+  Bugs fixed on the way, each a local rule: template and copy ends of a face bond are distinct; the fill count is
+  exact even under strain; no re-docking under a copy still peeling off; no release until the second fill has closed.
+- **Grown parts by programs** (`tri_chain.js` `grow`) — works (gallery). Hidden backs are growth sites, read
+  locally: an R back (both chain neighbours faces) and the first back of a Z. A site takes one free triangle and
+  writes a program state into it; each state names which edges take a child and in which state:
+  - **hex**: a ring of 6 that ends by closing on itself;
+  - **plate**: a side-2 triangle, ended by stop states;
+  - **spike**: a strip of 4;
+  - **fan**: a triangle with two wings.
+
+  Rules: only free triangles join (structures never fuse), only on released strands, nothing counts. The
+  self-complementary founder `10121` (RTRZRR) is copied to the same shape, so founder and copy grow the same
+  parts at the same place. In other chains Z sites become T in the copy, so parts alternate between generations.
+  Picture: `experiments/out/TRI_parts_gallery_20260930.png`.
+  Reproduce: `node experiments/tri_gallery.js OUT 10121 11 "Z:hex" "Z:plate" "Z:spike" "R:fan,Z:hex"`.
+  Next: give parts a job. Plates as shields under the damage field, fans or spikes as funnels
+  (the user's routes: protection or feeding); hinged parts.
+
 ## 2026-09-30 (session 2: chain core with grown shapes)
 
 - **Trapezoid strip: a one-shape chain** (`seeded_bent.js` STRIP, user idea) — works for straight strips (1 demo);
