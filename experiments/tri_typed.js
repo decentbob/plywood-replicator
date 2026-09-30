@@ -25,7 +25,9 @@
 //           push against a loaded one. Without a mark the flap holds its cargo until something else cuts the bond (a cast).
 //           Pulse doors ('#' on the hinge side): a trigger sets the door's own open state; the door swings open,
 //           resets its state there and swings back (and re-latches). '#' on a trigger side: the side lets go of the
-//           key one pass after binding (the door has read it), so the key is not carried.
+//           key one pass after binding (the door has read it), so the key is not carried. Interlock: a triangle with
+//           an unbonded latch side emits a lock signal (lockRange, relayed -1 per bond); a closed pulse door ignores
+//           its trigger while it hears it, so of two doors in one wall only one is unlatched at a time.
 //   close-only (side property '.') the side binds only triangles that are already attached, never a free one: it
 //           closes onto what a structure brings to it (a switch of the side's activity by attachment).
 //   casting (permanent type change, in-simulation) a triangle T whose three sides are all glue-bonded to triangles
@@ -58,13 +60,17 @@ const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<'
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^*~#]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 class TypedSim extends TriSim{
-  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.dOpen=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
+  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.dOpen=new Int8Array(n);this.lockBusy=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
   setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];this.hRelease[u*3+i]=t.rel[i];this.trg[u*3+i]=t.trig[i];this.ltc[u*3+i]=t.latch[i];}this.bondsDirty=true;}
   _roles(u){const r=super._roles(u);
     if(r.role===FREE)for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0&&this.bkind[u*4+i]===GLUE)return {role:GROWN};
     return r;}
   _derive3(){super._derive3();
     // activator exposure: the side of mine whose glue is K and is bonded to a partner side carrying k (or -1)
+    // lock signal (interlock): a triangle with an unbonded latch side (a door not latched) emits lockRange; others
+    // relay the largest bonded neighbour's value minus 1 (previous pass, one bond per pass)
+    {const b0=this.lockBusy.slice(),R=this.p.lockRange??12;
+      for(let u=0;u<this.n;u++){let v=0;for(let i=0;i<3;i++){if(this.ltc[u*3+i]&&this.bond[u*4+i]<0)v=R;const q=this.bond[u*4+i];if(q>=0)v=Math.max(v,b0[q>>2]-1);}this.lockBusy[u]=v;}}
     for(let u=0;u<this.n;u++)this.tb[u]=(this.trg[u*3]&&this.bond[u*4]>=0)||(this.trg[u*3+1]&&this.bond[u*4+1]>=0)||(this.trg[u*3+2]&&this.bond[u*4+2]>=0)?1:0;
     for(let u=0;u<this.n;u++)this.nbc[u]=(this.bond[u*4]>=0)+(this.bond[u*4+1]>=0)+(this.bond[u*4+2]>=0);
     const K=gcode('K');for(let u=0;u<this.n;u++){let a=-1;for(let i=0;i<3;i++){const q=this.bond[u*4+i];
@@ -148,8 +154,9 @@ class TypedSim extends TriSim{
     const hingeBond=(x,e)=>{const r=this.bond[x*4+e];return r>=0&&(this.hing[x*3+e]||this.hing[(r>>2)*3+(r&3)]);};
     // latches: a latch side lets go while its triangle, or one bonded to it (not by a hinge), has a bonded trigger or
     // is a pulse door in its open state (it would otherwise re-latch before the door has moved)
-    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*4+i]<0)continue;let on=this.tb[u]||this.dOpen[u];
-      for(let e=0;e<3&&!on;e++)if(e!==i&&this.bond[u*4+e]>=0&&!hingeBond(u,e)){const w=this.bond[u*4+e]>>2;if(this.tb[w]||this.dOpen[w])on=1;}
+    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*4+i]<0)continue;let trig=this.tb[u],open=this.dOpen[u];
+      for(let e=0;e<3;e++)if(e!==i&&this.bond[u*4+e]>=0&&!hingeBond(u,e)){const w=this.bond[u*4+e]>>2;if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
+      const on=open||(trig&&this.lockBusy[u]===0);   // interlock: a trigger unlatches only while no other door is unlatched
       if(on){this._cut(u,i);this.unlatches=(this.unlatches||0)+1;}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*4+i];if(!this.hing[u*3+i]||q<0)continue;const v=q>>2;
       const trs=[0,1,2].filter(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
@@ -161,7 +168,9 @@ class TypedSim extends TriSim{
       let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
       for(let e=0;e<3&&!swung;e++)if(this.bond[u*4+e]>=0&&!hingeBond(u,e)&&this.tb[this.bond[u*4+e]>>2])swung=true;
       // pulse doors (#): a trigger sets the door's own open state; it swings open and, once there, resets and swings back
-      if(this.hRelease[u*3+i]===3){if(swung)this.dOpen[u]=1;
+      // interlock: a closed pulse door ignores its trigger while it hears the lock signal of a door that is not latched
+      if(this.hRelease[u*3+i]===3){if(swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.interlocked=(this.interlocked||0)+1;}
+        if(swung)this.dOpen[u]=1;
         if(this.dOpen[u]&&Math.abs(wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this._ang(u)-this._ang(v))))<(this.p.dropTol??0.15)){this.dOpen[u]=0;this.pulses=(this.pulses||0)+1;}
         swung=!!this.dOpen[u];}
       const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0);
