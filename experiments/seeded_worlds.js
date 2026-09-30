@@ -14,7 +14,7 @@ const COMB={structural:[T_D,T_J],labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_D]:{
 function createWorld({seed,size=24,founder='PABAQ',loose={},config=COMB,Base=PinsLiveSim,params={}}={}){
   const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,need={},founders=Array.isArray(founder)?founder:[founder];
   for(const f of founders)for(const ch of f)need[ch]=(need[ch]||0)+1;
-  const counts={nA:(need.A||0)+(loose.A||0),nB:(need.B||0)+(loose.B||0),nC:loose.C||0,nD:loose.D||0,nJ:loose.J||0,
+  const counts={nA:(need.A||0)+(loose.A||0),nB:(need.B||0)+(loose.B||0),nC:(need.C||0)+(loose.C||0),nD:(need.D||0)+(loose.D||0),nJ:loose.J||0,
     nP:(need.P||0)+(loose.P||0),nQ:(need.Q||0)+(loose.Q||0),nE:loose.E||0};
   const Cls=seeded(Base,config),s=new Cls({...ref,...counts,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
   const chains=founders.map((f,k)=>{const c=s.seedStrand(size/2,size*(k+1)/(founders.length+1),0,f.length,f);assert(c,'founder not placed');return c;});

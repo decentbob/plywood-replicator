@@ -35,7 +35,10 @@ function seeded(Base,config){
   return class extends Base{
     _initGeometry(){
       super._initGeometry();
-      for(const [key,pts] of Object.entries(config.shapes||{})){
+      for(const [key,raw] of Object.entries(config.shapes||{})){
+        // the solver's shape matching treats the corner mean as the block's centre, so rest corners are stored about
+        // their mean (an asymmetric polygon centred on its area centroid would get a spurious turn every pass)
+        const mx=raw.reduce((a,q)=>a+q[0],0)/raw.length,my=raw.reduce((a,q)=>a+q[1],0)/raw.length,pts=raw.map(([x,y])=>[x-mx,y-my]);
         const t=+key,{area,inertia}=polyMass(pts);this.nv[t]=pts.length;
         pts.forEach((q,k)=>{this.rx[t*NV+k]=q[0];this.ry[t*NV+k]=q[1];});
         for(let i=0;i<4;i++)this.edgeOf[t*4+i]=i;

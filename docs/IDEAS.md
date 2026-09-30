@@ -5,6 +5,14 @@ The organizing view is [COMPLEXITY_MAP.md](COMPLEXITY_MAP.md); this file keeps t
 Nothing here is a queue item: ROADMAP ranks work, and each idea needs a frozen plan
 before it runs. Add new ideas at the top of their section, with date and evidence.
 
+## Adaptation (user, 2026-09-30; for later)
+
+- **Two main routes to adaptation: protection from the environment, or a feeding/funnelling
+  shape.** Structures pay either by shielding the chain from a damage field (shields evolved,
+  RESULTS 105–107) or by bringing material to the copying face (the funnel). Emergent
+  appendages (accretion on the chain's back) should be judged by these two effects: do grown
+  shapes shade the chain, or funnel letters to its face, and does that shift which sequences spread?
+
 ## Mechanism logic
 
 - **A latch needs memory or a drive (from RESULTS 79, 92, 94).** A shape switch that

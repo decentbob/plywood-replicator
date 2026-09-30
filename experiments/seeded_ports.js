@@ -37,6 +37,7 @@ function ports(Base,config){
             if(a.f!==b.f||a.s!==-b.s||(a.seed&&b.seed))continue;
             if(x[u*NV+ie]>=0||x[v*NV+jf]>=0)continue;
             if(!this.xAttached(u,ie)&&!this.xAttached(v,jf))continue;
+            if(this._portAllowed&&!this._portAllowed(u,ie,v,jf))continue;
             if(!this.edgeContact(u,ie,v,jf))continue;
             if(p<1&&this.rng()>=p)continue;
             x[u*NV+ie]=v*NV+jf;x[v*NV+jf]=u*NV+ie;this.bondsDirty=true;this.portEvents=(this.portEvents||0)+1;}
