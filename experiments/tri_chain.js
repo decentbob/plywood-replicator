@@ -257,6 +257,42 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     return open/dirs;
   }
   step(){this.t++;this._physics();this._derive3();this._triBonds();this._triChem();}
+  // No tunnelling (default on; noTunnel:false restores the plain jostle). A jostle kick can move a free triangle
+  // further than a thin wall is thick (kicks reach about 1.8 at sigma 0.3; a one-row wall is 0.87 thick); the
+  // contact solver then pushes it out on the far side. After the jostle, a body whose centre path (old to new
+  // centre of any of its blocks) enters a block of another bonded body (a structure: walls, chains, frames; free
+  // blocks still jostle past each other) is moved only 1/2 or 1/4 of the way (translation,
+  // orientation kept), or not at all. Ordinary overlaps of outlines stay (the contact solver resolves them).
+  _jostleBodies(){
+    if(this.p.noTunnel===false)return super._jostleBodies();
+    const n=this.n,px=this.px,py=this.py,pa=this.pa,ox=this.ox,oy=this.oy;
+    const k0=this._nt||(this._nt={});if(!k0.px||k0.px.length!==n){k0.px=new Float64Array(n);k0.py=new Float64Array(n);k0.pa=new Float64Array(n);k0.ox=new Float64Array(n*NV);k0.oy=new Float64Array(n*NV);k0.comp=new Int32Array(n);}
+    const {px:X,py:Y,pa:A,ox:OX,oy:OY,comp}=k0;X.set(px);Y.set(py);A.set(pa);OX.set(ox);OY.set(oy);
+    super._jostleBodies();
+    // bodies (bonded components), as the jostle moves them
+    comp.fill(-1);let nc=0;const st=[];
+    for(let u=0;u<n;u++){if(comp[u]>=0)continue;comp[u]=nc;st.push(u);
+      while(st.length){const x=st.pop();for(let i=0;i<4;i++){const q=this.bond[x*4+i];if(q<0)continue;const y=q>>2;if(comp[y]<0){comp[y]=nc;st.push(y);}}}nc++;}
+    const seg=(ax,ay,bx,by,cx,cy,dx,dy)=>{const d=(bx-ax)*(dy-cy)-(by-ay)*(dx-cx);if(Math.abs(d)<1e-12)return false;
+      const t=((cx-ax)*(dy-cy)-(cy-ay)*(dx-cx))/d,w=((cx-ax)*(by-ay)-(cy-ay)*(bx-ax))/d;return t>=0&&t<=1&&w>=0&&w<=1;};
+    const members=Array.from({length:nc},()=>[]);for(let u=0;u<n;u++)members[comp[u]].push(u);
+    // does block u's centre path enter a block of another, bonded body (a structure of two or more blocks)? (a centre inside another block can be pushed out on
+    // either side by the contact solver, so a thin wall is passed)
+    const through=(u,mx,my)=>{const m=Math.hypot(mx,my);if(m<1e-9)return false;
+      for(let v=0;v<n;v++){if(comp[v]===comp[u]||members[comp[v]].length<2)continue;const vx=this._dx(X[v]-X[u]),vy=this._dy(Y[v]-Y[u]);if(Math.hypot(vx,vy)>m+1.5)continue;
+        const nv=this.nv[this.type[v]];let c=0;
+        for(let k=0;k<nv;k++){const a=v*NV+k,e=v*NV+(k+1)%nv;if(seg(0,0,mx,my,vx+OX[a],vy+OY[a],vx+OX[e],vy+OY[e]))c++;}
+        if(c>=1)return true;}
+      return false;};
+    let blocked=0;
+    for(let b=0;b<nc;b++){const us=members[b];if(!us.some(u=>through(u,this._dx(px[u]-X[u]),this._dy(py[u]-Y[u]))))continue;
+      // a leap: keep the body's orientation as it was and try the translation of its first block at 1/2, then 1/4
+      const u0=us[0],tx=this._dx(px[u0]-X[u0]),ty=this._dy(py[u0]-Y[u0]);let f=0;
+      for(const g of [0.5,0.25])if(!us.some(u=>through(u,g*tx,g*ty))){f=g;break;}
+      for(const u of us){px[u]=this._wx(X[u]+f*tx);py[u]=this._wy(Y[u]+f*ty);pa[u]=A[u];for(let k=u*NV;k<u*NV+NV;k++){ox[k]=OX[k];oy[k]=OY[k];}}
+      blocked++;}
+    this.tunnelBlocks=(this.tunnelBlocks||0)+blocked;
+  }
 }
 
 // ---------------- worlds ----------------

@@ -16,6 +16,20 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   own docker type (14 each of 106 free).
   `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
   Next: typed backs and ends (inherited only through the docker types), supply limits by type.
+- **Physics fix: no tunnelling through structures (user: jumping single walls is a bug)** — works. Cause: a free
+  triangle's jostle kick is large (20% of kicks exceed 0.8, the largest reach about 1.8), larger than a one-row wall
+  (0.87). The kick puts its centre inside a wall block, and the contact solver pushes it out on the far side. Fix
+  (`TriSim._jostleBodies`, all triangle worlds, `noTunnel:false` turns it off): after the jostle, a body whose
+  block-centre path enters a block of another bonded body is moved only 1/2 or 1/4 of the way, or not at all.
+  Free blocks still jostle past each other. About 0.7 moves per step are shortened; step time is unchanged.
+  Closed rings at the default jostle: 1 row 141 crossings in 3000 steps before, 0 in 6000 after; 2 rows 0 in 8000.
+  Costs: copying about 20-40% slower (docks 44-60 against 72 in 3000 steps; triangles no longer jump into docking
+  sites through the chain), and the hatch pocket casts less often (1 and 3 against 6 and 6 in 4000 steps).
+  Picture: `experiments/out/TRI_notunnel_sealed_20260930.png`.
+  Gate at the default jostle (2 rows, 12 keys): the door opened near t=1500 and tracers crossed (66). But the open
+  ring is a C that bends wide (openings of 1-3), probably because triangles wedge into the doorway. In 2D any
+  doorway turns a ring into a C while it is open. Picture: `experiments/out/TYPED_gate_default_jostle_20260930.png`.
+  Next: doors that close again soon (drop the key), or a revolving door that carries only the key through.
 - **Hinge machines: triggers, latches, hand-off, conveyor, gated membrane** — works (demos, 1 world each).
   New side marks: `*` trigger (a flap swings while a trigger side is bonded, or while a triangle welded to it
   reports one, relayed one bond), `~` latch (lets go while its triangle or a welded partner has a bonded trigger),
@@ -29,7 +43,8 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   **Gated membrane** (`ROWS=2 SIGMA=0.1 tri_machines.js gate 1 10000 OUT 12`): a closed two-row ring. The door is a
   two-triangle panel latched into the wall and hinged at its outer corner. A key (`ggg`) binding its outer face
   unlatches it, and it swings 120 degrees out carrying the key. Keyed world: door opened near t=3500, then 8
-  crossings; no-key control: 0 crossings in 10k steps. At the default jostle (sigma 0.3) every wall leaked: a free
+  crossings; no-key control: 0 crossings in 10k steps. At the default jostle (sigma 0.3) every wall leaked (fixed since,
+  see the next entry up): a free
   triangle's jump (up to 1.8) is larger than a one-row wall (0.87); sigma 0.1 seals. A one-row ring with a notch cut
   into it was an open C and bent open; the latch keeps a closed door part of the ring. Weakness: once open, the
   ring bends at the doorway (the door's drive and the key push against the wall). Picture:

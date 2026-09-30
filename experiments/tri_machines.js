@@ -6,8 +6,8 @@
 //   gate      a closed ring membrane (ROWS=1 or 2 cell rows) with a door: a two-triangle panel latched into the wall
 //             on one side and hinged on the other. A key (ggg) binding the panel's outer face (trigger G*) unlatches it
 //             and the panel swings 120 degrees out, carrying the key, opening a passage (with two rows, into a chamber
-//             left open to the inside). Tracers inside and outside are counted. Membranes need low jostling
-//             (SIGMA=0.1): at the default a free triangle's jump (up to 1.8) exceeds the wall thickness.
+//             left open to the inside). Tracers inside and outside are counted. (Walls leaked at the default jostle
+//             until the no-tunnelling fix in TriSim; SIGMA still sets the jostle.)
 //   node experiments/tri_machines.js conveyor SEED STEPS OUT   |   [ROWS=2 SIGMA=0.1] gate SEED STEPS OUT [keys]
 const path=require('path'),{execFileSync}=require('child_process');
 const T=require('./tri_typed');
