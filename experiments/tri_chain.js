@@ -32,7 +32,7 @@ const fs=require('fs'),path=require('path'),zlib=require('zlib'),{execFileSync}=
 const {T_A,NV}=require('../src/sim');
 const live=require('./half_cell_live'),{overlap}=require('./half_cell_geometry');
 const {seeded}=require('./seeded_growth'),{regular}=require('./seeded_ports'),{PinsLiveSim}=require('./half_cell_pins');
-const {band}=require('./triangle_alphabet_figure');
+const {band}=require('./triangle_alphabet_figure'),{crosses}=require('./seeded_field');
 
 const PREV=1,NEXT=2,FACE=3,TFACE=4;   // FACE on the copy (docked) end of a face bond, TFACE on the template end
 const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=5,BUSY=30;
@@ -123,6 +123,11 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
           for(const [rel] of PROGRAMS[pa_][sa].stick){const e=m3(ra.att+rel);if(bnd(a,e))continue;
             for(const c of cl){const f=m3(rb.att+c);if(!bnd(b,f)&&this._flush(a,e,b,f,tolC)&&this.rng()<pb){this._bind(a,e,GRING,b,f,GRING);this.ringEvents=(this.ringEvents||0)+1;}}}}
         continue;}
+      // ligation (optional, pLigate): the last triangle of one strand and the first of another join by their spare end
+      // edges (both stay face triangles, so the junction is a gap 0, a T bend); neither may be in a copy (busy 0)
+      if(p.pLigate>0){const end=(r,x,last)=>r.role===SFACE&&r.inert>=0&&!this.fill[x]&&this.busy[x]===0&&(last?r.next<0:r.prev<0);
+        for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]])if(end(ra,a,true)&&end(rb,b,false)&&!bnd(a,ra.inert)&&!bnd(b,rb.inert)&&this._flush(a,ra.inert,b,rb.inert,tolC)&&this.rng()<p.pLigate){
+          this._bind(a,ra.inert,NEXT,b,rb.inert,PREV);this.ligateEvents=(this.ligateEvents||0)+1;break;}}
       // close: two copy triangles (docked or fill), prev edge of one to next edge of the other
       const cp=r=>r.role===DOCKED||r.fill;if(!cp(ru)||!cp(rv))continue;
       for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]]){
@@ -139,6 +144,37 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
         const ew=this._edges(w);for(const j of [ew.prev,ew.next])if(j>=0&&this.fill[this._partner(w,j)])return false;return true;};
       const pOK=e.prev>=0?done(e.prev):rt.next<0,nOK=e.next>=0?done(e.next):rt.prev<0;
       if(pOK&&nOK){const q=this.bond[u*4+e.face];this.refr[u]=1;this.refr[t]=1;this.bkind[u*4+e.face]=0;this.bkind[q]=0;this._unlink(u,e.face);this.releaseEvents=(this.releaseEvents||0)+1;}}
+    this._environment();
+    for(let u=0;u<this.n;u++)if((this.fill[u]||this.gstate[u])&&this.bond[u*4]<0&&this.bond[u*4+1]<0&&this.bond[u*4+2]<0){this.fill[u]=0;this.gstate[u]=0;}   // a free triangle keeps no state
+  }
+  _cut(u,i){const q=this.bond[u*4+i];if(q<0)return;this.bkind[u*4+i]=0;this.bkind[q]=0;this._unlink(u,i);}
+  // Environment (explicit external drives, labelled as such; off by default):
+  //   pField  a damage field: a strand triangle loses one chain bond at pField * exposure per step; exposure = fraction
+  //           of fieldDirs directions (length fieldRange) not crossing a grown triangle (grown parts cast shadows);
+  //   triUndock a lone docked triangle (no chain bond) undocks (stalled copies recycle);
+//   pFray   fraying: a triangle held by exactly one bond (a chain end or a part tip) that is not being copied lets go
+  //           at pFray per step, so material recycles; a part tip that frays is regrown by its program.
+  _environment(){
+    const p=this.p,n=this.n;if(!(p.pField>0)&&!(p.pFray>0))return;
+    for(let u=0;u<n;u++){
+      let nb=0,chain=[],copying=false;
+      for(let i=0;i<3;i++){if(this.bond[u*4+i]<0)continue;nb++;const k=this.bkind[u*4+i];if(k===PREV||k===NEXT)chain.push(i);if(k===FACE||k===TFACE)copying=true;}
+      if(p.pField>0&&chain.length&&!copying&&this.rng()<p.pField&&this.rng()<this.exposure(u)){this._cut(u,chain[(this.rng()*chain.length)|0]);this.fieldBreaks=(this.fieldBreaks||0)+1;continue;}
+      // undocking: a lone docked triangle (no copy neighbour yet) leaves at triUndock, so docks on dead
+      // templates recycle (undocking one bonded to a copy in progress split copies into replicating fragments)
+      if(p.triUndock>0&&chain.length===0){const f=[0,1,2].find(i=>this.bond[u*4+i]>=0&&this.bkind[u*4+i]===FACE);
+        if(f!==undefined&&this.rng()<p.triUndock){for(let i=0;i<3;i++)this._cut(u,i);this.undockEvents=(this.undockEvents||0)+1;continue;}}
+      if(p.pFray>0&&nb===1&&!copying&&this.busy[u]===0&&this.rng()<p.pFray){
+        for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0)this._cut(u,i);this.gstate[u]=0;this.frayEvents=(this.frayEvents||0)+1;}
+    }
+  }
+  exposure(u){
+    const p=this.p,range=p.fieldRange||3,dirs=p.fieldDirs||16,near=[];
+    for(let v=0;v<this.n;v++)if(this.gstate[v]){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);
+      if(Math.hypot(dx,dy)<range+1)near.push(this._outline(v,dx,dy));}
+    if(!near.length)return 1;let open=0;
+    for(let k=0;k<dirs;k++){const a=2*Math.PI*(k+0.5)/dirs,bx=range*Math.cos(a),by=range*Math.sin(a);if(!near.some(ps=>crosses(0,0,bx,by,ps)))open++;}
+    return open/dirs;
   }
   step(){this.t++;this._physics();this._derive3();this._triBonds();this._triChem();}
 }
@@ -159,17 +195,19 @@ function placeBand(s,units,tris,cx,cy){
     s._bind(units[k],i,NEXT,units[k+1],j,PREV);}
 }
 function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
-  const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,tris=band(rolesFromGaps(gaps));
-  const s=new TriSim({...ref,nA:tris.length+free,nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
-  s._tri();const units=tris.map((_,k)=>k);
-  placeBand(s,units,tris,size/2,size/2);
-  const placed=[...units];
+  // gaps: one founder's gap list, or a list of them (several founders, spread along a diagonal)
+  const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,all=Array.isArray(gaps[0])?gaps:[gaps],bands=all.map(g=>band(rolesFromGaps(g)));
+  const total=bands.reduce((a,b)=>a+b.length,0);
+  const s=new TriSim({...ref,nA:total+free,nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
+  s._tri();let next=0;const founders=bands.map((tris,k)=>{const units=tris.map(()=>next++);
+    placeBand(s,units,tris,size*(k+1)/(bands.length+1),size*(k+1)/(bands.length+1));return units;});
+  const units=founders[0],placed=founders.flat();
   for(let u=0;u<s.n;u++)if(!placed.includes(u)){let ok=false;
     for(let a=0;a<5000&&!ok;a++){s.px[u]=size*s.rng();s.py[u]=size*s.rng();s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
       ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
     if(!ok)throw Error('could not place');placed.push(u);}
   s.bondsDirty=true;s._derive3();
-  return {s,founder:units};
+  return {s,founder:units,founders};
 }
 // Read-only census: strands (chain-bonded components) with their gap strings and pairing.
 function triCensus(s){
