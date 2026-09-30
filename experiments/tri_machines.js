@@ -54,6 +54,46 @@ function ring(R=4,rows=1){
   return {tris,R};
 }
 
+// Airlock (user: a double lock, one door closed while the other is open, so the ring never opens into a C). The ring
+// is one row (band R). Below its bottom side a lock section adds two rows (bands R+1, R+2) in a small window:
+//   inner door I: the ring-row panel U1 (hinged, pin at its top corner on the inner boundary, swings inward) + D1
+//                 (welded, latched to the ring on its right); trigger G on U1's bottom face, which faces the chamber;
+//   chamber:      the two band R+1 cells under U1 (c1) and beside it (c2), always empty;
+//   outer door O: the band R+2 panel U2 (latched on its left, trigger G on its outer face) + D2 (hinged on its
+//                 right, pin at its bottom corner on the lock's outer boundary, swings outward).
+// Both are pulse doors: a key (ggg) on the trigger opens the door, is let go at once, and the door swings 120
+// degrees, back again, and re-latches. A key outside opens O; a key that reaches the chamber opens I. While one door
+// is open the other is latched, so the ring always has a closed load path.
+function airlock(R=4,win=2.5){
+  const lat=[];for(let i=-2*R-6;i<=2*R+6;i++)for(let j=-2*R-6;j<=2*R+6;j++){const b=[i+j/2,j*H];
+    lat.push([b,[b[0]+1,b[1]],[b[0]+0.5,b[1]+H]],[[b[0]+1,b[1]],[b[0]+1.5,b[1]+H],[b[0]+0.5,b[1]+H]]);}
+  const hexr=p=>Math.max(...[0,1,2,3,4,5].map(k=>{const a=Math.PI/6+k*Math.PI/3;return (p[0]*Math.cos(a)+p[1]*Math.sin(a))/H;}));
+  const cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],same=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6;
+  const has=(v,...ps)=>ps.every(p=>v.some(x=>same(x,p))),add=(p,d)=>[p[0]+d[0],p[1]+d[1]];
+  const ring=lat.filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;});
+  const lock=lat.filter(v=>{const c=cen(v),r=hexr(c);return r>R&&r<R+2&&c[1]<-R*H&&Math.abs(c[0])<win;});
+  // inner door: D1 = ring down cell (top edge on the inner line y=-(R-1)H) nearest x=0, U1 = the up cell left of it
+  const D1=ring.filter(v=>v.filter(p=>Math.abs(p[1]+(R-1)*H)<1e-6).length===2&&cen(v)[1]<-(R-1)*H).sort((a,b)=>Math.abs(cen(a)[0])-Math.abs(cen(b)[0]))[0];
+  const p1=D1.find(p=>Math.abs(p[1]+R*H)<1e-6),[q1,r1]=D1.filter(p=>!same(p,p1)).sort((a,b)=>b[0]-a[0]),a1=add(p1,[-1,0]);
+  const U1=ring.find(v=>has(v,a1,p1,r1)),Dl1=ring.find(v=>v!==U1&&has(v,a1,r1)),Ur1=ring.find(v=>v!==D1&&has(v,p1,q1));
+  // chamber: c1 under U1, c2 right of c1; outer door below c2
+  const m=add(p1,[-0.5,-H]),c1=lock.find(v=>has(v,a1,p1,m)),c2=lock.find(v=>has(v,m,p1,add(m,[1,0])));
+  const p2=add(m,[0.5,-H]),q2=add(m,[1,0]),a2=add(p2,[-1,0]);
+  const D2=lock.find(v=>has(v,m,q2,p2)),U2=lock.find(v=>has(v,a2,p2,m)),Dl2=lock.find(v=>v!==U2&&has(v,a2,m)),Ur2=lock.find(v=>v!==D2&&has(v,p2,q2));
+  if(![D1,U1,Dl1,Ur1,c1,c2,D2,U2,Dl2,Ur2].every(Boolean))throw Error('airlock geometry');
+  const edge=(v,x,y,g)=>{const i=[0,1,2].find(k=>same(v[k],x)&&same(v[(k+1)%3],y));return [0,1,2].map(k=>k===i?g:'-').join('');};
+  const tris=[
+    {v:[a1,p1,r1],type:'G*#Wh<#',loose:true,role:'inner door'},     // U1: bottom trigger (chamber), weld to D1, hinge to Dl1 (pin r1)
+    {v:[p1,q1,r1],type:'L~-w',loose:true,role:'inner door'},        // D1: latch to Ur1, top (inside), weld
+    {v:[a2,p2,m],type:'G*#WL~',loose:true,role:'outer door'},        // U2: outer trigger, weld to D2, latch to Dl2
+    {v:[p2,q2,m],type:'h<#-w',loose:true,role:'outer door'},         // D2: hinge to Ur2 (pin p2), top (chamber), weld
+  ];
+  for(const v of [...ring,...lock]){if([U1,D1,U2,D2,c1,c2].includes(v))continue;const t={v,type:'---'};
+    if(v===Dl1)t.type=edge(v,a1,r1,'H');if(v===Ur1)t.type=edge(v,q1,p1,'l');
+    if(v===Dl2)t.type=edge(v,a2,m,'l');if(v===Ur2)t.type=edge(v,q2,p2,'H');tris.push(t);}
+  return {tris,R};
+}
+
 const shots=[];
 function snap(s,f,title,focus){T.render(s,f,title,focus,true);shots.push(f);}
 function montage(out,title,cols=4){execFileSync('node',['tools/montage.js',out,String(cols),title,...shots]);}
@@ -94,5 +134,35 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
       if(t%Math.max(1,+steps/10|0)===0){const line=`t=${t} inside=${count()} crossings=${crossings} door ${s.bond[door*4]>=0?'open (key bound)':'closed'}`;console.log(line);log.push(line);}
       if(t%Math.max(1,+steps/3|0)===0)snap(s,out.replace('.png',`_t${t}.png`),`t=${t}: ${keys} keys, ${count()} inside, ${crossings} crossings, door ${s.bond[door*4]>=0?'open':'closed'}`,focus);}
     montage(out,`Gated ring membrane (${rows} rows), ${keys} keys (ggg): the door unlatches and swings 120 degrees out when a key binds its outer face`);}
+  if(cmd==='airlock'){
+    const keys=extra===undefined?12:+extra,R=4,{tris}=airlock(R),size=20,c=size/2;
+    const {s,structures}=T.createTypedWorld({seed:+seed,size,structures:[{tris,x:c,y:c}],supply:{'---':24,'ggg':keys},params:{hingeAngle:2*Math.PI/3,...(process.env.SIGMA?{sigma:+process.env.SIGMA}:{})}});
+    const U=structures[0],[U1,D1,U2,D2]=U,ringSet=new Set(U),free=[...Array(s.n).keys()].filter(u=>!ringSet.has(u));
+    const tracers=free.filter(u=>T.typeName(s,u)==='---'),keyUnits=free.filter(u=>T.typeName(s,u)==='ggg');
+    // ring centre: the structure was built around (c, c); follow it through a reference cell's position and turn
+    const ref=U[6],rx0=c-s.px[ref],ry0=c-s.py[ref],ra0=s._ang(ref);
+    const centre=()=>{const d=s._ang(ref)-ra0,cs=Math.cos(d),sn=Math.sin(d);return [s.px[ref]+cs*rx0-sn*ry0,s.py[ref]+sn*rx0+cs*ry0];};
+    const where=u=>{const [x,y]=centre(),d=Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y));return d<(R-1)*H-0.3?'in':d>R+2.2?'out':'wall';};
+    const {overlap}=require('./half_cell_geometry'),placed=[...U];
+    free.forEach(u=>{const inside=tracers.indexOf(u)>=0&&tracers.indexOf(u)<12;let ok=false;
+      for(let a=0;a<5000&&!ok;a++){const ang=2*Math.PI*s.rng(),r=inside?(R-1)*H-0.6-1.6*s.rng():R+2.6+(size/2-R-3)*s.rng();
+        s.px[u]=s._wx(c+r*Math.cos(ang));s.py[u]=s._wy(c+r*Math.sin(ang));s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
+        ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
+      if(!ok)throw Error('could not place');placed.push(u);});
+    // integrity: the widest gap across each door's latch (latch partners' distance change)
+    // integrity: across each doorway, the distance between the latch partner and the hinge partner (both wall cells)
+    const partner=(u,i)=>s.bond[u*4+i]>>2,li1=[0,1,2].find(i=>s.ltc[D1*3+i]),li2=[0,1,2].find(i=>s.ltc[U2*3+i]),L1=partner(D1,li1),L2=partner(U2,li2);
+    const H1=partner(U1,[0,1,2].find(i=>s.hing[U1*3+i])),H2=partner(D2,[0,1,2].find(i=>s.hing[D2*3+i]));
+    const dist=(a,b)=>Math.hypot(s._dx(s.px[a]-s.px[b]),s._dy(s.py[a]-s.py[b])),g1=dist(L1,H1),g2=dist(L2,H2);let gap1=0,gap2=0,bothOpen=0;
+    const focus={units:U,radius:R+3,align:{u:U[6],a0:s._ang(U[6])}},kin=()=>keyUnits.filter(u=>where(u)==='in').length,tin=()=>tracers.filter(u=>where(u)==='in').length;
+    const side=new Map(tracers.map(u=>[u,where(u)]));let crossings=0;
+    snap(s,out.replace('.png','_t0.png'),`t=0: ${keys} keys outside, ${tin()} tracers inside`,focus);
+    for(let t=1;t<=+steps;t++){s.step();
+      const o1=s.bond[D1*4+li1]<0,o2=s.bond[U2*4+li2]<0;if(o1&&o2)bothOpen++;
+      gap1=Math.max(gap1,Math.abs(dist(L1,H1)-g1));gap2=Math.max(gap2,Math.abs(dist(L2,H2)-g2));
+      for(const u of tracers){const w=where(u);if(w!=='wall'&&w!==side.get(u)){crossings++;side.set(u,w);}}
+      if(t%Math.max(1,+steps/10|0)===0)console.log(`t=${t} keys inside=${kin()} tracers inside=${tin()} crossings=${crossings} pulses=${s.pulses||0} steps with both doors unlatched=${bothOpen} largest doorway strain inner ${gap1.toFixed(2)} outer ${gap2.toFixed(2)}`);
+      if(t%Math.max(1,+steps/3|0)===0)snap(s,out.replace('.png',`_t${t}.png`),`t=${t}: ${kin()} keys inside, ${tin()} tracers inside, ${crossings} crossings, ${s.pulses||0} door pulses`,focus);}
+    montage(out,`Airlock (user: double lock): a key opens the outer door, a key in the chamber opens the inner door; pulse doors re-latch`);}
 }
-module.exports={conveyor,ring};
+module.exports={conveyor,ring,airlock};

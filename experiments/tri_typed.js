@@ -23,6 +23,9 @@
 //           bonded to something else; it reads the cargo's exposed bond count), '!' drop (it lets go when its swing
 //           is complete). A loaded flap drives at half the rate of an empty one, so a returning flap wins a
 //           push against a loaded one. Without a mark the flap holds its cargo until something else cuts the bond (a cast).
+//           Pulse doors ('#' on the hinge side): a trigger sets the door's own open state; the door swings open,
+//           resets its state there and swings back (and re-latches). '#' on a trigger side: the side lets go of the
+//           key one pass after binding (the door has read it), so the key is not carried.
 //   close-only (side property '.') the side binds only triangles that are already attached, never a free one: it
 //           closes onto what a structure brings to it (a switch of the side's activity by attachment).
 //   casting (permanent type change, in-simulation) a triangle T whose three sides are all glue-bonded to triangles
@@ -47,15 +50,15 @@ const m3=x=>((x%3)+3)%3;
 const gcode=c=>c==='-'?0:c>='a'&&c<='z'?2*(c.charCodeAt(0)-97)+1:2*(c.charCodeAt(0)-65)+2;
 const gname=g=>g===0?'-':g%2?String.fromCharCode(97+(g-1)/2):String.fromCharCode(65+(g-2)/2);
 const comp=g=>g===0?0:g%2?g+1:g-1;
-function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^*~]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^*~#]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>m[2].includes('<')?1:m[2].includes('>')?2:0),close:t.map(m=>m[2].includes('.')?1:0),
-    rel:t.map(m=>m[2].includes('!')?1:m[2].includes('^')?2:0),trig:t.map(m=>m[2].includes('*')?1:0),latch:t.map(m=>m[2].includes('~')?1:0)};}
-const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')+(s.hRelease[u*3+i]===1?'!':s.hRelease[u*3+i]===2?'^':'')+(s.trg[u*3+i]?'*':'')+(s.ltc[u*3+i]?'~':'')).join('');
+    rel:t.map(m=>m[2].includes('!')?1:m[2].includes('^')?2:m[2].includes('#')?3:0),trig:t.map(m=>m[2].includes('*')?1:0),latch:t.map(m=>m[2].includes('~')?1:0)};}
+const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')+(s.hRelease[u*3+i]===1?'!':s.hRelease[u*3+i]===2?'^':s.hRelease[u*3+i]===3?'#':'')+(s.trg[u*3+i]?'*':'')+(s.ltc[u*3+i]?'~':'')).join('');
 // canonical name up to rotation (the same type in any orientation)
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^*~]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^*~#]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 class TypedSim extends TriSim{
-  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
+  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.dOpen=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
   setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];this.hRelease[u*3+i]=t.rel[i];this.trg[u*3+i]=t.trig[i];this.ltc[u*3+i]=t.latch[i];}this.bondsDirty=true;}
   _roles(u){const r=super._roles(u);
     if(r.role===FREE)for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0&&this.bkind[u*4+i]===GLUE)return {role:GROWN};
@@ -143,9 +146,10 @@ class TypedSim extends TriSim{
     if(!this.hing||!this.hing.some(x=>x))return;const n=this.n,th=this.p.hingeAngle??Math.PI/3,rate=this.p.hingeRate??0.05;
     const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
     const hingeBond=(x,e)=>{const r=this.bond[x*4+e];return r>=0&&(this.hing[x*3+e]||this.hing[(r>>2)*3+(r&3)]);};
-    // latches: a latch side lets go while its triangle, or one bonded to it (not by a hinge), has a bonded trigger
-    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*4+i]<0)continue;let on=this.tb[u];
-      for(let e=0;e<3&&!on;e++)if(e!==i&&this.bond[u*4+e]>=0&&!hingeBond(u,e)&&this.tb[this.bond[u*4+e]>>2])on=1;
+    // latches: a latch side lets go while its triangle, or one bonded to it (not by a hinge), has a bonded trigger or
+    // is a pulse door in its open state (it would otherwise re-latch before the door has moved)
+    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*4+i]<0)continue;let on=this.tb[u]||this.dOpen[u];
+      for(let e=0;e<3&&!on;e++)if(e!==i&&this.bond[u*4+e]>=0&&!hingeBond(u,e)){const w=this.bond[u*4+e]>>2;if(this.tb[w]||this.dOpen[w])on=1;}
       if(on){this._cut(u,i);this.unlatches=(this.unlatches||0)+1;}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*4+i];if(!this.hing[u*3+i]||q<0)continue;const v=q>>2;
       const trs=[0,1,2].filter(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
@@ -156,6 +160,10 @@ class TypedSim extends TriSim{
       // triggered: one of my trigger sides is bonded, or a triangle bonded to me (not by a hinge) reports one (relay)
       let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
       for(let e=0;e<3&&!swung;e++)if(this.bond[u*4+e]>=0&&!hingeBond(u,e)&&this.tb[this.bond[u*4+e]>>2])swung=true;
+      // pulse doors (#): a trigger sets the door's own open state; it swings open and, once there, resets and swings back
+      if(this.hRelease[u*3+i]===3){if(swung)this.dOpen[u]=1;
+        if(this.dOpen[u]&&Math.abs(wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this._ang(u)-this._ang(v))))<(this.p.dropTol??0.15)){this.dOpen[u]=0;this.pulses=(this.pulses||0)+1;}
+        swung=!!this.dOpen[u];}
       const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0);
       const err=wrap(target-(this._ang(u)-this._ang(v)));if(Math.abs(err)<0.01)continue;const rr=swung?rate/2:rate,d=Math.max(-rr,Math.min(rr,err));   // a loaded flap drives at half rate: an empty flap returning wins a push
       // the flap's body: everything bonded to it except through its hinge
@@ -168,6 +176,8 @@ class TypedSim extends TriSim{
         this._rigidMove(x,cs*rx-sn*ry-rx,sn*rx+cs*ry-ry,d);
         this.px[x]=this._wx(this.px[x]);this.py[x]=this._wy(this.py[x]);}
       this.hingeMoves=(this.hingeMoves||0)+1;}
+    // pulse triggers (# on a trigger side) let go of the key once they have reported it (a pass after binding)
+    for(let u=0;u<n;u++)if(this.tb[u])for(let e=0;e<3;e++)if(this.trg[u*3+e]&&this.hRelease[u*3+e]===3&&this.bond[u*4+e]>=0){this._cut(u,e);this.keyReleases=(this.keyReleases||0)+1;}
   }
   step(){this._servo();super.step();}
   saveState(){const s=super.saveState();s.typed={glue:Array.from(this.glue||[]),hing:Array.from(this.hing||[]),cOnly:Array.from(this.cOnly||[]),bkind:Array.from(this.bkind||[])};return s;}
