@@ -3,10 +3,12 @@
 //   conveyor  two hatches pass a block along: hatch 1 (hand-off '^') catches it and swings 60 degrees, where the
 //             block meets hatch 2's catch side; the block is then bonded twice, so hatch 1 lets go and swings back,
 //             and hatch 2 (drop '!') swings on and drops it. The block travels around the frame's corner.
-//   gate      a closed ring membrane with a door: a key (ggg) that binds the door's trigger side in the notch
-//             beside it swings the door 120 degrees out, carrying the key, and opens a two-cell passage. Without keys
-//             the ring stays sealed. Tracers inside and outside are counted.
-//   node experiments/tri_machines.js conveyor SEED STEPS OUT   |   gate SEED STEPS OUT [keys]
+//   gate      a closed ring membrane (ROWS=1 or 2 cell rows) with a door: a two-triangle panel latched into the wall
+//             on one side and hinged on the other. A key (ggg) binding the panel's outer face (trigger G*) unlatches it
+//             and the panel swings 120 degrees out, carrying the key, opening a passage (with two rows, into a chamber
+//             left open to the inside). Tracers inside and outside are counted. Membranes need low jostling
+//             (SIGMA=0.1): at the default a free triangle's jump (up to 1.8) exceeds the wall thickness.
+//   node experiments/tri_machines.js conveyor SEED STEPS OUT   |   [ROWS=2 SIGMA=0.1] gate SEED STEPS OUT [keys]
 const path=require('path'),{execFileSync}=require('child_process');
 const T=require('./tri_typed');
 const H=Math.sqrt(3)/2;
@@ -84,13 +86,13 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
         s.px[u]=s._wx(c+r*Math.cos(ang));s.py[u]=s._wy(c+r*Math.sin(ang));s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
         ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
       if(!ok)throw Error('could not place');placed.push(u);});
-    const focus={units:U,radius:6,align:{u:U[1],a0:s._ang(U[1])}},count=()=>tracers.filter(u=>where(u)==='in').length;
+    const focus={units:U,radius:R+1.5,align:{u:U[2],a0:s._ang(U[2])}},count=()=>tracers.filter(u=>where(u)==='in').length;
     const cross0=new Map(tracers.map(u=>[u,where(u)]));let crossings=0;const log=[];
     snap(s,out.replace('.png','_t0.png'),`t=0: ${keys} keys, ${count()} tracers inside`,focus);
     for(let t=1;t<=+steps;t++){s.step();
       for(const u of tracers){const w=where(u);if(w!=='wall'&&w!==cross0.get(u)){crossings++;cross0.set(u,w);}}
       if(t%Math.max(1,+steps/10|0)===0){const line=`t=${t} inside=${count()} crossings=${crossings} door ${s.bond[door*4]>=0?'open (key bound)':'closed'}`;console.log(line);log.push(line);}
       if(t%Math.max(1,+steps/3|0)===0)snap(s,out.replace('.png',`_t${t}.png`),`t=${t}: ${keys} keys, ${count()} inside, ${crossings} crossings, door ${s.bond[door*4]>=0?'open':'closed'}`,focus);}
-    montage(out,`Gated ring membrane, ${keys} keys (ggg): tracers inside ${log.length?count():''}; door swings 120 degrees when a key binds`);}
+    montage(out,`Gated ring membrane (${rows} rows), ${keys} keys (ggg): the door unlatches and swings 120 degrees out when a key binds its outer face`);}
 }
 module.exports={conveyor,ring};

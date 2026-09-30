@@ -16,6 +16,25 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   own docker type (14 each of 106 free).
   `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
   Next: typed backs and ends (inherited only through the docker types), supply limits by type.
+- **Hinge machines: triggers, latches, hand-off, conveyor, gated membrane** — works (demos, 1 world each).
+  New side marks: `*` trigger (a flap swings while a trigger side is bonded, or while a triangle welded to it
+  reports one, relayed one bond), `~` latch (lets go while its triangle or a welded partner has a bonded trigger),
+  `^` hand-off (the flap lets go of its cargo once the cargo is bonded elsewhere too), `!` drop (it lets go when its
+  swing is complete). A loaded flap drives at half rate, so an empty flap returning wins a push. Geometry rule found:
+  a triangle turning about a corner bulges 13% past the edge it swings toward, so a flap needs free space beside its
+  third side to close.
+  **Conveyor** (`tri_machines.js conveyor`): hatch 1 catches an `aaa`, swings, and hands it to hatch 2, which swings
+  on and drops it. Hand-offs 2, drops 5 in 3000 steps (hatch 2 also catches directly). Picture:
+  `experiments/out/TYPED_conveyor_20260930.png`.
+  **Gated membrane** (`ROWS=2 SIGMA=0.1 tri_machines.js gate 1 10000 OUT 12`): a closed two-row ring. The door is a
+  two-triangle panel latched into the wall and hinged at its outer corner. A key (`ggg`) binding its outer face
+  unlatches it, and it swings 120 degrees out carrying the key. Keyed world: door opened near t=3500, then 8
+  crossings; no-key control: 0 crossings in 10k steps. At the default jostle (sigma 0.3) every wall leaked: a free
+  triangle's jump (up to 1.8) is larger than a one-row wall (0.87); sigma 0.1 seals. A one-row ring with a notch cut
+  into it was an open C and bent open; the latch keeps a closed door part of the ring. Picture:
+  `experiments/out/TYPED_gate_20260930.png`.
+  Next: gates that close again (a key that is dropped or cast), a pump (conveyor through a wall), a replicator
+  that carries a hatch.
 - **Driven hinges and a hatch pocket (user: hinges should open and close by a trigger, not flop)** — works (3
   worlds). A hinged side (`<` or `>` marks the pinned corner) remembers its flush angle from when it bonded. While the
   flap's trigger side (the side before the hinge side) is bonded, the flap is driven 60 degrees away from its partner
