@@ -6,6 +6,13 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 ## 2026-09-30 (session 2b: triangle-only chains)
 
+- **End arms: shells and funnels** (`tri_chain.js` site E; planner `experiments/tri_arm_design.js`) — works. Strand
+  ends grow arms from their spare edge by a bend pattern, and the far end grows the mirror pattern. A lattice
+  planner picks patterns that clear the chain and its copy's space. The shell (`222112`) curls behind the chain; the
+  funnel (`112112`) reaches in front with a wide mouth. RESULTS 112: the funnel gives no speed-up; the shell cuts
+  field breaks 3–6 fold. Pictures: `experiments/out/TRI_arms_sim_20260930.png`, `TRI_shell_field_20260930.png`.
+- **Seeded letters** (`pieces`) — works (exact copying), no speed-up (RESULTS 111).
+
 - **Marks: heritable parts on an unchanged shape** (`tri_chain.js`) — works (copying exact in demos). An R letter's
   hidden triangle can carry a mark. The template face shows it, the docked triangle reads it, and the fill placed
   beside it copies it (optional error `pMarkErr`). Marked R backs are growth site `Rm`. As a coat under the field:

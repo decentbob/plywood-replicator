@@ -8969,3 +8969,25 @@ singles), or pieces with the need check off. Founder `1101121`, caps, 22x22, 2 s
 used (1–8 docks against 21–48 single docks) and do not speed copying. They are bulky, diffuse slowly and must
 arrive in one orientation of two. The small monomer wins, so letter-sized supply is not a bottleneck worth
 designing around. Six processes ran at once in this batch, above the four-process guideline.
+
+## 112. End arms: a funnel does not speed copying; a shell behind the chain cuts field breaks 3–6 fold
+
+2026-09-30. User ideas: an inward funnel toward the copying side, or a half circle of welded pieces from the caps
+(as the earlier half-cell). Mechanism: strand ends grow arms from their spare edge by a bend pattern. The far end
+grows the mirror pattern. Patterns were chosen on the lattice (`tri_arm_design.js`): arms must not overlap the chain
+or the space its copy needs, and must keep a row of clearance. Funnel `112112`: arms reach in front with a mouth
+wider than the copy (7 units). Shell `222112`: arms curl behind the chain. Each costs 14 triangles.
+Simulated shapes: `experiments/out/TRI_arms_sim_20260930.png`. Founder `11111`, caps, dissolving, `pFray` 2e-4.
+Each condition runs alone in its own world, 2 seeds.
+
+| Test | Seed 1: with arms / without | Seed 2: with / without |
+|---|---|---|
+| Funnel, scarce (60 free), no field, complete strands at 10k | 3 / 3 | 3 / 4 |
+| Shell, 120 free, field 3e-5, complete strands at 12k (field breaks) | 2 (6) / 1 (22) | 4 (3) / 1 (17) |
+
+**What it says.** The funnel does not speed copying, and the arms' material cost weighs on the stock. Behind the
+chain, the shell cuts field breaks 3–6 fold and leaves more intact strands (2 worlds; separate worlds, not a
+competition). That is the lead the earlier half-cell suggested. Unlike single plates or coats (108–109), the
+shell's arms shade the chain ends and the back together. **Next.** Make the shell heritable apart from shape
+(a switch at the ends) and let shelled and bare lineages compete under the field. Picture:
+`experiments/out/TRI_shell_field_20260930.png`.
