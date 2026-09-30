@@ -65,14 +65,15 @@ const PROGRAMS={
 // arms from strand ends (site E): a strip grown by a pattern of relative edges ('1'/'2' per step, then a stop); equal
 // neighbouring steps (11, 22) bend the strip by 60 degrees, alternating steps (12) keep it straight
 function armProgram(pat){const pr={};[...pat].forEach((c,k)=>{pr[k===0?'s0':'a'+k]={stick:[[+c,k+1<pat.length?'a'+(k+1):'x']]};});pr.x={stick:[]};return pr;}
-for(let L=3;L<=7;L++)for(let m=0;m<(1<<L);m++){const pat=[...Array(L)].map((_,k)=>(m>>k)&1?'2':'1').join('');PROGRAMS['arm'+pat]=armProgram(pat);}
 const CODES=[];for(const [pn,pr] of Object.entries(PROGRAMS))for(const st of Object.keys(pr))CODES.push([pn,st]);
-const code=(pn,st)=>1+CODES.findIndex(([a,b])=>a===pn&&b===st);
+// arm programs ('arm' + pattern) are registered on first use
+const code=(pn,st)=>{if(!PROGRAMS[pn]&&pn.startsWith('arm')){PROGRAMS[pn]=armProgram(pn.slice(3));for(const k of Object.keys(PROGRAMS[pn]))CODES.push([pn,k]);}
+  return 1+CODES.findIndex(([a,b])=>a===pn&&b===st);};
 const TRI_CONFIG={structural:[],shapes:{[T_A]:regular(3,1)},labels:{}};
 
 class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   _tri(){const n=this.n;if(!this.bkind||this.bkind.length!==n*4){this.bkind=new Int8Array(n*4);this.fill=new Int8Array(n);
-    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int8Array(n);this.gatt=new Int8Array(n);this.cap=new Int8Array(n);this.mark=new Int8Array(n);this.mAfter=new Int8Array(n);this.dm=new Int8Array(n);this.sigP=new Int8Array(n);this.sigN=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
+    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int16Array(n);this.gatt=new Int8Array(n);this.cap=new Int8Array(n);this.mark=new Int8Array(n);this.mAfter=new Int8Array(n);this.dm=new Int8Array(n);this.sigP=new Int8Array(n);this.sigN=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
   // edges of u by kind (from its own bonds): {prev, next, face} (-1 if none)
   _edges(u){const k=this.bkind,o=u*4;let prev=-1,next=-1,face=-1;
     for(let i=0;i<3;i++){if(this.bond[o+i]<0)continue;if(k[o+i]===PREV)prev=i;else if(k[o+i]===NEXT)next=i;else if(k[o+i]===FACE)face=i;}
@@ -166,10 +167,11 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
         // end arms (site E): a released strand end grows its program from its spare (inert) edge
         if(G&&G.E&&r.role===SFACE&&r.inert>=0&&!bnd(u,r.inert)&&!(r.free>=0&&bnd(u,r.free))){
           for(let j=0;j<3;j++)if(this._flush(u,r.inert,v,j,tolF)&&this.rng()<pb){this._bind(u,r.inert,GSEED,v,j,GUP);
-            this.gstate[v]=code(G.E,'s0');this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};break;}
+            const pg=r.prev<0?G.E:'arm'+[...G.E.slice(3)].map(c=>c==='1'?'2':'1').join('');   // the last triangle grows the mirror pattern
+            this.gstate[v]=code(pg,'s0');this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};break;}
           if(R[v].role===GROWN)continue;}
         // dock on a free face
-        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
+        if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
         // fill on the prev edge of a docked or fill triangle that still needs fills
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(this._flush(u,r.prev,v,j,tolF)&&this.rng()<pb){
           this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.mark[v]=(r.role===DOCKED&&this.need[u]===1?this.dm[u]:0)^(p.pMarkErr>0&&this.rng()<p.pMarkErr?1:0);this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
