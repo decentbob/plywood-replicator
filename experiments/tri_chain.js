@@ -278,8 +278,9 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     const members=Array.from({length:nc},()=>[]);for(let u=0;u<n;u++)members[comp[u]].push(u);
     // does block u's centre path enter a block of another, bonded body (a structure of two or more blocks)? (a centre inside another block can be pushed out on
     // either side by the contact solver, so a thin wall is passed)
+    const sb=[];for(let v=0;v<n;v++)if(members[comp[v]].length>=2)sb.push(v);   // blocks of structures
     const through=(u,mx,my)=>{const m=Math.hypot(mx,my);if(m<1e-9)return false;
-      for(let v=0;v<n;v++){if(comp[v]===comp[u]||members[comp[v]].length<2)continue;const vx=this._dx(X[v]-X[u]),vy=this._dy(Y[v]-Y[u]);if(Math.hypot(vx,vy)>m+1.5)continue;
+      for(const v of sb){if(comp[v]===comp[u])continue;const vx=this._dx(X[v]-X[u]),vy=this._dy(Y[v]-Y[u]);if(Math.hypot(vx,vy)>m+1.5)continue;
         const nv=this.nv[this.type[v]];let c=0;
         for(let k=0;k<nv;k++){const a=v*NV+k,e=v*NV+(k+1)%nv;if(seg(0,0,mx,my,vx+OX[a],vy+OY[a],vx+OX[e],vy+OY[e]))c++;}
         if(c>=1)return true;}

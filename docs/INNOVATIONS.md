@@ -16,6 +16,19 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   own docker type (14 each of 106 free).
   `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
   Next: typed backs and ends (inherited only through the docker types), supply limits by type.
+- **Typed arms (grown parts from types, no programs)** — partial (1 world). `experiments/tri_typed_parts.js`.
+  An arm is a series of distinct types. Each attaches by the complement of its parent's exposed glue and exposes
+  the next glue on side 1 or 2 (a bend). A type exposing nothing ends it, so the length needs no counting.
+  Strand ends carry seed glues on their spare sides (first p, last u); dockers carry p and u on their side edges
+  (Apu, Bpu, ...), so copies show the seeds again. The planner's shell pattern (222112, mirrored 111221 at the far
+  end) as 2 x 7 types, 12 of each in supply: both founder ends grew their 7-triangle arm as planned, curling behind
+  the chain (16 grown triangles in 20000 steps). Released copy fragments grew arms too, so the seeds are
+  inherited. But copying was slow (5 docks): each face needs its own docker type, and arms need their own types,
+  so every part draws on a specific supply (the supply dependence the user expected).
+  `ARMS=12 node experiments/tri_typed_parts.js arms 1 20000 OUT`. Pictures: `experiments/out/TYPED_arms_20260930.png`
+  (zoom), `experiments/out/TYPED_arms_frames_20260930.png`.
+  Next: more docker supply or fewer distinct face glues; a pocket that casts supply (e.g. blank triangles into
+  arm types).
 - **Airlock with interlock (user: a double lock, one door closed while the other is open)** — partial (1 world).
   One-row ring; below it a small lock section: inner door (ring-row panel, swings inward), a two-cell chamber, outer
   door (swings outward). New: pulse doors (`#`): a key on the trigger opens the door and is let go at once; the door
@@ -44,6 +57,7 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   Closed rings at the default jostle: 1 row 141 crossings in 3000 steps before, 0 in 6000 after; 2 rows 0 in 8000.
   Costs: copying about 20-40% slower (docks 44-60 against 72 in 3000 steps; triangles no longer jump into docking
   sites through the chain), and the hatch pocket casts less often (1 and 3 against 6 and 6 in 4000 steps).
+  Checks only blocks of structures, so it costs nothing measurable (13.5 against 17.2 ms per step in a copy world).
   Picture: `experiments/out/TRI_notunnel_sealed_20260930.png`.
   Gate at the default jostle (2 rows, 12 keys): the door opened near t=1500 and tracers crossed (66). But the open
   ring is a C that bends wide (openings of 1-3), probably because triangles wedge into the doorway. In 2D any
