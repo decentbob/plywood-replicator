@@ -122,49 +122,40 @@ inertia follow the polygon). Viability look: a comb whose B seeds one 3x1 rod is
 intended. In that world the armed founder stayed paired for 30k steps without finishing a
 copy (the partner B, attached by its face, may grow a rod that jams); PAAQ made 4.
 
-## 3e. Base shapes: one block family with a few rest states (design, 2026-09-30)
+## 3e. Base shapes: one block, three rest states, complementary pairing (design, 2026-09-30)
 
-Picture: `experiments/out/SHAPES_alphabet_20260930.png` (script `experiments/shape_alphabet_figure.js`).
-Stay simple and general; complex forms should come from combinations and sequences.
+Picture: `experiments/out/SHAPES_alphabet_20260930.png` (script `experiments/shape_alphabet_figure.js`,
+which also checks the copy geometry numerically). Stay simple and general; complex forms
+should come from combinations and sequences.
 
-- **One family, not several types.** A 4-cornered block whose face F and laterals R, L are
-  always exactly one unit long, so any working edge can bond to any other. Its state tilts
-  the laterals inward by an angle and shrinks the back K to `1 - 2 sin(tilt)`:
-  **square** (tilt 0, straight) and **triangle** (tilt 30°, back collapses, turns 60°).
-  **No wedge state** (user, 2026-09-30): a welded trapezoid of three triangles covers that
-  role, and restricting chain turns to 60° steps keeps folded chains and parts on a few shared
-  directions, so structures fit together edge to edge more easily. No vertex count changes: the triangle is the
-  square with a zero-length back, so the switch is a rest-shape reset like the core fold.
-  A tiny nonzero back (about 0.05) is safer numerically than exact collapse.
-- **Why squares and triangles.** Both have unit edges and similar size. Together they give
-  angles in 30° steps and tile the plane in many ways. Rods, corners, rhombi, trapezoids,
-  hexagonal hubs, houses, kinked plates and saws are all bonded combinations. Two-corner pins
-  make a joint rigid; one pin makes a hinge. Releasing bonds splits parts.
-- **Sequence → shape (answers the "shapeless chain" worry).** A letter's kind encodes its
-  folded rest shape. Local rule: rest as a square while its face is bonded (paired), and take
-  the encoded shape when the face is free. Copying therefore stays straight and shape-agnostic,
-  and a released strand folds into the shape its sequence spells:
-  - SSSSSS gives a rod;
-  - TTTTTT gives a hexagon;
-  - (ST)×6 gives a 12-ring;
-  - SSS TTT SSS gives a back-to-back hairpin;
-  - a single T gives a 60° bend.
+- **One family, not several types.** A 4-cornered block whose face F and laterals R, L are always
+  exactly one unit long, so any working edge bonds to any other. Its state tilts the laterals, and
+  the back K becomes `1 - 2 sin(tilt)`:
+  - **square S** (tilt 0, back 1): straight;
+  - **triangle T** (tilt +30°, back 0): turns 60° with the face outside;
+  - **trapezoid Z** (tilt −30°, back 2, i.e. three welded unit triangles): turns 60° the other way, with the face inside.
 
-  Shape is inherited with the sequence, and a copying error in a shape letter changes the fold.
-  The chain is a shape-programmable polymer, like a protein.
-  The rule reads only the block's own kind and its own face bond.
+  The switch is a rest-shape change, like the core fold; the vertex count never changes (T has a zero-length back, and a tiny nonzero back is safer numerically).
+- **No wedge** (user, 2026-09-30). Every turn is a 60° step, so chains and parts share six
+  directions and meet edge to edge. Squares add 90° joints in combinations.
+- **Copying a bent chain (user correction, 2026-09-30).** A chain whose shape is its own must be copyable while bent.
+  - A square copy at a triangle letter cannot follow the bend: neighbouring copy letters leave a 60° gap (0.52 units).
+  - Instead, shapes pair as complements: **S↔S** (a 1×2 domino) and **T↔Z** (a side-2 triangle). The copy's squares attach to the trapezoid's angled legs.
+  - A bent double strand is then one rigid piece of dominoes and big triangles. Every pair of neighbouring copy letters shares a whole lateral (checked: gap 0).
+  - Shape is copied like a letter, by complementarity. The copy of a copy restores the original shapes.
+  - A wrong-shape docking at a bend physically cannot bond to both neighbours, so it is rejected mechanically.
 - **Consequences.**
-  - Faces always end up on the convex side, so folded chains keep their copying faces outside, like the half-cell.
-  - A single chain curls one way only. Curling the other way would need a face-short state, which loses the face. So S-curves need two strands or seeded parts.
-  - Only square letters keep a back port, so structures seed from squares and triangles are pure turns.
-  - Area changes with state (1 to 0.43): keep mass constant, or let it follow the polygon.
-- **Open mechanical questions** for the first demo:
-  - Does docking at a folded template unfold it joint by joint (a zipper)?
-  - Does a strand fold cleanly after release, or jam against its partner?
-  - Do closed rings form by themselves when the ends meet (end-to-end lateral bonds)?
-- **First demo:** a `shapeStates` option in the seeded engine (kind → tilt; square while the face
-  is bonded). A founder SSSTTTSSS copies, and its released copies fold into hairpins; TTTTTT
-  closes into hexagons.
+  - No fold/unfold rule is needed: strands are bent while copied and after release.
+  - A strand can hold both T and Z, so S-curves and zigzags are possible. Faces sit on the outside at T bends and inside at Z bends.
+  - Examples: SSSSSS is a rod; TTTTTT is a hexagon with faces out; ZZZZZZ is a ring with faces in; (ST)×6 is a 12-ring; SSS TTT SSS is a hairpin, whose copy SSS ZZZ SSS is a U that slides off.
+  - Only S and Z keep a back port (Z has two unit sites), so structures seed from those.
+- **Open problems and questions.**
+  - **Closed rings cannot separate:** in 2D a TTTTTT ring is enclosed by its ZZZZZZ copy. Rings would have to be copied open and then close, or open to release. This might also be a feature: a ring copy as an enclosing wall.
+  - Does docking at bends work kinetically? The copy's bent geometry needs neighbours to rotate into place.
+  - Mass changes with state (areas 1, 0.43, 1.3): keep it constant, or follow the polygon.
+- **First demo.** Add `shapeStates` to the seeded engine (kind → tilt; T and Z pair faces). A bent
+  founder SSTSS copies into SSZSS, and a copy of that copy returns SSTSS; an S-curve founder copies
+  with both bends.
 
 ## 4. Combinations worth trying (the map)
 

@@ -27,9 +27,10 @@ backlog; take the top unblocked item.
   (rods won there: D share 0.71). Recorded in ROADMAP "Parked evidence"; start nothing like it.
 - Funnel: tune lean and length so both blades point at the copying face (some splay outward).
 - **Next build (user focus): the base-shape alphabet** (COMPLEXITY_MAP 3e, picture
-  `experiments/out/SHAPES_alphabet_20260930.png`). One block family (unit face and laterals, back shrinks):
-  square / triangle states only (no wedge: welded trapezoids instead, 60° steps fit better); a letter rests square while its face is bonded and folds to its encoded
-  shape when free. Demo: SSSTTTSSS copies fold into hairpins, TTTTTT into hexagons.
+  `experiments/out/SHAPES_alphabet_20260930.png`). One block family (unit face and laterals):
+  square / triangle / trapezoid rest states (no wedge). Bent chains copy by complementary shapes
+  (S↔S, T↔Z; a paired bend is a side-2 triangle). Demo: a bent SSTSS founder copies into SSZSS.
+  Open: closed rings are enclosed by their copies.
 
 ## User ideas to keep (also in ROADMAP/IDEAS)
 
