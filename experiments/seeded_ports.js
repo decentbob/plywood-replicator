@@ -49,14 +49,17 @@ function ports(Base,config){
       if(dirty){const x=this._x();
         for(let q=0;q<x.length;q++){const r=x[q];if(r<=q)continue;
           const u=(q/NV)|0,e=q%NV,v=(r/NV)|0,f=r%NV,A=this._edge(u,e),B=this._edge(v,f);
-          this.pins.push(A.a,B.b,A.b,B.a);}
+          if(this._hinge(u,e,v,f))this.pins.push(A.a,B.b);else this.pins.push(A.a,B.b,A.b,B.a);}
         this.pinsVersion=(this.pinsVersion||0)+1;}
       return out;
     }
+    // Hinges (backlog 2): a label with hinge:true (on either end) pins only the first corner of the shared edge, so the
+    // part swings about that corner; hinged pairs keep their contact, so a flap cannot swing through its base.
+    _hinge(u,e,v,f){const a=lab(this.type[u],e),b=lab(this.type[v],f);return !!(a&&a.hinge||b&&b.hinge);}
     _polygonContacts(){
       const c=super._polygonContacts(),x=this._x(),out=[];
       for(let k=0;k<c.length;k+=2){const u=c[k],v=c[k+1];let linked=false;
-        for(let e=0;e<NV&&!linked;e++){const b=x[u*NV+e];if(b>=0&&((b/NV)|0)===v)linked=true;}
+        for(let e=0;e<NV&&!linked;e++){const b=x[u*NV+e];if(b>=0&&((b/NV)|0)===v&&!this._hinge(u,e,v,b%NV))linked=true;}
         if(!linked)out.push(u,v);}
       this._sweep=out.length/2;this._calls=0;return out;
     }

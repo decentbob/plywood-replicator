@@ -11,7 +11,7 @@
 // The sequence decides WHERE appendages grow (B back sticky, A back inert); the soup decides their shapes.
 //   node experiments/seeded_accrete.js demo SEED STEPS OUTSTEM [founder] [loose-json]
 const fs=require('fs'),zlib=require('zlib'),path=require('path'),{execFileSync}=require('child_process');
-const {T_B,T_C,T_J,NV,TNAME}=require('../src/sim');
+const {T_B,T_C,T_J,NV,TNAME,F}=require('../src/sim');
 const {ports,regular}=require('./seeded_ports'),{createWorld,census}=require('./seeded_worlds');
 const {PinsLiveSim}=require('./half_cell_pins');
 
@@ -86,6 +86,11 @@ function reach(Base,config){
       // structures never fuse (fusing locked template and copy together in the first demos)
       const au=this.xAttached(u,e),av=this.xAttached(v,f);
       if(au===av)return false;
+      // a letter's back takes tiles only while its own face is free (single strand): docked letters and templates
+      // being copied grow nothing, so tiles never fill the sites where copy letters must dock
+      const w=au?u:v;if(!config.structural.includes(this.type[w])&&this.bond[w*4+F]>=0)return false;
+      // the free partner must be a tile: appendages never capture loose letters by their backs (they ate the B supply)
+      if(!config.structural.includes(this.type[au?v:u]))return false;
       return au?this._source(u,e)>=1:this._source(v,f)>=1;
     }
   };
@@ -93,3 +98,41 @@ function reach(Base,config){
 // A tile set with reach: B's back reaches lvl tiles.
 const REACH=(lvl=4,base=GRAMMAR)=>({...base,edgeLabels:{...base.edgeLabels,[T_B]:{2:{...WELD,seed:true,lvl}}},reach:true});
 module.exports.reach=reach;module.exports.REACH=REACH;
+// Hinged appendages (backlog 2): B's back takes its first tile by a hinge (one pinned corner), so the whole grown
+// appendage swings about that corner under jostling: the first moving part.
+const HINGED=(lvl=5,base=GRAMMAR)=>{const c=REACH(lvl,base);c.edgeLabels[T_B]={2:{...c.edgeLabels[T_B][2],hinge:true}};return c;};
+module.exports.HINGED=HINGED;
+// Rod arms: C squares sticky on two opposite edges (a rod), D triangles sticky on one edge (a tip).
+const ROD={structural:[T_C,T_D],shapes:{[T_C]:regular(4,1),[T_D]:regular(3,1)},labels:{},
+  edgeLabels:{[T_B]:{2:{...WELD,seed:true}},[T_C]:{0:WELD,2:WELD},[T_D]:{0:WELD}}};
+module.exports.ROD=ROD;
+// Hinge demo: one chain, one B, a rod arm grown on its back, hinged or welded. Records the arm's direction in B's frame
+// (from B's centre to the arm's far end) and draws the arm poses over time on top of each other (B's frame).
+function hingeDemo(seed,steps,out,hinged=true,lvl=4){
+  const cfg=hinged?HINGED(lvl,ROD):REACH(lvl,ROD),Base=reach(ports(PinsLiveSim,cfg),cfg);
+  const {s,founder}=createWorld({seed,founder:['PAABAAQ'],loose:{C:30,D:2},config:cfg,Base,size:16});
+  const b=founder.find(u=>s.type[u]===T_B),poses=[],angles=[];
+  const arm=()=>{const seen=new Set([b]),todo=[b],out=[];while(todo.length){const v=todo.pop();
+    for(let e=0;e<NV;e++){const q=s.xBond[v*NV+e];if(q<0)continue;const w=(q/NV)|0;if(!seen.has(w)){seen.add(w);out.push(w);todo.push(w);}}}return out;};
+  const local=(x,y)=>{const dx=s._dx(x-s.px[b]),dy=s._dy(y-s.py[b]),c=Math.cos(-s.pa[b]),sn=Math.sin(-s.pa[b]);return [c*dx-sn*dy,sn*dx+c*dy];};
+  for(let t=1;t<=steps;t++){s.step();
+    if(t%50===0){const a=arm();if(a.length>=2){let far=a[0],fd=0;for(const w of a){const [x,y]=local(s.px[w],s.py[w]),d=Math.hypot(x,y);if(d>fd){fd=d;far=w;}}
+      const [x,y]=local(s.px[far],s.py[far]);angles.push({t,len:a.length,deg:Math.atan2(y,-x)*180/Math.PI});
+      if(t%500===0)poses.push({t,tiles:a.map(w=>{const pts=[];for(let k=0;k<s.corners(w);k++)pts.push(local(s.px[w]+s.ox[w*NV+k],s.py[w]+s.oy[w*NV+k]));return {type:s.type[w],pts};})});}}}
+  const chain=founder.map(u=>{const pts=[];for(let k=0;k<s.corners(u);k++)pts.push(local(s.px[u]+s.ox[u*NV+k],s.py[u]+s.oy[u*NV+k]));return {type:s.type[u],pts};});
+  // picture: chain in B's frame (last pose), arm poses coloured by time (early light, late dark)
+  const S=520,k=36,cx=S/2,cy=S/2,P=q=>`${(cx+q[0]*k).toFixed(1)},${(cy-q[1]*k).toFixed(1)}`,svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+40}"><rect width="${S}" height="${S+40}" fill="#15222d"/>`];
+  poses.forEach((p,i)=>{const f=i/Math.max(1,poses.length-1),col=`hsl(${200-160*f},70%,${70-25*f}%)`;
+    for(const tl of p.tiles)svg.push(`<polygon points="${tl.pts.map(P).join(' ')}" fill="${col}" fill-opacity="0.25" stroke="${col}" stroke-width="0.8"/>`);});
+  const fill={0:'#9cc3e6',1:'#5f8fd6',7:'#f0a35e',8:'#e4785a'};
+  for(const c of chain)svg.push(`<polygon points="${c.pts.map(P).join(' ')}" fill="${fill[c.type]||'#ccc'}" stroke="#2c4452"/>`);
+  const deg=angles.filter(a=>a.len>=3).map(a=>a.deg),mean=deg.reduce((x,y)=>x+y,0)/Math.max(1,deg.length),sd=Math.sqrt(deg.reduce((x,y)=>x+(y-mean)**2,0)/Math.max(1,deg.length));
+  const title=`${hinged?'hinged':'welded'} arm, seed ${seed}: ${poses.length} poses (blue early to orange late); swing sd ${sd.toFixed(1)} deg`;
+  svg.push(`<text x="8" y="${S+26}" font-family="Arial" font-size="12" fill="#e8eef2">${title}</text></svg>`);
+  const svgf=out.replace(/\.png$/,'.svg');fs.writeFileSync(svgf,svg.join('\n'));
+  const chrome=fs.readdirSync('/opt/pw-browsers').filter(d=>d.startsWith('chromium')).map(d=>`/opt/pw-browsers/${d}/chrome-linux/chrome`).find(fs.existsSync);
+  execFileSync(chrome,['--headless','--no-sandbox','--disable-gpu','--hide-scrollbars',`--screenshot=${path.resolve(out)}`,`--window-size=${S},${S+40+90}`,'file://'+path.resolve(svgf)],{stdio:'ignore'});
+  console.log(title,'min',Math.min(...deg).toFixed(0),'max',Math.max(...deg).toFixed(0),'n',deg.length);
+  return {angles,sd};
+}
+module.exports.hingeDemo=hingeDemo;

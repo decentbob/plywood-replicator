@@ -4,7 +4,49 @@ One short entry per new capability: what is new, how to see it, a picture, statu
 it enables next. Newest first. Status: **works** (does what was intended in demos or
 screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LEDGER.
 
-## 2026-09-30
+## 2026-09-30 (session 2: chain core with grown shapes)
+
+- **Hinges** (`seeded_ports.js`, label `hinge:true`) — works (demo). A hinged weld pins only one corner of
+  the shared edge and keeps the pair's contact, so the part swings about that corner and cannot pass through
+  its base. Demo: one chain, B's back takes a rod arm (reach 4) by a hinge; the arm swings between 14° on one side
+  and 80° on the other (sd 23.5°, about 95° of range) and folds against the chain; a welded arm only flexes (sd 7.6°).
+  Picture: `experiments/out/HINGE_arm_20260930.png` (welded: `HINGE_welded_20260930.png`).
+  Reproduce: `node -e "require('./experiments/seeded_accrete').hingeDemo(5,20000,'OUT.png',true)"`.
+  Next: flaps that sweep letters toward the face (a moving funnel), paddles for motility against fixed blocks.
+- **Bent chains copied by complementary shapes** (`seeded_bent.js`) — works (2 demos). Letters keep unit
+  faces and laterals; C is a unit triangle (T, 60° bend, face outside), D is the welded trapezoid of three
+  triangles (Z, the other way, face inside); complementary copying pairs A↔B and T↔Z. `PAACAAQ` was copied to
+  `PBBDBBQ` (bent the same way, t≈12k) and the copy was being copied back with a T. The S-curve `PAACAADAAQ`
+  (both bends) was copied to `PBBCBBDBBQ` (t≈42k), and its copy was being copied again. Each T+Z pair is one
+  rigid side-2 triangle. Pictures: `experiments/out/BENT_copy_20260930.png`, `BENT_copy_t5000_20260930.png`,
+  `BENT_scurve_20260930.png`. Reproduce: `node experiments/seeded_bent.js demo 1 20000 OUT PAACAAQ`.
+  The Z is one custom block for its three welded triangles; moulding it in place from notch triangles is not built.
+- **Accretion on the chain's back** (`seeded_accrete.js`, user idea) — partial. Drifting base tiles weld to a
+  sticky letter back and to each other (one weld family, sign 0: any tile edge binds any tile edge). Rules, each
+  added after a demo failed:
+  - activation by attachment: free tiles never clump;
+  - **reach**, a relayed level: a letter back emits lvl, each tile relays max(partner) − 1, one bond per pass, and
+    grows only at level ≥ 1. Appendage size is set by the letter (heritable); form comes from what drifts by.
+    Without it, the appendage engulfed the chain and all 70 tiles;
+  - **pure accretion**: an attached block takes only a free tile, so grown structures never fuse. Fused
+    structures had locked template and copy together;
+  - a letter's back is sticky only while its own face is free, so tiles grow on single strands and never
+    fill docking sites;
+  - appendages never capture loose letters. Otherwise they ate the B supply.
+
+  Tile grammar: squares sticky on opposite edges make rods, triangles branch, one-edge triangles make tips.
+  Demos show rod limbs with triangle joints and bounded shells, and a released copy growing its own appendage.
+  Cost: copying slowed a lot. In one world there were 0 copies in 30k steps with tiles, against 2 copies in
+  20k without them. Pictures: `experiments/out/ACCRETE_limbs_20260930.png`, `ACCRETE_reach_copy_20260930.png`,
+  `ACCRETE_shell_20260930.png`, `ACCRETE_current_20260930.png` (current rules). Reproduce (current rules):
+  `node -e "const a=require('./experiments/seeded_accrete');a.demo(2,30000,'OUT',['PBABQ'],{A:12,B:10,P:6,Q:6,C:30,J:20,D:6},a.REACH(5),5000)"`.
+  Next: judge appendages by protection (damage field) or feeding (funnelling), the user's two routes to adaptation.
+- **Fix: custom shapes centred on their corner mean** (`seeded_growth.js`). The solver's shape matching treats the
+  corner mean as the centre, and shapes centred on the area centroid got a spurious turn every pass. Asymmetric
+  parts drifted as a result: bends straightened, and the funnel blades and shield fans may have been affected.
+  Earlier FUNNEL/SHIELD results predate the fix.
+
+## 2026-09-30 (session 1)
 
 - **Base-shape alphabet** (design, user direction) — not yet built. Two base shapes (unit
   square and unit triangle); everything else is welded (the trapezoid is one of many). A triangle in a

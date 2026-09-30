@@ -13,7 +13,8 @@
 //   node experiments/seeded_bent.js demo SEED STEPS OUTSTEM FOUNDER [loose-json]
 const {T_C,T_D,R,L,NV}=require('../src/sim');
 const {createWorld,census}=require('./seeded_worlds'),{PinsLiveSim}=require('./half_cell_pins');
-const {snapshot}=require('./seeded_accrete');
+const {snapshot,appendages,reach,WELD,allEdges}=require('./seeded_accrete'),{ports,regular}=require('./seeded_ports');
+const {T_A,T_B,T_J,T_P,T_Q}=require('../src/sim');
 
 const C30=Math.cos(Math.PI/6),EPS=0.04;
 function centred(pts){let cx=0,cy=0,A=0;for(let k=0;k<pts.length;k++){const [x0,y0]=pts[k],[x1,y1]=pts[(k+1)%pts.length],c=x0*y1-x1*y0;
@@ -44,17 +45,33 @@ function bentBase(Base){
 }
 const BentSim=bentBase(PinsLiveSim);
 
-function demo(seed,steps,stem,founder=['PAACAAQ'],loose={A:10,B:14,C:6,D:6,P:6,Q:6},every=0){
-  const {s}=createWorld({seed,founder,loose,config:BENT,Base:BentSim,size:24,params:{compCopy:true}});
+function demo(seed,steps,stem,founder=['PAACAAQ'],loose={A:10,B:14,C:6,D:6,P:6,Q:6},every=0,config=BENT,Base=BentSim,size=24,params={compCopy:true}){
+  const {s}=createWorld({seed,founder,loose,config,Base,size,params});
   const t0=Date.now();
   snapshot(s.saveState(),`${stem}_t0.png`,`${stem.split('/').pop()} seed ${seed} t=0`,s);
   for(let t=1;t<=steps;t++){s.step();
     if(t%Math.max(1,steps/10|0)===0||t===steps){const c=census(s);
-      console.log(`t=${t} chains=${c.chains.length} [${c.chains.map(q=>q.seq+(q.paired?'*':'')).join(' ')}] ${((Date.now()-t0)/t).toFixed(1)}ms/step`);}
+      const a=s.xBond?appendages(s).filter(q=>q.anchored).map(q=>q.size).sort((p,q)=>q-p).join(','):'';
+      console.log(`t=${t} chains=${c.chains.length} [${c.chains.map(q=>q.seq+(q.paired?'*':'')).join(' ')}] ${a?'appendages='+a+' ':''}${((Date.now()-t0)/t).toFixed(1)}ms/step`);}
     if(every&&t%every===0)snapshot(s.saveState(),`${stem}_t${t}.png`,`${stem.split('/').pop()} seed ${seed} t=${t}`,s);}
   snapshot(s.saveState(),`${stem}.png`,`${stem.split('/').pop()} seed ${seed} t=${steps}`,s);
   return s;
 }
 if(require.main===module){const [cmd,seed,steps,stem,f,lj]=process.argv.slice(2);
   if(cmd==='demo')demo(+seed,+steps,stem,f?f.split(','):undefined,lj?JSON.parse(lj):undefined,+steps/4|0);}
-module.exports={BENT,TRI,TRAP,bentBase,BentSim,demo};
+// Bent chains with accreted appendages: both square letters' backs (A and B alternate under complementary copying)
+// take free unit-triangle tiles (J, all edges sticky) up to reach lvl; bends carry none.
+const BENT_ACCRETE=(lvl=3)=>({structural:[T_J],shapes:{...BENT.shapes,[T_J]:regular(3,1)},labels:{},reach:true,
+  edgeLabels:{[T_A]:{2:{...WELD,seed:true,lvl}},[T_B]:{2:{...WELD,seed:true,lvl}},[T_J]:allEdges(3,WELD)}});
+const bentAccreteBase=cfg=>reach(ports(BentSim,cfg),cfg);
+// Trapezoid strip (user, 2026-09-30): every letter is the same welded trapezoid (three unit triangles), in two
+// face choices. U = face on the long edge (2): legs lean in, +60 degrees. N = face on the short edge (1): legs lean
+// out, -60 degrees. UNUN... is a straight strip with every face on one side (long, short, long, ...) and every back on
+// the other, so the triangle is the only base shape. Each letter pairs with its own kind (U+U a hexagon, N+N short to
+// short); the mirror image of a strip is a strip, so the copy fits. UU turns 120 degrees one way, NN the other.
+// C = U, D = N; letters pair with their own kind (compCopy off).
+const TRAP_U=centred([[0,-1],[0,1],[-C30,0.5],[-C30,-0.5]]);
+// The caps continue the strip: P and Q are N-shaped (their laterals must match the U legs), so founders start and end
+// with U and every block of the chain is a trapezoid.
+const STRIP={structural:[],shapes:{[T_C]:TRAP_U,[T_D]:TRAP,[T_P]:TRAP,[T_Q]:TRAP},labels:{}};
+module.exports={STRIP,TRAP_U,BENT_ACCRETE,bentAccreteBase,BENT,TRI,TRAP,bentBase,BentSim,demo};

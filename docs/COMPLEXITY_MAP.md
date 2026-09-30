@@ -134,7 +134,12 @@ come from combinations and sequences (user, 2026-09-30).
   it turns 60° with the face outside.
   - No wedge, and no trapezoid shape.
   - Every turn is a 60° step, so chains and parts share six directions and meet edge to edge. Squares add 90° joints.
-  - A square⇄triangle state switch is optional (supply balancing). Otherwise the simulation supplies both shapes.
+  - **No shape switch (user, 2026-09-30):** shape is not a block state. The soup supplies a fixed ratio of the base shapes.
+  - **Triangle only? (user question, 2026-09-30).** For grown parts, yes: triangles alone give every 60° form and need no
+    supply control (the bent-chain accretion demo already uses triangle tiles only). For the copying chain there is a catch.
+    Triangles with faces on one side curl into a hexagon. A straight triangle chain is a strip whose faces alternate sides,
+    so it has no single copying side and no free back. Working choice: triangles for all grown material, the square kept
+    only as the straight chain letter. A both-sided triangle strip replicator is an open idea.
 - **Welded shapes.** Bigger parts are bonded combinations: rods, corners, rhombi, trapezoids,
   hexagon hubs, houses, kinked plates and saws. A two-corner pin is rigid, one pin is a hinge, and releasing bonds splits a part.
   The trapezoid (three triangles) is just one of many useful welded shapes (user).
