@@ -83,3 +83,12 @@ before it runs. Add new ideas at the top of their section, with date and evidenc
 - Remaining half-cell hotspot: polygon outline/hull allocation inside the contact sweep.
   Caching outlines per sweep is exact only if hull ordering is reproduced; test before use.
 - Screen-tier QA (AGENTS) removes about 2.5x redundant replay steps from screens.
+
+## Hinge triangles (user, 2026-09-30)
+
+"Simulation is in need of a hinge triangle, useful for this and other things like membranes; not sure how best
+to make it open with intention." First version in `tri_typed.js`: a hinge is a side property, so the pinned
+corner fixes the swing direction. Binding shuts a flap and unbinding opens it; a flap held only by hinges never
+captures free triangles. Open options for intention: a rest angle (spring) per hinge side; a latch that re-pins the
+second corner when a trigger side is bonded (the switch the user proposed for type states); stops that
+limit the swing (one-way valves for membranes).

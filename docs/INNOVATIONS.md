@@ -4,6 +4,34 @@ One short entry per new capability: what is new, how to see it, a picture, statu
 it enables next. Newest first. Status: **works** (does what was intended in demos or
 screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LEDGER.
 
+## 2026-09-30 (session 2c: typed triangles, casting, hinges)
+
+User direction: no growth programs. Every block is the same triangle with a **type**: three side glues from
+complementary pairs (a<->A, b<->B, ..., k<->K activator, '-' inert). One binding rule everywhere: complementary
+flush sides bind if one triangle is already attached. Engine: `experiments/tri_typed.js` (subclass of `tri_chain.js`).
+
+- **Typed chain copying (reads glue)** — works (1 world). A free triangle docks on a face only with the complementary
+  glue; fills and closures stay glue-agnostic. Template `abaabb` (gaps 10211) gave `BBAABA` (gaps 11021, the
+  reverse complement), whose copy was `abaabb` again, in 10k steps. Copying is slow because each face needs its
+  own docker type (14 each of 106 free).
+  `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
+  Next: typed backs and ends (inherited only through the docker types), supply limits by type.
+- **Casting: permanent in-simulation type change** — works (1 world). A triangle with all three sides glue-bonded
+  (a pocket) takes each encloser's instruction glue (the side after its recognition side, counter-clockwise), once
+  every encloser's activator side (K) is bonded to k. Then it lets go. Hand-built frame (prepared starting
+  condition): two casters fixed and one hinged lid. 4 of 16 `aaa` became `bcd` in 4000 steps. No casts happen
+  outside the frame, because free triangles never bind each other. The product copies the instruction glues rather
+  than complementing them; a complemented product would stick to its own casters.
+  `node experiments/tri_typed.js pocket 1 4000 OUT`. Picture: `experiments/out/TYPED_pocket_20260930.png`.
+  Next: a pocket grown from types, not prepared; machines that cast their own supply.
+- **Hinge sides (user)** — works (mechanism). A side marked `<` or `>` bonds with one pinned corner (the mark says
+  which corner, so it says which way the flap swings). The flap jostles as its own body. A triangle held only by
+  hinges does not activate: it can close onto attached triangles but never captures free ones. Binding holds it
+  shut and releasing the bond opens it again. In the pocket, the lid swings open, closes on the held target, and
+  after the cast swings open to let the product out. Without separate jostling or the no-capture rule the lid
+  stayed open or grabbed a second target and jammed.
+  Next: hinge springs or latches for membranes and gates, flaps that sweep supply.
+
 ## 2026-09-30 (session 2b: triangle-only chains)
 
 - **End arms: shells and funnels** (`tri_chain.js` site E; planner `experiments/tri_arm_design.js`) — works. Strand
