@@ -432,6 +432,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 104 | Field walls confirmation (12 seeds) | Is the RESULTS 103 wall benefit real? | same as 103, fresh seeds 1531–1542 | negative | net 7/10 (p .17), protection 8/12 (p .19); mean ratio .47 walled vs .33 bare; favourable but not significant | field_walls.js (`FWC_20260929`) | protection may matter only when damage is not instantly fatal, or in long within-world competition | 48 worlds x 100k; about 16,000 CPU s |
 | 105 | Sequence-encoded shields under the field | Does the field favour a sequence that seeds shield plates, within one soup? | engine SHIELD config (fan plate on B back), field 1e-5/0, PBBQ vs PAAQ | lead | field raises shielded share in 4/6 (rule 5/6); shields near-neutral without field (mean S .46); one shielded founder lost early | shield_screen.js (`SH_20260929`) | let shields evolve: PAAQ only with copying errors, field on/off | 12 worlds x 100k; about 5,000 CPU s; adopted as working assumption (user's mode) |
 | 106 | Shield evolution from PAAQ | Do shield-carrying mutants arise and spread under the field? | SHIELD config, `pSoft` .05, field on/off, 200k | negative (informative) | mutants arise in all surviving worlds; without field they accumulate and freeze (no death); under field they rise transiently but every final population is PAAQ; 2/6 field worlds lose the founder at once | shield_evolve.js (`SE_20260929`) | stronger single shield, lower mutation, more material/time | 12 worlds x 200k; about 10,000 CPU s; first run with heritable structural variation |
+| 107 | Shield evolution round 2 | With a stronger plate, fewer errors and more lineages, do shield mutants spread under the field? | SHIELD fan(1,6,1.5), `pSoft` .01, 3 PAAQ founders, field on/off, 300k | lead | late B-share on .56–.76 in 4/6 vs off .10–.23 (frozen, no death); 2/6 on-worlds lose B lineages early | shield_evolve.js SE_ROUND=2 (`SE2_20260929`) | stack on it: debris recycling (plate release), turnover, richer structure choices | 12 worlds x 300k; about 30,000 CPU s; first evolved use of a structure under fixed rules (screen tier) |
 
 ## Knob index
 
@@ -527,7 +528,7 @@ the rows that used it). Rerun it after adding rows.
 | `pSBind` | 40a (works), 40b (negative), 40c (negative) |
 | `pSMeltEnd` | 40a (works) |
 | `pSNuc` | 40a (works), 40b (negative) |
-| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works), 77 (negative), 106 (negative (informative)) |
+| `pSoft` | 1 (works), 2 (works), 5b (negative), 14b (works), 38b (lead), 38d (works), 44d (lead), 45e (works), 77 (negative), 106 (negative (informative)), 107 (lead) |
 | `pSpont` | 7 (works), 11b (negative) |
 | `pUndock` | 5 (works), 5b (negative), 12 (works), 13 (works), 13b (works), 15b (works), 52c (works), 53a (negative), 53b (works), 54 (works), 55 (negative), 56 (works), 57b (negative), 77 (negative) |
 | `pUnzip` | 13b (works), 15b (works), 49c (lead), 51b (lead), 52b (negative), 66 (negative), 72 (negative) |

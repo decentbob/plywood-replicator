@@ -8843,3 +8843,34 @@ turnover. Figure: `out/SE_20260929_off_1725.png` (mutants carrying plates).
 **Working-mode next steps (improve conditions, then build):** make one shield worth more (a
 larger plate, or the half-cell wall's 50%), lower the mutation rate so gains are kept, and
 give more material and time so several lineages compete. About 10,000 CPU s; raw in `out/SE_20260929*`.
+
+## 107. Shields evolve under the damage field (round 2)
+
+2026-09-30. [Plan](shield_evolve_plan.md), round 2 (working mode: stronger conditions after RESULTS 106).
+The founders are three PAAQ chains; B, and with it a shield seed, arises only by copying errors
+(`pSoft` .01). One fan plate (far edge 6, depth 1.5) cuts a chain's exposure to about .67. The world is
+26x26 with loose A 16, B 16, P 10, Q 10, plates 24; field on (1e-5) or off; seeds 1731–1736; 300,000 steps.
+B-share = the fraction of chain-steps held by B-carrying sequences per 50k window.
+
+| Seed | Field on: B-share per window | Late mean (windows 4–6) on / off |
+|---|---|---|
+| 1731 | .06 .26 .40 .58 .73 .49 | .60 / (control rerunning) |
+| 1732 | .06 .03 .31 .71 .84 .74 | .76 / .23 |
+| 1733 | .00 .01 .12 .03 .02 .19 | .08 / .22 |
+| 1734 | .02 .02 .12 .00 .00 .00 | .00 / .20 |
+| 1735 | .04 .36 .26 .40 .57 .73 | .56 / .11 |
+| 1736 | .25 .50 .69 .84 .40 .59 | .61 / .10 |
+
+**What it says.** Under the damage field, shield-carrying variants that arose by mutation rise to
+majority in 4/6 worlds (late share .56–.76, against .10–.23 in the matched no-field worlds).
+Without the field the variant mix freezes wherever it drifted, since nothing dies. In two worlds
+the B lineages were lost early under the field (drift at small numbers). The benefit comes only
+from physical shadowing; no label is rewarded. This is the project's first screen-level
+instance of an **inherited structural function arising by variation and spreading by selection
+under fixed local rules** (evidence ladder: heritable benefit, screen tier, not confirmed).
+
+**Caveats and costs.** A shielded chain broken by the field leaves B letters that keep their
+plates, which is debris that sequesters material (figure `out/SE2_20260929_on_1732.png`). The
+shield is a designed part (the fan shape and the B seed label), so the evolved step is *using* an
+available structure, not inventing a new one. The field is an explicit environmental drive. Four
+control runs were lost twice to container restarts and rerun from their seeds. About 30,000 CPU s.
