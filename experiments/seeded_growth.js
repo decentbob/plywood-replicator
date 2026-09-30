@@ -65,6 +65,11 @@ function seeded(Base,config){
       // Structural decay (turnover; user's patchy-environment idea): config.decay = {pRim, band}. Each growth bond of a
       // structural block breaks at pRim per step while the block is in the hot band x < band*W (band 1 = everywhere).
       // Rolled once per bond (by the lower-index structural end). A local environmental drive, as core pBreak/radBand.
+      // Maintenance by attachment (config.release, ROADMAP 1a): a growth bond is kept only while at least one of its two
+      // blocks is attached elsewhere. When a chain breaks and a seed block drifts free with its part, both let go and
+      // return to the soup. The structural block requests release of its own incident bond; reads own and partner bonds.
+      if(config.release)for(let i=0;i<4;i++){const b=this.rimBond[u*4+i];
+        if(b>=0&&!this.attached(u,i)&&!this.attached(b>>2,b&3)){this.rimBond[u*4+i]=-1;this.rimBond[b]=-1;this.releaseEvents=(this.releaseEvents||0)+1;}}
       const dec=config.decay;
       if(dec&&dec.pRim>0&&(dec.band>=1||this.px[u]<dec.band*this.p.W))for(let i=0;i<4;i++){const b=this.rimBond[u*4+i];
         if(b>=0&&(!structural.has(this.type[b>>2])||(b>>2)>u)&&this.rng()<dec.pRim){this.rimBond[u*4+i]=-1;this.rimBond[b]=-1;}}
