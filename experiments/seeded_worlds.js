@@ -82,3 +82,11 @@ const hubRod=(hubEdges,rodFar)=>({structural:[T_J,T_C],shapes:{[T_J]:regular(6,1
   edgeLabels:{[T_B]:{2:{f:2,s:1,seed:true}},[T_J]:{0:{f:2,s:-1},...(rodFar?{3:{f:4,s:-1}}:{}),...Object.fromEntries(hubEdges.map(e=>[e,{f:3,s:1}]))},
     [T_C]:{0:{f:3,s:-1},...(rodFar?{2:{f:4,s:1}}:{})}},labels:{}});
 module.exports.TRIPOD=hubRod([2,3,4],false);module.exports.LATTICE=hubRod([1,2,4,5],true);
+// Funnel (user idea, 2026-09-30): each cap's outer side seeds ONE blade, a custom parallelogram whose attaching edge
+// matches the cap side and whose body leans toward the copying face, so passing letters are guided toward the face
+// instead of drifting by. P and Q are at opposite ends, so their blades are mirror images (C for P, D for Q).
+function blade(len=2.5,lean=1.2){const pts=[[0,-0.5],[0,0.5],[-len,0.5+lean],[-len,-0.5+lean]];
+  const c=pts.reduce((a,p)=>[a[0]+p[0]/4,a[1]+p[1]/4],[0,0]);return pts.map(([x,y])=>[x-c[0],y-c[1]]);}
+const FUNNEL=(len=2.5,lean=1.2)=>({structural:[T_C,T_D],shapes:{[T_C]:blade(len,lean),[T_D]:blade(len,-lean)},release:true,
+  labels:{[T_P]:{[L]:{f:5,s:1,seed:true}},[T_Q]:{[R]:{f:6,s:1,seed:true}},[T_C]:{[F]:{f:5,s:-1}},[T_D]:{[F]:{f:6,s:-1}}}});
+module.exports.FUNNEL=FUNNEL;module.exports.blade=blade;

@@ -6,6 +6,13 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 ## 2026-09-30
 
+- **Funnel on the caps** (user idea) — partial/promising. Each cap's outer side seeds one custom
+  parallelogram blade (C on P, mirrored D on Q) that leans toward the copying face. Blades are
+  rebuilt on every copy. Demo (one seed each, 30k steps, 2 PAAQ founders): 7 chains and 26 face
+  docks with funnels vs 5 and 22 without. Picture: `experiments/out/FUNNEL_20260930.png`.
+  Reproduce: `createWorld({founder:['PAAQ','PAAQ'],loose:{A:14,P:6,Q:6,C:8,D:8},config:FUNNEL()})`.
+  Next: tune lean/length so both blades point at the face (some splay outward now); longer
+  blades; later, hinged blades that sweep (movement).
 - **Multi-port blocks** (`seeded_ports.js`) — works. Growth ports on any polygon edge (edge-indexed
   bond table, pins in the physics, contact exclusion), so a hexagonal hub has six usable sides.
   *Tripod*: B seeds a hub that grows 3 rods (bounded frame). *Network*: rods' far ends catch new
