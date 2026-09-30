@@ -12,7 +12,6 @@ const [g='11111',maxLen='7',out='experiments/out/TRI_arms_design_20260930.png']=
 const sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],add=(a,b)=>[a[0]+b[0],a[1]+b[1]],cross=(a,b)=>a[0]*b[1]-a[1]*b[0];
 const close=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6,cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
 const ccw=v=>cross(sub(v[1],v[0]),sub(v[2],v[0]))>0?v:[v[0],v[2],v[1]];
-const tris=band(rolesFromGaps([...g].map(Number))),copy=copyOf(tris),body=[...tris.map(t=>t.v),...copy.map(t=>t.v)];
 // the spare edge of an end triangle: first = its entry edge, last = the edge that is neither entry nor free
 const edgeEq=(e,f)=>(close(e[0],f[0])&&close(e[1],f[1]))||(close(e[0],f[1])&&close(e[1],f[0]));
 const spare=(t,first)=>{if(first)return t.entry;const V=t.v;for(let k=0;k<3;k++){const e=[V[k],V[(k+1)%3]];if(!edgeEq(e,t.entry)&&!edgeEq(e,t.free))return e;}};
@@ -21,6 +20,8 @@ function grow(t,first,pat){  // arm triangles (CCW vertex lists) from end triang
   const p=P[k],q=P[(k+1)%3],r=P[(k+2)%3];let cur=[q,p,sub(add(p,q),r)];const arm=[cur];   // child CCW with edge 0 = attach
   for(const c of pat){const i=+c,a=cur[i],b=cur[(i+1)%3],o=cur[(i+2)%3];cur=[b,a,sub(add(a,b),o)];arm.push(cur);}
   return arm;}
+if(require.main===module){
+const tris=band(rolesFromGaps([...g].map(Number))),copy=copyOf(tris),body=[...tris.map(t=>t.v),...copy.map(t=>t.v)];
 const hit=(A,B)=>A.some(a=>B.some(b=>Math.hypot(...sub(cen(a),cen(b)))<0.5));
 // face side: normal of the chain axis pointing to the copy
 const c0=cen(tris[0].v),c1=cen(tris[tris.length-1].v),ax=sub(c1,c0),L=Math.hypot(...ax),dir=[ax[0]/L,ax[1]/L];
@@ -51,4 +52,5 @@ parts.push(`<text x="20" y="30" font-family="Arial" font-size="20" font-weight="
 fs.writeFileSync(out.replace(/\.png$/,'.svg'),`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">${parts.join('')}</svg>`);
 const chrome=fs.readdirSync('/opt/pw-browsers').filter(d=>d.startsWith('chromium')).map(d=>`/opt/pw-browsers/${d}/chrome-linux/chrome`).find(fs.existsSync);
 execFileSync(chrome,['--headless','--no-sandbox','--disable-gpu','--hide-scrollbars',`--screenshot=${path.resolve(out)}`,`--window-size=${W},${H+90}`,'file://'+path.resolve(out.replace(/\.png$/,'.svg'))],{stdio:'ignore'});
+}
 module.exports={grow};
