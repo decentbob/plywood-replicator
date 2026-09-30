@@ -97,7 +97,13 @@ Otherwise every organism is capped by the soup we prepare. Two local routes:
   RESULTS 92 trap. **Reversal is required**, or blanks run out: an eraser is a writer with
   k=0, and/or unattached programmed blocks slowly decay back to blank. Keep programmability
   this simple: a few kinds, no per-side editing.
-- **Universal tiles and welding (user, 2026-09-30): shape supply.** Programming changes labels, not
+- **Preferred direction (user, 2026-09-30): a small shape alphabet with a switch.** Similar-size blocks
+  share unit-length working edges (face, laterals) and differ in back and angles: square, wedge,
+  half-square. Any can be a chain letter, so the sequence encodes the chain's own shape and copying stays
+  shape-agnostic. The programmable `kind` selects the rest shape (square or wedge, like the core fold rule),
+  so shape supply is balanced by reprogramming and chains can fold after release. Bigger parts are 2–3
+  squares bonded by existing mechanisms and splittable; intentional length comes from copying (rod genes).
+- **Universal tiles and welding (user, 2026-09-30; earlier variant): shape supply.** Programming changes labels, not
   form. Build parts from universal tiles (triangles or squares plus half-squares) welded edge to edge
   (rigid in 2D; a single-corner weld is a hinge). Welds are durable, but broken by hot zones or unwelding
   ports. Welding happens only where a chain-seeded **jig** holds tiles, so part form is copied from the

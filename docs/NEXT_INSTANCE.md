@@ -31,8 +31,11 @@ backlog; take the top unblocked item.
 
 ## User ideas to keep (also in ROADMAP/IDEAS)
 
-**Newest (2026-09-30): shape supply via universal tiles and jig-directed welding** (ROADMAP 10,
-COMPLEXITY_MAP 3c). A strong candidate for the next big capability after hinges.
+**Newest (2026-09-30): a small shape alphabet with a switch** (ROADMAP 10, preferred over pure tiles).
+Blocks share unit working edges but differ in shape (square, wedge, half-square); the programmable
+`kind` selects the rest shape; the sequence encodes the chain's own shape; bigger parts are bonded
+squares, with length from copying (rod genes). The user worried a chain of squares has no shape of its
+own; this answers it. A strong candidate for the next big capability, alongside hinges.
 
 
 Funnel (done, tune); patchy hot/safe environment; fixed obstacles for motility; organisms
