@@ -89,6 +89,7 @@ before it runs. Add new ideas at the top of their section, with date and evidenc
 "Simulation is in need of a hinge triangle, useful for this and other things like membranes; not sure how best
 to make it open with intention." First version in `tri_typed.js`: a hinge is a side property, so the pinned
 corner fixes the swing direction. Binding shuts a flap and unbinding opens it; a flap held only by hinges never
-captures free triangles. Open options for intention: a rest angle (spring) per hinge side; a latch that re-pins the
-second corner when a trigger side is bonded (the switch the user proposed for type states); stops that
-limit the swing (one-way valves for membranes).
+captures free triangles. Follow-up (user): "opening with intent" means a trigger mechanism, not free flopping. Now built as a driven hinge
+(flush / swung 60 degrees, switched by the flap's trigger side), and the flap carries what is bonded to it. User
+ideas still open: two hinges (jaws) to capture better; hatches that move blocks as a machine (conveyor,
+hand-off between hatches); gates in membranes (a hatch that opens only when a key binds).

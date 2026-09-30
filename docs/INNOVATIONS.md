@@ -16,21 +16,26 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   own docker type (14 each of 106 free).
   `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
   Next: typed backs and ends (inherited only through the docker types), supply limits by type.
-- **Casting: permanent in-simulation type change** — works (1 world). A triangle with all three sides glue-bonded
-  (a pocket) takes each encloser's instruction glue (the side after its recognition side, counter-clockwise), once
-  every encloser's activator side (K) is bonded to k. Then it lets go. Hand-built frame (prepared starting
-  condition): two casters fixed and one hinged lid. 4 of 16 `aaa` became `bcd` in 4000 steps. No casts happen
-  outside the frame, because free triangles never bind each other. The product copies the instruction glues rather
-  than complementing them; a complemented product would stick to its own casters.
-  `node experiments/tri_typed.js pocket 1 4000 OUT`. Picture: `experiments/out/TYPED_pocket_20260930.png`.
-  Next: a pocket grown from types, not prepared; machines that cast their own supply.
-- **Hinge sides (user)** — works (mechanism). A side marked `<` or `>` bonds with one pinned corner (the mark says
-  which corner, so it says which way the flap swings). The flap jostles as its own body. A triangle held only by
-  hinges does not activate: it can close onto attached triangles but never captures free ones. Binding holds it
-  shut and releasing the bond opens it again. In the pocket, the lid swings open, closes on the held target, and
-  after the cast swings open to let the product out. Without separate jostling or the no-capture rule the lid
-  stayed open or grabbed a second target and jammed.
-  Next: hinge springs or latches for membranes and gates, flaps that sweep supply.
+- **Driven hinges and a hatch pocket (user: hinges should open and close by a trigger, not flop)** — works (3
+  worlds). A hinged side (`<` or `>` marks the pinned corner) remembers its flush angle from when it bonded. While the
+  flap's trigger side (the side before the hinge side) is bonded, the flap is driven 60 degrees away from its partner
+  at 0.05 rad per step, and back when that side is released. Everything bonded to the flap is carried (a machine part
+  moving blocks), and the flap jostles with its base, not on its own. The first hinge (loose, jostled on its own)
+  flopped and jammed. **Close-only sides** (`.`) bind only triangles that are already attached.
+- **Casting: permanent in-simulation type change** — works. A triangle glue-bonded on all three sides takes each
+  encloser's instruction glue once every encloser's activator side (K) is bonded to k. Recognition, activator and
+  instruction sides follow in counter-clockwise order. Then it lets go. The product copies the instruction glues
+  rather than complementing them; a complemented product would stick to its casters. **Hatch pocket**
+  (hand-built frame, a prepared starting condition): two fixed casters with close-only recognition sides and a
+  hatch hinged at the corner it shares with the pocket centre. Cycle: the hatch waits open, catches an `aaa` in the
+  upper slot, swings shut and carries it into the centre. The target binds both fixed casters, the cast gives `bcd`,
+  and the hatch swings open so the product drifts out. 20 casts in 3 worlds x 4000 steps, all through the hatch
+  (6, 6, 8). The first design (floppy lid, casters catching free targets) managed 4 in one world, and 7 of 9 casts in
+  a later check took the direct route. Nothing is cast outside the frame. The frame dents where free triangles push
+  into it but keeps its bonds.
+  `node experiments/tri_typed.js pocket 1 4000 OUT`. Pictures: `experiments/out/TYPED_hatch_cycle_20260930.png`
+  (one cycle), `experiments/out/TYPED_pocket_20260930.png` (first design).
+  Next: two hatches as jaws; hatches that pass blocks along (conveyor); a pocket grown from types.
 
 ## 2026-09-30 (session 2b: triangle-only chains)
 

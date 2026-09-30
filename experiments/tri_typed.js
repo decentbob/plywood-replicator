@@ -11,13 +11,16 @@
 //           Fills and closures stay glue-agnostic (option latGlue: fills need the complement of the lateral glue).
 //           Chain backs (released strands) and strand ends' spare edges bind by glue like any attached side.
 //   hinges  (side property, written after the glue: '<' pins the side's first corner, '>' its second) a bond on a
-//           hinged side pins one corner only, so the partner swings about it; hinged pairs keep their contact. A hinge
-//           is loose until something else fixes the geometry: a flap that binds its target is held closed by that bond
-//           and swings open again when the bond goes (open and close by binding, no extra state). A triangle held only
-//           by hinges does not activate: it binds attached triangles (closure) but never captures a free one.
+//           hinged side pins one corner only; hinged pairs keep their contact and jostle as one body. The hinge
+//           is driven, not floppy: it rests flush (the angle at which the bond formed) and swings hingeAngle (60
+//           degrees) away from its partner while the flap's trigger side (the side before the hinge side,
+//           counter-clockwise) is bonded. Binding the trigger closes/opens the hatch, releasing it swings it back, and
+//           whatever is bonded to the flap is carried along (blocks moved by a machine part).
+//   close-only (side property '.') the side binds only triangles that are already attached, never a free one: it
+//           closes onto what a structure brings to it (a switch of the side's activity by attachment).
 //   casting (permanent type change, in-simulation) a triangle T whose three sides are all glue-bonded to triangles
 //           N1..N3 is in a pocket. For each Ni: the side bonded to T is its recognition side, the next side
-//           counter-clockwise its instruction side, the remaining side its activator side. If every Ni's activator side
+//           counter-clockwise its activator side, the remaining side its instruction side. If every Ni's activator side
 //           is bonded to a k (Ni exposes this to T, previous pass), T takes on each side the instruction glue of the
 //           triangle facing it (castComp: its complement) and lets go of all three. Casters are ordinary types with K
 //           on the activator side; a pocket needs a frame holding k in the right places, so casting is rare by chance
@@ -37,15 +40,15 @@ const m3=x=>((x%3)+3)%3;
 const gcode=c=>c==='-'?0:c>='a'&&c<='z'?2*(c.charCodeAt(0)-97)+1:2*(c.charCodeAt(0)-65)+2;
 const gname=g=>g===0?'-':g%2?String.fromCharCode(97+(g-1)/2):String.fromCharCode(65+(g-2)/2);
 const comp=g=>g===0?0:g%2?g+1:g-1;
-function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>]?)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
-  return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>m[2]==='<'?1:m[2]==='>'?2:0)};}
-const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')).join('');
+function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+  return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>m[2].includes('<')?1:m[2].includes('>')?2:0),close:t.map(m=>m[2].includes('.')?1:0)};}
+const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')).join('');
 // canonical name up to rotation (the same type in any orientation)
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>]?/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 class TypedSim extends TriSim{
-  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);}}
-  setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];}this.bondsDirty=true;}
+  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hSign=new Int8Array(3*n);}}
+  setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];}this.bondsDirty=true;}
   _roles(u){const r=super._roles(u);
     if(r.role===FREE)for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0&&this.bkind[u*4+i]===GLUE)return {role:GROWN};
     return r;}
@@ -60,16 +63,14 @@ class TypedSim extends TriSim{
     if(r.role===SBACK&&!r.fill&&r.prev>=0&&r.next>=0&&r.free>=0&&!bnd(r.free))return [r.free];
     if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free)))return [r.inert];
     return [];}
-  _anchored(u){for(let i=0;i<3;i++){const q=this.bond[u*4+i];if(q>=0&&!this.hing[u*3+i]&&!((q&3)<3&&this.hing[(q>>2)*3+(q&3)]))return true;}return false;}
   _triBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,tolF=p.triTol||0.3,tolC=p.triTolClose||0.22,pb=p.pBond===undefined?0.5:p.pBond,G=this.glue;
     const free=u=>R[u].role===FREE,bnd=(u,i)=>this.bond[u*4+i]>=0,gl=(u,i)=>G[u*3+i];
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
-        // glue binding on an active side (a triangle held only by hinges does not activate: a flap closes onto
-        // attached triangles but never captures free ones)
-        if(this._anchored(u))for(const e of this._active(u,r)){const g=gl(u,e);if(!g)continue;
+        // glue binding on an active side
+        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e])continue;
           for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&this._flush(u,e,v,j,tolF)&&this.rng()<pb){this._bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.glueEvents=(this.glueEvents||0)+1;done=true;break;}
           if(done)break;}
         if(done)continue;
@@ -100,9 +101,9 @@ class TypedSim extends TriSim{
     const G=this.glue;
     for(let u=0;u<this.n;u++){let ok=true;const src=[];
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*4+i];if(q<0||this.bkind[u*4+i]!==GLUE){ok=false;break;}
-        const w=q>>2,j=q&3;if(this.actE[w]!==m3(j+2))ok=false;else src.push(G[w*3+m3(j+1)]);}
+        const w=q>>2,j=q&3;if(this.actE[w]!==m3(j+1))ok=false;else src.push(G[w*3+m3(j+2)]);}
       if(!ok)continue;
-      for(let i=0;i<3;i++){G[u*3+i]=this.p.castComp?comp(src[i]):src[i];this.hing[u*3+i]=0;this._cut(u,i);}
+      for(let i=0;i<3;i++){G[u*3+i]=this.p.castComp?comp(src[i]):src[i];this.hing[u*3+i]=0;this.cOnly[u*3+i]=0;this._cut(u,i);}
       this.castEvents=(this.castEvents||0)+1;(this.castLog||(this.castLog=[])).push([this.t,u,typeName(this,u)]);}
   }
   // hinges: a bond on a hinged side pins one corner; hinged pairs still collide
@@ -117,12 +118,37 @@ class TypedSim extends TriSim{
     if(this.hing&&this.hing.some(x=>x)){for(let q=0;q<this.n*4;q++){const r=this.bond[q];if(r<=q)continue;const u=q>>2,i=q&3,v=r>>2,j=r&3;
       if((i<3&&this.hing[u*3+i])||(j<3&&this.hing[v*3+j]))c.push(u,v);}this._sweep=Math.max(1,c.length/2);}
     return c;}
-  // a hinge also separates bodies for jostling: the flap gets its own random moves and turns and swings about its pin
-  _jostleBodies(){if(!this.hing||!this.hing.some(x=>x))return super._jostleBodies();
-    const cut=[];for(let q=0;q<this.n*4;q++){const r=this.bond[q];if(r<=q)continue;const u=q>>2,i=q&3,v=r>>2,j=r&3;
-      if((i<3&&this.hing[u*3+i])||(j<3&&this.hing[v*3+j])){cut.push(q,r);this.bond[q]=-1;this.bond[r]=-1;}}
-    super._jostleBodies();for(let k=0;k<cut.length;k+=2){this.bond[cut[k]]=cut[k+1];this.bond[cut[k+1]]=cut[k];}}
-  saveState(){const s=super.saveState();s.typed={glue:Array.from(this.glue||[]),hing:Array.from(this.hing||[]),bkind:Array.from(this.bkind||[])};return s;}
+  // hinge drive: a hinged side remembers its flush angle (relative to its partner, when the bond formed) and which
+  // way is away from the partner. While the flap's trigger side (the side before the hinge side, counter-clockwise)
+  // is bonded the flap is driven to hingeAngle away from flush, otherwise back to flush, at most hingeRate per step,
+  // turning about its pinned corner and carrying everything bonded to it. A flap whose body reaches its partner
+  // through other bonds is locked and not driven.
+  _ang(u){return Math.atan2(this.oy[u*NV],this.ox[u*NV]);}
+  _bind(u,i,ku,v,j,kv){super._bind(u,i,ku,v,j,kv);
+    for(const [x,e,y] of [[u,i,v],[v,j,u]]){if(e>2||!this.hing||!this.hing[x*3+e])continue;
+      this.hRel[x*3+e]=this._ang(x)-this._ang(y);
+      const c=this.hing[x*3+e]===1?e:(e+1)%3,Px=this.ox[x*NV+c],Py=this.oy[x*NV+c];   // pin relative to the flap centre
+      const fx=-Px,fy=-Py,dx=this._dx(this.px[x]-this.px[y]),dy=this._dy(this.py[x]-this.py[y]);   // centre - pin; flap - partner
+      this.hSign[x*3+e]=(dx*(-fy)+dy*fx)>0?1:-1;}}
+  _servo(){
+    if(!this.hing||!this.hing.some(x=>x))return;const n=this.n,th=this.p.hingeAngle??Math.PI/3,rate=this.p.hingeRate??0.05;
+    const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
+    for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*4+i];if(!this.hing[u*3+i]||q<0)continue;const v=q>>2;
+      const swung=this.bond[u*4+m3(i+2)]>=0,target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0);
+      const err=wrap(target-(this._ang(u)-this._ang(v)));if(Math.abs(err)<0.01)continue;const d=Math.max(-rate,Math.min(rate,err));
+      // the flap's body: everything bonded to it except through its hinge
+      const body=[u],seen=new Set(body);let locked=false;
+      for(let k=0;k<body.length&&!locked;k++){const x=body[k];for(let e=0;e<3;e++){const r=this.bond[x*4+e];if(r<0||(x===u&&e===i))continue;const y=r>>2;
+        if(y===v){locked=true;break;}if(!seen.has(y)){seen.add(y);body.push(y);}}}
+      if(locked)continue;
+      const c=this.hing[u*3+i]===1?i:(i+1)%3,Px=this.px[u]+this.ox[u*NV+c],Py=this.py[u]+this.oy[u*NV+c],cs=Math.cos(d),sn=Math.sin(d);
+      for(const x of body){const rx=this._dx(this.px[x]-Px),ry=this._dy(this.py[x]-Py);
+        this._rigidMove(x,cs*rx-sn*ry-rx,sn*rx+cs*ry-ry,d);
+        this.px[x]=this._wx(this.px[x]);this.py[x]=this._wy(this.py[x]);}
+      this.hingeMoves=(this.hingeMoves||0)+1;}
+  }
+  step(){this._servo();super.step();}
+  saveState(){const s=super.saveState();s.typed={glue:Array.from(this.glue||[]),hing:Array.from(this.hing||[]),cOnly:Array.from(this.cOnly||[]),bkind:Array.from(this.bkind||[])};return s;}
 }
 
 // ---------------- worlds ----------------
@@ -216,24 +242,27 @@ function render(s,out,title,focus=null,labels=false){
 }
 
 // ---------------- the casting pocket (prepared frame) ----------------
-// Lattice: the pocket is a side-2 triangle (0,0),(2,0),(1,2H); the target sits in its centre. Two casters are
-// installed in the frame (both outer sides bonded); the third is a hinged lid on the frame's lip that swings open and
-// closes on a target. Casters: (recognition A, instruction x, activator K) in counter-clockwise order.
-function pocket(instr='bcd',recog='A',lidHinge='<'){
-  const [p,q,r]=[...instr],R=recog,Q=comp(gcode(q)),P=comp(gcode(p));
+// Lattice: the pocket is a side-2 triangle (0,0),(2,0),(1,2H); the target ends in its centre. Two casters are fixed in
+// the frame (both outer sides bonded). The third is a hatch hinged at V = (1.5,H), the corner it shares with the
+// centre: it waits flush against its hinge partner H (open), with its catch side facing the upper slot, which is open to
+// the outside. A target caught there triggers the hatch: it swings 60 degrees and carries the target into the centre,
+// where the target binds both fixed casters; the cast releases it, the catch side is free again and the hatch swings
+// back open. The fixed casters' recognition sides are close-only, so only the hatch catches.
+// Casters: recognition A, then activator K, then instruction x (counter-clockwise).
+function pocket(instr='bcd',recog='A'){
+  const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));
   return [
-    {v:[[0,0],[1,0],[0.5,H]],type:`K${R}${p}`,role:'caster'},                 // N0: bottom K, inner A, left-lower instruction p
-    {v:[[1,0],[2,0],[1.5,H]],type:`${q}K${R}`,role:'caster'},                 // N1: bottom-right instruction q, right-lower K, inner A
-    {v:[[0.5,H],[1.5,H],[1,2*H]],type:`${R}${r}K${lidHinge}`,role:'lid'},      // N2 (lid): inner A, right-upper instruction r, upper-left K hinged
-    {v:[[0,0],[0.5,-H],[1,0]],type:'--k'},                                    // L0: k under N0
-    {v:[[0,0],[0.5,H],[-0.5,H]],type:`${gname(P)}--`},                       // M0: holds N0's instruction side
-    {v:[[1,0],[1.5,-H],[2,0]],type:`--${gname(Q)}`},                         // M1: holds N1's instruction side
-    {v:[[2,0],[2.5,H],[1.5,H]],type:'--k'},                                   // L1: k beside N1
+    {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K`},                               // N0: bottom instruction p, inner A, left-lower K
+    {v:[[1,0],[2,0],[1.5,H]],type:`K${q}${R}.`},                               // N1: bottom-right K, right-lower instruction q, inner A
+    {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<${r}${R}`},                          // hatch (open): hinge K on H (pin V), top instruction r, catch A
+    {v:[[1.5,H],[2.5,H],[2,2*H]],type:'--k'},                                 // H: the hatch's hinge partner (k)
+    {v:[[2,0],[2.5,H],[1.5,H]],type:`--${Q}`},                                // holds N1's instruction side
+    {v:[[1,0],[1.5,-H],[2,0]],type:'--k'},                                    // k under N1
+    {v:[[0,0],[0.5,-H],[1,0]],type:`--${P}`},                                 // holds N0's instruction side
+    {v:[[0,0],[0.5,H],[-0.5,H]],type:'k--'},                                  // k beside N0
     {v:[[1,0],[0.5,-H],[1.5,-H]],type:'---'},                                 // connector under the pocket
-    {v:[[0,0],[-0.5,H],[-1,0]],type:'---'},{v:[[0,0],[-1,0],[-0.5,-H]],type:'---'},{v:[[0,0],[-0.5,-H],[0.5,-H]],type:'---'},   // fan at P0
-    {v:[[2,0],[1.5,-H],[2.5,-H]],type:'---'},{v:[[2,0],[2.5,-H],[3,0]],type:'---'},{v:[[2,0],[3,0],[2.5,H]],type:'---'},         // fan at P1
-    {v:[[0.5,H],[1,2*H],[0,2*H]],type:'k--'},                                 // L2: the lid's lip (k)
-    {v:[[0.5,H],[0,2*H],[-0.5,H]],type:'---'},                                // joins the lip to the frame
+    {v:[[0,0],[-0.5,H],[-1,0]],type:'---'},{v:[[0,0],[-1,0],[-0.5,-H]],type:'---'},{v:[[0,0],[-0.5,-H],[0.5,-H]],type:'---'},   // fan at (0,0)
+    {v:[[2,0],[1.5,-H],[2.5,-H]],type:'---'},{v:[[2,0],[2.5,-H],[3,0]],type:'---'},{v:[[2,0],[3,0],[2.5,H]],type:'---'},         // fan at (2,0)
   ];
 }
 
