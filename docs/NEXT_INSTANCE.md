@@ -23,11 +23,13 @@ backlog; take the top unblocked item.
 
 ## In flight / loose ends
 
-- Four round-3 structure-choice worlds (`experiments/scratch/SE3_20260930_on_175[1-4]`, shield vs rod,
-  field on only; the field-off controls were cancelled when the workflow changed) may finish in the
-  background: glance at B- vs D-share if present, record a line in RESULTS/INNOVATIONS, and start
-  nothing like it.
+- Nothing running. Round 3 (shield vs rod) was stopped on user request; only seed 1752 finished
+  (rods won there: D share 0.71). Recorded in ROADMAP "Parked evidence"; start nothing like it.
 - Funnel: tune lean and length so both blades point at the copying face (some splay outward).
+- **Next build (user focus): the base-shape alphabet** (COMPLEXITY_MAP 3e, picture
+  `experiments/out/SHAPES_alphabet_20260930.png`). One block family (unit face and laterals, back shrinks):
+  square / triangle states; a letter rests square while its face is bonded and folds to its encoded
+  shape when free. Demo: SSSTTTSSS copies fold into hairpins, TTTTTT into hexagons.
 
 ## User ideas to keep (also in ROADMAP/IDEAS)
 
