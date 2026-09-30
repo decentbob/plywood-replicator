@@ -65,6 +65,7 @@ function check(seq){
   return {t,c,cseq,gaps:facesGaps(t),copyGaps:facesGaps(c)};
 }
 
+if(require.main===module){
 // ---------------- drawing ----------------
 const W=1500,H=1260,parts=[];
 const txt=(x,y,s,o={})=>parts.push(`<text x="${x}" y="${y}" font-family="Helvetica,Arial,sans-serif" font-size="${o.size||16}" fill="${o.fill||'#222'}" text-anchor="${o.anchor||'start'}" font-weight="${o.weight||'normal'}">${s}</text>`);
@@ -146,4 +147,5 @@ fs.writeFileSync(out.replace(/\.png$/,'.svg'),`<svg xmlns="http://www.w3.org/200
 const chrome=fs.readdirSync('/opt/pw-browsers').filter(d=>d.startsWith('chromium')).map(d=>`/opt/pw-browsers/${d}/chrome-linux/chrome`).find(fs.existsSync);
 execFileSync(chrome,['--headless','--no-sandbox','--disable-gpu','--hide-scrollbars',`--screenshot=${path.resolve(out)}`,`--window-size=${W},${H+90}`,'file://'+path.resolve(out.replace(/\.png$/,'.svg'))],{stdio:'ignore'});
 console.log(out,'checks:',['RRR','RTR','RZR','RRTRRZRR'].map(s=>{const r=check(s);return s+'->'+r.cseq;}).join(' '));
+}
 module.exports={band,copyOf,check,rolesOf,LET,COMP};
