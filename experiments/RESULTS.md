@@ -8949,3 +8949,23 @@ the world, encounters are too rare for contact predation. **Lesson.** In a close
 part must return more material than it costs. Shading (108–109), holding (110) and contact cutting (sparse) do
 not, at these sizes. Candidates: denser worlds or a flow that brings material past organisms (filter feeding),
 then hands and blades again.
+
+## 111. Seeded letters (pre-welded rhombuses and trapezoids): exact, but not faster than single triangles
+
+2026-09-30. User idea: supply whole letters so that chains are built letter by letter. Mechanism (`tri_chain.js`
+`pieces`): a free rhombus (R, 2 triangles) or trapezoid (Z, 3) docks one triangle on a template face. Its welded
+triangles must lie on that triangle's fill side, in fill order; a mirrored piece is rejected. They must also not
+exceed the site's need (2 − gap); `pieceStrict:false` drops this check, leaving only geometry. The welds become chain
+bonds and single triangles fill any rest. Same material (80 triangles) as singles only, as pieces (R 10, Z 6, 42
+singles), or pieces with the need check off. Founder `1101121`, caps, 22x22, 2 seeds, 6000 steps (`tri_pieces.js`).
+
+| Supply | First copy (s1, s2) | Correct strands at end | Other strands | Piece docks / rejects | Single docks |
+|---|---|---|---|---|---|
+| singles | 1500, 1000 | 4, 3 | 0 | – | 48, 43 |
+| pieces | 1500, 4000 | 3, 2 | 0 | 8/9, 4/1 | 29, 22 |
+| pieces, loose | 1500, 4000 | 2, 2 | 0 | 3/2, 1/0 | 23, 21 |
+
+**What it says.** Copies are exact in all six worlds, even when only geometry checks the pieces. Pieces are rarely
+used (1–8 docks against 21–48 single docks) and do not speed copying. They are bulky, diffuse slowly and must
+arrive in one orientation of two. The small monomer wins, so letter-sized supply is not a bottleneck worth
+designing around. Six processes ran at once in this batch, above the four-process guideline.

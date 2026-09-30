@@ -31,6 +31,8 @@
 //   marks    (states) a hidden triangle of an R letter may carry a mark; the face before it shows it, the docked
 //           triangle reads it across the face bond, and the fill placed next to it copies it (error pMarkErr); marked
 //           R backs are growth site 'Rm': heritable parts on an unchanged shape;
+//   pieces   (seeded letters) pre-welded rhombuses (R) and trapezoids (Z) dock as a unit when their welded triangles
+//           lie on the fill side and do not exceed the site's need; single triangles fill any rest;
 //   refractory a released face (template and copy side) takes no new dock until the busy level around it (30 on any
 //           bonded face, relayed -1 per chain bond per pass) has fallen to 0, i.e. until the whole copy has let go:
 //           no second copy starts under a copy that is still peeling off.
@@ -43,8 +45,8 @@ const {seeded}=require('./seeded_growth'),{regular}=require('./seeded_ports'),{P
 const {band}=require('./triangle_alphabet_figure'),{crosses}=require('./seeded_field');
 
 const PREV=1,NEXT=2,FACE=3,TFACE=4;   // FACE on the copy (docked) end of a face bond, TFACE on the template end
-const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=5,BUSY=30;
-const GSEED=5,GUP=6,GDOWN=7,GRING=8,HOLD=9,HELD=10;   // HOLD/HELD: a hand's holding edge and the triangle it holds;   // growth bond kinds: seed edge on a chain back, child's attach edge, parent's sticky edge, ring closure   // BUSY: range of the relayed busy level (bonds)
+const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=5,PIECE=6,BUSY=30;
+const GSEED=5,GUP=6,GDOWN=7,GRING=8,HOLD=9,HELD=10,WELD=11;   // WELD: bonds inside a seeded free piece (letter);   // HOLD/HELD: a hand's holding edge and the triangle it holds;   // growth bond kinds: seed edge on a chain back, child's attach edge, parent's sticky edge, ring closure   // BUSY: range of the relayed busy level (bonds)
 const m3=x=>((x%3)+3)%3;
 
 // ---------------- growth programs (grown parts on hidden backs) ----------------
@@ -60,6 +62,10 @@ const PROGRAMS={
   hand:{s0:{stick:[[1,'t']]},t:{stick:[],hold:[1,2]}},
   blade:{s0:{stick:[[1,'k']]},k:{stick:[],cut:[1,2]}},                    // 2-triangle arm; the tip cuts strands it touches                     // 2-triangle arm; the tip holds free triangles                          // trapezoid: a triangle with two stop wings
 };
+// arms from strand ends (site E): a strip grown by a pattern of relative edges ('1'/'2' per step, then a stop); equal
+// neighbouring steps (11, 22) bend the strip by 60 degrees, alternating steps (12) keep it straight
+function armProgram(pat){const pr={};[...pat].forEach((c,k)=>{pr[k===0?'s0':'a'+k]={stick:[[+c,k+1<pat.length?'a'+(k+1):'x']]};});pr.x={stick:[]};return pr;}
+for(let L=3;L<=7;L++)for(let m=0;m<(1<<L);m++){const pat=[...Array(L)].map((_,k)=>(m>>k)&1?'2':'1').join('');PROGRAMS['arm'+pat]=armProgram(pat);}
 const CODES=[];for(const [pn,pr] of Object.entries(PROGRAMS))for(const st of Object.keys(pr))CODES.push([pn,st]);
 const code=(pn,st)=>1+CODES.findIndex(([a,b])=>a===pn&&b===st);
 const TRI_CONFIG={structural:[],shapes:{[T_A]:regular(3,1)},labels:{}};
@@ -76,7 +82,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     const e=this._edges(u);
     if(e.face>=0)return {role:DOCKED,prev:m3(e.face+1),next:m3(e.face+2),free:-1,face:e.face};
     if(this.gstate&&this.gstate[u])return {role:GROWN,att:this.gatt[u]};
-    if(e.prev<0&&e.next<0)return {role:FREE};
+    if(e.prev<0&&e.next<0){for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0&&this.bkind[u*4+i]===WELD)return {role:PIECE};return {role:FREE};}
     if(e.prev>=0&&e.next>=0)return {role:e.next===m3(e.prev+1)?SFACE:SBACK,prev:e.prev,next:e.next,free:3-e.prev-e.next};
     if(e.next>=0&&this.fill[u])return {role:SBACK,prev:m3(e.next+1),next:e.next,free:m3(e.next+2),fill:true};
     if(e.next>=0)return {role:SFACE,prev:-1,next:e.next,free:m3(e.next+1),inert:m3(e.next+2)};
@@ -119,6 +125,25 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     const free=u=>R[u].role===FREE,bnd=(u,i)=>this.bond[u*4+i]>=0;
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;
+      // seeded pieces (letters): a free piece docks one of its triangles on a template face if its welded triangles lie
+      // on that triangle's fill (prev) side, in fill order, and are no more than the site needs (2 - gap); its welds
+      // become chain bonds and its other triangles become fills, so the copy is built letter by letter
+      if((ru.role===SFACE&&rv.role===PIECE)||(rv.role===PIECE&&false)||(rv.role===SFACE&&ru.role===PIECE)){
+        const [t,x]=ru.role===SFACE?[u,v]:[v,u],rt=R[t];
+        if(rt.free>=0&&!bnd(t,rt.free)&&!this.refr[t]&&(!p.caps||(this.sigP[t]>0&&this.sigN[t]>0))){
+          const need=this.gap[t]>=0?2-this.gap[t]:0,weldAt=(y,i)=>this.bond[y*4+i]>=0&&this.bkind[y*4+i]===WELD;
+          for(let j=0;j<3;j++){if(bnd(x,j)||!this._flush(t,rt.free,x,j,tolF))continue;
+            const pe=m3(j+1),ne=m3(j+2);if(weldAt(x,ne))break;
+            const chain=[];let y=x,ye=pe,ok=true;
+            while(weldAt(y,ye)){const q=this.bond[y*4+ye],w=q>>2,we=q&3;chain.push([y,ye,w,we]);
+              const others=[0,1,2].filter(f=>f!==we&&weldAt(w,f));if(others.length>1||(others.length===1&&others[0]!==m3(we+1))){ok=false;break;}
+              y=w;ye=m3(we+1);if(!others.length)break;}
+            if(!ok||(p.pieceStrict!==false&&chain.length>need)){this.pieceRejects=(this.pieceRejects||0)+1;break;}
+            if(this.rng()>=pb)break;
+            this._bind(t,rt.free,TFACE,x,j,FACE);if(this.cap[t])this.cap[x]=1;this.sigP[x]=this.sigN[t];this.sigN[x]=this.sigP[t];
+            for(const [a,ae,w,we] of chain){this.bkind[a*4+ae]=PREV;this.bkind[w*4+we]=NEXT;this.fill[w]=1;this.sigP[w]=this.sigP[x];this.sigN[w]=this.sigN[x];R[w]={role:SBACK,fill:true};}
+            R[x]={role:DOCKED};this.pieceDocks=(this.pieceDocks||0)+1;this.dockEvents=(this.dockEvents||0)+1;break;}}
+        continue;}
       if(free(u)||free(v)){if(free(u)){[u,v]=[v,u];}const r=R[u];   // u attached, v free
         // growth: a site back (released strand) seeds its program; a grown triangle extends by its state
         const G=p.grow;
@@ -138,6 +163,11 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
             for(let j=0;j<3;j++)if(this._flush(u,e,v,j,p.holdTol||0.45)&&this.rng()<pb){this._bind(u,e,HOLD,v,j,HELD);this.holdEvents=(this.holdEvents||0)+1;done=true;break;}
             if(done)break;}
           continue;}
+        // end arms (site E): a released strand end grows its program from its spare (inert) edge
+        if(G&&G.E&&r.role===SFACE&&r.inert>=0&&!bnd(u,r.inert)&&!(r.free>=0&&bnd(u,r.free))){
+          for(let j=0;j<3;j++)if(this._flush(u,r.inert,v,j,tolF)&&this.rng()<pb){this._bind(u,r.inert,GSEED,v,j,GUP);
+            this.gstate[v]=code(G.E,'s0');this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};break;}
+          if(R[v].role===GROWN)continue;}
         // dock on a free face
         if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
         // fill on the prev edge of a docked or fill triangle that still needs fills
@@ -210,7 +240,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
       // templates recycle (undocking one bonded to a copy in progress split copies into replicating fragments)
       if(p.triUndock>0&&chain.length===0){const f=[0,1,2].find(i=>this.bond[u*4+i]>=0&&this.bkind[u*4+i]===FACE);
         if(f!==undefined&&this.rng()<p.triUndock){for(let i=0;i<3;i++)this._cut(u,i);this.undockEvents=(this.undockEvents||0)+1;continue;}}
-      if(p.pFray>0&&nb===1&&!copying&&this.busy[u]===0&&this.rng()<p.pFray){
+      if(p.pFray>0&&nb===1&&!copying&&this.busy[u]===0&&!(this.bkind[u*4]===WELD||this.bkind[u*4+1]===WELD||this.bkind[u*4+2]===WELD)&&this.rng()<p.pFray){
         for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0)this._cut(u,i);this.gstate[u]=0;this.frayEvents=(this.frayEvents||0)+1;}
     }
   }
@@ -244,10 +274,17 @@ function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
   // gaps: one founder's gap list, or a list of them (several founders, spread along a diagonal)
   const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,all=Array.isArray(gaps[0])?gaps:[gaps],rolesAll=all.map(g=>rolesFromGaps(g)),bands=rolesAll.map(r=>band(r.map(x=>x==='M'?'B':x)));
   const total=bands.reduce((a,b)=>a+b.length,0);
-  const s=new TriSim({...ref,nA:total+free,nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
+  const pc=params.pieces||{},s=new TriSim({...ref,nA:total+free+2*(pc.R||0)+3*(pc.Z||0),nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
   s._tri();let next=0;const founders=bands.map((tris,k)=>{const units=tris.map(()=>next++);
     placeBand(s,units,tris,size*(k+1)/(bands.length+1),size*(k+1)/(bands.length+1));return units;});
   const units=founders[0],placed=founders.flat();
+  // seeded pieces (params.pieces = {R: n, Z: n}): pre-welded letters placed without overlap
+  const pieces=[];for(const [L,roles] of [['R',['F','B']],['Z',['F','B','B']]])for(let q=0;q<((params.pieces||{})[L]||0);q++){
+    const tris=band(roles),us=tris.map(()=>next++);let ok=false;
+    for(let a=0;a<3000&&!ok;a++){placeBand(s,us,tris,size*s.rng(),size*s.rng());
+      ok=us.every(u=>placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;}));
+      if(!ok)for(const u of us)for(let i=0;i<3;i++)if(s.bond[u*4+i]>=0)s._cut(u,i);}
+    if(!ok)throw Error('could not place piece');for(const u of us)for(let i=0;i<3;i++)if(s.bond[u*4+i]>=0)s.bkind[u*4+i]=WELD;placed.push(...us);pieces.push(us);}
   for(let u=0;u<s.n;u++)if(!placed.includes(u)){let ok=false;
     for(let a=0;a<5000&&!ok;a++){s.px[u]=size*s.rng();s.py[u]=size*s.rng();s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
       ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
@@ -278,8 +315,8 @@ function render(s,out,title,focus=null){
   const cx=focus?0:W/2-s.px[0],cy=focus?0:W/2-s.py[0];
   const X0=u=>focus?s._dx(s.px[u]-fx)+focus.radius:((s.px[u]+cx)%W+W)%W,Y0=u=>focus?s._dy(s.py[u]-fy)+focus.radius:((s.py[u]+cy)%W+W)%W;
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s._roles(u);
-    const GC={hex:'#b58ae6',plate:'#e78ac0',spike:'#8ab4e6',fan:'#7fd18f',hand:'#f08a5d',blade:'#e84a5f'};
-    const col=r.role===GROWN?GC[CODES[s.gstate[u]-1][0]]:r.role===FREE?'#56646e':r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':'#c98f2e';
+    const GC=new Proxy({hex:'#b58ae6',plate:'#e78ac0',spike:'#8ab4e6',fan:'#7fd18f',hand:'#f08a5d',blade:'#e84a5f'},{get:(o,k)=>o[k]||'#b58ae6'});
+    const col=r.role===GROWN?GC[CODES[s.gstate[u]-1][0]]:r.role===PIECE?'#8fa3b3':r.role===FREE?'#56646e':r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':'#c98f2e';
     const pts=[];for(let q=0;q<3;q++){const x=X0(u)+s.ox[u*NV+q],y=Y0(u)+s.oy[u*NV+q];pts.push(`${(x*k).toFixed(1)},${(y*k).toFixed(1)}`);}
     const isHeld=[0,1,2].some(k=>s.bond[u*4+k]>=0&&s.bkind[u*4+k]===HELD);
     svg.push(`<polygon points="${pts.join(' ')}" fill="${isHeld?'#c7d3dc':r.fill?'#3f9e8f':col}" stroke="#1b2a33" stroke-width="0.8"/>`);
