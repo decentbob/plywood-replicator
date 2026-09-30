@@ -97,8 +97,13 @@ Otherwise every organism is capped by the soup we prepare. Two local routes:
   RESULTS 92 trap. **Reversal is required**, or blanks run out: an eraser is a writer with
   k=0, and/or unattached programmed blocks slowly decay back to blank. Keep programmability
   this simple: a few kinds, no per-side editing.
-- **Sub-block assembly.** Blocks made of smaller conserved parts, joined by directed local
-  bonding. This is deeper but heavier on the physics; keep it second.
+- **Universal tiles and welding (user, 2026-09-30): shape supply.** Programming changes labels, not
+  form. Build parts from universal tiles (triangles or squares plus half-squares) welded edge to edge
+  (rigid in 2D; a single-corner weld is a hinge). Welds are durable, but broken by hot zones or unwelding
+  ports. Welding happens only where a chain-seeded **jig** holds tiles, so part form is copied from the
+  organism, not left to chance. Three levels: tiles, parts, structures. The cost is more bodies per part.
+  Morphing blocks (a state selects one of a few rest shapes of equal area, like the fold rule) are
+  a cheap partial alternative for small shape changes.
 
 ## 3d. Custom parts, not repeating blocks (user, 2026-09-29)
 

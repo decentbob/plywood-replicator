@@ -31,6 +31,10 @@ backlog; take the top unblocked item.
 
 ## User ideas to keep (also in ROADMAP/IDEAS)
 
+**Newest (2026-09-30): shape supply via universal tiles and jig-directed welding** (ROADMAP 10,
+COMPLEXITY_MAP 3c). A strong candidate for the next big capability after hinges.
+
+
 Funnel (done, tune); patchy hot/safe environment; fixed obstacles for motility; organisms
 controlling their own supply (programmable blanks, erasers); custom parts instead of repeats;
 more ports per block; enclosure; sub-block assembly. Mechanics and local logic matter more than
