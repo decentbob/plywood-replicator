@@ -10,12 +10,19 @@
 //           glue, so a copy's faces carry the complement of the template's faces and a copy of the copy restores them.
 //           Fills and closures stay glue-agnostic (option latGlue: fills need the complement of the lateral glue).
 //           Chain backs (released strands) and strand ends' spare edges bind by glue like any attached side.
+//   triggers ('*' on a side) a flap swings while one of its trigger sides is bonded, or while a triangle bonded to it
+//           (not by a hinge) has a bonded trigger side (relayed one bond, previous pass).
+//   latches ('~' on a side) a latch side lets go while its own triangle, or one bonded to it (not by a hinge), has a
+//           bonded trigger: a door latched shut into its wall unlatches when its key binds.
 //   hinges  (side property, written after the glue: '<' pins the side's first corner, '>' its second) a bond on a
 //           hinged side pins one corner only; hinged pairs keep their contact and jostle as one body. The hinge
 //           is driven, not floppy: it rests flush (the angle at which the bond formed) and swings hingeAngle (60
-//           degrees) away from its partner while the flap's trigger side (the side before the hinge side,
-//           counter-clockwise) is bonded. Binding the trigger closes/opens the hatch, releasing it swings it back, and
+//           degrees) away from its partner while the flap is triggered (see triggers). Binding the trigger closes/opens the hatch, releasing it swings it back, and
 //           whatever is bonded to the flap is carried along (blocks moved by a machine part).
+//           Release marks on the hinge side: '^' hand-off (the flap lets go of its cargo once the cargo is also
+//           bonded to something else; it reads the cargo's exposed bond count), '!' drop (it lets go when its swing
+//           is complete). A loaded flap drives at half the rate of an empty one, so a returning flap wins a
+//           push against a loaded one. Without a mark the flap holds its cargo until something else cuts the bond (a cast).
 //   close-only (side property '.') the side binds only triangles that are already attached, never a free one: it
 //           closes onto what a structure brings to it (a switch of the side's activity by attachment).
 //   casting (permanent type change, in-simulation) a triangle T whose three sides are all glue-bonded to triangles
@@ -40,20 +47,23 @@ const m3=x=>((x%3)+3)%3;
 const gcode=c=>c==='-'?0:c>='a'&&c<='z'?2*(c.charCodeAt(0)-97)+1:2*(c.charCodeAt(0)-65)+2;
 const gname=g=>g===0?'-':g%2?String.fromCharCode(97+(g-1)/2):String.fromCharCode(65+(g-2)/2);
 const comp=g=>g===0?0:g%2?g+1:g-1;
-function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
-  return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>m[2].includes('<')?1:m[2].includes('>')?2:0),close:t.map(m=>m[2].includes('.')?1:0)};}
-const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')).join('');
+function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^*~]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+  return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>m[2].includes('<')?1:m[2].includes('>')?2:0),close:t.map(m=>m[2].includes('.')?1:0),
+    rel:t.map(m=>m[2].includes('!')?1:m[2].includes('^')?2:0),trig:t.map(m=>m[2].includes('*')?1:0),latch:t.map(m=>m[2].includes('~')?1:0)};}
+const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')+(s.hRelease[u*3+i]===1?'!':s.hRelease[u*3+i]===2?'^':'')+(s.trg[u*3+i]?'*':'')+(s.ltc[u*3+i]?'~':'')).join('');
 // canonical name up to rotation (the same type in any orientation)
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^*~]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 class TypedSim extends TriSim{
-  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hSign=new Int8Array(3*n);}}
-  setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];}this.bondsDirty=true;}
+  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
+  setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];this.hRelease[u*3+i]=t.rel[i];this.trg[u*3+i]=t.trig[i];this.ltc[u*3+i]=t.latch[i];}this.bondsDirty=true;}
   _roles(u){const r=super._roles(u);
     if(r.role===FREE)for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0&&this.bkind[u*4+i]===GLUE)return {role:GROWN};
     return r;}
   _derive3(){super._derive3();
     // activator exposure: the side of mine whose glue is K and is bonded to a partner side carrying k (or -1)
+    for(let u=0;u<this.n;u++)this.tb[u]=(this.trg[u*3]&&this.bond[u*4]>=0)||(this.trg[u*3+1]&&this.bond[u*4+1]>=0)||(this.trg[u*3+2]&&this.bond[u*4+2]>=0)?1:0;
+    for(let u=0;u<this.n;u++)this.nbc[u]=(this.bond[u*4]>=0)+(this.bond[u*4+1]>=0)+(this.bond[u*4+2]>=0);
     const K=gcode('K');for(let u=0;u<this.n;u++){let a=-1;for(let i=0;i<3;i++){const q=this.bond[u*4+i];
       if(q>=0&&this.glue[u*3+i]===K&&this.glue[(q>>2)*3+(q&3)]===comp(K)){a=i;break;}}this.actE[u]=a;}}
   // sides of an attached triangle that bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
@@ -103,7 +113,7 @@ class TypedSim extends TriSim{
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*4+i];if(q<0||this.bkind[u*4+i]!==GLUE){ok=false;break;}
         const w=q>>2,j=q&3;if(this.actE[w]!==m3(j+1))ok=false;else src.push(G[w*3+m3(j+2)]);}
       if(!ok)continue;
-      for(let i=0;i<3;i++){G[u*3+i]=this.p.castComp?comp(src[i]):src[i];this.hing[u*3+i]=0;this.cOnly[u*3+i]=0;this._cut(u,i);}
+      for(let i=0;i<3;i++){G[u*3+i]=this.p.castComp?comp(src[i]):src[i];this.hing[u*3+i]=0;this.cOnly[u*3+i]=0;this.hRelease[u*3+i]=0;this.trg[u*3+i]=0;this.ltc[u*3+i]=0;this._cut(u,i);}
       this.castEvents=(this.castEvents||0)+1;(this.castLog||(this.castLog=[])).push([this.t,u,typeName(this,u)]);}
   }
   // hinges: a bond on a hinged side pins one corner; hinged pairs still collide
@@ -119,8 +129,7 @@ class TypedSim extends TriSim{
       if((i<3&&this.hing[u*3+i])||(j<3&&this.hing[v*3+j]))c.push(u,v);}this._sweep=Math.max(1,c.length/2);}
     return c;}
   // hinge drive: a hinged side remembers its flush angle (relative to its partner, when the bond formed) and which
-  // way is away from the partner. While the flap's trigger side (the side before the hinge side, counter-clockwise)
-  // is bonded the flap is driven to hingeAngle away from flush, otherwise back to flush, at most hingeRate per step,
+  // way is away from the partner. While the flap is triggered the flap is driven to hingeAngle away from flush, otherwise back to flush, at most hingeRate per step,
   // turning about its pinned corner and carrying everything bonded to it. A flap whose body reaches its partner
   // through other bonds is locked and not driven.
   _ang(u){return Math.atan2(this.oy[u*NV],this.ox[u*NV]);}
@@ -133,9 +142,22 @@ class TypedSim extends TriSim{
   _servo(){
     if(!this.hing||!this.hing.some(x=>x))return;const n=this.n,th=this.p.hingeAngle??Math.PI/3,rate=this.p.hingeRate??0.05;
     const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
+    const hingeBond=(x,e)=>{const r=this.bond[x*4+e];return r>=0&&(this.hing[x*3+e]||this.hing[(r>>2)*3+(r&3)]);};
+    // latches: a latch side lets go while its triangle, or one bonded to it (not by a hinge), has a bonded trigger
+    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*4+i]<0)continue;let on=this.tb[u];
+      for(let e=0;e<3&&!on;e++)if(e!==i&&this.bond[u*4+e]>=0&&!hingeBond(u,e)&&this.tb[this.bond[u*4+e]>>2])on=1;
+      if(on){this._cut(u,i);this.unlatches=(this.unlatches||0)+1;}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*4+i];if(!this.hing[u*3+i]||q<0)continue;const v=q>>2;
-      const swung=this.bond[u*4+m3(i+2)]>=0,target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0);
-      const err=wrap(target-(this._ang(u)-this._ang(v)));if(Math.abs(err)<0.01)continue;const d=Math.max(-rate,Math.min(rate,err));
+      const trs=[0,1,2].filter(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
+      // releases on my own triggers: hand-off (^) once the cargo is bonded elsewhere too; drop (!) once the swing is complete
+      for(const tr of trs){const cq=this.bond[u*4+tr];
+        if(this.hRelease[u*3+i]===2&&this.nbc[cq>>2]>=2){this._cut(u,tr);this.handoffs=(this.handoffs||0)+1;}
+        else if(this.hRelease[u*3+i]===1&&Math.abs(wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this._ang(u)-this._ang(v))))<(this.p.dropTol??0.15)){this._cut(u,tr);this.drops=(this.drops||0)+1;}}
+      // triggered: one of my trigger sides is bonded, or a triangle bonded to me (not by a hinge) reports one (relay)
+      let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
+      for(let e=0;e<3&&!swung;e++)if(this.bond[u*4+e]>=0&&!hingeBond(u,e)&&this.tb[this.bond[u*4+e]>>2])swung=true;
+      const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0);
+      const err=wrap(target-(this._ang(u)-this._ang(v)));if(Math.abs(err)<0.01)continue;const rr=swung?rate/2:rate,d=Math.max(-rr,Math.min(rr,err));   // a loaded flap drives at half rate: an empty flap returning wins a push
       // the flap's body: everything bonded to it except through its hinge
       const body=[u],seen=new Set(body);let locked=false;
       for(let k=0;k<body.length&&!locked;k++){const x=body[k];for(let e=0;e<3;e++){const r=this.bond[x*4+e];if(r<0||(x===u&&e===i))continue;const y=r>>2;
@@ -168,7 +190,7 @@ function buildStructure(s,units,tris,x,y,rot=0){
   for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){
     if(!(same(W[a][i],W[b][(j+1)%3])&&same(W[a][(i+1)%3],W[b][j])))continue;
     const u=units[a],v=units[b];let gu=s.glue[u*3+i],gv=s.glue[v*3+j];
-    if(gu===0&&gv===0){gu=gcode('f');gv=gcode('F');s.glue[u*3+i]=gu;s.glue[v*3+j]=gv;}
+    if(gu===0&&gv===0){if(tris[a].loose||tris[b].loose)continue;gu=gcode('f');gv=gcode('F');s.glue[u*3+i]=gu;s.glue[v*3+j]=gv;}
     if(gv===comp(gu)&&gu)s._bind(u,i,GLUE,v,j,GLUE);}
   return W;
 }
@@ -222,8 +244,11 @@ function render(s,out,title,focus=null,labels=false){
   const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+30}"><rect width="${S}" height="${S+30}" fill="#f5f7f8"/><rect width="${S}" height="${S}" fill="#15222d"/>`];
   // world y up is drawn up (flip), so counter-clockwise reads counter-clockwise on the page
   const X0=u=>focus?s._dx(s.px[u]-fx)+focus.radius:((s.px[u])%W+W)%W,Y0=u=>focus?focus.radius-s._dy(s.py[u]-fy):W-((s.py[u])%W+W)%W;
+  // focus.align = {u, a0}: turn the picture so unit u keeps its orientation a0 (a machine drawn in its own frame)
+  const th=focus&&focus.align?focus.align.a0-s._ang(focus.align.u):0,cs=Math.cos(th),sn=Math.sin(th);
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s._roles(u);
-    const P=q=>[(X0(u)+s.ox[u*NV+q])*k,(Y0(u)-s.oy[u*NV+q])*k];
+    const P=q=>{if(!th)return [(X0(u)+s.ox[u*NV+q])*k,(Y0(u)-s.oy[u*NV+q])*k];
+      const x=s._dx(s.px[u]-fx)+s.ox[u*NV+q],y=s._dy(s.py[u]-fy)+s.oy[u*NV+q];return [(focus.radius+cs*x-sn*y)*k,(focus.radius-(sn*x+cs*y))*k];};
     const fill=r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':r.role===SBACK?(r.fill?'#3f9e8f':'#c98f2e'):r.role===GROWN?'#8a9bb0':'#3a4852';
     svg.push(`<polygon points="${[0,1,2].map(q=>P(q).map(z=>z.toFixed(1)).join(',')).join(' ')}" fill="${fill}" stroke="#1b2a33" stroke-width="0.8"/>`);
     // glue marks: a coloured bar along each glued side (letters when zoomed)
@@ -254,7 +279,7 @@ function pocket(instr='bcd',recog='A'){
   return [
     {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K`},                               // N0: bottom instruction p, inner A, left-lower K
     {v:[[1,0],[2,0],[1.5,H]],type:`K${q}${R}.`},                               // N1: bottom-right K, right-lower instruction q, inner A
-    {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<${r}${R}`},                          // hatch (open): hinge K on H (pin V), top instruction r, catch A
+    {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<${r}${R}*`},                          // hatch (open): hinge K on H (pin V), top instruction r, catch A
     {v:[[1.5,H],[2.5,H],[2,2*H]],type:'--k'},                                 // H: the hatch's hinge partner (k)
     {v:[[2,0],[2.5,H],[1.5,H]],type:`--${Q}`},                                // holds N1's instruction side
     {v:[[1,0],[1.5,-H],[2,0]],type:'--k'},                                    // k under N1
