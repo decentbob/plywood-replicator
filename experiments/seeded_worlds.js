@@ -73,3 +73,12 @@ module.exports.SHIELD=SHIELD;module.exports.fan=fan;
 const CHOICE={structural:[T_J,T_C],shapes:{[T_J]:fan(1,6,1.5),[T_C]:rod(3)},release:true,
   labels:{[T_B]:{[K]:{f:2,s:1,seed:true}},[T_J]:{[F]:{f:2,s:-1}},[T_D]:{[K]:{f:3,s:1,seed:true}},[T_C]:{[F]:{f:3,s:-1}}}};
 module.exports.CHOICE=CHOICE;
+// Multi-port frames (backlog 1). J = hexagonal hub (6 edges), C = 2x1 rod. B's back (edge 2 = K) seeds a hub by the
+// hub's edge 0. TRIPOD: hub edges 2, 3, 4 grow one rod each (a bounded branched frame). LATTICE: hub edges 1, 2, 4, 5
+// grow rods, and each rod's far end (edge 2) catches a NEW hub by that hub's edge 3, which grows more rods: an open
+// network of hubs and rods, limited only by material. Everything is edge labels; no new rule.
+const {regular}=require('./seeded_ports');
+const hubRod=(hubEdges,rodFar)=>({structural:[T_J,T_C],shapes:{[T_J]:regular(6,1),[T_C]:rod(2)},
+  edgeLabels:{[T_B]:{2:{f:2,s:1,seed:true}},[T_J]:{0:{f:2,s:-1},...(rodFar?{3:{f:4,s:-1}}:{}),...Object.fromEntries(hubEdges.map(e=>[e,{f:3,s:1}]))},
+    [T_C]:{0:{f:3,s:-1},...(rodFar?{2:{f:4,s:1}}:{})}},labels:{}});
+module.exports.TRIPOD=hubRod([2,3,4],false);module.exports.LATTICE=hubRod([1,2,4,5],true);

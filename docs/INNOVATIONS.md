@@ -4,7 +4,18 @@ One short entry per new capability: what is new, how to see it, a picture, statu
 it enables next. Newest first. Status: **works** (does what was intended in demos or
 screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LEDGER.
 
-## 2026-09-29/30
+## 2026-09-30
+
+- **Multi-port blocks** (`seeded_ports.js`) — works. Growth ports on any polygon edge (edge-indexed
+  bond table, pins in the physics, contact exclusion), so a hexagonal hub has six usable sides.
+  *Tripod*: B seeds a hub that grows 3 rods (bounded frame). *Network*: rods' far ends catch new
+  hubs that grow more rods, so an open branching frame of hubs and rods grows from the founder's
+  seeds (58 port bonds in 15k steps). Picture: `experiments/out/PORTS_lattice_20260930.png`.
+  Reproduce: `ports(PinsLiveSim, LATTICE)` with `createWorld({founder:['PBBQ'],loose:{J:20,C:40,...}})`.
+  Next: closed cells from hub rings, frames as scaffolds for copying, frames that break apart
+  (a new reproduction mode for frames).
+
+## 2026-09-29/30 (earlier)
 
 - **Evolved shields under a damage field** — works (screen). B letters arise by copying
   error, seed a fan plate that shades the chain, and spread to majority under the field in

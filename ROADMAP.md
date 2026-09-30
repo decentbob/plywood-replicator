@@ -23,6 +23,7 @@ saturates in closed worlds; supply is fixed by the starting soup; motion is pure
 
 | # | New capability | Why it is new / what it enables | First demo |
 |---|---|---|---|
+| 1a | **Funnel on the caps** (user, 2026-09-30) | One to three longer custom blocks attached to the caps, leaning toward the copying side, so passing letters are funnelled in instead of drifting by. Simpler than a gripping arm; a feeding structure that benefits its own chain; later movement | A cap-seeded pair of angled rods forming a V in front of the copying face; compare docking rate in a demo |
 | 1 | **Multi-port blocks (5–6 working sides)** | Branching frameworks, lattices and hubs, beyond chains and rims; the user's "sides not limited to four" | Extend the growth table past 4 ports; a hexagonal hub seeded by a chain letter grows a 3-way branched frame |
 | 2 | **Hinges and pivots** | Parts joined at a single corner can swing: limbs, flaps, clamps, the first moving parts | A pivot bond type (one pinned corner); an arm on a chain that flaps under kicks |
 | 3 | **Fixed obstacles and motility** | Immovable blocks give something to push against: grip, crawl, ratchet (user idea) | Pinned wall blocks; an organism with a hinged arm that sticks to the wall on one stroke only |
