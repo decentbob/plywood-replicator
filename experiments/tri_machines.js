@@ -113,7 +113,7 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
     montage(out,'Conveyor: hatch 1 catches aaa and swings, hands off to hatch 2, which swings on and drops it');}
   if(cmd==='gate'){
     const keys=extra===undefined?4:+extra,rows=+(process.env.ROWS||1),R=4+rows-1,{tris}=ring(R,rows),size=18+2*(rows-1),c=size/2;
-    const {s,structures}=T.createTypedWorld({seed:+seed,size,structures:[{tris,x:c,y:c}],supply:{'---':24,'ggg':keys},params:{hingeAngle:2*Math.PI/3,...(process.env.SIGMA?{sigma:+process.env.SIGMA}:{})}});
+    const {s,structures}=T.createTypedWorld({seed:+seed,size,structures:[{tris,x:c,y:c}],supply:{'---':24,'ggg':keys},params:{hingeAngle:2*Math.PI/3,...(process.env.SIGMA?{sigma:+process.env.SIGMA}:{}),...(process.env.RATE?{hingeRate:+process.env.RATE}:{})}});
     const U=structures[0],door=U[1],ringSet=new Set(U),free=[...Array(s.n).keys()].filter(u=>!ringSet.has(u));
     const tracers=free.filter(u=>T.typeName(s,u)==='---');
     // ring centre (read-only) and a tracer's place: inside (< inner apothem), outside (> outer circumradius) or in the wall
@@ -136,7 +136,7 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
     montage(out,`Gated ring membrane (${rows} rows), ${keys} keys (ggg): the door unlatches and swings 120 degrees out when a key binds its outer face`);}
   if(cmd==='airlock'){
     const keys=extra===undefined?12:+extra,R=4,{tris}=airlock(R),size=20,c=size/2;
-    const {s,structures}=T.createTypedWorld({seed:+seed,size,structures:[{tris,x:c,y:c}],supply:{'---':24,'ggg':keys},params:{hingeAngle:2*Math.PI/3,...(process.env.SIGMA?{sigma:+process.env.SIGMA}:{})}});
+    const {s,structures}=T.createTypedWorld({seed:+seed,size,structures:[{tris,x:c,y:c}],supply:{'---':24,'ggg':keys},params:{hingeAngle:2*Math.PI/3,...(process.env.SIGMA?{sigma:+process.env.SIGMA}:{}),...(process.env.RATE?{hingeRate:+process.env.RATE}:{})}});
     const U=structures[0],[U1,D1,U2,D2]=U,ringSet=new Set(U),free=[...Array(s.n).keys()].filter(u=>!ringSet.has(u));
     const tracers=free.filter(u=>T.typeName(s,u)==='---'),keyUnits=free.filter(u=>T.typeName(s,u)==='ggg');
     // ring centre: the structure was built around (c, c); follow it through a reference cell's position and turn
