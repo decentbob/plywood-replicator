@@ -33,6 +33,8 @@
 //           R backs are growth site 'Rm': heritable parts on an unchanged shape;
 //   pieces   (seeded letters) pre-welded rhombuses (R) and trapezoids (Z) dock as a unit when their welded triangles
 //           lie on the fill side and do not exceed the site's need; single triangles fill any rest;
+//   end marks (states) a strand end may carry a mark, copied to the triangle docking on it; with grow.Emark only
+//           marked ends grow end arms (a heritable shell switch on an unchanged shape);
 //   refractory a released face (template and copy side) takes no new dock until the busy level around it (30 on any
 //           bonded face, relayed -1 per chain bond per pass) has fallen to 0, i.e. until the whole copy has let go:
 //           no second copy starts under a copy that is still peeling off.
@@ -165,13 +167,13 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
             if(done)break;}
           continue;}
         // end arms (site E): a released strand end grows its program from its spare (inert) edge
-        if(G&&G.E&&r.role===SFACE&&r.inert>=0&&!bnd(u,r.inert)&&!(r.free>=0&&bnd(u,r.free))){
+        if(G&&G.E&&r.role===SFACE&&r.inert>=0&&!bnd(u,r.inert)&&!(r.free>=0&&bnd(u,r.free))&&(!G.Emark||this.mark[u])){
           for(let j=0;j<3;j++)if(this._flush(u,r.inert,v,j,tolF)&&this.rng()<pb){this._bind(u,r.inert,GSEED,v,j,GUP);
             const pg=r.prev<0?G.E:'arm'+[...G.E.slice(3)].map(c=>c==='1'?'2':'1').join('');   // the last triangle grows the mirror pattern
             this.gstate[v]=code(pg,'s0');this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};break;}
           if(R[v].role===GROWN)continue;}
         // dock on a free face
-        if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
+        if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.mark[v]=this.mark[u]^(p.pMarkErr>0&&this.rng()<p.pMarkErr?1:0);this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
         // fill on the prev edge of a docked or fill triangle that still needs fills
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(this._flush(u,r.prev,v,j,tolF)&&this.rng()<pb){
           this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.mark[v]=(r.role===DOCKED&&this.need[u]===1?this.dm[u]:0)^(p.pMarkErr>0&&this.rng()<p.pMarkErr?1:0);this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
@@ -272,11 +274,12 @@ function placeBand(s,units,tris,cx,cy){
     const i=edgeOf(tris[k],shared[0],shared[1]),j=edgeOf(tris[k+1],shared[0],shared[1]);
     s._bind(units[k],i,NEXT,units[k+1],j,PREV);}
 }
+// Triangle worlds use 32 pin-solver passes (core default 16): thin welded strips (arms) bend far less (tip error 0.7 -> 0.2).
 function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
   // gaps: one founder's gap list, or a list of them (several founders, spread along a diagonal)
   const ref=live.createWorld({seed:1,start:'paired',motion:'body'}).s.p,all=Array.isArray(gaps[0])?gaps:[gaps],rolesAll=all.map(g=>rolesFromGaps(g)),bands=rolesAll.map(r=>band(r.map(x=>x==='M'?'B':x)));
   const total=bands.reduce((a,b)=>a+b.length,0);
-  const pc=params.pieces||{},s=new TriSim({...ref,nA:total+free+2*(pc.R||0)+3*(pc.Z||0),nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,...params,seed,W:size,H:size,seedCount:0});
+  const pc=params.pieces||{},s=new TriSim({...ref,nA:total+free+2*(pc.R||0)+3*(pc.Z||0),nB:0,nC:0,nD:0,nJ:0,nP:0,nQ:0,nE:0,energyGate:false,iters:32,...params,seed,W:size,H:size,seedCount:0});
   s._tri();let next=0;const founders=bands.map((tris,k)=>{const units=tris.map(()=>next++);
     placeBand(s,units,tris,size*(k+1)/(bands.length+1),size*(k+1)/(bands.length+1));return units;});
   const units=founders[0],placed=founders.flat();
@@ -291,7 +294,7 @@ function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
     for(let a=0;a<5000&&!ok;a++){s.px[u]=size*s.rng();s.py[u]=size*s.rng();s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
       ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
     if(!ok)throw Error('could not place');placed.push(u);}
-  founders.forEach((f,k)=>{s.cap[f[0]]=1;s.cap[f[f.length-1]]=1;rolesAll[k].forEach((x,i)=>{if(x==='M')s.mark[f[i]]=1;});});   // founder ends carry caps (used with option caps)
+  founders.forEach((f,k)=>{s.cap[f[0]]=1;s.cap[f[f.length-1]]=1;if((params.markEnds||[]).includes(k)){s.mark[f[0]]=1;s.mark[f[f.length-1]]=1;}rolesAll[k].forEach((x,i)=>{if(x==='M')s.mark[f[i]]=1;});});   // founder ends carry caps (used with option caps)
   s.bondsDirty=true;for(let k=0;k<40;k++)s._derive3();   // settle the relayed signals (busy, cap signals) of the founders
   return {s,founder:units,founders};
 }
@@ -302,7 +305,7 @@ function triCensus(s){
     const units=[];let x=u,guard=0;while(x>=0&&!seen.has(x)&&guard++<500){seen.add(x);units.push(x);const r=s._edges(x);x=r.next>=0?s._partner(x,r.next):-1;}
     const roles=units.map(v=>s._roles(v).role),gaps=[];let c=null;
     let mk=0;for(let q=0;q<roles.length;q++){const r=roles[q];if(r===SFACE||r===DOCKED){if(c!==null)gaps.push(c===1&&mk?'m':c);c=0;mk=0;}else if(c!==null){c++;mk=s.mark[units[q]];}}
-    out.push({units,gaps:gaps.join(''),n:units.length,paired:units.some(v=>s._edges(v).face>=0)});}
+    out.push({units,gaps:(s.mark[units[0]]?'e':'')+gaps.join('')+(s.mark[units[units.length-1]]?'e':''),n:units.length,paired:units.some(v=>s._edges(v).face>=0)});}
   return out;
 }
 // ---------------- pictures ----------------

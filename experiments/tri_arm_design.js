@@ -36,10 +36,17 @@ const Emap=new Map(E.map(e=>[e.p,e]));
 for(const a of S){const b=Emap.get(mir(a.p));if(!b||hit(a.arm,b.arm))continue;   // the other end grows the mirror pattern
   const ta=cen(a.arm[a.arm.length-1]),tb=cen(b.arm[b.arm.length-1]),gap=Math.hypot(...sub(ta,tb));
   cands.push({a:a.p,b:b.p,gap,depth:Math.min(Math.abs(side(ta)),Math.abs(side(tb))),arms:[a.arm,b.arm],n:a.arm.length+b.arm.length,span:Math.abs(along(ta)-along(tb))});}
+// shade: mean exposure of the chain's triangles with the arms as walls (the field's ray rule: 16 directions, range 3)
+const {crosses}=require('./seeded_field');
+const expo=walls=>{let tot=0;for(const t of tris){const c=cen(t.v);let open=0;
+    for(let k=0;k<16;k++){const a=2*Math.PI*(k+0.5)/16,bx=c[0]+3*Math.cos(a),by=c[1]+3*Math.sin(a);if(!walls.some(w=>crosses(c[0],c[1],bx,by,w)))open++;}tot+=open/16;}
+  return tot/tris.length;};
+if(MODE==='shell')for(const c of cands)c.expo=expo(c.arms.flat());
 // funnel: mouth wider than the chain (the copy can leave); shell: tips close behind the chain
-const pick=MODE==='shell'?cands.filter(c=>c.gap<2.6).sort((x,y)=>x.n-y.n||y.depth-x.depth):cands.filter(c=>c.span>1.15).sort((x,y)=>x.n-y.n||y.depth-x.depth);
+const pick=MODE==='shell'?[...cands].sort((x,y)=>(x.expo+0.01*x.n)-(y.expo+0.01*y.n)):cands.filter(c=>c.span>1.15).sort((x,y)=>x.n-y.n||y.depth-x.depth);
 console.log(MODE,'start arms ok',S.length,'mirror pairs',cands.length,'picked',pick.length);
-for(const c of pick.slice(0,4))console.log(`${MODE}: start ${c.a} end ${c.b}, tips ${c.gap.toFixed(2)} apart, depth ${c.depth.toFixed(2)}, ${c.n} triangles`);
+for(const c of pick.slice(0,8))console.log(`${MODE}: start ${c.a} end ${c.b}, tips ${c.gap.toFixed(2)} apart, depth ${c.depth.toFixed(2)}, ${c.n} triangles${c.expo!==undefined?', chain exposure '+c.expo.toFixed(2):''}`);
+if(MODE==='shell')console.log('no arms: chain exposure',expo([]).toFixed(2));
 const half=MODE==='shell'?pick.slice(0,4):[],funnel=MODE==='funnel'?pick.slice(0,4):[];
 // draw
 const W=1500,H=560,parts=[`<rect width="${W}" height="${H}" fill="#fbfaf7"/>`];

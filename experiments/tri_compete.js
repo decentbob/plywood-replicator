@@ -3,8 +3,8 @@
 // field (grown parts shade) and fraying (recycling). Reports complete free strands per gap sequence over time.
 //   node experiments/tri_compete.js SEED STEPS OUTSTEM PARAMS_JSON GAPS1 GAPS2 ...
 const {createTriWorld,triCensus,render}=require('./tri_chain');
-const [seed,steps,stem,pj,...gs]=process.argv.slice(2),params=JSON.parse(pj),gaps=gs.map(g=>[...g].map(c=>c==='m'?'m':+c));
-const comp=g=>[...g].reverse().map(c=>c==='m'?'m':2-(+c)).join(''),names=gs.map(g=>comp(g)===g?[g]:[g,comp(g)]);
+const [seed,steps,stem,pj,...gs]=process.argv.slice(2),params=JSON.parse(pj),gaps=gs.map(g=>[...g].filter(c=>c!=='e').map(c=>c==='m'?'m':+c));
+const comp=g=>[...g].reverse().map(c=>c==='m'||c==='e'?c:2-(+c)).join(''),names=gs.map(g=>comp(g)===g?[g]:[g,comp(g)]);
 const {s}=createTriWorld({seed:+seed,gaps,free:+(params.free||180),size:+(params.size||26),params});
 const t0=Date.now(),rows=[];
 for(let t=1;t<=+steps;t++){s.step();
