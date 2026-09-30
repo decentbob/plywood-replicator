@@ -8991,3 +8991,23 @@ competition). That is the lead the earlier half-cell suggested. Unlike single pl
 shell's arms shade the chain ends and the back together. **Next.** Make the shell heritable apart from shape
 (a switch at the ends) and let shelled and bare lineages compete under the field. Picture:
 `experiments/out/TRI_shell_field_20260930.png`.
+
+## 113. Heritable shells in competition: a cost without the field, no rescue under it
+
+2026-09-30. Follow-up of 112. The shell (end arms `222112`, chosen by the planner for shading: chain exposure 1.00 → .53;
+the tips hold within .12 with 32 solver passes) grows only on ends that carry a mark. The mark is copied to the
+triangle that docks on a marked end, so shelled (`e11111e`) and bare (`11111`) lineages share one shape. Round 1: one
+founder each, field 3e-5 from t=0 (2 seeds). Both lineages went extinct under the field by t=4800; without the
+field, 3 vs 4 and 5 vs 0 (the bare one lost by drift). Round 2 (one retune): two founders each, field from t=3000
+(shells grown first), 15,000 steps, 140 free, 26x26.
+
+| Seed | Field off: shelled / bare | Field on: shelled / bare |
+|---|---|---|
+| 1 | 2 / 7 | 0 / 0 (shelled gone by 9000, bare by 15000) |
+| 2 | 3 / 5 | 1 / 3 |
+
+**What it says.** Not supported. The shell's material cost (14 triangles) shows without the field, and under the
+field it did not keep the shelled lineage ahead. The 3–6-fold break reduction of 112 (separate worlds) does not
+translate into a competitive advantage at this field strength and supply. All four protection attempts now
+point the same way (single plates, coats, shells): in these closed, material-limited worlds a part's cost
+outweighs its shading.

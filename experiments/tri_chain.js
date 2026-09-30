@@ -219,7 +219,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   }
   _cut(u,i){const q=this.bond[u*4+i];if(q<0)return;this.bkind[u*4+i]=0;this.bkind[q]=0;this._unlink(u,i);}
   // Environment (explicit external drives, labelled as such; off by default):
-  //   pField  a damage field: a strand triangle loses one chain bond at pField * exposure per step; exposure = fraction
+  //   pField  a damage field (from step fieldStart on): a strand triangle loses one chain bond at pField * exposure per step; exposure = fraction
   //           of fieldDirs directions (length fieldRange) not crossing a grown triangle (grown parts cast shadows);
   //   triUndock a lone docked triangle (no chain bond) undocks (stalled copies recycle);
 //   pFray   fraying: a triangle held by exactly one bond (a chain end or a part tip) that is not being copied lets go
@@ -239,7 +239,7 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     for(let u=0;u<n;u++){
       let nb=0,chain=[],copying=false;
       for(let i=0;i<3;i++){if(this.bond[u*4+i]<0)continue;nb++;const k=this.bkind[u*4+i];if(k===PREV||k===NEXT)chain.push(i);if(k===FACE||k===TFACE)copying=true;}
-      if(p.pField>0&&chain.length&&!copying&&this.rng()<p.pField&&this.rng()<this.exposure(u)){this._cut(u,chain[(this.rng()*chain.length)|0]);this.fieldBreaks=(this.fieldBreaks||0)+1;continue;}
+      if(p.pField>0&&this.t>=(p.fieldStart||0)&&chain.length&&!copying&&this.rng()<p.pField&&this.rng()<this.exposure(u)){this._cut(u,chain[(this.rng()*chain.length)|0]);this.fieldBreaks=(this.fieldBreaks||0)+1;continue;}
       // undocking: a lone docked triangle (no copy neighbour yet) leaves at triUndock, so docks on dead
       // templates recycle (undocking one bonded to a copy in progress split copies into replicating fragments)
       if(p.triUndock>0&&chain.length===0){const f=[0,1,2].find(i=>this.bond[u*4+i]>=0&&this.bkind[u*4+i]===FACE);
