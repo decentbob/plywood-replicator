@@ -6,6 +6,22 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 ## 2026-09-30 (session 2b: triangle-only chains)
 
+- **Environment for triangle worlds** (`tri_chain.js` options) — works (mechanisms):
+  - a damage field that breaks exposed chain bonds, with grown parts casting shadows;
+  - fraying of single-bonded triangles, so material recycles and part tips regrow;
+  - undocking of lone docked triangles;
+  - optional end joining (`pLigate`, a new junction is a T bend), built but not yet demonstrated;
+  - **caps**: an inherited end state whose relayed signals mark intact strands. Only intact strands start copies,
+    and a copy finishes only at capped ends;
+  - **dissolving**: strands missing a cap signal, and orphaned parts, fall apart.
+
+  Caps and dissolving remove the fragment-parasite collapse that took over every field world without them.
+  Picture of a turning-over coated world: `experiments/out/TRI_field_coat_on_1_20260930.png`.
+- **Coats vs shape under the field** (RESULTS 108, small batch) — parts: not yet; shape: lead. Fans on Z sites halve
+  field breaks, and the wave lineage `20202` outlasts a straight `11111` under the field in 2/2 worlds. It also does
+  so without any growth, so the benefit is the shape's, not the parts'. Next: a heritable part choice on the same
+  shape, or feeding.
+
 - **Triangle-only replicator** (`experiments/tri_chain.js`, user direction) — works (demos; every complete strand
   correct in 2 worlds: 6/6 and 7/7 by t=4000). One block type, the unit triangle. Bonds use the ordinary bond table,
   so pins and rigid-body jostling are unchanged. A chain is a band of triangles. Each triangle reads its roles from its

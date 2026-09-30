@@ -8875,3 +8875,34 @@ plates, which is debris that sequesters material (figure `out/SE2_20260929_on_17
 shield is a designed part (the fan shape and the B seed label), so the evolved step is *using* an
 available structure, not inventing a new one. The field is an explicit environmental drive. Four
 control runs were lost twice to container restarts and rerun from their seeds. About 30,000 CPU s.
+
+## 108. Triangle-only chains under the damage field: coats halve breaks; the wave shape wins either way
+
+2026-09-30. Plan (written before the runs): two founders of about equal length compete in one world. They are a wave
+`20202` (Z T Z T Z; its copy reads `02020`), whose Z sites grow fans (a coat along the back), and a straight `11111`
+with no Z sites. 2 seeds × field off/on (`pField` 3e-5; grown triangles shade), 12,000 steps. Prediction: under the
+field, the coated wave does relatively better. Decision: build on protection if so, otherwise try feeding. Engine
+`experiments/tri_chain.js`: 180 free triangles, 26x26, `pFray` 2e-4, `triUndock` 3e-4. One plate shades a chain only
+to exposure about .76; fans on every Z site of the wave give about .58 (coats on every R back of a straight chain .36).
+
+Three rounds; the first two exposed engine failures, which were fixed by new local rules before the last:
+- *Plates, no caps* (`10121` Z:plate vs `11111`, 1 seed): under the field the plain chain died in one world and the
+  plated one in a rerun. No signal: one plate is too weak.
+- *Coat, no caps* (`WAV_*`): at t=6000 the wave had 3 and 2 strands against 0 and 0 straight under the field. By
+  12,000 every field world had collapsed into about 30 broken fragments that kept replicating (parasites).
+- *Coat, caps + dissolving* (`DIS_*`): capped ends and relayed cap signals stop fragment copying; dead strands and
+  orphaned parts dissolve. Complete strands at t=12,000:
+
+| Seed | Field off: wave / straight | Field on, fans: wave / straight (breaks) | Field on, no growth: wave / straight (breaks) |
+|---|---|---|---|
+| 1 | 4 / 7 | 4 / 0 (18) | 3 / 0 (41) |
+| 2 | 6 / 5 | 2 / 0 (25) | 4 / 0 (45) |
+
+**What it says.** Under the field the wave lineage outlasts the straight one in 2/2 worlds, *with or without* fans.
+The fans roughly halve the field breaks (18–25 vs 41–45), but that did not decide the outcome. The advantage belongs
+to the wave shape or its copying dynamics, not to the parts. Without the field, both persist. So the prediction
+(parts protect and win) is **not supported**; shape itself is under selection by the field (2 worlds, lead only).
+Engine gains: caps, intact-strand signals and dissolving make a damaged world turn over without fragment parasites.
+**Next.** Parts and shape are coupled here, so the parts' own benefit cannot be isolated: the same shape always grows
+the same parts. It needs a heritable part choice on the same shape (a second site context or a triangle state), or
+the feeding route. About 10 CPU-hours in total.

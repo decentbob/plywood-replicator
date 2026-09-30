@@ -23,6 +23,11 @@
 //   release a docked triangle lets go of its face once its prev and next edges are bonded to complete partners (not a
 //           fill still waiting for its other bond; an edge facing past the template's end counts as done): the copy
 //           peels off as one piece and is a template itself;
+//   caps     (option) strand ends carry a cap state, inherited by the triangle docking on them; capped ends emit a
+//           signal relayed along the chain (range 30 bonds); a face takes a dock only if it hears both ends (an intact
+//           strand), and a copy end is done only at a capped template end: broken fragments stop being copied;
+//   dissolve (option pDissolve, with caps) strands missing a cap signal and orphaned parts fall apart, returning
+//           their material;
 //   refractory a released face (template and copy side) takes no new dock until the busy level around it (30 on any
 //           bonded face, relayed -1 per chain bond per pass) has fallen to 0, i.e. until the whole copy has let go:
 //           no second copy starts under a copy that is still peeling off.
@@ -56,7 +61,7 @@ const TRI_CONFIG={structural:[],shapes:{[T_A]:regular(3,1)},labels:{}};
 
 class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   _tri(){const n=this.n;if(!this.bkind||this.bkind.length!==n*4){this.bkind=new Int8Array(n*4);this.fill=new Int8Array(n);
-    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int8Array(n);this.gatt=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
+    this.role=new Int8Array(n);this.nb=new Int8Array(n);this.busy=new Int8Array(n);this.refr=new Int8Array(n);this.gstate=new Int8Array(n);this.gatt=new Int8Array(n);this.cap=new Int8Array(n);this.sigP=new Int8Array(n);this.sigN=new Int8Array(n);this.gap=new Int8Array(n).fill(-1);this.need=new Int8Array(n);}}
   // edges of u by kind (from its own bonds): {prev, next, face} (-1 if none)
   _edges(u){const k=this.bkind,o=u*4;let prev=-1,next=-1,face=-1;
     for(let i=0;i<3;i++){if(this.bond[o+i]<0)continue;if(k[o+i]===PREV)prev=i;else if(k[o+i]===NEXT)next=i;else if(k[o+i]===FACE)face=i;}
@@ -81,6 +86,13 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     for(let u=0;u<n;u++){let b=0;for(let i=0;i<3;i++){const k=this.bkind[u*4+i];if(this.bond[u*4+i]<0)continue;
         if(k===FACE||k===TFACE)b=BUSY;else if(k===PREV||k===NEXT)b=Math.max(b,busy0[this.bond[u*4+i]>>2]-1);}
       this.busy[u]=b;if(this.refr[u]&&b===0)this.refr[u]=0;}
+    // cap signals (option caps): each capped strand end emits BUSY, relayed along chain bonds away from it (-1 per bond,
+    // previous pass); a triangle hearing both ends (sigP from the start side, sigN from the end side) is in an intact strand
+    if(this.p.caps){const sp0=this.sigP.slice(),sn0=this.sigN.slice();
+      for(let u=0;u<n;u++){const e=this._edges(u);let a=0,b=0;
+        if(e.prev>=0)a=Math.max(0,sp0[this._partner(u,e.prev)]-1);else if(e.next>=0&&this.cap[u]&&e.face<0&&!this.fill[u])a=BUSY;
+        if(e.next>=0)b=Math.max(0,sn0[this._partner(u,e.next)]-1);else if(e.prev>=0&&this.cap[u]&&e.face<0&&!this.fill[u])b=BUSY;
+        this.sigP[u]=a;this.sigN[u]=b;}}
     for(let u=0;u<n;u++){const r=R[u];this.nb[u]=0;this.gap[u]=-1;this.need[u]=0;
       if(r.role===SFACE||r.role===SBACK){const nx=r.next>=0?this._partner(u,r.next):-1;
         if(nx>=0){this.nb[u]=role[nx]===SBACK?1:0;if(r.role===SFACE)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+nb0[nx]:-1;}
@@ -112,10 +124,10 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
             if(done)break;}
           continue;}
         // dock on a free face
-        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
+        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
         // fill on the prev edge of a docked or fill triangle that still needs fills
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(this._flush(u,r.prev,v,j,tolF)&&this.rng()<pb){
-          this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
+          this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // ring closure: a grown triangle's sticky edge binds another grown triangle's close edge
       if(ru.role===GROWN&&rv.role===GROWN){
@@ -142,10 +154,10 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     for(let u=0;u<this.n;u++){const e=this._edges(u);if(e.face<0)continue;
       const t=this._partner(u,e.face),rt=this._roles(t),done=i=>{const w=this._partner(u,i);if(this.fill[w])return false;   // a fill still in progress (mine or my partner's) holds me
         const ew=this._edges(w);for(const j of [ew.prev,ew.next])if(j>=0&&this.fill[this._partner(w,j)])return false;return true;};
-      const pOK=e.prev>=0?done(e.prev):rt.next<0,nOK=e.next>=0?done(e.next):rt.prev<0;
+      const endOK=!this.p.caps||this.cap[t],pOK=e.prev>=0?done(e.prev):rt.next<0&&endOK,nOK=e.next>=0?done(e.next):rt.prev<0&&endOK;
       if(pOK&&nOK){const q=this.bond[u*4+e.face];this.refr[u]=1;this.refr[t]=1;this.bkind[u*4+e.face]=0;this.bkind[q]=0;this._unlink(u,e.face);this.releaseEvents=(this.releaseEvents||0)+1;}}
     this._environment();
-    for(let u=0;u<this.n;u++)if((this.fill[u]||this.gstate[u])&&this.bond[u*4]<0&&this.bond[u*4+1]<0&&this.bond[u*4+2]<0){this.fill[u]=0;this.gstate[u]=0;}   // a free triangle keeps no state
+    for(let u=0;u<this.n;u++)if((this.fill[u]||this.gstate[u]||this.cap[u])&&this.bond[u*4]<0&&this.bond[u*4+1]<0&&this.bond[u*4+2]<0){this.fill[u]=0;this.gstate[u]=0;this.cap[u]=0;}   // a free triangle keeps no state
   }
   _cut(u,i){const q=this.bond[u*4+i];if(q<0)return;this.bkind[u*4+i]=0;this.bkind[q]=0;this._unlink(u,i);}
   // Environment (explicit external drives, labelled as such; off by default):
@@ -155,7 +167,15 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
 //   pFray   fraying: a triangle held by exactly one bond (a chain end or a part tip) that is not being copied lets go
   //           at pFray per step, so material recycles; a part tip that frays is regrown by its program.
   _environment(){
-    const p=this.p,n=this.n;if(!(p.pField>0)&&!(p.pFray>0))return;
+    const p=this.p,n=this.n;
+    // dissolving (option pDissolve, with caps): a strand triangle not being copied (busy 0) that misses a cap signal (a
+    // broken or uncapped strand) leaves (all its bonds go) at pDissolve; so does a grown triangle whose attach bond is gone
+    if(p.pDissolve>0&&p.caps)for(let u=0;u<n;u++){let chain=0,up=false,any=false;
+      for(let i=0;i<3;i++){if(this.bond[u*4+i]<0)continue;any=true;const k=this.bkind[u*4+i];if(k===PREV||k===NEXT)chain++;if(k===GUP)up=true;}
+      if(!any)continue;
+      const dead=this.gstate[u]?!up:(chain>0&&this.busy[u]===0&&!this.fill[u]&&(this.sigP[u]===0||this.sigN[u]===0));
+      if(dead&&this.rng()<p.pDissolve){for(let i=0;i<3;i++)this._cut(u,i);this.gstate[u]=0;this.dissolveEvents=(this.dissolveEvents||0)+1;}}
+    if(!(p.pField>0)&&!(p.pFray>0))return;
     for(let u=0;u<n;u++){
       let nb=0,chain=[],copying=false;
       for(let i=0;i<3;i++){if(this.bond[u*4+i]<0)continue;nb++;const k=this.bkind[u*4+i];if(k===PREV||k===NEXT)chain.push(i);if(k===FACE||k===TFACE)copying=true;}
@@ -206,7 +226,8 @@ function createTriWorld({seed,gaps=[1,1,1,1,1],free=120,size=18,params={}}={}){
     for(let a=0;a<5000&&!ok;a++){s.px[u]=size*s.rng();s.py[u]=size*s.rng();s.pa[u]=2*Math.PI*s.rng();s._resetShape(u);
       ok=placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||overlap(s._outline(u),s._outline(v,dx,dy))<1e-10;});}
     if(!ok)throw Error('could not place');placed.push(u);}
-  s.bondsDirty=true;s._derive3();
+  for(const f of founders){s.cap[f[0]]=1;s.cap[f[f.length-1]]=1;}   // founder ends carry caps (used with option caps)
+  s.bondsDirty=true;for(let k=0;k<40;k++)s._derive3();   // settle the relayed signals (busy, cap signals) of the founders
   return {s,founder:units,founders};
 }
 // Read-only census: strands (chain-bonded components) with their gap strings and pairing.
