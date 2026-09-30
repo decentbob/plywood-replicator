@@ -27,8 +27,14 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   section. Not yet: no key got through the chamber in 30000 steps (a key must slip in during a door's short
   opening), so nothing was imported. `node experiments/tri_machines.js airlock 1 30000 OUT 24`. Picture:
   `experiments/out/TYPED_airlock_20260930.png`.
-  Next: carry the cargo instead of waiting for diffusion, as in the conveyor. Hatch 1 moves a key from outside into
-  the chamber and hatch 2 moves it inside, under the same interlock.
+  Retune (slower doors, RATE=0.015): still no import in 30000 steps. Diagnosis (15000 steps, 24 keys): the outer
+  door opened 19 times, but in total only 1 key ever sat in the chamber (for 24 steps), and the inner door never
+  opened. The key that opens the outer door is let go at once and pushed away by the door as it swings out; other
+  keys are rarely nearby. So it is a lock, not a pump.
+  Next: a carrying lock. A single 60- or 120-degree hatch cannot move cargo between two sealed regions; the cell it
+  moves cargo into is always next to the chamber. The pocket hatch already carries a target from an outer slot into
+  an enclosed centre; a pulse door on the centre's inside wall, with the hatch holding its return while the lock
+  signal is on, would make a pump.
 - **Physics fix: no tunnelling through structures (user: jumping single walls is a bug)** — works. Cause: a free
   triangle's jostle kick is large (20% of kicks exceed 0.8, the largest reach about 1.8), larger than a one-row wall
   (0.87). The kick puts its centre inside a wall block, and the contact solver pushes it out on the far side. Fix
