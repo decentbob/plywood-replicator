@@ -435,6 +435,7 @@ Each is backed by the rows cited; treat it as a strong prior, not a law.
 | 107 | Shield evolution round 2 | With a stronger plate, fewer errors and more lineages, do shield mutants spread under the field? | SHIELD fan(1,6,1.5), `pSoft` .01, 3 PAAQ founders, field on/off, 300k | lead | late B-share on .56–.76 in 4/6 vs off .10–.23 (frozen, no death); 2/6 on-worlds lose B lineages early | shield_evolve.js SE_ROUND=2 (`SE2_20260929`) | stack on it: debris recycling (plate release), turnover, richer structure choices | 12 worlds x 300k; about 30,000 CPU s; first evolved use of a structure under fixed rules (screen tier) |
 | 108 | Triangle chains under the field: coat vs shape | Does a coated (fans on Z) wave lineage beat a straight one under the damage field? | tri_chain.js, `pField` 3e-5, `caps`, `pDissolve`, `pFray`, `triUndock`, 20202 vs 11111, 2 seeds | lead (shape), negative (parts) | wave outlasts straight 2/2 on with or without fans; fans halve breaks; off both persist | tri_compete.js (`DIS_*`) | heritable part choice on one shape, or feeding |
 | 109 | Heritable coats on one shape (marks) | Does a marked (fan-coated) straight chain beat a bare one under the field? | tri_chain.js marks, `grow` Rm:fan, `pField` 3e-5, mmmmm vs 11111, 2 seeds | negative | on: 0/0 and 1/3 (coated/bare); off: 5/4 and 2/9 (coat costs material) | tri_compete.js (`MK_*`) | cheaper parts, or feeding parts that pay |
+| 110 | Feeding hands and predatory blades (triangle chains) | Do holding arms raise copying; do cutting arms prey? | tri_chain.js hand/blade programs, `pHoldRelease`, `holdTol`, `pCut`, `cutReach`, mmmmm, 60 free | negative (hands), not yet (blades) | hands 2,2 vs 3,4 strands (cost 10 triangles); blades: 0 foreign contacts in 3k steps | tri_compete.js (`FEED_*`) | denser worlds or a flow past organisms |
 
 ## Knob index
 
@@ -507,7 +508,7 @@ the rows that used it). Rerun it after adding rows.
 | `pBindP` | 34c (works), 44e (lead), 45c (inconclusive), 46 (negative), 61 (lead), 62 (negative), 74 (works), 75 (inconclusive) |
 | `pBreak` | 8 (works), 10 (superseded), 11b (negative), 12 (works), 16 (negative), 16b (negative), 19 (works), 19d (negative), 35 (inconclusive), 40e (negative), 40g (negative), 94 (negative) |
 | `pCapture` | 1 (works), 2 (works), 5b (negative), 14b (works) |
-| `pCut` | 26 (negative) |
+| `pCut` | 26 (negative), 110 (negative (hands), not yet (blades)) |
 | `pFray` | 1 (works), 2 (works), 4 (negative), 5b (negative), 12 (works), 13 (works), 13b (works), 33a (partial), 44d (lead), 49c (lead), 50c (lead), 51a (negative), 51b (lead), 52b (negative), 66 (negative), 72 (negative), 101 (negative), 108 (lead (shape), negative (parts)) |
 | `pGrip` | 50a (works), 50b (works), 50c (lead), 66 (negative), 71 (lead), 72 (negative), 73 (inconclusive) |
 | `pHyb` | 18 (negative), 26 (negative), 26b (inconclusive), 27b (negative), 29 (partial), 78 (lead), 79 (negative), 92 (negative), 93 (works), 94 (negative) |

@@ -6,6 +6,15 @@ screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LE
 
 ## 2026-09-30 (session 2b: triangle-only chains)
 
+- **Marks: heritable parts on an unchanged shape** (`tri_chain.js`) — works (copying exact in demos). An R letter's
+  hidden triangle can carry a mark. The template face shows it, the docked triangle reads it, and the fill placed
+  beside it copies it (optional error `pMarkErr`). Marked R backs are growth site `Rm`. As a coat under the field:
+  RESULTS 109, a cost, no benefit. Picture of copies verified geometrically: `experiments/out/TRI_verify_20260930.png`
+  (`node experiments/tri_verify.js 2 4000 1101121 OUT`).
+- **Hands and blades** (programs `hand`, `blade`) — mechanisms work. Hands hold passing triangles and hand them over
+  when used. Blades cut strands they touch (predation). RESULTS 110: hands cost more than they return; blades met
+  no prey in sparse worlds. Next: a flow past organisms or denser worlds.
+
 - **Environment for triangle worlds** (`tri_chain.js` options) — works (mechanisms):
   - a damage field that breaks exposed chain bonds, with grown parts casting shadows;
   - fraying of single-bonded triangles, so material recycles and part tips regrow;

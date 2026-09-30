@@ -8926,3 +8926,26 @@ from the shared supply). Copying and exact inheritance of the coat are verified;
 outweigh its material cost at this field strength and coat size. Geometric check of copies (separate, no field,
 `tri_verify.js`): every released strand matches its letters within 4° per turn, pin gaps ≤ .05
 (`experiments/out/TRI_verify_20260930.png`).
+
+## 110. Feeding hands: a cost, no gain; blades: no encounters in sparse worlds
+
+2026-09-30. Two new parts on marked R backs (`tri_chain.js` programs):
+- **hand**: a 2-triangle arm whose tip holds a passing free triangle (grab tolerance .45) and releases it at 0.02
+  per step; a held triangle counts as free for docking, filling and growth (used on contact, the hold dissolves).
+- **blade**: a 2-triangle arm whose tip cuts a chain bond of any other strand triangle it touches (`pCut`).
+
+Plan for the hand: the same organism `mmmmm`, with hands (5 arms, 10 triangles) or without, alone in a scarce world
+(60 free triangles, 26x26), 2 seeds, 10,000 steps. Prediction: hands raise copying.
+
+| Seed | Complete strands at 2k / 6k / 10k: hands | no hands |
+|---|---|---|
+| 1 | 1 / 2 / 2 | 2 / 3 / 3 |
+| 2 | 1 / 1 / 2 | 1 / 3 / 4 |
+
+**What it says.** Not supported. Hands slow copying and cap the population: each organism costs 21 triangles
+instead of 11, and triangles held on the back must still diffuse around the chain to a face. Blades grew, but
+in 3,000 steps every tip contact was with the blade's own chain (715 own, 0 foreign). With a few organisms in
+the world, encounters are too rare for contact predation. **Lesson.** In a closed, material-limited world every
+part must return more material than it costs. Shading (108–109), holding (110) and contact cutting (sparse) do
+not, at these sizes. Candidates: denser worlds or a flow that brings material past organisms (filter feeding),
+then hands and blades again.

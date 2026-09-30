@@ -44,7 +44,7 @@ const {band}=require('./triangle_alphabet_figure'),{crosses}=require('./seeded_f
 
 const PREV=1,NEXT=2,FACE=3,TFACE=4;   // FACE on the copy (docked) end of a face bond, TFACE on the template end
 const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=5,BUSY=30;
-const GSEED=5,GUP=6,GDOWN=7,GRING=8;   // growth bond kinds: seed edge on a chain back, child's attach edge, parent's sticky edge, ring closure   // BUSY: range of the relayed busy level (bonds)
+const GSEED=5,GUP=6,GDOWN=7,GRING=8,HOLD=9,HELD=10;   // HOLD/HELD: a hand's holding edge and the triangle it holds;   // growth bond kinds: seed edge on a chain back, child's attach edge, parent's sticky edge, ring closure   // BUSY: range of the relayed busy level (bonds)
 const m3=x=>((x%3)+3)%3;
 
 // ---------------- growth programs (grown parts on hidden backs) ----------------
@@ -56,7 +56,9 @@ const PROGRAMS={
   hex:{s0:{stick:[[1,'r']],close:[2]},r:{stick:[[2,'r']]}},                  // 6 triangles around one point, closes itself
   plate:{s0:{stick:[[1,'c']]},c:{stick:[[1,'x'],[2,'x']]},x:{stick:[]}},       // side-2 triangle: corner, centre, 2 corners
   spike:{s0:{stick:[[1,'a']]},a:{stick:[[2,'b']]},b:{stick:[[1,'x']]},x:{stick:[]}},   // straight strip of 4
-  fan:{s0:{stick:[[1,'f'],[2,'f']]},f:{stick:[]}},                          // trapezoid: a triangle with two stop wings
+  fan:{s0:{stick:[[1,'f'],[2,'f']]},f:{stick:[]}},
+  hand:{s0:{stick:[[1,'t']]},t:{stick:[],hold:[1,2]}},
+  blade:{s0:{stick:[[1,'k']]},k:{stick:[],cut:[1,2]}},                    // 2-triangle arm; the tip cuts strands it touches                     // 2-triangle arm; the tip holds free triangles                          // trapezoid: a triangle with two stop wings
 };
 const CODES=[];for(const [pn,pr] of Object.entries(PROGRAMS))for(const st of Object.keys(pr))CODES.push([pn,st]);
 const code=(pn,st)=>1+CODES.findIndex(([a,b])=>a===pn&&b===st);
@@ -108,7 +110,10 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
     const a0=u*NV+i,a1=u*NV+(i+1)%3,b0=v*NV+j,b1=v*NV+(j+1)%3,dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);
     const g1=Math.hypot(dx+this.ox[b1]-this.ox[a0],dy+this.oy[b1]-this.oy[a0]),g2=Math.hypot(dx+this.ox[b0]-this.ox[a1],dy+this.oy[b0]-this.oy[a1]);
     return Math.max(g1,g2)<=tol;}
-  _bind(u,i,ku,v,j,kv){this._link(u,i,v,j);this.bkind[u*4+i]=ku;this.bkind[v*4+j]=kv;}
+  _bind(u,i,ku,v,j,kv){
+    // a held triangle that is used for anything else (dock, fill, growth, a new hold) is let go by its hand first
+    if(ku!==HOLD)for(const x of [u,v])for(let k=0;k<3;k++)if(this.bond[x*4+k]>=0&&this.bkind[x*4+k]===HELD)this._cut(x,k);
+    this._link(u,i,v,j);this.bkind[u*4+i]=ku;this.bkind[v*4+j]=kv;}
   _triBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,tolF=p.triTol||0.3,tolC=p.triTolClose||0.22,pb=p.pBond===undefined?0.5:p.pBond;
     const free=u=>R[u].role===FREE,bnd=(u,i)=>this.bond[u*4+i]>=0;
@@ -127,6 +132,11 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
             for(let j=0;j<3&&!done;j++)if(this._flush(u,e,v,j,tolF)&&this.rng()<pb){this._bind(u,e,GDOWN,v,j,GUP);
               this.gstate[v]=code(pn,child);this.gatt[v]=j;this.growEvents=(this.growEvents||0)+1;R[v]={role:GROWN};done=true;}
             if(done)break;}
+          // hands: a holding edge grabs a free (or held) triangle; it is let go at pHoldRelease per step
+          if(!done&&rule.hold&&p.pHold!==0)for(const rel of rule.hold){const e=m3(r.att+rel);if(bnd(u,e))continue;
+            let held=false;for(let k=0;k<3;k++)if(this.bond[v*4+k]>=0)held=true;if(held)break;
+            for(let j=0;j<3;j++)if(this._flush(u,e,v,j,p.holdTol||0.45)&&this.rng()<pb){this._bind(u,e,HOLD,v,j,HELD);this.holdEvents=(this.holdEvents||0)+1;done=true;break;}
+            if(done)break;}
           continue;}
         // dock on a free face
         if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){for(let j=0;j<3;j++)if(this._flush(u,r.free,v,j,tolF)&&this.rng()<pb){this._bind(u,r.free,TFACE,v,j,FACE);if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.dockEvents=(this.dockEvents||0)+1;R[v]={role:DOCKED};break;}continue;}
@@ -134,6 +144,15 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(this._flush(u,r.prev,v,j,tolF)&&this.rng()<pb){
           this._bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.mark[v]=(r.role===DOCKED&&this.need[u]===1?this.dm[u]:0)^(p.pMarkErr>0&&this.rng()<p.pMarkErr?1:0);this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.fillEvents=(this.fillEvents||0)+1;R[v]={role:SBACK,fill:true};break;}}
         continue;}
+      // predation (blades): a blade tip touching a strand triangle that is not being copied cuts one of that triangle's
+      // chain bonds at pCut (contact only; the victim's fragments dissolve and return their triangles)
+      if(p.pCut>0)for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]]){
+        if(ra.role!==GROWN||(rb.role!==SFACE&&rb.role!==SBACK)||rb.free<0||bnd(b,rb.free)||this.busy[b]>0)continue;
+        const [pn,st]=CODES[this.gstate[a]-1],cut=PROGRAMS[pn][st].cut;if(!cut)continue;
+        // contact: centres closer than cutReach (touching triangles); never the triangle my own arm grows from
+        const par=this._partner(a,ra.att),root=par>=0?this._partner(par,this.gatt[par]):-1;if(b===par||b===root)continue;
+        if(Math.hypot(this._dx(this.px[b]-this.px[a]),this._dy(this.py[b]-this.py[a]))<(p.cutReach||0.75)&&this.rng()<p.pCut){
+          const ch=[rb.prev,rb.next].filter(i=>i>=0&&bnd(b,i));if(ch.length){this._cut(b,ch[(this.rng()*ch.length)|0]);this.cutEvents=(this.cutEvents||0)+1;}}}
       // ring closure: a grown triangle's sticky edge binds another grown triangle's close edge
       if(ru.role===GROWN&&rv.role===GROWN){
         for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]]){const [pa_,sa]=CODES[this.gstate[a]-1],[pb_,sb]=CODES[this.gstate[b]-1],cl=PROGRAMS[pb_][sb].close||[];
@@ -173,6 +192,8 @@ class TriSim extends seeded(PinsLiveSim,TRI_CONFIG){
   //           at pFray per step, so material recycles; a part tip that frays is regrown by its program.
   _environment(){
     const p=this.p,n=this.n;
+    const pr=p.pHoldRelease===undefined?0.02:p.pHoldRelease;
+    for(let u=0;u<n;u++)for(let k=0;k<3;k++)if(this.bond[u*4+k]>=0&&this.bkind[u*4+k]===HELD&&this.rng()<pr)this._cut(u,k);
     // dissolving (option pDissolve, with caps): a strand triangle not being copied (busy 0) that misses a cap signal (a
     // broken or uncapped strand) leaves (all its bonds go) at pDissolve; so does a grown triangle whose attach bond is gone
     if(p.pDissolve>0&&p.caps)for(let u=0;u<n;u++){let chain=0,up=false,any=false;
@@ -257,10 +278,11 @@ function render(s,out,title,focus=null){
   const cx=focus?0:W/2-s.px[0],cy=focus?0:W/2-s.py[0];
   const X0=u=>focus?s._dx(s.px[u]-fx)+focus.radius:((s.px[u]+cx)%W+W)%W,Y0=u=>focus?s._dy(s.py[u]-fy)+focus.radius:((s.py[u]+cy)%W+W)%W;
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s._roles(u);
-    const GC={hex:'#b58ae6',plate:'#e78ac0',spike:'#8ab4e6',fan:'#7fd18f'};
+    const GC={hex:'#b58ae6',plate:'#e78ac0',spike:'#8ab4e6',fan:'#7fd18f',hand:'#f08a5d',blade:'#e84a5f'};
     const col=r.role===GROWN?GC[CODES[s.gstate[u]-1][0]]:r.role===FREE?'#56646e':r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':'#c98f2e';
     const pts=[];for(let q=0;q<3;q++){const x=X0(u)+s.ox[u*NV+q],y=Y0(u)+s.oy[u*NV+q];pts.push(`${(x*k).toFixed(1)},${(y*k).toFixed(1)}`);}
-    svg.push(`<polygon points="${pts.join(' ')}" fill="${r.fill?'#3f9e8f':col}" stroke="#1b2a33" stroke-width="0.8"/>`);
+    const isHeld=[0,1,2].some(k=>s.bond[u*4+k]>=0&&s.bkind[u*4+k]===HELD);
+    svg.push(`<polygon points="${pts.join(' ')}" fill="${isHeld?'#c7d3dc':r.fill?'#3f9e8f':col}" stroke="#1b2a33" stroke-width="0.8"/>`);
     if((r.role===SFACE)&&r.free>=0){const a=u*NV+r.free,b=u*NV+(r.free+1)%3,X=v=>(X0(u)+s.ox[v])*k,Y=v=>(Y0(u)+s.oy[v])*k;
       svg.push(`<line x1="${X(a).toFixed(1)}" y1="${Y(a).toFixed(1)}" x2="${X(b).toFixed(1)}" y2="${Y(b).toFixed(1)}" stroke="#e0672b" stroke-width="2.2"/>`);}}
   svg.push(`<text x="8" y="${S+20}" font-family="Arial" font-size="13" fill="#233542">${title}</text></svg>`);
