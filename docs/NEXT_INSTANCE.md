@@ -1,38 +1,37 @@
-# Next-instance handoff — 2026-09-28 (after Q9)
+# Next-instance handoff — 2026-09-30
 
-Read ROADMAP.md, the sole queue. No simulation or lab server is running.
-Core, live lab and historical sources are unchanged (LF checkout; the archived
-core hashes were taken from a CRLF Windows checkout and match after normalization).
+**Read AGENTS.md first: the workflow changed on 2026-09-30 to innovation first.** Build
+genuinely new block types, rules, geometries and combinations as configurations of the seeded
+engine, show them in pictures (send images to the chat), log them in `docs/INNOVATIONS.md`, and
+move on. Batches and confirmation rounds are the exception. The ROADMAP is an innovation
+backlog; take the top unblocked item.
 
-**Q7b (RESULTS 92) failed its frozen gate; passive repair is parked.** Fold45
-dimers escape directly more than straight ones (11/9/12 vs 5/4/4 of 16) but
-almost never complete a bridge (0/2/0 vs 5/7/7). The runner's built-in validator
-failed only on that CRLF hash comparison. `passive_fold_kinetics_validate.js`
-is the validator of record.
+## State
 
-**Q9 (RESULTS 93): contact kinetics depend on the time step.** Refining time with
-existing knobs (kicks x sqrt(dt), probabilities 1-(1-p)^dt) raises flush-pair
-bridges under individual kicks from 8/9 to 17/15 of 32 at dt 1/16, and lowers
-direct escape from 9–11 to 4. dt 1/4 equals dt 1, so convergence is not shown.
-The frozen verdict is sensitive (more acquisition). No earlier gate reopens.
+- **Engine:** `experiments/seeded_growth.js` (port labels, activation by attachment, custom
+  shapes, reversible programming, maintenance release, decay), `seeded_ports.js` (growth ports
+  on any polygon edge, e.g. hexagonal hubs), `seeded_field.js` (shadowing damage field),
+  `seeded_worlds.js` (configurations: HALF_CELL, COMB, COMB_ROD, SHIELD, CHOICE, ENZYME_CELL,
+  TRIPOD, LATTICE, FUNNEL; `createWorld`, `census`), `half_cell_fast.js` (fast polygon runtime),
+  `tools/snapshot.js` (any saved state to PNG).
+- **Built this session** (details and pictures in INNOVATIONS): multi-generation half-cells;
+  the generic engine; sequence-encoded arms, rods and shields; reversible block programming;
+  the damage field; shields that evolve by mutation and spread under the field; multi-port
+  hub/rod networks; the user's funnel (first demo).
+- **Speed:** a 100-block polygon world runs at about 4–6 ms/step. Container restarts are frequent:
+  commit results early, and re-arm background waits (1-hour limit per wait).
 
-User direction (2026-09-28): mechanics and logic over simulation precision, and fast
-tests. Default dt stays 1 (Q9b retired). Screens use the AGENTS QA tiers and
-`experiments/screen_kit.js`. Q10 (RESULTS 94): double strands with heat and ligation lengthen templates but not
-specifically under damage; closed. Next: ROADMAP order 1.
-Evidence:
-`experiments/out/PF_20260928*` and `experiments/out/TR_20260928*`.
+## In flight / loose ends
 
-```
-node experiments/time_resolution.js MODE experiments/scratch/UNIQUE_MODE.json.gz   # body4 | individual4 | individual16
-node experiments/time_resolution_validate.js experiments/scratch/UNIQUE            # expects UNIQUE_<mode>.json.gz
-node experiments/time_resolution_report.js experiments/scratch/UNIQUE experiments/scratch/UNIQUE.report.json
-```
+- Four round-3 structure-choice worlds (`experiments/scratch/SE3_20260930_on_175[1-4]`, shield vs rod,
+  field on only; the field-off controls were cancelled when the workflow changed) may finish in the
+  background: glance at B- vs D-share if present, record a line in RESULTS/INNOVATIONS, and start
+  nothing like it.
+- Funnel: tune lean and length so both blades point at the copying face (some splay outward).
 
-**2026-09-29.** The user asked about the half-cells and re-prioritised speed and logic over
-byte identity (AGENTS). Q8k (RESULTS 95): the half-cell runtime is 6x faster
-(`half_cell_fast.js`, bit-identical in tests); in-place capture does not fix acquisition,
-because one inventory is too little material. Q8l (abundant soup) is next or running;
-see ROADMAP. Ideas live in `docs/IDEAS.md`.
+## User ideas to keep (also in ROADMAP/IDEAS)
 
-Q8m/n (RESULTS 97–98): the anchor rule gives daughters and grand-daughters (screen tier). Next: ROADMAP order 1.
+Funnel (done, tune); patchy hot/safe environment; fixed obstacles for motility; organisms
+controlling their own supply (programmable blanks, erasers); custom parts instead of repeats;
+more ports per block; enclosure; sub-block assembly. Mechanics and local logic matter more than
+numerical perfection; speed matters.
