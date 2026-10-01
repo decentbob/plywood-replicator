@@ -167,13 +167,16 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
   if(cmd==='factory'){
     // a casting pocket makes the dockers a replicator needs: blanks xxx are cast into A-- (the docker for face a)
     const withPocket=extra!=='0',size=20;
-    const np=+(process.env.POCKETS||1),structures=withPocket?[{tris:T.pocket('-A-','X'),x:5,y:5},{tris:T.pocket('-A-','X'),x:5,y:14,rot:Math.PI}].slice(0,np):[];
+    // KINDS: the docker each pocket casts, e.g. 'AA' (two pockets for A--) or 'Aa' (one for A--, one for a--)
+    const kinds=process.env.KINDS||'A'.repeat(+(process.env.POCKETS||1)),spots=[[5,5,0],[5,14,Math.PI],[14,5,Math.PI],[14,14,0]];
+    const structures=withPocket?[...kinds].map((k,i)=>({tris:T.pocket('-'+k+'-','X'),x:spots[i][0],y:spots[i][1],rot:spots[i][2]})):[];
     const {s,structures:st}=T.createTypedWorld({seed:+seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures,supply:{'xxx':+(process.env.BLANKS||30),'---':40}});
     const t0=Date.now();const snapF=t=>snap(s,out.replace('.png',`_t${t}.png`),`${path.basename(out,'.png')} t=${t}: ${withPocket?'pocket':'no pocket'}, casts ${s.castEvents||0}`,null);
     snapF(0);
     for(let t=1;t<=+steps;t++){s.step();
       if(t%Math.max(1,+steps/10|0)===0){const c=T.typedCensus(s).filter(x=>x.n>1),tc=T.typeCount(s);
-        console.log(`t=${t} casts=${s.castEvents||0} free A-- ${tc[T.canon('A--')]||0} xxx ${tc['xxx']||0} strands [${c.map(q=>q.faces+'/'+q.gaps+(q.paired?'*':'')).join(' ')}] docks=${s.dockEvents||0} releases=${s.releaseEvents||0} ${((Date.now()-t0)/t).toFixed(1)}ms/step`);}
+        const gen=c.filter(q=>q.n>=9);
+        console.log(`t=${t} complete strands: aaaaa ${gen.filter(q=>q.faces==='aaaaa').length} AAAAA ${gen.filter(q=>q.faces==='AAAAA').length} | casts=${s.castEvents||0} A-- ${tc[T.canon('A--')]||0} a-- ${tc[T.canon('a--')]||0} xxx ${tc['xxx']||0} strands [${c.map(q=>q.faces+'/'+q.gaps+(q.paired?'*':'')).join(' ')}] docks=${s.dockEvents||0} releases=${s.releaseEvents||0} ${((Date.now()-t0)/t).toFixed(1)}ms/step`);}
       if(t%Math.max(1,+steps/3|0)===0)snapF(t);}
     montage(out,`Factory: a casting pocket turns blanks (xxx) into dockers (A--) for the chain aaaaa (${withPocket?'with pocket':'control, no pocket'})`);}
 }
