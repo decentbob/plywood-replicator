@@ -1,5 +1,0 @@
-arm,heldSteps,bothSteps,targetExact,exact,nonExact
-off,0,0,false,1,1
-placement,0,0,false,0,1
-dock,1,0,true,1,0
-hold,14,13,true,1,0

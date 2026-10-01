@@ -1,0 +1,81 @@
+'use strict';
+// Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
+//   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
+// NAME: copy | pocket | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+const path=require('path');
+const {createWorld,placeFree,census,typeCount}=require('./world');
+const {render,montage}=require('./render');
+const S=require('./structures');
+const {canon,typeName}=require('./sim');
+const H=Math.sqrt(3)/2;
+
+function demo(name,seed=1,steps,dir='runs',extra){
+  const shots=[],out=f=>path.join(dir,`${name}_${f}.png`);
+  const snap=(s,f,title,focus,labels=true)=>{render(s,out(f),title,focus,labels);shots.push(out(f));};
+  const finish=(title,cols=4)=>{montage(path.join(dir,`${name}.png`),cols,title,shots);console.log('pictures:',path.join(dir,`${name}.png`));};
+  const every=(t,k)=>t%Math.max(1,(steps/k)|0)===0;
+  const D={
+    // typed chain copying: faces read glue; the copy carries complementary faces
+    copy(){steps=steps||10000;const {s}=createWorld({seed,size:18,founders:[{gaps:[1,0,2,1,1],faces:'abaabb'}],supply:{'A--':14,'B--':14,'a--':14,'b--':14,'---':50}});
+      snap(s,'t0','t=0: founder abaabb',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} strands [${census(s).filter(c=>c.n>1).map(c=>c.faces+'/'+c.gaps+(c.paired?'*':'')).join(' ')}] docks=${s.ev.dock||0} releases=${s.ev.release||0}`);
+        if(every(t,3))snap(s,`t${t}`,`t=${t}`,null,false);}
+      finish('Typed chain copying: abaabb -> BBAABA (reverse complement) -> abaabb');},
+    // casting pocket: the hatch catches aaa, swings it into the centre, the cast gives the instruction glues
+    pocket(){steps=steps||4000;const {s,structures}=createWorld({seed,size:14,structures:[{tris:S.pocket('bcd','A'),x:7,y:7}],supply:{'aaa':16,'---':20}});
+      const U=structures[0],focus={units:U,radius:5,align:{u:U[4],a0:s.angle(U[4])}};snap(s,'t0','t=0',focus);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} casts=${s.ev.cast||0} ${JSON.stringify(typeCount(s)).slice(0,200)}`);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
+      console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Casting pocket: aaa -> bcd (hatch catches, carries, cast, reopens)');},
+    // conveyor of two hatches with hand-off
+    conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
+      const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} catches=${s.ev.glue||0} closures=${s.ev.closeGlue||0} handoffs=${s.ev.handoff||0} drops=${s.ev.drop||0}`);if(every(t,4))snap(s,`t${t}`,`t=${t}: hand-offs ${s.ev.handoff||0}, drops ${s.ev.drop||0}`,focus);}
+      finish('Conveyor: hatch 1 catches and hands off to hatch 2, which drops');},
+    // gated ring membrane (rows from extra: 'r2'), keys from extra number
+    gate(){steps=steps||10000;const rows=String(extra||'').includes('r2')?2:1,keys=parseInt(extra)||12,{tris,R}=S.ring(4+rows-1,rows);ringRun({tris,R,rows,keys,door:1,title:`Gated ring membrane (${rows} row${rows>1?'s':''}), ${keys} keys`});},
+    // airlock (double lock with interlock)
+    airlock(){steps=steps||30000;const keys=parseInt(extra)||24,{tris,R}=S.airlock(4);ringRun({tris,R,rows:1,keys,door:2,title:`Airlock, ${keys} keys`,lock:true});},
+    // energy: the pocket hatch spends a charged carrier per swing; carriers recharge in a light zone (extra 'dark': off)
+    energy(){steps=steps||10000;const light=extra!=='dark';
+      const {s}=createWorld({seed,size:16,structures:[{tris:S.pocket('bcd','A','E'),x:4.5,y:8}],supply:{'aaa':16,'eee':12,'---':12},params:light?{light:{x:12,y:8,r:2.5,p:0.02}}:{}});
+      const carriers=[...Array(s.n).keys()].filter(u=>typeName(s,u)==='eee');for(const u of carriers)s.chg[u]=0;snap(s,'t0',`t=0: light ${light?'on':'off'}, carriers discharged`,null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} light=${light} casts=${s.ev.cast||0} fuelUsed=${s.ev.fuelUsed||0} recharges=${s.ev.recharge||0} charged=${carriers.filter(u=>s.chg[u]).length}`);
+        if(every(t,3))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, fuel used ${s.ev.fuelUsed||0}`,null,false);}
+      finish(`Energy: one charged carrier per hatch swing (light ${light?'on':'off'})`);},
+    // factory: pockets cast blanks xxx into the dockers the chain needs (extra: kinds, e.g. 'AA' or 'Aa'; 'none' = control)
+    factory(){steps=steps||20000;const kinds=extra==='none'?'':(extra||'Aa'),spots=[[5,5,0],[5,14,Math.PI],[14,5,Math.PI],[14,14,0]];
+      const {s}=createWorld({seed,size:20,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures:[...kinds].map((k,i)=>({tris:S.pocket('-'+k+'-','X'),x:spots[i][0],y:spots[i][1],rot:spots[i][2]})),supply:{'xxx':60,'---':40}});
+      snap(s,'t0',`t=0: pockets ${kinds||'none'}`,null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10)){const c=census(s).filter(x=>x.n>=9),tc=typeCount(s);
+          console.log(`t=${t} complete aaaaa=${c.filter(q=>q.faces==='aaaaa').length} AAAAA=${c.filter(q=>q.faces==='AAAAA').length} casts=${s.ev.cast||0} A--=${tc[canon('A--')]||0} a--=${tc[canon('a--')]||0} xxx=${tc.xxx||0} docks=${s.ev.dock||0}`);}
+        if(every(t,3))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
+      finish(`Factory: pockets (${kinds||'none'}) cast blanks into dockers for the chain aaaaa`);},
+    // typed arms from strand-end seeds (extra: bend pattern)
+    arms(){steps=steps||20000;const pat=extra||'222112',A1=S.armTypes('p',pat,'cdeghi'),A2=S.armTypes('u',S.mirror(pat),'jkmnoq');
+      const supply={Apu:8,Bpu:8,apu:8,bpu:8,'---':24};for(const t of [...A1,...A2])supply[t]=(supply[t]||0)+12;
+      const {s,founders}=createWorld({seed,size:20,founders:[{gaps:[1,1,1,1,1],faces:'ababab',ends:'pu'}],supply});console.log('arm types',A1.join(' '),'|',A2.join(' '));
+      snap(s,'t0','t=0',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,6))console.log(`t=${t} grown=${[...Array(s.n).keys()].filter(u=>s.roles(u).role===4).length} docks=${s.ev.dock||0} strands [${census(s).filter(c=>c.n>1).map(c=>c.faces+'/'+c.gaps).join(' ')}]`);
+        if(every(t,3))snap(s,`t${t}`,`t=${t}`,null,false);}
+      snap(s,'zoom','founder with arms',{units:founders[0],radius:3.2});finish(`Typed arms ${pat} / ${S.mirror(pat)} from end seeds`);},
+  };
+  // ring worlds: tracers inside and outside, keys outside; counts crossings (inside <-> outside) and door activity
+  function ringRun({tris,R,rows,keys,door,title,lock}){const size=20,c=size/2;
+    const {s,structures}=createWorld({seed,size,structures:[{tris,x:c,y:c}],supply:{'---':24,'ggg':keys},params:{hingeAngle:2*Math.PI/3}});
+    const U=structures[0],ring=new Set(U),free=[...Array(s.n).keys()].filter(u=>!ring.has(u)),tracers=free.filter(u=>typeName(s,u)==='---'),placed=[...U];
+    const ref=U[6],rx0=c-s.px[ref],ry0=c-s.py[ref],ra0=s.angle(ref);
+    const centre=()=>{const d=s.angle(ref)-ra0,cs=Math.cos(d),sn=Math.sin(d);return [s.px[ref]+cs*rx0-sn*ry0,s.py[ref]+sn*rx0+cs*ry0];};
+    const inner=(R-rows)*H-0.3,outer=R+(lock?2.2:0.2),where=u=>{const [x,y]=centre(),d=Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y));return d<inner?'in':d>outer?'out':'wall';};
+    free.forEach(u=>{const inside=tracers.indexOf(u)>=0&&tracers.indexOf(u)<12;
+      if(!placeFree(s,u,placed,()=>{const a=2*Math.PI*s.rng(),r=inside?inner-0.3-1.4*s.rng():outer+0.6+(size/2-outer-1)*s.rng();return [c+r*Math.cos(a),c+r*Math.sin(a)];}))throw Error('could not place');placed.push(u);});
+    const side=new Map(tracers.map(u=>[u,where(u)]));let crossings=0;const focus={units:U,radius:R+(lock?3:1.5),align:{u:ref,a0:ra0}};
+    snap(s,'t0',`t=0: ${keys} keys outside`,focus);
+    for(let t=1;t<=steps;t++){s.step();for(const u of tracers){const w=where(u);if(w!=='wall'&&w!==side.get(u)){crossings++;side.set(u,w);}}
+      if(every(t,10))console.log(`t=${t} tracers inside=${tracers.filter(u=>where(u)==='in').length} crossings=${crossings} unlatches=${s.ev.unlatch||0} pulses=${s.ev.pulse||0} interlocked=${s.ev.interlocked||0}`);
+      if(every(t,3))snap(s,`t${t}`,`t=${t}: ${crossings} crossings`,focus);}
+    finish(title);}
+  if(!D[name])throw Error('unknown demo '+name+'; one of '+Object.keys(D).join(' '));
+  D[name]();
+}
+if(require.main===module){const [name,seed='1',steps,dir='runs',extra]=process.argv.slice(2);demo(name,+seed,steps?+steps:0,dir,extra);}
+module.exports={demo};

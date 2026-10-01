@@ -1,13 +1,11 @@
 {
-  "name": "polygon-chemistry",
-  "version": "0.1.0",
-  "description": "Artificial life from one universal rule table: template replication, mutation and selection emerging from local rules on deformable polygons.",
+  "name": "typed-triangle-world",
+  "version": "0.2.0",
+  "description": "Artificial life from one block, the unit triangle with glued sides: replicating chains, casting, machines, energy.",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "run": "node run.js",
-    "test": "node test.js",
-    "build": "node build.js",
-    "serve": "python3 -m http.server 8000"
+    "test": "node tri/test.js",
+    "demo": "node tri/demos.js"
   }
 }

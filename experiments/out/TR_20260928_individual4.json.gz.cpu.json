@@ -1,1 +1,0 @@
-{"command":["/opt/node22/bin/node","/home/user/plywood-replicator/experiments/time_resolution.js","individual4","experiments/scratch/TR_20260928_individual4.json.gz"],"cpuSeconds":75.810592,"kineticSteps":3360000,"relaxationSteps":9600,"scope":"whole process: preparation, viability, observed/plain/restart runs, replication check, analysis, gzip serialization"}

@@ -1,5 +1,0 @@
-t,free,docked,repel,tpl,strands,complexes,meanLen,maxLen,distinct,entropy,births,maxGen,eOn,energyUsed,docks,softDocks,captures,ligations,frays,unzips,fed,undocks,spont,breaks,energyCharged,rings,memRings,memArcs,enclosedAB,enclosedE,enclosedTPL,enclosedMotif,totalMotif,ringsWithStrand,memActive,made,binds,melts,snaps,rayHits,cuts,proofs,held,stacked,stackRows,stackMelts,nStacks,maxStack,meanStack,products
-5000,370,9,16,117,22,8,4.1,7,13,3.394,26,3,39,103,1111,1110,1,1,4,6,0,984,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-10000,166,24,28,294,60,17,3.935,7,22,3.902,85,5,33,333,4192,4185,2,4,18,40,0,3810,1,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-15000,102,19,5,386,80,19,3.646,10,24,3.901,122,5,45,508,7239,7222,2,9,43,89,0,6709,1,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-20000,87,21,9,395,84,20,3.673,8,29,4.222,156,6,43,634,10075,10049,2,11,76,157,0,9411,1,42,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

@@ -1,124 +1,84 @@
-# Idea notebook
+# Idea notebook (typed-triangle world)
 
-Untested ideas and design lessons, recorded at the user's request (2026-09-29).
-The organizing view is [COMPLEXITY_MAP.md](COMPLEXITY_MAP.md); this file keeps the loose ends.
-Nothing here is a queue item: ROADMAP ranks work, and each idea needs a frozen plan
-before it runs. Add new ideas at the top of their section, with date and evidence.
+Ideas and design lessons for the typed-triangle simulation, most of them the user's. ROADMAP ranks the work; this
+file keeps the reasoning so it is not lost. Add new ideas at the top of their section, with the date.
 
-## Adaptation (user, 2026-09-30; for later)
+## The BIG goal (user, 2026-10-01)
 
-- **Two main routes to adaptation: protection from the environment, or a feeding/funnelling
-  shape.** Structures pay either by shielding the chain from a damage field (shields evolved,
-  RESULTS 105–107) or by bringing material to the copying face (the funnel). Emergent
-  appendages (accretion on the chain's back) should be judged by these two effects: do grown
-  shapes shade the chain, or funnel letters to its face, and does that shift which sequences spread?
+An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
+it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
-## Mechanism logic
+## Heredity of machines (user, 2026-10-01)
 
-- **A latch needs memory or a drive (from RESULTS 79, 92, 94).** A shape switch that
-  reads only current occupancy cannot tell a bond just lost from one never formed, so it
-  trades acquisition for release. Every hold-then-release success here uses a driven,
-  state-changing cycle (docking, linking, energy-gated REPEL, rearming). Candidates:
-  - *Partner-completion release (Penrose-style):* a block changes shape when a bond forms
-    on another of its own sides (e.g. the new partner-partner link), not when its face
-    frees. It is local (own bonds only) and direction-sensitive. RESULTS 45 tried an
-    assembly-triggered shape on selected rest shapes; retry with actual geometry.
-  - *Energy-reset bistability:* a block keeps a folded or open state after an event and
-    returns only after contact with a charged E, reusing the existing rearm contact.
-- **Reuse the copy cycle for other operations.** Its REPEL/rearm release is the only
-  driven release. Supports, carriers or delivery may work better as ordinary copying
-  participants than as new bound states.
-- **Splinted ligation makes length, not function (RESULTS 94).** A bound complement
-  aligns two ends for joining; with heat cycles, templates stay 2–3x longer at a sixth of
-  the births. Only interesting if length then carries a function; otherwise this is the
-  known accumulation regularity.
-- **Sequestration is the recurring failure.** Binding-based functions keep locking
-  material (18, 29, 79, 94). Report the active (unbound, TPL) fraction beside any
-  binding benefit, and look for functions that pay while bound.
-
-## Half-cells (Q8)
-
-- **In-place capture under body motion** is being screened as Q8k (reopened under the
-  2026-09-28 speed/logic policy). Next steps if it forms new D-shapes: repeated cycles
-  with more loose material, then the equal-material bare-chain competitor.
-- **Radiation protection** as the wall's benefit (POLYMER_CAPS.md): compare walled and
-  bare competitors under ray particles that M/W block physically.
-- **Energy options** for rearming: `energyGate=false` diagnostic, ambient recharge, or
-  exposed-edge E capture (POLYMER_CAPS.md).
-
-## Environment (user, 2026-09-29; for later, not now)
-
-- **Patchy environment: safe pockets and destructive pockets.** A homogeneous world tends
-  to be either hostile to replication or eaten up by replicators until it stalls (seen in
-  many runs here). Zones of high temperature or radiation break things apart, returning
-  fresh, mixed supply; cool zones are safe places to build and experiment. Material flows
-  between them by diffusion. Existing hooks: `radBand` (radiation only in part of the world)
-  and heat cycles (`heatPeriod`, currently global). This needs position-dependent heat,
-  decay or erasing, which also fits the reversible programming idea (erase to blank in
-  hot zones). Name and mechanism are open; local rules stay local, and the environment
-  is an explicit, labelled external drive.
-- **Fixed blocks in the environment.** Immovable obstacles (at least colliding, perhaps
-  binding) give organisms something to push against or hold on to. Directed movement could
-  then evolve (grip, crawl, ratchet against the fixed structure) instead of only random
-  drift. Needs an immovable block type in the physics (infinite mass or pinned position).
-
-## Exploration method
-
-- **Pairwise mechanism-combination screen.** Toggle pairs of existing default-off
-  mechanisms in one small viable world, 50k steps, two seeds. Record births, length of
-  reproducing parents, distinct reproducing sequences and the active fraction separately.
-  This nominates leads cheaply; it is research by us, not evolution, and designed-gene
-  effects (shield, feed) are known calibrations. Many mechanisms need prerequisites, so
-  list valid pairs first.
-- **Rate-robust design test.** A mechanism whose logic is sound should work at dt 1 and at
-  dt 1/4 (RESULTS 93). Use this as a cheap robustness filter instead of individual-kick
-  gates when the claim is about logic rather than precise rates.
-
-## Speed
-
-- Research subclasses, not the core, are the slow part: the half-cell runtime cost
-  about 200x the core per block-step. Pattern: find per-sweep invariants (radii, pair
-  lists), cache them in a new subclass, and prove bit identity by trajectory comparison
-  (`experiments/half_cell_fast_test.js`). Historical sources stay byte-identical.
-- Remaining half-cell hotspot: polygon outline/hull allocation inside the contact sweep.
-  Caching outlines per sweep is exact only if hull ordering is reproduced; test before use.
-- Screen-tier QA (AGENTS) removes about 2.5x redundant replay steps from screens.
-
-## Hinge triangles (user, 2026-09-30)
-
-"Simulation is in need of a hinge triangle, useful for this and other things like membranes; not sure how best
-to make it open with intention." Follow-up: "opening with intent" means a trigger mechanism, not free flopping;
-maybe two hinges to capture better; a hatch that catches, closes, casts and opens again; blocks attached to
-hatches moved as a machine. Built (`tri_typed.js`, `tri_machines.js`): driven hinges switched by trigger sides,
-latches, hand-off and drop releases, the hatch pocket, a two-hatch conveyor and a key-gated ring membrane.
-User (2026-09-30): wall jumping is a bug (fixed: no tunnelling through structures); a double lock with one door
-closed while the other is open (built: airlock with pulse doors and an interlock signal). Still open: carrying
-keys through the airlock; two hinges as jaws; a pump through a wall.
-
-## Casting makes stray types; replicators need to scan (user, 2026-10-01)
-
-"One thing casting complicates is that new types can emerge that make past machines not build correctly. If a
-machine relies on [if side 1 is a, then side 2 is b], a triangle with side 1 = a and side 2 something else will
-block it. Still, a cast should theoretically be able to make all sorts of triangles. Long term a replicator relying
-on specific blocks would need a mechanism to scan and only let in the right ones."
-Notes: the pocket geometry already reads all three sides of a triangle (casting needs all three recognitions), so
-a pocket whose instructions equal what it recognizes changes nothing but works as a checkpoint; with a hatch on each
-side it becomes a scanner gate. A cheaper general guard is cooperative binding (a part stays bound only once a second
-side also matches; otherwise it is let go), which proofreads at every step without a machine.
+User: "Without new block types it should already be heritable, no? Because the blocks on the chain it attaches to
+are heritable and only bind arms." Yes: the chain carries seed glues, copies carry the same seeds (through the
+docker types), and parts regrow on every copy from supply, as the typed arms already did.
+- Any shape can be grown from a seed: lay its cells out as a spanning tree from the seed, give every tree edge its
+  own glue pair (unique attachment), and give the remaining shared edges closure glues (they bind once both sides
+  are attached), which closes rings. A pocket needs about 16 distinct types.
+- Information capacity: now only the two strand ends expose seeds (hidden backs are random fills). With `latGlue`
+  (fills must carry the complement of the docker's lateral glue) every back is determined by its face's docker type,
+  so the face sequence decides a sequence of parts along the back: a real genome-to-body mapping.
+- The bottleneck is supply: each copy needs its own kit types. A pocket that casts blanks into kit types would make
+  its own parts (an autocatalytic factory, the core of a metabolism).
 
 ## Biology as a source of ideas (user, 2026-10-01: "compare to real life and evolution")
 
 Mapping: typed triangles ~ monomers with specific pairing; complementary chain copying ~ template replication by
-base pairing; casting pocket ~ enzyme active site (changes a molecule's identity: metabolism, tRNA charging);
-factory ~ metabolism making building blocks; hatch / pulse doors ~ conformational changes; airlock with interlock ~
-alternating-access transporter (never open to both sides); scanner pocket ~ selectivity filter / lock and key; stray
-cast types ~ non-canonical monomers and toxic by-products.
-How life copes with strays: specificity from many contacts (whole-shape recognition), kinetic proofreading (a delay
-before commitment lets wrong partners fall off: polymerase and synthetase editing), sanitizing enzymes that destroy or
-recycle wrong building blocks, compartments with selective transport, and a frozen code (once much depends on an
-alphabet, new letters rarely get adopted, except through special machinery).
-Ideas for the project: (1) energy: hinge motion should cost something; a charged/discharged state, recharged by an
-environment zone, makes pumping directional and gives a metabolism; (2) proofreading as a binding rule (delay plus
-release); (3) "ribozyme" route: the replicator's own heritable arms fold into its pocket, so the factory is inherited
-without translation; (4) sanitizing pockets that cast stray types back into blanks (material recycling);
+base pairing; casting pocket ~ enzyme active site; factory ~ metabolism; hatches and doors ~ conformational changes;
+airlock with interlock ~ alternating-access transporter; scanner pocket ~ selectivity filter; stray cast types ~
+non-canonical monomers and toxic by-products.
+How life copes with strays: recognition of the whole shape (many contacts), kinetic proofreading (a delay before
+commitment lets wrong partners fall off), sanitizing enzymes that destroy or recycle wrong building blocks,
+compartments with selective transport, and a frozen code (once much depends on an alphabet, new letters are rarely
+adopted). Strays create selection for accuracy, which could make proofreading evolve here.
+Ideas: (1) energy for motion (built); (2) proofreading as a binding rule; (3) the "RNA world" route: the replicator's
+heritable arms fold into its own pocket; (4) sanitizing pockets that cast stray types back into blanks;
 (5) compartment plus transporters = a cell.
+
+## Energy (user, 2026-10-01)
+
+"Discharged energy shouldn't bind, otherwise the mechanism could just wait for a recharge." Built that way.
+
+## Casting makes stray types; replicators need to scan (user, 2026-10-01)
+
+"New types can emerge that make past machines not build correctly. If a machine relies on [if side 1 is a, then
+side 2 is b], a triangle with side 1 = a and side 2 something else will block it. Still, a cast should theoretically
+be able to make all sorts of triangles. Long term a replicator relying on specific blocks would need a mechanism to
+scan and only let in the right ones."
+- Scanner gate: the pocket already reads all three sides of a triangle (casting needs all three recognitions); a
+  pocket whose instructions equal what it recognizes changes nothing but works as a checkpoint; with a hatch on each
+  side it admits only triangles that match on all three sides.
+- Cooperative binding (cheap, everywhere): a part stays bound only once a second side also matches, otherwise it is
+  let go after a delay.
+
+## Machines from hinges (user, 2026-09-30)
+
+"Simulation is in need of a hinge triangle, useful for membranes; it should open with intention" (a trigger
+mechanism, not free flopping); "maybe two hinges to capture better"; "a hatch catching one, then closing and after a
+cast immediately opening again"; "blocks attached to hatches while they open or shut is good for moving blocks as a
+machine"; "a double lock with one door closed and one open so the membrane does not drift apart". All built (see
+INNOVATIONS) except two-hinge jaws. Lessons: a flap needs free space beside the side it swings toward (13% bulge);
+a single rotating hatch cannot carry cargo between two sealed regions (the cell it moves cargo into always touches
+the chamber), so a pump needs a carrying hatch plus a door, or a multi-blade rotor; any doorway turns a closed ring
+into a C while it is open, hence airlocks.
+
+## Design principles (user, 2026-09-30)
+
+- One base shape (the triangle) and local side rules; welding is ordinary bonding. Shapes come from chains of
+  triangles (letters T, R, Z by hidden backs); copies must be exact, so growth must be planned with intent (distinct
+  types, terminators), not left to repeats.
+- No programs in triangles ("one complexity level lower, like amino acids instead of proteins"): each triangle has
+  one active glue per side; behaviour comes from types and their combination. Repeats are allowed; if unwanted,
+  design the types with more intent.
+- Casting should be simple and general (able to make any type), rare by chance and routine in machines.
+
+## Adaptation and environment (user, 2026-09-29/30; for later)
+
+- Two routes to adaptation: protection from the environment (shields, shells) or a feeding shape (funnels, pumps).
+  Grown parts should be judged by these effects.
+- Patchy environment: destructive zones (heat, radiation) that break and recycle, and safe zones to build in; light
+  zones as energy sources (built as recharge zones).
+- Fixed blocks in the environment (immovable obstacles) would let directed movement evolve (grip, crawl).
+- In closed, material-limited worlds a part's cost so far outweighed its benefit (earlier triangle-chain batches):
+  parts need supply that machines make, or an environment that pays for them.

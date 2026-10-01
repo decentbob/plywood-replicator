@@ -1,7 +1,0 @@
-{"mode":"body4","done":32,"total":192,"cpuSeconds":3.015935}
-{"mode":"body4","done":64,"total":192,"cpuSeconds":8.406786}
-{"mode":"body4","done":96,"total":192,"cpuSeconds":29.472092}
-{"mode":"body4","done":128,"total":192,"cpuSeconds":30.950023}
-{"mode":"body4","done":160,"total":192,"cpuSeconds":36.543045}
-{"mode":"body4","done":192,"total":192,"cpuSeconds":57.4866}
-{"mode":"body4","complete":true,"cpuSeconds":58.215703,"summary":{"rows":[{"mode":"body4","n":32,"bridges":{"1":10,"0.25":14,"0.0625":14},"directEscapes":{"1":9,"0.25":10,"0.0625":4},"fisherP":0.4389694607398476,"verdict":"intermediate"}],"overall":null}}
