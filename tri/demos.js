@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | bud | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
 const {render,montage}=require('./render');
@@ -124,6 +124,23 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const focus={units:ring,radius:R+1.2};snap(s,'t0','t=0: protocell (prepared inside), blanks outside',focus);
       for(let t=1;t<=steps;t++){s.step();if(every(t,20))report(t);if(every(t,3))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
       finish('Protocell: the membrane imports blanks, pockets inside cast them into dockers, the chain copies inside');},
+    // budding: a parent ring (prepared) exposes seed z on one outer face; a daughter ring grows from it (periodic ring
+    // kit), and when it closes, its root's closure (a trigger) releases its seed latch: the daughter lets go and the
+    // seed is free for the next one (extra: motif copies, 14)
+    bud(){steps=steps||40000;const per=parseInt(extra)||14,size=20,c=size/2,K=S.ringKit(3,'z',null,true),P=S.ringKit(3,'q').tris.map(t=>t.v);
+      // the seed sits at the tip of a three-cell stalk (parent cell 0, side 1; then sides 1, 2; seed on the tip's side 1),
+      // found by a search: the daughter's closing gap (always next to its root) stays 2.5 away from the parent
+      const mir=(V,i)=>{const a=V[i],b=V[(i+1)%3],c=V[(i+2)%3];return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+      const parent=P.map(v=>({v,type:'---'})),s1=mir(P[0],1),s2=mir(s1,1),s3=mir(s2,2);parent.push({v:s1,type:'---'},{v:s2,type:'---'},{v:s3,type:'-z-'});
+      const supply={[K.tris[0].type]:6};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
+      const {s,structures}=createWorld({seed,size,structures:[{tris:parent,x:c-3,y:c}],supply});const PU=new Set(structures[0]);
+      const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},rootT=norm(K.tris[0].type),motif=new Set(K.kit.map(norm));
+      const report=t=>{const {comp,members}=s.bodies(),pc=comp[structures[0][0]];let att=0,free=[];for(const m of members){const kit=m.filter(u=>!PU.has(u)&&(motif.has(norm(typeName(s,u)))||norm(typeName(s,u))===rootT)).length;
+          if(comp[m[0]]===pc)att+=kit;else if(kit>=10)free.push(kit);}
+        console.log(`t=${t} on parent=${att} released rings [${free.join(' ')}] closures=${s.ev.closeGlue||0} completions=${s.ev.complete||0}`);};
+      snap(s,'t0','t=0: parent ring with seed z, daughter kit in supply',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,20))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: buds released ${s.ev.complete||0}`,null,false);}
+      finish('Budding: a daughter ring grows on the parent and lets go when it closes');},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);

@@ -220,8 +220,9 @@ function kitOptions(tris,reserved='',seed='z',slots=[]){const out=[];
 // the glue g_k its predecessor exposes and exposes g_(k+1) to its successor; motif letters cycle, so growth runs around
 // the ring without counting. The root (cell 0) attaches to a seed by its outer side and closes the ring: its side
 // toward the last cell carries G_0 without '@' (a closure once the last cell is attached). Inner and outer sides are
-// inert. Returns {tris (ring in growth order, root first, with types), kit (motif types), root, rootSide, letters}.
-function ringKit(R=3,seed='z',letters=null){
+// inert. bud: the root's seed side releases on completion ('&'), so a closed ring lets go of its seed. twoWay (two
+// fronts) grows faster but the fronts may meet at an inward-facing cell that only the closed-off inside can fill. Returns {tris (ring in growth order, root first, with types), kit (motif types), root, rootSide, letters}.
+function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false){
   const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
   // order around the ring, starting just past angle -30 degrees (a side's first cell)
   const start=-Math.PI/6+1e-6,key=v=>((ang(v)-start)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);cells.sort((a,b)=>key(a)-key(b));
@@ -236,11 +237,14 @@ function ringKit(R=3,seed='z',letters=null){
   const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const L=letters||[...LOW].filter(c=>!'fkxyz'.includes(c)&&c!==seed).slice(0,P);
   const types=cells.map((v,k)=>{const t=['-','-','-'],prev=shared(v,cells[(k+N-1)%N]),next=shared(v,cells[(k+1)%N]);if(prev<0||next<0)throw Error('ring kit: cells not adjacent');
-    t[prev]=UP[LOW.indexOf(L[k%P])]+'@';t[next]=L[(k+1)%P];return t;});
+    t[prev]=UP[LOW.indexOf(L[k%P])]+'@';t[next]=L[(k+1)%P]+(twoWay?'@':'');return t;});   // twoWay: either chain side attaches (two growth fronts)
   // root: closure side without '@', seed on its outer side (the side farther from the centre)
-  const root=types[0],v0=cells[0],prev0=shared(v0,cells[N-1]);root[prev0]=root[prev0].replace('@','.');
+  const root=types[0],v0=cells[0],prev0=shared(v0,cells[N-1]),next0=shared(v0,cells[1]);
+  if(twoWay){root[prev0]=root[prev0].replace('@','');root[next0]=root[next0].replace('@','');}   // the root exposes both fronts
+  else root[prev0]=root[prev0].replace('@','.');
   let rootSide=-1,far=-1;for(let i=0;i<3;i++){if(root[i]!=='-')continue;const m=[(v0[i][0]+v0[(i+1)%3][0])/2,(v0[i][1]+v0[(i+1)%3][1])/2],d=Math.hypot(m[0],m[1]);if(d>far){far=d;rootSide=i;}}
-  root[rootSide]=gname(comp(gcode(seed)))+'@';
+  root[rootSide]=gname(comp(gcode(seed)))+'@'+(bud?'&':'');
+  // bud: the seed side releases on completion ('&'): once no growth front is open, the ring lets go of its seed
   const names=types.map(t=>t.join(''));
   return {tris:cells.map((v,k)=>({v,type:names[k]})),kit:names.slice(P,2*P),root:0,rootSide,letters:L.join(''),N,P};}
 

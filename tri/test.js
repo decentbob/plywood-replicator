@@ -60,6 +60,14 @@ test('import ring: the revolving door carries a caught blank inside and drops it
   s.run(120);let x=0,y=0;for(let u=0;u<tris.length;u++){x+=s.px[u];y+=s.py[u];}x/=tris.length;y/=tris.length;
   assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(K),'let go');assert.ok(Math.hypot(s.px[K]-x,s.py[K]-y)<(R-1)*H,'inside the ring');symmetric(s);});
 
+test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
+  for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
+    const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
+    {const A=anc.v,q=A[1],w=A[2],e=A[0];base.v=[w,q,[q[0]+w[0]-e[0],q[1]+w[1]-e[1]]];}
+    const ring=K.tris.slice(0,K.tris.length-missing),all=[anc,base,...ring];const s=new TriSim({sigma:0,sigmaRot:0,W:16,H:16},all.length);buildStructure(s,all.map((_,k)=>k),all,8,8);
+    assert.ok(s.partner(2,K.rootSide)===0,'root on the seed');for(let k=0;k<80;k++)s.step();
+    assert.equal(s.partner(2,K.rootSide)<0,expect,missing?'incomplete ring must hold':'complete ring must let go');}});
+
 test('hinge: a triggered flap swings 60 degrees and returns when the trigger lets go',()=>{
   // partner P (fixed by no jostle), flap F hinged at P's shared corner, trigger side of F faces cargo C
   const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'--H'},{v:[[0,0],[0.5,H],[-0.5,H]],type:'h<-A*',loose:true},{v:[[0,0],[-0.5,H],[-1,0]],type:'a--',loose:true}];

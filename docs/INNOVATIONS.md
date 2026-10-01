@@ -8,6 +8,19 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Budding: a daughter ring grows on the parent and lets go when complete** — works (5 of 5 worlds released a
+  complete daughter; 2 released two). New local rule, the open signal: an attached part with an unbonded glued side
+  (an open growth front) emits a signal relayed one bond per pass and fading by 1 per bond; a side marked `&` lets go
+  once its triangle hears none, i.e. once the part it grew into is complete. The daughter's root carries its seed
+  side with `&`: when the ring closes, the last open sides vanish, the signal fades and the daughter detaches; the
+  parent's seed is free for the next daughter. Geometry found by search: the seed sits at the tip of a three-cell
+  stalk on the parent, so the daughter's closing gap (always next to its root, with one front) is 2.5 away from the
+  parent (with the seed on the wall, the last sites faced a crevice and never filled). Two growth fronts were tried
+  and dropped: they meet at a random cell, and an inward-facing last cell can only be filled from the closed inside.
+  Parent R=3 ring, daughter kit (5 motif types x 14, 6 roots) in a 20x20 world, 50000 steps: first daughter released
+  at about 15-30k steps. Test: a complete prepared daughter lets go, an incomplete one holds.
+  `node tri/demos.js bud 3 50000 runs`. Picture: `docs/pictures/budding.png`. Enables division: the same signal can
+  release a bud that carries a genome copy and a factory.
 - **Protocell: import, metabolism and copying inside a membrane** — works (2 of 2 worlds). Combines the import ring
   (R=7), and inside (labelled start, layout found by a search that keeps slots, dock sites and the door's sweep free) the
   chain `aaaaa` and two lid pockets that cast blanks into its dockers `A--` and `a--`; outside 50 blanks and 30 junk

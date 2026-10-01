@@ -26,7 +26,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `+` | hear side: the triangle hears the trigger signal of the partner bonded here (relayed, below) |
 | `=` (hinge side) | wide hinge: swings 120 degrees instead of `hingeAngle` |
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (like K bonded to k) |
-| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part) |
+| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); once attached, it never closes a bond on an attach side |
+| `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
 | `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
@@ -99,6 +100,9 @@ not complementing, is the default: a complemented product would stick to its own
   else cuts the bond (e.g. a cast). A hand-off flap's catch side catches free triangles only (it never closes onto
   the cargo it handed off); a flap's catch side catches only while the flap is at rest.
 - **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
+- **Open signal (completion):** an attached part (a triangle with an attach side) with an unbonded glued side (an
+  open growth front, an open closure side) emits `openRange` (60), relayed -1 per bond. A grown part that hears none is
+  complete; `&` sides let go then (a bud's seed side: a daughter ring lets go of its parent once it has closed).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
   (a trigger side anywhere in a frame) to a flap through a few bonds.
