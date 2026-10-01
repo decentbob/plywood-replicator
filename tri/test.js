@@ -59,6 +59,16 @@ test('parts: a free triangle with an attach side binds only by it',()=>{
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(30);
     assert.equal(s.partner(0,2)===2,expect,part);}});
 
+test('anchor: an anchor side catches a strand end seed and the strand is placed flush as one body',()=>{
+  for(const [ag,expect] of [['Z|',true],['Y|',false],['Z',false]]){
+    const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':2},params:{sigma:0,sigmaRot:0}});
+    const F=founders[0],u=F[F.length-1],r=s.roles(u),i=r.inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
+    const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]],sh=[0.12,-0.08];
+    const V=[b,a,x].map(p=>[p[0]+sh[0],p[1]+sh[1]]);   // the anchor cell (its side 0 faces the end, a little off the flush place), welded on side 1
+    const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,ag+'f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);
+    s.derive();s.run(3);const ok=s.partner(u,i)===s.n-2;assert.equal(ok,expect,ag);
+    if(ok){assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');for(let q=0;q+1<F.length;q++)for(let e=0;e<3;e++){const qq=s.bond[F[q]*3+e];if(qq>=0)assert.ok(s.flushGap(F[q],e,(qq/3)|0,qq%3)<1e-6,'strand stays rigid');}}
+    symmetric(s);}});
 test('import ring: the revolving door carries a caught blank inside and drops it',()=>{
   const {tris,door,R}=S.importRing(4,'X'),all=[...tris,{v:door.keyV,type:'xxx',loose:true}],K=all.length-1;
   const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},all.length);buildStructure(s,all.map((_,k)=>k),all,7,7);s.derive();assert.ok(s.bonded(K),'blank caught');
