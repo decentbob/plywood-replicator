@@ -70,6 +70,18 @@ function partPlacement(s,units,end,K,clear=[]){
   const dist=(v,w)=>{const p=cen(v),q=cen(w);return Math.hypot(p[0]-q[0],p[1]-q[1]);};
   for(const v of [...cells,...clr]){for(const w of strand)if(dist(v,w)<0.3)return {ok:false,cells};for(const w of dock)if(dist(v,w)<0.7)return {ok:false,cells};}
   return {ok:true,cells};}
+// The cells of strand `units` (and its dock sites and the row beyond them, where a copy lies) in the coordinates of kit
+// K, when the strand's end `end` is bound by its spare edge to the kit root's seed side. Read-only planning for demos.
+function strandInKit(s,units,end,K){
+  const u0=units[0],P=(u,k)=>[s._dx(s.px[u]-s.px[u0])+s.ox[u*3+k],s._dy(s.py[u]-s.py[u0])+s.oy[u*3+k]];
+  const e=s.roles(end).inert,a=P(end,(e+1)%3),b=P(end,e),V=K.tris[K.root].v,i=K.rootSide,c=V[i],d=V[(i+1)%3];
+  const ang=Math.atan2(d[1]-c[1],d[0]-c[0])-Math.atan2(b[1]-a[1],b[0]-a[0]),cs=Math.cos(ang),sn=Math.sin(ang);
+  const T=p=>{const x=p[0]-a[0],y=p[1]-a[1];return [c[0]+cs*x-sn*y,c[1]+sn*x+cs*y];};
+  const strand=units.map(u=>[0,1,2].map(k=>T(P(u,k)))),dock=[],beyond=[];
+  for(const u of units){const r=s.roles(u);if(r.role!==SFACE||r.free<0)continue;const f=r.free,A=P(u,f),B=P(u,(f+1)%3),C=P(u,(f+2)%3),X=[A[0]+B[0]-C[0],A[1]+B[1]-C[1]];
+    dock.push([B,A,X].map(T));const sh=[(B[0]+A[0]+X[0]-A[0]-B[0]-C[0])/3,(B[1]+A[1]+X[1]-A[1]-B[1]-C[1])/3];   // dock centre minus face centre
+    beyond.push([B,A,X].map(p=>T([p[0]+sh[0],p[1]+sh[1]])));}
+  return {strand,dock,beyond};}
 // read-only census: strands (chain-bonded components) with face glue sequence and gap string
 function census(s){const seen=new Set(),out=[];
   for(let u=0;u<s.n;u++){if(seen.has(u))continue;const e=s._edges(u);if(e.prev>=0||e.next<0)continue;
@@ -79,4 +91,4 @@ function census(s){const seen=new Set(),out=[];
     out.push({units,faces,gaps,n:units.length,paired:units.some(v=>s._edges(v).face>=0)});}
   return out;}
 const typeCount=s=>{const m={};for(let u=0;u<s.n;u++){const k=canon(typeName(s,u));m[k]=(m[k]||0)+1;}return m;};
-module.exports={createWorld,partPlacement,buildStructure,placeTri,placeFree,band,rolesFromGaps,census,typeCount,H};
+module.exports={createWorld,partPlacement,strandInKit,buildStructure,placeTri,placeFree,band,rolesFromGaps,census,typeCount,H};

@@ -1,9 +1,9 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
-const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
+const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit}=require('./world');
 const {render,montage}=require('./render');
 const S=require('./structures');
 const {TriSim,canon,typeName}=require('./sim');
@@ -160,8 +160,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // living membrane: a chain whose low end carries seed z grows a membrane with its own import door (door ring kit:
     // motif front + wall cell + latched door panel with key X; the motif closes onto the panel's hinge); the closed ring
     // lets go of the chain; blanks xxx bind the key and are carried in, junk stays out (extra: RxM, ring R, M kit copies
-    // per cell; default 6x3)
-    live(){steps=steps||60000;const [R,mult]=(extra||'6x3').split('x').map(Number),size=R*2+14,c=size/2,K=S.doorRingKit(R,'z','X');
+    // per cell; default 6x3; RxMp: a pore instead of a door, the panel opens once the ring is closed and stays open)
+    live(){steps=steps||60000;const pore=(extra||'').endsWith('p'),[R,mult]=(extra||'6x3').replace('p','').split('x').map(Number),size=R*2+14,c=size/2,K=S.doorRingKit(R,'z','X',4,'',pore?3:1,true,pore);
       const supply={[K.rootType]:2,xxx:16,'---':16};for(const [t,m] of Object.entries(K.counts))supply[t]=(supply[t]||0)+(mult||3)*m;
       const {s,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-',x:c,y:c}],supply});const F=founders[0];
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},kitT=new Set([...Object.keys(K.counts),K.rootType].map(norm));
@@ -203,6 +203,30 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,50))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, imports ${s.ev.drop||0}`,null,false);}
       snap(s,'zoom','the grown cell',{units:F,radius:R+1.5});
       finish('Grown protocell: a chain grows its membrane with a door and a casting pocket, imports blanks and copies inside');},
+    // birth: chain aaaaa with membrane seed m on its high end grows a whole cell (cellKit: membrane with a pore and an
+    // organelle of two lid pockets on its wall, casting dockers AXm and aXm; the root keeps the chain). When the cell is
+    // complete the pore opens; blanks diffuse in, the pockets cast dockers, the chain copies (blanks are the fills:
+    // latGlue, docker prev side X); a copy carries m on its free end, may leave through the pore and grow its own cell
+    // from the supply (extra: kit copies per cell, 3)
+    birth(){steps=steps||400000;const R=7,mult=parseInt(extra)||3,size=40,c=size/2;
+      const founder={gaps:[1,1,1,1],faces:'aaaaa',ends:'-m',x:c-7,y:c};
+      const probe=createWorld({seed,size,founders:[founder]}),U0=probe.founders[0];
+      const K=S.cellKit({R,k:6,m:1,pre:7,order:[false],keepFor:K0=>{const g=strandInKit(probe.s,U0,U0[U0.length-1],K0);return [...g.strand,...g.dock];}});
+      console.log('cell kit: cells',K.tris.length,'types',Object.keys(K.counts).length,'root',K.rootType,'organelle risk',K.organelle.K.risk);
+      const supply={[K.rootType]:mult,xxx:60,'---':20};for(const [t,n] of Object.entries(K.counts))supply[t]=(supply[t]||0)+mult*n;
+      const {s,founders}=createWorld({seed,size,founders:[founder],supply,params:{pLoose:0.05,latGlue:true}});const F=founders[0];
+      const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},kitT=new Set([...Object.keys(K.counts),K.rootType].map(norm));
+      const isKit=u=>kitT.has(norm(typeName(s,u)));
+      const report=t=>{const {comp,members}=s.bodies(),cells=[];
+        for(const m of members){const k=m.filter(isKit).length;if(k>=20)cells.push(m);}
+        const cs=census(s).filter(q=>q.n>=7);
+        const where=q=>{const b=comp[q.units[0]];const own=cells.findIndex(m=>comp[m[0]]===b);if(own>=0)return 'on cell'+own;
+          for(let i=0;i<cells.length;i++){const M=cells[i].filter(isKit);let x=0,y=0;for(const u of M){x+=s._dx(s.px[u]-s.px[M[0]]);y+=s._dy(s.py[u]-s.py[M[0]]);}x=s.px[M[0]]+x/M.length;y=s.py[M[0]]+y/M.length;
+            if(Math.hypot(s._dx(s.px[q.units[4]]-x),s._dy(s.py[q.units[4]]-y))<(R-1)*H)return 'in cell'+i;}return 'free';};
+        console.log(`t=${t} cells [${cells.map(m=>m.filter(isKit).length).join(' ')}] strands [${cs.map(q=>q.faces+(q.paired?'*':'')+':'+where(q)).join(' ')}] casts=${s.ev.cast||0} docks=${s.ev.dock||0} releases=${s.ev.release||0} unlatch=${s.ev.unlatch||0}`);};
+      snap(s,'t0','t=0: chain aaaaa with seed m; cell kit, blanks, junk',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,80))report(t);if(every(t,8))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
+      finish('Birth: a chain grows its cell, the cell opens a pore, copies leave and grow their own cells');},
     // heritable cells: chain aaaa with seed z on its high end; dockers Ay.z/ay.z carry z on their next side (a copy's high
     // end exposes it again), fills Y-- (latGlue: dockers never fill); a membrane kit (ring R=4, root facing inward) in
     // supply: chains copy, and every chain grows a membrane around itself (extra: motif copies, 12)

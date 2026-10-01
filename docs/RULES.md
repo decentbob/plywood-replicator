@@ -114,9 +114,10 @@ not complementing, is the default: a complemented product would stick to its own
   (catch or closure) while its triangle hears an open signal (below): a sensor is live once its structure is complete (a grown door's key,
   a grown pocket's slot; a prepared machine has no attach sides and hears none).
 - **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
+  A latch holds a trigger while its triangle hears an open signal: a door does not open before its wall is complete.
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` (an open growth front) emits
   `openRange` (120), relayed -1 per bond (through every bond, so a pocket on a chain hears the chain's growing
-  membrane). An `&` side (a spent attachment) emits nothing. A grown part that hears none is
+  membrane). An `&` side (a spent attachment) and a latch side `~` (an edge meant to come apart) emit nothing. A grown part that hears none is
   complete; `&` sides let go then (a bud's seed side: a daughter ring lets go of its parent once it has closed).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor

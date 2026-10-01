@@ -174,7 +174,7 @@ function airlock(R=4,win=2.5){
 function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   if(root==='auto'){let best=null;for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;try{const k=kit(tris,r,reserved,seed,null,slots);if(seed&&k.rootSide<0)continue;
       if(!best||k.risk<best.risk||(k.risk===best.risk&&k.depth<best.depth))best=k;}catch(e){}}if(!best)throw Error('kit: no root');return best;}
-  const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Zα-ωΑ-Ω-])([<>.!^#*~$+=%@]*)/g)].map(m=>({g:m[1],m:m[2]})));
+  const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Zα-ωΑ-Ωа-яА-Я-])([<>.!^#*~$+=%@]*)/g)].map(m=>({g:m[1],m:m[2]})));
   const E=[];for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){const A=tris[a].v,B=tris[b].v;
     if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))E.push({a,i,b,j});}
   const plain=e=>tok[e.a][e.i].g==='-'&&tok[e.b][e.j].g==='-',loose=e=>tris[e.a].loose||tris[e.b].loose;
@@ -259,38 +259,105 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
 // latch holds a trigger while its triangle hears an open signal, so a key bound early does not drop the panel.) A
 // key that binds a blank then swings the panel 120 degrees inward, the hinge drops the blank inside, the panel swings
 // back and re-latches. The door position is found by a search (the panel's sweep clear of the wall, the key's cargo
-// ending inside). avoid: letters the kit must not use. Returns {tris (growth order: root, motif..., hinge cell,
-// panel..., u), counts (type -> cells needed, root excluded), root, rootSide, letters, door}.
-function doorRingKit(R=5,seed='z',key='X',k=4,avoid=''){
+// ending inside). avoid: letters the kit must not use. m: unique wall cells between the root and the panel (their
+// free sides can carry seeds for inner parts: `wall`). release false: the root keeps the chain (no '&'). Returns {tris (growth order: root, motif..., hinge cell,
+// panel..., u), counts (type -> cells needed, root excluded), root, rootSide, letters, door}. order: which way round the
+// short front may run ([false, true]: either, plain first). pore: no key; the second panel
+// cell attaches by a trigger side, so the door swings open as soon as its hinge exists and stays open (a pore).
+function doorRingKit(R=5,seed='z',key='X',k=4,avoid='',m=1,release=true,pore=false,order=[false,true],pre=0){
   const base0=ringKit(R,seed,null,true,false,true).tris.map(t=>t.v),N=base0.length,P=2*R-1;
   const shr=(a,b)=>a.filter(p=>b.some(q=>same(p,q))),rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
   let door=null;
-  for(const rev of [false,true]){const base=rev?[base0[0],...base0.slice(1).reverse()]:base0;
+  for(const rev of order){const base=rev?[base0[0],...base0.slice(1).reverse()]:base0;
     for(let r0=0;r0<N&&!door;r0++){const cells=[...base.slice(r0),...base.slice(0,r0)];
       const side=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(cells[a][i],cells[b][(j+1)%3])&&same(cells[a][(i+1)%3],cells[b][j]))return i;return -1;};
       const freeS=c=>[0,1,2].find(i=>side(c,(c+1)%N)!==i&&side(c,(c+N-1)%N)!==i);
       const outw=c=>{const v=cells[c],f=freeS(c);return hexr([(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2])>R-0.5;};   // hex radius (Euclidean distance misjudges sides near corners)
-      const hc=N-1-k,hp=hc-1;if(outw(0)||!outw(hc)||!outw(hp))continue;
+      const hc=N-m-k,hp=hc-1;if(outw(0)||(!pore&&!outw(hc))||!outw(hp))continue;
       const panel=[...Array(k).keys()].map(q=>hc+q),fixed=cells.filter((_,x)=>!panel.includes(x)),f=freeS(hc),v=cells[hc];
       const kv=[v[(f+1)%3],v[f],[v[f][0]+v[(f+1)%3][0]-v[(f+2)%3][0],v[f][1]+v[(f+1)%3][1]-v[(f+2)%3][1]]];
-      for(const Pv of shr(cells[hc],cells[hp]))for(const dir of [1,-1]){if(door||!sweepClear([...panel.map(c=>cells[c]),kv],fixed,Pv,dir,120))continue;
-        if(hexr(cen(kv.map(p=>rot(p,Pv,dir*2*Math.PI/3))))<R-1-0.35)door={cells,side,freeS,hc,hp,panel,P:Pv,dir,keySide:f};}}
+      for(const Pv of shr(cells[hc],cells[hp]))for(const dir of [1,-1]){if(door)continue;
+        // a pore's panel swings out and stays out (the inside stays free); a door's key carries its cargo inside
+        if(pore){if(sweepClear(panel.map(c=>cells[c]),fixed,Pv,dir,120)&&(()=>{const q=panel.flatMap(c=>cells[c]).map(p=>rot(p,Pv,dir*2*Math.PI/3));return hexr([q.reduce((a,p)=>a+p[0],0)/q.length,q.reduce((a,p)=>a+p[1],0)/q.length])>R;})())door={cells,side,freeS,outw,hc,hp,panel,P:Pv,dir,keySide:f};continue;}
+        if(!sweepClear([...panel.map(c=>cells[c]),kv],fixed,Pv,dir,120))continue;
+        if(hexr(cen(kv.map(p=>rot(p,Pv,dir*2*Math.PI/3))))<R-1-0.35)door={cells,side,freeS,outw,hc,hp,panel,P:Pv,dir,keySide:f};}}
     if(door)break;}
   if(!door)throw Error('doorRingKit: no clear door');
-  const {cells,side,freeS,hc,hp}=door,used=new Set([seed,key.toLowerCase(),'f','k','x','y',...[...avoid].map(c=>LOW[Math.max(LOW.indexOf(c),UP.indexOf(c))])]);
-  const L=[...LOW].filter(c=>!used.has(c)).slice(0,P),X=[...LOW].filter(c=>!used.has(c)&&!L.includes(c)).slice(0,k+1),U=c=>UP[LOW.indexOf(c)];
+  const {cells,side,freeS,outw,hc,hp}=door,used=new Set([seed,key.toLowerCase(),'f','k','x','y',...[...avoid].map(c=>LOW[Math.max(LOW.indexOf(c),UP.indexOf(c))])]);
+  const L=[...LOW].filter(c=>!used.has(c)).slice(0,P),X=[...LOW].filter(c=>!used.has(c)&&!L.includes(c)).slice(0,k+m+pre),U=c=>UP[LOW.indexOf(c)];
   const T=cells.map(()=>['-','-','-']);
   // motif front: c_1 .. c_hp (cell q attaches by L_q, exposes L_(q+1)); the root exposes L_1 and holds the seed
-  for(let q=0;q<=hp;q++){const nx=side(q,q+1);T[q][nx]=L[(q+1)%P]+'@';if(q>0)T[q][side(q,q-1)]=U(L[q%P])+'@';}
-  T[0][freeS(0)]=gname(comp(gcode(seed)))+'@&';
-  // short front: root -> u (cell N-1) -> panel N-2 .. hc
-  T[0][side(0,N-1)]=X[0]+'@';T[N-1][side(N-1,0)]=U(X[0])+'@';
-  T[N-1][side(N-1,N-2)]=X[1]+'@';T[N-2][side(N-2,N-1)]=U(X[1])+'~@';
-  for(let q=N-2;q>hc;q--){const e=X[N-q];T[q][side(q,q-1)]=e+'+@';T[q-1][side(q-1,q)]=U(e)+'+@';}
-  {const i=side(hc,hp),v=cells[hc];T[hc][i]=U(L[hc%P])+(same(v[i],door.P)?'<':'>')+'!=.';T[hc][door.keySide]=key+'*';}
+  // (pre: the first links root -> c_1 -> .. -> c_pre use unique letters, so c_1 .. c_pre are unique wall cells too)
+  const lk=q=>q<pre?X[k+m+q]:L[(q+1)%P];   // the glue of the link from c_q to c_(q+1)
+  for(let q=0;q<=hp;q++){const nx=side(q,q+1);T[q][nx]=lk(q)+'@';if(q>0)T[q][side(q,q-1)]=U(lk(q-1))+'@';}
+  T[0][freeS(0)]=gname(comp(gcode(seed)))+'@'+(release?'&':'');
+  // short front: root -> wall cells N-1 .. N-m -> panel N-m-1 (latched to the last wall cell) .. hc (welded)
+  for(let q=0;q<m;q++){const a=q?N-q:0,b=N-1-q;T[a][side(a,b)]=X[q]+'@';T[b][side(b,a)]=U(X[q])+'@';}
+  // the latch: both sides marked (an edge that comes apart: no open signal from either side once the door is open)
+  T[N-m][side(N-m,N-m-1)]=X[m]+'~@';T[N-m-1][side(N-m-1,N-m)]=U(X[m])+'~@';
+  for(let q=N-m-1;q>hc;q--){const e=X[m+(N-m-1-q)+1];T[q][side(q,q-1)]=e+'+@';T[q-1][side(q-1,q)]=U(e)+(pore&&q===N-m-1?'*':'')+'+@';}
+  {const i=side(hc,hp),v=cells[hc];T[hc][i]=U(L[hc%P])+(same(v[i],door.P)?'<':'>')+'!=.';if(!pore)T[hc][door.keySide]=key+'*';}
+  const wall=[...[...Array(m).keys()].map(q=>N-1-q),...[...Array(pre).keys()].map(q=>q+1)].map(c=>{const f=freeS(c);return {cell:c,side:f,inward:!outw(c)};});
   const types=T.map(t=>t.join('')),counts={},canonT=t=>[0,1,2].map(r=>[...t.slice(r),...t.slice(0,r)].join('')).sort()[0];
   T.slice(1).forEach(t=>{const c=canonT(t);counts[c]=(counts[c]||0)+1;});
-  return {tris:cells.map((v,q)=>({v,type:types[q]})),types,counts,root:0,rootSide:freeS(0),rootType:types[0],N,letters:[...L,...X].join(''),door:{hc,hp,P:door.P,dir:door.dir,panel:door.panel}};}
+  return {tris:cells.map((v,q)=>({v,type:types[q]})),types,counts,root:0,rootSide:freeS(0),rootType:types[0],N,letters:[...L,...X].join(''),wall,door:{hc,hp,P:door.P,dir:door.dir,panel:door.panel}};}
+
+// map kit K so that its root's seed side lies flush against side i of the triangle with vertices A (a shared edge runs
+// the opposite way); returns the mapped cells and the point map
+function mapKit(K,A,i){const a=A[(i+1)%3],b=A[i],V=K.tris[K.root].v,j=K.rootSide,c=V[j],d=V[(j+1)%3];
+  const ang=Math.atan2(b[1]-a[1],b[0]-a[0])-Math.atan2(d[1]-c[1],d[0]-c[0]),cs=Math.cos(ang),sn=Math.sin(ang);
+  const T=p=>{const x=p[0]-c[0],y=p[1]-c[1];return [a[0]+cs*x-sn*y,a[1]+sn*x+cs*y];};return {cells:K.tris.map(t=>t.v.map(T)),T};}
+
+// Two lid pockets joined into one structure (an organelle with two slots): the second pocket turned by a multiple of
+// 60 degrees and moved by a lattice vector so that the two do not overlap, neither covers the other's slot or lid
+// space, and they share at least one edge (so one kit can grow both). Returns candidates {tris, slots, clear}, most
+// shared edges first.
+function pocketPair(instrA,instrB,recog='X'){
+  const A=lidPocket(instrA,recog,null,'B'),B=lidPocket(instrB,recog,null,'B'),sA=lidSlot('B'),cA=lidClear();
+  const rotP=(p,k)=>{const a=k*Math.PI/3,c=Math.cos(a),s=Math.sin(a);return [c*p[0]-s*p[1],s*p[0]+c*p[1]];};
+  const keyOf=v=>{const c=cen(v);return Math.round(c[0]*6)+','+Math.round(c[1]*6/H);};
+  const occA=new Set(A.map(t=>keyOf(t.v))),freeA=new Set([sA.v,...cA].map(keyOf)),out=[];
+  for(let k=0;k<6;k++)for(let i=-6;i<=6;i++)for(let j=-6;j<=6;j++){const d=[i+j/2,j*H],T=p=>{const q=rotP(p,k);return [q[0]+d[0],q[1]+d[1]];};
+    const Bt=B.map(t=>({...t,v:t.v.map(T)})),sB={...sA,v:sA.v.map(T)},cB=cA.map(v=>v.map(T));
+    const occB=Bt.map(t=>keyOf(t.v)),freeB=[sB.v,...cB].map(keyOf);
+    if(occB.some(x=>occA.has(x)||freeA.has(x))||freeB.some(x=>occA.has(x)))continue;
+    let shared=0;for(const a of A)for(const b of Bt)for(let x=0;x<3;x++)for(let y=0;y<3;y++)if(same(a.v[x],b.v[(y+1)%3])&&same(a.v[(x+1)%3],b.v[y]))shared++;
+    if(!shared)continue;out.push({tris:[...A,...Bt],slots:[sA,sB],clear:[...cA,...cB],shared});}
+  return out.sort((a,b)=>b.shared-a.shared);}
+
+// Cell kit (a membrane that grows its own machines): a door ring kit (door or pore; the root keeps the chain) whose
+// inward-facing wall cell carries the seed of an organelle (two lid pockets joined, `pocketPair`), so the casting
+// machinery hangs on the wall, not on the chain. Searched: layout of the pair, kit option, wall cell, so that every
+// organelle cell, slot and lid space lies inside the ring, the slots and lid spaces stay off the wall and the door's
+// sweep, and nothing touches the cells in `keep` (e.g. the chain and the room its copy needs, in ring coordinates;
+// keepFor(ringKit) computes them for the chosen ring).
+// Fewest risky cells first. Returns {tris (ring cells, then organelle cells), counts (type -> cells, root excluded),
+// rootType, rootSide, root, N, ring (the door ring kit), organelle {K, cells, wall, side, seed}, letters}.
+function cellKit({R=7,seed='m',k=4,m=5,pre=0,pore=true,key='X',recog='X',pockets=['AXm','aXm'],avoid='',keep=null,keepFor=null,maxRisk=99,order=[false,true]}={}){
+  const used0=[...new Set([...pockets.join(''),recog,seed,...avoid].filter(c=>c!=='-').map(c=>LOW[Math.max(LOW.indexOf(c),UP.indexOf(c))]))].join('');
+  const KR=doorRingKit(R,seed,key,k,used0,m,false,pore,order,pre),ring=KR.tris.map(t=>t.v);if(keepFor)keep=keepFor(KR);keep=keep||[];
+  const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
+  // the part of the door's sweep inside the ring (panel cells turned up to 120 degrees)
+  const sweep=[];for(let q=1;q<=12;q++)for(const c of KR.door.panel){const p=cen(ring[c].map(p=>rot(p,KR.door.P,KR.door.dir*q/12*2*Math.PI/3)));if(hexr(p)<R-1)sweep.push(p);}
+  const dist=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1]),inner=KR.wall.filter(w=>w.inward),ringC=ring.map(cen),keepC=keep.map(cen);
+  let letters=used0+KR.letters;const sd=[...LOW].find(c=>!letters.includes(c));letters+=sd;
+  const layouts=pockets.length===2?pocketPair(pockets[0],pockets[1],recog):[{tris:lidPocket(pockets[0],recog,null,'B'),slots:[lidSlot('B')],clear:lidClear()}];
+  let best=null;
+  for(const L of layouts){const opts=kitOptions(L.tris,letters,sd,L.slots);
+    for(const K of opts){if(K.risk>maxRisk||(best&&K.risk>=best.K.risk))continue;
+      for(const w of inner){const {cells,T:map}=mapKit(K,ring[w.cell],w.side),extra=[...L.clear,...L.slots.map(x=>x.v)].map(v=>v.map(map));
+        const all=[...cells,...extra].map(cen),ex=extra.map(cen);
+        if(all.some(p=>hexr(p)>R-1-0.3)||all.some(p=>ringC.some(q=>dist(p,q)<0.3)))continue;   // inside, no overlap (cells may touch the wall)
+        if(ex.some(p=>ringC.some(q=>dist(p,q)<0.9)))continue;   // the slots and lid spaces stay off the wall
+        if(all.some(p=>sweep.some(q=>dist(p,q)<1.0))||all.some(p=>keepC.some(q=>dist(p,q)<0.9)))continue;
+        best={K,cells,wall:w.cell,side:w.side,seed:sd};break;}}}
+  if(!best)throw Error('cellKit: no place for the organelle');
+  letters+=best.K.letters;
+  const T=KR.types.map(t=>[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(x=>x[0]));T[best.wall][best.side]=sd+'@';
+  const ringTypes=T.map(t=>t.join('')),canonT=t=>{const x=[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(y=>y[0]);return [0,1,2].map(r=>[...x.slice(r),...x.slice(0,r)].join('')).sort()[0];};
+  const tris=[...ring.map((v,q)=>({v,type:ringTypes[q]})),...best.cells.map((v,q)=>({v,type:best.K.types[q]}))];
+  const counts={};tris.slice(1).forEach(t=>{const c=canonT(t.type);counts[c]=(counts[c]||0)+1;});
+  return {tris,counts,rootType:ringTypes[0],rootSide:KR.rootSide,root:0,N:ring.length,ring:KR,organelle:best,letters};}
 
 // Arm kit: the types of an arm grown from seed glue `seed` by a bend pattern ('1'/'2' per step: the side, counted
 // counter-clockwise from the attach side, that exposes the next glue), using the given letters; the last type exposes
@@ -299,4 +366,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,lidSlot,lidClear,importRing,doorRingKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

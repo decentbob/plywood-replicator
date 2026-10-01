@@ -19,21 +19,22 @@ const SNAP0=-Math.PI/3;   // angle of rest corner 0 (physics REST)
 
 // ---------------- glues and types ----------------
 // glue codes: 0 inert '-', lower case odd, upper case even; complement = the other case
-// letters: a..z / A..Z, then Greek α..ω / Α..Ω (24 more pairs, for kits that need many unique glues)
-const GL='αβγδεζηθικλμνξοπρστυφχψω',GU=GL.toUpperCase(),LOW='abcdefghijklmnopqrstuvwxyz'+GL,UP='ABCDEFGHIJKLMNOPQRSTUVWXYZ'+GU;
+// letters: a..z / A..Z, then Greek α..ω / Α..Ω (24 more pairs) and 13 Cyrillic pairs (б / Б ...), for kits that need
+// many unique glues (63 pairs: codes fit in Int8)
+const GL='αβγδεζηθικλμνξοπρστυφχψω',GU=GL.toUpperCase(),CL='бгджзилпфцчшэ',CU=CL.toUpperCase(),LOW='abcdefghijklmnopqrstuvwxyz'+GL+CL,UP='ABCDEFGHIJKLMNOPQRSTUVWXYZ'+GU+CU;
 const gcode=c=>{if(c==='-')return 0;let i=LOW.indexOf(c);if(i>=0)return 2*i+1;i=UP.indexOf(c);if(i>=0)return 2*i+2;throw Error('glue letter '+c);};
 const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
 // ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
 const MARKS='<>.!^#*~$+=%@&';
-function parseType(str){const t=[...str.matchAll(/([a-zA-Zα-ωΑ-Ω-])([<>.!^#*~$+=%@&]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+function parseType(str){const t=[...str.matchAll(/([a-zA-Zα-ωΑ-Ωа-яА-Я-])([<>.!^#*~$+=%@&]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>has(m,'<')?1:has(m,'>')?2:0),close:t.map(m=>has(m,'.')),
     rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&'))};}
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');}).join('');
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@&]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
@@ -103,9 +104,9 @@ class TriSim extends Physics{
       if(a<0&&((this.glue[u*3+i]===K&&this.glue[q]===comp(K))||(this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
-    // attachment) emits nothing.
+    // attachment) and a latch side '~' (an edge meant to come apart) emit nothing.
     for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;v=Math.max(v,op0[(q/3)|0]-1);}}
-      if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){v=this.p.openRange;break;}}
+      if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]&&!this.ltc[k]){v=this.p.openRange;break;}}
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}
     // sg (trigger signal on hear sides): sigRange while a trigger side of mine is bonded, else the best value heard on a
@@ -232,7 +233,8 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++)if(this.op[u]===0)for(let i=0;i<3;i++)if(this.done[u*3+i]&&this.bond[u*3+i]>=0){this.cut(u,i);this.count('complete');}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u]||this.sg[u]>0,open=this.dOpen[u];
       for(let e=0;e<3;e++)if(e!==i&&this.bond[u*3+e]>=0&&!this.isHingeBond(u,e)){const w=P(u,e);if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
-      if(open||(trig&&this.lockBusy[u]===0)){this.cut(u,i);this.count('unlatch');}}}
+      // a latch holds a trigger while its triangle hears an open signal (a door does not open before its wall is complete)
+      if(open||(trig&&this.lockBusy[u]===0&&this.op[u]===0)){this.cut(u,i);this.count('unlatch');}}}
   servo(){
     this._latches();
     if(!this.hinge.some(x=>x))return;this.gridSync();const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
