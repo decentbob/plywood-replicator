@@ -10,12 +10,14 @@
 //   no tunnelling  a jostle kick can exceed a thin wall (kicks reach about 1.8 at sigma 0.3, a one-row wall is 0.87
 //           thick): after the jostle, a body whose block-centre path enters a block of another bonded structure is
 //           moved only 1/2 or 1/4 of the way (translation, orientation kept), or not at all.
+//   clusters  blocks joined by full bonds are pulled onto the best-fit placement of their exact lattice shape every
+//           clusterEvery passes (cluster shape matching), so long structures stay rigid; hinged parts move freely.
 //   contacts  pairs within contactMargin of touching after the jostle are separated in every pass (a cell grid finds them).
 // Locality: nothing here reads chemistry; the chemistry (sim.js) reads `pairs` (blocks near enough to bond).
 const R3=1/Math.sqrt(3);
 const REST=[[R3*Math.cos(-Math.PI/3),R3*Math.sin(-Math.PI/3)],[R3*Math.cos(Math.PI/3),R3*Math.sin(Math.PI/3)],[-R3,0]];   // counter-clockwise; side 0 faces +x
 const AREA=Math.sqrt(3)/4,INERTIA=AREA/12,SIZE=Math.sqrt(AREA);   // unit density: mass = area; moment about the centroid = area * side^2 / 12
-const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,stiff:0.8,iters:32,pairTol:0.35,noTunnel:true,contactMargin:0.6};
+const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,stiff:0.8,iters:32,pairTol:0.35,noTunnel:true,contactMargin:0.6,clusterEvery:32};
 const EPS=1e-10;
 
 function mulberry32(seed){let a=seed|0;const f=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
@@ -69,8 +71,8 @@ class Physics{
   flushGap(u,i,v,j){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]),a0=u*3+i,a1=u*3+(i+1)%3,b0=v*3+j,b1=v*3+(j+1)%3;
     return Math.max(Math.hypot(dx+this.ox[b1]-this.ox[a0],dy+this.oy[b1]-this.oy[a0]),Math.hypot(dx+this.ox[b0]-this.ox[a1],dy+this.oy[b0]-this.oy[a1]));}
   // ---- bonds
-  link(u,i,v,j){this.bond[u*3+i]=v*3+j;this.bond[v*3+j]=u*3+i;this.bondsDirty=true;}
-  unlink(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bond[q]=-1;this.bond[u*3+i]=-1;this.bondsDirty=true;}
+  link(u,i,v,j){this.bond[u*3+i]=v*3+j;this.bond[v*3+j]=u*3+i;this.bondsDirty=true;this._clDirty=true;}
+  unlink(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bond[q]=-1;this.bond[u*3+i]=-1;this.bondsDirty=true;this._clDirty=true;}
   partner(u,i){const q=this.bond[u*3+i];return q<0?-1:(q/3)|0;}
   bonded(u){return this.bond[u*3]>=0||this.bond[u*3+1]>=0||this.bond[u*3+2]>=0;}
   isHingeBond(u,i){const q=this.bond[u*3+i];return q>=0&&(this.hinge[u*3+i]>0||this.hinge[q]>0);}
@@ -85,6 +87,26 @@ class Physics{
       for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(comp[y]<0){comp[y]=id;list.push(y);}}}
       members.push(list);}
     return {comp,members};}
+  // ---- rigid clusters: blocks joined by full (non-hinge) bonds have an exact lattice shape that follows from the bonds
+  // (each bond places the partner flush against a side); computed breadth first from the cluster's first block and
+  // cached until bonds change. Each entry: {m: members, x, y, a: ideal centre and angle in the first block's frame}.
+  _clusters(){if(this._cl&&!this._clDirty)return this._cl;const n=this.n,seen=new Uint8Array(n),out=[],C0=Math.atan2(REST[0][1],REST[0][0]);
+    for(let r=0;r<n;r++){if(seen[r]||!this.bonded(r))continue;const m=[r],X=[0],Y=[0],A=[0];seen[r]=1;
+      for(let k=0;k<m.length;k++){const u=m[k],c=Math.cos(A[k]),s=Math.sin(A[k]),Cx=q=>X[k]+c*REST[q][0]-s*REST[q][1],Cy=q=>Y[k]+s*REST[q][0]+c*REST[q][1];
+        for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||this.isHingeBond(u,i))continue;const v=(q/3)|0,j=q%3;if(seen[v])continue;seen[v]=1;
+          const ax=Cx(i),ay=Cy(i),bx=Cx((i+1)%3),by=Cy((i+1)%3),xx=ax+bx-Cx((i+2)%3),xy=ay+by-Cy((i+2)%3),V=[];V[j]=[bx,by];V[(j+1)%3]=[ax,ay];V[(j+2)%3]=[xx,xy];
+          const cx=(ax+bx+xx)/3,cy=(ay+by+xy)/3;m.push(v);X.push(cx);Y.push(cy);A.push(Math.atan2(V[0][1]-cy,V[0][0]-cx)-C0);}}
+      if(m.length>=3)out.push({m,x:Float64Array.from(X),y:Float64Array.from(Y),a:Float64Array.from(A)});}
+    this._cl=out;this._clDirty=false;return out;}
+  // pull every rigid cluster onto the best-fit rigid placement of its lattice shape (cluster shape matching): long
+  // structures stay true instead of bending joint by joint under collisions
+  _clusterMatch(){for(const C of this._clusters()){const m=C.m,k=m.length,r=m[0];let px=0,py=0,qx=0,qy=0;const ux=new Float64Array(k),uy=new Float64Array(k);
+      for(let t=0;t<k;t++){ux[t]=this._dx(this.px[m[t]]-this.px[r]);uy[t]=this._dy(this.py[m[t]]-this.py[r]);px+=ux[t];py+=uy[t];qx+=C.x[t];qy+=C.y[t];}
+      px/=k;py/=k;qx/=k;qy/=k;let sc=0,ss=0;
+      for(let t=0;t<k;t++){const ax=C.x[t]-qx,ay=C.y[t]-qy,bx=ux[t]-px,by=uy[t]-py;sc+=ax*bx+ay*by;ss+=ax*by-ay*bx;}
+      const th=Math.atan2(ss,sc),c=Math.cos(th),s=Math.sin(th);
+      for(let t=0;t<k;t++){const u=m[t],ax=C.x[t]-qx,ay=C.y[t]-qy,tx=px+c*ax-s*ay,ty=py+s*ax+c*ay;
+        let da=C.a[t]+th-this.pa[u];da=Math.atan2(Math.sin(da),Math.cos(da));this.rigidMove(u,tx-ux[t],ty-uy[t],da);}}}
   // ---- motion
   _jostle(){
     const p=this.p,n=this.n,{px,py,pa,ox,oy}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w);
@@ -146,6 +168,7 @@ class Physics{
     const contacts=this._contacts(),rr=Float64Array.from(this._r,x=>x+0.05),pins=this._pinList(),bonded=[];for(let u=0;u<n;u++)if(this.bonded(u))bonded.push(u);
     const fitC=new Float64Array(n),fitS=new Float64Array(n);
     for(let it=0;it<p.iters;it++){
+      if(p.clusterEvery>0&&it%p.clusterEvery===0)this._clusterMatch();
       for(let k=0;k<contacts.length;k+=2)this._separate(contacts[k],contacts[k+1],rr);
       for(let k=0;k<pins.length;k+=2){const qa=pins[k],qb=pins[k+1],u=(qa/3)|0,v=(qb/3)|0;
         const dx=this._dx(px[v]+ox[qb]-px[u]-ox[qa]),dy=this._dy(py[v]+oy[qb]-py[u]-oy[qa]),dl=Math.hypot(dx,dy);if(dl<1e-9)continue;

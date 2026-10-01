@@ -8,6 +8,31 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Aligned bonds (user: "edges don't seem to align, which leads to deformation")** — works. Diagnosis: a free
+  triangle bound as soon as its corners were within 0.45 of flush, so cells joined tilted; in a grown strip, cells two
+  apart then overlapped, their contact forces pushed against the pins, and the strip jammed bent (flush gaps up to
+  0.28-0.40, bonded neighbours overlapping by 0.1; a prepared strip stays at 0.000). Fix (rule): binding pulls the
+  free triangle in, placing it exactly flush against its partner's side. Grown rings and pockets now: worst gap
+  0.008-0.03.
+- **Kit safety: no enclosed cells** — works. The grown pocket stalled at 15/16 (and the cycle worlds too): caster B's
+  cell lies between its k cell, the frame below and the slot; in 2D the frame must close around it, so once anything
+  sits in the slot B can only squeeze in through it. `kit()` now scores each tree: a cell is risky if, when it
+  arrives, all its sides may already face cells no deeper than it (not its descendants) or a slot; the generator picks
+  a risk-free root (next to B, so B arrives before the frame closes around it). With binding probability 1
+  (`pBond`, was 0.5; binding was limited by flush encounters anyway): grown pocket complete at 6400 steps in 2 of 2
+  worlds (was 10-11k, and stalls), 11-13 casts by 16000.
+- **Rigid clusters (cluster shape matching)** — works. Even with flush bonds, a grown one-row C curled: each joint's
+  tiny angle error bent the same way, and over 28 joints the front overlapped the root region (a prepared 28-cell C
+  among free triangles: far end up to 2.15 off its design position). The local pin solver cannot keep long strips
+  true. Now blocks joined by full bonds form a cluster whose exact lattice shape follows from the bonds; once per step
+  each cluster is pulled onto the best-fit rigid placement of that shape (hinged parts stay free). Far end now within
+  0.36. Running it more often than once per step made frames effectively infinitely heavy, and hinged flaps got kicked
+  by their frame (conveyor: no hand-offs), so once per step it is.
+- **Ring membrane from a periodic kit** — works (closed in 1 world at 40202 steps; others still growing). A one-row hexagonal ring
+  of side R is six repeats of a (2R-1)-cell motif; motif types attach in a cycle of unique glues (no counting), the
+  root carries the seed on its outer side and closes the ring by a close-only glue. R=3: 30 cells from 5 motif types +
+  root. 30000 steps, 12 copies per type: 28/30 cells in 2 of 2 worlds, a clean hexagon with every bond flush (worst gap
+  0.03); before the alignment fix the open C crumpled into a spiral. `node tri/demos.js ring 1 60000 runs 3`. Picture: `docs/pictures/grown_ring.png`.
 - **Heritable pocket: a chain grows its machine, copies regrow it** — works (2 of 2 worlds). The founder `aaaaa` exposes
   seed `z` on its low end; dockers `Az-`/`az-` carry `z` on their prev side, so every copy's low end exposes the seed
   again (the template's high end becomes the copy's low end). A placement check (`world.partPlacement`) picks the kit

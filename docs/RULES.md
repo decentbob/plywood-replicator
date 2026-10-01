@@ -45,7 +45,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 ## Binding (one rule everywhere)
 A side binds a flush side (both corner gaps within 0.45, closures 0.22) with the complementary glue, at
 probability `pBond` per step (1: whenever flush), if at least one of the two triangles is already attached (**activation by
-attachment**: free triangles never bind each other). A **discharged** triangle binds nothing. Close-only sides
+attachment**: free triangles never bind each other). **Binding pulls the free triangle in:** it is placed exactly
+flush against its partner's side (it moves at most about the tolerance), so every bond starts aligned. A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
 attach side. Option `pLoose` (proofreading): a triangle caught while free (not by an attach side) and held on only one
 or two sides lets go with this probability per step.
