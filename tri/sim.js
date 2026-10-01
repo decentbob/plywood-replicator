@@ -28,13 +28,18 @@ const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
 // ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
 const MARKS='<>.!^#*~$+=%@&';
-function parseType(str){const t=[...str.matchAll(/([a-zA-Zα-ωΑ-Ωа-яА-Я-])([<>.!^#*~$+=%@&]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+// carried marks (stamp): marks written after an apostrophe (b.'@) do nothing on this side; a cast product takes them
+// with the glue (a caster's instruction side prints glue and marks, so a pocket can cast parts that carry marks)
+const LET='a-zA-Zα-ωΑ-Ωа-яА-Я-',MK='<>.!^#*~$+=%@&',TOK=new RegExp(`([${LET}])([${MK}]*)(?:'([${MK}]*))?`,'g');
+const markBits=m=>{let b=0;for(const c of m||'')b|=1<<MARKS.indexOf(c);return b;},bitMarks=b=>[...MARKS].filter((_,i)=>b>>i&1).join('');
+function parseType(str){const t=[...str.matchAll(TOK)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>has(m,'<')?1:has(m,'>')?2:0),close:t.map(m=>has(m,'.')),
-    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&'))};}
-const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
-  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');}).join('');
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),carry:t.map(m=>markBits(m[3]))};}
+const sideMarks=(s,k)=>(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
+  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');
+const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k)+(s.carry&&s.carry[k]?"'"+bitMarks(s.carry[k]):'');}).join('');
+const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
@@ -43,7 +48,7 @@ class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
-    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);
+    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.carry=new Int16Array(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
     this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
@@ -51,7 +56,10 @@ class TriSim extends Physics{
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
   setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.spent[k]=0;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
-    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];}}
+    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];this.carry[k]=t.carry[i];}}
+  // side k takes glue g and the marks in bit set b (a cast: the caster's carried marks), nothing carried
+  _setSide(k,g,b){const t=parseType(gname(g)+bitMarks(b)+'--');this.glue[k]=g;this.spent[k]=0;this.hinge[k]=t.hinge[0];this.cOnly[k]=t.close[0];this.rel[k]=t.rel[0];this.trg[k]=t.trig[0];
+    this.ltc[k]=t.latch[0];this.fuel[k]=t.fuel[0];this.hear[k]=t.hear[0];this.wide[k]=t.wide[0];this.act[k]=t.act[0];this.att[k]=t.att[0];this.done[k]=t.done[0];this.carry[k]=0;}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
   _edges(u){let prev=-1,next=-1,face=-1;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -215,11 +223,13 @@ class TriSim extends Physics{
   // casting: a triangle glue-bonded on all three sides, each partner's activator (the side after its recognition side)
   // bonded to a k: the triangle takes each partner's instruction glue (castComp: its complement) and lets go
   _cast(){const G=this.glue;
-    for(let u=0;u<this.n;u++){let ok=true;const src=[];
+    for(let u=0;u<this.n;u++){let ok=true;const src=[],cm=[];
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*3+i];if(q<0||this.bkind[u*3+i]!==GLUE){ok=false;break;}
-        const w=(q/3)|0,j=q%3;if(this.actE[w]!==m3(j+1))ok=false;else src.push(G[w*3+m3(j+2)]);}
+        const w=(q/3)|0,j=q%3;if(this.actE[w]!==m3(j+1))ok=false;else{src.push(G[w*3+m3(j+2)]);cm.push(this.carry[w*3+m3(j+2)]);}}
       if(!ok)continue;
-      for(let i=0;i<3;i++){const k=u*3+i;G[k]=this.p.castComp?comp(src[i]):src[i];this.spent[k]=0;this.hinge[k]=0;this.cOnly[k]=0;this.rel[k]=0;this.trg[k]=0;this.ltc[k]=0;this.fuel[k]=0;this.hear[k]=0;this.wide[k]=0;this.act[k]=0;this.att[k]=0;this.done[k]=0;this.cut(u,i);}
+      // the product takes each instruction glue (castComp: its complement) and the marks that side carries; it loses
+      // its own marks and lets go of all three casters
+      for(let i=0;i<3;i++){const k=u*3+i;this._setSide(k,this.p.castComp?comp(src[i]):src[i],cm[i]);this.cut(u,i);}
       this.count('cast');(this.castLog||(this.castLog=[])).push([this.t,u,typeName(this,u)]);}}
   // environment drive (labelled): free discharged triangles inside the light zone {x, y, r, p} recharge
   _light(){const L=this.p.light;if(!L)return;
@@ -275,4 +285,4 @@ class TriSim extends Physics{
   step(){this.servo();this.t++;this.physics();this.derive();this.formBonds();this.chemistry();}
   run(steps){for(let k=0;k<steps;k++)this.step();}
 }
-module.exports={TriSim,PREV,NEXT,FACE,TFACE,GLUE,FREE,SFACE,SBACK,DOCKED,GROWN,gcode,gname,comp,parseType,typeName,canon,MARKS,LOW,UP};
+module.exports={TriSim,PREV,NEXT,FACE,TFACE,GLUE,FREE,SFACE,SBACK,DOCKED,GROWN,gcode,gname,comp,parseType,typeName,canon,MARKS,LOW,UP,TOK};

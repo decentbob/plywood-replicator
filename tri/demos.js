@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | stamp | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit}=require('./world');
 const {render,montage}=require('./render');
@@ -32,8 +32,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} casts=${s.ev.cast||0} aaa=${typeCount(s).aaa||0}`);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
       console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Lid pocket: aaa slides into the notch, the lid closes, cast bcd, the lid reopens');},
     // grown pocket: a lid pocket kit (structures.kit) grows from a seed on an anchor cell (labelled start: anchor + root);
-    // extra: copies of each kit type (default 4)
-    grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X',null,'B'),'auto','x','z',null,[S.lidSlot('B')]),r=K.tris[K.root],i=K.rootSide;
+    // extra: copies of each kit type (default 4); with 's' (e.g. 4s) a stamp pocket that casts the ring part A@-b@
+    grow(){steps=steps||20000;const per=parseInt(extra)||4,stamp=String(extra||'').includes('s'),K=S.kit(S.lidPocket(stamp?S.stampInstr('A@-b@'):'-A-','X',null,'B'),'auto','x','z',null,[S.lidSlot('B')]),r=K.tris[K.root],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'};
       const supply={xxx:16};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
       const {s,structures}=createWorld({seed,size:16,structures:[{tris:[anchor,r],x:8,y:8}],supply,params:{pLoose:0.05}});
@@ -43,7 +43,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,20)){const g=grown();if(!done&&g>=K.tris.length)done=t;console.log(`t=${t} kit cells=${g}/${K.tris.length} casts=${s.ev.cast||0}`);}
         if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
       {const {comp}=s.bodies();snap(s,'zoom','grown part (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:3.5});}
-      console.log('complete at',done||'not yet');finish(`Grown lid pocket from a seed (kit of ${K.kit.length} types, ${per} each)`);},
+      console.log('complete at',done||'not yet','products',JSON.stringify(typeCount(s)[canon(stamp?'A@-b@':'-A-')]||0));finish(`Grown ${stamp?'stamp':'lid'} pocket from a seed (kit of ${K.kit.length} types, ${per} each)`);},
     // heritable pocket: a chain whose low end exposes seed z grows a lid pocket from the kit in supply; dockers carry z on
     // their prev side, so every copy's low end exposes the seed again and grows its own pocket; latGlue: fills must be Z--
     // (a docker used as a fill would expose z on a hidden back) (extra: kit copies, 12)
@@ -79,6 +79,21 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
       const c=census(s).filter(x=>x.n>=9&&!x.paired);c.slice(0,4).forEach((x,k)=>{const {comp,members}=s.bodies();snap(s,'zoom'+k,`strand ${x.faces} and its part`,{units:members[comp[x.units[0]]],radius:4.5});});
       finish('Heritable factory cycle: each strand grows the pocket that casts the dockers it needs');},
+    // stamp factory: five lid pockets (prepared, labelled) whose instruction sides carry the attach mark '@' cast blanks
+    // xxx into the five motif parts of a ring kit (R=3); an anchor with the ring's root (prepared) grows the ring from
+    // cast parts only: the metabolism makes the parts of a membrane (extra: blanks, default 60)
+    stamp(){steps=steps||60000;const nb=parseInt(extra)||60,size=26,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
+      const a=r.v[i],b=r.v[(i+1)%3],cc=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-cc[0],a[1]+b[1]-cc[1]]],type:'z--'};
+      const pockets=K.kit.map((t,k)=>{const ang=2*Math.PI*k/K.kit.length+0.3,R0=8.5;return {tris:S.lidPocket(S.stampInstr(t),'X'),x:c+R0*Math.cos(ang),y:c+R0*Math.sin(ang),rot:ang+Math.PI/2};});
+      const {s,structures}=createWorld({seed,size,structures:[{tris:[anchor,r],x:c,y:c},...pockets],supply:{xxx:nb}});const A=structures[0][0],root=structures[0][1],cl=[0,1,2].find(q=>s.cOnly[root*3+q]);
+      console.log('motif parts',K.kit.join(' '),'stamps',K.kit.map(t=>S.stampInstr(t).join(' ')).join(' | '));
+      const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},motif=K.kit.map(norm);let closed=0;
+      const size_=()=>{const {comp}=s.bodies();let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[A])k++;return k-1;};
+      const report=t=>{const tc=typeCount(s);console.log(`t=${t} ring cells=${size_()}/${K.N} closed=${closed?'at '+closed:'no'} casts=${s.ev.cast||0} parts cast [${motif.map(m=>tc[m]||0).join(' ')}] blanks=${tc.xxx||0}`);};
+      snap(s,'t0','t=0: five stamp pockets, blanks, the ring root on an anchor',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(!closed&&s.bond[root*3+cl]>=0)closed=t;if(every(t,20))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, ring ${size_()}/${K.N}${closed?', closed':''}`,null,false);}
+      {const {comp}=s.bodies();snap(s,'zoom','ring grown from cast parts (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:4.5});}
+      finish('Stamp factory: pockets cast blanks into membrane parts; a ring grows from them');},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
     ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;

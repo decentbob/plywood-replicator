@@ -2,7 +2,7 @@
 // Designed structures on the triangle lattice (prepared starting conditions, labelled as such in every demo) and
 // type kits. Coordinates: lattice with unit sides, H = sqrt(3)/2; triangles given counter-clockwise, side i runs
 // v[i] -> v[i+1]; a type string names the glue and marks of sides 0, 1, 2 (sim.js parseType).
-const {gcode,gname,comp,LOW,UP}=require('./sim');
+const {gcode,gname,comp,LOW,UP,TOK}=require('./sim');
 const H=Math.sqrt(3)/2;
 const same=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6,cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
 const has=(v,...ps)=>ps.every(p=>v.some(x=>same(x,p))),add=(p,d)=>[p[0]+d[0],p[1]+d[1]];
@@ -42,12 +42,16 @@ function pocket(instr='bcd',recog='A',fuel=null){
 // After the cast the trigger lets go, the signal fades and the lid reopens. Product: [p, q, r] = instructions of
 // (B, R, lid) on T's sides 0, 1, 2. q must not be inert (R's instruction bond carries the signal to Q).
 // fuel: a glue letter puts a fuel side on Q's outer side (each closing spends a charged carrier).
+// instr: a string of three glues, or three tokens with carried marks (["-", "b'@", "A'@"]: the product's sides then
+// carry those marks: a stamp, see RULES Casting).
 function lidPocket(instr='bcd',recog='A',fuel=null,catcher='BR'){
-  const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));if(q==='-')throw Error('lid pocket: R needs an instruction glue');
+  const tk=typeof instr==='string'?[...instr]:instr,g=tk.map(t=>t[0]),c=tk.map(t=>t.slice(1));if(c.some(x=>x&&x[0]!=="'"))throw Error('lid pocket: carried marks follow an apostrophe');
+  const [p,q,r]=g,R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));if(q==='-')throw Error('lid pocket: R needs an instruction glue');
+  const [pc,qc,rc]=c;
   return [
-    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}.${R}${catcher.includes('B')?'':'.'}`,loose:p==='-'},   // B: K, instruction p (close-only, as all instruction sides), recognition (catches if in `catcher`)
-    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}.${R}${catcher.includes('R')?'':'.'}*`},                       // R: K, instruction q, recognition + trigger
-    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}.${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
+    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}.${pc}${R}${catcher.includes('B')?'':'.'}`,loose:p==='-'},   // B: K, instruction p (close-only, as all instruction sides), recognition (catches if in `catcher`)
+    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}.${qc}${R}${catcher.includes('R')?'':'.'}*`},                       // R: K, instruction q, recognition + trigger
+    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}.${rc}${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
     {v:[[0.5,H],[1.5,H],[1,2*H]],type:`${Q}+${fuel?fuel+'$':'-'}k`},     // Q: holds R's instruction and hears R; outer side (fuel); lid's hinge partner
     {v:[[0,0],[-0.5,-H],[0.5,-H]],type:'--k'},                           // Z: k for B
     {v:[[0.5,-H],[1.5,-H],[1,0]],type:`--${P}`},                         // W: holds B's instruction
@@ -57,6 +61,10 @@ function lidPocket(instr='bcd',recog='A',fuel=null,catcher='BR'){
     {v:[[1,-2*H],[2,-2*H],[1.5,-H]],type:'---'},
     ...(fuel?[]:[{v:[[1.5,H],[2,2*H],[1,2*H]],type:'---'},{v:[[1.5,H],[2.5,H],[2,2*H]],type:'---'}]),   // behind Q (a kit reaches Q this way)
   ];}
+// stamp instructions for a lid pocket that casts part type t: t's sides as tokens, turned so side 1 (R's instruction)
+// is not inert, each side's marks carried (b@ -> b'@)
+function stampInstr(t){const x=[...t.matchAll(TOK)].map(m=>({g:m[1],m:m[2]}));const r=[0,1,2].find(k=>x[(k+1)%3].g!=='-');if(r===undefined)throw Error('stampInstr: inert type');
+  return [0,1,2].map(i=>{const y=x[(i+r)%3];return y.g+(y.m?"'"+y.m:'');});}
 // cells a lid pocket needs empty: the slot, the lid's sweep (Lc, V) and the cell its corner bulges into (X)
 // the lid pocket's slot (T) and which cells catch into it (for kit safety checks)
 const lidSlot=(catcher='BR')=>({v:[[0,0],[1,0],[0.5,H]],catchers:[...catcher].map(c=>c==='B'?0:1)});
@@ -174,7 +182,7 @@ function airlock(R=4,win=2.5){
 function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   if(root==='auto'){let best=null;for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;try{const k=kit(tris,r,reserved,seed,null,slots);if(seed&&k.rootSide<0)continue;
       if(!best||k.risk<best.risk||(k.risk===best.risk&&k.depth<best.depth))best=k;}catch(e){}}if(!best)throw Error('kit: no root');return best;}
-  const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Zα-ωΑ-Ωа-яА-Я-])([<>.!^#*~$+=%@]*)/g)].map(m=>({g:m[1],m:m[2]})));
+  const tok=tris.map(t=>[...t.type.matchAll(TOK)].map(m=>({g:m[1],m:m[2],c:m[3]?"'"+m[3]:''})));
   const E=[];for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){const A=tris[a].v,B=tris[b].v;
     if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))E.push({a,i,b,j});}
   const plain=e=>tok[e.a][e.i].g==='-'&&tok[e.b][e.j].g==='-',loose=e=>tris[e.a].loose||tris[e.b].loose;
@@ -207,7 +215,7 @@ function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
       for(const sl of slots)if(!e&&sh(tris[c].v,sl.v)===i)e=true;   // a slot is never an access route (a cell behind it is as hard to reach as a hole)
       if(e)early++;}
     if(early===3){risk++;risky.push(c);}}
-  const types=tok.map(t=>t.map(x=>x.g+x.m).join(''));
+  const types=tok.map(t=>t.map(x=>x.g+x.m+x.c).join(''));
   return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values()),risk,risky,letters:tree.map((_,k)=>pool[k]).join('')};}
 
 // every (root, seed side) kit of a structure, fewest risky cells first, then shallowest tree
@@ -375,4 +383,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,stampInstr,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

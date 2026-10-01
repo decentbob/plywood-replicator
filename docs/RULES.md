@@ -29,6 +29,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (like K bonded to k) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
+| `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
 | `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
@@ -102,6 +103,9 @@ recognition side, the next side counter-clockwise the activator side, the remain
 every partner's activator side carries `K` bonded to a `k` (or is an activator side `%` bonded by its glue), the triangle takes each partner's instruction
 glue on the facing side (option `castComp`: the complement), loses its marks, and lets go of all three. (Copying,
 not complementing, is the default: a complemented product would stick to its own casters.)
+**Stamp (2026-10-01):** the product side also takes the marks the instruction side carries (`'`), and nothing
+carried: a caster's instruction side prints glue and marks, so a pocket can cast kit parts (`@`, `.`, `%`, ...) from
+blanks. A product never carries marks itself (a stamp cannot be stamped).
 
 ## Hinges and machines
 - A hinge remembers its flush angle (when it bonded, snapped to a multiple of 60 degrees) and which way is away from its partner. While the flap is

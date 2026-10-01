@@ -6,6 +6,23 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-01 (fourth session)
+
+- **Stamp casting: the metabolism makes the parts of a membrane** — works (4 of 4 worlds). New rule: marks written
+  after an apostrophe on a side are *carried*: they do nothing there, and a cast product takes them with that side's
+  instruction glue (`Kb.'@X*` casts `b@` onto the product). So a pocket can cast kit parts, which carry attach marks
+  `@` (before, casting stripped every mark, and parts could only come from the supply). `structures.stampInstr(type)`
+  gives a lid pocket's instruction tokens for any part type. Demo `stamp`: five prepared lid pockets (labelled
+  starting condition) stamp blanks `xxx` into the five motif parts of a ring kit (R=3: `A@-b@`, `-B@c@`, ...); an
+  anchor with the ring's root (prepared) grows the ring from cast parts only (no parts in the supply). 60 blanks: all
+  cast by ~20000 steps (about 12 of each part, unevenly), the ring closes at 36000, 61000, 64000 and 95000 steps in
+  worlds 1-4 (the last two or three parts are slow: they must find the one open site). Heritable too: a stamp pocket
+  kit (16 types, carried marks kept by `kit`) grows from a seed and casts `A@-b@` (`grow 1 20000 runs 4s`: complete at
+  17000 steps, 4 parts cast by 20000). Limits: one pocket per part type (5 pockets of 16 cells for a 30-cell ring); a
+  product carries nothing, so a pocket cannot cast stamp casters (no closed loop of part making yet).
+  `node tri/demos.js stamp 1 60000 runs`. Picture: `docs/pictures/stamp_factory.png`. Enables: a cell whose pockets
+  make its offspring's membrane (feeding), membranes in worlds whose only food is blanks.
+
 ## 2026-10-01 (second session)
 
 - **Cell kit: one seed grows a membrane with a pore and an organelle** — partial (in progress). `structures.cellKit`

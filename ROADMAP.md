@@ -10,6 +10,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Genome: typed chain copied by complementary faces | DNA/RNA | works (zip copying from the high end, no deadlock) | sim.js chain rules |
 | Compartment: closed ring membrane, sealed at the default jostle | cell membrane | works | structures.ring |
 | Factory: casting pockets turn blanks into the parts copying needs | metabolism | works with prepared pockets; lid pocket casts without stalling | structures.pocket/lidPocket, demos factory, lid |
+| Stamp: pockets cast kit parts (marks carried by instruction sides) | metabolism makes structure | works: five stamp pockets make a ring membrane's parts from blanks, the ring grows from them (4 of 4 worlds); stamp pockets grow from kits | sim.js _cast, structures.stampInstr, demo stamp |
 | Signals: heard triggers wire a sensor side to a flap through hear sides | nerves, signalling | works (lid pocket) | sim.js sg |
 | Energy: charged carriers fuel every hinge swing, recharge in a light zone | ATP, light | works | sim.js servo, demo energy |
 | Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works on rigid physics except the airlock (rebuild with swept doors) | structures, demos |
@@ -30,9 +31,9 @@ splits it off.** Build every mechanism in isolation, then combine them.
 
 1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`; see
    INNOVATIONS). Then: smaller pockets (fewer kit types, faster growth); several seeds per chain (`latGlue` backs);
-   a pocket that casts its own kit types. Blocker for the last: casting strips marks, and kit types carry marks
-   (`@ % . + = < *`). Idea: an instruction side's marks travel with its glue (the caster's own instruction side would
-   then need marks that do nothing on an attached caster, e.g. `@`, or a separate "carried mark" notation).
+   a pocket that casts its own kit types. Marks now travel with cast glue (stamp, `'` carried marks, 2026-10-01): a
+   pocket casts kit parts. Remaining blockers: one pocket per part type, and a product carries nothing (stamp casters
+   cannot be cast). Needs programmable casting (see IDEAS: part templating, translation).
 2. **Factory on lid pockets.** Switch the factory demo to lid pockets (done: copy deadlock fixed by zip; lid pocket
    built) and measure generations.
 3. **Pump through a wall.** A carrying lock: the hatch pocket carries a key from an outer slot into an enclosed

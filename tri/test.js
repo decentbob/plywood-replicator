@@ -48,6 +48,11 @@ test('kit: unique tree glues; the kit-typed lid pocket bonds as designed and cas
   const s=new TriSim({sigma:0,sigmaRot:0,W:12,H:12},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,5,5);for(let i=0;i<3;i++)s.cut(T,i);
   const {comp}=s.bodies();for(let u=0;u<T;u++)assert.equal(comp[u],comp[K.root],'cell '+u+' not bonded into the part');
   s.derive();s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('-A-'));symmetric(s);});
+test('stamp: an instruction side carries marks; the cast product takes them',()=>{
+  assert.equal(new TriSim({},1).typeName(0),'---');const s0=new TriSim({},1);s0.setType(0,"Kb.'@X*");assert.equal(s0.typeName(0),"Kb.'@X*");assert.equal(s0.att[1],0,'carried mark inactive');
+  const tris=[...S.lidPocket(S.stampInstr('A@-b@'),'X'),{v:[[0,0],[1,0],[0.5,H]],type:'xxx',loose:true}],T=tris.length-1;
+  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,4,4);for(let i=0;i<3;i++)s.cut(T,i);s.derive();
+  s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('A@-b@'));symmetric(s);});
 test('parts: a free triangle with an attach side binds only by it',()=>{
   for(const [part,expect] of [['A@--',true],['A-B@',false],['A--',true]]){
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'f-a'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[0,0],[0.5,H],[-0.5,H]],type:part,loose:true}];
