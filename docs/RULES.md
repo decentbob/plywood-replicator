@@ -12,7 +12,8 @@ the values its bonded partners exposed in the previous pass. No rule counts, tra
 - **State** (small values that change by rules): charge (charged/discharged), fill, cap, door open, powered.
 
 ### Glues
-`a..z` pair with `A..Z` (complement = the other case); Greek `α..ω` pair with `Α..Ω` (24 more pairs, used by kits). `-` is inert and binds nothing. `k`/`K` is the casting
+`a..z` pair with `A..Z` (complement = the other case); Greek `α..ω` pair with `Α..Ω` (24 more pairs) and 13 Cyrillic pairs `б..э` / `Б..Э`
+(used by kits: 63 pairs in all). `-` is inert and binds nothing. `k`/`K` is the casting
 activator pair (by convention only). `f`/`F` is used by the structure builder to weld prepared structures.
 
 ### Side marks

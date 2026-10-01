@@ -71,6 +71,15 @@ test('door ring kit: the last wall site faces outward; the key catches only once
     if(expect){s.run(200);let x=0,y=0;for(let u=0;u<ring.length;u++){x+=s.px[u];y+=s.py[u];}x/=ring.length;y/=ring.length;
       assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(B)&&Math.hypot(s.px[B]-x,s.py[B]-y)<(R-1)*H,'blank inside');symmetric(s);}}});
 
+test('pore: a complete ring opens its panel outward and keeps it open; an incomplete ring holds it',()=>{
+  for(const missing of [false,true]){const R=5,K=S.doorRingKit(R,'z','X',6,'',1,true,true),ring=K.tris.filter((_,q)=>!(missing&&q===5));
+    const s=new TriSim({sigma:0,sigmaRot:0,W:16,H:16},ring.length);buildStructure(s,ring.map((_,k)=>k),ring,8,8);for(let k=0;k<150;k++)s.derive();
+    s.run(300);const P=K.door.panel.map(q=>ring.findIndex(t=>t===K.tris[q]));let x=0,y=0;for(let u=0;u<ring.length;u++){x+=s.px[u];y+=s.py[u];}x/=ring.length;y/=ring.length;
+    const out=P.reduce((a,u)=>a+Math.hypot(s.px[u]-x,s.py[u]-y),0)/P.length;
+    if(missing)assert.ok(!s.ev.unlatch,'an incomplete ring must keep its pore latched');
+    else{assert.ok(s.ev.unlatch>=1,'unlatched');assert.ok(out>(R-0.5)*H,'panel outside the ring');s.run(300);assert.equal(s.ev.unlatch,1,'stays open');}
+    symmetric(s);}});
+
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};

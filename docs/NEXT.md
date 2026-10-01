@@ -45,17 +45,25 @@ membrane around itself), heritable cells (copies carry the seed and wrap themsel
 1. **Cells that live** — done (2026-10-01): `live` (grown door membrane imports) and `grown` (the chain grows its pocket
    and its membrane with door; the cell imports blanks, casts dockers and copies inside; 4 of 4 worlds, ~250k steps).
    Slow: kit growth is the bottleneck (one specific type must find each growth site in a crowded world).
-2. **Heredity of the living cell.** A copy inside the cell cannot become a cell: its dockers carry no seeds, and kit
+2. **Birth (in progress, 2026-10-01).** `structures.cellKit`: one seed grows a whole cell: membrane (`doorRingKit` with
+   unique wall cells), a **pore** (a 6-cell panel with a built-in trigger: it swings out once the cell is complete and
+   stays open; a strand leaves through it in ~5-20k steps) and an **organelle** on the wall (two lid pockets joined,
+   `pocketPair`, casting dockers `AXm` and `aXm`). The root keeps the chain (no `&`). Dockers carry the membrane seed
+   `m` on their next side (a copy's high end exposes it) and `X` on their prev side (blanks are the fills, latGlue).
+   Demo `birth` (800k steps): the cell completes at ~300-375k; watching whether copies leave and grow their own cells.
+   Pitfalls met: the pore search must use the direction the hinge really turns (away from its partner); the ring can
+   close before the organelle completes (organelle parts 4x).
+3. **Heredity of the living cell.** A copy inside the cell cannot become a cell: its dockers carry no seeds, and kit
    parts cannot enter (the door takes blanks only; a free part binds only by its attach side). Options: (a) the pocket
    casts dockers that carry the seeds (`Ayz`-like, with fills that do not expose seeds), and the copy leaves the cell
    (an export door, or the membrane opens when copying is done: a local signal) to grow its own cell outside, where the
    kits are; (b) the cell makes kit parts itself (casting that keeps marks, item 4); (c) a door that imports kit parts.
    (a) is closest to the goal (offspring split off).
-3. **Division of a living cell**: two genomes inside one cell -> each wraps itself inside (inner membranes), or the
+4. **Division of a living cell**: two genomes inside one cell -> each wraps itself inside (inner membranes), or the
    copy is exported into a bud (budding with contents). Commitment rules already stop copying once wrapping starts.
-4. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel
+5. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel
    with cast glues) would close the loop (metabolism makes the parts of the cell).
-5. Airlock on rigid physics, scanner gate. (The heritable factory cycle works on rigid physics.)
+6. Airlock on rigid physics, scanner gate. (The heritable factory cycle works on rigid physics.)
 
 ## Pitfalls learned
 - **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
