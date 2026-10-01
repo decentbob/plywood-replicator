@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | stamp | split | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | stamp | split | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit,openBudDoors}=require('./world');
 const {render,montage}=require('./render');
@@ -171,6 +171,40 @@ function demo(name,seed=1,steps,dir='runs',extra){
         snap(s,'pocket',`the bud's pocket: ${T.length-miss.length}/${T.length} cells`,{units:members[dc].filter(u=>T.includes(canon(typeName(s,u)))),radius:3.5});}
       {const {comp,members}=s.bodies();snap(s,'zoom','the bud after the split',{units:members[comp[Du[0]]],radius:6});}
       finish('Split: the parent feeds its bud through a doorway; when the bud is complete the doors shut and it separates');},
+    // budgrow: the bud grows instead of being prepared (structures.grownBud). The parent P (prepared, labelled: ring of
+    // side 7 with a pulse door beside its seed side, a stamp pocket casting the bud's cap part from blanks, blanks xxx
+    // inside) and the bud's kit parts outside (every bud cell its own type; extra: copies per type, default 2). The bud
+    // ring D (side 5) grows from P's seed: while a wall site is open the lock signal holds both doors shut; when D's last
+    // cell arrives both open, cap parts cast in P come through the doorway and grow D's two-cell cap; when nothing is
+    // open, D's seed bond is cut, the lock signal returns, both doors swing shut and D leaves
+    budgrow(){steps=steps||300000;const per=parseInt(extra)||2,size=40,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud({RP,RD}),dcy=cy+(RP+RD)*H;
+      const P=g.P,Pt=P.map(x=>g.tris[x]),kit={};for(const t of g.kit)kit[t]=(kit[t]||0)+per;kit[g.rootType]=per;
+      const pocket={tris:S.lidPocket(S.stampInstr(g.cap.type),'X'),x:c-0.5,y:cy-2.5,rot:0};
+      const {s,structures}=createWorld({seed,size,structures:[{tris:Pt,x:c,y:cy},pocket],supply:{xxx:30,...kit},params:{lockRange:80}});
+      const U=structures[0],PK=structures[1],prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
+      // prepared parts must not meet the parent's door sweep
+      {const {triDepth}=require('./physics'),d=g.doors[0],tr=p=>[p[0]+c,p[1]+cy],pin=tr(d.pin),flat=V=>Float64Array.from(V.flat());
+        const pk=pocket.tris.map(t=>t.v.map(p=>[p[0]+pocket.x,p[1]+pocket.y]));if(!S.sweepClear(d.panel.map(x=>g.tris[x].v.map(tr)),pk,pin,d.dir,d.ang))throw Error('budgrow: the pocket is in the door sweep');void triDepth;void flat;}
+      // blanks inside P; kit parts outside both rings (D's place included)
+      free.forEach(u=>{const inP=typeName(s,u)==='xxx';if(!placeFree(s,u,placed,()=>{for(;;){if(inP){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}
+        const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-dcy)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);});
+      const norm=t=>{const z=new TriSim({},1);z.setType(0,t);return canon(z.typeName(0));},kitT=new Set([...g.kit,g.rootType].map(norm)),capT=norm(g.cap.type);
+      const Su=U[g.S],flap=(f,p)=>{const i=[0,1,2].find(i=>s.bond[f*3+i]>=0&&((s.bond[f*3+i]/3)|0)===p);if(i===undefined)return NaN;return Math.abs(Math.atan2(Math.sin(s.angle(f)-s.angle(p)-s.hRel[f*3+i]),Math.cos(s.angle(f)-s.angle(p)-s.hRel[f*3+i]))*180/Math.PI);};
+      // the bud's root and its panel's hinge cell (whichever kit copies became them)
+      const rootT=norm(g.rootType),p1T=norm(g.tris[g.panelD[0]].type),qT=norm(g.tris[g.q].type);
+      let closed=0,opened=0,split=0,early=0;const ctr=L=>{let x=0,y=0;for(const u of L){x+=s._dx(s.px[u]-s.px[L[0]]);y+=s._dy(s.py[u]-s.py[L[0]]);}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];};
+      const report=t=>{const {comp,members}=s.bodies(),root=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT&&kitT.has(rootT)&&[0,1,2].some(i=>s.bond[u*3+i]>=0));
+        const dc=root!==undefined?comp[root]:-1,dU=dc>=0?members[dc]:[],cells=dU.filter(u=>kitT.has(norm(typeName(s,u)))).length,q=dU.find(u=>norm(typeName(s,u))===qT),p1=dU.find(u=>norm(typeName(s,u))===p1T);
+        const aP=flap(U[g.panelP[0]],Su),aD=p1!==undefined&&root!==undefined?flap(p1,root):NaN,cap=dU.filter(u=>norm(typeName(s,u))===capT).length;
+        if(!closed&&q!==undefined)closed=t;if(!opened&&aP>20)opened=t;if(!closed&&aP>20)early=t;if(!split&&root!==undefined&&dc!==comp[Su]&&cells>=g.D.length-1)split=t;
+        const inD=dc>=0?(()=>{const [x,y]=ctr(dU);return u=>S.hexr([s._dx(s.px[u]-x),s._dy(s.py[u]-y)])<RD-1;})():()=>false;
+        const parts=free.filter(u=>!s.bonded(u)&&norm(typeName(s,u))===capT);
+        console.log(`t=${t} bud cells=${cells}/${g.D.length} ${closed?'closed at '+closed:'open'} doors P:${(aP|0)} D:${isNaN(aD)?'-':aD|0} deg${early?' EARLY at '+early:''} casts=${s.ev.cast||0} free cap parts=${parts.length} (in D ${parts.filter(inD).length}) cap=${cap}/${g.cap.slots.length} ${split?'SPLIT at '+split:'joined'} doors after split: ${split?(aP<5&&aD<5?'shut':'open'):'-'} kit parts in D=${free.filter(u=>!s.bonded(u)&&kitT.has(norm(typeName(s,u)))&&inD(u)).length} completions=${s.ev.complete||0}`);};
+      console.log('bud kit',g.kit.length+1,'types x',per,'cap part',g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
+      snap(s,'t0','t=0: parent P (seed on its top wall, door, stamp pocket, blanks); the bud kit outside',{units:U,radius:15});
+      for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,6))snap(s,`t${t}`,`t=${t}`,{units:U,radius:15},false);}
+      {const {comp,members}=s.bodies(),r=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT);if(r!==undefined)snap(s,'zoom','the bud',{units:members[comp[r]],radius:7});}
+      finish('Grown bud: the bud ring grows on the parent; its closing opens the doorway; the parent feeds its cap; it splits off sealed');},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
     ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;
