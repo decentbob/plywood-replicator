@@ -65,10 +65,12 @@ copy closes; two separately moving structures rarely meet that exactly). At prob
 `pBond` per step (1). A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
 attach side. Option `pLoose` (proofreading, cooperative binding): a triangle caught while free (not by an attach side) and held
-on one side only lets go with this probability per step; a second matching side holds it.
+on one side only lets go with this probability per step; a second matching side holds it. A triangle held by a
+trigger side (a key a machine is reading) is not proofread.
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
-released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0). A
+released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and hears no open signal (a part
+growing on the strand: the strand grows one part at a time). A
 strand's high end held by a completion-release side `&` (a membrane growing around the strand) starts no copy.
 
 ## Chains and copying
