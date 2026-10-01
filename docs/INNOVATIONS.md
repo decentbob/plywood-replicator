@@ -29,8 +29,17 @@ not statistics.
   in the first runs without that anchor the founder drifted into D in 1 of 4); one copy slipped out in 1 world. A
   strand lying in the doorway can jam a closing panel (seen once before the parent anchor: P stayed open).
   Picture: `docs/pictures/split_genome.png` (t=0, feeding, split, the bud with its anchored copy and food).
-  Not yet: the bud grows nothing that lets it live alone (next: its own docker pocket, `split ... o`), and the pair is
-  prepared, not grown.
+  (3) Organelle (`split 1 150000 runs o`, RP 8, RD 6): the bud also grows its own stamp pocket from a seed `v@` on its
+  wall, from kit parts (16 types, 2 each) that start in the parent as food, and the pocket casts `aq.w`, the dockers
+  the bud's copy `AAAA` needs. **Yolk**: its blanks `uuu` and fills `Q--` are food only the bud's pocket uses (the
+  parent's pocket takes `xxx`; with shared blanks the parent ate them all and the bud left with none). Result: in 3 of 4
+  worlds the pair splits at 70000, 75000 and 140000 steps with the bud's pocket complete and a copy anchored; world 4
+  had 6/16 pocket cells at 150000. After the split each bud cast 1-3 dockers from its yolk and started a copy, which
+  stalled: about a third of the yolk reaches the bud (by area), too little for a whole copy (4 dockers, 3 fills). The
+  founder stayed in the parent in 2 of the 3 (anchored there); in one it drifted into the bud before being anchored.
+  Some free triangles escape while the doors swing at the split. Picture: `docs/pictures/split_organelle.png` (the bud
+  after the split: its grown pocket, the anchored copy with a stalled copy on it).
+  Not yet: a bud that feeds itself after the split (an import door of its own, or more yolk), and a grown pair.
 - **Anchor `|`: a structure catches a strand** — works (in `split g`). A strand cannot otherwise join an existing
   structure: capture needs a free triangle and closures need an exact fit. An unbonded anchor side catches a strand
   end's seed (its spare edge, active while the strand is not being copied, complementary glue) when the end comes
