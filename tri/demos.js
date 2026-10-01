@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount}=require('./world');
 const {render,montage}=require('./render');
@@ -31,6 +31,19 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const U=structures[0],focus={units:U,radius:4,align:{u:U[4],a0:s.angle(U[4])}};snap(s,'t0','t=0',focus);
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} casts=${s.ev.cast||0} aaa=${typeCount(s).aaa||0}`);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
       console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Lid pocket: aaa slides into the notch, the lid closes, cast bcd, the lid reopens');},
+    // grown pocket: a lid pocket kit (structures.kit) grows from a seed on an anchor cell (labelled start: anchor + root);
+    // extra: copies of each kit type (default 4)
+    grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X'),'auto','x','z'),r=K.tris[K.root],i=K.rootSide;
+      const a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'};
+      const supply={xxx:16};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
+      const {s,structures}=createWorld({seed,size:18,structures:[{tris:[anchor,r],x:9,y:9}],supply});
+      console.log('kit',K.kit.join(' '),'depth',K.depth);const A=structures[0][0];
+      const want=new Set(K.types.map(canon)),grown=()=>{const {comp}=s.bodies();let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[A]&&want.has(canon(typeName(s,u))))k++;return k;};
+      snap(s,'t0','t=0: anchor and root',null,false);let done=0;
+      for(let t=1;t<=steps;t++){s.step();if(every(t,20)){const g=grown();if(!done&&g>=K.tris.length)done=t;console.log(`t=${t} kit cells=${g}/${K.tris.length} casts=${s.ev.cast||0}`);}
+        if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
+      {const {comp}=s.bodies();snap(s,'zoom','grown part (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:3.5});}
+      console.log('complete at',done||'not yet');finish(`Grown lid pocket from a seed (kit of ${K.kit.length} types, ${per} each)`);},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);
@@ -47,9 +60,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} light=${light} casts=${s.ev.cast||0} fuelUsed=${s.ev.fuelUsed||0} recharges=${s.ev.recharge||0} charged=${carriers.filter(u=>s.chg[u]).length}`);
         if(every(t,3))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, fuel used ${s.ev.fuelUsed||0}`,null,false);}
       finish(`Energy: one charged carrier per hatch swing (light ${light?'on':'off'})`);},
-    // factory: pockets cast blanks xxx into the dockers the chain needs (extra: kinds, e.g. 'AA' or 'Aa'; 'none' = control)
+    // factory: lid pockets cast blanks xxx into the dockers the chain needs (extra: kinds, e.g. 'AA' or 'Aa'; 'none' = control)
     factory(){steps=steps||20000;const kinds=extra==='none'?'':(extra||'Aa'),spots=[[5,5,0],[5,14,Math.PI],[14,5,Math.PI],[14,14,0]];
-      const {s}=createWorld({seed,size:20,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures:[...kinds].map((k,i)=>({tris:S.pocket('-'+k+'-','X'),x:spots[i][0],y:spots[i][1],rot:spots[i][2]})),supply:{'xxx':60,'---':40}});
+      const {s}=createWorld({seed,size:20,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures:[...kinds].map((k,i)=>({tris:S.lidPocket('-'+k+'-','X'),x:spots[i][0],y:spots[i][1],rot:spots[i][2]})),supply:{'xxx':60,'---':40}});
       snap(s,'t0',`t=0: pockets ${kinds||'none'}`,null,false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,10)){const c=census(s).filter(x=>x.n>=9),tc=typeCount(s);
           console.log(`t=${t} complete aaaaa=${c.filter(q=>q.faces==='aaaaa').length} AAAAA=${c.filter(q=>q.faces==='AAAAA').length} casts=${s.ev.cast||0} A--=${tc[canon('A--')]||0} a--=${tc[canon('a--')]||0} xxx=${tc.xxx||0} docks=${s.ev.dock||0}`);}

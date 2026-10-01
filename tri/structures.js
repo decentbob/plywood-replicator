@@ -55,6 +55,7 @@ function lidPocket(instr='bcd',recog='A',fuel=null){
     {v:[[1,0],[1.5,-H],[2,0]],type:'---'},{v:[[2,0],[2.5,H],[1.5,H]],type:'---'},{v:[[2,0],[1.5,-H],[2.5,-H]],type:'---'},
     {v:[[-0.5,-H],[0,-2*H],[0.5,-H]],type:'---'},{v:[[0,-2*H],[1,-2*H],[0.5,-H]],type:'---'},{v:[[0.5,-H],[1,-2*H],[1.5,-H]],type:'---'},
     {v:[[1,-2*H],[2,-2*H],[1.5,-H]],type:'---'},
+    ...(fuel?[]:[{v:[[1.5,H],[2,2*H],[1,2*H]],type:'---'},{v:[[1.5,H],[2.5,H],[2,2*H]],type:'---'}]),   // behind Q (a kit reaches Q this way)
   ];}
 
 // Conveyor: hatch 1 (hand-off ^) catches a block (glue a) and swings it to hatch 2's catch side; once the block is
@@ -109,6 +110,42 @@ function airlock(R=4,win=2.5){
     tris.push({v,type:v===Dl1?edge(v,a1,r1,'H'):v===Ur1?edge(v,q1,p1,'l'):v===Dl2?edge(v,a2,m,'l'):v===Ur2?edge(v,q2,p2,'H'):'---'});}
   return {tris,R};}
 
+// Kit (heritable parts): turn a prepared structure into types that grow it from one root cell. Cells are joined by a
+// spanning tree from the root (breadth first); every tree edge gets its own glue pair, the parent exposing the lower
+// case letter and the child attaching by the upper case one, so each kit type attaches at one place only. Tree edges
+// are the plain (inert, welded) shared edges and the casters' activator edges (K/k), which become a unique pair with
+// the activator mark '%' on the caster's side. Every other shared edge closes once both cells are attached: plain
+// ones by the close-only pair f/F, functional ones (instruction holders, other glue pairs) keep their glue and become
+// close-only on both sides, so free triangles (products, dockers) never stick to a growing part. Each kit cell's
+// attachment side carries '@': a free part binds only by it (a free caster never sticks to a caught target). Loose
+// cells are not welded. Returns {tris, types (per cell), kit (types except the root's), tree: [[parent, child]]}.
+// reserved: letters the kit must not use (both cases; also every letter already in the structure).
+function kit(tris,root=0,reserved='',seed=null){
+  if(root==='auto'){let best=null;for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;try{const k=kit(tris,r,reserved,seed);if(seed&&k.rootSide<0)continue;
+      if(!best||k.depth<best.depth)best=k;}catch(e){}}if(!best)throw Error('kit: no root');return best;}
+  const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Z-])([<>.!^#*~$+=%]*)/g)].map(m=>({g:m[1],m:m[2]})));
+  const E=[];for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){const A=tris[a].v,B=tris[b].v;
+    if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))E.push({a,i,b,j});}
+  const plain=e=>tok[e.a][e.i].g==='-'&&tok[e.b][e.j].g==='-',loose=e=>tris[e.a].loose||tris[e.b].loose;
+  const isK=(x,i)=>tok[x][i].g==='K',actE=e=>(isK(e.a,e.i)&&tok[e.b][e.j].g==='k')||(isK(e.b,e.j)&&tok[e.a][e.i].g==='k');
+  const used=new Set([...reserved.toLowerCase(),...(seed?seed.toLowerCase():''),'f','k',...tris.flatMap(t=>[...t.type.replace(/[^a-zA-Z]/g,'').toLowerCase()])]);
+  const pool=[...'abcdeghijlmnopqrstuvwxyz'].filter(c=>!used.has(c));
+  const seen=new Set([root]),tree=[],treeE=new Set(),q=[root];
+  while(q.length){const x=q.shift();for(const e of E){if(treeE.has(e))continue;const y=e.a===x?e.b:e.b===x?e.a:-1;if(y<0||seen.has(y))continue;
+    if(!((plain(e)&&!loose(e))||actE(e)))continue;seen.add(y);q.push(y);treeE.add(e);tree.push([x,y,e]);}}
+  if(seen.size!==tris.length)throw Error('kit: cells not reachable by plain or activator edges: '+tris.map((_,k)=>k).filter(k=>!seen.has(k)).join(' '));
+  if(tree.length>pool.length)throw Error(`kit: needs ${tree.length} glue pairs, ${pool.length} letters free`);
+  const addMark=(t,c)=>{if(!t.m.includes(c))t.m+=c;};
+  tree.forEach(([x,y,e],k)=>{const L=pool[k],[px,pi,cy,ci]=e.a===x?[e.a,e.i,e.b,e.j]:[e.b,e.j,e.a,e.i];
+    for(const [c,i,g] of [[px,pi,L],[cy,ci,L.toUpperCase()]]){const t=tok[c][i];if(t.g==='K')addMark(t,'%');t.g=g;if(c===cy)addMark(t,'@');}});
+  for(const e of E){if(treeE.has(e)||loose(e))continue;const A=tok[e.a][e.i],B=tok[e.b][e.j];
+    if(plain(e)){A.g='f';B.g='F';}else if(A.g==='-'||B.g==='-')continue;addMark(A,'.');addMark(B,'.');}
+  // seed: the root's first outer inert side takes the seed glue's complement (it attaches to an exposed seed)
+  let rootSide=-1;if(seed)for(let i=0;i<3&&rootSide<0;i++)if(tok[root][i].g==='-'&&!E.some(e=>(e.a===root&&e.i===i)||(e.b===root&&e.j===i))){rootSide=i;tok[root][i].g=gname(comp(gcode(seed)));addMark(tok[root][i],'@');}
+  const depth=new Map([[root,0]]);for(const [x,y] of tree)depth.set(y,depth.get(x)+1);
+  const types=tok.map(t=>t.map(x=>x.g+x.m).join(''));
+  return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values())};}
+
 // Arm kit: the types of an arm grown from seed glue `seed` by a bend pattern ('1'/'2' per step: the side, counted
 // counter-clockwise from the attach side, that exposes the next glue), using the given letters; the last type exposes
 // nothing, so the arm ends without counting.
@@ -116,4 +153,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,kit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
