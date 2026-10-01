@@ -333,9 +333,10 @@ function pocketPair(instrA,instrB,recog='X'){
 // organelle cell, slot and lid space lies inside the ring, the slots and lid spaces stay off the wall and the door's
 // sweep, and nothing touches the cells in `keep` (e.g. the chain and the room its copy needs, in ring coordinates;
 // keepFor(ringKit) computes them for the chosen ring).
-// Fewest risky cells first. Returns {tris (ring cells, then organelle cells), counts (type -> cells, root excluded),
+// late (default): the organelle starts only once the wall is complete (its seed is a trigger side). Fewest risky
+// cells first. Returns {tris (ring cells, then organelle cells), counts (type -> cells, root excluded),
 // rootType, rootSide, root, N, ring (the door ring kit), organelle {K, cells, wall, side, seed}, letters}.
-function cellKit({R=7,seed='m',k=4,m=5,pre=0,pore=true,key='X',recog='X',pockets=['AXm','aXm'],avoid='',keep=null,keepFor=null,maxRisk=99,order=[false,true]}={}){
+function cellKit({R=7,seed='m',k=4,m=5,pre=0,pore=true,key='X',recog='X',pockets=['AXm','aXm'],avoid='',keep=null,keepFor=null,maxRisk=99,order=[false,true],late=true}={}){
   const used0=[...new Set([...pockets.join(''),recog,seed,...avoid].filter(c=>c!=='-').map(c=>LOW[Math.max(LOW.indexOf(c),UP.indexOf(c))]))].join('');
   const KR=doorRingKit(R,seed,key,k,used0,m,false,pore,order,pre),ring=KR.tris.map(t=>t.v);if(keepFor)keep=keepFor(KR);keep=keep||[];
   const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
@@ -357,7 +358,9 @@ function cellKit({R=7,seed='m',k=4,m=5,pre=0,pore=true,key='X',recog='X',pockets
         best={K,cells,wall:w.cell,side:w.side,seed:sd};break;}}}
   if(!best)throw Error('cellKit: no place for the organelle');
   letters+=best.K.letters;
-  const T=KR.types.map(t=>[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(x=>x[0]));T[best.wall][best.side]=sd+'@';
+  // the organelle's seed on the wall is a trigger side: it binds nothing while the cell hears an open signal, and it
+  // emits none, so the wall closes and the pore opens first; then the organelle's parts come in and grow it
+  const T=KR.types.map(t=>[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(x=>x[0]));T[best.wall][best.side]=sd+(late?'*':'@');
   const ringTypes=T.map(t=>t.join('')),canonT=t=>{const x=[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(y=>y[0]);return [0,1,2].map(r=>[...x.slice(r),...x.slice(0,r)].join('')).sort()[0];};
   const tris=[...ring.map((v,q)=>({v,type:ringTypes[q]})),...best.cells.map((v,q)=>({v,type:best.K.types[q]}))];
   const counts={};tris.slice(1).forEach(t=>{const c=canonT(t.type);counts[c]=(counts[c]||0)+1;});
