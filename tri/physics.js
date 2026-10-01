@@ -153,8 +153,9 @@ class Physics{
   // bisection, overlap-reducing moves) but against its neighbours gathered once (most cost is blocked trials)
   _single(u,tx,ty,da){const {px,py,ox,oy}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.hypot(tx,ty);
     SKIN.v=Math.max(TOUCH,p.skin);const r=2*R3+tl+1e-6,R2=r*r,nb=this._nb||(this._nb=[]);nb.length=0;
-    const gx=this._gx,gy=this._gy,cells=this._cells,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
-    for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
+    // grid cells within reach r of the start (a block near its cell's edge reaches past the 3 x 3 cells around it)
+    const gx=this._gx,gy=this._gy,cells=this._cells,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/this._cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/this._ch),(gy-1)>>1);
+    for(let b=-kb;b<=kb;b++)for(let a=-ka;a<=ka;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
       for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}
     // depth of u at centre (x, y) turned by angle t from its current shape; early: true at the first overlap
     const depth=(x,y,t,early)=>{const c=Math.cos(t),s=Math.sin(t);let built=false,sum=0;

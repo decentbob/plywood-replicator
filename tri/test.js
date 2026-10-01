@@ -154,6 +154,11 @@ test('physics: a block overlapping a wall cannot jump through it (an overlap-red
   const u=tris.length;placeTri(s,u,[[11,12],[10,12],[10.5,12-H]].map(p=>[p[0],p[1]+0.02]));s.gridSync();
   assert.ok(s.moveDepth([u],0,0,0,s.px[u],s.py[u])>0,'the block overlaps the wall');
   for(const k of [1.2,1.6,2.0,2.4])s._single(u,0,k,0);assert.ok(s.py[u]<12,'the block jumped through the wall');symmetric(s);});
+test('physics: a lone block sees blocks beyond the 3 x 3 grid cells around it (long moves near a cell edge)',()=>{
+  // world 14 (grid cells 1.4 wide): obstacle A at x = 4.3 (cell 3), block B at x = 1.45 (cell 1); B kicked +2.2 must stop
+  // before A (its neighbour search once covered only cells 0..2)
+  const s=new TriSim({W:14,H:14,seed:1,sigma:0,sigmaRot:0},2),tri=(x,y)=>[[x-0.5,y-H/3],[x+0.5,y-H/3],[x,y+2*H/3]];placeTri(s,0,tri(4.3,7));placeTri(s,1,tri(1.45,7));
+  s.gridSync();s._single(1,2.2,0,0);assert.ok(s.moveDepth([1],0,0,0,s.px[1],s.py[1])===0,`B overlaps A (B at x=${s.px[1].toFixed(2)})`);assert.ok(s.px[1]<3.4,'B stopped before A');});
 test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)',()=>{
   const {triDepth}=require('./physics');
   const {s}=createWorld({seed:4,size:12,founders:[{gaps:[1,0,2],faces:'abab'}],supply:{'A--':10,'B--':10,'a--':10,'b--':10,'---':20},params:{zip:false}});s.run(600);
