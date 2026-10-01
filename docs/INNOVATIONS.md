@@ -16,6 +16,16 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   own docker type (14 each of 106 free).
   `node experiments/tri_typed.js copy 1 10000 OUT`. Picture: `experiments/out/TYPED_copy_20260930.png`.
   Next: typed backs and ends (inherited only through the docker types), supply limits by type.
+- **Factory: a casting pocket makes a replicator's parts** — works (1 world plus control). The founder chain has faces
+  `aaaaa`; its copy needs dockers `A--`, and the world starts with none, only blanks `xxx`. Two hatch pockets
+  (casters: recognition X, instructions -, A, -) cast blanks into `A--`. Result: 26 casts in 20000 steps and a
+  complete copy `AAAAA` by t=10000. Control (same blanks, no pocket): no casts, no docks. First demo of a machine
+  producing the supply replication needs. (Bug fixed on the way: a caster's inert instruction side was welded to
+  the frame, which wrote the frame glue f into the products; such sides are now left unwelded.)
+  `POCKETS=2 BLANKS=60 node experiments/tri_machines.js factory 1 20000 OUT 1` (control: last argument 0).
+  Picture: `experiments/out/TYPED_factory_20260930.png`.
+  Next: pockets for both dockers (A-- and a--), so copies of copies run on cast supply too; then a replicator that
+  carries its own pocket.
 - **Typed arms (grown parts from types, no programs)** — partial (1 world). `experiments/tri_typed_parts.js`.
   An arm is a series of distinct types. Each attaches by the complement of its parent's exposed glue and exposes
   the next glue on side 1 or 2 (a bend). A type exposing nothing ends it, so the length needs no counting.
