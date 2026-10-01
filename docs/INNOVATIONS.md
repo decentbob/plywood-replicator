@@ -21,8 +21,12 @@ not statistics.
   on the first). **Late organelle**: its wall seed is a trigger side, deaf while the wall grows, so the wall closes
   and the pore opens first, then organelle parts come in through the pore (otherwise the ring closed before the
   organelle in 2 of 3 worlds and the cell was stuck). Also fixed: door searches use the direction the hinge really
-  turns. Status: 4 worlds grow the wall (complete by ~340-380k steps) and then the organelle inside, slowly (parts
-  diffuse in through the pore). Not yet: casting, copying and a copy leaving to grow its own cell.
+  turns. Status (4 worlds, 100 blanks, chain `aaaaa`): the wall completes at ~340-380k steps, the pore opens, then
+  the organelle grows inside, slowly (its parts must wander in through the pore): complete in 1 of 4 worlds by
+  ~900k, the others 1-2 cells short at 1.5M. In that world the organelle cast dockers, the chain copied inside its
+  cell, copies were copied again inside (with the second docker type), and **a copy left through the pore**
+  (~1.1M steps; two free copies by 1.55M, one being copied outside by dockers that drifted out). Not yet: a free copy
+  starting its own cell (only one free membrane root was left in the world). Long runs continue with `TRI_RESUME`.
   `node tri/demos.js birth 3 900000 runs`.
 - **Heritable factory cycle on rigid physics** — works (third generation in 2 of 3 worlds by 150000 steps). Founder
   `aaaaa` with seed `y`; two pocket kits in the supply: P_y casts blanks into dockers `Az-`, P_z casts `ay-`; fills
