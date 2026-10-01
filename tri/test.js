@@ -40,6 +40,20 @@ test('lid pocket: a target in the notch is caught, the lid closes (heard trigger
   const a0=s.angle(2)-s.angle(3);s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('bcd'));
   const back=Math.atan2(Math.sin(s.angle(2)-s.angle(3)-a0),Math.cos(s.angle(2)-s.angle(3)-a0));assert.ok(Math.abs(back)<0.1,`lid open again (got ${back.toFixed(2)})`);symmetric(s);});
 
+test('kit: unique tree glues; the kit-typed lid pocket bonds as designed and casts with activator sides',()=>{
+  const K=S.kit(S.lidPocket('-A-','X'),'auto','x','z'),glues=new Set();
+  for(const [x,y] of K.tree)assert.ok(K.types[y].includes('@'),'child has an attach side');
+  for(const t of K.types)for(const m of t.matchAll(/([a-zA-Z])[<>.!^#*~$+=%]*@/g)){assert.ok(!glues.has(m[1]),'attach glue used twice: '+m[1]);glues.add(m[1]);}
+  const tris=[...K.tris,{v:[[0,0],[1,0],[0.5,H]],type:'xxx',loose:true}],T=tris.length-1;
+  const s=new TriSim({sigma:0,sigmaRot:0,W:12,H:12},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,5,5);for(let i=0;i<3;i++)s.cut(T,i);
+  const {comp}=s.bodies();for(let u=0;u<T;u++)assert.equal(comp[u],comp[K.root],'cell '+u+' not bonded into the part');
+  s.derive();s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('-A-'));symmetric(s);});
+test('parts: a free triangle with an attach side binds only by it',()=>{
+  for(const [part,expect] of [['A@--',true],['A-B@',false],['A--',true]]){
+    const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'f-a'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[0,0],[0.5,H],[-0.5,H]],type:part,loose:true}];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(30);
+    assert.equal(s.partner(0,2)===2,expect,part);}});
+
 test('hinge: a triggered flap swings 60 degrees and returns when the trigger lets go',()=>{
   // partner P (fixed by no jostle), flap F hinged at P's shared corner, trigger side of F faces cargo C
   const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'--H'},{v:[[0,0],[0.5,H],[-0.5,H]],type:'h<-A*',loose:true},{v:[[0,0],[-0.5,H],[-1,0]],type:'a--',loose:true}];

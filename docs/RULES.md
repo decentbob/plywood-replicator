@@ -25,6 +25,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `$` | fuel side: a hinge here (or on its partner) spends one charged carrier per swing |
 | `+` | hear side: the triangle hears the trigger signal of the partner bonded here (relayed, below) |
 | `=` (hinge side) | wide hinge: swings 120 degrees instead of `hingeAngle` |
+| `%` | activator side: counts as a casting activator while it is bonded by its glue (like K bonded to k) |
+| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
 | `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
@@ -44,7 +46,9 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 A side binds a flush side (both corner gaps within 0.45, closures 0.22) with the complementary glue, at
 probability 0.5 per step, if at least one of the two triangles is already attached (**activation by
 attachment**: free triangles never bind each other). A **discharged** triangle binds nothing. Close-only sides
-bind only attached partners.
+bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
+attach side. Option `pLoose` (proofreading): a triangle caught while free (not by an attach side) and held on only one
+or two sides lets go with this probability per step.
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
 released strand triangle; the spare edge of a strand end that is not being copied.
@@ -75,12 +79,12 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
 ## Casting (permanent type change)
 A triangle bonded by glue on all three sides is in a **pocket**. For each partner: the side bonded to it is the
 recognition side, the next side counter-clockwise the activator side, the remaining side the instruction side. If
-every partner's activator side carries `K` and is bonded to a `k`, the triangle takes each partner's instruction
+every partner's activator side carries `K` bonded to a `k` (or is an activator side `%` bonded by its glue), the triangle takes each partner's instruction
 glue on the facing side (option `castComp`: the complement), loses its marks, and lets go of all three. (Copying,
 not complementing, is the default: a complemented product would stick to its own casters.)
 
 ## Hinges and machines
-- A hinge remembers its flush angle (when it bonded) and which way is away from its partner. While the flap is
+- A hinge remembers its flush angle (when it bonded, snapped to a multiple of 60 degrees) and which way is away from its partner. While the flap is
   **triggered** (a trigger side bonded, or a triangle welded to it reports a bonded trigger, relayed one bond) it
   is driven `hingeAngle` (60 degrees) away from flush, at 0.05 rad per step (half rate while loaded, so an empty
   flap returning wins a push), turning about its pinned corner and **carrying everything bonded to it**. A flap

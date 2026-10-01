@@ -14,7 +14,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Energy: charged carriers fuel every hinge swing, recharge in a light zone | ATP, light | works | sim.js servo, demo energy |
 | Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works | structures, demos |
 | Import: bring raw material through the membrane (pump) | transporters | not yet (lock works, pump does not) | backlog 3 |
-| Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | arms inherited; pocket kit not yet | backlog 1 |
+| Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | arms inherited; lid pocket grows from a seed on an anchor (kit generator) | structures.kit, demo grow; backlog 1 |
 | Membrane growth | membrane growth | not yet | backlog 5 |
 | Budding: second compartment with genome copy and parts | daughter cell | not yet | backlog 6 |
 | Feeding the bud through a shared wall gate | maternal supply | not yet | backlog 6 |
@@ -23,10 +23,10 @@ splits it off.** Build every mechanism in isolation, then combine them.
 
 ## Backlog (top first)
 
-1. **Grown pocket (heritable factory).** Design a pocket kit: the hatch pocket's cells as a spanning tree from one
-   seed glue, one glue pair per tree edge, closure glues for the remaining shared edges; kit types in supply. Grow it
-   from a chain-end seed; check it forms on the founder, regrows on copies, and casts. Then `latGlue` backs so a chain
-   carries several seeds (different chains grow different parts), and a pocket that casts its own kit types.
+1. **Grown pocket on a chain (heritable factory).** The kit generator works and the lid pocket grows from a seed on
+   an anchor (done). Next: grow it from a chain-end seed (check the part does not overlap the chain or block copying),
+   check it regrows on copies (dockers carry the seed), and casts. Then `latGlue` backs so a chain carries several
+   seeds, and a pocket that casts its own kit types (16 types: a factory of factories).
 2. **Factory on lid pockets.** Switch the factory demo to lid pockets (done: copy deadlock fixed by zip; lid pocket
    built) and measure generations.
 3. **Pump through a wall.** A carrying lock: the hatch pocket carries a key from an outer slot into an enclosed

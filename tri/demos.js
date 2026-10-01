@@ -6,7 +6,7 @@ const path=require('path');
 const {createWorld,placeFree,census,typeCount}=require('./world');
 const {render,montage}=require('./render');
 const S=require('./structures');
-const {canon,typeName}=require('./sim');
+const {TriSim,canon,typeName}=require('./sim');
 const H=Math.sqrt(3)/2;
 
 function demo(name,seed=1,steps,dir='runs',extra){
@@ -36,9 +36,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X'),'auto','x','z'),r=K.tris[K.root],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'};
       const supply={xxx:16};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
-      const {s,structures}=createWorld({seed,size:18,structures:[{tris:[anchor,r],x:9,y:9}],supply});
+      const {s,structures}=createWorld({seed,size:16,structures:[{tris:[anchor,r],x:8,y:8}],supply,params:{pLoose:0.005}});
       console.log('kit',K.kit.join(' '),'depth',K.depth);const A=structures[0][0];
-      const want=new Set(K.types.map(canon)),grown=()=>{const {comp}=s.bodies();let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[A]&&want.has(canon(typeName(s,u))))k++;return k;};
+      const tmp=new TriSim({},1),want=new Set(K.types.map(t=>{tmp.setType(0,t);return canon(tmp.typeName(0));})),grown=()=>{const {comp}=s.bodies();let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[A]&&want.has(canon(typeName(s,u))))k++;return k;};
       snap(s,'t0','t=0: anchor and root',null,false);let done=0;
       for(let t=1;t<=steps;t++){s.step();if(every(t,20)){const g=grown();if(!done&&g>=K.tris.length)done=t;console.log(`t=${t} kit cells=${g}/${K.tris.length} casts=${s.ev.cast||0}`);}
         if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}

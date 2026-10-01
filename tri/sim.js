@@ -33,7 +33,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^#*~$+=%@]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:0.5,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
-  zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,latGlue:false,castComp:false,noDock:false,light:null};
+  zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -42,7 +42,7 @@ class TriSim extends Physics{
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.hSign=I8(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.sg=I8(n);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.sg=I8(n);this.cg=I8(n);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -125,7 +125,7 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e])continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&flush(u,e,v,j,p.triTol)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&flush(u,e,v,j,p.triTol)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
@@ -161,14 +161,18 @@ class TriSim extends Physics{
       const endOK=!p.caps||this.cap[t],pOK=e.prev>=0?done(e.prev):rt.next<0&&endOK,nOK=e.next>=0?done(e.next):rt.prev<0&&endOK;
       if(pOK&&nOK){this.refr[u]=1;this.refr[t]=1;this.cut(u,e.face);this.count('release');}}
     this._environment();
-    for(let u=0;u<n;u++)if((this.fill[u]||this.cap[u])&&!this.bonded(u)){this.fill[u]=0;this.cap[u]=0;}   // a free triangle keeps no chain state
+    for(let u=0;u<n;u++)if((this.fill[u]||this.cap[u]||this.cg[u])&&!this.bonded(u)){this.fill[u]=0;this.cap[u]=0;this.cg[u]=0;}   // a free triangle keeps no chain or caught state
     this._cast();this._light();
   }
   // options: dissolve (with caps: strands missing a cap signal fall apart), undock (lone docked triangles leave), fray
-  // (a triangle held by one bond, not being copied, lets go)
+  // (a triangle held by one bond, not being copied, lets go), loose (below)
   _environment(){const p=this.p,n=this.n;
     if(p.pDissolve>0&&p.caps)for(let u=0;u<n;u++){let chain=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;}
       if(chain>0&&this.busy[u]===0&&!this.fill[u]&&(this.sigP[u]===0||this.sigN[u]===0)&&this.rng()<p.pDissolve){for(let i=0;i<3;i++)this.cut(u,i);this.count('dissolve');}}
+    // loose (option, proofreading): a caught triangle (bound when free, not by an attach side) held on only one or two sides
+    // lets go; one held on all three sides is fully recognized (a pocket casts it at once)
+    if(p.pLoose>0)for(let u=0;u<n;u++){if(!this.cg[u])continue;let nb=0;for(let i=0;i<3;i++)if(this.bond[u*3+i]>=0)nb++;
+      if(nb>=1&&nb<=2&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
     if(!(p.triUndock>0)&&!(p.pFray>0))return;
     for(let u=0;u<n;u++){let nb=0,chain=0,face=-1,copying=false;
       for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;nb++;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;if(k===FACE)face=i;if(k===FACE||k===TFACE)copying=true;}

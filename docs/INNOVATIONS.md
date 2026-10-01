@@ -8,6 +8,22 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Grown pocket (kit generator)** — works (3 of 3 worlds). `structures.kit(tris, root, reserved, seed)` turns a
+  prepared structure into kit types that grow it from one root cell: a breadth-first spanning tree (root chosen for the
+  shallowest tree), one unique glue pair per tree edge, casters attached by their activator edge (unique glue plus the
+  new activator mark `%`), all other shared edges close-only closures. Three problems found and fixed on the way:
+  (1) a free caster stuck to a caught target by its recognition side, so the new attach mark `@` makes a free part
+  bind only by its attach side (and never dock or fill); (2) a hinge bound at the 0.45 tolerance kept a crooked rest
+  angle, so hinge rest angles snap to the lattice; (3) a caster that arrives after the slot caught a target finds its
+  cell enclosed (in 2D the frame must close around it), so caught triangles held on only one or two sides now let go
+  (option `pLoose`, the user's cooperative-binding idea; a fully recognized target casts at once). Lid pocket for the
+  factory part (`-A-`, recognition X), 16 kit types x 12 in a 16x16 world with an anchor + root (labelled start): the
+  pocket completed at 11200, 10400, 11200 steps and cast 5, 8, 7 times by 16000. `node tri/demos.js grow 2 16000 runs
+  12`. Picture: `docs/pictures/grown_pocket.png`. Enables heritable machines (grow from a strand-end seed next).
+- **Factory on lid pockets** — works (2 of 2 worlds). Same factory world (chain `aaaaa`, blanks `xxx`, no dockers),
+  two lid pockets casting `A--` and `a--`, 30000 steps: world 1 made 3 new `aaaaa` and 2 `AAAAA` (58 casts), world 2 3
+  and 3 (60 casts), all 60 blanks used; control without pockets: nothing. Before (hatch pockets): one generation
+  cycle in 1 of 2 worlds in 40000 steps. `node tri/demos.js factory 1 30000 runs Aa`.
 - **Lid pocket (bulge-free casting pocket)** — works (3 worlds). Diagnosis of the old hatch pocket's stall: a triangle
   turning 60 degrees about a corner sweeps its far corner along an arc that bulges 0.134 past the chord, straight
   into the fixed caster across the target's far edge, so the carried target jams (seed 1: one catch, then nothing for
