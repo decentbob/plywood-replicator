@@ -167,8 +167,8 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
   if(cmd==='factory'){
     // a casting pocket makes the dockers a replicator needs: blanks xxx are cast into A-- (the docker for face a)
     const withPocket=extra!=='0',size=20;
-    const structures=withPocket?[{tris:T.pocket('-A-','X'),x:5,y:5}]:[];
-    const {s,structures:st}=T.createTypedWorld({seed:+seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures,supply:{'xxx':30,'---':40}});
+    const np=+(process.env.POCKETS||1),structures=withPocket?[{tris:T.pocket('-A-','X'),x:5,y:5},{tris:T.pocket('-A-','X'),x:5,y:14,rot:Math.PI}].slice(0,np):[];
+    const {s,structures:st}=T.createTypedWorld({seed:+seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures,supply:{'xxx':+(process.env.BLANKS||30),'---':40}});
     const t0=Date.now();const snapF=t=>snap(s,out.replace('.png',`_t${t}.png`),`${path.basename(out,'.png')} t=${t}: ${withPocket?'pocket':'no pocket'}, casts ${s.castEvents||0}`,null);
     snapF(0);
     for(let t=1;t<=+steps;t++){s.step();
