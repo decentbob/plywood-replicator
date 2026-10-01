@@ -29,6 +29,8 @@ node tri/demos.js cell 2 40000 runs                # protocell: import + factory
 node tri/demos.js bud 3 50000 runs                 # budding: daughter rings detach when complete
 node tri/demos.js wrap 2 100000 runs               # a chain grows a membrane around itself
 node tri/demos.js cells 1 100000 runs 36           # heritable cells: copies wrap themselves
+node tri/demos.js live 1 90000 runs 6x3            # a grown membrane with its own import door
+node tri/demos.js grown 2 200000 runs              # chain grows membrane + door and a casting pocket (slow)
 node tri/demos.js heir 1 30000 runs                # chains grow pockets from their end seed; copies regrow them
 node tri/demos.js cycle 1 120000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
 ```
@@ -38,10 +40,12 @@ Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to
 Built on rigid physics this session, in order: selective import (revolving door), protocell (import + factory + copying
 inside a membrane), budding (a daughter ring detaches when complete: open signal + `&`), encapsulation (a chain grows a
 membrane around itself), heritable cells (copies carry the seed and wrap themselves: two cells per world).
-1. **Cells that live**: a self-grown membrane has no door, so a wrapped genome cannot feed or copy. Grow the import door
-   as part of the membrane (a ring kit with one door segment: break the period at one place; the door panel and its
-   latch as kit cells) and a pocket inside (heritable pocket from the other end seed). Then a wrapped cell imports
-   blanks, casts dockers and copies inside (the protocell, but grown from the genome).
+1. **Cells that live** (in progress). Done: the membrane kit grows its own import door (`doorRingKit`, demo `live`, 3 of
+   3 worlds import blanks); sensors are live only once their structure is complete (open signal), so a pocket on the
+   chain waits for the membrane. Demo `grown` (R=7 door membrane from seed z, lid pocket from seed y, chain aaaaa): the
+   pocket completes early and waits; the membrane closes slowly (70/78 cells at 116k steps in a crowded 30x30 world).
+   Next: make kit growth faster (fewer kit copies crowding the world, or a smaller pocket kit; or a membrane that grows
+   from two fronts), then show import -> cast -> copy inside.
 2. **Division of a living cell**: two genomes inside one cell -> each wraps itself inside (inner membranes), or the
    copy is exported into a bud (budding with contents). Commitment rules already stop copying once wrapping starts.
 3. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel

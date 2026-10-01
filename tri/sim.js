@@ -201,9 +201,10 @@ class TriSim extends Physics{
     if(p.pDissolve>0&&p.caps)for(let u=0;u<n;u++){let chain=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;}
       if(chain>0&&this.busy[u]===0&&!this.fill[u]&&(this.sigP[u]===0||this.sigN[u]===0)&&this.rng()<p.pDissolve){for(let i=0;i<3;i++)this.cut(u,i);this.count('dissolve');}}
     // loose (option, proofreading): a caught triangle (bound when free, not by an attach side) held on one side only lets
-    // go; a second matching side holds it (cooperative binding)
-    if(p.pLoose>0)for(let u=0;u<n;u++){if(!this.cg[u])continue;let nb=0;for(let i=0;i<3;i++)if(this.bond[u*3+i]>=0)nb++;
-      if(nb===1&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
+    // go; a second matching side holds it (cooperative binding). Cargo held by a trigger side (a key read by a machine)
+    // is not proofread: it stays until the machine lets it go
+    if(p.pLoose>0)for(let u=0;u<n;u++){if(!this.cg[u])continue;let nb=0,key=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){nb++;if(this.trg[q])key=true;}}
+      if(nb===1&&!key&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
     if(!(p.triUndock>0)&&!(p.pFray>0))return;
     for(let u=0;u<n;u++){let nb=0,chain=0,face=-1,copying=false;
       for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;nb++;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;if(k===FACE)face=i;if(k===FACE||k===TFACE)copying=true;}
