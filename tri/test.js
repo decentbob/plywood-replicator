@@ -60,14 +60,14 @@ test('import ring: the revolving door carries a caught blank inside and drops it
   s.run(120);let x=0,y=0;for(let u=0;u<tris.length;u++){x+=s.px[u];y+=s.py[u];}x/=tris.length;y/=tris.length;
   assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(K),'let go');assert.ok(Math.hypot(s.px[K]-x,s.py[K]-y)<(R-1)*H,'inside the ring');symmetric(s);});
 
-test('door ring kit: the last wall site faces outward; the key catches only once the door is hung, then imports',()=>{
+test('door ring kit: the last wall site faces outward; the key catches only once the wall is complete, then imports',()=>{
   for(const R of [4,6,8]){const K=S.doorRingKit(R),v=K.tris[K.door.hp].v,f=[0,1,2].find(i=>K.tris.every((t,q)=>q===K.door.hp||!(t.v.some(p=>Math.hypot(p[0]-v[i][0],p[1]-v[i][1])<1e-6)&&t.v.some(p=>Math.hypot(p[0]-v[(i+1)%3][0],p[1]-v[(i+1)%3][1])<1e-6))));
     assert.ok(S.hexr([(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2])>R-0.5,'last site faces outward, R='+R);}
   for(const [missing,expect] of [[true,false],[false,true]]){const K=S.doorRingKit(4),R=4,ring=K.tris.filter((_,q)=>!(missing&&q===K.door.hp));
-    const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},ring.length+1);buildStructure(s,ring.map((_,k)=>k),ring,7,7);
+    const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},ring.length+1);buildStructure(s,ring.map((_,k)=>k),ring,7,7);s.run(150);   // the open signal spreads
     const hc=ring.findIndex(t=>t.type.includes('*')),i=[...s.typeName(hc).matchAll(/[a-zA-Z-][<>.!^#*~$+=%@&]*/g)].findIndex(m=>m[0].includes('*')),P=k=>[s.px[hc]+s.ox[hc*3+k],s.py[hc]+s.oy[hc*3+k]];
     const a=P(i),b=P((i+1)%3),c=P((i+2)%3),B=ring.length;placeTri(s,B,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);s.setType(B,'xxx');s.derive();
-    s.run(5);assert.equal(s.bonded(B),expect,missing?'an unhung key must not catch':'a hung key catches');
+    s.run(5);assert.equal(s.bonded(B),expect,missing?'a key in an open wall must not catch':'the key of a complete wall catches');
     if(expect){s.run(200);let x=0,y=0;for(let u=0;u<ring.length;u++){x+=s.px[u];y+=s.py[u];}x/=ring.length;y/=ring.length;
       assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(B)&&Math.hypot(s.px[B]-x,s.py[B]-y)<(R-1)*H,'blank inside');symmetric(s);}}});
 
@@ -76,6 +76,7 @@ test('budding: a ring on a seed lets go when complete (open signal), holds while
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
     {const A=anc.v,q=A[1],w=A[2],e=A[0];base.v=[w,q,[q[0]+w[0]-e[0],q[1]+w[1]-e[1]]];}
     const ring=K.tris.slice(0,K.tris.length-missing),all=[anc,base,...ring];const s=new TriSim({sigma:0,sigmaRot:0,W:16,H:16},all.length);buildStructure(s,all.map((_,k)=>k),all,8,8);
+    for(let k=0;k<150;k++)s.derive();   // settle the relayed signals (a grown ring has them from its first cell)
     assert.ok(s.partner(2,K.rootSide)===0,'root on the seed');for(let k=0;k<80;k++)s.step();
     assert.equal(s.partner(2,K.rootSide)<0,expect,missing?'incomplete ring must hold':'complete ring must let go');}});
 

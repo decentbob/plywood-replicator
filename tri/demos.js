@@ -177,8 +177,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
       finish('Living membrane: a chain grows a membrane with an import door; blanks come in');},
     // grown protocell: chain aaaaa with membrane seed z (low end) and pocket seed y (high end). From the supply it grows a
     // membrane with an import door (door ring kit, R=7) and a lid pocket that casts blanks xxx into dockers A--; blanks
-    // come in through the door, the pocket casts them, the chain copies inside its own membrane (extra: kit copies, 3)
-    grown(){steps=steps||150000;const R=7,mult=parseInt(extra)||3,size=34,c=size/2,KR=S.doorRingKit(R,'z','X',4,'a');
+    // come in through the door, the pocket casts them, the chain copies inside its own membrane (extra: membrane kit copies per
+    // cell, 4; the pocket kit gets 4 times as many per type)
+    grown(){steps=steps||200000;const R=7,mult=parseInt(extra)||4,size=30,c=size/2,KR=S.doorRingKit(R,'z','X',4,'a');
       const founder={gaps:[1,1,1,1],faces:'aaaaa',ends:'zy',x:c,y:c};
       // plan (read-only): a pocket kit option whose cells lie inside the membrane, clear of its wall and the chain's dock sites
       const probe=createWorld({seed,size,founders:[founder]}),U0=probe.founders[0],ring=partPlacement(probe.s,U0,U0[0],KR);
@@ -187,16 +188,17 @@ function demo(name,seed=1,steps,dir='runs',extra){
         return pp.ok&&pp.cells.every(v=>ring.cells.every(w=>dist(v,w)>1.1));});
       if(!ring.ok||!KP)throw Error('grown: no layout');console.log('membrane root',KR.rootType,'pocket root',KP.root,'side',KP.rootSide,'risk',KP.risk);
       const supply={[KR.rootType]:2,[KP.types[KP.root]]:2,xxx:40,'---':20};
-      for(const [t,m] of Object.entries(KR.counts))supply[t]=(supply[t]||0)+mult*m;for(const t of KP.kit)supply[t]=(supply[t]||0)+mult;
+      for(const [t,m] of Object.entries(KR.counts))supply[t]=(supply[t]||0)+mult*m;for(const t of KP.kit)supply[t]=(supply[t]||0)+4*mult;
       const {s,founders}=createWorld({seed,size,founders:[founder],supply,params:{pLoose:0.05}});const F=founders[0];
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},memT=new Set([...Object.keys(KR.counts),KR.rootType].map(norm));
-      const isMem=u=>memT.has(norm(typeName(s,u))),A=canon('A--');
+      const isMem=u=>memT.has(norm(typeName(s,u))),A=canon('A--'),pocT=new Set(KP.types.map(norm));
       const report=t=>{const {comp,members}=s.bodies(),fc=comp[F[0]];let on=0,mem=null;for(const m of members){const k=m.filter(isMem).length;if(comp[m[0]]===fc)on+=k;else if(k>=KR.N-1)mem=m;}
         let inn=null;if(mem){const M=mem.filter(isMem);let x=0,y=0;for(const u of M){x+=s._dx(s.px[u]-s.px[M[0]]);y+=s._dy(s.py[u]-s.py[M[0]]);}x=s.px[M[0]]+x/M.length;y=s.py[M[0]]+y/M.length;
           inn=u=>Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<(R-1)*H-0.3;}
         const cnt=(ty,where)=>{let k=0;for(let u=0;u<s.n;u++)if(canon(typeName(s,u))===ty&&(where==='in'?inn&&inn(u):!(inn&&inn(u))))k++;return k;};
         const cs=census(s).filter(q=>q.n>=7);
-        console.log(`t=${t} membrane ${mem?'closed':on+'/'+KR.N} strands [${cs.map(q=>q.faces+(q.paired?'*':'')+(inn?inn(q.units[4])?'(in)':'(out)':'')).join(' ')}] casts=${s.ev.cast||0} docks=${s.ev.dock||0} imports=${s.ev.drop||0} in: xxx=${inn?cnt('xxx','in'):'-'} A--=${inn?cnt(A,'in'):'-'} out: A--=${cnt(A,'out')}`);};
+        const pk=members[fc].filter(u=>pocT.has(norm(typeName(s,u)))).length;
+        console.log(`t=${t} membrane ${mem?'closed':on+'/'+KR.N} pocket ${pk}/${KP.types.length} strands [${cs.map(q=>q.faces+(q.paired?'*':'')+(inn?inn(q.units[4])?'(in)':'(out)':'')).join(' ')}] casts=${s.ev.cast||0} docks=${s.ev.dock||0} imports=${s.ev.drop||0} in: xxx=${inn?cnt('xxx','in'):'-'} A--=${inn?cnt(A,'in'):'-'} out: A--=${cnt(A,'out')}`);};
       snap(s,'t0','t=0: chain aaaaa with seeds z and y; membrane and pocket kits, blanks, junk',null,false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,50))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, imports ${s.ev.drop||0}`,null,false);}
       snap(s,'zoom','the grown cell',{units:F,radius:R+1.5});

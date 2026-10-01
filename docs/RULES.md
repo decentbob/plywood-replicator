@@ -109,12 +109,13 @@ not complementing, is the default: a complemented product would stick to its own
   whose body reaches its partner through other bonds is locked.
 - **Releases:** hand-off `^`, drop `!`, pulse `#` (above). Without a mark a flap holds its cargo until something
   else cuts the bond (e.g. a cast). A hand-off flap's catch side catches free triangles only (it never closes onto
-  the cargo it handed off); a flap's catch side catches only while the flap is at rest. A trigger side of a triangle
-  with a hinge side catches only while that hinge side is bonded (a grown door's key is live once the door is hung).
+  the cargo it handed off); a flap's catch side catches only while the flap is at rest. A trigger side binds nothing
+  (catch or closure) while its triangle hears an open signal (below): a sensor is live once its structure is complete (a grown door's key,
+  a grown pocket's slot; a prepared machine has no attach sides and hears none).
 - **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
-- **Open signal (completion):** an attached part (a triangle with an attach side) with an unbonded glued side (an
-  open growth front, an open closure side) emits `openRange` (60), relayed -1 per bond. Trigger sides (sensors) and
-  `&` sides (a spent attachment) are not growth fronts and emit nothing. A grown part that hears none is
+- **Open signal (completion):** an attached triangle with an unbonded attach side `@` (an open growth front) emits
+  `openRange` (120), relayed -1 per bond (through every bond, so a pocket on a chain hears the chain's growing
+  membrane). An `&` side (a spent attachment) emits nothing. A grown part that hears none is
   complete; `&` sides let go then (a bud's seed side: a daughter ring lets go of its parent once it has closed).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
@@ -135,4 +136,4 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
 capture 0.6, triTol 0.65 (with capture 0), triTolClose 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12,
-sigRange 6, openRange 60, zip true`, other options off.
+sigRange 6, openRange 120, zip true`, other options off.

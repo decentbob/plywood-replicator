@@ -18,6 +18,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Encapsulation: a chain grows a membrane around itself | genome-directed compartment | works (seed on the chain end, ring kit seedIn) | demo wrap |
 | Heritable cells: copies carry the membrane seed and wrap themselves | cell lineage | works (founder and copy each end in their own cell) | demo cells |
 | Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (8-13k steps) | structures.ringKit, demo ring; backlog 5 |
+| Grown import door: the genome's membrane kit grows its own door | transporter made by the cell | works (3 of 3 worlds, R=6: closes, lets go of the chain, imports blanks) | structures.doorRingKit, demo live |
 | Protocell: membrane + import + factory + copying inside | cell | works (prepared inside; copies made inside) | demo cell |
 | Budding: second compartment with genome copy and parts | daughter cell | empty daughter rings bud off a parent (open signal, `&` release); with contents not yet | demo bud; backlog 6 |
 | Feeding the bud through a shared wall gate | maternal supply | not yet | backlog 6 |

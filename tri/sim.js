@@ -35,7 +35,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');}).join('');
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@&]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:60,
+const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
@@ -101,11 +101,11 @@ class TriSim extends Physics{
     const K=gcode('K');
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
       if(a<0&&((this.glue[u*3+i]===K&&this.glue[q]===comp(K))||(this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
-    // op (open signal): an attached part (it has an attach side) with an unbonded glued side (a growth front still open)
-    // emits openRange, relayed -1 per bond; a part that hears none is complete. Trigger sides (sensors) and completion
-    // release sides (a spent attachment) are not growth fronts and emit nothing.
+    // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
+    // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
+    // attachment) emits nothing.
     for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;v=Math.max(v,op0[(q/3)|0]-1);}}
-      if(b&&(this.att[u*3]||this.att[u*3+1]||this.att[u*3+2]))for(let i=0;i<3;i++){const k=u*3+i;if(this.glue[k]&&this.bond[k]<0&&!this.trg[k]&&!this.done[k]){v=this.p.openRange;break;}}
+      if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){v=this.p.openRange;break;}}
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}
     // sg (trigger signal on hear sides): sigRange while a trigger side of mine is bonded, else the best value heard on a
@@ -126,6 +126,9 @@ class TriSim extends Physics{
     // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
     const tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v];if(this.moveDepth([v],tx,ty,da,this.px[v],this.py[v])>0)return false;
     this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=ang;this.resetShape(v);this.regrid(v);return true;}
+  // a trigger side is inert (binds nothing) while its triangle hears an open signal: a sensor is live once its structure
+  // is complete (op -1: just attached, not yet heard)
+  _deaf(u,e){return this.trg[u*3+e]&&this.op[u]!==0;}
   _handCatch(u,e){if(!this.trg[u*3+e])return false;for(let i=0;i<3;i++)if(this.hinge[u*3+i]&&this.rel[u*3+i]===2)return true;return false;}
   cut(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bkind[u*3+i]=0;this.bkind[q]=0;this.unlink(u,i);}
   // sides of an attached triangle that bind by glue: free sides of a grown (glue-bonded) triangle, the back of a
@@ -148,9 +151,8 @@ class TriSim extends Physics{
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
-        // a trigger side catches only while its flap is at rest and hung (a triangle with a hinge side: that side bonded)
-        const unhung=this.hinge[u*3]&&this.bond[u*3]<0||this.hinge[u*3+1]&&this.bond[u*3+1]<0||this.hinge[u*3+2]&&this.bond[u*3+2]<0;
-        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&(this.away[u]||unhung)))continue;
+        // a trigger side catches only while its flap is at rest and its structure is complete (_deaf)
+        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
           for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
@@ -166,8 +168,8 @@ class TriSim extends Physics{
       // two attached triangles: glue closure between active sides (a hand-off flap's catch side never closes: it catches
       // free triangles only, so a handed-off cargo is not taken back)
       let done=false;
-      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e)||this.done[u*3+e])continue;   // a released completion side never re-closes
-        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.done[v*3+f]&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
+      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e)||this.done[u*3+e]||this._deaf(u,e))continue;   // a released completion side never re-closes
+        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.done[v*3+f]&&!this._deaf(v,f)&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
       // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed

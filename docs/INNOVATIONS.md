@@ -8,6 +8,22 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **A grown membrane with its own import door** — works (3 of 3 worlds at R=6). The door ring kit
+  (`structures.doorRingKit`) grows two fronts from its root, which holds the chain's seed: the periodic motif the long
+  way round, and a short unique front (one wall cell, then a four-cell door panel attached by its latch side `~`,
+  welded by hear sides `+`, whose last cell carries the key `X*` outside and a close-only hinge side). The motif's last
+  cell closes onto that hinge side, so the hinge exists only once the ring is closed (a door that swung while the wall
+  was open would carry half the wall). Local rules: only unbonded attach sides `@` (growth fronts) emit the open
+  signal (`&` sides do not), relayed through every bond (range 120); a trigger side binds nothing (catch or closure)
+  while its triangle hears the open signal, so a sensor is live once its structure is complete. So the key stays idle
+  until the wall has closed, and the ring lets go of the chain while its key is free. Then a blank binds the
+  key, the latch lets go, the panel swings 120 degrees inward, drops the blank and swings back; junk is not caught.
+  Chain `aaaaa` (seed `z`), 3 kit copies per cell in a 26x26 world: membranes closed at 28000, 36000 and 44000 steps,
+  chain inside, 13-15 blanks imported by 88000 (2 junk slipped in while the door was open). A geometry bug found on the
+  way: the "faces outward" test used Euclidean distance, which misjudges sides near hex corners for R >= 6 (the last
+  site faced inward and could only be closed by triangles trapped inside); now hex radius everywhere.
+  `node tri/demos.js live 1 90000 runs 6x3`. Picture: `docs/pictures/grown_door.png`. Enables a cell that feeds itself:
+  the genome grows its membrane and the door that brings in its food.
 - **Locality audit (user: "a triangle shouldn't know it is part of a larger structure")** — done. All chemistry rules
   reviewed; three non-local rules removed: closures that asked whether two triangles are in the same body (now one flush
   tolerance, 0.05, for every closure), snapping the smaller of two bonding bodies (removed), copy release reading two
