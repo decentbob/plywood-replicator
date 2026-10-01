@@ -107,12 +107,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // their copies aaaa carry w like the founder; latGlue: the blanks uuu are their fills) from yolk blanks uuu (food
     // only the bud uses; the parent's pocket takes xxx), from a seed v@ on its wall; D has an import door for uuu (key
     // U*), deaf until the split; 40 uuu start outside both rings; its
-    // kit parts (2 of each type) start inside P with the food; the pair splits once the pocket is complete and a copy is
+    // kit parts (3 of each type) start inside P with the food; the pair splits once the pocket is complete and a copy is
     // anchored: the bud leaves with a genome, a pocket that casts its dockers, and the food that came in (RP 8, RD 6)
     split(){steps=steps||60000;const org=String(extra||'').includes('o'),gen=org||String(extra||'').includes('g'),nb=parseInt(extra)||30,size=org?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:gen?7:6;
       const OK=org?S.kitOptions(S.lidPocket(S.stampInstr('aU.w'),'U',null,'B'),'aywzxvuψωбгджцшэлпфизч','v',[S.lidSlot('B')]):null;
       const RD=org?6:gen?5:4,bp=S.budPair({RP,RD,k:5,capGlue:gen?null:'a',anchorGlue:gen?'Z':null,anchorP:gen?'W':null,importD:org?'U':null,organelle:org?{opts:OK,gaps:[1,1,1],seed:'v',slots:[S.lidSlot('B')],clear:S.lidClear()}:null});
-      const OUT=org?40:0,kitSupply={};if(org)for(const t of bp.organelle.K.types)kitSupply[t]=(kitSupply[t]||0)+2;
+      const OUT=org?40:0,kitSupply={};if(org)for(const t of bp.organelle.K.types)kitSupply[t]=(kitSupply[t]||0)+3;
       const pocket={tris:S.lidPocket(S.stampInstr(gen?'Ay.z':bp.cap.type),'X'),x:c-(gen?1:0.5),y:cy-(gen?0:1.6),rot:0};
       // the founder (genome variant) near P's anchor: the first spot where prepared parts do not overlap
       const overlap=(s,all)=>{const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);

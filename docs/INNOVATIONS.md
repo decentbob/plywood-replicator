@@ -6,6 +6,22 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-01 (autorun run 20261001-1806)
+
+- **A bud that lives alone: split, import, cast and a whole genome copy made inside the sealed bud** — partial: 2 of
+  4 worlds (prepared pair; `split ... o`). First demo run with the lock-signal deafness rule (a trigger side is deaf
+  while it hears the lock signal) and with 3 kit parts per organelle type (was 2). In both successful worlds the pair
+  splits (t=53328 and t=119988), both doors shut, the bud imports 42-47 blanks `uuu` through its own door, its grown
+  pocket casts `aU.w` dockers (16 casts) and a new `aaaa` copy forms in the bud next to its anchored `AAAA`.
+  In the other 2 worlds the bud's pocket stalls at 14-15 of 16 cells with the doorway still open, so nothing splits.
+  Before the retune (2 parts per type, same rule) 1 of 4 worlds ran fully (split at 119988, 35 imports, two new
+  `aaaa` in D); the other 3 stalled at 14-15/16. The rule change caused no regression: `split 1 30000 runs` (cap,
+  split at 9000) and `split 1 60000 runs g` (split at 24000) still work. Command:
+  `for k in 1 2 3 4; do node tri/demos.js split $k 200000 runs/sj$k o > runs/sj$k.log & done` (about 2 min per
+  world on a 4-core container). Picture (world 4 after the split: pocket, imported `uuu`, anchored `AAAA` and its
+  copy `aaaa`): `docs/pictures/split_alone.png`. Status: partial (2 of 4); next, find why the pocket stalls at
+  14-15/16 (see docs/NEXT.md).
+
 ## 2026-10-01 (fourth session)
 
 - **Bud, feed, split: the parent feeds its bud through a doorway; the bud seals and separates when complete** — works

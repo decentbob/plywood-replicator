@@ -1,24 +1,22 @@
 # Next instance: start here
 
-State on 2026-10-01 (end of the fourth session). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-01 (after autorun run 20261001-1806). Read AGENTS.md first (rules of work), then this file.
 
-**Autorun 20261001-1806 (in progress):** started the `split o` batch below on branch `claude/autorun-20261001-1806`
-at 18:08 UTC (4 worlds, logs `runs/si$k.log`). If this note is still here, that run was interrupted: rerun the batch.
-
-**Handoff status (end of the fourth session).** Working tree clean; everything committed on branch
-`claude/nice-tesla-eztyn4` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass. Runs live
-in `runs/` (not committed); regenerate with the commands below.
-**Last change, not yet tried in a demo:** a trigger side is now also deaf while it hears the lock signal (sim.js
-`_deaf`). Why: in `split o`, the bud's import door caught a blank at the split while the bud's doorway was still open;
-its latch held, but a latch locks a flap only through a closed loop of bonds and the bud's ring was a C, so the import
-panel swung and carried half the ring, jamming the closing door (world 3 of the last batch; replay showed import door
-at 13 degrees, closing door stuck at 90, thousands of stalls). **Exact next step:** rerun
-`for k in 1 2 3 4; do node tri/demos.js split $k 200000 runs/si$k o > runs/si$k.log & done` (about 1.5 h, 4 processes)
-and check per world: SPLIT, `doors P:shut D:shut`, then `imports` rising and a new `aaaa` strand in D (a whole copy made
-by the bud). Also rerun `split 1 30000 runs` and `split 1 60000 runs g` once to confirm the rule change keeps them
-working (it should: their keys are deaf anyway until the split). Last batch (before this rule, xxx 10): 1 of 4 split by
-200000 (organelle stuck at 14-15/16 in the others: the last kit parts are slow or lost; 2 copies per kit type) - if
-that persists, give 3 copies per kit type. The demo's `outside=` count (flood fill on a 0.25 grid) can leak through wall
+**Handoff status (autorun run 20261001-1806).** Working tree clean; everything committed on branch
+`claude/autorun-20261001-1806` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass. Runs
+live in `runs/` (not committed); regenerate with the commands below.
+**Done this run:** the `split o` batch with the lock-signal deafness rule (sim.js `_deaf`), then one retune (3 kit
+parts per organelle type, was 2). Result: 2 of 4 worlds run the whole chain (split, both doors shut, 42-47 imports, 16
+casts, a new `aaaa` copy in the bud); see INNOVATIONS (newest entry) and `docs/pictures/split_alone.png`. The cap and
+genome variants still work. A batch takes about 2 minutes per world here (not 1.5 h).
+**Open problem:** in the other 2 worlds (seeds 2 and 3) the bud's pocket stops at 14-15 of 16 cells with the doorway
+open, so it never splits; 3 parts per type did not fix it, so it is probably not supply. Not yet diagnosed: TRI_RESUME
+does not work for `split` (the demo re-places the prepared parts and the food after `createWorld` has loaded the
+saved state, so the resumed world is scrambled). **Exact next step:** add an end-of-run report to demo `split` (extra
+`o`) listing each kit type missing from the bud's pocket and where its copies are (bonded in D/P, free in D/P/out),
+rerun seeds 2 and 3 (`node tri/demos.js split 2 200000 runs/sj2 o`), look at the pocket zoom and decide: an enclosed
+site (a design fix in the organelle kit), a part stuck on a wrong partner (glue fix), or parts that cannot reach D.
+The demo's `outside=` count (flood fill on a 0.25 grid) can leak through wall
 gaps between sample points: treat it as rough.
 
 ## Where things stand
@@ -74,12 +72,11 @@ saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` 
 The BIG goal's sentence now has a prepared, working skeleton: the parent **feeds** its bud through a doorway, the bud
 **catches a genome copy** and grows its content, and it **splits off** sealed (demo `split`). What is still prepared
 or missing, in order:
-1. **A bud that lives alone** (`split 1 200000 runs o`, 2026-10-01): the bud grows its own stamp pocket (casting `aU.w`
-   from blanks `uuu`, which are also its fills) from kit parts held as food in the parent, catches a copy, splits off,
-   then imports `uuu` through its own door (interlocked with its closing door). 3 of 4 worlds split; in 1 the whole
-   chain ran (import, cast, copying started); in 2 the bud's closing door jammed on a free copy in the doorway. Next:
-   fewer free copies in the parent (fewer `xxx`: the parent needs only one or two copies), the doorway kept clearer (a
-   60-degree bud door, or the anchor pulling the copy out of the doorway), then run until a whole copy forms in the bud.
+1. **A bud that lives alone** (`split 1 200000 runs o`): the bud grows its own stamp pocket (casting `aU.w` from blanks
+   `uuu`, which are also its fills) from kit parts held as food in the parent, catches a copy, splits off, imports
+   `uuu` through its own door (interlocked with its closing door) and makes a whole copy of its genome. Works in 2 of 4
+   worlds (autorun 20261001-1806, 3 kit parts per type); in the other 2 the pocket stalls at 14-15/16 (see the handoff
+   status for the diagnosis step). Earlier jams of the closing door on a free copy did not recur this batch.
 2. **Grow the bud pair instead of preparing it.** Ideas: grow D as a kit from a seed on the parent's outer wall
    (kits grow any prepared lattice structure). Problems to solve: (a) a hinge bonds only when its sides are flush, so
    a panel grown in the open position needs its hinge partner to be the cell beside it there (the doorstop) with the
@@ -100,6 +97,9 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **TRI_RESUME and `split`**: the demo places its prepared parts and food after `createWorld` has loaded the saved
+  state, so a resumed `split` world is scrambled (and the genome variant may throw "prepared parts overlap"). Rerun from
+  t=0 instead (a 200000-step world takes about 2 minutes).
 - **Bodies longer than half the world** were folded by the torus minimum image (fixed 2026-10-01, `_unwrap`). Keep
   world size larger than any body anyway (pictures and inside tests use minimum images).
 - **A ring with two open doors falls apart** (two gaps make two rigid pieces). Interlock the doors of one ring: an

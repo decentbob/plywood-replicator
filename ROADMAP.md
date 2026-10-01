@@ -25,7 +25,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Birth: a grown cell makes copies that leave through a pore and start their own cells | reproduction | partial: copies leave and one began its own cell (1 of 4 worlds, 2.6M steps); not yet a complete offspring cell | structures.cellKit, demo birth |
 | Feeding the bud through a shared wall gate | maternal supply | works prepared: parent and bud share a wall with a doorway through both; the parent's stamp pocket feeds the bud (parts, blanks, dockers) | structures.budPair, demo split |
 | Division: cut the shared wall when the bud is complete | cytokinesis | works prepared (4 of 4 worlds): when the bud's growth front closes (cap complete, or its anchor has caught a genome copy) every `&` lets go, both doors swing shut and lock, the bud separates | demo split |
-| Offspring that lives alone | independent daughter cell | partial: the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and starts copying its genome (1 of 4 worlds ran fully; 2 jammed) | demo split o |
+| Offspring that lives alone | independent daughter cell | partial: the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and makes a whole genome copy (2 of 4 worlds; in 2 its pocket stalls at 14-15 of 16 cells) | demo split o |
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
