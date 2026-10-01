@@ -8,6 +8,32 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Rigid-part physics (user: "let connected parts move as one"; "no deformation and squeezing is fine")** — works.
+  `tri/physics.js` rewritten: a body (blocks joined by bonds) is one rigid piece; each step every body tries a
+  Brownian translation and turn and moves in sub-steps until contact (move or stop): no overlap, no deformation, no
+  tunnelling, no constraint passes. Hinged flaps turn by the same checked move and stall when blocked. Binding:
+  a free triangle within 0.6 of a free site beside a complementary side is placed in it (capture; it cannot bind
+  into an occupied site); closures inside one body only when flush, between bodies the smaller is placed flush.
+  Speed: copy world 1.9 -> 0.5 ms per step, a 357-triangle cycle world 7.6 -> 1.5 ms (about 5x). Re-run on it:
+  copying 26 docks in 10k steps (2 copies and copies of copies; was 4-14); lid pocket 6-8 casts per 4000 steps;
+  factory 4 new `aaaaa` + 3 `AAAAA` in 30k steps (best so far); energy (lid pocket with fuel) 13 casts paid by 13
+  carriers (was 2 casts); ring membrane closed in 2 of 2 worlds at 12939 and 8463 steps (was 40k); gated ring
+  (rebuilt) opens and tracers cross (28 crossings in 10k steps); conveyor 4-5 hand-offs and 14-20 drops per 3000;
+  grown pocket complete in 2 of 3 worlds by 13.6k steps; heritable pocket: founder, copy and copies of copies grow
+  pockets. Fixes the rigid world needed: hand-off flaps no longer re-close on their cargo; flaps catch only at
+  rest; in kits only caster B catches (a target in the slot before B arrived closed B's cell off); `pLoose` frees a
+  triangle held on one side only. Not yet on rigid physics: the old hatch pocket (its carried target bulges into a
+  caster; superseded by the lid pocket) and the airlock (its door panels collide with the wall; rebuild with swept
+  doors like the gate).
+- **Gated ring rebuilt (swept door)** — works. A hinged panel in a closed wall collides with its latch neighbour
+  unless its latch edge moves away during the swing; a search over ring doors found clear 120-degree doors: panels of
+  three cells (two at a corner) hinged at an outer vertex, swinging out. `structures.ring` now picks such a door by
+  sweeping it, welds the panel with hear sides (the key's signal reaches the hinge two cells away) and puts the key
+  trigger next to the latch. `node tri/demos.js gate 1 10000 runs 12`.
+- **Heritable factory cycle (progress, old engine)** — partial. Two kits (pocket P_y casts `Az-`, pocket P_z casts
+  `ay-`), founder `aaaaa` with seed y. By 48000 steps in world 2: the founder grew P_y and cast 50 `Az-`; its copies
+  `AAAAA` grew P_z (one complete) which began casting `ay-` (2). Not yet: a third generation. Re-running on rigid
+  physics.
 - **Aligned bonds (user: "edges don't seem to align, which leads to deformation")** — works. Diagnosis: a free
   triangle bound as soon as its corners were within 0.45 of flush, so cells joined tilted; in a grown strip, cells two
   apart then overlapped, their contact forces pushed against the pins, and the strip jammed bent (flush gaps up to

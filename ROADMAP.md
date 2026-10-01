@@ -12,10 +12,10 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Factory: casting pockets turn blanks into the parts copying needs | metabolism | works with prepared pockets; lid pocket casts without stalling | structures.pocket/lidPocket, demos factory, lid |
 | Signals: heard triggers wire a sensor side to a flap through hear sides | nerves, signalling | works (lid pocket) | sim.js sg |
 | Energy: charged carriers fuel every hinge swing, recharge in a light zone | ATP, light | works | sim.js servo, demo energy |
-| Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works | structures, demos |
+| Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works on rigid physics except the airlock (rebuild with swept doors) | structures, demos |
 | Import: bring raw material through the membrane (pump) | transporters | not yet (lock works, pump does not) | backlog 3 |
 | Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | works: a chain grows a lid pocket from its end seed, copies regrow it (kit generator) | structures.kit, demos grow, heir, cycle; backlog 1 |
-| Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (slow: 40k steps) | structures.ringKit, demo ring; backlog 5 |
+| Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (8-13k steps) | structures.ringKit, demo ring; backlog 5 |
 | Budding: second compartment with genome copy and parts | daughter cell | not yet | backlog 6 |
 | Feeding the bud through a shared wall gate | maternal supply | not yet | backlog 6 |
 | Division: cut the shared wall when the bud is complete | cytokinesis | not yet | backlog 7 |
@@ -44,5 +44,6 @@ splits it off.** Build every mechanism in isolation, then combine them.
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 
 ## Known issues
+- Airlock and old hatch pocket need squeezing; not working on rigid physics (rebuild airlock; hatch pocket superseded).
 - Sequential (zip) copying is slower per copy than parallel docking was when it did not deadlock.
 - Single runs are noisy; a claim needs a few worlds. Batches stay rare (AGENTS).

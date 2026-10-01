@@ -32,21 +32,26 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
 | `#` (trigger side) | the key is let go one pass after it was read (not carried) |
 
-## Physics (`tri/physics.js`)
-- Torus `W x H`. Each step: Brownian jostling of **bodies** (blocks joined by bonds move and turn as one rigid
-  body; free blocks alone; sigma 0.3, sigmaRot 0.45), then 32 constraint passes: polygon contacts (minimum
-  translation; pairs within `contactMargin` 0.6 of touching after the jostle), pins (bond corners together), shape matching of bonded blocks (stiffness 0.8, soft corners).
-- A **bond** pins both corner pairs of the shared side; a **hinged** bond pins one corner. Hinged pairs still collide.
-- **No tunnelling:** if a jostle kick would carry a block's centre into a block of another bonded structure, the
-  body moves only 1/2 or 1/4 of the way, or not at all (kicks reach about 1.8; a one-row wall is 0.87 thick).
-  Free blocks still jostle past each other.
+## Physics (`tri/physics.js`): rigid parts, move or stop
+- Torus `W x H`. Blocks are rigid unit triangles; a **body** (blocks joined by bonds, hinged ones included) moves and
+  turns as one rigid piece. Nothing deforms, overlaps or squeezes (user, 2026-10-01: "no deformation and squeezing is
+  fine and might even be good for deterministic machines").
+- Each step every body, in random order, proposes a Brownian kick (sigma 0.3, sigmaRot 0.45 for a lone block; a body
+  gets the mean kick of its blocks and the turn of their torque, so larger bodies move less), translation and turn
+  as two trials. Each trial moves in sub-steps (0.3) as far as it goes without overlapping another block, then closes
+  in on the contact (bisection). So nothing passes through a wall. A body that overlaps (rare: binding just placed
+  it) may make any move that reduces its overlap.
+- A **hinged flap** turns relative to its partner only when the chemistry drives it (below), by the same checked
+  move: a blocked flap **stalls** (it does not push). A design must keep a flap's whole sweep clear.
 - `pairs`: blocks near enough to bond (centre distance within the two radii plus 0.23).
 
 ## Binding (one rule everywhere)
-A side binds a flush side (both corner gaps within 0.45, closures 0.22) with the complementary glue, at
-probability `pBond` per step (1: whenever flush), if at least one of the two triangles is already attached (**activation by
-attachment**: free triangles never bind each other). **Binding pulls the free triangle in:** it is placed exactly
-flush against its partner's side (it moves at most about the tolerance), so every bond starts aligned. A **discharged** triangle binds nothing. Close-only sides
+A free triangle binds an attached triangle's side with the complementary glue when its centre comes within `capture`
+(0.6) of the free site beside that side (any orientation), and the site is free: **binding places it** exactly flush
+in the site (activation by attachment: free triangles never bind each other). Two attached triangles close a bond
+when their sides are flush: within 0.22 if they belong to different bodies (the smaller body is then placed flush, if
+it fits), and exactly (0.05) inside one body (parts are exact, so a gap means a flap has not arrived). At probability
+`pBond` per step (1). A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
 attach side. Option `pLoose` (proofreading, cooperative binding): a triangle caught while free (not by an attach side) and held
 on one side only lets go with this probability per step; a second matching side holds it.
@@ -91,16 +96,18 @@ not complementing, is the default: a complemented product would stick to its own
   flap returning wins a push), turning about its pinned corner and **carrying everything bonded to it**. A flap
   whose body reaches its partner through other bonds is locked.
 - **Releases:** hand-off `^`, drop `!`, pulse `#` (above). Without a mark a flap holds its cargo until something
-  else cuts the bond (e.g. a cast).
+  else cuts the bond (e.g. a cast). A hand-off flap's catch side catches free triangles only (it never closes onto
+  the cargo it handed off); a flap's catch side catches only while the flap is at rest.
 - **Latches** `~` let go while their door is triggered or opening (otherwise a door would re-latch before moving).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
   (a trigger side anywhere in a frame) to a flap through a few bonds.
 - **Interlock:** a triangle with an unbonded latch side emits a lock signal (12, relayed -1 per bond); a closed pulse
   door ignores its key, and its latch holds, while it hears the signal, so only one door of a lock is open at a time.
-- Geometry rule: a triangle turning about a corner bulges 13% past the edge it swings toward, so a flap needs free
-  space beside the side it swings toward; a carried block pressing on a neighbour stalls the swing (it then
-  completes only with lucky jostling).
+- Geometry rule: a triangle turning about a corner sweeps its far corner 13% past the chord, so a flap's (and its
+  cargo's) whole sweep must be clear, or it stalls. A hinged panel's latch edge must move away from its neighbour
+  (check designs by sweeping them, as `structures.ring` does). Lids that close onto a target turn about a corner of
+  the slot, so their leading edge arrives flush.
 
 ## Energy
 Every triangle is charged by default. A flap whose own or hinge partner's type has a fuel side `$` starts each
@@ -109,5 +116,5 @@ falls off. Without fuel a triggered flap holds. **Environment drive** (labelled)
 the light zone `light: {x, y, r, p}` recharge at p per step.
 
 ## Parameters (defaults)
-Physics: `sigma 0.3, sigmaRot 0.45, stiff 0.8, iters 32, pairTol 0.35, noTunnel true, contactMargin 0.6`. Chemistry: `pBond 1,
-triTol 0.45, triTolClose 0.22, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12, sigRange 6, zip true`, other options off.
+Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, subStep 0.3, bisect 5, split true`. Chemistry: `pBond 1,
+capture 0.6, triTol 0.65 (with capture 0), triTolClose 0.22, triTolSame 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12, sigRange 6, zip true`, other options off.
