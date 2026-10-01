@@ -8,6 +8,13 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Encapsulation: a chain grows its own membrane** — works (2 of 2 worlds). The chain's low end exposes seed `z`; a
+  periodic ring kit (R=6, 66 cells, 11 motif types) whose root binds the seed by its inner side grows the membrane
+  around the chain; the root is chosen so the last two sites face outward (a corner pair), so the ring can close from
+  outside; the root's seed side releases on completion (`&`), leaving the chain free inside. The ring size was found by
+  a placement check (R=4 and 5 touch the chain or its dock sites). 12 copies per kit type in a 26x26 world: membranes
+  complete and released at about 45000 and 65000 steps, chain inside in both. `node tri/demos.js wrap 2 100000 runs`.
+  Picture: `docs/pictures/encapsulation.png`. Enables heritable cells: copies carry the seed and can wrap themselves.
 - **Budding: a daughter ring grows on the parent and lets go when complete** — works (5 of 5 worlds released a
   complete daughter; 2 released two). New local rule, the open signal: an attached part with an unbonded glued side
   (an open growth front) emits a signal relayed one bond per pass and fading by 1 per bond; a side marked `&` lets go

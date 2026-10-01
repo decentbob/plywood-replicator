@@ -24,17 +24,26 @@ node tri/demos.js factory 1 30000 runs Aa          # lid pockets feed a replicat
 node tri/demos.js grow 1 16000 runs 12             # a lid pocket kit grows from a seed and casts
 node tri/demos.js ring 1 30000 runs 3              # ring membrane from a periodic kit, closes
 node tri/demos.js gate 1 10000 runs 12             # gated ring (swept 3-cell door)
+node tri/demos.js import 1 20000 runs              # selective import (revolving door)
+node tri/demos.js cell 2 40000 runs                # protocell: import + factory + copying inside a membrane
+node tri/demos.js bud 3 50000 runs                 # budding: daughter rings detach when complete
+node tri/demos.js wrap 2 100000 runs               # a chain grows a membrane around itself
 node tri/demos.js heir 1 30000 runs                # chains grow pockets from their end seed; copies regrow them
 node tri/demos.js cycle 1 120000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 
-## Do next (ROADMAP backlog, top first)
-0. **Rebuild the airlock on rigid physics** (doors with checked sweeps, like `structures.ring`); then the pump.
-1. **Heritable factory cycle**: see the cycle entry in INNOVATIONS for where it stands. Main cost: kits are 16 types
-   each and attach one cell at a time (about 1000 steps per cell at 10 copies in 24x24). Ideas: a smaller pocket
-   (fewer frame cells), or a pocket that casts its own kit types.
-2. **Pump**, 3. **scanner gate**, 4. **membrane growth**, 5. **bud and feed**, 6. **division** — see ROADMAP.
+## Do next (toward the BIG goal)
+Built on rigid physics this session, in order: selective import (revolving door), protocell (import + factory + copying
+inside a membrane), budding (a daughter ring detaches when complete: open signal + `&`), encapsulation (a chain's seed
+grows a membrane around the chain; see INNOVATIONS for the latest result).
+1. **Heritable cells**: dockers carry the membrane seed too, so every copy wraps itself; combine with the heritable
+   pocket (other end seed) so a copy grows membrane and factory. Needs supply of both kits; mind kit sizes (speed).
+2. **Feeding a closed daughter**: grown membranes have no door yet; a door cell in the ring kit (break the period at
+   one place) or an import ring grown from a kit (`kit()` on `importRing`).
+3. **Bud with contents**: parent exports a genome copy into the bud region before it closes (export door), or the
+   copy wraps itself (1) while still attached to the parent.
+4. Airlock on rigid physics (swept doors), scanner gate, heritable factory cycle on rigid physics.
 
 ## Pitfalls learned
 - **Rigid machines.** Every swing must be clear: sweep a design before building it (`structures.ring` shows how). A

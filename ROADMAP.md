@@ -15,6 +15,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works on rigid physics except the airlock (rebuild with swept doors) | structures, demos |
 | Import: bring raw material through the membrane (pump) | transporters | works: a revolving door carries blanks in selectively | structures.importRing, demo import |
 | Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | works: a chain grows a lid pocket from its end seed, copies regrow it (kit generator) | structures.kit, demos grow, heir, cycle; backlog 1 |
+| Encapsulation: a chain grows a membrane around itself | genome-directed compartment | works (seed on the chain end, ring kit seedIn) | demo wrap |
 | Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (8-13k steps) | structures.ringKit, demo ring; backlog 5 |
 | Protocell: membrane + import + factory + copying inside | cell | works (prepared inside; copies made inside) | demo cell |
 | Budding: second compartment with genome copy and parts | daughter cell | empty daughter rings bud off a parent (open signal, `&` release); with contents not yet | demo bud; backlog 6 |
