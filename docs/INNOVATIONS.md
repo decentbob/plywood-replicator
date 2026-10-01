@@ -19,8 +19,9 @@ not statistics.
   hinge lock by a bond loop. Two contents tried:
   (1) `split 1 30000 runs`: a stamp pocket in P casts blanks into one part type `A@-a@`; the parts diffuse into D and
   grow a three-cell cap on D's inner wall (one type fills it: the three slots are turns of each other about a vertex).
-  The cap completes and the pair splits at 5000-9300 steps in 4 of 4 worlds; both doors shut; D leaves with its cap,
-  5-7 blanks and a spare part; 0-2 triangles slip out while the doors swing.
+  The cap completes and the pair splits at 4700-8700 steps in 4 of 4 worlds (rerun on the fixed physics); both doors
+  shut; D leaves with its cap and 3-5 blanks; 2-4 free triangles escape while the doors swing (flood-fill count).
+  Picture: `docs/pictures/split_cap.png`.
   (2) Genome (`split 1 60000 runs g`, RP 7, RD 5): P holds a chain `aaaa` and a stamp pocket casting its dockers
   `Ay.z` (fills `Y--` as food, latGlue); copies `AAAA` carry seed `z` on their high end. D's wall has an anchor
   `Z@|` (new mark, below), which emits the open signal until it catches a copy. The parent's wall has an anchor `W|`
