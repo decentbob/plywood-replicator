@@ -35,12 +35,21 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
   previous pass; it changes its own state or one of its own bonds. Relayed signals move one bond per pass. No
   counters, traversals, global signals, organism or parent predicates. Environment drives (light zones, fields,
   supply) are allowed and labelled.
+  **Check every new rule against this before writing it** (user, 2026-10-01). A triangle does not know it is part of
+  a larger structure except through its own bonds. Mistakes made and undone so far: (1) "separate structures do not
+  close bonds" (it asked whether two triangles belong to the same body: a traversal); (2) "move the smaller of two
+  bodies" when they bond (counted body sizes); (3) a docked triangle reading whether its partner's partners are fills
+  (two bonds away). The local alternative is always one of: the triangle's own type/state/bonds, a value its direct
+  partner exposes, or a signal relayed one bond per pass (busy, zip, lock, hear, open). Physics is the one exception
+  and must be labelled as such in RULES: rigid motion of connected parts, a flap that is bonded back to its own base
+  cannot turn, a triangle cannot bind into an occupied site.
 - **No hidden programs.** Behaviour comes from types (glues and marks) and their combination, not stored programs
   (user: "amino acids, not proteins"). Describe every triangle's action without copy, genome or organism words.
 - **Conserve blocks.** No creation or destruction. Types change only by casting; states (charge, fill, door) change
   by rules. Prepared structures are labelled starting conditions.
 - **One shape:** the unit triangle. Larger parts are built from triangles.
-- **Polygon physics only.** Mechanics and local logic matter more than numerical perfection.
+- **Polygon physics only.** Mechanics and local logic matter more than numerical perfection. Physics: rigid parts,
+  move-or-stop (no overlap, no squeezing); it may treat a connected structure as one body, chemistry may not.
 
 ## Recording (light)
 

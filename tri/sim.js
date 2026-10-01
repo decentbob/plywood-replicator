@@ -35,7 +35,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');}).join('');
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@&]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.22,triTolSame:0.05,closeBodies:false,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:60,
+const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:60,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
@@ -45,7 +45,7 @@ class TriSim extends Physics{
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.hSign=I8(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -125,19 +125,6 @@ class TriSim extends Physics{
     const tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v];if(this.moveDepth([v],tx,ty,da,this.px[v],this.py[v])>0)return false;
     this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=ang;this.resetShape(v);this.regrid(v);return true;}
   _handCatch(u,e){if(!this.trg[u*3+e])return false;for(let i=0;i<3;i++)if(this.hinge[u*3+i]&&this.rel[u*3+i]===2)return true;return false;}
-  // closure tolerance: inside one rigid body only flush sides close (triTolSame: parts are exact, so a gap means a flap
-  // has not arrived); two separate bodies close only with option closeBodies (within triTolClose, the smaller placed flush;
-  // off by default: neighbouring membranes would fuse)
-  _closeTol(u,v){return this.bodyOf(v).includes(u)?this.p.triTolSame:this.p.closeBodies?this.p.triTolClose:-1;}   // separate bodies close only with closeBodies
-  // a closure between two separate bodies: the smaller body is placed exactly flush (side j of v against side i of u)
-  _snapBody(v,j,u,i){const Bv=this.bodyOf(v);if(Bv.includes(u))return true;const Bu=this.bodyOf(u);return Bu.length<Bv.length?this._snapList(Bu,u,i,v,j):this._snapList(Bv,v,j,u,i);}
-  _snapList(list,v,j,u,i){const C=(x,k)=>[this.px[x]+this.ox[x*3+k],this.py[x]+this.oy[x*3+k]];
-    const a=C(u,i),b=C(u,(i+1)%3),p0=C(v,j),p1=C(v,(j+1)%3);p0[0]=a[0]+this._dx(p0[0]-a[0]);p0[1]=a[1]+this._dy(p0[1]-a[1]);p1[0]=p0[0]+this._dx(p1[0]-p0[0]);p1[1]=p0[1]+this._dy(p1[1]-p0[1]);
-    // corner j of v goes to corner i+1 of u (b), corner j+1 of v to corner i (a); only if the body fits there
-    const da=Math.atan2(a[1]-b[1],a[0]-b[0])-Math.atan2(p1[1]-p0[1],p1[0]-p0[0]),c=Math.cos(da),s=Math.sin(da);
-    if(this.moveDepth(list,b[0]-p0[0],b[1]-p0[1],da,p0[0],p0[1])>0)return false;
-    for(const x of list){const rx=this._dx(this.px[x]-p0[0]),ry=this._dy(this.py[x]-p0[1]);this.px[x]=this._wx(b[0]+c*rx-s*ry);this.py[x]=this._wy(b[1]+s*rx+c*ry);this.pa[x]+=da;this.resetShape(x);this.regrid(x);}
-    return true;}
   cut(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bkind[u*3+i]=0;this.bkind[q]=0;this.unlink(u,i);}
   // sides of an attached triangle that bind by glue: free sides of a grown (glue-bonded) triangle, the back of a
   // released strand triangle, the spare edge of a strand end that is not being copied
@@ -176,14 +163,14 @@ class TriSim extends Physics{
       // free triangles only, so a handed-off cargo is not taken back)
       let done=false;
       for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e)||this.done[u*3+e])continue;   // a released completion side never re-closes
-        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.done[v*3+f]&&flush(u,e,v,f,this._closeTol(u,v))&&this.rng()<p.pBond){if(!this._snapBody(v,f,u,e))continue;this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
+        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.done[v*3+f]&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
       // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed
       const cp=r=>r.role===DOCKED||r.fill;if(!cp(ru)||!cp(rv))continue;
       for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]])
-        if(ra.prev>=0&&rb.next>=0&&this.need[a]===0&&!bnd(a,ra.prev)&&!bnd(b,rb.next)&&flush(a,ra.prev,b,rb.next,this._closeTol(a,b))&&this.rng()<p.pBond){
-          if(!this._snapBody(b,rb.next,a,ra.prev))continue;this.bind(a,ra.prev,PREV,b,rb.next,NEXT);this.count('close');break;}
+        if(ra.prev>=0&&rb.next>=0&&this.need[a]===0&&!bnd(a,ra.prev)&&!bnd(b,rb.next)&&flush(a,ra.prev,b,rb.next,p.triTolClose)&&this.rng()<p.pBond){
+          this.bind(a,ra.prev,PREV,b,rb.next,NEXT);this.count('close');break;}
     }
   }
   // ---------------- state changes ----------------
@@ -191,9 +178,11 @@ class TriSim extends Physics{
     const n=this.n,p=this.p,P=(u,i)=>this.partner(u,i);
     // fills become ordinary strand triangles once they have both chain bonds
     for(let u=0;u<n;u++)if(this.fill[u]){const e=this._edges(u);if(e.prev>=0&&e.next>=0)this.fill[u]=0;}
+    // fn (exposed, after this pass's bonding): I am a fill, or a fill is bonded to me by a chain bond
+    for(let u=0;u<n;u++){let f=this.fill[u];for(let i=0;i<3&&!f;i++){const q=this.bond[u*3+i];if(q<0)continue;const k=this.bkind[u*3+i];if((k===PREV||k===NEXT)&&this.fill[(q/3)|0])f=1;}this.fn[u]=f;}
     // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face
     for(let u=0;u<n;u++){const e=this._edges(u);if(e.face<0)continue;const t=P(u,e.face),rt=this.roles(t);
-      const done=i=>{const w=P(u,i);if(this.fill[w])return false;const ew=this._edges(w);for(const j of [ew.prev,ew.next])if(j>=0&&this.fill[P(w,j)])return false;return true;};
+      const done=i=>!this.fn[P(u,i)];   // my chain partner exposes that neither it nor its chain neighbours are fills
       const endOK=!p.caps||this.cap[t],pOK=e.prev>=0?done(e.prev):rt.next<0&&endOK,nOK=e.next>=0?done(e.next):rt.prev<0&&endOK;
       if(pOK&&nOK){this.refr[u]=1;this.refr[t]=1;this.cut(u,e.face);this.count('release');}}
     this._environment();

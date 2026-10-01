@@ -49,6 +49,10 @@ membrane around itself), heritable cells (copies carry the seed and wrap themsel
 4. Airlock on rigid physics, scanner gate, heritable factory cycle on rigid physics.
 
 ## Pitfalls learned
+- **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
+  a direct partner's exposed value, or a relayed signal? "Same structure", "smaller body", "partner's partner" are
+  not local (all three were written once and undone). Physics may treat a structure as one body; chemistry may not.
+  See AGENTS.md (Locality) and RULES.md (Locality audit).
 - **Trailing comments in one-line code.** Twice a `// comment` appended inside a long line swallowed the code after it
   (no error, wrong behaviour). Put comments on their own line.
 - **Rigid machines.** Every swing must be clear: sweep a design before building it (`structures.ring` shows how). A

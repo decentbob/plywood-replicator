@@ -46,13 +46,22 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
   move: a blocked flap **stalls** (it does not push). A design must keep a flap's whole sweep clear.
 - `pairs`: blocks near enough to bond (centre distance within the two radii plus 0.23).
 
+## Locality audit (2026-10-01)
+Every chemistry rule below reads only: the triangle's own type, state and bonds; values its bonded partners expose
+(their role, fill, trigger, charge, activator, the glue and marks of the side bonded to it); and relayed signals that
+move one bond per pass and fade (busy, zip, caps, lock, hear, open). Rules that were not local and were replaced:
+closures that asked whether two triangles belong to the same body (now one flush tolerance, 0.05, for every closure),
+snapping the smaller of two bonding bodies (removed), copy release reading two bonds away (now the partner exposes
+whether a fill is beside it). Physics, not chemistry, and labelled as such: connected parts move as one rigid body; a
+flap whose body is bonded back to its own hinge partner cannot turn; a free triangle binds only into a free site and is
+placed flush there.
+
 ## Binding (one rule everywhere)
 A free triangle binds an attached triangle's side with the complementary glue when its centre comes within `capture`
 (0.6) of the free site beside that side (any orientation), and the site is free: **binding places it** exactly flush
 in the site (activation by attachment: free triangles never bind each other). Two attached triangles close a bond
-when their sides are flush: exactly (0.05) inside one body (parts are exact, so a gap means a flap has not arrived);
-separate bodies do not close (option `closeBodies`: within 0.22, the smaller body placed flush; off, since neighbouring
-membranes would fuse). At probability
+when their sides are flush within 0.05 (rigid parts are exact, so a flap that has arrived, a ring that closes or a
+copy closes; two separately moving structures rarely meet that exactly). At probability
 `pBond` per step (1). A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
 attach side. Option `pLoose` (proofreading, cooperative binding): a triangle caught while free (not by an attach side) and held

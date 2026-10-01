@@ -8,6 +8,13 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Locality audit (user: "a triangle shouldn't know it is part of a larger structure")** — done. All chemistry rules
+  reviewed; three non-local rules removed: closures that asked whether two triangles are in the same body (now one flush
+  tolerance, 0.05, for every closure), snapping the smaller of two bonding bodies (removed), copy release reading two
+  bonds away (the partner now exposes whether a fill is beside it, computed after bonding). Physics exceptions labelled
+  (rigid bodies, flap locked by a loop, binding into free sites). Recorded in AGENTS.md (Locality, with the mistakes),
+  RULES.md (Locality audit) and NEXT.md. Re-checked: copying 30-32 docks per 10k steps, factory 4 + 3 copies, conveyor,
+  lid, import, grow, bud unchanged.
 - **Heritable cells: copies wrap themselves** — works (3 of 3 worlds). Genome `aaaa` with seed `z` on its high end
   (there a smaller membrane fits: R=4, 42 cells, 7 motif types); dockers `Ay.z`/`ay.z` carry `z` on their next side, so
   a copy's high end exposes it again; fills `Y--` (latGlue). In each world the founder made a copy, then founder and copy
@@ -15,8 +22,7 @@ not statistics.
   Local rules added on the way: a strand end's seed is exposed only while the strand is not being copied, and a high end
   held by a completion-release side starts no copy (commitment: a wrapping genome stops copying, so copy and membrane
   do not jam each other); a kit's growth sites (`@` on an attached triangle) take parts only (a free docker had bound a
-  membrane front and seeded a second membrane inside it); separate bodies no longer close bonds by default
-  (`closeBodies`); the dockers' prev side is close-only (a loose fill had stuck to a copy's end in the membrane's way).
+  membrane front and seeded a second membrane inside it); the dockers' prev side is close-only (a loose fill had stuck to a copy's end in the membrane's way).
   `node tri/demos.js cells 1 100000 runs 36`. Picture: `docs/pictures/heritable_cells.png`.
 - **Encapsulation: a chain grows its own membrane** — works (2 of 2 worlds). The chain's low end exposes seed `z`; a
   periodic ring kit (R=6, 66 cells, 11 motif types) whose root binds the seed by its inner side grows the membrane
