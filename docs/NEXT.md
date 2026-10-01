@@ -58,11 +58,12 @@ saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` 
 The BIG goal's sentence now has a prepared, working skeleton: the parent **feeds** its bud through a doorway, the bud
 **catches a genome copy** and grows its content, and it **splits off** sealed (demo `split`). What is still prepared
 or missing, in order:
-1. **A bud that lives alone** (`split ... o`, 2026-10-01): the bud grows its own stamp pocket (casting `aq.w` from yolk
-   blanks `uuu`, fills `Q--`) from kit parts held as food in the parent; 3 of 4 worlds split with the pocket complete and
-   a copy anchored; the bud then casts 1-3 dockers and starts a copy that stalls (too little yolk: ~1/3 reaches it).
-   Next: give D an import door for `uuu` (a revolving door as `importRing`, its sweep clear of the pocket, anchor and
-   closing door) and put `uuu`/`Q--` outside as well, so the bud feeds itself after the split; or more yolk.
+1. **A bud that lives alone** (`split 1 200000 runs o`, 2026-10-01): the bud grows its own stamp pocket (casting `aU.w`
+   from blanks `uuu`, which are also its fills) from kit parts held as food in the parent, catches a copy, splits off,
+   then imports `uuu` through its own door (interlocked with its closing door). 3 of 4 worlds split; in 1 the whole
+   chain ran (import, cast, copying started); in 2 the bud's closing door jammed on a free copy in the doorway. Next:
+   fewer free copies in the parent (fewer `xxx`: the parent needs only one or two copies), the doorway kept clearer (a
+   60-degree bud door, or the anchor pulling the copy out of the doorway), then run until a whole copy forms in the bud.
 2. **Grow the bud pair instead of preparing it.** Ideas: grow D as a kit from a seed on the parent's outer wall
    (kits grow any prepared lattice structure). Problems to solve: (a) a hinge bonds only when its sides are flush, so
    a panel grown in the open position needs its hinge partner to be the cell beside it there (the doorstop) with the

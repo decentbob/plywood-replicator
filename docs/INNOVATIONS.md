@@ -40,7 +40,19 @@ not statistics.
   founder stayed in the parent in 2 of the 3 (anchored there); in one it drifted into the bud before being anchored.
   Some free triangles escape while the doors swing at the split. Picture: `docs/pictures/split_organelle.png` (the bud
   after the split: its grown pocket, the anchored copy with a stalled copy on it).
-  Not yet: a bud that feeds itself after the split (an import door of its own, or more yolk), and a grown pair.
+  (4) Import door (same command, current version): the bud also has a revolving import door (`importD`: key `U*`
+  catches blanks `uuu`, deaf until the split), its dockers are `aU.w` (the blanks are also their fills), and 40 `uuu`
+  start outside. The bud's closing pair is interlocked with its import door: its wall side is a latch that emits the
+  lock signal while the doorway is open, so the import door holds until the closing door is shut (without it the
+  import door opened at the split while the doorway was still open; a ring with two gaps fell into two pieces in 2 of
+  4 worlds). Result (4 worlds, 200000 steps): splits at 100000, 113000 and 140000 steps (the fourth had 14/16 pocket
+  cells). In world 3 everything ran: both doors shut, the bud then imported 36 blanks, cast 4 dockers and is copying
+  its anchored genome (docks with fills placed, slow). In worlds 1 and 4 the bud's closing door jammed at 87 degrees
+  on a free copy lying in the doorway at the split (P shut; the bud stayed open). Picture:
+  `docs/pictures/split_import.png` (the bud after the split, filled with imported blanks, its pocket and its copying
+  genome).
+  Not yet: a whole copy made in the bud, fewer jams (fewer free copies in the parent, a smaller door sweep), a grown
+  pair.
 - **Anchor `|`: a structure catches a strand** — works (in `split g`). A strand cannot otherwise join an existing
   structure: capture needs a free triangle and closures need an exact fit. An unbonded anchor side catches a strand
   end's seed (its spare edge, active while the strand is not being copied, complementary glue) when the end comes
