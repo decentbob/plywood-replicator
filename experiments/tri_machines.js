@@ -179,5 +179,17 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
         console.log(`t=${t} complete strands: aaaaa ${gen.filter(q=>q.faces==='aaaaa').length} AAAAA ${gen.filter(q=>q.faces==='AAAAA').length} | casts=${s.castEvents||0} A-- ${tc[T.canon('A--')]||0} a-- ${tc[T.canon('a--')]||0} xxx ${tc['xxx']||0} strands [${c.map(q=>q.faces+'/'+q.gaps+(q.paired?'*':'')).join(' ')}] docks=${s.dockEvents||0} releases=${s.releaseEvents||0} ${((Date.now()-t0)/t).toFixed(1)}ms/step`);}
       if(t%Math.max(1,+steps/3|0)===0)snapF(t);}
     montage(out,`Factory: a casting pocket turns blanks (xxx) into dockers (A--) for the chain aaaaa (${withPocket?'with pocket':'control, no pocket'})`);}
+  if(cmd==='energy'){
+    // a pocket whose hatch needs fuel: each swing spends a charged carrier (eee) bound to the hinge partner's fuel side;
+    // carriers start discharged and recharge only in a light zone (environment drive, off with last argument 0)
+    const lightOn=extra!=='0',size=16;
+    const {s,structures}=T.createTypedWorld({seed:+seed,size,structures:[{tris:T.pocket('bcd','A','E'),x:4.5,y:8}],supply:{'aaa':16,'eee':12,'---':12},
+      params:lightOn?{light:{x:12,y:8,r:2.5,p:0.02}}:{}});
+    const carriers=[...Array(s.n).keys()].filter(u=>T.typeName(s,u)==='eee');for(const u of carriers)s.chg[u]=0;
+    const t0=Date.now();snap(s,out.replace('.png','_t0.png'),`t=0: light ${lightOn?'on':'off'}, carriers discharged`,null);
+    for(let t=1;t<=+steps;t++){s.step();
+      if(t%Math.max(1,+steps/10|0)===0)console.log(`t=${t} light ${lightOn?'on':'off'} casts=${s.castEvents||0} fuel used=${s.fuelUsed||0} recharges=${s.recharges||0} charged carriers=${carriers.filter(u=>s.chg[u]).length} unfuelled steps=${s.unfuelled||0} ${((Date.now()-t0)/t).toFixed(1)}ms/step`);
+      if(t%Math.max(1,+steps/3|0)===0)snap(s,out.replace('.png',`_t${t}.png`),`t=${t}: light ${lightOn?'on':'off'}, casts ${s.castEvents||0}, fuel used ${s.fuelUsed||0}`,null);}
+    montage(out,`Energy: the pocket hatch spends a charged carrier per swing; carriers recharge in the light zone (${lightOn?'light on':'light off'})`);}
 }
 module.exports={conveyor,ring,airlock};

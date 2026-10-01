@@ -4,6 +4,24 @@ One short entry per new capability: what is new, how to see it, a picture, statu
 it enables next. Newest first. Status: **works** (does what was intended in demos or
 screens), **partial**, **not yet**. Batches and their numbers live in RESULTS/LEDGER.
 
+## 2026-10-01 (session 2d: toward an organism — energy)
+
+User BIG goal (ROADMAP): an organism with a metabolism that builds and feeds its offspring until it can split
+off; build every mechanism in isolation, then combine.
+
+- **Energy: charged carriers fuel the hinges** — works (1 world each, light on/off). Every triangle has a charge
+  state (charged by default). A discharged triangle binds nothing (user: otherwise a mechanism could just wait for
+  a recharge). A flap whose own or hinge partner's type has a fuel side (`$`) starts each swing by spending a
+  charged carrier (`eee`) bound there: the carrier is discharged and falls off. Without fuel a triggered flap holds.
+  Environment drive (labelled): free discharged triangles in a light zone recharge (p 0.02 per step). Demo: the
+  hatch pocket with a fuel side on the hatch's hinge partner, 12 carriers starting discharged, 10000 steps.
+  Light off: the hatch caught a target early and held, unfuelled, for 9692 steps; no casts. Light on: carriers
+  recharged in the zone (15 recharges), reached the pocket, and powered 3 swings, 2 casts. The rate is limited by
+  carriers reaching the fuel side.
+  `node experiments/tri_machines.js energy 1 10000 OUT [0 = light off]`. Pictures:
+  `experiments/out/TYPED_energy_20261001.png`, `experiments/out/TYPED_energy_dark_20261001.png`.
+  Next: fuel for doors and pumps; carriers delivered to machines by a carrier-catching arm; a light-harvesting part.
+
 ## 2026-09-30 (session 2c: typed triangles, casting, hinges)
 
 User direction: no growth programs. Every block is the same triangle with a **type**: three side glues from

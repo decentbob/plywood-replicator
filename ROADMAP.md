@@ -30,7 +30,7 @@ splits it off. Build every mechanism in isolation, then combine. Modules and sta
 | Genome: typed chain copied by complementary faces | DNA/RNA | works |
 | Compartment: closed ring membrane, sealed at the default jostle | cell membrane | works |
 | Factory: casting pockets turn blanks into the parts copying needs | metabolism | works (prepared pockets) |
-| Energy: charged carriers, fuel for every hinge swing, recharge in a light zone; discharged carriers bind nothing (user) | ATP, light | building |
+| Energy: charged carriers, fuel for every hinge swing, recharge in a light zone; discharged carriers bind nothing (user) | ATP, light | works (pocket on fuel; light on/off demo) |
 | Import: a gate or pump that brings raw material in (scanner gate admits only right types) | transporters | lock works, import not yet |
 | Heritable machines: the replicator's own arms fold into its pocket and frame | ribozymes, then translation | arms inherited; pocket not yet |
 | Growth: the membrane grows by adding wall cells | membrane growth | not yet |

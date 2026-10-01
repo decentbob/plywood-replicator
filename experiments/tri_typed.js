@@ -28,6 +28,11 @@
 //           key one pass after binding (the door has read it), so the key is not carried. Interlock: a triangle with
 //           an unbonded latch side emits a lock signal (lockRange, relayed -1 per bond); a closed pulse door ignores
 //           its trigger while it hears it, so of two doors in one wall only one is unlatched at a time.
+//   energy  every triangle has a charge state (charged by default); a discharged triangle binds nothing (user: so a
+//           mechanism cannot just wait for a recharge). A flap whose type, or its hinge partner's, has a fuel side ('$')
+//           starts each swing by spending a charged carrier bound to a fuel side: the carrier is discharged and falls
+//           off. Without fuel a triggered flap holds. Environment drive: free discharged triangles in a light zone
+//           (param light {x,y,r,p}) recharge.
 //   close-only (side property '.') the side binds only triangles that are already attached, never a free one: it
 //           closes onto what a structure brings to it (a switch of the side's activity by attachment).
 //   casting (permanent type change, in-simulation) a triangle T whose three sides are all glue-bonded to triangles
@@ -52,16 +57,16 @@ const m3=x=>((x%3)+3)%3;
 const gcode=c=>c==='-'?0:c>='a'&&c<='z'?2*(c.charCodeAt(0)-97)+1:2*(c.charCodeAt(0)-65)+2;
 const gname=g=>g===0?'-':g%2?String.fromCharCode(97+(g-1)/2):String.fromCharCode(65+(g-2)/2);
 const comp=g=>g===0?0:g%2?g+1:g-1;
-function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^*~#]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^*~#$]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>m[2].includes('<')?1:m[2].includes('>')?2:0),close:t.map(m=>m[2].includes('.')?1:0),
-    rel:t.map(m=>m[2].includes('!')?1:m[2].includes('^')?2:m[2].includes('#')?3:0),trig:t.map(m=>m[2].includes('*')?1:0),latch:t.map(m=>m[2].includes('~')?1:0)};}
-const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')+(s.hRelease[u*3+i]===1?'!':s.hRelease[u*3+i]===2?'^':s.hRelease[u*3+i]===3?'#':'')+(s.trg[u*3+i]?'*':'')+(s.ltc[u*3+i]?'~':'')).join('');
+    rel:t.map(m=>m[2].includes('!')?1:m[2].includes('^')?2:m[2].includes('#')?3:0),trig:t.map(m=>m[2].includes('*')?1:0),latch:t.map(m=>m[2].includes('~')?1:0),fuel:t.map(m=>m[2].includes('$')?1:0)};}
+const typeName=(s,u)=>[0,1,2].map(i=>gname(s.glue[u*3+i])+(s.hing[u*3+i]===1?'<':s.hing[u*3+i]===2?'>':'')+(s.cOnly[u*3+i]?'.':'')+(s.hRelease[u*3+i]===1?'!':s.hRelease[u*3+i]===2?'^':s.hRelease[u*3+i]===3?'#':'')+(s.trg[u*3+i]?'*':'')+(s.ltc[u*3+i]?'~':'')+(s.fuel[u*3+i]?'$':'')).join('');
 // canonical name up to rotation (the same type in any orientation)
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^*~#]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^*~#$]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 class TypedSim extends TriSim{
-  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.dOpen=new Int8Array(n);this.lockBusy=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
-  setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];this.hRelease[u*3+i]=t.rel[i];this.trg[u*3+i]=t.trig[i];this.ltc[u*3+i]=t.latch[i];}this.bondsDirty=true;}
+  _tri(){super._tri();const n=this.n;if(!this.glue||this.glue.length!==3*n){this.glue=new Int8Array(3*n);this.hing=new Int8Array(3*n);this.actE=new Int8Array(n).fill(-1);this.hRel=new Float64Array(3*n);this.cOnly=new Int8Array(3*n);this.hRelease=new Int8Array(3*n);this.trg=new Int8Array(3*n);this.ltc=new Int8Array(3*n);this.tb=new Int8Array(n);this.dOpen=new Int8Array(n);this.fuel=new Int8Array(3*n);this.pw=new Int8Array(n);this.chg=new Int8Array(n).fill(1);this.lockBusy=new Int8Array(n);this.nbc=new Int8Array(n);this.hSign=new Int8Array(3*n);}}
+  setType(u,str){this._tri();const t=parseType(str);for(let i=0;i<3;i++){this.glue[u*3+i]=t.glue[i];this.hing[u*3+i]=t.hinge[i];this.cOnly[u*3+i]=t.close[i];this.hRelease[u*3+i]=t.rel[i];this.trg[u*3+i]=t.trig[i];this.ltc[u*3+i]=t.latch[i];this.fuel[u*3+i]=t.fuel[i];}this.bondsDirty=true;}
   _roles(u){const r=super._roles(u);
     if(r.role===FREE)for(let i=0;i<3;i++)if(this.bond[u*4+i]>=0&&this.bkind[u*4+i]===GLUE)return {role:GROWN};
     return r;}
@@ -87,6 +92,7 @@ class TypedSim extends TriSim{
     const free=u=>R[u].role===FREE,bnd=(u,i)=>this.bond[u*4+i]>=0,gl=(u,i)=>G[u*3+i];
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;
+      if(!this.chg[u]||!this.chg[v])continue;   // energy: a discharged triangle binds nothing
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
         // glue binding on an active side
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e])continue;
@@ -115,7 +121,11 @@ class TypedSim extends TriSim{
           this._bind(a,ra.prev,PREV,b,rb.next,NEXT);this.closeEvents=(this.closeEvents||0)+1;break;}}
     }
   }
-  _triChem(){super._triChem();this._cast();}
+  _triChem(){super._triChem();this._cast();this._light();}
+  // Environment drive (labelled): a light zone {x, y, r, p}; a free discharged triangle inside it is recharged at p
+  _light(){const L=this.p.light;if(!L)return;
+    for(let u=0;u<this.n;u++){if(this.chg[u]||this.bond[u*4]>=0||this.bond[u*4+1]>=0||this.bond[u*4+2]>=0)continue;
+      if(Math.hypot(this._dx(this.px[u]-L.x),this._dy(this.py[u]-L.y))<L.r&&this.rng()<L.p){this.chg[u]=1;this.recharges=(this.recharges||0)+1;}}}
   _cast(){
     const G=this.glue;
     for(let u=0;u<this.n;u++){let ok=true;const src=[];
@@ -167,6 +177,12 @@ class TypedSim extends TriSim{
       // triggered: one of my trigger sides is bonded, or a triangle bonded to me (not by a hinge) reports one (relay)
       let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*4+e]>=0);
       for(let e=0;e<3&&!swung;e++)if(this.bond[u*4+e]>=0&&!hingeBond(u,e)&&this.tb[this.bond[u*4+e]>>2])swung=true;
+      // energy: a flap whose own or whose hinge partner's type has a fuel side ($) starts a swing only by spending a
+      // charged carrier bound there: the carrier is discharged and, binding nothing, falls off. Without fuel it holds.
+      if(swung&&!this.pw[u]&&!this.dOpen[u]){let need=false,spent=false;
+        for(const [x,isU] of [[u,1],[v,0]])for(let e=0;e<3;e++){if(!this.fuel[x*3+e])continue;need=true;if(spent)continue;const q2=this.bond[x*4+e];
+          if(q2>=0&&this.chg[q2>>2]){const w=q2>>2;this._cut(x,e);this.chg[w]=0;spent=true;this.fuelUsed=(this.fuelUsed||0)+1;}}
+        if(need){if(spent)this.pw[u]=1;else{swung=false;this.unfuelled=(this.unfuelled||0)+1;}}}
       // pulse doors (#): a trigger sets the door's own open state; it swings open and, once there, resets and swings back
       // interlock: a closed pulse door ignores its trigger while it hears the lock signal of a door that is not latched
       if(this.hRelease[u*3+i]===3){if(swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.interlocked=(this.interlocked||0)+1;}
@@ -174,7 +190,7 @@ class TypedSim extends TriSim{
         if(this.dOpen[u]&&Math.abs(wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this._ang(u)-this._ang(v))))<(this.p.dropTol??0.15)){this.dOpen[u]=0;this.pulses=(this.pulses||0)+1;}
         swung=!!this.dOpen[u];}
       const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0);
-      const err=wrap(target-(this._ang(u)-this._ang(v)));if(Math.abs(err)<0.01)continue;const rr=swung?rate/2:rate,d=Math.max(-rr,Math.min(rr,err));   // a loaded flap drives at half rate: an empty flap returning wins a push
+      const err=wrap(target-(this._ang(u)-this._ang(v)));if(!swung&&Math.abs(err)<0.02)this.pw[u]=0;if(Math.abs(err)<0.01)continue;const rr=swung?rate/2:rate,d=Math.max(-rr,Math.min(rr,err));   // a loaded flap drives at half rate: an empty flap returning wins a push
       // the flap's body: everything bonded to it except through its hinge
       const body=[u],seen=new Set(body);let locked=false;
       for(let k=0;k<body.length&&!locked;k++){const x=body[k];for(let e=0;e<3;e++){const r=this.bond[x*4+e];if(r<0||(x===u&&e===i))continue;const y=r>>2;
@@ -189,7 +205,7 @@ class TypedSim extends TriSim{
     for(let u=0;u<n;u++)if(this.tb[u])for(let e=0;e<3;e++)if(this.trg[u*3+e]&&this.hRelease[u*3+e]===3&&this.bond[u*4+e]>=0){this._cut(u,e);this.keyReleases=(this.keyReleases||0)+1;}
   }
   step(){this._servo();super.step();}
-  saveState(){const s=super.saveState();s.typed={glue:Array.from(this.glue||[]),hing:Array.from(this.hing||[]),cOnly:Array.from(this.cOnly||[]),bkind:Array.from(this.bkind||[])};return s;}
+  saveState(){const s=super.saveState();s.typed={glue:Array.from(this.glue||[]),hing:Array.from(this.hing||[]),cOnly:Array.from(this.cOnly||[]),chg:Array.from(this.chg||[]),bkind:Array.from(this.bkind||[])};return s;}
 }
 
 // ---------------- worlds ----------------
@@ -267,10 +283,11 @@ function render(s,out,title,focus=null,labels=false){
   const X0=u=>focus?s._dx(s.px[u]-fx)+focus.radius:((s.px[u])%W+W)%W,Y0=u=>focus?focus.radius-s._dy(s.py[u]-fy):W-((s.py[u])%W+W)%W;
   // focus.align = {u, a0}: turn the picture so unit u keeps its orientation a0 (a machine drawn in its own frame)
   const th=focus&&focus.align?focus.align.a0-s._ang(focus.align.u):0,cs=Math.cos(th),sn=Math.sin(th);
+  if(s.p.light&&!focus){const L=s.p.light;svg.push(`<circle cx="${(((L.x)%W+W)%W*k).toFixed(1)}" cy="${((W-((L.y)%W+W)%W)*k).toFixed(1)}" r="${(L.r*k).toFixed(1)}" fill="#f5e663" fill-opacity="0.13" stroke="#f5e663" stroke-opacity="0.5"/>`);}
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s._roles(u);
     const P=q=>{if(!th)return [(X0(u)+s.ox[u*NV+q])*k,(Y0(u)-s.oy[u*NV+q])*k];
       const x=s._dx(s.px[u]-fx)+s.ox[u*NV+q],y=s._dy(s.py[u]-fy)+s.oy[u*NV+q];return [(focus.radius+cs*x-sn*y)*k,(focus.radius-(sn*x+cs*y))*k];};
-    const fill=r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':r.role===SBACK?(r.fill?'#3f9e8f':'#c98f2e'):r.role===GROWN?'#8a9bb0':'#3a4852';
+    const fill=s.chg&&!s.chg[u]?'#1e2429':r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':r.role===SBACK?(r.fill?'#3f9e8f':'#c98f2e'):r.role===GROWN?'#8a9bb0':'#3a4852';
     svg.push(`<polygon points="${[0,1,2].map(q=>P(q).map(z=>z.toFixed(1)).join(',')).join(' ')}" fill="${fill}" stroke="#1b2a33" stroke-width="0.8"/>`);
     // glue marks: a coloured bar along each glued side (letters when zoomed)
     const c=[[0,1,2].reduce((a,q)=>a+P(q)[0],0)/3,[0,1,2].reduce((a,q)=>a+P(q)[1],0)/3];
@@ -295,13 +312,13 @@ function render(s,out,title,focus=null,labels=false){
 // where the target binds both fixed casters; the cast releases it, the catch side is free again and the hatch swings
 // back open. The fixed casters' recognition sides are close-only, so only the hatch catches.
 // Casters: recognition A, then activator K, then instruction x (counter-clockwise).
-function pocket(instr='bcd',recog='A'){
+function pocket(instr='bcd',recog='A',fuel=null){
   const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));
   return [
     {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K`,loose:p==='-'},   // an inert instruction side is not welded (that would overwrite it)                               // N0: bottom instruction p, inner A, left-lower K
     {v:[[1,0],[2,0],[1.5,H]],type:`K${q}${R}.`,loose:q==='-'},                               // N1: bottom-right K, right-lower instruction q, inner A
     {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<${r}${R}*`},                          // hatch (open): hinge K on H (pin V), top instruction r, catch A
-    {v:[[1.5,H],[2.5,H],[2,2*H]],type:'--k'},                                 // H: the hatch's hinge partner (k)
+    {v:[[1.5,H],[2.5,H],[2,2*H]],type:fuel?`-${fuel}$k`:'--k'},   // H; with fuel, its outer side holds a carrier                                 // H: the hatch's hinge partner (k)
     {v:[[2,0],[2.5,H],[1.5,H]],type:`--${Q}`},                                // holds N1's instruction side
     {v:[[1,0],[1.5,-H],[2,0]],type:'--k'},                                    // k under N1
     {v:[[0,0],[0.5,-H],[1,0]],type:`--${P}`},                                 // holds N0's instruction side
