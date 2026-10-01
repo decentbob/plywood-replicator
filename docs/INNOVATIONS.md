@@ -8,6 +8,14 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Heritable factory cycle on rigid physics** — works (third generation in 2 of 3 worlds by 150000 steps). Founder
+  `aaaaa` with seed `y`; two pocket kits in the supply: P_y casts blanks into dockers `Az-`, P_z casts `ay-`; fills
+  `Z--`/`Y--` (latGlue), blanks 60. The founder grows P_y (complete at 35000-40000) and casts `Az-`; its copies
+  `AAAAA` carry seed `z` (a docker's lateral glue left free at the copy's end) and grow P_z, which casts `ay-`; their
+  copies `aaaaa` carry `y` again. World 1 by 150000: 59 casts (42 `Az-`, 18 `ay-`), five strands, a third-generation
+  `aaaaa` that has regrown P_y; world 2: a third-generation strand without its pocket yet; world 3: second generation
+  with pockets. Blanks run out (1 left in world 1). No rule changes were needed since the old engine.
+  `node tri/demos.js cycle 1 150000 runs`. Picture: `docs/pictures/heritable_cycle.png` (strands with their pockets).
 - **Grown protocell: a chain grows its own cell, feeds it and copies inside** — works (4 of 4 worlds). Chain `aaaaa`
   with seed `z` on its low end and `y` on its high end; in the supply: the door membrane kit (R=7, 78 cells, 4 copies
   per cell), a lid pocket kit (16 types that cast blanks `xxx` into dockers `A--`), blanks and junk; `pLoose` 0.05.
@@ -113,7 +121,7 @@ not statistics.
   three cells (two at a corner) hinged at an outer vertex, swinging out. `structures.ring` now picks such a door by
   sweeping it, welds the panel with hear sides (the key's signal reaches the hinge two cells away) and puts the key
   trigger next to the latch. `node tri/demos.js gate 1 10000 runs 12`.
-- **Heritable factory cycle (progress, old engine)** — partial. Two kits (pocket P_y casts `Az-`, pocket P_z casts
+- **Heritable factory cycle (progress, old engine)** — partial (works on rigid physics, see above). Two kits (pocket P_y casts `Az-`, pocket P_z casts
   `ay-`), founder `aaaaa` with seed y. By 48000 steps in world 2: the founder grew P_y and cast 50 `Az-`; its copies
   `AAAAA` grew P_z (one complete) which began casting `ay-` (2). Not yet: a third generation. Re-running on rigid
   physics.

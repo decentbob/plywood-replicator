@@ -55,7 +55,7 @@ membrane around itself), heritable cells (copies carry the seed and wrap themsel
    copy is exported into a bud (budding with contents). Commitment rules already stop copying once wrapping starts.
 4. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel
    with cast glues) would close the loop (metabolism makes the parts of the cell).
-5. Airlock on rigid physics, scanner gate, heritable factory cycle on rigid physics.
+5. Airlock on rigid physics, scanner gate. (The heritable factory cycle works on rigid physics.)
 
 ## Pitfalls learned
 - **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
