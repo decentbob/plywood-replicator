@@ -18,12 +18,28 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
    (designed machines and kits), `tri/render.js` (pictures), `tri/demos.js` (one demo per capability),
    `tri/test.js` (fast checks).
 
-## How we work: innovation first
+## How we work: a small core, built on in slices
 
-- **Each slice builds something new**: a type kit, a rule, a machine, an environment feature. A parameter variant
-  or a rerun is not a slice.
-- **The loop:** idea → build it as types and structures (rules only when needed) → a demo world, as short as shows
-  the behaviour → look at pictures → fix the mechanics → log it with a picture → next idea.
+- **The core stays small** (user, 2026-10-01). The core is the rule set in docs/RULES.md: side marks, signals,
+  states, the binding, copying, casting and hinge rules, physics exceptions. Capabilities come from new combinations
+  of it: structures, kits, glue assignments, machines, environments. New glue letters are labels, not rules, and are
+  fine. A **core change** (new mark, signal, state, rule or rule branch, physics exception, or a default that changes
+  behaviour everywhere) needs a very good reason and an entry under "Core changes" in docs/RULES.md written before
+  any code: (1) the capability and why the goal needs it; (2) at least two designs with the existing core and why
+  they fail; (3) the locality check: exactly what the triangle reads and from where; (4) which other structures can
+  use it; (5) what it replaces or makes removable. Prefer generalizing or removing a rule over adding one. After a
+  core change, the capability checks (`node tri/check.js`, once it exists) must still pass.
+- **Slices.** Before any code, write under "Current slice" at the top of docs/NEXT.md: **goal** (one sentence: what
+  will exist or be known, and how it moves the organism forward), **acceptance** (a command and the observable
+  result, with a number, e.g. "3 of 4 worlds"), **stop boundary** (what is out of scope, and a budget of demo runs
+  after which you hand off) and **approach** (designs considered, the one chosen and why). Work toward the acceptance
+  only; record side paths in NEXT. End with acceptance met, or a verified milestone and the exact next step. A slice
+  that turns out wrong ends with what was learned. Small finished slices beat large open ones.
+- **What counts as a slice:** a new structure or machine from the existing core, making a capability reliable (3 of
+  4 worlds or better), a capability check, a speed-up that limits iteration, an analysis that decides a question, a
+  removal or merge of core rules, and (rarely) a gated core change. A parameter sweep without a question is not.
+- **The loop:** idea → build it as types and structures with the existing core → a demo world, as short as shows the
+  behaviour → look at pictures → fix the mechanics → log it with a picture → next idea.
 - **Batches are rare:** only when a capability works in demos and a number changes what gets built next; about six
   worlds, one round. One retune per idea when a demo fails; then try another idea or record "not yet".
 - **Build mechanisms in isolation, then combine** (user, 2026-10-01). Stack new capabilities on existing ones.
@@ -31,7 +47,7 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
 
 ## Hard constraints
 
-- **Locality.** A rule reads its triangle's own type, state and bonds and the values bonded partners exposed in the
+- **Locality, always.** A rule reads its triangle's own type, state and bonds and the values bonded partners exposed in the
   previous pass; it changes its own state or one of its own bonds. Relayed signals move one bond per pass. No
   counters, traversals, global signals, organism or parent predicates. Environment drives (light zones, fields,
   supply) are allowed and labelled.
@@ -62,7 +78,7 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
 
 - Read `git status` first; preserve user changes. Run output goes to `runs/` (ignored); keep only chosen pictures in
   `docs/pictures/`.
-- Run `node tri/test.js` before committing rule or physics changes.
+- Run `node tri/test.js` (and `node tri/check.js` once it exists) before committing rule or physics changes.
 - Commit often with descriptive messages; standing approval to push the working branch, merge into `main` and push
   `main`. At most four simulation processes at once. Container restarts happen: commit results early.
 - **Always ready for handoff** (user, 2026-10-01). After every checkpoint reached or any stoppage, leave the work so
