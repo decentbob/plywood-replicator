@@ -45,7 +45,7 @@ class TriSim extends Physics{
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.hSign=I8(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.sg=I8(n);this.cg=I8(n);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -118,6 +118,7 @@ class TriSim extends Physics{
     // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
     const tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v];if(this.moveDepth([v],tx,ty,da,this.px[v],this.py[v])>0)return false;
     this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=ang;this.resetShape(v);this.regrid(v);return true;}
+  _handCatch(u,e){if(!this.trg[u*3+e])return false;for(let i=0;i<3;i++)if(this.hinge[u*3+i]&&this.rel[u*3+i]===2)return true;return false;}
   // closure tolerance: two separate bodies close within triTolClose (the smaller is then placed flush); inside one rigid
   // body only flush sides close (triTolSame: parts are exact, so a gap means a flap has not arrived)
   _closeTol(u,v){return this.bodyOf(v).includes(u)?this.p.triTolSame:this.p.triTolClose;}
@@ -151,7 +152,7 @@ class TriSim extends Physics{
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
-        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e])continue;
+        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&this.away[u]))continue;
           for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
@@ -164,10 +165,11 @@ class TriSim extends Physics{
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
           if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
-      // two attached triangles: glue closure between active sides
+      // two attached triangles: glue closure between active sides (a hand-off flap's catch side never closes: it catches
+      // free triangles only, so a handed-off cargo is not taken back)
       let done=false;
-      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g)continue;
-        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&flush(u,e,v,f,this._closeTol(u,v))&&this.rng()<p.pBond){if(!this._snapBody(v,f,u,e))continue;this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
+      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e))continue;
+        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&flush(u,e,v,f,this._closeTol(u,v))&&this.rng()<p.pBond){if(!this._snapBody(v,f,u,e))continue;this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
       // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed
@@ -196,10 +198,10 @@ class TriSim extends Physics{
   _environment(){const p=this.p,n=this.n;
     if(p.pDissolve>0&&p.caps)for(let u=0;u<n;u++){let chain=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;}
       if(chain>0&&this.busy[u]===0&&!this.fill[u]&&(this.sigP[u]===0||this.sigN[u]===0)&&this.rng()<p.pDissolve){for(let i=0;i<3;i++)this.cut(u,i);this.count('dissolve');}}
-    // loose (option, proofreading): a caught triangle (bound when free, not by an attach side) held on only one or two sides
-    // lets go; one held on all three sides is fully recognized (a pocket casts it at once)
+    // loose (option, proofreading): a caught triangle (bound when free, not by an attach side) held on one side only lets
+    // go; a second matching side holds it (cooperative binding)
     if(p.pLoose>0)for(let u=0;u<n;u++){if(!this.cg[u])continue;let nb=0;for(let i=0;i<3;i++)if(this.bond[u*3+i]>=0)nb++;
-      if(nb>=1&&nb<=2&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
+      if(nb===1&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
     if(!(p.triUndock>0)&&!(p.pFray>0))return;
     for(let u=0;u<n;u++){let nb=0,chain=0,face=-1,copying=false;
       for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;nb++;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;if(k===FACE)face=i;if(k===FACE||k===TFACE)copying=true;}
@@ -244,6 +246,7 @@ class TriSim extends Physics{
       if(rel===3){if(swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.count('interlocked');}
         if(swung)this.dOpen[u]=1;if(this.dOpen[u]&&Math.abs(open())<p.dropTol){this.dOpen[u]=0;this.count('pulse');}swung=!!this.dOpen[u];}
       const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0),err=wrap(target-(this.angle(u)-this.angle(v)));
+      this.away[u]=Math.abs(wrap(this.hRel[u*3+i]-(this.angle(u)-this.angle(v))))>0.05?1:0;   // away from rest: its catch sides do not catch
       if(!swung&&Math.abs(err)<0.02)this.pw[u]=0;if(Math.abs(err)<0.01)continue;
       const rr=swung?rate/2:rate,d=Math.max(-rr,Math.min(rr,err));   // a loaded flap drives at half rate: a returning flap wins a push
       // the flap's body (everything bonded to it except through this hinge); locked if it reaches the partner

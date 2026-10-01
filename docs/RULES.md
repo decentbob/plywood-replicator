@@ -48,8 +48,8 @@ probability `pBond` per step (1: whenever flush), if at least one of the two tri
 attachment**: free triangles never bind each other). **Binding pulls the free triangle in:** it is placed exactly
 flush against its partner's side (it moves at most about the tolerance), so every bond starts aligned. A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
-attach side. Option `pLoose` (proofreading): a triangle caught while free (not by an attach side) and held on only one
-or two sides lets go with this probability per step.
+attach side. Option `pLoose` (proofreading, cooperative binding): a triangle caught while free (not by an attach side) and held
+on one side only lets go with this probability per step; a second matching side holds it.
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
 released strand triangle; the spare edge of a strand end that is not being copied.

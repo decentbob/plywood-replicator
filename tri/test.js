@@ -69,7 +69,7 @@ test('state: save and reload continue the same run',()=>{
   assert.deepEqual(Array.from(a.px),Array.from(s.px));assert.deepEqual(Array.from(a.bond),Array.from(s.bond));});
 
 test('physics: a closed ring keeps its tracers at the default jostle (no tunnelling)',()=>{
-  const {tris,R}=S.ring(4,1);for(const t of tris)t.type=t.type.replace(/[*~<]/g,'');   // a plain closed ring (door welded shut)
+  const {tris,R}=S.ring(4,1);for(const t of tris)t.type=t.type.replace(/[*~<>#]/g,'');   // a plain closed ring (door welded shut)
   const {s,structures}=createWorld({seed:2,size:16,structures:[{tris,x:8,y:8}],params:{}});
   // tracers inside: placed near the centre
   const ring=structures[0],{placeFree}=require('./world'),n0=s.n;void n0;assert.ok(ring.length>30);

@@ -73,21 +73,37 @@ function conveyor(){return [
   {v:[[0.5,-H],[1.5,-H],[1,0]],type:'---'},{v:[[0.5,-H],[1,-2*H],[1.5,-H]],type:'---'},{v:[[0.5,-H],[0,-2*H],[1,-2*H]],type:'---'},
 ];}
 
-// Closed ring membrane (cells between hexagons of side R-rows and R) with a gate on the bottom side: a two-triangle
-// panel (outer cell U + inner cell D, welded w/W), D hinged to the next outer cell at the panel's bottom corner, U
-// latched (L~) into the wall on its left. A key (ggg) on U's outer face (trigger G*) unlatches it; the panel swings
-// out (use hingeAngle 120 degrees) carrying the key. With rows=2 the inner-row cells behind the door are left out.
-function ring(R=4,rows=1){
-  let cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-rows;});
-  const onY=(v,y)=>v.filter(p=>Math.abs(p[1]-y)<1e-6).length;
-  const D=cells.filter(v=>onY(v,-(R-1)*H)===2&&cen(v)[1]<-(R-1)*H).sort((a,b)=>Math.abs(cen(a)[0])-Math.abs(cen(b)[0]))[0];
-  const pin=D.find(p=>Math.abs(p[1]+R*H)<1e-6),[q,r]=D.filter(p=>!same(p,pin)).sort((a,b)=>b[0]-a[0]);
-  const U=cells.find(v=>onY(v,-R*H)===2&&has(v,pin,r)),Ur=cells.find(v=>onY(v,-R*H)===2&&has(v,pin,q));
-  const a=U.find(p=>!same(p,pin)&&!same(p,r)),Dl=cells.find(v=>v!==U&&has(v,a,r));
-  if(rows>1){const X=cells.find(v=>v!==D&&has(v,q,r)),top=X.find(p=>!same(p,q)&&!same(p,r)),Yr=cells.find(v=>v!==X&&has(v,q,top));cells=cells.filter(v=>v!==X&&v!==Yr);}
-  const tris=[{v:[pin,q,r],type:'h<-w',loose:true},{v:[a,pin,r],type:'G*WL~',loose:true}];
-  for(const v of cells){if(v===D||v===U)continue;tris.push({v,type:v===Ur?edge(v,q,pin,'H'):v===Dl?edge(v,a,r,'l'):'---'});}
-  return {tris,R};}
+// Gated ring membrane (rigid parts): a one-row ring of side R with a door panel of `k` consecutive wall cells, welded
+// together (unique weld glues), hinged to the wall at one end (pin on the outer boundary) and latched (L~) to the wall
+// at the other; a key (ggg) on an outward face of the panel (trigger G*) unlatches it and the panel swings 120 degrees
+// out (use hingeAngle 120 degrees or a wide hinge). The door is chosen so its whole swing is clear of the wall (a rigid
+// panel cannot squeeze past its neighbours): checked here by sweeping it. pulse: '#' marks (pulse door, key let go).
+function ring(R=4,rows=1,k=3,pulse=false){
+  if(rows!==1)throw Error('ring: one row only on rigid physics');
+  const cells=ringKit(R,'z').tris.map(t=>t.v),N=cells.length,shr=(a,b)=>a.filter(p=>b.some(q=>same(p,q)));
+  const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
+  const {triDepth}=require('./physics'),flat=V=>Float64Array.from(V.flat()),out=v=>hexr(cen(v))>R-0.5;
+  // bottom side first: start cells ordered by height
+  const order=[...Array(N).keys()].sort((a,b)=>cen(cells[a])[1]-cen(cells[b])[1]);let door=null;
+  for(const st of order){const panel=[...Array(k).keys()].map(q=>(st+q)%N),prev=(st+N-1)%N,next=(st+k)%N;
+    for(const P of shr(cells[st],cells[prev])){if(hexr(P)<R-0.01)continue;
+      for(const dir of [1,-1]){let ok=true;
+        for(let a=1;a<=120&&ok;a++){const t=dir*a*Math.PI/180;for(const c of panel){const V=flat(cells[c].map(p=>rot(p,P,t)));
+          for(let w=0;w<N&&ok;w++)if(!panel.includes(w)&&triDepth(V,flat(cells[w]))>1e-6)ok=false;if(!ok)break;}}
+        const moved=cen(cells[st].map(p=>rot(p,P,dir*0.3)));if(ok&&Math.hypot(...moved)>Math.hypot(...cen(cells[st])))door={panel,prev,next,P};if(door)break;}if(door)break;}if(door)break;}
+  if(!door)throw Error('ring: no clear door');
+  const side=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(cells[a][i],cells[b][(j+1)%3])&&same(cells[a][(i+1)%3],cells[b][j]))return [i,j];return null;};
+  const T=cells.map(()=>['-','-','-']),loose=new Set(door.panel),W='wvu';
+  // hinge: first panel cell to the previous wall cell
+  {const [i,j]=side(door.panel[0],door.prev),v=cells[door.panel[0]];T[door.panel[0]][i]='h'+(same(v[i],door.P)?'<':'>')+(pulse?'#':'');T[door.prev][j]='H';}
+  // welds inside the panel, latch at the far end
+  for(let q=0;q+1<door.panel.length;q++){const [i,j]=side(door.panel[q],door.panel[q+1]);T[door.panel[q]][i]=W[q]+'+';T[door.panel[q+1]][j]=W[q].toUpperCase()+'+';}   // weld sides hear: the key's signal reaches the hinge
+  {const last=door.panel[door.panel.length-1],[i,j]=side(last,door.next);T[last][i]='L~';T[door.next][j]='l';}
+  // key trigger on the panel cell nearest the latch with an outward free side (a latch hears triggers one bond away)
+  for(const c of [...door.panel].reverse()){const f=[0,1,2].find(i=>T[c][i]==='-'&&!cells.some((w,x)=>x!==c&&side(c,x)&&side(c,x)[0]===i));
+    if(f===undefined)continue;const m=[(cells[c][f][0]+cells[c][(f+1)%3][0])/2,(cells[c][f][1]+cells[c][(f+1)%3][1])/2];if(Math.hypot(...m)>(R-0.5)*H){T[c][f]='G*'+(pulse?'#':'');break;}}
+  const tris=cells.map((v,x)=>({v,type:T[x].join(''),loose:loose.has(x)}));
+  return {tris,R,door};}
 
 // Airlock (user: a double lock): one-row ring; below its bottom side a lock section (two more rows in a window) with
 // an inner door (ring-row panel U1+D1, hinged at its top corner, swings inward, trigger G on the chamber side), a
