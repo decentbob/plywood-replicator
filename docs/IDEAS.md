@@ -94,3 +94,14 @@ latches, hand-off and drop releases, the hatch pocket, a two-hatch conveyor and 
 User (2026-09-30): wall jumping is a bug (fixed: no tunnelling through structures); a double lock with one door
 closed while the other is open (built: airlock with pulse doors and an interlock signal). Still open: carrying
 keys through the airlock; two hinges as jaws; a pump through a wall.
+
+## Casting makes stray types; replicators need to scan (user, 2026-10-01)
+
+"One thing casting complicates is that new types can emerge that make past machines not build correctly. If a
+machine relies on [if side 1 is a, then side 2 is b], a triangle with side 1 = a and side 2 something else will
+block it. Still, a cast should theoretically be able to make all sorts of triangles. Long term a replicator relying
+on specific blocks would need a mechanism to scan and only let in the right ones."
+Notes: the pocket geometry already reads all three sides of a triangle (casting needs all three recognitions), so
+a pocket whose instructions equal what it recognizes changes nothing but works as a checkpoint; with a hatch on each
+side it becomes a scanner gate. A cheaper general guard is cooperative binding (a part stays bound only once a second
+side also matches; otherwise it is let go), which proofreads at every step without a machine.
