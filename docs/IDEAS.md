@@ -105,3 +105,20 @@ Notes: the pocket geometry already reads all three sides of a triangle (casting 
 a pocket whose instructions equal what it recognizes changes nothing but works as a checkpoint; with a hatch on each
 side it becomes a scanner gate. A cheaper general guard is cooperative binding (a part stays bound only once a second
 side also matches; otherwise it is let go), which proofreads at every step without a machine.
+
+## Biology as a source of ideas (user, 2026-10-01: "compare to real life and evolution")
+
+Mapping: typed triangles ~ monomers with specific pairing; complementary chain copying ~ template replication by
+base pairing; casting pocket ~ enzyme active site (changes a molecule's identity: metabolism, tRNA charging);
+factory ~ metabolism making building blocks; hatch / pulse doors ~ conformational changes; airlock with interlock ~
+alternating-access transporter (never open to both sides); scanner pocket ~ selectivity filter / lock and key; stray
+cast types ~ non-canonical monomers and toxic by-products.
+How life copes with strays: specificity from many contacts (whole-shape recognition), kinetic proofreading (a delay
+before commitment lets wrong partners fall off: polymerase and synthetase editing), sanitizing enzymes that destroy or
+recycle wrong building blocks, compartments with selective transport, and a frozen code (once much depends on an
+alphabet, new letters rarely get adopted, except through special machinery).
+Ideas for the project: (1) energy: hinge motion should cost something; a charged/discharged state, recharged by an
+environment zone, makes pumping directional and gives a metabolism; (2) proofreading as a binding rule (delay plus
+release); (3) "ribozyme" route: the replicator's own heritable arms fold into its pocket, so the factory is inherited
+without translation; (4) sanitizing pockets that cast stray types back into blanks (material recycling);
+(5) compartment plus transporters = a cell.
