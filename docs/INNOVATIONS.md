@@ -6,6 +6,38 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-01 (autorun run 20261001-2006, harden)
+
+- **Capability checks (`tri/check.js`)** — works. One command runs every capability ROADMAP marks as working (24 checks:
+  each an existing demo on fixed seeds with pictures off, `TRI_NOPIC=1`) and reads a pass condition from the demo's
+  own last report line (copies made, casts, ring closed, blanks imported, bud split with doors shut, ...), with
+  controls (factory without pockets, energy in the dark). Capabilities claimed for several worlds run 4 seeds and need
+  3. At most 4 processes, longest jobs first; about 8-9 minutes on a 4-core container (`grown` alone takes 5.5 min).
+  First run: 22 of 24 passed; `cells` (2 of 4) and `live` (2 of 4) had fallen below their recorded 3 of 3, fixed below.
+  Command: `node tri/check.js` (or `node tri/check.js ring live` for some).
+- **A bud that lives alone** — works (4 of 4 worlds, prepared pair; was 2 of 4). An end-of-run report (demo `split`,
+  extra `o`) lists each kit cell missing from the bud's pocket, its tree parent, its kit neighbours and where the
+  copies of its type are. It found two causes, neither supply: (1) a yolk blank `uuu` that had come in through the
+  doorway closed onto two casters' close-only instruction sides `U.` in the pocket's last caster site (cell 1) and
+  blocked it for good (seeds 2 and 3); the bud needs `uuu` only after the split, so none starts inside P any more (all
+  40 start outside and come in through the bud's own door). (2) Then cell 13 stalled in seeds 3 and 4: its site had a
+  side on the bud's wall, so once its parent was there a part could enter only through one side (a narrow site);
+  `budPair` now prefers, after kit risk, the organelle placement with the fewest kit cells touching the wall (one with
+  none exists, same kit). Result: in all 4 worlds the pocket completes (16/16), the pair splits (t=40000-153000), both
+  doors shut, the bud imports 33-50 blanks through its own door, casts its dockers and makes a whole `aaaa` copy of its
+  genome (two in world 2). Command: `for k in 1 2 3 4; do node tri/demos.js split $k 200000 runs/sl$k o > runs/sl$k.log
+  & done` (about 3 min per world). Picture (world 3 after the split: its pocket, imported `uuu`, the anchored `AAAA`
+  and its copy `aaaa`): `docs/pictures/split_alone.png`. Enables: the full BIG-goal sentence on a prepared pair; next,
+  grow the pair instead of preparing it.
+- **Heritable cells, reliability** — 4 of 4 worlds (was 2 of 4 on the current engine). The founder's first docker races
+  the membrane root for its high end; a root there first commits the founder to wrapping before any copy (docks=0).
+  Supply changed from 12 dockers per face type and 8 roots to 24 and 4 (one root per cell): every world makes 4 cells
+  (47-48 docks per world). `node tri/demos.js cells 1 100000 runs 36`.
+- **Grown import door, reliability** — 4 of 4 worlds within 150000 steps (was 2 of 4). With 3 kit copies per cell,
+  leftover kit parts trapped inside the closed ring lay in the door's sweep and jammed the panel half open (50000
+  stalls, one import). With 2 per cell the ring closes later (54000-57000; one world about 120000) and imports 14-15
+  blanks. `node tri/demos.js live 1 150000 runs 6x2`.
+
 ## 2026-10-01 (autorun run 20261001-1806)
 
 - **A bud that lives alone: split, import, cast and a whole genome copy made inside the sealed bud** — partial: 2 of
@@ -19,8 +51,8 @@ not statistics.
   split at 9000) and `split 1 60000 runs g` (split at 24000) still work. Command:
   `for k in 1 2 3 4; do node tri/demos.js split $k 200000 runs/sj$k o > runs/sj$k.log & done` (about 2 min per
   world on a 4-core container). Picture (world 4 after the split: pocket, imported `uuu`, anchored `AAAA` and its
-  copy `aaaa`): `docs/pictures/split_alone.png`. Status: partial (2 of 4); next, find why the pocket stalls at
-  14-15/16 (see docs/NEXT.md).
+  copy `aaaa`): `docs/pictures/split_alone.png` (since replaced by the 4-of-4 run's picture). Status: partial (2 of
+  4); fixed in run 20261001-2006 (above).
 
 ## 2026-10-01 (fourth session)
 

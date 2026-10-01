@@ -1,37 +1,25 @@
 # Next instance: start here
 
-## Current slice (autorun 20261001-2006-plywood-harden, 2026-10-01)
-- **Goal:** a capability check (`tri/check.js`) that guards every working module of ROADMAP in one command, and the
-  `split o` pocket stall diagnosed (and fixed if a kit/glue/supply fix exists), so the offspring that lives alone is
-  built on a verified base.
-- **Acceptance:** (1) `node tri/check.js` prints one PASS/FAIL line per working capability (ROADMAP module table),
-  pass conditions read from the world, all pass, wall time about 10 minutes or less with at most 4 processes;
-  (2) `node tri/demos.js split k 200000 runs/sjk o` with an end-of-run report of missing pocket kit types: the stall in
-  seeds 2 and 3 explained, and `split o` at 3 of 4 worlds or better, or the cause recorded with the next fix.
-- **Stop boundary:** no core changes, no new capabilities (no grown bud pair, no programmable synthesis). Budget:
-  about 3 `split o` batches of 4 worlds and one check run per fix.
-- **Approach:** check.js spawns the existing demos (one source of truth for setups) with pictures off (`TRI_NOPIC=1`;
-  every picture starts a Chromium) and reads each demo's own report lines; a pass condition per capability. A
-  separate copy of each world's setup in check.js was rejected (two places to keep in step).
+State on 2026-10-01 (after autorun run 20261001-2006, harden). Read AGENTS.md first (rules of work), then this file.
 
-State on 2026-10-01 (after autorun run 20261001-1806). Read AGENTS.md first (rules of work), then this file.
-
-**Handoff status (autorun run 20261001-1806).** Working tree clean; everything committed on branch
-`claude/autorun-20261001-1806` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass. Runs
-live in `runs/` (not committed); regenerate with the commands below.
-**Done this run:** the `split o` batch with the lock-signal deafness rule (sim.js `_deaf`), then one retune (3 kit
-parts per organelle type, was 2). Result: 2 of 4 worlds run the whole chain (split, both doors shut, 42-47 imports, 16
-casts, a new `aaaa` copy in the bud); see INNOVATIONS (newest entry) and `docs/pictures/split_alone.png`. The cap and
-genome variants still work. A batch takes about 2 minutes per world here (not 1.5 h).
-**Open problem:** in the other 2 worlds (seeds 2 and 3) the bud's pocket stops at 14-15 of 16 cells with the doorway
-open, so it never splits; 3 parts per type did not fix it, so it is probably not supply. Not yet diagnosed: TRI_RESUME
-does not work for `split` (the demo re-places the prepared parts and the food after `createWorld` has loaded the
-saved state, so the resumed world is scrambled). **Exact next step:** add an end-of-run report to demo `split` (extra
-`o`) listing each kit type missing from the bud's pocket and where its copies are (bonded in D/P, free in D/P/out),
-rerun seeds 2 and 3 (`node tri/demos.js split 2 200000 runs/sj2 o`), look at the pocket zoom and decide: an enclosed
-site (a design fix in the organelle kit), a part stuck on a wrong partner (glue fix), or parts that cannot reach D.
-The demo's `outside=` count (flood fill on a 0.25 grid) can leak through wall
-gaps between sample points: treat it as rough.
+**Handoff status (autorun run 20261001-2006).** Working tree clean; everything committed on branch
+`claude/autorun-20261001-2006` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass;
+`node tri/check.js`: 24 of 24 checks pass in 467 s (4 processes). No current slice: the next run starts a new one.
+**Done this run (slice: capability checks and the `split o` stall; acceptance met):**
+- `tri/check.js`: one PASS/FAIL line per working capability of ROADMAP (24 checks with two controls; multi-world
+  claims run seeds 1-4 and need 3). It spawns the existing demos with `TRI_NOPIC=1` (no pictures) and reads each
+  demo's last report line, so setups live only in demos.js. Add a check for every new working capability.
+- `split o` (a bud that lives alone): 4 of 4 worlds (was 2 of 4). An end-of-run report lists missing pocket cells and
+  where their copies are. Causes found: a yolk blank `uuu` stuck in the last caster site (fix: no `uuu` inside the
+  parent; the bud imports them after the split), then a narrow site (a kit cell with a side on the bud's wall; fix:
+  `budPair` picks the organelle placement with the fewest wall-touching kit cells, after kit risk).
+- The first check run found two older capabilities below their record: `cells` 2 of 4 (the founder's first dock lost
+  the race with the membrane root: now 24 dockers per type, 4 roots: 4 of 4) and `live` 2 of 4 (leftover kit parts
+  trapped in the ring jammed the door: now 2 kit copies per cell, 150000 steps: 4 of 4). Details: INNOVATIONS (newest).
+**Exact next step:** a `build` slice toward growing the bud pair instead of preparing it (Do next, item 2), or the
+explore run on programmable synthesis (item 3) when the rotation gives an explore run. Run `node tri/check.js` before
+merging any rule, physics or shared-structure change.
+The `split` demo's `outside=` count (flood fill on a 0.25 grid) can leak through wall gaps: treat it as rough.
 
 ## Where things stand
 - Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (zip), casting, lid
@@ -61,14 +49,15 @@ node tri/demos.js copy 1 10000 runs                # typed copying (zip)
 node tri/demos.js lid 1 4000 runs                  # lid pocket casting
 node tri/demos.js factory 1 30000 runs Aa          # lid pockets feed a replicator (none = control)
 node tri/demos.js grow 1 16000 runs 12             # a lid pocket kit grows from a seed and casts
-node tri/demos.js ring 1 30000 runs 3              # ring membrane from a periodic kit, closes
+node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~8 min)
+node tri/demos.js ring 1 60000 runs 3              # ring membrane from a periodic kit, closes (7k-45k steps)
 node tri/demos.js gate 1 10000 runs 12             # gated ring (swept 3-cell door)
 node tri/demos.js import 1 20000 runs              # selective import (revolving door)
 node tri/demos.js cell 2 40000 runs                # protocell: import + factory + copying inside a membrane
 node tri/demos.js bud 3 50000 runs                 # budding: daughter rings detach when complete
 node tri/demos.js wrap 2 100000 runs               # a chain grows a membrane around itself
 node tri/demos.js cells 1 100000 runs 36           # heritable cells: copies wrap themselves
-node tri/demos.js live 1 90000 runs 6x3            # a grown membrane with its own import door
+node tri/demos.js live 1 150000 runs 6x2           # a grown membrane with its own import door
 node tri/demos.js grown 2 200000 runs              # chain grows membrane + door and a casting pocket (slow)
 node tri/demos.js heir 1 30000 runs                # chains grow pockets from their end seed; copies regrow them
 node tri/demos.js cycle 1 120000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
@@ -76,7 +65,7 @@ node tri/demos.js stamp 1 60000 runs               # stamp pockets make a ring's
 node tri/demos.js grow 1 20000 runs 4s             # a stamp pocket grows from its kit and casts A@-b@
 node tri/demos.js split 1 30000 runs               # bud fed through a doorway grows a cap, then splits off sealed
 node tri/demos.js split 1 60000 runs g             # the bud catches a genome copy (anchor), then splits off
-node tri/demos.js split 1 150000 runs o            # + the bud grows its own docker pocket from parts the parent holds
+node tri/demos.js split 1 200000 runs o            # + the bud grows its own pocket, splits, imports, copies its genome
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
@@ -86,11 +75,9 @@ saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` 
 The BIG goal's sentence now has a prepared, working skeleton: the parent **feeds** its bud through a doorway, the bud
 **catches a genome copy** and grows its content, and it **splits off** sealed (demo `split`). What is still prepared
 or missing, in order:
-1. **A bud that lives alone** (`split 1 200000 runs o`): the bud grows its own stamp pocket (casting `aU.w` from blanks
-   `uuu`, which are also its fills) from kit parts held as food in the parent, catches a copy, splits off, imports
-   `uuu` through its own door (interlocked with its closing door) and makes a whole copy of its genome. Works in 2 of 4
-   worlds (autorun 20261001-1806, 3 kit parts per type); in the other 2 the pocket stalls at 14-15/16 (see the handoff
-   status for the diagnosis step). Earlier jams of the closing door on a free copy did not recur this batch.
+1. ~~**A bud that lives alone**~~ — works prepared, 4 of 4 worlds (`split 1 200000 runs o`, autorun 20261001-2006):
+   the bud grows its own stamp pocket (casting `aU.w` from blanks `uuu`, also its fills) from kit parts held as food in
+   the parent, catches a copy, splits off, imports `uuu` through its own door and makes a whole copy of its genome.
 2. **Grow the bud pair instead of preparing it.** Ideas: grow D as a kit from a seed on the parent's outer wall
    (kits grow any prepared lattice structure). Problems to solve: (a) a hinge bonds only when its sides are flush, so
    a panel grown in the open position needs its hinge partner to be the cell beside it there (the doorstop) with the
@@ -113,6 +100,14 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **Food in a kit site.** A blank whose glue complements casters' close-only instruction sides closes into an empty
+  caster site of a growing pocket (two `U.` sides facing it) and blocks it for good. Keep a pocket's target blanks away
+  until the pocket is complete (the bud gets `uuu` only through its own door, after the split).
+- **Narrow kit sites.** A kit cell with a side on a wall can be entered only through one side once its parent is
+  there; it stalled 2 of 4 bud pockets. `budPair` avoids such placements; check new layouts for them (the risk count
+  in `structures.kit` does not see walls).
+- **Supply races decide reliability.** The founder's first dock races the membrane root (cells); leftover kit parts
+  trapped in a closed ring jam its door (live). Supply ratios are design parameters: check them on 4 worlds.
 - **TRI_RESUME and `split`**: the demo places its prepared parts and food after `createWorld` has loaded the saved
   state, so a resumed `split` world is scrambled (and the genome variant may throw "prepared parts overlap"). Rerun from
   t=0 instead (a 200000-step world takes about 2 minutes).

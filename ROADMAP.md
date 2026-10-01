@@ -17,17 +17,19 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Import: bring raw material through the membrane (pump) | transporters | works: a revolving door carries blanks in selectively | structures.importRing, demo import |
 | Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | works: a chain grows a lid pocket from its end seed, copies regrow it; the two-pocket cycle (each generation casts the next one's dockers) reaches a third generation | structures.kit, demos grow, heir, cycle; backlog 1 |
 | Encapsulation: a chain grows a membrane around itself | genome-directed compartment | works (seed on the chain end, ring kit seedIn) | demo wrap |
-| Heritable cells: copies carry the membrane seed and wrap themselves | cell lineage | works (founder and copy each end in their own cell) | demo cells |
+| Heritable cells: copies carry the membrane seed and wrap themselves | cell lineage | works (4 of 4 worlds, 4 cells each; 24 dockers per type, 4 roots) | demo cells |
 | Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (8-13k steps) | structures.ringKit, demo ring; backlog 5 |
-| Grown import door: the genome's membrane kit grows its own door | transporter made by the cell | works (3 of 3 worlds, R=6: closes, lets go of the chain, imports blanks) | structures.doorRingKit, demo live |
+| Grown import door: the genome's membrane kit grows its own door | transporter made by the cell | works (4 of 4 worlds, R=6, 2 kit copies per cell, 150000 steps: closes, lets go of the chain, imports 14-16 blanks) | structures.doorRingKit, demo live |
 | Protocell: membrane + import + factory + copying inside | cell | works prepared (demo cell) and grown from the genome (4 of 4 worlds: pocket and membrane with door grow from the chain's seeds, import, cast, copy inside) | demos cell, grown |
 | Budding: second compartment with genome copy and parts | daughter cell | empty daughter rings bud off a parent (open signal, `&` release); with contents not yet | demo bud; backlog 6 |
 | Birth: a grown cell makes copies that leave through a pore and start their own cells | reproduction | partial: copies leave and one began its own cell (1 of 4 worlds, 2.6M steps); not yet a complete offspring cell | structures.cellKit, demo birth |
 | Feeding the bud through a shared wall gate | maternal supply | works prepared: parent and bud share a wall with a doorway through both; the parent's stamp pocket feeds the bud (parts, blanks, dockers) | structures.budPair, demo split |
 | Division: cut the shared wall when the bud is complete | cytokinesis | works prepared (4 of 4 worlds): when the bud's growth front closes (cap complete, or its anchor has caught a genome copy) every `&` lets go, both doors swing shut and lock, the bud separates | demo split |
-| Offspring that lives alone | independent daughter cell | partial: the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and makes a whole genome copy (2 of 4 worlds; in 2 its pocket stalls at 14-15 of 16 cells) | demo split o |
+| Offspring that lives alone | independent daughter cell | works prepared (4 of 4 worlds): the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and makes a whole genome copy | demo split o |
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
+
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 9 minutes).
 
 ## Backlog (top first)
 
@@ -45,8 +47,8 @@ splits it off.** Build every mechanism in isolation, then combine them.
    doors admits only triangles matching on all three sides; or cooperative binding (a part stays bound only once a
    second side matches). Needed once casting makes stray types.
 5. **Membrane growth.** A ring that inserts wall cells (a growth site with a seed glue, wall kit types), staying closed.
-6. **Bud and feed** — works prepared (demo split, 2026-10-01). Next: grow the pair (a bud ring grown from a seed on
-   the parent's wall around its doorway), and a bud that lives alone (its own docker pocket: `split ... o`).
+6. **Bud and feed** — works prepared (demo split, 2026-10-01), including a bud that lives alone (`split ... o`, 4 of 4).
+   Next: grow the pair (a bud ring grown from a seed on the parent's wall around its doorway).
 7. **Division** — works prepared (completion signal cuts the shared wall; doors shut and lock).
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 

@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 7 minutes)
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 8 minutes)
 // Exit code 1 if a working capability fails.
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
