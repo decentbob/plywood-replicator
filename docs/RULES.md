@@ -98,7 +98,7 @@ not complementing, is the default: a complemented product would stick to its own
 - **Releases:** hand-off `^`, drop `!`, pulse `#` (above). Without a mark a flap holds its cargo until something
   else cuts the bond (e.g. a cast). A hand-off flap's catch side catches free triangles only (it never closes onto
   the cargo it handed off); a flap's catch side catches only while the flap is at rest.
-- **Latches** `~` let go while their door is triggered or opening (otherwise a door would re-latch before moving).
+- **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
   (a trigger side anywhere in a frame) to a flap through a few bonds.

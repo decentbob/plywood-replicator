@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | ring | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
 const {render,montage}=require('./render');
@@ -92,6 +92,18 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(every(t,3))snap(s,`t${t}`,`t=${t}: ${size()} cells${closed?', closed':''}`,null,false);}
       {const {comp}=s.bodies();snap(s,'zoom','ring (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:R+1.5});}
       finish(`Ring membrane grown from a periodic kit (R=${R}, ${K.kit.length} motif types)`);},
+    // selective import: a ring whose revolving door carries blanks (xxx) inside and drops them; junk (---) stays out
+    // except what slips through while the door is open (extra: blanks outside, default 12)
+    import(){steps=steps||20000;const nb=parseInt(extra)||12,size=18,c=size/2,{tris,R,door}=S.importRing(4,'X');
+      const {s,structures}=createWorld({seed,size,structures:[{tris,x:c,y:c}],supply:{xxx:nb,'---':24}});
+      const U=structures[0],ring=new Set(U),free=[...Array(s.n).keys()].filter(u=>!ring.has(u)),placed=[...U],inner=(R-1)*H-0.3,outer=R+0.3;
+      const centre=()=>{let x=0,y=0;for(const u of U){x+=s._dx(s.px[u]-s.px[U[0]]);y+=s._dy(s.py[u]-s.py[U[0]]);}return [s.px[U[0]]+x/U.length,s.py[U[0]]+y/U.length];};
+      free.forEach(u=>{if(!placeFree(s,u,placed,()=>{const a=2*Math.PI*s.rng(),r=outer+0.6+(size/2-outer-1)*s.rng();return [c+r*Math.cos(a),c+r*Math.sin(a)];}))throw Error('place');placed.push(u);});
+      const inside=t=>{const [x,y]=centre();return free.filter(u=>typeName(s,u)===t&&Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<inner).length;};
+      const focus={units:U,radius:R+1.5};snap(s,'t0','t=0: blanks xxx and junk outside',focus);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} inside: xxx=${inside('xxx')} junk=${inside('---')} catches=${s.ev.glue||0} drops=${s.ev.drop||0} stalls=${s.ev.stall||0}`);
+        if(every(t,3))snap(s,`t${t}`,`t=${t}: inside xxx ${inside('xxx')}, junk ${inside('---')}`,focus);}
+      finish('Selective import: a revolving door carries blanks in');},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);

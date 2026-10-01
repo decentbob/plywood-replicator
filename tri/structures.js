@@ -105,6 +105,37 @@ function ring(R=4,rows=1,k=3,pulse=false){
   const tris=cells.map((v,x)=>({v,type:T[x].join(''),loose:loose.has(x)}));
   return {tris,R,door};}
 
+// sweep test: do the cells `moving` (vertex lists), turned about P by up to `ang` degrees in direction dir, stay clear of
+// the cells `fixed`? (rigid parts cannot squeeze: every machine's sweep must be clear)
+function sweepClear(moving,fixed,P,dir,ang){const {triDepth}=require('./physics'),flat=V=>Float64Array.from(V.flat());
+  const rot=(p,t)=>[P[0]+Math.cos(t)*(p[0]-P[0])-Math.sin(t)*(p[1]-P[1]),P[1]+Math.sin(t)*(p[0]-P[0])+Math.cos(t)*(p[1]-P[1])];
+  for(let a=1;a<=ang;a++){const t=dir*a*Math.PI/180;for(const V0 of moving){const V=flat(V0.map(p=>rot(p,t)));for(const W of fixed)if(triDepth(V,flat(W))>1e-6)return false;}}
+  return true;}
+// Import ring (a selective importer, revolving door): a one-row ring whose door panel (k cells, welded with hear sides)
+// is hinged at an inner corner, latched at its far end, and catches a key (glue `key`, e.g. X for blanks xxx) on an outer
+// face. The caught key triggers the panel: it unlatches and swings 120 degrees inward (wide hinge) carrying the key, drops
+// it inside at the end of the swing (drop '!'), swings back and re-latches. Only triangles with the key's complement are
+// carried in. The door is chosen by sweeping panel and key (rigid parts): returns {tris, R, door}.
+function importRing(R=4,key='X',k=4){
+  const cells=ringKit(R,'z').tris.map(t=>t.v),N=cells.length,shr=(a,b)=>a.filter(p=>b.some(q=>same(p,q)));
+  const side=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(cells[a][i],cells[b][(j+1)%3])&&same(cells[a][(i+1)%3],cells[b][j]))return [i,j];return null;};
+  const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
+  const order=[...Array(N).keys()].sort((a,b)=>cen(cells[a])[1]-cen(cells[b])[1]);let door=null;
+  for(const st of order){const panel=[...Array(k).keys()].map(q=>(st+q)%N),prev=(st+N-1)%N,next=(st+k)%N,fixed=cells.filter((_,x)=>!panel.includes(x));
+    for(const P of shr(cells[st],cells[prev]))for(const kc of panel){const f=[0,1,2].find(i=>!cells.some((w,x)=>x!==kc&&side(kc,x)&&side(kc,x)[0]===i));
+      const v=cells[kc],m=[(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2];if(Math.hypot(...m)<(R-0.5)*H)continue;
+      const kv=[v[(f+1)%3],v[f],[v[f][0]+v[(f+1)%3][0]-v[(f+2)%3][0],v[f][1]+v[(f+1)%3][1]-v[(f+2)%3][1]]];
+      for(const dir of [1,-1]){if(!sweepClear([...panel.map(c=>cells[c]),kv],fixed,P,dir,120))continue;
+        const kEnd=cen(kv.map(p=>rot(p,P,dir*2*Math.PI/3)));if(Math.hypot(...kEnd)<(R-1)*H-0.3){door={panel,prev,next,P,keyCell:kc,keySide:f,dir,keyV:kv};break;}}
+      if(door)break;}if(door)break;}
+  if(!door)throw Error('importRing: no clear import door');
+  const T=cells.map(()=>['-','-','-']),W='wvu';
+  {const [i,j]=side(door.panel[0],door.prev),v=cells[door.panel[0]];T[door.panel[0]][i]='h'+(same(v[i],door.P)?'<':'>')+'!=';T[door.prev][j]='H';}
+  for(let q=0;q+1<door.panel.length;q++){const [i,j]=side(door.panel[q],door.panel[q+1]);T[door.panel[q]][i]=W[q]+'+';T[door.panel[q+1]][j]=W[q].toUpperCase()+'+';}
+  {const last=door.panel[door.panel.length-1],[i,j]=side(last,door.next);T[last][i]='L~';T[door.next][j]='l';}
+  T[door.keyCell][door.keySide]=key+'*';
+  return {tris:cells.map((v,x)=>({v,type:T[x].join(''),loose:door.panel.includes(x)})),R,door};}
+
 // Airlock (user: a double lock): one-row ring; below its bottom side a lock section (two more rows in a window) with
 // an inner door (ring-row panel U1+D1, hinged at its top corner, swings inward, trigger G on the chamber side), a
 // two-cell chamber, and an outer door (panel U2+D2, hinged at its bottom corner, swings outward, trigger G outside).
@@ -220,4 +251,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,lidSlot,lidClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,lidSlot,lidClear,importRing,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

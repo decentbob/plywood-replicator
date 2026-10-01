@@ -8,6 +8,17 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Selective import: a revolving door** — works (2 of 2 worlds). A one-row ring whose door is a 4-cell panel (welded
+  with hear sides) hinged at an inner corner, with a catch side (X) on an outer face: a caught blank triggers it, the
+  latch hears the trigger through the panel (new: a latch lets go while its triangle hears a trigger), the panel swings
+  120 degrees inward carrying the blank, drops it inside, swings back and re-latches. The design was found by sweeping
+  panel and carried blank (rigid parts). 12 blanks and 24 junk triangles outside, 20000 steps: 11 and 12 blanks
+  inside, junk inside 0 in both worlds (a few blanks slipped out while the door was open and were carried in again).
+  The membrane now feeds its inside selectively: the transport step of a metabolism. `node tri/demos.js import 1
+  20000 runs`. Picture: `docs/pictures/import.png`.
+- **Physics speed (second round)** — a move short enough that it cannot pass through a one-row wall (under 1.0; passing
+  needs 1.44) is taken after a single check; one bisection; inlined neighbour loops. A 357-triangle world: 4.2 -> 2.0
+  ms per step; binding faster (737 vs 177 catches in the benchmark).
 - **Rigid-part physics (user: "let connected parts move as one"; "no deformation and squeezing is fine")** — works.
   `tri/physics.js` rewritten: a body (blocks joined by bonds) is one rigid piece; each step every body tries a
   Brownian translation and turn and moves in sub-steps until contact (move or stop): no overlap, no deformation, no
