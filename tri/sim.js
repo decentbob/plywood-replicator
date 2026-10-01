@@ -136,7 +136,7 @@ class TriSim extends Physics{
   _active(u,r){const bnd=i=>this.bond[u*3+i]>=0;
     if(r.role===GROWN)return [0,1,2].filter(i=>!bnd(i));
     if(r.role===SBACK&&!r.fill&&r.prev>=0&&r.next>=0&&r.free>=0&&!bnd(r.free))return [r.free];
-    if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free))&&this.busy[u]===0&&this.op[u]<=0)return [r.inert];   // an end's seed: only while the strand is not being copied and hears no growing part (one part at a time)
+    if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free))&&this.busy[u]===0)return [r.inert];   // an end's seed: only while the strand is not being copied
     return [];}
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE;

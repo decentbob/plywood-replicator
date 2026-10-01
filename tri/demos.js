@@ -178,7 +178,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // grown protocell: chain aaaaa with membrane seed z (low end) and pocket seed y (high end). From the supply it grows a
     // membrane with an import door (door ring kit, R=7) and a lid pocket that casts blanks xxx into dockers A--; blanks
     // come in through the door, the pocket casts them, the chain copies inside its own membrane (extra: membrane kit copies per
-    // cell, 4; the pocket kit gets twice as many per type)
+    // cell, 4; the pocket kit gets 4 times as many per type, so it usually completes before the membrane closes)
     grown(){steps=steps||200000;const R=7,mult=parseInt(extra)||4,size=30,c=size/2,KR=S.doorRingKit(R,'z','X',4,'a');
       const founder={gaps:[1,1,1,1],faces:'aaaaa',ends:'zy',x:c,y:c};
       // plan (read-only): a pocket kit option whose cells lie inside the membrane, clear of its wall and the chain's dock sites
@@ -188,7 +188,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         return pp.ok&&pp.cells.every(v=>ring.cells.every(w=>dist(v,w)>1.1));});
       if(!ring.ok||!KP)throw Error('grown: no layout');console.log('membrane root',KR.rootType,'pocket root',KP.root,'side',KP.rootSide,'risk',KP.risk);
       const supply={[KR.rootType]:2,[KP.types[KP.root]]:2,xxx:40,'---':10};
-      for(const [t,m] of Object.entries(KR.counts))supply[t]=(supply[t]||0)+mult*m;for(const t of KP.kit)supply[t]=(supply[t]||0)+2*mult;
+      for(const [t,m] of Object.entries(KR.counts))supply[t]=(supply[t]||0)+mult*m;for(const t of KP.kit)supply[t]=(supply[t]||0)+4*mult;
       const {s,founders}=createWorld({seed,size,founders:[founder],supply,params:{pLoose:0.05}});const F=founders[0];
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},memT=new Set([...Object.keys(KR.counts),KR.rootType].map(norm));
       const isMem=u=>memT.has(norm(typeName(s,u))),A=canon('A--'),pocT=new Set(KP.types.map(norm));

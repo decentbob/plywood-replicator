@@ -69,8 +69,7 @@ on one side only lets go with this probability per step; a second matching side 
 trigger side (a key a machine is reading) is not proofread.
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
-released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and hears no open signal (a part
-growing on the strand: the strand grows one part at a time). A
+released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0). A
 strand's high end held by a completion-release side `&` (a membrane growing around the strand) starts no copy.
 
 ## Chains and copying
