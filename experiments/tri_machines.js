@@ -164,5 +164,17 @@ if(require.main===module){const [cmd,seed='1',steps='3000',out='experiments/scra
       if(t%Math.max(1,+steps/10|0)===0)console.log(`t=${t} keys inside=${kin()} tracers inside=${tin()} crossings=${crossings} pulses=${s.pulses||0} steps with both doors unlatched=${bothOpen} largest doorway strain inner ${gap1.toFixed(2)} outer ${gap2.toFixed(2)}`);
       if(t%Math.max(1,+steps/3|0)===0)snap(s,out.replace('.png',`_t${t}.png`),`t=${t}: ${kin()} keys inside, ${tin()} tracers inside, ${crossings} crossings, ${s.pulses||0} door pulses`,focus);}
     montage(out,`Airlock (user: double lock): a key opens the outer door, a key in the chamber opens the inner door; pulse doors re-latch`);}
+  if(cmd==='factory'){
+    // a casting pocket makes the dockers a replicator needs: blanks xxx are cast into A-- (the docker for face a)
+    const withPocket=extra!=='0',size=20;
+    const structures=withPocket?[{tris:T.pocket('-A-','X'),x:5,y:5}]:[];
+    const {s,structures:st}=T.createTypedWorld({seed:+seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:13,y:13}],structures,supply:{'xxx':30,'---':40}});
+    const t0=Date.now();const snapF=t=>snap(s,out.replace('.png',`_t${t}.png`),`${path.basename(out,'.png')} t=${t}: ${withPocket?'pocket':'no pocket'}, casts ${s.castEvents||0}`,null);
+    snapF(0);
+    for(let t=1;t<=+steps;t++){s.step();
+      if(t%Math.max(1,+steps/10|0)===0){const c=T.typedCensus(s).filter(x=>x.n>1),tc=T.typeCount(s);
+        console.log(`t=${t} casts=${s.castEvents||0} free A-- ${tc[T.canon('A--')]||0} xxx ${tc['xxx']||0} strands [${c.map(q=>q.faces+'/'+q.gaps+(q.paired?'*':'')).join(' ')}] docks=${s.dockEvents||0} releases=${s.releaseEvents||0} ${((Date.now()-t0)/t).toFixed(1)}ms/step`);}
+      if(t%Math.max(1,+steps/3|0)===0)snapF(t);}
+    montage(out,`Factory: a casting pocket turns blanks (xxx) into dockers (A--) for the chain aaaaa (${withPocket?'with pocket':'control, no pocket'})`);}
 }
 module.exports={conveyor,ring,airlock};
