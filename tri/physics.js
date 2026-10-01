@@ -90,20 +90,21 @@ class Physics{
   // total overlap of the marked blocks (relative offsets rx, ry from pivot (cx, cy)) moved by (tx, ty) and turned by da
   // about the pivot, against unmarked blocks; early: stop at the first overlap (then the value is only > 0)
   _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark,{px,py,ox,oy}=this,W=this.p.W,Hh=this.p.H;
-    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all;let sum=0;
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all,hw=W/2,hh=Hh/2;let sum=0;
     for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;let built=false;
       const gxi=Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw)),gyi=Math.min(gy-1,Math.floor((((y%Hh)+Hh)%Hh)/ch));
       for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;
         const L=all?null:cells[((gyi+b+gy)%gy)*gx+(gxi+a+gx)%gx],m=all?this.n:L.length;
         for(let q=0;q<m;q++){const v=all?q:L[q];if(mark[v]===st)continue;
-          let dx=px[v]-x,dy=py[v]-y;dx-=W*Math.round(dx/W);dy-=Hh*Math.round(dy/Hh);const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;
+          let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;
           if(early&&d2<IN2)return 1;   // centres closer than two inradii: certainly overlapping
           if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
           for(let e=0;e<3;e++){TB[2*e]=dx+ox[v*3+e];TB[2*e+1]=dy+oy[v*3+e];}const dd=triDepth(TA,TB);if(dd>0){if(early)return dd;sum+=dd;}}}}
     return sum;}
   // move the blocks of `list` rigidly by (tx, ty) and a turn da about (cx, cy), in sub-steps, as far as they go without
   // overlapping unlisted blocks; returns the fraction moved (0: blocked). An overlapping set may move if that reduces it.
-  tryMove(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length,rx=new Float64Array(k),ry=new Float64Array(k);let reach=0;
+  tryMove(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length;
+    if(!this._rxb||this._rxb.length<k){this._rxb=new Float64Array(Math.max(64,2*k));this._ryb=new Float64Array(Math.max(64,2*k));}const rx=this._rxb,ry=this._ryb;let reach=0;
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
     const dist=Math.max(Math.hypot(tx,ty),reach*Math.abs(da));let f=0;
     // a move short enough that it cannot pass through a one-row wall (that needs 1.44: the wall plus two inradii)
@@ -123,12 +124,36 @@ class Physics{
   moveDepth(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length,rx=new Float64Array(k),ry=new Float64Array(k);
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);}
     return this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true);}
+  // a lone block's two trials (move, then turn about its centre), with tryMove's rules (direct move, sub-steps,
+  // bisection, overlap-reducing moves) but against its neighbours gathered once (most cost is blocked trials)
+  _single(u,tx,ty,da){const {px,py,ox,oy}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.hypot(tx,ty);
+    SKIN.v=Math.max(TOUCH,p.skin);const r=2*R3+tl+1e-6,R2=r*r,nb=this._nb||(this._nb=[]);nb.length=0;
+    const gx=this._gx,gy=this._gy,cells=this._cells,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
+    for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
+      for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}
+    // depth of u at centre (x, y) turned by angle t from its current shape; early: true at the first overlap
+    const depth=(x,y,t,early)=>{const c=Math.cos(t),s=Math.sin(t);let built=false,sum=0;
+      for(let k=0;k<nb.length;k++){const v=nb[k];let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
+        const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;if(early&&d2<IN2)return 1;
+        if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
+        for(let e=0;e<3;e++){TB[2*e]=dx+ox[v*3+e];TB[2*e+1]=dy+oy[v*3+e];}const dd=triDepth(TA,TB);if(dd>0){if(early)return dd;sum+=dd;}}
+      return sum;};
+    // one trial: translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
+    const trial=(xs,ys,mx,my,t)=>{const dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t)),at=g=>depth(xs+g*mx,ys+g*my,g*t,true);
+      const tried=dist<=p.direct;let f=0;if(tried&&at(1)===0)return 1;
+      const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
+      for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||at(g)>0){blocked=g;break;}f=g;}
+      if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(at(g)>0)blocked=g;else f=g;}
+      if(f===0){const d0=depth(xs,ys,0,false);if(d0>0&&depth(xs+mx,ys+my,t,false)<d0-EPS)f=1;}
+      return f;};
+    let f=trial(x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
+    f=trial(px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
   // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
   _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,{members}=this.bodies();
     for(let k=members.length-1;k>0;k--){const j=Math.floor(this.rng()*(k+1));const t=members[k];members[k]=members[j];members[j]=t;}
     for(const list of members){const m=list.length,u0=list[0];
       if(m===1){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
-        if(p.split){this.tryMove(list,tx,ty,0,px[u0],py[u0]);this.tryMove(list,0,0,da,px[u0],py[u0]);}else this.tryMove(list,tx,ty,da,px[u0],py[u0]);continue;}
+        if(p.split)this._single(u0,tx,ty,da);else this.tryMove(list,tx,ty,da,px[u0],py[u0]);continue;}
       let cx=0,cy=0;const rx=new Float64Array(m),ry=new Float64Array(m);
       for(let q=0;q<m;q++){rx[q]=this._dx(px[list[q]]-px[u0]);ry[q]=this._dy(py[list[q]]-py[u0]);cx+=rx[q];cy+=ry[q];}cx/=m;cy/=m;
       let inertia=0,tq=0;const ib=1/wr;
@@ -137,10 +162,12 @@ class Physics{
       const tx=st*this._gauss(),ty=st*this._gauss(),da=sr*this._gauss();
       if(p.split){this.tryMove(list,tx,ty,0,px[u0]+cx,py[u0]+cy);this.tryMove(list,0,0,da,px[list[0]]+this._dx(cx),py[list[0]]+this._dy(cy));}else this.tryMove(list,tx,ty,da,px[u0]+cx,py[u0]+cy);}}
   // blocks near enough to bond (centre distance within two radii plus pairTol)
-  _pairs(){const reach=2*R3+this.p.pairTol*SIZE+EPS,r2=reach*reach,out=this.pairs,cand=[];out.length=0;
-    for(let u=0;u<this.n;u++){cand.length=0;
-      this._around(this.px[u],this.py[u],v=>{if(v<=u)return;const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);if(dx*dx+dy*dy<=r2)cand.push(v);});
-      cand.sort((a,b)=>a-b);for(const v of cand)out.push(u,v);}
+  _pairs(){const reach=2*R3+this.p.pairTol*SIZE+EPS,r2=reach*reach,out=this.pairs,cand=[],{px,py}=this,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2;out.length=0;
+    const gx=this._gx,gy=this._gy,cells=this._cells,cellOf=this._cellOf,all=this._all;
+    for(let u=0;u<this.n;u++){cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
+      for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
+        for(let q=0;q<m;q++){const v=all?q:L[q];if(v<=u)continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
+      if(cand.length>1)cand.sort((a,b)=>a-b);for(let q=0;q<cand.length;q++)out.push(u,cand[q]);}
     return out;}
   physics(){this.gridSync();this._jostle();this._pairs();}
   regrid(u){if(this._cells)this._regrid(u);}
