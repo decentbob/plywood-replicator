@@ -8,6 +8,38 @@ not statistics.
 
 ## 2026-10-01 (fourth session)
 
+- **Bud, feed, split: the parent feeds its bud through a doorway; the bud seals and separates when complete** — works
+  (4 of 4 worlds, prepared pair). `structures.budPair`: a parent ring P and a bud ring D (prepared, labelled) share a
+  flat contact held by completion-release pairs `&`; a doorway runs through both walls. Each door panel (5 cells,
+  welded by hear sides, a built-in trigger between its first two cells, so always triggered) is turned open into its
+  own ring (P's 120 degrees, D's 60) and held there by a `&` pair to a doorstop cell welded to the wall; that loop
+  locks the hinge. While anything bonded to the pair hears an open signal (a growth front in D), all holds. When
+  nothing is open: every `&` lets go, P and D drift apart, and each panel swings shut and closes (close-only pair)
+  onto the wall cell beyond its doorway, which locks it shut. No new rule: completion release, built-in trigger,
+  hinge lock by a bond loop. Two contents tried:
+  (1) `split 1 30000 runs`: a stamp pocket in P casts blanks into one part type `A@-a@`; the parts diffuse into D and
+  grow a three-cell cap on D's inner wall (one type fills it: the three slots are turns of each other about a vertex).
+  The cap completes and the pair splits at 5000-9300 steps in 4 of 4 worlds; both doors shut; D leaves with its cap,
+  5-7 blanks and a spare part; 0-2 triangles slip out while the doors swing.
+  (2) Genome (`split 1 60000 runs g`, RP 7, RD 5): P holds a chain `aaaa` and a stamp pocket casting its dockers
+  `Ay.z` (fills `Y--` as food, latGlue); copies `AAAA` carry seed `z` on their high end. D's wall has an anchor
+  `Z@|` (new mark, below), which emits the open signal until it catches a copy. The parent's wall has an anchor `W|`
+  for the founder's seed `w` (copies do not carry `w`). Result: a copy is anchored in D and the pair splits at 22000,
+  32000, 34000 and 36000 steps; both doors shut in all four; the founder stays in P in all four (anchored there in 2;
+  in the first runs without that anchor the founder drifted into D in 1 of 4); one copy slipped out in 1 world. A
+  strand lying in the doorway can jam a closing panel (seen once before the parent anchor: P stayed open).
+  Picture: `docs/pictures/split_genome.png` (t=0, feeding, split, the bud with its anchored copy and food).
+  Not yet: the bud grows nothing that lets it live alone (next: its own docker pocket, `split ... o`), and the pair is
+  prepared, not grown.
+- **Anchor `|`: a structure catches a strand** — works (in `split g`). A strand cannot otherwise join an existing
+  structure: capture needs a free triangle and closures need an exact fit. An unbonded anchor side catches a strand
+  end's seed (its spare edge, active while the strand is not being copied, complementary glue) when the end comes
+  within capture distance of the site, as it would catch a free triangle: the strand moves as one rigid body into the
+  flush place if that place is free (physics; chosen by role, the strand end, not by body size).
+- **Physics fix: long bodies** — a body's offsets were taken as the torus minimum image from one member, so a body
+  longer than half the world (P+D, 21 units in a 32 world) folded: its far cells were turned about a wrong point and
+  drifted apart while their bonds stayed (D's wall opened and things leaked out). Offsets are now unwrapped along
+  bonds (`Physics._unwrap`). Test added; earlier demos used bodies shorter than half their world.
 - **Stamp casting: the metabolism makes the parts of a membrane** — works (4 of 4 worlds). New rule: marks written
   after an apostrophe on a side are *carried*: they do nothing there, and a cast product takes them with that side's
   instruction glue (`Kb.'@X*` casts `b@` onto the product). So a pocket can cast kit parts, which carry attach marks
