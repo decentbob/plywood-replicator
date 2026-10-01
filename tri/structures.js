@@ -369,7 +369,9 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
     // welds inside the panel hear each other; the first weld is also the built-in trigger (always triggered)
     for(let q=0;q+1<pc.length;q++){const [i,j]=side(pc[q],pc[q+1]);const w=['б','г','д','ж'][q]+(n?'':'');T[pc[q]][i]=(n?UP[LOW.indexOf(w)]:w)+(q===0?'*':'')+'+';T[pc[q+1]][j]=(n?w:UP[LOW.indexOf(w)])+'+';}
     // the closing pair: the last panel cell onto the wall cell beyond the doorway (close-only: nothing free binds it)
-    {const [i,j]=side(pc[pc.length-1],d.next);T[pc[pc.length-1]][i]=(n?'э':'Э')+'.';T[d.next][j]=(n?'Э':'э')+'.';d.closeSide=[i,j];}
+    // the wall side is also a latch: unbonded (doorway open) it emits the lock signal, so another door of the ring (an
+    // import door) holds shut until this one is shut (a ring with two gaps falls apart); shut, it holds (never triggered)
+    {const [i,j]=side(pc[pc.length-1],d.next);T[pc[pc.length-1]][i]=(n?'э':'Э')+'.';T[d.next][j]=(n?'Э':'э')+'.~';d.closeSide=[i,j];}
     // the doorstop holds the open panel by a '&' pair; welded to its wall cell (inert sides: the builder welds them)
     {const V=d.stopOpen,[i,j]=sideV(V,d.stopV);T[pc[d.stopPanel]][i]=(n?'ц':'Ц')+'&';T[d.stop][j]=(n?'Ц':'ц')+'&';d.stopSide=[pc[d.stopPanel],i,j];}});
   // cap (the bud's content): three slots around a vertex V on D's inner boundary, from a seed side on one wall cell
