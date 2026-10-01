@@ -1,31 +1,30 @@
 # Next instance: start here
 
-State on 2026-10-01 (end of the third session, handoff point). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-01 (end of the fourth session). Read AGENTS.md first (rules of work), then this file.
 
-**Handoff status.** Working tree clean; everything committed on branch `ccr-631cd60a-y9pcgh` and merged into `main`.
-No simulations running. `node tri/test.js`: 16 tests pass. Current work: the `birth` demo (Do next, item 2). Its long
-runs' saved states (`runs/bs3/birth_t1000000.json.gz`, world 3 at 2.6M steps) are in `runs/`, which is not committed:
-a new instance must rerun (`node tri/demos.js birth 3 900000 runs/x`, then continue with `TRI_RESUME`), roughly an hour
-per world for the first cell with 4 processes.
+**Handoff status.** See the bottom of "Do next" for what was running last. `node tri/test.js`: 19 tests pass. Branch
+`claude/nice-tesla-eztyn4`, merged into `main`. Runs live in `runs/` (not committed); regenerate with the commands below.
 
 ## Where things stand
-- Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (now **zip**: from the
-  high end, no deadlock), casting, hatch pocket (old), **lid pocket** (bulge-free, the standard casting pocket now),
-  driven hinges, conveyor, gated ring, airlock, energy, factory (on lid pockets: several generations in 30k steps),
-  typed arms, **kits** (any prepared structure becomes kit types that grow it from a seed), **grown pocket** (from an
-  anchor), **heritable pocket** (a chain grows its pocket from an end seed; copies regrow it).
-- New marks this session: `+` hear side (trigger signal relay), `=` wide hinge (120 degrees), `%` activator side, `@`
-  attach side (parts bind only by it). New options: `zip` (default on), `pLoose` (proofreading: a caught triangle held
-  on one side only lets go). Binding by capture (0.6, into free sites only), `pBond` 1. Greek glue letters.
-- Third session (2026-10-01): locality audit; a membrane kit that grows its own import door (`doorRingKit`); sensors
-  live only once their structure is complete (open signal from open attach sides); the grown protocell (`grown`).
-- Fourth part of the third session: the heritable two-pocket cycle works on rigid physics; `cellKit` (membrane +
-  pore + organelle from one seed), spent `&` sides, latch sides emit no open signal and hold until complete, late
-  organelle (trigger seed), 13 Cyrillic glue pairs, `TRI_RESUME`, physics ~40% faster. `birth`: a copy leaves its
-  parent cell and begins its own cell (1 of 4 worlds); not yet a complete offspring cell.
-- **Physics is rigid-part, move-or-stop** (rewritten at the user's request): bodies move as rigid pieces, nothing
-  overlaps, deforms or squeezes; flaps stall when blocked; binding places parts exactly in free sites (capture 0.6).
-  About 20x faster than at the start of the session. Machines must keep their sweeps clear (see RULES, Geometry rule).
+- Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (zip), casting, lid
+  pocket, driven hinges, conveyor, gated ring, energy, factory, kits (any prepared structure grows from a seed),
+  heritable pockets and the two-pocket cycle, ring membranes, import door, protocell (prepared and grown), budding of
+  empty rings, encapsulation, heritable cells, cell kit with pore and organelle, birth (partial).
+- **Fourth session (2026-10-01):**
+  - **Stamp casting** (rule): marks after an apostrophe on an instruction side (`b.'@`) are carried: the product takes
+    them, so pockets cast kit parts (`structures.stampInstr`). Demo `stamp`: five stamp pockets make a ring's parts
+    from blanks and the ring grows from them (4 of 4 worlds). Stamp pockets grow from kits too (`grow 1 20000 runs 4s`).
+  - **Bud, feed, split** (`structures.budPair`, `world.openBudDoors`, demo `split`): prepared parent and bud rings share a
+    wall held by `&` pairs, with a doorway through both walls (panels prepared open, held by `&` doorstops, always
+    triggered). The parent's stamp pocket feeds the bud; when the bud's growth front closes, all `&` let go, both doors
+    shut and lock, the bud separates (cap content: 4 of 4; genome content: 4 of 4).
+  - **Anchor `|`** (rule, physics exception): an anchor side catches a strand end's seed as it would a free triangle;
+    the strand is placed flush as one body. The bud catches a genome copy; the parent keeps its founder by its own anchor.
+  - **Physics fix**: bodies longer than half the world were folded by the minimum image (torn without losing bonds);
+    offsets are now unwrapped along bonds.
+- **Physics is rigid-part, move-or-stop**: bodies move as rigid pieces, nothing overlaps, deforms or squeezes; flaps
+  stall when blocked; binding places parts exactly in free sites. A closing door stalls on anything in its sweep (a
+  strand lying in the doorway jammed a panel once).
 
 ## Commands
 ```
@@ -45,41 +44,42 @@ node tri/demos.js live 1 90000 runs 6x3            # a grown membrane with its o
 node tri/demos.js grown 2 200000 runs              # chain grows membrane + door and a casting pocket (slow)
 node tri/demos.js heir 1 30000 runs                # chains grow pockets from their end seed; copies regrow them
 node tri/demos.js cycle 1 120000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
+node tri/demos.js stamp 1 60000 runs               # stamp pockets make a ring's parts from blanks; the ring grows
+node tri/demos.js grow 1 20000 runs 4s             # a stamp pocket grows from its kit and casts A@-b@
+node tri/demos.js split 1 30000 runs               # bud fed through a doorway grows a cap, then splits off sealed
+node tri/demos.js split 1 60000 runs g             # the bud catches a genome copy (anchor), then splits off
+node tri/demos.js split 1 150000 runs o            # + the bud grows its own docker pocket from parts the parent holds
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
 saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Do next (toward the BIG goal)
-Built on rigid physics this session, in order: selective import (revolving door), protocell (import + factory + copying
-inside a membrane), budding (a daughter ring detaches when complete: open signal + `&`), encapsulation (a chain grows a
-membrane around itself), heritable cells (copies carry the seed and wrap themselves: two cells per world).
-1. **Cells that live** — done (2026-10-01): `live` (grown door membrane imports) and `grown` (the chain grows its pocket
-   and its membrane with door; the cell imports blanks, casts dockers and copies inside; 4 of 4 worlds, ~250k steps).
-   Slow: kit growth is the bottleneck (one specific type must find each growth site in a crowded world).
-2. **Birth (partial, 2026-10-01).** `structures.cellKit`: one seed grows a whole cell: membrane (`doorRingKit` with
-   unique wall cells), a **pore** (6-cell panel with a built-in trigger, held by a `&` pair: it lets go once the cell
-   is complete, the spent wall side recruits nothing) and a late **organelle** on the wall (two lid pockets joined,
-   casting dockers `AXm`/`aXm`; its seed is a trigger side, so it starts after the wall closes). The root keeps the
-   chain. Dockers carry the membrane seed `m` (next side) and `X` (prev side; blanks are the fills, latGlue). Demo
-   `birth`: in 1 of 4 worlds the whole cycle ran up to the start of the offspring's own cell (~2.6M steps; see
-   INNOVATIONS). To make it complete: (a) more unique wall parts or fewer wasted (roots entering through the pore bind
-   copies inside: a pore that keeps parts out, e.g. a door that exports, or copies whose seed is hidden while inside);
-   (b) a faster organelle (it waits for parts to wander in; an early organelle raced the wall); (c) speed: physics is
-   ~40% faster now, but a generation is still ~1-2M steps.
-3. **Heredity of the living cell.** A copy inside the cell cannot become a cell: its dockers carry no seeds, and kit
-   parts cannot enter (the door takes blanks only; a free part binds only by its attach side). Options: (a) the pocket
-   casts dockers that carry the seeds (`Ayz`-like, with fills that do not expose seeds), and the copy leaves the cell
-   (an export door, or the membrane opens when copying is done: a local signal) to grow its own cell outside, where the
-   kits are; (b) the cell makes kit parts itself (casting that keeps marks, item 4); (c) a door that imports kit parts.
-   (a) is closest to the goal (offspring split off).
-4. **Division of a living cell**: two genomes inside one cell -> each wraps itself inside (inner membranes), or the
-   copy is exported into a bud (budding with contents). Commitment rules already stop copying once wrapping starts.
-5. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel
-   with cast glues) would close the loop (metabolism makes the parts of the cell).
-6. Airlock on rigid physics, scanner gate. (The heritable factory cycle works on rigid physics.)
+The BIG goal's sentence now has a prepared, working skeleton: the parent **feeds** its bud through a doorway, the bud
+**catches a genome copy** and grows its content, and it **splits off** sealed (demo `split`). What is still prepared
+or missing, in order:
+1. **A bud that lives alone** (in progress, `split ... o`): the bud grows its own stamp pocket (casting `ay.w`, the
+   dockers its copy `AAAA` needs) from kit parts held as food in the parent; after the split it should copy its genome
+   inside with the blanks and fills it was fed. Check: organelle completes, split, then docks/copies in D. If the kit
+   is too slow: more copies per kit type, or a smaller kit (fewer cells).
+2. **Grow the bud pair instead of preparing it.** Ideas: grow D as a kit from a seed on the parent's outer wall
+   (kits grow any prepared lattice structure). Problems to solve: (a) a hinge bonds only when its sides are flush, so
+   a panel grown in the open position needs its hinge partner to be the cell beside it there (the doorstop) with the
+   pin at the shared vertex, and its swing direction must point shut; (b) closures never form on `&` sides, so only
+   tree edges can be `&` (the root's seed side, like the bud demo); (c) the parent's own door must open only after D's
+   wall closes (two phases: the late-organelle trick, a trigger side deaf while the open signal is heard).
+3. **Programmable synthesis** (the next big blocker, see IDEAS): one stamp pocket makes one part type; a cell kit has
+   ~60. Options: part templating (a copier pocket: simple, information in parts) or translation (a reading frame on a
+   strand: hard). **Ask the user which way** before building: both need a rule.
+4. **Birth (partial, older route):** `cellKit` + demo `birth` (a copy leaves through a pore and grows its own cell from
+   kit parts in the world; 1 of 4 worlds started an offspring cell at ~2.6M steps). See INNOVATIONS.
+5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **Bodies longer than half the world** were folded by the torus minimum image (fixed 2026-10-01, `_unwrap`). Keep
+  world size larger than any body anyway (pictures and inside tests use minimum images).
+- **A closing door stalls on anything in its sweep**; a strand lying across a doorway can jam it for good.
+- **Apostrophes in test names**: `'` inside a single-quoted test name breaks the file (twice this session).
 - **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
   a direct partner's exposed value, or a relayed signal? "Same structure", "smaller body", "partner's partner" are
   not local (all three were written once and undone). Physics may treat a structure as one body; chemistry may not.
