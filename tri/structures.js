@@ -276,7 +276,9 @@ function doorRingKit(R=5,seed='z',key='X',k=4,avoid='',m=1,release=true,pore=fal
       const hc=N-m-k,hp=hc-1;if(outw(0)||(!pore&&!outw(hc))||!outw(hp))continue;
       const panel=[...Array(k).keys()].map(q=>hc+q),fixed=cells.filter((_,x)=>!panel.includes(x)),f=freeS(hc),v=cells[hc];
       const kv=[v[(f+1)%3],v[f],[v[f][0]+v[(f+1)%3][0]-v[(f+2)%3][0],v[f][1]+v[(f+1)%3][1]-v[(f+2)%3][1]]];
-      for(const Pv of shr(cells[hc],cells[hp]))for(const dir of [1,-1]){if(door)continue;
+      // the direction a hinge actually turns (sim.bind: away from its partner's centre about the pinned corner)
+      const realDir=Pv=>{const c=cen(cells[hc]),q=cen(cells[hp]),f=[c[0]-Pv[0],c[1]-Pv[1]],d=[c[0]-q[0],c[1]-q[1]];return (d[0]*(-f[1])+d[1]*f[0])>0?1:-1;};
+      for(const Pv of shr(cells[hc],cells[hp]))for(const dir of [1,-1]){if(door||dir!==realDir(Pv))continue;
         // a pore's panel swings out and stays out (the inside stays free); a door's key carries its cargo inside
         if(pore){if(sweepClear(panel.map(c=>cells[c]),fixed,Pv,dir,120)&&(()=>{const q=panel.flatMap(c=>cells[c]).map(p=>rot(p,Pv,dir*2*Math.PI/3));return hexr([q.reduce((a,p)=>a+p[0],0)/q.length,q.reduce((a,p)=>a+p[1],0)/q.length])>R;})())door={cells,side,freeS,outw,hc,hp,panel,P:Pv,dir,keySide:f};continue;}
         if(!sweepClear([...panel.map(c=>cells[c]),kv],fixed,Pv,dir,120))continue;
