@@ -8,6 +8,19 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Grown protocell: a chain grows its own cell, feeds it and copies inside** — works (4 of 4 worlds). Chain `aaaaa`
+  with seed `z` on its low end and `y` on its high end; in the supply: the door membrane kit (R=7, 78 cells, 4 copies
+  per cell), a lid pocket kit (16 types that cast blanks `xxx` into dockers `A--`), blanks and junk; `pLoose` 0.05.
+  From `y` the pocket grows (complete at 40000-105000 steps), from `z` the membrane with its import door (closed at
+  105000-175000). The open signal orders the work without any counter: while the membrane grows, its signal reaches
+  the pocket through the chain, so the pocket's sensor stays idle; the membrane cannot let go until the pocket is
+  complete. Once the cell is closed: the door imports blanks (36-42 by 250000), the pocket casts dockers inside (20-24
+  casts), and the chain copies inside its own membrane (1-4 copies `AAAAA` per world; the first cast always after
+  closure, the first copy 10000-25000 steps later). Two fixes on the way: proofreading (`pLoose`) no longer drops a
+  key's cargo (the door's blank fell off mid-swing), and the pocket kit gets a richer supply (if the membrane closes
+  before the pocket's last cell arrives, that site is inside and the cell is stuck: 2 of 4 worlds with half the
+  pocket supply). Not yet: the copies cannot become cells (their dockers carry no seeds, and kit parts cannot enter).
+  `node tri/demos.js grown 3 250000 runs`. Picture: `docs/pictures/grown_protocell.png`.
 - **A grown membrane with its own import door** — works (3 of 3 worlds at R=6). The door ring kit
   (`structures.doorRingKit`) grows two fronts from its root, which holds the chain's seed: the periodic motif the long
   way round, and a short unique front (one wall cell, then a four-cell door panel attached by its latch side `~`,

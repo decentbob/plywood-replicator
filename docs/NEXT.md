@@ -11,6 +11,8 @@ State on 2026-10-01 (end of the second session). Read AGENTS.md first (rules of 
 - New marks this session: `+` hear side (trigger signal relay), `=` wide hinge (120 degrees), `%` activator side, `@`
   attach side (parts bind only by it). New options: `zip` (default on), `pLoose` (proofreading: a caught triangle held
   on one side only lets go). Binding by capture (0.6, into free sites only), `pBond` 1. Greek glue letters.
+- Third session (2026-10-01): locality audit; a membrane kit that grows its own import door (`doorRingKit`); sensors
+  live only once their structure is complete (open signal from open attach sides); the grown protocell (`grown`).
 - **Physics is rigid-part, move-or-stop** (rewritten at the user's request): bodies move as rigid pieces, nothing
   overlaps, deforms or squeezes; flaps stall when blocked; binding places parts exactly in free sites (capture 0.6).
   About 20x faster than at the start of the session. Machines must keep their sweeps clear (see RULES, Geometry rule).
@@ -40,17 +42,20 @@ Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to
 Built on rigid physics this session, in order: selective import (revolving door), protocell (import + factory + copying
 inside a membrane), budding (a daughter ring detaches when complete: open signal + `&`), encapsulation (a chain grows a
 membrane around itself), heritable cells (copies carry the seed and wrap themselves: two cells per world).
-1. **Cells that live** (in progress). Done: the membrane kit grows its own import door (`doorRingKit`, demo `live`, 3 of
-   3 worlds import blanks); sensors are live only once their structure is complete (open signal), so a pocket on the
-   chain waits for the membrane. Demo `grown` (R=7 door membrane from seed z, lid pocket from seed y, chain aaaaa): the
-   pocket completes early and waits; the membrane closes slowly (70/78 cells at 116k steps in a crowded 30x30 world).
-   Next: make kit growth faster (fewer kit copies crowding the world, or a smaller pocket kit; or a membrane that grows
-   from two fronts), then show import -> cast -> copy inside.
-2. **Division of a living cell**: two genomes inside one cell -> each wraps itself inside (inner membranes), or the
+1. **Cells that live** — done (2026-10-01): `live` (grown door membrane imports) and `grown` (the chain grows its pocket
+   and its membrane with door; the cell imports blanks, casts dockers and copies inside; 4 of 4 worlds, ~250k steps).
+   Slow: kit growth is the bottleneck (one specific type must find each growth site in a crowded world).
+2. **Heredity of the living cell.** A copy inside the cell cannot become a cell: its dockers carry no seeds, and kit
+   parts cannot enter (the door takes blanks only; a free part binds only by its attach side). Options: (a) the pocket
+   casts dockers that carry the seeds (`Ayz`-like, with fills that do not expose seeds), and the copy leaves the cell
+   (an export door, or the membrane opens when copying is done: a local signal) to grow its own cell outside, where the
+   kits are; (b) the cell makes kit parts itself (casting that keeps marks, item 4); (c) a door that imports kit parts.
+   (a) is closest to the goal (offspring split off).
+3. **Division of a living cell**: two genomes inside one cell -> each wraps itself inside (inner membranes), or the
    copy is exported into a bud (budding with contents). Commitment rules already stop copying once wrapping starts.
-3. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel
+4. Kit cost: kits are many types and grow one cell at a time; a pocket that casts kit types (marks would have to travel
    with cast glues) would close the loop (metabolism makes the parts of the cell).
-4. Airlock on rigid physics, scanner gate, heritable factory cycle on rigid physics.
+5. Airlock on rigid physics, scanner gate, heritable factory cycle on rigid physics.
 
 ## Pitfalls learned
 - **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
@@ -60,6 +65,12 @@ membrane around itself), heritable cells (copies carry the seed and wrap themsel
 - **Inside or outside a hex ring: use `hexr`, not Euclidean distance.** Near a hexagon's corners a side on the inner
   boundary can lie farther from the centre than (R-0.5)H; for R >= 6 twelve sides were misjudged, so a door kit's last
   site faced inward and the ring could only be closed by triangles already trapped inside (fixed 2026-10-01).
+- **Order of parts on one genome.** Pocket and membrane grow at once from the chain's two seeds; the open signal keeps
+  the pocket idle and the membrane attached until both are complete. Tried and reverted: "a seed binds only while the
+  strand hears no open signal" (one part at a time): a finished pocket then went live before any membrane, copying
+  started outside, and a strand being copied exposes no seed, so the membrane never began. Remaining race: if the
+  membrane closes before the pocket's last cell arrives, that site is inside and the cell is stuck (seen in 2 of 4
+  worlds with a poor pocket supply).
 - **Trailing comments in one-line code.** Twice a `// comment` appended inside a long line swallowed the code after it
   (no error, wrong behaviour). Put comments on their own line.
 - **Rigid machines.** Every swing must be clear: sweep a design before building it (`structures.ring` shows how). A

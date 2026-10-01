@@ -19,7 +19,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Heritable cells: copies carry the membrane seed and wrap themselves | cell lineage | works (founder and copy each end in their own cell) | demo cells |
 | Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (8-13k steps) | structures.ringKit, demo ring; backlog 5 |
 | Grown import door: the genome's membrane kit grows its own door | transporter made by the cell | works (3 of 3 worlds, R=6: closes, lets go of the chain, imports blanks) | structures.doorRingKit, demo live |
-| Protocell: membrane + import + factory + copying inside | cell | works (prepared inside; copies made inside) | demo cell |
+| Protocell: membrane + import + factory + copying inside | cell | works prepared (demo cell) and grown from the genome (4 of 4 worlds: pocket and membrane with door grow from the chain's seeds, import, cast, copy inside) | demos cell, grown |
 | Budding: second compartment with genome copy and parts | daughter cell | empty daughter rings bud off a parent (open signal, `&` release); with contents not yet | demo bud; backlog 6 |
 | Feeding the bud through a shared wall gate | maternal supply | not yet | backlog 6 |
 | Division: cut the shared wall when the bud is complete | cytokinesis | completion release works for empty buds | sim.js open signal |
