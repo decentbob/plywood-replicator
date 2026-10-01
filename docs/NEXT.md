@@ -2,6 +2,9 @@
 
 State on 2026-10-01 (end of the fourth session). Read AGENTS.md first (rules of work), then this file.
 
+**Autorun 20261001-1806 (in progress):** started the `split o` batch below on branch `claude/autorun-20261001-1806`
+at 18:08 UTC (4 worlds, logs `runs/si$k.log`). If this note is still here, that run was interrupted: rerun the batch.
+
 **Handoff status (end of the fourth session).** Working tree clean; everything committed on branch
 `claude/nice-tesla-eztyn4` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass. Runs live
 in `runs/` (not committed); regenerate with the commands below.
