@@ -85,6 +85,9 @@ or missing, in order:
 ## Pitfalls learned
 - **Bodies longer than half the world** were folded by the torus minimum image (fixed 2026-10-01, `_unwrap`). Keep
   world size larger than any body anyway (pictures and inside tests use minimum images).
+- **A ring with two open doors falls apart** (two gaps make two rigid pieces). Interlock the doors of one ring: an
+  unbonded latch side emits the lock signal and other latches hold while they hear it (raise `lockRange` for big
+  rings). Seen in the bud: its import door opened before its closing door had shut.
 - **A closing door stalls on anything in its sweep**; a strand lying across a doorway can jam it for good.
 - **Apostrophes in test names**: `'` inside a single-quoted test name breaks the file (twice this session).
 - **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
