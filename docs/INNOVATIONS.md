@@ -8,6 +8,22 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Cell kit: one seed grows a membrane with a pore and an organelle** — partial (in progress). `structures.cellKit`
+  turns a door ring kit plus an organelle (two lid pockets joined, `pocketPair`, casting dockers `AXm` and `aXm`) into
+  one kit grown from the chain's seed `m` (R=7: 110 cells, 59 types, 62 of 63 glue pairs; the alphabet gained 13
+  Cyrillic pairs). Placement by search: organelle on an inward wall cell, slots and lid space clear of wall, door
+  sweep and the chain with its dock sites; the door must also not sweep the chain (it did: the panel stalled against
+  the chain beside its hinge, flickering its latch 7686 times). New pieces, all local:
+  **pore**: a 6-cell panel with a built-in trigger, held to the wall by a completion-release pair `&`; once the cell
+  hears no open signal it lets go and swings out for good (a strand leaves through a 6-cell pore in ~5-20k steps; a
+  4-cell pore at a hex corner barely lets it out). **Spent sides**: a `&` side whose triangle hears no open signal is
+  spent and binds nothing again (with a latch, the open wall side recruited spare panel cells and a second ring grew
+  on the first). **Late organelle**: its wall seed is a trigger side, deaf while the wall grows, so the wall closes
+  and the pore opens first, then organelle parts come in through the pore (otherwise the ring closed before the
+  organelle in 2 of 3 worlds and the cell was stuck). Also fixed: door searches use the direction the hinge really
+  turns. Status: 4 worlds grow the wall (complete by ~340-380k steps) and then the organelle inside, slowly (parts
+  diffuse in through the pore). Not yet: casting, copying and a copy leaving to grow its own cell.
+  `node tri/demos.js birth 3 900000 runs`.
 - **Heritable factory cycle on rigid physics** — works (third generation in 2 of 3 worlds by 150000 steps). Founder
   `aaaaa` with seed `y`; two pocket kits in the supply: P_y casts blanks into dockers `Az-`, P_z casts `ay-`; fills
   `Z--`/`Y--` (latGlue), blanks 60. The founder grows P_y (complete at 35000-40000) and casts `Az-`; its copies
