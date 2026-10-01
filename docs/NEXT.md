@@ -1,5 +1,28 @@
 # Next instance: start here
 
+## Current slice (autorun run 20261001-2235, build, 2026-10-01)
+- **Goal:** the bud ring grows from a seed on the parent's wall instead of being prepared: its growth fronts hold
+  both doors of the doorway shut until the bud's ring is closed, the parent then feeds it through the doorway, and when
+  the bud's content is complete it splits off sealed (both doors shut) — the "builds its offspring" half of the BIG
+  goal on the existing core.
+- **Acceptance:** `node tri/demos.js budgrow k 300000 runs`, k = 1..4: the bud ring grows to all its cells, both doors
+  stay shut until it is closed and then open, the cap grows from parts cast in the parent, the pair splits with both
+  doors shut in at least 3 of 4 worlds; a sigma-0 test in `tri/test.js` shows the door order (shut while a front is
+  open, open once closed, shut after the split).
+- **Stop boundary:** cap content only (no genome anchor or organelle, no regrowth of the next bud); the parent stays
+  prepared. Budget: about 15 demo runs; then hand off with the exact state.
+- **Approach:** designs considered (details in INNOVATIONS when done): (a) grow budPair's open panels with `&`
+  doorstops: every `&` cuts at the first silence, so the doors could not open on the bud's closing and shut on its
+  completion with one open signal (NEXT analysis); (b) a trigger key bound when the ring closes: closures with trigger
+  sides are deaf while anything is open; (c) chosen: both door panels are **pulse doors** (`#`) with a built-in
+  trigger, held shut while they hear the **lock signal**. The bud's growth sites are latch sites (`@~`): while a
+  front is open the lock signal holds both doors, so they open when the bud's last cell arrives (no rule reads the open
+  signal for that), stay open while the bud's content (cap seed) is open, and once nothing is open the root's `&` seed
+  bond is cut: the parent's seed side and the root's seed side are latches, unbonded they emit the lock signal again
+  and both pulse doors swing shut. The bud's panel hangs only by its hinge (to the root); its far end meets the last
+  wall cell flush, unbonded (a bond would lock the flap). Every bud cell type is unique (a periodic motif cannot end on
+  a cell whose next side stays open).
+
 State on 2026-10-01 (after autorun run 20261001-2006, harden). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261001-2006).** Working tree clean; everything committed on branch
