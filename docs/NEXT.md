@@ -1,5 +1,19 @@
 # Next instance: start here
 
+## Current slice (autorun 20261001-2006-plywood-harden, 2026-10-01)
+- **Goal:** a capability check (`tri/check.js`) that guards every working module of ROADMAP in one command, and the
+  `split o` pocket stall diagnosed (and fixed if a kit/glue/supply fix exists), so the offspring that lives alone is
+  built on a verified base.
+- **Acceptance:** (1) `node tri/check.js` prints one PASS/FAIL line per working capability (ROADMAP module table),
+  pass conditions read from the world, all pass, wall time about 10 minutes or less with at most 4 processes;
+  (2) `node tri/demos.js split k 200000 runs/sjk o` with an end-of-run report of missing pocket kit types: the stall in
+  seeds 2 and 3 explained, and `split o` at 3 of 4 worlds or better, or the cause recorded with the next fix.
+- **Stop boundary:** no core changes, no new capabilities (no grown bud pair, no programmable synthesis). Budget:
+  about 3 `split o` batches of 4 worlds and one check run per fix.
+- **Approach:** check.js spawns the existing demos (one source of truth for setups) with pictures off (`TRI_NOPIC=1`;
+  every picture starts a Chromium) and reads each demo's own report lines; a pass condition per capability. A
+  separate copy of each world's setup in check.js was rejected (two places to keep in step).
+
 State on 2026-10-01 (after autorun run 20261001-1806). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261001-1806).** Working tree clean; everything committed on branch

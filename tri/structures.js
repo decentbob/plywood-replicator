@@ -452,9 +452,11 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
           const all=[...oc,...extra].map(cen),ex=extra.map(cen);
           if(all.some(p=>hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1-0.3)||all.some(p=>wallC.some(q=>dist(p,q)<0.3)))continue;
           if(ex.some(p=>wallC.some(q=>dist(p,q)<0.9))||all.some(p=>sweep.some(q=>dist(p,q)<1.0))||all.some(p=>keep.some(q=>dist(p,q)<1.0)))continue;
-          bestO={K,cells:oc,wall:w,anchor:an,strand:st};break;}
-        if(bestO)break;}
-      if(bestO)break;}
+          // narrow sites: a kit cell (not the root) with a side on a wall cell can enter only through its one open
+          // side once its parent is there (2 of 4 bud pockets stalled on such a cell); fewest of them, after kit risk
+          const across=(v,i)=>{const a=v[i],b=v[(i+1)%3],c=v[(i+2)%3];return cen([a,b,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);};
+          const narrow=oc.filter((v,x)=>x!==K.root&&[0,1,2].some(i=>{const m=across(v,i);return wallC.some(q=>dist(m,q)<0.3);})).length;
+          if(!bestO||K.risk<bestO.K.risk||(K.risk===bestO.K.risk&&narrow<bestO.narrow))bestO={K,cells:oc,wall:w,anchor:an,strand:st,narrow};}}}
     if(!bestO)throw Error('budPair: no place for the organelle and anchor');
     T[bestO.wall[0]][bestO.wall[1]]=org.seed+'@';T[bestO.anchor[0]][bestO.anchor[1]]=anchorGlue+'@|';
     organelle=bestO;}
