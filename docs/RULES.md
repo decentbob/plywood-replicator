@@ -44,7 +44,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
   gets the mean kick of its blocks and the turn of their torque, so larger bodies move less), translation and turn
   as two trials. A trial of at most 1.0 is checked once; a longer one moves in sub-steps (0.8) as far as it goes
   without overlapping another block, then closes in on the contact (one bisection). So nothing passes through a wall. A body that overlaps (rare: binding just placed
-  it) may make any move that reduces its overlap.
+  it) may make a move that reduces its overlap, if the move is at most 1.0 (fixed 2026-10-01: any length was allowed,
+  and a block touching a wall jumped through it on a kick above 1.44; cast products and released parts start touching).
 - A **hinged flap** turns relative to its partner only when the chemistry drives it (below), by the same checked
   move: a blocked flap **stalls** (it does not push). A design must keep a flap's whole sweep clear.
 - `pairs`: blocks near enough to bond (centre distance within the two radii plus 0.23).

@@ -137,7 +137,8 @@ class Physics{
     let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}   // the full move was already found blocked
     // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
     if(blocked>0)for(let b=0;b<this.p.bisect;b++){const g=(f+blocked)/2;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0)blocked=g;else f=g;}
-    if(f===0){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
+    // an overlapping (or touching) set may take a move that reduces its overlap, only one too short to pass a wall
+    if(f===0&&tried){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
     if(f===0)return 0;
     const c=Math.cos(f*da),s=Math.sin(f*da);
     for(let q=0;q<k;q++){const u=list[q];this.px[u]=this._wx(cx+c*rx[q]-s*ry[q]+f*tx);this.py[u]=this._wy(cy+s*rx[q]+c*ry[q]+f*ty);
@@ -168,7 +169,7 @@ class Physics{
       const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
       for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||at(g)>0){blocked=g;break;}f=g;}
       if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(at(g)>0)blocked=g;else f=g;}
-      if(f===0){const d0=depth(xs,ys,0,false);if(d0>0&&depth(xs+mx,ys+my,t,false)<d0-EPS)f=1;}
+      if(f===0&&tried){const d0=depth(xs,ys,0,false);if(d0>0&&depth(xs+mx,ys+my,t,false)<d0-EPS)f=1;}
       return f;};
     let f=trial(x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
     f=trial(px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}

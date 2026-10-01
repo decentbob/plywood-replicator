@@ -102,6 +102,17 @@ test('bud pair: joined while the bud cap is open; with nothing open it splits an
     const shut=bp.doors.map(d=>s.bond[U[d.panel[d.panel.length-1]]*3+d.closeSide[0]]>=0);
     if(capGlue){assert.ok(joined,'an open cap holds the pair');assert.deepEqual(shut,[false,false],'doors stay open');}
     else{assert.ok(!joined,'split');assert.deepEqual(shut,[true,true],'both doors shut');}symmetric(s);}});
+test('grown bud: both doors shut while a wall site is open, open once the ring is closed, shut after the split',()=>{
+  // the bud as grown (structures.grownBud), without its last wall cell q / complete with an open cap seed / complete
+  // with its cap filled (nothing open)
+  for(const [withQ,capFilled] of [[false,false],[true,false],[true,true]]){const g=S.grownBud({RP:7,RD:5});
+    let tris=g.tris.filter((_,x)=>withQ||x!==g.q);const idx=x=>tris.indexOf(g.tris[x]);if(capFilled)tris=[...tris,...g.cap.slots.map(v=>({v,type:g.cap.type,loose:true}))];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:44,H:44,lockRange:80},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,22,16);for(let k=0;k<200;k++)s.derive();
+    const ang=(f,p)=>{const u=idx(f),v=idx(p),i=[0,1,2].find(i=>s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===v);return Math.abs(Math.atan2(Math.sin(s.angle(u)-s.angle(v)-s.hRel[u*3+i]),Math.cos(s.angle(u)-s.angle(v)-s.hRel[u*3+i])))*180/Math.PI;};
+    s.run(300);const {comp}=s.bodies(),joined=comp[idx(g.S)]===comp[idx(g.root)],aP=ang(g.panelP[0],g.S),aD=ang(g.panelD[0],g.root);
+    if(!withQ){assert.ok(joined,'growing: joined');assert.ok(aP<1&&aD<1,`growing: both doors shut (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}
+    else if(!capFilled){assert.ok(joined,'cap open: joined');assert.ok(aP>40&&aD>40,`closed ring: both doors open (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}
+    else{assert.ok(!joined,'nothing open: split');assert.ok(aP<1&&aD<1,`after the split both doors shut (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}symmetric(s);}});
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
@@ -135,6 +146,14 @@ test('physics: a closed ring keeps its tracers at the default jostle (no tunnell
   s2.derive();const cx=()=>{let x=0,y=0;for(const u of ring){x+=s2._dx(s2.px[u]-s2.px[ring[0]]);y+=s2._dy(s2.py[u]-s2.py[ring[0]]);}return [s2.px[ring[0]]+x/ring.length,s2.py[ring[0]]+y/ring.length];};
   s2.run(1500);const [x,y]=cx();for(const u of inside)assert.ok(Math.hypot(s2._dx(s2.px[u]-x),s2._dy(s2.py[u]-y))<(R-1)*H,'tracer left the ring');symmetric(s2);});
 
+test('physics: a block overlapping a wall cannot jump through it (an overlap-reducing move is short)',()=>{
+  // a straight one-row wall (welded lattice row between y = 0 and y = H) and a free block below it, pushed 0.02 into it
+  // (an overlap, as one left by a cut); kicks of up to 2 straight up must not carry it across
+  const tris=[];for(let i=0;i<10;i++)tris.push({v:[[i,0],[i+1,0],[i+0.5,H]],type:'---'},{v:[[i+1,0],[i+1.5,H],[i+0.5,H]],type:'---'});
+  const s=new TriSim({W:24,H:24,seed:3,sigma:0,sigmaRot:0},tris.length+1);buildStructure(s,tris.map((_,k)=>k),tris,6,12);
+  const u=tris.length;placeTri(s,u,[[11,12],[10,12],[10.5,12-H]].map(p=>[p[0],p[1]+0.02]));s.gridSync();
+  assert.ok(s.moveDepth([u],0,0,0,s.px[u],s.py[u])>0,'the block overlaps the wall');
+  for(const k of [1.2,1.6,2.0,2.4])s._single(u,0,k,0);assert.ok(s.py[u]<12,'the block jumped through the wall');symmetric(s);});
 test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)',()=>{
   const {triDepth}=require('./physics');
   const {s}=createWorld({seed:4,size:12,founders:[{gaps:[1,0,2],faces:'abab'}],supply:{'A--':10,'B--':10,'a--':10,'b--':10,'---':20},params:{zip:false}});s.run(600);
