@@ -35,6 +35,20 @@ function triDepth(A,B){let best=Infinity;
     const depth=Math.min(amax-bmin,bmax-amin);if(depth<=SKIN.v)return 0;if(depth<best)best=depth;}}
   return best;}
 const SKIN={v:TOUCH};
+// the same for two unit equilateral blocks given by corner offsets from their centres (ao, bo: flat [x0,y0,x1,y1,x2,y2])
+// and B's centre relative to A's (dx, dy): an edge's outward normal is minus the opposite corner's offset times sqrt 3,
+// and a block's own extent along it is [-2r, r] (r the inradius), so no square roots are needed
+const S3=Math.sqrt(3),RI=1/(2*Math.sqrt(3)),RO=2*RI;
+function eqDepth(ao,bo,dx,dy){let best=Infinity;const sk=SKIN.v;
+  for(let k=0;k<3;k++){const o=2*((k+2)%3),nx=-ao[o]*S3,ny=-ao[o+1]*S3;
+    let bmin=Infinity,bmax=-Infinity;for(let j=0;j<6;j+=2){const p=(dx+bo[j])*nx+(dy+bo[j+1])*ny;if(p<bmin)bmin=p;if(p>bmax)bmax=p;}
+    const d=Math.min(RI-bmin,bmax+RO);if(d<=sk)return 0;if(d<best)best=d;}
+  for(let k=0;k<3;k++){const o=2*((k+2)%3),nx=-bo[o]*S3,ny=-bo[o+1]*S3,c=dx*nx+dy*ny;
+    let amin=Infinity,amax=-Infinity;for(let j=0;j<6;j+=2){const p=ao[j]*nx+ao[j+1]*ny;if(p<amin)amin=p;if(p>amax)amax=p;}
+    const d=Math.min(amax-(c-RO),(c+RI)-amin);if(d<=sk)return 0;if(d<best)best=d;}
+  return best;}
+const BO=new Float64Array(6);
+function eqDepthOf(ao,ox,oy,v,dx,dy){for(let e=0;e<3;e++){BO[2*e]=ox[v*3+e];BO[2*e+1]=oy[v*3+e];}return eqDepth(ao,BO,dx,dy);}
 const TA=new Float64Array(6),TB=new Float64Array(6);
 
 class Physics{
@@ -99,7 +113,7 @@ class Physics{
           let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;
           if(early&&d2<IN2)return 1;   // centres closer than two inradii: certainly overlapping
           if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
-          for(let e=0;e<3;e++){TB[2*e]=dx+ox[v*3+e];TB[2*e+1]=dy+oy[v*3+e];}const dd=triDepth(TA,TB);if(dd>0){if(early)return dd;sum+=dd;}}}}
+          const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}}}
     return sum;}
   // move the blocks of `list` rigidly by (tx, ty) and a turn da about (cx, cy), in sub-steps, as far as they go without
   // overlapping unlisted blocks; returns the fraction moved (0: blocked). An overlapping set may move if that reduces it.
@@ -136,7 +150,7 @@ class Physics{
       for(let k=0;k<nb.length;k++){const v=nb[k];let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
         const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;if(early&&d2<IN2)return 1;
         if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
-        for(let e=0;e<3;e++){TB[2*e]=dx+ox[v*3+e];TB[2*e+1]=dy+oy[v*3+e];}const dd=triDepth(TA,TB);if(dd>0){if(early)return dd;sum+=dd;}}
+        const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}
       return sum;};
     // one trial: translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
     const trial=(xs,ys,mx,my,t)=>{const dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t)),at=g=>depth(xs+g*mx,ys+g*my,g*t,true);
@@ -149,9 +163,15 @@ class Physics{
     let f=trial(x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
     f=trial(px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
   // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
-  _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,{members}=this.bodies();
+  _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,n=this.n;
+    // bodies: a lone block is its own body (no list allocated); bonded blocks are grouped by a search through bonds
+    const comp=this._comp&&this._comp.length===n?this._comp:(this._comp=new Int32Array(n));comp.fill(-1);const members=[],one=[0];
+    for(let u=0;u<n;u++){if(comp[u]>=0)continue;const id=members.length;comp[u]=id;
+      if(this.bond[u*3]<0&&this.bond[u*3+1]<0&&this.bond[u*3+2]<0){members.push(u);continue;}
+      const list=[u];for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(comp[y]<0){comp[y]=id;list.push(y);}}}
+      members.push(list);}
     for(let k=members.length-1;k>0;k--){const j=Math.floor(this.rng()*(k+1));const t=members[k];members[k]=members[j];members[j]=t;}
-    for(const list of members){const m=list.length,u0=list[0];
+    for(const M of members){const list=typeof M==='number'?(one[0]=M,one):M,m=list.length,u0=list[0];
       if(m===1){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
         if(p.split)this._single(u0,tx,ty,da);else this.tryMove(list,tx,ty,da,px[u0],py[u0]);continue;}
       let cx=0,cy=0;const rx=new Float64Array(m),ry=new Float64Array(m);
@@ -164,10 +184,12 @@ class Physics{
   // blocks near enough to bond (centre distance within two radii plus pairTol)
   _pairs(){const reach=2*R3+this.p.pairTol*SIZE+EPS,r2=reach*reach,out=this.pairs,cand=[],{px,py}=this,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2;out.length=0;
     const gx=this._gx,gy=this._gy,cells=this._cells,cellOf=this._cellOf,all=this._all;
-    for(let u=0;u<this.n;u++){cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
+    // only pairs with a bonded block (free blocks never bind each other): scan around bonded blocks only
+    const bd=u=>this.bond[u*3]>=0||this.bond[u*3+1]>=0||this.bond[u*3+2]>=0;
+    for(let u=0;u<this.n;u++){if(!bd(u))continue;cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
       for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
-        for(let q=0;q<m;q++){const v=all?q:L[q];if(v<=u)continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
-      if(cand.length>1)cand.sort((a,b)=>a-b);for(let q=0;q<cand.length;q++)out.push(u,cand[q]);}
+        for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u||(v<u&&bd(v)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
+      if(cand.length>1)cand.sort((a,b)=>a-b);for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
     return out;}
   physics(){this.gridSync();this._jostle();this._pairs();}
   regrid(u){if(this._cells)this._regrid(u);}
@@ -180,4 +202,4 @@ class Physics{
     for(const k in st.arrays)s[k]=T[st.arrays[k].t].from(st.arrays[k].a);for(const k in st.nums)s[k]=st.nums[k];
     s.rng.setState(st.rng);s._spare=st.spare===null?NaN:st.spare;return s;}
 }
-module.exports={Physics,REST,AREA,SIZE,DEFAULTS,separation,triDepth,mulberry32};
+module.exports={Physics,REST,AREA,SIZE,DEFAULTS,separation,triDepth,eqDepth,mulberry32};
