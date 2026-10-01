@@ -29,6 +29,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (like K bonded to k) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
+| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one |
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
@@ -56,7 +57,8 @@ closures that asked whether two triangles belong to the same body (now one flush
 snapping the smaller of two bonding bodies (removed), copy release reading two bonds away (now the partner exposes
 whether a fill is beside it). Physics, not chemistry, and labelled as such: connected parts move as one rigid body; a
 flap whose body is bonded back to its own hinge partner cannot turn; a free triangle binds only into a free site and is
-placed flush there.
+placed flush there; a strand caught by an anchor side `|` is placed flush as one body (the place must be free; which
+body moves is decided by role, the strand end, never by size).
 
 ## Binding (one rule everywhere)
 A free triangle binds an attached triangle's side with the complementary glue when its centre comes within `capture`
@@ -69,6 +71,11 @@ bind only when both triangles are attached. A free part (a triangle with an atta
 attach side. Option `pLoose` (proofreading, cooperative binding): a triangle caught while free (not by an attach side) and held
 on one side only lets go with this probability per step; a second matching side holds it. A triangle held by a
 trigger side (a key a machine is reading) is not proofread.
+
+**Anchor (2026-10-01):** an attached triangle's unbonded anchor side `|` catches a strand end whose seed (spare edge,
+active while the strand is not being copied) carries the complementary glue, when the end's centre comes within
+`capture` of the site: the whole strand moves rigidly into the flush place if that place is free (all or nothing).
+This is the only way a strand joins an existing structure (two attached triangles otherwise bond only when flush).
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
 released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0). A

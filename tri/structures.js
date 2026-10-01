@@ -314,6 +314,140 @@ function doorRingKit(R=5,seed='z',key='X',k=4,avoid='',m=1,release=true,pore=fal
   T.slice(1).forEach(t=>{const c=canonT(t);counts[c]=(counts[c]||0)+1;});
   return {tris:cells.map((v,q)=>({v,type:types[q]})),types,counts,root:0,rootSide:freeS(0),rootType:types[0],N,letters:[...L,...X].join(''),wall,door:{hc,hp,P:door.P,dir:door.dir,panel:door.panel}};}
 
+// Bud pair (prepared, labelled starting condition): a parent ring P (side RP, centre 0,0) and a bud ring D (side RD)
+// above it, sharing a flat contact (P's top side against D's bottom side) held by completion-release pairs ('&'). A
+// doorway runs through both walls: each wall has a door panel of k cells (welded by hear sides, a built-in trigger
+// between its first two cells), turned open into its own ring about a pin on its inner boundary and held there by a
+// '&' pair to a doorstop cell welded to the wall. While anything bonded to the pair hears an open signal (a growth
+// front, e.g. a seed inside D), all holds. Once nothing is open: the '&' bonds cut, P and D separate, and each panel,
+// always triggered, swings shut (60 or 120 degrees, '=') and closes (close-only pair) onto the wall cell beyond the doorway, which
+// locks it. Returns {tris (closed positions: the demo turns the panels open), P: cell indices, D, doors:[{panel, prev,
+// next, pin, dir, ang, stop, hingeSide, closeSide, stopSide:[panel cell, side, stop side]}], cap}. capGlue: D grows a
+// three-cell cap on its inner wall from one part type (below).
+function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organelle:org=null}={}){
+  if((RP+RD)%2)throw Error('budPair: RP+RD must be even (lattice offset)');
+  const {triDepth}=require('./physics'),flat=V=>Float64Array.from(V.flat());
+  const Pc=ringKit(RP,'z').tris.map(t=>t.v),dy=(RP+RD)*H,Dc=ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dy]));
+  const cells=[...Pc,...Dc],NP=Pc.length,ND=Dc.length,P=[...Array(NP).keys()],D=[...Array(ND).keys()].map(q=>NP+q);
+  const side=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(cells[a][i],cells[b][(j+1)%3])&&same(cells[a][(i+1)%3],cells[b][j]))return [i,j];return null;};
+  const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
+  const yc=RP*H,T=cells.map(()=>['-','-','-']);
+  // the doors: k consecutive ring cells nearest x = 0 on the contact row, pin on the inner boundary, turning inward
+  const lat=lattice(RP+RD+2).map(v=>v.map(p=>[p[0],p[1]])),key=v=>{const c=cen(v);return Math.round(c[0]*12)+','+Math.round(c[1]*12);};
+  const occupied=new Set(cells.map(key));
+  const doors=[];
+  for(const [ring,inner,sgn] of [[P,(RP-1)*H,-1],[D,dy-(RD-1)*H,1]]){
+    const N=ring.length,row=ring.filter(c=>cells[c].every(p=>Math.abs(p[1]-yc)<1e-6||Math.abs(p[1]-inner)<1e-6)&&Math.abs(cen(cells[c])[0])<Math.max(RP,RD));
+    const idx=c=>ring.indexOf(c);let best=null;
+    for(const st of row){const panel=[...Array(k).keys()].map(q=>ring[(idx(st)+q)%N]);if(!panel.every(c=>row.includes(c)))continue;
+      const xm=panel.reduce((a,c)=>a+cen(cells[c])[0],0)/k;
+      for(const [h,o,end] of [[panel[0],ring[(idx(st)+N-1)%N],ring[(idx(st)+k)%N]],[panel[k-1],ring[(idx(st)+k)%N],ring[(idx(st)+N-1)%N]]]){
+        const ord=h===panel[0]?panel:[...panel].reverse();
+        for(const pin of cells[h].filter(p=>Math.abs(p[1]-inner)<1e-6&&cells[o].some(q=>same(p,q))))for(const dir of [1,-1])for(const ang of [60,120]){
+          const fixed=cells.filter((_,x)=>!panel.includes(x));
+          if(!sweepClear(panel.map(c=>cells[c]),fixed,pin,dir,ang))continue;
+          const open=panel.map(c=>cells[c].map(p=>rot(p,pin,dir*ang*Math.PI/180)));
+          if(Math.sign(cen(open[0])[1]-yc)!==sgn)continue;   // opens into its own ring
+          // doorstop: a free lattice slot sharing a side with an open panel cell (not the hinge cell) and with a fixed
+          // cell of the same ring, clear of the panel's closing sweep
+          for(const v of lat){if(occupied.has(key(v)))continue;const sh=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return [i,j];return null;};
+            const pi=open.findIndex((V,q)=>q>0&&sh(V,v)),wc=ring.find(c=>!panel.includes(c)&&sh(cells[c],v));if(pi<0||wc===undefined)continue;
+            if(open.some(V=>triDepth(flat(V),flat(v))>1e-6))continue;
+            if(!sweepClear(open,[v],pin,-dir,ang))continue;
+            const score=Math.abs(xm-(doors.length?doors[0].xm:0));if(!best||score<best.score)best={score,xm,ang,panel:ord,prev:o,next:end,pin,dir,stopV:v,stopWall:wc,stopPanel:ord.indexOf(panel[pi]),stopOpen:open[pi],open:ord.map(c=>open[panel.indexOf(c)])};}
+          }}}
+    if(!best)throw Error('budPair: no door');doors.push(best);}
+  // the doorstops become cells of their rings
+  for(const d of doors){d.stop=cells.length;cells.push(d.stopV);T.push(['-','-','-']);(P.includes(d.prev)?P:D).push(d.stop);}
+  const sideV=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return [i,j];return null;};
+  // contact: P's top side against D's bottom side ('&' pairs), not across the doorway (loose panels)
+  const loose=new Set(doors.flatMap(d=>d.panel));
+  for(const a of P)for(const b of D){if(loose.has(a)||loose.has(b))continue;const ij=side(a,b);if(!ij)continue;T[a][ij[0]]='ш&';T[b][ij[1]]='Ш&';}
+  const W=['ψ','ω'];
+  doors.forEach((d,n)=>{const pc=d.panel,g=W[n];
+    {const [i,j]=side(pc[0],d.prev);T[pc[0]][i]=g+(same(cells[pc[0]][i],d.pin)?'<':'>')+(d.ang===120?'=':'');T[d.prev][j]=UP[LOW.indexOf(g)];d.hingeSide=[i,j];}
+    // welds inside the panel hear each other; the first weld is also the built-in trigger (always triggered)
+    for(let q=0;q+1<pc.length;q++){const [i,j]=side(pc[q],pc[q+1]);const w=['б','г','д','ж'][q]+(n?'':'');T[pc[q]][i]=(n?UP[LOW.indexOf(w)]:w)+(q===0?'*':'')+'+';T[pc[q+1]][j]=(n?w:UP[LOW.indexOf(w)])+'+';}
+    // the closing pair: the last panel cell onto the wall cell beyond the doorway (close-only: nothing free binds it)
+    {const [i,j]=side(pc[pc.length-1],d.next);T[pc[pc.length-1]][i]=(n?'э':'Э')+'.';T[d.next][j]=(n?'Э':'э')+'.';d.closeSide=[i,j];}
+    // the doorstop holds the open panel by a '&' pair; welded to its wall cell (inert sides: the builder welds them)
+    {const V=d.stopOpen,[i,j]=sideV(V,d.stopV);T[pc[d.stopPanel]][i]=(n?'ц':'Ц')+'&';T[d.stop][j]=(n?'Ц':'ц')+'&';d.stopSide=[pc[d.stopPanel],i,j];}});
+  // cap (the bud's content): three slots around a vertex V on D's inner boundary, from a seed side on one wall cell
+  // (glue `cap` + '@') to a closing side on the next (complement, close-only); one part type fills all three (they are
+  // turns of each other about V). Returns {seed: [cell, side], close: [cell, side], slots, type}.
+  let cap=null;
+  if(capGlue){const busy=new Set([...loose,...doors.flatMap(d=>[d.stop,d.prev,d.next])]),C=capGlue,CU=gname(comp(gcode(C)));
+    const near=(v,w)=>Math.hypot(cen(v)[0]-cen(w)[0],cen(v)[1]-cen(w)[1]);
+    const cand=[];
+    for(const c of D){if(busy.has(c))continue;for(let f=0;f<3;f++){if(T[c][f]!=='-'||cells.some((w,x)=>x!==c&&sideV(cells[c],w)&&sideV(cells[c],w)[0]===f))continue;
+      const V0=cells[c][f],V1=cells[c][(f+1)%3];if(hexr([(V0[0]+V1[0])/2,V0[1]/2+V1[1]/2-dy])>RD-0.5)continue;   // inner side
+      for(const V of [V0,V1]){const rotV=(v,t)=>v.map(p=>rot(p,V,t));
+        // the slot across side f, then two more turned about V away from the wall
+        const s0=[cells[c][(f+1)%3],cells[c][f],[V0[0]+V1[0]-cells[c][(f+2)%3][0],V0[1]+V1[1]-cells[c][(f+2)%3][1]]];
+        for(const t of [Math.PI/3,-Math.PI/3]){const sl=[s0,rotV(s0,t),rotV(s0,2*t)],last=rotV(s0,3*t);
+          const c2=D.find(x=>!busy.has(x)&&x!==c&&near(cells[x],last)<1e-6);if(c2===undefined)continue;
+          if(sl.some(v=>cells.some(w=>near(v,w)<1e-6)||doors.some(d=>d.open.some(w=>near(v,w)<1.6))))continue;
+          if(Math.abs(t)>0&&hexr([cen(sl[1])[0],cen(sl[1])[1]-dy])>RD-1)continue;   // the cap bulges inward
+          cand.push({c,f,c2,sl,t,dist:Math.min(...doors.map(d=>near(d.open[0],sl[1])))});}}}}
+    cand.sort((a,b)=>b.dist-a.dist);const b=cand[0];if(!b)throw Error('budPair: no place for the cap');
+    T[b.c][b.f]=C+'@';const f2=[0,1,2].find(i=>sideV(cells[b.c2],b.sl[2])&&sideV(cells[b.c2],b.sl[2])[0]===i);T[b.c2][f2]=CU+'.';
+    // part type: side toward the previous cell attaches (complement + '@'), side toward the next exposes `cap` + '@'
+    const types=b.sl.map((v,q)=>{const prev=q?b.sl[q-1]:cells[b.c],next=q<2?b.sl[q+1]:cells[b.c2],t=['-','-','-'];t[sideV(v,prev)[0]]=CU+'@';t[sideV(v,next)[0]]=C+'@';return t.join('');});
+    const canonT=t=>{const x=[...t.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[...x.slice(r),...x.slice(0,r)].join('')).sort()[0];};
+    if(new Set(types.map(canonT)).size!==1)throw Error('budPair: cap slots need different types '+types);
+    cap={seed:[b.c,b.f],close:[b.c2,f2],slots:b.sl,type:types[0]};}
+  // organelle (with anchorGlue): D grows a part from kit options `organelle.opts` (structures.kitOptions, their seeds
+  // '@' on a D wall side) and keeps an anchor side: planned together so that the part, its slot and lid spaces, the
+  // anchored strand (world.band of `organelle.gaps`, its high end on the anchor) with its dock sites and the row beyond
+  // them, and the door's sweep do not meet
+  let organelle=null;
+  if(org){const {band,rolesFromGaps}=require('./world'),dcen=[0,dy],dist=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1]);
+    const busy=new Set([...loose,...doors.flatMap(d=>[d.stop,d.prev,d.next])]),wallC=cells.map(cen);
+    const inSide=[];for(const c of D){if(busy.has(c))continue;for(let f=0;f<3;f++){if(T[c][f]!=='-'||cells.some((w,x)=>x!==c&&sideV(cells[c],w)&&sideV(cells[c],w)[0]===f))continue;
+      const V0=cells[c][f],V1=cells[c][(f+1)%3];if(hexr([(V0[0]+V1[0])/2-dcen[0],(V0[1]+V1[1])/2-dcen[1]])<RD-0.5)inSide.push([c,f]);}}
+    const dd=doors[1],sweep=[];for(let q=0;q<=12;q++)for(const V of dd.open)sweep.push(cen(V.map(p=>rot(p,dd.pin,-dd.dir*q/12*dd.ang*Math.PI/180))));
+    const B=band(rolesFromGaps(org.gaps)),last=B[B.length-1];
+    const strandAt=([c,f])=>{const a=cells[c][(f+1)%3],b=cells[c][f],[x0,x1]=last.exit;   // the strand's spare high edge x0->x1 meets the anchor side (b->a)
+      const ang=Math.atan2(a[1]-b[1],a[0]-b[0])-Math.atan2(x1[1]-x0[1],x1[0]-x0[0]);const cs=Math.cos(ang),sn=Math.sin(ang);
+      // the shared edge runs the opposite way: x0 -> b... try both orientations and keep the one on the inner side
+      const out=[];for(const [P0,Q0] of [[b,x0],[a,x0]]){const an=Math.atan2((P0===b?a:b)[1]-P0[1],(P0===b?a:b)[0]-P0[0])-Math.atan2(x1[1]-x0[1],x1[0]-x0[0]),c2=Math.cos(an),s2=Math.sin(an);
+        const M=p=>[P0[0]+c2*(p[0]-x0[0])-s2*(p[1]-x0[1]),P0[1]+s2*(p[0]-x0[0])+c2*(p[1]-x0[1])];out.push(B.map(t=>({v:t.v.map(M),role:t.role,free:t.free.map(M)})));}
+      return out.find(st=>st.every(t=>hexr([cen(t.v)[0]-dcen[0],cen(t.v)[1]-dcen[1]])<RD-1))||null;};
+    let bestO=null;
+    for(const an of inSide){const st=strandAt(an);if(!st)continue;const keep=[],docks=[];
+      for(const t of st){keep.push(cen(t.v));if(t.role!=='F')continue;const [A,Bp]=t.free,C=t.v.find(p=>!same(p,A)&&!same(p,Bp)),X=[A[0]+Bp[0]-C[0],A[1]+Bp[1]-C[1]];
+        const dock=cen([A,Bp,X]),fc=cen(t.v);docks.push(dock,[2*dock[0]-fc[0],2*dock[1]-fc[1]]);}
+      // the strand may touch the wall at its anchored end; its dock sites (where copies grow) stay off the wall
+      if(keep.some(p=>wallC.some(q=>dist(p,q)<0.3))||docks.some(p=>wallC.some(q=>dist(p,q)<0.9))||[...keep,...docks].some(p=>sweep.some(q=>dist(p,q)<1.2)||hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1))continue;
+      keep.push(...docks);
+      for(const K of org.opts){for(const w of inSide){if(w[0]===an[0])continue;const {cells:oc,T:map}=mapKit(K,cells[w[0]],w[1]),extra=[...org.clear,...org.slots.map(x=>x.v)].map(v=>v.map(map));
+          const all=[...oc,...extra].map(cen),ex=extra.map(cen);
+          if(all.some(p=>hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1-0.3)||all.some(p=>wallC.some(q=>dist(p,q)<0.3)))continue;
+          if(ex.some(p=>wallC.some(q=>dist(p,q)<0.9))||all.some(p=>sweep.some(q=>dist(p,q)<1.0))||all.some(p=>keep.some(q=>dist(p,q)<1.0)))continue;
+          bestO={K,cells:oc,wall:w,anchor:an,strand:st};break;}
+        if(bestO)break;}
+      if(bestO)break;}
+    if(!bestO)throw Error('budPair: no place for the organelle and anchor');
+    T[bestO.wall[0]][bestO.wall[1]]=org.seed+'@';T[bestO.anchor[0]][bestO.anchor[1]]=anchorGlue+'@|';
+    organelle=bestO;}
+  // anchor: an inward side of a plain D wall cell, far from the door, takes glue `anchorGlue` with '@|' (it catches a
+  // strand end's seed and emits the open signal until it has)
+  let anchor=organelle?organelle.anchor:null;
+  if(anchorGlue&&!organelle){const busy=new Set([...loose,...doors.flatMap(d=>[d.stop,d.prev,d.next])]);if(cap)busy.add(cap.seed[0]).add(cap.close[0]);let best=null;
+    for(const c of D){if(busy.has(c))continue;for(let f=0;f<3;f++){if(T[c][f]!=='-'||cells.some((w,x)=>x!==c&&sideV(cells[c],w)&&sideV(cells[c],w)[0]===f))continue;
+      const V0=cells[c][f],V1=cells[c][(f+1)%3],m=[(V0[0]+V1[0])/2,(V0[1]+V1[1])/2-dy];if(hexr(m)>RD-0.5)continue;
+      const d=Math.min(...doors.map(q=>Math.hypot(cen(q.open[0])[0]-m[0],cen(q.open[0])[1]-m[1]-dy)));if(!best||d>best.d)best={c,f,d};}}
+    if(!best)throw Error('budPair: no anchor side');T[best.c][best.f]=anchorGlue+'@|';anchor=[best.c,best.f];}
+  // anchorP: the parent keeps its own genome: an inward side of a plain P wall cell far from the door takes glue
+  // `anchorP` with '|' (no '@': it does not hold the pair together)
+  let anchorPs=null;
+  if(anchorP){const busy=new Set([...loose,...doors.flatMap(d=>[d.stop,d.prev,d.next])]);let best=null;
+    for(const c of P){if(busy.has(c))continue;for(let f=0;f<3;f++){if(T[c][f]!=='-'||cells.some((w,x)=>x!==c&&sideV(cells[c],w)&&sideV(cells[c],w)[0]===f))continue;
+      const V0=cells[c][f],V1=cells[c][(f+1)%3],m=[(V0[0]+V1[0])/2,(V0[1]+V1[1])/2];if(hexr(m)>RP-0.5)continue;
+      const d=Math.min(...doors.map(q=>Math.hypot(cen(q.open[0])[0]-m[0],cen(q.open[0])[1]-m[1])));if(!best||d>best.d)best={c,f,d,m};}}
+    T[best.c][best.f]=anchorP+'|';anchorPs=[best.c,best.f,best.m];}
+  return {tris:cells.map((v,x)=>({v,type:T[x].join(''),loose:loose.has(x)})),P,D,doors,cap,anchor,anchorP:anchorPs,organelle};}
+
 // map kit K so that its root's seed side lies flush against side i of the triangle with vertices A (a shared edge runs
 // the opposite way); returns the mapped cells and the point map
 function mapKit(K,A,i){const a=A[(i+1)%3],b=A[i],V=K.tris[K.root].v,j=K.rootSide,c=V[j],d=V[(j+1)%3];
@@ -383,4 +517,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,stampInstr,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,stampInstr,budPair,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

@@ -2,7 +2,7 @@
 // Fast checks of the triangle engine (about 20 s): node tri/test.js
 const assert=require('assert/strict');
 const {TriSim,gcode,parseType,canon,FACE,TFACE,GLUE}=require('./sim');
-const {createWorld,buildStructure,placeTri,band,rolesFromGaps,census}=require('./world');
+const {createWorld,buildStructure,placeTri,band,rolesFromGaps,census,openBudDoors}=require('./world');
 const S=require('./structures');
 const H=Math.sqrt(3)/2;let passed=0;
 const test=(name,fn)=>{const t0=Date.now();fn();passed++;console.log(`ok  ${name} (${Date.now()-t0} ms)`);};
@@ -86,6 +86,12 @@ test('pore: a complete ring lets its panel go (spent release sides) and it swing
       const out2=P.reduce((a,u)=>a+Math.hypot(s.px[u]-x,s.py[u]-y),0)/P.length;assert.ok(out2>(R-0.5)*H,'stays open');}
     symmetric(s);}});
 
+test('bud pair: joined while the bud cap is open; with nothing open it splits and both doors shut and lock',()=>{
+  for(const capGlue of ['a',null]){const bp=S.budPair({capGlue});const {s,structures}=createWorld({seed:2,size:30,structures:[{tris:bp.tris,x:15,y:12}],params:{sigma:0,sigmaRot:0}});
+    const U=structures[0];openBudDoors(s,U,bp);s.run(400);const {comp}=s.bodies(),joined=comp[U[bp.P[0]]]===comp[U[bp.D[0]]];
+    const shut=bp.doors.map(d=>s.bond[U[d.panel[d.panel.length-1]]*3+d.closeSide[0]]>=0);
+    if(capGlue){assert.ok(joined,'an open cap holds the pair');assert.deepEqual(shut,[false,false],'doors stay open');}
+    else{assert.ok(!joined,'split');assert.deepEqual(shut,[true,true],'both doors shut');}symmetric(s);}});
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
@@ -128,6 +134,11 @@ test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)'
   for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0&&!s.isHingeBond(u,i))gap=Math.max(gap,s.flushGap(u,i,(q/3)|0,q%3));}
   assert.ok(worst<1e-3,`overlap ${worst}`);assert.ok(gap<1e-6,`bond gap ${gap}`);assert.ok((s.ev.dock||0)+(s.ev.glue||0)>0,'something bound');symmetric(s);});
 
+test('physics: a body longer than half the world keeps its shape (offsets unwrapped along bonds)',()=>{
+  const roles=[...Array(24)].map((_,i)=>'FB'[i%2]),ccw=V=>((V[1][0]-V[0][0])*(V[2][1]-V[0][1])-(V[1][1]-V[0][1])*(V[2][0]-V[0][0]))<0?[V[0],V[2],V[1]]:V,B=band(roles).map(t=>({v:ccw(t.v),type:'---'}));   // a straight strip about 12 long
+  const s=new TriSim({W:14,H:14,seed:4},B.length);buildStructure(s,B.map((_,k)=>k),B,7,7,0.4);s.derive();s.run(300);let worst=0;
+  for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0)worst=Math.max(worst,s.flushGap(u,i,(q/3)|0,q%3));}
+  assert.ok(worst<1e-6,'bonds stay flush (worst gap '+worst+')');});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

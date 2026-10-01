@@ -115,11 +115,20 @@ class Physics{
           if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
           const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}}}
     return sum;}
+  // offsets of the blocks of `list` from list[0], unwrapped along bonds (each block measured from a bonded block earlier
+  // in the list: lists are in search order), so a body longer than half the torus keeps its shape (the minimum image
+  // from list[0] alone would fold it)
+  _unwrap(list,ux,uy){const k=list.length,mark=this._umark||(this._umark=new Int32Array(this.n)),pos=this._upos||(this._upos=new Int32Array(this.n)),st=this._ustamp=(this._ustamp||0)+1;
+    const u0=list[0];ux[0]=0;uy[0]=0;mark[u0]=st;pos[u0]=0;
+    for(let q=1;q<k;q++){const u=list[q];let r=-1;for(let i=0;i<3&&r<0;i++){const b=this.bond[u*3+i];if(b<0)continue;const w=(b/3)|0;if(mark[w]===st)r=pos[w];}
+      if(r<0){ux[q]=this._dx(this.px[u]-this.px[u0]);uy[q]=this._dy(this.py[u]-this.py[u0]);}else{const w=list[r];ux[q]=ux[r]+this._dx(this.px[u]-this.px[w]);uy[q]=uy[r]+this._dy(this.py[u]-this.py[w]);}
+      mark[u]=st;pos[u]=q;}}
   // move the blocks of `list` rigidly by (tx, ty) and a turn da about (cx, cy), in sub-steps, as far as they go without
   // overlapping unlisted blocks; returns the fraction moved (0: blocked). An overlapping set may move if that reduces it.
   tryMove(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length;
     if(!this._rxb||this._rxb.length<k){this._rxb=new Float64Array(Math.max(64,2*k));this._ryb=new Float64Array(Math.max(64,2*k));}const rx=this._rxb,ry=this._ryb;let reach=0;
-    for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
+    this._unwrap(list,rx,ry);const px0=this._dx(cx-this.px[list[0]]),py0=this._dy(cy-this.py[list[0]]);
+    for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]-=px0;ry[q]-=py0;reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
     const dist=Math.max(Math.hypot(tx,ty),reach*Math.abs(da));let f=0;
     // a move short enough that it cannot pass through a one-row wall (that needs 1.44: the wall plus two inradii)
     // whose destination is clear is taken at once
@@ -136,7 +145,8 @@ class Physics{
     return f;}
   // overlap the blocks of `list` would have after a rigid move (translation, turn da about (cx, cy)); for placing checks
   moveDepth(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length,rx=new Float64Array(k),ry=new Float64Array(k);
-    for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);}
+    this._unwrap(list,rx,ry);const px0=this._dx(cx-this.px[list[0]]),py0=this._dy(cy-this.py[list[0]]);
+    for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]-=px0;ry[q]-=py0;}
     return this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true);}
   // a lone block's two trials (move, then turn about its centre), with tryMove's rules (direct move, sub-steps,
   // bisection, overlap-reducing moves) but against its neighbours gathered once (most cost is blocked trials)
@@ -175,7 +185,7 @@ class Physics{
       if(m===1){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
         if(p.split)this._single(u0,tx,ty,da);else this.tryMove(list,tx,ty,da,px[u0],py[u0]);continue;}
       let cx=0,cy=0;const rx=new Float64Array(m),ry=new Float64Array(m);
-      for(let q=0;q<m;q++){rx[q]=this._dx(px[list[q]]-px[u0]);ry[q]=this._dy(py[list[q]]-py[u0]);cx+=rx[q];cy+=ry[q];}cx/=m;cy/=m;
+      this._unwrap(list,rx,ry);for(let q=0;q<m;q++){cx+=rx[q];cy+=ry[q];}cx/=m;cy/=m;
       let inertia=0,tq=0;const ib=1/wr;
       for(let q=0;q<m;q++){const r2=(rx[q]-cx)**2+(ry[q]-cy)**2;inertia+=r2+ib;tq+=r2*p.sigma*p.sigma*w+ib*ib*spin*spin;}
       const st=p.sigma*Math.sqrt(m*w)/m,sr=Math.sqrt(tq)/inertia;

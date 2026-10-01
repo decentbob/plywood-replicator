@@ -8,6 +8,33 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Programmable synthesis: the next big blocker (2026-10-01, fourth session)
+
+Stamp casting lets a pocket cast kit parts, but one pocket makes one part type, and a cell needs dozens of types
+(a cell kit has ~60). A pocket that casts its own kit (16 types) would need 16 stamp pockets, each needing 16 more:
+no closed loop. Biology solves this with a code: few adaptor types read a sequence, so one machine makes many
+products. Candidates here (none built; each needs a rule change, so the user should choose):
+- **Part templating (simplest):** a pocket with a *read* side holds a template part and casts a blank into a copy of
+  the template's type (marks included). One copier pocket then multiplies every part type present: a cell carrying one
+  of each of its parts (a "library") can make all of them from blanks, and pass a library to its offspring. Local (the
+  caster exposes the type of the triangle bonded to its read side, one bond per pass), but information then lives in
+  the parts, not in the chain, and stray types are copied too (selection would have to act on parts).
+- **Translation (closest to biology, hardest):** a reading frame on a strand: three consecutive faces each hold an
+  adaptor, and a product in a notch touching the three adaptors takes one glue from each (n adaptor types give n^3
+  products). Needs a site touched by three reader cells and a way to step along the strand (a ratchet).
+- **Kit-free growth:** shapes from few types (periodic motifs, the 3-cell cap from one type) wherever position-specific
+  parts are not needed; kits only for the machines.
+
+## Division and segregation (2026-10-01, fourth session)
+
+Built (demo `split`): parent and bud share a wall held by `&` pairs with a doorway through both walls; the parent's
+pockets feed the bud through it; when the bud's growth front closes (open signal gone) every `&` lets go, both doors
+(prepared open, always triggered, held by a `&` doorstop) swing shut and lock by a closure. Genome segregation needed a
+new physical rule: a strand cannot otherwise bind an attached structure (capture needs a free triangle, closures need
+an exact fit). The anchor `|`: an anchor side catches a strand end's seed as it would a free triangle, and the strand
+moves as one body into place (physics; the choice is by role, not by body size). Next: grow the bud pair instead of
+preparing it (a bud ring grown on the parent's wall around its doorway), and give the bud its own pockets.
+
 ## Heredity of machines (user, 2026-10-01)
 
 User: "Without new block types it should already be heritable, no? Because the blocks on the chain it attaches to

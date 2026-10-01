@@ -1,9 +1,9 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | stamp | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | stamp | split | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
-const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit}=require('./world');
+const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit,openBudDoors}=require('./world');
 const {render,montage}=require('./render');
 const S=require('./structures');
 const {TriSim,canon,typeName}=require('./sim');
@@ -94,6 +94,48 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(!closed&&s.bond[root*3+cl]>=0)closed=t;if(every(t,20))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, ring ${size_()}/${K.N}${closed?', closed':''}`,null,false);}
       {const {comp}=s.bodies();snap(s,'zoom','ring grown from cast parts (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:4.5});}
       finish('Stamp factory: pockets cast blanks into membrane parts; a ring grows from them');},
+    // split: a parent ring P and a bud ring D (prepared, labelled) share a wall held by completion-release pairs '&',
+    // with an open doorway through both walls (each panel turned open, held by a '&' doorstop, always triggered). Inside
+    // P a stamp pocket casts blanks into the bud's part (A@-a@); parts diffuse through the doorway into D and grow a
+    // three-cell cap on D's inner wall. While the cap is open the pair hears the open signal; once it is complete every
+    // '&' lets go: the doors swing shut and lock, D separates with its content (extra: blanks inside P, default 30)
+    // extra 'g' (genome): no cap; P holds a chain aaaa (no seed) and a stamp pocket casting its dockers Ay.z (seed z on
+    // the next side, lateral y close-only; fills Y-- as food, latGlue); D's wall has an anchor Z@| that catches a copy's
+    // seed z (the strand is placed flush): the bud splits off once it holds a genome copy; the parent's wall has an
+    // anchor W| that holds the founder by its seed w (copies do not carry w), so the parent keeps its genome
+    split(){steps=steps||60000;const gen=String(extra||'').includes('g'),nb=parseInt(extra)||30,size=gen?32:28,c=size/2,cy=c-3,RP=gen?7:6;
+      const RD=gen?5:4,bp=S.budPair({RP,RD,k:5,capGlue:gen?null:'a',anchorGlue:gen?'Z':null,anchorP:gen?'W':null});
+      const pocket={tris:S.lidPocket(S.stampInstr(gen?'Ay.z':bp.cap.type),'X'),x:c-(gen?1:0.5),y:cy-(gen?0:1.6),rot:0};
+      // the founder (genome variant) near P's anchor: the first spot where prepared parts do not overlap
+      const overlap=(s,all)=>{const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);
+        for(const u of all)for(const v of all){if(v<=u)continue;const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+          for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)return true;}return false;};
+      let W0=null;
+      for(const f of gen?[0.55,0.45,0.65,0.35,0.75]:[0])for(const ox of gen?[0,1,-1,2,-2]:[0]){
+        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c+bp.anchorP[2][0]*f+ox,y:cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},pocket],supply:gen?{xxx:nb,'Y--':16}:{xxx:nb},params:gen?{latGlue:true}:{}});
+        openBudDoors(w.s,w.structures[0],bp);if(!overlap(w.s,[...w.structures[0],...w.structures[1],...(w.founders[0]||[])])){W0=w;break;}}
+      if(!W0)throw Error('split: prepared parts overlap');
+      const {s,structures,founders}=W0,U=structures[0],PK=[...structures[1],...(founders[0]||[])];
+      // the blanks start inside P (the parent's food; labelled)
+      const prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
+      free.forEach(u=>{if(!placeFree(s,u,placed,()=>{const a=2*Math.PI*s.rng(),r=(RP-1.8)*Math.sqrt(s.rng());return [c+r*Math.cos(a),cy+r*Math.sin(a)];}))throw Error('place');placed.push(u);});
+      const Pu=bp.P.map(q=>U[q]),Du=bp.D.map(q=>U[q]),capT=canon(gen?'Ay.z':bp.cap.type),closeU=bp.doors.map(d=>[U[d.panel[d.panel.length-1]],d.closeSide[0]]);
+      const ctr=L=>{let x=0,y=0;for(const u of L){x+=s._dx(s.px[u]-s.px[L[0]]);y+=s._dy(s.py[u]-s.py[L[0]]);}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];};
+      // inside a ring: hex radius (structures.hexr) in the ring's own frame (its turn since t=0 read from one wall cell)
+      const a0P=s.angle(Pu[0]),a0D=s.angle(Du[0]),hexIn=(L,a0,R,u)=>{const [x,y]=ctr(L),t=a0-s.angle(L[0]),dx=s._dx(s.px[u]-x),dy=s._dy(s.py[u]-y);
+        return S.hexr([Math.cos(t)*dx-Math.sin(t)*dy,Math.sin(t)*dx+Math.cos(t)*dy])<R-1;};
+      const inD=u=>hexIn(Du,a0D,RD,u),inP=u=>hexIn(Pu,a0P,RP,u);
+      let split=0;
+      const report=t=>{const {comp}=s.bodies(),dc=comp[Du[0]],cap=[...Array(s.n).keys()].filter(u=>comp[u]===dc&&canon(typeName(s,u))===capT).length;
+        if(!split&&comp[Pu[0]]!==dc)split=t;const shut=closeU.map(([u,i])=>s.bond[u*3+i]>=0?'shut':'open');
+        const parts=[...Array(s.n).keys()].filter(u=>canon(typeName(s,u))===capT&&!s.bonded(u));
+        const st=gen?' strands ['+census(s).filter(q=>q.n>=7).map(q=>q.faces+(q.paired?'*':'')+(comp[q.units[0]]===dc?'(anchored in D)':inD(q.units[3])?'(in D)':inP(q.units[3])?'(in P)':'(out)')).join(' ')+'] docks='+(s.ev.dock||0)+' anchors='+(s.ev.anchor||0):'';
+        console.log(`t=${t} casts=${s.ev.cast||0}${st} cap=${cap}/3 ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length} completions=${s.ev.complete||0} lost outside=${free.filter(u=>!s.bonded(u)&&!inD(u)&&!inP(u)).length}`);};
+      console.log('part',gen?'Ay.z':bp.cap.type,'stamp',S.stampInstr(gen?'Ay.z':bp.cap.type).join(' '),'doors',bp.doors.map(d=>d.ang+'deg').join(' '));
+      snap(s,'t0','t=0: parent P (stamp pocket, blanks) and bud D share an open doorway',{units:U,radius:10});
+      for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}${split?', split':''}`,{units:Pu,radius:12},false);}
+      {const {comp,members}=s.bodies();snap(s,'zoom','the bud after the split',{units:members[comp[Du[0]]],radius:6});}
+      finish('Split: the parent feeds its bud through a doorway; when the bud is complete the doors shut and it separates');},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
     ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;

@@ -27,17 +27,17 @@ const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
 // ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
-const MARKS='<>.!^#*~$+=%@&';
+const MARKS='<>.!^#*~$+=%@&|';
 // carried marks (stamp): marks written after an apostrophe (b.'@) do nothing on this side; a cast product takes them
 // with the glue (a caster's instruction side prints glue and marks, so a pocket can cast parts that carry marks)
-const LET='a-zA-Zα-ωΑ-Ωа-яА-Я-',MK='<>.!^#*~$+=%@&',TOK=new RegExp(`([${LET}])([${MK}]*)(?:'([${MK}]*))?`,'g');
+const LET='a-zA-Zα-ωΑ-Ωа-яА-Я-',MK='<>.!^#*~$+=%@&|',TOK=new RegExp(`([${LET}])([${MK}]*)(?:'([${MK}]*))?`,'g');
 const markBits=m=>{let b=0;for(const c of m||'')b|=1<<MARKS.indexOf(c);return b;},bitMarks=b=>[...MARKS].filter((_,i)=>b>>i&1).join('');
 function parseType(str){const t=[...str.matchAll(TOK)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>has(m,'<')?1:has(m,'>')?2:0),close:t.map(m=>has(m,'.')),
-    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),carry:t.map(m=>markBits(m[3]))};}
+    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),anc:t.map(m=>has(m,'|')),carry:t.map(m=>markBits(m[3]))};}
 const sideMarks=(s,k)=>(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
-  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');
+  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+(s.anc&&s.anc[k]?'|':'');
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k)+(s.carry&&s.carry[k]?"'"+bitMarks(s.carry[k]):'');}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
@@ -48,7 +48,7 @@ class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
-    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.carry=new Int16Array(3*n);
+    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.carry=new Int16Array(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
     this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
@@ -56,10 +56,10 @@ class TriSim extends Physics{
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
   setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.spent[k]=0;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
-    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];this.carry[k]=t.carry[i];}}
+    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];this.anc[k]=t.anc[i];this.carry[k]=t.carry[i];}}
   // side k takes glue g and the marks in bit set b (a cast: the caster's carried marks), nothing carried
   _setSide(k,g,b){const t=parseType(gname(g)+bitMarks(b)+'--');this.glue[k]=g;this.spent[k]=0;this.hinge[k]=t.hinge[0];this.cOnly[k]=t.close[0];this.rel[k]=t.rel[0];this.trg[k]=t.trig[0];
-    this.ltc[k]=t.latch[0];this.fuel[k]=t.fuel[0];this.hear[k]=t.hear[0];this.wide[k]=t.wide[0];this.act[k]=t.act[0];this.att[k]=t.att[0];this.done[k]=t.done[0];this.carry[k]=0;}
+    this.ltc[k]=t.latch[0];this.fuel[k]=t.fuel[0];this.hear[k]=t.hear[0];this.wide[k]=t.wide[0];this.act[k]=t.act[0];this.att[k]=t.att[0];this.done[k]=t.done[0];this.anc[k]=t.anc[0];this.carry[k]=0;}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
   _edges(u){let prev=-1,next=-1,face=-1;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -135,6 +135,16 @@ class TriSim extends Physics{
     // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
     const tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v];if(this.moveDepth([v],tx,ty,da,this.px[v],this.py[v])>0)return false;
     this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=ang;this.resetShape(v);this.regrid(v);return true;}
+  // anchor capture (physics: a connected structure moves as one body): strand end v is placed with side j flush against
+  // side i of u by moving its whole body rigidly, if the place is free (all or nothing, like binding a free triangle)
+  _snapBody(v,j,u,i){const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
+    const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
+    const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
+    const body=this.bodyOf(v),tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v],ox=this.px[v],oy=this.py[v];
+    if(body.includes(u)||this.moveDepth(body,tx,ty,da,ox,oy)>0)return false;
+    const co=Math.cos(da),si=Math.sin(da),k=body.length,RX=new Float64Array(k),RY=new Float64Array(k);this._unwrap(body,RX,RY);
+    for(let q=0;q<k;q++){const w=body[q],rx=RX[q],ry=RY[q];this.px[w]=this._wx(ox+co*rx-si*ry+tx);this.py[w]=this._wy(oy+si*rx+co*ry+ty);this.pa[w]+=da;this.resetShape(w);this.regrid(w);}
+    return true;}
   // a trigger side is inert (binds nothing) while its triangle hears an open signal: a sensor is live once its structure
   // is complete (op -1: just attached, not yet heard)
   _deaf(u,e){return this.trg[u*3+e]&&this.op[u]!==0;}
@@ -174,6 +184,15 @@ class TriSim extends Physics{
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
           if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
+      // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its spare edge, active
+      // while the strand is not being copied) with the complementary glue, as it would catch a free triangle: the end
+      // comes within `capture` of the site and the strand is placed flush (physics moves it as one body)
+      {let hit=false;for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]]){if(rb.role!==SFACE||rb.inert<0||!this.chg[b])continue;
+          for(let e=0;e<3&&!hit;e++){if(!this.anc[a*3+e]||this.bond[a*3+e]>=0||!this.glue[a*3+e])continue;const f=rb.inert;
+            if(!this._active(b,rb).includes(f)||this.glue[b*3+f]!==comp(this.glue[a*3+e])||!reach(a,e,b,f)||this.rng()>=p.pBond)continue;
+            if(!this._snapBody(b,f,a,e))continue;this.bind(a,e,GLUE,b,f,GLUE);this.count('anchor');hit=true;}
+          if(hit)break;}
+        if(hit)continue;}
       // two attached triangles: glue closure between active sides (a hand-off flap's catch side never closes: it catches
       // free triangles only, so a handed-off cargo is not taken back)
       let done=false;

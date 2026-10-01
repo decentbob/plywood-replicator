@@ -56,6 +56,18 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
   if(process.env.TRI_RESUME){const st=JSON.parse(require('zlib').gunzipSync(require('fs').readFileSync(process.env.TRI_RESUME)));
     if(st.n===n){const r=s.constructor.fromState(st);for(const k of Object.keys(r))s[k]=r[k];s._cells=null;console.log('resumed from',process.env.TRI_RESUME,'at t='+s.t);}}
   return out;}
+
+// open the prepared doors of a bud pair (structures.budPair) built as units U: cut the closing pair, turn each panel
+// open about its pin, rebind its hinge there (rest = open, the trigger turns it shut), bind its '&' doorstop pair
+// (a labelled starting condition)
+function openBudDoors(s,U,bp){
+  for(const d of bp.doors){const pc=d.panel.map(c=>U[c]),[ci,cj]=d.closeSide;s.cut(pc[pc.length-1],ci);
+    const [hi,hj]=d.hingeSide;s.cut(pc[0],hi);
+    const px=s.px[pc[0]]+s.ox[pc[0]*3+(s.hinge[pc[0]*3+hi]===1?hi:(hi+1)%3)],py=s.py[pc[0]]+s.oy[pc[0]*3+(s.hinge[pc[0]*3+hi]===1?hi:(hi+1)%3)],t=d.dir*d.ang*Math.PI/180,c=Math.cos(t),n=Math.sin(t);
+    for(const u of pc){const x=s._dx(s.px[u]-px),y=s._dy(s.py[u]-py);s.px[u]=s._wx(px+c*x-n*y);s.py[u]=s._wy(py+n*x+c*y);s.pa[u]+=t;s.resetShape(u);s.regrid(u);}
+    s.bind(pc[0],hi,GLUE,U[d.prev],hj,GLUE);s.hSign[pc[0]*3+hi]=-d.dir;
+    const [sc,si,sj]=d.stopSide;s.bind(U[sc],si,GLUE,U[d.stop],sj,GLUE);}
+  for(let k=0;k<200;k++)s.derive();}
 // place free triangle u at random points from gen() without overlapping `placed`; true on success
 function placeFree(s,u,placed,gen,tries=5000){for(let a=0;a<tries;a++){const [x,y]=gen();s.px[u]=s._wx(x);s.py[u]=s._wy(y);s.pa[u]=2*Math.PI*s.rng();s.resetShape(u);
     if(placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||!separation(s.outline(u),s.outline(v,dx,dy));}))return true;}
@@ -94,4 +106,4 @@ function census(s){const seen=new Set(),out=[];
     out.push({units,faces,gaps,n:units.length,paired:units.some(v=>s._edges(v).face>=0)});}
   return out;}
 const typeCount=s=>{const m={};for(let u=0;u<s.n;u++){const k=canon(typeName(s,u));m[k]=(m[k]||0)+1;}return m;};
-module.exports={createWorld,partPlacement,strandInKit,buildStructure,placeTri,placeFree,band,rolesFromGaps,census,typeCount,H};
+module.exports={createWorld,openBudDoors,partPlacement,strandInKit,buildStructure,placeTri,placeFree,band,rolesFromGaps,census,typeCount,H};
