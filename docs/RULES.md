@@ -135,6 +135,7 @@ blanks. A product never carries marks itself (a stamp cannot be stamped).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
   (a trigger side anywhere in a frame) to a flap through a few bonds.
+- **Interlock (keys, 2026-10-01):** a trigger side binds nothing while its triangle hears the lock signal (a latch locks its flap only through a closed loop of bonds, so a ring with one open doorway does not hold a second door shut).
 - **Interlock:** a triangle with an unbonded latch side emits a lock signal (12, relayed -1 per bond); a closed pulse
   door ignores its key, and its latch holds, while it hears the signal, so only one door of a lock is open at a time.
 - Geometry rule: a triangle turning about a corner sweeps its far corner 13% past the chord, so a flap's (and its

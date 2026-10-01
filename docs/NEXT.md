@@ -2,8 +2,21 @@
 
 State on 2026-10-01 (end of the fourth session). Read AGENTS.md first (rules of work), then this file.
 
-**Handoff status.** See the bottom of "Do next" for what was running last. `node tri/test.js`: 19 tests pass. Branch
-`claude/nice-tesla-eztyn4`, merged into `main`. Runs live in `runs/` (not committed); regenerate with the commands below.
+**Handoff status (end of the fourth session).** Working tree clean; everything committed on branch
+`claude/nice-tesla-eztyn4` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass. Runs live
+in `runs/` (not committed); regenerate with the commands below.
+**Last change, not yet tried in a demo:** a trigger side is now also deaf while it hears the lock signal (sim.js
+`_deaf`). Why: in `split o`, the bud's import door caught a blank at the split while the bud's doorway was still open;
+its latch held, but a latch locks a flap only through a closed loop of bonds and the bud's ring was a C, so the import
+panel swung and carried half the ring, jamming the closing door (world 3 of the last batch; replay showed import door
+at 13 degrees, closing door stuck at 90, thousands of stalls). **Exact next step:** rerun
+`for k in 1 2 3 4; do node tri/demos.js split $k 200000 runs/si$k o > runs/si$k.log & done` (about 1.5 h, 4 processes)
+and check per world: SPLIT, `doors P:shut D:shut`, then `imports` rising and a new `aaaa` strand in D (a whole copy made
+by the bud). Also rerun `split 1 30000 runs` and `split 1 60000 runs g` once to confirm the rule change keeps them
+working (it should: their keys are deaf anyway until the split). Last batch (before this rule, xxx 10): 1 of 4 split by
+200000 (organelle stuck at 14-15/16 in the others: the last kit parts are slow or lost; 2 copies per kit type) - if
+that persists, give 3 copies per kit type. The demo's `outside=` count (flood fill on a 0.25 grid) can leak through wall
+gaps between sample points: treat it as rough.
 
 ## Where things stand
 - Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (zip), casting, lid

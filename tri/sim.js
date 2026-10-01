@@ -145,9 +145,11 @@ class TriSim extends Physics{
     const co=Math.cos(da),si=Math.sin(da),k=body.length,RX=new Float64Array(k),RY=new Float64Array(k);this._unwrap(body,RX,RY);
     for(let q=0;q<k;q++){const w=body[q],rx=RX[q],ry=RY[q];this.px[w]=this._wx(ox+co*rx-si*ry+tx);this.py[w]=this._wy(oy+si*rx+co*ry+ty);this.pa[w]+=da;this.resetShape(w);this.regrid(w);}
     return true;}
-  // a trigger side is inert (binds nothing) while its triangle hears an open signal: a sensor is live once its structure
-  // is complete (op -1: just attached, not yet heard)
-  _deaf(u,e){return this.trg[u*3+e]&&this.op[u]!==0;}
+  // a trigger side is inert (binds nothing) while its triangle hears an open signal (a sensor is live once its structure
+  // is complete; op -1: just attached, not yet heard) or the lock signal (interlock: a key catches nothing while
+  // another door of its structure is open; a latch locks its flap only through a closed loop of bonds, so a ring with
+  // one gap does not hold a second door shut)
+  _deaf(u,e){return this.trg[u*3+e]&&(this.op[u]!==0||this.lockBusy[u]>0);}
   _handCatch(u,e){if(!this.trg[u*3+e])return false;for(let i=0;i<3;i++)if(this.hinge[u*3+i]&&this.rel[u*3+i]===2)return true;return false;}
   cut(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bkind[u*3+i]=0;this.bkind[q]=0;this.unlink(u,i);}
   // sides of an attached triangle that bind by glue: free sides of a grown (glue-bonded) triangle, the back of a

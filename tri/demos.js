@@ -120,7 +120,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
           for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)return true;}return false;};
       let W0=null;
       for(const f of gen?[0.55,0.45,0.65,0.35,0.75]:[0])for(const ox of gen?[0,1,-1,2,-2]:[0]){
-        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c+bp.anchorP[2][0]*f+ox,y:cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},pocket],supply:gen?{xxx:org?24:nb,'Y--':org?12:16,...(org?{uuu:20+OUT}:{}),...kitSupply}:{xxx:nb},params:gen?{latGlue:true,...(org?{lockRange:80}:{})}:{}});
+        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c+bp.anchorP[2][0]*f+ox,y:cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},pocket],supply:gen?{xxx:org?10:nb,'Y--':org?12:16,...(org?{uuu:20+OUT}:{}),...kitSupply}:{xxx:nb},params:gen?{latGlue:true,...(org?{lockRange:80}:{})}:{}});
         openBudDoors(w.s,w.structures[0],bp);if(!overlap(w.s,[...w.structures[0],...w.structures[1],...(w.founders[0]||[])])){W0=w;break;}}
       if(!W0)throw Error('split: prepared parts overlap');
       const {s,structures,founders}=W0,U=structures[0],PK=[...structures[1],...(founders[0]||[])];
