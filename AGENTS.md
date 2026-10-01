@@ -34,10 +34,17 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
   result, with a number, e.g. "3 of 4 worlds"), **stop boundary** (what is out of scope, and a budget of demo runs
   after which you hand off) and **approach** (designs considered, the one chosen and why). Work toward the acceptance
   only; record side paths in NEXT. End with acceptance met, or a verified milestone and the exact next step. A slice
-  that turns out wrong ends with what was learned. Small finished slices beat large open ones.
+  that turns out wrong ends with what was learned. A slice is a substantial step (typically a few hours), not one
+  batch and a retune; split work longer than a session into milestones with their own acceptance.
+- **Simplifying is progress** (user, 2026-10-01): removing or merging core rules while keeping the capabilities is
+  worth as much as a new capability.
+- **Theory counts** (user, 2026-10-01): when a demonstration would take unreasonable compute or needs a structure
+  that does not exist yet, a careful design argument is a result (types laid out, each step justified by a named
+  rule, timing and supply estimated, weakest assumption stated). Record it as "designed, not demonstrated", never as
+  working.
 - **What counts as a slice:** a new structure or machine from the existing core, making a capability reliable (3 of
-  4 worlds or better), a capability check, a speed-up that limits iteration, an analysis that decides a question, a
-  removal or merge of core rules, and (rarely) a gated core change. A parameter sweep without a question is not.
+  4 worlds or better), a capability check, a speed-up that limits iteration, an analysis or design argument that
+  decides a question, a removal or merge of core rules, and (rarely) a gated core change. A parameter sweep without a question is not.
 - **The loop:** idea → build it as types and structures with the existing core → a demo world, as short as shows the
   behaviour → look at pictures → fix the mechanics → log it with a picture → next idea.
 - **Batches are rare:** only when a capability works in demos and a number changes what gets built next; about six
