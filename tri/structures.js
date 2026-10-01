@@ -33,6 +33,30 @@ function pocket(instr='bcd',recog='A',fuel=null){
     {v:[[2,0],[1.5,-H],[2.5,-H]],type:'---'},{v:[[2,0],[2.5,-H],[3,0]],type:'---'},{v:[[2,0],[3,0],[2.5,H]],type:'---'},
   ];}
 
+// Lid pocket (bulge-free casting pocket). The target slot T = (0,0),(1,0),(0.5,H) is a V notch between two fixed
+// casters, B below and R on the right, open to the upper left, so a free target slides in. B and R catch (their
+// recognition sides are not close-only); R's recognition side is also a trigger. R's trigger signal is heard by Q
+// (hear side '+' facing R) and by the lid (hear side on its hinge, facing Q): the lid, hinged to Q at (0.5,H) and
+// waiting open 120 degrees away (wide hinge '='), closes onto T. It turns about a corner of T, so its leading edge
+// arrives flush and nothing bulges into the target; its recognition side is close-only and bonds the caught target.
+// After the cast the trigger lets go, the signal fades and the lid reopens. Product: [p, q, r] = instructions of
+// (B, R, lid) on T's sides 0, 1, 2. q must not be inert (R's instruction bond carries the signal to Q).
+// fuel: a glue letter puts a fuel side on Q's outer side (each closing spends a charged carrier).
+function lidPocket(instr='bcd',recog='A',fuel=null){
+  const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));if(q==='-')throw Error('lid pocket: R needs an instruction glue');
+  return [
+    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}${R}`,loose:p==='-'},          // B: K, instruction p, recognition (catches)
+    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}${R}*`},                       // R: K, instruction q, recognition + trigger
+    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
+    {v:[[0.5,H],[1.5,H],[1,2*H]],type:`${Q}+${fuel?fuel+'$':'-'}k`},     // Q: holds R's instruction and hears R; outer side (fuel); lid's hinge partner
+    {v:[[0,0],[-0.5,-H],[0.5,-H]],type:'--k'},                           // Z: k for B
+    {v:[[0.5,-H],[1.5,-H],[1,0]],type:`--${P}`},                         // W: holds B's instruction
+    {v:[[1,0],[2,0],[1.5,H]],type:'--k'},                                // S: k for R
+    {v:[[1,0],[1.5,-H],[2,0]],type:'---'},{v:[[2,0],[2.5,H],[1.5,H]],type:'---'},{v:[[2,0],[1.5,-H],[2.5,-H]],type:'---'},
+    {v:[[-0.5,-H],[0,-2*H],[0.5,-H]],type:'---'},{v:[[0,-2*H],[1,-2*H],[0.5,-H]],type:'---'},{v:[[0.5,-H],[1,-2*H],[1.5,-H]],type:'---'},
+    {v:[[1,-2*H],[2,-2*H],[1.5,-H]],type:'---'},
+  ];}
+
 // Conveyor: hatch 1 (hand-off ^) catches a block (glue a) and swings it to hatch 2's catch side; once the block is
 // bonded twice hatch 1 lets go; hatch 2 (drop !) swings on and drops it. The frame cell beside hatch 2's third side
 // stays empty: a triangle turning about a corner bulges 13% past the edge it swings toward.
@@ -92,4 +116,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

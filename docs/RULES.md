@@ -23,6 +23,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `~` | latch: lets go while its door is triggered or opening |
 | `.` | close-only: binds only triangles that are already attached, never a free one |
 | `$` | fuel side: a hinge here (or on its partner) spends one charged carrier per swing |
+| `+` | hear side: the triangle hears the trigger signal of the partner bonded here (relayed, below) |
+| `=` (hinge side) | wide hinge: swings 120 degrees instead of `hingeAngle` |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
 | `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
@@ -39,7 +41,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 - `pairs`: blocks near enough to bond (centre distance within the two radii plus 0.23).
 
 ## Binding (one rule everywhere)
-A side binds a flush side (both corner gaps within 0.3, closures 0.22) with the complementary glue, at
+A side binds a flush side (both corner gaps within 0.45, closures 0.22) with the complementary glue, at
 probability 0.5 per step, if at least one of the two triangles is already attached (**activation by
 attachment**: free triangles never bind each other). A **discharged** triangle binds nothing. Close-only sides
 bind only attached partners.
@@ -60,6 +62,10 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
 - **release:** a docked triangle lets go of its face once its prev and next partners are complete; the copy peels
   off as one strand and is a template itself. Copy faces carry the complement of the template's faces, so a copy
   of the copy restores them (the copy reads as the reverse complement).
+- **zip (default on):** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it, a
+  face whose dock is bonded passes it on, backs relay it (previous pass). A copy therefore grows from the high end one
+  face after another; parallel docking used to enclose an empty dock site between two partial copies (a hole no free
+  triangle can reach), which deadlocked copying. Option `zip: false` restores parallel docking.
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - options: `caps` (capped ends emit relayed signals; only intact strands are copied), `pDissolve` (with caps:
@@ -82,6 +88,9 @@ not complementing, is the default: a complemented product would stick to its own
 - **Releases:** hand-off `^`, drop `!`, pulse `#` (above). Without a mark a flap holds its cargo until something
   else cuts the bond (e.g. a cast).
 - **Latches** `~` let go while their door is triggered or opening (otherwise a door would re-latch before moving).
+- **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
+  signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
+  (a trigger side anywhere in a frame) to a flap through a few bonds.
 - **Interlock:** a triangle with an unbonded latch side emits a lock signal (12, relayed -1 per bond); a closed pulse
   door ignores its key, and its latch holds, while it hears the signal, so only one door of a lock is open at a time.
 - Geometry rule: a triangle turning about a corner bulges 13% past the edge it swings toward, so a flap needs free
@@ -96,4 +105,4 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, stiff 0.8, iters 32, pairTol 0.35, noTunnel true`. Chemistry: `pBond 0.5,
-triTol 0.3, triTolClose 0.22, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12`, options off.
+triTol 0.45, triTolClose 0.22, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12, sigRange 6, zip true`, other options off.

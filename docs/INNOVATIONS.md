@@ -6,6 +6,29 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-01 (second session)
+
+- **Lid pocket (bulge-free casting pocket)** — works (3 worlds). Diagnosis of the old hatch pocket's stall: a triangle
+  turning 60 degrees about a corner sweeps its far corner along an arc that bulges 0.134 past the chord, straight
+  into the fixed caster across the target's far edge, so the carried target jams (seed 1: one catch, then nothing for
+  4000 steps). New design: the target slides into an open V notch between two fixed casters (B, R); R's recognition
+  side is a trigger, its signal is heard through one frame cell (Q) by a lid hinged to Q (new marks: hear side `+`,
+  wide hinge `=` 120 degrees); the lid turns about a corner of the slot, so its leading edge arrives flush and nothing
+  bulges into the target; cast; the trigger lets go and the lid reopens. 4000 steps, 16 targets: 5, 5 and 9 casts
+  (seeds 1-3) against 0-2 for the hatch pocket. Test: deterministic catch-close-cast-reopen. Enables faster factories;
+  the heard trigger wires any sensor side to a flap a few bonds away (signals for budding and division later).
+  `node tri/demos.js lid 1 4000 runs`. Picture: `docs/pictures/lid_pocket.png`.
+- **Copy deadlock fixed: zip copying** — works (copies complete in 4 of 4 worlds that deadlocked or stalled before).
+  Diagnosis: two partial copies on one template leave an empty dock site enclosed on all three sides (template face,
+  the lower copy's last fill, the upper copy's dock); no free triangle can reach it since the no-tunnelling fix, so
+  the busy relay stays high for ever. Fix (rule): a face docks only while it hears zip from the strand's high end
+  (relayed through docked faces and backs), so copies grow one face after another and every dock site is an open
+  notch. Sequential docking is slower, so the binding tolerance went from 0.3 to 0.45 (also 2-3x faster conveyor
+  hand-offs). copy world (abaabb), 10k steps: zip + 0.45 gave complete copies `BBAABA` in seeds 1-4 (seed 1 also a
+  copy of the copy); without zip, seed 3 deadlocked (`BBA*` + `BA*`).
+- **Speed** — physics 2.6x faster (cell-grid broad phase, radii cached per pass, allocation-free triangle SAT; same
+  results bit for bit): copy world 8.6 -> 3.3 ms per step.
+
 ## 2026-10-01
 
 - **Clean engine (`tri/`)** — works. The typed-triangle world was ported out of the old research stack (core letter

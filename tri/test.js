@@ -34,6 +34,12 @@ test('casting: a pocket of three activated casters casts the instruction glues',
   assert.equal(s.nbc.length,tris.length);s.derive();s.chemistry();
   assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(0)),canon('bcd'));assert.ok(!s.bonded(0),'product released');});
 
+test('lid pocket: a target in the notch is caught, the lid closes (heard trigger), cast, the lid reopens',()=>{
+  const tris=[...S.lidPocket('bcd','A'),{v:[[0,0],[1,0],[0.5,H]],type:'aaa',loose:true}],T=tris.length-1;
+  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,4,4);for(let i=0;i<3;i++)s.cut(T,i);s.derive();
+  const a0=s.angle(2)-s.angle(3);s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('bcd'));
+  const back=Math.atan2(Math.sin(s.angle(2)-s.angle(3)-a0),Math.cos(s.angle(2)-s.angle(3)-a0));assert.ok(Math.abs(back)<0.1,`lid open again (got ${back.toFixed(2)})`);symmetric(s);});
+
 test('hinge: a triggered flap swings 60 degrees and returns when the trigger lets go',()=>{
   // partner P (fixed by no jostle), flap F hinged at P's shared corner, trigger side of F faces cargo C
   const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'--H'},{v:[[0,0],[0.5,H],[-0.5,H]],type:'h<-A*',loose:true},{v:[[0,0],[-0.5,H],[-1,0]],type:'a--',loose:true}];

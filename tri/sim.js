@@ -23,31 +23,31 @@ const gname=g=>g===0?'-':g%2?String.fromCharCode(97+(g-1)/2):String.fromCharCode
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
 // ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
-const MARKS='<>.!^#*~$';
-function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^#*~$]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+const MARKS='<>.!^#*~$+=';
+function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^#*~$+=]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>has(m,'<')?1:has(m,'>')?2:0),close:t.map(m=>has(m,'.')),
-    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$'))};}
+    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'='))};}
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
-  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'');}).join('');
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^#*~$]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'');}).join('');
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^#*~$+=]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:0.5,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,
+const DEFAULTS={pBond:0.5,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
-    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hSign=I8(3*n);
+    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.hSign=I8(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.sg=I8(n);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
   setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
-    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];}this.bondsDirty=true;}
+    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];}this.bondsDirty=true;}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
   _edges(u){let prev=-1,next=-1,face=-1;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -65,7 +65,7 @@ class TriSim extends Physics{
   // ---------------- exposed values (previous pass, one bond per pass) ----------------
   derive(){
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
-    const nb0=this.nb.slice(),gap0=this.gap.slice(),need0=this.need.slice(),busy0=this.busy.slice(),lb0=this.lockBusy.slice(),zip0=this.zip.slice();
+    const nb0=this.nb.slice(),gap0=this.gap.slice(),need0=this.need.slice(),busy0=this.busy.slice(),lb0=this.lockBusy.slice(),zip0=this.zip.slice(),sg0=this.sg.slice();
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
     // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond (refractory)
     for(let u=0;u<n;u++){let b=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -96,6 +96,9 @@ class TriSim extends Physics{
     const K=gcode('K');
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
       if(a<0&&this.glue[u*3+i]===K&&this.glue[q]===comp(K))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
+    // sg (trigger signal on hear sides): sigRange while a trigger side of mine is bonded, else the best value heard on a
+    // bonded hear side '+' (the partner's previous value - 1); a flap with sg > 0 swings
+    for(let u=0;u<n;u++){let v=this.tb[u]?this.p.sigRange:0;for(let i=0;i<3;i++){if(!this.hear[u*3+i])continue;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,sg0[(q/3)|0]-1);}this.sg[u]=v;}
   }
   // ---------------- bonds ----------------
   bind(u,i,ku,v,j,kv){this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;
@@ -176,7 +179,7 @@ class TriSim extends Physics{
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*3+i];if(q<0||this.bkind[u*3+i]!==GLUE){ok=false;break;}
         const w=(q/3)|0,j=q%3;if(this.actE[w]!==m3(j+1))ok=false;else src.push(G[w*3+m3(j+2)]);}
       if(!ok)continue;
-      for(let i=0;i<3;i++){const k=u*3+i;G[k]=this.p.castComp?comp(src[i]):src[i];this.hinge[k]=0;this.cOnly[k]=0;this.rel[k]=0;this.trg[k]=0;this.ltc[k]=0;this.fuel[k]=0;this.cut(u,i);}
+      for(let i=0;i<3;i++){const k=u*3+i;G[k]=this.p.castComp?comp(src[i]):src[i];this.hinge[k]=0;this.cOnly[k]=0;this.rel[k]=0;this.trg[k]=0;this.ltc[k]=0;this.fuel[k]=0;this.hear[k]=0;this.wide[k]=0;this.cut(u,i);}
       this.count('cast');(this.castLog||(this.castLog=[])).push([this.t,u,typeName(this,u)]);}}
   // environment drive (labelled): free discharged triangles inside the light zone {x, y, r, p} recharge
   _light(){const L=this.p.light;if(!L)return;
@@ -184,20 +187,20 @@ class TriSim extends Physics{
       if(Math.hypot(this._dx(this.px[u]-L.x),this._dy(this.py[u]-L.y))<L.r&&this.rng()<L.p){this.chg[u]=1;this.count('recharge');}}}
   // ---------------- hinge drive ----------------
   servo(){
-    if(!this.hinge.some(x=>x))return;const n=this.n,p=this.p,th=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
+    if(!this.hinge.some(x=>x))return;const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
     const hb=(x,e)=>this.isHingeBond(x,e),P=(u,i)=>this.partner(u,i);
     // latches let go while their door is triggered (and no other door is unlatched: interlock) or opening
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u],open=this.dOpen[u];
       for(let e=0;e<3;e++)if(e!==i&&this.bond[u*3+e]>=0&&!hb(u,e)){const w=P(u,e);if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
       if(open||(trig&&this.lockBusy[u]===0)){this.cut(u,i);this.count('unlatch');}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(!this.hinge[u*3+i]||q<0)continue;const v=(q/3)|0,rel=this.rel[u*3+i];
-      const open=()=>wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this.angle(u)-this.angle(v)));
+      const th=this.wide[u*3+i]?2*Math.PI/3:th0,open=()=>wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this.angle(u)-this.angle(v)));
       // releases on my own triggers: hand-off once the cargo is bonded elsewhere too; drop once the swing is complete
       for(let e=0;e<3;e++){if(!this.trg[u*3+e]||this.bond[u*3+e]<0)continue;
         if(rel===2&&this.nbc[P(u,e)]>=2){this.cut(u,e);this.count('handoff');}else if(rel===1&&Math.abs(open())<p.dropTol){this.cut(u,e);this.count('drop');}}
       // triggered: a trigger side of mine is bonded, or a triangle bonded to me (not by a hinge) reports one
       let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*3+e]>=0);
-      for(let e=0;e<3&&!swung;e++)if(this.bond[u*3+e]>=0&&!hb(u,e)&&this.tb[P(u,e)])swung=true;
+      for(let e=0;e<3&&!swung;e++)if(this.bond[u*3+e]>=0&&!hb(u,e)&&this.tb[P(u,e)])swung=true;if(this.sg[u]>0)swung=true;
       // energy: with a fuel side (mine or my hinge partner's), a swing starts only by spending a charged carrier there
       if(swung&&!this.pw[u]&&!this.dOpen[u]){let need=false,spent=false;
         for(const x of [u,v])for(let e=0;e<3;e++){if(!this.fuel[x*3+e])continue;need=true;if(spent)continue;const w=P(x,e);

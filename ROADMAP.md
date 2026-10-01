@@ -7,9 +7,10 @@ splits it off.** Build every mechanism in isolation, then combine them.
 
 | Module | Biology | Status | Where |
 |---|---|---|---|
-| Genome: typed chain copied by complementary faces | DNA/RNA | works (copies can deadlock, see issues) | sim.js chain rules |
+| Genome: typed chain copied by complementary faces | DNA/RNA | works (zip copying from the high end, no deadlock) | sim.js chain rules |
 | Compartment: closed ring membrane, sealed at the default jostle | cell membrane | works | structures.ring |
-| Factory: casting pockets turn blanks into the parts copying needs | metabolism | works with prepared pockets | structures.pocket, demo factory |
+| Factory: casting pockets turn blanks into the parts copying needs | metabolism | works with prepared pockets; lid pocket casts without stalling | structures.pocket/lidPocket, demos factory, lid |
+| Signals: heard triggers wire a sensor side to a flap through hear sides | nerves, signalling | works (lid pocket) | sim.js sg |
 | Energy: charged carriers fuel every hinge swing, recharge in a light zone | ATP, light | works | sim.js servo, demo energy |
 | Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works | structures, demos |
 | Import: bring raw material through the membrane (pump) | transporters | not yet (lock works, pump does not) | backlog 3 |
@@ -26,10 +27,8 @@ splits it off.** Build every mechanism in isolation, then combine them.
    seed glue, one glue pair per tree edge, closure glues for the remaining shared edges; kit types in supply. Grow it
    from a chain-end seed; check it forms on the founder, regrows on copies, and casts. Then `latGlue` backs so a chain
    carries several seeds (different chains grow different parts), and a pocket that casts its own kit types.
-2. **Robust copying.** Fix the deadlock where two partial copies on one template keep the busy relay high, so the
-   template's other faces stay refractory for ever (seen in the copy and factory demos). Candidates: `triUndock` for
-   stalled partial copies, refractory only for faces of the copy that just left, or caps + dissolve. Measure copy
-   completion in a few worlds.
+2. **Factory on lid pockets.** Switch the factory demo to lid pockets (done: copy deadlock fixed by zip; lid pocket
+   built) and measure generations.
 3. **Pump through a wall.** A carrying lock: the hatch pocket carries a key from an outer slot into an enclosed
    centre; a pulse door on the centre's inner wall opens while the hatch holds its return (interlock). Fuel each
    stroke (energy), so pumping is directional and costs carriers.
@@ -41,9 +40,8 @@ splits it off.** Build every mechanism in isolation, then combine them.
    moves through; the parent's factory feeds parts across.
 7. **Division.** A local completion signal (relayed) that cuts the shared wall (latches) once the bud has its genome
    and factory.
-8. **Pocket swing stall.** The hatch's carried target presses on a caster during the swing (13% bulge), so casts
-   depend on lucky jostling; redesign the pocket so the swing path is clear (faster factories).
+8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 
 ## Known issues
-- Copy deadlock (backlog 2). Pocket swing stall (backlog 8). Both slow everything built on them.
+- Sequential (zip) copying is slower per copy than parallel docking was when it did not deadlock.
 - Single runs are noisy; a claim needs a few worlds. Batches stay rare (AGENTS).

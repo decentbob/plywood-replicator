@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount}=require('./world');
 const {render,montage}=require('./render');
@@ -26,6 +26,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const U=structures[0],focus={units:U,radius:5,align:{u:U[4],a0:s.angle(U[4])}};snap(s,'t0','t=0',focus);
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} casts=${s.ev.cast||0} ${JSON.stringify(typeCount(s)).slice(0,200)}`);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
       console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Casting pocket: aaa -> bcd (hatch catches, carries, cast, reopens)');},
+    // lid pocket: a target slides into the notch, the lid closes on it, the cast gives the instruction glues, the lid reopens
+    lid(){steps=steps||4000;const {s,structures}=createWorld({seed,size:14,structures:[{tris:S.lidPocket('bcd','A'),x:7,y:7}],supply:{'aaa':16,'---':20}});
+      const U=structures[0],focus={units:U,radius:4,align:{u:U[4],a0:s.angle(U[4])}};snap(s,'t0','t=0',focus);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} casts=${s.ev.cast||0} aaa=${typeCount(s).aaa||0}`);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
+      console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Lid pocket: aaa slides into the notch, the lid closes, cast bcd, the lid reopens');},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);
