@@ -91,7 +91,9 @@ or missing, in order:
    already an open front while the wall grows (then the parent's door must open on something else than silence).
 3. **Programmable synthesis** (the next big blocker, see IDEAS): one stamp pocket makes one part type; a cell kit has
    ~60. Options: part templating (a copier pocket: simple, information in parts) or translation (a reading frame on a
-   strand: hard). **Ask the user which way** before building: both need a rule.
+   strand: hard). **User (2026-10-01): an explore run decides**, comparing part templating, translation and
+   kit-free growth (no new rule) through the core-change gate (AGENTS.md); prefer the least core growth, at most one
+   new rule; record the decision in IDEAS and here before building.
 4. **Birth (partial, older route):** `cellKit` + demo `birth` (a copy leaves through a pore and grows its own cell from
    kit parts in the world; 1 of 4 worlds started an offspring cell at ~2.6M steps). See INNOVATIONS.
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
