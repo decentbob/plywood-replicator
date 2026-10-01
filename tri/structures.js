@@ -183,7 +183,9 @@ function ringKit(R=3,seed='z',letters=null){
   const shared0=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const freeOut=k=>{const v=cells[k],a=shared0(v,cells[(k+N-1)%N]),b=shared0(v,cells[(k+1)%N]),f=3-a-b,m=[(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2];
     return Math.hypot(m[0],m[1])>(R-0.5)*H;};
-  if(!freeOut(0))cells.push(cells.shift());
+  // start where two outward-facing cells meet: the root and the last site both face outward (the last site fills from
+  // outside, not from the closed-off inside)
+  {let k0=0;for(let k=0;k<N;k++)if(freeOut(k)&&freeOut((k+N-1)%N)){k0=k;break;}const rot=cells.splice(0,k0);cells.push(...rot);}
   const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const L=letters||[...LOW].filter(c=>!'fkxyz'.includes(c)&&c!==seed).slice(0,P);
   const types=cells.map((v,k)=>{const t=['-','-','-'],prev=shared(v,cells[(k+N-1)%N]),next=shared(v,cells[(k+1)%N]);if(prev<0||next<0)throw Error('ring kit: cells not adjacent');

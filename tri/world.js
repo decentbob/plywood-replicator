@@ -37,7 +37,7 @@ function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.s
 function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params={}}={}){
   const bands=founders.map(f=>band(rolesFromGaps(f.gaps)));
   const n=bands.reduce((a,b)=>a+b.length,0)+structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
-  // TRI_PARAMS (environment, JSON) overrides parameters for experiments, e.g. TRI_PARAMS='{"stiff":0.95}'
+  // TRI_PARAMS (environment, JSON) overrides parameters for experiments, e.g. TRI_PARAMS='{"sigma":0.2}'
   const s=new TriSim({...params,...JSON.parse(process.env.TRI_PARAMS||'{}'),seed,W:size,H:size},n);let next=0;const placed=[],out={s,founders:[],structures:[]};
   bands.forEach((tris,k)=>{const f=founders[k],units=tris.map(()=>next++),cx=f.x??size*(k+1)/(bands.length+1),cy=f.y??size*(k+1)/(bands.length+1);
     let mx=0,my=0;for(const t of tris)for(const p of t.v){mx+=p[0]/(3*tris.length);my+=p[1]/(3*tris.length);}
@@ -51,7 +51,7 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
   for(const st of structures){const units=st.tris.map(()=>next++);buildStructure(s,units,st.tris,st.x,st.y,st.rot||0);placed.push(...units);out.structures.push(units);}
   for(const [t,c] of Object.entries(supply))for(let q=0;q<c;q++){const u=next++;s.setType(u,t);
     if(!placeFree(s,u,placed,()=>[size*s.rng(),size*s.rng()]))throw Error('could not place '+t);placed.push(u);}
-  s.bondsDirty=true;for(let k=0;k<40;k++)s.derive();   // settle the relayed signals of the founders
+  for(let k=0;k<40;k++)s.derive();   // settle the relayed signals of the founders
   return out;}
 // place free triangle u at random points from gen() without overlapping `placed`; true on success
 function placeFree(s,u,placed,gen,tries=5000){for(let a=0;a<tries;a++){const [x,y]=gen();s.px[u]=s._wx(x);s.py[u]=s._wy(y);s.pa[u]=2*Math.PI*s.rng();s.resetShape(u);

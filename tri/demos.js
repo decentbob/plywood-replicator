@@ -33,10 +33,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Lid pocket: aaa slides into the notch, the lid closes, cast bcd, the lid reopens');},
     // grown pocket: a lid pocket kit (structures.kit) grows from a seed on an anchor cell (labelled start: anchor + root);
     // extra: copies of each kit type (default 4)
-    grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X'),'auto','x','z',null,[S.lidSlot()]),r=K.tris[K.root],i=K.rootSide;
+    grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X',null,'B'),'auto','x','z',null,[S.lidSlot('B')]),r=K.tris[K.root],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'};
       const supply={xxx:16};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
-      const {s,structures}=createWorld({seed,size:16,structures:[{tris:[anchor,r],x:8,y:8}],supply,params:{pLoose:0.005}});
+      const {s,structures}=createWorld({seed,size:16,structures:[{tris:[anchor,r],x:8,y:8}],supply,params:{pLoose:0.05}});
       console.log('kit',K.kit.join(' '),'depth',K.depth);const A=structures[0][0];
       const tmp=new TriSim({},1),want=new Set(K.types.map(t=>{tmp.setType(0,t);return canon(tmp.typeName(0));})),grown=()=>{const {comp}=s.bodies();let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[A]&&want.has(canon(typeName(s,u))))k++;return k;};
       snap(s,'t0','t=0: anchor and root',null,false);let done=0;
@@ -50,9 +50,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     heir(){steps=steps||30000;const per=parseInt(extra)||12,P=S.lidPocket('-A-','X');
       const supply={'Az-':14,'az-':14,'Z--':30,xxx:10};
       const probe=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}]}),U0=probe.founders[0];
-      const K=S.kitOptions(P,'xa','z',[S.lidSlot()]).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);if(!K)throw Error('no placement');
+      const K=S.kitOptions(P,'xa','z',[S.lidSlot('B')]).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);if(!K)throw Error('no placement');
       for(const t of K.kit.concat([K.types[K.root]]))supply[t]=(supply[t]||0)+per;
-      const {s,founders}=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}],supply,params:{pLoose:0.005,latGlue:true}});
+      const {s,founders}=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}],supply,params:{pLoose:0.05,latGlue:true}});
       console.log('root',K.root,'side',K.rootSide,'depth',K.depth);
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},want=new Set(K.types.map(norm));
       const report=t=>{const {comp,members}=s.bodies(),c=census(s).filter(x=>x.n>=9&&!x.paired);
@@ -67,10 +67,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // with the founder aaaaa, the two kits, fills and blanks; no dockers (extra: kit copies, 10)
     cycle(){steps=steps||120000;const per=parseInt(extra)||10,size=24;
       const probe=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}]}),U0=probe.founders[0];
-      const fit=(P,res,sd)=>S.kitOptions(P,res,sd,[S.lidSlot()]).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);
-      const Ky=fit(S.lidPocket('-Az','X'),'xyz','y'),Kz=fit(S.lidPocket('-ay','X'),'xyz'+Ky.letters,'z');if(!Ky||!Kz)throw Error('no placement');
+      const fit=(P,res,sd)=>S.kitOptions(P,res,sd,[S.lidSlot('B')]).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);
+      const Ky=fit(S.lidPocket('-Az','X',null,'B'),'xyz','y'),Kz=fit(S.lidPocket('-ay','X',null,'B'),'xyz'+Ky.letters,'z');if(!Ky||!Kz)throw Error('no placement');
       const supply={'Z--':16,'Y--':16,xxx:60};for(const K of [Ky,Kz])for(const t of K.types)supply[t]=(supply[t]||0)+per;
-      const {s}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}],supply,params:{pLoose:0.005,latGlue:true}});
+      const {s}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}],supply,params:{pLoose:0.05,latGlue:true}});
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},Wy=new Set(Ky.types.map(norm)),Wz=new Set(Kz.types.map(norm));
       const report=t=>{const {comp,members}=s.bodies(),c=census(s).filter(x=>x.n>=9&&!x.paired),tc=typeCount(s);
         const part=x=>{const m=members[comp[x.units[0]]];return m.filter(u=>Wy.has(norm(typeName(s,u)))).length+'/'+m.filter(u=>Wz.has(norm(typeName(s,u)))).length;};
@@ -101,9 +101,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     gate(){steps=steps||10000;const rows=String(extra||'').includes('r2')?2:1,keys=parseInt(extra)||12,{tris,R}=S.ring(4+rows-1,rows);ringRun({tris,R,rows,keys,door:1,title:`Gated ring membrane (${rows} row${rows>1?'s':''}), ${keys} keys`});},
     // airlock (double lock with interlock)
     airlock(){steps=steps||30000;const keys=parseInt(extra)||24,{tris,R}=S.airlock(4);ringRun({tris,R,rows:1,keys,door:2,title:`Airlock, ${keys} keys`,lock:true});},
-    // energy: the pocket hatch spends a charged carrier per swing; carriers recharge in a light zone (extra 'dark': off)
+    // energy: the lid pocket's lid spends a charged carrier per closing; carriers recharge in a light zone (extra 'dark': off)
     energy(){steps=steps||10000;const light=extra!=='dark';
-      const {s}=createWorld({seed,size:16,structures:[{tris:S.pocket('bcd','A','E'),x:4.5,y:8}],supply:{'aaa':16,'eee':12,'---':12},params:light?{light:{x:12,y:8,r:2.5,p:0.02}}:{}});
+      const {s}=createWorld({seed,size:16,structures:[{tris:S.lidPocket('bcd','A','E'),x:4.5,y:8}],supply:{'aaa':16,'eee':12,'---':12},params:light?{light:{x:12,y:8,r:2.5,p:0.02}}:{}});
       const carriers=[...Array(s.n).keys()].filter(u=>typeName(s,u)==='eee');for(const u of carriers)s.chg[u]=0;snap(s,'t0',`t=0: light ${light?'on':'off'}, carriers discharged`,null,false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} light=${light} casts=${s.ev.cast||0} fuelUsed=${s.ev.fuelUsed||0} recharges=${s.ev.recharge||0} charged=${carriers.filter(u=>s.chg[u]).length}`);
         if(every(t,3))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, fuel used ${s.ev.fuelUsed||0}`,null,false);}

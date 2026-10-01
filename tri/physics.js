@@ -1,24 +1,21 @@
 'use strict';
-// Polygon physics for unit triangles on a torus (all blocks are the same regular triangle, side 1).
-//   state   centre (px, py), angle pa, corner offsets (ox, oy) per triangle; corners are soft (stiffness `stiff`)
-//   bonds   bond[u*3+i] = v*3+j: side i of u is joined to side j of v (-1: free). A bond pins the two corner pairs
-//           of the shared side together; a hinged side (hinge[u*3+i] = 1: its first corner, 2: its second) pins one
-//           corner only, so the partner swings about it, and hinged pairs still collide.
-//   motion  Brownian jostling of bodies (a body = blocks joined by bonds, moved and turned as one rigid body; a free
-//           block alone), then `iters` constraint passes: polygon contacts (minimum translation), pins (rigid share plus
-//           corner deformation by softness) and shape matching of bonded blocks back toward their rest shape.
-//   no tunnelling  a jostle kick can exceed a thin wall (kicks reach about 1.8 at sigma 0.3, a one-row wall is 0.87
-//           thick): after the jostle, a body whose block-centre path enters a block of another bonded structure is
-//           moved only 1/2 or 1/4 of the way (translation, orientation kept), or not at all.
-//   clusters  blocks joined by full bonds are pulled onto the best-fit placement of their exact lattice shape every
-//           clusterEvery passes (cluster shape matching), so long structures stay rigid; hinged parts move freely.
-//   contacts  pairs within contactMargin of touching after the jostle are separated in every pass (a cell grid finds them).
+// Rigid-part physics for unit triangles on a torus (all blocks are the same regular triangle, side 1).
+//   state   centre (px, py) and angle pa per triangle; the corner offsets (ox, oy) always follow from pa (rigid blocks)
+//   bonds   bond[u*3+i] = v*3+j: side i of u is joined to side j of v (-1: free); hinge[u*3+i] marks a hinged side
+//           (1: it pins its first corner, 2: its second). Bonded blocks are flush by construction: binding places them
+//           (sim.js), and nothing deforms afterwards.
+//   parts   a body is the set of blocks joined by bonds (hinged ones included); it moves and turns as one rigid piece.
+//           A hinged flap turns relative to its partner only when the chemistry drives it (sim.js servo, via tryMove).
+//   motion  every step each body, in random order, proposes a Brownian kick (translation and turn; a larger body gets a
+//           smaller kick) and moves along it in short sub-steps until the next sub-step would overlap another block:
+//           move or stop. Nothing overlaps, deforms, squeezes or passes through a wall. A body that does overlap (binding
+//           just placed it) may make any move that reduces its overlap.
 // Locality: nothing here reads chemistry; the chemistry (sim.js) reads `pairs` (blocks near enough to bond).
 const R3=1/Math.sqrt(3);
 const REST=[[R3*Math.cos(-Math.PI/3),R3*Math.sin(-Math.PI/3)],[R3*Math.cos(Math.PI/3),R3*Math.sin(Math.PI/3)],[-R3,0]];   // counter-clockwise; side 0 faces +x
 const AREA=Math.sqrt(3)/4,INERTIA=AREA/12,SIZE=Math.sqrt(AREA);   // unit density: mass = area; moment about the centroid = area * side^2 / 12
-const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,stiff:0.8,iters:32,pairTol:0.35,noTunnel:true,contactMargin:0.6,clusterEvery:32};
-const EPS=1e-10;
+const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,pairTol:0.35,subStep:0.3,bisect:5,skin:0,split:true};
+const EPS=1e-10,TOUCH=1e-6,CELL=1.4,NEAR2=(2*R3)*(2*R3);   // overlaps below TOUCH count as touching; CELL >= reach of overlap and pair checks
 
 function mulberry32(seed){let a=seed|0;const f=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
   f.getState=()=>a;f.setState=s=>{a=s|0;};return f;}
@@ -30,27 +27,22 @@ function separation(a,b){let best=null;
     const plus=amax-bmin,minus=bmax-amin;if(plus<=EPS||minus<=EPS)return null;
     const depth=Math.min(plus,minus),sign=plus<=minus?1:-1;if(!best||depth<best.depth)best={depth,x:sign*nx*depth,y:sign*ny*depth};}
   return best;}
-// separation() for two triangles given by corner offsets (ox, oy at a and b), the second displaced by (dx, dy); no
-// allocation, same arithmetic
-const SA=new Float64Array(6),SB=new Float64Array(6),SEP={depth:0,x:0,y:0};
-function sepTri(ox,oy,a,b,dx,dy){for(let k=0;k<3;k++){SA[2*k]=0+ox[a+k];SA[2*k+1]=0+oy[a+k];SB[2*k]=dx+ox[b+k];SB[2*k+1]=dy+oy[b+k];}
-  let bd=Infinity,bx=0,by=0,found=false;
-  for(let w=0;w<2;w++){const P=w?SB:SA;for(let k=0;k<3;k++){const k1=(k+1)%3,ex=P[2*k1]-P[2*k],ey=P[2*k1+1]-P[2*k+1],d=Math.hypot(ex,ey);if(d<EPS)continue;
-    const nx=ey/d,ny=-ex/d;let amax=-Infinity,amin=Infinity,bmax=-Infinity,bmin=Infinity;
-    for(let c=0;c<3;c++){const v=SA[2*c]*nx+SA[2*c+1]*ny;if(v>amax)amax=v;if(v<amin)amin=v;}for(let c=0;c<3;c++){const v=SB[2*c]*nx+SB[2*c+1]*ny;if(v>bmax)bmax=v;if(v<bmin)bmin=v;}
-    const plus=amax-bmin,minus=bmax-amin;if(plus<=EPS||minus<=EPS)return null;
-    const depth=Math.min(plus,minus),sign=plus<=minus?1:-1;if(!found||depth<bd){found=true;bd=depth;bx=sign*nx*depth;by=sign*ny*depth;}}}
-  SEP.depth=bd;SEP.x=bx;SEP.y=by;return SEP;}
-// segment a-b against segment c-d
-function segX(ax,ay,bx,by,cx,cy,dx,dy){const d=(bx-ax)*(dy-cy)-(by-ay)*(dx-cx);if(Math.abs(d)<1e-12)return false;
-  const t=((cx-ax)*(dy-cy)-(cy-ay)*(dx-cx))/d,w=((cx-ax)*(by-ay)-(cy-ay)*(bx-ax))/d;return t>=0&&t<=1&&w>=0&&w<=1;}
+// penetration depth of two triangles (flat corner arrays A, B of length 6), 0 if they only touch or are apart
+function triDepth(A,B){let best=Infinity;
+  for(let w=0;w<2;w++){const P=w?B:A;for(let k=0;k<3;k++){const k1=k===2?0:k+1,ex=P[2*k1]-P[2*k],ey=P[2*k1+1]-P[2*k+1],d=Math.hypot(ex,ey),nx=ey/d,ny=-ex/d;
+    let amax=-Infinity,amin=Infinity,bmax=-Infinity,bmin=Infinity;
+    for(let c=0;c<6;c+=2){const a=A[c]*nx+A[c+1]*ny,b=B[c]*nx+B[c+1]*ny;if(a>amax)amax=a;if(a<amin)amin=a;if(b>bmax)bmax=b;if(b<bmin)bmin=b;}
+    const depth=Math.min(amax-bmin,bmax-amin);if(depth<=SKIN.v)return 0;if(depth<best)best=depth;}}
+  return best;}
+const SKIN={v:TOUCH};
+const TA=new Float64Array(6),TB=new Float64Array(6);
 
 class Physics{
   constructor(params={},n=params.n||0){
     this.p={...DEFAULTS,...params};this.n=n;this.t=0;this.rng=mulberry32(this.p.seed);this._spare=NaN;
     this.px=new Float64Array(n);this.py=new Float64Array(n);this.pa=new Float64Array(n);
     this.ox=new Float64Array(3*n);this.oy=new Float64Array(3*n);this.bond=new Int32Array(3*n).fill(-1);this.hinge=new Int8Array(3*n);
-    this.pairs=[];this.pins=[];this.bondsDirty=true;
+    this.pairs=[];this._mark=new Int32Array(n);this._stamp=0;
     for(let u=0;u<n;u++)this.resetShape(u);
   }
   // ---- torus and random numbers
@@ -62,136 +54,95 @@ class Physics{
     let x,y,q;do{x=2*this.rng()-1;y=2*this.rng()-1;q=x*x+y*y;}while(q>=1||q===0);const f=Math.sqrt(-2*Math.log(q)/q);this._spare=y*f;return x*f;}
   // ---- geometry of one block
   resetShape(u){const c=Math.cos(this.pa[u]),s=Math.sin(this.pa[u]);for(let k=0;k<3;k++){const [x,y]=REST[k];this.ox[u*3+k]=c*x-s*y;this.oy[u*3+k]=s*x+c*y;}}
-  rigidMove(u,dx,dy,da){this.px[u]+=dx;this.py[u]+=dy;if(da===0)return;this.pa[u]+=da;const c=Math.cos(da),s=Math.sin(da);
-    for(let k=u*3;k<u*3+3;k++){const x=this.ox[k],y=this.oy[k];this.ox[k]=c*x-s*y;this.oy[k]=s*x+c*y;}}
+  rigidMove(u,dx,dy,da){this.px[u]+=dx;this.py[u]+=dy;if(da!==0){this.pa[u]+=da;this.resetShape(u);}}
   angle(u){return Math.atan2(this.oy[u*3],this.ox[u*3]);}   // orientation read from the corners (rest corner 0 is at -60 degrees)
   outline(u,x=0,y=0){return [0,1,2].map(k=>[x+this.ox[u*3+k],y+this.oy[u*3+k]]);}
-  radius(u){let r=0;for(let k=u*3;k<u*3+3;k++)r=Math.max(r,Math.hypot(this.ox[k],this.oy[k]));return r;}
+  radius(){return R3;}
   // side i of u faces side j of v: corner i of u meets corner j+1 of v and corner i+1 meets corner j; largest gap
   flushGap(u,i,v,j){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]),a0=u*3+i,a1=u*3+(i+1)%3,b0=v*3+j,b1=v*3+(j+1)%3;
     return Math.max(Math.hypot(dx+this.ox[b1]-this.ox[a0],dy+this.oy[b1]-this.oy[a0]),Math.hypot(dx+this.ox[b0]-this.ox[a1],dy+this.oy[b0]-this.oy[a1]));}
   // ---- bonds
-  link(u,i,v,j){this.bond[u*3+i]=v*3+j;this.bond[v*3+j]=u*3+i;this.bondsDirty=true;this._clDirty=true;}
-  unlink(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bond[q]=-1;this.bond[u*3+i]=-1;this.bondsDirty=true;this._clDirty=true;}
+  link(u,i,v,j){this.bond[u*3+i]=v*3+j;this.bond[v*3+j]=u*3+i;}
+  unlink(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bond[q]=-1;this.bond[u*3+i]=-1;}
   partner(u,i){const q=this.bond[u*3+i];return q<0?-1:(q/3)|0;}
   bonded(u){return this.bond[u*3]>=0||this.bond[u*3+1]>=0||this.bond[u*3+2]>=0;}
   isHingeBond(u,i){const q=this.bond[u*3+i];return q>=0&&(this.hinge[u*3+i]>0||this.hinge[q]>0);}
-  _pinList(){if(!this.bondsDirty)return this.pins;const P=this.pins;P.length=0;
-    for(let q=0;q<3*this.n;q++){const r=this.bond[q];if(r<=q)continue;const u=(q/3)|0,i=q%3,v=(r/3)|0,j=r%3,a0=u*3+i,a1=u*3+(i+1)%3,b0=v*3+j,b1=v*3+(j+1)%3;
-      const hu=this.hinge[q],hv=this.hinge[r];
-      if(hu===1||hv===2)P.push(a0,b1);else if(hu===2||hv===1)P.push(a1,b0);else P.push(a0,b1,a1,b0);}
-    this.bondsDirty=false;return P;}
   // bodies: components through bonds (hinged bonds included)
   bodies(){const n=this.n,comp=new Int32Array(n).fill(-1),members=[];
     for(let u=0;u<n;u++){if(comp[u]>=0)continue;const id=members.length,list=[u];comp[u]=id;
       for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(comp[y]<0){comp[y]=id;list.push(y);}}}
       members.push(list);}
     return {comp,members};}
-  // ---- rigid clusters: blocks joined by full (non-hinge) bonds have an exact lattice shape that follows from the bonds
-  // (each bond places the partner flush against a side); computed breadth first from the cluster's first block and
-  // cached until bonds change. Each entry: {m: members, x, y, a: ideal centre and angle in the first block's frame}.
-  _clusters(){if(this._cl&&!this._clDirty)return this._cl;const n=this.n,seen=new Uint8Array(n),out=[],C0=Math.atan2(REST[0][1],REST[0][0]);
-    for(let r=0;r<n;r++){if(seen[r]||!this.bonded(r))continue;const m=[r],X=[0],Y=[0],A=[0];seen[r]=1;
-      for(let k=0;k<m.length;k++){const u=m[k],c=Math.cos(A[k]),s=Math.sin(A[k]),Cx=q=>X[k]+c*REST[q][0]-s*REST[q][1],Cy=q=>Y[k]+s*REST[q][0]+c*REST[q][1];
-        for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||this.isHingeBond(u,i))continue;const v=(q/3)|0,j=q%3;if(seen[v])continue;seen[v]=1;
-          const ax=Cx(i),ay=Cy(i),bx=Cx((i+1)%3),by=Cy((i+1)%3),xx=ax+bx-Cx((i+2)%3),xy=ay+by-Cy((i+2)%3),V=[];V[j]=[bx,by];V[(j+1)%3]=[ax,ay];V[(j+2)%3]=[xx,xy];
-          const cx=(ax+bx+xx)/3,cy=(ay+by+xy)/3;m.push(v);X.push(cx);Y.push(cy);A.push(Math.atan2(V[0][1]-cy,V[0][0]-cx)-C0);}}
-      if(m.length>=3)out.push({m,x:Float64Array.from(X),y:Float64Array.from(Y),a:Float64Array.from(A)});}
-    this._cl=out;this._clDirty=false;return out;}
-  // pull every rigid cluster onto the best-fit rigid placement of its lattice shape (cluster shape matching): long
-  // structures stay true instead of bending joint by joint under collisions
-  _clusterMatch(){for(const C of this._clusters()){const m=C.m,k=m.length,r=m[0];let px=0,py=0,qx=0,qy=0;const ux=new Float64Array(k),uy=new Float64Array(k);
-      for(let t=0;t<k;t++){ux[t]=this._dx(this.px[m[t]]-this.px[r]);uy[t]=this._dy(this.py[m[t]]-this.py[r]);px+=ux[t];py+=uy[t];qx+=C.x[t];qy+=C.y[t];}
-      px/=k;py/=k;qx/=k;qy/=k;let sc=0,ss=0;
-      for(let t=0;t<k;t++){const ax=C.x[t]-qx,ay=C.y[t]-qy,bx=ux[t]-px,by=uy[t]-py;sc+=ax*bx+ay*by;ss+=ax*by-ay*bx;}
-      const th=Math.atan2(ss,sc),c=Math.cos(th),s=Math.sin(th);
-      for(let t=0;t<k;t++){const u=m[t],ax=C.x[t]-qx,ay=C.y[t]-qy,tx=px+c*ax-s*ay,ty=py+s*ax+c*ay;
-        let da=C.a[t]+th-this.pa[u];da=Math.atan2(Math.sin(da),Math.cos(da));this.rigidMove(u,tx-ux[t],ty-uy[t],da);}}}
-  // ---- motion
-  _jostle(){
-    const p=this.p,n=this.n,{px,py,pa,ox,oy}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w);
-    const X=Float64Array.from(px),Y=Float64Array.from(py),A=Float64Array.from(pa),OX=Float64Array.from(ox),OY=Float64Array.from(oy);
-    const {comp,members}=this.bodies();
-    for(const list of members){const m=list.length;
-      if(m===1){const u=list[0];px[u]=this._wx(px[u]+p.sigma*sw*this._gauss());py[u]=this._wy(py[u]+p.sigma*sw*this._gauss());
-        const da=p.sigmaRot*w*(sw/Math.sqrt(w))*this._gauss();this.rigidMove(u,0,0,da);continue;}
-      // a body: the mean of its blocks' kicks, turned by the torque of the kicks and the blocks' own turns
-      const rx=new Float64Array(m),ry=new Float64Array(m),u0=list[0];let cx=0,cy=0;
-      for(let k=0;k<m;k++){rx[k]=this._dx(px[list[k]]-px[u0]);ry[k]=this._dy(py[list[k]]-py[u0]);cx+=rx[k];cy+=ry[k];}cx/=m;cy/=m;
-      let s2=0,tq=0,inertia=0;const ib=1/wr,spin=p.sigmaRot*w*(sw/Math.sqrt(w));
-      for(let k=0;k<m;k++){const dx=rx[k]-cx,dy=ry[k]-cy,r2=dx*dx+dy*dy;s2+=sw*sw;inertia+=r2+ib;tq+=r2*p.sigma*p.sigma*sw*sw+ib*ib*spin*spin;}
-      const st=p.sigma*Math.sqrt(s2)/m,sr=Math.sqrt(tq)/inertia,tx=st*this._gauss(),ty=st*this._gauss(),da=sr*this._gauss(),c=Math.cos(da),s=Math.sin(da);
-      const ax=px[u0]+cx,ay=py[u0]+cy;
-      for(let k=0;k<m;k++){const x=list[k],dx=rx[k]-cx,dy=ry[k]-cy;px[x]=this._wx(ax+c*dx-s*dy+tx);py[x]=this._wy(ay+s*dx+c*dy+ty);pa[x]+=da;
-        for(let q=x*3;q<x*3+3;q++){const a=ox[q],b=oy[q];ox[q]=c*a-s*b;oy[q]=s*a+c*b;}}}
-    if(!p.noTunnel)return;
-    // no tunnelling through structures (bodies of two or more blocks)
-    const sb=[];for(let v=0;v<n;v++)if(members[comp[v]].length>=2)sb.push(v);
-    const through=(u,mx,my)=>{const m=Math.hypot(mx,my);if(m<1e-9)return false;
-      for(const v of sb){if(comp[v]===comp[u])continue;const vx=this._dx(X[v]-X[u]),vy=this._dy(Y[v]-Y[u]);if(Math.hypot(vx,vy)>m+1.5)continue;
-        for(let k=0;k<3;k++){const a=v*3+k,e=v*3+(k+1)%3;if(segX(0,0,mx,my,vx+OX[a],vy+OY[a],vx+OX[e],vy+OY[e]))return true;}}
-      return false;};
-    for(const list of members){if(!list.some(u=>through(u,this._dx(px[u]-X[u]),this._dy(py[u]-Y[u]))))continue;
-      const u0=list[0],tx=this._dx(px[u0]-X[u0]),ty=this._dy(py[u0]-Y[u0]);let f=0;
-      for(const g of [0.5,0.25])if(!list.some(u=>through(u,g*tx,g*ty))){f=g;break;}
-      for(const u of list){px[u]=this._wx(X[u]+f*tx);py[u]=this._wy(Y[u]+f*ty);pa[u]=A[u];for(let k=u*3;k<u*3+3;k++){ox[k]=OX[k];oy[k]=OY[k];}}
-      this.tunnelBlocks=(this.tunnelBlocks||0)+1;}
-  }
-  // block radii (corners are soft, so a radius can exceed 1/sqrt(3))
-  _radii(){const n=this.n,r=this._r&&this._r.length===n?this._r:(this._r=new Float64Array(n)),{ox,oy}=this;
-    for(let u=0;u<n;u++){let m=0;for(let k=u*3;k<u*3+3;k++)m=Math.max(m,Math.hypot(ox[k],oy[k]));r[u]=m;}return r;}
-  // candidate pairs (u < v, in u-major order) whose centres are within `reach` of each other: a cell grid on the torus
-  _near(reach){const n=this.n,{px,py}=this,W=this.p.W,H=this.p.H,gx=Math.max(1,Math.floor(W/reach)),gy=Math.max(1,Math.floor(H/reach)),cw=W/gx,ch=H/gy;
-    if(gx<3||gy<3){const all=[];for(let u=0;u<n;u++)for(let v=u+1;v<n;v++)all.push(u,v);return all;}
-    const head=new Int32Array(gx*gy).fill(-1),nxt=new Int32Array(n),cx=new Int32Array(n),cy=new Int32Array(n);
-    for(let u=n-1;u>=0;u--){cx[u]=Math.min(gx-1,Math.floor(this._wx(px[u])/cw));cy[u]=Math.min(gy-1,Math.floor(this._wy(py[u])/ch));const c=cy[u]*gx+cx[u];nxt[u]=head[c];head[c]=u;}
-    const out=[],cand=[];
-    for(let u=0;u<n;u++){cand.length=0;
-      for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const c=((cy[u]+b+gy)%gy)*gx+(cx[u]+a+gx)%gx;for(let v=head[c];v>=0;v=nxt[v])if(v>u)cand.push(v);}
+  // the body of u (blocks reachable through bonds)
+  bodyOf(u){const list=[u],seen=new Set(list);for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(!seen.has(y)){seen.add(y);list.push(y);}}}return list;}
+  // ---- cell grid of block centres (rebuilt each step; kept current by tryMove)
+  gridSync(){const W=this.p.W,H=this.p.H,gx=Math.max(1,Math.floor(W/CELL)),gy=Math.max(1,Math.floor(H/CELL));
+    this._gx=gx;this._gy=gy;this._cw=W/gx;this._ch=H/gy;this._all=gx<3||gy<3;
+    if(!this._cells||this._cells.length!==gx*gy)this._cells=Array.from({length:gx*gy},()=>[]);else for(const c of this._cells)c.length=0;
+    if(!this._cellOf||this._cellOf.length!==this.n)this._cellOf=new Int32Array(this.n);
+    for(let u=0;u<this.n;u++){const c=this._cellAt(this.px[u],this.py[u]);this._cellOf[u]=c;this._cells[c].push(u);}}
+  _cellAt(x,y){return Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch))*this._gx+Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw));}
+  _regrid(u){const c=this._cellAt(this.px[u],this.py[u]),o=this._cellOf[u];if(c===o)return;const L=this._cells[o],k=L.indexOf(u);if(k>=0)L.splice(k,1);this._cells[c].push(u);this._cellOf[u]=c;}
+  // visit blocks whose centres may lie within reach of (x, y)
+  _around(x,y,fn){if(this._all){for(let v=0;v<this.n;v++)fn(v);return;}
+    const cx=Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw)),cy=Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch));
+    for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const L=this._cells[((cy+b+this._gy)%this._gy)*this._gx+(cx+a+this._gx)%this._gx];for(let k=0;k<L.length;k++)fn(L[k]);}}
+  // total overlap of the marked blocks (relative offsets rx, ry from pivot (cx, cy)) moved by (tx, ty) and turned by da
+  // about the pivot, against unmarked blocks; early: stop at the first overlap
+  _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark;let sum=0;
+    for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;
+      for(let q=0;q<3;q++){const ax=this.ox[u*3+q],ay=this.oy[u*3+q];TA[2*q]=c*ax-s*ay;TA[2*q+1]=s*ax+c*ay;}
+      let hit=false;
+      this._around(x,y,v=>{if(hit&&early)return;if(mark[v]===st)return;const dx=this._dx(this.px[v]-x),dy=this._dy(this.py[v]-y);if(dx*dx+dy*dy>=NEAR2)return;
+        for(let q=0;q<3;q++){TB[2*q]=dx+this.ox[v*3+q];TB[2*q+1]=dy+this.oy[v*3+q];}const d=triDepth(TA,TB);if(d>0){sum+=d;hit=true;}});
+      if(hit&&early)return sum;}
+    return sum;}
+  // move the blocks of `list` rigidly by (tx, ty) and a turn da about (cx, cy), in sub-steps, as far as they go without
+  // overlapping unlisted blocks; returns the fraction moved (0: blocked). An overlapping set may move if that reduces it.
+  tryMove(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length,rx=new Float64Array(k),ry=new Float64Array(k);let reach=0;
+    for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
+    const nsub=Math.max(1,Math.ceil(Math.max(Math.hypot(tx,ty),reach*Math.abs(da))/this.p.subStep));let f=0;
+    let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}
+    // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
+    if(blocked>0)for(let b=0;b<this.p.bisect;b++){const g=(f+blocked)/2;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0)blocked=g;else f=g;}
+    if(f===0){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
+    if(f===0)return 0;
+    const c=Math.cos(f*da),s=Math.sin(f*da);
+    for(let q=0;q<k;q++){const u=list[q];this.px[u]=this._wx(cx+c*rx[q]-s*ry[q]+f*tx);this.py[u]=this._wy(cy+s*rx[q]+c*ry[q]+f*ty);
+      if(da!==0){this.pa[u]+=f*da;this.resetShape(u);}this._regrid(u);}
+    return f;}
+  // overlap the blocks of `list` would have after a rigid move (translation, turn da about (cx, cy)); for placing checks
+  moveDepth(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length,rx=new Float64Array(k),ry=new Float64Array(k);
+    for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);}
+    return this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true);}
+  // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
+  _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,{members}=this.bodies();
+    for(let k=members.length-1;k>0;k--){const j=Math.floor(this.rng()*(k+1));const t=members[k];members[k]=members[j];members[j]=t;}
+    for(const list of members){const m=list.length,u0=list[0];
+      if(m===1){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
+        if(p.split){this.tryMove(list,tx,ty,0,px[u0],py[u0]);this.tryMove(list,0,0,da,px[u0],py[u0]);}else this.tryMove(list,tx,ty,da,px[u0],py[u0]);continue;}
+      let cx=0,cy=0;const rx=new Float64Array(m),ry=new Float64Array(m);
+      for(let q=0;q<m;q++){rx[q]=this._dx(px[list[q]]-px[u0]);ry[q]=this._dy(py[list[q]]-py[u0]);cx+=rx[q];cy+=ry[q];}cx/=m;cy/=m;
+      let inertia=0,tq=0;const ib=1/wr;
+      for(let q=0;q<m;q++){const r2=(rx[q]-cx)**2+(ry[q]-cy)**2;inertia+=r2+ib;tq+=r2*p.sigma*p.sigma*w+ib*ib*spin*spin;}
+      const st=p.sigma*Math.sqrt(m*w)/m,sr=Math.sqrt(tq)/inertia;
+      const tx=st*this._gauss(),ty=st*this._gauss(),da=sr*this._gauss();
+      if(p.split){this.tryMove(list,tx,ty,0,px[u0]+cx,py[u0]+cy);this.tryMove(list,0,0,da,px[list[0]]+this._dx(cx),py[list[0]]+this._dy(cy));}else this.tryMove(list,tx,ty,da,px[u0]+cx,py[u0]+cy);}}
+  // blocks near enough to bond (centre distance within two radii plus pairTol)
+  _pairs(){const reach=2*R3+this.p.pairTol*SIZE+EPS,r2=reach*reach,out=this.pairs,cand=[];out.length=0;
+    for(let u=0;u<this.n;u++){cand.length=0;
+      this._around(this.px[u],this.py[u],v=>{if(v<=u)return;const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);if(dx*dx+dy*dy<=r2)cand.push(v);});
       cand.sort((a,b)=>a-b);for(const v of cand)out.push(u,v);}
     return out;}
-  _contacts(){const r=this._radii(),M=this.p.contactMargin,out=[],near=this._near(2*Math.max(...r,R3)+M);
-    for(let k=0;k<near.length;k+=2){const u=near[k],v=near[k+1];
-      let joined=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0&&((q/3)|0)===v&&!this.isHingeBond(u,i))joined=true;}
-      if(joined)continue;if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))>r[u]+r[v]+M)continue;out.push(u,v);}
-    return out;}
-  // separate two blocks (minimum translation, shared equally); r: radii
-  _separate(u,v,r){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);if(Math.hypot(dx,dy)>r[u]+r[v]+EPS)return;
-    const m=sepTri(this.ox,this.oy,u*3,v*3,dx,dy);if(!m)return;this.px[u]-=m.x/2;this.py[u]-=m.y/2;this.px[v]+=m.x/2;this.py[v]+=m.y/2;}
-  _pairs(){const r=this._radii(),tol=this.p.pairTol*SIZE,near=this._near(2*Math.max(...r,R3)+tol+EPS);this.pairs.length=0;
-    for(let k=0;k<near.length;k+=2){const u=near[k],v=near[k+1];if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))<=r[u]+r[v]+tol+EPS)this.pairs.push(u,v);}
-    return this.pairs;}
-  physics(){
-    const p=this.p,n=this.n,{px,py,ox,oy}=this,w=1/AREA,wr=1/INERTIA,soft=1-p.stiff;
-    this._jostle();
-    // contacts and radii (with slack) once per step; the passes move blocks far less than the contact margin
-    const contacts=this._contacts(),rr=Float64Array.from(this._r,x=>x+0.05),pins=this._pinList(),bonded=[];for(let u=0;u<n;u++)if(this.bonded(u))bonded.push(u);
-    const fitC=new Float64Array(n),fitS=new Float64Array(n);
-    for(let it=0;it<p.iters;it++){
-      if(p.clusterEvery>0&&it%p.clusterEvery===0)this._clusterMatch();
-      for(let k=0;k<contacts.length;k+=2)this._separate(contacts[k],contacts[k+1],rr);
-      for(let k=0;k<pins.length;k+=2){const qa=pins[k],qb=pins[k+1],u=(qa/3)|0,v=(qb/3)|0;
-        const dx=this._dx(px[v]+ox[qb]-px[u]-ox[qa]),dy=this._dy(py[v]+oy[qb]-py[u]-oy[qa]),dl=Math.hypot(dx,dy);if(dl<1e-9)continue;
-        const nx=dx/dl,ny=dy/dl,cu=ox[qa]*ny-oy[qa]*nx,cv=ox[qb]*ny-oy[qb]*nx,eu=w+wr*cu*cu,ev=w+wr*cv*cv,lam=dl/(eu+ev);
-        this.rigidMove(u,nx*lam*w*(1-soft),ny*lam*w*(1-soft),wr*cu*lam*(1-soft));this.rigidMove(v,-nx*lam*w*(1-soft),-ny*lam*w*(1-soft),-wr*cv*lam*(1-soft));
-        if(soft>0){ox[qa]+=nx*lam*eu*soft;oy[qa]+=ny*lam*eu*soft;ox[qb]-=nx*lam*ev*soft;oy[qb]-=ny*lam*ev*soft;}}
-      if(soft>0)for(const u of bonded){   // shape matching: best-fit turn of the rest shape onto the corners, pulled toward it
-        const o=u*3;let mx=(ox[o]+ox[o+1]+ox[o+2])/3,my=(oy[o]+oy[o+1]+oy[o+2])/3;px[u]+=mx;py[u]+=my;let a=0,b=0;
-        for(let k=0;k<3;k++){ox[o+k]-=mx;oy[o+k]-=my;a+=REST[k][0]*ox[o+k]+REST[k][1]*oy[o+k];b+=REST[k][0]*oy[o+k]-REST[k][1]*ox[o+k];}
-        const h=Math.hypot(a,b)||1,c=a/h,s=b/h;
-        for(let k=0;k<3;k++){const gx=c*REST[k][0]-s*REST[k][1],gy=s*REST[k][0]+c*REST[k][1];ox[o+k]+=p.stiff*(gx-ox[o+k]);oy[o+k]+=p.stiff*(gy-oy[o+k]);}
-        fitC[u]=c;fitS[u]=s;}}
-    if(soft>0)for(const u of bonded)this.pa[u]=Math.atan2(fitS[u],fitC[u]);
-    for(let u=0;u<n;u++){px[u]=this._wx(px[u]);py[u]=this._wy(py[u]);}
-    this._pairs();
-  }
+  physics(){this.gridSync();this._jostle();this._pairs();}
+  regrid(u){if(this._cells)this._regrid(u);}
   // ---- state
   saveState(){const arrays={},nums={};
-    for(const k of Object.keys(this)){const v=this[k];if(k.startsWith('_')||k==='p'||k==='pairs'||k==='pins')continue;
+    for(const k of Object.keys(this)){const v=this[k];if(k.startsWith('_')||k==='p'||k==='pairs')continue;
       if(ArrayBuffer.isView(v))arrays[k]={t:v.constructor.name,a:Array.from(v)};else if(typeof v==='number')nums[k]=v;}
     return {p:this.p,n:this.n,rng:this.rng.getState(),spare:Number.isNaN(this._spare)?null:this._spare,arrays,nums};}
   static fromState(st){const s=new this(st.p,st.n);const T={Float64Array,Int32Array,Int8Array,Uint8Array,Int16Array};
     for(const k in st.arrays)s[k]=T[st.arrays[k].t].from(st.arrays[k].a);for(const k in st.nums)s[k]=st.nums[k];
-    s.rng.setState(st.rng);s._spare=st.spare===null?NaN:st.spare;s.bondsDirty=true;return s;}
+    s.rng.setState(st.rng);s._spare=st.spare===null?NaN:st.spare;return s;}
 }
-module.exports={Physics,REST,AREA,SIZE,DEFAULTS,separation,sepTri,segX,mulberry32};
+module.exports={Physics,REST,AREA,SIZE,DEFAULTS,separation,triDepth,mulberry32};

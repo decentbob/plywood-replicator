@@ -35,7 +35,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'');}).join('');
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
+const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.22,triTolSame:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
@@ -50,7 +50,7 @@ class TriSim extends Physics{
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
   setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
-    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];}this.bondsDirty=true;}
+    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];}}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
   _edges(u){let prev=-1,next=-1,face=-1;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -112,10 +112,24 @@ class TriSim extends Physics{
       const dx=this._dx(this.px[x]-this.px[y]),dy=this._dy(this.py[x]-this.py[y]);this.hSign[x*3+e]=(dx*(-fy)+dy*fx)>0?1:-1;}}
   // binding pulls a free triangle in: v is placed exactly flush with side j against side i of u (it moves at most about
   // the binding tolerance), so every bond starts aligned (a tilted bond jams a strip against its own contacts)
-  _snap(v,j,u,i){if(this.p.snap===false)return;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
+  _snap(v,j,u,i){if(this.p.snap===false)return true;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
     const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
-    const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3;
-    this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;this.resetShape(v);}
+    const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
+    // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
+    const tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v];if(this.moveDepth([v],tx,ty,da,this.px[v],this.py[v])>0)return false;
+    this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=ang;this.resetShape(v);this.regrid(v);return true;}
+  // closure tolerance: two separate bodies close within triTolClose (the smaller is then placed flush); inside one rigid
+  // body only flush sides close (triTolSame: parts are exact, so a gap means a flap has not arrived)
+  _closeTol(u,v){return this.bodyOf(v).includes(u)?this.p.triTolSame:this.p.triTolClose;}
+  // a closure between two separate bodies: the smaller body is placed exactly flush (side j of v against side i of u)
+  _snapBody(v,j,u,i){const Bv=this.bodyOf(v);if(Bv.includes(u))return true;const Bu=this.bodyOf(u);return Bu.length<Bv.length?this._snapList(Bu,u,i,v,j):this._snapList(Bv,v,j,u,i);}
+  _snapList(list,v,j,u,i){const C=(x,k)=>[this.px[x]+this.ox[x*3+k],this.py[x]+this.oy[x*3+k]];
+    const a=C(u,i),b=C(u,(i+1)%3),p0=C(v,j),p1=C(v,(j+1)%3);p0[0]=a[0]+this._dx(p0[0]-a[0]);p0[1]=a[1]+this._dy(p0[1]-a[1]);p1[0]=p0[0]+this._dx(p1[0]-p0[0]);p1[1]=p0[1]+this._dy(p1[1]-p0[1]);
+    // corner j of v goes to corner i+1 of u (b), corner j+1 of v to corner i (a); only if the body fits there
+    const da=Math.atan2(a[1]-b[1],a[0]-b[0])-Math.atan2(p1[1]-p0[1],p1[0]-p0[0]),c=Math.cos(da),s=Math.sin(da);
+    if(this.moveDepth(list,b[0]-p0[0],b[1]-p0[1],da,p0[0],p0[1])>0)return false;
+    for(const x of list){const rx=this._dx(this.px[x]-p0[0]),ry=this._dy(this.py[x]-p0[1]);this.px[x]=this._wx(b[0]+c*rx-s*ry);this.py[x]=this._wy(b[1]+s*rx+c*ry);this.pa[x]+=da;this.resetShape(x);this.regrid(x);}
+    return true;}
   cut(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bkind[u*3+i]=0;this.bkind[q]=0;this.unlink(u,i);}
   // sides of an attached triangle that bind by glue: free sides of a grown (glue-bonded) triangle, the back of a
   // released strand triangle, the spare edge of a strand end that is not being copied
@@ -127,6 +141,10 @@ class TriSim extends Physics{
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE;
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
+    // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
+    // orientation: binding turns it into place), or, with capture 0, its side j is flush within triTol
+    const reach=(u,i,v,j)=>{if(!(p.capture>0))return flush(u,i,v,j,p.triTol);const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
+      const sx=(2*(X(i)+X((i+1)%3))-X(k2))/3,sy=(2*(Y(i)+Y((i+1)%3))-Y(k2))/3,dx=this._dx(this.px[v]-this.px[u])-sx,dy=this._dy(this.py[v]-this.py[u])-sy;return dx*dx+dy*dy<=p.capture*p.capture;};
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)
       if(!this.chg[u]||!this.chg[v])continue;          // a discharged triangle binds nothing
@@ -134,29 +152,29 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e])continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&flush(u,e,v,j,p.triTol)&&this.rng()<p.pBond){this._snap(v,j,u,e);this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
         if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){const g=gl(u,r.free);
-          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&flush(u,r.free,v,j,p.triTol)&&this.rng()<p.pBond){this._snap(v,j,u,r.free);this.bind(u,r.free,TFACE,v,j,FACE);
+          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
             if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
         // fill the prev edge of a docked or fill triangle that still needs fills (glue-agnostic unless latGlue)
-        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&flush(u,r.prev,v,j,p.triTol)&&this.rng()<p.pBond){
-          this._snap(v,j,u,r.prev);this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
+        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
+          if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // two attached triangles: glue closure between active sides
       let done=false;
       for(const e of this._active(u,ru)){const g=gl(u,e);if(!g)continue;
-        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
+        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&flush(u,e,v,f,this._closeTol(u,v))&&this.rng()<p.pBond){if(!this._snapBody(v,f,u,e))continue;this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
       // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed
       const cp=r=>r.role===DOCKED||r.fill;if(!cp(ru)||!cp(rv))continue;
       for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]])
-        if(ra.prev>=0&&rb.next>=0&&this.need[a]===0&&!bnd(a,ra.prev)&&!bnd(b,rb.next)&&flush(a,ra.prev,b,rb.next,p.triTolClose)&&this.rng()<p.pBond){
-          this.bind(a,ra.prev,PREV,b,rb.next,NEXT);this.count('close');break;}
+        if(ra.prev>=0&&rb.next>=0&&this.need[a]===0&&!bnd(a,ra.prev)&&!bnd(b,rb.next)&&flush(a,ra.prev,b,rb.next,this._closeTol(a,b))&&this.rng()<p.pBond){
+          if(!this._snapBody(b,rb.next,a,ra.prev))continue;this.bind(a,ra.prev,PREV,b,rb.next,NEXT);this.count('close');break;}
     }
   }
   // ---------------- state changes ----------------
@@ -203,7 +221,7 @@ class TriSim extends Physics{
       if(Math.hypot(this._dx(this.px[u]-L.x),this._dy(this.py[u]-L.y))<L.r&&this.rng()<L.p){this.chg[u]=1;this.count('recharge');}}}
   // ---------------- hinge drive ----------------
   servo(){
-    if(!this.hinge.some(x=>x))return;const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
+    if(!this.hinge.some(x=>x))return;this.gridSync();const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
     const hb=(x,e)=>this.isHingeBond(x,e),P=(u,i)=>this.partner(u,i);
     // latches let go while their door is triggered (and no other door is unlatched: interlock) or opening
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u],open=this.dOpen[u];
@@ -233,9 +251,10 @@ class TriSim extends Physics{
       for(let k=0;k<body.length&&!locked;k++){const x=body[k];for(let e=0;e<3;e++){const r=this.bond[x*3+e];if(r<0||(x===u&&e===i))continue;const y=(r/3)|0;
         if(y===v){locked=true;break;}if(!seen.has(y)){seen.add(y);body.push(y);}}}
       if(locked)continue;
-      const c=this.hinge[u*3+i]===1?i:(i+1)%3,Px=this.px[u]+this.ox[u*3+c],Py=this.py[u]+this.oy[u*3+c],cs=Math.cos(d),sn=Math.sin(d);
-      for(const x of body){const rx=this._dx(this.px[x]-Px),ry=this._dy(this.py[x]-Py);this.rigidMove(x,cs*rx-sn*ry-rx,sn*rx+cs*ry-ry,d);
-        this.px[x]=this._wx(this.px[x]);this.py[x]=this._wy(this.py[x]);}}
+      // turn the flap and everything it carries about the pinned corner, as far as it goes without overlapping (a blocked
+      // flap stalls: rigid parts do not squeeze)
+      const c=this.hinge[u*3+i]===1?i:(i+1)%3,Px=this.px[u]+this.ox[u*3+c],Py=this.py[u]+this.oy[u*3+c];
+      if(this.tryMove(body,0,0,d,Px,Py)<1)this.count('stall');}
     // pulse triggers let the key go once it has been read
     for(let u=0;u<n;u++)if(this.tb[u])for(let e=0;e<3;e++)if(this.trg[u*3+e]&&this.rel[u*3+e]===3&&this.bond[u*3+e]>=0){this.cut(u,e);this.count('keyRelease');}
   }

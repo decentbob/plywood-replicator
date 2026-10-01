@@ -78,6 +78,15 @@ test('physics: a closed ring keeps its tracers at the default jostle (no tunnell
   s2.derive();const cx=()=>{let x=0,y=0;for(const u of ring){x+=s2._dx(s2.px[u]-s2.px[ring[0]]);y+=s2._dy(s2.py[u]-s2.py[ring[0]]);}return [s2.px[ring[0]]+x/ring.length,s2.py[ring[0]]+y/ring.length];};
   s2.run(1500);const [x,y]=cx();for(const u of inside)assert.ok(Math.hypot(s2._dx(s2.px[u]-x),s2._dy(s2.py[u]-y))<(R-1)*H,'tracer left the ring');symmetric(s2);});
 
+test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)',()=>{
+  const {triDepth}=require('./physics');
+  const {s}=createWorld({seed:4,size:12,founders:[{gaps:[1,0,2],faces:'abab'}],supply:{'A--':10,'B--':10,'a--':10,'b--':10,'---':20},params:{zip:false}});s.run(600);
+  const A=new Float64Array(6),B=new Float64Array(6);let worst=0,gap=0;
+  for(let u=0;u<s.n;u++)for(let v=u+1;v<s.n;v++){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+    for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}worst=Math.max(worst,triDepth(A,B));}
+  for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0&&!s.isHingeBond(u,i))gap=Math.max(gap,s.flushGap(u,i,(q/3)|0,q%3));}
+  assert.ok(worst<1e-3,`overlap ${worst}`);assert.ok(gap<1e-6,`bond gap ${gap}`);assert.ok((s.ev.dock||0)+(s.ev.glue||0)>0,'something bound');symmetric(s);});
+
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);
