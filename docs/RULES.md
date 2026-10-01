@@ -39,8 +39,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
   fine and might even be good for deterministic machines").
 - Each step every body, in random order, proposes a Brownian kick (sigma 0.3, sigmaRot 0.45 for a lone block; a body
   gets the mean kick of its blocks and the turn of their torque, so larger bodies move less), translation and turn
-  as two trials. Each trial moves in sub-steps (0.3) as far as it goes without overlapping another block, then closes
-  in on the contact (bisection). So nothing passes through a wall. A body that overlaps (rare: binding just placed
+  as two trials. A trial of at most 1.0 is checked once; a longer one moves in sub-steps (0.8) as far as it goes
+  without overlapping another block, then closes in on the contact (one bisection). So nothing passes through a wall. A body that overlaps (rare: binding just placed
   it) may make any move that reduces its overlap.
 - A **hinged flap** turns relative to its partner only when the chemistry drives it (below), by the same checked
   move: a blocked flap **stalls** (it does not push). A design must keep a flap's whole sweep clear.
@@ -109,10 +109,12 @@ not complementing, is the default: a complemented product would stick to its own
   whose body reaches its partner through other bonds is locked.
 - **Releases:** hand-off `^`, drop `!`, pulse `#` (above). Without a mark a flap holds its cargo until something
   else cuts the bond (e.g. a cast). A hand-off flap's catch side catches free triangles only (it never closes onto
-  the cargo it handed off); a flap's catch side catches only while the flap is at rest.
+  the cargo it handed off); a flap's catch side catches only while the flap is at rest. A trigger side of a triangle
+  with a hinge side catches only while that hinge side is bonded (a grown door's key is live once the door is hung).
 - **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
 - **Open signal (completion):** an attached part (a triangle with an attach side) with an unbonded glued side (an
-  open growth front, an open closure side) emits `openRange` (60), relayed -1 per bond. A grown part that hears none is
+  open growth front, an open closure side) emits `openRange` (60), relayed -1 per bond. Trigger sides (sensors) and
+  `&` sides (a spent attachment) are not growth fronts and emit nothing. A grown part that hears none is
   complete; `&` sides let go then (a bud's seed side: a daughter ring lets go of its parent once it has closed).
 - **Heard triggers:** a triangle whose trigger side is bonded has trigger signal `sigRange` (6); a triangle hears the
   signal on its hear sides `+` (partner's previous value - 1). A flap with a heard signal swings. This wires a sensor
@@ -131,5 +133,6 @@ falls off. Without fuel a triggered flap holds. **Environment drive** (labelled)
 the light zone `light: {x, y, r, p}` recharge at p per step.
 
 ## Parameters (defaults)
-Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, subStep 0.3, bisect 5, split true`. Chemistry: `pBond 1,
-capture 0.6, triTol 0.65 (with capture 0), triTolClose 0.22, triTolSame 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12, sigRange 6, zip true`, other options off.
+Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
+capture 0.6, triTol 0.65 (with capture 0), triTolClose 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12,
+sigRange 6, openRange 60, zip true`, other options off.

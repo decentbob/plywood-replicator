@@ -102,10 +102,12 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
       if(a<0&&((this.glue[u*3+i]===K&&this.glue[q]===comp(K))||(this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
     // op (open signal): an attached part (it has an attach side) with an unbonded glued side (a growth front still open)
-    // emits openRange,
-    // relayed -1 per bond; a part that hears none is complete
+    // emits openRange, relayed -1 per bond; a part that hears none is complete. Trigger sides (sensors) and completion
+    // release sides (a spent attachment) are not growth fronts and emit nothing.
     for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;v=Math.max(v,op0[(q/3)|0]-1);}}
-      if(b&&(this.att[u*3]||this.att[u*3+1]||this.att[u*3+2]))for(let i=0;i<3;i++)if(this.glue[u*3+i]&&this.bond[u*3+i]<0){v=this.p.openRange;break;}this.op[u]=b?v:-1;}   // -1: free (not yet heard)
+      if(b&&(this.att[u*3]||this.att[u*3+1]||this.att[u*3+2]))for(let i=0;i<3;i++){const k=u*3+i;if(this.glue[k]&&this.bond[k]<0&&!this.trg[k]&&!this.done[k]){v=this.p.openRange;break;}}
+      // -1: free (not yet heard)
+      this.op[u]=b?v:-1;}
     // sg (trigger signal on hear sides): sigRange while a trigger side of mine is bonded, else the best value heard on a
     // bonded hear side '+' (the partner's previous value - 1); a flap with sg > 0 swings
     for(let u=0;u<n;u++){let v=this.tb[u]?this.p.sigRange:0;for(let i=0;i<3;i++){if(!this.hear[u*3+i])continue;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,sg0[(q/3)|0]-1);}this.sg[u]=v;}
@@ -146,7 +148,9 @@ class TriSim extends Physics{
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
-        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&this.away[u]))continue;
+        // a trigger side catches only while its flap is at rest and hung (a triangle with a hinge side: that side bonded)
+        const unhung=this.hinge[u*3]&&this.bond[u*3]<0||this.hinge[u*3+1]&&this.bond[u*3+1]<0||this.hinge[u*3+2]&&this.bond[u*3+2]<0;
+        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&(this.away[u]||unhung)))continue;
           for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;

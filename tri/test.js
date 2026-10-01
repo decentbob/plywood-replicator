@@ -60,6 +60,17 @@ test('import ring: the revolving door carries a caught blank inside and drops it
   s.run(120);let x=0,y=0;for(let u=0;u<tris.length;u++){x+=s.px[u];y+=s.py[u];}x/=tris.length;y/=tris.length;
   assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(K),'let go');assert.ok(Math.hypot(s.px[K]-x,s.py[K]-y)<(R-1)*H,'inside the ring');symmetric(s);});
 
+test('door ring kit: the last wall site faces outward; the key catches only once the door is hung, then imports',()=>{
+  for(const R of [4,6,8]){const K=S.doorRingKit(R),v=K.tris[K.door.hp].v,f=[0,1,2].find(i=>K.tris.every((t,q)=>q===K.door.hp||!(t.v.some(p=>Math.hypot(p[0]-v[i][0],p[1]-v[i][1])<1e-6)&&t.v.some(p=>Math.hypot(p[0]-v[(i+1)%3][0],p[1]-v[(i+1)%3][1])<1e-6))));
+    assert.ok(S.hexr([(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2])>R-0.5,'last site faces outward, R='+R);}
+  for(const [missing,expect] of [[true,false],[false,true]]){const K=S.doorRingKit(4),R=4,ring=K.tris.filter((_,q)=>!(missing&&q===K.door.hp));
+    const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},ring.length+1);buildStructure(s,ring.map((_,k)=>k),ring,7,7);
+    const hc=ring.findIndex(t=>t.type.includes('*')),i=[...s.typeName(hc).matchAll(/[a-zA-Z-][<>.!^#*~$+=%@&]*/g)].findIndex(m=>m[0].includes('*')),P=k=>[s.px[hc]+s.ox[hc*3+k],s.py[hc]+s.oy[hc*3+k]];
+    const a=P(i),b=P((i+1)%3),c=P((i+2)%3),B=ring.length;placeTri(s,B,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);s.setType(B,'xxx');s.derive();
+    s.run(5);assert.equal(s.bonded(B),expect,missing?'an unhung key must not catch':'a hung key catches');
+    if(expect){s.run(200);let x=0,y=0;for(let u=0;u<ring.length;u++){x+=s.px[u];y+=s.py[u];}x/=ring.length;y/=ring.length;
+      assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(B)&&Math.hypot(s.px[B]-x,s.py[B]-y)<(R-1)*H,'blank inside');symmetric(s);}}});
+
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
