@@ -20,6 +20,25 @@ Built and working in demos or screens (details in INNOVATIONS):
 Open weaknesses to design around (not to re-test): one break kills a chain; material
 saturates in closed worlds; supply is fixed by the starting soup; motion is pure drift.
 
+## BIG goal (user, 2026-10-01): an organism that builds and feeds its offspring
+
+An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then
+splits it off. Build every mechanism in isolation, then combine. Modules and status:
+
+| Module | Biology | Status |
+|---|---|---|
+| Genome: typed chain copied by complementary faces | DNA/RNA | works |
+| Compartment: closed ring membrane, sealed at the default jostle | cell membrane | works |
+| Factory: casting pockets turn blanks into the parts copying needs | metabolism | works (prepared pockets) |
+| Energy: charged carriers, fuel for every hinge swing, recharge in a light zone; discharged carriers bind nothing (user) | ATP, light | building |
+| Import: a gate or pump that brings raw material in (scanner gate admits only right types) | transporters | lock works, import not yet |
+| Heritable machines: the replicator's own arms fold into its pocket and frame | ribozymes, then translation | arms inherited; pocket not yet |
+| Growth: the membrane grows by adding wall cells | membrane growth | not yet |
+| Budding: a second compartment built against the parent, with its own genome copy and parts | daughter cell | not yet |
+| Feeding: transport from parent to bud through a shared wall gate | maternal supply | not yet |
+| Division: cut the shared wall when the bud is complete (a local completion signal) | cytokinesis | not yet |
+| Proofreading / scanning against stray cast types | proofreading, selectivity | idea |
+
 ## Backlog (top first)
 
 | # | New capability | Why it is new / what it enables | First demo |
