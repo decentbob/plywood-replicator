@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
 const {render,montage}=require('./render');
@@ -104,6 +104,26 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))console.log(`t=${t} inside: xxx=${inside('xxx')} junk=${inside('---')} catches=${s.ev.glue||0} drops=${s.ev.drop||0} stalls=${s.ev.stall||0}`);
         if(every(t,3))snap(s,`t${t}`,`t=${t}: inside xxx ${inside('xxx')}, junk ${inside('---')}`,focus);}
       finish('Selective import: a revolving door carries blanks in');},
+    // protocell: an import ring (R=7) whose door carries blanks xxx in; inside (labelled start) the chain aaaaa and two
+    // lid pockets that cast blanks into its dockers A-- and a--; outside blanks and junk. extra: 'none' = no pockets
+    cell(){steps=steps||40000;const size=30,c=size/2,{tris,R}=S.importRing(7,'X'),pk=extra!=='none';   // layout found by a search (no overlaps, slots and dock sites free, clear of the door's sweep)
+      const pockets=pk?[{tris:S.lidPocket('-A-','X'),x:c-1.537,y:c+2.156,rot:Math.PI},{tris:S.lidPocket('-a-','X'),x:c+1.353,y:c+4.116,rot:4*Math.PI/3}]:[];
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',x:c+1.053,y:c-1.051}],structures:[{tris,x:c,y:c},...pockets],supply:{xxx:50,'---':30},params:{pLoose:0.05}});
+      // check: prepared structures do not overlap
+      {const {triDepth}=require('./physics');const U=[...founders[0],...structures.flat()],A=new Float64Array(6),B=new Float64Array(6);
+        for(const u of U)for(const v of U){if(v<=u)continue;const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+          for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6){if(process.env.LAYOUT)console.log('overlap',u,v);else throw Error('protocell: prepared parts overlap '+u+' '+v);}}}
+      // free triangles start outside the ring
+      const ring=structures[0],inside=new Set([...founders[0],...structures.flat()]),free=[...Array(s.n).keys()].filter(u=>!inside.has(u)),placed=[...inside],outer=R+0.3;
+      free.forEach(u=>{if(!placeFree(s,u,placed,()=>{const a=2*Math.PI*s.rng(),r=outer+0.6+(size/2-outer-1)*s.rng();return [c+r*Math.cos(a),c+r*Math.sin(a)];}))throw Error('place');placed.push(u);});
+      const centre=()=>{let x=0,y=0;for(const u of ring){x+=s._dx(s.px[u]-s.px[ring[0]]);y+=s._dy(s.py[u]-s.py[ring[0]]);}return [s.px[ring[0]]+x/ring.length,s.py[ring[0]]+y/ring.length];};
+      const isIn=u=>{const [x,y]=centre();return Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<(R-1)*H-0.3;};
+      const report=t=>{const tc={};for(let u=0;u<s.n;u++){if(inside.has(u))continue;const k=canon(typeName(s,u))+(isIn(u)?'@in':'@out');tc[k]=(tc[k]||0)+1;}
+        const cs=census(s).filter(q=>q.n>=9&&!q.paired);
+        console.log(`t=${t} strands [${cs.map(q=>q.faces).join(' ')}] casts=${s.ev.cast||0} imports=${s.ev.drop||0} docks=${s.ev.dock||0} in: xxx=${tc['xxx@in']||0} junk=${tc['---@in']||0} A--=${tc[canon('A--')+'@in']||0} a--=${tc[canon('a--')+'@in']||0} out: A--=${tc[canon('A--')+'@out']||0} a--=${tc[canon('a--')+'@out']||0}`);};
+      const focus={units:ring,radius:R+1.2};snap(s,'t0','t=0: protocell (prepared inside), blanks outside',focus);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,20))report(t);if(every(t,3))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,focus);}
+      finish('Protocell: the membrane imports blanks, pockets inside cast them into dockers, the chain copies inside');},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);

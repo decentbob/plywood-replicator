@@ -8,6 +8,13 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Protocell: import, metabolism and copying inside a membrane** — works (2 of 2 worlds). Combines the import ring
+  (R=7), and inside (labelled start, layout found by a search that keeps slots, dock sites and the door's sweep free) the
+  chain `aaaaa` and two lid pockets that cast blanks into its dockers `A--` and `a--`; outside 50 blanks and 30 junk
+  triangles, no dockers anywhere. 40000 steps: in both worlds the pockets cast 15 dockers inside, the chain made a full
+  copy `AAAAA` inside, junk inside 0, products outside 0-1. Control without pockets: blanks accumulate inside (16), no
+  casts, no copies. Bottleneck: import (one door; about one catch per 6000 steps; some blanks drift in while it is
+  open). `node tri/demos.js cell 2 40000 runs` (`none` = control). Picture: `docs/pictures/protocell.png`.
 - **Selective import: a revolving door** — works (2 of 2 worlds). A one-row ring whose door is a 4-cell panel (welded
   with hear sides) hinged at an inner corner, with a catch side (X) on an outer face: a caught blank triggers it, the
   latch hears the trigger through the panel (new: a latch lets go while its triangle hears a trigger), the panel swings
