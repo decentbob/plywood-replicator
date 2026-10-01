@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | bud | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | ring | import | cell | bud | wrap | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
 const {render,montage}=require('./render');
@@ -141,6 +141,22 @@ function demo(name,seed=1,steps,dir='runs',extra){
       snap(s,'t0','t=0: parent ring with seed z, daughter kit in supply',null,false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,20))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: buds released ${s.ev.complete||0}`,null,false);}
       finish('Budding: a daughter ring grows on the parent and lets go when it closes');},
+    // encapsulation: a chain whose low end carries seed z grows a membrane ring (periodic kit, R=6, root facing inward)
+    // around itself; when the ring closes, the root lets go of the seed: the chain is free inside its own compartment
+    // (extra: motif copies, 8)
+    wrap(){steps=steps||100000;const per=parseInt(extra)||12,size=26,c=size/2,K=S.ringKit(6,'z',null,true,false,true);
+      const supply={[K.tris[0].type]:4};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
+      const {s,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-',x:c,y:c}],supply});const F=founders[0];
+      const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},kitT=new Set([...K.kit,K.tris[0].type].map(norm));
+      const report=t=>{const {comp,members}=s.bodies(),fc=comp[F[0]];let on=0,rings=[];for(const m of members){const k=m.filter(u=>kitT.has(norm(typeName(s,u)))).length;if(comp[m[0]]===fc)on+=k;else if(k>=30)rings.push(m);}
+        // is the chain inside a released ring? (centre of the ring within its inner apothem of the chain's centre)
+        const inside=rings.map(m=>{let x=0,y=0;for(const u of m){x+=s._dx(s.px[u]-s.px[m[0]]);y+=s._dy(s.py[u]-s.py[m[0]]);}x=s.px[m[0]]+x/m.length;y=s.py[m[0]]+y/m.length;
+          return Math.hypot(s._dx(s.px[F[4]]-x),s._dy(s.py[F[4]]-y))<5*H?'chain inside':'chain outside';});
+        console.log(`t=${t} ring cells on the chain=${on}/${K.tris.length} released rings ${rings.length} [${inside.join(', ')}] completions=${s.ev.complete||0}`);};
+      snap(s,'t0','t=0: chain with seed z, membrane kit in supply',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,20))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}`,null,false);}
+      {const {comp}=s.bodies();snap(s,'zoom','the chain and its membrane',{units:[...Array(s.n).keys()].filter(u=>kitT.has(norm(typeName(s,u)))||F.includes(u)),radius:7.5});}
+      finish('Encapsulation: a chain grows a membrane around itself and is released inside');},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);

@@ -222,7 +222,7 @@ function kitOptions(tris,reserved='',seed='z',slots=[]){const out=[];
 // toward the last cell carries G_0 without '@' (a closure once the last cell is attached). Inner and outer sides are
 // inert. bud: the root's seed side releases on completion ('&'), so a closed ring lets go of its seed. twoWay (two
 // fronts) grows faster but the fronts may meet at an inward-facing cell that only the closed-off inside can fill. Returns {tris (ring in growth order, root first, with types), kit (motif types), root, rootSide, letters}.
-function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false){
+function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
   const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
   // order around the ring, starting just past angle -30 degrees (a side's first cell)
   const start=-Math.PI/6+1e-6,key=v=>((ang(v)-start)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);cells.sort((a,b)=>key(a)-key(b));
@@ -233,7 +233,10 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false){
     return Math.hypot(m[0],m[1])>(R-0.5)*H;};
   // start where two outward-facing cells meet: the root and the last site both face outward (the last site fills from
   // outside, not from the closed-off inside)
-  {let k0=0;for(let k=0;k<N;k++)if(freeOut(k)&&freeOut((k+N-1)%N)){k0=k;break;}const rot=cells.splice(0,k0);cells.push(...rot);}
+  // seedIn (the ring grows around what carries the seed): the root faces inward and the last two sites both face
+  // outward (a corner pair), so the closing sites fill from outside
+  {let k0=0;for(let k=0;k<N;k++){const ok=seedIn?!freeOut(k)&&freeOut((k+N-1)%N)&&freeOut((k+N-2)%N):freeOut(k)&&freeOut((k+N-1)%N);if(ok){k0=k;break;}}
+    const rot=cells.splice(0,k0);cells.push(...rot);}
   const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const L=letters||[...LOW].filter(c=>!'fkxyz'.includes(c)&&c!==seed).slice(0,P);
   const types=cells.map((v,k)=>{const t=['-','-','-'],prev=shared(v,cells[(k+N-1)%N]),next=shared(v,cells[(k+1)%N]);if(prev<0||next<0)throw Error('ring kit: cells not adjacent');
@@ -242,7 +245,7 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false){
   const root=types[0],v0=cells[0],prev0=shared(v0,cells[N-1]),next0=shared(v0,cells[1]);
   if(twoWay){root[prev0]=root[prev0].replace('@','');root[next0]=root[next0].replace('@','');}   // the root exposes both fronts
   else root[prev0]=root[prev0].replace('@','.');
-  let rootSide=-1,far=-1;for(let i=0;i<3;i++){if(root[i]!=='-')continue;const m=[(v0[i][0]+v0[(i+1)%3][0])/2,(v0[i][1]+v0[(i+1)%3][1])/2],d=Math.hypot(m[0],m[1]);if(d>far){far=d;rootSide=i;}}
+  let rootSide=-1,far=-1;for(let i=0;i<3;i++){if(root[i]!=='-')continue;const m=[(v0[i][0]+v0[(i+1)%3][0])/2,(v0[i][1]+v0[(i+1)%3][1])/2],d=Math.hypot(m[0],m[1])*(seedIn?-1:1);if(rootSide<0||d>far){far=d;rootSide=i;}}
   root[rootSide]=gname(comp(gcode(seed)))+'@'+(bud?'&':'');
   // bud: the seed side releases on completion ('&'): once no growth front is open, the ring lets go of its seed
   const names=types.map(t=>t.join(''));
