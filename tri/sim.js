@@ -18,19 +18,21 @@ const m3=x=>((x%3)+3)%3;
 
 // ---------------- glues and types ----------------
 // glue codes: 0 inert '-', lower case odd, upper case even; complement = the other case
-const gcode=c=>c==='-'?0:c>='a'&&c<='z'?2*(c.charCodeAt(0)-97)+1:2*(c.charCodeAt(0)-65)+2;
-const gname=g=>g===0?'-':g%2?String.fromCharCode(97+(g-1)/2):String.fromCharCode(65+(g-2)/2);
+// letters: a..z / A..Z, then Greek α..ω / Α..Ω (24 more pairs, for kits that need many unique glues)
+const GL='αβγδεζηθικλμνξοπρστυφχψω',GU=GL.toUpperCase(),LOW='abcdefghijklmnopqrstuvwxyz'+GL,UP='ABCDEFGHIJKLMNOPQRSTUVWXYZ'+GU;
+const gcode=c=>{if(c==='-')return 0;let i=LOW.indexOf(c);if(i>=0)return 2*i+1;i=UP.indexOf(c);if(i>=0)return 2*i+2;throw Error('glue letter '+c);};
+const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
 // ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
 const MARKS='<>.!^#*~$+=%@';
-function parseType(str){const t=[...str.matchAll(/([a-zA-Z-])([<>.!^#*~$+=%@]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
+function parseType(str){const t=[...str.matchAll(/([a-zA-Zα-ωΑ-Ω-])([<>.!^#*~$+=%@]*)/g)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>has(m,'<')?1:has(m,'>')?2:0),close:t.map(m=>has(m,'.')),
     rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@'))};}
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'');}).join('');
-const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^#*~$+=%@]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:0.5,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
@@ -233,4 +235,4 @@ class TriSim extends Physics{
   step(){this.servo();this.t++;this.physics();this.derive();this.formBonds();this.chemistry();}
   run(steps){for(let k=0;k<steps;k++)this.step();}
 }
-module.exports={TriSim,PREV,NEXT,FACE,TFACE,GLUE,FREE,SFACE,SBACK,DOCKED,GROWN,gcode,gname,comp,parseType,typeName,canon,MARKS};
+module.exports={TriSim,PREV,NEXT,FACE,TFACE,GLUE,FREE,SFACE,SBACK,DOCKED,GROWN,gcode,gname,comp,parseType,typeName,canon,MARKS,LOW,UP};

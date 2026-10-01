@@ -2,7 +2,7 @@
 // Designed structures on the triangle lattice (prepared starting conditions, labelled as such in every demo) and
 // type kits. Coordinates: lattice with unit sides, H = sqrt(3)/2; triangles given counter-clockwise, side i runs
 // v[i] -> v[i+1]; a type string names the glue and marks of sides 0, 1, 2 (sim.js parseType).
-const {gcode,gname,comp}=require('./sim');
+const {gcode,gname,comp,LOW,UP}=require('./sim');
 const H=Math.sqrt(3)/2;
 const same=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6,cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
 const has=(v,...ps)=>ps.every(p=>v.some(x=>same(x,p))),add=(p,d)=>[p[0]+d[0],p[1]+d[1]];
@@ -45,9 +45,9 @@ function pocket(instr='bcd',recog='A',fuel=null){
 function lidPocket(instr='bcd',recog='A',fuel=null){
   const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));if(q==='-')throw Error('lid pocket: R needs an instruction glue');
   return [
-    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}${R}`,loose:p==='-'},          // B: K, instruction p, recognition (catches)
-    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}${R}*`},                       // R: K, instruction q, recognition + trigger
-    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
+    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}.${R}`,loose:p==='-'},         // B: K, instruction p (close-only, as all instruction sides), recognition (catches)
+    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}.${R}*`},                       // R: K, instruction q, recognition + trigger
+    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}.${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
     {v:[[0.5,H],[1.5,H],[1,2*H]],type:`${Q}+${fuel?fuel+'$':'-'}k`},     // Q: holds R's instruction and hears R; outer side (fuel); lid's hinge partner
     {v:[[0,0],[-0.5,-H],[0.5,-H]],type:'--k'},                           // Z: k for B
     {v:[[0.5,-H],[1.5,-H],[1,0]],type:`--${P}`},                         // W: holds B's instruction
@@ -57,6 +57,8 @@ function lidPocket(instr='bcd',recog='A',fuel=null){
     {v:[[1,-2*H],[2,-2*H],[1.5,-H]],type:'---'},
     ...(fuel?[]:[{v:[[1.5,H],[2,2*H],[1,2*H]],type:'---'},{v:[[1.5,H],[2.5,H],[2,2*H]],type:'---'}]),   // behind Q (a kit reaches Q this way)
   ];}
+// cells a lid pocket needs empty: the slot, the lid's sweep (Lc, V) and the cell its corner bulges into (X)
+const lidClear=()=>[[[0,0],[1,0],[0.5,H]],[[0,0],[0.5,H],[-0.5,H]],[[0.5,H],[0,2*H],[-0.5,H]],[[0,0],[-0.5,H],[-1,0]]];
 
 // Conveyor: hatch 1 (hand-off ^) catches a block (glue a) and swings it to hatch 2's catch side; once the block is
 // bonded twice hatch 1 lets go; hatch 2 (drop !) swings on and drops it. The frame cell beside hatch 2's third side
@@ -120,16 +122,16 @@ function airlock(R=4,win=2.5){
 // attachment side carries '@': a free part binds only by it (a free caster never sticks to a caught target). Loose
 // cells are not welded. Returns {tris, types (per cell), kit (types except the root's), tree: [[parent, child]]}.
 // reserved: letters the kit must not use (both cases; also every letter already in the structure).
-function kit(tris,root=0,reserved='',seed=null){
+function kit(tris,root=0,reserved='',seed=null,side=null){
   if(root==='auto'){let best=null;for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;try{const k=kit(tris,r,reserved,seed);if(seed&&k.rootSide<0)continue;
       if(!best||k.depth<best.depth)best=k;}catch(e){}}if(!best)throw Error('kit: no root');return best;}
-  const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Z-])([<>.!^#*~$+=%]*)/g)].map(m=>({g:m[1],m:m[2]})));
+  const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Zα-ωΑ-Ω-])([<>.!^#*~$+=%@]*)/g)].map(m=>({g:m[1],m:m[2]})));
   const E=[];for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){const A=tris[a].v,B=tris[b].v;
     if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))E.push({a,i,b,j});}
   const plain=e=>tok[e.a][e.i].g==='-'&&tok[e.b][e.j].g==='-',loose=e=>tris[e.a].loose||tris[e.b].loose;
   const isK=(x,i)=>tok[x][i].g==='K',actE=e=>(isK(e.a,e.i)&&tok[e.b][e.j].g==='k')||(isK(e.b,e.j)&&tok[e.a][e.i].g==='k');
-  const used=new Set([...reserved.toLowerCase(),...(seed?seed.toLowerCase():''),'f','k',...tris.flatMap(t=>[...t.type.replace(/[^a-zA-Z]/g,'').toLowerCase()])]);
-  const pool=[...'abcdeghijlmnopqrstuvwxyz'].filter(c=>!used.has(c));
+  const low=c=>{const i=UP.indexOf(c);return i>=0?LOW[i]:c;},used=new Set([...reserved,...(seed||''),'f','k',...tris.flatMap(t=>[...t.type])].map(low));
+  const pool=[...LOW].filter(c=>!used.has(c));
   const seen=new Set([root]),tree=[],treeE=new Set(),q=[root];
   while(q.length){const x=q.shift();for(const e of E){if(treeE.has(e))continue;const y=e.a===x?e.b:e.b===x?e.a:-1;if(y<0||seen.has(y))continue;
     if(!((plain(e)&&!loose(e))||actE(e)))continue;seen.add(y);q.push(y);treeE.add(e);tree.push([x,y,e]);}}
@@ -137,14 +139,19 @@ function kit(tris,root=0,reserved='',seed=null){
   if(tree.length>pool.length)throw Error(`kit: needs ${tree.length} glue pairs, ${pool.length} letters free`);
   const addMark=(t,c)=>{if(!t.m.includes(c))t.m+=c;};
   tree.forEach(([x,y,e],k)=>{const L=pool[k],[px,pi,cy,ci]=e.a===x?[e.a,e.i,e.b,e.j]:[e.b,e.j,e.a,e.i];
-    for(const [c,i,g] of [[px,pi,L],[cy,ci,L.toUpperCase()]]){const t=tok[c][i];if(t.g==='K')addMark(t,'%');t.g=g;if(c===cy)addMark(t,'@');}});
+    for(const [c,i,g] of [[px,pi,L],[cy,ci,UP[LOW.indexOf(L)]]]){const t=tok[c][i];if(t.g==='K')addMark(t,'%');t.g=g;if(c===cy)addMark(t,'@');}});
   for(const e of E){if(treeE.has(e)||loose(e))continue;const A=tok[e.a][e.i],B=tok[e.b][e.j];
     if(plain(e)){A.g='f';B.g='F';}else if(A.g==='-'||B.g==='-')continue;addMark(A,'.');addMark(B,'.');}
   // seed: the root's first outer inert side takes the seed glue's complement (it attaches to an exposed seed)
-  let rootSide=-1;if(seed)for(let i=0;i<3&&rootSide<0;i++)if(tok[root][i].g==='-'&&!E.some(e=>(e.a===root&&e.i===i)||(e.b===root&&e.j===i))){rootSide=i;tok[root][i].g=gname(comp(gcode(seed)));addMark(tok[root][i],'@');}
+  let rootSide=-1;if(seed)for(let i=0;i<3&&rootSide<0;i++)if((side===null||side===i)&&tok[root][i].g==='-'&&!E.some(e=>(e.a===root&&e.i===i)||(e.b===root&&e.j===i))){rootSide=i;tok[root][i].g=gname(comp(gcode(seed)));addMark(tok[root][i],'@');}
   const depth=new Map([[root,0]]);for(const [x,y] of tree)depth.set(y,depth.get(x)+1);
   const types=tok.map(t=>t.map(x=>x.g+x.m).join(''));
-  return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values())};}
+  return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values()),letters:tree.map((_,k)=>pool[k]).join('')};}
+
+// every (root, seed side) kit of a structure, shallowest tree first
+function kitOptions(tris,reserved='',seed='z'){const out=[];
+  for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;for(let i=0;i<3;i++){try{const k=kit(tris,r,reserved,seed,i);if(k.rootSide===i)out.push(k);}catch(e){}}}
+  return out.sort((a,b)=>a.depth-b.depth);}
 
 // Arm kit: the types of an arm grown from seed glue `seed` by a bend pattern ('1'/'2' per step: the side, counted
 // counter-clockwise from the attach side, that exposes the next glue), using the given letters; the last type exposes
@@ -153,4 +160,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,kit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,lidClear,kit,kitOptions,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

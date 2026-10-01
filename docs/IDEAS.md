@@ -65,6 +65,10 @@ into a C while it is open, hence airlocks.
 
 ## Design principles (user, 2026-09-30)
 
+- (2026-10-01) "I don't care much about the simulation being byte-identical, as long as the mechanisms work. The
+  simulation is mostly a tool in pursuit of the goal and letting us play out the rules." Physics and rule changes
+  that keep mechanisms working are fine; re-run the affected demos, no need for bit-for-bit reproduction.
+
 - One base shape (the triangle) and local side rules; welding is ordinary bonding. Shapes come from chains of
   triangles (letters T, R, Z by hidden backs); copies must be exact, so growth must be planned with intent (distinct
   types, terminators), not left to repeats.

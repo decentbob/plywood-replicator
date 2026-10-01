@@ -1,9 +1,9 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
-const {createWorld,placeFree,census,typeCount}=require('./world');
+const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
 const {render,montage}=require('./render');
 const S=require('./structures');
 const {TriSim,canon,typeName}=require('./sim');
@@ -44,6 +44,41 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
       {const {comp}=s.bodies();snap(s,'zoom','grown part (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:3.5});}
       console.log('complete at',done||'not yet');finish(`Grown lid pocket from a seed (kit of ${K.kit.length} types, ${per} each)`);},
+    // heritable pocket: a chain whose low end exposes seed z grows a lid pocket from the kit in supply; dockers carry z on
+    // their prev side, so every copy's low end exposes the seed again and grows its own pocket; latGlue: fills must be Z--
+    // (a docker used as a fill would expose z on a hidden back) (extra: kit copies, 12)
+    heir(){steps=steps||30000;const per=parseInt(extra)||12,P=S.lidPocket('-A-','X');
+      const supply={'Az-':14,'az-':14,'Z--':30,xxx:10};
+      const probe=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}]}),U0=probe.founders[0];
+      const K=S.kitOptions(P,'xa','z').find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);if(!K)throw Error('no placement');
+      for(const t of K.kit.concat([K.types[K.root]]))supply[t]=(supply[t]||0)+per;
+      const {s,founders}=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}],supply,params:{pLoose:0.005,latGlue:true}});
+      console.log('root',K.root,'side',K.rootSide,'depth',K.depth);
+      const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},want=new Set(K.types.map(norm));
+      const report=t=>{const {comp,members}=s.bodies(),c=census(s).filter(x=>x.n>=9&&!x.paired);
+        const parts=c.map(x=>members[comp[x.units[0]]].filter(u=>want.has(norm(typeName(s,u)))).length);
+        console.log(`t=${t} strands ${c.map((x,k)=>x.faces+'+'+parts[k]).join(' ')} docks=${s.ev.dock||0} casts=${s.ev.cast||0}`);};
+      snap(s,'t0','t=0: founder with seed z, kit in supply',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,15))report(t);if(every(t,3))snap(s,`t${t}`,`t=${t}`,null,false);}
+      const c=census(s).filter(x=>x.n>=9&&!x.paired);c.slice(0,3).forEach((x,k)=>{const {comp,members}=s.bodies();snap(s,'zoom'+k,`strand ${x.faces} and its part`,{units:members[comp[x.units[0]]],radius:4.5});});
+      finish('Heritable pocket: chains grow a lid pocket from their end seed');},
+    // heritable factory cycle: strands aaaaa (seed y) grow pocket Py, which casts dockers Az- from blanks; their copies
+    // AAAAA (seed z, from the dockers' prev side) grow pocket Pz, which casts ay-, whose copies are aaaaa again. Starts
+    // with the founder aaaaa, the two kits, fills and blanks; no dockers (extra: kit copies, 8)
+    cycle(){steps=steps||80000;const per=parseInt(extra)||8,size=26;
+      const probe=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}]}),U0=probe.founders[0];
+      const fit=(P,res,sd)=>S.kitOptions(P,res,sd).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);
+      const Ky=fit(S.lidPocket('-Az','X'),'xyz','y'),Kz=fit(S.lidPocket('-ay','X'),'xyz'+Ky.letters,'z');if(!Ky||!Kz)throw Error('no placement');
+      const supply={'Z--':16,'Y--':16,xxx:60};for(const K of [Ky,Kz])for(const t of K.types)supply[t]=(supply[t]||0)+per;
+      const {s}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}],supply,params:{pLoose:0.005,latGlue:true}});
+      const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},Wy=new Set(Ky.types.map(norm)),Wz=new Set(Kz.types.map(norm));
+      const report=t=>{const {comp,members}=s.bodies(),c=census(s).filter(x=>x.n>=9&&!x.paired),tc=typeCount(s);
+        const part=x=>{const m=members[comp[x.units[0]]];return m.filter(u=>Wy.has(norm(typeName(s,u)))).length+'/'+m.filter(u=>Wz.has(norm(typeName(s,u)))).length;};
+        console.log(`t=${t} strands ${c.map(x=>x.faces+'['+part(x)+']').join(' ')} casts=${s.ev.cast||0} Az-=${tc[canon('Az-')]||0} ay-=${tc[canon('ay-')]||0} xxx=${tc.xxx||0} docks=${s.ev.dock||0}`);};
+      snap(s,'t0','t=0: founder aaaaa (seed y), two kits, blanks; no dockers',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
+      const c=census(s).filter(x=>x.n>=9&&!x.paired);c.slice(0,4).forEach((x,k)=>{const {comp,members}=s.bodies();snap(s,'zoom'+k,`strand ${x.faces} and its part`,{units:members[comp[x.units[0]]],radius:4.5});});
+      finish('Heritable factory cycle: each strand grows the pocket that casts the dockers it needs');},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);
