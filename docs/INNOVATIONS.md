@@ -8,6 +8,16 @@ not statistics.
 
 ## 2026-10-01 (second session)
 
+- **Heritable pocket: a chain grows its machine, copies regrow it** — works (2 of 2 worlds). The founder `aaaaa` exposes
+  seed `z` on its low end; dockers `Az-`/`az-` carry `z` on their prev side, so every copy's low end exposes the seed
+  again (the template's high end becomes the copy's low end). A placement check (`world.partPlacement`) picks the kit
+  root and seed side so the grown pocket meets neither the chain, its dock sites nor the cells beside them. Fills must
+  be `Z--` (`latGlue`): a docker used as a fill exposed `z` on a hidden back and grew extra pockets mid-chain. 30000
+  steps, kit x12: world 1: the founder, its copy `AAAAA` (complete 16-cell pocket, casting) and the copy of the copy
+  each grew a pocket at their low end; world 2: founder and copy (copy's pocket complete). The products here (`-A-`)
+  lack the seed, so copies built from them would not inherit (fixed in the cycle demo). `node tri/demos.js heir 1
+  30000 runs`. Picture: `docs/pictures/heritable_pocket.png`.
+- **Greek glue letters** — 24 more glue pairs (α..ω / Α..Ω) so two kits can use disjoint alphabets.
 - **Grown pocket (kit generator)** — works (3 of 3 worlds). `structures.kit(tris, root, reserved, seed)` turns a
   prepared structure into kit types that grow it from one root cell: a breadth-first spanning tree (root chosen for the
   shallowest tree), one unique glue pair per tree edge, casters attached by their activator edge (unique glue plus the

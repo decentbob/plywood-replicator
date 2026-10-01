@@ -10,11 +10,12 @@
 //   no tunnelling  a jostle kick can exceed a thin wall (kicks reach about 1.8 at sigma 0.3, a one-row wall is 0.87
 //           thick): after the jostle, a body whose block-centre path enters a block of another bonded structure is
 //           moved only 1/2 or 1/4 of the way (translation, orientation kept), or not at all.
+//   contacts  pairs within contactMargin of touching after the jostle are separated in every pass (a cell grid finds them).
 // Locality: nothing here reads chemistry; the chemistry (sim.js) reads `pairs` (blocks near enough to bond).
 const R3=1/Math.sqrt(3);
 const REST=[[R3*Math.cos(-Math.PI/3),R3*Math.sin(-Math.PI/3)],[R3*Math.cos(Math.PI/3),R3*Math.sin(Math.PI/3)],[-R3,0]];   // counter-clockwise; side 0 faces +x
 const AREA=Math.sqrt(3)/4,INERTIA=AREA/12,SIZE=Math.sqrt(AREA);   // unit density: mass = area; moment about the centroid = area * side^2 / 12
-const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,stiff:0.8,iters:32,pairTol:0.35,noTunnel:true};
+const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,stiff:0.8,iters:32,pairTol:0.35,noTunnel:true,contactMargin:0.6};
 const EPS=1e-10;
 
 function mulberry32(seed){let a=seed|0;const f=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
@@ -29,7 +30,7 @@ function separation(a,b){let best=null;
   return best;}
 // separation() for two triangles given by corner offsets (ox, oy at a and b), the second displaced by (dx, dy); no
 // allocation, same arithmetic
-const SA=new Float64Array(6),SB=new Float64Array(6);
+const SA=new Float64Array(6),SB=new Float64Array(6),SEP={depth:0,x:0,y:0};
 function sepTri(ox,oy,a,b,dx,dy){for(let k=0;k<3;k++){SA[2*k]=0+ox[a+k];SA[2*k+1]=0+oy[a+k];SB[2*k]=dx+ox[b+k];SB[2*k+1]=dy+oy[b+k];}
   let bd=Infinity,bx=0,by=0,found=false;
   for(let w=0;w<2;w++){const P=w?SB:SA;for(let k=0;k<3;k++){const k1=(k+1)%3,ex=P[2*k1]-P[2*k],ey=P[2*k1+1]-P[2*k+1],d=Math.hypot(ex,ey);if(d<EPS)continue;
@@ -37,7 +38,7 @@ function sepTri(ox,oy,a,b,dx,dy){for(let k=0;k<3;k++){SA[2*k]=0+ox[a+k];SA[2*k+1
     for(let c=0;c<3;c++){const v=SA[2*c]*nx+SA[2*c+1]*ny;if(v>amax)amax=v;if(v<amin)amin=v;}for(let c=0;c<3;c++){const v=SB[2*c]*nx+SB[2*c+1]*ny;if(v>bmax)bmax=v;if(v<bmin)bmin=v;}
     const plus=amax-bmin,minus=bmax-amin;if(plus<=EPS||minus<=EPS)return null;
     const depth=Math.min(plus,minus),sign=plus<=minus?1:-1;if(!found||depth<bd){found=true;bd=depth;bx=sign*nx*depth;by=sign*ny*depth;}}}
-  return {depth:bd,x:bx,y:by};}
+  SEP.depth=bd;SEP.x=bx;SEP.y=by;return SEP;}
 // segment a-b against segment c-d
 function segX(ax,ay,bx,by,cx,cy,dx,dy){const d=(bx-ax)*(dy-cy)-(by-ay)*(dx-cx);if(Math.abs(d)<1e-12)return false;
   const t=((cx-ax)*(dy-cy)-(cy-ay)*(dx-cx))/d,w=((cx-ax)*(by-ay)-(cy-ay)*(bx-ax))/d;return t>=0&&t<=1&&w>=0&&w<=1;}
@@ -127,10 +128,10 @@ class Physics{
       for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const c=((cy[u]+b+gy)%gy)*gx+(cx[u]+a+gx)%gx;for(let v=head[c];v>=0;v=nxt[v])if(v>u)cand.push(v);}
       cand.sort((a,b)=>a-b);for(const v of cand)out.push(u,v);}
     return out;}
-  _contacts(){const r=this._radii(),out=[],near=this._near(2*Math.max(...r,R3)+2);
+  _contacts(){const r=this._radii(),M=this.p.contactMargin,out=[],near=this._near(2*Math.max(...r,R3)+M);
     for(let k=0;k<near.length;k+=2){const u=near[k],v=near[k+1];
       let joined=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0&&((q/3)|0)===v&&!this.isHingeBond(u,i))joined=true;}
-      if(joined)continue;if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))>r[u]+r[v]+2)continue;out.push(u,v);}
+      if(joined)continue;if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))>r[u]+r[v]+M)continue;out.push(u,v);}
     return out;}
   // separate two blocks (minimum translation, shared equally); r: radii
   _separate(u,v,r){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);if(Math.hypot(dx,dy)>r[u]+r[v]+EPS)return;
@@ -141,10 +142,11 @@ class Physics{
   physics(){
     const p=this.p,n=this.n,{px,py,ox,oy}=this,w=1/AREA,wr=1/INERTIA,soft=1-p.stiff;
     this._jostle();
-    const contacts=this._contacts(),pins=this._pinList(),bonded=[];for(let u=0;u<n;u++)if(this.bonded(u))bonded.push(u);
+    // contacts and radii (with slack) once per step; the passes move blocks far less than the contact margin
+    const contacts=this._contacts(),rr=Float64Array.from(this._r,x=>x+0.05),pins=this._pinList(),bonded=[];for(let u=0;u<n;u++)if(this.bonded(u))bonded.push(u);
     const fitC=new Float64Array(n),fitS=new Float64Array(n);
     for(let it=0;it<p.iters;it++){
-      {const r=this._radii();for(let k=0;k<contacts.length;k+=2)this._separate(contacts[k],contacts[k+1],r);}
+      for(let k=0;k<contacts.length;k+=2)this._separate(contacts[k],contacts[k+1],rr);
       for(let k=0;k<pins.length;k+=2){const qa=pins[k],qb=pins[k+1],u=(qa/3)|0,v=(qb/3)|0;
         const dx=this._dx(px[v]+ox[qb]-px[u]-ox[qa]),dy=this._dy(py[v]+oy[qb]-py[u]-oy[qa]),dl=Math.hypot(dx,dy);if(dl<1e-9)continue;
         const nx=dx/dl,ny=dy/dl,cu=ox[qa]*ny-oy[qa]*nx,cv=ox[qb]*ny-oy[qb]*nx,eu=w+wr*cu*cu,ev=w+wr*cv*cv,lam=dl/(eu+ev);
