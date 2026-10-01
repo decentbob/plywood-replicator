@@ -47,14 +47,16 @@ membrane around itself), heritable cells (copies carry the seed and wrap themsel
 1. **Cells that live** — done (2026-10-01): `live` (grown door membrane imports) and `grown` (the chain grows its pocket
    and its membrane with door; the cell imports blanks, casts dockers and copies inside; 4 of 4 worlds, ~250k steps).
    Slow: kit growth is the bottleneck (one specific type must find each growth site in a crowded world).
-2. **Birth (in progress, 2026-10-01).** `structures.cellKit`: one seed grows a whole cell: membrane (`doorRingKit` with
-   unique wall cells), a **pore** (a 6-cell panel with a built-in trigger: it swings out once the cell is complete and
-   stays open; a strand leaves through it in ~5-20k steps) and an **organelle** on the wall (two lid pockets joined,
-   `pocketPair`, casting dockers `AXm` and `aXm`). The root keeps the chain (no `&`). Dockers carry the membrane seed
-   `m` on their next side (a copy's high end exposes it) and `X` on their prev side (blanks are the fills, latGlue).
-   Demo `birth` (800k steps): the cell completes at ~300-375k; watching whether copies leave and grow their own cells.
-   Pitfalls met: the pore search must use the direction the hinge really turns (away from its partner); the ring can
-   close before the organelle completes (organelle parts 4x).
+2. **Birth (partial, 2026-10-01).** `structures.cellKit`: one seed grows a whole cell: membrane (`doorRingKit` with
+   unique wall cells), a **pore** (6-cell panel with a built-in trigger, held by a `&` pair: it lets go once the cell
+   is complete, the spent wall side recruits nothing) and a late **organelle** on the wall (two lid pockets joined,
+   casting dockers `AXm`/`aXm`; its seed is a trigger side, so it starts after the wall closes). The root keeps the
+   chain. Dockers carry the membrane seed `m` (next side) and `X` (prev side; blanks are the fills, latGlue). Demo
+   `birth`: in 1 of 4 worlds the whole cycle ran up to the start of the offspring's own cell (~2.6M steps; see
+   INNOVATIONS). To make it complete: (a) more unique wall parts or fewer wasted (roots entering through the pore bind
+   copies inside: a pore that keeps parts out, e.g. a door that exports, or copies whose seed is hidden while inside);
+   (b) a faster organelle (it waits for parts to wander in; an early organelle raced the wall); (c) speed: physics is
+   ~40% faster now, but a generation is still ~1-2M steps.
 3. **Heredity of the living cell.** A copy inside the cell cannot become a cell: its dockers carry no seeds, and kit
    parts cannot enter (the door takes blanks only; a free part binds only by its attach side). Options: (a) the pocket
    casts dockers that carry the seeds (`Ayz`-like, with fills that do not expose seeds), and the copy leaves the cell

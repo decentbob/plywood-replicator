@@ -25,9 +25,14 @@ not statistics.
   the organelle grows inside, slowly (its parts must wander in through the pore): complete in 1 of 4 worlds by
   ~900k, the others 1-2 cells short at 1.5M. In that world the organelle cast dockers, the chain copied inside its
   cell, copies were copied again inside (with the second docker type), and **a copy left through the pore**
-  (~1.1M steps; two free copies by 1.55M, one being copied outside by dockers that drifted out). Not yet: a free copy
-  starting its own cell (only one free membrane root was left in the world). Long runs continue with `TRI_RESUME`.
-  `node tri/demos.js birth 3 900000 runs`.
+  (~1.1M steps; four free copies by 2.6M, some copied again outside by dockers that drifted out). A free copy was
+  bound by a membrane root and **began its own cell** (root, wall cell and pore panel), but its long wall front stopped
+  after one cell: each unique wall part had 3 copies, one went into the parent and one into a ring that a root started
+  on a copy *inside* the parent (roots enter through the pore too). Not yet: a complete offspring cell. Lessons: the
+  late organelle is safe but slow (parts must find the pore); roots inside the parent waste parts and trap copies;
+  supply of unique parts limits the number of cells. Picture: `docs/pictures/birth.png` (world 3 at 2.6M steps: parent
+  cell with organelle and copies, free copies above, the offspring's started wall). Long runs continue with
+  `TRI_RESUME`. `node tri/demos.js birth 3 900000 runs`.
 - **Heritable factory cycle on rigid physics** — works (third generation in 2 of 3 worlds by 150000 steps). Founder
   `aaaaa` with seed `y`; two pocket kits in the supply: P_y casts blanks into dockers `Az-`, P_z casts `ay-`; fills
   `Z--`/`Y--` (latGlue), blanks 60. The founder grows P_y (complete at 35000-40000) and casts `Az-`; its copies

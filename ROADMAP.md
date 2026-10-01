@@ -21,6 +21,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Grown import door: the genome's membrane kit grows its own door | transporter made by the cell | works (3 of 3 worlds, R=6: closes, lets go of the chain, imports blanks) | structures.doorRingKit, demo live |
 | Protocell: membrane + import + factory + copying inside | cell | works prepared (demo cell) and grown from the genome (4 of 4 worlds: pocket and membrane with door grow from the chain's seeds, import, cast, copy inside) | demos cell, grown |
 | Budding: second compartment with genome copy and parts | daughter cell | empty daughter rings bud off a parent (open signal, `&` release); with contents not yet | demo bud; backlog 6 |
+| Birth: a grown cell makes copies that leave through a pore and start their own cells | reproduction | partial: copies leave and one began its own cell (1 of 4 worlds, 2.6M steps); not yet a complete offspring cell | structures.cellKit, demo birth |
 | Feeding the bud through a shared wall gate | maternal supply | not yet | backlog 6 |
 | Division: cut the shared wall when the bud is complete | cytokinesis | completion release works for empty buds | sim.js open signal |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
