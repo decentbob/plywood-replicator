@@ -107,7 +107,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // their copies aaaa carry w like the founder) from a seed v@ on its wall; its
     // kit parts (2 of each type) start inside P with the food; the pair splits once the pocket is complete and a copy is
     // anchored: the bud leaves with a genome, a pocket that casts its dockers, and the food that came in (RP 8, RD 6)
-    split(){steps=steps||60000;const org=String(extra||'').includes('o'),gen=org||String(extra||'').includes('g'),nb=parseInt(extra)||30,size=org?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:gen?7:6;
+    split(){steps=steps||60000;const org=String(extra||'').includes('o'),gen=org||String(extra||'').includes('g'),nb=parseInt(extra)||(org?50:30),size=org?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:gen?7:6;
       const OK=org?S.kitOptions(S.lidPocket(S.stampInstr('ay.w'),'X',null,'B'),'aywzxvψωбгджцшэ','v',[S.lidSlot('B')]):null;
       const RD=org?6:gen?5:4,bp=S.budPair({RP,RD,k:5,capGlue:gen?null:'a',anchorGlue:gen?'Z':null,anchorP:gen?'W':null,organelle:org?{opts:OK,gaps:[1,1,1],seed:'v',slots:[S.lidSlot('B')],clear:S.lidClear()}:null});
       const kitSupply={};if(org)for(const t of bp.organelle.K.types)kitSupply[t]=(kitSupply[t]||0)+2;
@@ -118,13 +118,13 @@ function demo(name,seed=1,steps,dir='runs',extra){
           for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)return true;}return false;};
       let W0=null;
       for(const f of gen?[0.55,0.45,0.65,0.35,0.75]:[0])for(const ox of gen?[0,1,-1,2,-2]:[0]){
-        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c+bp.anchorP[2][0]*f+ox,y:cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},pocket],supply:gen?{xxx:nb,'Y--':16,...kitSupply}:{xxx:nb},params:gen?{latGlue:true}:{}});
+        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c+bp.anchorP[2][0]*f+ox,y:cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},pocket],supply:gen?{xxx:nb,'Y--':org?24:16,...kitSupply}:{xxx:nb},params:gen?{latGlue:true}:{}});
         openBudDoors(w.s,w.structures[0],bp);if(!overlap(w.s,[...w.structures[0],...w.structures[1],...(w.founders[0]||[])])){W0=w;break;}}
       if(!W0)throw Error('split: prepared parts overlap');
       const {s,structures,founders}=W0,U=structures[0],PK=[...structures[1],...(founders[0]||[])];
       // the blanks start inside P (the parent's food; labelled)
       const prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
-      free.forEach(u=>{if(!placeFree(s,u,placed,()=>{const a=2*Math.PI*s.rng(),r=(RP-1.8)*Math.sqrt(s.rng());return [c+r*Math.cos(a),cy+r*Math.sin(a)];}))throw Error('place');placed.push(u);});
+      free.forEach(u=>{if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];}},20000))throw Error('place');placed.push(u);});
       const Pu=bp.P.map(q=>U[q]),Du=bp.D.map(q=>U[q]),capT=canon(gen?'Ay.z':bp.cap.type),closeU=bp.doors.map(d=>[U[d.panel[d.panel.length-1]],d.closeSide[0]]);
       const ctr=L=>{let x=0,y=0;for(const u of L){x+=s._dx(s.px[u]-s.px[L[0]]);y+=s._dy(s.py[u]-s.py[L[0]]);}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];};
       // inside a ring: hex radius (structures.hexr) in the ring's own frame (its turn since t=0 read from one wall cell)
@@ -137,7 +137,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const parts=[...Array(s.n).keys()].filter(u=>canon(typeName(s,u))===capT&&!s.bonded(u));
         const st=gen?' strands ['+census(s).filter(q=>q.n>=7).map(q=>q.faces+(q.paired?'*':'')+(comp[q.units[0]]===dc||comp[q.units[0]]===comp[Pu[0]]?(inD(q.units[3])?'(anchored in D)':'(anchored in P)'):inD(q.units[3])?'(in D)':inP(q.units[3])?'(in P)':'(out)')).join(' ')+'] docks='+(s.ev.dock||0)+' anchors='+(s.ev.anchor||0):'';
         const og=org?` organelle=${[...Array(s.n).keys()].filter(u=>comp[u]===dc&&kitT.has(canon(typeName(s,u)))&&inD(u)).length}/${bp.organelle.K.types.length}`:'';
-        console.log(`t=${t} casts=${s.ev.cast||0}${st}${gen?og:` cap=${cap}/3`} ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length} completions=${s.ev.complete||0} lost outside=${free.filter(u=>!s.bonded(u)&&!inD(u)&&!inP(u)).length}`);};
+        console.log(`t=${t} casts=${s.ev.cast||0}${st}${gen?og:` cap=${cap}/3`} ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length}${gen?` fills in D=${free.filter(u=>typeName(s,u)==='Y--'&&inD(u)).length}`:''} completions=${s.ev.complete||0} lost outside=${free.filter(u=>!s.bonded(u)&&!inD(u)&&!inP(u)).length}`);};
       console.log('part',gen?'Ay.z':bp.cap.type,'stamp',S.stampInstr(gen?'Ay.z':bp.cap.type).join(' '),'doors',bp.doors.map(d=>d.ang+'deg').join(' '));
       snap(s,'t0','t=0: parent P (stamp pocket, blanks) and bud D share an open doorway',{units:U,radius:10});
       for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}${split?', split':''}`,{units:Pu,radius:12},false);}
