@@ -13,15 +13,18 @@ test('types: parse, name, canonical rotation',()=>{
   const s=new TriSim({},1);s.setType(0,'K<^dA*');assert.equal(s.typeName(0),'K<^dA*');assert.equal(canon('A--'),canon('-A-'));});
 
 // a founder face with a docker placed exactly on it (no jostle): docks only with the complementary glue
-function dockWorld(dockerType,charged=true){
+function dockWorld(dockerType,charged=true,end='high'){
   const {s,founders}=createWorld({seed:3,size:12,founders:[{gaps:[1,1],faces:'aba',x:6,y:6}],supply:{[dockerType]:1},params:{sigma:0,sigmaRot:0}});
-  const f=founders[0],u=f[0],r=s.roles(u),d=s.n-1,i=r.free,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
+  const f=founders[0],u=end==='high'?f[f.length-1]:f[0],r=s.roles(u),d=s.n-1,i=r.free,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
   const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];placeTri(s,d,[b,a,x]);   // reflection of the face triangle across its face
   s.setType(d,dockerType);if(!charged)s.chg[d]=0;s.derive();return {s,u,d,i};}
 test('copy: complementary docking only, not when discharged',()=>{
   for(const [type,expect] of [['A--',true],['B--',false],['a--',false]]){const {s,u,d,i}=dockWorld(type);s.run(30);
     assert.equal(s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===d,expect,`docker ${type}`);symmetric(s);}
   const {s,u,i}=dockWorld('A--',false);s.run(30);assert.ok(s.bond[u*3+i]<0,'discharged docker must not bind');});
+test('copy: zip, a face takes a dock only from the high end on',()=>{
+  const {s,u,i}=dockWorld('A--',true,'low');s.run(30);assert.ok(s.bond[u*3+i]<0,'low end docked before the faces above it');
+  s.p.zip=false;s.run(30);assert.ok(s.bond[u*3+i]>=0,'without zip the low end docks');});
 
 test('casting: a pocket of three activated casters casts the instruction glues',()=>{
   const tris=[{v:[[1,0],[1.5,H],[0.5,H]],type:'aaa'},

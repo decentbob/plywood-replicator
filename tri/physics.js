@@ -27,6 +27,17 @@ function separation(a,b){let best=null;
     const plus=amax-bmin,minus=bmax-amin;if(plus<=EPS||minus<=EPS)return null;
     const depth=Math.min(plus,minus),sign=plus<=minus?1:-1;if(!best||depth<best.depth)best={depth,x:sign*nx*depth,y:sign*ny*depth};}
   return best;}
+// separation() for two triangles given by corner offsets (ox, oy at a and b), the second displaced by (dx, dy); no
+// allocation, same arithmetic
+const SA=new Float64Array(6),SB=new Float64Array(6);
+function sepTri(ox,oy,a,b,dx,dy){for(let k=0;k<3;k++){SA[2*k]=0+ox[a+k];SA[2*k+1]=0+oy[a+k];SB[2*k]=dx+ox[b+k];SB[2*k+1]=dy+oy[b+k];}
+  let bd=Infinity,bx=0,by=0,found=false;
+  for(let w=0;w<2;w++){const P=w?SB:SA;for(let k=0;k<3;k++){const k1=(k+1)%3,ex=P[2*k1]-P[2*k],ey=P[2*k1+1]-P[2*k+1],d=Math.hypot(ex,ey);if(d<EPS)continue;
+    const nx=ey/d,ny=-ex/d;let amax=-Infinity,amin=Infinity,bmax=-Infinity,bmin=Infinity;
+    for(let c=0;c<3;c++){const v=SA[2*c]*nx+SA[2*c+1]*ny;if(v>amax)amax=v;if(v<amin)amin=v;}for(let c=0;c<3;c++){const v=SB[2*c]*nx+SB[2*c+1]*ny;if(v>bmax)bmax=v;if(v<bmin)bmin=v;}
+    const plus=amax-bmin,minus=bmax-amin;if(plus<=EPS||minus<=EPS)return null;
+    const depth=Math.min(plus,minus),sign=plus<=minus?1:-1;if(!found||depth<bd){found=true;bd=depth;bx=sign*nx*depth;by=sign*ny*depth;}}}
+  return {depth:bd,x:bx,y:by};}
 // segment a-b against segment c-d
 function segX(ax,ay,bx,by,cx,cy,dx,dy){const d=(bx-ax)*(dy-cy)-(by-ay)*(dx-cx);if(Math.abs(d)<1e-12)return false;
   const t=((cx-ax)*(dy-cy)-(cy-ay)*(dx-cx))/d,w=((cx-ax)*(by-ay)-(cy-ay)*(bx-ax))/d;return t>=0&&t<=1&&w>=0&&w<=1;}
@@ -103,15 +114,29 @@ class Physics{
       for(const u of list){px[u]=this._wx(X[u]+f*tx);py[u]=this._wy(Y[u]+f*ty);pa[u]=A[u];for(let k=u*3;k<u*3+3;k++){ox[k]=OX[k];oy[k]=OY[k];}}
       this.tunnelBlocks=(this.tunnelBlocks||0)+1;}
   }
-  _contacts(){const n=this.n,r=new Float64Array(n),out=[];for(let u=0;u<n;u++)r[u]=this.radius(u);
-    for(let u=0;u<n;u++)for(let v=u+1;v<n;v++){
+  // block radii (corners are soft, so a radius can exceed 1/sqrt(3))
+  _radii(){const n=this.n,r=this._r&&this._r.length===n?this._r:(this._r=new Float64Array(n)),{ox,oy}=this;
+    for(let u=0;u<n;u++){let m=0;for(let k=u*3;k<u*3+3;k++)m=Math.max(m,Math.hypot(ox[k],oy[k]));r[u]=m;}return r;}
+  // candidate pairs (u < v, in u-major order) whose centres are within `reach` of each other: a cell grid on the torus
+  _near(reach){const n=this.n,{px,py}=this,W=this.p.W,H=this.p.H,gx=Math.max(1,Math.floor(W/reach)),gy=Math.max(1,Math.floor(H/reach)),cw=W/gx,ch=H/gy;
+    if(gx<3||gy<3){const all=[];for(let u=0;u<n;u++)for(let v=u+1;v<n;v++)all.push(u,v);return all;}
+    const head=new Int32Array(gx*gy).fill(-1),nxt=new Int32Array(n),cx=new Int32Array(n),cy=new Int32Array(n);
+    for(let u=n-1;u>=0;u--){cx[u]=Math.min(gx-1,Math.floor(this._wx(px[u])/cw));cy[u]=Math.min(gy-1,Math.floor(this._wy(py[u])/ch));const c=cy[u]*gx+cx[u];nxt[u]=head[c];head[c]=u;}
+    const out=[],cand=[];
+    for(let u=0;u<n;u++){cand.length=0;
+      for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const c=((cy[u]+b+gy)%gy)*gx+(cx[u]+a+gx)%gx;for(let v=head[c];v>=0;v=nxt[v])if(v>u)cand.push(v);}
+      cand.sort((a,b)=>a-b);for(const v of cand)out.push(u,v);}
+    return out;}
+  _contacts(){const r=this._radii(),out=[],near=this._near(2*Math.max(...r,R3)+2);
+    for(let k=0;k<near.length;k+=2){const u=near[k],v=near[k+1];
       let joined=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0&&((q/3)|0)===v&&!this.isHingeBond(u,i))joined=true;}
       if(joined)continue;if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))>r[u]+r[v]+2)continue;out.push(u,v);}
     return out;}
-  _separate(u,v){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);if(Math.hypot(dx,dy)>this.radius(u)+this.radius(v)+EPS)return;
-    const m=separation(this.outline(u),this.outline(v,dx,dy));if(!m)return;this.px[u]-=m.x/2;this.py[u]-=m.y/2;this.px[v]+=m.x/2;this.py[v]+=m.y/2;}
-  _pairs(){const n=this.n,r=new Float64Array(n),tol=this.p.pairTol*SIZE;this.pairs.length=0;for(let u=0;u<n;u++)r[u]=this.radius(u);
-    for(let u=0;u<n;u++)for(let v=u+1;v<n;v++)if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))<=r[u]+r[v]+tol+EPS)this.pairs.push(u,v);
+  // separate two blocks (minimum translation, shared equally); r: radii
+  _separate(u,v,r){const dx=this._dx(this.px[v]-this.px[u]),dy=this._dy(this.py[v]-this.py[u]);if(Math.hypot(dx,dy)>r[u]+r[v]+EPS)return;
+    const m=sepTri(this.ox,this.oy,u*3,v*3,dx,dy);if(!m)return;this.px[u]-=m.x/2;this.py[u]-=m.y/2;this.px[v]+=m.x/2;this.py[v]+=m.y/2;}
+  _pairs(){const r=this._radii(),tol=this.p.pairTol*SIZE,near=this._near(2*Math.max(...r,R3)+tol+EPS);this.pairs.length=0;
+    for(let k=0;k<near.length;k+=2){const u=near[k],v=near[k+1];if(Math.hypot(this._dx(this.px[v]-this.px[u]),this._dy(this.py[v]-this.py[u]))<=r[u]+r[v]+tol+EPS)this.pairs.push(u,v);}
     return this.pairs;}
   physics(){
     const p=this.p,n=this.n,{px,py,ox,oy}=this,w=1/AREA,wr=1/INERTIA,soft=1-p.stiff;
@@ -119,7 +144,7 @@ class Physics{
     const contacts=this._contacts(),pins=this._pinList(),bonded=[];for(let u=0;u<n;u++)if(this.bonded(u))bonded.push(u);
     const fitC=new Float64Array(n),fitS=new Float64Array(n);
     for(let it=0;it<p.iters;it++){
-      for(let k=0;k<contacts.length;k+=2)this._separate(contacts[k],contacts[k+1]);
+      {const r=this._radii();for(let k=0;k<contacts.length;k+=2)this._separate(contacts[k],contacts[k+1],r);}
       for(let k=0;k<pins.length;k+=2){const qa=pins[k],qb=pins[k+1],u=(qa/3)|0,v=(qb/3)|0;
         const dx=this._dx(px[v]+ox[qb]-px[u]-ox[qa]),dy=this._dy(py[v]+oy[qb]-py[u]-oy[qa]),dl=Math.hypot(dx,dy);if(dl<1e-9)continue;
         const nx=dx/dl,ny=dy/dl,cu=ox[qa]*ny-oy[qa]*nx,cv=ox[qb]*ny-oy[qb]*nx,eu=w+wr*cu*cu,ev=w+wr*cv*cv,lam=dl/(eu+ev);
@@ -144,4 +169,4 @@ class Physics{
     for(const k in st.arrays)s[k]=T[st.arrays[k].t].from(st.arrays[k].a);for(const k in st.nums)s[k]=st.nums[k];
     s.rng.setState(st.rng);s._spare=st.spare===null?NaN:st.spare;s.bondsDirty=true;return s;}
 }
-module.exports={Physics,REST,AREA,SIZE,DEFAULTS,separation,segX,mulberry32};
+module.exports={Physics,REST,AREA,SIZE,DEFAULTS,separation,sepTri,segX,mulberry32};

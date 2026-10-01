@@ -32,8 +32,8 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'');}).join('');
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Z-][<>.!^#*~$]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:0.5,triTol:0.3,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,
-  caps:false,pDissolve:0,triUndock:0,pFray:0,latGlue:false,castComp:false,noDock:false,light:null};
+const DEFAULTS={pBond:0.5,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,
+  zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -42,7 +42,7 @@ class TriSim extends Physics{
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hSign=I8(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -65,7 +65,7 @@ class TriSim extends Physics{
   // ---------------- exposed values (previous pass, one bond per pass) ----------------
   derive(){
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
-    const nb0=this.nb.slice(),gap0=this.gap.slice(),need0=this.need.slice(),busy0=this.busy.slice(),lb0=this.lockBusy.slice();
+    const nb0=this.nb.slice(),gap0=this.gap.slice(),need0=this.need.slice(),busy0=this.busy.slice(),lb0=this.lockBusy.slice(),zip0=this.zip.slice();
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
     // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond (refractory)
     for(let u=0;u<n;u++){let b=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -83,6 +83,13 @@ class TriSim extends Physics{
         if(nx>=0){this.nb[u]=role[nx]===SBACK?1:0;if(r.role===SFACE)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+nb0[nx]:-1;}
         if(r.fill&&nx>=0)this.need[u]=Math.max(0,need0[nx]-1);}
       else if(r.role===DOCKED){const t=P(u,r.face);this.need[u]=gap0[t]>=0?Math.max(0,2-gap0[t]):0;}}
+    // zip: a strand triangle without a next bond (the strand's high end), or whose next partner is a face being copied
+    // (a TFACE bond), or a back that hears zip from its next partner; a face takes a dock only while it hears zip, so a
+    // copy grows from the high end one face after another and never encloses an empty dock site between two copies
+    for(let u=0;u<n;u++){const r=R[u];let z=0;
+      if(r.role===SFACE||r.role===SBACK){const e=this._edges(u);
+        if(e.next<0)z=1;else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
+      this.zip[u]=z;}
     // lock signal (interlock): an unbonded latch side emits lockRange, relayed -1 per bond
     for(let u=0;u<n;u++){let v=0;for(let i=0;i<3;i++){if(this.ltc[u*3+i]&&this.bond[u*3+i]<0)v=this.p.lockRange;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,lb0[(q/3)|0]-1);}this.lockBusy[u]=v;}
     // tb: a trigger side of mine is bonded; nbc: my bond count; actE: my side whose glue K is bonded to a k
@@ -116,7 +123,7 @@ class TriSim extends Physics{
           if(done)break;}
         if(done)continue;
         // dock on a free template face with the complementary glue
-        if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){const g=gl(u,r.free);
+        if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){const g=gl(u,r.free);
           if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&flush(u,r.free,v,j,p.triTol)&&this.rng()<p.pBond){this.bind(u,r.free,TFACE,v,j,FACE);
             if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
