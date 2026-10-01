@@ -68,6 +68,12 @@ or missing, in order:
    pin at the shared vertex, and its swing direction must point shut; (b) closures never form on `&` sides, so only
    tree edges can be `&` (the root's seed side, like the bud demo); (c) the parent's own door must open only after D's
    wall closes (two phases: the late-organelle trick, a trigger side deaf while the open signal is heard).
+   Analysis (2026-10-01): D's open panel can be grown: in the open position the hinge cell's partner is the doorstop
+   (the edge through the pin), the hold is a `@&` tree edge to a wall cell, the built-in trigger a tree edge with `*`
+   (as the pore). The hard part is ordering with one open signal: D's wall completing silences everything for a moment,
+   so every `&` (contact, doorstop) would cut before D's content starts. Needs a second, independent completion signal
+   (e.g. one relayed only through hear sides, or a mark for "content" fronts), or an order where the content's seed is
+   already an open front while the wall grows (then the parent's door must open on something else than silence).
 3. **Programmable synthesis** (the next big blocker, see IDEAS): one stamp pocket makes one part type; a cell kit has
    ~60. Options: part templating (a copier pocket: simple, information in parts) or translation (a reading frame on a
    strand: hard). **Ask the user which way** before building: both need a rule.
