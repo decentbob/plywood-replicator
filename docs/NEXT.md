@@ -82,8 +82,8 @@ node tri/demos.js wrap 2 100000 runs               # a chain grows a membrane ar
 node tri/demos.js cells 1 100000 runs 36           # heritable cells: copies wrap themselves
 node tri/demos.js live 1 150000 runs 6x2           # a grown membrane with its own import door
 node tri/demos.js grown 2 200000 runs              # chain grows membrane + door and a casting pocket (slow)
-node tri/demos.js heir 1 30000 runs                # chains grow pockets from their end seed; copies regrow them
-node tri/demos.js cycle 1 120000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
+node tri/demos.js heir 1 45000 runs                # chains grow pockets from their end seed; copies regrow them
+node tri/demos.js cycle 1 200000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
 node tri/demos.js stamp 1 60000 runs               # stamp pockets make a ring's parts from blanks; the ring grows
 node tri/demos.js grow 1 20000 runs 4s             # a stamp pocket grows from its kit and casts A@-b@
 node tri/demos.js split 1 30000 runs               # bud fed through a doorway grows a cap, then splits off sealed

@@ -173,11 +173,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       finish('Split: the parent feeds its bud through a doorway; when the bud is complete the doors shut and it separates');},
     // budgrow: the bud grows instead of being prepared (structures.grownBud). The parent P (prepared, labelled: ring of
     // side 7 with a pulse door beside its seed side, a stamp pocket casting the bud's cap part from blanks, blanks xxx
-    // inside) and the bud's kit parts outside (every bud cell its own type; extra: copies per type, default 2). The bud
+    // inside) and the bud's kit parts outside (every bud cell its own type; extra: copies per type, default 4). The bud
     // ring D (side 5) grows from P's seed: while a wall site is open the lock signal holds both doors shut; when D's last
     // cell arrives both open, cap parts cast in P come through the doorway and grow D's two-cell cap; when nothing is
     // open, D's seed bond is cut, the lock signal returns, both doors swing shut and D leaves
-    budgrow(){steps=steps||300000;const per=parseInt(extra)||2,size=40,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud({RP,RD}),dcy=cy+(RP+RD)*H;
+    budgrow(){steps=steps||400000;const per=parseInt(extra)||4,size=32,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud({RP,RD}),dcy=cy+(RP+RD)*H;
       const P=g.P,Pt=P.map(x=>g.tris[x]),kit={};for(const t of g.kit)kit[t]=(kit[t]||0)+per;kit[g.rootType]=per;
       const pocket={tris:S.lidPocket(S.stampInstr(g.cap.type),'X'),x:c-0.5,y:cy-2.5,rot:0};
       const {s,structures}=createWorld({seed,size,structures:[{tris:Pt,x:c,y:cy},pocket],supply:{xxx:30,...kit},params:{lockRange:80}});
@@ -197,7 +197,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const dc=root!==undefined?comp[root]:-1,dU=dc>=0?members[dc]:[],cells=dU.filter(u=>kitT.has(norm(typeName(s,u)))).length,q=dU.find(u=>norm(typeName(s,u))===qT),p1=dU.find(u=>norm(typeName(s,u))===p1T);
         const aP=flap(U[g.panelP[0]],Su),aD=p1!==undefined&&root!==undefined?flap(p1,root):NaN,cap=dU.filter(u=>norm(typeName(s,u))===capT).length;
         if(!closed&&q!==undefined)closed=t;if(!opened&&aP>20)opened=t;if(!closed&&aP>20)early=t;if(!split&&root!==undefined&&dc!==comp[Su]&&cells>=g.D.length-1)split=t;
-        const inD=dc>=0?(()=>{const [x,y]=ctr(dU);return u=>S.hexr([s._dx(s.px[u]-x),s._dy(s.py[u]-y)])<RD-1;})():()=>false;
+        const dK=dU.filter(u=>kitT.has(norm(typeName(s,u)))),inD=dK.length>=g.D.length-1?(()=>{const [x,y]=ctr(dK);return u=>Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<(RD-1)*H;})():()=>false;
         const parts=free.filter(u=>!s.bonded(u)&&norm(typeName(s,u))===capT);
         console.log(`t=${t} bud cells=${cells}/${g.D.length} ${closed?'closed at '+closed:'open'} doors P:${(aP|0)} D:${isNaN(aD)?'-':aD|0} deg${early?' EARLY at '+early:''} casts=${s.ev.cast||0} free cap parts=${parts.length} (in D ${parts.filter(inD).length}) cap=${cap}/${g.cap.slots.length} ${split?'SPLIT at '+split:'joined'} doors after split: ${split?(aP<5&&aD<5?'shut':'open'):'-'} kit parts in D=${free.filter(u=>!s.bonded(u)&&kitT.has(norm(typeName(s,u)))&&inD(u)).length} completions=${s.ev.complete||0}`);};
       console.log('bud kit',g.kit.length+1,'types x',per,'cap part',g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
