@@ -43,14 +43,14 @@ class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
-    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.hSign=I8(3*n);
+    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
     this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
-  setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
+  setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.spent[k]=0;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
     this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];}}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
@@ -153,8 +153,8 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
         // a trigger side catches only while its flap is at rest and its structure is complete (_deaf)
-        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
@@ -219,7 +219,7 @@ class TriSim extends Physics{
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*3+i];if(q<0||this.bkind[u*3+i]!==GLUE){ok=false;break;}
         const w=(q/3)|0,j=q%3;if(this.actE[w]!==m3(j+1))ok=false;else src.push(G[w*3+m3(j+2)]);}
       if(!ok)continue;
-      for(let i=0;i<3;i++){const k=u*3+i;G[k]=this.p.castComp?comp(src[i]):src[i];this.hinge[k]=0;this.cOnly[k]=0;this.rel[k]=0;this.trg[k]=0;this.ltc[k]=0;this.fuel[k]=0;this.hear[k]=0;this.wide[k]=0;this.act[k]=0;this.att[k]=0;this.done[k]=0;this.cut(u,i);}
+      for(let i=0;i<3;i++){const k=u*3+i;G[k]=this.p.castComp?comp(src[i]):src[i];this.spent[k]=0;this.hinge[k]=0;this.cOnly[k]=0;this.rel[k]=0;this.trg[k]=0;this.ltc[k]=0;this.fuel[k]=0;this.hear[k]=0;this.wide[k]=0;this.act[k]=0;this.att[k]=0;this.done[k]=0;this.cut(u,i);}
       this.count('cast');(this.castLog||(this.castLog=[])).push([this.t,u,typeName(this,u)]);}}
   // environment drive (labelled): free discharged triangles inside the light zone {x, y, r, p} recharge
   _light(){const L=this.p.light;if(!L)return;
@@ -230,7 +230,8 @@ class TriSim extends Physics{
   // other door is unlatched: interlock), or while their door is opening; also without any hinge (e.g. a bud's seed latch)
   _latches(){const n=this.n,P=(u,i)=>this.partner(u,i);
     // completion release '&': the bond on this side is cut once its triangle hears no open signal (its part is complete)
-    for(let u=0;u<n;u++)if(this.op[u]===0)for(let i=0;i<3;i++)if(this.done[u*3+i]&&this.bond[u*3+i]>=0){this.cut(u,i);this.count('complete');}
+    // (the side is then spent: it binds nothing again, so the gap it leaves cannot be refilled)
+    for(let u=0;u<n;u++)if(this.op[u]===0)for(let i=0;i<3;i++){const k=u*3+i;if(!this.done[k])continue;this.spent[k]=1;if(this.bond[k]>=0){this.cut(u,i);this.count('complete');}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u]||this.sg[u]>0,open=this.dOpen[u];
       for(let e=0;e<3;e++)if(e!==i&&this.bond[u*3+e]>=0&&!this.isHingeBond(u,e)){const w=P(u,e);if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
       // a latch holds a trigger while its triangle hears an open signal (a door does not open before its wall is complete)

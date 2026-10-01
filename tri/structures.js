@@ -296,7 +296,9 @@ function doorRingKit(R=5,seed='z',key='X',k=4,avoid='',m=1,release=true,pore=fal
   // short front: root -> wall cells N-1 .. N-m -> panel N-m-1 (latched to the last wall cell) .. hc (welded)
   for(let q=0;q<m;q++){const a=q?N-q:0,b=N-1-q;T[a][side(a,b)]=X[q]+'@';T[b][side(b,a)]=U(X[q])+'@';}
   // the latch: both sides marked (an edge that comes apart: no open signal from either side once the door is open)
-  T[N-m][side(N-m,N-m-1)]=X[m]+'~@';T[N-m-1][side(N-m-1,N-m)]=U(X[m])+'~@';
+  // (a pore holds its panel by a completion release pair instead: once the cell is complete it lets go for good and
+  // the spent wall side recruits nothing, so the pore stays open)
+  T[N-m][side(N-m,N-m-1)]=X[m]+(pore?'@&':'~@');T[N-m-1][side(N-m-1,N-m)]=U(X[m])+(pore?'@&':'~@');
   for(let q=N-m-1;q>hc;q--){const e=X[m+(N-m-1-q)+1];T[q][side(q,q-1)]=e+'+@';T[q-1][side(q-1,q)]=U(e)+(pore&&q===N-m-1?'*':'')+'+@';}
   {const i=side(hc,hp),v=cells[hc];T[hc][i]=U(L[hc%P])+(same(v[i],door.P)?'<':'>')+'!=.';if(!pore)T[hc][door.keySide]=key+'*';}
   const wall=[...[...Array(m).keys()].map(q=>N-1-q),...[...Array(pre).keys()].map(q=>q+1)].map(c=>{const f=freeS(c);return {cell:c,side:f,inward:!outw(c)};});

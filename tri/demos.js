@@ -215,7 +215,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log('cell kit: cells',K.tris.length,'types',Object.keys(K.counts).length,'root',K.rootType,'organelle risk',K.organelle.K.risk);
       // organelle parts 4x richer: if the ring closes first, the organelle's last sites are inside and the cell is stuck
       const orgT=new Set(K.organelle.K.types);
-      const supply={[K.rootType]:mult,xxx:60,'---':20};for(const [t,n] of Object.entries(K.counts))supply[t]=(supply[t]||0)+mult*n;
+      const supply={[K.rootType]:mult,xxx:100,'---':20};for(const [t,n] of Object.entries(K.counts))supply[t]=(supply[t]||0)+mult*n;
       for(const t of orgT){const c=Object.keys(K.counts).find(x=>{const a=new TriSim({},1);a.setType(0,x);const b=new TriSim({},1);b.setType(0,t);return canon(a.typeName(0))===canon(b.typeName(0));});if(c)supply[c]+=3*mult*K.counts[c];}
       const {s,founders}=createWorld({seed,size,founders:[founder],supply,params:{pLoose:0.05,latGlue:true}});const F=founders[0];
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},kitT=new Set([...Object.keys(K.counts),K.rootType].map(norm));
