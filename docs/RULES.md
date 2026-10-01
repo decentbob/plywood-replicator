@@ -12,7 +12,7 @@ the values its bonded partners exposed in the previous pass. No rule counts, tra
 - **State** (small values that change by rules): charge (charged/discharged), fill, cap, door open, powered.
 
 ### Glues
-`a..z` pair with `A..Z` (complement = the other case). `-` is inert and binds nothing. `k`/`K` is the casting
+`a..z` pair with `A..Z` (complement = the other case); Greek `α..ω` pair with `Α..Ω` (24 more pairs, used by kits). `-` is inert and binds nothing. `k`/`K` is the casting
 activator pair (by convention only). `f`/`F` is used by the structure builder to weld prepared structures.
 
 ### Side marks
@@ -35,7 +35,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 ## Physics (`tri/physics.js`)
 - Torus `W x H`. Each step: Brownian jostling of **bodies** (blocks joined by bonds move and turn as one rigid
   body; free blocks alone; sigma 0.3, sigmaRot 0.45), then 32 constraint passes: polygon contacts (minimum
-  translation), pins (bond corners together), shape matching of bonded blocks (stiffness 0.8, soft corners).
+  translation; pairs within `contactMargin` 0.6 of touching after the jostle), pins (bond corners together), shape matching of bonded blocks (stiffness 0.8, soft corners).
 - A **bond** pins both corner pairs of the shared side; a **hinged** bond pins one corner. Hinged pairs still collide.
 - **No tunnelling:** if a jostle kick would carry a block's centre into a block of another bonded structure, the
   body moves only 1/2 or 1/4 of the way, or not at all (kicks reach about 1.8; a one-row wall is 0.87 thick).
@@ -44,7 +44,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 
 ## Binding (one rule everywhere)
 A side binds a flush side (both corner gaps within 0.45, closures 0.22) with the complementary glue, at
-probability 0.5 per step, if at least one of the two triangles is already attached (**activation by
+probability `pBond` per step (1: whenever flush), if at least one of the two triangles is already attached (**activation by
 attachment**: free triangles never bind each other). A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
 attach side. Option `pLoose` (proofreading): a triangle caught while free (not by an attach side) and held on only one
@@ -108,5 +108,5 @@ falls off. Without fuel a triggered flap holds. **Environment drive** (labelled)
 the light zone `light: {x, y, r, p}` recharge at p per step.
 
 ## Parameters (defaults)
-Physics: `sigma 0.3, sigmaRot 0.45, stiff 0.8, iters 32, pairTol 0.35, noTunnel true`. Chemistry: `pBond 0.5,
+Physics: `sigma 0.3, sigmaRot 0.45, stiff 0.8, iters 32, pairTol 0.35, noTunnel true, contactMargin 0.6`. Chemistry: `pBond 1,
 triTol 0.45, triTolClose 0.22, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12, sigRange 6, zip true`, other options off.

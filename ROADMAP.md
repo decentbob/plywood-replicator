@@ -14,7 +14,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Energy: charged carriers fuel every hinge swing, recharge in a light zone | ATP, light | works | sim.js servo, demo energy |
 | Machines: driven hinges, conveyor, gate, airlock with interlock | proteins that move | works | structures, demos |
 | Import: bring raw material through the membrane (pump) | transporters | not yet (lock works, pump does not) | backlog 3 |
-| Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | arms inherited; lid pocket grows from a seed on an anchor (kit generator) | structures.kit, demo grow; backlog 1 |
+| Heritable machines: parts grown from the chain's seeds | ribozymes, then translation | works: a chain grows a lid pocket from its end seed, copies regrow it (kit generator) | structures.kit, demos grow, heir, cycle; backlog 1 |
 | Membrane growth | membrane growth | not yet | backlog 5 |
 | Budding: second compartment with genome copy and parts | daughter cell | not yet | backlog 6 |
 | Feeding the bud through a shared wall gate | maternal supply | not yet | backlog 6 |
@@ -23,10 +23,11 @@ splits it off.** Build every mechanism in isolation, then combine them.
 
 ## Backlog (top first)
 
-1. **Grown pocket on a chain (heritable factory).** The kit generator works and the lid pocket grows from a seed on
-   an anchor (done). Next: grow it from a chain-end seed (check the part does not overlap the chain or block copying),
-   check it regrows on copies (dockers carry the seed), and casts. Then `latGlue` backs so a chain carries several
-   seeds, and a pocket that casts its own kit types (16 types: a factory of factories).
+1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`; see
+   INNOVATIONS). Then: smaller pockets (fewer kit types, faster growth); several seeds per chain (`latGlue` backs);
+   a pocket that casts its own kit types. Blocker for the last: casting strips marks, and kit types carry marks
+   (`@ % . + = < *`). Idea: an instruction side's marks travel with its glue (the caster's own instruction side would
+   then need marks that do nothing on an attached caster, e.g. `@`, or a separate "carried mark" notation).
 2. **Factory on lid pockets.** Switch the factory demo to lid pockets (done: copy deadlock fixed by zip; lid pocket
    built) and measure generations.
 3. **Pump through a wall.** A carrying lock: the hatch pocket carries a key from an outer slot into an enclosed

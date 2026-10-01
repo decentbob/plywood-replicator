@@ -15,6 +15,7 @@ const PREV=1,NEXT=2,FACE=3,TFACE=4,GLUE=5;                      // bond kinds (p
 const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=4;                  // roles (derived from bonds)
 const BUSY=30;                                                  // range of the busy relay (bonds)
 const m3=x=>((x%3)+3)%3;
+const SNAP0=-Math.PI/3;   // angle of rest corner 0 (physics REST)
 
 // ---------------- glues and types ----------------
 // glue codes: 0 inert '-', lower case odd, upper case even; complement = the other case
@@ -34,7 +35,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'');}).join('');
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:0.5,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
+const DEFAULTS={pBond:1,triTol:0.45,triTolClose:0.22,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
@@ -109,6 +110,12 @@ class TriSim extends Physics{
       {const d=this.angle(x)-this.angle(y),L=Math.PI/3;this.hRel[x*3+e]=L*Math.round(d/L);}   // rest angle on the lattice
       const c=this.hinge[x*3+e]===1?e:(e+1)%3,fx=-this.ox[x*3+c],fy=-this.oy[x*3+c];
       const dx=this._dx(this.px[x]-this.px[y]),dy=this._dy(this.py[x]-this.py[y]);this.hSign[x*3+e]=(dx*(-fy)+dy*fx)>0?1:-1;}}
+  // binding pulls a free triangle in: v is placed exactly flush with side j against side i of u (it moves at most about
+  // the binding tolerance), so every bond starts aligned (a tilted bond jams a strip against its own contacts)
+  _snap(v,j,u,i){if(this.p.snap===false)return;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
+    const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
+    const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3;
+    this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;this.resetShape(v);}
   cut(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bkind[u*3+i]=0;this.bkind[q]=0;this.unlink(u,i);}
   // sides of an attached triangle that bind by glue: free sides of a grown (glue-bonded) triangle, the back of a
   // released strand triangle, the spare edge of a strand end that is not being copied
@@ -127,17 +134,17 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e])continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&flush(u,e,v,j,p.triTol)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&flush(u,e,v,j,p.triTol)&&this.rng()<p.pBond){this._snap(v,j,u,e);this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
         if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){const g=gl(u,r.free);
-          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&flush(u,r.free,v,j,p.triTol)&&this.rng()<p.pBond){this.bind(u,r.free,TFACE,v,j,FACE);
+          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&flush(u,r.free,v,j,p.triTol)&&this.rng()<p.pBond){this._snap(v,j,u,r.free);this.bind(u,r.free,TFACE,v,j,FACE);
             if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
         // fill the prev edge of a docked or fill triangle that still needs fills (glue-agnostic unless latGlue)
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&flush(u,r.prev,v,j,p.triTol)&&this.rng()<p.pBond){
-          this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
+          this._snap(v,j,u,r.prev);this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // two attached triangles: glue closure between active sides
       let done=false;

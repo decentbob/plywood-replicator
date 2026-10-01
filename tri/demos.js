@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | grow | heir | cycle | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | grow | heir | cycle | ring | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement}=require('./world');
 const {render,montage}=require('./render');
@@ -33,7 +33,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log('casts',JSON.stringify((s.castLog||[]).slice(0,8)));finish('Lid pocket: aaa slides into the notch, the lid closes, cast bcd, the lid reopens');},
     // grown pocket: a lid pocket kit (structures.kit) grows from a seed on an anchor cell (labelled start: anchor + root);
     // extra: copies of each kit type (default 4)
-    grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X'),'auto','x','z'),r=K.tris[K.root],i=K.rootSide;
+    grow(){steps=steps||20000;const per=parseInt(extra)||4,K=S.kit(S.lidPocket('-A-','X'),'auto','x','z',null,[S.lidSlot()]),r=K.tris[K.root],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'};
       const supply={xxx:16};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
       const {s,structures}=createWorld({seed,size:16,structures:[{tris:[anchor,r],x:8,y:8}],supply,params:{pLoose:0.005}});
@@ -50,7 +50,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     heir(){steps=steps||30000;const per=parseInt(extra)||12,P=S.lidPocket('-A-','X');
       const supply={'Az-':14,'az-':14,'Z--':30,xxx:10};
       const probe=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}]}),U0=probe.founders[0];
-      const K=S.kitOptions(P,'xa','z').find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);if(!K)throw Error('no placement');
+      const K=S.kitOptions(P,'xa','z',[S.lidSlot()]).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);if(!K)throw Error('no placement');
       for(const t of K.kit.concat([K.types[K.root]]))supply[t]=(supply[t]||0)+per;
       const {s,founders}=createWorld({seed,size:22,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-'}],supply,params:{pLoose:0.005,latGlue:true}});
       console.log('root',K.root,'side',K.rootSide,'depth',K.depth);
@@ -64,10 +64,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
       finish('Heritable pocket: chains grow a lid pocket from their end seed');},
     // heritable factory cycle: strands aaaaa (seed y) grow pocket Py, which casts dockers Az- from blanks; their copies
     // AAAAA (seed z, from the dockers' prev side) grow pocket Pz, which casts ay-, whose copies are aaaaa again. Starts
-    // with the founder aaaaa, the two kits, fills and blanks; no dockers (extra: kit copies, 8)
-    cycle(){steps=steps||80000;const per=parseInt(extra)||8,size=26;
+    // with the founder aaaaa, the two kits, fills and blanks; no dockers (extra: kit copies, 10)
+    cycle(){steps=steps||120000;const per=parseInt(extra)||10,size=24;
       const probe=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}]}),U0=probe.founders[0];
-      const fit=(P,res,sd)=>S.kitOptions(P,res,sd).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);
+      const fit=(P,res,sd)=>S.kitOptions(P,res,sd,[S.lidSlot()]).find(k=>partPlacement(probe.s,U0,U0[0],k,S.lidClear()).ok);
       const Ky=fit(S.lidPocket('-Az','X'),'xyz','y'),Kz=fit(S.lidPocket('-ay','X'),'xyz'+Ky.letters,'z');if(!Ky||!Kz)throw Error('no placement');
       const supply={'Z--':16,'Y--':16,xxx:60};for(const K of [Ky,Kz])for(const t of K.types)supply[t]=(supply[t]||0)+per;
       const {s}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'y-'}],supply,params:{pLoose:0.005,latGlue:true}});
@@ -79,6 +79,19 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}`,null,false);}
       const c=census(s).filter(x=>x.n>=9&&!x.paired);c.slice(0,4).forEach((x,k)=>{const {comp,members}=s.bodies();snap(s,'zoom'+k,`strand ${x.faces} and its part`,{units:members[comp[x.units[0]]],radius:4.5});});
       finish('Heritable factory cycle: each strand grows the pocket that casts the dockers it needs');},
+    // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
+    // (extra: R, default 3; copies of each motif type 12)
+    ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;
+      const a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'};
+      const supply={};for(const t of K.kit)supply[t]=per;
+      const {s,structures}=createWorld({seed,size:18,structures:[{tris:[anchor,r],x:9,y:9}],supply});const A=structures[0][0],root=structures[0][1];
+      console.log('motif',K.kit.join(' '),'root',r.type,'cells',K.N);let closed=0;
+      const size=()=>{const {comp}=s.bodies();let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[A])k++;return k-1;};
+      snap(s,'t0','t=0: anchor and root',null,false);
+      for(let t=1;t<=steps;t++){s.step();if(!closed&&s.ev.closeGlue)closed=t;if(every(t,15))console.log(`t=${t} ring cells=${size()}/${K.N} closed=${closed?'at '+closed:'no'}`);
+        if(every(t,3))snap(s,`t${t}`,`t=${t}: ${size()} cells${closed?', closed':''}`,null,false);}
+      {const {comp}=s.bodies();snap(s,'zoom','ring (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:R+1.5});}
+      finish(`Ring membrane grown from a periodic kit (R=${R}, ${K.kit.length} motif types)`);},
     // conveyor of two hatches with hand-off
     conveyor(){steps=steps||3000;const {s,structures}=createWorld({seed,size:12,structures:[{tris:S.conveyor(),x:6,y:6}],supply:{'aaa':10,'---':14}});
       const U=structures[0],focus={units:U,radius:2.8,align:{u:U[2],a0:s.angle(U[2])}};snap(s,'t0','t=0',focus);

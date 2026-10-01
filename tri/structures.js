@@ -42,11 +42,11 @@ function pocket(instr='bcd',recog='A',fuel=null){
 // After the cast the trigger lets go, the signal fades and the lid reopens. Product: [p, q, r] = instructions of
 // (B, R, lid) on T's sides 0, 1, 2. q must not be inert (R's instruction bond carries the signal to Q).
 // fuel: a glue letter puts a fuel side on Q's outer side (each closing spends a charged carrier).
-function lidPocket(instr='bcd',recog='A',fuel=null){
+function lidPocket(instr='bcd',recog='A',fuel=null,catcher='BR'){
   const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));if(q==='-')throw Error('lid pocket: R needs an instruction glue');
   return [
-    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}.${R}`,loose:p==='-'},         // B: K, instruction p (close-only, as all instruction sides), recognition (catches)
-    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}.${R}*`},                       // R: K, instruction q, recognition + trigger
+    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}.${R}${catcher.includes('B')?'':'.'}`,loose:p==='-'},   // B: K, instruction p (close-only, as all instruction sides), recognition (catches if in `catcher`)
+    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}.${R}${catcher.includes('R')?'':'.'}*`},                       // R: K, instruction q, recognition + trigger
     {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}.${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
     {v:[[0.5,H],[1.5,H],[1,2*H]],type:`${Q}+${fuel?fuel+'$':'-'}k`},     // Q: holds R's instruction and hears R; outer side (fuel); lid's hinge partner
     {v:[[0,0],[-0.5,-H],[0.5,-H]],type:'--k'},                           // Z: k for B
@@ -58,6 +58,8 @@ function lidPocket(instr='bcd',recog='A',fuel=null){
     ...(fuel?[]:[{v:[[1.5,H],[2,2*H],[1,2*H]],type:'---'},{v:[[1.5,H],[2.5,H],[2,2*H]],type:'---'}]),   // behind Q (a kit reaches Q this way)
   ];}
 // cells a lid pocket needs empty: the slot, the lid's sweep (Lc, V) and the cell its corner bulges into (X)
+// the lid pocket's slot (T) and which cells catch into it (for kit safety checks)
+const lidSlot=(catcher='BR')=>({v:[[0,0],[1,0],[0.5,H]],catchers:[...catcher].map(c=>c==='B'?0:1)});
 const lidClear=()=>[[[0,0],[1,0],[0.5,H]],[[0,0],[0.5,H],[-0.5,H]],[[0.5,H],[0,2*H],[-0.5,H]],[[0,0],[-0.5,H],[-1,0]]];
 
 // Conveyor: hatch 1 (hand-off ^) catches a block (glue a) and swings it to hatch 2's catch side; once the block is
@@ -122,9 +124,9 @@ function airlock(R=4,win=2.5){
 // attachment side carries '@': a free part binds only by it (a free caster never sticks to a caught target). Loose
 // cells are not welded. Returns {tris, types (per cell), kit (types except the root's), tree: [[parent, child]]}.
 // reserved: letters the kit must not use (both cases; also every letter already in the structure).
-function kit(tris,root=0,reserved='',seed=null,side=null){
-  if(root==='auto'){let best=null;for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;try{const k=kit(tris,r,reserved,seed);if(seed&&k.rootSide<0)continue;
-      if(!best||k.depth<best.depth)best=k;}catch(e){}}if(!best)throw Error('kit: no root');return best;}
+function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
+  if(root==='auto'){let best=null;for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;try{const k=kit(tris,r,reserved,seed,null,slots);if(seed&&k.rootSide<0)continue;
+      if(!best||k.risk<best.risk||(k.risk===best.risk&&k.depth<best.depth))best=k;}catch(e){}}if(!best)throw Error('kit: no root');return best;}
   const tok=tris.map(t=>[...t.type.matchAll(/([a-zA-Zα-ωΑ-Ω-])([<>.!^#*~$+=%@]*)/g)].map(m=>({g:m[1],m:m[2]})));
   const E=[];for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){const A=tris[a].v,B=tris[b].v;
     if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))E.push({a,i,b,j});}
@@ -145,13 +147,53 @@ function kit(tris,root=0,reserved='',seed=null,side=null){
   // seed: the root's first outer inert side takes the seed glue's complement (it attaches to an exposed seed)
   let rootSide=-1;if(seed)for(let i=0;i<3&&rootSide<0;i++)if((side===null||side===i)&&tok[root][i].g==='-'&&!E.some(e=>(e.a===root&&e.i===i)||(e.b===root&&e.j===i))){rootSide=i;tok[root][i].g=gname(comp(gcode(seed)));addMark(tok[root][i],'@');}
   const depth=new Map([[root,0]]);for(const [x,y] of tree)depth.set(y,depth.get(x)+1);
+  // safety (enclosed holes): a cell is at risk if, when it arrives, every side may already face something: a cell no
+  // deeper than it (not its descendant), or a slot (a filled slot blocks it, an empty one is a narrow deep channel). Such
+  // a cell can only be reached through a filled or narrow space. risk = number of such cells (prefer kits with none).
+  const kids=new Map();for(const [x,y] of tree){if(!kids.has(x))kids.set(x,[]);kids.get(x).push(y);}
+  const desc=c=>{const out=new Set(),q=[c];while(q.length){for(const y of kids.get(q.pop())||[])if(!out.has(y)){out.add(y);q.push(y);}}return out;};
+  const sh=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return i;return -1;};
+  let risk=0;const risky=[];
+  for(let c=0;c<tris.length;c++){if(c===root)continue;const D=desc(c),dc=depth.get(c);let early=0;
+    for(let i=0;i<3;i++){let e=false;
+      for(let o=0;o<tris.length&&!e;o++)if(o!==c&&sh(tris[c].v,tris[o].v)===i&&!D.has(o)&&depth.get(o)<=dc)e=true;
+      for(const sl of slots)if(!e&&sh(tris[c].v,sl.v)===i)e=true;   // a slot is never an access route (a cell behind it is as hard to reach as a hole)
+      if(e)early++;}
+    if(early===3){risk++;risky.push(c);}}
   const types=tok.map(t=>t.map(x=>x.g+x.m).join(''));
-  return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values()),letters:tree.map((_,k)=>pool[k]).join('')};}
+  return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values()),risk,risky,letters:tree.map((_,k)=>pool[k]).join('')};}
 
-// every (root, seed side) kit of a structure, shallowest tree first
-function kitOptions(tris,reserved='',seed='z'){const out=[];
-  for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;for(let i=0;i<3;i++){try{const k=kit(tris,r,reserved,seed,i);if(k.rootSide===i)out.push(k);}catch(e){}}}
-  return out.sort((a,b)=>a.depth-b.depth);}
+// every (root, seed side) kit of a structure, fewest risky cells first, then shallowest tree
+function kitOptions(tris,reserved='',seed='z',slots=[]){const out=[];
+  for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;for(let i=0;i<3;i++){try{const k=kit(tris,r,reserved,seed,i,slots);if(k.rootSide===i)out.push(k);}catch(e){}}}
+  return out.sort((a,b)=>a.risk-b.risk||a.depth-b.depth);}
+
+// Ring kit (periodic): a one-row hexagonal ring of side R has 6(2R-1) cells, six repeats of a (2R-1)-cell motif (the
+// lattice is symmetric under 60-degree turns, so a turned cell takes the same type). Motif type k attaches by G_k@ to
+// the glue g_k its predecessor exposes and exposes g_(k+1) to its successor; motif letters cycle, so growth runs around
+// the ring without counting. The root (cell 0) attaches to a seed by its outer side and closes the ring: its side
+// toward the last cell carries G_0 without '@' (a closure once the last cell is attached). Inner and outer sides are
+// inert. Returns {tris (ring in growth order, root first, with types), kit (motif types), root, rootSide, letters}.
+function ringKit(R=3,seed='z',letters=null){
+  const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
+  // order around the ring, starting just past angle -30 degrees (a side's first cell)
+  const start=-Math.PI/6+1e-6,key=v=>((ang(v)-start)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);cells.sort((a,b)=>key(a)-key(b));
+  const N=cells.length,P=N/6;if(P!==2*R-1)throw Error('ring kit: unexpected cell count '+N);
+  // the root's free side must face outward (an anchor inside would enclose the last site): start one cell later if not
+  const shared0=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
+  const freeOut=k=>{const v=cells[k],a=shared0(v,cells[(k+N-1)%N]),b=shared0(v,cells[(k+1)%N]),f=3-a-b,m=[(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2];
+    return Math.hypot(m[0],m[1])>(R-0.5)*H;};
+  if(!freeOut(0))cells.push(cells.shift());
+  const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
+  const L=letters||[...LOW].filter(c=>!'fkxyz'.includes(c)&&c!==seed).slice(0,P);
+  const types=cells.map((v,k)=>{const t=['-','-','-'],prev=shared(v,cells[(k+N-1)%N]),next=shared(v,cells[(k+1)%N]);if(prev<0||next<0)throw Error('ring kit: cells not adjacent');
+    t[prev]=UP[LOW.indexOf(L[k%P])]+'@';t[next]=L[(k+1)%P];return t;});
+  // root: closure side without '@', seed on its outer side (the side farther from the centre)
+  const root=types[0],v0=cells[0],prev0=shared(v0,cells[N-1]);root[prev0]=root[prev0].replace('@','.');
+  let rootSide=-1,far=-1;for(let i=0;i<3;i++){if(root[i]!=='-')continue;const m=[(v0[i][0]+v0[(i+1)%3][0])/2,(v0[i][1]+v0[(i+1)%3][1])/2],d=Math.hypot(m[0],m[1]);if(d>far){far=d;rootSide=i;}}
+  root[rootSide]=gname(comp(gcode(seed)))+'@';
+  const names=types.map(t=>t.join(''));
+  return {tris:cells.map((v,k)=>({v,type:names[k]})),kit:names.slice(P,2*P),root:0,rootSide,letters:L.join(''),N,P};}
 
 // Arm kit: the types of an arm grown from seed glue `seed` by a bend pattern ('1'/'2' per step: the side, counted
 // counter-clockwise from the attach side, that exposes the next glue), using the given letters; the last type exposes
@@ -160,4 +202,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,lidClear,kit,kitOptions,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={pocket,lidPocket,lidSlot,lidClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

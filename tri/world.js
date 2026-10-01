@@ -37,7 +37,8 @@ function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.s
 function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params={}}={}){
   const bands=founders.map(f=>band(rolesFromGaps(f.gaps)));
   const n=bands.reduce((a,b)=>a+b.length,0)+structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
-  const s=new TriSim({...params,seed,W:size,H:size},n);let next=0;const placed=[],out={s,founders:[],structures:[]};
+  // TRI_PARAMS (environment, JSON) overrides parameters for experiments, e.g. TRI_PARAMS='{"stiff":0.95}'
+  const s=new TriSim({...params,...JSON.parse(process.env.TRI_PARAMS||'{}'),seed,W:size,H:size},n);let next=0;const placed=[],out={s,founders:[],structures:[]};
   bands.forEach((tris,k)=>{const f=founders[k],units=tris.map(()=>next++),cx=f.x??size*(k+1)/(bands.length+1),cy=f.y??size*(k+1)/(bands.length+1);
     let mx=0,my=0;for(const t of tris)for(const p of t.v){mx+=p[0]/(3*tris.length);my+=p[1]/(3*tris.length);}
     const Wv=tris.map((t,q)=>{const V=ccw(t.v).map(p=>[p[0]-mx+cx,p[1]-my+cy]);placeTri(s,units[q],V);return V;});
