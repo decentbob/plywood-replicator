@@ -24,8 +24,11 @@ flush sides bind if one triangle is already attached. Engine: `experiments/tri_t
   the frame, which wrote the frame glue f into the products; such sides are now left unwelded.)
   `POCKETS=2 BLANKS=60 node experiments/tri_machines.js factory 1 20000 OUT 1` (control: last argument 0).
   Picture: `experiments/out/TYPED_factory_20260930.png`.
-  Next: pockets for both dockers (A-- and a--), so copies of copies run on cast supply too; then a replicator that
-  carries its own pocket.
+  **Closed cycle** (`KINDS=Aa BLANKS=60 ... factory SEED 40000 OUT 1`): one pocket casts A--, one casts a--, from the
+  same blanks. World 2: first copy AAAAA by t=20000, copy of the copy aaaaa by t=28000, second AAAAA by t=36000,
+  i.e. three complete copies over two generations, every docked part cast (46 casts). World 1: 41 casts, but the
+  first copy stalled at AAAA (4 of 5 faces) for 20000 steps. Picture: `experiments/out/TYPED_factory_cycle_20260930.png`.
+  Next: a replicator that carries its own pocket (heritable factory); stalled partial copies need recycling.
 - **Typed arms (grown parts from types, no programs)** — partial (1 world). `experiments/tri_typed_parts.js`.
   An arm is a series of distinct types. Each attaches by the complement of its parent's exposed glue and exposes
   the next glue on side 1 or 2 (a bend). A type exposing nothing ends it, so the length needs no counting.
