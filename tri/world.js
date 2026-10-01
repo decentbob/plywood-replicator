@@ -52,6 +52,9 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
   for(const [t,c] of Object.entries(supply))for(let q=0;q<c;q++){const u=next++;s.setType(u,t);
     if(!placeFree(s,u,placed,()=>[size*s.rng(),size*s.rng()]))throw Error('could not place '+t);placed.push(u);}
   for(let k=0;k<40;k++)s.derive();   // settle the relayed signals of the founders
+  // TRI_RESUME (environment): a saved state (.json.gz from a demo's pictures) of this same world continues from there
+  if(process.env.TRI_RESUME){const st=JSON.parse(require('zlib').gunzipSync(require('fs').readFileSync(process.env.TRI_RESUME)));
+    if(st.n===n){const r=s.constructor.fromState(st);for(const k of Object.keys(r))s[k]=r[k];s._cells=null;console.log('resumed from',process.env.TRI_RESUME,'at t='+s.t);}}
   return out;}
 // place free triangle u at random points from gen() without overlapping `placed`; true on success
 function placeFree(s,u,placed,gen,tries=5000){for(let a=0;a<tries;a++){const [x,y]=gen();s.px[u]=s._wx(x);s.py[u]=s._wy(y);s.pa[u]=2*Math.PI*s.rng();s.resetShape(u);

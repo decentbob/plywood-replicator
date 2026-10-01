@@ -37,6 +37,8 @@ node tri/demos.js heir 1 30000 runs                # chains grow pockets from th
 node tri/demos.js cycle 1 120000 runs              # heritable factory cycle (two kits; see INNOVATIONS)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
+Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
+saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Do next (toward the BIG goal)
 Built on rigid physics this session, in order: selective import (revolving door), protocell (import + factory + copying
