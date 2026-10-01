@@ -44,7 +44,7 @@ const CHECKS=[
     pass:L=>{const ok=/released rings 1 \[chain inside\]/.test(L);return [ok,ok?'chain inside its released ring':L.slice(L.indexOf(' ')+1,120)];}},
   {id:'cells',cap:'Heritable cells: founder and copy each wrap themselves',demo:'cells',seeds:[1,2,3,4],need:3,steps:100000,extra:'36',secs:70,
     pass:L=>{const c=count(L,/\(in a cell\)/g),d=num(L,/docks=(\d+)/);return [c>=2,`${c} chains in cells, ${d} docks`];}},
-  {id:'live',cap:'Grown import door: membrane with door, imports',demo:'live',seeds:[1,2,3,4],need:3,steps:90000,extra:'6x3',secs:55,
+  {id:'live',cap:'Grown import door: membrane with door, imports',demo:'live',seeds:[1,2,3,4],need:3,steps:150000,extra:'6x2',secs:80,
     pass:L=>{const m=L.match(/\[chain in, xxx in (\d+), junk in (\d+)\]/);return [!!m&&+m[1]>=8,m?`${m[1]} blanks in, ${m[2]} junk`:'no closed ring with the chain'];}},
   {id:'cell',cap:'Protocell (prepared): import, cast, copy inside',demo:'cell',seeds:[2],steps:40000,secs:26,
     pass:L=>{const n=count(L,/AAAAA/g),i=num(L,/imports=(\d+)/);return [n>=2&&i>=10,`${n} copies, ${i} imports`];}},
@@ -56,7 +56,7 @@ const CHECKS=[
     pass:L=>{const ok=/cap=3\/3/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${(L.match(/cap=\S+/)||['?'])[0]} ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
   {id:'split-g',cap:'Segregation: the bud anchors a genome copy, splits',demo:'split',seeds:[1],steps:60000,extra:'g',secs:47,
     pass:L=>{const ok=/anchored in D/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${/anchored in D/.test(L)?'copy anchored in D':'no copy in D'}, ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
-  {id:'split-o',cap:'Offspring that lives alone (partial)',demo:'split',seeds:[1,2,3,4],need:3,steps:200000,extra:'o',secs:130,partial:true,
+  {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:200000,extra:'o',secs:190,
     pass:L=>{const o=(L.match(/organelle=(\S+)/)||[])[1],sp=/SPLIT/.test(L),im=num(L,/imports=(\d+)/),cp=/aaaa\*?\(in D\)/.test(L);
       return [sp&&cp&&im>=10,`pocket ${o}, ${sp?'split':'joined'}, ${im} imports, ${cp?'a genome copy':'no copy'} in D`];}},
 ];

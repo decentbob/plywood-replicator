@@ -252,9 +252,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // living membrane: a chain whose low end carries seed z grows a membrane with its own import door (door ring kit:
     // motif front + wall cell + latched door panel with key X; the motif closes onto the panel's hinge); the closed ring
     // lets go of the chain; blanks xxx bind the key and are carried in, junk stays out (extra: RxM, ring R, M kit copies
-    // per cell; default 6x3; RxMp: a pore instead of a door, the panel opens once the ring is closed and stays open)
-    live(){steps=steps||60000;const pore=(extra||'').endsWith('p'),[R,mult]=(extra||'6x3').replace('p','').split('x').map(Number),size=R*2+14,c=size/2,K=S.doorRingKit(R,'z','X',4,'',pore?3:1,true,pore);
-      const supply={[K.rootType]:2,xxx:16,'---':16};for(const [t,m] of Object.entries(K.counts))supply[t]=(supply[t]||0)+(mult||3)*m;
+    // per cell; default 6x2: with 3 the leftover kit parts trapped inside the closed ring jammed the door's swing in 2 of
+    // 4 worlds; RxMp: a pore instead of a door, the panel opens once the ring is closed and stays open)
+    live(){steps=steps||150000;const pore=(extra||'').endsWith('p'),[R,mult]=(extra||'6x2').replace('p','').split('x').map(Number),size=R*2+14,c=size/2,K=S.doorRingKit(R,'z','X',4,'',pore?3:1,true,pore);
+      const supply={[K.rootType]:2,xxx:16,'---':16};for(const [t,m] of Object.entries(K.counts))supply[t]=(supply[t]||0)+(mult||2)*m;
       const {s,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1,1],faces:'aaaaa',ends:'z-',x:c,y:c}],supply});const F=founders[0];
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},kitT=new Set([...Object.keys(K.counts),K.rootType].map(norm));
       const isKit=u=>kitT.has(norm(typeName(s,u)));
@@ -326,8 +327,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // end exposes it again), fills Y-- (latGlue: dockers never fill); a membrane kit (ring R=4, root facing inward) in
     // supply: chains copy, and every chain grows a membrane around itself (extra: motif copies, 12)
     cells(){steps=steps||100000;const per=parseInt(extra)||12,size=30,c=size/2,K=S.ringKit(4,'z',null,true,false,true);
-      // docker prev side close-only: a released copy's low end catches no loose fill
-      const supply={'Ay.z':12,'ay.z':12,'Y--':24,[K.tris[0].type]:8};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
+      // docker prev side close-only: a released copy's low end catches no loose fill. Supply: the founder's first dock
+      // races the membrane root for its high end (a root there first commits it to wrapping, uncopied); 24 dockers per
+      // face type and 4 roots (one per cell) make the dock win in 4 of 4 worlds (12 and 8: 2 of 4)
+      const supply={'Ay.z':24,'ay.z':24,'Y--':36,[K.tris[0].type]:4};for(const t of K.kit)supply[t]=(supply[t]||0)+per;
       const {s,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aaaa',ends:'-z',x:c,y:c}],supply,params:{latGlue:true}});
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},kitT=new Set([...K.kit,K.tris[0].type].map(norm));
       const report=t=>{const {comp,members}=s.bodies(),cs=census(s).filter(q=>q.n>=7&&!q.paired),rings=[];
