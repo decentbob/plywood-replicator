@@ -65,3 +65,8 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
 - Run `node tri/test.js` before committing rule or physics changes.
 - Commit often with descriptive messages; standing approval to push the working branch, merge into `main` and push
   `main`. At most four simulation processes at once. Container restarts happen: commit results early.
+- **Always ready for handoff** (user, 2026-10-01). After every checkpoint reached or any stoppage, leave the work so
+  another agent can take over at once: results recorded (INNOVATIONS, ROADMAP, RULES, NEXT), docs/NEXT.md's handoff
+  status current (what is being worked on, what was last tried and what it showed, the exact next step, commands),
+  tests passing, everything committed and pushed (branch and `main`), no simulations left running unnoticed. Anything
+  only in `runs/` (ignored) is lost on handoff: say in NEXT how to regenerate it.

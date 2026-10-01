@@ -1,6 +1,12 @@
 # Next instance: start here
 
-State on 2026-10-01 (end of the second session). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-01 (end of the third session, handoff point). Read AGENTS.md first (rules of work), then this file.
+
+**Handoff status.** Working tree clean; everything committed on branch `ccr-631cd60a-y9pcgh` and merged into `main`.
+No simulations running. `node tri/test.js`: 16 tests pass. Current work: the `birth` demo (Do next, item 2). Its long
+runs' saved states (`runs/bs3/birth_t1000000.json.gz`, world 3 at 2.6M steps) are in `runs/`, which is not committed:
+a new instance must rerun (`node tri/demos.js birth 3 900000 runs/x`, then continue with `TRI_RESUME`), roughly an hour
+per world for the first cell with 4 processes.
 
 ## Where things stand
 - Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (now **zip**: from the
@@ -13,6 +19,10 @@ State on 2026-10-01 (end of the second session). Read AGENTS.md first (rules of 
   on one side only lets go). Binding by capture (0.6, into free sites only), `pBond` 1. Greek glue letters.
 - Third session (2026-10-01): locality audit; a membrane kit that grows its own import door (`doorRingKit`); sensors
   live only once their structure is complete (open signal from open attach sides); the grown protocell (`grown`).
+- Fourth part of the third session: the heritable two-pocket cycle works on rigid physics; `cellKit` (membrane +
+  pore + organelle from one seed), spent `&` sides, latch sides emit no open signal and hold until complete, late
+  organelle (trigger seed), 13 Cyrillic glue pairs, `TRI_RESUME`, physics ~40% faster. `birth`: a copy leaves its
+  parent cell and begins its own cell (1 of 4 worlds); not yet a complete offspring cell.
 - **Physics is rigid-part, move-or-stop** (rewritten at the user's request): bodies move as rigid pieces, nothing
   overlaps, deforms or squeezes; flaps stall when blocked; binding places parts exactly in free sites (capture 0.6).
   About 20x faster than at the start of the session. Machines must keep their sweeps clear (see RULES, Geometry rule).
