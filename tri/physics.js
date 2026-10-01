@@ -14,8 +14,8 @@
 const R3=1/Math.sqrt(3);
 const REST=[[R3*Math.cos(-Math.PI/3),R3*Math.sin(-Math.PI/3)],[R3*Math.cos(Math.PI/3),R3*Math.sin(Math.PI/3)],[-R3,0]];   // counter-clockwise; side 0 faces +x
 const AREA=Math.sqrt(3)/4,INERTIA=AREA/12,SIZE=Math.sqrt(AREA);   // unit density: mass = area; moment about the centroid = area * side^2 / 12
-const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,pairTol:0.35,subStep:0.3,bisect:5,skin:0,split:true};
-const EPS=1e-10,TOUCH=1e-6,CELL=1.4,NEAR2=(2*R3)*(2*R3);   // overlaps below TOUCH count as touching; CELL >= reach of overlap and pair checks
+const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,pairTol:0.35,subStep:0.8,direct:1.0,bisect:1,skin:0,split:true};
+const EPS=1e-10,TOUCH=1e-6,CELL=1.4,NEAR2=(2*R3)*(2*R3),IN2=(R3-1e-4)*(R3-1e-4);   // IN2: (two inradii)^2, a little less   // overlaps below TOUCH count as touching; CELL >= reach of overlap and pair checks
 
 function mulberry32(seed){let a=seed|0;const f=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
   f.getState=()=>a;f.setState=s=>{a=s|0;};return f;}
@@ -88,21 +88,29 @@ class Physics{
     const cx=Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw)),cy=Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch));
     for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const L=this._cells[((cy+b+this._gy)%this._gy)*this._gx+(cx+a+this._gx)%this._gx];for(let k=0;k<L.length;k++)fn(L[k]);}}
   // total overlap of the marked blocks (relative offsets rx, ry from pivot (cx, cy)) moved by (tx, ty) and turned by da
-  // about the pivot, against unmarked blocks; early: stop at the first overlap
-  _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark;let sum=0;
-    for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;
-      for(let q=0;q<3;q++){const ax=this.ox[u*3+q],ay=this.oy[u*3+q];TA[2*q]=c*ax-s*ay;TA[2*q+1]=s*ax+c*ay;}
-      let hit=false;
-      this._around(x,y,v=>{if(hit&&early)return;if(mark[v]===st)return;const dx=this._dx(this.px[v]-x),dy=this._dy(this.py[v]-y);if(dx*dx+dy*dy>=NEAR2)return;
-        for(let q=0;q<3;q++){TB[2*q]=dx+this.ox[v*3+q];TB[2*q+1]=dy+this.oy[v*3+q];}const d=triDepth(TA,TB);if(d>0){sum+=d;hit=true;}});
-      if(hit&&early)return sum;}
+  // about the pivot, against unmarked blocks; early: stop at the first overlap (then the value is only > 0)
+  _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark,{px,py,ox,oy}=this,W=this.p.W,Hh=this.p.H;
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all;let sum=0;
+    for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;let built=false;
+      const gxi=Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw)),gyi=Math.min(gy-1,Math.floor((((y%Hh)+Hh)%Hh)/ch));
+      for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;
+        const L=all?null:cells[((gyi+b+gy)%gy)*gx+(gxi+a+gx)%gx],m=all?this.n:L.length;
+        for(let q=0;q<m;q++){const v=all?q:L[q];if(mark[v]===st)continue;
+          let dx=px[v]-x,dy=py[v]-y;dx-=W*Math.round(dx/W);dy-=Hh*Math.round(dy/Hh);const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;
+          if(early&&d2<IN2)return 1;   // centres closer than two inradii: certainly overlapping
+          if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
+          for(let e=0;e<3;e++){TB[2*e]=dx+ox[v*3+e];TB[2*e+1]=dy+oy[v*3+e];}const dd=triDepth(TA,TB);if(dd>0){if(early)return dd;sum+=dd;}}}}
     return sum;}
   // move the blocks of `list` rigidly by (tx, ty) and a turn da about (cx, cy), in sub-steps, as far as they go without
   // overlapping unlisted blocks; returns the fraction moved (0: blocked). An overlapping set may move if that reduces it.
   tryMove(list,tx,ty,da,cx,cy){if(!this._cells)this.gridSync();SKIN.v=Math.max(TOUCH,this.p.skin);const st=++this._stamp,k=list.length,rx=new Float64Array(k),ry=new Float64Array(k);let reach=0;
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]=this._dx(this.px[u]-cx);ry[q]=this._dy(this.py[u]-cy);reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
-    const nsub=Math.max(1,Math.ceil(Math.max(Math.hypot(tx,ty),reach*Math.abs(da))/this.p.subStep));let f=0;
-    let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}
+    const dist=Math.max(Math.hypot(tx,ty),reach*Math.abs(da));let f=0;
+    // a move short enough that it cannot pass through a one-row wall (that needs 1.44: the wall plus two inradii)
+    // whose destination is clear is taken at once
+    const tried=dist<=this.p.direct;if(tried&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true)===0)f=1;
+    const nsub=f===1?0:Math.max(1,Math.ceil(dist/this.p.subStep));
+    let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}   // the full move was already found blocked
     // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
     if(blocked>0)for(let b=0;b<this.p.bisect;b++){const g=(f+blocked)/2;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0)blocked=g;else f=g;}
     if(f===0){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
