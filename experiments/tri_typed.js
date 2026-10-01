@@ -298,8 +298,8 @@ function render(s,out,title,focus=null,labels=false){
 function pocket(instr='bcd',recog='A'){
   const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));
   return [
-    {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K`},                               // N0: bottom instruction p, inner A, left-lower K
-    {v:[[1,0],[2,0],[1.5,H]],type:`K${q}${R}.`},                               // N1: bottom-right K, right-lower instruction q, inner A
+    {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K`,loose:p==='-'},   // an inert instruction side is not welded (that would overwrite it)                               // N0: bottom instruction p, inner A, left-lower K
+    {v:[[1,0],[2,0],[1.5,H]],type:`K${q}${R}.`,loose:q==='-'},                               // N1: bottom-right K, right-lower instruction q, inner A
     {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<${r}${R}*`},                          // hatch (open): hinge K on H (pin V), top instruction r, catch A
     {v:[[1.5,H],[2.5,H],[2,2*H]],type:'--k'},                                 // H: the hatch's hinge partner (k)
     {v:[[2,0],[2.5,H],[1.5,H]],type:`--${Q}`},                                // holds N1's instruction side
