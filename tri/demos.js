@@ -211,7 +211,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     birth(){steps=steps||400000;const R=7,mult=parseInt(extra)||3,size=40,c=size/2;
       const founder={gaps:[1,1,1,1],faces:'aaaaa',ends:'-m',x:c-7,y:c};
       const probe=createWorld({seed,size,founders:[founder]}),U0=probe.founders[0];
-      const K=S.cellKit({R,k:6,m:1,pre:7,order:[false],keepFor:K0=>{const g=strandInKit(probe.s,U0,U0[U0.length-1],K0);return [...g.strand,...g.dock];}});
+      const K=S.cellKit({R,k:6,m:1,pre:7,order:[true],keepFor:K0=>{const g=strandInKit(probe.s,U0,U0[U0.length-1],K0);return [...g.strand,...g.dock];}});
       console.log('cell kit: cells',K.tris.length,'types',Object.keys(K.counts).length,'root',K.rootType,'organelle risk',K.organelle.K.risk);
       // organelle parts 4x richer: if the ring closes first, the organelle's last sites are inside and the cell is stuck
       const orgT=new Set(K.organelle.K.types);

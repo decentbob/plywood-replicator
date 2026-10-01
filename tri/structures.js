@@ -341,6 +341,8 @@ function cellKit({R=7,seed='m',k=4,m=5,pre=0,pore=true,key='X',recog='X',pockets
   const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
   // the part of the door's sweep inside the ring (panel cells turned up to 120 degrees)
   const sweep=[];for(let q=1;q<=12;q++)for(const c of KR.door.panel){const p=cen(ring[c].map(p=>rot(p,KR.door.P,KR.door.dir*q/12*2*Math.PI/3)));if(hexr(p)<R-1)sweep.push(p);}
+  // the door's whole sweep must also miss the kept cells (a chain beside the hinge stalls a turning panel)
+  if(keep.length&&!sweepClear(KR.door.panel.map(c=>ring[c]),keep,KR.door.P,KR.door.dir,120))throw Error('cellKit: the door sweeps the kept cells');
   const dist=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1]),inner=KR.wall.filter(w=>w.inward),ringC=ring.map(cen),keepC=keep.map(cen);
   let letters=used0+KR.letters;const sd=[...LOW].find(c=>!letters.includes(c));letters+=sd;
   const layouts=pockets.length===2?pocketPair(pockets[0],pockets[1],recog):[{tris:lidPocket(pockets[0],recog,null,'B'),slots:[lidSlot('B')],clear:lidClear()}];
