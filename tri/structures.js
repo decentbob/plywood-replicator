@@ -188,7 +188,7 @@ function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   if(tree.length>pool.length)throw Error(`kit: needs ${tree.length} glue pairs, ${pool.length} letters free`);
   const addMark=(t,c)=>{if(!t.m.includes(c))t.m+=c;};
   tree.forEach(([x,y,e],k)=>{const L=pool[k],[px,pi,cy,ci]=e.a===x?[e.a,e.i,e.b,e.j]:[e.b,e.j,e.a,e.i];
-    for(const [c,i,g] of [[px,pi,L],[cy,ci,UP[LOW.indexOf(L)]]]){const t=tok[c][i];if(t.g==='K')addMark(t,'%');t.g=g;if(c===cy)addMark(t,'@');}});
+    for(const [c,i,g] of [[px,pi,L],[cy,ci,UP[LOW.indexOf(L)]]]){const t=tok[c][i];if(t.g==='K')addMark(t,'%');t.g=g;addMark(t,'@');}});   // both ends '@': the parent's site takes parts only
   for(const e of E){if(treeE.has(e)||loose(e))continue;const A=tok[e.a][e.i],B=tok[e.b][e.j];
     if(plain(e)){A.g='f';B.g='F';}else if(A.g==='-'||B.g==='-')continue;addMark(A,'.');addMark(B,'.');}
   // seed: the root's first outer inert side takes the seed glue's complement (it attaches to an exposed seed)
@@ -240,10 +240,10 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
   const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const L=letters||[...LOW].filter(c=>!'fkxyz'.includes(c)&&c!==seed).slice(0,P);
   const types=cells.map((v,k)=>{const t=['-','-','-'],prev=shared(v,cells[(k+N-1)%N]),next=shared(v,cells[(k+1)%N]);if(prev<0||next<0)throw Error('ring kit: cells not adjacent');
-    t[prev]=UP[LOW.indexOf(L[k%P])]+'@';t[next]=L[(k+1)%P]+(twoWay?'@':'');return t;});   // twoWay: either chain side attaches (two growth fronts)
+    t[prev]=UP[LOW.indexOf(L[k%P])]+'@';t[next]=L[(k+1)%P]+'@';return t;});   // the exposed growth side takes parts only ('@'); twoWay: either side attaches
   // root: closure side without '@', seed on its outer side (the side farther from the centre)
   const root=types[0],v0=cells[0],prev0=shared(v0,cells[N-1]),next0=shared(v0,cells[1]);
-  if(twoWay){root[prev0]=root[prev0].replace('@','');root[next0]=root[next0].replace('@','');}   // the root exposes both fronts
+  if(twoWay){root[prev0]=root[prev0].replace('@','');}   // the root exposes both fronts
   else root[prev0]=root[prev0].replace('@','.');
   let rootSide=-1,far=-1;for(let i=0;i<3;i++){if(root[i]!=='-')continue;const m=[(v0[i][0]+v0[(i+1)%3][0])/2,(v0[i][1]+v0[(i+1)%3][1])/2],d=Math.hypot(m[0],m[1])*(seedIn?-1:1);if(rootSide<0||d>far){far=d;rootSide=i;}}
   root[rootSide]=gname(comp(gcode(seed)))+'@'+(bud?'&':'');

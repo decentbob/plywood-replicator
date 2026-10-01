@@ -26,8 +26,8 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `+` | hear side: the triangle hears the trigger signal of the partner bonded here (relayed, below) |
 | `=` (hinge side) | wide hinge: swings 120 degrees instead of `hingeAngle` |
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (like K bonded to k) |
-| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); once attached, it never closes a bond on an attach side |
-| `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete) |
+| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
+| `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); it never re-closes |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
 | `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
@@ -50,15 +50,17 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 A free triangle binds an attached triangle's side with the complementary glue when its centre comes within `capture`
 (0.6) of the free site beside that side (any orientation), and the site is free: **binding places it** exactly flush
 in the site (activation by attachment: free triangles never bind each other). Two attached triangles close a bond
-when their sides are flush: within 0.22 if they belong to different bodies (the smaller body is then placed flush, if
-it fits), and exactly (0.05) inside one body (parts are exact, so a gap means a flap has not arrived). At probability
+when their sides are flush: exactly (0.05) inside one body (parts are exact, so a gap means a flap has not arrived);
+separate bodies do not close (option `closeBodies`: within 0.22, the smaller body placed flush; off, since neighbouring
+membranes would fuse). At probability
 `pBond` per step (1). A **discharged** triangle binds nothing. Close-only sides
 bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
 attach side. Option `pLoose` (proofreading, cooperative binding): a triangle caught while free (not by an attach side) and held
 on one side only lets go with this probability per step; a second matching side holds it.
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
-released strand triangle; the spare edge of a strand end that is not being copied.
+released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0). A
+strand's high end held by a completion-release side `&` (a membrane growing around the strand) starts no copy.
 
 ## Chains and copying
 A strand is triangles joined by chain bonds (PREV/NEXT ends). A strand triangle's free edge is a **face** if its

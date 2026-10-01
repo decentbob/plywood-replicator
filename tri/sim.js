@@ -35,7 +35,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+(s.h
   (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'');}).join('');
 const canon=name=>{const t=[...name.matchAll(/[a-zA-Zα-ωΑ-Ω-][<>.!^#*~$+=%@&]*/g)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.22,triTolSame:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:60,
+const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.22,triTolSame:0.05,closeBodies:false,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:60,
   zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
 
 class TriSim extends Physics{
@@ -91,7 +91,8 @@ class TriSim extends Physics{
     // copy grows from the high end one face after another and never encloses an empty dock site between two copies
     for(let u=0;u<n;u++){const r=R[u];let z=0;
       if(r.role===SFACE||r.role===SBACK){const e=this._edges(u);
-        if(e.next<0)z=1;else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
+        // a high end held by a completion-release side (a membrane growing around the strand) starts no copy
+        if(e.next<0){z=1;const sp=r.inert;if(sp>=0){const q=this.bond[u*3+sp];if(q>=0&&this.done[q])z=0;}}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
       this.zip[u]=z;}
     // lock signal (interlock): an unbonded latch side emits lockRange, relayed -1 per bond
     for(let u=0;u<n;u++){let v=0;for(let i=0;i<3;i++){if(this.ltc[u*3+i]&&this.bond[u*3+i]<0)v=this.p.lockRange;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,lb0[(q/3)|0]-1);}this.lockBusy[u]=v;}
@@ -124,9 +125,10 @@ class TriSim extends Physics{
     const tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v];if(this.moveDepth([v],tx,ty,da,this.px[v],this.py[v])>0)return false;
     this.px[v]=this._wx(cx);this.py[v]=this._wy(cy);this.pa[v]=ang;this.resetShape(v);this.regrid(v);return true;}
   _handCatch(u,e){if(!this.trg[u*3+e])return false;for(let i=0;i<3;i++)if(this.hinge[u*3+i]&&this.rel[u*3+i]===2)return true;return false;}
-  // closure tolerance: two separate bodies close within triTolClose (the smaller is then placed flush); inside one rigid
-  // body only flush sides close (triTolSame: parts are exact, so a gap means a flap has not arrived)
-  _closeTol(u,v){return this.bodyOf(v).includes(u)?this.p.triTolSame:this.p.triTolClose;}
+  // closure tolerance: inside one rigid body only flush sides close (triTolSame: parts are exact, so a gap means a flap
+  // has not arrived); two separate bodies close only with option closeBodies (within triTolClose, the smaller placed flush;
+  // off by default: neighbouring membranes would fuse)
+  _closeTol(u,v){return this.bodyOf(v).includes(u)?this.p.triTolSame:this.p.closeBodies?this.p.triTolClose:-1;}   // separate bodies close only with closeBodies
   // a closure between two separate bodies: the smaller body is placed exactly flush (side j of v against side i of u)
   _snapBody(v,j,u,i){const Bv=this.bodyOf(v);if(Bv.includes(u))return true;const Bu=this.bodyOf(u);return Bu.length<Bv.length?this._snapList(Bu,u,i,v,j):this._snapList(Bv,v,j,u,i);}
   _snapList(list,v,j,u,i){const C=(x,k)=>[this.px[x]+this.ox[x*3+k],this.py[x]+this.oy[x*3+k]];
@@ -142,7 +144,7 @@ class TriSim extends Physics{
   _active(u,r){const bnd=i=>this.bond[u*3+i]>=0;
     if(r.role===GROWN)return [0,1,2].filter(i=>!bnd(i));
     if(r.role===SBACK&&!r.fill&&r.prev>=0&&r.next>=0&&r.free>=0&&!bnd(r.free))return [r.free];
-    if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free)))return [r.inert];
+    if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free))&&this.busy[u]===0)return [r.inert];   // an end's seed: only while the strand is not being copied
     return [];}
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE;
@@ -158,7 +160,7 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||(this.trg[u*3+e]&&this.away[u]))continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
@@ -173,8 +175,8 @@ class TriSim extends Physics{
       // two attached triangles: glue closure between active sides (a hand-off flap's catch side never closes: it catches
       // free triangles only, so a handed-off cargo is not taken back)
       let done=false;
-      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e)||this.att[u*3+e])continue;   // an attach side is for joining when free, not for closures
-        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.att[v*3+f]&&flush(u,e,v,f,this._closeTol(u,v))&&this.rng()<p.pBond){if(!this._snapBody(v,f,u,e))continue;this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
+      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e)||this.done[u*3+e])continue;   // a released completion side never re-closes
+        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.done[v*3+f]&&flush(u,e,v,f,this._closeTol(u,v))&&this.rng()<p.pBond){if(!this._snapBody(v,f,u,e))continue;this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
       // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed
