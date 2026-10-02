@@ -60,6 +60,10 @@ const CHECKS=[
     pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n>=4,`${n} strands`];}},
   {id:'imprint-genome-c',cap:'  control: plain blanks, no copies',demo:'imprint',seeds:[1],steps:30000,extra:'gc',secs:15,
     pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n===1,`${n} strands`];}},
+  {id:'imprint-cell',cap:'Genome on copies inside a sealed cell (spent walls: every copy goes to the genome)',demo:'imprint',seeds:[1,2,3,4],need:3,steps:40000,extra:'60m',secs:35,
+    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[1]>=4&&+m[4]===0,m?`${m[1]} strands, copies to genome ${m[3]}, wall ${m[4]}`:'no result'];}},
+  {id:'imprint-cell-n',cap:'  control: plain walls take most blanks',demo:'imprint',seeds:[1],steps:40000,extra:'60mn',secs:35,
+    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[1]<=3&&+m[4]>+m[3],m?`${m[1]} strands, copies to genome ${m[3]}, wall ${m[4]}`:'no result'];}},
   {id:'budgrow',cap:'Grown bud: grows on the parent, doors open once closed, fed cap, splits sealed',demo:'budgrow',seeds:[1,2,3,4],need:3,steps:250000,secs:170,
     pass:(L,o)=>{const m=o.match(/events: ring closed at (\d+), parent door widest before that (\d+) deg, doors open at (\d+), cap cells at ([\d ]+), split at (\d+)/);
       if(!m)return [false,'no events: '+(o.match(/events: .*/)||['none'])[0].slice(8,90)];const [c,w,op]=[+m[1],+m[2],+m[3]],caps=m[4].trim().split(' ').map(Number),sp=+m[5],shut=/doors after split: shut/.test(L);

@@ -1,29 +1,47 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-0136, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-0236, build). Read AGENTS.md first (rules of work), then this file.
 
-**Handoff status (autorun run 20261002-0136, explore).** Everything committed on branch `claude/autorun-20261002-0136`
-and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: 28 of 28 pass in 1121 s (3 new: `imprint` 3 of 4, `imprint-genome` 4 of 4, its control).
+**Handoff status (autorun run 20261002-0236, build).** Everything committed on branch `claude/autorun-20261002-0236`
+and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: 30 of 30 pass in 1285 s (2 new: `imprint-cell` 3 of 4, its control `imprint-cell-n`).
 No current slice.
-**Done this run (slice: decide programmable synthesis and build it; acceptance met):**
-- Decision (maintainer's question, 2026-10-01): **contact copying**, one gated core change, the copy side `?`
-  (IDEAS "Programmable synthesis: decision"; RULES "Core changes", the first entry). A free copy blank binds any free
-  side of an attached triangle (any glue) and becomes a copy of that triangle, then lets go: the body is the template.
-  Translation needs several rules and adaptors no cast can make; kit-free growth cannot close the loop (stamp casters
-  carry marks no cast makes); a copier pocket with free templates needs three rules and its library is used up.
-- Acceptance met: `imprint k 100000 runs` (a ring grown one motif round, a bare anchor, 400 copy blanks, no free
-  parts): both rings closed in 3 of 4 worlds; control `c` 6 cells in 2 of 2. Milestone 2 changed from the lid pocket
-  (5 of its 16 kit cells are enclosed when complete: never copied) to the genome: `imprint k 30000 runs g`, a strand
-  copied from copies of its own triangles, 8-15 strands in 4 of 4 worlds, control 1. Changed on the way: a free
-  library (one free part of each type) failed: the blanks (all spent in about 10000 steps) went to the anchors and the
-  root before the single parts reached the front. Numbers, pictures, limits: INNOVATIONS (newest).
-- New checks: `imprint`, `imprint-genome`, `imprint-genome-c`.
-**Exact next step:** the backlog's item 0, a `build` slice: feed the organism on copies. Two candidates: (a) the
-genome on copies inside a cell (dockers copied from the strands instead of cast by a pocket: `split o` without the
-bud's stamp pocket; the bud imports copy blanks); (b) the grown bud's ring from copies of the parent's ring (the parent
-grown from the same ring kit, so its outer faces are the bud's parts; inner-facing types come only from inside).
-(a) is closer to working. The grown bud's genome anchor (the previous handoff's next step) is still open too.
-Watch: blanks are spent on whatever is exposed first; supply them where the template is (import doors), or in steps.
+**Done this run (slice: the bud's genome cycle on copies; budget used, acceptance not met, a milestone met):**
+- Slice as set: M1 `split k 60000 runs q`: a copy anchored in D and the pair split in 3 of 4 worlds; M2: the bud
+  copies its genome after the split. **Result: M1 partial, 1 of 4** (world 4 splits at 38000, both doors shut); M2 not
+  reached. Numbers and every variant tried: INNOVATIONS (newest).
+- **Milestone met (new capability): genome on copies inside a sealed cell** (`imprint k 40000 runs 60m`): a complete
+  cell copies its genome from copy blanks alone, 5 / 2 / 5 / 6 strands from 60 blanks (control with plain walls
+  `60mn`: 2 / 2 / 3 / 3, the wall takes 34-42 of 60 copies). Key: plain free wall sides marked `&` are spent once the
+  cell hears no open signal, and spent sides are never copied (existing core). Genome: faces `aAaA` (its own reverse
+  complement) seeded by `demos.seedCopyGenome` (`w` prev / `z` next on faces, `W` on backs, `latGlue`). New checks
+  `imprint-cell`, `imprint-cell-n`.
+- What blocks `split q` (measured): (1) the blanks are one batch, spent in about 2000 steps; dockers come out
+  unbalanced and a copy waiting for a missing docker type stays paired with its template for good, so P makes only 1-2
+  copies; (2) a joined pair hears the open signal of D's anchor (it must, to stay joined), so walls within
+  `openRange` are not spent and still take blanks; with P's anchor `W@|` (default) nearly all walls hear an open
+  signal; with a plain `W|` (tried, removed) 60 of 134 wall cells are spent, P makes 2-4 strands and strands enter D in
+  3 of 4 worlds, but D's anchor caught none in 150000 steps (not diagnosed: check whether their high end `z` is free
+  and not busy when near the anchor); (3) a pore in P (blanks from outside) fails: the rings' outer walls take all.
+**Exact next step:** a `build` slice on the bud that copies its genome after the split (M2), which needs no joined
+phase: the bud is complete then, so its `&` walls are spent (as in `imprint m`). Prepare it like `imprint m` with an
+anchored strand (or take `split g`, where a cast copy `AAAA` is anchored: give the bud `aAaA` instead) and copy
+blanks that reach the bud only after the split. The open problem is how blanks get into a sealed bud (see the core
+change candidate below); until then, blanks inside the bud's ring from the start must survive the joined phase, which
+needs D's walls out of the open signal's reach (anchor near the doorway, short `openRange`). Alternatively diagnose (2)
+above first: one batch with `W|` and a trace of the strands that enter D.
+
+### Core change candidate (run 20261002-0236): bringing copy blanks into a cell
+1. **Capability:** feed a sealed cell (parent or bud) a steady supply of copy blanks, so contact copying of its genome
+   (and later its parts) does not stop when one batch is spent; the BIG goal's "feeds it until it can live on its own".
+2. **Designs with the existing core that fail:** (a) an import door: its key side catches by glue, but a copy blank
+   binds only by its copy side (RULES, copy side), so no key catches it; (b) a pore: blanks outside are spent on the
+   rings' outer walls (400 of 400, none got in); (c) a stamp pocket casting copy blanks from imported `xxx` (carried
+   mark `'?`): possible, but it brings back the casting machinery copying was meant to replace, and each new blank
+   starts touching the pocket, which it copies first.
+3. **Locality of the smallest change found:** "a copy side with a glue (`u?`) is also caught by a trigger side by that
+   glue (a key)": the key reads the free triangle's side glue, as every glue binding does; the blank changes only its
+   own bonds. Alternative: copy sides bind only sides that carry a glue (inert sides are never templates), so inert
+   walls are never copied; that changes `imprint` (ring cells are copied through inert faces) and needs a check.
 
 ## Where things stand
 - Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (zip), casting, lid
@@ -73,6 +91,8 @@ node tri/demos.js split 1 450000 runs o            # + the bud grows its own poc
 node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
 node tri/demos.js imprint 1 100000 runs            # contact copying: a ring closes and a second grows from copy blanks only (c: control)
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
+node tri/demos.js imprint 1 40000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
+node tri/demos.js split 1 150000 runs q            # the bud pair on copies (partial: 1 of 4 worlds splits)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
@@ -100,6 +120,9 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **Copy blanks go to every exposed side.** Walls take most of a batch (65-70% in a cell). Mark plain wall sides `&`:
+  they are spent once the structure hears no open signal and are never copied. Copies of `&` cells used as fills are
+  cut when their `&` side hears none: use `latGlue` so only genome back copies fill.
 - **Latch sites emit no open signal** (`@~`): a front of latch sites carries the lock signal, not the open signal;
   something else must keep a structure open (ordinary sites, a content seed) or its `&` sides cut early.
 - **A latch-cut closure re-closes**: two sides that stay flush close again next step (no `&` on a closure is possible:

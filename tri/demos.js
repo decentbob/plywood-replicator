@@ -9,6 +9,15 @@ const S=require('./structures');
 const {TriSim,canon,typeName}=require('./sim');
 const H=Math.sqrt(3)/2;
 
+// a genome copied from contact copies of itself (faces its own reverse complement, e.g. aAaA): every face triangle
+// carries seed w on its prev side and z on its next (as a docker: face F, prev F+1, next F+2), so every strand exposes
+// w at its low end and z at its high end; every back carries W on its next side, so with latGlue (a fill needs the
+// complement of the docker's prev glue) only copies of backs fill
+function seedCopyGenome(s,F){const {gcode}=require('./sim');
+  for(const u of F){const r=s.roles(u);if(r.role===2){s.glue[u*3+r.next]=gcode('W');continue;}if(r.role!==1)continue;s.glue[u*3+(r.free+1)%3]=gcode('w');s.glue[u*3+(r.free+2)%3]=gcode('z');}}
+// every plain free side (inert, no marks) of prepared units U becomes a completion side '&': it binds nothing, and once
+// its triangle hears no open signal it is spent (never copied)
+function spendableSides(s,U){for(const u of U)for(let i=0;i<3;i++){const k=u*3+i;if(s.bond[k]<0&&!s.glue[k]&&!s.hinge[k]&&!s.cOnly[k]&&!s.trg[k]&&!s.ltc[k]&&!s.hear[k]&&!s.att[k]&&!s.anc[k]&&!s.cpy[k])s.done[k]=1;}}
 function demo(name,seed=1,steps,dir='runs',extra){
   // TRI_NOPIC=1: no pictures or saved states (each picture starts a Chromium; tri/check.js reads only the reports)
   const shots=[],out=f=>path.join(dir,`${name}_${f}.png`),pics=!process.env.TRI_NOPIC;
@@ -100,7 +109,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // attached); copy blanks -?-?-? are the only food: no free parts. A copy blank that touches a free side of an
     // attached triangle becomes a copy of it, so the ring's own cells and root multiply, the ring closes and a second
     // ring grows on the bare anchor. extra: number of copy blanks (default 400); 'c': control, blanks without copy sides
-    imprint(){if(String(extra||'').includes('g'))return D.imprintGenome();steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
+    imprint(){if(String(extra||'').includes('m'))return D.imprintCell();if(String(extra||'').includes('g'))return D.imprintGenome();steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],cc=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-cc[0],a[1]+b[1]-cc[1]]],type:'z--'};
       const supply={[ctl?'---':'-?-?-?']:nb},av=anchor.v,weld={v:[av[2],av[1],[av[1][0]+av[2][0]-av[0][0],av[1][1]+av[2][1]-av[0][1]]],type:'---'};
       const {s,structures}=createWorld({seed,size,structures:[{tris:[anchor,...K.tris.slice(0,1+K.P)],x:c-7,y:c},{tris:[anchor,weld],x:c+7,y:c}],supply});
@@ -125,6 +134,22 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,3))snap(s,`t${t}`,`t=${t}: ${strands().length} free strands, copies ${s.ev.copy||0}`,null,false);}
       console.log(`result: ${strands().length} free strands (founder included), ${s.ev.release||0} releases, ${s.ev.copy||0} copies`);
       finish(`Genome on copies: a strand copied from contact copies of its own triangles${ctl?' (control)':''}`);},
+    // imprint m (genome on copies inside a cell): a sealed ring (R 6, prepared, labelled) holding a founder aAaA (seeded
+    // as seedCopyGenome) and copy blanks only. The ring's free sides are completion sides '&': the ring is complete (no
+    // open signal), so they are spent at once and never copied; the blanks go to the genome. extra: blanks (default 40);
+    // 'n': control, plain walls (the walls take most blanks)
+    imprintCell(){steps=steps||40000;const plain=String(extra||'').includes('n'),nb=parseInt(extra)||40,R=6,size=2*R+8,c=size/2;
+      const ring=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:c}],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{latGlue:true}});
+      const U=structures[0],F=founders[0];seedCopyGenome(s,F);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
+      const prep=new Set([...U,...F]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*R,y=(2*s.rng()-1)*R;if(S.hexr([x,y])<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
+      const wallT=new Set(U.map(u=>canon(typeName(s,u)))),strands=()=>census(s).filter(q=>q.n>=7&&!q.paired);
+      const tally=()=>{let g=0,w=0;for(const [,,t] of s.copyLog||[])if(wallT.has(canon(t)))w++;else g++;return [g,w];};
+      const report=t=>{const [g,w]=tally();console.log(`t=${t} strands ${strands().length} docks=${s.ev.dock||0} releases=${s.ev.release||0} copies=${s.ev.copy||0} (genome ${g}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
+      snap(s,'t0',`t=0: a sealed cell${plain?' (plain walls, control)':' (spent walls)'}, founder aAaA, ${nb} copy blanks`,null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${strands().length} free strands`,null,false);}
+      const [g,w]=tally();console.log(`result: ${strands().length} free strands (founder included), copies ${s.ev.copy||0}: genome ${g}, wall ${w}`);
+      finish(`Genome on copies inside a sealed cell${plain?' (control: plain walls)':''}`);},
     // split: a parent ring P and a bud ring D (prepared, labelled) share a wall held by completion-release pairs '&',
     // with an open doorway through both walls (each panel turned open, held by a '&' doorstop, always triggered). Inside
     // P a stamp pocket casts blanks into the bud's part (A@-a@); parts diffuse through the doorway into D and grow a
@@ -141,22 +166,36 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // two casters' U. sides in the pocket's last caster site and blocked it); its kit parts (3 of each type) start
     // inside P with the food; the pair splits once the pocket is complete and a copy is anchored: the bud leaves with a
     // genome and a pocket that casts its dockers, and imports their blanks through its own door (RP 8, RD 6)
-    split(){steps=steps||60000;const org=String(extra||'').includes('o'),gen=org||String(extra||'').includes('g'),nb=parseInt(extra)||30,size=org?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:gen?7:6;
+    split(){steps=steps||60000;const org=String(extra||'').includes('o'),cpy=!org&&String(extra||'').includes('q'),gen=org||cpy||String(extra||'').includes('g'),nb=parseInt(extra)||(cpy?70:30),size=org||cpy?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:cpy?7:gen?7:6;
       const OK=org?S.kitOptions(S.lidPocket(S.stampInstr('aU.w'),'U',null,'B'),'aywzxvuψωбгджцшэлпфизч','v',[S.lidSlot('B')]):null;
       const RD=org?6:gen?5:4,bp=S.budPair({RP,RD,k:5,capGlue:gen?null:'a',anchorGlue:gen?'Z':null,anchorP:gen?'W':null,importD:org?'U':null,organelle:org?{opts:OK,gaps:[1,1,1],seed:'v',slots:[S.lidSlot('B')],clear:S.lidClear()}:null});
       const OUT=org?40:0,kitSupply={};if(org)for(const t of bp.organelle.K.types)kitSupply[t]=(kitSupply[t]||0)+3;
-      const pocket={tris:S.lidPocket(S.stampInstr(gen?'Ay.z':bp.cap.type),'X'),x:c-(gen?1:0.5),y:cy-(gen?0:1.6),rot:0};
+      const pocket=cpy?null:{tris:S.lidPocket(S.stampInstr(gen?'Ay.z':bp.cap.type),'X'),x:c-(gen?1:0.5),y:cy-(gen?0:1.6),rot:0};
+      const supplyG=cpy?{'-?-?-?':nb}:{xxx:org?10:nb,'Y--':org?12:16,...(org?{uuu:OUT}:{}),...kitSupply};
       // the founder (genome variant) near P's anchor: the first spot where prepared parts do not overlap
       const overlap=(s,all)=>{const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);
         for(const u of all)for(const v of all){if(v<=u)continue;const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
           for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)return true;}return false;};
+      // copy variant: every face triangle of the founder carries seed w on its prev side and z on its next (as a docker:
+      // face F, prev F+1, next F+2), so every strand, founder or copy, exposes w at its low end and z at its high end;
+      // every back carries W on its next side (latGlue: a fill needs the complement of the docker's prev glue w), so only
+      // copies of backs fill, not copies of wall cells. The founder starts free in P; P's anchor is W@| (with '@' it
+      // emits the open signal until it holds a strand, and free dockers, which carry w, cannot plug it): the pair splits
+      // once P's anchor holds a strand by its low end and D's anchor one by its high end
+      const seedFounder=w=>{const {s}=w,F=w.founders[0],{gcode}=require('./sim');
+        seedCopyGenome(s,F);
+        const a=w.structures[0][bp.anchorP[0]],e=[0,1,2].find(i=>s.anc[a*3+i]&&s.glue[a*3+i]===gcode('W'));if(e===undefined)throw Error('split: no anchor W');s.att[a*3+e]=1;for(let k=0;k<40;k++)s.derive();};
       let W0=null;
       for(const f of gen?[0.55,0.45,0.65,0.35,0.75]:[0])for(const ox of gen?[0,1,-1,2,-2]:[0]){
-        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c+bp.anchorP[2][0]*f+ox,y:cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},pocket],supply:gen?{xxx:org?10:nb,'Y--':org?12:16,...(org?{uuu:OUT}:{}),...kitSupply}:{xxx:nb},params:gen?{latGlue:true,...(org?{lockRange:80}:{})}:{}});
-        openBudDoors(w.s,w.structures[0],bp);if(!overlap(w.s,[...w.structures[0],...w.structures[1],...(w.founders[0]||[])])){W0=w;break;}}
+        const w=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:cpy?'aAaA':'aaaa',ends:cpy?null:'w-',x:cpy?c+ox:c+bp.anchorP[2][0]*f+ox,y:cpy?cy-RP*H*(f-0.55):cy+bp.anchorP[2][1]*f}]:[],structures:[{tris:bp.tris,x:c,y:cy},...(pocket?[pocket]:[])],supply:gen?supplyG:{xxx:nb},params:cpy?{openRange:30,latGlue:true}:gen?{latGlue:true,...(org?{lockRange:80}:{})}:{}});
+        openBudDoors(w.s,w.structures[0],bp);if(cpy)seedFounder(w);if(!overlap(w.s,[...w.structures[0],...(w.structures[1]||[]),...(w.founders[0]||[])])){W0=w;break;}}
       if(!W0)throw Error('split: prepared parts overlap');
-      const {s,structures,founders}=W0,U=structures[0],PK=[...structures[1],...(founders[0]||[])];
+      const {s,structures,founders}=W0,U=structures[0],PK=[...(structures[1]||[]),...(founders[0]||[])];
       // the blanks start inside P (the parent's food; labelled)
+      // copy variant: every inert free side of the prepared pair is a completion side '&' (no glue: it binds nothing), so it
+      // is spent, and never copied, once its triangle hears no open signal; with openRange 30 the open signal of D's
+      // anchor reaches the '&' pairs that hold P and D together (op 6 or more at t=0) but not P's far walls
+      if(cpy)spendableSides(s,U);
       const prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
       // organelle variant: OUT blanks uuu start outside both rings (the bud imports them after the split)
       const outU=free.filter(u=>typeName(s,u)==='uuu').slice(0,OUT),dcy=cy+(RP+RD)*H;
@@ -182,7 +221,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const parts=[...Array(s.n).keys()].filter(u=>canon(typeName(s,u))===capT&&!s.bonded(u));
         const st=gen?' strands ['+census(s).filter(q=>q.n>=7).map(q=>q.faces+(q.paired?'*':'')+(comp[q.units[0]]===dc||comp[q.units[0]]===comp[Pu[0]]?(inD(q.units[3])?'(anchored in D)':'(anchored in P)'):inD(q.units[3])?'(in D)':inP(q.units[3])?'(in P)':'(out)')).join(' ')+'] docks='+(s.ev.dock||0)+' anchors='+(s.ev.anchor||0):'';
         const og=org?` organelle=${[...Array(s.n).keys()].filter(u=>comp[u]===dc&&kitT.has(canon(typeName(s,u)))&&inD(u)).length}/${bp.organelle.K.types.length}`:'';
-        console.log(`t=${t} casts=${s.ev.cast||0}${st}${gen?og:` cap=${cap}/3`} ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length}${gen?` fills in D=${free.filter(u=>typeName(s,u)==='Y--'&&inD(u)).length}`:''}${org?` in D: uuu=${free.filter(u=>typeName(s,u)==='uuu'&&inD(u)).length} aU.w=${free.filter(u=>canon(typeName(s,u))===canon('aU.w')&&inD(u)).length} imports=${s.ev.drop||0}`:''} completions=${s.ev.complete||0} outside=${(o=>free.filter(u=>!s.bonded(u)&&o(u)).length)(outsideNow())}`);};
+        console.log(`t=${t} casts=${s.ev.cast||0}${st}${gen?og:` cap=${cap}/3`} ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length}${gen?` fills in D=${free.filter(u=>typeName(s,u)==='Y--'&&inD(u)).length}`:''}${org?` in D: uuu=${free.filter(u=>typeName(s,u)==='uuu'&&inD(u)).length} aU.w=${free.filter(u=>canon(typeName(s,u))===canon('aU.w')&&inD(u)).length} imports=${s.ev.drop||0}`:''} completions=${s.ev.complete||0} outside=${(o=>free.filter(u=>!s.bonded(u)&&o(u)).length)(outsideNow())}${cpy?` copies=${s.ev.copy||0} copy blanks in P=${free.filter(u=>typeName(s,u)==='-?-?-?'&&inP(u)).length} in D=${free.filter(u=>typeName(s,u)==='-?-?-?'&&inD(u)).length}`:''}`);};
       console.log('part',gen?'Ay.z':bp.cap.type,'stamp',S.stampInstr(gen?'Ay.z':bp.cap.type).join(' '),'doors',bp.doors.map(d=>d.ang+'deg').join(' '));
       snap(s,'t0','t=0: parent P (stamp pocket, blanks) and bud D share an open doorway',{units:U,radius:10});
       for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}${split?', split':''}`,{units:Pu,radius:12},false);}
