@@ -156,7 +156,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         inside=()=>{const [cx,cy]=centre();return strands().filter(q=>{let x=0,y=0;for(const u of q.units){x+=s._dx(s.px[u]-s.px[q.units[0]]);y+=s._dy(s.py[u]-s.py[q.units[0]]);}
           return Math.hypot(s._dx(s.px[q.units[0]]+x/q.n-cx),s._dy(s.py[q.units[0]]+y/q.n-cy))<(R-1)*H;}).length;};
       const tally=()=>{let g=0,w=0;for(const [,,t] of s.copyLog||[])if(wallT.has(canon(t)))w++;else g++;return [g,w];};
-      const report=t=>{const [g,w]=tally();console.log(`t=${t} strands ${strands().length}${pore?` (inside ${inside()})`:''} docks=${s.ev.dock||0} releases=${s.ev.release||0} copies=${s.ev.copy||0} (genome ${g}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
+      const report=t=>{const [g,w]=tally();console.log(`t=${t} strands ${strands().length}${pore?` (inside ${inside()})`:''} docks=${s.ev.dock||0} releases=${s.ev.release||0} copies=${s.ev.copy||0} (genome ${g}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}${split?` releases in D ${relD}, on D's strand ${relA}`:''}`);};
       const what=pore?`a cell with ${closed?'no pore (control)':'a pore'}${plain?' (plain walls, control)':' (spent walls)'}, founder aAaA, ${nb} copy blanks outside`:`a sealed cell${plain?' (plain walls, control)':' (spent walls)'}, founder aAaA, ${nb} copy blanks`;
       snap(s,'t0',`t=0: ${what}`,null,false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${pore?`${inside()} strands inside`:`${strands().length} free strands`}`,null,false);}
@@ -239,17 +239,17 @@ function demo(name,seed=1,steps,dir='runs',extra){
         snap(s,'pocket',`the bud's pocket: ${T.length-miss.length}/${T.length} cells`,{units:members[dc].filter(u=>T.includes(canon(typeName(s,u)))),radius:3.5});}
       {const {comp,members}=s.bodies();snap(s,'zoom','the bud after the split',{units:members[comp[Du[0]]],radius:6});}
       finish('Split: the parent feeds its bud through a doorway; when the bud is complete the doors shut and it separates');},
-    // budpore (a bud pair on copies, partial; see INNOVATIONS): parent P (R 7) and bud D (R 5), prepared rings (labelled)
-    // touching along D's bottom wall. The contact cells of both walls right of x = -DW are missing: one opening joins
-    // P, D and the outside (each ring has one gap: a second would cut its wall in two). One P-D bond left of the
-    // opening is a latch bond (latch side '~' on D's cell L); the other contacts are unbonded. D's anchor A, a neighbour
-    // of L, is Z@|* (anchor, attach, trigger): once it holds a strand by its high end z its trigger side is bonded, and
-    // a latch lets go while a non-hinge partner has a bonded trigger: D lets go of P. No wall hears an open signal
+    // budpore (a bud pair on copies; see INNOVATIONS): parent P (R 7) and bud D (R 5), prepared rings (labelled) touching
+    // along D's bottom wall. The contact cells of both walls right of x = -0.75 are missing: one opening joins P, D and
+    // the outside (each ring has one gap: a second would cut its wall in two). The leftmost P-D bond is a latch bond
+    // (latch side '~' on D's cell L, no glue); the other contacts are unbonded. D's anchor A is W@|* (anchor, attach,
+    // trigger) on the inner side farthest from D's corners within 5 ring bonds of L (the middle of D's lower-left wall),
+    // so a strand caught there stands into the bud with its backs open. A catches a strand's low end w (as P's anchor
+    // W| holds the founder aAaA; seedCopyGenome): the high end, where copying starts (zip), stays free in the bud. Once
+    // A holds a strand its trigger side is bonded; the cells from A to L hear it (hear side '+' towards A; sigRange 6),
+    // and a latch lets go while its triangle hears a trigger signal: D lets go of P. No wall hears an open signal
     // (openRange 1: only A's own '@'), so every other free side is spent and never copied; A's copies are parts ('@')
-    // and bind nothing. P's anchor W| (middle of its bottom wall) holds the founder aAaA (seedCopyGenome). Copy blanks
-    // start outside ('i': also 60 inside P). extra: blanks outside (default 300). Status: P copies its genome; D's anchor
-    // catches a copy, also one being copied (since 2026-10-02), and the pair splits with food left in 4 of 8 seeds; A sits
-    // beside a corner, so a caught strand lies along the wall and the bud does not copy it after the split
+    // and bind nothing. Copy blanks start outside ('i': also 60 inside P). extra: blanks outside (default 300).
     budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
@@ -257,23 +257,28 @@ function demo(name,seed=1,steps,dir='runs',extra){
       Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&cn(v)[0]>-DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&cn(v)[0]>-DW));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
-      const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu);
-      // the hold: one P-D bond left of the doorway is a latch bond (latch side '~' on its D cell L); every other P-D bond is
-      // cut and loses its weld glue. D's anchor A is a neighbour of L with an inner free side, marked Z@|* (anchor,
-      // attach, trigger): once it holds a strand its trigger side is bonded, and a latch lets go while a non-hinge
-      // partner has a bonded trigger side: L lets go of P. The '@' emits the open signal (openRange 1: A alone hears it)
-      // and makes A's copies harmless (a free part binds only by '@').
-      const inD=new Set(Du);let pick=null;
-      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0;
-        for(let e=0;e<3;e++){const q=s.bond[L*3+e];if(q<0||!inD.has((q/3)|0))continue;const A=(q/3)|0,v=tris[U.indexOf(A)].v;
-          for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[A*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;if(!pick||m[0]<pick.x)pick={u,i,L,j:b%3,A,f,x:m[0]};}}}
+      const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
+      // the hold: the leftmost P-D bond is the latch bond L; the anchor A is the inner free side within 5 ring bonds of L
+      // farthest from D's corners; the cells from L towards A get a hear side on the side bonded towards A
+      const RC=[...Array(6).keys()].map(k=>[(RD-0.5)*Math.cos(k*Math.PI/3),dyL+(RD-0.5)*Math.sin(k*Math.PI/3)]);let pick=null;
+      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0,x=cn(tris[U.indexOf(L)].v)[0];if(!pick||x<pick.x)pick={u,i,L,j:b%3,x};}
       if(!pick)throw Error('budpore: no latch site');
+      const prev=new Map([[pick.L,-1]]),Q=[pick.L],dist=new Map([[pick.L,0]]);let best=null;
+      for(let q=0;q<Q.length;q++){const w=Q[q],d=dist.get(w);
+        if(d>0){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));if(!best||sc>best.sc)best={A:w,f,sc};}}
+        if(d>=s.p.sigRange-1)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
+      const chain=[];for(let w=best.A;prev.get(w)>=0;w=prev.get(w)){const v=prev.get(w);chain.push(v);for(let e=0;e<3;e++)if(s.bond[v*3+e]>=0&&((s.bond[v*3+e]/3)|0)===w)s.hear[v*3+e]=1;}
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
-      s.ltc[pick.L*3+pick.j]=1;const da={u:pick.A,i:pick.f};
+      // the latch bond carries no glue: once it lets go its two sides bind nothing (with the weld glue f/F copies of them
+      // grew glue crystals on P after the split)
+      s.ltc[pick.L*3+pick.j]=1;s.glue[pick.u*3+pick.i]=0;s.glue[pick.L*3+pick.j]=0;const da={u:best.A,i:best.f};
+      // prepared bonds need no glue: every wall side is inert (copies of wall cells then bind nothing; with the weld glue
+      // f/F, copies of the anchor and the freed latch sides glued onto each other and onto strands and grew clusters)
+      for(const u of U)for(let i=0;i<3;i++)s.glue[u*3+i]=0;
       // P's anchor W| (middle of its bottom inner wall)
       let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5)continue;if(!pa||Math.abs(m[0])<pa.d)pa={u,i,d:Math.abs(m[0])};}}
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
-      s.glue[da.u*3+da.i]=gc('Z');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;const hold=new Set([pick.u,pick.L]);
+      s.glue[da.u*3+da.i]=gc('W');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
@@ -291,16 +296,26 @@ function demo(name,seed=1,steps,dir='runs',extra){
         return inR(cD,RD)?(an?'D*':'D'):inR(cP,RP)?(an?'P*':'P'):'out';});};
       const wallT=new Set(U.map(u=>canon(typeName(s,u)))),tally=()=>{let gn=0,w=0;for(const [,,ty] of s.copyLog||[])if(wallT.has(canon(ty)))w++;else gn++;return [gn,w];};
       let split=0,atSplit=null,bSplit=0;const nIn=(L,k)=>L.filter(x=>x[0]===k).length;
+      // copies finished inside the bud after the split (a release whose copy triangle lies inside D)
+      // and on the bud's own anchored strand (its template is in D's body; a copy of aAaA has 4 docked triangles)
+      let relD=0,relA=0,relJ=0,lastCut=-1,lastT=-1;{const oc=s.cut.bind(s),ok=s.count.bind(s);s.cut=(u,i)=>{lastCut=u;lastT=s.bond[u*3+i]>=0?(s.bond[u*3+i]/3)|0:-1;return oc(u,i);};
+        s.count=(k,d)=>{if(k==='release'&&!split&&lastT>=0){const {comp}=s.bodies(),cD=centre(Du);if(comp[lastT]===comp[Du[0]]&&Math.hypot(s._dx(s.px[lastT]-cD[0]),s._dy(s.py[lastT]-cD[1]))<(RD-1)*H)relJ++;}
+          if(k==='release'&&split&&lastCut>=0){const cD=centre(Du);if(Math.hypot(s._dx(s.px[lastCut]-cD[0]),s._dy(s.py[lastCut]-cD[1]))<(RD-1)*H)relD++;
+          if(lastT>=0){const {comp}=s.bodies();if(comp[lastT]===comp[Du[0]])relA++;}}return ok(k,d);};}
       const report=t=>{const {comp}=s.bodies();if(!split&&comp[Pu[0]]!==comp[Du[0]]){split=t;atSplit=where();bSplit=typeCount(s)[canon('-?-?-?')]||0;snap(s,'split',`t=${t}: split, ${bSplit} blanks left`,{units:Pu,radius:16},false);}const L=where(),[gn,w]=tally();
         console.log(`t=${t} strands in P ${nIn(L,'P')} in D ${nIn(L,'D')} out ${L.filter(x=>x==='out').length} [${L.join(' ')}] ${split?'SPLIT at '+split:'joined'} docks=${s.ev.dock||0} releases=${s.ev.release||0} anchors=${s.ev.anchor||0} copies=${s.ev.copy||0} (genome ${gn}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
+      // DBGC: where copies are made after the split (by the copied triangle: in D, in P, outside; wall or genome type)
+      const afterW={};if(process.env.DBGC){const cl=[];cl.push=function(e){if(split){const [,u,ty]=e,cD=centre(Du),cP=centre(Pu),d=C=>Math.hypot(s._dx(s.px[u]-C[0]),s._dy(s.py[u]-C[1]));
+        const k=(d(cD)<RD*H?'D':d(cP)<RP*H?'P':'out')+':'+(wallT.has(canon(ty))?ty:'genome');afterW[k]=(afterW[k]||0)+1;}return Array.prototype.push.call(this,e);};s.copyLog=cl;
+        process.on('exit',()=>console.log('after split',JSON.stringify(afterW)));}
       if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [tt,u,ty] of s.copyLog||[])if(wallT.has(canon(ty)))m[ty+(split&&tt>split?' after':' before')]=(m[ty+(split&&tt>split?' after':' before')]||0)+1;console.log(JSON.stringify(m),'hearing',U.filter(u=>s.op[u]>0).length,'unspent free sides',U.reduce((a,u)=>a+[0,1,2].filter(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i]).length,0));});
-      console.log(`budpore: latch bond on D cell ${U.indexOf(pick.L)}, anchor Z@|* on its neighbour ${U.indexOf(pick.A)}`);
+      console.log(`budpore: latch bond on D cell ${U.indexOf(pick.L)}, anchor W@|* on D cell ${U.indexOf(da.u)}, hear chain ${chain.length} bonds`);
       snap(s,'t0',`t=0: parent P (founder on its anchor${NI?`, ${NI} copy blanks`:''}) and bud D joined at one latch; ${nb} copy blanks outside`,{units:U,radius:14},false);
-      for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${split?'split at '+split:'joined'}`,{units:Pu,radius:16},false);}
+      for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,+process.env.BUDF||4))snap(s,`t${t}`,`t=${t}: ${split?'split at '+split+', the bud':'joined'}`,split?{units:Du,radius:9}:{units:Pu,radius:16},false);}
       report(steps);const L=where(),[gn,w]=tally();
-      console.log(`result: ${split?'split at '+split+' with '+bSplit+' blanks left':'not split'}, strands in D at the split ${atSplit?nIn(atSplit,'D'):0}, at the end ${nIn(L,'D')}; in P ${nIn(L,'P')}; copies ${s.ev.copy||0}: genome ${gn}, wall ${w}`);
+      console.log(`result: ${split?'split at '+split+' with '+bSplit+' blanks left':'not split'}, strands in D at the split ${atSplit?nIn(atSplit,'D'):0}, at the end ${nIn(L,'D')}, copy releases in D after the split ${relD}, on the bud's anchored strand ${relA} (copies ${Math.floor(relA/4)}); before the split on D's anchored strand ${relJ}; in P ${nIn(L,'P')}; copies ${s.ev.copy||0}: genome ${gn}, wall ${w}`);
       {const {comp,members}=s.bodies();snap(s,'zoom','the bud at the end',{units:members[comp[Du[0]]],radius:8},false);}
-      finish('Bud pair on copies with a doorway (partial): the parent copies its genome; the bud catches a copy (busy too) and splits off while food lasts');},
+      finish('Bud pair on copies: the bud catches a copy mid-wall by its low end and splits off with food left; frames then follow the bud');},
     // budgrow: the bud grows instead of being prepared (structures.grownBud). The parent P (prepared, labelled: ring of
     // side 7 with a pulse door beside its seed side, a stamp pocket casting the bud's cap part from blanks, blanks xxx
     // inside) and the bud's kit parts outside (every bud cell its own type; extra: copies per type, default 4). The bud

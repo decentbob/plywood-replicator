@@ -71,7 +71,7 @@ the core (the repository restarted on 2026-10-01).
 | `<` `>` hinge | mark | 19 (pockets, doors, conveyor, gate) | 10-01 |
 | `.` close-only | mark | 21 (pockets, kits, rings) | 10-01 |
 | `*` trigger | mark | 19 | 10-01 |
-| `+` hear | mark | 18 (lid pocket, door panels) | 10-01 |
+| `+` hear | mark | 18 (lid pocket, door panels); since run 20261002-1921 also `budpore` (hear chain from the bud anchor to the latch) | 10-01 |
 | `=` wide hinge | mark | 17 (lid pocket) | 10-01 |
 | `@` attach | mark | 16 (kits, rings, growth) | 10-01 |
 | `&` completion release | mark | 10 (buds, membranes, sealed cell) | 10-01 |

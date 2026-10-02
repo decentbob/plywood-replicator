@@ -31,7 +31,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds at 200000 steps; 5 of 8 seeds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
 | Genome on copies inside a cell: a sealed cell copies its genome from copy blanks alone (spent `&` walls are never copied) | replication from uniform nutrients | works (4 of 4 worlds at 60000 steps, 4 strands from 60 blanks, since the 2026-10-02 release locality fix; before it 3 of 4 at 40000; control 2-3, the wall takes most); in a bud pair: see budpore below | demo imprint m |
 | Feeding on copies: a cell fed through a pore copies its genome from copy blanks outside (every free side spent `&`, so only what lies inside is copied) | uptake of uniform nutrients | works (4 of 4 worlds, 5-6 strands inside from 150 blanks; controls: no pore 0 copies, plain walls take all; since anchors catch busy strands 7 of 8 seeds: a founder caught during its first copy, before any back was copied, never gets a fill) | demo imprint p |
-| Bud pair on copies with a doorway (no doors; held by one latch bond released by the bud anchor's trigger side, so no wall hears an open signal) | budding on copies | partial: since anchors catch busy strands (core change 2026-10-02, run 1551) the bud catches a copy and splits with food left in 4 of 8 seeds (before: 0 of 4); the bud does not yet copy its genome after the split (its anchor sits beside a corner) | demo budpore |
+| Bud pair on copies with a doorway (no doors; held by one latch bond that lets go when the latch cell hears the bud anchor's trigger through a hear chain `+`, so no wall hears an open signal) | budding on copies | works: the bud's mid-wall anchor `W@\|*` catches a copy by its low end and the pair splits with food left in 8 of 8 seeds (run 1921; before: 4 of 8); the bud copying its genome after the split: not yet (one full copy in 2 of 8: the food goes to P's copies outside, the freed latch sides and anchor copies) | demo budpore |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
 Every row marked works is guarded by `node tri/check.js` (one line per capability, about 40 minutes with 4 processes).
@@ -48,7 +48,7 @@ kind as its parent (so the cycle repeats). State in `budpore`, the nearest demo:
 | Parent ring with `&` walls and one gap (pore) | compartment; spent walls are never copied | prepared (R 7) | the previous generation's bud |
 | Parent anchor `W\|` | holds the founder mid-wall | prepared | a part of the ring's kit, same as the bud's anchor role |
 | Bud ring (R 5), its half of the opening | the offspring's compartment; its pore after the split | prepared | grown from copies on the parent's seed site (priority 3) |
-| Bud anchor `Z@\|*` | catches a copy; its trigger releases the latch | prepared | a part of the bud's kit |
+| Bud anchor `W@\|*` (mid-wall, same glue as the parent's) | catches a copy by its low end; its trigger, heard along a hear chain `+`, releases the latch | prepared | a part of the bud's kit |
 | Latch bond `~` between the rings | holds the pair until the bud has its copy | prepared | made by the bud's growth |
 | Bud seed site on the parent | where the next bud starts | none | re-made in every bud (closure, priority 2) |
 
@@ -66,9 +66,10 @@ let the parent construct its offspring from one uniform food, and only that rout
    size, anchor roles, seed site, the first motif round), "designed, not demonstrated" counts; (c) grow the bud ring
    from copies on the parent's seed site (as `imprint`'s rings; fix the one-front 28/30 stall); (d) two generations;
    then (e) a core review of removing casting, stamp, fuel and machine marks that only the frozen lineage uses
-   (`% ' $ ^ # = ! < > +`). Done so far: contact copying (run 0136), a sealed cell copies its genome from blanks
+   (`% ' $ ^ # = ! < >`; `+` is now used by `budpore`'s hear chain). Done so far: contact copying (run 0136), a sealed cell copies its genome from blanks
    (`imprint m`), a cell fed through a pore (`imprint p`), anchors catch busy strands and `budpore` splits with food
-   left in 4 of 8 seeds (run 1551).
+   left in 4 of 8 seeds (run 1551), 8 of 8 with a mid-wall low-end anchor (run 1921; the bud's own copying is still
+   starved, docs/NEXT.md).
 0b. **Speed** (harden runs): `budpore` worlds take about 4 minutes, the check suite 40; lone blocks dominate physics
    (`_single`).
 

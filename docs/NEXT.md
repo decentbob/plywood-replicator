@@ -1,25 +1,49 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-1821, cleanup). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-1921, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
-**Handoff status (autorun run 20261002-1821, cleanup).** Everything committed on branch `claude/autorun-20261002-1821` and
-merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (2371 s).
-No current slice. **Done (slice: cleanup; met):** this file went from 457 to about 150 lines (handoff history is in
-INNOVATIONS and git; casting-lineage pitfalls moved to IDEAS); removed the demos and structures nothing checked or used
-(`pocket`, `airlock`, `arms`, `birth` with `cellKit`, `pocketPair`, `strandInKit`, and the `split q` variant superseded
-by `budpore`; code in git at `c11ed14`), with the outputs of 12 remaining demo worlds identical before and after;
-ROADMAP, RULES, INNOVATIONS and README follow (README now describes the copy lineage). Autorun: the plywood preamble
-says to run the checks on inherited work and how to wait on simulations. No AGENTS.md change proposed.
+**Handoff status (autorun run 20261002-1921, build).** Everything committed on branch `claude/autorun-20261002-1921`
+and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js budpore` passes 4 of 4
+(no rule, physics or shared-structure change, so the full suite was not rerun; last full run 35 of 35 in run 1821).
+No current slice. **Done (slice: M2 on `budpore`; not met, ended at the stop condition):** D's anchor is now `W@|*`
+mid-wall on D's lower-left wall (a 4-bond hear chain `+` carries its trigger to the latch cell) and catches a strand's
+low end `w` (the parent's anchor glue too), so the high end, where copying starts, stands free in the bud; the latch
+bond and all prepared wall sides carry no glue. Splits with food left: 8 of 8 seeds (was 4 of 8), check `budpore`
+updated (split with 50+ blanks left) and no longer partial. The bud's own copying after the split: one full copy in
+2 of 8 seeds. Why (INNOVATIONS, run 1921): the caught strand leans with its backs towards the wall (one back site is
+covered by a wall cell, centre distance 0.58), so back copies (the fills) are rare at the bud's strand; even while
+joined with food around it gets 0-3 releases in 100000+ steps; and after the split P's copies outside, the freed latch
+sides and copies of the anchor cell take the food (600 blanks did not help: 0-1 copies). Dropped variants (measured):
+anchor catching the high end `z` mid-wall, low-end anchor at the old corner, an `&` hold two bonds from the anchor,
+the mirrored layout (opening on the left: 2 of 4 split, no copies), and two anchors (one holding the bud's strand and
+locking the latch with an unbonded latch side `~`, one triggering; "replicate before dividing"): the trigger anchor 2
+bonds from the latch never caught. Two core-change candidates below.
 
-**Exact next step (build, priority 1 below): M2, the bud copies its genome after the split, on `budpore`.** Move D's
-anchor mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the latch lets go while it hears
-a trigger signal; see the pitfall "Anchors in the middle of a flat wall") so a caught strand stands into the bud with
-its backs exposed. Target: the bud holds 2 or more strands at the end in 3 of 4 worlds (seeds 1-4, 300 blanks, 200000
-steps; about 4 minutes per world). Also worth a look: seeds 5 and 8 never split (seed 5: 180 of 270 copies went to
-walls). Probes that helped (scratch, rebuild as needed, about 30 lines each): preloads via
-`NODE_OPTIONS="-r ./runs/NAME.js"` that log anchor captures and render the scene after (`ANC_AT` step, `ANC_OUT`
-folder), list copy types made and each docker's fill need, or dry-run `_snap` of a blank into each back site.
+**Exact next step (build, priority 1 below): M2, choose D's anchor by where the caught strand's backs face.** Before
+running anything, dry-run the capture for each inner wall side of D within the hear range of the latch cell (or with a
+larger `sigRange` passed as a parameter, if the best sides are farther): place a strand by its low end `w` with
+`_snapBody` (as the founder is placed on P's anchor) and measure each back site's distance to the nearest wall cell;
+keep sides whose back sites are all clear (more than about 1.5 from walls) and that leave the faces free too. Then run
+`budpore` seeds 1-4 (300 blanks, 200000 steps, about 4.5 minutes each, 4 at once) and read "on the bud's anchored
+strand N (copies M)" and "before the split on D's anchored strand". Target: one full copy of the bud's strand (4
+releases) in 3 of 4 worlds, before or after the split. If no side gives open backs, the genome's handedness decides:
+try the founder's mirror (`gaps` and faces reversed) so its backs face the other way. After that, "replicate before
+dividing" (the bud's strand copies while joined; a second, triggering anchor releases the latch once both hold) is
+the design that keeps the bud fed: place the trigger anchor where strands are caught often (the old corner place
+caught in 4 of 4 worlds with `w`).
+
+**Core-change candidates (for an `explore` run; each needs its case in RULES first).**
+1. *A free part binds only an attached attach side `@`* (or narrower: a free triangle's anchor side `|` never binds by
+   glue). Measured in `budpore`: copies of the bud's anchor cell (made before its catch, 15-60 per world) are parts
+   `W@|*` that glue-bind strand low ends `w` (5-17 per world); a capped strand can no longer be caught, and the bound
+   copy's free sides are copied again (30-80 copies after the split). Today an attached `@` side binds only a free
+   part's `@` side, but a free part's `@` side binds any complementary glue side; making it symmetric would remove
+   this, but kits (casting lineage) must be checked with the coverage hook first.
+2. *A latch side that has let go, on a triangle without a hinge, is spent* (with `~` on both sides of the bond, the
+   partner's latch letting go on the hear signal it gets through its own hear side). Measured: after the split the two
+   freed latch sides are copied by every blank that reaches them: 19-105 copies per world (seed 1 with weld glue: 105
+   of the 172 blanks left at the split). Doors re-latch on closing, so hinged latches stay as they are.
 
 ### Direction (autorun run 20261002-1751, review-intent): where the work stands and what comes first
 **Findings.**
@@ -36,7 +60,7 @@ folder), list copy types made and each docker's fill need, or dry-run `_snap` of
    narrowed several (K merged into `%`, the latch's open hold, 8 options, the anchor reads less). Good. The larger
    win is ahead: the copy lineage uses only `@ . & | ? ~ *`, the open, busy and zip signals and binding; casting,
    stamp, fuel and most machine marks (`% ' $ ^ # = ! < > +`) serve only the frozen lineage (measured with the coverage hook on 3000-step runs of `budpore 300`, `imprint`,
-   `imprint 60m`, `imprint 150p`: marks present are `. * ~ @ & | ?` only). Once the organism on
+   `imprint 60m`, `imprint 150p`: marks present are `. * ~ @ & | ?` only; since run 1921 `budpore` also uses `+`, its hear chain). Once the organism on
    copies runs a whole cycle (priority 3), a `core-review` should weigh removing them (with their demos, into git
    history, as the 10-01 restart did); the case goes through the RULES gate first.
 3. **Prepared structure does most of the organism's work.** In `budpore` only the genome copies are grown; both
@@ -53,7 +77,8 @@ folder), list copy types made and each docker's fill need, or dry-run `_snap` of
    (on the genome, inside the parent). Written into IDEAS.
 
 **Priorities (in order; each a slice).**
-1. **M2: the bud copies its genome after the split** (`budpore`, mid-wall anchor in D; as run 1551 set it). After the
+1. **M2: the bud copies its genome after the split** (`budpore`, mid-wall anchor in D; as run 1551 set it; run 1921
+   built the mid-wall low-end anchor, splits 8 of 8, but the caught strand's backs face the wall: see Exact next step). After the
    split D's half of the opening is its pore, so D is then an `imprint p` cell: the bud "lives on its own".
 2. **Closure by design (analysis slice; "designed, not demonstrated" is a valid result).** Specify one organism kind
    whose bud is the same kind: one ring size or a fixed alternation, which anchor holds the founder and which catches
@@ -89,7 +114,7 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~40 min, 4 processes)
-node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: the bud catches a copy, splits with food left (partial: 4 of 8)
+node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, split with food left (8 of 8); DBGC=1: where copies go, BUDF=20: frames
 node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
@@ -103,6 +128,15 @@ world from a saved state (not `split`: it places its parts after loading); `TRI_
 
 ## Pitfalls learned
 Casting-lineage and machine pitfalls (kits, pockets, doors, flaps): docs/IDEAS.md, "Pitfalls from the casting lineage".
+- **Where a caught strand's backs face** (2026-10-02, run 1921). A strand caught by an end stands at 60 degrees to the
+  wall, leaning one way fixed by which end is caught and the strand's handedness; its backs then face either the acute
+  wedge (a back site can be covered by a wall cell) or the open side. Backs in the wedge get no copies, so there are
+  no fills and copying stalls after a few docks. Dry-run the capture and measure back sites before placing an anchor.
+- **Prepared bonds need no glue** (2026-10-02, run 1921). A weld glue left on a prepared side becomes active when the
+  bond is cut (a latch letting go) or on every copy of the cell: copies of `f`/`F` cells glued onto each other and grew
+  crystals. Zero the glue of prepared walls; give glue only to sides meant to bind.
+- **A freed side is a food sink.** Every free, unspent side of an attached triangle is copied by every copy blank that
+  reaches it, glue or not (a released latch side: up to 105 copies). Count exposed sides after each event, not only at t=0.
 - **A strand caught while busy needs fills from elsewhere** (2026-10-02, run 1551). Anchors catch busy strands; the
   strand and its partial copy are pinned in the anchor's orientation. If its backs then face a wall (a narrow wedge),
   no back is copied there, and a copy caught before any back copy exists never gets a fill (`imprint p` seed 2). Place
