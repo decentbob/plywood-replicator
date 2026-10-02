@@ -51,7 +51,7 @@ class TriSim extends Physics{
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.carry=new Int32Array(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.fu=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -106,6 +106,12 @@ class TriSim extends Physics{
     const K=gcode('K');
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
       if(a<0&&((this.glue[u*3+i]===K&&this.glue[q]===comp(K))||(this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
+    // fu (fuel, exposed): 0 no fuel side '$'; 1 fuel sides, none holding a charged carrier; 2 a charged carrier on a fuel
+    // side; 3 that, and a flap started a swing in this step (pw 1) that is me or bonded to me by a hinge: the carriers
+    // on my fuel sides spend themselves in the next servo
+    for(let u=0;u<n;u++){let f=0;for(let i=0;i<3;i++){if(!this.fuel[u*3+i])continue;f=Math.max(f,1);const q=this.bond[u*3+i];if(q>=0&&this.chg[(q/3)|0])f=2;}
+      if(f===2){if(this.pw[u]===1)f=3;else for(let i=0;i<3&&f===2;i++){const q=this.bond[u*3+i];if(q>=0&&this.isHingeBond(u,i)&&this.pw[(q/3)|0]===1)f=3;}}
+      this.fu[u]=f;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
     // attachment) and a latch side '~' (an edge meant to come apart) emit nothing.
@@ -274,6 +280,10 @@ class TriSim extends Physics{
     this._latches();
     if(!this.hinge.some(x=>x))return;this.gridSync();const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
     const hb=(x,e)=>this.isHingeBond(x,e),P=(u,i)=>this.partner(u,i);
+    // energy: a charged carrier bonded to a fuel side whose triangle exposes a started swing (fu 3) discharges itself
+    // and lets go; a flap's start pulse (pw 1) becomes powered (pw 2)
+    for(let u=0;u<n;u++){if(this.pw[u]===1)this.pw[u]=2;if(!this.chg[u])continue;
+      for(let e=0;e<3;e++){const q=this.bond[u*3+e];if(q>=0&&this.fuel[q]&&this.fu[(q/3)|0]===3){this.chg[u]=0;this.cut(u,e);this.count('fuelUsed');break;}}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(!this.hinge[u*3+i]||q<0)continue;const v=(q/3)|0,rel=this.rel[u*3+i];
       const th=this.wide[u*3+i]?2*Math.PI/3:th0,open=()=>wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this.angle(u)-this.angle(v)));
       // releases on my own triggers: hand-off once the cargo is bonded elsewhere too; drop once the swing is complete
@@ -282,14 +292,13 @@ class TriSim extends Physics{
       // triggered: a trigger side of mine is bonded, or a triangle bonded to me (not by a hinge) reports one
       let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*3+e]>=0);
       for(let e=0;e<3&&!swung;e++)if(this.bond[u*3+e]>=0&&!hb(u,e)&&this.tb[P(u,e)])swung=true;if(this.sg[u]>0)swung=true;
-      // energy: with a fuel side (mine or my hinge partner's), a swing starts only by spending a charged carrier there
-      if(swung&&!this.pw[u]&&!this.dOpen[u]){let need=false,spent=false;
-        for(const x of [u,v])for(let e=0;e<3;e++){if(!this.fuel[x*3+e])continue;need=true;if(spent)continue;const w=P(x,e);
-          if(w>=0&&this.chg[w]){this.cut(x,e);this.chg[w]=0;spent=true;this.count('fuelUsed');}}
-        if(need){if(spent)this.pw[u]=1;else{swung=false;this.count('unfuelled');}}}
-      // pulse doors: a trigger sets the open state (unless the interlock signal is heard); open reached -> reset
-      if(rel===3){if(swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.count('interlocked');}
-        if(swung)this.dOpen[u]=1;if(this.dOpen[u]&&Math.abs(open())<p.dropTol){this.dOpen[u]=0;this.count('pulse');}swung=!!this.dOpen[u];}
+      // pulse doors: a closed door ignores its trigger while it hears the interlock signal
+      if(rel===3&&swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.count('interlocked');}
+      // energy: with a fuel side (mine or my hinge partner's: fu exposed), a swing starts only while a charged carrier is
+      // on one (fu 2); the start (pw 1) makes the carriers there spend themselves (fu 3, next servo)
+      if(swung&&!this.pw[u]&&!this.dOpen[u]&&(this.fu[u]||this.fu[v])){if(this.fu[u]===2||this.fu[v]===2)this.pw[u]=1;else{swung=false;this.count('unfuelled');}}
+      // pulse doors: a trigger sets the open state; open reached -> reset
+      if(rel===3){if(swung)this.dOpen[u]=1;if(this.dOpen[u]&&Math.abs(open())<p.dropTol){this.dOpen[u]=0;this.count('pulse');}swung=!!this.dOpen[u];}
       const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0),err=wrap(target-(this.angle(u)-this.angle(v)));
       this.away[u]=Math.abs(wrap(this.hRel[u*3+i]-(this.angle(u)-this.angle(v))))>0.05?1:0;   // away from rest: its catch sides do not catch
       if(!swung&&Math.abs(err)<0.02)this.pw[u]=0;if(Math.abs(err)<0.01)continue;

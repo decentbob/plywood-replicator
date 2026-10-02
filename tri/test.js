@@ -193,6 +193,14 @@ test('locality: release reads its chain partners\' fill state from the previous 
   s.chemistry();assert.ok(s.bond[3]>=0,'U holds its face while P has a fill beside it');
   B(4,1,PREV,5,0,NEXT);s.chemistry();assert.ok(s.bond[3]>=0,'the fill completed this pass: U hears it one pass later');
   s.chemistry();assert.ok(s.bond[3]<0,'U lets go in the next pass');s.derive();assert.ok(s.refr[1]===1||s.busy[1]===0,'released U is refractory');});
+test('locality: fuel, the flap never touches its hinge partner\'s carrier; the carrier spends itself one pass later',()=>{
+  // flap 0 hinged on 1, whose fuel side holds the charged carrier 2; flap 0 hears a trigger signal
+  const s=new TriSim({W:40,H:40,seed:1},3);s.setType(0,'a<--');s.setType(1,'A-b$');s.setType(2,'B--');for(let u=0;u<3;u++){s.px[u]=6*u+3;s.py[u]=5;}
+  s.link(0,0,1,0);s.bkind[0]=GLUE;s.bkind[3]=GLUE;s.link(1,2,2,0);s.bkind[5]=GLUE;s.bkind[6]=GLUE;s.derive();assert.equal(s.fu[1],2,'partner exposes a charged carrier');
+  s.sg[0]=1;s.servo();assert.equal(s.pw[0],1,'the flap starts its swing');assert.ok(s.chg[2]===1&&s.bond[5]>=0,'the start does not write the carrier (two bonds away)');
+  s.derive();assert.equal(s.fu[1],3,'the partner exposes the start');s.sg[0]=1;s.servo();
+  assert.ok(s.chg[2]===0&&s.bond[5]<0&&s.ev.fuelUsed===1,'the carrier discharged itself and let go');assert.equal(s.pw[0],2,'the flap stays powered');
+  s.setType(2,'B--');s.chg[2]=1;s.link(1,2,2,0);s.derive();assert.equal(s.fu[1],2);s.sg[0]=1;s.servo();assert.ok(s.chg[2]===1,'a carrier arriving mid-swing is not spent');});
 test('copy side: only a triangle bonded by its copy side alone takes its partner\'s type',()=>{
   const s=new TriSim({W:40,H:40,seed:1},3);s.setType(0,'abc');s.setType(1,'a?-x');s.setType(2,'X--');for(let u=0;u<3;u++){s.px[u]=3*u+2;s.py[u]=5;}
   s.link(0,0,1,0);s.bkind[0]=GLUE;s.bkind[3]=GLUE;s.link(1,2,2,0);s.bkind[5]=GLUE;s.bkind[6]=GLUE;s.chemistry();
