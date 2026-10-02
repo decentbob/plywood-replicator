@@ -52,7 +52,7 @@ folder), list copy types made and each docker's fill need, or dry-run `_snap` of
    narrowed several (K merged into `%`, the latch's open hold, 8 options, the anchor reads less). Good. The larger
    win is ahead: the copy lineage uses only `@ . & | ? ~ *`, the open, busy and zip signals and binding; casting,
    stamp, fuel and most machine marks (`% ' $ ^ # = ! < > +`) serve only the frozen lineage (measured with the coverage hook on 3000-step runs of `budpore 300`, `imprint`,
-   `imprint 60m`, `imprint 150p`: marks present are `. * ~ @ & | ?` only). Once the organism on
+   `imprint 60m`, `imprint 150p`: marks present are `. * ~ @ & | ?` only; since run 1921 `budpore` also uses `+`, its hear chain). Once the organism on
    copies runs a whole cycle (priority 3), a `core-review` should weigh removing them (with their demos, into git
    history, as the 10-01 restart did); the case goes through the RULES gate first.
 3. **Prepared structure does most of the organism's work.** In `budpore` only the genome copies are grown; both

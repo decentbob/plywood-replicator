@@ -6,6 +6,36 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-1921, build)
+
+- **`budpore`: the bud catches mid-wall by the strand's low end and splits with food left** — works (8 of 8 seeds);
+  **M2, the bud copies its genome after the split: not yet** (2 of 8 seeds make one full copy). No new rule.
+  - Design (fewer exposed sides, same core): D's anchor `W@|*` sits in the middle of D's lower-left wall (the inner
+    side farthest from D's corners within 5 ring bonds of the latch cell); the 4 cells from the latch cell towards the
+    anchor carry a hear side `+` towards it, so the latch cell hears the anchor's trigger signal (sigRange 6) and lets
+    go. The anchor catches a strand's **low** end `w` (the same glue as P's anchor `W|`, which holds the founder): the
+    high end, where copying starts (zip), stands free in the bud. The latch bond and every prepared wall side carry no
+    glue (prepared bonds need none).
+  - Evidence (`node tri/demos.js budpore k 200000 runs 300`, seeds 1-8): split at 35000 / 30000 / 60000 / 45000 /
+    65000 / 45000 / 40000 / 45000 with 176 / 193 / 113 / 136 / 106 / 157 / 165 / 139 blanks left (before: 4 of 8,
+    70000-135000). Releases of copy triangles on the bud's anchored strand after the split: 5 / 3 / 4 / 1 / 2 / 2 / 0 /
+    3 (a full copy of `aAaA` releases 4 dockers): one full copy in seeds 1 and 3. Check `budpore` (seeds 1-4, split
+    with 50+ blanks left; the line also reports the bud's copies).
+  - Variants measured and dropped: (1) mid-wall anchor catching the high end `z`: 1 of 4 split (the caught end is the
+    one copying starts from, pinned at the wall); (2) low-end anchor at the old corner place: splits, but the bud
+    makes 0-2 releases (its strand lies along the wall); (3) no latch, an `&` hold two bonds from the anchor (openRange
+    3): every cell hearing the anchor keeps its free side unspent and was copied, 190-210 wall copies before the split,
+    late catches (56000-151000).
+  - **Why the bud does not copy yet (measured, `DBGC=1`):** its strand starts (seed 1: three dockers bound by 100000
+    steps) and then waits for fills: the blanks are gone by about 80000 steps. After the split the food goes to
+    (a) the two latch sides, freed and unspent (with weld glue: seed 1, 105 of 172 blanks; their copies glued into
+    crystals on P, now inert), (b) copies of the anchor cell made before its catch: parts `W@|*` that glue-bind strand
+    low ends `w` (5-17 per world) and are copied again from their free sides (30-80 copies), (c) most of all, P's copies
+    outside, which keep copying (out: 50-100 copy events with 300 blanks; 170-270 with 600). With 600 blanks the bud
+    still made at most one copy (seeds 1-4: 0 / 1 / 0 / 0): the bud's interior is a small sink beside many templates.
+  - Pictures: `docs/pictures/budpore_mid.png` (seed 1: catch mid-wall at 35000, frames then follow the bud; its strand
+    stands into the bud, docks start, no fills).
+
 ## 2026-10-02 (autorun run 20261002-1551, explore)
 
 - **An anchor catches a strand while it is being copied (core change)** — works; `budpore` (bud pair on copies) is
