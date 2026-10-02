@@ -1,5 +1,29 @@
 # Next instance: start here
 
+## Current slice (autorun run 20261002-0136, explore, 2026-10-02)
+- **Goal:** decide programmable synthesis (part templating, translation, kit-free growth) through the core-change
+  gate and build the chosen one: parts are made from uniform blanks by copying the parts already in a body, so one set
+  of an organism's parts can multiply into the parts of its offspring.
+- **Decision (details: IDEAS, "Programmable synthesis"; gate entry: RULES, "Core changes"):** part templating in its
+  smallest form, **contact copying**: a copy blank (a free triangle with copy sides `?`) binds any free side of an
+  attached triangle and takes that triangle's whole type (glues, marks, carried marks), then lets go. No machine: the
+  body is the template. Translation needs a reading frame, stepping and adaptors that carry marks (which no cast can
+  make), so several rules; kit-free growth needs no rule but cannot close the loop (stamp casters carry `'` marks,
+  and no cast product carries marks). Contact copying closes it: every part type on a body's surface, the copier's
+  own included (there is none), can be multiplied from blanks.
+- **Acceptance:** (1) `node tri/demos.js imprint k 80000 runs`, k = 1..4: an anchored ring root, ONE free copy of each
+  ring part (R = 3, 5 motif types) and copy blanks only: two rings (the second anchor starts bare: its root is a copy
+  too) close in at least 3 of 4 worlds; control `imprint k 80000 runs c` (blanks without `?`) never passes 6 ring
+  cells. (2) Milestone 2, if budget allows: a lid pocket (16 kit types, 5 of them enclosed when complete) grows from one
+  copy of each part and casts, at least 3 of 4 worlds. (3) `node tri/test.js` with a test of the copy rule; `node
+  tri/check.js` all pass (no existing type has `?`).
+- **Stop boundary:** no use in the organism yet (budgrow, split), no removal of casting or stamp marks (recorded as the
+  follow-up). Budget: about 12 demo runs and one check.js run.
+- **Approach:** one mark, one rule branch in binding plus one state change (`_copy` beside `_cast`); copy blanks bind
+  only by `?` (like parts by `@`), never dock or fill. Designs considered and dropped: a copier pocket holding free
+  templates (needs a glue-agnostic hold, a read rule and a release, and library parts get used up by growth sites);
+  copying free templates (free triangles never bind each other).
+
 State on 2026-10-02 (after autorun run 20261001-2235, build). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261001-2235).** Everything committed on branch `claude/autorun-20261001-2235` and
