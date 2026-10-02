@@ -58,6 +58,52 @@ to weld prepared structures (a builder convention, not a rule).
   move: a blocked flap **stalls** (it does not push). A design must keep a flap's whole sweep clear.
 - `pairs`: blocks near enough to bond (centre distance within the two radii plus 0.23).
 
+## Core inventory (2026-10-02, core review run 20261002-0721)
+Users measured by running every capability check with a coverage hook (which demos' triangles carry the mark, which
+rule events fire); "checks" counts the demos of `node tri/check.js` (27 demo variants). Dates: when the item entered
+the core (the repository restarted on 2026-10-01).
+
+| Item | Kind | Used by (checks) | Since |
+|---|---|---|---|
+| `<` `>` hinge | mark | 19 (pockets, doors, conveyor, gate) | 10-01 |
+| `.` close-only | mark | 21 (pockets, kits, rings) | 10-01 |
+| `*` trigger | mark | 19 | 10-01 |
+| `+` hear | mark | 18 (lid pocket, door panels) | 10-01 |
+| `=` wide hinge | mark | 17 (lid pocket) | 10-01 |
+| `@` attach | mark | 16 (kits, rings, growth) | 10-01 |
+| `&` completion release | mark | 10 (buds, membranes, sealed cell) | 10-01 |
+| `~` latch | mark | 9 (doors) | 10-01 |
+| `!` drop | mark | 6 (doors, conveyor) | 10-01 |
+| `%` activator | mark | 6 (kits; since this run also the prepared pockets: all casting) | 10-01 |
+| `'` carried marks (stamp) | mark | 6 (stamp, grow 4s, split, split g, split o, budgrow) | 10-01 |
+| `?` copy side | mark | 4 (imprint) | 10-02 |
+| `$` fuel | mark | 2 (energy) | 10-01 |
+| `|` anchor | mark | 2 (split g, split o) | 10-01 |
+| `^` hand-off | mark | 1 (conveyor) | 10-01 |
+| `#` pulse door (hinge side) | mark | 1 (budgrow) | 10-01 |
+| `#` key let go (trigger side) | mark (second meaning) | 0 (airlock demo and the gate's pulse option only) | 10-01 |
+| busy (30, chain bonds) | relayed signal | 11 (all copying) | 10-01 |
+| zip (chain) | relayed signal | 11 (all copying) | 10-01 |
+| open (`openRange` 120) | relayed signal | 16 (growth: trigger sides deaf while open in 5, `&` release in 8) | 10-01 |
+| lock (`lockRange` 12) | relayed signal | 6 (keys deaf: split o, live, cell, import; latches held: + gate; pulse door: budgrow) | 10-01 |
+| hear (`sigRange` 6) | relayed signal | 18 (lid pocket, doors) | 10-01 |
+| fn, fu, need, gap, nb, tb, nbc, actE, pwE | exposed values (one bond) | copying (fn, need, gap, nb), energy (fu, pwE), machines (tb, nbc), casting (actE) | 10-01 / pwE 10-02 |
+| charge | state | 2 (energy) | 10-01 |
+| fill, refractory | state | 11 (copying) | 10-01 |
+| caught (`cg`) | state | 3 (pLoose: cycle, grown, grow 4s) | 10-01 |
+| door open, powered, away, hinge rest angle and side | state | machines | 10-01 |
+| spent | state | 10 (`&`) | 10-01 |
+| `pLoose` | option | 3 (cycle, grown, grow 4s) | 10-01 |
+| `latGlue` | option | 7 demo variants (cells, split o, imprint m, ...) | 10-01 |
+| `light` | option (environment) | 1 (energy) | 10-01 |
+| `zip: false` | option | tests only | 10-01 |
+
+**Counts (2026-10-02):** 17 mark meanings on 16 mark characters (`#` has two), 5 relayed signals, 9 exposed one-bond
+values, 9 states, 4 options (after removing 8 unused options this review: `caps` with its state and two relayed
+signals, `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`, `capture: 0`/`triTol`) and one rule
+branch merged (glue `K` as activator, into `%`). Rule branches that fired in no check: a latch held by the open signal
+(the key's deafness does that job), and `#` on a trigger side (used by the airlock demo only); see docs/NEXT.md.
+
 ## Locality audit (2026-10-02, rule by rule)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
 glue and marks of the side bonded to it; for a copy blank, its whole type); values a direct partner exposed in the
