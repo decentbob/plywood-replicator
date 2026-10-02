@@ -198,6 +198,14 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **An open-signal hold exposes its whole range to copying** (2026-10-02, run 0921). `&` sides are spent only where
+  nothing is heard; every wall cell within `openRange` of an emitter keeps its free side and is copied by any blank
+  that reaches it, from inside or outside. With blanks outside, a pair held by `&` pairs (range 27, or 11 with two
+  anchors) lost 98% of the blanks to its walls. Hold by one latch bond instead, released by the anchor's own trigger
+  side (`budpore`), so only the anchor side is ever unspent.
+- **Anchors in the middle of a flat wall.** An anchor next to a hex corner lays its strand along the next wall with its
+  backs hidden: no back is copied, so no fill exists and copying deadlocks (`budPair`'s P anchor is such a place).
+- **One gap per one-row ring.** A pore plus a doorway cuts a ring's wall into two bodies.
 - **Copy blanks go to every exposed side.** Walls take most of a batch (65-70% in a cell). Mark plain wall sides `&`:
   they are spent once the structure hears no open signal and are never copied. Copies of `&` cells used as fills are
   cut when their `&` side hears none: use `latGlue` so only genome back copies fill.

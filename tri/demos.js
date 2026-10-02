@@ -183,7 +183,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // two casters' U. sides in the pocket's last caster site and blocked it); its kit parts (3 of each type) start
     // inside P with the food; the pair splits once the pocket is complete and a copy is anchored: the bud leaves with a
     // genome and a pocket that casts its dockers, and imports their blanks through its own door (RP 8, RD 6)
-    split(){steps=steps||60000;const org=String(extra||'').includes('o'),cpy=!org&&String(extra||'').includes('q'),pore=cpy&&String(extra||'').includes('p'),gen=org||cpy||String(extra||'').includes('g'),nb=parseInt(extra)||(cpy?70:30),size=org||cpy?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:cpy?7:gen?7:6;
+    split(){steps=steps||60000;const org=String(extra||'').includes('o'),cpy=!org&&String(extra||'').includes('q'),gen=org||cpy||String(extra||'').includes('g'),nb=parseInt(extra)||(cpy?70:30),size=org||cpy?40:gen?32:28,c=size/2,cy=c-3,RP=org?8:cpy?7:gen?7:6;
       const OK=org?S.kitOptions(S.lidPocket(S.stampInstr('aU.w'),'U',null,'B'),'aywzxvuψωбгджцшэлпфизч','v',[S.lidSlot('B')]):null;
       const RD=org?6:gen?5:4,bp=S.budPair({RP,RD,k:5,capGlue:gen?null:'a',anchorGlue:gen?'Z':null,anchorP:gen?'W':null,importD:org?'U':null,organelle:org?{opts:OK,gaps:[1,1,1],seed:'v',slots:[S.lidSlot('B')],clear:S.lidClear()}:null});
       const OUT=org?40:0,kitSupply={};if(org)for(const t of bp.organelle.K.types)kitSupply[t]=(kitSupply[t]||0)+3;
@@ -201,15 +201,6 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // once P's anchor holds a strand by its low end and D's anchor one by its high end
       const seedFounder=w=>{const {s}=w,F=w.founders[0],{gcode}=require('./sim');
         seedCopyGenome(s,F);
-        // pore variant: P's anchor stays W| (no '@'); the founder starts held by it (placed where the anchor puts a strand;
-        // the overlap test below rejects a place that meets a wall)
-        // P's anchor moves to the middle of P's bottom inner wall (budPair puts it near a corner, where an anchored strand
-        // lies along the next wall with its backs hidden: no back is copied, so no fill exists)
-        if(pore){const {GLUE,gcode:gc}=require('./sim'),U0=w.structures[0],T=bp.tris,o=U0[bp.anchorP[0]]*3+bp.anchorP[1];s.glue[o]=0;s.anc[o]=0;
-          let best=null;for(const x of bp.P)for(let i=0;i<3;i++){const v=T[x].v,m=[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];if(s.bond[U0[x]*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5||!/^[-fF]*$/.test(T[x].type))continue;if(!best||Math.abs(m[0])<best.d)best={x,i,d:Math.abs(m[0])};}
-          const a=U0[best.x],e=best.i;s.glue[a*3+e]=gc('W');s.anc[a*3+e]=1;
-          const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert;for(let k=0;k<40;k++)s.derive();
-          const md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,a,e);s.moveDepth=md;if(ok)s.bind(a,e,GLUE,b,f,GLUE);return;}
         const a=w.structures[0][bp.anchorP[0]],e=[0,1,2].find(i=>s.anc[a*3+i]&&s.glue[a*3+i]===gcode('W'));if(e===undefined)throw Error('split: no anchor W');s.att[a*3+e]=1;for(let k=0;k<40;k++)s.derive();};
       let W0=null;
       for(const f of gen?[0.55,0.45,0.65,0.35,0.75]:[0])for(const ox of gen?[0,1,-1,2,-2]:[0]){
@@ -221,44 +212,14 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // copy variant: every inert free side of the prepared pair is a completion side '&' (no glue: it binds nothing), so it
       // is spent, and never copied, once its triangle hears no open signal; with openRange 30 the open signal of D's
       // anchor reaches the '&' pairs that hold P and D together (op 6 or more at t=0) but not P's far walls
-      // pore variant: 3 plain wall cells of P (upper left flat, away from its anchor) and of D (upper right flat) are taken out of the walls
-      // (they become free inert blocks outside, labelled) and their neighbours' sides there lose their weld glue: both
-      // rings are fed through a pore from the start. The '&' bonds that hold the pair lie on both sides of the doorway
-      // (left: P's doorstop and two wall pairs; right: D's door hinge and doorstop and a pair), and between the two
-      // groups the only bond path runs round D, so one anchor would need an open range of about 27 (most walls hear it,
-      // are not spent and are copied from outside). Instead D has two anchors Z@|, one beside each group, outside the
-      // sweep of D's door, and the open range is just long enough for each to reach its group: the walls beyond are
-      // spent. The pair splits once both anchors hold a strand.
-      const poreCells=[];let openR=30;if(pore){const T=bp.tris,cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],plain=x=>/^[-fF]*$/.test(T[x].type),dyL=(RP+RD)*H;
-        const pick=(ring,o,R,th)=>{const g=[o[0]+Math.cos(th)*(R-0.5)*H,o[1]+Math.sin(th)*(R-0.5)*H],d=x=>{const m=cn(T[x].v);return Math.hypot(m[0]-g[0],m[1]-g[1]);};return ring.filter(plain).sort((a,b)=>d(a)-d(b)).slice(0,3);};
-        for(const x of [...pick(bp.P,[0,0],RP,5*Math.PI/6),...pick(bp.D,[0,dyL],RD,Math.PI/6)]){const u=U[x];for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b>=0){s.cut(u,i);s.glue[b]=0;}}s.setType(u,'---');poreCells.push(u);}
-        const hold=[];for(const u of U)for(let i=0;i<3;i++)if(s.done[u*3+i]&&s.bond[u*3+i]>=0&&!hold.includes(u))hold.push(u);
-        const L=hold.filter(u=>cn(T[U.indexOf(u)].v)[0]<0.5),Rg=hold.filter(u=>!L.includes(u));
-        const dist=src=>{const d=new Map([[src,0]]),q=[src];for(let a=0;a<q.length;a++){const u=q[a];for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0)continue;const w=(b/3)|0;if(!d.has(w)){d.set(w,d.get(u)+1);q.push(w);}}}return d;};
-        const old=U[bp.anchor[0]]*3+bp.anchor[1];s.glue[old]=0;s.anc[old]=0;s.att[old]=0;
-        const hinge=cn(T[bp.doors[1].prev].v),{gcode}=require('./sim');
-        for(const [G,sg] of [[L,-1],[Rg,1]]){let best=null;
-          for(const x of bp.D){const u=U[x],m=cn(T[x].v);if(poreCells.includes(u)||!plain(x)||sg*m[0]<2||Math.hypot(m[0]-hinge[0],m[1]-hinge[1])<3.5)continue;
-            const i=[0,1,2].find(i=>{if(s.bond[u*3+i]>=0)return false;const v=T[x].v,mm=[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];return S.hexr([mm[0],mm[1]-dyL])<RD-0.5;});
-            if(i===undefined)continue;const d=dist(u),mx=Math.max(...G.map(h=>d.get(h)??999));if(!best||mx<best.mx)best={u,i,mx};}
-          s.glue[best.u*3+best.i]=gcode('Z');s.anc[best.u*3+best.i]=1;s.att[best.u*3+best.i]=1;(poreCells.anchors||(poreCells.anchors=[])).push(best);}
-        openR=Math.max(...poreCells.anchors.map(b=>b.mx))+2;s.p.openRange=openR;console.log('pore variant: anchors in D at bond distance',poreCells.anchors.map(b=>b.mx).join(' and '),'from their groups; openRange',openR);
-        for(let k=0;k<60;k++)s.derive();}
-      if(cpy)spendableSides(s,U.filter(u=>!poreCells.includes(u)));
-      if(process.env.DBGA){const hold=[];for(const u of U)for(let i=0;i<3;i++){const k=u*3+i;if(s.done[k]&&s.bond[k]>=0)hold.push(u);}
-        const dist=src=>{const d=new Map([[src,0]]),q=[src];for(let a=0;a<q.length;a++){const u=q[a];for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0)continue;const w=(b/3)|0;if(!d.has(w)){d.set(w,d.get(u)+1);q.push(w);}}}return d;};
-        const T=bp.tris,cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
-        const res=bp.D.map(x=>{const d=dist(U[x]);return {x,max:Math.max(...hold.map(h=>d.get(h)??999)),c:cn(T[x].v).map(z=>z.toFixed(1)).join(',')};}).sort((a,b)=>a.max-b.max);
-        console.log('anchor now',bp.anchor,'max',res.find(r=>r.x===bp.anchor[0]).max);console.log(res.slice(0,8));
-        for(const h of new Set(hold))console.log('hold',U.indexOf(h),cn(T[U.indexOf(h)].v).map(z=>z.toFixed(1)).join(','),bp.P.includes(U.indexOf(h))?'P':'D');}
-      if(process.env.DBGP){for(const u of U)for(let i=0;i<3;i++){const k=u*3+i;if(s.done[k]&&s.bond[k]>=0)console.log('pair',U.indexOf(u),i,'op',s.op[u],'P?',bp.P.includes(U.indexOf(u)));}console.log('anchorD op',s.op[U[bp.anchor[0]]],'att',s.att[U[bp.anchor[0]]*3+bp.anchor[1]]);}
-      const prep=new Set([...U,...PK].filter(u=>!poreCells.includes(u))),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
+      if(cpy)spendableSides(s,U);
+      const prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
       // organelle variant: OUT blanks uuu start outside both rings (the bud imports them after the split)
-      const outU=pore?free:free.filter(u=>typeName(s,u)==='uuu').slice(0,OUT),dcy=cy+(RP+RD)*H;
+      const outU=free.filter(u=>typeName(s,u)==='uuu').slice(0,OUT),dcy=cy+(RP+RD)*H;
       outU.forEach(u=>{if(!placeFree(s,u,placed,()=>{for(;;){const x=size*s.rng(),y=size*s.rng();const dP=[s._dx(x-c),s._dy(y-cy)],dD=[s._dx(x-c),s._dy(y-dcy)];
         if(S.hexr(dP)>RP+0.6&&S.hexr(dD)>RD+0.6)return [x,y];}},50000))throw Error('place out');placed.push(u);});
       free.filter(u=>!outU.includes(u)).forEach(u=>{if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];}},50000))throw Error('place');placed.push(u);});
-      const Pu=bp.P.map(q=>U[q]).filter(u=>!poreCells.includes(u)),Du=bp.D.map(q=>U[q]).filter(u=>!poreCells.includes(u)),capT=canon(gen?'Ay.z':bp.cap.type),closeU=bp.doors.map(d=>[U[d.panel[d.panel.length-1]],d.closeSide[0]]);
+      const Pu=bp.P.map(q=>U[q]),Du=bp.D.map(q=>U[q]),capT=canon(gen?'Ay.z':bp.cap.type),closeU=bp.doors.map(d=>[U[d.panel[d.panel.length-1]],d.closeSide[0]]);
       const ctr=L=>{let x=0,y=0;for(const u of L){x+=s._dx(s.px[u]-s.px[L[0]]);y+=s._dy(s.py[u]-s.py[L[0]]);}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];};
       // inside a ring: hex radius (structures.hexr) in the ring's own frame (its turn since t=0 read from one wall cell)
       const a0P=s.angle(Pu[0]),a0D=s.angle(Du[0]),hexIn=(L,a0,R,u)=>{const [x,y]=ctr(L),t=a0-s.angle(L[0]),dx=s._dx(s.px[u]-x),dy=s._dy(s.py[u]-y);
@@ -271,17 +232,15 @@ function demo(name,seed=1,steps,dir='runs',extra){
         for(const st of [0,G-1,G*(G-1),G*G-1])if(!occ[st]){rch[st]=1;q.push(st);}
         while(q.length){const c=q.pop(),i=c%G,j=(c/G)|0;for(const [di,dj] of [[1,0],[-1,0],[0,1],[0,-1]]){const n=((j+dj+G)%G)*G+((i+di+G)%G);if(!rch[n]&&!occ[n]){rch[n]=1;q.push(n);}}}
         return u=>rch[(Math.floor(s._wy(s.py[u])/cell)%G)*G+Math.floor(s._wx(s.px[u])/cell)%G]===1;};
-      const genT=new Set((founders[0]||[]).map(u=>canon(typeName(s,u))));
       let split=0;const kitT=new Set(org?bp.organelle.K.types.map(t=>{const z=new TriSim({},1);z.setType(0,t);return canon(z.typeName(0));}):[]);
       const report=t=>{const {comp}=s.bodies(),dc=comp[Du[0]],cap=[...Array(s.n).keys()].filter(u=>comp[u]===dc&&canon(typeName(s,u))===capT).length;
         if(!split&&comp[Pu[0]]!==dc)split=t;const shut=closeU.map(([u,i])=>s.bond[u*3+i]>=0?'shut':'open');
         const parts=[...Array(s.n).keys()].filter(u=>canon(typeName(s,u))===capT&&!s.bonded(u));
         const st=gen?' strands ['+census(s).filter(q=>q.n>=7).map(q=>q.faces+(q.paired?'*':'')+(comp[q.units[0]]===dc||comp[q.units[0]]===comp[Pu[0]]?(inD(q.units[3])?'(anchored in D)':'(anchored in P)'):inD(q.units[3])?'(in D)':inP(q.units[3])?'(in P)':'(out)')).join(' ')+'] docks='+(s.ev.dock||0)+' anchors='+(s.ev.anchor||0):'';
         const og=org?` organelle=${[...Array(s.n).keys()].filter(u=>comp[u]===dc&&kitT.has(canon(typeName(s,u)))&&inD(u)).length}/${bp.organelle.K.types.length}`:'';
-        console.log(`t=${t} casts=${s.ev.cast||0}${st}${gen?og:` cap=${cap}/3`} ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length}${gen?` fills in D=${free.filter(u=>typeName(s,u)==='Y--'&&inD(u)).length}`:''}${org?` in D: uuu=${free.filter(u=>typeName(s,u)==='uuu'&&inD(u)).length} aU.w=${free.filter(u=>canon(typeName(s,u))===canon('aU.w')&&inD(u)).length} imports=${s.ev.drop||0}`:''} completions=${s.ev.complete||0} outside=${(o=>free.filter(u=>!s.bonded(u)&&o(u)).length)(outsideNow())}${cpy?` copies=${s.ev.copy||0}${pore?` (genome ${(s.copyLog||[]).filter(([,,ty])=>genT.has(canon(ty))).length})`:''} copy blanks in P=${free.filter(u=>typeName(s,u)==='-?-?-?'&&inP(u)).length} in D=${free.filter(u=>typeName(s,u)==='-?-?-?'&&inD(u)).length}`:''}`);};
+        console.log(`t=${t} casts=${s.ev.cast||0}${st}${gen?og:` cap=${cap}/3`} ${split?'SPLIT at '+split:'joined'} doors P:${shut[0]} D:${shut[1]} free parts in D=${parts.filter(inD).length}/${parts.length} blanks in D=${free.filter(u=>typeName(s,u)==='xxx'&&inD(u)).length}${gen?` fills in D=${free.filter(u=>typeName(s,u)==='Y--'&&inD(u)).length}`:''}${org?` in D: uuu=${free.filter(u=>typeName(s,u)==='uuu'&&inD(u)).length} aU.w=${free.filter(u=>canon(typeName(s,u))===canon('aU.w')&&inD(u)).length} imports=${s.ev.drop||0}`:''} completions=${s.ev.complete||0} outside=${(o=>free.filter(u=>!s.bonded(u)&&o(u)).length)(outsideNow())}${cpy?` copies=${s.ev.copy||0} copy blanks in P=${free.filter(u=>typeName(s,u)==='-?-?-?'&&inP(u)).length} in D=${free.filter(u=>typeName(s,u)==='-?-?-?'&&inD(u)).length}`:''}`);};
       console.log('part',gen?'Ay.z':bp.cap.type,'stamp',S.stampInstr(gen?'Ay.z':bp.cap.type).join(' '),'doors',bp.doors.map(d=>d.ang+'deg').join(' '));
       snap(s,'t0','t=0: parent P (stamp pocket, blanks) and bud D share an open doorway',{units:U,radius:10});
-      if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [,u,ty] of s.copyLog||[])m[ty]=(m[ty]||0)+1;console.log(JSON.stringify(m));const sp=U.filter(u=>[0,1,2].some(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i])).length;console.log('cells with unspent free sides',sp,'of',U.length,'op>0',U.filter(u=>s.op[u]>0).length);});
       for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}${split?', split':''}`,{units:Pu,radius:12},false);}
       // organelle variant, end of run: each kit cell missing from the bud's pocket, whether its tree parent is there, how
       // many of its kit neighbours are there (3 sides facing something before it arrives: an enclosed site), and where
@@ -309,25 +268,30 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // drifts through the doorway and meets D's anchor by its high end z is caught; then nothing is open, the pairs let go
     // and D drifts off: its doorway is now its pore, and it copies its own genome from blanks outside. extra: blanks
     // outside (default 300)
-    budpore(){steps=steps||200000;const nb=parseInt(extra)||300,NI=60,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
-      // the doorway: contact-row cells of both walls with |x| < DW
-      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&Math.abs(cn(v)[0])<DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&Math.abs(cn(v)[0])<DW));
+      // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
+      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&cn(v)[0]>-DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&cn(v)[0]>-DW));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu);
-      // the pair: P-D bonds left of the doorway become '&' pairs (both sides), the others are cut and lose their weld glue
-      const hold=new Set();for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||inP.has((b/3)|0))continue;
-        if(mid(tris[U.indexOf(u)].v,i)[0]<0){s.done[u*3+i]=1;s.done[b]=1;hold.add(u).add((b/3)|0);}else{s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}}
+      // the hold: one P-D bond left of the doorway is a latch bond (latch side '~' on its D cell L); every other P-D bond is
+      // cut and loses its weld glue. D's anchor A is a neighbour of L with an inner free side, marked Z@|* (anchor,
+      // attach, trigger): once it holds a strand its trigger side is bonded, and a latch lets go while a non-hinge
+      // partner has a bonded trigger side: L lets go of P. The '@' emits the open signal (openRange 1: A alone hears it)
+      // and makes A's copies harmless (a free part binds only by '@').
+      const inD=new Set(Du);let pick=null;
+      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0;
+        for(let e=0;e<3;e++){const q=s.bond[L*3+e];if(q<0||!inD.has((q/3)|0))continue;const A=(q/3)|0,v=tris[U.indexOf(A)].v;
+          for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[A*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;if(!pick||m[0]<pick.x)pick={u,i,L,j:b%3,A,f,x:m[0]};}}}
+      if(!pick)throw Error('budpore: no latch site');
+      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
+      s.ltc[pick.L*3+pick.j]=1;const da={u:pick.A,i:pick.f};
       // P's anchor W| (middle of its bottom inner wall)
       let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5)continue;if(!pa||Math.abs(m[0])<pa.d)pa={u,i,d:Math.abs(m[0])};}}
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
-      // D's anchor Z@|: the inner side left of the doorway with the shortest bond path to every pair
-      const dist=src=>{const d=new Map([[src,0]]),q=[src];for(let a=0;a<q.length;a++){const u=q[a];for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0)continue;const w=(b/3)|0;if(!d.has(w)){d.set(w,d.get(u)+1);q.push(w);}}}return d;};
-      let da=null;for(const u of Du){const v=tris[U.indexOf(u)].v;if(cn(v)[0]>-1.5)continue;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;
-        const d=dist(u),mx=Math.max(...[...hold].map(h=>d.get(h)??999));if(!da||mx<da.mx)da={u,i,mx};}}
-      s.glue[da.u*3+da.i]=gc('Z');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.p.openRange=da.mx+2;
+      s.glue[da.u*3+da.i]=gc('Z');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;const hold=new Set([pick.u,pick.L]);
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
@@ -347,7 +311,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
       let split=0,atSplit=null;const nIn=(L,k)=>L.filter(x=>x[0]===k).length;
       const report=t=>{const {comp}=s.bodies();if(!split&&comp[Pu[0]]!==comp[Du[0]]){split=t;atSplit=where();}const L=where(),[gn,w]=tally();
         console.log(`t=${t} strands in P ${nIn(L,'P')} in D ${nIn(L,'D')} out ${L.filter(x=>x==='out').length} [${L.join(' ')}] ${split?'SPLIT at '+split:'joined'} docks=${s.ev.dock||0} releases=${s.ev.release||0} anchors=${s.ev.anchor||0} copies=${s.ev.copy||0} (genome ${gn}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
-      console.log(`budpore: ${hold.size} cells in '&' pairs, D's anchor ${da.mx} bonds from the farthest, openRange ${s.p.openRange}`);
+      if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [tt,u,ty] of s.copyLog||[])if(wallT.has(canon(ty)))m[ty+(split&&tt>split?' after':' before')]=(m[ty+(split&&tt>split?' after':' before')]||0)+1;console.log(JSON.stringify(m),'hearing',U.filter(u=>s.op[u]>0).length,'unspent free sides',U.reduce((a,u)=>a+[0,1,2].filter(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i]).length,0));});
+      console.log(`budpore: latch bond on D cell ${U.indexOf(pick.L)}, anchor Z@|* on its neighbour ${U.indexOf(pick.A)}`);
       snap(s,'t0',`t=0: parent P (founder on its anchor, ${NI} copy blanks) and bud D joined beside a doorway; ${nb} copy blanks outside`,{units:U,radius:14},false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${split?'split at '+split:'joined'}`,{units:Pu,radius:16},false);}
       report(steps);const L=where(),[gn,w]=tally();
