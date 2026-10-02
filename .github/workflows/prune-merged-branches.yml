@@ -1,0 +1,32 @@
+# Deletes branches whose work is fully in main. Autorun cloud runs merge by
+# pushing main directly (no pull request, so GitHub's "delete head branch on
+# merge" never fires) and cannot delete branches themselves.
+# Only branches with no commit missing from main and a last commit older than
+# 6 hours are deleted, so unfinished work and fresh branches stay.
+name: Prune merged branches
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const base = (await github.rest.repos.get({ owner, repo })).data.default_branch;
+            const branches = await github.paginate(github.rest.repos.listBranches, { owner, repo, per_page: 100 });
+            const cutoff = Date.now() - 6 * 3600 * 1000;
+            for (const b of branches) {
+              if (b.name === base || b.protected) continue;
+              const cmp = await github.rest.repos.compareCommitsWithBasehead({ owner, repo, basehead: `${base}...${b.name}` });
+              if (cmp.data.ahead_by !== 0) continue;
+              const tip = await github.rest.repos.getCommit({ owner, repo, ref: b.commit.sha });
+              if (new Date(tip.data.commit.committer.date).getTime() > cutoff) continue;
+              await github.rest.git.deleteRef({ owner, repo, ref: `heads/${b.name}` });
+              core.info(`deleted ${b.name} (fully merged into ${base})`);
+            }
