@@ -84,7 +84,7 @@ the core (the repository restarted on 2026-10-01).
 | `#` key let go (trigger side) | mark (second meaning) | 0 (airlock demo and the gate's pulse option only) | 10-01 |
 | busy (30, chain bonds) | relayed signal | 11 (all copying) | 10-01 |
 | zip (chain) | relayed signal | 11 (all copying) | 10-01 |
-| open (`openRange` 120) | relayed signal | 16 (growth: trigger sides deaf while open in 5, `&` release in 8) | 10-01 |
+| open (`openRange` 120) | relayed signal | 16 (growth: trigger sides deaf while open in 6, `&` release in 8) | 10-01 |
 | lock (`lockRange` 12) | relayed signal | 6 (keys deaf: split o, live, cell, import; latches held: + gate; pulse door: budgrow) | 10-01 |
 | hear (`sigRange` 6) | relayed signal | 18 (lid pocket, doors) | 10-01 |
 | fn, fu, need, gap, nb, tb, nbc, actE, pwE | exposed values (one bond) | copying (fn, need, gap, nb), energy (fu, pwE), machines (tb, nbc), casting (actE) | 10-01 / pwE 10-02 |
@@ -94,7 +94,7 @@ the core (the repository restarted on 2026-10-01).
 | door open, powered, away, hinge rest angle and side | state | machines | 10-01 |
 | spent | state | 10 (`&`) | 10-01 |
 | `pLoose` | option | 3 (cycle, grown, grow 4s) | 10-01 |
-| `latGlue` | option | 7 demo variants (cells, split o, imprint m, ...) | 10-01 |
+| `latGlue` | option | set in 7 places in tri/demos.js (cells, split o, imprint m, ...) | 10-01 |
 | `light` | option (environment) | 1 (energy) | 10-01 |
 | `zip: false` | option | tests only | 10-01 |
 
