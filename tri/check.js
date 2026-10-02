@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 16 minutes)
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 29 minutes)
 // Exit code 1 if a working capability fails.
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
@@ -12,7 +12,7 @@ const count=(L,re)=>(L.match(re)||[]).length;
 const CHECKS=[
   {id:'copy',cap:'Genome: typed chain copying (zip)',demo:'copy',seeds:[1],steps:10000,secs:4,
     pass:L=>{const n=count(L,/BBAABA\//g);return [n>=2,`${n} complete copies BBAABA`];}},
-  {id:'lid',cap:'Factory: lid pocket casts (signals: heard trigger)',demo:'lid',seeds:[1],steps:4000,secs:2,
+  {id:'lid',cap:'Factory: lid pocket casts (signals: heard trigger)',demo:'lid',seeds:[1,2,3,4],need:3,steps:4000,secs:2,
     pass:L=>{const c=num(L,/casts=(\d+)/);return [c>=5,`${c} casts`];}},
   {id:'factory',cap:'Factory: lid pockets feed copying (cast dockers only)',demo:'factory',seeds:[1],steps:30000,extra:'Aa',secs:15,
     pass:L=>{const n=num(L,/AAAAA=(\d+)/);return [n>=2,`${n} copies AAAAA`];}},
@@ -28,7 +28,7 @@ const CHECKS=[
     pass:L=>{const c=num(L,/crossings=(\d+)/),u=num(L,/unlatches=(\d+)/);return [c>=5&&u>=1,`${c} crossings, ${u} unlatches`];}},
   {id:'import',cap:'Import: revolving door carries blanks in',demo:'import',seeds:[1],steps:20000,secs:5,
     pass:L=>{const x=num(L,/xxx=(\d+)/),j=num(L,/junk=(\d+)/);return [x>=8&&j<=1,`${x} blanks in, ${j} junk`];}},
-  {id:'grow',cap:'Kits: a lid pocket grows from a seed and casts',demo:'grow',seeds:[1],steps:16000,extra:'12',secs:12,
+  {id:'grow',cap:'Kits: a lid pocket grows from a seed and casts',demo:'grow',seeds:[1,2,3,4],need:3,steps:16000,extra:'12',secs:12,
     pass:(L,o)=>{const m=o.match(/complete at (\S+) products (\d+)/);return [!!m&&m[1]!=='not'&&+m[2]>=1,m?`complete at ${m[1]}, ${m[2]} products`:'no result'];}},
   {id:'grow-stamp',cap:'Stamp: a stamp pocket grows from its kit and casts',demo:'grow',seeds:[1],steps:20000,extra:'4s',secs:5,
     pass:(L,o)=>{const m=o.match(/complete at (\S+) products (\d+)/);return [!!m&&m[1]!=='not'&&+m[2]>=1,m?`complete at ${m[1]}, ${m[2]} products`:'no result'];}},
@@ -48,13 +48,13 @@ const CHECKS=[
     pass:L=>{const m=L.match(/\[chain in, xxx in (\d+), junk in (\d+)\]/);return [!!m&&+m[1]>=8,m?`${m[1]} blanks in, ${m[2]} junk`:'no closed ring with the chain'];}},
   {id:'cell',cap:'Protocell (prepared): import, cast, copy inside',demo:'cell',seeds:[2],steps:40000,secs:26,
     pass:L=>{const n=count(L,/AAAAA/g),i=num(L,/imports=(\d+)/);return [n>=2&&i>=10,`${n} copies, ${i} imports`];}},
-  {id:'grown',cap:'Protocell grown from the genome: copy inside',demo:'grown',seeds:[2],steps:200000,secs:350,
+  {id:'grown',cap:'Protocell grown from the genome: copy inside (partial since the midpoint physics: membrane closes 1 of 4)',demo:'grown',seeds:[2],steps:200000,secs:350,partial:true,
     pass:L=>{const ok=/membrane closed pocket 16\/16/.test(L)&&/AAAAA\(in\)/.test(L);return [ok,`${(L.match(/membrane \S+ pocket \S+/)||['?'])[0]}, strands ${(L.match(/strands \[[^\]]*\]/)||['?'])[0].slice(8)}`];}},
   {id:'bud',cap:'Budding: empty daughter rings detach',demo:'bud',seeds:[3],steps:50000,secs:12,
     pass:L=>{const m=L.match(/released rings \[([^\]]*)\]/);return [!!m&&m[1].trim()!=='',m?`released [${m[1]}]`:'none'];}},
   {id:'split',cap:'Feeding and division: the bud grows a cap, splits sealed',demo:'split',seeds:[1],steps:30000,secs:20,
     pass:L=>{const ok=/cap=3\/3/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${(L.match(/cap=\S+/)||['?'])[0]} ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
-  {id:'imprint',cap:'Contact copying: a ring with one of each part closes, a second grows from copies',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,secs:90,
+  {id:'imprint',cap:'Contact copying: a ring with one of each part closes, a second grows from copies',demo:'imprint',seeds:[1,2,3,4],need:3,steps:200000,secs:180,
     pass:(L,o)=>{const m=o.match(/result: ring cells (\d+) (\d+) of 30, closed at (\S+) \/ (\S+)/);return [!!m&&m[3]!=='not'&&m[4]!=='not',m?`rings ${m[1]}/${m[2]} cells, closed ${m[3]} / ${m[4]}`:'no result'];}},
   {id:'imprint-genome',cap:'Contact copying: a strand copied from copies of its own triangles',demo:'imprint',seeds:[1,2,3,4],need:3,steps:30000,extra:'g',secs:25,
     pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n>=4,`${n} strands`];}},

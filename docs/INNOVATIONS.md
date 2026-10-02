@@ -6,6 +6,42 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-1050, harden)
+
+- **Physics: no block passes a gap narrower than itself (midpoint check merged)** — works; capabilities rebuilt on
+  it by layout and supply changes only (no rule change). A direct move longer than a sub-step (0.8) now needs a clear
+  midpoint as well as a clear end. Before, a block sitting in a one-row wall's hole hopped across the wall (95 of 2000
+  kicks of 0.95), and six checks relied on such hops (run 0721's core review). A probe (`runs/pinch.js`, scratch;
+  logic: wrap the midpoint check, log every move it blocks and the lone blocks that bind within 3 steps after one)
+  and pictures located each site:
+  - **budgrow** (1 of 4 -> 3 of 4): the bud ring's last site q began exactly at the parent's top-right corner apex,
+    so the only way in was a channel exactly one block wide (0.866) between the parent's slanted wall and q's
+    neighbour. `grownBud` now requires the last site's approach (q mirrored across its free side) to share no side
+    with any cell; no layout of any ring size met it with the current door search (the one candidate at offset 3 has
+    the parent's door hinged at its corner, swinging up into the bud's door), so the parent's outer corner cell next to
+    q is left out: its two neighbours still meet at a point, the parent stays one sealed body (no block passes a
+    point) and q's way in is a 120 degree opening. The door search now tries every clear door pair.
+  - **split-o** (0 of 4 -> 4 of 4): the bud's import door dropped its blank into a pocket boxed in by the open
+    panel, the wall and the anchored strand (centroids 1.2 from the sweep); the panel could not swing back over it and
+    the door never shut again (imports 2-18 instead of 13-43). `budPair` keeps the drop place clear (strand, its dock
+    sites and the organelle at least 2 away) and tries the next import door candidate when nothing fits.
+  - **lid, grow** (single seed -> 4 worlds, need 3): seed noise, not the hop. Eight-seed sweeps give the same mean
+    under both rules (lid 7.0 vs 6.6 casts; grow completes 5 vs 6 of 8; on the old rule grow's seeds 1-4 complete 2).
+  - **imprint** (2 of 4 at 100000 -> 3 of 4 at 200000 steps): also noise at its threshold (both rules: 3 of 8 worlds
+    at 100000 steps; main itself fails world 3). Two stalls remain: a ring at 28/30 whose second-to-last site faces
+    inward (with that site and the last one open, the gap through the one-row wall is a rhombus exactly one block wide:
+    only a part already inside can fill it), and early part starvation (rings at 7 and 2 cells).
+  - **grown** (1 of 1 -> partial): the lid pocket's cell beside the slot is a leaf of every kit tree; if the cell above
+    it arrives first, its site is closed off except through the slot (a race, `structures.kitRace`). Three times the
+    supply of such cells completes the pocket in 4 of 4 worlds; membrane roots 6 instead of 2 (otherwise the faster
+    pocket went live before a membrane root attached). The membrane now closes in 1 of 4 worlds by 200000 steps
+    (others stop at 72-76 of 78; not diagnosed). The check is partial.
+  - Picture: the import door trap in split-o before the change (the open panel, the boxed-in blank `uuu` between it,
+    the wall and the anchored strand): ![import trap](pictures/import_trap.png)
+  - Command: `node tri/check.js budgrow split-o lid grow imprint` (about 15 minutes).
+  - Enables: membranes, pores and doorways are now sealed for anything wider than the gap; claims about what gets in
+    or out (pore feeding, controls) no longer depend on a leak.
+
 ## 2026-10-02 (autorun run 20261002-0921, build)
 
 - **A cell fed through a pore (genome on copies, food from outside)** — works (4 of 4 worlds). A ring with a pore

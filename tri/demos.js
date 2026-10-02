@@ -479,8 +479,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const KP=S.kitOptions(S.lidPocket('-A-','X'),'xaz'+KR.letters,'y',[S.lidSlot('B')]).find(k=>{const pp=partPlacement(probe.s,U0,U0[U0.length-1],k,S.lidClear());
         return pp.ok&&pp.cells.every(v=>ring.cells.every(w=>dist(v,w)>1.1));});
       if(!ring.ok||!KP)throw Error('grown: no layout');console.log('membrane root',KR.rootType,'pocket root',KP.root,'side',KP.rootSide,'risk',KP.risk);
-      const supply={[KR.rootType]:2,[KP.types[KP.root]]:2,xxx:40,'---':10};
+      const supply={[KR.rootType]:6,[KP.types[KP.root]]:2,xxx:40,'---':10};
       for(const [t,m] of Object.entries(KR.counts))supply[t]=(supply[t]||0)+mult*m;for(const t of KP.kit)supply[t]=(supply[t]||0)+4*mult;
+      // race cells (structures.kitRace: the lid and the cell beside the slot can be closed off by a later cell): three times the
+      // supply; membrane roots 6 (with 2 the faster pocket went live before any root had attached in 2 of 4 worlds)
+      for(const x of S.kitRace(KP,[S.lidSlot('B')]))supply[KP.types[x]]+=8*mult;
       const {s,founders}=createWorld({seed,size,founders:[founder],supply,params:{pLoose:0.05}});const F=founders[0];
       const tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},memT=new Set([...Object.keys(KR.counts),KR.rootType].map(norm));
       const isMem=u=>memT.has(norm(typeName(s,u))),A=canon('A--'),pocT=new Set(KP.types.map(norm));

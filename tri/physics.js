@@ -130,10 +130,10 @@ class Physics{
     this._unwrap(list,rx,ry);const px0=this._dx(cx-this.px[list[0]]),py0=this._dy(cy-this.py[list[0]]);
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]-=px0;ry[q]-=py0;reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
     const dist=Math.max(Math.hypot(tx,ty),reach*Math.abs(da));let f=0;
-    // a short move (at most `direct`, 1.0) whose destination is clear is taken at once. Known defect (RULES, Physics): a
-    // block in a wall's hole can hop across the wall through the pinch at the hole's apex (the shortest path through a
-    // wall is a block's width, 0.866); the midpoint fix is on branch claude/physics-pinch-midpoint
-    const tried=dist<=this.p.direct;if(tried&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true)===0)f=1;
+    // a short move (at most `direct`, 1.0) whose destination is clear is taken at once; one longer than a sub-step only
+    // if its midpoint is clear too (a block in a wall's hole could hop across the wall through the pinch at the hole's
+    // apex: the shortest path through a wall is a block's width, 0.866; fixed 2026-10-02)
+    const tried=dist<=this.p.direct;if(tried&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true)===0&&(dist<=this.p.subStep||this._overlap(list,rx,ry,cx,cy,tx/2,ty/2,da/2,st,true)===0))f=1;
     const nsub=f===1?0:Math.max(1,Math.ceil(dist/this.p.subStep));
     let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}   // the full move was already found blocked
     // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
@@ -167,7 +167,7 @@ class Physics{
       return sum;};
     // one trial: translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
     const trial=(xs,ys,mx,my,t)=>{const dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t)),at=g=>depth(xs+g*mx,ys+g*my,g*t,true);
-      const tried=dist<=p.direct;let f=0;if(tried&&at(1)===0)return 1;
+      const tried=dist<=p.direct;let f=0;if(tried&&at(1)===0&&(dist<=p.subStep||at(0.5)===0))return 1;
       const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
       for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||at(g)>0){blocked=g;break;}f=g;}
       if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(at(g)>0)blocked=g;else f=g;}

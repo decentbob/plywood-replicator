@@ -218,6 +218,17 @@ function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   const types=tok.map(t=>t.map(x=>x.g+x.m+x.c).join(''));
   return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values()),risk,risky,letters:tree.map((_,k)=>pool[k]).join('')};}
 
+// race cells of a kit: cells whose site can be closed off by a cell that is not their descendant arriving first (or
+// that border a slot on their only other side), whatever the depths. With the midpoint physics such a site is lost
+// for good (no block passes a gap narrower than itself); a larger supply of these cells' types wins the race.
+function kitRace(K,slots=[]){const T=K.tris.map(t=>t.v),sh=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return i;return -1;};
+  const kids=new Map();for(const [x,y] of K.tree){if(!kids.has(x))kids.set(x,[]);kids.get(x).push(y);}
+  const desc=c=>{const out=new Set(),q=[c];while(q.length){for(const y of kids.get(q.pop())||[])if(!out.has(y)){out.add(y);q.push(y);}}return out;};
+  const out=[];for(let c=0;c<T.length;c++){if(c===K.root)continue;const D=desc(c);let open=0;
+    for(let i=0;i<3;i++){if(T.some((w,o)=>o!==c&&!D.has(o)&&sh(T[c],w)===i)||slots.some(sl=>sh(T[c],sl.v)===i))continue;open++;}
+    if(!open)out.push(c);}
+  return out;}
+
 // every (root, seed side) kit of a structure, fewest risky cells first, then shallowest tree
 function kitOptions(tris,reserved='',seed='z',slots=[]){const out=[];
   for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;for(let i=0;i<3;i++){try{const k=kit(tris,r,reserved,seed,i,slots);if(k.rootSide===i)out.push(k);}catch(e){}}}
@@ -324,7 +335,7 @@ function doorRingKit(R=5,seed='z',key='X',k=4,avoid='',m=1,release=true,pore=fal
 // locks it. Returns {tris (closed positions: the demo turns the panels open), P: cell indices, D, doors:[{panel, prev,
 // next, pin, dir, ang, stop, hingeSide, closeSide, stopSide:[panel cell, side, stop side]}], cap}. capGlue: D grows a
 // three-cell cap on its inner wall from one part type (below).
-function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organelle:org=null,importD=null}={}){
+function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organelle:org=null,importD=null,impSkip=0}={}){
   if((RP+RD)%2)throw Error('budPair: RP+RD must be even (lattice offset)');
   const {triDepth}=require('./physics'),flat=V=>Float64Array.from(V.flat());
   const Pc=ringKit(RP,'z').tris.map(t=>t.v),dy=(RP+RD)*H,Dc=ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dy]));
@@ -402,7 +413,8 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
   // welded by hear sides, hinged at an inner corner with drop '!' and wide '=', latched at its far end, the key '*' on an
   // outer face); its sweep (panel and key, 120 degrees inward) clear of everything fixed and of the closing door's sweep.
   // While D hears an open signal its latch holds and its key is deaf: it imports only after the split.
-  let imp=null;
+  // impSkip: take the next import door candidate (the organelle, its strand and the door's drop place must all fit)
+  let imp=null,impN=0;
   if(importD){const busy=new Set([...loose,...doors.flatMap(d=>[d.stop,d.prev,d.next])]),Dr=D.filter(c=>c<NP+ND),N=Dr.length,kk=4,dcen=[0,dy];
     const dd=doors[1],dsw=[];for(let q=0;q<=12;q++)for(const V of dd.open)dsw.push(V.map(p=>rot(p,dd.pin,-dd.dir*q/12*dd.ang*Math.PI/180)));
     const order=[...Array(N).keys()].sort((a,b)=>cen(cells[Dr[b]])[1]-cen(cells[Dr[a]])[1]);   // far from P first
@@ -417,7 +429,7 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
           if(!sweepClear([...panel.map(c=>cells[c]),kv],[...fixed,...dsw],P0,dir,120))continue;
           const kEnd=cen(kv.map(p=>rot(p,P0,dir*2*Math.PI/3)));if(hexr([kEnd[0]-dcen[0],kEnd[1]-dcen[1]])>RD-1-0.3)continue;
           const sw=[];for(let q=0;q<=12;q++)for(const V of [...panel.map(c=>cells[c]),kv])sw.push(cen(V.map(p=>rot(p,P0,dir*q/12*2*Math.PI/3))));
-          imp={panel,prev,next,P:P0,dir,keyCell:kc,keySide:f,sweep:sw};break;}}}
+          if(impN++===impSkip)imp={panel,prev,next,P:P0,dir,keyCell:kc,keySide:f,sweep:sw,drop:kEnd};break;}}}
     if(!imp)throw Error('budPair: no import door in D');
     const H2=['л','п','ф','и','з'];
     {const [i,j]=side(imp.panel[0],imp.prev),v=cells[imp.panel[0]];T[imp.panel[0]][i]=H2[0]+(same(v[i],imp.P)?'<':'>')+'!=';T[imp.prev][j]=UP[LOW.indexOf(H2[0])];}
@@ -441,23 +453,27 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
       const out=[];for(const [P0,Q0] of [[b,x0],[a,x0]]){const an=Math.atan2((P0===b?a:b)[1]-P0[1],(P0===b?a:b)[0]-P0[0])-Math.atan2(x1[1]-x0[1],x1[0]-x0[0]),c2=Math.cos(an),s2=Math.sin(an);
         const M=p=>[P0[0]+c2*(p[0]-x0[0])-s2*(p[1]-x0[1]),P0[1]+s2*(p[0]-x0[0])+c2*(p[1]-x0[1])];out.push(B.map(t=>({v:t.v.map(M),role:t.role,free:t.free.map(M)})));}
       return out.find(st=>st.every(t=>hexr([cen(t.v)[0]-dcen[0],cen(t.v)[1]-dcen[1]])<RD-1))||null;};
-    let bestO=null;
+    // the cargo's drop place (the key's cargo at the open door) stays clear by DROP: a dropped blank must get out of the
+    // door's sweep (with 1.2 one was wedged between the open panel and the anchored strand and the door never closed)
+    const DROP=2;let bestO=null;
     for(const an of inSide){const st=strandAt(an);if(!st)continue;const keep=[],docks=[];
       for(const t of st){keep.push(cen(t.v));if(t.role!=='F')continue;const [A,Bp]=t.free,C=t.v.find(p=>!same(p,A)&&!same(p,Bp)),X=[A[0]+Bp[0]-C[0],A[1]+Bp[1]-C[1]];
         const dock=cen([A,Bp,X]),fc=cen(t.v);docks.push(dock,[2*dock[0]-fc[0],2*dock[1]-fc[1]]);}
       // the strand may touch the wall at its anchored end; its dock sites (where copies grow) stay off the wall
+      if(imp&&[...keep,...docks].some(p=>dist(p,imp.drop)<DROP))continue;
       if(keep.some(p=>wallC.some(q=>dist(p,q)<0.3))||docks.some(p=>wallC.some(q=>dist(p,q)<0.9))||[...keep,...docks].some(p=>sweep.some(q=>dist(p,q)<1.2)||hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1))continue;
       keep.push(...docks);
       for(const K of org.opts){for(const w of inSide){if(w[0]===an[0])continue;const {cells:oc,T:map}=mapKit(K,cells[w[0]],w[1]),extra=[...org.clear,...org.slots.map(x=>x.v)].map(v=>v.map(map));
           const all=[...oc,...extra].map(cen),ex=extra.map(cen);
           if(all.some(p=>hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1-0.3)||all.some(p=>wallC.some(q=>dist(p,q)<0.3)))continue;
+          if(imp&&all.some(p=>dist(p,imp.drop)<DROP))continue;
           if(ex.some(p=>wallC.some(q=>dist(p,q)<0.9))||all.some(p=>sweep.some(q=>dist(p,q)<1.0))||all.some(p=>keep.some(q=>dist(p,q)<1.0)))continue;
           // narrow sites: a kit cell (not the root) with a side on a wall cell can enter only through its one open
           // side once its parent is there (2 of 4 bud pockets stalled on such a cell); fewest of them, after kit risk
           const across=(v,i)=>{const a=v[i],b=v[(i+1)%3],c=v[(i+2)%3];return cen([a,b,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);};
           const narrow=oc.filter((v,x)=>x!==K.root&&[0,1,2].some(i=>{const m=across(v,i);return wallC.some(q=>dist(m,q)<0.3);})).length;
           if(!bestO||K.risk<bestO.K.risk||(K.risk===bestO.K.risk&&narrow<bestO.narrow))bestO={K,cells:oc,wall:w,anchor:an,strand:st,narrow};}}}
-    if(!bestO)throw Error('budPair: no place for the organelle and anchor');
+    if(!bestO){if(imp){try{return budPair({RP,RD,k,capGlue,anchorGlue,anchorP,organelle:org,importD,impSkip:impSkip+1});}catch(e){}}throw Error('budPair: no place for the organelle and anchor');}
     T[bestO.wall[0]][bestO.wall[1]]=org.seed+'@';T[bestO.anchor[0]][bestO.anchor[1]]=anchorGlue+'@|';
     organelle=bestO;}
   // anchor: an inward side of a plain D wall cell, far from the door, takes glue `anchorGlue` with '@|' (it catches a
@@ -493,11 +509,12 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
 // latch sits on or beside a triggered cell or a flap (a latch lets go there). Returns {tris: P cells then D cells in
 // their grown places (types; D cells loose), P, D (indices), S, root, panelP, panelD, q, frontB (wall growth order),
 // doors [{panel, hinge, pin, dir, ang}], kit (D types except the root's), rootType, cap, letters}.
-function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null}={}){
+function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null,cut=null}={}){
   if((RP+RD)%2)throw Error('grownBud: RP+RD must be even (lattice offset)');
   // the bud's sideways offset (a lattice step): searched, nearest first
   if(ox===null){let err=null;for(const o of [0,1,-1,2,-2,3,-3]){try{return grownBud({RP,RD,k,kP,seed,capGlue,avoid,ox:o});}catch(e){err=e;}}throw err;}
-  const Pc=ringKit(RP,'z').tris.map(t=>t.v),dy=(RP+RD)*H,Dc=ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0]+ox,p[1]+dy]));
+  // cut: leave out the parent's outer corner cell at this corner (see the last site q below)
+  const Pc=ringKit(RP,'z').tris.map(t=>t.v).filter(V=>!cut||!V.some(p=>same(p,cut))),dy=(RP+RD)*H,Dc=ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0]+ox,p[1]+dy]));
   const NP=Pc.length,ND=Dc.length,cells=[...Pc,...Dc],P=[...Array(NP).keys()],D=[...Array(ND).keys()].map(q=>NP+q);
   const sideV=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return [i,j];return null;};
   const side=(a,b)=>sideV(cells[a],cells[b]),rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
@@ -507,14 +524,15 @@ function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null}={})
   const inRing=(V,c0,R)=>hexr([cen(V)[0]-c0[0],cen(V)[1]-c0[1]])<R-1;
   // a door: the panel hinged to `hp`, swinging (sim.bind's direction) 60 or 120 degrees into its own ring, its sweep
   // clear of every cell not in `moving`
-  const door=(panel,hp,c0,R,moving)=>{const fixed=cells.filter((_,x)=>!moving.includes(x));
+  const door=(panel,hp,c0,R,moving)=>{const fixed=cells.filter((_,x)=>!moving.includes(x)),out=[];
     for(const ang of [60,120])for(const pin of cells[panel[0]].filter(p=>cells[hp].some(q=>same(p,q)))){const dir=realDir(panel[0],hp,pin);
       if(!sweepClear(panel.map(c=>cells[c]),fixed,pin,dir,ang))continue;
       const open=panel.map(c=>cells[c].map(p=>rot(p,pin,dir*ang*Math.PI/180)));if(!open.every(V=>inRing(V,c0,R)))continue;
-      return {panel,hinge:hp,pin,dir,ang,open};}
-    return null;};
+      out.push({panel,hinge:hp,pin,dir,ang,open});}
+    return out;};
   const swept=d=>{const out=[];for(let a=0;a<=d.ang;a+=5)for(const c of d.panel)out.push(cells[c].map(p=>rot(p,d.pin,d.dir*a*Math.PI/180)));return out;};
   const onLine=(c,y)=>{const V=cells[c],e=[0,1,2].find(i=>Math.abs(V[i][1]-y)<1e-6&&Math.abs(V[(i+1)%3][1]-y)<1e-6);return e===undefined?null:[Math.min(V[e][0],V[(e+1)%3][0]),Math.max(V[e][0],V[(e+1)%3][0])];};
+  const corners=[...Array(6).keys()].map(i=>[RP*Math.cos(i*Math.PI/3),RP*Math.sin(i*Math.PI/3)]),spikes=[];
   const layouts=[],topP=P.filter(c=>row(c,(RP-1)*H,yt)||cells[c].some(p=>Math.abs(p[1]-yt)<1e-6));
   for(let i=0;i<NP;i++){const S=P[i],up=cells[S].filter(p=>Math.abs(p[1]-yt)<1e-6);if(up.length!==2||!row(S,(RP-1)*H,yt))continue;
     const r=D.findIndex(c=>has(cells[c],...up));if(r<0)continue;const root=D[r];
@@ -523,19 +541,28 @@ function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null}={})
       // the last wall cell q fills the last site: its free side must face the outside (a site whose three sides are
       // taken, by its predecessor, the panel's far end and the parent's wall, can never be filled)
       {const fq=[0,1,2].find(e=>!cells.some((w,x)=>x!==q&&sideV(cells[q],w)&&sideV(cells[q],w)[0]===e));
-        if(fq===undefined)continue;const V=cells[q],m=[(V[fq][0]+V[(fq+1)%3][0])/2,(V[fq][1]+V[(fq+1)%3][1])/2];if(hexr([m[0]-ox,m[1]-dy])<RD-0.5)continue;}
-      const dD=door(pD,root,[ox,dy],RD,pD);if(!dD)continue;
+        if(fq===undefined)continue;const V=cells[q],m=[(V[fq][0]+V[(fq+1)%3][0])/2,(V[fq][1]+V[(fq+1)%3][1])/2];if(hexr([m[0]-ox,m[1]-dy])<RD-0.5)continue;
+        // and a free part must be able to reach it: the approach place (q mirrored across that side) shares no side with
+        // any cell (beside the parent's corner the way in is a channel exactly one block wide, passable only by the
+        // wall-pinch hop the physics no longer allows; 2026-10-02)
+        const ap=[V[(fq+1)%3],V[fq],[V[fq][0]+V[(fq+1)%3][0]-V[(fq+2)%3][0],V[fq][1]+V[(fq+1)%3][1]-V[(fq+2)%3][1]]];
+        // When the only such cell is the parent's outer corner cell, the layout is retried without it: its two
+        // neighbours still meet at the corner's inner point, so the parent stays one sealed body (no block passes a
+        // point) and the way in becomes a 120 degree opening
+        const sh=cells.filter((w,x)=>x!==q&&sideV(ap,w));if(sh.length){const cn=sh.length===1&&P.some(x=>cells[x]===sh[0])&&corners.find(c=>sh[0].some(p=>same(p,c)));
+          if(cn&&!cut)spikes.push(cn);continue;}}
+      const dDs=door(pD,root,[ox,dy],RD,pD);if(!dDs.length)continue;
       // the bud's opening on the contact line (its panel cells' sides there); the parent's door: kP consecutive cells of
       // its top row whose sides on the contact line cover at least two units of that opening
       const openD=pD.map(c=>onLine(c,yt)).filter(Boolean);
       for(const kp of [kP,kP+1,kP-1])for(const st of topP)for(const sP of [1,-1]){const idx=P.indexOf(st),pP=[...Array(kp).keys()].map(x=>at(P,idx+sP*x)),hp=at(P,idx-sP);
         if(pP.includes(S))continue;
         const ov=pP.map(c=>onLine(c,yt)).filter(Boolean).reduce((a,e)=>a+openD.reduce((b,f)=>b+Math.max(0,Math.min(e[1],f[1])-Math.max(e[0],f[0])),0),0);if(ov<2-1e-6)continue;
-        const dP=door(pP,hp,[0,0],RP,[...pP,...pD]);if(!dP)continue;const doors=[dP,dD];
+        for(const dP of door(pP,hp,[0,0],RP,[...pP,...pD]))for(const dD of dDs){const doors=[dP,dD];
         // the two doors' sweeps must not meet (they open together)
         if(!sweepClear(dP.panel.map(c=>cells[c]),swept(dD),dP.pin,dP.dir,dP.ang))continue;
-        const score=Math.abs(cen(cells[S])[0])+dP.ang/60+dD.ang/60+(hp===S?0:5);layouts.push({score,S,root,r,s,pP,pD,q,doors});}}}
-  if(!layouts.length)throw Error('grownBud: no doorway');
+        const score=Math.abs(cen(cells[S])[0])+dP.ang/60+dD.ang/60+(hp===S?0:5);layouts.push({score,S,root,r,s,pP,pD,q,doors});}}}}
+  if(!layouts.length){if(spikes.length)return grownBud({RP,RD,k,kP,seed,capGlue,avoid,ox,cut:spikes[0]});throw Error('grownBud: no doorway');}
   layouts.sort((a,b)=>a.score-b.score);let err=null;
   for(const lay of layouts){try{return grownBudTypes(lay);}catch(e){err=e;}}
   throw err;
@@ -579,7 +606,7 @@ function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null}={})
     cap={seed:[b.c,b.f],close:[b.c2,f2],slots:b.sl,type:types[0]};}
   const types=T.map(t=>t.join('')),loose=new Set([...pP,...D]);
   return {tris:cells.map((v,x)=>({v,type:types[x],loose:loose.has(x)})),P,D,S,root,panelP:pP,panelD:pD,q,frontB,doors:doors.map(({open,...d})=>d),
-    kit:D.filter(c=>c!==root).map(c=>types[c]),rootType:types[root],cap,ox,dy,letters:pool.slice(0,nl).join('')};}}
+    cut,kit:D.filter(c=>c!==root).map(c=>types[c]),rootType:types[root],cap,ox,dy,letters:pool.slice(0,nl).join('')};}}
 const canonT=t=>{const x=[...t.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[...x.slice(r),...x.slice(0,r)].join('')).sort()[0];};
 
 // map kit K so that its root's seed side lies flush against side i of the triangle with vertices A (a shared edge runs
@@ -651,4 +678,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={kitRace,pocket,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};

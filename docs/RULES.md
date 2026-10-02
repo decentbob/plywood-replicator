@@ -45,12 +45,11 @@ to weld prepared structures (a builder convention, not a rule).
 - Each step every body, in random order, proposes a Brownian kick (parameters sigma 0.3, sigmaRot 0.45 per unit
   mass: a lone block, mass sqrt(3)/4, gets a kick of 0.46 and a turn of 1.04 rad standard deviation; a body gets the
   mean kick of its blocks and the turn of their torque, so larger bodies move less), translation and turn as two
-  trials. A trial of at most `direct` (1.0) is checked only at its end. **Known defect (2026-10-02, not fixed on
-  main):** a move between 0.8 and 1.0 whose end is clear but whose midpoint overlaps is taken, so a block can pass a
-  gap narrower than itself (a block in a one-row wall's hole hops across the wall through the pinch at the hole's
-  apex: 95 of 2000 kicks of 0.95). The fix (check the midpoint, equivalent to `direct` 0.8) is on branch
-  `claude/physics-pinch-midpoint` with its test; it makes 6 capability checks fail (budgrow 1 of 4, split-o 0 of 4,
-  grown, imprint 2 of 4, lid, grow): those capabilities rely on the leak (docs/NEXT.md). a longer one moves in sub-steps (0.8) as far as it goes
+  trials. A trial of at most `direct` (1.0) whose end is clear is taken at once if it is no longer than a sub-step
+  (0.8); a longer one also needs a clear midpoint (fixed 2026-10-02, merged in autorun run 20261002-1050: with the end
+  check alone a move between 0.8 and 1.0 took a block through a gap narrower than itself, e.g. across a one-row wall
+  through the pinch at a hole's apex, 95 of 2000 kicks of 0.95; test "a block in a hole of a one-row wall never hops
+  across it"). Otherwise the body moves in sub-steps (0.8) as far as it goes
   without overlapping another block, then closes in on the contact (one bisection). So nothing passes through a wall.
   A body that overlaps (rare: binding just placed it) may make a move that reduces its overlap, if the move is at most
   `direct` (fixed 2026-10-01: any length was allowed, and a block touching a wall jumped through it on a kick above

@@ -20,21 +20,21 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Heritable cells: copies carry the membrane seed and wrap themselves | cell lineage | works (4 of 4 worlds, 4 cells each; 24 dockers per type, 4 roots) | demo cells |
 | Membrane growth | membrane growth | a ring grows from a periodic kit (2R-1 types) and closes (8-13k steps) | structures.ringKit, demo ring; backlog 5 |
 | Grown import door: the genome's membrane kit grows its own door | transporter made by the cell | works (4 of 4 worlds, R=6, 2 kit copies per cell, 150000 steps: closes, lets go of the chain, imports 14-16 blanks) | structures.doorRingKit, demo live |
-| Protocell: membrane + import + factory + copying inside | cell | works prepared (demo cell) and grown from the genome (4 of 4 worlds: pocket and membrane with door grow from the chain's seeds, import, cast, copy inside) | demos cell, grown |
+| Protocell: membrane + import + factory + copying inside | cell | works prepared (demo cell); grown from the genome: partial since the midpoint physics (2026-10-02 run 1050: pocket complete 4 of 4 with race-cell supply, membrane with door closes 1 of 4 by 200000 steps, others stop at 72-76 of 78; before: 4 of 4 through wall-pinch hops) | demos cell, grown |
 | Budding: second compartment with genome copy and parts | daughter cell | empty daughter rings bud off a parent (open signal, `&` release); with contents not yet | demo bud; backlog 6 |
 | Birth: a grown cell makes copies that leave through a pore and start their own cells | reproduction | partial: copies leave and one began its own cell (1 of 4 worlds, 2.6M steps); not yet a complete offspring cell | structures.cellKit, demo birth |
 | Feeding the bud through a shared wall gate | maternal supply | works prepared: parent and bud share a wall with a doorway through both; the parent's stamp pocket feeds the bud (parts, blanks, dockers) | structures.budPair, demo split |
 | Division: cut the shared wall when the bud is complete | cytokinesis | works prepared (4 of 4 worlds): when the bud's growth front closes (cap complete, or its anchor has caught a genome copy) every `&` lets go, both doors swing shut and lock, the bud separates | demo split |
 | Offspring that lives alone | independent daughter cell | works prepared (4 of 4 worlds): the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and makes a whole genome copy | demo split o |
-| Grown bud: the bud ring grows on the parent's seed; its closing opens the doorway; fed cap; splits sealed | budding by growth | works (4 of 4 worlds): doors held shut by the lock signal of the bud's open wall sites, open once its last cell arrives, shut when its content is complete (no new rule) | structures.grownBud, demo budgrow |
+| Grown bud: the bud ring grows on the parent's seed; its closing opens the doorway; fed cap; splits sealed | budding by growth | works (3 of 4 worlds since the midpoint physics; the parent's corner cell beside the bud's last site is left out): doors held shut by the lock signal of the bud's open wall sites, open once its last cell arrives, shut when its content is complete (no new rule) | structures.grownBud, demo budgrow |
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
-| Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
+| Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds at 200000 steps; 5 of 8 seeds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
 | Genome on copies inside a cell: a sealed cell copies its genome from copy blanks alone (spent `&` walls are never copied) | replication from uniform nutrients | works (4 of 4 worlds at 60000 steps, 4 strands from 60 blanks, since the 2026-10-02 release locality fix; before it 3 of 4 at 40000; control 2-3, the wall takes most); in the bud pair (`split q`) partial, 1 of 4 | demos imprint m, split q |
 | Feeding on copies: a cell fed through a pore copies its genome from copy blanks outside (every free side spent `&`, so only what lies inside is copied) | uptake of uniform nutrients | works (4 of 4 worlds, 5-6 strands inside from 150 blanks; controls: no pore 0 copies, plain walls take all) | demo imprint p |
 | Bud pair on copies with a doorway (no doors; held by one latch bond released by the bud anchor's trigger side, so no wall hears an open signal) | budding on copies | partial: the bud's anchor rarely catches (strands are busy whenever food is plentiful; core change candidate in docs/NEXT.md) | demo budpore |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 23 minutes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 29 minutes).
 
 ## Backlog (top first)
 
@@ -68,9 +68,9 @@ Every row marked works is guarded by `node tri/check.js` (one line per capabilit
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 
 ## Known issues
-- Physics leak (2026-10-02 core review): a direct move is checked only at its end, so a block can pass a gap narrower
-  than itself (it hops a one-row wall through a hole's apex). The fix is on branch `claude/physics-pinch-midpoint`;
-  budgrow, split-o, grown and imprint rely on the leak and must be rebuilt first (docs/NEXT.md, follow-up 1).
+- Physics leak fixed 2026-10-02 (run 1050, midpoint check). Left from it: grown is partial (membrane closes 1 of 4);
+  a one-front ring whose last two sites are open can be finished only by a part already inside (the gap is a rhombus
+  exactly one block wide: imprint's 28/30 stalls); see docs/NEXT.md.
 - Fuel is spent per fuel triangle, not per swing (two carriers on one triangle are both spent); designed fix in
   docs/NEXT.md (follow-up 2). The energy demo is not affected.
 - Core inventory and the rule-by-rule locality table: docs/RULES.md.
