@@ -18,6 +18,16 @@ D's wall carries the anchor's trigger signal to the latch cell. Done when: the b
 in 3 of 4 worlds (seeds 1-4, 300 blanks, 200000 steps), with check `budpore` updated. Stop: if the mid-wall anchor
 catches but the bud still makes no copies after the split, record why (pictures, counts) and end there.
 
+**In progress (run 1921):** `budpore` now has D's anchor `W@|*` mid-wall on D's lower-left wall (4-bond hear chain to
+the latch cell), catching a strand's low end `w` (the high end, where zip starts, stays free in the bud), and an inert
+latch bond. Measured (seeds 1-8, 300 blanks, 200000 steps): splits in 8 of 8 at 30000-65000 with 102-193 blanks left
+(before: 4 of 8); the bud ends with 2 strands in 7 of 8, but full copies of the bud's own anchored strand after the split
+only in 1 of 4 (seeds 1-4: releases on it 2 / 3 / 1 / 6, a copy takes 4). Food after the split goes to the two freed
+latch sides (seed 1: 105 of 172 blanks) and to strands outside. Tried and dropped: mid-wall anchor catching the high end
+`z` (1 of 4 split), low-end anchor at the old corner place (bud copies 0-2 releases), an `&` hold two bonds from the
+anchor (openRange 3; the cells hearing it keep their sides exposed: 190-210 wall copies before the split). Rerun:
+`node tri/demos.js budpore k 200000 runs 300` (`DBGC=1`: where copies go after the split; `BUDF=20`: 20 frames).
+
 **Exact next step (build, priority 1 below): M2, the bud copies its genome after the split, on `budpore`.** Move D's
 anchor mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the latch lets go while it hears
 a trigger signal; see the pitfall "Anchors in the middle of a flat wall") so a caught strand stands into the bud with
