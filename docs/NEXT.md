@@ -3,7 +3,7 @@
 State on 2026-10-02 (after autorun run 20261002-1050, harden). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-1050, harden).** Everything committed on branch `claude/autorun-20261002-1050`
-and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: CHECKRESULT.
+and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: 33 of 33 pass in 1713 s (grown reported partial; lid and grow now 4 worlds; imprint 200000 steps).
 No current slice.
 **Done this run (slice: merge the physics midpoint fix; met, with grown downgraded to partial):** a direct move longer
 than a sub-step needs a clear midpoint, so no block passes a gap narrower than itself (core-review follow-up 1 below;
@@ -199,7 +199,7 @@ node tri/demos.js copy 1 10000 runs                # typed copying (zip)
 node tri/demos.js lid 1 4000 runs                  # lid pocket casting
 node tri/demos.js factory 1 30000 runs Aa          # lid pockets feed a replicator (none = control)
 node tri/demos.js grow 1 16000 runs 12             # a lid pocket kit grows from a seed and casts
-node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~16 min)
+node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~29 min)
 node tri/demos.js ring 1 60000 runs 3              # ring membrane from a periodic kit, closes (7k-45k steps)
 node tri/demos.js gate 1 10000 runs 12             # gated ring (swept 3-cell door)
 node tri/demos.js import 1 20000 runs              # selective import (revolving door)
