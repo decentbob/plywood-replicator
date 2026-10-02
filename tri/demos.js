@@ -100,7 +100,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // attached); copy blanks -?-?-? are the only food: no free parts. A copy blank that touches a free side of an
     // attached triangle becomes a copy of it, so the ring's own cells and root multiply, the ring closes and a second
     // ring grows on the bare anchor. extra: number of copy blanks (default 400); 'c': control, blanks without copy sides
-    imprint(){steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
+    imprint(){if(String(extra||'').includes('g'))return D.imprintGenome();steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],cc=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-cc[0],a[1]+b[1]-cc[1]]],type:'z--'};
       const supply={[ctl?'---':'-?-?-?']:nb},av=anchor.v,weld={v:[av[2],av[1],[av[1][0]+av[2][0]-av[0][0],av[1][1]+av[2][1]-av[0][1]]],type:'---'};
       const {s,structures}=createWorld({seed,size,structures:[{tris:[anchor,...K.tris.slice(0,1+K.P)],x:c-7,y:c},{tris:[anchor,weld],x:c+7,y:c}],supply});
@@ -114,6 +114,17 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();A.forEach((x,k)=>{if(!closed[k]&&isClosed(x))closed[k]=t;});if(every(t,16))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: copies ${s.ev.copy||0}, rings ${cells().join(' / ')}${closed[1]?', both closed':''}`,null,false);}
       const n=cells();console.log(`result: ring cells ${n.join(' ')} of ${K.N}, closed at ${closed.map(x=>x||'not yet').join(' / ')}, copies ${s.ev.copy||0}`);
       finish(`Contact copying: a ring with one of each part and copy blanks only; it closes and a second ring grows from copies${ctl?' (control)':''}`);},
+    // imprint g (genome on copies): a founder strand whose faces aAaAaA are their own reverse complement, and copy blanks
+    // only: no dockers or fills in supply. Copies of the strand's face triangles are its dockers, copies of its backs
+    // its fills, so the strand is copied from copies of itself (extra: blanks, default 200; 'c': control, plain blanks)
+    imprintGenome(){steps=steps||30000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||200,size=24;
+      const {s}=createWorld({seed,size,founders:[{gaps:[1,1,1,1,1],faces:'aAaAaA',x:size/2,y:size/2}],supply:{[ctl?'---':'-?-?-?']:nb}});
+      const strands=()=>census(s).filter(c=>c.n>=9&&!c.paired),report=t=>{const tc=typeCount(s);
+        console.log(`t=${t} strands [${strands().map(c=>c.faces).join(' ')}] copies=${s.ev.copy||0} docks=${s.ev.dock||0} releases=${s.ev.release||0} blanks=${tc[canon(ctl?'---':'-?-?-?')]||0}`);};
+      snap(s,'t0',`t=0: founder aAaAaA and ${ctl?'plain blanks (control)':'copy blanks'}, no dockers`,null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,3))snap(s,`t${t}`,`t=${t}: ${strands().length} free strands, copies ${s.ev.copy||0}`,null,false);}
+      console.log(`result: ${strands().length} free strands (founder included), ${s.ev.release||0} releases, ${s.ev.copy||0} copies`);
+      finish(`Genome on copies: a strand copied from contact copies of its own triangles${ctl?' (control)':''}`);},
     // split: a parent ring P and a bud ring D (prepared, labelled) share a wall held by completion-release pairs '&',
     // with an open doorway through both walls (each panel turned open, held by a '&' doorstop, always triggered). Inside
     // P a stamp pocket casts blanks into the bud's part (A@-a@); parts diffuse through the doorway into D and grow a

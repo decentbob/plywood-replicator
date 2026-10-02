@@ -54,6 +54,12 @@ const CHECKS=[
     pass:L=>{const m=L.match(/released rings \[([^\]]*)\]/);return [!!m&&m[1].trim()!=='',m?`released [${m[1]}]`:'none'];}},
   {id:'split',cap:'Feeding and division: the bud grows a cap, splits sealed',demo:'split',seeds:[1],steps:30000,secs:20,
     pass:L=>{const ok=/cap=3\/3/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${(L.match(/cap=\S+/)||['?'])[0]} ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
+  {id:'imprint',cap:'Contact copying: a ring with one of each part closes, a second grows from copies',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,secs:90,
+    pass:(L,o)=>{const m=o.match(/result: ring cells (\d+) (\d+) of 30, closed at (\S+) \/ (\S+)/);return [!!m&&m[3]!=='not'&&m[4]!=='not',m?`rings ${m[1]}/${m[2]} cells, closed ${m[3]} / ${m[4]}`:'no result'];}},
+  {id:'imprint-genome',cap:'Contact copying: a strand copied from copies of its own triangles',demo:'imprint',seeds:[1,2,3,4],need:3,steps:30000,extra:'g',secs:25,
+    pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n>=4,`${n} strands`];}},
+  {id:'imprint-genome-c',cap:'  control: plain blanks, no copies',demo:'imprint',seeds:[1],steps:30000,extra:'gc',secs:15,
+    pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n===1,`${n} strands`];}},
   {id:'budgrow',cap:'Grown bud: grows on the parent, doors open once closed, fed cap, splits sealed',demo:'budgrow',seeds:[1,2,3,4],need:3,steps:250000,secs:170,
     pass:(L,o)=>{const m=o.match(/events: ring closed at (\d+), parent door widest before that (\d+) deg, doors open at (\d+), cap cells at ([\d ]+), split at (\d+)/);
       if(!m)return [false,'no events: '+(o.match(/events: .*/)||['none'])[0].slice(8,90)];const [c,w,op]=[+m[1],+m[2],+m[3]],caps=m[4].trim().split(' ').map(Number),sp=+m[5],shut=/doors after split: shut/.test(L);

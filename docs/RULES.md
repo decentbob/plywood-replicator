@@ -30,6 +30,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
 | `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one |
+| `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
@@ -55,7 +56,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 
 ## Locality audit (2026-10-01)
 Every chemistry rule below reads only: the triangle's own type, state and bonds; values its bonded partners expose
-(their role, fill, trigger, charge, activator, the glue and marks of the side bonded to it); and relayed signals that
+(their role, fill, trigger, charge, activator, the glue and marks of the side bonded to it, and, for a copy blank, their whole type); and relayed signals that
 move one bond per pass and fade (busy, zip, caps, lock, hear, open). Rules that were not local and were replaced:
 closures that asked whether two triangles belong to the same body (now one flush tolerance, 0.05, for every closure),
 snapping the smaller of two bonding bodies (removed), copy release reading two bonds away (now the partner exposes
@@ -117,6 +118,13 @@ not complementing, is the default: a complemented product would stick to its own
 **Stamp (2026-10-01):** the product side also takes the marks the instruction side carries (`'`), and nothing
 carried: a caster's instruction side prints glue and marks, so a pocket can cast kit parts (`@`, `.`, `%`, ...) from
 blanks. A product never carries marks itself (a stamp cannot be stamped).
+
+**Contact copying (2026-10-02, copy side `?`):** a free triangle with a copy side binds by it to any free (unbonded, not
+spent) side of an attached triangle, whatever that side's glue, when its centre comes within `capture` of the site and
+the site is free. In the same pass it takes its partner's type (side i+k takes the partner's side j+k, i and j the
+bonded sides: the partner turned about the shared edge; glues, marks and carried marks) and lets go. It binds nothing
+else (no glue binding, dock or fill) and is never itself a template. Free triangles never bind each other, so only
+attached triangles are copied. Gate entry: Core changes.
 
 ## Hinges and machines
 - A hinge remembers its flush angle (when it bonded, snapped to a multiple of 60 degrees) and which way is away from its partner. While the flap is

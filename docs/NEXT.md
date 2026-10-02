@@ -1,52 +1,29 @@
 # Next instance: start here
 
-## Current slice (autorun run 20261002-0136, explore, 2026-10-02)
-- **Goal:** decide programmable synthesis (part templating, translation, kit-free growth) through the core-change
-  gate and build the chosen one: parts are made from uniform blanks by copying the parts already in a body, so one set
-  of an organism's parts can multiply into the parts of its offspring.
-- **Decision (details: IDEAS, "Programmable synthesis"; gate entry: RULES, "Core changes"):** part templating in its
-  smallest form, **contact copying**: a copy blank (a free triangle with copy sides `?`) binds any free side of an
-  attached triangle and takes that triangle's whole type (glues, marks, carried marks), then lets go. No machine: the
-  body is the template. Translation needs a reading frame, stepping and adaptors that carry marks (which no cast can
-  make), so several rules; kit-free growth needs no rule but cannot close the loop (stamp casters carry `'` marks,
-  and no cast product carries marks). Contact copying closes it: every part type on a body's surface, the copier's
-  own included (there is none), can be multiplied from blanks.
-- **Acceptance:** (1) `node tri/demos.js imprint k 80000 runs`, k = 1..4: an anchored ring root, ONE free copy of each
-  ring part (R = 3, 5 motif types) and copy blanks only: two rings (the second anchor starts bare: its root is a copy
-  too) close in at least 3 of 4 worlds; control `imprint k 80000 runs c` (blanks without `?`) never passes 6 ring
-  cells. (2) Milestone 2, if budget allows: a lid pocket (16 kit types, 5 of them enclosed when complete) grows from one
-  copy of each part and casts, at least 3 of 4 worlds. (3) `node tri/test.js` with a test of the copy rule; `node
-  tri/check.js` all pass (no existing type has `?`).
-- **Stop boundary:** no use in the organism yet (budgrow, split), no removal of casting or stamp marks (recorded as the
-  follow-up). Budget: about 12 demo runs and one check.js run.
-- **Approach:** one mark, one rule branch in binding plus one state change (`_copy` beside `_cast`); copy blanks bind
-  only by `?` (like parts by `@`), never dock or fill. Designs considered and dropped: a copier pocket holding free
-  templates (needs a glue-agnostic hold, a read rule and a release, and library parts get used up by growth sites);
-  copying free templates (free triangles never bind each other).
+State on 2026-10-02 (after autorun run 20261002-0136, explore). Read AGENTS.md first (rules of work), then this file.
 
-State on 2026-10-02 (after autorun run 20261001-2235, build). Read AGENTS.md first (rules of work), then this file.
-
-**Handoff status (autorun run 20261001-2235).** Everything committed on branch `claude/autorun-20261001-2235` and
-merged into `main`. No simulations running. `node tri/test.js`: 23 tests pass; `node tri/check.js`: 24 of 25 in 803 s
-(25 checks incl. the new `budgrow`, 4 of 4); the one failure, `split-o` at 200000 steps (2 of 4 still joined), passes
-4 of 4 at 450000 (run separately; the check now uses 450000, about 7 minutes per world). No current slice.
-**Done this run (slice: grow the bud ring instead of preparing it; acceptance met, 4 of 4 worlds):**
-- Goal was: the bud ring grows from a seed on the parent's wall; its growth holds both doors shut until it is closed,
-  the parent feeds it through the doorway, it splits off sealed. Acceptance: `budgrow k 250000`, k = 1..4, all cells,
-  doors shut until closed, cap fed after closure, split with doors shut in >= 3 of 4; sigma-0 door-order test. Met:
-  4 of 4 (details, numbers and picture: INNOVATIONS, newest). No new rule: pulse doors gated by the lock signal of the
-  bud's open latch sites; the root's `&` seed bond cut once the cap is complete.
-- Designs tried and dropped on the way (recorded so nobody retries them): growth sites as latches AND relying on them
-  for the open signal (latch sides emit none: the root's `&` would cut early); a closure bond cut by a latch (the sides
-  stay flush and re-close at once, then the restored lock signal keeps the latch from cutting again: the bud stayed
-  stuck to the parent); a last cell resting on the parent (its site enclosed: buds stalled at 53/54).
-- Two physics bugs fixed (both let blocks through closed walls; RULES Physics; tests). `heir`, `cycle` and `split-o`
-  checks now run 45000 / 200000 / 450000 steps (same criteria): kit growth and copy traffic are slower without leaks.
-**Exact next step:** a `build` slice: give the grown bud a genome copy (the anchor `Z@|` from `split g`, on a wall cell
-of the grown bud, emitting the open signal until it catches a copy; the parent keeps its founder by its own anchor) and
-then its own pocket (`split o`), so the grown bud lives alone. Keep the cap seed or the anchor on an early wall cell
-(the open signal must exist before the 7-cell panel completes). Then: the parent's seed is free again after the split
-(a second bud from fresh kit parts would test repeat budding).
+**Handoff status (autorun run 20261002-0136, explore).** Everything committed on branch `claude/autorun-20261002-0136`
+and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: CHECKRESULT.
+No current slice.
+**Done this run (slice: decide programmable synthesis and build it; acceptance met):**
+- Decision (maintainer's question, 2026-10-01): **contact copying**, one gated core change, the copy side `?`
+  (IDEAS "Programmable synthesis: decision"; RULES "Core changes", the first entry). A free copy blank binds any free
+  side of an attached triangle (any glue) and becomes a copy of that triangle, then lets go: the body is the template.
+  Translation needs several rules and adaptors no cast can make; kit-free growth cannot close the loop (stamp casters
+  carry marks no cast makes); a copier pocket with free templates needs three rules and its library is used up.
+- Acceptance met: `imprint k 100000 runs` (a ring grown one motif round, a bare anchor, 400 copy blanks, no free
+  parts): both rings closed in 3 of 4 worlds; control `c` 6 cells in 2 of 2. Milestone 2 changed from the lid pocket
+  (5 of its 16 kit cells are enclosed when complete: never copied) to the genome: `imprint k 30000 runs g`, a strand
+  copied from copies of its own triangles, 8-15 strands in 4 of 4 worlds, control 1. Changed on the way: a free
+  library (one free part of each type) failed: the blanks (all spent in about 10000 steps) went to the anchors and the
+  root before the single parts reached the front. Numbers, pictures, limits: INNOVATIONS (newest).
+- New checks: `imprint`, `imprint-genome`, `imprint-genome-c`.
+**Exact next step:** the backlog's item 0, a `build` slice: feed the organism on copies. Two candidates: (a) the
+genome on copies inside a cell (dockers copied from the strands instead of cast by a pocket: `split o` without the
+bud's stamp pocket; the bud imports copy blanks); (b) the grown bud's ring from copies of the parent's ring (the parent
+grown from the same ring kit, so its outer faces are the bud's parts; inner-facing types come only from inside).
+(a) is closer to working. The grown bud's genome anchor (the previous handoff's next step) is still open too.
+Watch: blanks are spent on whatever is exposed first; supply them where the template is (import doors), or in steps.
 
 ## Where things stand
 - Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (zip), casting, lid
@@ -94,6 +71,8 @@ node tri/demos.js split 1 30000 runs               # bud fed through a doorway g
 node tri/demos.js split 1 60000 runs g             # the bud catches a genome copy (anchor), then splits off
 node tri/demos.js split 1 450000 runs o            # + the bud grows its own pocket, splits, imports, copies its genome
 node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
+node tri/demos.js imprint 1 100000 runs            # contact copying: a ring closes and a second grows from copy blanks only (c: control)
+node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
@@ -110,7 +89,8 @@ or missing, in order:
    20261001-2235): the bud ring grows on the parent's seed; pulse doors held by the lock signal of its open wall sites
    open once it is closed; its cap is fed; it splits sealed. Next: genome anchor and pocket in the grown bud (see the
    handoff above); later the parent's door and seed as grown parts of the bud itself (the bud as the next parent).
-3. **Programmable synthesis** (the next big blocker, see IDEAS): one stamp pocket makes one part type; a cell kit has
+3. ~~**Programmable synthesis**~~ — decided and built in isolation (autorun 20261002-0136): contact copying, copy
+   side `?` (IDEAS, decision; INNOVATIONS). Next: the organism on copies (ROADMAP backlog 0). Original note: (see IDEAS): one stamp pocket makes one part type; a cell kit has
    ~60. Options: part templating (a copier pocket: simple, information in parts) or translation (a reading frame on a
    strand: hard). **User (2026-10-01): an explore run decides**, comparing part templating, translation and
    kit-free growth (no new rule) through the core-change gate (AGENTS.md); prefer the least core growth, at most one
