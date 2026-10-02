@@ -28,7 +28,7 @@ typed-triangle simulation; all earlier simulations (letter chemistry, half-cells
   any code: (1) the capability and why the goal needs it; (2) at least two designs with the existing core and why
   they fail; (3) the locality check: exactly what the triangle reads and from where; (4) which other structures can
   use it; (5) what it replaces or makes removable. Prefer generalizing or removing a rule over adding one. After a
-  core change, the capability checks (`node tri/check.js`, about 9 minutes, 4 processes) must still pass.
+  core change, the capability checks (`node tri/check.js`, about 16 minutes, 4 processes) must still pass.
 - **Slices.** Before any code, write under "Current slice" at the top of docs/NEXT.md: **goal** (one sentence: what
   will exist or be known, and how it moves the organism forward), **acceptance** (a command and the observable
   result, with a number, e.g. "3 of 4 worlds"), **stop boundary** (what is out of scope, and a budget of demo runs

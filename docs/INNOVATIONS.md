@@ -45,7 +45,9 @@ not statistics.
   whole reach. Tests for both (each fails on the old code). Effect on old capabilities: kit pockets grow a little
   slower (blocks no longer tunnel into kit sites); `heir` needs 45000 steps (was 30000) and `cycle` 200000 (was
   120000) on the check's seed (old physics: third generation in 2 of 4 worlds at 120000; new: 0 of 4 at 120000, seed 1
-  at 200000).
+  at 200000), and `split o` 450000 (was 200000: with 200000 two of 4 worlds were still joined; at 450000 all 4
+  split at 60000-285000, import 34-51 blanks and copy their genome). `node tri/check.js`: 24 of 25 with the old
+  `split-o` horizon (that check then failed 2 of 4); `split-o` at 450000 was run separately on its 4 worlds: 4 of 4.
 
 ## 2026-10-01 (autorun run 20261001-2006, harden)
 

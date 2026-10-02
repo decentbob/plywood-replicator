@@ -30,7 +30,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 9 minutes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 14 minutes).
 
 ## Backlog (top first)
 

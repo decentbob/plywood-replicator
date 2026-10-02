@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 8 minutes)
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 16 minutes)
 // Exit code 1 if a working capability fails.
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
@@ -60,7 +60,7 @@ const CHECKS=[
       return [w<5&&op>=c&&caps.length>=3&&caps.every(x=>x>=c)&&sp>=Math.max(...caps)&&shut,`closed ${c}, doors ${w}/open ${op}, cap ${caps.join(',')}, split ${sp}, ${shut?'shut':'open'}`];}},
   {id:'split-g',cap:'Segregation: the bud anchors a genome copy, splits',demo:'split',seeds:[1],steps:60000,extra:'g',secs:47,
     pass:L=>{const ok=/anchored in D/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${/anchored in D/.test(L)?'copy anchored in D':'no copy in D'}, ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
-  {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:200000,extra:'o',secs:190,
+  {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:450000,extra:'o',secs:420,
     pass:L=>{const o=(L.match(/organelle=(\S+)/)||[])[1],sp=/SPLIT/.test(L),im=num(L,/imports=(\d+)/),cp=/aaaa\*?\(in D\)/.test(L);
       return [sp&&cp&&im>=10,`pocket ${o}, ${sp?'split':'joined'}, ${im} imports, ${cp?'a genome copy':'no copy'} in D`];}},
 ];

@@ -3,8 +3,9 @@
 State on 2026-10-02 (after autorun run 20261001-2235, build). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261001-2235).** Everything committed on branch `claude/autorun-20261001-2235` and
-merged into `main`. No simulations running. `node tri/test.js`: 23 tests pass; `node tri/check.js`: see the last line
-of the run's INNOVATIONS entry / commit message (25 checks incl. the new `budgrow`). No current slice.
+merged into `main`. No simulations running. `node tri/test.js`: 23 tests pass; `node tri/check.js`: 24 of 25 in 803 s
+(25 checks incl. the new `budgrow`, 4 of 4); the one failure, `split-o` at 200000 steps (2 of 4 still joined), passes
+4 of 4 at 450000 (run separately; the check now uses 450000, about 7 minutes per world). No current slice.
 **Done this run (slice: grow the bud ring instead of preparing it; acceptance met, 4 of 4 worlds):**
 - Goal was: the bud ring grows from a seed on the parent's wall; its growth holds both doors shut until it is closed,
   the parent feeds it through the doorway, it splits off sealed. Acceptance: `budgrow k 250000`, k = 1..4, all cells,
@@ -15,8 +16,8 @@ of the run's INNOVATIONS entry / commit message (25 checks incl. the new `budgro
   for the open signal (latch sides emit none: the root's `&` would cut early); a closure bond cut by a latch (the sides
   stay flush and re-close at once, then the restored lock signal keeps the latch from cutting again: the bud stayed
   stuck to the parent); a last cell resting on the parent (its site enclosed: buds stalled at 53/54).
-- Two physics bugs fixed (both let blocks through closed walls; RULES Physics; tests). `heir` and `cycle` checks now
-  run 45000 / 200000 steps (same criteria).
+- Two physics bugs fixed (both let blocks through closed walls; RULES Physics; tests). `heir`, `cycle` and `split-o`
+  checks now run 45000 / 200000 / 450000 steps (same criteria): kit growth and copy traffic are slower without leaks.
 **Exact next step:** a `build` slice: give the grown bud a genome copy (the anchor `Z@|` from `split g`, on a wall cell
 of the grown bud, emitting the open signal until it catches a copy; the parent keeps its founder by its own anchor) and
 then its own pocket (`split o`), so the grown bud lives alone. Keep the cap seed or the anchor on an early wall cell
@@ -51,7 +52,7 @@ node tri/demos.js copy 1 10000 runs                # typed copying (zip)
 node tri/demos.js lid 1 4000 runs                  # lid pocket casting
 node tri/demos.js factory 1 30000 runs Aa          # lid pockets feed a replicator (none = control)
 node tri/demos.js grow 1 16000 runs 12             # a lid pocket kit grows from a seed and casts
-node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~8 min)
+node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~16 min)
 node tri/demos.js ring 1 60000 runs 3              # ring membrane from a periodic kit, closes (7k-45k steps)
 node tri/demos.js gate 1 10000 runs 12             # gated ring (swept 3-cell door)
 node tri/demos.js import 1 20000 runs              # selective import (revolving door)
@@ -67,7 +68,7 @@ node tri/demos.js stamp 1 60000 runs               # stamp pockets make a ring's
 node tri/demos.js grow 1 20000 runs 4s             # a stamp pocket grows from its kit and casts A@-b@
 node tri/demos.js split 1 30000 runs               # bud fed through a doorway grows a cap, then splits off sealed
 node tri/demos.js split 1 60000 runs g             # the bud catches a genome copy (anchor), then splits off
-node tri/demos.js split 1 200000 runs o            # + the bud grows its own pocket, splits, imports, copies its genome
+node tri/demos.js split 1 450000 runs o            # + the bud grows its own pocket, splits, imports, copies its genome
 node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
