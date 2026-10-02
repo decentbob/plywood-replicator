@@ -2,6 +2,20 @@
 
 State on 2026-10-02 (after autorun run 20261002-0721, core-review). Read AGENTS.md first (rules of work), then this file.
 
+## Current slice (autorun 20261002-0921, build): feeding on copies through a pore
+**Goal.** The build line's open problem is getting copy blanks into a sealed cell (core change candidate below; its
+design (b), a pore, was tried only with plain walls, which took every blank). Test it with spent walls: (1) a sealed
+cell whose free sides (inner and outer) are all spent `&`, with a pore (3 wall cells missing), its founder held by an
+anchor `W|`, copy blanks only outside: the genome is copied from blanks that come in. (2) M2 of the build line: the bud
+of a split pair has such a pore and copies its anchored genome after the split.
+**Done when:** (1) demo `imprint k N runs p` reaches 4 or more strands inside in 3 of 4 worlds with no wall copies,
+controls (no pore: no copies; plain walls: the wall takes the blanks), check `imprint-pore`; (2) a `split` variant whose
+bud holds 2 or more strands inside after the split in 3 of 4 worlds, with a check. **Stop:** (2) is a stretch; if it
+fails after a few variants, record it as partial with what blocks it. No core change.
+**Probe (scratch, runs/pore.js, 100000 steps, R 6, world 20, 150 blanks outside):** pore: 4 / 5 / 7 / 1 strands inside
+(world 4: one copy stalled waiting for a docker type); no pore: 0 copies; plain walls with pore: all 150 copies of
+wall cells.
+
 **Handoff status (autorun run 20261002-0721, core-review).** Everything committed on branch
 `claude/autorun-20261002-0721` and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass;
 `node tri/check.js`: 30 of 30 pass (run in parts on the final code: 6 + 22 + 2 checks, about 25 minutes in all). One
