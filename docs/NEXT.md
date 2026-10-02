@@ -1,6 +1,31 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-0721, core-review). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-0921, build). Read AGENTS.md first (rules of work), then this file.
+
+**Handoff status (autorun run 20261002-0921, build).** Everything committed on branch `claude/autorun-20261002-0921`
+and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass; `node tri/check.js`: 33 of 33 pass in 1363 s (3 new: `imprint-pore` 4 of 4, its controls `imprint-pore-c`, `imprint-pore-n`).
+No current slice.
+**Done this run (slice: feeding on copies through a pore; part 1 met, part 2 partial):**
+- **(1) A cell fed through a pore** (new capability, 4 of 4 worlds; `node tri/demos.js imprint k 100000 runs 150p`): a
+  ring whose every free side is a spent `&` (outer, inner, pore edges) with a 3-cell pore copies its anchored genome
+  from copy blanks outside only: 5-6 strands inside, all 150 copies genome. Controls: no pore (`150pc`) 0 copies;
+  plain walls (`150pn`) all 150 copies of wall cells. Checks `imprint-pore`, `imprint-pore-c`, `imprint-pore-n`. The
+  core change candidate "bringing copy blanks into a cell" is not needed for feeding (its design (b) failed only with
+  plain walls). The anchor must be mid-wall (a corner anchor lays the strand along the wall: no fill copies).
+- **(2) The bud copies its genome after the split (M2): not yet.** New demo `budpore` (fewest parts so far: two rings
+  joined by one latch bond beside a shared opening; D's anchor `Z@|*` releases the latch by its trigger side when it
+  catches; no wall hears an open signal): splits in 2 of 4 worlds (150 blanks), both after the food was spent; no bud
+  copied after the split. Diagnosed: a strand's seed is inactive while it is being copied, and with food around strands
+  are almost always being copied (52-87 approaches to D's anchor, all busy, 0 capture attempts). Core change candidate
+  below. Also learned (Pitfalls): an open-signal hold exposes every wall in range to copying (`split ... qp`, tried and
+  removed: 98% of blanks lost to walls).
+**Exact next step:** the rotation's next run is `harden`: the physics leak (core-review follow-up 1 below). For the
+build line: an `explore` run takes the core change candidate "an anchor catches a strand that is being copied" (below);
+then `budpore` with D's anchor moved mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the
+latch lets go while it hears a trigger signal) and enough blanks that food lasts past the split; target: the bud holds
+2 or more strands after the split in 3 of 4 worlds. Regenerate: `node tri/demos.js budpore k 200000 runs 150` (about
+5 minutes per world); probes used this run: `runs/anchdiag.js`, `runs/anchdiag2.js` (preloads via
+`NODE_OPTIONS="-r ./runs/anchdiag2.js"`; scratch, not kept: their logic is described in the candidate below).
 
 **Handoff status (autorun run 20261002-0721, core-review).** Everything committed on branch
 `claude/autorun-20261002-0721` and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass;
@@ -26,7 +51,7 @@ acting), fixed or split off, and merged with the rest:
   closures, copy sides on any side, pLoose scope, inert `@`, `&` closures, release at ends, fuel).
 - **Physics leak kept on main, fix on a branch** (see the first item below).
 
-**Exact next step:** a `harden` slice on the physics leak (item 1 below); the build line continues from run 0236's
+**Exact next step (as of run 0721, still valid for harden):** a `harden` slice on the physics leak (item 1 below); the build line continues from run 0236's
 handoff (below, "Build line").
 
 ### Core review follow-ups (run 20261002-0721), in order
@@ -80,7 +105,7 @@ No current slice.
   signal; with a plain `W|` (tried, removed) 60 of 134 wall cells are spent, P makes 2-4 strands and strands enter D in
   3 of 4 worlds, but D's anchor caught none in 150000 steps (not diagnosed: check whether their high end `z` is free
   and not busy when near the anchor); (3) a pore in P (blanks from outside) fails: the rings' outer walls take all.
-**Exact next step:** a `build` slice on the bud that copies its genome after the split (M2), which needs no joined
+**Next step as of run 0236 (taken by run 0921, see above):** a `build` slice on the bud that copies its genome after the split (M2), which needs no joined
 phase: the bud is complete then, so its `&` walls are spent (as in `imprint m`). Prepare it like `imprint m` with an
 anchored strand (or take `split g`, where a cast copy `AAAA` is anchored: give the bud `aAaA` instead) and copy
 blanks that reach the bud only after the split. The open problem is how blanks get into a sealed bud (see the core
@@ -88,7 +113,25 @@ change candidate below); until then, blanks inside the bud's ring from the start
 needs D's walls out of the open signal's reach (anchor near the doorway, short `openRange`). Alternatively diagnose (2)
 above first: one batch with `W|` and a trace of the strands that enter D.
 
+### Core change candidate (run 20261002-0921): an anchor catches a strand that is being copied
+1. **Capability:** segregation on copies: a bud catches a genome copy while the parent copies from a steady blank
+   supply. Measured (`budpore`, world 3, 60000 steps, a probe counting strand ends with seed `z` within `capture` of
+   D's anchor site every 20 steps): 52-87 close approaches, every one while the strand was busy (busy 26-30: being
+   copied or within 30 passes of a release), 0 capture attempts. With blanks everywhere, a blank touching a strand face
+   becomes a docker beside it, and zip docks the high end (the seed end) first, so an end is idle only for moments.
+   `split g` catches copies because its dockers come only from P's pocket (scarce); run 0236's `split q` (D's anchor
+   caught none, undiagnosed) is most likely the same cause.
+2. **Designs with the existing core that fail or cost:** fewer blanks (strands idle once food runs out; then the bud
+   has none to copy its genome after the split; measured below); an anchor on the low end (busy covers the whole
+   strand, range 30); keeping blanks out of D before the split (the junction feeds both; a second gap cuts a ring).
+3. **Smallest change:** an anchor side `|` catches a strand end's seed also while the strand is busy (the strand and
+   its partial copy are one body and move together; the copy still releases as usual). Reads: the end's spare-edge
+   glue (fixed type), as now; removes one condition (busy) for anchors only. Alternative: a seed is active while its
+   own face is free (not the whole strand's busy relay). For an explore run; not changed here.
+
 ### Core change candidate (run 20261002-0236): bringing copy blanks into a cell
+**Status (run 20261002-0921): not needed for feeding.** A pore works once every free side of the cell is spent
+(`imprint ... p`, 4 of 4 worlds); design (b) below failed only because the walls were plain.
 1. **Capability:** feed a sealed cell (parent or bud) a steady supply of copy blanks, so contact copying of its genome
    (and later its parts) does not stop when one batch is spent; the BIG goal's "feeds it until it can live on its own".
 2. **Designs with the existing core that fail:** (a) an import door: its key side catches by glue, but a copy blank
@@ -151,6 +194,8 @@ node tri/demos.js imprint 1 100000 runs            # contact copying: a ring clo
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js split 1 150000 runs q            # the bud pair on copies (partial: 1 of 4 worlds splits)
+node tri/demos.js imprint 1 100000 runs 150p      # a cell fed through a pore: genome copied from blanks outside (150pc, 150pn: controls)
+node tri/demos.js budpore 1 200000 runs 150        # bud pair on copies, one latch, shared opening (partial: 2 of 4 split)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
@@ -178,6 +223,14 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **An open-signal hold exposes its whole range to copying** (2026-10-02, run 0921). `&` sides are spent only where
+  nothing is heard; every wall cell within `openRange` of an emitter keeps its free side and is copied by any blank
+  that reaches it, from inside or outside. With blanks outside, a pair held by `&` pairs (range 27, or 11 with two
+  anchors) lost 98% of the blanks to its walls. Hold by one latch bond instead, released by the anchor's own trigger
+  side (`budpore`), so only the anchor side is ever unspent.
+- **Anchors in the middle of a flat wall.** An anchor next to a hex corner lays its strand along the next wall with its
+  backs hidden: no back is copied, so no fill exists and copying deadlocks (`budPair`'s P anchor is such a place).
+- **One gap per one-row ring.** A pore plus a doorway cuts a ring's wall into two bodies.
 - **Copy blanks go to every exposed side.** Walls take most of a batch (65-70% in a cell). Mark plain wall sides `&`:
   they are spent once the structure hears no open signal and are never copied. Copies of `&` cells used as fills are
   cut when their `&` side hears none: use `latGlue` so only genome back copies fill.

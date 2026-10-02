@@ -6,6 +6,56 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-0921, build)
+
+- **A cell fed through a pore (genome on copies, food from outside)** — works (4 of 4 worlds). A ring with a pore
+  copies its genome from copy blanks that come in from outside; no new rule. This answers the core change candidate's
+  design (b) ("a pore: the rings' outer walls take every blank"): that was true only with plain walls. With every free
+  side spent (`&` on the outer, inner and pore-edge sides of a complete ring, which hears no open signal), nothing on
+  the cell's surface can be copied, so blanks pass the pore and copy only what lies inside.
+  - Set-up (`node tri/demos.js imprint k 100000 runs 150p`, labelled): the sealed ring of `imprint m` (R 6) without
+    the 3 wall cells in the middle of its top wall (a pore), an anchor `W|` in the middle of the bottom inner wall,
+    the founder `aAaA` (seeded as `seedCopyGenome`) inside, 150 copy blanks outside only (world 20 x 20).
+  - Evidence (100000 steps): 6 / 5 / 5 / 5 strands inside (17 / 14 / 6 / 12 in all: copies leave through the pore
+    and are copied outside too); all 150 copies are of genome triangles, none of the wall. Controls: no pore (`150pc`):
+    0 copies, the founder alone; plain walls with the pore (`150pn`): all 150 copies are of wall cells, no genome copy.
+    Checks `imprint-pore` (need 3 of 4 with 4 or more strands inside and no wall copies), `imprint-pore-c`,
+    `imprint-pore-n`. Picture (world 1): ![imprint pore](pictures/imprint_pore.png)
+  - **The anchor must sit in the middle of a flat wall.** First placed at a hex corner: the anchored founder lay along
+    the next wall with its backs against it, no back could be copied, so no fill existed and the first copy stayed
+    docked for good (world 4: 1 strand). In the middle of a flat wall the strand stands at 60 degrees into the cell,
+    faces and backs exposed. (The same trap is run 0236's "founder bound to P's anchor at t=0", variant (d).)
+  - Limits: the anchor holds one strand (the founder, or a copy if the founder left first); copies leave through the
+    pore as freely as blanks come in (no selectivity: a pore is as wide for a strand end as for a blank); food is a
+    finite batch outside (150 blanks).
+  - Enables: a bud that copies its genome after the split, fed through its own pore (below); the core change
+    candidate "bringing copy blanks into a cell" is no longer needed for feeding.
+
+- **Bud pair on copies with a doorway (`budpore`)** — partial: the pair splits in 2 of 4 worlds; the bud never copies
+  its genome after the split (M2 of the build line: not yet). Fewer parts than `split q`: no doors, no `&` pairs, no
+  open signal on the walls. P (R 7) and D (R 5) are joined by one latch bond beside a single opening that joins P, D
+  and the outside; D's anchor next to the latch is `Z@|*`: when it catches a copy's high end its trigger side is bonded
+  and the latch lets go (existing rule: a latch lets go while a non-hinge partner has a bonded trigger). With no open
+  signal every wall side is spent from t = 0. Command: `node tri/demos.js budpore k 200000 runs 150`. Picture (world 4,
+  split at 54000; last frame: the bud, its strand lying along the wall): `docs/pictures/budpore.png`.
+  - Evidence (150 blanks outside, 200000 steps): split at 130000 / no / no / 55000; both splits came after the blanks
+    were spent; the bud then held 1 strand and made no copy (no food left, and its strand lies along its wall).
+    300 blanks: no split (worlds 3 and 4 to 200000 steps, D held 2-3 free strands for over 100000 steps and caught
+    none; worlds 1 and 2 stopped at 95000 without a split).
+  - **Why D's anchor does not catch (measured):** a probe counted strand ends with seed `z` within `capture` of D's
+    anchor site every 20 steps (world 3, 60000 steps): 52-87 approaches, all while the strand was busy (busy 26-30),
+    0 capture attempts. A strand's seed is active only while it is not being copied; with blanks around, a blank
+    touching a face becomes a docker beside it and zip docks the high end first, so ends are idle only for moments.
+    `split g` catches because its dockers come only from P's pocket. Core change candidate in docs/NEXT.md.
+  - **Tried and removed, `split ... qp`** (pores in run 0236's `split q`): the `&` pairs that hold a pair lie on both
+    sides of its doorway (P's doorstop and pairs left, D's hinge, doorstop and a pair right), joined only round D, so
+    D's anchor needed open range 27 (two anchors: 11); every wall cell in range keeps its free side and outside blanks
+    copied them: 200 copies in 5000 steps, 2% of them genome. Pores in a pair's walls also cut the open signal's way to
+    the pairs (a second gap). A first `budpore` with `&` pairs on one side of the doorway (range 4, 9 cells hearing)
+    still lost 60-90% of the blanks to the neck. Hence the latch hold.
+  - Next: the bud needs a mid-wall anchor (a hear chain `+` from the anchor to the latch allows up to 5 bonds) and an
+    anchor that catches busy strands (core change), then food lasts past the split.
+
 ## 2026-10-02 (autorun run 20261002-0236, build)
 
 - **Genome on copies inside a sealed cell** — works (3 of 4 worlds). A cell copies its genome from copy blanks alone:

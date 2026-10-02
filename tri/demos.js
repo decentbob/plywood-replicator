@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | stamp | split | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | stamp | split | budpore | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit,openBudDoors}=require('./world');
 const {render,montage}=require('./render');
@@ -109,7 +109,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // attached); copy blanks -?-?-? are the only food: no free parts. A copy blank that touches a free side of an
     // attached triangle becomes a copy of it, so the ring's own cells and root multiply, the ring closes and a second
     // ring grows on the bare anchor. extra: number of copy blanks (default 400); 'c': control, blanks without copy sides
-    imprint(){if(String(extra||'').includes('m'))return D.imprintCell();if(String(extra||'').includes('g'))return D.imprintGenome();steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
+    imprint(){if(/[mp]/.test(String(extra||'')))return D.imprintCell();if(String(extra||'').includes('g'))return D.imprintGenome();steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
       const a=r.v[i],b=r.v[(i+1)%3],cc=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-cc[0],a[1]+b[1]-cc[1]]],type:'z--'};
       const supply={[ctl?'---':'-?-?-?']:nb},av=anchor.v,weld={v:[av[2],av[1],[av[1][0]+av[2][0]-av[0][0],av[1][1]+av[2][1]-av[0][1]]],type:'---'};
       const {s,structures}=createWorld({seed,size,structures:[{tris:[anchor,...K.tris.slice(0,1+K.P)],x:c-7,y:c},{tris:[anchor,weld],x:c+7,y:c}],supply});
@@ -138,18 +138,35 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // as seedCopyGenome) and copy blanks only. The ring's free sides are completion sides '&': the ring is complete (no
     // open signal), so they are spent at once and never copied; the blanks go to the genome. extra: blanks (default 40);
     // 'n': control, plain walls (the walls take most blanks)
-    imprintCell(){steps=steps||40000;const plain=String(extra||'').includes('n'),nb=parseInt(extra)||40,R=6,size=2*R+8,c=size/2;
-      const ring=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:c}],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{latGlue:true}});
+    // imprint p (a cell fed through a pore): as m, but the 3 wall cells in the middle of the top wall are missing (a pore),
+    // an anchor W| in the middle of the bottom inner wall holds a strand by its low end (seed w: the founder, or a copy if the founder left), and the
+    // copy blanks start outside only (labelled). Every free side of the ring, outside, inside and the pore's edges, is a
+    // spent '&' side, so blanks come in through the pore and copy only the genome. extra: blanks (default 150); 'n':
+    // plain walls (control: the walls take the blanks); 'c': no pore (control: no blank gets in)
+    imprintCell(){const X=String(extra||''),pore=X.includes('p'),plain=X.includes('n'),closed=pore&&X.includes('c'),nb=parseInt(extra)||(pore?150:40),R=6,size=2*R+8,c=size/2;steps=steps||(pore?100000:40000);
+      let ring=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));const mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
+      if(pore){const ang=t=>{const m=[0,1,2].map(i=>t.v[i]).reduce((a,p)=>[a[0]+p[0]/3,a[1]+p[1]/3],[0,0]);return Math.abs(Math.atan2(m[1],m[0])-Math.PI/2);};
+        ring.sort((a,b)=>ang(a)-ang(b));if(!closed)ring=ring.slice(3);
+        // the anchor: the inner side in the middle of the flat wall opposite the pore (at a corner the anchored strand
+        // would lie along the next wall, its backs hidden, and no fill could be copied)
+        let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
+        best.t.type=[0,1,2].map(i=>i===best.i?'W|':'-').join('');}
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c}],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{latGlue:true}});
       const U=structures[0],F=founders[0];seedCopyGenome(s,F);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
-      const prep=new Set([...U,...F]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*R,y=(2*s.rng()-1)*R;if(S.hexr([x,y])<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
+      const prep=new Set([...U,...F]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*(pore?c:R),y=(2*s.rng()-1)*(pore?c:R),h=S.hexr([x,y]);if(pore?h>R+0.6:h<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
       const wallT=new Set(U.map(u=>canon(typeName(s,u)))),strands=()=>census(s).filter(q=>q.n>=7&&!q.paired);
+      // inside the ring: a strand's centre within the inner wall's distance from the ring's centre (unwrapped along bonds)
+      const centre=()=>{const set=new Set(U),L=[U[0]],seen=new Set(L);for(let q=0;q<L.length;q++)for(let i=0;i<3;i++){const b=s.bond[L[q]*3+i];if(b<0)continue;const w=(b/3)|0;if(set.has(w)&&!seen.has(w)){seen.add(w);L.push(w);}}
+          const RX=new Float64Array(L.length),RY=new Float64Array(L.length);s._unwrap(L,RX,RY);let x=0,y=0;for(let q=0;q<L.length;q++){x+=RX[q];y+=RY[q];}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];},
+        inside=()=>{const [cx,cy]=centre();return strands().filter(q=>{let x=0,y=0;for(const u of q.units){x+=s._dx(s.px[u]-s.px[q.units[0]]);y+=s._dy(s.py[u]-s.py[q.units[0]]);}
+          return Math.hypot(s._dx(s.px[q.units[0]]+x/q.n-cx),s._dy(s.py[q.units[0]]+y/q.n-cy))<(R-1)*H;}).length;};
       const tally=()=>{let g=0,w=0;for(const [,,t] of s.copyLog||[])if(wallT.has(canon(t)))w++;else g++;return [g,w];};
-      const report=t=>{const [g,w]=tally();console.log(`t=${t} strands ${strands().length} docks=${s.ev.dock||0} releases=${s.ev.release||0} copies=${s.ev.copy||0} (genome ${g}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
-      snap(s,'t0',`t=0: a sealed cell${plain?' (plain walls, control)':' (spent walls)'}, founder aAaA, ${nb} copy blanks`,null,false);
-      for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${strands().length} free strands`,null,false);}
-      const [g,w]=tally();console.log(`result: ${strands().length} free strands (founder included), copies ${s.ev.copy||0}: genome ${g}, wall ${w}`);
-      finish(`Genome on copies inside a sealed cell${plain?' (control: plain walls)':''}`);},
+      const report=t=>{const [g,w]=tally();console.log(`t=${t} strands ${strands().length}${pore?` (inside ${inside()})`:''} docks=${s.ev.dock||0} releases=${s.ev.release||0} copies=${s.ev.copy||0} (genome ${g}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
+      const what=pore?`a cell with ${closed?'no pore (control)':'a pore'}${plain?' (plain walls, control)':' (spent walls)'}, founder aAaA, ${nb} copy blanks outside`:`a sealed cell${plain?' (plain walls, control)':' (spent walls)'}, founder aAaA, ${nb} copy blanks`;
+      snap(s,'t0',`t=0: ${what}`,null,false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${pore?`${inside()} strands inside`:`${strands().length} free strands`}`,null,false);}
+      const [g,w]=tally();console.log(`result: ${strands().length} free strands (founder included)${pore?`, ${inside()} inside`:''}, copies ${s.ev.copy||0}: genome ${g}, wall ${w}`);
+      finish(pore?`Genome on copies in a cell fed through a pore${closed?' (control: no pore)':plain?' (control: plain walls)':''}`:`Genome on copies inside a sealed cell${plain?' (control: plain walls)':''}`);},
     // split: a parent ring P and a bud ring D (prepared, labelled) share a wall held by completion-release pairs '&',
     // with an open doorway through both walls (each panel turned open, held by a '&' doorstop, always triggered). Inside
     // P a stamp pocket casts blanks into the bud's part (A@-a@); parts diffuse through the doorway into D and grow a
@@ -240,6 +257,68 @@ function demo(name,seed=1,steps,dir='runs',extra){
         snap(s,'pocket',`the bud's pocket: ${T.length-miss.length}/${T.length} cells`,{units:members[dc].filter(u=>T.includes(canon(typeName(s,u)))),radius:3.5});}
       {const {comp,members}=s.bodies();snap(s,'zoom','the bud after the split',{units:members[comp[Du[0]]],radius:6});}
       finish('Split: the parent feeds its bud through a doorway; when the bud is complete the doors shut and it separates');},
+    // budpore (a bud pair on copies, partial; see INNOVATIONS): parent P (R 7) and bud D (R 5), prepared rings (labelled)
+    // touching along D's bottom wall. The contact cells of both walls right of x = -DW are missing: one opening joins
+    // P, D and the outside (each ring has one gap: a second would cut its wall in two). One P-D bond left of the
+    // opening is a latch bond (latch side '~' on D's cell L); the other contacts are unbonded. D's anchor A, a neighbour
+    // of L, is Z@|* (anchor, attach, trigger): once it holds a strand by its high end z its trigger side is bonded, and
+    // a latch lets go while a non-hinge partner has a bonded trigger: D lets go of P. No wall hears an open signal
+    // (openRange 1: only A's own '@'), so every other free side is spent and never copied; A's copies are parts ('@')
+    // and bind nothing. P's anchor W| (middle of its bottom wall) holds the founder aAaA (seedCopyGenome). Copy blanks
+    // start outside ('i': also 60 inside P). extra: blanks outside (default 300). Status: P copies its genome; D's anchor
+    // catches a copy only once the blanks are spent (a strand's seed is inactive while it is being copied), so the bud
+    // has no food left after the split, and A sits beside a corner, so a caught strand lies along the wall
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+      const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
+      let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
+      // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
+      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&cn(v)[0]>-DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&cn(v)[0]>-DW));
+      const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
+      const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu);
+      // the hold: one P-D bond left of the doorway is a latch bond (latch side '~' on its D cell L); every other P-D bond is
+      // cut and loses its weld glue. D's anchor A is a neighbour of L with an inner free side, marked Z@|* (anchor,
+      // attach, trigger): once it holds a strand its trigger side is bonded, and a latch lets go while a non-hinge
+      // partner has a bonded trigger side: L lets go of P. The '@' emits the open signal (openRange 1: A alone hears it)
+      // and makes A's copies harmless (a free part binds only by '@').
+      const inD=new Set(Du);let pick=null;
+      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0;
+        for(let e=0;e<3;e++){const q=s.bond[L*3+e];if(q<0||!inD.has((q/3)|0))continue;const A=(q/3)|0,v=tris[U.indexOf(A)].v;
+          for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[A*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;if(!pick||m[0]<pick.x)pick={u,i,L,j:b%3,A,f,x:m[0]};}}}
+      if(!pick)throw Error('budpore: no latch site');
+      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
+      s.ltc[pick.L*3+pick.j]=1;const da={u:pick.A,i:pick.f};
+      // P's anchor W| (middle of its bottom inner wall)
+      let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5)continue;if(!pa||Math.abs(m[0])<pa.d)pa={u,i,d:Math.abs(m[0])};}}
+      s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
+      s.glue[da.u*3+da.i]=gc('Z');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;const hold=new Set([pick.u,pick.L]);
+      seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
+      // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
+      {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
+        if(!ok)throw Error('budpore: founder not placed');s.bind(pa.u,pa.i,GLUE,b,f,GLUE);
+        const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);for(const u of F)for(const v of U){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+          for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)throw Error('budpore: founder overlaps the wall');}}
+      spendableSides(s,U);for(let k=0;k<60;k++)s.derive();
+      const prep=new Set([...U,...F]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
+        if(!placeFree(s,u,placed,()=>{for(;;){if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}
+      // inside a ring: within its inner wall's distance of its centre (unwrapped along bonds)
+      const centre=L=>{const set=new Set(L),Q=[L[0]],seen=new Set(Q);for(let q=0;q<Q.length;q++)for(let i=0;i<3;i++){const b=s.bond[Q[q]*3+i];if(b<0)continue;const w=(b/3)|0;if(set.has(w)&&!seen.has(w)){seen.add(w);Q.push(w);}}
+        const RX=new Float64Array(Q.length),RY=new Float64Array(Q.length);s._unwrap(Q,RX,RY);let x=0,y=0;for(let q=0;q<Q.length;q++){x+=RX[q];y+=RY[q];}return [s.px[Q[0]]+x/Q.length,s.py[Q[0]]+y/Q.length];};
+      const where=()=>{const cP=centre(Pu),cD=centre(Du),{comp}=s.bodies();return census(s).filter(q=>q.n>=7&&!q.paired).map(q=>{let x=0,y=0;for(const u of q.units){x+=s._dx(s.px[u]-s.px[q.units[0]]);y+=s._dy(s.py[u]-s.py[q.units[0]]);}
+        const X=s.px[q.units[0]]+x/q.n,Y=s.py[q.units[0]]+y/q.n,inR=(C,R)=>Math.hypot(s._dx(X-C[0]),s._dy(Y-C[1]))<(R-1)*H,an=comp[q.units[0]]===comp[Pu[0]]||comp[q.units[0]]===comp[Du[0]];
+        return inR(cD,RD)?(an?'D*':'D'):inR(cP,RP)?(an?'P*':'P'):'out';});};
+      const wallT=new Set(U.map(u=>canon(typeName(s,u)))),tally=()=>{let gn=0,w=0;for(const [,,ty] of s.copyLog||[])if(wallT.has(canon(ty)))w++;else gn++;return [gn,w];};
+      let split=0,atSplit=null;const nIn=(L,k)=>L.filter(x=>x[0]===k).length;
+      const report=t=>{const {comp}=s.bodies();if(!split&&comp[Pu[0]]!==comp[Du[0]]){split=t;atSplit=where();}const L=where(),[gn,w]=tally();
+        console.log(`t=${t} strands in P ${nIn(L,'P')} in D ${nIn(L,'D')} out ${L.filter(x=>x==='out').length} [${L.join(' ')}] ${split?'SPLIT at '+split:'joined'} docks=${s.ev.dock||0} releases=${s.ev.release||0} anchors=${s.ev.anchor||0} copies=${s.ev.copy||0} (genome ${gn}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
+      if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [tt,u,ty] of s.copyLog||[])if(wallT.has(canon(ty)))m[ty+(split&&tt>split?' after':' before')]=(m[ty+(split&&tt>split?' after':' before')]||0)+1;console.log(JSON.stringify(m),'hearing',U.filter(u=>s.op[u]>0).length,'unspent free sides',U.reduce((a,u)=>a+[0,1,2].filter(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i]).length,0));});
+      console.log(`budpore: latch bond on D cell ${U.indexOf(pick.L)}, anchor Z@|* on its neighbour ${U.indexOf(pick.A)}`);
+      snap(s,'t0',`t=0: parent P (founder on its anchor${NI?`, ${NI} copy blanks`:''}) and bud D joined at one latch; ${nb} copy blanks outside`,{units:U,radius:14},false);
+      for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${split?'split at '+split:'joined'}`,{units:Pu,radius:16},false);}
+      report(steps);const L=where(),[gn,w]=tally();
+      console.log(`result: ${split?'split at '+split:'not split'}, strands in D at the split ${atSplit?nIn(atSplit,'D'):0}, at the end ${nIn(L,'D')}; in P ${nIn(L,'P')}; copies ${s.ev.copy||0}: genome ${gn}, wall ${w}`);
+      {const {comp,members}=s.bodies();snap(s,'zoom','the bud at the end',{units:members[comp[Du[0]]],radius:8},false);}
+      finish('Bud pair on copies with a doorway (partial): the parent copies its genome; the bud catches a copy only once food runs out, then splits off');},
     // budgrow: the bud grows instead of being prepared (structures.grownBud). The parent P (prepared, labelled: ring of
     // side 7 with a pulse door beside its seed side, a stamp pocket casting the bud's cap part from blanks, blanks xxx
     // inside) and the bud's kit parts outside (every bud cell its own type; extra: copies per type, default 4). The bud
