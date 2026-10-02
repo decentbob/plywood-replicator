@@ -1,15 +1,29 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-1351, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-1551, explore). Read AGENTS.md first (rules of work), then this file.
 
-**Current slice (autorun run 20261002-1551, explore): an anchor catches a strand that is being copied.** Goal: settle
-the core change candidate below (run 0921) by measurement. Try variants on `budpore` (4 worlds, 300 blanks):
-(A) the anchor ignores the busy relay but needs the end's face free; (B) the anchor ignores busy and face (the strand
-and its partial copy move as one body). Done when: either a variant makes the bud catch a copy while food lasts
-(catch before the blanks run out, in 3 of 4 worlds) and is entered in RULES Core changes, built as the rule, and
-`node tri/check.js` passes; or the candidate is recorded as "not yet" with what blocks it. Stop there; the bud's
-genome cycle after the split (D holds 2+ strands) is a follow-up only if time remains. Experiment option `ancX` in
-`tri/sim.js` (temporary; removed or made the rule at the end of the slice).
+**Handoff status (autorun run 20261002-1551, explore).** Everything committed on branch `claude/autorun-20261002-1551`
+and merged into `main`. No simulations running. `node tri/test.js`: 34 tests pass; `node tri/check.js`: 34 of 34 pass
+with the change (run as an experiment option, 2144 s), and the five anchor checks rerun on the final code give the same
+lines (`imprint-pore budpore split-g split-o budgrow-g`, 1351 s; new partial check `budpore` 3 of 4). No current slice.
+**Done this run (slice: an anchor catches a strand that is being copied; met):** core change, case and result in
+RULES (Core changes, newest): an anchor side catches a strand end whose spare edge is unbonded, busy or not, face
+docked or not; the strand moves with its partial copy as one body. `budpore` (300 blanks): the bud catches a copy and
+splits with food left in 4 of 8 seeds (seeds 1-4: 3 of 4; before: 0 of 4); a variant keeping "end face free" gave 2
+of 4. Cost: `imprint p` seed 2 (founder caught during its first copy, no back copied yet, its backs face the wall's
+wedge: no fill ever; 7 of 8 seeds now). Test "anchor: catches a strand end while the strand is being copied".
+Pictures `budpore_busy.png`, `anchor_busy_deadlock.png`. Also (user, 2026-10-02): AGENTS.md now asks every run to
+send the user a picture now and then (file-send tool), e.g. of the current work or a surprising result.
+**Exact next step:** the rotation's next run is `build`: the bud copies its genome after the split (M2) on `budpore`:
+move D's anchor mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the latch lets go while
+it hears a trigger signal; check the anchor site with the pitfall "Anchors in the middle of a flat wall") so a caught
+strand stands into the bud with backs exposed; target: the bud holds 2 or more strands at the end in 3 of 4 worlds
+(seeds 1-4, 300 blanks, 200000 steps; `budpore` worlds take about 4 minutes each). Also worth a look: seeds 5 and 8
+never split (seed 5: 180 of 270 copies went to walls). Build follow-ups of run 1351 below are still open. Probes used
+this run (scratch, in `runs/`, not kept): `anclog.js` (log anchor captures, render the scene after), `anclog2.js`
+(render the strand body zoomed at given steps), `fillprobe.js` / `backprobe.js` (copy types made, each docker's fill
+need, each back's free site and its nearest triangle), `snaptest.js` (dry-run `_snap` of a blank into each back site);
+all are preloads via `NODE_OPTIONS="-r ./runs/NAME.js"` with `ANC_AT` (step) and `ANC_OUT` (picture folder).
 
 **Handoff status (autorun run 20261002-1351, build).** Everything committed on branch `claude/autorun-20261002-1351`
 and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: 34 of 34 pass in 2391 s (new `budgrow-g` 3 of 4;
@@ -176,6 +190,7 @@ needs D's walls out of the open signal's reach (anchor near the doorway, short `
 above first: one batch with `W|` and a trace of the strands that enter D.
 
 ### Core change candidate (run 20261002-0921): an anchor catches a strand that is being copied
+**Status (run 20261002-1551): done, built as the rule (RULES, Core changes); `budpore` 4 of 8 seeds split with food left.**
 1. **Capability:** segregation on copies: a bud catches a genome copy while the parent copies from a steady blank
    supply. Measured (`budpore`, world 3, 60000 steps, a probe counting strand ends with seed `z` within `capture` of
    D's anchor site every 20 steps): 52-87 close approaches, every one while the strand was busy (busy 26-30: being
@@ -258,7 +273,7 @@ node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js split 1 150000 runs q            # the bud pair on copies (partial: 1 of 4 worlds splits)
 node tri/demos.js imprint 1 100000 runs 150p      # a cell fed through a pore: genome copied from blanks outside (150pc, 150pn: controls)
-node tri/demos.js budpore 1 200000 runs 150        # bud pair on copies, one latch, shared opening (partial: 2 of 4 split)
+node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: the bud catches a busy copy, splits with food left (partial: 4 of 8)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
@@ -286,6 +301,10 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **A strand caught while busy needs fills from elsewhere** (2026-10-02, run 1551). Anchors catch busy strands; the
+  strand and its partial copy are pinned in the anchor's orientation. If its backs then face a wall (a narrow wedge),
+  no back is copied there, and a copy caught before any back copy exists never gets a fill (`imprint p` seed 2). Place
+  anchors so a caught strand stands into the cell with backs open, or keep other strands copying nearby.
 - **Glue letters run out; seed letters clash** (2026-10-02, run 1351). The glue code is Int8: 63 letters, and a grown
   bud of side 5 uses 54. A genome in the same world needs its own letters (`avoid`), and the bud's seed glue must not
   be the genome's (a free part carrying the anchor's `Z@` bound the parent's seed side `z@~` in place of the root).

@@ -31,11 +31,11 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
 | Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds at 200000 steps; 5 of 8 seeds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
 | Genome on copies inside a cell: a sealed cell copies its genome from copy blanks alone (spent `&` walls are never copied) | replication from uniform nutrients | works (4 of 4 worlds at 60000 steps, 4 strands from 60 blanks, since the 2026-10-02 release locality fix; before it 3 of 4 at 40000; control 2-3, the wall takes most); in the bud pair (`split q`) partial, 1 of 4 | demos imprint m, split q |
-| Feeding on copies: a cell fed through a pore copies its genome from copy blanks outside (every free side spent `&`, so only what lies inside is copied) | uptake of uniform nutrients | works (4 of 4 worlds, 5-6 strands inside from 150 blanks; controls: no pore 0 copies, plain walls take all) | demo imprint p |
-| Bud pair on copies with a doorway (no doors; held by one latch bond released by the bud anchor's trigger side, so no wall hears an open signal) | budding on copies | partial: the bud's anchor rarely catches (strands are busy whenever food is plentiful; core change candidate in docs/NEXT.md) | demo budpore |
+| Feeding on copies: a cell fed through a pore copies its genome from copy blanks outside (every free side spent `&`, so only what lies inside is copied) | uptake of uniform nutrients | works (4 of 4 worlds, 5-6 strands inside from 150 blanks; controls: no pore 0 copies, plain walls take all; since anchors catch busy strands 7 of 8 seeds: a founder caught during its first copy, before any back was copied, never gets a fill) | demo imprint p |
+| Bud pair on copies with a doorway (no doors; held by one latch bond released by the bud anchor's trigger side, so no wall hears an open signal) | budding on copies | partial: since anchors catch busy strands (core change 2026-10-02, run 1551) the bud catches a copy and splits with food left in 4 of 8 seeds (before: 0 of 4); the bud does not yet copy its genome after the split (its anchor sits beside a corner) | demo budpore |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 40 minutes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 40 minutes with 4 processes).
 
 ## Backlog (top first)
 
@@ -45,8 +45,9 @@ Every row marked works is guarded by `node tri/check.js` (one line per capabilit
    cells of a complete pocket are not; inside faces only from inside). Done 2026-10-02: a sealed cell copies its genome
    from copy blanks alone (`imprint m`; walls with spent `&` sides are not copied). Open: the bud pair on copies (`split
    q`, 1 of 4: blanks are one batch, copies stall, strands rarely reach D's anchor) and a way to bring copy blanks in
-   (NEXT, core change candidate; 2026-10-02 run 0921: not needed, a pore with spent walls feeds a cell, `imprint p`). Open:
-   the bud's anchor catches no busy strand (NEXT, core change candidate run 0921; demo `budpore`).
+   (NEXT, core change candidate; 2026-10-02 run 0921: not needed, a pore with spent walls feeds a cell, `imprint p`). Done
+   2026-10-02 run 1551: anchors catch busy strands (core change), the bud pair `budpore` splits with food left in 4 of 8
+   seeds. Open: the bud copies its genome after the split (mid-wall anchor in D).
 
 1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`; see
    INNOVATIONS). Then: smaller pockets (fewer kit types, faster growth); several seeds per chain (`latGlue` backs);

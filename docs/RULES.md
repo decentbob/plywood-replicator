@@ -81,7 +81,7 @@ the core (the repository restarted on 2026-10-01).
 | `'` carried marks (stamp) | mark | 6 (stamp, grow 4s, split, split g, split o, budgrow) | 10-01 |
 | `?` copy side | mark | 4 (imprint) | 10-02 |
 | `$` fuel | mark | 2 (energy) | 10-01 |
-| `|` anchor | mark | 2 (split g, split o) | 10-01 |
+| `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02 |
 | `^` hand-off | mark | 1 (conveyor) | 10-01 |
 | `#` pulse door (hinge side) | mark | 1 (budgrow) | 10-01 |
 | `#` key let go (trigger side) | mark (second meaning) | 0 (airlock demo and the gate's pulse option only) | 10-01 |
@@ -134,7 +134,7 @@ by an anchor side `|` moves as one body into a free flush place (all or nothing;
 | fu (fuel) | own fuel sides; carrier's charge; own or hinge flap's start pulse (pwE) | partner current state; previous servo | local (fixed 2026-10-02) |
 | copy bind | the blank's copy sides; the site's bond and spent state | own; partner current state | local |
 | glue catch, dock, fill | own role, need, zip, refr, away, deaf; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
-| `_snap`, anchor capture | is the place free; the strand's body moves as one | physics (labelled) | physics |
+| `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds) | physics (labelled); own | physics; local |
 | glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
 | release | own face bond; chain partners' fn; template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
 | fn | own fill; chain partners' fill | partner current state | local (convention) |
@@ -167,15 +167,16 @@ binding): a triangle caught by glue while free (not by an attach side; docks and
 on one side only lets go with this probability per step; a second matching side holds it. A triangle held by a
 trigger side (a key a machine is reading) is not proofread.
 
-**Anchor (2026-10-01):** an attached triangle's unbonded anchor side `|` catches a strand end whose seed (spare edge,
-active while the strand is not being copied) carries the complementary glue, when the end's centre comes within
-`capture` of the site: the whole strand moves rigidly into the flush place if that place is free (all or nothing).
+**Anchor (2026-10-01):** an attached triangle's unbonded anchor side `|` catches a strand end whose seed (its unbonded
+spare edge, also while the strand is being copied: since 2026-10-02, Core changes) carries the complementary glue, when the end's centre comes within
+`capture` of the site: the whole strand (with any partial copy docked on it) moves rigidly into the flush place if that place is free (all or nothing).
 The capture path (the turn the short way and the move) must be clear in sub-steps, as every move (fixed 2026-10-02:
 a strand was pulled through a wall); a strand that already holds the anchor's triangle (one body) is not caught.
 This is the only way a strand joins an existing structure (two attached triangles otherwise bond only when flush).
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
-released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0). A
+released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and its face is free (an anchor
+reads only that the spare edge is unbonded, above). A
 strand's high end held by a completion-release side `&` (a membrane growing around the strand) starts no copy.
 
 ## Chains and copying
@@ -290,6 +291,14 @@ behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
    (300 blanks, 200000 steps, seeds 1-4): without the busy condition only (face must be free): split in 2 of 4 worlds
    while blanks remained (70000 with 100 left, 110000 with 71); without both: 3 of 4 (70000 / 100000 / 95000, with
    100 / 81 / 83 blanks left). Chosen: both removed.
+6. **Result (built as the rule).** `budpore` seeds 1-8: the bud catches a copy and the pair splits with food left in
+   4 of 8 worlds (seeds 5-8: 1 of 4; seed 7 split once the blanks were gone, 5 and 8 never split); before: 0 of 4.
+   `node tri/check.js` 34 of 34 with the change. Cost, measured: `imprint p` (a lone founder in a cell fed through
+   a pore) seed 2 caught its founder at step 1001 during its first copy, before any of its backs had been copied:
+   pinned at the wall its backs face a narrow wedge that blanks do not reach, so no fill triangle ever exists and
+   the copy stays docked for good (1 strand; without the change 7). Seeds 5-8 are identical with and without the
+   change, seeds 1, 3, 4 pass (4, 7, 6 strands inside): 7 of 8 worlds (the check needs 3 of 4 and passes). Test: "anchor: catches a strand
+   end while the strand is being copied".
 
 ### Removal: a latch held by the open signal, 2026-10-02, autorun run 20261002-0721 (core-review)
 1. **Capability:** none lost. The branch "a latch holds a trigger while its triangle hears an open signal" was meant to

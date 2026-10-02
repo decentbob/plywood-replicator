@@ -166,7 +166,6 @@ class TriSim extends Physics{
     if(r.role===SBACK&&!r.fill&&r.prev>=0&&r.next>=0&&r.free>=0&&!bnd(r.free))return [r.free];
     if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free))&&this.busy[u]===0)return [r.inert];   // an end's seed: only while the strand is not being copied
     return [];}
-  _ancSeed(u,r){const bnd=i=>this.bond[u*3+i]>=0;if(r.role!==SFACE||r.inert<0||bnd(r.inert))return false;if(this.p.ancX===1)return !(r.free>=0&&bnd(r.free));return true;}
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
@@ -201,12 +200,13 @@ class TriSim extends Physics{
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
           if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fn[v]=1;this.fn[u]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
-      // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its spare edge, active
-      // while the strand is not being copied) with the complementary glue, as it would catch a free triangle: the end
-      // comes within `capture` of the site and the strand is placed flush (physics moves it as one body)
+      // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its unbonded spare edge,
+      // also while the strand is being copied) with the complementary glue, as it would catch a free triangle: the end
+      // comes within `capture` of the site and the strand is placed flush (physics moves it, with any partial copy
+      // docked on it, as one body)
       {let hit=false;for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]]){if(rb.role!==SFACE||rb.inert<0||!this.chg[b])continue;
           for(let e=0;e<3&&!hit;e++){if(!this.anc[a*3+e]||this.bond[a*3+e]>=0||!this.glue[a*3+e])continue;const f=rb.inert;
-            if(!(this.p.ancX?this._ancSeed(b,rb):this._active(b,rb).includes(f))||this.glue[b*3+f]!==comp(this.glue[a*3+e])||!reach(a,e,b,f)||this.rng()>=p.pBond)continue;
+            if(this.bond[b*3+f]>=0||this.glue[b*3+f]!==comp(this.glue[a*3+e])||!reach(a,e,b,f)||this.rng()>=p.pBond)continue;
             if(!this._snapBody(b,f,a,e))continue;this.bind(a,e,GLUE,b,f,GLUE);this.count('anchor');hit=true;}
           if(hit)break;}
         if(hit)continue;}

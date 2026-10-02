@@ -6,6 +6,27 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-1551, explore)
+
+- **An anchor catches a strand while it is being copied (core change)** — works; `budpore` (bud pair on copies) is
+  still partial, now 4 of 8 seeds instead of 0 of 4. Rule: an anchor side `|` catches a strand end whose spare edge
+  is unbonded and carries the complementary glue, whether or not the strand is busy or its end face is docked; the
+  strand and its partial copy move as one body into the flush place (RULES, Core changes, with the case). The anchor
+  reads less than before (no busy relay, no face bond).
+  - Evidence, `node tri/demos.js budpore k 200000 runs 300` (300 blanks outside): seeds 1-4 split at 70000 / 100000
+    / no / 95000 with 100 / 81 / - / 83 blanks left; seeds 5-8: no / 45000 (122 left) / 135000 (0 left) / no. Before
+    the change, seeds 1-4 never split with 300 blanks (run 0921). A variant that kept "the end's face is free" split in
+    2 of 4 (seeds 1, 2). Partial check `budpore` (seeds 1-4, split with blanks left).
+  - Cost: `imprint ... 150p` seed 2 now fails (1 strand instead of 7): its lone founder was caught at step 1001 in its
+    first copy, before any back had been copied; pinned at the wall its backs face a narrow wedge blanks do not
+    reach, so no fill triangle exists and the copy stays docked for good (pictures below). Seeds 1, 3-8 pass (5-8
+    identical to before): 7 of 8. A strand caught busy finishes its copy only with fills made elsewhere.
+  - Not yet: the bud copies its genome after the split. D holds 1-2 strands at the split and 1 at the end: its anchor
+    sits beside a corner (the caught strand lies along the wall, no back exposed). Next: a mid-wall anchor in D.
+  - Pictures: `docs/pictures/budpore_busy.png` (seed 1: the bud catches a busy copy at 70000 and leaves, food left);
+    `docs/pictures/anchor_busy_deadlock.png` (imprint p seed 2: the founder caught mid-copy, no fills).
+  - Checks: all 34 pass with the change (`imprint-pore` 3 of 4), plus partial `budpore`.
+
 ## 2026-10-02 (autorun run 20261002-1351, build)
 
 - **Grown bud catches a genome copy** — works: 3 of 4 check worlds at 300000 steps; 6 of 8 seeds at 400000 (5 of 8
