@@ -340,6 +340,8 @@ Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed step
 saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Do next (toward the BIG goal)
+**Superseded by "Direction" above (run 20261002-1751): its priorities come first; the list below is the older
+casting-lineage record.**
 The BIG goal's sentence now has a prepared, working skeleton: the parent **feeds** its bud through a doorway, the bud
 **catches a genome copy** and grows its content, and it **splits off** sealed (demo `split`). What is still prepared
 or missing, in order:
