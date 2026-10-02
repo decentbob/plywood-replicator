@@ -1,48 +1,27 @@
 # Next instance: start here
 
-## Current slice (autorun run 20261001-2235, build, 2026-10-01)
-- **Goal:** the bud ring grows from a seed on the parent's wall instead of being prepared: its growth fronts hold
-  both doors of the doorway shut until the bud's ring is closed, the parent then feeds it through the doorway, and when
-  the bud's content is complete it splits off sealed (both doors shut) — the "builds its offspring" half of the BIG
-  goal on the existing core.
-- **Acceptance:** `node tri/demos.js budgrow k 300000 runs`, k = 1..4: the bud ring grows to all its cells, both doors
-  stay shut until it is closed and then open, the cap grows from parts cast in the parent, the pair splits with both
-  doors shut in at least 3 of 4 worlds; a sigma-0 test in `tri/test.js` shows the door order (shut while a front is
-  open, open once closed, shut after the split).
-- **Stop boundary:** cap content only (no genome anchor or organelle, no regrowth of the next bud); the parent stays
-  prepared. Budget: about 15 demo runs; then hand off with the exact state.
-- **Approach:** designs considered (details in INNOVATIONS when done): (a) grow budPair's open panels with `&`
-  doorstops: every `&` cuts at the first silence, so the doors could not open on the bud's closing and shut on its
-  completion with one open signal (NEXT analysis); (b) a trigger key bound when the ring closes: closures with trigger
-  sides are deaf while anything is open; (c) chosen: both door panels are **pulse doors** (`#`) with a built-in
-  trigger, held shut while they hear the **lock signal**. The bud's growth sites are latch sites (`@~`): while a
-  front is open the lock signal holds both doors, so they open when the bud's last cell arrives (no rule reads the open
-  signal for that), stay open while the bud's content (cap seed) is open, and once nothing is open the root's `&` seed
-  bond is cut: the parent's seed side and the root's seed side are latches, unbonded they emit the lock signal again
-  and both pulse doors swing shut. The bud's panel hangs only by its hinge (to the root); its far end meets the last
-  wall cell flush, unbonded (a bond would lock the flap). Every bud cell type is unique (a periodic motif cannot end on
-  a cell whose next side stays open).
+State on 2026-10-02 (after autorun run 20261001-2235, build). Read AGENTS.md first (rules of work), then this file.
 
-State on 2026-10-01 (after autorun run 20261001-2006, harden). Read AGENTS.md first (rules of work), then this file.
-
-**Handoff status (autorun run 20261001-2006).** Working tree clean; everything committed on branch
-`claude/autorun-20261001-2006` and merged into `main`. No simulations running. `node tri/test.js`: 20 tests pass;
-`node tri/check.js`: 24 of 24 checks pass in 467 s (4 processes). No current slice: the next run starts a new one.
-**Done this run (slice: capability checks and the `split o` stall; acceptance met):**
-- `tri/check.js`: one PASS/FAIL line per working capability of ROADMAP (24 checks with two controls; multi-world
-  claims run seeds 1-4 and need 3). It spawns the existing demos with `TRI_NOPIC=1` (no pictures) and reads each
-  demo's last report line, so setups live only in demos.js. Add a check for every new working capability.
-- `split o` (a bud that lives alone): 4 of 4 worlds (was 2 of 4). An end-of-run report lists missing pocket cells and
-  where their copies are. Causes found: a yolk blank `uuu` stuck in the last caster site (fix: no `uuu` inside the
-  parent; the bud imports them after the split), then a narrow site (a kit cell with a side on the bud's wall; fix:
-  `budPair` picks the organelle placement with the fewest wall-touching kit cells, after kit risk).
-- The first check run found two older capabilities below their record: `cells` 2 of 4 (the founder's first dock lost
-  the race with the membrane root: now 24 dockers per type, 4 roots: 4 of 4) and `live` 2 of 4 (leftover kit parts
-  trapped in the ring jammed the door: now 2 kit copies per cell, 150000 steps: 4 of 4). Details: INNOVATIONS (newest).
-**Exact next step:** a `build` slice toward growing the bud pair instead of preparing it (Do next, item 2), or the
-explore run on programmable synthesis (item 3) when the rotation gives an explore run. Run `node tri/check.js` before
-merging any rule, physics or shared-structure change.
-The `split` demo's `outside=` count (flood fill on a 0.25 grid) can leak through wall gaps: treat it as rough.
+**Handoff status (autorun run 20261001-2235).** Everything committed on branch `claude/autorun-20261001-2235` and
+merged into `main`. No simulations running. `node tri/test.js`: 23 tests pass; `node tri/check.js`: see the last line
+of the run's INNOVATIONS entry / commit message (25 checks incl. the new `budgrow`). No current slice.
+**Done this run (slice: grow the bud ring instead of preparing it; acceptance met, 4 of 4 worlds):**
+- Goal was: the bud ring grows from a seed on the parent's wall; its growth holds both doors shut until it is closed,
+  the parent feeds it through the doorway, it splits off sealed. Acceptance: `budgrow k 250000`, k = 1..4, all cells,
+  doors shut until closed, cap fed after closure, split with doors shut in >= 3 of 4; sigma-0 door-order test. Met:
+  4 of 4 (details, numbers and picture: INNOVATIONS, newest). No new rule: pulse doors gated by the lock signal of the
+  bud's open latch sites; the root's `&` seed bond cut once the cap is complete.
+- Designs tried and dropped on the way (recorded so nobody retries them): growth sites as latches AND relying on them
+  for the open signal (latch sides emit none: the root's `&` would cut early); a closure bond cut by a latch (the sides
+  stay flush and re-close at once, then the restored lock signal keeps the latch from cutting again: the bud stayed
+  stuck to the parent); a last cell resting on the parent (its site enclosed: buds stalled at 53/54).
+- Two physics bugs fixed (both let blocks through closed walls; RULES Physics; tests). `heir` and `cycle` checks now
+  run 45000 / 200000 steps (same criteria).
+**Exact next step:** a `build` slice: give the grown bud a genome copy (the anchor `Z@|` from `split g`, on a wall cell
+of the grown bud, emitting the open signal until it catches a copy; the parent keeps its founder by its own anchor) and
+then its own pocket (`split o`), so the grown bud lives alone. Keep the cap seed or the anchor on an early wall cell
+(the open signal must exist before the 7-cell panel completes). Then: the parent's seed is free again after the split
+(a second bud from fresh kit parts would test repeat budding).
 
 ## Where things stand
 - Built and working in demos (details and pictures: docs/INNOVATIONS.md): typed chain copying (zip), casting, lid
@@ -89,6 +68,7 @@ node tri/demos.js grow 1 20000 runs 4s             # a stamp pocket grows from i
 node tri/demos.js split 1 30000 runs               # bud fed through a doorway grows a cap, then splits off sealed
 node tri/demos.js split 1 60000 runs g             # the bud catches a genome copy (anchor), then splits off
 node tri/demos.js split 1 200000 runs o            # + the bud grows its own pocket, splits, imports, copies its genome
+node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a
@@ -101,18 +81,10 @@ or missing, in order:
 1. ~~**A bud that lives alone**~~ — works prepared, 4 of 4 worlds (`split 1 200000 runs o`, autorun 20261001-2006):
    the bud grows its own stamp pocket (casting `aU.w` from blanks `uuu`, also its fills) from kit parts held as food in
    the parent, catches a copy, splits off, imports `uuu` through its own door and makes a whole copy of its genome.
-2. **Grow the bud pair instead of preparing it.** Ideas: grow D as a kit from a seed on the parent's outer wall
-   (kits grow any prepared lattice structure). Problems to solve: (a) a hinge bonds only when its sides are flush, so
-   a panel grown in the open position needs its hinge partner to be the cell beside it there (the doorstop) with the
-   pin at the shared vertex, and its swing direction must point shut; (b) closures never form on `&` sides, so only
-   tree edges can be `&` (the root's seed side, like the bud demo); (c) the parent's own door must open only after D's
-   wall closes (two phases: the late-organelle trick, a trigger side deaf while the open signal is heard).
-   Analysis (2026-10-01): D's open panel can be grown: in the open position the hinge cell's partner is the doorstop
-   (the edge through the pin), the hold is a `@&` tree edge to a wall cell, the built-in trigger a tree edge with `*`
-   (as the pore). The hard part is ordering with one open signal: D's wall completing silences everything for a moment,
-   so every `&` (contact, doorstop) would cut before D's content starts. Needs a second, independent completion signal
-   (e.g. one relayed only through hear sides, or a mark for "content" fronts), or an order where the content's seed is
-   already an open front while the wall grows (then the parent's door must open on something else than silence).
+2. ~~**Grow the bud pair instead of preparing it.**~~ — works for a cap, 4 of 4 worlds (`budgrow`, autorun
+   20261001-2235): the bud ring grows on the parent's seed; pulse doors held by the lock signal of its open wall sites
+   open once it is closed; its cap is fed; it splits sealed. Next: genome anchor and pocket in the grown bud (see the
+   handoff above); later the parent's door and seed as grown parts of the bud itself (the bud as the next parent).
 3. **Programmable synthesis** (the next big blocker, see IDEAS): one stamp pocket makes one part type; a cell kit has
    ~60. Options: part templating (a copier pocket: simple, information in parts) or translation (a reading frame on a
    strand: hard). **User (2026-10-01): an explore run decides**, comparing part templating, translation and
@@ -123,6 +95,15 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **Latch sites emit no open signal** (`@~`): a front of latch sites carries the lock signal, not the open signal;
+  something else must keep a structure open (ordinary sites, a content seed) or its `&` sides cut early.
+- **A latch-cut closure re-closes**: two sides that stay flush close again next step (no `&` on a closure is possible:
+  closures never form on `&` sides). Cut what must stay apart with `&` on a bond formed by binding a free part.
+- **A grown flap hangs by its hinge only**: any second bond of the panel to the ring locks it. Its far end must move
+  away from its neighbour when it swings (down-triangle far end, up-triangle neighbour for a panel swinging up).
+- **lockBusy and other relays are Int8**: lockRange above 127 overflows (no lock at all). Use at most 120.
+- **Physics leaks found 2026-10-02** (fixed): check new closed structures for escapes with a trace (cast products and
+  released parts start touching their neighbours).
 - **Food in a kit site.** A blank whose glue complements casters' close-only instruction sides closes into an empty
   caster site of a growing pocket (two `U.` sides facing it) and blocks it for good. Keep a pocket's target blanks away
   until the pocket is complete (the bud gets `uuu` only through its own door, after the split).

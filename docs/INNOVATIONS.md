@@ -6,6 +6,47 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261001-2235, build)
+
+- **Grown bud** — works (4 of 4 worlds). The bud ring is no longer prepared: it grows from free kit parts on a seed
+  side of the parent's wall (`structures.grownBud`, demo `budgrow`; the parent, its stamp pocket and blanks are a
+  labelled prepared start). Every bud cell is its own type (54 types, 4 copies each). From the root two fronts grow: the
+  bud's door panel (7 cells along the contact row, hinged to the root) and the wall the long way round; the wall's last
+  cell q meets the panel's far end flush, unbonded. No new rule; the order of events comes from existing signals:
+  - **Doors held by the lock signal.** Both door panels (the parent's, 5 cells, and the bud's) are pulse doors (`#`)
+    with a built-in trigger, so they open whenever they hear no lock signal. The parent's seed side, the root's seed
+    side and every site of the wall front are latch sides (`@~`): while any is unbonded it emits the lock signal. So
+    both doors stay shut while the bud grows and open about 150 steps after q arrives (its ring is closed).
+  - **Open signal from the panel front and the content.** Latch sites emit no open signal; the panel front's sites
+    and the cap seed (on the wall front's second cell) do. The root's seed side is a completion release (`&`): while
+    the cap is open the pair holds; the parent's stamp pocket casts cap parts from blanks, they come through the
+    doorway and grow the three-cell cap; then nothing is open, the seed bond is cut for good, both seed latches are
+    open again, their lock signal swings both doors shut, and the bud drifts off with its panel.
+  - **Geometry.** A grown panel hangs only by its hinge (any second bond locks the flap). The panel's far end must
+    separate from q when it swings into the bud, so q is an up-triangle in the contact row; one resting on the parent
+    would make q's site enclosed (its three sides taken), so the bud sits shifted 2 to the side and q overhangs the
+    parent's top corner (its free side faces open space). `grownBud` searches this layout (offset, panels, pins,
+    sweeps, cap place).
+  - Evidence (`events:` line per world, 250000 steps): ring closed at 141450 / 154150 / 152600 / 172650; the parent's
+    door never moved before that (0 degrees); doors open 150 steps later; cap cells 900-4600 steps after closure;
+    split 100-200 steps after the last cap cell; both doors shut. Sigma-0 test of the door order in `tri/test.js`.
+  - Command: `node tri/demos.js budgrow 1 250000 runs` (about 3 minutes; extra: copies per type). Picture (t=0, growth,
+    the closed bud with its cap, the bud after the split): `docs/pictures/budgrow.png`.
+  - Limits: the parent is prepared and its door is not regrown; the next bud would need the parent's seed latch only
+    (it is free again after the split) and a new kit supply; the content is a cap (no genome or organelle yet); a
+    small race remains (if the 7-cell panel completes before the wall front's second cell arrives, nothing is open
+    and the root lets go early; not seen in 8 worlds).
+  Enables: the BIG goal's "builds its offspring" on a grown bud; next, a genome copy and a pocket in the grown bud.
+- **Physics fixes (two leaks through walls)** — found because cap parts left the closed parent ring. (1) A lone block
+  that started touching another block (cast products and released parts do) could take its whole kick when that
+  reduced its overlap, of any length, and jumped through a one-row wall on kicks above 1.44: the overlap-reducing move
+  is now at most 1.0. (2) A lone block's trial checked only blocks in the 3 x 3 grid cells (1.4 wide) around its start,
+  but reaches 1.15 + its move; near a cell edge it moved into wall cells it had not checked: the search now covers the
+  whole reach. Tests for both (each fails on the old code). Effect on old capabilities: kit pockets grow a little
+  slower (blocks no longer tunnel into kit sites); `heir` needs 45000 steps (was 30000) and `cycle` 200000 (was
+  120000) on the check's seed (old physics: third generation in 2 of 4 worlds at 120000; new: 0 of 4 at 120000, seed 1
+  at 200000).
+
 ## 2026-10-01 (autorun run 20261001-2006, harden)
 
 - **Capability checks (`tri/check.js`)** — works. One command runs every capability ROADMAP marks as working (24 checks:
