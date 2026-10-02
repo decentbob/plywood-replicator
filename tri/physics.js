@@ -14,7 +14,7 @@
 const R3=1/Math.sqrt(3);
 const REST=[[R3*Math.cos(-Math.PI/3),R3*Math.sin(-Math.PI/3)],[R3*Math.cos(Math.PI/3),R3*Math.sin(Math.PI/3)],[-R3,0]];   // counter-clockwise; side 0 faces +x
 const AREA=Math.sqrt(3)/4,INERTIA=AREA/12,SIZE=Math.sqrt(AREA);   // unit density: mass = area; moment about the centroid = area * side^2 / 12
-const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,pairTol:0.35,subStep:0.8,direct:0.8,bisect:1,skin:0,split:true};
+const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,pairTol:0.35,subStep:0.8,direct:1.0,bisect:1,skin:0,split:true};
 const EPS=1e-10,TOUCH=1e-6,CELL=1.4,NEAR2=(2*R3)*(2*R3),IN2=(R3-1e-4)*(R3-1e-4);   // IN2: (two inradii)^2, a little less   // overlaps below TOUCH count as touching; CELL >= reach of overlap and pair checks
 
 function mulberry32(seed){let a=seed|0;const f=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
@@ -130,10 +130,10 @@ class Physics{
     this._unwrap(list,rx,ry);const px0=this._dx(cx-this.px[list[0]]),py0=this._dy(cy-this.py[list[0]]);
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]-=px0;ry[q]-=py0;reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
     const dist=Math.max(Math.hypot(tx,ty),reach*Math.abs(da));let f=0;
-    // a move short enough that it cannot pass through a one-row wall whose destination is clear is taken at once: at
-    // most `direct` (0.8), below a block's own width (0.866), the shortest path through a wall (through the pinch at a
-    // hole's apex; 1.0 let a block in a wall's hole hop across it, fixed 2026-10-02)
-    const tried=dist<=this.p.direct;if(tried&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true)===0)f=1;
+    // a short move (at most `direct`, 1.0) whose destination is clear is taken at once; one longer than a sub-step only
+    // if its midpoint is clear too (a block in a wall's hole could hop across the wall through the pinch at the hole's
+    // apex: the shortest path through a wall is a block's width, 0.866; fixed 2026-10-02)
+    const tried=dist<=this.p.direct;if(tried&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true)===0&&(dist<=this.p.subStep||this._overlap(list,rx,ry,cx,cy,tx/2,ty/2,da/2,st,true)===0))f=1;
     const nsub=f===1?0:Math.max(1,Math.ceil(dist/this.p.subStep));
     let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}   // the full move was already found blocked
     // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
@@ -167,7 +167,7 @@ class Physics{
       return sum;};
     // one trial: translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
     const trial=(xs,ys,mx,my,t)=>{const dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t)),at=g=>depth(xs+g*mx,ys+g*my,g*t,true);
-      const tried=dist<=p.direct;let f=0;if(tried&&at(1)===0)return 1;
+      const tried=dist<=p.direct;let f=0;if(tried&&at(1)===0&&(dist<=p.subStep||at(0.5)===0))return 1;
       const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
       for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||at(g)>0){blocked=g;break;}f=g;}
       if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(at(g)>0)blocked=g;else f=g;}

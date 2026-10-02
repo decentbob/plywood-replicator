@@ -45,8 +45,9 @@ to weld prepared structures (a builder convention, not a rule).
 - Each step every body, in random order, proposes a Brownian kick (parameters sigma 0.3, sigmaRot 0.45 per unit
   mass: a lone block, mass sqrt(3)/4, gets a kick of 0.46 and a turn of 1.04 rad standard deviation; a body gets the
   mean kick of its blocks and the turn of their torque, so larger bodies move less), translation and turn as two
-  trials. A trial of at most `direct` (0.8, below a block's width: fixed 2026-10-02, 1.0 let a block in a wall's hole
-  hop across it through the apex pinch) is checked once; a longer one moves in sub-steps (0.8) as far as it goes
+  trials. A trial of at most `direct` (1.0) is checked once, a trial longer than a sub-step also at its midpoint
+  (fixed 2026-10-02: a block in a wall's hole hopped across the wall through the pinch at the hole's apex, 95 of 2000
+  kicks of 0.95; `direct` 0.8 also fixed it but changed the outcome of most capability checks); a longer one moves in sub-steps (0.8) as far as it goes
   without overlapping another block, then closes in on the contact (one bisection). So nothing passes through a wall.
   A body that overlaps (rare: binding just placed it) may make a move that reduces its overlap, if the move is at most
   `direct` (fixed 2026-10-01: any length was allowed, and a block touching a wall jumped through it on a kick above
