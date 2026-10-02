@@ -325,43 +325,64 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // ring D (side 5) grows from P's seed: while a wall site is open the lock signal holds both doors shut; when D's last
     // cell arrives both open, cap parts cast in P come through the doorway and grow D's two-cell cap; when nothing is
     // open, D's seed bond is cut, the lock signal returns, both doors swing shut and D leaves
-    budgrow(){steps=steps||400000;const per=parseInt(extra)||4,size=32,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud({RP,RD}),dcy=cy+(RP+RD)*H;
+    budgrow(){steps=steps||400000;const gen=String(extra||'').includes('g'),per=parseInt(extra)||4,size=32,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud(gen?{RP,RD,seed:'v',capGlue:null,anchorGlue:'Z',avoid:'ayw'}:{RP,RD}),dcy=cy+(RP+RD)*H;
       const P=g.P,Pt=P.map(x=>g.tris[x]),kit={};for(const t of g.kit)kit[t]=(kit[t]||0)+per;kit[g.rootType]=per;
-      const pocket={tris:S.lidPocket(S.stampInstr(g.cap.type),'X'),x:c-0.5,y:cy-2.5,rot:0};
-      const {s,structures}=createWorld({seed,size,structures:[{tris:Pt,x:c,y:cy},pocket],supply:{xxx:30,...kit},params:{lockRange:120}});
-      const U=structures[0],PK=structures[1],prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
+      // genome variant: the wall front's cells up to the anchor get three times the supply (the anchor's open signal holds
+      // the pair; if the 7-cell panel front completes first, nothing is open and the root lets go: a race, as kitRace)
+      if(gen)for(const x of g.frontB.slice(0,g.anchor[2]+1))kit[g.tris[x].type]+=2*per;
+      const pocket={tris:S.lidPocket(S.stampInstr(gen?'Ay.z':g.cap.type),'X'),x:c-0.5,y:cy-2.5,rot:0};
+      const {s,structures,founders}=createWorld({seed,size,founders:gen?[{gaps:[1,1,1],faces:'aaaa',ends:'w-',x:c,y:cy+3}]:[],structures:[{tris:Pt,x:c,y:cy},pocket],supply:{xxx:gen?40:30,...(gen?{'Y--':24}:{}),...kit},params:{lockRange:120,...(gen?{latGlue:true}:{})}});
+      const U=structures[0],PK=structures[1],F=gen?founders[0]:[];
+      // genome variant (as split g): P's anchor W| holds the founder aaaa by its low end w (placed there at t=0, labelled);
+      // the pocket casts its dockers Ay.z (copies AAAA expose seed z at their high end), Y-- are their fills (latGlue);
+      // the bud's anchor Z@| (grownBud anchorGlue) emits the open signal until it catches a copy's z, then nothing is
+      // open and the bud splits off with it. P's anchor: a plain inner side in the middle of a flat wall (the founder
+      // stands into P), the farthest from the pocket and the parent's door
+      if(gen){const {gcode:gc,GLUE}=require('./sim'),cen3=V=>[(V[0][0]+V[1][0]+V[2][0])/3,(V[0][1]+V[1][1]+V[2][1])/3],busy=new Set([...g.panelP,g.doors[0].hinge,g.S]);
+        const far=[...pocket.tris.map(t=>cen3(t.v.map(p=>[p[0]+pocket.x-c,p[1]+pocket.y-cy]))),...g.panelP.map(x=>cen3(g.tris[x].v))],inC=[...Array(6).keys()].map(i=>[(RP-1)*Math.cos(i*Math.PI/3),(RP-1)*Math.sin(i*Math.PI/3)]);let pa=null;
+        for(const x of g.P){if(busy.has(x))continue;const V=g.tris[x].v;for(let i=0;i<3;i++){if(s.bond[U[x]*3+i]>=0||s.glue[U[x]*3+i])continue;const m=[(V[i][0]+V[(i+1)%3][0])/2,(V[i][1]+V[(i+1)%3][1])/2];
+          if(S.hexr(m)>RP-0.5||inC.some(q=>Math.hypot(q[0]-m[0],q[1]-m[1])<1.5-1e-6))continue;const o=cen3(V),l=Math.hypot(m[0]-o[0],m[1]-o[1]),z=[m[0]+2*(m[0]-o[0])/l,m[1]+2*(m[1]-o[1])/l],d=Math.min(...far.map(q=>Math.hypot(q[0]-z[0],q[1]-z[1])));
+          if(!pa||d>pa.d)pa={u:U[x],i,d};}}
+        if(!pa)throw Error('budgrow: no place for the parent anchor');s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;for(let k=0;k<40;k++)s.derive();
+        const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
+        if(!ok)throw Error('budgrow: founder not placed');s.bind(pa.u,pa.i,GLUE,b,f,GLUE);
+        const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);for(const u of F)for(const v of [...U,...PK]){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+          for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)throw Error('budgrow: founder overlaps the parent');}}
+      const prep=new Set([...U,...PK,...F]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
       // prepared parts must not meet the parent's door sweep
       {const {triDepth}=require('./physics'),d=g.doors[0],tr=p=>[p[0]+c,p[1]+cy],pin=tr(d.pin),flat=V=>Float64Array.from(V.flat());
         const pk=pocket.tris.map(t=>t.v.map(p=>[p[0]+pocket.x,p[1]+pocket.y]));if(!S.sweepClear(d.panel.map(x=>g.tris[x].v.map(tr)),pk,pin,d.dir,d.ang))throw Error('budgrow: the pocket is in the door sweep');void triDepth;void flat;}
       // blanks inside P; kit parts outside both rings (D's place included)
-      free.forEach(u=>{const inP=typeName(s,u)==='xxx';if(!placeFree(s,u,placed,()=>{for(;;){if(inP){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}
+      free.forEach(u=>{const inP=typeName(s,u)==='xxx'||typeName(s,u)==='Y--';if(!placeFree(s,u,placed,()=>{for(;;){if(inP){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}
         const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-dcy)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);});
-      const norm=t=>{const z=new TriSim({},1);z.setType(0,t);return canon(z.typeName(0));},kitT=new Set([...g.kit,g.rootType].map(norm)),capT=norm(g.cap.type);
+      const norm=t=>{const z=new TriSim({},1);z.setType(0,t);return canon(z.typeName(0));},kitT=new Set([...g.kit,g.rootType].map(norm)),capT=norm(gen?'Ay.z':g.cap.type),aT=gen?norm(g.tris[g.anchor[0]].type):null;
+      // genome variant: the bud's anchor cell (in body dU) holds a strand
+      const held=dU=>dU.some(u=>norm(typeName(s,u))===aT&&[0,1,2].some(i=>s.anc[u*3+i]&&s.bond[u*3+i]>=0));
       const Su=U[g.S],flap=(f,p)=>{const i=[0,1,2].find(i=>s.bond[f*3+i]>=0&&((s.bond[f*3+i]/3)|0)===p);if(i===undefined)return NaN;return Math.abs(Math.atan2(Math.sin(s.angle(f)-s.angle(p)-s.hRel[f*3+i]),Math.cos(s.angle(f)-s.angle(p)-s.hRel[f*3+i]))*180/Math.PI);};
       // the bud's root and its panel's hinge cell (whichever kit copies became them)
       const rootT=norm(g.rootType),p1T=norm(g.tris[g.panelD[0]].type),qT=norm(g.tris[g.q].type);
       let closed=0,opened=0,split=0,early=0;const ctr=L=>{let x=0,y=0;for(const u of L){x+=s._dx(s.px[u]-s.px[L[0]]);y+=s._dy(s.py[u]-s.py[L[0]]);}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];};
-      const report=t=>{const {comp,members}=s.bodies(),root=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT&&kitT.has(rootT)&&[0,1,2].some(i=>s.bond[u*3+i]>=0));
+      const report=t=>{const {comp,members}=s.bodies(),root=rootU>=0?rootU:undefined;
         const dc=root!==undefined?comp[root]:-1,dU=dc>=0?members[dc]:[],cells=dU.filter(u=>kitT.has(norm(typeName(s,u)))).length,q=dU.find(u=>norm(typeName(s,u))===qT),p1=dU.find(u=>norm(typeName(s,u))===p1T);
         const aP=flap(U[g.panelP[0]],U[g.doors[0].hinge]),aD=p1!==undefined&&root!==undefined?flap(p1,root):NaN,cap=dU.filter(u=>norm(typeName(s,u))===capT).length;
         if(!closed&&q!==undefined)closed=t;if(!opened&&aP>20)opened=t;if(!closed&&aP>20)early=t;if(!split&&root!==undefined&&dc!==comp[Su]&&cells>=g.D.length-1)split=t;
         const dK=dU.filter(u=>kitT.has(norm(typeName(s,u)))),inD=dK.length>=g.D.length-1?(()=>{const [x,y]=ctr(dK);return u=>Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<(RD-1)*H;})():()=>false;
         const parts=free.filter(u=>!s.bonded(u)&&norm(typeName(s,u))===capT);
-        console.log(`t=${t} bud cells=${cells}/${g.D.length} ${closed?'closed at '+closed:'open'} doors P:${(aP|0)} D:${isNaN(aD)?'-':aD|0} deg${early?' EARLY at '+early:''} casts=${s.ev.cast||0} free cap parts=${parts.length} (in D ${parts.filter(inD).length}) cap=${cap}/${g.cap.slots.length} ${split?'SPLIT at '+split:'joined'} doors after split: ${split?(aP<5&&aD<5?'shut':'open'):'-'} kit parts in D=${free.filter(u=>!s.bonded(u)&&kitT.has(norm(typeName(s,u)))&&inD(u)).length} completions=${s.ev.complete||0}`);};
-      console.log('bud kit',g.kit.length+1,'types x',per,'cap part',g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
+        console.log(`t=${t} bud cells=${cells}/${g.D.length} ${closed?'closed at '+closed:'open'} doors P:${(aP|0)} D:${isNaN(aD)?'-':aD|0} deg${early?' EARLY at '+early:''} casts=${s.ev.cast||0} free cap parts=${parts.length} (in D ${parts.filter(inD).length}) ${gen?(held(dU)?'copy anchored in D':'no copy in D')+` strands ${census(s).filter(x=>x.n>=7).length}`:`cap=${cap}/${g.cap.slots.length}`} ${split?'SPLIT at '+split:'joined'} doors after split: ${split?(aP<5&&aD<5?'shut':'open'):'-'} kit parts in D=${free.filter(u=>!s.bonded(u)&&kitT.has(norm(typeName(s,u)))&&inD(u)).length} completions=${s.ev.complete||0}`);};
+      console.log('bud kit',g.kit.length+1,'types x',per,gen?'anchor on wall front cell '+(g.anchor[2]+1):'cap part '+g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
       snap(s,'t0','t=0: parent P (seed on its top wall, door, stamp pocket, blanks); the bud kit outside',{units:U,radius:15});
       // events (every 50 steps): the bud's last cell q bonded (ring closed), the doors' widest opening before and after,
       // each cap cell, the split
-      const ev={closed:0,open:0,caps:[],split:0,early:0,maxBefore:0};let rootU=-1;const seedI=[0,1,2].find(i=>s.glue[Su*3+i]&&s.ltc[Su*3+i]);
-      const watch=t=>{const r=s.partner(Su,seedI);if(r>=0)rootU=r;if(rootU<0)return;const {comp,members}=s.bodies(),dU=members[comp[rootU]];
+      const ev={closed:0,open:0,caps:[],split:0,early:0,maxBefore:0,anch:0,lost:[]};let rootU=-1;const seedI=[0,1,2].find(i=>s.glue[Su*3+i]&&s.ltc[Su*3+i]);
+      const watch=t=>{const r=s.partner(Su,seedI);if(r>=0&&!ev.split)rootU=r;if(rootU<0)return;const {comp,members}=s.bodies(),dU=members[comp[rootU]];
         if(!ev.closed&&dU.some(u=>norm(typeName(s,u))===qT))ev.closed=t;const aP=flap(U[g.panelP[0]],U[g.doors[0].hinge]);
         if(!ev.closed)ev.maxBefore=Math.max(ev.maxBefore,aP|0);else if(!ev.open&&aP>30)ev.open=t;
-        const cap=dU.filter(u=>norm(typeName(s,u))===capT).length;while(ev.caps.length<cap)ev.caps.push(t);if(!ev.split&&comp[rootU]!==comp[Su])ev.split=t;};
+        const cap=dU.filter(u=>norm(typeName(s,u))===capT).length;while(ev.caps.length<cap)ev.caps.push(t);if(gen&&!ev.anch&&held(dU))ev.anch=t;if(!ev.split&&comp[rootU]!==comp[Su]){if(ev.closed)ev.split=t;else{ev.lost.push(t);rootU=-1;}}};
       for(let t=1;t<=steps;t++){s.step();if(t%50===0)watch(t);if(every(t,30))report(t);if(every(t,6))snap(s,`t${t}`,`t=${t}`,{units:U,radius:15},false);}
-      console.log(`events: ring closed at ${ev.closed||'-'}, parent door widest before that ${ev.maxBefore} deg, doors open at ${ev.open||'-'}, cap cells at ${ev.caps.join(' ')||'-'}, split at ${ev.split||'-'}`);
+      console.log(`events: ring closed at ${ev.closed||'-'}, parent door widest before that ${ev.maxBefore} deg, doors open at ${ev.open||'-'}, ${gen?`copy anchored in D at ${ev.anch||'-'}`:`cap cells at ${ev.caps.join(' ')||'-'}`}, split at ${ev.split||'-'}, early releases at ${ev.lost.join(' ')||'-'}`);
       // end of run: each bud cell missing from the root's body (panel, wall front position, last cell q), whether its
       // predecessor is there, and where the copies of its type are (free near the bud, free elsewhere, bonded elsewhere)
-      {const {comp,members}=s.bodies(),r=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT);
+      {const {comp,members}=s.bodies(),r=rootU>=0?rootU:undefined;
         if(r!==undefined){const have=new Set(members[comp[r]].map(u=>norm(typeName(s,u)))),order=[g.root,...g.panelD,...g.frontB],pred=c=>{const i=g.panelD.indexOf(c);if(i>=0)return i?g.panelD[i-1]:g.root;const j=g.frontB.indexOf(c);return j?g.frontB[j-1]:g.root;};
           const miss=order.filter(c=>!have.has(norm(g.tris[c].type))),[x,y]=ctr(members[comp[r]].filter(u=>kitT.has(norm(typeName(s,u)))));
           console.log(`bud: ${order.length-miss.length}/${order.length} cells; missing:`);

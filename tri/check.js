@@ -74,6 +74,10 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/events: ring closed at (\d+), parent door widest before that (\d+) deg, doors open at (\d+), cap cells at ([\d ]+), split at (\d+)/);
       if(!m)return [false,'no events: '+(o.match(/events: .*/)||['none'])[0].slice(8,90)];const [c,w,op]=[+m[1],+m[2],+m[3]],caps=m[4].trim().split(' ').map(Number),sp=+m[5],shut=/doors after split: shut/.test(L);
       return [w<5&&op>=c&&caps.length>=3&&caps.every(x=>x>=c)&&sp>=Math.max(...caps)&&shut,`closed ${c}, doors ${w}/open ${op}, cap ${caps.join(',')}, split ${sp}, ${shut?'shut':'open'}`];}},
+  {id:'budgrow-g',cap:'Grown bud catches a genome copy: grows on the parent, opens, anchors a copy, splits sealed',demo:'budgrow',seeds:[1,2,3,4],need:3,steps:300000,extra:'g',secs:220,
+    pass:(L,o)=>{const m=o.match(/events: ring closed at (\d+), parent door widest before that (\d+) deg, doors open at (\d+), copy anchored in D at (\d+), split at (\d+)/);
+      if(!m)return [false,'no events: '+(o.match(/events: .*/)||['none'])[0].slice(8,90)];const [c,w,op,an,sp]=m.slice(1).map(Number),shut=/doors after split: shut/.test(L),held=/copy anchored in D/.test(L);
+      return [w<5&&op>=c&&an>=c&&sp>=an&&shut&&held,`closed ${c}, doors ${w}/open ${op}, anchored ${an}, split ${sp}, ${shut?'shut':'open'}${held?'':', copy lost'}`];}},
   {id:'split-g',cap:'Segregation: the bud anchors a genome copy, splits',demo:'split',seeds:[1],steps:60000,extra:'g',secs:47,
     pass:L=>{const ok=/anchored in D/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${/anchored in D/.test(L)?'copy anchored in D':'no copy in D'}, ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
   {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:450000,extra:'o',secs:420,
