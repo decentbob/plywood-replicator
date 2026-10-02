@@ -509,10 +509,10 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
 // latch sits on or beside a triggered cell or a flap (a latch lets go there). Returns {tris: P cells then D cells in
 // their grown places (types; D cells loose), P, D (indices), S, root, panelP, panelD, q, frontB (wall growth order),
 // doors [{panel, hinge, pin, dir, ang}], kit (D types except the root's), rootType, cap, letters}.
-function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null,cut=null}={}){
+function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',anchorGlue=null,avoid='',ox=null,cut=null}={}){
   if((RP+RD)%2)throw Error('grownBud: RP+RD must be even (lattice offset)');
   // the bud's sideways offset (a lattice step): searched, nearest first
-  if(ox===null){let err=null;for(const o of [0,1,-1,2,-2,3,-3]){try{return grownBud({RP,RD,k,kP,seed,capGlue,avoid,ox:o});}catch(e){err=e;}}throw err;}
+  if(ox===null){let err=null;for(const o of [0,1,-1,2,-2,3,-3]){try{return grownBud({RP,RD,k,kP,seed,capGlue,anchorGlue,avoid,ox:o});}catch(e){err=e;}}throw err;}
   // cut: leave out the parent's outer corner cell at this corner (see the last site q below)
   const Pc=ringKit(RP,'z').tris.map(t=>t.v).filter(V=>!cut||!V.some(p=>same(p,cut))),dy=(RP+RD)*H,Dc=ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0]+ox,p[1]+dy]));
   const NP=Pc.length,ND=Dc.length,cells=[...Pc,...Dc],P=[...Array(NP).keys()],D=[...Array(ND).keys()].map(q=>NP+q);
@@ -562,7 +562,7 @@ function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null,cut=
         // the two doors' sweeps must not meet (they open together)
         if(!sweepClear(dP.panel.map(c=>cells[c]),swept(dD),dP.pin,dP.dir,dP.ang))continue;
         const score=Math.abs(cen(cells[S])[0])+dP.ang/60+dD.ang/60+(hp===S?0:5);layouts.push({score,S,root,r,s,pP,pD,q,doors});}}}}
-  if(!layouts.length){if(spikes.length)return grownBud({RP,RD,k,kP,seed,capGlue,avoid,ox,cut:spikes[0]});throw Error('grownBud: no doorway');}
+  if(!layouts.length){if(spikes.length)return grownBud({RP,RD,k,kP,seed,capGlue,anchorGlue,avoid,ox,cut:spikes[0]});throw Error('grownBud: no doorway');}
   layouts.sort((a,b)=>a.score-b.score);let err=null;
   for(const lay of layouts){try{return grownBudTypes(lay);}catch(e){err=e;}}
   throw err;
@@ -570,13 +570,14 @@ function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null,cut=
   function grownBudTypes({S,root,r,s,pP,pD,q,doors}){const frontB=[...Array(ND-k-1).keys()].map(x=>at(D,r-s*(x+1)));
   if(frontB[frontB.length-1]!==q)throw Error('grownBud: wall front does not end at q');
   // letters: unique pairs for the tree edges of D and the welds of P's panel
-  const U=c=>UP[LOW.indexOf(c)],res=new Set([seed,capGlue,'f','k','x',...[...avoid].map(c=>LOW.includes(c)?c:LOW[UP.indexOf(c)])].filter(Boolean));
-  const pool=[...LOW].filter(c=>!res.has(c));if(pool.length<ND+pP.length-1)throw Error('grownBud: not enough letters');let nl=0;const L=()=>pool[nl++];
+  const U=c=>UP[LOW.indexOf(c)],res=new Set([seed,capGlue,anchorGlue&&LOW[Math.max(LOW.indexOf(anchorGlue),UP.indexOf(anchorGlue))],'f','k','x',...[...avoid].map(c=>LOW.includes(c)?c:LOW[UP.indexOf(c)])].filter(Boolean));
+  const pool=[...LOW].filter(c=>!res.has(c));if(pool.length<ND)throw Error('grownBud: not enough letters');let nl=0;const L=()=>pool[nl++];
   const T=cells.map(()=>['-','-','-']);
   const pinMark=(c,i,pin)=>same(cells[c][i],pin)?'<':'>';
-  // P's door: hinged to S, built-in trigger on the second cell's weld, welded panel (loose: its far end meets the wall unwelded)
+  // P's door: hinged to S, built-in trigger on the second cell's weld, welded panel (loose: its far end meets the wall
+  // unwelded); the welds are prepared bonds that never let go, so they share the kit's weld letter 'f'
   {const d=doors[0],[i,j]=side(pP[0],d.hinge),h=L();T[pP[0]][i]=h+pinMark(pP[0],i,d.pin)+'#'+(d.ang===120?'=':'');T[d.hinge][j]=U(h);
-    for(let x=0;x+1<pP.length;x++){const [a,b]=side(pP[x],pP[x+1]),w=L();T[pP[x]][a]=w;T[pP[x+1]][b]=U(w)+(x===0?'*':'');}}
+    for(let x=0;x+1<pP.length;x++){const [a,b]=side(pP[x],pP[x+1]),w='f';T[pP[x]][a]=w;T[pP[x+1]][b]=U(w)+(x===0?'*':'');}}
   // S's seed side (outer top) and the root's seed side: latches (unbonded, they hold the doors shut); the root's is
   // also the completion release
   {const [i,j]=side(S,root);T[S][i]=seed+'@~';T[root][j]=gname(comp(gcode(seed)))+'@&~';}
@@ -604,9 +605,25 @@ function grownBud({RP=7,RD=5,k=7,kP=5,seed='z',capGlue='a',avoid='',ox=null,cut=
     const types=b.sl.map((v,x)=>{const prev=x?b.sl[x-1]:cells[b.c],next=x<b.sl.length-1?b.sl[x+1]:cells[b.c2],t=['-','-','-'];t[sideV(v,prev)[0]]=CU+'@';t[sideV(v,next)[0]]=C+'@';return t.join('');});
     if(new Set(types.map(t=>canonT(t))).size!==1)throw Error('grownBud: cap slots need different types '+types);
     cap={seed:[b.c,b.f],close:[b.c2,f2],slots:b.sl,type:types[0]};}
+  // anchor (D's content instead of a cap): an inner free side of one of the wall front's first six cells takes
+  // `anchorGlue` with '@|' (it emits the open signal until it catches a strand end's seed, as the cap seed does: the
+  // panel front alone completes after 7 cells, and a later anchor would leave nothing open, so the bud would let go
+  // early). In the middle of a flat wall (at least 1.5 from the inner boundary's corners: beside a corner a caught
+  // strand lies along the next wall, its backs hidden), the farthest from both doors' sweeps (the strand stands into
+  // the bud from there: measured from a point two units in from the side)
+  let anchor=null;
+  if(anchorGlue){const inC=[...Array(6).keys()].map(i=>[ox+(RD-1)*Math.cos(i*Math.PI/3),dy+(RD-1)*Math.sin(i*Math.PI/3)]),sw=[];
+    for(const d of doors)for(let a=0;a<=d.ang;a+=10)for(const c of d.panel)sw.push(cen(cells[c].map(p=>rot(p,d.pin,d.dir*a*Math.PI/180))));
+    for(const c of frontB.slice(0,6))for(let f=0;f<3;f++){if(T[c][f]!=='-'||cells.some((w,x)=>x!==c&&sideV(cells[c],w)&&sideV(cells[c],w)[0]===f))continue;
+      const V0=cells[c][f],V1=cells[c][(f+1)%3],m=[(V0[0]+V1[0])/2,(V0[1]+V1[1])/2];if(hexr([m[0]-ox,m[1]-dy])>RD-0.5)continue;
+      if(inC.some(p=>Math.hypot(p[0]-m[0],p[1]-m[1])<1.5-1e-6))continue;
+      const o=cen(cells[c]),n=[m[0]-o[0],m[1]-o[1]],l=Math.hypot(...n),z=[m[0]+2*n[0]/l,m[1]+2*n[1]/l],d=Math.min(...sw.map(p=>Math.hypot(p[0]-z[0],p[1]-z[1])));
+      if(!anchor||d>anchor.d)anchor={c,f,d};}
+    if(anchor){T[anchor.c][anchor.f]=anchorGlue+'@|';anchor=[anchor.c,anchor.f,frontB.indexOf(anchor.c)];}
+    if(!anchor)throw Error('grownBud: no place for the anchor');}
   const types=T.map(t=>t.join('')),loose=new Set([...pP,...D]);
   return {tris:cells.map((v,x)=>({v,type:types[x],loose:loose.has(x)})),P,D,S,root,panelP:pP,panelD:pD,q,frontB,doors:doors.map(({open,...d})=>d),
-    cut,kit:D.filter(c=>c!==root).map(c=>types[c]),rootType:types[root],cap,ox,dy,letters:pool.slice(0,nl).join('')};}}
+    cut,kit:D.filter(c=>c!==root).map(c=>types[c]),rootType:types[root],cap,anchor,ox,dy,letters:pool.slice(0,nl).join('')};}}
 const canonT=t=>{const x=[...t.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[...x.slice(r),...x.slice(0,r)].join('')).sort()[0];};
 
 // map kit K so that its root's seed side lies flush against side i of the triangle with vertices A (a shared edge runs
