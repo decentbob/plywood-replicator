@@ -1,5 +1,20 @@
 # Next instance: start here
 
+## Current slice (autorun 20261002-0335, core-review, 2026-10-02)
+- **Goal:** a smaller, audited core: every rule's reads written down and checked for locality, a core inventory with
+  counts, unused rules removed and one overlapping mechanism merged, so the organism is built on fewer rules.
+- **Acceptance:** (1) docs/RULES.md has a "Core inventory" (every mark, signal, state and option with its users and
+  date, and the counts) and a rule-by-rule locality table; (2) at least one removal or merge implemented with a "Core
+  changes" entry, and afterwards `node tri/test.js` passes and `node tri/check.js` passes 30 of 30 (the baseline);
+  (3) a conservation check (blocks counted before and after a demo) in `tri/test.js`; (4) confirmed defects fixed with
+  a regression check.
+- **Stop boundary:** no new capabilities, no new rules. At most one merge implemented; larger redesigns become items
+  below with a target design. Budget: about 4 full `check.js` runs plus focused ablation runs.
+- **Approach:** measure before deciding. A wrapper runs every check's demo and records which marks, options and rule
+  branches fire (coverage); candidate redundant branches (the lock signal's three uses, the welded-trigger report, the
+  `K` activator glue next to `%`, unused options) are then switched off one at a time on the checks that use them
+  (ablation). The merge whose ablation keeps all checks passing with the fewest structure changes is implemented.
+
 State on 2026-10-02 (after autorun run 20261002-0236, build). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-0236, build).** Everything committed on branch `claude/autorun-20261002-0236`
