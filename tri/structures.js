@@ -218,6 +218,17 @@ function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   const types=tok.map(t=>t.map(x=>x.g+x.m+x.c).join(''));
   return {tris:tris.map((t,k)=>({...t,type:types[k]})),types,kit:types.filter((_,k)=>k!==root),tree:tree.map(([x,y])=>[x,y]),root,rootSide,depth:Math.max(...depth.values()),risk,risky,letters:tree.map((_,k)=>pool[k]).join('')};}
 
+// race cells of a kit: cells whose site can be closed off by a cell that is not their descendant arriving first (or
+// that border a slot on their only other side), whatever the depths. With the midpoint physics such a site is lost
+// for good (no block passes a gap narrower than itself); a larger supply of these cells' types wins the race.
+function kitRace(K,slots=[]){const T=K.tris.map(t=>t.v),sh=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return i;return -1;};
+  const kids=new Map();for(const [x,y] of K.tree){if(!kids.has(x))kids.set(x,[]);kids.get(x).push(y);}
+  const desc=c=>{const out=new Set(),q=[c];while(q.length){for(const y of kids.get(q.pop())||[])if(!out.has(y)){out.add(y);q.push(y);}}return out;};
+  const out=[];for(let c=0;c<T.length;c++){if(c===K.root)continue;const D=desc(c);let open=0;
+    for(let i=0;i<3;i++){if(T.some((w,o)=>o!==c&&!D.has(o)&&sh(T[c],w)===i)||slots.some(sl=>sh(T[c],sl.v)===i))continue;open++;}
+    if(!open)out.push(c);}
+  return out;}
+
 // every (root, seed side) kit of a structure, fewest risky cells first, then shallowest tree
 function kitOptions(tris,reserved='',seed='z',slots=[]){const out=[];
   for(let r=0;r<tris.length;r++){if(tris[r].loose)continue;for(let i=0;i<3;i++){try{const k=kit(tris,r,reserved,seed,i,slots);if(k.rootSide===i)out.push(k);}catch(e){}}}
@@ -667,4 +678,4 @@ function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern
   for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
   return out;}
 const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={pocket,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={kitRace,pocket,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
