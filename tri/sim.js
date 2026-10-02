@@ -52,7 +52,7 @@ class TriSim extends Physics{
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.carry=new Int32Array(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.fu=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.pwE=I8(n);this.fu=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -107,10 +107,11 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
       if(a<0&&this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
     // fu (fuel, exposed): 0 no fuel side '$'; 1 fuel sides, none holding a charged carrier; 2 a charged carrier on a fuel
-    // side; 3 that, and a flap started a swing in this step (pw 1) that is me or bonded to me by a hinge: the carriers
-    // on my fuel sides spend themselves in the next servo
+    // side; 3 that, and a flap exposed a started swing (pwE 1, as it stood before this step's servo) that is me or the
+    // flap of a hinge on me (its hinge side is bonded to me): the carriers on my fuel sides spend themselves in the next
+    // servo (the start pulse moves one bond per pass: trigger -> flap in one servo, flap -> fuel triangle in the next)
     for(let u=0;u<n;u++){let f=0;for(let i=0;i<3;i++){if(!this.fuel[u*3+i])continue;f=Math.max(f,1);const q=this.bond[u*3+i];if(q>=0&&this.chg[(q/3)|0])f=2;}
-      if(f===2){if(this.pw[u]===1)f=3;else for(let i=0;i<3&&f===2;i++){const q=this.bond[u*3+i];if(q>=0&&this.isHingeBond(u,i)&&this.pw[(q/3)|0]===1)f=3;}}
+      if(f===2){if(this.pwE[u]===1)f=3;else for(let i=0;i<3&&f===2;i++){const q=this.bond[u*3+i];if(q>=0&&this.hinge[q]&&this.pwE[(q/3)|0]===1)f=3;}}
       this.fu[u]=f;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
@@ -145,10 +146,10 @@ class TriSim extends Physics{
     const body=this.bodyOf(v),tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=Math.atan2(Math.sin(ang-this.pa[v]),Math.cos(ang-this.pa[v])),ox=this.px[v],oy=this.py[v];
     if(body.includes(u))return false;
     // the whole path must be clear (checked in sub-steps of at most subStep, as every move): a strand never jumps a wall
-    let reach=0;for(const w of body)reach=Math.max(reach,Math.hypot(this._dx(this.px[w]-ox),this._dy(this.py[w]-oy))+1/Math.sqrt(3));
+    const co=Math.cos(da),si=Math.sin(da),k=body.length,RX=new Float64Array(k),RY=new Float64Array(k);this._unwrap(body,RX,RY);
+    let reach=0;for(let q=0;q<k;q++)reach=Math.max(reach,Math.hypot(RX[q],RY[q])+1/Math.sqrt(3));   // measured along bonds (a long strand is not folded)
     const nsub=Math.max(1,Math.ceil(Math.max(Math.hypot(tx,ty),reach*Math.abs(da))/this.p.subStep));
     for(let q=1;q<=nsub;q++){const g=q/nsub;if(this.moveDepth(body,g*tx,g*ty,g*da,ox,oy)>0)return false;}
-    const co=Math.cos(da),si=Math.sin(da),k=body.length,RX=new Float64Array(k),RY=new Float64Array(k);this._unwrap(body,RX,RY);
     for(let q=0;q<k;q++){const w=body[q],rx=RX[q],ry=RY[q];this.px[w]=this._wx(ox+co*rx-si*ry+tx);this.py[w]=this._wy(oy+si*rx+co*ry+ty);this.pa[w]+=da;this.resetShape(w);this.regrid(w);}
     return true;}
   // a trigger side is inert (binds nothing) while its triangle hears an open signal (a sensor is live once its structure
@@ -197,7 +198,7 @@ class TriSim extends Physics{
           continue;}
         // fill the prev edge of a docked or fill triangle that still needs fills (glue-agnostic unless latGlue)
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
-          if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
+          if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fn[v]=1;this.fn[u]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its spare edge, active
       // while the strand is not being copied) with the complementary glue, as it would catch a free triangle: the end
@@ -286,6 +287,7 @@ class TriSim extends Physics{
     const hb=(x,e)=>this.isHingeBond(x,e),P=(u,i)=>this.partner(u,i);
     // energy: a charged carrier bonded to a fuel side whose triangle exposes a started swing (fu 3) discharges itself
     // and lets go; a flap's start pulse (pw 1) becomes powered (pw 2)
+    this.pwE.set(this.pw);
     for(let u=0;u<n;u++){if(this.pw[u]===1)this.pw[u]=2;if(!this.chg[u])continue;
       for(let e=0;e<3;e++){const q=this.bond[u*3+e];if(q>=0&&this.fuel[q]&&this.fu[(q/3)|0]===3){this.chg[u]=0;this.cut(u,e);this.count('fuelUsed');break;}}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(!this.hinge[u*3+i]||q<0)continue;const v=(q/3)|0,rel=this.rel[u*3+i];
