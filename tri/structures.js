@@ -324,7 +324,7 @@ function doorRingKit(R=5,seed='z',key='X',k=4,avoid='',m=1,release=true,pore=fal
 // locks it. Returns {tris (closed positions: the demo turns the panels open), P: cell indices, D, doors:[{panel, prev,
 // next, pin, dir, ang, stop, hingeSide, closeSide, stopSide:[panel cell, side, stop side]}], cap}. capGlue: D grows a
 // three-cell cap on its inner wall from one part type (below).
-function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organelle:org=null,importD=null}={}){
+function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organelle:org=null,importD=null,impSkip=0}={}){
   if((RP+RD)%2)throw Error('budPair: RP+RD must be even (lattice offset)');
   const {triDepth}=require('./physics'),flat=V=>Float64Array.from(V.flat());
   const Pc=ringKit(RP,'z').tris.map(t=>t.v),dy=(RP+RD)*H,Dc=ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dy]));
@@ -402,7 +402,8 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
   // welded by hear sides, hinged at an inner corner with drop '!' and wide '=', latched at its far end, the key '*' on an
   // outer face); its sweep (panel and key, 120 degrees inward) clear of everything fixed and of the closing door's sweep.
   // While D hears an open signal its latch holds and its key is deaf: it imports only after the split.
-  let imp=null;
+  // impSkip: take the next import door candidate (the organelle, its strand and the door's drop place must all fit)
+  let imp=null,impN=0;
   if(importD){const busy=new Set([...loose,...doors.flatMap(d=>[d.stop,d.prev,d.next])]),Dr=D.filter(c=>c<NP+ND),N=Dr.length,kk=4,dcen=[0,dy];
     const dd=doors[1],dsw=[];for(let q=0;q<=12;q++)for(const V of dd.open)dsw.push(V.map(p=>rot(p,dd.pin,-dd.dir*q/12*dd.ang*Math.PI/180)));
     const order=[...Array(N).keys()].sort((a,b)=>cen(cells[Dr[b]])[1]-cen(cells[Dr[a]])[1]);   // far from P first
@@ -417,7 +418,7 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
           if(!sweepClear([...panel.map(c=>cells[c]),kv],[...fixed,...dsw],P0,dir,120))continue;
           const kEnd=cen(kv.map(p=>rot(p,P0,dir*2*Math.PI/3)));if(hexr([kEnd[0]-dcen[0],kEnd[1]-dcen[1]])>RD-1-0.3)continue;
           const sw=[];for(let q=0;q<=12;q++)for(const V of [...panel.map(c=>cells[c]),kv])sw.push(cen(V.map(p=>rot(p,P0,dir*q/12*2*Math.PI/3))));
-          imp={panel,prev,next,P:P0,dir,keyCell:kc,keySide:f,sweep:sw};break;}}}
+          if(impN++===impSkip)imp={panel,prev,next,P:P0,dir,keyCell:kc,keySide:f,sweep:sw,drop:kEnd};break;}}}
     if(!imp)throw Error('budPair: no import door in D');
     const H2=['л','п','ф','и','з'];
     {const [i,j]=side(imp.panel[0],imp.prev),v=cells[imp.panel[0]];T[imp.panel[0]][i]=H2[0]+(same(v[i],imp.P)?'<':'>')+'!=';T[imp.prev][j]=UP[LOW.indexOf(H2[0])];}
@@ -441,23 +442,27 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
       const out=[];for(const [P0,Q0] of [[b,x0],[a,x0]]){const an=Math.atan2((P0===b?a:b)[1]-P0[1],(P0===b?a:b)[0]-P0[0])-Math.atan2(x1[1]-x0[1],x1[0]-x0[0]),c2=Math.cos(an),s2=Math.sin(an);
         const M=p=>[P0[0]+c2*(p[0]-x0[0])-s2*(p[1]-x0[1]),P0[1]+s2*(p[0]-x0[0])+c2*(p[1]-x0[1])];out.push(B.map(t=>({v:t.v.map(M),role:t.role,free:t.free.map(M)})));}
       return out.find(st=>st.every(t=>hexr([cen(t.v)[0]-dcen[0],cen(t.v)[1]-dcen[1]])<RD-1))||null;};
-    let bestO=null;
+    // the cargo's drop place (the key's cargo at the open door) stays clear by DROP: a dropped blank must get out of the
+    // door's sweep (with 1.2 one was wedged between the open panel and the anchored strand and the door never closed)
+    const DROP=2;let bestO=null;
     for(const an of inSide){const st=strandAt(an);if(!st)continue;const keep=[],docks=[];
       for(const t of st){keep.push(cen(t.v));if(t.role!=='F')continue;const [A,Bp]=t.free,C=t.v.find(p=>!same(p,A)&&!same(p,Bp)),X=[A[0]+Bp[0]-C[0],A[1]+Bp[1]-C[1]];
         const dock=cen([A,Bp,X]),fc=cen(t.v);docks.push(dock,[2*dock[0]-fc[0],2*dock[1]-fc[1]]);}
       // the strand may touch the wall at its anchored end; its dock sites (where copies grow) stay off the wall
+      if(imp&&[...keep,...docks].some(p=>dist(p,imp.drop)<DROP))continue;
       if(keep.some(p=>wallC.some(q=>dist(p,q)<0.3))||docks.some(p=>wallC.some(q=>dist(p,q)<0.9))||[...keep,...docks].some(p=>sweep.some(q=>dist(p,q)<1.2)||hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1))continue;
       keep.push(...docks);
       for(const K of org.opts){for(const w of inSide){if(w[0]===an[0])continue;const {cells:oc,T:map}=mapKit(K,cells[w[0]],w[1]),extra=[...org.clear,...org.slots.map(x=>x.v)].map(v=>v.map(map));
           const all=[...oc,...extra].map(cen),ex=extra.map(cen);
           if(all.some(p=>hexr([p[0]-dcen[0],p[1]-dcen[1]])>RD-1-0.3)||all.some(p=>wallC.some(q=>dist(p,q)<0.3)))continue;
+          if(imp&&all.some(p=>dist(p,imp.drop)<DROP))continue;
           if(ex.some(p=>wallC.some(q=>dist(p,q)<0.9))||all.some(p=>sweep.some(q=>dist(p,q)<1.0))||all.some(p=>keep.some(q=>dist(p,q)<1.0)))continue;
           // narrow sites: a kit cell (not the root) with a side on a wall cell can enter only through its one open
           // side once its parent is there (2 of 4 bud pockets stalled on such a cell); fewest of them, after kit risk
           const across=(v,i)=>{const a=v[i],b=v[(i+1)%3],c=v[(i+2)%3];return cen([a,b,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);};
           const narrow=oc.filter((v,x)=>x!==K.root&&[0,1,2].some(i=>{const m=across(v,i);return wallC.some(q=>dist(m,q)<0.3);})).length;
           if(!bestO||K.risk<bestO.K.risk||(K.risk===bestO.K.risk&&narrow<bestO.narrow))bestO={K,cells:oc,wall:w,anchor:an,strand:st,narrow};}}}
-    if(!bestO)throw Error('budPair: no place for the organelle and anchor');
+    if(!bestO){if(imp){try{return budPair({RP,RD,k,capGlue,anchorGlue,anchorP,organelle:org,importD,impSkip:impSkip+1});}catch(e){}}throw Error('budPair: no place for the organelle and anchor');}
     T[bestO.wall[0]][bestO.wall[1]]=org.seed+'@';T[bestO.anchor[0]][bestO.anchor[1]]=anchorGlue+'@|';
     organelle=bestO;}
   // anchor: an inward side of a plain D wall cell, far from the door, takes glue `anchorGlue` with '@|' (it catches a
