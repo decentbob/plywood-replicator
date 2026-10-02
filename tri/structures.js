@@ -11,28 +11,6 @@ function lattice(R){const out=[];for(let i=-2*R-6;i<=2*R+6;i++)for(let j=-2*R-6;
   out.push([b,[b[0]+1,b[1]],[b[0]+0.5,b[1]+H]],[[b[0]+1,b[1]],[b[0]+1.5,b[1]+H],[b[0]+0.5,b[1]+H]]);}return out;}
 const hexr=p=>Math.max(...[0,1,2,3,4,5].map(k=>{const a=Math.PI/6+k*Math.PI/3;return (p[0]*Math.cos(a)+p[1]*Math.sin(a))/H;}));
 
-// Casting pocket (hatch design). The pocket is a side-2 triangle (0,0),(2,0),(1,2H); the target ends in its centre.
-// Two casters are fixed in the frame; the third is a hatch hinged at (1.5,H) that waits open, catches a target in the
-// upper slot (trigger = catch side) and swings it into the centre; the fixed casters' recognition sides are close-only,
-// so only the hatch catches. Casters: recognition, activator K% (bonded to a k), instruction (counter-clockwise). The product takes the
-// instructions [p, q, r] of (fixed caster 0, fixed caster 1, hatch). fuel: a glue letter puts a fuel side on the hatch's
-// hinge partner (energy). An inert instruction side is not welded to the frame (that would overwrite it).
-function pocket(instr='bcd',recog='A',fuel=null){
-  const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));
-  return [
-    {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K%`,loose:p==='-'},          // caster 0: instruction p (bottom), recognition (inner), K
-    {v:[[1,0],[2,0],[1.5,H]],type:`K%${q}${R}.`,loose:q==='-'},          // caster 1: K, instruction q (right-lower), recognition
-    {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<%${r}${R}*`},                   // hatch (open): hinge K (pin (1.5,H)), instruction r, catch/trigger
-    {v:[[1.5,H],[2.5,H],[2,2*H]],type:fuel?`-${fuel}$k`:'--k'},          // hinge partner (k); with fuel, its outer side holds a carrier
-    {v:[[2,0],[2.5,H],[1.5,H]],type:`--${Q}`},                           // holds caster 1's instruction side
-    {v:[[1,0],[1.5,-H],[2,0]],type:'--k'},                               // k under caster 1
-    {v:[[0,0],[0.5,-H],[1,0]],type:`--${P}`},                            // holds caster 0's instruction side
-    {v:[[0,0],[0.5,H],[-0.5,H]],type:'k--'},                             // k beside caster 0
-    {v:[[1,0],[0.5,-H],[1.5,-H]],type:'---'},
-    {v:[[0,0],[-0.5,H],[-1,0]],type:'---'},{v:[[0,0],[-1,0],[-0.5,-H]],type:'---'},{v:[[0,0],[-0.5,-H],[0.5,-H]],type:'---'},
-    {v:[[2,0],[1.5,-H],[2.5,-H]],type:'---'},{v:[[2,0],[2.5,-H],[3,0]],type:'---'},{v:[[2,0],[3,0],[2.5,H]],type:'---'},
-  ];}
-
 // Lid pocket (bulge-free casting pocket). The target slot T = (0,0),(1,0),(0.5,H) is a V notch between two fixed
 // casters, B below and R on the right, open to the upper left, so a free target slides in. B and R catch (their
 // recognition sides are not close-only); R's recognition side is also a trigger. R's trigger signal is heard by Q
@@ -143,31 +121,6 @@ function importRing(R=4,key='X',k=4){
   {const last=door.panel[door.panel.length-1],[i,j]=side(last,door.next);T[last][i]='L~';T[door.next][j]='l';}
   T[door.keyCell][door.keySide]=key+'*';
   return {tris:cells.map((v,x)=>({v,type:T[x].join(''),loose:door.panel.includes(x)})),R,door};}
-
-// Airlock (user: a double lock): one-row ring; below its bottom side a lock section (two more rows in a window) with
-// an inner door (ring-row panel U1+D1, hinged at its top corner, swings inward, trigger G on the chamber side), a
-// two-cell chamber, and an outer door (panel U2+D2, hinged at its bottom corner, swings outward, trigger G outside).
-// Both are pulse doors (#): a key opens the door, is let go at once, the door swings 120 degrees and back and re-latches.
-// Interlock: a door that is not latched emits the lock signal; a closed door ignores its key while it hears it.
-function airlock(R=4,win=2.5){
-  const lat=lattice(R),ring=lat.filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;});
-  const lock=lat.filter(v=>{const c=cen(v),r=hexr(c);return r>R&&r<R+2&&c[1]<-R*H&&Math.abs(c[0])<win;});
-  const D1=ring.filter(v=>v.filter(p=>Math.abs(p[1]+(R-1)*H)<1e-6).length===2&&cen(v)[1]<-(R-1)*H).sort((a,b)=>Math.abs(cen(a)[0])-Math.abs(cen(b)[0]))[0];
-  const p1=D1.find(p=>Math.abs(p[1]+R*H)<1e-6),[q1,r1]=D1.filter(p=>!same(p,p1)).sort((a,b)=>b[0]-a[0]),a1=add(p1,[-1,0]);
-  const U1=ring.find(v=>has(v,a1,p1,r1)),Dl1=ring.find(v=>v!==U1&&has(v,a1,r1)),Ur1=ring.find(v=>v!==D1&&has(v,p1,q1));
-  const m=add(p1,[-0.5,-H]),c1=lock.find(v=>has(v,a1,p1,m)),c2=lock.find(v=>has(v,m,p1,add(m,[1,0])));
-  const p2=add(m,[0.5,-H]),q2=add(m,[1,0]),a2=add(p2,[-1,0]);
-  const D2=lock.find(v=>has(v,m,q2,p2)),U2=lock.find(v=>has(v,a2,p2,m)),Dl2=lock.find(v=>v!==U2&&has(v,a2,m)),Ur2=lock.find(v=>v!==D2&&has(v,p2,q2));
-  if(![D1,U1,Dl1,Ur1,c1,c2,D2,U2,Dl2,Ur2].every(Boolean))throw Error('airlock geometry');
-  const tris=[
-    {v:[a1,p1,r1],type:'G*#Wh<#',loose:true},   // U1 (inner door, hinged): trigger to the chamber, weld, hinge to the wall
-    {v:[p1,q1,r1],type:'L~-w',loose:true},      // D1: latch to the wall, inside face, weld
-    {v:[a2,p2,m],type:'G*#WL~',loose:true},     // U2 (outer door): outer trigger, weld, latch to the lock wall
-    {v:[p2,q2,m],type:'h<#-w',loose:true},      // D2 (outer door, hinged): hinge, chamber face, weld
-  ];
-  for(const v of [...ring,...lock]){if([U1,D1,U2,D2,c1,c2].includes(v))continue;
-    tris.push({v,type:v===Dl1?edge(v,a1,r1,'H'):v===Ur1?edge(v,q1,p1,'l'):v===Dl2?edge(v,a2,m,'l'):v===Ur2?edge(v,q2,p2,'H'):'---'});}
-  return {tris,R};}
 
 // Kit (heritable parts): turn a prepared structure into types that grow it from one root cell. Cells are joined by a
 // spanning tree from the root (breadth first); every tree edge gets its own glue pair, the parent exposing the lower
@@ -632,67 +585,4 @@ function mapKit(K,A,i){const a=A[(i+1)%3],b=A[i],V=K.tris[K.root].v,j=K.rootSide
   const ang=Math.atan2(b[1]-a[1],b[0]-a[0])-Math.atan2(d[1]-c[1],d[0]-c[0]),cs=Math.cos(ang),sn=Math.sin(ang);
   const T=p=>{const x=p[0]-c[0],y=p[1]-c[1];return [a[0]+cs*x-sn*y,a[1]+sn*x+cs*y];};return {cells:K.tris.map(t=>t.v.map(T)),T};}
 
-// Two lid pockets joined into one structure (an organelle with two slots): the second pocket turned by a multiple of
-// 60 degrees and moved by a lattice vector so that the two do not overlap, neither covers the other's slot or lid
-// space, and they share at least one edge (so one kit can grow both). Returns candidates {tris, slots, clear}, most
-// shared edges first.
-function pocketPair(instrA,instrB,recog='X'){
-  const A=lidPocket(instrA,recog,null,'B'),B=lidPocket(instrB,recog,null,'B'),sA=lidSlot('B'),cA=lidClear();
-  const rotP=(p,k)=>{const a=k*Math.PI/3,c=Math.cos(a),s=Math.sin(a);return [c*p[0]-s*p[1],s*p[0]+c*p[1]];};
-  const keyOf=v=>{const c=cen(v);return Math.round(c[0]*6)+','+Math.round(c[1]*6/H);};
-  const occA=new Set(A.map(t=>keyOf(t.v))),freeA=new Set([sA.v,...cA].map(keyOf)),out=[];
-  for(let k=0;k<6;k++)for(let i=-6;i<=6;i++)for(let j=-6;j<=6;j++){const d=[i+j/2,j*H],T=p=>{const q=rotP(p,k);return [q[0]+d[0],q[1]+d[1]];};
-    const Bt=B.map(t=>({...t,v:t.v.map(T)})),sB={...sA,v:sA.v.map(T)},cB=cA.map(v=>v.map(T));
-    const occB=Bt.map(t=>keyOf(t.v)),freeB=[sB.v,...cB].map(keyOf);
-    if(occB.some(x=>occA.has(x)||freeA.has(x))||freeB.some(x=>occA.has(x)))continue;
-    let shared=0;for(const a of A)for(const b of Bt)for(let x=0;x<3;x++)for(let y=0;y<3;y++)if(same(a.v[x],b.v[(y+1)%3])&&same(a.v[(x+1)%3],b.v[y]))shared++;
-    if(!shared)continue;out.push({tris:[...A,...Bt],slots:[sA,sB],clear:[...cA,...cB],shared});}
-  return out.sort((a,b)=>b.shared-a.shared);}
-
-// Cell kit (a membrane that grows its own machines): a door ring kit (door or pore; the root keeps the chain) whose
-// inward-facing wall cell carries the seed of an organelle (two lid pockets joined, `pocketPair`), so the casting
-// machinery hangs on the wall, not on the chain. Searched: layout of the pair, kit option, wall cell, so that every
-// organelle cell, slot and lid space lies inside the ring, the slots and lid spaces stay off the wall and the door's
-// sweep, and nothing touches the cells in `keep` (e.g. the chain and the room its copy needs, in ring coordinates;
-// keepFor(ringKit) computes them for the chosen ring).
-// late (default): the organelle starts only once the wall is complete (its seed is a trigger side). Fewest risky
-// cells first. Returns {tris (ring cells, then organelle cells), counts (type -> cells, root excluded),
-// rootType, rootSide, root, N, ring (the door ring kit), organelle {K, cells, wall, side, seed}, letters}.
-function cellKit({R=7,seed='m',k=4,m=5,pre=0,pore=true,key='X',recog='X',pockets=['AXm','aXm'],avoid='',keep=null,keepFor=null,maxRisk=99,order=[false,true],late=true}={}){
-  const used0=[...new Set([...pockets.join(''),recog,seed,...avoid].filter(c=>c!=='-').map(c=>LOW[Math.max(LOW.indexOf(c),UP.indexOf(c))]))].join('');
-  const KR=doorRingKit(R,seed,key,k,used0,m,false,pore,order,pre),ring=KR.tris.map(t=>t.v);if(keepFor)keep=keepFor(KR);keep=keep||[];
-  const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
-  // the part of the door's sweep inside the ring (panel cells turned up to 120 degrees)
-  const sweep=[];for(let q=1;q<=12;q++)for(const c of KR.door.panel){const p=cen(ring[c].map(p=>rot(p,KR.door.P,KR.door.dir*q/12*2*Math.PI/3)));if(hexr(p)<R-1)sweep.push(p);}
-  // the door's whole sweep must also miss the kept cells (a chain beside the hinge stalls a turning panel)
-  if(keep.length&&!sweepClear(KR.door.panel.map(c=>ring[c]),keep,KR.door.P,KR.door.dir,120))throw Error('cellKit: the door sweeps the kept cells');
-  const dist=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1]),inner=KR.wall.filter(w=>w.inward),ringC=ring.map(cen),keepC=keep.map(cen);
-  let letters=used0+KR.letters;const sd=[...LOW].find(c=>!letters.includes(c));letters+=sd;
-  const layouts=pockets.length===2?pocketPair(pockets[0],pockets[1],recog):[{tris:lidPocket(pockets[0],recog,null,'B'),slots:[lidSlot('B')],clear:lidClear()}];
-  let best=null;
-  for(const L of layouts){const opts=kitOptions(L.tris,letters,sd,L.slots);
-    for(const K of opts){if(K.risk>maxRisk||(best&&K.risk>=best.K.risk))continue;
-      for(const w of inner){const {cells,T:map}=mapKit(K,ring[w.cell],w.side),extra=[...L.clear,...L.slots.map(x=>x.v)].map(v=>v.map(map));
-        const all=[...cells,...extra].map(cen),ex=extra.map(cen);
-        if(all.some(p=>hexr(p)>R-1-0.3)||all.some(p=>ringC.some(q=>dist(p,q)<0.3)))continue;   // inside, no overlap (cells may touch the wall)
-        if(ex.some(p=>ringC.some(q=>dist(p,q)<0.9)))continue;   // the slots and lid spaces stay off the wall
-        if(all.some(p=>sweep.some(q=>dist(p,q)<1.0))||all.some(p=>keepC.some(q=>dist(p,q)<0.9)))continue;
-        best={K,cells,wall:w.cell,side:w.side,seed:sd};break;}}}
-  if(!best)throw Error('cellKit: no place for the organelle');
-  letters+=best.K.letters;
-  // the organelle's seed on the wall is a trigger side: it binds nothing while the cell hears an open signal, and it
-  // emits none, so the wall closes and the pore opens first; then the organelle's parts come in and grow it
-  const T=KR.types.map(t=>[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(x=>x[0]));T[best.wall][best.side]=sd+(late?'*':'@');
-  const ringTypes=T.map(t=>t.join('')),canonT=t=>{const x=[...t.matchAll(/[a-zA-Zα-ωΑ-Ωа-яА-Я-][<>.!^#*~$+=%@&]*/g)].map(y=>y[0]);return [0,1,2].map(r=>[...x.slice(r),...x.slice(0,r)].join('')).sort()[0];};
-  const tris=[...ring.map((v,q)=>({v,type:ringTypes[q]})),...best.cells.map((v,q)=>({v,type:best.K.types[q]}))];
-  const counts={};tris.slice(1).forEach(t=>{const c=canonT(t.type);counts[c]=(counts[c]||0)+1;});
-  return {tris,counts,rootType:ringTypes[0],rootSide:KR.rootSide,root:0,N:ring.length,ring:KR,organelle:best,letters};}
-
-// Arm kit: the types of an arm grown from seed glue `seed` by a bend pattern ('1'/'2' per step: the side, counted
-// counter-clockwise from the attach side, that exposes the next glue), using the given letters; the last type exposes
-// nothing, so the arm ends without counting.
-function armTypes(seed,pattern,letters){const E=[seed,...letters.slice(0,pattern.length)],out=[];
-  for(let k=0;k<=pattern.length;k++){const t=['-','-','-'];t[0]=gname(comp(gcode(E[k])));if(k<pattern.length)t[+pattern[k]]=E[k+1];out.push(t.join(''));}
-  return out;}
-const mirror=p=>[...p].map(c=>c==='1'?'2':'1').join('');
-module.exports={kitRace,pocket,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,pocketPair,importRing,doorRingKit,cellKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,airlock,armTypes,mirror,lattice,hexr,H};
+module.exports={kitRace,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,importRing,doorRingKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,lattice,hexr,H};
