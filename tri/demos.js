@@ -95,6 +95,25 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(!closed&&s.bond[root*3+cl]>=0)closed=t;if(every(t,20))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: casts ${s.ev.cast||0}, ring ${size_()}/${K.N}${closed?', closed':''}`,null,false);}
       {const {comp}=s.bodies();snap(s,'zoom','ring grown from cast parts (zoom)',{units:[...Array(s.n).keys()].filter(u=>comp[u]===comp[A]),radius:4.5});}
       finish('Stamp factory: pockets cast blanks into membrane parts; a ring grows from them');},
+    // imprint (contact copying): two anchors z-- (labelled start); on the first a ring (R=3) grown one motif round
+    // (root and the 5 motif cells: one of each part, prepared), the second bare (welded to a plain cell so it is
+    // attached); copy blanks -?-?-? are the only food: no free parts. A copy blank that touches a free side of an
+    // attached triangle becomes a copy of it, so the ring's own cells and root multiply, the ring closes and a second
+    // ring grows on the bare anchor. extra: number of copy blanks (default 400); 'c': control, blanks without copy sides
+    imprint(){steps=steps||100000;const ctl=String(extra||'').includes('c'),nb=parseInt(extra)||400,size=36,c=size/2,K=S.ringKit(3,'z'),r=K.tris[0],i=K.rootSide;
+      const a=r.v[i],b=r.v[(i+1)%3],cc=r.v[(i+2)%3],anchor={v:[b,a,[a[0]+b[0]-cc[0],a[1]+b[1]-cc[1]]],type:'z--'};
+      const supply={[ctl?'---':'-?-?-?']:nb},av=anchor.v,weld={v:[av[2],av[1],[av[1][0]+av[2][0]-av[0][0],av[1][1]+av[2][1]-av[0][1]]],type:'---'};
+      const {s,structures}=createWorld({seed,size,structures:[{tris:[anchor,...K.tris.slice(0,1+K.P)],x:c-7,y:c},{tris:[anchor,weld],x:c+7,y:c}],supply});
+      const A=[structures[0][0],structures[1][0]],tmp=new TriSim({},1),norm=t=>{tmp.setType(0,t);return canon(tmp.typeName(0));},motif=K.kit.map(norm),rootT=norm(K.types?K.types[0]:r.type);
+      console.log('motif parts',K.kit.join(' '),'root',r.type,ctl?'(control: blanks ---)':'');
+      const closed=[0,0],cells=()=>{const {comp}=s.bodies();return A.map((x,q)=>{let k=0;for(let u=0;u<s.n;u++)if(comp[u]===comp[x])k++;return k-1-q;});};
+      // a ring is closed once its root's close-only side is bonded (the root: the anchor's partner on the anchor's glue side)
+      const isClosed=x=>{const q=s.bond[x*3];if(q<0)return false;const rt=(q/3)|0;return [0,1,2].some(e=>s.cOnly[rt*3+e]&&s.bond[rt*3+e]>=0);};
+      const report=t=>{const tc=typeCount(s),n=cells();console.log(`t=${t} ring cells ${n.map(x=>x+'/'+K.N).join(' ')} closed ${closed.map(x=>x||'no').join(' ')} copies=${s.ev.copy||0} parts (attached too) [${motif.map(m=>tc[m]||0).join(' ')}] roots=${tc[rootT]||0} blanks=${tc[norm(ctl?'---':'-?-?-?')]||0}`);};
+      snap(s,'t0',`t=0: a ring grown one motif round (one of each part), a bare anchor, ${ctl?'inert blanks (control)':'copy blanks'}`,null,false);
+      for(let t=1;t<=steps;t++){s.step();A.forEach((x,k)=>{if(!closed[k]&&isClosed(x))closed[k]=t;});if(every(t,16))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: copies ${s.ev.copy||0}, rings ${cells().join(' / ')}${closed[1]?', both closed':''}`,null,false);}
+      const n=cells();console.log(`result: ring cells ${n.join(' ')} of ${K.N}, closed at ${closed.map(x=>x||'not yet').join(' / ')}, copies ${s.ev.copy||0}`);
+      finish(`Contact copying: a ring with one of each part and copy blanks only; it closes and a second ring grows from copies${ctl?' (control)':''}`);},
     // split: a parent ring P and a bud ring D (prepared, labelled) share a wall held by completion-release pairs '&',
     // with an open doorway through both walls (each panel turned open, held by a '&' doorstop, always triggered). Inside
     // P a stamp pocket casts blanks into the bud's part (A@-a@); parts diffuse through the doorway into D and grow a

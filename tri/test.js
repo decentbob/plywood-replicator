@@ -59,6 +59,18 @@ test('parts: a free triangle with an attach side binds only by it',()=>{
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(30);
     assert.equal(s.partner(0,2)===2,expect,part);}});
 
+test('copy side: a copy blank binds any free side of an attached triangle, takes its type (turned, marks and carried marks) and lets go',()=>{
+  // template (cell 0) welded to cell 1 by side 0; the copy blank (cell 2) sits flush in the site beside template side `at`
+  const run=(tmpl,blank,at,attached=true)=>{const sites=[[[1,0],[1.5,H],[0.5,H]],[[0,0],[0.5,H],[-0.5,H]]];
+    const tris=[{v:[[0,0],[1,0],[0.5,H]],type:tmpl},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:sites[at-1],type:blank,loose:true}];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);if(!attached)s.cut(0,0);s.derive();s.run(5);symmetric(s);return s;};
+  for(const [tmpl,at] of [["fA|b.'@",1],["fA|b.'@",2],['f-b',1]]){const s=run(tmpl,'-?-?-?',at);
+    assert.equal(s.ev.copy,1,`one copy (${tmpl} side ${at})`);assert.equal(canon(s.typeName(2)),canon(tmpl),'the copy has the template type (not its mirror)');
+    assert.ok(!s.bonded(2),'the copy lets go');assert.equal(s.typeName(0),tmpl,'the template is unchanged');assert.equal(s.partner(0,0),1);}
+  assert.notEqual(canon('fbA'),canon('fAb'),'test types are chiral');
+  assert.ok(!run('f-b','---',1).bonded(2),'a blank without a copy side binds no inert side');
+  assert.ok(!run('f-b','-?-?-?',1,false).ev.copy,'a free template is not copied (free triangles never bind each other)');});
+
 test('anchor: an anchor side catches a strand end seed and the strand is placed flush as one body',()=>{
   for(const [ag,expect] of [['Z|',true],['Y|',false],['Z',false]]){
     const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':2},params:{sigma:0,sigmaRot:0}});

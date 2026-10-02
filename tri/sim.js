@@ -27,17 +27,17 @@ const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
 // ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
-const MARKS='<>.!^#*~$+=%@&|';
+const MARKS='<>.!^#*~$+=%@&|?';
 // carried marks (stamp): marks written after an apostrophe (b.'@) do nothing on this side; a cast product takes them
 // with the glue (a caster's instruction side prints glue and marks, so a pocket can cast parts that carry marks)
-const LET='a-zA-Zα-ωΑ-Ωа-яА-Я-',MK='<>.!^#*~$+=%@&|',TOK=new RegExp(`([${LET}])([${MK}]*)(?:'([${MK}]*))?`,'g');
+const LET='a-zA-Zα-ωΑ-Ωа-яА-Я-',MK='<>.!^#*~$+=%@&|?',TOK=new RegExp(`([${LET}])([${MK}]*)(?:'([${MK}]*))?`,'g');
 const markBits=m=>{let b=0;for(const c of m||'')b|=1<<MARKS.indexOf(c);return b;},bitMarks=b=>[...MARKS].filter((_,i)=>b>>i&1).join('');
 function parseType(str){const t=[...str.matchAll(TOK)];if(t.length!==3)throw Error('type needs 3 sides: '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),hinge:t.map(m=>has(m,'<')?1:has(m,'>')?2:0),close:t.map(m=>has(m,'.')),
-    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),anc:t.map(m=>has(m,'|')),carry:t.map(m=>markBits(m[3]))};}
+    rel:t.map(m=>has(m,'!')?1:has(m,'^')?2:has(m,'#')?3:0),trig:t.map(m=>has(m,'*')),latch:t.map(m=>has(m,'~')),fuel:t.map(m=>has(m,'$')),hear:t.map(m=>has(m,'+')),wide:t.map(m=>has(m,'=')),act:t.map(m=>has(m,'%')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),anc:t.map(m=>has(m,'|')),cpy:t.map(m=>has(m,'?')),carry:t.map(m=>markBits(m[3]))};}
 const sideMarks=(s,k)=>(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.':'')+
-  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+(s.anc&&s.anc[k]?'|':'');
+  (s.rel[k]===1?'!':s.rel[k]===2?'^':s.rel[k]===3?'#':'')+(s.trg[k]?'*':'')+(s.ltc[k]?'~':'')+(s.fuel[k]?'$':'')+(s.hear[k]?'+':'')+(s.wide[k]?'=':'')+(s.act[k]?'%':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+(s.anc&&s.anc[k]?'|':'')+(s.cpy&&s.cpy[k]?'?':'');
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k)+(s.carry&&s.carry[k]?"'"+bitMarks(s.carry[k]):'');}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
@@ -48,7 +48,7 @@ class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
-    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.carry=new Int16Array(3*n);
+    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.carry=new Int32Array(3*n);
     this.hRel=new Float64Array(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
     this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
@@ -56,10 +56,10 @@ class TriSim extends Physics{
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
   setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.spent[k]=0;this.glue[k]=t.glue[i];this.hinge[k]=t.hinge[i];this.cOnly[k]=t.close[i];
-    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];this.anc[k]=t.anc[i];this.carry[k]=t.carry[i];}}
+    this.rel[k]=t.rel[i];this.trg[k]=t.trig[i];this.ltc[k]=t.latch[i];this.fuel[k]=t.fuel[i];this.hear[k]=t.hear[i];this.wide[k]=t.wide[i];this.act[k]=t.act[i];this.att[k]=t.att[i];this.done[k]=t.done[i];this.anc[k]=t.anc[i];this.cpy[k]=t.cpy[i];this.carry[k]=t.carry[i];}}
   // side k takes glue g and the marks in bit set b (a cast: the caster's carried marks), nothing carried
   _setSide(k,g,b){const t=parseType(gname(g)+bitMarks(b)+'--');this.glue[k]=g;this.spent[k]=0;this.hinge[k]=t.hinge[0];this.cOnly[k]=t.close[0];this.rel[k]=t.rel[0];this.trg[k]=t.trig[0];
-    this.ltc[k]=t.latch[0];this.fuel[k]=t.fuel[0];this.hear[k]=t.hear[0];this.wide[k]=t.wide[0];this.act[k]=t.act[0];this.att[k]=t.att[0];this.done[k]=t.done[0];this.anc[k]=t.anc[0];this.carry[k]=0;}
+    this.ltc[k]=t.latch[0];this.fuel[k]=t.fuel[0];this.hear[k]=t.hear[0];this.wide[k]=t.wide[0];this.act[k]=t.act[0];this.att[k]=t.att[0];this.done[k]=t.done[0];this.anc[k]=t.anc[0];this.cpy[k]=t.cpy[0];this.carry[k]=0;}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
   _edges(u){let prev=-1,next=-1,face=-1;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -170,6 +170,13 @@ class TriSim extends Physics{
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)
       if(!this.chg[u]||!this.chg[v])continue;          // a discharged triangle binds nothing
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
+        // copy side '?': a free triangle that has one binds only by it, to any free (unbonded, not spent) side of an
+        // attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets go, so it
+        // stays free here (it binds nothing else and is never a template)
+        if(this.cpy[v*3]||this.cpy[v*3+1]||this.cpy[v*3+2]){if(this.bonded(v))continue;
+          for(let e=0;e<3&&!done;e++){if(this.bond[u*3+e]>=0||this.spent[u*3+e])continue;
+            for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
+          continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
         // a trigger side catches only while its flap is at rest and its structure is complete (_deaf)
@@ -223,8 +230,15 @@ class TriSim extends Physics{
       if(pOK&&nOK){this.refr[u]=1;this.refr[t]=1;this.cut(u,e.face);this.count('release');}}
     this._environment();
     for(let u=0;u<n;u++)if((this.fill[u]||this.cap[u]||this.cg[u])&&!this.bonded(u)){this.fill[u]=0;this.cap[u]=0;this.cg[u]=0;}   // a free triangle keeps no chain or caught state
-    this._cast();this._light();
+    this._copy();this._cast();this._light();
   }
+  // contact copying: a triangle bonded by a copy side '?' takes its partner's type (side i+k takes the partner's side
+  // j+k, i and j the bonded sides: the partner turned about the shared edge; glues, marks and carried marks) and lets go
+  _copy(){const A=['glue','hinge','cOnly','rel','trg','ltc','fuel','hear','wide','act','att','done','anc','cpy','carry'];
+    for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||!this.cpy[u*3+i])continue;
+      const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
+      for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
+      for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u)]);break;}}
   // options: dissolve (with caps: strands missing a cap signal fall apart), undock (lone docked triangles leave), fray
   // (a triangle held by one bond, not being copied, lets go), loose (below)
   _environment(){const p=this.p,n=this.n;
