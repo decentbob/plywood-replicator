@@ -230,6 +230,13 @@ test('conservation: blocks stay in play, types change only by cast and copy (lid
   assert.ok((s.ev.cast||0)>=1&&(s.ev.copy||0)>=1,`casts ${s.ev.cast} copies ${s.ev.copy}`);
   assert.ok(changed<=(s.ev.cast||0)+(s.ev.copy||0),`${changed} types changed, ${s.ev.cast} casts + ${s.ev.copy} copies`);
   assert.ok(worst<1e-3,`overlap ${worst}`);symmetric(s);});
+test('physics: a block in a hole of a one-row wall never hops across it through the apex pinch',()=>{
+  const tris=[];for(let i=0;i<10;i++){if(i!==5)tris.push({v:[[i,0],[i+1,0],[i+0.5,H]],type:'---'});tris.push({v:[[i+1,0],[i+1.5,H],[i+0.5,H]],type:'---'});}
+  const sw=Math.sqrt(1/(Math.sqrt(3)/4));let up=0;
+  for(let k=0;k<300;k++){const s=new TriSim({W:24,H:24,seed:k+1},tris.length+1);buildStructure(s,tris.map((_,q)=>q),tris,6,12);
+    const u=tris.length;placeTri(s,u,[[11,12],[12,12],[11.5,12+H]]);s.gridSync();if(k===0){s._single(u,0,0.95,0);assert.ok(s.py[u]<12.3,'a direct kick of 0.95 hopped the wall');}
+    for(let t=0;t<200;t++){s._single(u,0.3*sw*s._gauss(),0.3*sw*s._gauss(),0.45*sw*sw*s._gauss());if(s.py[u]-H/3>12+H-1e-6){up++;break;}if(s.py[u]+2*H/3<12+1e-6)break;}}
+  assert.equal(up,0,`${up} of 300 blocks crossed the (frozen) wall`);});
 test('physics: an anchor never pulls a strand through a wall (the whole capture path must be clear)',()=>{
   // a strand end lies within capture of an anchor site, the strand turned 100 degrees from its flush place and a welded
   // wall row across the sweep of its far part: the destination is clear, the path is not (it was captured, 2026-10-02)

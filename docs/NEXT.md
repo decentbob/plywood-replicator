@@ -2,6 +2,13 @@
 
 State on 2026-10-02 (after autorun run 20261002-0921, build). Read AGENTS.md first (rules of work), then this file.
 
+**Current slice (autorun run 20261002-1050, harden): merge the physics midpoint fix.** Goal: the move rule on main
+checks a direct move's midpoint (no block passes a gap narrower than itself), with every capability check that relied
+on the wall-pinch hop passing again by layout changes only (no core change, no rule change). Done when: the fix and its
+test are on main and `node tri/check.js` passes in full (each multi-world check at least 3 of 4). Stop: if a check can
+only pass with the hop, record which site needs it and why, keep that check as a known failure only if the user's
+principles allow it, otherwise leave the fix on a branch with the traces. Branch `claude/autorun-20261002-1050`.
+
 **Handoff status (autorun run 20261002-0921, build).** Everything committed on branch `claude/autorun-20261002-0921`
 and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass; `node tri/check.js`: 33 of 33 pass in 1363 s (3 new: `imprint-pore` 4 of 4, its controls `imprint-pore-c`, `imprint-pore-n`).
 No current slice.
