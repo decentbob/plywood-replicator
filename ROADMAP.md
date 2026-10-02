@@ -37,36 +37,51 @@ splits it off.** Build every mechanism in isolation, then combine them.
 
 Every row marked works is guarded by `node tri/check.js` (one line per capability, about 40 minutes with 4 processes).
 
+## Organism on copies: parts and where they come from (2026-10-02, review-intent run 20261002-1751)
+
+The goal is reached when every part below is grown from copies or comes from the environment, and the bud is the same
+kind as its parent (so the cycle repeats). State in `budpore`, the nearest demo:
+
+| Part | Role | Source now | Must become |
+|---|---|---|---|
+| Copy blanks `-?-?-?` | the one food | environment | (stays) |
+| Genome `aAaA` | template for its own dockers and fills | founder prepared; copies grown | founder = the parent's own inherited copy |
+| Parent ring with `&` walls and one gap (pore) | compartment; spent walls are never copied | prepared (R 7) | the previous generation's bud |
+| Parent anchor `W\|` | holds the founder mid-wall | prepared | a part of the ring's kit, same as the bud's anchor role |
+| Bud ring (R 5), its half of the opening | the offspring's compartment; its pore after the split | prepared | grown from copies on the parent's seed site (priority 3) |
+| Bud anchor `Z@\|*` | catches a copy; its trigger releases the latch | prepared | a part of the bud's kit |
+| Latch bond `~` between the rings | holds the pair until the bud has its copy | prepared | made by the bud's growth |
+| Bud seed site on the parent | where the next bud starts | none | re-made in every bud (closure, priority 2) |
+
+Spent walls cannot be templates, so ring material must come from an exposed, unspent surface (IDEAS, 2026-10-02).
+
 ## Backlog (top first)
 
-0. **Organism on copies** (contact copying works in isolation, 2026-10-02). Feed the grown bud from copies of the
-   parent's parts (the parent's ring as the bud ring's template: same kit), dockers from copies of the genome; then ask
-   a core-review whether stamp marks (`'`) and casting can be removed. Exposure: only free sides are copied (enclosed
-   cells of a complete pocket are not; inside faces only from inside). Done 2026-10-02: a sealed cell copies its genome
-   from copy blanks alone (`imprint m`; walls with spent `&` sides are not copied). Open: the bud pair on copies (`split
-   q`, 1 of 4: blanks are one batch, copies stall, strands rarely reach D's anchor) and a way to bring copy blanks in
-   (NEXT, core change candidate; 2026-10-02 run 0921: not needed, a pore with spent walls feeds a cell, `imprint p`). Done
-   2026-10-02 run 1551: anchors catch busy strands (core change), the bud pair `budpore` splits with food left in 4 of 8
-   seeds. Open: the bud copies its genome after the split (mid-wall anchor in D).
+Since run 20261002-1751 all new building goes to the organism on copies (item 0); the casting lineage (items 1-3, 6:
+kit parts and cast dockers as prepared food) is frozen: its checks keep passing, no new features. Reason: only copies
+let the parent construct its offspring from one uniform food, and only that route lets the core shrink later (docs/NEXT.md,
+"Direction").
 
-1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`; see
-   INNOVATIONS). Then: smaller pockets (fewer kit types, faster growth); several seeds per chain (`latGlue` backs);
-   a pocket that casts its own kit types. Marks now travel with cast glue (stamp, `'` carried marks, 2026-10-01): a
-   pocket casts kit parts. Remaining blockers: one pocket per part type, and a product carries nothing (stamp casters
-   cannot be cast). Needs programmable casting (see IDEAS: part templating, translation).
-2. **Factory on lid pockets.** Switch the factory demo to lid pockets (done: copy deadlock fixed by zip; lid pocket
-   built) and measure generations.
-3. **Pump through a wall.** A carrying lock: the hatch pocket carries a key from an outer slot into an enclosed
-   centre; a pulse door on the centre's inner wall opens while the hatch holds its return (interlock). Fuel each
-   stroke (energy), so pumping is directional and costs carriers.
-4. **Scanner gate / proofreading.** A pocket whose instructions equal what it recognizes (a checkpoint) between two
-   doors admits only triangles matching on all three sides; or cooperative binding (a part stays bound only once a
-   second side matches). Needed once casting makes stray types.
-5. **Membrane growth.** A ring that inserts wall cells (a growth site with a seed glue, wall kit types), staying closed.
-6. **Bud and feed** — works prepared (demo split, 2026-10-01), including a bud that lives alone (`split ... o`, 4 of 4).
-   Grown pair: works for a cap (`budgrow`, 2026-10-02: the bud ring grows on the parent's seed) and for a genome copy
-   (`budgrow ... g`, 2026-10-02 run 1351: 6 of 8 seeds). Next: food for the grown bud after the split (a pore with
-   spent walls, `imprint p`), a pocket in the grown bud; a second bud already starts on the parent's freed seed.
+0. **Organism on copies**, in order (docs/NEXT.md, Direction, priorities): (a) the bud copies its genome after the
+   split (`budpore`, mid-wall anchor in D); (b) closure by design: one organism kind whose bud is the same kind (ring
+   size, anchor roles, seed site, the first motif round), "designed, not demonstrated" counts; (c) grow the bud ring
+   from copies on the parent's seed site (as `imprint`'s rings; fix the one-front 28/30 stall); (d) two generations;
+   then (e) a core review of removing casting, stamp, fuel and machine marks that only the frozen lineage uses
+   (`% ' $ ^ # = ! < > +`). Done so far: contact copying (run 0136), a sealed cell copies its genome from blanks
+   (`imprint m`), a cell fed through a pore (`imprint p`), anchors catch busy strands and `budpore` splits with food
+   left in 4 of 8 seeds (run 1551).
+0b. **Speed** (harden runs): `budpore` worlds take about 4 minutes, the check suite 40; lone blocks dominate physics
+   (`_single`).
+
+Frozen (casting lineage; kept for reference and checks):
+1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`). Open
+   ends (smaller pockets, several seeds per chain, a pocket that casts its own kit) are superseded by contact copying.
+2. **Factory on lid pockets** (lid pocket built; factory demo not switched).
+3. **Pump through a wall** (carrying lock, fuelled strokes): not needed on copies (a pore with spent walls feeds a cell).
+4. **Scanner gate / proofreading.** Still relevant on copies (everything exposed is copied, strays too); after item 0.
+5. **Membrane growth.** A ring that inserts wall cells while staying closed; after item 0.
+6. **Bud and feed on kits** — works prepared (`split`, `split o` 4 of 4) and grown (`budgrow`, `budgrow g` 6 of 8).
+   Frozen: the transport tail, the second bud on the freed seed and food after the split are not pursued here.
 7. **Division** — works prepared (completion signal cuts the shared wall; doors shut and lock).
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 

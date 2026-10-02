@@ -1,6 +1,66 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-1551, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-1751, review-intent). Read AGENTS.md first (rules of work), then this file.
+
+**Handoff status (autorun run 20261002-1751, review-intent).** Docs only, on branch `claude/autorun-20261002-1751`,
+merged into `main`. No simulations running; tests 34 pass; checks not rerun (no code change). No current slice.
+**Done this run (slice: direction check, no building; met):** findings and priorities below ("Direction"); ROADMAP
+backlog reordered to match (organism on copies first, casting lineage frozen) with a parts table of the organism on
+copies; IDEAS has the design lesson (spent walls cannot be templates). Autorun rotation unchanged (reason below).
+**Exact next step:** the rotation's next run is `cleanup`; then `build` takes priority 1 below (M2 on `budpore`, as
+run 1551 set it: mid-wall anchor in D, target the bud holds 2+ strands at the end in 3 of 4 worlds).
+
+### Direction (autorun run 20261002-1751, review-intent): where the work stands and what comes first
+**Findings.**
+1. **Two half-organisms.** Since the synthesis decision (run 0136: contact copying) the build line has alternated
+   between two lineages: the casting lineage (kit parts and stamp-cast dockers as prepared food: `split o`,
+   `budgrow`, `budgrow g`; run 1351 built here) and the copy lineage (one uniform food, copy blanks: `imprint m/p`,
+   `budpore`; runs 0236, 0921, 1551). Each covers part of the goal sentence with different prepared pieces; neither
+   is converging on the other. The copy lineage is the only one where the parent can construct its offspring from
+   uniform food (in the casting lineage the world supplies the bud's kit parts, the parent only a seed), and only it
+   lets a later core review shrink the core. **Decision: all new building goes to the copy lineage; the casting
+   lineage is frozen** (its checks keep running and passing; no new features, its open follow-ups are dropped:
+   `budgrow g`'s transport tail and second bud, `grown`'s membrane stall, fuel per swing, the airlock).
+2. **The core is not outgrowing the capabilities.** Since 10-01 the core gained one rule (copy side `?`) and lost or
+   narrowed several (K merged into `%`, the latch's open hold, 8 options, the anchor reads less). Good. The larger
+   win is ahead: the copy lineage uses only `@ . & | ? ~ *`, the open, busy and zip signals and binding; casting,
+   stamp, fuel and most machine marks (`% ' $ ^ # = ! < > +`) serve only the frozen lineage (measured with the coverage hook on 3000-step runs of `budpore 300`, `imprint`,
+   `imprint 60m`, `imprint 150p`: marks present are `. * ~ @ & | ?` only). Once the organism on
+   copies runs a whole cycle (priority 3), a `core-review` should weigh removing them (with their demos, into git
+   history, as the 10-01 restart did); the case goes through the RULES gate first.
+3. **Prepared structure does most of the organism's work.** In `budpore` only the genome copies are grown; both
+   rings, the bud's anchor, the latch bond, the opening and the founder are prepared (ROADMAP, "Organism on copies:
+   parts and where they come from"). Of these, the bud ring and everything on it must be made each generation.
+4. **Nothing yet tests closure.** The goal is a lineage: the offspring must be able to do it again. `budpore`'s bud is
+   not its parent's kind (D is R 5 with anchor `Z@|*` and a latch side; P is R 7 with anchor `W|` and a seed for no
+   bud), so even a perfect run would end the lineage after one generation. Closure is a design question to settle
+   early, before more prepared asymmetries are built on.
+5. **A design tension found.** Food protection needs spent `&` walls (spent sides are never copied: imprint m, p);
+   but a spent wall cannot be a template, so a complete parent cannot template its bud's ring. Ring material must
+   come from something exposed and unspent: the bud's own growing front (as `imprint`'s rings: one motif round grows
+   into a whole ring from copies, while open-signal sides are unspent), or templates carried where they stay exposed
+   (on the genome, inside the parent). Written into IDEAS.
+
+**Priorities (in order; each a slice).**
+1. **M2: the bud copies its genome after the split** (`budpore`, mid-wall anchor in D; as run 1551 set it). After the
+   split D's half of the opening is its pore, so D is then an `imprint p` cell: the bud "lives on its own".
+2. **Closure by design (analysis slice; "designed, not demonstrated" is a valid result).** Specify one organism kind
+   whose bud is the same kind: one ring size or a fixed alternation, which anchor holds the founder and which catches
+   (one glue for both roles, or roles by position), how the bud's seed site and latch are re-made in the bud, and
+   where the bud ring's first motif round comes from (finding 5). Output: a parts list where every part is grown from
+   copies or comes from the environment, with each step mapped to an existing demo, and the rules it reads (locality
+   check). A `build` or `explore` run can take it; if it needs a core change, the case goes to RULES first.
+3. **Grow the bud ring from copies** (replace D in `budpore`): the bud grows on P's seed site from copies of its own
+   motif round (as `imprint`), outside in the food; latch and anchor as parts of its kit. Fix `imprint`'s one-front
+   28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
+4. **Two generations:** the bud of priority 3 splits off, copies its genome (priority 1) and starts its own bud.
+   This is the goal's whole cycle; then the core-review of finding 2.
+5. **Speed (for `harden` runs):** `budpore` worlds take about 4 minutes and the check suite 40; copy-lineage worlds
+   need hundreds of blanks, and lone blocks dominate physics (`_single`). Measure steps per second on `budpore` and
+   optimise the lone-block path; keep capability lines identical or explain each difference.
+**Rotation:** unchanged. Five `build` runs per twelve fit priorities 1-4; `explore` can take priority 2 or a core
+change it needs; the two `harden` runs take priority 5 and the copy lineage's partial checks (`budpore`, `imprint`
+5 of 8); `core-review` takes finding 2 once priority 3 works.
 
 **Handoff status (autorun run 20261002-1551, explore).** Everything committed on branch `claude/autorun-20261002-1551`
 and merged into `main`. No simulations running. `node tri/test.js`: 34 tests pass; `node tri/check.js`: 34 of 34 pass
@@ -280,6 +340,8 @@ Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed step
 saved state (same seed and extra; event counters restart). `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Do next (toward the BIG goal)
+**Superseded by "Direction" above (run 20261002-1751): its priorities come first; the list below is the older
+casting-lineage record.**
 The BIG goal's sentence now has a prepared, working skeleton: the parent **feeds** its bud through a doorway, the bud
 **catches a genome copy** and grows its content, and it **splits off** sealed (demo `split`). What is still prepared
 or missing, in order:
