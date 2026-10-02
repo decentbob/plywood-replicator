@@ -130,8 +130,9 @@ class Physics{
     this._unwrap(list,rx,ry);const px0=this._dx(cx-this.px[list[0]]),py0=this._dy(cy-this.py[list[0]]);
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]-=px0;ry[q]-=py0;reach=Math.max(reach,Math.hypot(rx[q],ry[q])+R3);}
     const dist=Math.max(Math.hypot(tx,ty),reach*Math.abs(da));let f=0;
-    // a move short enough that it cannot pass through a one-row wall (that needs 1.44: the wall plus two inradii)
-    // whose destination is clear is taken at once
+    // a short move (at most `direct`, 1.0) whose destination is clear is taken at once. Known defect (RULES, Physics): a
+    // block in a wall's hole can hop across the wall through the pinch at the hole's apex (the shortest path through a
+    // wall is a block's width, 0.866); the midpoint fix is on branch claude/physics-pinch-midpoint
     const tried=dist<=this.p.direct;if(tried&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true)===0)f=1;
     const nsub=f===1?0:Math.max(1,Math.ceil(dist/this.p.subStep));
     let blocked=-1;for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0){blocked=g;break;}f=g;}   // the full move was already found blocked

@@ -1,8 +1,66 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-0236, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-0721, core-review). Read AGENTS.md first (rules of work), then this file.
 
-**Handoff status (autorun run 20261002-0236, build).** Everything committed on branch `claude/autorun-20261002-0236`
+**Handoff status (autorun run 20261002-0721, core-review).** Everything committed on branch
+`claude/autorun-20261002-0721` and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass;
+`node tri/check.js`: 30 of 30 pass (run in parts on the final code: 6 + 22 + 2 checks, about 25 minutes in all). One
+check recalibrated: `imprint-cell` (and its control) runs 60000 steps instead of 40000; with the release locality fix
+copies let go one pass later and at 40000 steps only 2 of 4 worlds had reached 4 strands (main's same-pass read gave
+5 / 2 / 5 / 6, the local read 4 / 4 / 3 / 2; at 60000: 4 / 4 / 4 / 4, control 2 strands, wall 42 of 60). No current slice.
+**Done this run (slice: finish run 0335's core review; acceptance met):** run 0335 (never reported back) had left five
+commits that broke 14 of 30 checks; they were reviewed (two `deep-reviewer` passes, every finding reproduced before
+acting), fixed or split off, and merged with the rest:
+- **Removed:** 8 unused options (`caps` with its state and two relayed signals, `pDissolve`, `triUndock`, `pFray`,
+  `castComp`, `noDock`, `snap: false`: run 0335; `capture: 0` with `triTol`: this run) and the latch's open-signal hold
+  (fired in none of 55 check worlds, measured with a coverage hook). **Merged:** the glue `K` is no longer a casting
+  activator; the mark `%` is the only one (RULES, Core changes; glue letters are now all labels).
+- **Locality fixes** (RULES, Locality audit, now a rule-by-rule table): copy release reads partners' fill exposure
+  (run 0335) and a fill exposes itself from the pass it binds (this run: without it a docked triangle let go while a
+  fill bound in the same pass was incomplete, which broke copying in 11 checks; regression test); fuel: the carrier
+  spends itself (run 0335), the start pulse reaches the fuel triangle one pass later (pwE), and only the flap of a hinge
+  on the fuel triangle spends its carriers (this run; regression test); anchor capture checks its whole path, measured
+  along bonds.
+- **Core inventory** in RULES with users measured per check and counts: 17 mark meanings, 5 relayed signals, 9 exposed
+  values, 9 states, 4 options. RULES and code now agree on 11 points the audit found (kick sizes, hinge rates, `@`
+  closures, copy sides on any side, pLoose scope, inert `@`, `&` closures, release at ends, fuel).
+- **Physics leak kept on main, fix on a branch** (see the first item below).
+
+**Exact next step:** a `harden` slice on the physics leak (item 1 below); the build line continues from run 0236's
+handoff (below, "Build line").
+
+### Core review follow-ups (run 20261002-0721), in order
+1. **Physics: capabilities rely on a leak.** A direct move (at most 1.0) is checked only at its end, so a block passes a
+   gap narrower than itself (a block in a one-row wall's hole hops across the wall: 95 of 2000 kicks of 0.95). The fix
+   (a direct move longer than a sub-step needs a clear midpoint; the same as `direct` 0.8) is on branch
+   `claude/physics-pinch-midpoint` (commit "Physics: direct back to 1.0, ...", with the test "a block in a hole of a
+   one-row wall never hops across it"). With it 6 checks fail: budgrow 1 of 4 (the bud ring never closes in 3 worlds),
+   split-o 0 of 4 (no genome copy reaches D), grown (pocket 15/16), imprint 2 of 4, lid (4 casts, seed noise: seeds 1-4
+   average the same), grow (seed noise: completes in 4 of 5 seeds). Commands: on that branch,
+   `node tri/check.js budgrow split-o grown imprint` (about 9 minutes). Next: trace which sites in budgrow and split-o
+   are reached only through a sub-width gap (they are "narrow kit sites", see Pitfalls), widen those layouts, then
+   merge the fix. Until then membranes on main are not sealed against this hop.
+2. **Fuel per swing (designed, not built).** A fuel triangle spends every charged carrier on its fuel sides when a
+   flap starts (two carriers: both spent), and two flaps hinged on one fuel triangle can both start on one carrier
+   (the start reads `fu` 2 before anything is spent). No current structure has either. Target design, all local: the
+   flap requests (pw 1) and does not move; the fuel triangle grants one request per pass (the hinge side with the
+   lowest index) and exposes which fuel side pays (fuSide); only the carrier on that side discharges; the flap moves
+   once its hinge partner (or itself) exposes "paid". Also closes a hole with `pLoose` (a carrier that leaves in the
+   same pass is never spent). Reproducers were in the run's scratch (`fuel.js`, `fuel2.js`): build them as tests.
+3. **`#` has two meanings.** On a trigger side ("let the key go after reading") it is used only by the airlock and the
+   gate's pulse option; the airlock does not work on rigid physics (ROADMAP, Known issues). Remove the trigger-side
+   meaning together with the airlock, or rebuild the airlock; then `#` means only "pulse door".
+4. **Lock signal, three uses** (keys deaf, latches held, pulse doors ignore their trigger): all three fire in checks
+   (keys: split o, live, cell, import; latches: those and gate; pulse doors: budgrow). A merge would need non-pulse
+   flaps to tell "my own latch is open" from "another door is open"; not found this run.
+5. **Same-pass partner reads** (zip, gap, release, fn, cast) are allowed by an explicit convention (RULES, Locality
+   audit); a strict version snapshots role and exposes an end bit, at one pass of lag per face. Decide only if a
+   locality problem traces back to it.
+6. Coverage hook for the next core review (marks per demo, rule events, why keys and latches were held):
+   `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js` (one JSON line per demo world).
+
+### Build line (from run 20261002-0236)
+**Handoff status of run 20261002-0236 (build).** Everything committed on branch `claude/autorun-20261002-0236`
 and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: 30 of 30 pass in 1285 s (2 new: `imprint-cell` 3 of 4, its control `imprint-cell-n`).
 No current slice.
 **Done this run (slice: the bud's genome cycle on copies; budget used, acceptance not met, a milestone met):**
@@ -91,7 +149,7 @@ node tri/demos.js split 1 450000 runs o            # + the bud grows its own poc
 node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
 node tri/demos.js imprint 1 100000 runs            # contact copying: a ring closes and a second grows from copy blanks only (c: control)
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
-node tri/demos.js imprint 1 40000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
+node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js split 1 150000 runs q            # the bud pair on copies (partial: 1 of 4 worlds splits)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
@@ -174,7 +232,7 @@ or missing, in order:
   stall (fixed by `pLoose`). Check every new design for sites that can become enclosed.
 - A flap turning about a corner sweeps its far corner 13% past the chord: a carried target jams against a fixed
   neighbour across its far edge. Close lids onto a target instead of carrying the target (lid pocket).
-- Kits: every functional pair (K/k, instruction holders) must be a close-only closure or a unique activator glue (`%`);
+- Kits: every functional pair (activator `%` pairs, instruction holders) must be a close-only closure or a unique activator glue (`%`);
   otherwise free kit cells, products or dockers stick at the wrong place. Free parts must bind only by `@`.
 - Dockers used as fills expose their side glues on hidden backs: use `latGlue` with dedicated fill types when dockers
   carry seeds.

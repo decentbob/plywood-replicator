@@ -1,7 +1,7 @@
 'use strict';
 // Typed-triangle chemistry on the triangle physics (physics.js). Rules in full: docs/RULES.md.
 // Every block is the same unit triangle. Its TYPE is three side glues (counter-clockwise) plus side marks; its STATE
-// is a few small per-triangle values (charge, fill, cap, door state). Bonds carry a kind on each end (PREV/NEXT chain
+// is a few small per-triangle values (charge, fill, door state). Bonds carry a kind on each end (PREV/NEXT chain
 // bonds, FACE/TFACE copy bonds, GLUE bonds). Every rule reads one triangle, its bonds and its bonded partners' exposed
 // values from the previous pass; nothing counts, traverses or reads an organism.
 //
@@ -41,17 +41,18 @@ const sideMarks=(s,k)=>(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k)+(s.carry&&s.carry[k]?"'"+bitMarks(s.carry[k]):'');}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
-  zip:true,caps:false,pDissolve:0,triUndock:0,pFray:0,pLoose:0,latGlue:false,castComp:false,noDock:false,light:null};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
+  zip:true,pLoose:0,latGlue:false,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
+    for(const k of ['lockRange','sigRange'])if(!(this.p[k]>=0&&this.p[k]<=127))throw Error(k+' must be 0..127 (an Int8 relay)');
     const I8=k=>new Int8Array(k);
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.carry=new Int32Array(3*n);
     this.hRel=new Float64Array(3*n);
-    this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);this.cap=I8(n);this.sigP=I8(n);this.sigN=I8(n);
-    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
+    this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);
+    this.actE=I8(n).fill(-1);this.tb=I8(n);this.nbc=I8(n);this.dOpen=I8(n);this.pw=I8(n);this.pwE=I8(n);this.fu=I8(n);this.lockBusy=I8(n);this.chg=I8(n).fill(1);this.zip=I8(n);this.fn=I8(n);this.sg=I8(n);this.cg=I8(n);this.away=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -79,16 +80,12 @@ class TriSim extends Physics{
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
     const nb0=this.nb.slice(),gap0=this.gap.slice(),need0=this.need.slice(),busy0=this.busy.slice(),lb0=this.lockBusy.slice(),zip0=this.zip.slice(),sg0=this.sg.slice(),op0=this.op.slice();
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
-    // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond (refractory)
-    for(let u=0;u<n;u++){let b=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
-        if(k===FACE||k===TFACE)b=BUSY;else if(k===PREV||k===NEXT)b=Math.max(b,busy0[P(u,i)]-1);}
-      this.busy[u]=b;if(this.refr[u]&&b===0)this.refr[u]=0;}
-    // caps (option): capped strand ends emit, relayed away from them; a face hearing both ends is in an intact strand
-    if(this.p.caps){const sp0=this.sigP.slice(),sn0=this.sigN.slice();
-      for(let u=0;u<n;u++){const e=this._edges(u);let a=0,b=0;
-        if(e.prev>=0)a=Math.max(0,sp0[P(u,e.prev)]-1);else if(e.next>=0&&this.cap[u]&&e.face<0&&!this.fill[u])a=BUSY;
-        if(e.next>=0)b=Math.max(0,sn0[P(u,e.next)]-1);else if(e.prev>=0&&this.cap[u]&&e.face<0&&!this.fill[u])b=BUSY;
-        this.sigP[u]=a;this.sigN[u]=b;}}
+    // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond. Refractory: a
+    // triangle that had a face bond in the previous pass (busy BUSY) and has none now was released; it stays
+    // refractory (takes no dock) until the busy relay around it is 0
+    for(let u=0;u<n;u++){let b=0,face=false;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
+        if(k===FACE||k===TFACE){b=BUSY;face=true;}else if(k===PREV||k===NEXT)b=Math.max(b,busy0[P(u,i)]-1);}
+      if(busy0[u]===BUSY&&!face)this.refr[u]=1;this.busy[u]=b;if(this.refr[u]&&b===0)this.refr[u]=0;}
     // nb: my next partner is a back; gap: hidden backs after a face (0,1,2); need: fills still to place after a docked/fill
     for(let u=0;u<n;u++){const r=R[u];this.nb[u]=0;this.gap[u]=-1;this.need[u]=0;
       if(r.role===SFACE||r.role===SBACK){const nx=r.next>=0?P(u,r.next):-1;
@@ -105,11 +102,17 @@ class TriSim extends Physics{
       this.zip[u]=z;}
     // lock signal (interlock): an unbonded latch side emits lockRange, relayed -1 per bond
     for(let u=0;u<n;u++){let v=0;for(let i=0;i<3;i++){if(this.ltc[u*3+i]&&this.bond[u*3+i]<0)v=this.p.lockRange;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,lb0[(q/3)|0]-1);}this.lockBusy[u]=v;}
-    // tb: a trigger side of mine is bonded; nbc: my bond count; actE: my activator side (glue K bonded to a k, or an
-    // activator side '%' bonded by its glue)
-    const K=gcode('K');
+    // tb: a trigger side of mine is bonded; nbc: my bond count; actE: my activator side (an activator side '%' bonded
+    // by its glue)
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
-      if(a<0&&((this.glue[u*3+i]===K&&this.glue[q]===comp(K))||(this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
+      if(a<0&&this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
+    // fu (fuel, exposed): 0 no fuel side '$'; 1 fuel sides, none holding a charged carrier; 2 a charged carrier on a fuel
+    // side; 3 that, and a flap exposed a started swing (pwE 1, as it stood before this step's servo) that is me or the
+    // flap of a hinge on me (its hinge side is bonded to me): the carriers on my fuel sides spend themselves in the next
+    // servo (the start pulse moves one bond per pass: trigger -> flap in one servo, flap -> fuel triangle in the next)
+    for(let u=0;u<n;u++){let f=0;for(let i=0;i<3;i++){if(!this.fuel[u*3+i])continue;f=Math.max(f,1);const q=this.bond[u*3+i];if(q>=0&&this.chg[(q/3)|0])f=2;}
+      if(f===2){if(this.pwE[u]===1)f=3;else for(let i=0;i<3&&f===2;i++){const q=this.bond[u*3+i];if(q>=0&&this.hinge[q]&&this.pwE[(q/3)|0]===1)f=3;}}
+      this.fu[u]=f;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
     // attachment) and a latch side '~' (an edge meant to come apart) emit nothing.
@@ -122,14 +125,14 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++){let v=this.tb[u]?this.p.sigRange:0;for(let i=0;i<3;i++){if(!this.hear[u*3+i])continue;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,sg0[(q/3)|0]-1);}this.sg[u]=v;}
   }
   // ---------------- bonds ----------------
-  bind(u,i,ku,v,j,kv){this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;
+  bind(u,i,ku,v,j,kv){if(this.bond[u*3+i]>=0||this.bond[v*3+j]>=0)throw Error('bind: side already bonded');this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;
     for(const [x,e,y] of [[u,i,v],[v,j,u]]){if(!this.hinge[x*3+e])continue;   // a hinge remembers its flush angle and which way is away
       {const d=this.angle(x)-this.angle(y),L=Math.PI/3;this.hRel[x*3+e]=L*Math.round(d/L);}   // rest angle on the lattice
       const c=this.hinge[x*3+e]===1?e:(e+1)%3,fx=-this.ox[x*3+c],fy=-this.oy[x*3+c];
       const dx=this._dx(this.px[x]-this.px[y]),dy=this._dy(this.py[x]-this.py[y]);this.hSign[x*3+e]=(dx*(-fy)+dy*fx)>0?1:-1;}}
   // binding pulls a free triangle in: v is placed exactly flush with side j against side i of u (it moves at most about
   // the binding tolerance), so every bond starts aligned (a tilted bond jams a strip against its own contacts)
-  _snap(v,j,u,i){if(this.p.snap===false)return true;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
+  _snap(v,j,u,i){if(this.bonded(v))return false;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
     const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
     const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
     // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
@@ -140,9 +143,13 @@ class TriSim extends Physics{
   _snapBody(v,j,u,i){const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
     const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
     const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
-    const body=this.bodyOf(v),tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v],ox=this.px[v],oy=this.py[v];
-    if(body.includes(u)||this.moveDepth(body,tx,ty,da,ox,oy)>0)return false;
+    const body=this.bodyOf(v),tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=Math.atan2(Math.sin(ang-this.pa[v]),Math.cos(ang-this.pa[v])),ox=this.px[v],oy=this.py[v];
+    if(body.includes(u))return false;
+    // the whole path must be clear (checked in sub-steps of at most subStep, as every move): a strand never jumps a wall
     const co=Math.cos(da),si=Math.sin(da),k=body.length,RX=new Float64Array(k),RY=new Float64Array(k);this._unwrap(body,RX,RY);
+    let reach=0;for(let q=0;q<k;q++)reach=Math.max(reach,Math.hypot(RX[q],RY[q])+1/Math.sqrt(3));   // measured along bonds (a long strand is not folded)
+    const nsub=Math.max(1,Math.ceil(Math.max(Math.hypot(tx,ty),reach*Math.abs(da))/this.p.subStep));
+    for(let q=1;q<=nsub;q++){const g=q/nsub;if(this.moveDepth(body,g*tx,g*ty,g*da,ox,oy)>0)return false;}
     for(let q=0;q<k;q++){const w=body[q],rx=RX[q],ry=RY[q];this.px[w]=this._wx(ox+co*rx-si*ry+tx);this.py[w]=this._wy(oy+si*rx+co*ry+ty);this.pa[w]+=da;this.resetShape(w);this.regrid(w);}
     return true;}
   // a trigger side is inert (binds nothing) while its triangle hears an open signal (a sensor is live once its structure
@@ -160,11 +167,11 @@ class TriSim extends Physics{
     if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free))&&this.busy[u]===0)return [r.inert];   // an end's seed: only while the strand is not being copied
     return [];}
   formBonds(){
-    const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE;
+    const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
     // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
-    // orientation: binding turns it into place), or, with capture 0, its side j is flush within triTol
-    const reach=(u,i,v,j)=>{if(!(p.capture>0))return flush(u,i,v,j,p.triTol);const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
+    // orientation: binding turns it into place)
+    const reach=(u,i,v,j)=>{const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
       const sx=(2*(X(i)+X((i+1)%3))-X(k2))/3,sy=(2*(Y(i)+Y((i+1)%3))-Y(k2))/3,dx=this._dx(this.px[v]-this.px[u])-sx,dy=this._dy(this.py[v]-this.py[u])-sy;return dx*dx+dy*dy<=p.capture*p.capture;};
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)
@@ -185,13 +192,13 @@ class TriSim extends Physics{
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
-        if(!p.noDock&&r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])&&(!p.caps||(this.sigP[u]>0&&this.sigN[u]>0))){const g=gl(u,r.free);
+        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])){const g=gl(u,r.free);
           if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
-            if(this.cap[u])this.cap[v]=1;this.sigP[v]=this.sigN[u];this.sigN[v]=this.sigP[u];this.count('dock');R[v]={role:DOCKED};break;}
+            this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
         // fill the prev edge of a docked or fill triangle that still needs fills (glue-agnostic unless latGlue)
         if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
-          if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.sigP[v]=this.sigP[u];this.sigN[v]=this.sigN[u];this.count('fill');R[v]={role:SBACK,fill:true};break;}}
+          if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fn[v]=1;this.fn[u]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its spare edge, active
       // while the strand is not being copied) with the complementary glue, as it would catch a free triangle: the end
@@ -221,50 +228,43 @@ class TriSim extends Physics{
     const n=this.n,p=this.p,P=(u,i)=>this.partner(u,i);
     // fills become ordinary strand triangles once they have both chain bonds
     for(let u=0;u<n;u++)if(this.fill[u]){const e=this._edges(u);if(e.prev>=0&&e.next>=0)this.fill[u]=0;}
-    // fn (exposed, after this pass's bonding): I am a fill, or a fill is bonded to me by a chain bond
-    for(let u=0;u<n;u++){let f=this.fill[u];for(let i=0;i<3&&!f;i++){const q=this.bond[u*3+i];if(q<0)continue;const k=this.bkind[u*3+i];if((k===PREV||k===NEXT)&&this.fill[(q/3)|0])f=1;}this.fn[u]=f;}
-    // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face
+    // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face (the
+    // partners' fn from the previous pass; both ends become refractory in the next derive)
     for(let u=0;u<n;u++){const e=this._edges(u);if(e.face<0)continue;const t=P(u,e.face),rt=this.roles(t);
       const done=i=>!this.fn[P(u,i)];   // my chain partner exposes that neither it nor its chain neighbours are fills
-      const endOK=!p.caps||this.cap[t],pOK=e.prev>=0?done(e.prev):rt.next<0&&endOK,nOK=e.next>=0?done(e.next):rt.prev<0&&endOK;
-      if(pOK&&nOK){this.refr[u]=1;this.refr[t]=1;this.cut(u,e.face);this.count('release');}}
-    this._environment();
-    for(let u=0;u<n;u++)if((this.fill[u]||this.cap[u]||this.cg[u])&&!this.bonded(u)){this.fill[u]=0;this.cap[u]=0;this.cg[u]=0;}   // a free triangle keeps no chain or caught state
+      const pOK=e.prev>=0?done(e.prev):rt.next<0,nOK=e.next>=0?done(e.next):rt.prev<0;
+      if(pOK&&nOK){this.cut(u,e.face);this.count('release');}}
+    // fn (exposed for the next pass): I am a fill, or a fill is bonded to me by a chain bond
+    for(let u=0;u<n;u++){let f=this.fill[u];for(let i=0;i<3&&!f;i++){const q=this.bond[u*3+i];if(q<0)continue;const k=this.bkind[u*3+i];if((k===PREV||k===NEXT)&&this.fill[(q/3)|0])f=1;}this.fn[u]=f;}
+    this._loose();
+    for(let u=0;u<n;u++)if((this.fill[u]||this.cg[u])&&!this.bonded(u)){this.fill[u]=0;this.cg[u]=0;}   // a free triangle keeps no chain or caught state
     this._copy();this._cast();this._light();
   }
-  // contact copying: a triangle bonded by a copy side '?' takes its partner's type (side i+k takes the partner's side
-  // j+k, i and j the bonded sides: the partner turned about the shared edge; glues, marks and carried marks) and lets go
+  // contact copying: a triangle bonded by a copy side '?' and by nothing else (a copy blank that bound this pass) takes
+  // its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the partner turned about the
+  // shared edge; glues, marks and carried marks) and lets go
   _copy(){const A=['glue','hinge','cOnly','rel','trg','ltc','fuel','hear','wide','act','att','done','anc','cpy','carry'];
-    for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||!this.cpy[u*3+i])continue;
+    for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||!this.cpy[u*3+i]||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
       const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
       for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
       for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u)]);break;}}
-  // options: dissolve (with caps: strands missing a cap signal fall apart), undock (lone docked triangles leave), fray
-  // (a triangle held by one bond, not being copied, lets go), loose (below)
-  _environment(){const p=this.p,n=this.n;
-    if(p.pDissolve>0&&p.caps)for(let u=0;u<n;u++){let chain=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;}
-      if(chain>0&&this.busy[u]===0&&!this.fill[u]&&(this.sigP[u]===0||this.sigN[u]===0)&&this.rng()<p.pDissolve){for(let i=0;i<3;i++)this.cut(u,i);this.count('dissolve');}}
-    // loose (option, proofreading): a caught triangle (bound when free, not by an attach side) held on one side only lets
-    // go; a second matching side holds it (cooperative binding). Cargo held by a trigger side (a key read by a machine)
-    // is not proofread: it stays until the machine lets it go
+  // loose (option pLoose, proofreading): a caught triangle (bound when free, not by an attach side) held on one side only
+  // lets go; a second matching side holds it (cooperative binding). Cargo held by a trigger side (a key read by a
+  // machine) is not proofread: it stays until the machine lets it go
+  _loose(){const p=this.p,n=this.n;
     if(p.pLoose>0)for(let u=0;u<n;u++){if(!this.cg[u])continue;let nb=0,key=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){nb++;if(this.trg[q])key=true;}}
       if(nb===1&&!key&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
-    if(!(p.triUndock>0)&&!(p.pFray>0))return;
-    for(let u=0;u<n;u++){let nb=0,chain=0,face=-1,copying=false;
-      for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;nb++;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT)chain++;if(k===FACE)face=i;if(k===FACE||k===TFACE)copying=true;}
-      if(p.triUndock>0&&chain===0&&face>=0&&this.rng()<p.triUndock){for(let i=0;i<3;i++)this.cut(u,i);this.count('undock');continue;}
-      if(p.pFray>0&&nb===1&&!copying&&this.busy[u]===0&&this.rng()<p.pFray){for(let i=0;i<3;i++)this.cut(u,i);this.count('fray');}}
   }
   // casting: a triangle glue-bonded on all three sides, each partner's activator (the side after its recognition side)
-  // bonded to a k: the triangle takes each partner's instruction glue (castComp: its complement) and lets go
+  // an activator side '%' bonded by its glue: the triangle takes each partner's instruction glue and lets go
   _cast(){const G=this.glue;
     for(let u=0;u<this.n;u++){let ok=true;const src=[],cm=[];
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*3+i];if(q<0||this.bkind[u*3+i]!==GLUE){ok=false;break;}
         const w=(q/3)|0,j=q%3;if(this.actE[w]!==m3(j+1))ok=false;else{src.push(G[w*3+m3(j+2)]);cm.push(this.carry[w*3+m3(j+2)]);}}
       if(!ok)continue;
-      // the product takes each instruction glue (castComp: its complement) and the marks that side carries; it loses
+      // the product takes each instruction glue and the marks that side carries; it loses
       // its own marks and lets go of all three casters
-      for(let i=0;i<3;i++){const k=u*3+i;this._setSide(k,this.p.castComp?comp(src[i]):src[i],cm[i]);this.cut(u,i);}
+      for(let i=0;i<3;i++){const k=u*3+i;this._setSide(k,src[i],cm[i]);this.cut(u,i);}
       this.count('cast');(this.castLog||(this.castLog=[])).push([this.t,u,typeName(this,u)]);}}
   // environment drive (labelled): free discharged triangles inside the light zone {x, y, r, p} recharge
   _light(){const L=this.p.light;if(!L)return;
@@ -279,12 +279,16 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++)if(this.op[u]===0)for(let i=0;i<3;i++){const k=u*3+i;if(!this.done[k])continue;this.spent[k]=1;if(this.bond[k]>=0){this.cut(u,i);this.count('complete');}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u]||this.sg[u]>0,open=this.dOpen[u];
       for(let e=0;e<3;e++)if(e!==i&&this.bond[u*3+e]>=0&&!this.isHingeBond(u,e)){const w=P(u,e);if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
-      // a latch holds a trigger while its triangle hears an open signal (a door does not open before its wall is complete)
-      if(open||(trig&&this.lockBusy[u]===0&&this.op[u]===0)){this.cut(u,i);this.count('unlatch');}}}
+      if(open||(trig&&this.lockBusy[u]===0)){this.cut(u,i);this.count('unlatch');}}}
   servo(){
     this._latches();
     if(!this.hinge.some(x=>x))return;this.gridSync();const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
     const hb=(x,e)=>this.isHingeBond(x,e),P=(u,i)=>this.partner(u,i);
+    // energy: a charged carrier bonded to a fuel side whose triangle exposes a started swing (fu 3) discharges itself
+    // and lets go; a flap's start pulse (pw 1) becomes powered (pw 2)
+    this.pwE.set(this.pw);
+    for(let u=0;u<n;u++){if(this.pw[u]===1)this.pw[u]=2;if(!this.chg[u])continue;
+      for(let e=0;e<3;e++){const q=this.bond[u*3+e];if(q>=0&&this.fuel[q]&&this.fu[(q/3)|0]===3){this.chg[u]=0;this.cut(u,e);this.count('fuelUsed');break;}}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(!this.hinge[u*3+i]||q<0)continue;const v=(q/3)|0,rel=this.rel[u*3+i];
       const th=this.wide[u*3+i]?2*Math.PI/3:th0,open=()=>wrap(this.hRel[u*3+i]+this.hSign[u*3+i]*th-(this.angle(u)-this.angle(v)));
       // releases on my own triggers: hand-off once the cargo is bonded elsewhere too; drop once the swing is complete
@@ -293,14 +297,13 @@ class TriSim extends Physics{
       // triggered: a trigger side of mine is bonded, or a triangle bonded to me (not by a hinge) reports one
       let swung=[0,1,2].some(e=>this.trg[u*3+e]&&this.bond[u*3+e]>=0);
       for(let e=0;e<3&&!swung;e++)if(this.bond[u*3+e]>=0&&!hb(u,e)&&this.tb[P(u,e)])swung=true;if(this.sg[u]>0)swung=true;
-      // energy: with a fuel side (mine or my hinge partner's), a swing starts only by spending a charged carrier there
-      if(swung&&!this.pw[u]&&!this.dOpen[u]){let need=false,spent=false;
-        for(const x of [u,v])for(let e=0;e<3;e++){if(!this.fuel[x*3+e])continue;need=true;if(spent)continue;const w=P(x,e);
-          if(w>=0&&this.chg[w]){this.cut(x,e);this.chg[w]=0;spent=true;this.count('fuelUsed');}}
-        if(need){if(spent)this.pw[u]=1;else{swung=false;this.count('unfuelled');}}}
-      // pulse doors: a trigger sets the open state (unless the interlock signal is heard); open reached -> reset
-      if(rel===3){if(swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.count('interlocked');}
-        if(swung)this.dOpen[u]=1;if(this.dOpen[u]&&Math.abs(open())<p.dropTol){this.dOpen[u]=0;this.count('pulse');}swung=!!this.dOpen[u];}
+      // pulse doors: a closed door ignores its trigger while it hears the interlock signal
+      if(rel===3&&swung&&!this.dOpen[u]&&this.lockBusy[u]>0){swung=false;this.count('interlocked');}
+      // energy: with a fuel side (mine or my hinge partner's: fu exposed), a swing starts only while a charged carrier is
+      // on one (fu 2); the start (pw 1) makes the carriers there spend themselves (fu 3, next servo)
+      if(swung&&!this.pw[u]&&!this.dOpen[u]&&(this.fu[u]||this.fu[v])){if(this.fu[u]===2||this.fu[v]===2)this.pw[u]=1;else{swung=false;this.count('unfuelled');}}
+      // pulse doors: a trigger sets the open state; open reached -> reset
+      if(rel===3){if(swung)this.dOpen[u]=1;if(this.dOpen[u]&&Math.abs(open())<p.dropTol){this.dOpen[u]=0;this.count('pulse');}swung=!!this.dOpen[u];}
       const target=this.hRel[u*3+i]+(swung?this.hSign[u*3+i]*th:0),err=wrap(target-(this.angle(u)-this.angle(v)));
       this.away[u]=Math.abs(wrap(this.hRel[u*3+i]-(this.angle(u)-this.angle(v))))>0.05?1:0;   // away from rest: its catch sides do not catch
       if(!swung&&Math.abs(err)<0.02)this.pw[u]=0;if(Math.abs(err)<0.01)continue;

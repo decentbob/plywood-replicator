@@ -29,7 +29,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Grown bud: the bud ring grows on the parent's seed; its closing opens the doorway; fed cap; splits sealed | budding by growth | works (4 of 4 worlds): doors held shut by the lock signal of the bud's open wall sites, open once its last cell arrives, shut when its content is complete (no new rule) | structures.grownBud, demo budgrow |
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
 | Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
-| Genome on copies inside a cell: a sealed cell copies its genome from copy blanks alone (spent `&` walls are never copied) | replication from uniform nutrients | works (3 of 4 worlds, 5-6 strands from 60 blanks; control 2-3, the wall takes most); in the bud pair (`split q`) partial, 1 of 4 | demos imprint m, split q |
+| Genome on copies inside a cell: a sealed cell copies its genome from copy blanks alone (spent `&` walls are never copied) | replication from uniform nutrients | works (4 of 4 worlds at 60000 steps, 4 strands from 60 blanks, since the 2026-10-02 release locality fix; before it 3 of 4 at 40000; control 2-3, the wall takes most); in the bud pair (`split q`) partial, 1 of 4 | demos imprint m, split q |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
 Every row marked works is guarded by `node tri/check.js` (one line per capability, about 19 minutes).
@@ -65,6 +65,12 @@ Every row marked works is guarded by `node tri/check.js` (one line per capabilit
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 
 ## Known issues
+- Physics leak (2026-10-02 core review): a direct move is checked only at its end, so a block can pass a gap narrower
+  than itself (it hops a one-row wall through a hole's apex). The fix is on branch `claude/physics-pinch-midpoint`;
+  budgrow, split-o, grown and imprint rely on the leak and must be rebuilt first (docs/NEXT.md, follow-up 1).
+- Fuel is spent per fuel triangle, not per swing (two carriers on one triangle are both spent); designed fix in
+  docs/NEXT.md (follow-up 2). The energy demo is not affected.
+- Core inventory and the rule-by-rule locality table: docs/RULES.md.
 - Airlock and old hatch pocket need squeezing; not working on rigid physics (rebuild airlock; hatch pocket superseded).
 - Sequential (zip) copying is slower per copy than parallel docking was when it did not deadlock.
 - Single runs are noisy; a claim needs a few worlds. Batches stay rare (AGENTS).

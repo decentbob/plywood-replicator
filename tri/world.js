@@ -33,7 +33,7 @@ function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.s
     if(gu===0&&gv===0){if(tris[a].loose||tris[b].loose)continue;gu=gcode('f');gv=gcode('F');s.glue[u*3+i]=gu;s.glue[v*3+j]=gv;}
     if(gu&&gv===comp(gu))s.bind(u,i,GLUE,v,j,GLUE);}
   return W;}
-// founders: {gaps, faces, ends?, backs?, x?, y?, caps?}; structures: {tris, x, y, rot?}; supply: {type: count}
+// founders: {gaps, faces, ends?, backs?, x?, y?}; structures: {tris, x, y, rot?}; supply: {type: count}
 function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params={}}={}){
   const bands=founders.map(f=>band(rolesFromGaps(f.gaps)));
   const n=bands.reduce((a,b)=>a+b.length,0)+structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
@@ -46,7 +46,6 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
     units.forEach(u=>s.setType(u,'---'));
     let fi=0;for(const u of units){const r=s.roles(u);if(r.role===SFACE)s.glue[u*3+r.free]=gcode(f.faces[fi++]||'-');else if(r.role===SBACK&&f.backs)s.glue[u*3+r.free]=gcode(f.backs);}
     if(f.ends){const r0=s.roles(units[0]),r1=s.roles(units[units.length-1]);if(r0.inert>=0)s.glue[units[0]*3+r0.inert]=gcode(f.ends[0]);if(r1.inert>=0&&f.ends[1])s.glue[units[units.length-1]*3+r1.inert]=gcode(f.ends[1]);}
-    if(f.caps!==false){s.cap[units[0]]=1;s.cap[units[units.length-1]]=1;}
     placed.push(...units);out.founders.push(units);});
   for(const st of structures){const units=st.tris.map(()=>next++);buildStructure(s,units,st.tris,st.x,st.y,st.rot||0);placed.push(...units);out.structures.push(units);}
   for(const [t,c] of Object.entries(supply))for(let q=0;q<c;q++){const u=next++;s.setType(u,t);
