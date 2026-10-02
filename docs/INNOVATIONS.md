@@ -6,6 +6,41 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-0236, build)
+
+- **Genome on copies inside a sealed cell** — works (3 of 4 worlds). A cell copies its genome from copy blanks alone:
+  no casting pocket, no dockers or fills in supply. No new rule: two existing pieces combined.
+  (1) A genome that is its own reverse complement (faces `aAaA`), so copies of its face triangles are its dockers and
+  copies of its backs its fills (`latGlue`: every back carries `W` on its next side, every face triangle `w` on its
+  prev side and `z` on its next, so only back copies fill and every strand, founder or copy, exposes `w` at its low end
+  and `z` at its high end; `demos.seedCopyGenome`). (2) **Spent walls:** every plain free side of the membrane is a
+  completion side `&` (no glue, binds nothing). A complete structure hears no open signal, so these sides are spent at
+  once, and spent sides are never copied: every copy blank goes to the genome instead of the wall.
+  - Evidence (`node tri/demos.js imprint k 40000 runs 60m`, sealed ring R = 6, founder and 60 copy blanks inside):
+    5 / 2 / 5 / 6 free strands (founder included); all 60 copies are of genome triangles, none of the wall. Control
+    (`... 60mn`, plain walls): 2 / 2 / 3 / 3 strands; the wall takes 34-42 of the 60 copies. With 40 blanks: 2-4
+    strands (control 2). Checks `imprint-cell` (4 seeds, need 3 with at least 4 strands and no wall copies) and
+    `imprint-cell-n`. Picture: ![imprint cell](pictures/imprint_cell.png)
+  - Limits: a finite batch: blanks are spent in about 2000 steps; dockers come out unbalanced (`a` against `A`) and a
+    copy waiting for a missing docker type stays paired with its template for good. Blanks cannot be imported (a copy
+    blank binds only by its copy side, so no key catches it): NEXT, core change candidate.
+  - Enables: a bud that copies its genome after the split without a pocket (it is complete then, so its walls are
+    spent); food for the genome is one uniform blank type.
+- **Bud pair on copies (`split ... q`)** — partial: 1 of 4 worlds. `split` with the genome above and 70 copy blanks
+  inside P as the only food (no stamp pocket, no dockers or fills; P's anchor `W@|`, the founder free in P, all plain
+  free sides `&`, `openRange` 30 so D's anchor's open signal reaches the `&` pairs that hold the pair, op 3-10 at t=0,
+  but not P's far walls). P makes 1-2 copies of its genome; in world 4 one reaches D's anchor and the pair splits at
+  38000 with both doors shut; worlds 1-3: no strand reached D's anchor in 150000 steps (stalled half-copies; strands
+  crowded by 70 free copies). P's anchor `W@|` emits the open signal too until it holds a strand (it held none), so
+  only 3 of 134 wall cells were spent; with a plain `W|` (tried, 4 worlds, removed) 60 of 134 are spent, P makes 2-4
+  strands and strands enter D in 3 worlds, but D's anchor caught none (0 of 4 split; not diagnosed). Command: `node tri/demos.js split k 150000
+  runs q`. Picture (world 4): `docs/pictures/split_copies.png`.
+  Tried on the way (each 4 worlds): (a) RP 9 and 140 blanks, plain walls: the walls took 65-70% of the copies, copies
+  stall, no anchoring; (b) a pore in P's wall and 400 blanks outside: all 400 were spent on the rings' outer walls,
+  none got in; (c) `&` walls with glue-agnostic fills: copies of `&` wall cells became fills and were cut when their
+  `&` side heard no open signal (91 cuts in one world), hence `latGlue`; (d) the founder bound to P's anchor at t=0:
+  it lay along the wall with its backs hidden, so no fill copies were made.
+
 ## 2026-10-02 (autorun run 20261002-0136, explore)
 
 - **Contact copying (programmable synthesis, decided and built)** — works in isolation. The explore run compared part
