@@ -31,7 +31,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 14 minutes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 19 minutes).
 
 ## Backlog (top first)
 

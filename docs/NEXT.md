@@ -3,7 +3,7 @@
 State on 2026-10-02 (after autorun run 20261002-0136, explore). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-0136, explore).** Everything committed on branch `claude/autorun-20261002-0136`
-and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: CHECKRESULT.
+and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: 28 of 28 pass in 1121 s (3 new: `imprint` 3 of 4, `imprint-genome` 4 of 4, its control).
 No current slice.
 **Done this run (slice: decide programmable synthesis and build it; acceptance met):**
 - Decision (maintainer's question, 2026-10-01): **contact copying**, one gated core change, the copy side `?`
