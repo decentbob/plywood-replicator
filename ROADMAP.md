@@ -86,9 +86,9 @@ Frozen (casting lineage; kept for reference and checks):
 ## Known issues
 - Physics leak fixed 2026-10-02 (run 1050, midpoint check). Left from it: grown is partial (membrane closes 1 of 4);
   a one-front ring whose last two sites are open can be finished only by a part already inside (the gap is a rhombus
-  exactly one block wide: imprint's 28/30 stalls); see docs/NEXT.md.
+  exactly one block wide: imprint's 28/30 stalls); see docs/NEXT.md, Pitfalls (one-front rings).
 - Fuel is spent per fuel triangle, not per swing (two carriers on one triangle are both spent); designed fix in
-  docs/NEXT.md (Open follow-ups); casting lineage, frozen. The energy demo is not affected.
+  docs/NEXT.md at `c11ed14` (core review follow-up 2); casting lineage, frozen. The energy demo is not affected.
 - Core inventory and the rule-by-rule locality table: docs/RULES.md.
 - Sequential (zip) copying is slower per copy than parallel docking was when it did not deadlock.
 - Single runs are noisy; a claim needs a few worlds. Batches stay rare (AGENTS).

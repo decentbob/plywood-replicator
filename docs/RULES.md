@@ -105,7 +105,7 @@ the core (the repository restarted on 2026-10-01).
 values, 9 states, 4 options (after removing 8 unused options this review: `caps` with its state and two relayed
 signals, `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`, `capture: 0`/`triTol`) and one rule
 branch merged (glue `K` as activator, into `%`). Rule branches that fired in no check: a latch held by the open signal
-(the key's deafness does that job; removed this run), and `#` on a trigger side (used by the gate's pulse option only since the airlock demo was removed); see docs/NEXT.md.
+(the key's deafness does that job; removed this run), and `#` on a trigger side (used by the gate's pulse option only since the airlock demo was removed); see docs/NEXT.md, Open follow-ups.
 
 ## Locality audit (2026-10-02, rule by rule)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
@@ -260,7 +260,7 @@ only while a charged carrier is bound to a fuel side of one of the two (the fuel
 start (the flap's `pw` 1) reaches the fuel triangle one pass later (`fu` 3: the start of its own swing or of the flap
 whose hinge side is bonded to it), and in the next servo every charged carrier on its fuel sides discharges itself
 and, binding nothing, falls off (one bond per pass, fixed 2026-10-02: the flap used to discharge its partner's carrier,
-two bonds away). Without fuel a triggered flap holds. Known gap (designed fix in docs/NEXT.md): a fuel triangle with
+two bonds away). Without fuel a triggered flap holds. Known gap (casting lineage, frozen; designed fix in docs/NEXT.md at `c11ed14`, core review follow-up 2): a fuel triangle with
 two carriers spends both on one swing, and two flaps on one fuel triangle can both start on one carrier. **Environment drive** (labelled): free discharged triangles inside
 the light zone `light: {x, y, r, p}` recharge at p per step.
 

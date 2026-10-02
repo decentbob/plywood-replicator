@@ -1,9 +1,9 @@
 # Innovation log (typed-triangle world)
 
 One entry per capability: what it is, the evidence, the picture, the command, what it enables. Newest first.
-Status: **works** (does what was intended in demos), **partial**, **not yet**. Pictures in `docs/pictures/` were
+Status: **works** (does what was intended in demos), **partial**, **not yet**. Pictures from before 2026-10-01 were
 made with the pre-port engine (experiments/, history before commit `cac79c9`, same rules); `node tri/demos.js NAME`
-reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
+reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
 ## 2026-10-02 (autorun run 20261002-1551, explore)
@@ -143,7 +143,7 @@ not statistics.
     anchor site every 20 steps (world 3, 60000 steps): 52-87 approaches, all while the strand was busy (busy 26-30),
     0 capture attempts. A strand's seed is active only while it is not being copied; with blanks around, a blank
     touching a face becomes a docker beside it and zip docks the high end first, so ends are idle only for moments.
-    `split g` catches because its dockers come only from P's pocket. Core change candidate in docs/NEXT.md.
+    `split g` catches because its dockers come only from P's pocket. Core change candidate, built in run 1551 (RULES, Core changes).
   - **Tried and removed, `split ... qp`** (pores in run 0236's `split q`): the `&` pairs that hold a pair lie on both
     sides of its doorway (P's doorstop and pairs left, D's hinge, doorstop and a pair right), joined only round D, so
     D's anchor needed open range 27 (two anchors: 11); every wall cell in range keeps its free side and outside blanks
@@ -170,7 +170,7 @@ not statistics.
     `imprint-cell-n`. Picture: ![imprint cell](pictures/imprint_cell.png)
   - Limits: a finite batch: blanks are spent in about 2000 steps; dockers come out unbalanced (`a` against `A`) and a
     copy waiting for a missing docker type stays paired with its template for good. Blanks cannot be imported (a copy
-    blank binds only by its copy side, so no key catches it): NEXT, core change candidate.
+    blank binds only by its copy side, so no key catches it): a core change candidate, found not needed in run 0921 (a pore with spent walls feeds a cell).
   - Enables: a bud that copies its genome after the split without a pocket (it is complete then, so its walls are
     spent); food for the genome is one uniform blank type.
 - **Bud pair on copies (`split ... q`)** — partial: 1 of 4 worlds. `split` with the genome above and 70 copy blanks
