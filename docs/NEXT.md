@@ -1,14 +1,28 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-1050, harden). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-1351, build). Read AGENTS.md first (rules of work), then this file.
 
-**Current slice (autorun run 20261002-1351, build): the grown bud catches a genome copy.** Combine `budgrow` (the bud
-ring grows on the parent's seed) with `split g`'s content (the parent holds the founder `aaaa` on its anchor `W|` and a
-stamp pocket casting its dockers `Ay.z`; the bud's anchor `Z@|` emits the open signal until it catches a copy's high
-end `z`). The anchor replaces the cap on an early wall-front cell (the open signal during growth), in the middle of a
-flat wall, its strand clear of both door sweeps. No core change. Done when `node tri/demos.js budgrow k 300000 runs g`
-splits with a copy anchored in the bud and both doors shut in 3 of 4 worlds; then check `budgrow-g`. Stop after about
-4 hours; if the anchor cannot sit early on the wall front, record why and the next layout to try.
+**Handoff status (autorun run 20261002-1351, build).** Everything committed on branch `claude/autorun-20261002-1351`
+and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: CHECKRESULT.
+No current slice.
+**Done this run (slice: the grown bud catches a genome copy; met):** `node tri/demos.js budgrow k 400000 runs g`: the
+bud ring grows on the parent's seed, carrying an anchor `Z@|` (new `grownBud` option `anchorGlue`: an inner side of an
+early wall-front cell, mid-wall, farthest from the door sweeps) instead of a cap; the parent holds the founder `aaaa`
+on `W|` and a stamp pocket casting its dockers `Ay.z` (as `split g`). Seeds 1-8: 6 split with a copy anchored in the
+bud and both doors shut (check `budgrow-g`: seeds 1-4, 3 of 4). No rule change. Details, numbers and the three design
+points (seed letter clash, early-anchor supply race, trapped anchor parts): INNOVATIONS (newest). Shared change: the
+parent's panel welds in `grownBud` use the weld letter `f` (frees 4 letters; default `budgrow` unchanged otherwise);
+`budgrow` events log an early release ("early releases at") and follow the regrown bud instead of calling it a split.
+**Exact next step:** the rotation's next run is `explore`: the anchor core change candidate below (an anchor catches a
+busy strand) is still open for `budpore`. Build follow-ups, in order: (1) food for the grown bud after the split, so
+it copies its genome (M2 on the grown pair): copy blanks through a pore with spent `&` walls (as `imprint p`; the
+genome then becomes `aAaA` seeded by `demos.seedCopyGenome`, as in `budpore`) keep the parts list shortest; the
+alternative is `split o`'s own pocket and import door; (2) the
+transport tail: seeds 3 and 8 stay open 170000-232000 steps with 8-9 idle copies in the parent (try fewer copies or
+the anchor nearer the doorway's middle; measure on 8 seeds); (3) the second bud that starts on the parent's freed seed
+after the split (world 4): measure whether it closes and catches a copy too (needs more kit parts). Regenerate: each
+world about 10 minutes with pictures (`runs/bgK`); probes used: `runs/probe.js` (strand ends and what is bonded at
+them, from a saved `.json.gz`) and `runs/zoom.js` (render a saved state around one unit type), scratch.
 
 **Handoff status (autorun run 20261002-1050, harden).** Everything committed on branch `claude/autorun-20261002-1050`
 and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: 33 of 33 pass in 1713 s (grown reported partial; lid and grow now 4 worlds; imprint 200000 steps).
@@ -225,6 +239,7 @@ node tri/demos.js split 1 30000 runs               # bud fed through a doorway g
 node tri/demos.js split 1 60000 runs g             # the bud catches a genome copy (anchor), then splits off
 node tri/demos.js split 1 450000 runs o            # + the bud grows its own pocket, splits, imports, copies its genome
 node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
+node tri/demos.js budgrow 1 400000 runs g          # the grown bud's anchor catches a copy of the parent's genome, then it splits
 node tri/demos.js imprint 1 200000 runs            # contact copying: a ring closes and a second grows from copy blanks only (c: control)
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
@@ -258,6 +273,13 @@ or missing, in order:
 5. Speed: physics is ~85% of step time, lone blocks dominate (`_single`); a big world is ~500 steps/s.
 
 ## Pitfalls learned
+- **Glue letters run out; seed letters clash** (2026-10-02, run 1351). The glue code is Int8: 63 letters, and a grown
+  bud of side 5 uses 54. A genome in the same world needs its own letters (`avoid`), and the bud's seed glue must not
+  be the genome's (a free part carrying the anchor's `Z@` bound the parent's seed side `z@~` in place of the root).
+  Prepared bonds that never let go can share one letter (`f`).
+- **The last open-signal source must arrive early.** A grown pair holds while anything hears an open signal; latch
+  sites emit none. If the content seed (cap seed, anchor) sits late on the wall front, the panel front completes first
+  and the root lets go of a half-grown bud. Put it early and give the cells before it more supply.
 - **A site needs an open approach, not just a free side** (2026-10-02, run 1050). Binding needs the part within the
   capture tolerance of its place, so a site whose way in is a channel exactly one block wide (0.866) fills only by luck:
   the grown bud's last site beside the parent's corner apex, an import door's drop place boxed in by its open panel,

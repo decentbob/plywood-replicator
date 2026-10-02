@@ -27,6 +27,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Division: cut the shared wall when the bud is complete | cytokinesis | works prepared (4 of 4 worlds): when the bud's growth front closes (cap complete, or its anchor has caught a genome copy) every `&` lets go, both doors swing shut and lock, the bud separates | demo split |
 | Offspring that lives alone | independent daughter cell | works prepared (4 of 4 worlds): the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and makes a whole genome copy | demo split o |
 | Grown bud: the bud ring grows on the parent's seed; its closing opens the doorway; fed cap; splits sealed | budding by growth | works (3 of 4 worlds since the midpoint physics; the parent's corner cell beside the bud's last site is left out): doors held shut by the lock signal of the bud's open wall sites, open once its last cell arrives, shut when its content is complete (no new rule) | structures.grownBud, demo budgrow |
+| Grown bud with a genome: the grown bud's anchor catches a copy of the parent's genome, then it splits | budding with segregation | works (3 of 4 check worlds, 6 of 8 seeds, 400000 steps; the parent with founder and docker pocket is prepared; transport of a copy through the doorway has a long tail) | structures.grownBud anchorGlue, demo budgrow g |
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
 | Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds at 200000 steps; 5 of 8 seeds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
 | Genome on copies inside a cell: a sealed cell copies its genome from copy blanks alone (spent `&` walls are never copied) | replication from uniform nutrients | works (4 of 4 worlds at 60000 steps, 4 strands from 60 blanks, since the 2026-10-02 release locality fix; before it 3 of 4 at 40000; control 2-3, the wall takes most); in the bud pair (`split q`) partial, 1 of 4 | demos imprint m, split q |
@@ -62,8 +63,9 @@ Every row marked works is guarded by `node tri/check.js` (one line per capabilit
    second side matches). Needed once casting makes stray types.
 5. **Membrane growth.** A ring that inserts wall cells (a growth site with a seed glue, wall kit types), staying closed.
 6. **Bud and feed** — works prepared (demo split, 2026-10-01), including a bud that lives alone (`split ... o`, 4 of 4).
-   Grown pair: works for a cap (`budgrow`, 2026-10-02: the bud ring grows on the parent's seed). Next: a genome copy
-   and a pocket in the grown bud; then the parent's door and seed for a second bud.
+   Grown pair: works for a cap (`budgrow`, 2026-10-02: the bud ring grows on the parent's seed) and for a genome copy
+   (`budgrow ... g`, 2026-10-02 run 1351: 6 of 8 seeds). Next: food for the grown bud after the split (a pore with
+   spent walls, `imprint p`), a pocket in the grown bud; a second bud already starts on the parent's freed seed.
 7. **Division** — works prepared (completion signal cuts the shared wall; doors shut and lock).
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 

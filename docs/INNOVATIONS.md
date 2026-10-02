@@ -6,6 +6,42 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-1351, build)
+
+- **Grown bud catches a genome copy** — works (3 of 4 check worlds; 6 of 8 seeds) at 400000 steps. `budgrow` with
+  `split g`'s content: the bud ring grows on the parent's seed as before, but carries an anchor instead of a cap, and
+  the parent holds the genome. No new rule; three existing pieces combined (grown bud, anchor `|`, stamp-cast dockers).
+  - Set-up (`node tri/demos.js budgrow k 400000 runs g`, labelled start): the parent P of `budgrow` with the founder
+    `aaaa` held by an anchor `W|` (an inner side mid-wall, far from the pocket and the door; placed there at t=0) and
+    its stamp pocket casting the founder's dockers `Ay.z` from 40 blanks `xxx` (24 fills `Y--`; `latGlue`), so P makes
+    copies `AAAA` whose high end exposes the seed `z`; the bud kit outside. `grownBud({anchorGlue:'Z'})` puts `Z@|` on an
+    inner side of an early wall-front cell (cell 6) in the middle of a flat wall: like the cap seed it emits the open
+    signal, which holds the pair together until the anchor catches a copy's `z`; then nothing is open, the root's `&`
+    lets go, both doors shut and the bud leaves with the copy.
+  - Evidence (seeds 1-8, 400000 steps; `events:` lines): ring closed at 133500-229600; doors open 150 steps later; copy
+    anchored 29400 / 83150 / - / 35350 / 66700 / 61450 / 209750 / - steps after opening; split 100-150 steps after
+    the anchor caught; both doors shut in all 6; no early release. The two failures (seeds 3 and 8) are still open
+    with 8-9 idle copies in the parent: a copy must drift through the doorway into the bud with its high end first;
+    nothing is wrong at the anchor (copies are not busy: nothing copies `AAAA`). Check `budgrow-g` (seeds 1-4, need 3).
+    Picture (world 4: growth, open doorway, the bud leaving with its anchored copy; a second bud then starts on the
+    parent's seed): ![budgrow genome](pictures/budgrow_genome.png)
+  - **Three design points.** (1) The bud's seed glue must differ from the genome's letters: with the default seed `z`
+    a free anchor part `Z@|` bound the parent's seed side in place of the root (the demo passes `seed: 'v'` to `grownBud`; the
+    genome uses `a y z w`). To find the letters, the parent's panel welds (prepared, never released) now share the weld letter `f`,
+    as kit welds do (54 letters left for the bud; the glue code is Int8: 63 letters in all). (2) **An early anchor and
+    a supply race:** after the 7-cell panel front is complete only the anchor emits the open signal, so if the panel
+    finished before the anchor's cell arrived, the root let go and the half-grown bud drifted off (seeds 1 and 2 of the
+    first run, at 29200 and 33400; a new bud then regrew on the freed seed). The anchor is the earliest mid-wall side
+    (cell 6; cells 2 and 4 are beside a corner or in a door sweep) and the wall-front cells up to it get three times
+    the supply (as `kitRace`): no early release in 8 worlds. (3) Leftover anchor parts trapped in the bud when it
+    closes carry `Z@`, and a copy's seed `z` catches them (one copy per world lost that way); harmless while copies
+    are plentiful.
+  - Observed, not yet measured: after the split the parent's seed latch is free and a second bud starts growing on it
+    from the remaining kit parts (world 4).
+  - Limits: the parent and its door, pocket and founder are prepared; the bud carries one copy and nothing that copies
+    it (next: food for the bud after the split, as `imprint p` or `split o`); transport through the doorway has a long
+    tail.
+
 ## 2026-10-02 (autorun run 20261002-1050, harden)
 
 - **Physics: no block passes a gap narrower than itself (midpoint check merged)** — works; capabilities rebuilt on
