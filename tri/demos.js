@@ -324,7 +324,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // inside) and the bud's kit parts outside (every bud cell its own type; extra: copies per type, default 4). The bud
     // ring D (side 5) grows from P's seed: while a wall site is open the lock signal holds both doors shut; when D's last
     // cell arrives both open, cap parts cast in P come through the doorway and grow D's two-cell cap; when nothing is
-    // open, D's seed bond is cut, the lock signal returns, both doors swing shut and D leaves
+    // open, D's seed bond is cut, the lock signal returns, both doors swing shut and D leaves. extra 'g' (genome, as
+    // split g): instead of the cap, D's wall front carries an anchor Z@| (grownBud anchorGlue) and P holds the founder
+    // aaaa on its anchor W| with a pocket casting its dockers Ay.z (40 blanks, 24 fills Y--); once the doorway is open
+    // a copy AAAA drifts into D, its high end z is caught, nothing is open any more and D splits off with it
     budgrow(){steps=steps||400000;const gen=String(extra||'').includes('g'),per=parseInt(extra)||4,size=32,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud(gen?{RP,RD,seed:'v',capGlue:null,anchorGlue:'Z',avoid:'ayw'}:{RP,RD}),dcy=cy+(RP+RD)*H;
       const P=g.P,Pt=P.map(x=>g.tris[x]),kit={};for(const t of g.kit)kit[t]=(kit[t]||0)+per;kit[g.rootType]=per;
       // genome variant: the wall front's cells up to the anchor get three times the supply (the anchor's open signal holds
@@ -370,7 +373,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const parts=free.filter(u=>!s.bonded(u)&&norm(typeName(s,u))===capT);
         console.log(`t=${t} bud cells=${cells}/${g.D.length} ${closed?'closed at '+closed:'open'} doors P:${(aP|0)} D:${isNaN(aD)?'-':aD|0} deg${early?' EARLY at '+early:''} casts=${s.ev.cast||0} free cap parts=${parts.length} (in D ${parts.filter(inD).length}) ${gen?(held(dU)?'copy anchored in D':'no copy in D')+` strands ${census(s).filter(x=>x.n>=7).length}`:`cap=${cap}/${g.cap.slots.length}`} ${split?'SPLIT at '+split:'joined'} doors after split: ${split?(aP<5&&aD<5?'shut':'open'):'-'} kit parts in D=${free.filter(u=>!s.bonded(u)&&kitT.has(norm(typeName(s,u)))&&inD(u)).length} completions=${s.ev.complete||0}`);};
       console.log('bud kit',g.kit.length+1,'types x',per,gen?'anchor on wall front cell '+(g.anchor[2]+1):'cap part '+g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
-      snap(s,'t0','t=0: parent P (seed on its top wall, door, stamp pocket, blanks); the bud kit outside',{units:U,radius:15});
+      snap(s,'t0',gen?'t=0: parent P (seed on its top wall, door, founder aaaa on its anchor, pocket casting its dockers, blanks); the bud kit outside':'t=0: parent P (seed on its top wall, door, stamp pocket, blanks); the bud kit outside',{units:U,radius:15});
       // events (every 50 steps): the bud's last cell q bonded (ring closed), the doors' widest opening before and after,
       // each cap cell, the split
       const ev={closed:0,open:0,caps:[],split:0,early:0,maxBefore:0,anch:0,lost:[]};let rootU=-1;const seedI=[0,1,2].find(i=>s.glue[Su*3+i]&&s.ltc[Su*3+i]);
@@ -390,7 +393,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
             for(let u=0;u<s.n;u++){if(norm(typeName(s,u))!==T)continue;const k=s.bonded(u)?'bonded elsewhere':Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<RD*H?'free inside the bud':'free outside';where[k]=(where[k]||0)+1;}
             console.log(`  ${name} ${g.tris[c].type}: predecessor ${have.has(norm(g.tris[pred(c)].type))?'there':'missing'}, copies ${JSON.stringify(where)}`);}
           snap(s,'zoom','the bud',{units:members[comp[r]],radius:7});}}
-      finish('Grown bud: the bud ring grows on the parent; its closing opens the doorway; the parent feeds its cap; it splits off sealed');},
+      finish(gen?'Grown bud catches a genome copy: the bud ring grows on the parent; its closing opens the doorway; its anchor catches a copy of the parent\'s genome; it splits off sealed':'Grown bud: the bud ring grows on the parent; its closing opens the doorway; the parent feeds its cap; it splits off sealed');},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
     ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;
