@@ -3,7 +3,7 @@
 State on 2026-10-02 (after autorun run 20261002-0921, build). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-0921, build).** Everything committed on branch `claude/autorun-20261002-0921`
-and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass; `node tri/check.js`: CHECKRESULT.
+and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass; `node tri/check.js`: 33 of 33 pass in 1363 s (3 new: `imprint-pore` 4 of 4, its controls `imprint-pore-c`, `imprint-pore-n`).
 No current slice.
 **Done this run (slice: feeding on copies through a pore; part 1 met, part 2 partial):**
 - **(1) A cell fed through a pore** (new capability, 4 of 4 worlds; `node tri/demos.js imprint k 100000 runs 150p`): a
@@ -194,6 +194,8 @@ node tri/demos.js imprint 1 100000 runs            # contact copying: a ring clo
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js split 1 150000 runs q            # the bud pair on copies (partial: 1 of 4 worlds splits)
+node tri/demos.js imprint 1 100000 runs 150p      # a cell fed through a pore: genome copied from blanks outside (150pc, 150pn: controls)
+node tri/demos.js budpore 1 200000 runs 150        # bud pair on copies, one latch, shared opening (partial: 2 of 4 split)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.
 Long runs: `TRI_RESUME=runs/x/NAME_tNNN.json.gz node tri/demos.js NAME seed steps outdir` continues a demo world from a

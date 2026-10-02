@@ -34,7 +34,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Bud pair on copies with a doorway (no doors; held by one latch bond released by the bud anchor's trigger side, so no wall hears an open signal) | budding on copies | partial: the bud's anchor rarely catches (strands are busy whenever food is plentiful; core change candidate in docs/NEXT.md) | demo budpore |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 19 minutes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 23 minutes).
 
 ## Backlog (top first)
 

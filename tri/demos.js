@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | pocket | lid | stamp | split | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
+// NAME: copy | pocket | lid | stamp | split | budpore | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | birth | cells | conveyor | gate | airlock | energy | factory | arms  (see docs/INNOVATIONS.md for results)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement,strandInKit,openBudDoors}=require('./world');
 const {render,montage}=require('./render');
