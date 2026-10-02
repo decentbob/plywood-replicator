@@ -41,7 +41,7 @@ const sideMarks=(s,k)=>(s.hinge[k]===1?'<':s.hinge[k]===2?'>':'')+(s.cOnly[k]?'.
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k)+(s.carry&&s.carry[k]?"'"+bitMarks(s.carry[k]):'');}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
   zip:true,pLoose:0,latGlue:false,light:null};
 
 class TriSim extends Physics{
@@ -170,8 +170,8 @@ class TriSim extends Physics{
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
     // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
-    // orientation: binding turns it into place), or, with capture 0, its side j is flush within triTol
-    const reach=(u,i,v,j)=>{if(!(p.capture>0))return flush(u,i,v,j,p.triTol);const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
+    // orientation: binding turns it into place)
+    const reach=(u,i,v,j)=>{const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
       const sx=(2*(X(i)+X((i+1)%3))-X(k2))/3,sy=(2*(Y(i)+Y((i+1)%3))-Y(k2))/3,dx=this._dx(this.px[v]-this.px[u])-sx,dy=this._dy(this.py[v]-this.py[u])-sy;return dx*dx+dy*dy<=p.capture*p.capture;};
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)

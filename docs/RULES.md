@@ -152,7 +152,8 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
-  intact strands were copied), `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`.
+  intact strands were copied), `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`; and (run
+  20261002-0721) `capture: 0` with `triTol` (binding by a flush side instead of the capture radius).
 
 ## Casting (permanent type change)
 A triangle bonded by glue on all three sides is in a **pocket**. For each partner: the side bonded to it is the
@@ -276,5 +277,5 @@ copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
-capture 0.6, triTol 0.65 (with capture 0), triTolClose 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12,
+capture 0.6, triTolClose 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12,
 sigRange 6, openRange 120, zip true`, other options off.
