@@ -65,6 +65,12 @@ Every row marked works is guarded by `node tri/check.js` (one line per capabilit
 8. ~~Pocket swing stall~~ — solved by the lid pocket (2026-10-01).
 
 ## Known issues
+- Physics leak (2026-10-02 core review): a direct move is checked only at its end, so a block can pass a gap narrower
+  than itself (it hops a one-row wall through a hole's apex). The fix is on branch `claude/physics-pinch-midpoint`;
+  budgrow, split-o, grown and imprint rely on the leak and must be rebuilt first (docs/NEXT.md, follow-up 1).
+- Fuel is spent per fuel triangle, not per swing (two carriers on one triangle are both spent); designed fix in
+  docs/NEXT.md (follow-up 2). The energy demo is not affected.
+- Core inventory and the rule-by-rule locality table: docs/RULES.md.
 - Airlock and old hatch pocket need squeezing; not working on rigid physics (rebuild airlock; hatch pocket superseded).
 - Sequential (zip) copying is slower per copy than parallel docking was when it did not deadlock.
 - Single runs are noisy; a claim needs a few worlds. Batches stay rare (AGENTS).
