@@ -1,15 +1,16 @@
 # Next instance: start here
 
 State on 2026-10-02 (after autorun run 20261002-1821, cleanup). Read AGENTS.md first (rules of work), then this file.
-History of earlier runs: docs/INNOVATIONS.md (one entry per run, newest first), RULES (Core changes) and git.
+History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
-**Current slice (autorun 20261002-1821, cleanup).** Goal: a lean starting point. NEXT.md down to the current state,
-direction, next step, commands and pitfalls (handoff history moves to INNOVATIONS or stays in git); demos and structures
-nothing checks or uses removed (`pocket`, `airlock`, `arms`, `birth`, the `split q` variant superseded by `budpore`),
-with outputs of the remaining demos unchanged; stale docs fixed; autorun prompt friction fixed. Done when tests pass,
-the checks pass as before and NEXT.md is under about 150 lines. No new capabilities, no core changes.
-
-**Handoff status (autorun run 20261002-1821, cleanup).** HANDOFF_PENDING
+**Handoff status (autorun run 20261002-1821, cleanup).** Everything committed on branch `claude/autorun-20261002-1821` and
+merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (2371 s).
+No current slice. **Done (slice: cleanup; met):** this file went from 457 to about 150 lines (handoff history is in
+INNOVATIONS and git; casting-lineage pitfalls moved to IDEAS); removed the demos and structures nothing checked or used
+(`pocket`, `airlock`, `arms`, `birth` with `cellKit`, `pocketPair`, `strandInKit`, and the `split q` variant superseded
+by `budpore`; code in git at `c11ed14`), with the outputs of 12 remaining demo worlds identical before and after;
+ROADMAP, RULES, INNOVATIONS and README follow (README now describes the copy lineage). Autorun: the plywood preamble
+says to run the checks on inherited work and how to wait on simulations. No AGENTS.md change proposed.
 
 **Exact next step (build, priority 1 below): M2, the bud copies its genome after the split, on `budpore`.** Move D's
 anchor mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the latch lets go while it hears
