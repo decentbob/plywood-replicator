@@ -102,11 +102,10 @@ class TriSim extends Physics{
       this.zip[u]=z;}
     // lock signal (interlock): an unbonded latch side emits lockRange, relayed -1 per bond
     for(let u=0;u<n;u++){let v=0;for(let i=0;i<3;i++){if(this.ltc[u*3+i]&&this.bond[u*3+i]<0)v=this.p.lockRange;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,lb0[(q/3)|0]-1);}this.lockBusy[u]=v;}
-    // tb: a trigger side of mine is bonded; nbc: my bond count; actE: my activator side (glue K bonded to a k, or an
-    // activator side '%' bonded by its glue)
-    const K=gcode('K');
+    // tb: a trigger side of mine is bonded; nbc: my bond count; actE: my activator side (an activator side '%' bonded
+    // by its glue)
     for(let u=0;u<n;u++){let tb=0,c=0,a=-1;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;c++;if(this.trg[u*3+i])tb=1;
-      if(a<0&&((this.glue[u*3+i]===K&&this.glue[q]===comp(K))||(this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
+      if(a<0&&this.act[u*3+i]&&this.glue[u*3+i]&&this.glue[q]===comp(this.glue[u*3+i]))a=i;}this.tb[u]=tb;this.nbc[u]=c;this.actE[u]=a;}
     // fu (fuel, exposed): 0 no fuel side '$'; 1 fuel sides, none holding a charged carrier; 2 a charged carrier on a fuel
     // side; 3 that, and a flap started a swing in this step (pw 1) that is me or bonded to me by a hinge: the carriers
     // on my fuel sides spend themselves in the next servo
@@ -256,7 +255,7 @@ class TriSim extends Physics{
       if(nb===1&&!key&&this.rng()<p.pLoose){for(let i=0;i<3;i++)this.cut(u,i);this.count('loose');}}
   }
   // casting: a triangle glue-bonded on all three sides, each partner's activator (the side after its recognition side)
-  // bonded to a k: the triangle takes each partner's instruction glue and lets go
+  // an activator side '%' bonded by its glue: the triangle takes each partner's instruction glue and lets go
   _cast(){const G=this.glue;
     for(let u=0;u<this.n;u++){let ok=true;const src=[],cm=[];
       for(let i=0;i<3&&ok;i++){const q=this.bond[u*3+i];if(q<0||this.bkind[u*3+i]!==GLUE){ok=false;break;}

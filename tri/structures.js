@@ -14,15 +14,15 @@ const hexr=p=>Math.max(...[0,1,2,3,4,5].map(k=>{const a=Math.PI/6+k*Math.PI/3;re
 // Casting pocket (hatch design). The pocket is a side-2 triangle (0,0),(2,0),(1,2H); the target ends in its centre.
 // Two casters are fixed in the frame; the third is a hatch hinged at (1.5,H) that waits open, catches a target in the
 // upper slot (trigger = catch side) and swings it into the centre; the fixed casters' recognition sides are close-only,
-// so only the hatch catches. Casters: recognition, activator K, instruction (counter-clockwise). The product takes the
+// so only the hatch catches. Casters: recognition, activator K% (bonded to a k), instruction (counter-clockwise). The product takes the
 // instructions [p, q, r] of (fixed caster 0, fixed caster 1, hatch). fuel: a glue letter puts a fuel side on the hatch's
 // hinge partner (energy). An inert instruction side is not welded to the frame (that would overwrite it).
 function pocket(instr='bcd',recog='A',fuel=null){
   const [p,q,r]=[...instr],R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));
   return [
-    {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K`,loose:p==='-'},          // caster 0: instruction p (bottom), recognition (inner), K
-    {v:[[1,0],[2,0],[1.5,H]],type:`K${q}${R}.`,loose:q==='-'},          // caster 1: K, instruction q (right-lower), recognition
-    {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<${r}${R}*`},                   // hatch (open): hinge K (pin (1.5,H)), instruction r, catch/trigger
+    {v:[[0,0],[1,0],[0.5,H]],type:`${p}${R}.K%`,loose:p==='-'},          // caster 0: instruction p (bottom), recognition (inner), K
+    {v:[[1,0],[2,0],[1.5,H]],type:`K%${q}${R}.`,loose:q==='-'},          // caster 1: K, instruction q (right-lower), recognition
+    {v:[[1.5,H],[2,2*H],[1,2*H]],type:`K<%${r}${R}*`},                   // hatch (open): hinge K (pin (1.5,H)), instruction r, catch/trigger
     {v:[[1.5,H],[2.5,H],[2,2*H]],type:fuel?`-${fuel}$k`:'--k'},          // hinge partner (k); with fuel, its outer side holds a carrier
     {v:[[2,0],[2.5,H],[1.5,H]],type:`--${Q}`},                           // holds caster 1's instruction side
     {v:[[1,0],[1.5,-H],[2,0]],type:'--k'},                               // k under caster 1
@@ -49,9 +49,9 @@ function lidPocket(instr='bcd',recog='A',fuel=null,catcher='BR'){
   const [p,q,r]=g,R=recog,P=gname(comp(gcode(p))),Q=gname(comp(gcode(q)));if(q==='-')throw Error('lid pocket: R needs an instruction glue');
   const [pc,qc,rc]=c;
   return [
-    {v:[[0,0],[0.5,-H],[1,0]],type:`K${p}.${pc}${R}${catcher.includes('B')?'':'.'}`,loose:p==='-'},   // B: K, instruction p (close-only, as all instruction sides), recognition (catches if in `catcher`)
-    {v:[[1,0],[1.5,H],[0.5,H]],type:`K${q}.${qc}${R}${catcher.includes('R')?'':'.'}*`},                       // R: K, instruction q, recognition + trigger
-    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+${r}.${rc}${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
+    {v:[[0,0],[0.5,-H],[1,0]],type:`K%${p}.${pc}${R}${catcher.includes('B')?'':'.'}`,loose:p==='-'},   // B: K, instruction p (close-only, as all instruction sides), recognition (catches if in `catcher`)
+    {v:[[1,0],[1.5,H],[0.5,H]],type:`K%${q}.${qc}${R}${catcher.includes('R')?'':'.'}*`},                       // R: K, instruction q, recognition + trigger
+    {v:[[0.5,H],[1,2*H],[0,2*H]],type:`K<=+%${r}.${rc}${R}.`},                  // lid (open): hinge K (pin (0.5,H), wide, hears Q), instruction r, recognition (close-only)
     {v:[[0.5,H],[1.5,H],[1,2*H]],type:`${Q}+${fuel?fuel+'$':'-'}k`},     // Q: holds R's instruction and hears R; outer side (fuel); lid's hinge partner
     {v:[[0,0],[-0.5,-H],[0.5,-H]],type:'--k'},                           // Z: k for B
     {v:[[0.5,-H],[1.5,-H],[1,0]],type:`--${P}`},                         // W: holds B's instruction
@@ -172,8 +172,8 @@ function airlock(R=4,win=2.5){
 // Kit (heritable parts): turn a prepared structure into types that grow it from one root cell. Cells are joined by a
 // spanning tree from the root (breadth first); every tree edge gets its own glue pair, the parent exposing the lower
 // case letter and the child attaching by the upper case one, so each kit type attaches at one place only. Tree edges
-// are the plain (inert, welded) shared edges and the casters' activator edges (K/k), which become a unique pair with
-// the activator mark '%' on the caster's side. Every other shared edge closes once both cells are attached: plain
+// are the plain (inert, welded) shared edges and the casters' activator edges (a side marked '%' bonded by its glue), which become a
+// unique pair that keeps the mark on the caster's side. Every other shared edge closes once both cells are attached: plain
 // ones by the close-only pair f/F, functional ones (instruction holders, other glue pairs) keep their glue and become
 // close-only on both sides, so free triangles (products, dockers) never stick to a growing part. Each kit cell's
 // attachment side carries '@': a free part binds only by it (a free caster never sticks to a caught target). Loose
@@ -186,7 +186,7 @@ function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   const E=[];for(let a=0;a<tris.length;a++)for(let b=a+1;b<tris.length;b++)for(let i=0;i<3;i++)for(let j=0;j<3;j++){const A=tris[a].v,B=tris[b].v;
     if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))E.push({a,i,b,j});}
   const plain=e=>tok[e.a][e.i].g==='-'&&tok[e.b][e.j].g==='-',loose=e=>tris[e.a].loose||tris[e.b].loose;
-  const isK=(x,i)=>tok[x][i].g==='K',actE=e=>(isK(e.a,e.i)&&tok[e.b][e.j].g==='k')||(isK(e.b,e.j)&&tok[e.a][e.i].g==='k');
+  const isAct=(x,i,y,j)=>tok[x][i].m.includes('%')&&tok[x][i].g!=='-'&&tok[y][j].g===gname(comp(gcode(tok[x][i].g))),actE=e=>isAct(e.a,e.i,e.b,e.j)||isAct(e.b,e.j,e.a,e.i);
   const low=c=>{const i=UP.indexOf(c);return i>=0?LOW[i]:c;},used=new Set([...reserved,...(seed||''),'f','k',...tris.flatMap(t=>[...t.type])].map(low));
   const pool=[...LOW].filter(c=>!used.has(c));
   const seen=new Set([root]),tree=[],treeE=new Set(),q=[root];
@@ -196,7 +196,7 @@ function kit(tris,root=0,reserved='',seed=null,side=null,slots=[]){
   if(tree.length>pool.length)throw Error(`kit: needs ${tree.length} glue pairs, ${pool.length} letters free`);
   const addMark=(t,c)=>{if(!t.m.includes(c))t.m+=c;};
   tree.forEach(([x,y,e],k)=>{const L=pool[k],[px,pi,cy,ci]=e.a===x?[e.a,e.i,e.b,e.j]:[e.b,e.j,e.a,e.i];
-    for(const [c,i,g] of [[px,pi,L],[cy,ci,UP[LOW.indexOf(L)]]]){const t=tok[c][i];if(t.g==='K')addMark(t,'%');t.g=g;addMark(t,'@');}});   // both ends '@': the parent's site takes parts only
+    for(const [c,i,g] of [[px,pi,L],[cy,ci,UP[LOW.indexOf(L)]]]){const t=tok[c][i];t.g=g;addMark(t,'@');}});   // both ends '@': the parent's site takes parts only
   for(const e of E){if(treeE.has(e)||loose(e))continue;const A=tok[e.a][e.i],B=tok[e.b][e.j];
     if(plain(e)){A.g='f';B.g='F';}else if(A.g==='-'||B.g==='-')continue;addMark(A,'.');addMark(B,'.');}
   // seed: the root's first outer inert side takes the seed glue's complement (it attaches to an exposed seed)

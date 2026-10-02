@@ -28,7 +28,7 @@ test('copy: zip, a face takes a dock only from the high end on',()=>{
 
 test('casting: a pocket of three activated casters casts the instruction glues',()=>{
   const tris=[{v:[[1,0],[1.5,H],[0.5,H]],type:'aaa'},
-    {v:[[0,0],[1,0],[0.5,H]],type:'bA.K'},{v:[[1,0],[2,0],[1.5,H]],type:'KcA.'},{v:[[0.5,H],[1.5,H],[1,2*H]],type:'AKd'},
+    {v:[[0,0],[1,0],[0.5,H]],type:'bA.K%'},{v:[[1,0],[2,0],[1.5,H]],type:'K%cA.'},{v:[[0.5,H],[1.5,H],[1,2*H]],type:'AK%d'},
     {v:[[0,0],[0.5,H],[-0.5,H]],type:'k--'},{v:[[1,0],[1.5,-H],[2,0]],type:'--k'},{v:[[1.5,H],[2,2*H],[1,2*H]],type:'--k'}];
   const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,4,4);
   assert.equal(s.nbc.length,tris.length);s.derive();s.chemistry();

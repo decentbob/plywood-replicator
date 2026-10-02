@@ -13,8 +13,9 @@ the values its bonded partners exposed in the previous pass. No rule counts, tra
 
 ### Glues
 `a..z` pair with `A..Z` (complement = the other case); Greek `α..ω` pair with `Α..Ω` (24 more pairs) and 13 Cyrillic pairs `б..э` / `Б..Э`
-(used by kits: 63 pairs in all). `-` is inert and binds nothing. `k`/`K` is the casting
-activator pair (by convention only). `f`/`F` is used by the structure builder to weld prepared structures.
+(used by kits: 63 pairs in all). `-` is inert and binds nothing. Glue letters are labels: no letter has a rule of
+its own (`K` was the casting activator until 2026-10-02; now the mark `%` is). `f`/`F` is used by the structure builder
+to weld prepared structures (a builder convention, not a rule).
 
 ### Side marks
 | Mark | Meaning |
@@ -26,7 +27,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `$` | fuel side: a hinge here (or on its partner) spends one charged carrier per swing |
 | `+` | hear side: the triangle hears the trigger signal of the partner bonded here (relayed, below) |
 | `=` (hinge side) | wide hinge: swings 120 degrees instead of `hingeAngle` |
-| `%` | activator side: counts as a casting activator while it is bonded by its glue (like K bonded to k) |
+| `%` | activator side: counts as a casting activator while it is bonded by its glue (the only activator) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
 | `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one |
@@ -111,7 +112,7 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
 ## Casting (permanent type change)
 A triangle bonded by glue on all three sides is in a **pocket**. For each partner: the side bonded to it is the
 recognition side, the next side counter-clockwise the activator side, the remaining side the instruction side. If
-every partner's activator side carries `K` bonded to a `k` (or is an activator side `%` bonded by its glue), the triangle takes each partner's instruction
+every partner's activator side is an activator side `%` bonded by its glue, the triangle takes each partner's instruction
 glue on the facing side, loses its marks, and lets go of all three. (Copying, not complementing: a complemented
 product would stick to its own casters.)
 **Stamp (2026-10-01):** the product side also takes the marks the instruction side carries (`'`), and nothing
@@ -164,6 +165,27 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
+
+### Merge: the glue `K` is no longer an activator; `%` is the only one, 2026-10-02, autorun run 20261002-0721 (core-review)
+1. **Capability and why.** No new capability: casting keeps its activators. Two rules did one job: a caster's
+   activator side counted if it was the glue letter `K` bonded to a `k`, or if it carried the activator mark `%` and
+   was bonded by its glue. The first gives one glue letter a meaning of its own, against "glue letters are labels, not
+   rules" (AGENTS.md): any structure or kit that happens to use the pair k/K for a weld or a link turns those cells
+   into activators without saying so, and the kit builder had to reserve `k` and translate `K` into `%`. After the
+   merge an activator is marked where it is, and `k`/`K` is an ordinary pair.
+2. **Designs considered.** (a) Keep both (status quo): two branches in `derive` and in the kit builder for one
+   meaning. (b) Remove `%` and keep `K`: kits need many distinct activator pairs (each kit cell attaches at one place
+   only), so one letter cannot serve them; `%` is the general form. (c) Make activation implicit (any glue-bonded side
+   after the recognition side activates): every pocket of glue-bonded triangles would cast, e.g. every ring cell
+   bonded on three sides; casting must be marked. Chosen: (b') keep `%`, drop the `K` branch, write `K%` where the
+   prepared pockets meant `K` (pocket, lid pocket, test pockets).
+3. **Locality.** Unchanged and smaller: a triangle reads its own side's mark and glue and the glue of the partner side
+   bonded to it (the partner's fixed type), as before; the `K` branch read the same things.
+4. **Generality.** Any structure marks its activators explicitly; kits keep the mark they inherit (the builder no
+   longer translates).
+5. **What it removes.** One rule branch (glue `K` bonded to `k` activates) and its special case in the kit builder.
+   Expected behaviour: identical in every demo whose only `K`/`k` pairs are the prepared pockets' activators
+   (verified by comparing demo outputs before and after, and by `node tri/check.js`).
 
 ### Copy side `?` (contact copying), 2026-10-02, autorun run 20261002-0136 (explore)
 1. **Capability and why the goal needs it.** Programmable synthesis: making any part type from uniform blanks. The
