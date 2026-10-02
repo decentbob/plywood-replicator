@@ -12,7 +12,7 @@ const count=(L,re)=>(L.match(re)||[]).length;
 const CHECKS=[
   {id:'copy',cap:'Genome: typed chain copying (zip)',demo:'copy',seeds:[1],steps:10000,secs:4,
     pass:L=>{const n=count(L,/BBAABA\//g);return [n>=2,`${n} complete copies BBAABA`];}},
-  {id:'lid',cap:'Factory: lid pocket casts (signals: heard trigger)',demo:'lid',seeds:[1],steps:4000,secs:2,
+  {id:'lid',cap:'Factory: lid pocket casts (signals: heard trigger)',demo:'lid',seeds:[1,2,3,4],need:3,steps:4000,secs:2,
     pass:L=>{const c=num(L,/casts=(\d+)/);return [c>=5,`${c} casts`];}},
   {id:'factory',cap:'Factory: lid pockets feed copying (cast dockers only)',demo:'factory',seeds:[1],steps:30000,extra:'Aa',secs:15,
     pass:L=>{const n=num(L,/AAAAA=(\d+)/);return [n>=2,`${n} copies AAAAA`];}},
@@ -28,7 +28,7 @@ const CHECKS=[
     pass:L=>{const c=num(L,/crossings=(\d+)/),u=num(L,/unlatches=(\d+)/);return [c>=5&&u>=1,`${c} crossings, ${u} unlatches`];}},
   {id:'import',cap:'Import: revolving door carries blanks in',demo:'import',seeds:[1],steps:20000,secs:5,
     pass:L=>{const x=num(L,/xxx=(\d+)/),j=num(L,/junk=(\d+)/);return [x>=8&&j<=1,`${x} blanks in, ${j} junk`];}},
-  {id:'grow',cap:'Kits: a lid pocket grows from a seed and casts',demo:'grow',seeds:[1],steps:16000,extra:'12',secs:12,
+  {id:'grow',cap:'Kits: a lid pocket grows from a seed and casts',demo:'grow',seeds:[1,2,3,4],need:3,steps:16000,extra:'12',secs:12,
     pass:(L,o)=>{const m=o.match(/complete at (\S+) products (\d+)/);return [!!m&&m[1]!=='not'&&+m[2]>=1,m?`complete at ${m[1]}, ${m[2]} products`:'no result'];}},
   {id:'grow-stamp',cap:'Stamp: a stamp pocket grows from its kit and casts',demo:'grow',seeds:[1],steps:20000,extra:'4s',secs:5,
     pass:(L,o)=>{const m=o.match(/complete at (\S+) products (\d+)/);return [!!m&&m[1]!=='not'&&+m[2]>=1,m?`complete at ${m[1]}, ${m[2]} products`:'no result'];}},
