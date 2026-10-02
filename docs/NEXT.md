@@ -2,6 +2,10 @@
 
 State on 2026-10-02 (after autorun run 20261002-1551, explore). Read AGENTS.md first (rules of work), then this file.
 
+**Current slice (autorun run 20261002-1751, review-intent):** direction check, no building. Goal: say whether the
+work is on the best path to the organism, set priorities here and in the ROADMAP backlog with reasons, adjust the
+autorun rotation if the mix of run kinds no longer fits. Done when the priorities are written and pushed.
+
 **Handoff status (autorun run 20261002-1551, explore).** Everything committed on branch `claude/autorun-20261002-1551`
 and merged into `main`. No simulations running. `node tri/test.js`: 34 tests pass; `node tri/check.js`: 34 of 34 pass
 with the change (run as an experiment option, 2144 s), and the five anchor checks rerun on the final code give the same
