@@ -1,6 +1,9 @@
 # Next instance: start here
 
-## Current slice (autorun 20261002-0335, core-review, 2026-10-02)
+## Current slice (autorun 20261002-0721, core-review, 2026-10-02; continues run 20261002-0335, which never reported back)
+- **Taken over:** run 0335's branch (5 commits: unused options removed, three locality fixes, physics fixes, conservation
+  test) is the base of this run's branch `claude/autorun-20261002-0721`; its parts (1)-(4) below that are done: removals,
+  (3), (4). This run does the rest: the inventory and locality table, one merge, the full checks, and merges to main.
 - **Goal:** a smaller, audited core: every rule's reads written down and checked for locality, a core inventory with
   counts, unused rules removed and one overlapping mechanism merged, so the organism is built on fewer rules.
 - **Acceptance:** (1) docs/RULES.md has a "Core inventory" (every mark, signal, state and option with its users and
