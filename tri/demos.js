@@ -250,7 +250,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // start outside ('i': also 60 inside P). extra: blanks outside (default 300). Status: P copies its genome; D's anchor
     // catches a copy, also one being copied (since 2026-10-02), and the pair splits with food left in 4 of 8 seeds; A sits
     // beside a corner, so a caught strand lies along the wall and the bud does not copy it after the split
-    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,andH=X.includes('a'),DW=X.includes('n')?-0.25:0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
@@ -277,16 +277,24 @@ function demo(name,seed=1,steps,dir='runs',extra){
           if(d>0){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));if(!best||sc>best.sc)best={A:w,f,sc};}}
           if(d>=5)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
         pick.A=best.A;pick.f=best.f;for(let w=best.A;prev.get(w)>=0;w=prev.get(w)){const v=prev.get(w);chain.push(v);for(let e=0;e<3;e++)if(s.bond[v*3+e]>=0&&((s.bond[v*3+e]/3)|0)===w)s.hear[v*3+e]=1;}}
+      // 'a' (and-hold): no latch. A is an inner bottom-wall cell of D (farthest from D's corners) whose ring neighbour N
+      // touches P; the N-P bond is the hold, '&' on both sides. A's '@' emits the open signal (openRange 3: A 3, N 2, P's
+      // cell 1); once A holds a strand nothing is open, the hold is cut and both its sides are spent
+      if(andH){pick=null;const RC=[...Array(6).keys()].map(k=>[(RD-0.5)*Math.cos(k*Math.PI/3),dyL+(RD-0.5)*Math.sin(k*Math.PI/3)]);
+        for(const A of Du){const v=tris[U.indexOf(A)].v;if(cn(v)[1]>dyL-(RD-1)*H)continue;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[A*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;
+          const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));
+          for(let e=0;e<3;e++){const q=s.bond[A*3+e];if(q<0||!inD.has((q/3)|0))continue;const N=(q/3)|0;for(let j=0;j<3;j++){const b=s.bond[N*3+j];if(b<0||!inP.has((b/3)|0))continue;
+            const x=cn(tris[U.indexOf(N)].v)[0];if(!pick||sc>pick.sc+1e-9||(Math.abs(sc-pick.sc)<1e-9&&x<pick.x))pick={u:(b/3)|0,i:b%3,L:N,j,A,f,sc,x};}}}}}
       if(!pick)throw Error('budpore: no latch site');
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
-      s.ltc[pick.L*3+pick.j]=1;const da={u:pick.A,i:pick.f};
+      if(andH){s.done[pick.u*3+pick.i]=1;s.done[pick.L*3+pick.j]=1;}else s.ltc[pick.L*3+pick.j]=1;const da={u:pick.A,i:pick.f};
       // the latch bond carries no glue: once it lets go its two sides bind nothing (with the weld glue f/F they stayed
       // unspent and glue-active, and copies of them grew glue crystals on P after the split)
       if(!X.includes('w')){s.glue[pick.u*3+pick.i]=0;s.glue[pick.L*3+pick.j]=0;}
       // P's anchor W| (middle of its bottom inner wall)
       let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5)continue;if(!pa||Math.abs(m[0])<pa.d)pa={u,i,d:Math.abs(m[0])};}}
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
-      s.glue[da.u*3+da.i]=gc(X.includes('l')?'W':'Z');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;const hold=new Set([pick.u,pick.L]);
+      s.glue[da.u*3+da.i]=gc(X.includes('l')?'W':'Z');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;if(!andH)s.trg[da.u*3+da.i]=1;s.p.openRange=andH?3:1;const hold=new Set([pick.u,pick.L]);
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
@@ -314,7 +322,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const k=(d(cD)<RD*H?'D':d(cP)<RP*H?'P':'out')+':'+(wallT.has(canon(ty))?ty:'genome');afterW[k]=(afterW[k]||0)+1;}return Array.prototype.push.call(this,e);};s.copyLog=cl;
         process.on('exit',()=>console.log('after split',JSON.stringify(afterW)));}
       if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [tt,u,ty] of s.copyLog||[])if(wallT.has(canon(ty)))m[ty+(split&&tt>split?' after':' before')]=(m[ty+(split&&tt>split?' after':' before')]||0)+1;console.log(JSON.stringify(m),'hearing',U.filter(u=>s.op[u]>0).length,'unspent free sides',U.reduce((a,u)=>a+[0,1,2].filter(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i]).length,0));});
-      console.log(`budpore: latch bond on D cell ${U.indexOf(pick.L)}, anchor Z@|* on ${midA?`D cell ${U.indexOf(pick.A)}, hear chain ${chain.length} bonds`:`its neighbour ${U.indexOf(pick.A)}`}`);
+      console.log(`budpore: ${andH?'& hold':'latch bond'} on D cell ${U.indexOf(pick.L)}, anchor ${andH?'':'Z@|* '}on ${midA||andH?`D cell ${U.indexOf(pick.A)}, hear chain ${chain.length} bonds`:`its neighbour ${U.indexOf(pick.A)}`}`);
       snap(s,'t0',`t=0: parent P (founder on its anchor${NI?`, ${NI} copy blanks`:''}) and bud D joined at one latch; ${nb} copy blanks outside`,{units:U,radius:14},false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${split?'split at '+split:'joined'}`,{units:Pu,radius:16},false);}
       report(steps);const L=where(),[gn,w]=tally();
