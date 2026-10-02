@@ -3,7 +3,7 @@
 State on 2026-10-02 (after autorun run 20261002-0236, build). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-0236, build).** Everything committed on branch `claude/autorun-20261002-0236`
-and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: CHECKRESULT.
+and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: 30 of 30 pass in 1285 s (2 new: `imprint-cell` 3 of 4, its control `imprint-cell-n`).
 No current slice.
 **Done this run (slice: the bud's genome cycle on copies; budget used, acceptance not met, a milestone met):**
 - Slice as set: M1 `split k 60000 runs q`: a copy anchored in D and the pair split in 3 of 4 worlds; M2: the bud
