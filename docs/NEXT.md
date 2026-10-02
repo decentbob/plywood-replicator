@@ -1,26 +1,31 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-0721, core-review). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-0921, build). Read AGENTS.md first (rules of work), then this file.
 
-## Current slice (autorun 20261002-0921, build): feeding on copies through a pore
-**Goal.** The build line's open problem is getting copy blanks into a sealed cell (core change candidate below; its
-design (b), a pore, was tried only with plain walls, which took every blank). Test it with spent walls: (1) a sealed
-cell whose free sides (inner and outer) are all spent `&`, with a pore (3 wall cells missing), its founder held by an
-anchor `W|`, copy blanks only outside: the genome is copied from blanks that come in. (2) M2 of the build line: the bud
-of a split pair has such a pore and copies its anchored genome after the split.
-**Done when:** (1) demo `imprint k N runs p` reaches 4 or more strands inside in 3 of 4 worlds with no wall copies,
-controls (no pore: no copies; plain walls: the wall takes the blanks), check `imprint-pore`; (2) a `split` variant whose
-bud holds 2 or more strands inside after the split in 3 of 4 worlds, with a check. **Stop:** (2) is a stretch; if it
-fails after a few variants, record it as partial with what blocks it. No core change.
-**Progress (checkpoint 1).** (1) done: `imprint ... 150p`, 4 of 4 worlds (INNOVATIONS); checks pass. (2) in progress:
-`split ... qp` (pores in the `split q` pair) failed by design: the open signal that holds a pair (range 27 from D's
-one anchor, 11 with two anchors) keeps about 50 wall cells unspent and outside blanks copy their outer sides (200
-copies in 5000 steps, 2% genome). New demo `budpore` (fewer parts: no doors, a doorway held by `&` pairs on one side
-only, D's anchor beside them, open range 4; 60 blanks inside P for the joined phase, 300 outside for the bud after the
-split): first 4-world batch running (`node tri/demos.js budpore k 200000 runs`).
-**Probe (scratch, runs/pore.js, 100000 steps, R 6, world 20, 150 blanks outside):** pore: 4 / 5 / 7 / 1 strands inside
-(world 4: one copy stalled waiting for a docker type); no pore: 0 copies; plain walls with pore: all 150 copies of
-wall cells.
+**Handoff status (autorun run 20261002-0921, build).** Everything committed on branch `claude/autorun-20261002-0921`
+and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass; `node tri/check.js`: CHECKRESULT.
+No current slice.
+**Done this run (slice: feeding on copies through a pore; part 1 met, part 2 partial):**
+- **(1) A cell fed through a pore** (new capability, 4 of 4 worlds; `node tri/demos.js imprint k 100000 runs 150p`): a
+  ring whose every free side is a spent `&` (outer, inner, pore edges) with a 3-cell pore copies its anchored genome
+  from copy blanks outside only: 5-6 strands inside, all 150 copies genome. Controls: no pore (`150pc`) 0 copies;
+  plain walls (`150pn`) all 150 copies of wall cells. Checks `imprint-pore`, `imprint-pore-c`, `imprint-pore-n`. The
+  core change candidate "bringing copy blanks into a cell" is not needed for feeding (its design (b) failed only with
+  plain walls). The anchor must be mid-wall (a corner anchor lays the strand along the wall: no fill copies).
+- **(2) The bud copies its genome after the split (M2): not yet.** New demo `budpore` (fewest parts so far: two rings
+  joined by one latch bond beside a shared opening; D's anchor `Z@|*` releases the latch by its trigger side when it
+  catches; no wall hears an open signal): splits in 2 of 4 worlds (150 blanks), both after the food was spent; no bud
+  copied after the split. Diagnosed: a strand's seed is inactive while it is being copied, and with food around strands
+  are almost always being copied (52-87 approaches to D's anchor, all busy, 0 capture attempts). Core change candidate
+  below. Also learned (Pitfalls): an open-signal hold exposes every wall in range to copying (`split ... qp`, tried and
+  removed: 98% of blanks lost to walls).
+**Exact next step:** the rotation's next run is `harden`: the physics leak (core-review follow-up 1 below). For the
+build line: an `explore` run takes the core change candidate "an anchor catches a strand that is being copied" (below);
+then `budpore` with D's anchor moved mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the
+latch lets go while it hears a trigger signal) and enough blanks that food lasts past the split; target: the bud holds
+2 or more strands after the split in 3 of 4 worlds. Regenerate: `node tri/demos.js budpore k 200000 runs 150` (about
+5 minutes per world); probes used this run: `runs/anchdiag.js`, `runs/anchdiag2.js` (preloads via
+`NODE_OPTIONS="-r ./runs/anchdiag2.js"`; scratch, not kept: their logic is described in the candidate below).
 
 **Handoff status (autorun run 20261002-0721, core-review).** Everything committed on branch
 `claude/autorun-20261002-0721` and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass;
@@ -46,7 +51,7 @@ acting), fixed or split off, and merged with the rest:
   closures, copy sides on any side, pLoose scope, inert `@`, `&` closures, release at ends, fuel).
 - **Physics leak kept on main, fix on a branch** (see the first item below).
 
-**Exact next step:** a `harden` slice on the physics leak (item 1 below); the build line continues from run 0236's
+**Exact next step (as of run 0721, still valid for harden):** a `harden` slice on the physics leak (item 1 below); the build line continues from run 0236's
 handoff (below, "Build line").
 
 ### Core review follow-ups (run 20261002-0721), in order
@@ -100,7 +105,7 @@ No current slice.
   signal; with a plain `W|` (tried, removed) 60 of 134 wall cells are spent, P makes 2-4 strands and strands enter D in
   3 of 4 worlds, but D's anchor caught none in 150000 steps (not diagnosed: check whether their high end `z` is free
   and not busy when near the anchor); (3) a pore in P (blanks from outside) fails: the rings' outer walls take all.
-**Exact next step:** a `build` slice on the bud that copies its genome after the split (M2), which needs no joined
+**Next step as of run 0236 (taken by run 0921, see above):** a `build` slice on the bud that copies its genome after the split (M2), which needs no joined
 phase: the bud is complete then, so its `&` walls are spent (as in `imprint m`). Prepare it like `imprint m` with an
 anchored strand (or take `split g`, where a cast copy `AAAA` is anchored: give the bud `aAaA` instead) and copy
 blanks that reach the bud only after the split. The open problem is how blanks get into a sealed bud (see the core

@@ -31,6 +31,31 @@ not statistics.
   - Enables: a bud that copies its genome after the split, fed through its own pore (below); the core change
     candidate "bringing copy blanks into a cell" is no longer needed for feeding.
 
+- **Bud pair on copies with a doorway (`budpore`)** — partial: the pair splits in 2 of 4 worlds; the bud never copies
+  its genome after the split (M2 of the build line: not yet). Fewer parts than `split q`: no doors, no `&` pairs, no
+  open signal on the walls. P (R 7) and D (R 5) are joined by one latch bond beside a single opening that joins P, D
+  and the outside; D's anchor next to the latch is `Z@|*`: when it catches a copy's high end its trigger side is bonded
+  and the latch lets go (existing rule: a latch lets go while a non-hinge partner has a bonded trigger). With no open
+  signal every wall side is spent from t = 0. Command: `node tri/demos.js budpore k 200000 runs 150`. Picture (world 4,
+  split at 54000; last frame: the bud, its strand lying along the wall): `docs/pictures/budpore.png`.
+  - Evidence (150 blanks outside, 200000 steps): split at 130000 / no / no / 55000; both splits came after the blanks
+    were spent; the bud then held 1 strand and made no copy (no food left, and its strand lies along its wall).
+    300 blanks: no split (worlds 3 and 4 to 200000 steps, D held 2-3 free strands for over 100000 steps and caught
+    none; worlds 1 and 2 stopped at 95000 without a split).
+  - **Why D's anchor does not catch (measured):** a probe counted strand ends with seed `z` within `capture` of D's
+    anchor site every 20 steps (world 3, 60000 steps): 52-87 approaches, all while the strand was busy (busy 26-30),
+    0 capture attempts. A strand's seed is active only while it is not being copied; with blanks around, a blank
+    touching a face becomes a docker beside it and zip docks the high end first, so ends are idle only for moments.
+    `split g` catches because its dockers come only from P's pocket. Core change candidate in docs/NEXT.md.
+  - **Tried and removed, `split ... qp`** (pores in run 0236's `split q`): the `&` pairs that hold a pair lie on both
+    sides of its doorway (P's doorstop and pairs left, D's hinge, doorstop and a pair right), joined only round D, so
+    D's anchor needed open range 27 (two anchors: 11); every wall cell in range keeps its free side and outside blanks
+    copied them: 200 copies in 5000 steps, 2% of them genome. Pores in a pair's walls also cut the open signal's way to
+    the pairs (a second gap). A first `budpore` with `&` pairs on one side of the doorway (range 4, 9 cells hearing)
+    still lost 60-90% of the blanks to the neck. Hence the latch hold.
+  - Next: the bud needs a mid-wall anchor (a hear chain `+` from the anchor to the latch allows up to 5 bonds) and an
+    anchor that catches busy strands (core change), then food lasts past the split.
+
 ## 2026-10-02 (autorun run 20261002-0236, build)
 
 - **Genome on copies inside a sealed cell** — works (3 of 4 worlds). A cell copies its genome from copy blanks alone:
