@@ -10,6 +10,13 @@ up by 1.5x or more, demo outputs on fixed seeds identical to `main` (or each dif
 passes and `node tri/check.js` passes all working checks. Stop: if the profile shows no single hot spot worth more
 than 20%, record the profile and report.
 
+**Progress (run 2150, in progress).** Fixed: `imprint 60m`/`150p` crashed on main (`split is not defined`, a stray
+`budpore` report suffix from d91de57), so checks imprint-cell, imprint-pore and their controls failed. Speed (outputs
+identical to main on 12 short demo runs, `runs/bench.sh`): lone blocks skip grid cells out of reach; budPair's doorstop
+search and sweepClear (split o setup 31 s -> 1.5 s); shared role records for free triangles. Short runs 1.1-1.25x,
+split o 2.7x; budpore's loop only about 1.1x (the cost is spread: lone-block gather 20%, ring moves 14%, pairs 9%).
+Running: `node tri/check.js > runs/check_full.txt` (full suite, about 35 minutes); rerun it if the run ended.
+
 **Handoff status (autorun run 20261002-1921, build).** Everything committed on branch `claude/autorun-20261002-1921`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js budpore` passes 4 of 4
 (no rule, physics or shared-structure change, so the full suite was not rerun; last full run 35 of 35 in run 1821).
