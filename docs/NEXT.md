@@ -2,6 +2,12 @@
 
 State on 2026-10-02 (after autorun run 20261002-1751, review-intent). Read AGENTS.md first (rules of work), then this file.
 
+**Current slice (autorun 20261002-1821, cleanup).** Goal: a lean starting point. NEXT.md down to the current state,
+direction, next step, commands and pitfalls (handoff history moves to INNOVATIONS or stays in git); demos and structures
+nothing checks or uses removed (`pocket`, `airlock`, `arms`, `birth`, the `split q` variant superseded by `budpore`),
+with outputs of the remaining demos unchanged; stale docs fixed; autorun prompt friction fixed. Done when tests pass,
+the checks pass as before and NEXT.md is under about 150 lines. No new capabilities, no core changes.
+
 **Handoff status (autorun run 20261002-1751, review-intent).** Docs only, on branch `claude/autorun-20261002-1751`,
 merged into `main`. No simulations running; tests 34 pass; checks not rerun (no code change). No current slice.
 **Done this run (slice: direction check, no building; met):** findings and priorities below ("Direction"); ROADMAP
