@@ -8,6 +8,29 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Programmable synthesis: decision (autorun 20261002-0136, explore, 2026-10-02)
+
+The maintainer asked an explore run to decide between part templating, translation and kit-free growth through the
+core-change gate, least core growth, at most one new rule. Decision: **part templating, as contact copying** (one
+mark `?`, gate entry in RULES "Core changes"). Reasoning:
+- **Closure is the test.** A synthesis scheme is enough only if it can make the parts of its own machinery. Stamp
+  casting cannot: a stamp caster carries `'` marks and no cast product carries marks. Kit-free growth (no rule) cuts the
+  number of types but keeps the same gap. Translation also needs adaptors that carry marks, plus a reading frame, a
+  site touching three strand faces (impossible on a straight strand: the lattice's dual has no 3-cycles) and stepping:
+  several rules, and the adaptors still need a way to be multiplied. Part templating closes the loop with one rule.
+- **The smallest templating has no machine.** A copier pocket needs a hold for arbitrary templates (glue-agnostic),
+  a read rule and a release, and its library parts are taken by growth sites. Instead the copy blank itself reads: a
+  free blank with copy sides binds any free side of an attached triangle and becomes a copy of it (the partner turned
+  about the shared edge). The body is the template; nothing is held, nothing is used up.
+- **Costs, stated.** Information about parts then lives in the body, not the chain (the chain still decides where
+  parts grow, by its seeds). Only exposed triangles are copied: a cell whose three sides are bonded is copied only
+  while it is still growing (5 of the lid pocket's 16 kit cells are enclosed when complete; every cell of a one-row
+  ring keeps one free side, inside or outside). Everything exposed is copied, strays included, at rates set by
+  surface and blank supply: regulation is by where copy blanks are (import doors), selection acts on bodies.
+- **Biology.** Membranes and cortical patterns are inherited by templating in real cells (new membrane only grows from
+  membrane); here every part is.
+- **What it may remove later:** stamp marks (`'`) and, once dockers are copied from strands, casting itself.
+
 ## Programmable synthesis: the next big blocker (2026-10-01, fourth session)
 
 Stamp casting lets a pocket cast kit parts, but one pocket makes one part type, and a cell needs dozens of types

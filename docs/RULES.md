@@ -30,6 +30,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
 | `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one |
+| `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
@@ -55,7 +56,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 
 ## Locality audit (2026-10-01)
 Every chemistry rule below reads only: the triangle's own type, state and bonds; values its bonded partners expose
-(their role, fill, trigger, charge, activator, the glue and marks of the side bonded to it); and relayed signals that
+(their role, fill, trigger, charge, activator, the glue and marks of the side bonded to it, and, for a copy blank, their whole type); and relayed signals that
 move one bond per pass and fade (busy, zip, caps, lock, hear, open). Rules that were not local and were replaced:
 closures that asked whether two triangles belong to the same body (now one flush tolerance, 0.05, for every closure),
 snapping the smaller of two bonding bodies (removed), copy release reading two bonds away (now the partner exposes
@@ -118,6 +119,13 @@ not complementing, is the default: a complemented product would stick to its own
 carried: a caster's instruction side prints glue and marks, so a pocket can cast kit parts (`@`, `.`, `%`, ...) from
 blanks. A product never carries marks itself (a stamp cannot be stamped).
 
+**Contact copying (2026-10-02, copy side `?`):** a free triangle with a copy side binds by it to any free (unbonded, not
+spent) side of an attached triangle, whatever that side's glue, when its centre comes within `capture` of the site and
+the site is free. In the same pass it takes its partner's type (side i+k takes the partner's side j+k, i and j the
+bonded sides: the partner turned about the shared edge; glues, marks and carried marks) and lets go. It binds nothing
+else (no glue binding, dock or fill) and is never itself a template. Free triangles never bind each other, so only
+attached triangles are copied. Gate entry: Core changes.
+
 ## Hinges and machines
 - A hinge remembers its flush angle (when it bonded, snapped to a multiple of 60 degrees) and which way is away from its partner. While the flap is
   **triggered** (a trigger side bonded, or a triangle welded to it reports a bonded trigger, relayed one bond) it
@@ -152,6 +160,47 @@ Every triangle is charged by default. A flap whose own or hinge partner's type h
 swing only by spending a charged carrier bound to a fuel side: the carrier is discharged and, binding nothing,
 falls off. Without fuel a triggered flap holds. **Environment drive** (labelled): free discharged triangles inside
 the light zone `light: {x, y, r, p}` recharge at p per step.
+
+## Core changes
+
+Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
+behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
+
+### Copy side `?` (contact copying), 2026-10-02, autorun run 20261002-0136 (explore)
+1. **Capability and why the goal needs it.** Programmable synthesis: making any part type from uniform blanks. The
+   organism must build its offspring; today every kit part (a bud ring has 54 types, a cell kit ~60) is prepared food
+   in the world. Stamp casting makes one part type per pocket, and a pocket's casters carry marks (`'@`) that no cast
+   can make (a product never carries marks), so pockets cannot make the pockets that make parts: the loop never
+   closes. With contact copying a body's parts multiply from blanks, so a parent's parts become its offspring's parts
+   (the offspring is grown from copies), and food can be one uniform blank type.
+2. **Designs with the existing core, and why they fail.** (a) Stamp pockets for every part: one pocket (16 parts) per
+   part type, and stamp casters cannot be cast (no product carries marks); a second apostrophe level only moves the
+   regress one level up. (b) Kit-free growth (periodic motifs, the one-type cap): fewer types, but machines still need
+   position-specific parts with `@` sides, and those come from supply or from stamp pockets, (a). (c) Translation with
+   casting (a product in a notch beside three strand faces): a site touching three strand triangles needs the strand
+   to wrap round it (the triangle lattice's dual has no 3-cycles), the frame must step along the strand, and the
+   adaptors carry marks that no cast makes: several new rules, and it still needs a way to multiply the adaptors.
+   (d) A copier pocket holding a free template: needs a glue-agnostic hold, a read rule and a release (three rules),
+   and the free library parts are taken by growth sites before they are copied.
+3. **Locality check.** The copy blank reads only its one bonded partner: that partner's own type (glue and marks of
+   its three sides, a fixed property, not relayed state). Binding reads the partner's side and the free site, as every
+   binding does. The copy blank changes only its own type and its own bonds. Nothing counts or traverses.
+4. **Generality.** Any attached triangle with a free side is a template: ring cells (every cell of a one-row ring),
+   pocket parts while their sides are exposed, strand triangles (a strand's own triangles are the dockers of its
+   complement), door panels, roots with `&` seeds (a copied root starts a new bud). Cast products and strays are
+   copied too: selection must act on what a body exposes, and copying is regulated by the supply of copy blanks
+   (import doors).
+5. **What it replaces or makes removable.** Stamp casting (`'`) existed to make kit parts; copying makes them without a
+   pocket per type. Casting (K/k, `%`) makes dockers from blanks; a genome's dockers can be copied from the strands
+   themselves. Once feeding and docker supply are rebuilt on copying, `'`, `%` and the cast rule are candidates for
+   removal (a core-review question; not done here).
+
+Rule as built: a copy side `?` on a free triangle binds any free (unbonded, not spent) side of an attached triangle,
+whatever its glue (inert too), when its centre comes within `capture` of the site and the site is free; a free
+triangle with a copy side binds only by it (never by glue, dock or fill). In the same pass it takes its partner's type
+(side i+k takes the partner's side j+k, k = 0, 1, 2, where i, j are the bonded sides: the copy is the partner turned
+180 degrees about the shared edge) and lets go. Free triangles never bind each other, so only attached triangles are
+copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,

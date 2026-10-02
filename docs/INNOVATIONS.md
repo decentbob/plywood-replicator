@@ -6,6 +6,32 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-0136, explore)
+
+- **Contact copying (programmable synthesis, decided and built)** — works in isolation. The explore run compared part
+  templating, translation and kit-free growth through the core-change gate (IDEAS, decision; RULES, Core changes) and
+  chose the smallest templating: one mark, the copy side `?`. A copy blank (`-?-?-?`, a free triangle) binds by a copy
+  side to any free side of an attached triangle, whatever its glue, takes that triangle's whole type (the partner
+  turned about the shared edge: glues, marks, carried marks) and lets go in the same pass. No machine: the body is the
+  template. Unlike stamp pockets this closes the loop: any part on a body's surface, stamp casters included, can be
+  multiplied from one uniform blank type.
+  - **Ring from copies** (`node tri/demos.js imprint k 100000 runs`, world 36, 400 copy blanks, no free parts): a ring
+    (R = 3) grown one motif round on an anchor (root and 5 motif cells: one of each part, prepared, labelled) and a bare
+    anchor. Copies of the ring's cells and root complete the ring and start and complete a second ring on the bare
+    anchor: both closed in 3 of 4 worlds (closures 61353 / 51554, 33960 / 81267, 26388 / 36407 steps); world 3
+    stalled at 7 and 3 cells: one part type (an inner-facing cell) got a single copy before the blanks were spent
+    (blanks are used up in about 10000 steps, shared by whatever is exposed: anchors, roots and outer faces take most).
+    Control (`... c`, blanks without `?`): 6 cells, nothing copied (2 of 2 worlds).
+  - **Genome on copies** (`imprint k 30000 runs g`): a founder strand whose faces `aAaAaA` are their own reverse
+    complement and 200 copy blanks, no dockers or fills in supply. Copies of its face triangles are its dockers, copies
+    of its backs its fills: 10 / 15 / 12 / 8 free strands after 30000 steps (4 of 4 worlds); control `gc`: 1 strand.
+  - Pictures: ![imprint](pictures/imprint.png) ![imprint genome](pictures/imprint_genome.png)
+  - Limits (stated in the gate entry): only free sides are copied (5 of the lid pocket's 16 kit cells are enclosed when
+    complete; a closed ring's inner faces only from inside); everything exposed is copied, strays and anchors too; a
+    finite blank supply goes to whatever is exposed, not to what is needed.
+  - Enables: feeding a bud from copies of its parent's own parts and a genome that makes its own dockers, so kit parts
+    and casting pockets need no longer be food; a later core-review may remove stamp marks and casting.
+
 ## 2026-10-02 (autorun run 20261001-2235, build)
 
 - **Grown bud** — works (4 of 4 worlds). The bud ring is no longer prepared: it grows from free kit parts on a seed

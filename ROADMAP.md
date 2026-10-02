@@ -28,11 +28,17 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Offspring that lives alone | independent daughter cell | works prepared (4 of 4 worlds): the bud grows its own pocket from parts the parent holds, splits off, imports blanks through its own door and makes a whole genome copy | demo split o |
 | Grown bud: the bud ring grows on the parent's seed; its closing opens the doorway; fed cap; splits sealed | budding by growth | works (4 of 4 worlds): doors held shut by the lock signal of the bud's open wall sites, open once its last cell arrives, shut when its content is complete (no new rule) | structures.grownBud, demo budgrow |
 | Segregation: the bud catches a genome copy | chromosome segregation | works: anchor side `\|` catches a copy's seed (the strand placed flush as one body); the parent keeps its founder by its own anchor | sim.js anchor, demo split g |
+| Programmable synthesis: contact copying (copy side `?`): a copy blank touching a body becomes a copy of the touched part | templating (membrane heredity) | works in isolation: a ring grown one motif round closes and a second ring grows, from copy blanks only (3 of 4 worlds); a strand is copied from copies of its own triangles (4 of 4) | sim.js _copy, demo imprint |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 14 minutes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 19 minutes).
 
 ## Backlog (top first)
+
+0. **Organism on copies** (contact copying works in isolation, 2026-10-02). Feed the grown bud from copies of the
+   parent's parts (the parent's ring as the bud ring's template: same kit), dockers from copies of the genome; then ask
+   a core-review whether stamp marks (`'`) and casting can be removed. Exposure: only free sides are copied (enclosed
+   cells of a complete pocket are not; inside faces only from inside).
 
 1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`; see
    INNOVATIONS). Then: smaller pockets (fewer kit types, faster growth); several seeds per chain (`latGlue` backs);
