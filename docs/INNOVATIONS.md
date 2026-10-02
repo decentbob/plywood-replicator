@@ -25,16 +25,24 @@ not statistics.
     one copying starts from, pinned at the wall); (2) low-end anchor at the old corner place: splits, but the bud
     makes 0-2 releases (its strand lies along the wall); (3) no latch, an `&` hold two bonds from the anchor (openRange
     3): every cell hearing the anchor keeps its free side unspent and was copied, 190-210 wall copies before the split,
-    late catches (56000-151000).
-  - **Why the bud does not copy yet (measured, `DBGC=1`):** its strand starts (seed 1: three dockers bound by 100000
-    steps) and then waits for fills: the blanks are gone by about 80000 steps. After the split the food goes to
+    late catches (56000-151000); (4) the mirrored layout (opening and latch on the other side, anchor on D's
+    lower-right wall): 2 of 4 split, no copies; (5) "replicate before dividing": the mid-wall anchor without trigger,
+    its anchor side also a latch side (an unbonded latch side emits the lock signal, so the latch holds until it has
+    caught), and a second, triggering anchor 2 bonds from the latch cell: the first caught in 4 of 4, the second never
+    (no split in 200000 steps).
+  - **Why the bud does not copy yet (measured).** First, where the strand's backs face: caught by its low end, the
+    strand stands at 60 degrees to the wall with its backs towards the acute wedge (seed 1: back sites 0.58, 1.00 and
+    1.53 from the nearest wall cell centre, the first covered by a wall cell; faces 1.0-2.5). Backs there get no
+    copies, so fills are rare: the strand docks (seed 1 with weld glue: three dockers by 100000 steps) and waits. Even
+    while joined with food around (two-anchor variant below) the bud's strand got 0-3 releases in 100000+ steps.
+    Second, food (`DBGC=1`): the blanks are gone by about 80000 steps. After the split the food goes to
     (a) the two latch sides, freed and unspent (with weld glue: seed 1, 105 of 172 blanks; their copies glued into
     crystals on P, now inert), (b) copies of the anchor cell made before its catch: parts `W@|*` that glue-bind strand
     low ends `w` (5-17 per world) and are copied again from their free sides (30-80 copies), (c) most of all, P's copies
     outside, which keep copying (out: 50-100 copy events with 300 blanks; 170-270 with 600). With 600 blanks the bud
     still made at most one copy (seeds 1-4: 0 / 1 / 0 / 0): the bud's interior is a small sink beside many templates.
-  - Pictures: `docs/pictures/budpore_mid.png` (seed 1: catch mid-wall at 35000, frames then follow the bud; its strand
-    stands into the bud, docks start, no fills).
+  - Picture (seed 3: split at 60000 with 113 blanks left; the frames then follow the bud, which makes one copy of its
+    strand): ![budpore mid-wall](pictures/budpore_mid.png)
 
 ## 2026-10-02 (autorun run 20261002-1551, explore)
 
