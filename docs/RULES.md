@@ -268,6 +268,29 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
 
+### Generalization: an anchor catches a strand end whether or not the strand is being copied, 2026-10-02, autorun run 20261002-1551 (explore)
+1. **Capability and why the goal needs it.** Segregation on copies: a bud catches a copy of its parent's genome while
+   the parent is still copying from a steady blank supply, so the bud leaves with food around it and can copy its
+   genome after the split ("feeds it until it can live on its own"). Measured before the change (run 0921, `budpore`
+   world 3): 52-87 approaches of a strand end to D's anchor, every one while the strand was busy, 0 captures; with 300
+   blanks, 0 of 4 worlds split in 200000 steps. A strand end's seed was active only while the strand was not being
+   copied (busy relay 0) and its face was free; with blanks around, ends are idle only for moments.
+2. **Designs with the existing core that fail or cost.** Fewer blanks (the pair splits only once food is gone: 2 of 4
+   worlds with 150 blanks, the bud then has nothing to copy from); an anchor on the low end (busy covers the whole
+   strand, range 30); keeping blanks out of D (the shared opening feeds both; a second gap cuts a ring); scarce
+   dockers from a pocket (`split g`: works, but brings back casting).
+3. **Locality.** The anchor reads less than before: the end triangle's role (a strand end, from its own bonds), its
+   spare edge's glue (fixed type) and whether that edge is bonded (its own bond). It no longer reads the busy relay or
+   the end's face bond. Capture stays the labelled physics exception: the strand and anything bonded to it (a partial
+   copy docked on it) move as one body into a free flush place, all or nothing, along a clear path.
+4. **Generality.** Any anchor (`split g`, `split o`, `budgrow g`, `imprint`, `budpore`) catches whichever strand end
+   reaches it; seeds of strands for glue binding by free triangles keep both conditions (a kit growing on a strand
+   while it is copied would enclose dock sites).
+5. **What it replaces.** Two conditions of the anchor's seed test (busy 0, face free). Variants measured on `budpore`
+   (300 blanks, 200000 steps, seeds 1-4): without the busy condition only (face must be free): split in 2 of 4 worlds
+   while blanks remained (70000 with 100 left, 110000 with 71); without both: 3 of 4 (70000 / 100000 / 95000, with
+   100 / 81 / 83 blanks left). Chosen: both removed.
+
 ### Removal: a latch held by the open signal, 2026-10-02, autorun run 20261002-0721 (core-review)
 1. **Capability:** none lost. The branch "a latch holds a trigger while its triangle hears an open signal" was meant to
    keep a grown door shut until its wall is complete. 2. **Measured:** a coverage hook over every capability check (55
