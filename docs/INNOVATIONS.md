@@ -1,9 +1,9 @@
 # Innovation log (typed-triangle world)
 
 One entry per capability: what it is, the evidence, the picture, the command, what it enables. Newest first.
-Status: **works** (does what was intended in demos), **partial**, **not yet**. Pictures in `docs/pictures/` were
+Status: **works** (does what was intended in demos), **partial**, **not yet**. Pictures from before 2026-10-01 were
 made with the pre-port engine (experiments/, history before commit `cac79c9`, same rules); `node tri/demos.js NAME`
-reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
+reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
 ## 2026-10-02 (autorun run 20261002-1551, explore)
@@ -143,7 +143,7 @@ not statistics.
     anchor site every 20 steps (world 3, 60000 steps): 52-87 approaches, all while the strand was busy (busy 26-30),
     0 capture attempts. A strand's seed is active only while it is not being copied; with blanks around, a blank
     touching a face becomes a docker beside it and zip docks the high end first, so ends are idle only for moments.
-    `split g` catches because its dockers come only from P's pocket. Core change candidate in docs/NEXT.md.
+    `split g` catches because its dockers come only from P's pocket. Core change candidate, built in run 1551 (RULES, Core changes).
   - **Tried and removed, `split ... qp`** (pores in run 0236's `split q`): the `&` pairs that hold a pair lie on both
     sides of its doorway (P's doorstop and pairs left, D's hinge, doorstop and a pair right), joined only round D, so
     D's anchor needed open range 27 (two anchors: 11); every wall cell in range keeps its free side and outside blanks
@@ -170,7 +170,7 @@ not statistics.
     `imprint-cell-n`. Picture: ![imprint cell](pictures/imprint_cell.png)
   - Limits: a finite batch: blanks are spent in about 2000 steps; dockers come out unbalanced (`a` against `A`) and a
     copy waiting for a missing docker type stays paired with its template for good. Blanks cannot be imported (a copy
-    blank binds only by its copy side, so no key catches it): NEXT, core change candidate.
+    blank binds only by its copy side, so no key catches it): a core change candidate, found not needed in run 0921 (a pore with spent walls feeds a cell).
   - Enables: a bud that copies its genome after the split without a pocket (it is complete then, so its walls are
     spent); food for the genome is one uniform blank type.
 - **Bud pair on copies (`split ... q`)** — partial: 1 of 4 worlds. `split` with the genome above and 70 copy blanks
@@ -181,7 +181,7 @@ not statistics.
   crowded by 70 free copies). P's anchor `W@|` emits the open signal too until it holds a strand (it held none), so
   only 3 of 134 wall cells were spent; with a plain `W|` (tried, 4 worlds, removed) 60 of 134 are spent, P makes 2-4
   strands and strands enter D in 3 worlds, but D's anchor caught none (0 of 4 split; not diagnosed). Command: `node tri/demos.js split k 150000
-  runs q`. Picture (world 4): `docs/pictures/split_copies.png`.
+  runs q` (variant removed 2026-10-02, cleanup run 1821, superseded by `budpore`; code in git at `c11ed14`). Picture (world 4): `docs/pictures/split_copies.png`.
   Tried on the way (each 4 worlds): (a) RP 9 and 140 blanks, plain walls: the walls took 65-70% of the copies, copies
   stall, no anchoring; (b) a pore in P's wall and 400 blanks outside: all 400 were spent on the rings' outer walls,
   none got in; (c) `&` walls with glue-agnostic fills: copies of `&` wall cells became fills and were cut when their
@@ -402,7 +402,7 @@ not statistics.
   late organelle is safe but slow (parts must find the pore); roots inside the parent waste parts and trap copies;
   supply of unique parts limits the number of cells. Picture: `docs/pictures/birth.png` (world 3 at 2.6M steps: parent
   cell with organelle and copies, free copies above, the offspring's started wall). Long runs continue with
-  `TRI_RESUME`. `node tri/demos.js birth 3 900000 runs`.
+  `TRI_RESUME`. `node tri/demos.js birth 3 900000 runs` (demo removed 2026-10-02, cleanup run 1821; code in git at `c11ed14`).
 - **Heritable factory cycle on rigid physics** — works (third generation in 2 of 3 worlds by 150000 steps). Founder
   `aaaaa` with seed `y`; two pocket kits in the supply: P_y casts blanks into dockers `Az-`, P_z casts `ay-`; fills
   `Z--`/`Y--` (latGlue), blanks 60. The founder grows P_y (complete at 35000-40000) and casts `Az-`; its copies
@@ -616,13 +616,13 @@ not statistics.
   type exposing nothing ends it. Dockers carry the seeds on their side edges, so copies show them again. The shell
   pattern 222112 (mirrored at the far end), 12 of each type in supply: both founder ends grew their planned
   7-triangle arm in 20k steps; copy fragments grew arms too; copying was slow (5 docks).
-  `node tri/demos.js arms 1 20000 runs 222112`. Picture: `docs/pictures/typed_arms.png`.
+  `node tri/demos.js arms 1 20000 runs 222112` (demo removed 2026-10-02, cleanup run 1821; code in git at `c11ed14`). Picture: `docs/pictures/typed_arms.png`.
 - **Airlock with interlock (user: a double lock)** — partial. One-row ring with a lock: inner door, two-cell
   chamber, outer door; pulse doors (a key opens, is let go, the door swings and re-latches); a lock signal from an
   unlatched door makes the other door ignore its key. Without the interlock both doors opened together and the ring
   tore; with it, in 30k steps the doors never stood open together and the ring kept its shape. Not yet: no key got
   through (it is pushed away by the opening door; a lock is not a pump).
-  `node tri/demos.js airlock 1 30000 runs 24`. Picture: `docs/pictures/airlock.png`.
+  `node tri/demos.js airlock 1 30000 runs 24` (demo removed 2026-10-02, cleanup run 1821; code in git at `c11ed14`). Picture: `docs/pictures/airlock.png`.
 - **No tunnelling (user: jumping single walls is a bug)** — works. Kicks reached 1.8 against a 0.87 wall; a body
   whose centre path enters a block of another structure is moved 1/2, 1/4 of the way or not at all. One-row ring:
   141 crossings in 3k steps before, 0 in 6k after; two-row ring 0 in 8k. Costs: copying and catching slower
@@ -644,7 +644,7 @@ not statistics.
 - **Hatch casting pocket** — works. Two fixed casters with close-only recognition sides and a hinged hatch: the hatch
   waits open, catches a target, swings it into the centre, the cast happens, the hatch reopens; 20 casts in 3 x 4k
   steps before the tunnelling fix, all through the hatch. Weakness: the carried target presses on a caster during
-  the swing, which then completes only with lucky jostling. `node tri/demos.js pocket 1 4000 runs`.
+  the swing, which then completes only with lucky jostling. `node tri/demos.js pocket 1 4000 runs` (demo removed 2026-10-02, cleanup run 1821; code in git at `c11ed14`).
   Picture: `docs/pictures/hatch_cycle.png`.
 - **Casting** — works. A triangle glue-bonded on all three sides to activated casters takes their instruction glues
   and lets go: a permanent, in-simulation type change, general (any type) and rare by chance (needs a frame).

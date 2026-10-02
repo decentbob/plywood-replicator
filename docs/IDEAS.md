@@ -147,3 +147,43 @@ into a C while it is open, hence airlocks.
 - Fixed blocks in the environment (immovable obstacles) would let directed movement evolve (grip, crawl).
 - In closed, material-limited worlds a part's cost so far outweighed its benefit (earlier triangle-chain batches):
   parts need supply that machines make, or an environment that pays for them.
+
+## Pitfalls from the casting lineage (moved from docs/NEXT.md, cleanup run 20261002-1821)
+
+Design lessons from kits, pockets, doors and flaps (the casting lineage, frozen since run 20261002-1751). The pitfalls
+for current work stay in docs/NEXT.md.
+
+- **Kit races** (`structures.kitRace`): a cell whose every side may face a non-descendant (or a slot) is lost for good
+  if that neighbour arrives first; kit depth does not order arrival. The lid pocket's cell beside the slot is a leaf of
+  every kit tree. Raise the supply of race cells (3x completed the grown pocket in 4 of 4 worlds).
+- **A latch-cut closure re-closes**: two sides that stay flush close again next step (no `&` on a closure is possible:
+  closures never form on `&` sides). Cut what must stay apart with `&` on a bond formed by binding a free part.
+- **A grown flap hangs by its hinge only**: any second bond of the panel to the ring locks it. Its far end must move
+  away from its neighbour when it swings (down-triangle far end, up-triangle neighbour for a panel swinging up).
+- **Food in a kit site.** A blank whose glue complements casters' close-only instruction sides closes into an empty
+  caster site of a growing pocket (two `U.` sides facing it) and blocks it for good. Keep a pocket's target blanks away
+  until the pocket is complete (the bud gets `uuu` only through its own door, after the split).
+- **Narrow kit sites.** A kit cell with a side on a wall can be entered only through one side once its parent is
+  there; it stalled 2 of 4 bud pockets. `budPair` avoids such placements; check new layouts for them (the risk count
+  in `structures.kit` does not see walls).
+- **TRI_RESUME and `split`**: the demo places its prepared parts and food after `createWorld` has loaded the saved
+  state, so a resumed `split` world is scrambled (and the genome variant may throw "prepared parts overlap"). Rerun from
+  t=0 instead (a 200000-step world takes about 2 minutes).
+- **A ring with two open doors falls apart** (two gaps make two rigid pieces). Interlock the doors of one ring: an
+  unbonded latch side emits the lock signal and other latches hold while they hear it (raise `lockRange` for big
+  rings). Seen in the bud: its import door opened before its closing door had shut.
+- **Order of parts on one genome.** Pocket and membrane grow at once from the chain's two seeds; the open signal keeps
+  the pocket idle and the membrane attached until both are complete. Tried and reverted: "a seed binds only while the
+  strand hears no open signal" (one part at a time): a finished pocket then went live before any membrane, copying
+  started outside, and a strand being copied exposes no seed, so the membrane never began. Remaining race: if the
+  membrane closes before the pocket's last cell arrives, that site is inside and the cell is stuck (seen in 2 of 4
+  worlds with a poor pocket supply).
+- **Catchers in kits.** A target caught before a neighbouring caster arrives closes that caster's cell off; let only
+  the caster whose cell borders the frame catch (lid pocket catcher 'B').
+- A flap turning about a corner sweeps its far corner 13% past the chord: a carried target jams against a fixed
+  neighbour across its far edge. Close lids onto a target instead of carrying the target (lid pocket).
+- Kits: every functional pair (activator `%` pairs, instruction holders) must be a close-only closure or a unique activator glue (`%`);
+  otherwise free kit cells, products or dockers stick at the wrong place. Free parts must bind only by `@`.
+- Dockers used as fills expose their side glues on hidden backs: use `latGlue` with dedicated fill types when dockers
+  carry seeds.
+- A latch must stay released while its door opens; any doorway makes a 2D ring a C (use airlocks).
