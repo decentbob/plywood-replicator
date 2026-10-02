@@ -2,6 +2,14 @@
 
 State on 2026-10-02 (after autorun run 20261002-1050, harden). Read AGENTS.md first (rules of work), then this file.
 
+**Current slice (autorun run 20261002-1351, build): the grown bud catches a genome copy.** Combine `budgrow` (the bud
+ring grows on the parent's seed) with `split g`'s content (the parent holds the founder `aaaa` on its anchor `W|` and a
+stamp pocket casting its dockers `Ay.z`; the bud's anchor `Z@|` emits the open signal until it catches a copy's high
+end `z`). The anchor replaces the cap on an early wall-front cell (the open signal during growth), in the middle of a
+flat wall, its strand clear of both door sweeps. No core change. Done when `node tri/demos.js budgrow k 300000 runs g`
+splits with a copy anchored in the bud and both doors shut in 3 of 4 worlds; then check `budgrow-g`. Stop after about
+4 hours; if the anchor cannot sit early on the wall front, record why and the next layout to try.
+
 **Handoff status (autorun run 20261002-1050, harden).** Everything committed on branch `claude/autorun-20261002-1050`
 and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: 33 of 33 pass in 1713 s (grown reported partial; lid and grow now 4 worlds; imprint 200000 steps).
 No current slice.
