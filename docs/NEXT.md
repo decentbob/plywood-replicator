@@ -3,6 +3,12 @@
 State on 2026-10-02 (after autorun run 20261002-2150, harden). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
+**Current slice (autorun run 20261002-2321, build): M2 on `budpore`, D's anchor chosen by where the caught strand's
+backs face.** Goal: one full copy of the bud's strand (4 releases) in 3 of 4 worlds (seeds 1-4, 300 blanks, 200000
+steps), before or after the split, with the split kept (check `budpore`). Steps: dry-run the capture on every inner
+side of D (`BUDDRY=1`), run the best sides (`BUDA=cell:side`), then the founder's mirror if no side has open backs.
+Stop: if no placement gives 3 of 4, record the measurements and the next design (replicate before dividing).
+
 **Handoff status (autorun run 20261002-2150, harden).** Everything committed on branch `claude/autorun-20261002-2150`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (`grown`
 partial as before; `imprint-pore` 3 of 4, seed 2 as recorded since run 1551; run as six groups after a container
