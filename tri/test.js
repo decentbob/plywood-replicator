@@ -185,6 +185,31 @@ test('physics: a body longer than half the world keeps its shape (offsets unwrap
   const s=new TriSim({W:14,H:14,seed:4},B.length);buildStructure(s,B.map((_,k)=>k),B,7,7,0.4);s.derive();s.run(300);let worst=0;
   for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0)worst=Math.max(worst,s.flushGap(u,i,(q/3)|0,q%3));}
   assert.ok(worst<1e-6,'bonds stay flush (worst gap '+worst+')');});
+test('locality: release reads its chain partners\' fill state from the previous pass (one bond per pass)',()=>{
+  // U (1) docked on T (0), prev partner P (2, docked on 3), next partner Y (6, docked on 7); P's prev is a fill W (4)
+  const {PREV,NEXT}=require('./sim');const s=new TriSim({W:40,H:40,seed:1},8);for(let u=0;u<8;u++){s.setType(u,'a--');s.px[u]=3*u+2;s.py[u]=5;}
+  const B=(u,i,ku,v,j,kv)=>{s.link(u,i,v,j);s.bkind[u*3+i]=ku;s.bkind[v*3+j]=kv;};
+  B(0,0,TFACE,1,0,FACE);B(3,0,TFACE,2,0,FACE);B(7,0,TFACE,6,0,FACE);B(1,1,PREV,2,2,NEXT);B(1,2,NEXT,6,1,PREV);B(2,1,PREV,4,0,NEXT);s.fill[4]=1;s.fn[2]=1;   // P exposed the fill in the previous pass
+  s.chemistry();assert.ok(s.bond[3]>=0,'U holds its face while P has a fill beside it');
+  B(4,1,PREV,5,0,NEXT);s.chemistry();assert.ok(s.bond[3]>=0,'the fill completed this pass: U hears it one pass later');
+  s.chemistry();assert.ok(s.bond[3]<0,'U lets go in the next pass');s.derive();assert.ok(s.refr[1]===1||s.busy[1]===0,'released U is refractory');});
+test('copy side: only a triangle bonded by its copy side alone takes its partner\'s type',()=>{
+  const s=new TriSim({W:40,H:40,seed:1},3);s.setType(0,'abc');s.setType(1,'a?-x');s.setType(2,'X--');for(let u=0;u<3;u++){s.px[u]=3*u+2;s.py[u]=5;}
+  s.link(0,0,1,0);s.bkind[0]=GLUE;s.bkind[3]=GLUE;s.link(1,2,2,0);s.bkind[5]=GLUE;s.bkind[6]=GLUE;s.chemistry();
+  assert.equal(s.typeName(1),'a?-x','an attached triangle with a copy side is no copy blank');assert.ok(s.bond[3]>=0);
+  s.cut(1,2);s.chemistry();assert.equal(s.typeName(1),'abc','bonded by its copy side alone it copies (the partner turned about the shared edge)');});
+test('conservation: blocks stay in play, types change only by cast and copy (lid pocket, copy blanks)',()=>{
+  const {triDepth}=require('./physics');
+  const {s}=createWorld({seed:2,size:14,structures:[{tris:S.lidPocket('bcd','A'),x:7,y:7}],supply:{'aaa':12,'---':10,'-?-?-?':8}});
+  const before=[...Array(s.n).keys()].map(u=>s.typeName(u));s.run(3000);
+  let changed=0,worst=0;const A=new Float64Array(6),B=new Float64Array(6);
+  for(let u=0;u<s.n;u++){assert.ok(Number.isFinite(s.px[u])&&Number.isFinite(s.py[u])&&Number.isFinite(s.pa[u]),'block '+u+' left play');
+    assert.ok(s.px[u]>=0&&s.px[u]<s.p.W&&s.py[u]>=0&&s.py[u]<s.p.H,'block '+u+' outside the torus');if(s.typeName(u)!==before[u])changed++;
+    for(let v=u+1;v<s.n;v++){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+      for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}worst=Math.max(worst,triDepth(A,B));}}
+  assert.ok((s.ev.cast||0)>=1&&(s.ev.copy||0)>=1,`casts ${s.ev.cast} copies ${s.ev.copy}`);
+  assert.ok(changed<=(s.ev.cast||0)+(s.ev.copy||0),`${changed} types changed, ${s.ev.cast} casts + ${s.ev.copy} copies`);
+  assert.ok(worst<1e-3,`overlap ${worst}`);symmetric(s);});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

@@ -79,10 +79,12 @@ class TriSim extends Physics{
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
     const nb0=this.nb.slice(),gap0=this.gap.slice(),need0=this.need.slice(),busy0=this.busy.slice(),lb0=this.lockBusy.slice(),zip0=this.zip.slice(),sg0=this.sg.slice(),op0=this.op.slice();
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
-    // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond (refractory)
-    for(let u=0;u<n;u++){let b=0;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
-        if(k===FACE||k===TFACE)b=BUSY;else if(k===PREV||k===NEXT)b=Math.max(b,busy0[P(u,i)]-1);}
-      this.busy[u]=b;if(this.refr[u]&&b===0)this.refr[u]=0;}
+    // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond. Refractory: a
+    // triangle that had a face bond in the previous pass (busy BUSY) and has none now was released; it stays
+    // refractory (takes no dock) until the busy relay around it is 0
+    for(let u=0;u<n;u++){let b=0,face=false;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
+        if(k===FACE||k===TFACE){b=BUSY;face=true;}else if(k===PREV||k===NEXT)b=Math.max(b,busy0[P(u,i)]-1);}
+      if(busy0[u]===BUSY&&!face)this.refr[u]=1;this.busy[u]=b;if(this.refr[u]&&b===0)this.refr[u]=0;}
     // nb: my next partner is a back; gap: hidden backs after a face (0,1,2); need: fills still to place after a docked/fill
     for(let u=0;u<n;u++){const r=R[u];this.nb[u]=0;this.gap[u]=-1;this.need[u]=0;
       if(r.role===SFACE||r.role===SBACK){const nx=r.next>=0?P(u,r.next):-1;
@@ -215,21 +217,23 @@ class TriSim extends Physics{
     const n=this.n,p=this.p,P=(u,i)=>this.partner(u,i);
     // fills become ordinary strand triangles once they have both chain bonds
     for(let u=0;u<n;u++)if(this.fill[u]){const e=this._edges(u);if(e.prev>=0&&e.next>=0)this.fill[u]=0;}
-    // fn (exposed, after this pass's bonding): I am a fill, or a fill is bonded to me by a chain bond
-    for(let u=0;u<n;u++){let f=this.fill[u];for(let i=0;i<3&&!f;i++){const q=this.bond[u*3+i];if(q<0)continue;const k=this.bkind[u*3+i];if((k===PREV||k===NEXT)&&this.fill[(q/3)|0])f=1;}this.fn[u]=f;}
-    // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face
+    // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face (the
+    // partners' fn from the previous pass; both ends become refractory in the next derive)
     for(let u=0;u<n;u++){const e=this._edges(u);if(e.face<0)continue;const t=P(u,e.face),rt=this.roles(t);
       const done=i=>!this.fn[P(u,i)];   // my chain partner exposes that neither it nor its chain neighbours are fills
       const pOK=e.prev>=0?done(e.prev):rt.next<0,nOK=e.next>=0?done(e.next):rt.prev<0;
-      if(pOK&&nOK){this.refr[u]=1;this.refr[t]=1;this.cut(u,e.face);this.count('release');}}
+      if(pOK&&nOK){this.cut(u,e.face);this.count('release');}}
+    // fn (exposed for the next pass): I am a fill, or a fill is bonded to me by a chain bond
+    for(let u=0;u<n;u++){let f=this.fill[u];for(let i=0;i<3&&!f;i++){const q=this.bond[u*3+i];if(q<0)continue;const k=this.bkind[u*3+i];if((k===PREV||k===NEXT)&&this.fill[(q/3)|0])f=1;}this.fn[u]=f;}
     this._loose();
     for(let u=0;u<n;u++)if((this.fill[u]||this.cg[u])&&!this.bonded(u)){this.fill[u]=0;this.cg[u]=0;}   // a free triangle keeps no chain or caught state
     this._copy();this._cast();this._light();
   }
-  // contact copying: a triangle bonded by a copy side '?' takes its partner's type (side i+k takes the partner's side
-  // j+k, i and j the bonded sides: the partner turned about the shared edge; glues, marks and carried marks) and lets go
+  // contact copying: a triangle bonded by a copy side '?' and by nothing else (a copy blank that bound this pass) takes
+  // its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the partner turned about the
+  // shared edge; glues, marks and carried marks) and lets go
   _copy(){const A=['glue','hinge','cOnly','rel','trg','ltc','fuel','hear','wide','act','att','done','anc','cpy','carry'];
-    for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||!this.cpy[u*3+i])continue;
+    for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0||!this.cpy[u*3+i]||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
       const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
       for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
       for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u)]);break;}}
