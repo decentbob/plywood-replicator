@@ -13,6 +13,7 @@
 const {Physics}=require('./physics');
 const PREV=1,NEXT=2,FACE=3,TFACE=4,GLUE=5;                      // bond kinds (per bond end)
 const FREE=0,SFACE=1,SBACK=2,DOCKED=3,GROWN=4;                  // roles (derived from bonds)
+const R_FREE=Object.freeze({role:FREE}),R_GROWN=Object.freeze({role:GROWN});   // shared role records (never changed)
 const BUSY=30;                                                  // range of the busy relay (bonds)
 const m3=x=>((x%3)+3)%3;
 const SNAP0=-Math.PI/3;   // angle of rest corner 0 (physics REST)
@@ -68,9 +69,9 @@ class TriSim extends Physics{
   // role and role edges: a strand triangle's free edge is a face if next = prev+1 (counter-clockwise), else a hidden
   // back; strand ends are faces with one inert (spare) edge; a docked triangle has prev f+1 and next f+2; a fill
   // attached by its next edge n has prev n+1 until its second chain bond forms
-  roles(u){const e=this._edges(u);
+  roles(u){if(this.bond[u*3]<0&&this.bond[u*3+1]<0&&this.bond[u*3+2]<0)return R_FREE;const e=this._edges(u);
     if(e.face>=0)return {role:DOCKED,prev:m3(e.face+1),next:m3(e.face+2),free:-1,face:e.face};
-    if(e.prev<0&&e.next<0){for(let i=0;i<3;i++)if(this.bond[u*3+i]>=0&&this.bkind[u*3+i]===GLUE)return {role:GROWN};return {role:FREE};}
+    if(e.prev<0&&e.next<0){for(let i=0;i<3;i++)if(this.bond[u*3+i]>=0&&this.bkind[u*3+i]===GLUE)return R_GROWN;return R_FREE;}
     if(e.prev>=0&&e.next>=0)return {role:e.next===m3(e.prev+1)?SFACE:SBACK,prev:e.prev,next:e.next,free:3-e.prev-e.next};
     if(e.next>=0&&this.fill[u])return {role:SBACK,prev:m3(e.next+1),next:e.next,free:m3(e.next+2),fill:true};
     if(e.next>=0)return {role:SFACE,prev:-1,next:e.next,free:m3(e.next+1),inert:m3(e.next+2)};

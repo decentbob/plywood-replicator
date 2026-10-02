@@ -67,7 +67,7 @@ class Physics{
   _gauss(){if(this._spare===this._spare){const g=this._spare;this._spare=NaN;return g;}
     let x,y,q;do{x=2*this.rng()-1;y=2*this.rng()-1;q=x*x+y*y;}while(q>=1||q===0);const f=Math.sqrt(-2*Math.log(q)/q);this._spare=y*f;return x*f;}
   // ---- geometry of one block
-  resetShape(u){const c=Math.cos(this.pa[u]),s=Math.sin(this.pa[u]);for(let k=0;k<3;k++){const [x,y]=REST[k];this.ox[u*3+k]=c*x-s*y;this.oy[u*3+k]=s*x+c*y;}}
+  resetShape(u){const c=Math.cos(this.pa[u]),s=Math.sin(this.pa[u]);for(let k=0;k<3;k++){const x=REST[k][0],y=REST[k][1];this.ox[u*3+k]=c*x-s*y;this.oy[u*3+k]=s*x+c*y;}}
   rigidMove(u,dx,dy,da){this.px[u]+=dx;this.py[u]+=dy;if(da!==0){this.pa[u]+=da;this.resetShape(u);}}
   angle(u){return Math.atan2(this.oy[u*3],this.ox[u*3]);}   // orientation read from the corners (rest corner 0 is at -60 degrees)
   outline(u,x=0,y=0){return [0,1,2].map(k=>[x+this.ox[u*3+k],y+this.oy[u*3+k]]);}
@@ -94,7 +94,8 @@ class Physics{
     this._gx=gx;this._gy=gy;this._cw=W/gx;this._ch=H/gy;this._all=gx<3||gy<3;
     if(!this._cells||this._cells.length!==gx*gy)this._cells=Array.from({length:gx*gy},()=>[]);else for(const c of this._cells)c.length=0;
     if(!this._cellOf||this._cellOf.length!==this.n)this._cellOf=new Int32Array(this.n);
-    for(let u=0;u<this.n;u++){const c=this._cellAt(this.px[u],this.py[u]);this._cellOf[u]=c;this._cells[c].push(u);}}
+    const px=this.px,py=this.py,cw=this._cw,ch=this._ch,cells=this._cells,cellOf=this._cellOf;
+    for(let u=0;u<this.n;u++){const x=px[u],y=py[u],c=Math.min(gy-1,Math.floor((((y%H)+H)%H)/ch))*gx+Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw));cellOf[u]=c;cells[c].push(u);}}
   _cellAt(x,y){return Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch))*this._gx+Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw));}
   _regrid(u){const c=this._cellAt(this.px[u],this.py[u]),o=this._cellOf[u];if(c===o)return;const L=this._cells[o],k=L.indexOf(u);if(k>=0)L.splice(k,1);this._cells[c].push(u);this._cellOf[u]=c;}
   // visit blocks whose centres may lie within reach of (x, y)
@@ -139,7 +140,8 @@ class Physics{
     // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
     if(blocked>0)for(let b=0;b<this.p.bisect;b++){const g=(f+blocked)/2;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0)blocked=g;else f=g;}
     // an overlapping (or touching) set may take a move that reduces its overlap, only one too short to pass a wall
-    if(f===0&&tried){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
+    // (the early check finds a set that overlaps nothing, the usual case, without summing over all its blocks)
+    if(f===0&&tried&&this._overlap(list,rx,ry,cx,cy,0,0,0,st,true)>0){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
     if(f===0)return 0;
     const c=Math.cos(f*da),s=Math.sin(f*da);
     for(let q=0;q<k;q++){const u=list[q];this.px[u]=this._wx(cx+c*rx[q]-s*ry[q]+f*tx);this.py[u]=this._wy(cy+s*rx[q]+c*ry[q]+f*ty);
@@ -152,29 +154,35 @@ class Physics{
     return this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true);}
   // a lone block's two trials (move, then turn about its centre), with tryMove's rules (direct move, sub-steps,
   // bisection, overlap-reducing moves) but against its neighbours gathered once (most cost is blocked trials)
-  _single(u,tx,ty,da){const {px,py,ox,oy}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.hypot(tx,ty);
+  _single(u,tx,ty,da){const {px,py}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.hypot(tx,ty);
     SKIN.v=Math.max(TOUCH,p.skin);const r=2*R3+tl+1e-6,R2=r*r,nb=this._nb||(this._nb=[]);nb.length=0;
     // grid cells within reach r of the start (a block near its cell's edge reaches past the 3 x 3 cells around it)
-    const gx=this._gx,gy=this._gy,cells=this._cells,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/this._cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/this._ch),(gy-1)>>1);
-    for(let b=-kb;b<=kb;b++)for(let a=-ka;a<=ka;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
-      for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}
-    // depth of u at centre (x, y) turned by angle t from its current shape; early: true at the first overlap
-    const depth=(x,y,t,early)=>{const c=Math.cos(t),s=Math.sin(t);let built=false,sum=0;
-      for(let k=0;k<nb.length;k++){const v=nb[k];let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
-        const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;if(early&&d2<IN2)return 1;
-        if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
-        const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}
-      return sum;};
-    // one trial: translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
-    const trial=(xs,ys,mx,my,t)=>{const dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t)),at=g=>depth(xs+g*mx,ys+g*my,g*t,true);
-      const tried=dist<=p.direct;let f=0;if(tried&&at(1)===0&&(dist<=p.subStep||at(0.5)===0))return 1;
-      const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
-      for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||at(g)>0){blocked=g;break;}f=g;}
-      if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(at(g)>0)blocked=g;else f=g;}
-      if(f===0&&tried){const d0=depth(xs,ys,0,false);if(d0>0&&depth(xs+mx,ys+my,t,false)<d0-EPS)f=1;}
-      return f;};
-    let f=trial(x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
-    f=trial(px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/ch),(gy-1)>>1);
+    // a cell whose nearest point lies r or more from the start holds no neighbour: skipped (only where the cells
+    // scanned span less than half the torus, so direct offsets are minimum images; the start's place in its cell)
+    const fx=x0-cx*cw,fy=y0-cy*ch,cut=!all&&gx>=2*ka+4&&gy>=2*kb+4&&fx>=0&&fx<=cw&&fy>=0&&fy<=ch,R2c=R2+1e-9;
+    for(let b=-kb;b<=kb;b++){const gb=b>0?b*ch-fy:b<0?fy-(b+1)*ch:0,gb2=gb>0?gb*gb:0;if(cut&&gb2>=R2c)continue;let row=cy+b;row=(row<0?row+gy:row>=gy?row-gy:row)*gx;
+      for(let a=-ka;a<=ka;a++){if(all&&(a||b))continue;if(cut){const ga=a>0?a*cw-fx:a<0?fx-(a+1)*cw:0;if(ga>0&&ga*ga+gb2>=R2c)continue;}
+        let col=cx+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;const L=all?null:cells[row+col],m=all?this.n:L.length;
+        for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}}
+    let f=this._strial(u,x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
+    f=this._strial(u,px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
+  // depth of lone block u at centre (x, y) turned by angle t from its current shape, against its gathered neighbours;
+  // early: true at the first overlap
+  _sdepth(u,x,y,t,early){const {px,py,ox,oy}=this,nb=this._nb,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2,c=Math.cos(t),s=Math.sin(t);let built=false,sum=0;
+    for(let k=0;k<nb.length;k++){const v=nb[k];let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
+      const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;if(early&&d2<IN2)return 1;
+      if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
+      const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}
+    return sum;}
+  // one trial of lone block u from (xs, ys): translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
+  _strial(u,xs,ys,mx,my,t){const p=this.p,dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t));
+    const tried=dist<=p.direct;let f=0;if(tried&&this._sdepth(u,xs+mx,ys+my,t,true)===0&&(dist<=p.subStep||this._sdepth(u,xs+0.5*mx,ys+0.5*my,0.5*t,true)===0))return 1;
+    const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
+    for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._sdepth(u,xs+g*mx,ys+g*my,g*t,true)>0){blocked=g;break;}f=g;}
+    if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(this._sdepth(u,xs+g*mx,ys+g*my,g*t,true)>0)blocked=g;else f=g;}
+    if(f===0&&tried&&this._sdepth(u,xs,ys,0,true)>0){const d0=this._sdepth(u,xs,ys,0,false);if(d0>0&&this._sdepth(u,xs+mx,ys+my,t,false)<d0-EPS)f=1;}
+    return f;}
   // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
   _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,n=this.n;
     // bodies: a lone block is its own body (no list allocated); bonded blocks are grouped by a search through bonds
@@ -198,10 +206,10 @@ class Physics{
   _pairs(){const reach=2*R3+this.p.pairTol*SIZE+EPS,r2=reach*reach,out=this.pairs,cand=[],{px,py}=this,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2;out.length=0;
     const gx=this._gx,gy=this._gy,cells=this._cells,cellOf=this._cellOf,all=this._all;
     // only pairs with a bonded block (free blocks never bind each other): scan around bonded blocks only
-    const bd=u=>this.bond[u*3]>=0||this.bond[u*3+1]>=0||this.bond[u*3+2]>=0;
-    for(let u=0;u<this.n;u++){if(!bd(u))continue;cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
+    const bond=this.bond;
+    for(let u=0;u<this.n;u++){if(bond[u*3]<0&&bond[u*3+1]<0&&bond[u*3+2]<0)continue;cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
       for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
-        for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u||(v<u&&bd(v)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
+        for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u||(v<u&&(bond[v*3]>=0||bond[v*3+1]>=0||bond[v*3+2]>=0)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
       if(cand.length>1)cand.sort((a,b)=>a-b);for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
     return out;}
   physics(){this.gridSync();this._jostle();this._pairs();}

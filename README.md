@@ -13,7 +13,7 @@ goal is an organism that builds and feeds its offspring until it can split off.
 ```
 node tri/test.js                        # fast checks
 node tri/demos.js imprint 1 100000 runs 150p  # a cell fed through a pore copies its genome from blanks outside
-node tri/check.js                       # one PASS/FAIL line per working capability (~40 min)
+node tri/check.js                       # one PASS/FAIL line per working capability (~30-40 min)
 ```
 Pictures appear in `runs/` (needs Chromium; see tri/render.js). Plain Node.js, no dependencies.
 

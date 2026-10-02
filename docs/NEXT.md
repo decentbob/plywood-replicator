@@ -1,7 +1,26 @@
 # Next instance: start here
 
-State on 2026-10-02 (after autorun run 20261002-1921, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-02 (after autorun run 20261002-2150, harden). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
+
+**Handoff status (autorun run 20261002-2150, harden).** Everything committed on branch `claude/autorun-20261002-2150`
+and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (`grown`
+partial as before; `imprint-pore` 3 of 4, seed 2 as recorded since run 1551; run as six groups after a container
+restart, 31 minutes in all). **Done (slice: speed, Direction priority 5; target only partly met):**
+- *Bug fixed:* `imprint 60m`/`150p` crashed on main since d91de57 (`split is not defined`: a `budpore` report suffix
+  pasted into `imprintCell`'s report), so the checks imprint-cell, imprint-pore and their controls failed.
+- *Speed, same results:* demo outputs are byte-identical to main on 12 short runs of 10 demos (`runs/bench.sh <repo>
+  <out>` in this run's container: budpore 1-2, imprint 150p/60m/default, split o, budgrow g, cells 36, live 6x2,
+  grow 12, cycle, lid). Changes: a lone block's neighbour gather skips grid cells out of reach and its trials are
+  methods, not per-call closures; `gridSync` and `_pairs` inline their loops; free and grown triangles share one frozen
+  role record; a blocked move checks overlap early before summing it; `budPair`'s doorstop search skips lattice slots
+  away from the open panel and `sweepClear` flattens fixed cells once (`split o` setup 31 s -> 1.5 s, `split g` 6 s ->
+  0.5 s). Short runs 1.1-1.25x faster; `budpore` 1.1x (check worlds about 220 s, were about 270 s). The 1.5x target
+  for `budpore` was not met: after these changes no single spot is worth more than 20% (lone-block `_single` 40%
+  inclusive, of which the gather loop about 11%; ring moves `tryMove` 14%; `_pairs` 9%; `formBonds` 7%; `gridSync` 6%;
+  `derive` 5%). Next speed step, if one is wanted: a lone block's gather visits about 22 grid cells to find 2
+  neighbours (cell 1.4, reach about 1.7); a grid kept per step as flat arrays (counting sort) would cut the per-cell
+  cost, but neighbour order changes the order of overlap sums, so outputs would need re-checking, not byte comparison.
 
 **Handoff status (autorun run 20261002-1921, build).** Everything committed on branch `claude/autorun-20261002-1921`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js budpore` passes 4 of 4
@@ -25,7 +44,7 @@ running anything, dry-run the capture for each inner wall side of D within the h
 larger `sigRange` passed as a parameter, if the best sides are farther): place a strand by its low end `w` with
 `_snapBody` (as the founder is placed on P's anchor) and measure each back site's distance to the nearest wall cell;
 keep sides whose back sites are all clear (more than about 1.5 from walls) and that leave the faces free too. Then run
-`budpore` seeds 1-4 (300 blanks, 200000 steps, about 4.5 minutes each, 4 at once) and read "on the bud's anchored
+`budpore` seeds 1-4 (300 blanks, 200000 steps, about 4 minutes each, 4 at once) and read "on the bud's anchored
 strand N (copies M)" and "before the split on D's anchored strand". Target: one full copy of the bud's strand (4
 releases) in 3 of 4 worlds, before or after the split. If no side gives open backs, the genome's handedness decides:
 try the founder's mirror (`gaps` and faces reversed) so its backs face the other way. After that, "replicate before
@@ -91,7 +110,7 @@ caught in 4 of 4 worlds with `w`).
    28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
 4. **Two generations:** the bud of priority 3 splits off, copies its genome (priority 1) and starts its own bud.
    This is the goal's whole cycle; then the core-review of finding 2.
-5. **Speed (for `harden` runs):** `budpore` worlds take about 4 minutes and the check suite 40; copy-lineage worlds
+5. **Speed (for `harden` runs):** `budpore` worlds take about 4 minutes and the check suite 30-40 (run 2150: 1.1-1.25x by exact changes, see Handoff); copy-lineage worlds
    need hundreds of blanks, and lone blocks dominate physics (`_single`). Measure steps per second on `budpore` and
    optimise the lone-block path; keep capability lines identical or explain each difference.
 **Rotation:** unchanged. Five `build` runs per twelve fit priorities 1-4; `explore` can take priority 2 or a core
@@ -113,7 +132,7 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~40 min, 4 processes)
+node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~30-40 min, 4 processes)
 node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, split with food left (8 of 8); DBGC=1: where copies go, BUDF=20: frames
 node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
