@@ -57,7 +57,7 @@ activator pair (by convention only). `f`/`F` is used by the structure builder to
 ## Locality audit (2026-10-01)
 Every chemistry rule below reads only: the triangle's own type, state and bonds; values its bonded partners expose
 (their role, fill, trigger, charge, activator, the glue and marks of the side bonded to it, and, for a copy blank, their whole type); and relayed signals that
-move one bond per pass and fade (busy, zip, caps, lock, hear, open). Rules that were not local and were replaced:
+move one bond per pass and fade (busy, zip, lock, hear, open). Rules that were not local and were replaced:
 closures that asked whether two triangles belong to the same body (now one flush tolerance, 0.05, for every closure),
 snapping the smaller of two bonding bodies (removed), copy release reading two bonds away (now the partner exposes
 whether a fill is beside it). Physics, not chemistry, and labelled as such: connected parts move as one rigid body; a
@@ -105,16 +105,15 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   triangle can reach), which deadlocked copying. Option `zip: false` restores parallel docking.
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
-- options: `caps` (capped ends emit relayed signals; only intact strands are copied), `pDissolve` (with caps:
-  strands missing a signal fall apart), `triUndock` (lone docked triangles leave), `pFray` (single-bond triangles
-  not being copied let go).
+- Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
+  intact strands were copied), `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`.
 
 ## Casting (permanent type change)
 A triangle bonded by glue on all three sides is in a **pocket**. For each partner: the side bonded to it is the
 recognition side, the next side counter-clockwise the activator side, the remaining side the instruction side. If
 every partner's activator side carries `K` bonded to a `k` (or is an activator side `%` bonded by its glue), the triangle takes each partner's instruction
-glue on the facing side (option `castComp`: the complement), loses its marks, and lets go of all three. (Copying,
-not complementing, is the default: a complemented product would stick to its own casters.)
+glue on the facing side, loses its marks, and lets go of all three. (Copying, not complementing: a complemented
+product would stick to its own casters.)
 **Stamp (2026-10-01):** the product side also takes the marks the instruction side carries (`'`), and nothing
 carried: a caster's instruction side prints glue and marks, so a pocket can cast kit parts (`@`, `.`, `%`, ...) from
 blanks. A product never carries marks itself (a stamp cannot be stamped).
