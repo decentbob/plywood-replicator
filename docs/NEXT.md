@@ -1,10 +1,32 @@
 # Next instance: start here
 
+## Current slice (autorun run 20261002-0236, build, 2026-10-02)
+- **Goal:** the bud's genome cycle on copies: the parent's genome is copied inside the parent from contact copies of
+  its own triangles (no stamp pocket, no cast dockers, no docker or fill food: copy blanks are the only food), the
+  bud catches a copy and splits off sealed, and the bud copies its genome inside itself after the split, so the
+  organism's genome needs no casting machinery (backlog 0, candidate (a)).
+- **Acceptance:** M1: `node tri/demos.js split k 60000 runs q`, k = 1..4: a copy anchored in D, the pair split and
+  both doors shut in at least 3 of 4 worlds, the founder still in P. M2 (same runs): after the split a further strand
+  is completed inside D (D holds its anchored strand and at least one free strand made after the split) in at least 3
+  of 4 worlds, or the measured reason it cannot.
+- **Stop boundary:** no import of copy blanks after the split (a copy blank binds only by its copy side, so no key
+  catches it: a core change candidate, recorded, not built); the grown bud (`budgrow`) and the bud's pocket (`split
+  o`) stay as they are; no core change. Budget: about 10 runs of 4 worlds; then hand off.
+- **Approach:** (1) chosen: dockers and fills copied from the genome inside the cell: removes the stamp pocket and
+  two food types, existing core only. The genome must be its own reverse complement (faces `aAaA`), so copies of its
+  face triangles are its dockers; every face triangle carries seed `w` on its prev side and `z` on its next, so every
+  strand (founder and copies alike) exposes `w` at its low end and `z` at its high end; the founder starts bound to
+  P's anchor `W|` (labelled prepared start) so D's anchor `Z@|` can only catch a copy. Fills are glue-agnostic (no
+  latGlue): copies of backs and of wall cells both fill. (2) The bud ring from copies of the parent's ring (candidate
+  (b)): needs parent and bud built from one kit and a redesigned pair; larger, and inner-facing types are copied only
+  from inside. Not this slice. Risk: copy blanks are spent on every exposed side (both rings' inner walls, panels,
+  anchors), so the strands get a fraction; measured, not assumed.
+
 State on 2026-10-02 (after autorun run 20261002-0136, explore). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-0136, explore).** Everything committed on branch `claude/autorun-20261002-0136`
 and merged into `main`. No simulations running. `node tri/test.js`: 24 tests pass; `node tri/check.js`: 28 of 28 pass in 1121 s (3 new: `imprint` 3 of 4, `imprint-genome` 4 of 4, its control).
-No current slice.
+Current slice: above (autorun 20261002-0236).
 **Done this run (slice: decide programmable synthesis and build it; acceptance met):**
 - Decision (maintainer's question, 2026-10-01): **contact copying**, one gated core change, the copy side `?`
   (IDEAS "Programmable synthesis: decision"; RULES "Core changes", the first entry). A free copy blank binds any free
