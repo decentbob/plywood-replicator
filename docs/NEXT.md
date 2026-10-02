@@ -3,6 +3,13 @@
 State on 2026-10-02 (after autorun run 20261002-1921, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
+**Current slice (autorun run 20261002-2150, harden): speed.** Goal: faster demos and checks without changing what
+they compute (Direction priority 5). Measure steps per second on `budpore 300` and the slowest checks, profile, and
+optimise the hot path (lone blocks in physics, `_single`, per-step chemistry). Done when: `budpore` steps per second
+up by 1.5x or more, demo outputs on fixed seeds identical to `main` (or each difference explained), `node tri/test.js`
+passes and `node tri/check.js` passes all working checks. Stop: if the profile shows no single hot spot worth more
+than 20%, record the profile and report.
+
 **Handoff status (autorun run 20261002-1921, build).** Everything committed on branch `claude/autorun-20261002-1921`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js budpore` passes 4 of 4
 (no rule, physics or shared-structure change, so the full suite was not rerun; last full run 35 of 35 in run 1821).
