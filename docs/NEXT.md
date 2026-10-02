@@ -108,7 +108,25 @@ change candidate below); until then, blanks inside the bud's ring from the start
 needs D's walls out of the open signal's reach (anchor near the doorway, short `openRange`). Alternatively diagnose (2)
 above first: one batch with `W|` and a trace of the strands that enter D.
 
+### Core change candidate (run 20261002-0921): an anchor catches a strand that is being copied
+1. **Capability:** segregation on copies: a bud catches a genome copy while the parent copies from a steady blank
+   supply. Measured (`budpore`, world 3, 60000 steps, a probe counting strand ends with seed `z` within `capture` of
+   D's anchor site every 20 steps): 52-87 close approaches, every one while the strand was busy (busy 26-30: being
+   copied or within 30 passes of a release), 0 capture attempts. With blanks everywhere, a blank touching a strand face
+   becomes a docker beside it, and zip docks the high end (the seed end) first, so an end is idle only for moments.
+   `split g` catches copies because its dockers come only from P's pocket (scarce); run 0236's `split q` (D's anchor
+   caught none, undiagnosed) is most likely the same cause.
+2. **Designs with the existing core that fail or cost:** fewer blanks (strands idle once food runs out; then the bud
+   has none to copy its genome after the split; measured below); an anchor on the low end (busy covers the whole
+   strand, range 30); keeping blanks out of D before the split (the junction feeds both; a second gap cuts a ring).
+3. **Smallest change:** an anchor side `|` catches a strand end's seed also while the strand is busy (the strand and
+   its partial copy are one body and move together; the copy still releases as usual). Reads: the end's spare-edge
+   glue (fixed type), as now; removes one condition (busy) for anchors only. Alternative: a seed is active while its
+   own face is free (not the whole strand's busy relay). For an explore run; not changed here.
+
 ### Core change candidate (run 20261002-0236): bringing copy blanks into a cell
+**Status (run 20261002-0921): not needed for feeding.** A pore works once every free side of the cell is spent
+(`imprint ... p`, 4 of 4 worlds); design (b) below failed only because the walls were plain.
 1. **Capability:** feed a sealed cell (parent or bud) a steady supply of copy blanks, so contact copying of its genome
    (and later its parts) does not stop when one batch is spent; the BIG goal's "feeds it until it can live on its own".
 2. **Designs with the existing core that fail:** (a) an import door: its key side catches by glue, but a copy blank
