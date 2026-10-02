@@ -12,6 +12,12 @@ of a split pair has such a pore and copies its anchored genome after the split.
 controls (no pore: no copies; plain walls: the wall takes the blanks), check `imprint-pore`; (2) a `split` variant whose
 bud holds 2 or more strands inside after the split in 3 of 4 worlds, with a check. **Stop:** (2) is a stretch; if it
 fails after a few variants, record it as partial with what blocks it. No core change.
+**Progress (checkpoint 1).** (1) done: `imprint ... 150p`, 4 of 4 worlds (INNOVATIONS); checks pass. (2) in progress:
+`split ... qp` (pores in the `split q` pair) failed by design: the open signal that holds a pair (range 27 from D's
+one anchor, 11 with two anchors) keeps about 50 wall cells unspent and outside blanks copy their outer sides (200
+copies in 5000 steps, 2% genome). New demo `budpore` (fewer parts: no doors, a doorway held by `&` pairs on one side
+only, D's anchor beside them, open range 4; 60 blanks inside P for the joined phase, 300 outside for the bud after the
+split): first 4-world batch running (`node tri/demos.js budpore k 200000 runs`).
 **Probe (scratch, runs/pore.js, 100000 steps, R 6, world 20, 150 blanks outside):** pore: 4 / 5 / 7 / 1 strands inside
 (world 4: one copy stalled waiting for a docker type); no pore: 0 copies; plain walls with pore: all 150 copies of
 wall cells.

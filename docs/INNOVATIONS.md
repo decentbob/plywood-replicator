@@ -6,6 +6,31 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-02 (autorun run 20261002-0921, build)
+
+- **A cell fed through a pore (genome on copies, food from outside)** — works (4 of 4 worlds). A ring with a pore
+  copies its genome from copy blanks that come in from outside; no new rule. This answers the core change candidate's
+  design (b) ("a pore: the rings' outer walls take every blank"): that was true only with plain walls. With every free
+  side spent (`&` on the outer, inner and pore-edge sides of a complete ring, which hears no open signal), nothing on
+  the cell's surface can be copied, so blanks pass the pore and copy only what lies inside.
+  - Set-up (`node tri/demos.js imprint k 100000 runs 150p`, labelled): the sealed ring of `imprint m` (R 6) without
+    the 3 wall cells in the middle of its top wall (a pore), an anchor `W|` in the middle of the bottom inner wall,
+    the founder `aAaA` (seeded as `seedCopyGenome`) inside, 150 copy blanks outside only (world 20 x 20).
+  - Evidence (100000 steps): 6 / 5 / 5 / 5 strands inside (17 / 14 / 6 / 12 in all: copies leave through the pore
+    and are copied outside too); all 150 copies are of genome triangles, none of the wall. Controls: no pore (`150pc`):
+    0 copies, the founder alone; plain walls with the pore (`150pn`): all 150 copies are of wall cells, no genome copy.
+    Checks `imprint-pore` (need 3 of 4 with 4 or more strands inside and no wall copies), `imprint-pore-c`,
+    `imprint-pore-n`. Picture (world 1): ![imprint pore](pictures/imprint_pore.png)
+  - **The anchor must sit in the middle of a flat wall.** First placed at a hex corner: the anchored founder lay along
+    the next wall with its backs against it, no back could be copied, so no fill existed and the first copy stayed
+    docked for good (world 4: 1 strand). In the middle of a flat wall the strand stands at 60 degrees into the cell,
+    faces and backs exposed. (The same trap is run 0236's "founder bound to P's anchor at t=0", variant (d).)
+  - Limits: the anchor holds one strand (the founder, or a copy if the founder left first); copies leave through the
+    pore as freely as blanks come in (no selectivity: a pore is as wide for a strand end as for a blank); food is a
+    finite batch outside (150 blanks).
+  - Enables: a bud that copies its genome after the split, fed through its own pore (below); the core change
+    candidate "bringing copy blanks into a cell" is no longer needed for feeding.
+
 ## 2026-10-02 (autorun run 20261002-0236, build)
 
 - **Genome on copies inside a sealed cell** — works (3 of 4 worlds). A cell copies its genome from copy blanks alone:
