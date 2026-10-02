@@ -95,7 +95,8 @@ function ring(R=4,rows=1,k=3,pulse=false){
 // the cells `fixed`? (rigid parts cannot squeeze: every machine's sweep must be clear)
 function sweepClear(moving,fixed,P,dir,ang){const {triDepth}=require('./physics'),flat=V=>Float64Array.from(V.flat());
   const rot=(p,t)=>[P[0]+Math.cos(t)*(p[0]-P[0])-Math.sin(t)*(p[1]-P[1]),P[1]+Math.sin(t)*(p[0]-P[0])+Math.cos(t)*(p[1]-P[1])];
-  for(let a=1;a<=ang;a++){const t=dir*a*Math.PI/180;for(const V0 of moving){const V=flat(V0.map(p=>rot(p,t)));for(const W of fixed)if(triDepth(V,flat(W))>1e-6)return false;}}
+  const F=fixed.map(flat);
+  for(let a=1;a<=ang;a++){const t=dir*a*Math.PI/180;for(const V0 of moving){const V=flat(V0.map(p=>rot(p,t)));for(const W of F)if(triDepth(V,W)>1e-6)return false;}}
   return true;}
 // Import ring (a selective importer, revolving door): a one-row ring whose door panel (k cells, welded with hear sides)
 // is hinged at an inner corner, latched at its far end, and catches a key (glue `key`, e.g. X for blanks xxx) on an outer
@@ -314,7 +315,9 @@ function budPair({RP=6,RD=4,k=5,capGlue=null,anchorGlue=null,anchorP=null,organe
           if(Math.sign(cen(open[0])[1]-yc)!==sgn)continue;   // opens into its own ring
           // doorstop: a free lattice slot sharing a side with an open panel cell (not the hinge cell) and with a fixed
           // cell of the same ring, clear of the panel's closing sweep
-          for(const v of lat){if(occupied.has(key(v)))continue;const sh=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return [i,j];return null;};
+          // (a slot sharing a side with an open cell has its centre 1/sqrt 3 from that cell's centre: farther slots are skipped)
+          const oc=open.map(cen),near=v=>{const c=cen(v);return oc.some(o=>Math.abs(o[0]-c[0])<0.7&&Math.abs(o[1]-c[1])<0.7);};
+          for(const v of lat){if(!near(v)||occupied.has(key(v)))continue;const sh=(A,B)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(A[i],B[(j+1)%3])&&same(A[(i+1)%3],B[j]))return [i,j];return null;};
             const pi=open.findIndex((V,q)=>q>0&&sh(V,v)),wc=ring.find(c=>!panel.includes(c)&&sh(cells[c],v));if(pi<0||wc===undefined)continue;
             if(open.some(V=>triDepth(flat(V),flat(v))>1e-6))continue;
             if(!sweepClear(open,[v],pin,-dir,ang))continue;
