@@ -8,6 +8,17 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Spent walls cannot be templates (design lesson, review-intent run 20261002-1751, 2026-10-02)
+
+Feeding on copies needs every wall side spent (`&`), because spent sides are never copied and the food goes to the
+genome (`imprint m`, `imprint p`). The same rule means a complete parent cannot template its bud's ring: its wall is
+spent. Ring material for the next generation must therefore come from a surface that is exposed and unspent while it
+is needed: the bud's own growing front (open-signal sides are unspent; `imprint` showed one motif round of a ring
+growing into a whole ring and a second ring from copies), or templates carried somewhere they stay exposed (for
+example parts held on the genome inside the parent). Which one, and where each bud's first motif round comes from, is
+the closure question (ROADMAP, Organism on copies). Also from this review: the organism is a lineage only if the bud
+is its parent's kind; `budpore`'s bud (R 5, catching anchor, latch) and parent (R 7, holding anchor) are not.
+
 ## Programmable synthesis: decision (autorun 20261002-0136, explore, 2026-10-02)
 
 The maintainer asked an explore run to decide between part templating, translation and kit-free growth through the
