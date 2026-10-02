@@ -53,6 +53,9 @@ sim (chemistry), world, structures (machines and kits), demos (one per capabilit
 
 - Read `git status` first and preserve the user's changes. Run output goes to `runs/` (ignored); keep chosen
   pictures in `docs/pictures/`.
+- **Keep the user in the loop with pictures (user, 2026-10-02).** Now and then, not often, send the user a picture
+  in the chat (the session's file-send tool) of what is being worked on, or when something interesting happens (a
+  new capability working, a surprising failure), with a one-line caption. This applies to unattended runs too.
 - `node tri/test.js` before committing; `node tri/check.js` before merging any rule, physics or shared-structure
   change. At most four simulation processes at once.
 - Standing approval to commit, push and merge into `main`, preferably through a pull request (GitHub then deletes
