@@ -8,7 +8,8 @@ not statistics.
 
 ## 2026-10-02 (autorun run 20261002-1351, build)
 
-- **Grown bud catches a genome copy** — works (3 of 4 check worlds; 6 of 8 seeds) at 400000 steps. `budgrow` with
+- **Grown bud catches a genome copy** — works: 3 of 4 check worlds at 300000 steps; 6 of 8 seeds at 400000 (5 of 8
+  at 300000). `budgrow` with
   `split g`'s content: the bud ring grows on the parent's seed as before, but carries an anchor instead of a cap, and
   the parent holds the genome. No new rule; three existing pieces combined (grown bud, anchor `|`, stamp-cast dockers).
   - Set-up (`node tri/demos.js budgrow k 400000 runs g`, labelled start): the parent P of `budgrow` with the founder
@@ -22,7 +23,8 @@ not statistics.
     anchored 29400 / 83150 / - / 35350 / 66700 / 61450 / 209750 / - steps after opening; split 100-150 steps after
     the anchor caught; both doors shut in all 6; no early release. The two failures (seeds 3 and 8) are still open
     with 8-9 idle copies in the parent: a copy must drift through the doorway into the bud with its high end first;
-    nothing is wrong at the anchor (copies are not busy: nothing copies `AAAA`). Check `budgrow-g` (seeds 1-4, need 3).
+    nothing is wrong at the anchor (copies are not busy: nothing copies `AAAA`). Check `budgrow-g` (seeds 1-4, 300000
+    steps, need 3).
     Picture (world 4: growth, open doorway, the bud leaving with its anchored copy; a second bud then starts on the
     parent's seed): ![budgrow genome](pictures/budgrow_genome.png)
   - **Three design points.** (1) The bud's seed glue must differ from the genome's letters: with the default seed `z`
@@ -37,7 +39,9 @@ not statistics.
     closes carry `Z@`, and a copy's seed `z` catches them (one copy per world lost that way); harmless while copies
     are plentiful.
   - Observed, not yet measured: after the split the parent's seed latch is free and a second bud starts growing on it
-    from the remaining kit parts (world 4).
+    from the remaining kit parts (world 4; also in the cap variant). The old `budgrow` report looked up any bonded root
+    and so read that second bud after the split: world 1's "door open after the split" was this misreport (same
+    events on the old code, doors shut); the report now follows the bud the events track, and `budgrow` is 4 of 4.
   - Limits: the parent and its door, pocket and founder are prepared; the bud carries one copy and nothing that copies
     it (next: food for the bud after the split, as `imprint p` or `split o`); transport through the doorway has a long
     tail.

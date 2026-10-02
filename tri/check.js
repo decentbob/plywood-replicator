@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 29 minutes)
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 40 minutes)
 // Exit code 1 if a working capability fails.
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
@@ -74,7 +74,7 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/events: ring closed at (\d+), parent door widest before that (\d+) deg, doors open at (\d+), cap cells at ([\d ]+), split at (\d+)/);
       if(!m)return [false,'no events: '+(o.match(/events: .*/)||['none'])[0].slice(8,90)];const [c,w,op]=[+m[1],+m[2],+m[3]],caps=m[4].trim().split(' ').map(Number),sp=+m[5],shut=/doors after split: shut/.test(L);
       return [w<5&&op>=c&&caps.length>=3&&caps.every(x=>x>=c)&&sp>=Math.max(...caps)&&shut,`closed ${c}, doors ${w}/open ${op}, cap ${caps.join(',')}, split ${sp}, ${shut?'shut':'open'}`];}},
-  {id:'budgrow-g',cap:'Grown bud catches a genome copy: grows on the parent, opens, anchors a copy, splits sealed',demo:'budgrow',seeds:[1,2,3,4],need:3,steps:300000,extra:'g',secs:220,
+  {id:'budgrow-g',cap:'Grown bud catches a genome copy: grows on the parent, opens, anchors a copy, splits sealed',demo:'budgrow',seeds:[1,2,3,4],need:3,steps:300000,extra:'g',secs:300,
     pass:(L,o)=>{const m=o.match(/events: ring closed at (\d+), parent door widest before that (\d+) deg, doors open at (\d+), copy anchored in D at (\d+), split at (\d+)/);
       if(!m)return [false,'no events: '+(o.match(/events: .*/)||['none'])[0].slice(8,90)];const [c,w,op,an,sp]=m.slice(1).map(Number),shut=/doors after split: shut/.test(L),held=/copy anchored in D/.test(L);
       return [w<5&&op>=c&&an>=c&&sp>=an&&shut&&held,`closed ${c}, doors ${w}/open ${op}, anchored ${an}, split ${sp}, ${shut?'shut':'open'}${held?'':', copy lost'}`];}},

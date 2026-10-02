@@ -3,16 +3,20 @@
 State on 2026-10-02 (after autorun run 20261002-1351, build). Read AGENTS.md first (rules of work), then this file.
 
 **Handoff status (autorun run 20261002-1351, build).** Everything committed on branch `claude/autorun-20261002-1351`
-and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: CHECKRESULT.
+and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: 34 of 34 pass in 2391 s (new `budgrow-g` 3 of 4;
+`budgrow` now 4 of 4, see below).
 No current slice.
 **Done this run (slice: the grown bud catches a genome copy; met):** `node tri/demos.js budgrow k 400000 runs g`: the
 bud ring grows on the parent's seed, carrying an anchor `Z@|` (new `grownBud` option `anchorGlue`: an inner side of an
 early wall-front cell, mid-wall, farthest from the door sweeps) instead of a cap; the parent holds the founder `aaaa`
 on `W|` and a stamp pocket casting its dockers `Ay.z` (as `split g`). Seeds 1-8: 6 split with a copy anchored in the
-bud and both doors shut (check `budgrow-g`: seeds 1-4, 3 of 4). No rule change. Details, numbers and the three design
+bud and both doors shut by 400000 steps, 5 by 300000 (check `budgrow-g`: seeds 1-4, 300000 steps, 3 of 4). No rule change. Details, numbers and the three design
 points (seed letter clash, early-anchor supply race, trapped anchor parts): INNOVATIONS (newest). Shared change: the
 parent's panel welds in `grownBud` use the weld letter `f` (frees 4 letters; default `budgrow` unchanged otherwise);
-`budgrow` events log an early release ("early releases at") and follow the regrown bud instead of calling it a split.
+`budgrow` events log an early release ("early releases at") and follow the regrown bud instead of calling it a split,
+and the report follows the bud the events track: `budgrow` world 1's "door open after the split" (run 1050's harden
+follow-up 3) was the old report reading a second bud regrowing on the parent's freed seed (same events on `main`:
+split at 202850, doors shut); `budgrow` is 4 of 4.
 **Exact next step:** the rotation's next run is `explore`: the anchor core change candidate below (an anchor catches a
 busy strand) is still open for `budpore`. Build follow-ups, in order: (1) food for the grown bud after the split, so
 it copies its genome (M2 on the grown pair): copy blanks through a pore with spent `&` walls (as `imprint p`; the
@@ -48,8 +52,8 @@ sub-width gap) and pictures of the stalled worlds; INNOVATIONS (newest) has the 
 **Exact next step:** the rotation's next run is `build` (the build line below waits on the anchor core change
 candidate, for an `explore` run). Harden follow-ups, in order: (1) grown's membrane stall at 72-76 of 78: zoom on the
 end state of `node tri/demos.js grown 3 200000 runs` (about 6 minutes) and find the missing sites (the door kit? the
-rhombus pitfall below?); (2) imprint's 28/30 stall (Pitfalls: one-front rings); (3) budgrow world 1, a door open after
-the split. Regenerate the probe: logic above (about 30 lines). 
+rhombus pitfall below?); (2) imprint's 28/30 stall (Pitfalls: one-front rings); (3) done in run 1351 (a misreport, see its
+handoff). Regenerate the probe: logic above (about 30 lines). 
 
 **Handoff status (autorun run 20261002-0921, build).** Everything committed on branch `claude/autorun-20261002-0921`
 and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass; `node tri/check.js`: 33 of 33 pass in 1363 s (3 new: `imprint-pore` 4 of 4, its controls `imprint-pore-c`, `imprint-pore-n`).
@@ -221,7 +225,7 @@ node tri/demos.js copy 1 10000 runs                # typed copying (zip)
 node tri/demos.js lid 1 4000 runs                  # lid pocket casting
 node tri/demos.js factory 1 30000 runs Aa          # lid pockets feed a replicator (none = control)
 node tri/demos.js grow 1 16000 runs 12             # a lid pocket kit grows from a seed and casts
-node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~29 min)
+node tri/check.js                                  # capability checks: one PASS/FAIL line per working capability (~40 min)
 node tri/demos.js ring 1 60000 runs 3              # ring membrane from a periodic kit, closes (7k-45k steps)
 node tri/demos.js gate 1 10000 runs 12             # gated ring (swept 3-cell door)
 node tri/demos.js import 1 20000 runs              # selective import (revolving door)
