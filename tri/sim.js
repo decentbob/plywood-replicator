@@ -279,8 +279,7 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++)if(this.op[u]===0)for(let i=0;i<3;i++){const k=u*3+i;if(!this.done[k])continue;this.spent[k]=1;if(this.bond[k]>=0){this.cut(u,i);this.count('complete');}}
     for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u]||this.sg[u]>0,open=this.dOpen[u];
       for(let e=0;e<3;e++)if(e!==i&&this.bond[u*3+e]>=0&&!this.isHingeBond(u,e)){const w=P(u,e);if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
-      // a latch holds a trigger while its triangle hears an open signal (a door does not open before its wall is complete)
-      if(open||(trig&&this.lockBusy[u]===0&&this.op[u]===0)){this.cut(u,i);this.count('unlatch');}}}
+      if(open||(trig&&this.lockBusy[u]===0)){this.cut(u,i);this.count('unlatch');}}}
   servo(){
     this._latches();
     if(!this.hinge.some(x=>x))return;this.gridSync();const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));

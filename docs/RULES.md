@@ -102,7 +102,7 @@ the core (the repository restarted on 2026-10-01).
 values, 9 states, 4 options (after removing 8 unused options this review: `caps` with its state and two relayed
 signals, `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`, `capture: 0`/`triTol`) and one rule
 branch merged (glue `K` as activator, into `%`). Rule branches that fired in no check: a latch held by the open signal
-(the key's deafness does that job), and `#` on a trigger side (used by the airlock demo only); see docs/NEXT.md.
+(the key's deafness does that job; removed this run), and `#` on a trigger side (used by the airlock demo only); see docs/NEXT.md.
 
 ## Locality audit (2026-10-02, rule by rule)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
@@ -231,7 +231,8 @@ attached triangles are copied. Gate entry: Core changes.
   (catch or closure) while its triangle hears an open signal (below): a sensor is live once its structure is complete (a grown door's key,
   a grown pocket's slot; a prepared machine has no attach sides and hears none).
 - **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
-  A latch holds a trigger while its triangle hears an open signal: a door does not open before its wall is complete.
+  (A latch no longer holds a trigger while it hears an open signal: removed 2026-10-02, it decided nothing in any
+  check; a grown door's key side is deaf while its structure hears the open signal, which keeps the door shut.)
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` that has a glue (an open growth front; an inert `@` side emits nothing) emits
   `openRange` (120), relayed -1 per bond (through every bond, so a pocket on a chain hears the chain's growing
   membrane). An `&` side (a spent attachment) and a latch side `~` (an edge meant to come apart) emit nothing. An `&`
@@ -263,6 +264,15 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
+
+### Removal: a latch held by the open signal, 2026-10-02, autorun run 20261002-0721 (core-review)
+1. **Capability:** none lost. The branch "a latch holds a trigger while its triangle hears an open signal" was meant to
+   keep a grown door shut until its wall is complete. 2. **Measured:** a coverage hook over every capability check (55
+   demo worlds) counted the passes where a triggered latch was held by the open signal and not by the lock signal: 0.
+   Grown doors stay shut because their key side is deaf while the structure hears the open signal (`_deaf`). 3.
+   **Locality:** removing a read (own open signal) only. 4. **Generality:** a design that needs a latch to wait for
+   completion can put its trigger behind a key side (deaf while open). 5. **Removes** one condition in the latch rule.
+   Outputs of every check are unchanged by construction (the branch never decided).
 
 ### Merge: the glue `K` is no longer an activator; `%` is the only one, 2026-10-02, autorun run 20261002-0721 (core-review)
 1. **Capability and why.** No new capability: casting keeps its activators. Two rules did one job: a caster's
