@@ -34,7 +34,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Bud pair on copies with a doorway (no doors; held by one latch bond that lets go when the latch cell hears the bud anchor's trigger through a hear chain `+`, so no wall hears an open signal) | budding on copies | works: the bud's mid-wall anchor `W@\|*` catches a copy by its low end and the pair splits with food left in 8 of 8 seeds (run 1921; before: 4 of 8); the bud copying its genome after the split: not yet (one full copy in 2 of 8: the food goes to P's copies outside, the freed latch sides and anchor copies) | demo budpore |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 40 minutes with 4 processes).
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 30-40 minutes with 4 processes).
 
 ## Organism on copies: parts and where they come from (2026-10-02, review-intent run 20261002-1751)
 
