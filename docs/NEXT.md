@@ -2,6 +2,15 @@
 
 State on 2026-10-02 (after autorun run 20261002-1351, build). Read AGENTS.md first (rules of work), then this file.
 
+**Current slice (autorun run 20261002-1551, explore): an anchor catches a strand that is being copied.** Goal: settle
+the core change candidate below (run 0921) by measurement. Try variants on `budpore` (4 worlds, 300 blanks):
+(A) the anchor ignores the busy relay but needs the end's face free; (B) the anchor ignores busy and face (the strand
+and its partial copy move as one body). Done when: either a variant makes the bud catch a copy while food lasts
+(catch before the blanks run out, in 3 of 4 worlds) and is entered in RULES Core changes, built as the rule, and
+`node tri/check.js` passes; or the candidate is recorded as "not yet" with what blocks it. Stop there; the bud's
+genome cycle after the split (D holds 2+ strands) is a follow-up only if time remains. Experiment option `ancX` in
+`tri/sim.js` (temporary; removed or made the rule at the end of the slice).
+
 **Handoff status (autorun run 20261002-1351, build).** Everything committed on branch `claude/autorun-20261002-1351`
 and merged into `main`. No simulations running. `node tri/test.js`: 33 tests pass; `node tri/check.js`: 34 of 34 pass in 2391 s (new `budgrow-g` 3 of 4;
 `budgrow` now 4 of 4, see below).
