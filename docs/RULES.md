@@ -84,7 +84,7 @@ the core (the repository restarted on 2026-10-01).
 | `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02 |
 | `^` hand-off | mark | 1 (conveyor) | 10-01 |
 | `#` pulse door (hinge side) | mark | 1 (budgrow) | 10-01 |
-| `#` key let go (trigger side) | mark (second meaning) | 0 (airlock demo and the gate's pulse option only) | 10-01 |
+| `#` key let go (trigger side) | mark (second meaning) | 0 (the gate's pulse option only; the airlock demo was removed 2026-10-02) | 10-01 |
 | busy (30, chain bonds) | relayed signal | 11 (all copying) | 10-01 |
 | zip (chain) | relayed signal | 11 (all copying) | 10-01 |
 | open (`openRange` 120) | relayed signal | 16 (growth: trigger sides deaf while open in 6, `&` release in 8) | 10-01 |
@@ -105,7 +105,7 @@ the core (the repository restarted on 2026-10-01).
 values, 9 states, 4 options (after removing 8 unused options this review: `caps` with its state and two relayed
 signals, `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`, `capture: 0`/`triTol`) and one rule
 branch merged (glue `K` as activator, into `%`). Rule branches that fired in no check: a latch held by the open signal
-(the key's deafness does that job; removed this run), and `#` on a trigger side (used by the airlock demo only); see docs/NEXT.md.
+(the key's deafness does that job; removed this run), and `#` on a trigger side (used by the gate's pulse option only since the airlock demo was removed); see docs/NEXT.md.
 
 ## Locality audit (2026-10-02, rule by rule)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
