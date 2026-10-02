@@ -107,9 +107,9 @@ test('grown bud: both doors shut while a wall site is open, open once the ring i
   // with its cap filled (nothing open)
   for(const [withQ,capFilled] of [[false,false],[true,false],[true,true]]){const g=S.grownBud({RP:7,RD:5});
     let tris=g.tris.filter((_,x)=>withQ||x!==g.q);const idx=x=>tris.indexOf(g.tris[x]);if(capFilled)tris=[...tris,...g.cap.slots.map(v=>({v,type:g.cap.type,loose:true}))];
-    const s=new TriSim({sigma:0,sigmaRot:0,W:44,H:44,lockRange:80},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,22,16);for(let k=0;k<200;k++)s.derive();
+    const s=new TriSim({sigma:0,sigmaRot:0,W:44,H:44,lockRange:120},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,22,16);for(let k=0;k<300;k++)s.derive();
     const ang=(f,p)=>{const u=idx(f),v=idx(p),i=[0,1,2].find(i=>s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===v);return Math.abs(Math.atan2(Math.sin(s.angle(u)-s.angle(v)-s.hRel[u*3+i]),Math.cos(s.angle(u)-s.angle(v)-s.hRel[u*3+i])))*180/Math.PI;};
-    s.run(300);const {comp}=s.bodies(),joined=comp[idx(g.S)]===comp[idx(g.root)],aP=ang(g.panelP[0],g.S),aD=ang(g.panelD[0],g.root);
+    s.run(300);const {comp}=s.bodies(),joined=comp[idx(g.S)]===comp[idx(g.root)],aP=ang(g.panelP[0],g.doors[0].hinge),aD=ang(g.panelD[0],g.root);
     if(!withQ){assert.ok(joined,'growing: joined');assert.ok(aP<1&&aD<1,`growing: both doors shut (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}
     else if(!capFilled){assert.ok(joined,'cap open: joined');assert.ok(aP>40&&aD>40,`closed ring: both doors open (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}
     else{assert.ok(!joined,'nothing open: split');assert.ok(aP<1&&aD<1,`after the split both doors shut (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}symmetric(s);}});

@@ -180,7 +180,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     budgrow(){steps=steps||400000;const per=parseInt(extra)||4,size=32,c=size/2,cy=c-5,RP=7,RD=5,g=S.grownBud({RP,RD}),dcy=cy+(RP+RD)*H;
       const P=g.P,Pt=P.map(x=>g.tris[x]),kit={};for(const t of g.kit)kit[t]=(kit[t]||0)+per;kit[g.rootType]=per;
       const pocket={tris:S.lidPocket(S.stampInstr(g.cap.type),'X'),x:c-0.5,y:cy-2.5,rot:0};
-      const {s,structures}=createWorld({seed,size,structures:[{tris:Pt,x:c,y:cy},pocket],supply:{xxx:30,...kit},params:{lockRange:80}});
+      const {s,structures}=createWorld({seed,size,structures:[{tris:Pt,x:c,y:cy},pocket],supply:{xxx:30,...kit},params:{lockRange:120}});
       const U=structures[0],PK=structures[1],prep=new Set([...U,...PK]),free=[...Array(s.n).keys()].filter(u=>!prep.has(u)),placed=[...prep];
       // prepared parts must not meet the parent's door sweep
       {const {triDepth}=require('./physics'),d=g.doors[0],tr=p=>[p[0]+c,p[1]+cy],pin=tr(d.pin),flat=V=>Float64Array.from(V.flat());
@@ -195,7 +195,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       let closed=0,opened=0,split=0,early=0;const ctr=L=>{let x=0,y=0;for(const u of L){x+=s._dx(s.px[u]-s.px[L[0]]);y+=s._dy(s.py[u]-s.py[L[0]]);}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];};
       const report=t=>{const {comp,members}=s.bodies(),root=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT&&kitT.has(rootT)&&[0,1,2].some(i=>s.bond[u*3+i]>=0));
         const dc=root!==undefined?comp[root]:-1,dU=dc>=0?members[dc]:[],cells=dU.filter(u=>kitT.has(norm(typeName(s,u)))).length,q=dU.find(u=>norm(typeName(s,u))===qT),p1=dU.find(u=>norm(typeName(s,u))===p1T);
-        const aP=flap(U[g.panelP[0]],Su),aD=p1!==undefined&&root!==undefined?flap(p1,root):NaN,cap=dU.filter(u=>norm(typeName(s,u))===capT).length;
+        const aP=flap(U[g.panelP[0]],U[g.doors[0].hinge]),aD=p1!==undefined&&root!==undefined?flap(p1,root):NaN,cap=dU.filter(u=>norm(typeName(s,u))===capT).length;
         if(!closed&&q!==undefined)closed=t;if(!opened&&aP>20)opened=t;if(!closed&&aP>20)early=t;if(!split&&root!==undefined&&dc!==comp[Su]&&cells>=g.D.length-1)split=t;
         const dK=dU.filter(u=>kitT.has(norm(typeName(s,u)))),inD=dK.length>=g.D.length-1?(()=>{const [x,y]=ctr(dK);return u=>Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<(RD-1)*H;})():()=>false;
         const parts=free.filter(u=>!s.bonded(u)&&norm(typeName(s,u))===capT);
@@ -203,7 +203,16 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log('bud kit',g.kit.length+1,'types x',per,'cap part',g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
       snap(s,'t0','t=0: parent P (seed on its top wall, door, stamp pocket, blanks); the bud kit outside',{units:U,radius:15});
       for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,6))snap(s,`t${t}`,`t=${t}`,{units:U,radius:15},false);}
-      {const {comp,members}=s.bodies(),r=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT);if(r!==undefined)snap(s,'zoom','the bud',{units:members[comp[r]],radius:7});}
+      // end of run: each bud cell missing from the root's body (panel, wall front position, last cell q), whether its
+      // predecessor is there, and where the copies of its type are (free near the bud, free elsewhere, bonded elsewhere)
+      {const {comp,members}=s.bodies(),r=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT);
+        if(r!==undefined){const have=new Set(members[comp[r]].map(u=>norm(typeName(s,u)))),order=[g.root,...g.panelD,...g.frontB],pred=c=>{const i=g.panelD.indexOf(c);if(i>=0)return i?g.panelD[i-1]:g.root;const j=g.frontB.indexOf(c);return j?g.frontB[j-1]:g.root;};
+          const miss=order.filter(c=>!have.has(norm(g.tris[c].type))),[x,y]=ctr(members[comp[r]].filter(u=>kitT.has(norm(typeName(s,u)))));
+          console.log(`bud: ${order.length-miss.length}/${order.length} cells; missing:`);
+          for(const c of miss){const name=g.panelD.includes(c)?'panel '+(g.panelD.indexOf(c)+1):c===g.q?'last cell q':'wall '+(g.frontB.indexOf(c)+1),T=norm(g.tris[c].type),where={};
+            for(let u=0;u<s.n;u++){if(norm(typeName(s,u))!==T)continue;const k=s.bonded(u)?'bonded elsewhere':Math.hypot(s._dx(s.px[u]-x),s._dy(s.py[u]-y))<RD*H?'free inside the bud':'free outside';where[k]=(where[k]||0)+1;}
+            console.log(`  ${name} ${g.tris[c].type}: predecessor ${have.has(norm(g.tris[pred(c)].type))?'there':'missing'}, copies ${JSON.stringify(where)}`);}
+          snap(s,'zoom','the bud',{units:members[comp[r]],radius:7});}}
       finish('Grown bud: the bud ring grows on the parent; its closing opens the doorway; the parent feeds its cap; it splits off sealed');},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
