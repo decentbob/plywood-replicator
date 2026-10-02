@@ -218,6 +218,35 @@ test('conservation: blocks stay in play, types change only by cast and copy (lid
   assert.ok((s.ev.cast||0)>=1&&(s.ev.copy||0)>=1,`casts ${s.ev.cast} copies ${s.ev.copy}`);
   assert.ok(changed<=(s.ev.cast||0)+(s.ev.copy||0),`${changed} types changed, ${s.ev.cast} casts + ${s.ev.copy} copies`);
   assert.ok(worst<1e-3,`overlap ${worst}`);symmetric(s);});
+test('physics: a block in a hole of a one-row wall never hops across it through the apex pinch',()=>{
+  const tris=[];for(let i=0;i<10;i++){if(i!==5)tris.push({v:[[i,0],[i+1,0],[i+0.5,H]],type:'---'});tris.push({v:[[i+1,0],[i+1.5,H],[i+0.5,H]],type:'---'});}
+  const sw=Math.sqrt(1/(Math.sqrt(3)/4));let up=0;
+  for(let k=0;k<300;k++){const s=new TriSim({W:24,H:24,seed:k+1},tris.length+1);buildStructure(s,tris.map((_,q)=>q),tris,6,12);
+    const u=tris.length;placeTri(s,u,[[11,12],[12,12],[11.5,12+H]]);s.gridSync();if(k===0){s._single(u,0,0.95,0);assert.ok(s.py[u]<12.3,'a direct kick of 0.95 hopped the wall');}
+    for(let t=0;t<200;t++){s._single(u,0.3*sw*s._gauss(),0.3*sw*s._gauss(),0.45*sw*sw*s._gauss());if(s.py[u]-H/3>12+H-1e-6){up++;break;}if(s.py[u]+2*H/3<12+1e-6)break;}}
+  assert.equal(up,0,`${up} of 300 blocks crossed the (frozen) wall`);});
+test('physics: an anchor never pulls a strand through a wall (the whole capture path must be clear)',()=>{
+  // a strand end lies within capture of an anchor site, the strand turned 100 degrees from its flush place and a welded
+  // wall row across the sweep of its far part: the destination is clear, the path is not (it was captured, 2026-10-02)
+  const {GLUE}=require("./sim"),phi=-100*Math.PI/180,R0=3,SH=0.55,tris=[];for(let k=0;k<4;k++)tris.push({v:[[k,0],[k+1,0],[k+0.5,H]],type:'---'},{v:[[k+1,0],[k+1.5,H],[k+0.5,H]],type:'---'});
+  const {s,founders}=createWorld({seed:5,size:30,founders:[{gaps:[1,1,1,1,1,1],faces:'aaaaaaa',ends:'-z',x:15,y:15}],supply:{'---':2+tris.length},params:{sigma:0,sigmaRot:0}});
+  const F=founders[0],u=F[F.length-1],i=s.roles(u).inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
+  const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]],V=[b,a,x],W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];
+  const A=F.length,A2=A+1;placeTri(s,A,V);placeTri(s,A2,W2);s.setType(A,'Z|f-');s.setType(A2,'F--');s.bind(A,1,GLUE,A2,0,GLUE);
+  const units=tris.map((_,k)=>A2+1+k);for(const w of units)s.px[w]=-50;
+  const cx=s.px[u],cy=s.py[u],fin0=[s.px[F[0]],s.py[F[0]]],ax=s._dx(s.px[A]-cx),ay=s._dy(s.py[A]-cy),al=Math.hypot(ax,ay),sx=-SH*ax/al,sy=-SH*ay/al,co=Math.cos(phi),si=Math.sin(phi);
+  for(const w of F){const dx=s._dx(s.px[w]-cx),dy=s._dy(s.py[w]-cy);s.px[w]=s._wx(cx+co*dx-si*dy+sx);s.py[w]=s._wy(cy+si*dx+co*dy+sy);s.pa[w]+=phi;s.resetShape(w);}
+  const ang=(X,Y)=>Math.atan2(s._dy(Y-cy),s._dx(X-cx)),a0=ang(s.px[F[0]],s.py[F[0]]),a1=ang(fin0[0],fin0[1]),mid=Math.atan2(Math.sin(a0)+Math.sin(a1),Math.cos(a0)+Math.cos(a1));
+  buildStructure(s,units,tris,cx+R0*Math.cos(mid)+Math.sin(mid)*H/2,cy+R0*Math.sin(mid)-Math.cos(mid)*H/2,mid);s.gridSync();
+  assert.equal(s.moveDepth(F,0,0,0,s.px[F[0]],s.py[F[0]]),0,'start clear');s.derive();s.run(3);
+  assert.ok(s.partner(u,i)!==A&&!s.ev.anchor,'the strand was captured through the wall');});
+test('binding: a bonded triangle is never free (a docked template that lost its chain bonds is not caught again)',()=>{
+  const {FACE}=require('./sim'),s=new TriSim({W:16,H:16,seed:2,sigma:0,sigmaRot:0},4);
+  const refl=u=>i=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];const a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  const u=0,w=1,t=2,d=3;placeTri(s,u,[[8,8],[9,8],[8.5,8+H]]);s.setType(u,'a-f');placeTri(s,w,refl(u)(2));s.setType(w,'F--');s.bind(u,2,GLUE,w,0,GLUE);
+  const S=refl(u)(0),Sc=[(S[0][0]+S[1][0]+S[2][0])/3,(S[0][1]+S[1][1]+S[2][1])/3];placeTri(s,t,S.map(p=>[2*Sc[0]-p[0],2*Sc[1]-p[1]-0.5]));s.setType(t,'A--');
+  placeTri(s,d,refl(t)(0));s.setType(d,'a--');s.bind(t,0,TFACE,d,0,FACE);s.gridSync();s.physics();s.derive();s.formBonds();
+  assert.equal(s.bond[t*3],d*3,'the template keeps its face bond');symmetric(s);assert.throws(()=>s.bind(u,0,GLUE,t,0,GLUE),/already bonded/);});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

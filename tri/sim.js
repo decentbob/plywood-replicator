@@ -47,6 +47,7 @@ const DEFAULTS={pBond:1,triTol:0.65,capture:0.6,triTolClose:0.05,hingeAngle:Math
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
+    for(const k of ['lockRange','sigRange'])if(!(this.p[k]>=0&&this.p[k]<=127))throw Error(k+' must be 0..127 (an Int8 relay)');
     const I8=k=>new Int8Array(k);
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.rel=I8(3*n);this.trg=I8(3*n);this.ltc=I8(3*n);this.fuel=I8(3*n);this.hear=I8(3*n);this.wide=I8(3*n);this.act=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.hSign=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.carry=new Int32Array(3*n);
     this.hRel=new Float64Array(3*n);
@@ -124,14 +125,14 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++){let v=this.tb[u]?this.p.sigRange:0;for(let i=0;i<3;i++){if(!this.hear[u*3+i])continue;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,sg0[(q/3)|0]-1);}this.sg[u]=v;}
   }
   // ---------------- bonds ----------------
-  bind(u,i,ku,v,j,kv){this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;
+  bind(u,i,ku,v,j,kv){if(this.bond[u*3+i]>=0||this.bond[v*3+j]>=0)throw Error('bind: side already bonded');this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;
     for(const [x,e,y] of [[u,i,v],[v,j,u]]){if(!this.hinge[x*3+e])continue;   // a hinge remembers its flush angle and which way is away
       {const d=this.angle(x)-this.angle(y),L=Math.PI/3;this.hRel[x*3+e]=L*Math.round(d/L);}   // rest angle on the lattice
       const c=this.hinge[x*3+e]===1?e:(e+1)%3,fx=-this.ox[x*3+c],fy=-this.oy[x*3+c];
       const dx=this._dx(this.px[x]-this.px[y]),dy=this._dy(this.py[x]-this.py[y]);this.hSign[x*3+e]=(dx*(-fy)+dy*fx)>0?1:-1;}}
   // binding pulls a free triangle in: v is placed exactly flush with side j against side i of u (it moves at most about
   // the binding tolerance), so every bond starts aligned (a tilted bond jams a strip against its own contacts)
-  _snap(v,j,u,i){const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
+  _snap(v,j,u,i){if(this.bonded(v))return false;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
     const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
     const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
     // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
@@ -142,8 +143,12 @@ class TriSim extends Physics{
   _snapBody(v,j,u,i){const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
     const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
     const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
-    const body=this.bodyOf(v),tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=ang-this.pa[v],ox=this.px[v],oy=this.py[v];
-    if(body.includes(u)||this.moveDepth(body,tx,ty,da,ox,oy)>0)return false;
+    const body=this.bodyOf(v),tx=this._dx(cx-this.px[v]),ty=this._dy(cy-this.py[v]),da=Math.atan2(Math.sin(ang-this.pa[v]),Math.cos(ang-this.pa[v])),ox=this.px[v],oy=this.py[v];
+    if(body.includes(u))return false;
+    // the whole path must be clear (checked in sub-steps of at most subStep, as every move): a strand never jumps a wall
+    let reach=0;for(const w of body)reach=Math.max(reach,Math.hypot(this._dx(this.px[w]-ox),this._dy(this.py[w]-oy))+1/Math.sqrt(3));
+    const nsub=Math.max(1,Math.ceil(Math.max(Math.hypot(tx,ty),reach*Math.abs(da))/this.p.subStep));
+    for(let q=1;q<=nsub;q++){const g=q/nsub;if(this.moveDepth(body,g*tx,g*ty,g*da,ox,oy)>0)return false;}
     const co=Math.cos(da),si=Math.sin(da),k=body.length,RX=new Float64Array(k),RY=new Float64Array(k);this._unwrap(body,RX,RY);
     for(let q=0;q<k;q++){const w=body[q],rx=RX[q],ry=RY[q];this.px[w]=this._wx(ox+co*rx-si*ry+tx);this.py[w]=this._wy(oy+si*rx+co*ry+ty);this.pa[w]+=da;this.resetShape(w);this.regrid(w);}
     return true;}
@@ -162,7 +167,7 @@ class TriSim extends Physics{
     if(r.role===SFACE&&r.inert>=0&&!bnd(r.inert)&&!(r.free>=0&&bnd(r.free))&&this.busy[u]===0)return [r.inert];   // an end's seed: only while the strand is not being copied
     return [];}
   formBonds(){
-    const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE;
+    const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
     // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
     // orientation: binding turns it into place), or, with capture 0, its side j is flush within triTol
