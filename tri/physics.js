@@ -140,7 +140,8 @@ class Physics{
     // blocked: close in on the contact (bisection), so a body ends up touching what stopped it
     if(blocked>0)for(let b=0;b<this.p.bisect;b++){const g=(f+blocked)/2;if(this._overlap(list,rx,ry,cx,cy,g*tx,g*ty,g*da,st,true)>0)blocked=g;else f=g;}
     // an overlapping (or touching) set may take a move that reduces its overlap, only one too short to pass a wall
-    if(f===0&&tried){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
+    // (the early check finds a set that overlaps nothing, the usual case, without summing over all its blocks)
+    if(f===0&&tried&&this._overlap(list,rx,ry,cx,cy,0,0,0,st,true)>0){const d0=this._overlap(list,rx,ry,cx,cy,0,0,0,st,false);if(d0>0&&this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,false)<d0-EPS)f=1;}
     if(f===0)return 0;
     const c=Math.cos(f*da),s=Math.sin(f*da);
     for(let q=0;q<k;q++){const u=list[q];this.px[u]=this._wx(cx+c*rx[q]-s*ry[q]+f*tx);this.py[u]=this._wy(cy+s*rx[q]+c*ry[q]+f*ty);
@@ -180,7 +181,7 @@ class Physics{
     const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
     for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._sdepth(u,xs+g*mx,ys+g*my,g*t,true)>0){blocked=g;break;}f=g;}
     if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(this._sdepth(u,xs+g*mx,ys+g*my,g*t,true)>0)blocked=g;else f=g;}
-    if(f===0&&tried){const d0=this._sdepth(u,xs,ys,0,false);if(d0>0&&this._sdepth(u,xs+mx,ys+my,t,false)<d0-EPS)f=1;}
+    if(f===0&&tried&&this._sdepth(u,xs,ys,0,true)>0){const d0=this._sdepth(u,xs,ys,0,false);if(d0>0&&this._sdepth(u,xs+mx,ys+my,t,false)<d0-EPS)f=1;}
     return f;}
   // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
   _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,n=this.n;
