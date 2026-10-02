@@ -12,6 +12,12 @@ by `budpore`; code in git at `c11ed14`), with the outputs of 12 remaining demo w
 ROADMAP, RULES, INNOVATIONS and README follow (README now describes the copy lineage). Autorun: the plywood preamble
 says to run the checks on inherited work and how to wait on simulations. No AGENTS.md change proposed.
 
+**Current slice (autorun run 20261002-1921, build): M2, the bud copies its genome after the split (`budpore`).**
+Goal: D's anchor sits mid-wall (a strand caught there stands into the bud with its backs open); a hear chain `+` along
+D's wall carries the anchor's trigger signal to the latch cell. Done when: the bud holds 2 or more strands at the end
+in 3 of 4 worlds (seeds 1-4, 300 blanks, 200000 steps), with check `budpore` updated. Stop: if the mid-wall anchor
+catches but the bud still makes no copies after the split, record why (pictures, counts) and end there.
+
 **Exact next step (build, priority 1 below): M2, the bud copies its genome after the split, on `budpore`.** Move D's
 anchor mid-wall (a hear chain `+` of up to 5 bonds from the anchor to the latch cell; the latch lets go while it hears
 a trigger signal; see the pitfall "Anchors in the middle of a flat wall") so a caught strand stands into the bud with
