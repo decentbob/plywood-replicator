@@ -4,7 +4,10 @@ State on 2026-10-02 (after autorun run 20261002-0721, core-review). Read AGENTS.
 
 **Handoff status (autorun run 20261002-0721, core-review).** Everything committed on branch
 `claude/autorun-20261002-0721` and merged into `main`. No simulations running. `node tri/test.js`: 32 tests pass;
-`node tri/check.js`: 30 of 30 pass (CHECK_RESULT). No current slice.
+`node tri/check.js`: 30 of 30 pass (run in parts on the final code: 6 + 22 + 2 checks, about 25 minutes in all). One
+check recalibrated: `imprint-cell` (and its control) runs 60000 steps instead of 40000; with the release locality fix
+copies let go one pass later and at 40000 steps only 2 of 4 worlds had reached 4 strands (main's same-pass read gave
+5 / 2 / 5 / 6, the local read 4 / 4 / 3 / 2; at 60000: 4 / 4 / 4 / 4, control 2 strands, wall 42 of 60). No current slice.
 **Done this run (slice: finish run 0335's core review; acceptance met):** run 0335 (never reported back) had left five
 commits that broke 14 of 30 checks; they were reviewed (two `deep-reviewer` passes, every finding reproduced before
 acting), fixed or split off, and merged with the rest:
@@ -146,7 +149,7 @@ node tri/demos.js split 1 450000 runs o            # + the bud grows its own poc
 node tri/demos.js budgrow 1 250000 runs            # the bud ring grows on the parent's seed, doorway opens once closed, cap fed, splits
 node tri/demos.js imprint 1 100000 runs            # contact copying: a ring closes and a second grows from copy blanks only (c: control)
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
-node tri/demos.js imprint 1 40000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
+node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js split 1 150000 runs q            # the bud pair on copies (partial: 1 of 4 worlds splits)
 ```
 Older: `pocket`, `conveyor`, `gate`, `airlock`, `energy`, `arms`. Pictures go to `runs/NAME.png` with saved states.

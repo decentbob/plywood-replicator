@@ -296,8 +296,8 @@ behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
 4. **Generality.** Any structure marks its activators explicitly; kits keep the mark they inherit (the builder no
    longer translates).
 5. **What it removes.** One rule branch (glue `K` bonded to `k` activates) and its special case in the kit builder.
-   Expected behaviour: identical in every demo whose only `K`/`k` pairs are the prepared pockets' activators
-   (verified by comparing demo outputs before and after, and by `node tri/check.js`).
+   Verified: demo outputs byte-identical before and after (lid, energy, grow 12 (a kit), factory), and
+   `node tri/check.js` 30 of 30.
 
 ### Copy side `?` (contact copying), 2026-10-02, autorun run 20261002-0136 (explore)
 1. **Capability and why the goal needs it.** Programmable synthesis: making any part type from uniform blanks. The
