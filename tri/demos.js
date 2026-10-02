@@ -202,7 +202,15 @@ function demo(name,seed=1,steps,dir='runs',extra){
         console.log(`t=${t} bud cells=${cells}/${g.D.length} ${closed?'closed at '+closed:'open'} doors P:${(aP|0)} D:${isNaN(aD)?'-':aD|0} deg${early?' EARLY at '+early:''} casts=${s.ev.cast||0} free cap parts=${parts.length} (in D ${parts.filter(inD).length}) cap=${cap}/${g.cap.slots.length} ${split?'SPLIT at '+split:'joined'} doors after split: ${split?(aP<5&&aD<5?'shut':'open'):'-'} kit parts in D=${free.filter(u=>!s.bonded(u)&&kitT.has(norm(typeName(s,u)))&&inD(u)).length} completions=${s.ev.complete||0}`);};
       console.log('bud kit',g.kit.length+1,'types x',per,'cap part',g.cap.type,'doors',g.doors.map(d=>d.ang+'deg').join(' '));
       snap(s,'t0','t=0: parent P (seed on its top wall, door, stamp pocket, blanks); the bud kit outside',{units:U,radius:15});
-      for(let t=1;t<=steps;t++){s.step();if(every(t,30))report(t);if(every(t,6))snap(s,`t${t}`,`t=${t}`,{units:U,radius:15},false);}
+      // events (every 50 steps): the bud's last cell q bonded (ring closed), the doors' widest opening before and after,
+      // each cap cell, the split
+      const ev={closed:0,open:0,caps:[],split:0,early:0,maxBefore:0};let rootU=-1;const seedI=[0,1,2].find(i=>s.glue[Su*3+i]&&s.ltc[Su*3+i]);
+      const watch=t=>{const r=s.partner(Su,seedI);if(r>=0)rootU=r;if(rootU<0)return;const {comp,members}=s.bodies(),dU=members[comp[rootU]];
+        if(!ev.closed&&dU.some(u=>norm(typeName(s,u))===qT))ev.closed=t;const aP=flap(U[g.panelP[0]],U[g.doors[0].hinge]);
+        if(!ev.closed)ev.maxBefore=Math.max(ev.maxBefore,aP|0);else if(!ev.open&&aP>30)ev.open=t;
+        const cap=dU.filter(u=>norm(typeName(s,u))===capT).length;while(ev.caps.length<cap)ev.caps.push(t);if(!ev.split&&comp[rootU]!==comp[Su])ev.split=t;};
+      for(let t=1;t<=steps;t++){s.step();if(t%50===0)watch(t);if(every(t,30))report(t);if(every(t,6))snap(s,`t${t}`,`t=${t}`,{units:U,radius:15},false);}
+      console.log(`events: ring closed at ${ev.closed||'-'}, parent door widest before that ${ev.maxBefore} deg, doors open at ${ev.open||'-'}, cap cells at ${ev.caps.join(' ')||'-'}, split at ${ev.split||'-'}`);
       // end of run: each bud cell missing from the root's body (panel, wall front position, last cell q), whether its
       // predecessor is there, and where the copies of its type are (free near the bud, free elsewhere, bonded elsewhere)
       {const {comp,members}=s.bodies(),r=[...Array(s.n).keys()].find(u=>s.bonded(u)&&norm(typeName(s,u))===rootT);
