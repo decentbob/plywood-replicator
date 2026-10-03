@@ -30,7 +30,7 @@ to weld prepared structures (a builder convention, not a rule).
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (the only activator) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
-| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one |
+| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one. It binds only so, never by glue (since 2026-10-03; a free triangle's anchor side binds nothing) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
@@ -71,7 +71,7 @@ the core (the repository restarted on 2026-10-01).
 | `<` `>` hinge | mark | 19 (pockets, doors, conveyor, gate) | 10-01 |
 | `.` close-only | mark | 21 (pockets, kits, rings) | 10-01 |
 | `*` trigger | mark | 19 | 10-01 |
-| `+` hear | mark | 18 (lid pocket, door panels); since run 20261002-1921 also `budpore` (hear chain from the bud anchor to the latch) | 10-01 |
+| `+` hear | mark | 18 (lid pocket, door panels; `budpore` used a hear chain from run 20261002-1921 to run 20261003-0050, now a completion-release doorway) | 10-01 |
 | `=` wide hinge | mark | 17 (lid pocket) | 10-01 |
 | `@` attach | mark | 16 (kits, rings, growth) | 10-01 |
 | `&` completion release | mark | 10 (buds, membranes, sealed cell) | 10-01 |
@@ -81,7 +81,7 @@ the core (the repository restarted on 2026-10-01).
 | `'` carried marks (stamp) | mark | 6 (stamp, grow 4s, split, split g, split o, budgrow) | 10-01 |
 | `?` copy side | mark | 4 (imprint) | 10-02 |
 | `$` fuel | mark | 2 (energy) | 10-01 |
-| `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02 |
+| `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02; never by glue 10-03 |
 | `^` hand-off | mark | 1 (conveyor) | 10-01 |
 | `#` pulse door (hinge side) | mark | 1 (budgrow) | 10-01 |
 | `#` key let go (trigger side) | mark (second meaning) | 0 (the gate's pulse option only; the airlock demo was removed 2026-10-02) | 10-01 |
@@ -173,6 +173,8 @@ spare edge, also while the strand is being copied: since 2026-10-02, Core change
 The capture path (the turn the short way and the move) must be clear in sub-steps, as every move (fixed 2026-10-02:
 a strand was pulled through a wall); a strand that already holds the anchor's triangle (one body) is not caught.
 This is the only way a strand joins an existing structure (two attached triangles otherwise bond only when flush).
+An anchor side binds only by this rule: never by glue, neither a free triangle's anchor side nor an attached one's
+(since 2026-10-03, Core changes: free copies of a waiting anchor glue-capped strand ends).
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
 released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and its face is free (an anchor

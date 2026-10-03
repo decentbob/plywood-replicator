@@ -8,6 +8,18 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Let go by completion, not by a machine (design lesson, explore run 20261003-0050, 2026-10-03)
+
+A one-shot separation needs no latch, trigger or hear chain: an anchor with `@` is an open growth front until it
+catches, so "the bud has its genome" is the same event as "the bud is complete", and a completion-release bond (`&`)
+that hears the anchor is cut by it. Its freed sides are spent, so they are never copied (a latch's freed sides were
+copied 3-105 times per world). The general point: whatever comes apart only once should be an `&` bond; latches are
+for doors that close again. The cost: every unspent side that hears the signal is exposed to copying while it waits,
+so the structure around the anchor must already be spent. In `budpore` the walls start spent (prepared). A grown bud
+has to get there by its order of growth: its walls spent before its anchor starts to emit. How is open (the site that
+takes the anchor part emits too, so walls near it stay unspent until the anchor has caught); it belongs to the
+closure question (ROADMAP, Organism on copies).
+
 ## A parent whose copies leak out feeds its competitors (design lesson, build run 20261002-2321, 2026-10-03)
 
 In `budpore` the parent's opening is also its way out: its genome copies leave, copy each other in the open food (free
