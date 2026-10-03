@@ -1,9 +1,9 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | lid | stamp | split | budpore | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | cells | conveyor | gate | energy | factory | imprint
+// NAME: copy | lid | stamp | split | closure | budpore | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | cells | conveyor | gate | energy | factory | imprint
 const path=require('path');
-const {createWorld,placeFree,census,typeCount,partPlacement,openBudDoors}=require('./world');
+const {createWorld,placeFree,census,typeCount,partPlacement,openBudDoors,buildStructure,placeTri}=require('./world');
 const {render,montage}=require('./render');
 const S=require('./structures');
 const {TriSim,canon,typeName}=require('./sim');
@@ -249,6 +249,27 @@ function demo(name,seed=1,steps,dir='runs',extra){
         snap(s,'pocket',`the bud's pocket: ${T.length-miss.length}/${T.length} cells`,{units:members[dc].filter(u=>T.includes(canon(typeName(s,u)))),radius:3.5});}
       {const {comp,members}=s.bodies();snap(s,'zoom','the bud after the split',{units:members[comp[Du[0]]],radius:6});}
       finish('Split: the parent feeds its bud through a doorway; when the bud is complete the doors shut and it separates');},
+    // closure (designed, not demonstrated; docs/IDEAS.md "Closure by design"): the organism kind of structures.budKit
+    // drawn, no physics. A complete parent (R 5, prepared, labelled) whose root's anchor holds a stand-in strand end; its
+    // bud's cells are bonded one by one in growth order (as copies arriving), each followed by signal passes; then a
+    // stand-in strand end is caught by the bud's anchor, completion releases the bud's root, and the bud is moved off to
+    // show the split. The bud is then in the parent's starting state (test "closure (budKit)")
+    closure(){const R=5,K=S.budKit(R),N=K.N,{GLUE}=require('./sim'),s=new TriSim({W:28,H:28,sigma:0,sigmaRot:0,openRange:3},2*N+2),O=[14,14-R*H];
+      const Bv=K.tris.map(t=>t.v.map(p=>S.budPose(R,p))),at=(v,dy=0)=>v.map(p=>[O[0]+p[0],O[1]+p[1]+dy]),Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1;
+      const sh=(a,b)=>{const eq=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1])<1e-6;for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(eq(a[i],b[(j+1)%3])&&eq(a[(i+1)%3],b[j]))return [i,j];return null;};
+      const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+      const pass=k=>{for(let q=0;q<k;q++){s.derive();s.servo();}},hear=()=>Bu.filter(u=>s.op[u]>0).length;
+      buildStructure(s,Pu,K.tris,O[0],O[1]);placeTri(s,Ps,refl(Pu[0],K.anchorSide));s.setType(Ps,'w--');s.bind(Pu[0],K.anchorSide,GLUE,Ps,0,GLUE);
+      for(const u of [...Bu,Bs]){placeTri(s,u,[[1,1],[2,1],[1.5,1+H]]);s.px[u]=-40;}pass(10);
+      const put=k=>{placeTri(s,Bu[k],at(Bv[k]));s.setType(Bu[k],K.types[k]);if(k===0)s.bind(Bu[0],K.rootSide,GLUE,Pu[N-1],K.seedSide,GLUE);else{const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,GLUE,Bu[k-1],j,GLUE);}pass(4);};
+      console.log('kit',K.types.join(' '));snap(s,'t0','the parent (complete; its anchor holds a strand end) with its seed site free',null,true);
+      for(let k=0;k<N;k++){put(k);if(k===0||k===24)snap(s,`g${k}`,`the bud grows from copies: ${k+1} of ${N} cells; ${hear()} hear the open signal`,null,true);}
+      snap(s,'w',`the bud complete: its doorway faces the parent's pore; only its waiting anchor emits (${hear()} cells hear it)`,null,true);
+      placeTri(s,Bs,refl(Bu[0],K.anchorSide));s.setType(Bs,'w--');s.bind(Bu[0],K.anchorSide,GLUE,Bs,0,GLUE);pass(10);
+      const split=s.bond[Bu[0]*3+K.rootSide]<0;console.log('after the catch: the bud '+(split?'let go of':'still holds')+' its parent');
+      Bv.forEach((v,k)=>placeTri(s,Bu[k],at(v,1.2)));placeTri(s,Bs,refl(Bu[0],K.anchorSide));
+      snap(s,'split',`the catch: completion releases the bud's root; the bud (moved off) is in the parent's starting state`,null,true);
+      finish('Closure by design: a bud of its parent\'s kind (structures.budKit; signals only, no physics)',2);},
     // budpore (a bud pair on copies; see INNOVATIONS): parent P (R 7) and bud D (R 5), prepared rings (labelled) touching
     // along D's bottom wall. The contact cells of both walls right of x = -0.75 are missing: one opening joins P, D and
     // the outside (each ring has one gap: a second would cut its wall in two). The leftmost P-D bond is the doorway bond
@@ -286,17 +307,21 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const CA=process.env.BUDCAP?+process.env.BUDCAP:null,capT=CA===null?[]:Pc.filter(v=>cn(v)[1]>(RP-1)*H&&cn(v)[0]>CA&&cn(v)[0]<CA+1);
       Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gP(v)));const Dk=[...Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gD(v))),...tooth];
       const tris=[...Pc,...Dk,...capT].map(v=>({v,type:'---'})),NP=Pc.length;
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{}});
+      // BUDPS=n (n <= 2): n more strands aAaA start free inside P, in rows below the founder (labelled: a parent that has
+      // copied its genome)
+      const moreF=[...Array(Math.min(2,+(process.env.BUDPS||0))).keys()].map(k=>({gaps:[1,1,1],faces:'aAaA',x:c,y:cy-1-1.1*k}));
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy},...moreF],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP,NP+Dk.length),Cu=U.slice(NP+Dk.length),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
       // the hold: the leftmost P-D bond is the doorway bond L; the anchor A is the inner free side within MD ring bonds
       // of L farthest from D's corners
+      const LX=process.env.BUDLX?+process.env.BUDLX:null;
       const RC=[...Array(6).keys()].map(k=>[(RD-0.5)*Math.cos(k*Math.PI/3),dyL+(RD-0.5)*Math.sin(k*Math.PI/3)]);let pick=null;const MD=5;
-      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0,x=cn(tris[U.indexOf(L)].v)[0];if(TA!==null?L===U[U.length-tooth.length+tooth.findIndex(v=>cn(v)[0]<TA+0.5)]:!pick||x<pick.x)pick={u,i,L,j:b%3,x};}
+      for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0,x=cn(tris[U.indexOf(L)].v)[0];if(TA!==null?L===U[U.length-tooth.length+tooth.findIndex(v=>cn(v)[0]<TA+0.5)]:LX!==null?!pick||Math.abs(x-LX)<Math.abs(pick.x-LX):!pick||x<pick.x)pick={u,i,L,j:b%3,x};}
       if(!pick)throw Error('budpore: no doorway bond');
       // BUDA=cell:side (D cell index in the structure, side) chooses the anchor instead
       const BA=process.env.BUDA,cands=[],more=[],prev=new Map([[pick.L,-1]]),Q=[pick.L],dist=new Map([[pick.L,0]]);let best=null;
       for(let q=0;q<Q.length;q++){const w=Q[q],d=dist.get(w);
-        if(d>0){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));
+        if(d>0||BA){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));
           const k={A:w,f,sc,d};cands.push(k);if(BA?BA.split(',').includes(`${U.indexOf(w)}:${f}`):d<=MD&&(!best||sc>best.sc))best=k;if(BA&&BA.split(',').includes(`${U.indexOf(w)}:${f}`))more.push(k);}}
         if(d>=MD&&!BA&&!process.env.BUDDRY)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
       if(!best)throw Error('budpore: no anchor side '+(BA||''));
@@ -315,26 +340,29 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(PX)console.log('P anchor at',S.hexr(mid(tris[U.indexOf(pa.u)].v,pa.i)).toFixed(2),mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));
       // BUDPF=x: the founder as P's plug: held by its high end z on an anchor Z| on the free side of P's top row nearest x
       // (as BUDPA's catch: at the left edge of P's half it lies in P's row, faces into P), instead of W| holding its low end
+      // BUDAG=Z: D's catching anchor takes a strand's high end z (glue Z@|; also in the dry-run) instead of its low end.
+      // BUDPFE=w: BUDPF holds the founder's low end w (anchor W|) instead. BUDLX=x: the doorway bond is the P-D contact nearest x
+      // (default: the leftmost)
       let fe='w';if(process.env.BUDPF){const x0=+process.env.BUDPF;pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!pa||d<pa.d)pa={u,i,d};}}
-        fe='z';console.log(`P anchor Z| (founder's high end) on P cell ${U.indexOf(pa.u)} side ${pa.i} at`,mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));}
+        fe=process.env.BUDPFE||'z';console.log(`P anchor ${fe.toUpperCase()}| (founder's ${fe==='z'?'high':'low'} end) on P cell ${U.indexOf(pa.u)} side ${pa.i} at`,mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));}
       s.glue[pa.u*3+pa.i]=gc(fe.toUpperCase());s.anc[pa.u*3+pa.i]=1;
       // BUDPA=x (BUDPAG=glue, default W): a catching anchor W@| in P too, on the free side of P's top row whose midpoint is nearest x (a gap edge:
       // a strand caught there lies in P's row, the parent's plug); the doorway waits for it as well. BUDDRYPIC=P: its picture
       let ppa=null;if(process.env.BUDPA){const x0=+process.env.BUDPA;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!ppa||d<ppa.d)ppa={u,i,d};}}
         ppa.g=process.env.BUDPAG||'W';s.glue[ppa.u*3+ppa.i]=gc(ppa.g);s.anc[ppa.u*3+ppa.i]=1;s.att[ppa.u*3+ppa.i]=1;const Q=[pick.u],dd=new Map([[pick.u,0]]);for(let q=0;q<Q.length;q++)for(let e=0;e<3;e++){const b=s.bond[Q[q]*3+e];if(b<0||!inP.has((b/3)|0)||dd.has((b/3)|0))continue;dd.set((b/3)|0,dd.get(Q[q])+1);Q.push((b/3)|0);}
         ppa.dist=dd.get(ppa.u)+1;console.log(`P catching anchor on P cell ${U.indexOf(ppa.u)} side ${ppa.i} at`,mid(tris[U.indexOf(ppa.u)].v,ppa.i).map(x=>x.toFixed(2)).join(','),`(${ppa.dist} bonds)`);}
-      for(const k of BA?more:[best]){s.glue[k.A*3+k.f]=gc('W');s.anc[k.A*3+k.f]=1;s.att[k.A*3+k.f]=1;}s.p.openRange=1;
-      seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
+      for(const k of BA?more:[best]){s.glue[k.A*3+k.f]=gc(process.env.BUDAG||'W');s.anc[k.A*3+k.f]=1;s.att[k.A*3+k.f]=1;}s.p.openRange=1;
+      for(const G of founders)seedCopyGenome(s,G);for(let k=0;k<40;k++)s.derive();
       // BUDDRY: where a strand caught by its low end on each inner side of D would stand (placed as the anchor places it):
       // overlap with the wall, and each back site's and face site's distance to the nearest wall cell; then exit
-      if(process.env.BUDDRY){const {triDepth}=require('./physics'),A6=new Float64Array(6),B6=new Float64Array(6),b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;
+      if(process.env.BUDDRY){const {triDepth}=require('./physics'),A6=new Float64Array(6),B6=new Float64Array(6),b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(process.env.BUDAG?process.env.BUDAG.toLowerCase():'w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;
         const site=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),q=P((i+1)%3),o=P((i+2)%3);return [(2*a[0]+2*q[0]-o[0])/3,(2*a[1]+2*q[1]-o[1])/3];};
         const near=p=>Math.min(...U.map(v=>Math.hypot(s._dx(s.px[v]-p[0]),s._dy(s.py[v]-p[1])))),cD=[c,cy+dyL];
         for(const k of cands.sort((x,y)=>x.d-y.d)){s._snapBody(b,f,k.A,k.f);let ov=0;for(const u of F)for(const v of U){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
             for(let q=0;q<3;q++){A6[2*q]=s.ox[u*3+q];A6[2*q+1]=s.oy[u*3+q];B6[2*q]=dx+s.ox[v*3+q];B6[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A6,B6)>1e-6)ov++;}
           const bk=[],fc=[];for(const u of F){const r=s.roles(u);if(r.free<0)continue;(r.role===2?bk:fc).push(near(site(u,r.free)).toFixed(2));}
           let ex=0,ey=0;for(const u of F){ex+=s._dx(s.px[u]-cD[0]);ey+=s._dy(s.py[u]-cD[1]);}const inn=S.hexr([ex/F.length,ey/F.length])<RD-1;
-          console.log(`cell ${U.indexOf(k.A)}:${k.f} bonds from the doorway cell ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);
+          const km=mid(tris[U.indexOf(k.A)].v,k.f);console.log(`cell ${U.indexOf(k.A)}:${k.f} at ${km[0].toFixed(2)},${(km[1]-dyL).toFixed(2)} (D frame) bonds from the doorway cell ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);
           // BUDDRYPIC=cell:side,...: a picture of the strand placed there
           if((process.env.BUDDRYPIC||'').split(',').includes(`${U.indexOf(k.A)}:${k.f}`))snap(s,`dry${U.indexOf(k.A)}_${k.f}`,`dry-run: a strand caught by its low end on D cell ${U.indexOf(k.A)} side ${k.f}`,{units:[...F,k.A],radius:6},false);}
         if(ppa&&(process.env.BUDDRYPIC||'').split(',').includes('P')){const e=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(ppa.g.toLowerCase());});s._snapBody(e,s.roles(e).inert,ppa.u,ppa.i);snap(s,'dryP',`dry-run: a strand caught by its low end on P's catching anchor`,{units:[...F,ppa.u],radius:6},false);}
@@ -354,7 +382,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(!(s.op[cap.u]>0))throw Error('budpore: the cap hears no open signal');console.log(`cap: on P cell ${U.indexOf(cap.P)} (anchor Z@|), ${dc} bonds from the bud's anchor; openRange ${R}`);}
       else if(TA===null)s.done[pick.u*3+pick.i]=1;else{s.glue[pick.u*3+pick.i]=gc('Z');s.anc[pick.u*3+pick.i]=1;s.att[pick.u*3+pick.i]=1;console.log(`tooth: doorway bond from P cell ${U.indexOf(pick.u)} (anchor Z@|) to the tooth, D cell ${U.indexOf(pick.L)}`);}
       if(!(s.op[pick.u]>0&&s.op[pick.L]>0))throw Error('budpore: the doorway bond hears no open signal');
-      const prep=new Set([...U,...F]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
+      const prep=new Set([...U,...founders.flat()]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
         if(!placeFree(s,u,placed,()=>{for(;;){if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}
       // inside a ring: within its inner wall's distance of its centre (unwrapped along bonds)
       const centre=L=>{const set=new Set(L),Q=[L[0]],seen=new Set(Q);for(let q=0;q<Q.length;q++)for(let i=0;i<3;i++){const b=s.bond[Q[q]*3+i];if(b<0)continue;const w=(b/3)|0;if(set.has(w)&&!seen.has(w)){seen.add(w);Q.push(w);}}

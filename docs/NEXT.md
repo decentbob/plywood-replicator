@@ -1,62 +1,50 @@
 # Next instance: start here
 
-**Current slice (autorun run 20261003-1121, build): closure by design (priority 2).** Goal: one organism kind whose
-bud is the same kind, every part grown from copies or taken from the environment, each step mapped to an existing demo
-or marked new, and the rules each step reads (locality). Done when: the design is written (IDEAS, ROADMAP parts table),
-its signal logic is checked deterministically in `tri/test.js` (growth order, completion, release) on a generated kit,
-and the least certain step (a strand passing an aligned 3+3 doorway into a bud of the parent's size) has been tried on
-`budpore`'s options in 4 worlds. Stop there: no M2 work, no growth-from-copies demo (priority 3).
-
-State on 2026-10-03 (after autorun run 20261003-0950, harden). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-03 (after autorun run 20261003-1121, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `a993d78`).
+handoffs: NEXT.md in git, e.g. at `b13cde7` for run 0950's and `a993d78`).
 
-**Handoff status (autorun run 20261003-0950, harden).** Everything committed on branch `claude/autorun-20261003-0950`
-and merged into `main`. No simulations running; `node tri/test.js` 36 pass; the whole check suite was run before and
-after (37 of 37 pass, `grown` partial, result lines identical). **Slice: check suite and speed (priority 5). Result:
-1.34x by exact changes** (same output byte for byte on all 37 check configurations; suite 2286 -> 1701 s, a `budpore
-300` world 253 -> 178 s; details INNOVATIONS run 0950). Nothing failed, so nothing was fixed. The user's idea of growing
-a finished membrane by breaking it and inserting triangles is in IDEAS (top) with first feasibility notes; it bears on
-closure (priority 2: a bud born small that grows to its parent's size). The next speed idea, if a harden run wants
-one: `_overlap` on ring bodies scans mostly the body's own blocks (a per-body list of foreign neighbours gathered once
-per `tryMove` would help bodies that take several trials); `_single`'s gather visits about 10 cells per lone block.
+**Handoff status (autorun run 20261003-1121, build).** Everything committed on branch `claude/autorun-20261003-1121`
+and merged into `main`. No simulations running; `node tri/test.js` 37 pass (one new test); no rule, physics or shared
+structure changed, so the check suite was not rerun (`budpore`'s default output checked byte-identical to main, both
+check variants, 6000 steps). **Slice: closure by design (priority 2). Result: designed, not demonstrated** (INNOVATIONS
+and IDEAS, run 1121; ROADMAP parts table). In short:
+- The kind: `structures.budKit(5, 7)`: a radius-5 ring with a 7-cell pore, every cell its own type (46 bond letters),
+  grown from its root one way round. Root = the pore's left edge: seed bond `Y@&` out, catching anchor `W@|` into the
+  pore (it later holds the founder). Last cell E = the pore's right edge with the seed site `y` (plain glue). A bud on
+  E is the parent turned 180 degrees about the pore: pores face (the doorway), the bud's E lies on the parent's root.
+- Why unique cells: growth cannot count motif repeats, so a periodic ring cannot stop beside a gap; the periodic
+  alternative (door cells released at ring closure, closure target `@.`) races its two growth fronts (IDEAS).
+- Checked: test "closure (budKit)" (deterministic, no physics): the bud holds while growing and waiting, lets go only
+  after its catch, and is then in the parent's starting state; the parent's seed site is free again (buds again).
+- Tried (`budpore` options, R 5 pair, 3 strands and 20 blanks in P, seeds 1-4, 100000 steps): 3-cell pores pass no
+  strand (0 of 8 worlds); 7-cell pores 4 of 4 split with the founder away from the doorway (a full copy in the bud
+  after the split in 3 of 4; strands leak out of the wide pores), 1 of 4 with the founder where the kind holds it (on
+  the parent's root, at the doorway's corner: it hangs into the doorway and jams it).
+- New: `structures.budKit`, `structures.budPose`, demo `closure` (picture only), `budpore` options `BUDPS`, `BUDPFE`,
+  `BUDLX`, `BUDAG`, `BUDA` on the doorway cell, dry-run positions (Commands).
 
-**M2 state (from build run 20261003-0751, unchanged).** Slice: plug the parent's half (priority 1, M2). Result: M2 not
-met (the bud makes a full copy after the split in at most 1 of 4 worlds of any layout); one new mechanism, cap release
-(partial, 2 of 4); a core-change candidate. Details and numbers: INNOVATIONS (run 0751). In short:
-- All three options of the old next step fail: more food in a bigger parent never reaches the bud before the split; the
-  founder lying in a wall row turns all food into face copies (no fills); the founder right of the doorway lies facing
-  in or stalls.
-- A catching anchor that waits near food is a food sink (copied 29-69 times per world). With copy binds on `@` sides
-  refused (hook), a parent catching anchor plugs the parent in time (3 of 8 with a full copy in the bud), but when it
-  catches first its 3-cell pore lets no strand reach the bud.
-- *Cap release* (`BUDCAP`, see Commands): the parent's plug anchor is bonded to a free cap until the bud's catch; the
-  decaying open signal cuts the cap one pass before the doorway, the freed anchor holds the doorway until it has caught,
-  then the pair splits. Order solved, no leak window: the parent keeps 7-14 strands (old layout 1-2). Fails on the bud's
-  anchor sink (no catch in 2 of 4) and on the bud's food after the split.
-- New demo options (diagnostics): `budpore` `BUDPF=x` (the founder held by its high end in P's row), `BUDNI=n` (blanks in
-  P), `BUDRP=r` (P's radius, odd), `BUDTOOTH=a`, `BUDCAP=a`, `BUDDBGA=1` (which prepared sides copy blanks bind; after the
-  split by template body), `BUDNOCA=1` (copy binds on `@` sides let go at once: the candidate below, not a rule). The
-  hook used for the checks is `runs/noca.js` (four lines, recreate from INNOVATIONS run 0751 if needed:
-  `TriSim.prototype.bind` wrapped so a copy bind on an `@` side is cut at once), run as
-  `NODE_OPTIONS="-r $PWD/runs/noca.js" node tri/check.js ...`. Pitfall: with `BUDA`, D's cell indices move when P's gap
-  changes (count P's removed cells).
-
-**Exact next step.** M2 has had four build runs (1921, 2321, 0320, 0751); the obstacles are now (1) the bud's waiting
-anchor as a food sink, which wants the core narrowing (c) below (an `explore` run), and (2) the bud's food after the
-split: outside blanks meet exposed templates (both plugs' backs face out, the bud's freed doorway side) before they
-pass its 3-cell pore. Recommended order: the next `build` run takes **priority 2, closure by design** (analysis; it
-decides what the bud's opening and anchors must be in every generation, which bounds the M2 design); the next
-`explore` run weighs candidate (c) and, if adopted, reruns the cap layout (`BUDCAP` command below, 8 worlds) as its
-evidence. A build run that returns to M2 should start from cap release and attack the bud's food: e.g. a bud whose
-pore is hooded (`imprint ph`), or a plug whose backs face a wall.
+**Exact next step.** A `build` run continues closure toward a demonstration, in this order: (1) **move the anchor off
+the doorway** in the kind: the root keeps the seed bond, the catching anchor goes k cells counter-clockwise (openRange
+k + 1, so the waiting anchor still holds the root and only cells within k of it stay unspent; no race, there is no
+door). Find k by dry-run on the 7-cell layout (`BUDDRY=1`, both catch ends with `BUDAG=Z`, Commands): a held strand
+must stand inside, backs open, leaning away from the doorway; then rerun the faithful transfer batch with the founder
+on the same side in P (`BUDPF`/`BUDPFE`, or `BUDPX`) and the bud's anchor there (`BUDA`), 4 worlds, target 3 of 4, and
+update `budKit` (anchor position as a parameter) and its test. (2) Priority 3 on this kind: a bud grows on a parent's
+seed site from a pool of free parts (one of each of the 47 types to start, labelled) and copy blanks; measure whether
+its growth leaves copies of every type for the next bud (the pool). M2 (the bud's food after the split) stays open;
+7-cell pores also leak strands. The next `explore` run weighs candidate (c) with the cost found here.
 
 **Core-change candidates.** (c) *A copy blank binds no `@` side* (run 0751): a catching anchor waits unbonded and
 exposed, and every blank that touches it becomes a useless copy of the anchor cell (29-69 per world when food is near:
 `BUDDBGA`). The rule would read the site's own attach mark (the copy bind already reads the site's spent state); it
 narrows, adds nothing. Measured as a hook over `imprint`, `imprint-genome`, `imprint-cell`, `imprint-pore`,
 `imprint-hood`, `budpore`, `budpore-c`: all pass as before (rings 30/30 in 4 of 4). Cost to weigh: an anchor or ring
-front cell can then be copied only through its other free sides. (d) *Code vs RULES:* the anchor catch does not test
+front cell can then be copied only through its other free sides; closure (run 1121) needs every cell type copied
+some time, and a cell whose free sides are all `@` (the kind's root `W@|Y@&b@`, an in-facing anchor cell) never would
+be: as stated (c) cuts the lineage unless such cells get a non-`@` free side. Hook for measuring it: `runs/noca.js` (recreate:
+`TriSim.prototype.bind` wrapped so a copy bind on an `@` side is cut at once; INNOVATIONS run 0751), run as
+`NODE_OPTIONS="-r $PWD/runs/noca.js" node tri/check.js ...`; `budpore` `BUDNOCA=1` does the same in one demo. (d) *Code vs RULES:* the anchor catch does not test
 `spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no structure has a spent anchor
 side, so nothing depends on it; a core review should add the test. (a) A flap swings on a welded partner's bonded
 trigger read directly, besides hearing through `+`: only `budgrow`'s pulse-door hinges use the direct path
@@ -108,6 +96,7 @@ RULES Binding. (a) and (b) are casting lineage; take them with the removal of fi
    where the bud ring's first motif round comes from (finding 5). Output: a parts list where every part is grown from
    copies or comes from the environment, with each step mapped to an existing demo, and the rules it reads (locality
    check). A `build` or `explore` run can take it; if it needs a core change, the case goes to RULES first.
+   **Designed in run 20261003-1121** (`budKit`, IDEAS "Closure by design"); open: the anchor's place, the part pool.
 3. **Grow the bud ring from copies** (replace D in `budpore`): the bud grows on P's seed site from copies of its own
    motif round (as `imprint`), outside in the food; doorway bond and anchor as parts of its kit (its walls spent before its anchor emits: IDEAS, 2026-10-03). Fix `imprint`'s one-front
    28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
@@ -136,6 +125,11 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~28 min, 4 processes)
+node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
+BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPX=b BUDLX=2 BUDA=84:2 BUDNI=20 BUDPS=2 node tri/demos.js budpore 1 100000 runs 100c
+                                                   # the kind's 7-cell doorway, founder away (4 of 4 split); the kind's own layout:
+                                                   # BUDPF=-1.75 BUDPFE=w instead of BUDPX=b (1 of 4); 3-cell pores: BUDPG=BUDDG=-0.75,0.75
+                                                   # BUDLX=1 BUDA=90:2 (0 of 8); BUDDRY=1: dry-run every bud anchor side (BUDAG=Z: by the high end)
 node tri/demos.js budpore 1 100000 runs 100c       # sealed bud pair: P feeds inside, founder under the doorway (7 of 8 split)
 node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, the doorway bond cut by completion release, split with food left (7 of 8); DBGC=1: where copies go, BUDF=20: frames;
                                                    # BUDDRY=1: dry-run a catch on every inner side of D; BUDA=cell:side: anchor
@@ -156,6 +150,15 @@ world from a saved state (not `split`: it places its parts after loading); `TRI_
 
 ## Pitfalls learned
 Casting-lineage and machine pitfalls (kits, pockets, doors, flaps): docs/IDEAS.md, "Pitfalls from the casting lineage".
+- **Growth cannot stop beside a gap** (2026-10-03, run 1121). A ring grown from a periodic motif ends only by closing
+  onto a cell already there (cells of one motif index are interchangeable among the six repeats), so a grown ring with
+  a pore needs unique cells up to the pore's far edge, or cells released later. Unique cells lie on segments grown
+  from the root.
+- **Two aligned 3-cell halves pass no strand** (2026-10-03, run 1121; run 0320 for a 3-cell bud half). The doorway's
+  waist is one unit wide and two rows long: 0 of 8 worlds; 7-cell halves pass (4 of 4).
+- **An anchor at a doorway's edge holds its strand across the doorway** (2026-10-03, run 1121). A strand caught on the
+  pore side of an edge cell (or one cell from it) leans over the opening; as a parent's founder it jams the doorway
+  (1 of 4 transfers, 4 of 4 with the founder elsewhere).
 - **A catching anchor must carry `@`** (2026-10-03, run 0751). An attached glued side without `@` binds any free
   triangle with the complementary glue (glue catch): a plain `Z|` anchor was capped by a lone face copy and never
   caught a strand. With `@` it binds only a part's `@` side, so only the anchor catch (strand ends) can take it.

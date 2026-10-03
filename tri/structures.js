@@ -588,4 +588,37 @@ function mapKit(K,A,i){const a=A[(i+1)%3],b=A[i],V=K.tris[K.root].v,j=K.rootSide
   const ang=Math.atan2(b[1]-a[1],b[0]-a[0])-Math.atan2(d[1]-c[1],d[0]-c[0]),cs=Math.cos(ang),sn=Math.sin(ang);
   const T=p=>{const x=p[0]-c[0],y=p[1]-c[1];return [a[0]+cs*x-sn*y,a[1]+sn*x+cs*y];};return {cells:K.tris.map(t=>t.v.map(T)),T};}
 
-module.exports={kitRace,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,importRing,doorRingKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,lattice,hexr,H};
+// Bud kit for closure (designed in autorun run 20261003-1121, docs/IDEAS.md "Closure by design"): one organism kind
+// whose bud is the same kind. A one-row ring of side R (odd) with a pore of 3 or 7 cells (in, out, ..., in) in the
+// middle of its top wall (with 7 its edges are the wall's corner cells for R = 5), grown from its root in one direction
+// (counter-clockwise) round to its last cell E: every cell has its own type
+// (a grown periodic ring cannot stop beside a gap: growth cannot count repeats, so every cell up to the pore's far edge
+// must be unique; 6(2R-1)-pore-1 bond letters, 46 for R = 5 and pore 7). A 3-cell pore passes no strand between two such
+// cells (run 20261003-1121: 0 of 8 worlds), a 7-cell pore does. The root is the pore's left edge: its outer side 'Y@&' attaches
+// to a seed y and lets go once the cell hears no open signal (completion); its pore side is the catching anchor 'W@|'
+// (it emits the open signal until it holds a strand's low end w, so the bud holds on to its parent until then, and later
+// holds the cell's founder). E is the pore's right edge: its outer side is the seed site 'y' (plain glue: it emits no
+// open signal, it is never spent), where the next bud's root attaches. Every other free side is '&' (spent once complete:
+// never copied). A bud's root attached to a parent's E puts the bud at the parent rotated 180 degrees about the middle of
+// the parent's pore (budPose): its pore faces the parent's pore (an aligned doorway) and its E lies on the parent's root.
+// letters: bond glues (default: the lower-case letters minus the genome's a w z, the seed y and the weld f).
+function budKit(R=5,pore=7,letters=null){if(R%2!==1||(pore!==3&&pore!==7))throw Error('budKit: R odd, pore 3 or 7');const e=(pore+1)/4;
+  const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),top=v=>cen(v)[1]>(R-1)*H,near=(v,x)=>top(v)&&Math.abs(cen(v)[0]-x)<0.1;
+  const root=cells.find(v=>near(v,-e)),gap=cells.filter(v=>top(v)&&Math.abs(cen(v)[0])<e-0.1),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
+  if(!root||gap.length!==pore)throw Error('budKit: no pore');const a0=ang(root),key=v=>((ang(v)-a0)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  const arc=cells.filter(v=>!gap.includes(v)).sort((a,b)=>key(a)-key(b)),N=arc.length;if(!near(arc[N-1],e))throw Error('budKit: the arc does not end at the pore');
+  const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
+  const L=letters||[...LOW].filter(c=>!'awzyf'.includes(c)).slice(0,N-1);if(L.length<N-1)throw Error(`budKit: needs ${N-1} letters`);
+  const outer=(v,i)=>hexr([(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2]);
+  let rootSide=-1,anchorSide=-1,seedSide=-1;
+  const types=arc.map((v,k)=>{const t=['-&','-&','-&'],prev=k>0?shared(v,arc[k-1]):-1,next=k<N-1?shared(v,arc[k+1]):-1;
+    if((k>0&&prev<0)||(k<N-1&&next<0))throw Error('budKit: cells not adjacent');
+    if(prev>=0)t[prev]=UP[LOW.indexOf(L[k-1])]+'@';if(next>=0)t[next]=L[k]+'@';
+    if(k===0||k===N-1){const free=[0,1,2].filter(i=>i!==prev&&i!==next).sort((i,j)=>outer(v,j)-outer(v,i));   // outer side first
+      if(k===0){rootSide=free[0];anchorSide=free[1];t[free[0]]='Y@&';t[free[1]]='W@|';}else{seedSide=free[0];t[free[0]]='y';}}
+    return t.join('');});
+  return {tris:arc.map((v,k)=>({v,type:types[k]})),types,root:0,last:N-1,rootSide,anchorSide,seedSide,letters:L.join(''),N,R,pore};}
+// a bud's pose on its parent (budKit): the parent's cells rotated 180 degrees about the middle of its pore's outer edge
+const budPose=(R,p)=>[-p[0],2*R*H-p[1]];
+
+module.exports={budKit,budPose,kitRace,lidPocket,stampInstr,budPair,grownBud,lidSlot,lidClear,importRing,doorRingKit,mapKit,sweepClear,kit,kitOptions,ringKit,conveyor,ring,lattice,hexr,H};

@@ -33,6 +33,7 @@ splits it off.** Build every mechanism in isolation, then combine them.
 | Feeding on copies: a cell fed through a pore copies its genome from copy blanks outside (every free side spent `&`, so only what lies inside is copied) | uptake of uniform nutrients | works (4 of 4 worlds, 5-6 strands inside from 150 blanks; controls: no pore 0 copies, plain walls take all; since anchors catch busy strands 7 of 8 seeds: a founder caught during its first copy, before any back was copied, never gets a fill) | demo imprint p |
 | Hooded pore: a cell fed through a pore under a hood keeps every strand in (a strand cannot turn from the pore into the corridor under the hood; blanks can) | a cell that does not leak its genome | works (8 of 8 worlds with 4+ strands inside, none lost in 7 of 8; plain pore: 4-9 strands lost in 3 of 8). Needed because free strands outside starve any cell (3 rivals leave an `imprint p` cell 1-2 strands) | demo imprint `ph` |
 | Bud pair on copies with a doorway (no doors; held by one completion-release bond `&` that hears the bud anchor's open signal and is cut once the anchor has caught, its freed sides spent; until run 20261003-0050 a latch on a hear chain) | budding on copies | works: the bud's mid-wall anchor `W@\|` catches a copy by its low end and the pair splits with food left in 8 of 8 seeds (run 1921; before: 4 of 8); the bud copying its genome after the split: not yet (one full copy in 2 of 8: the food goes to P's copies outside, the freed latch sides and anchor copies). Sealed variant `c` (run 2321): the doorway joins P and D only, P feeds from blanks inside with its founder under the doorway; splits 7 of 8 with 1-4 strands in the bud; bud copies after the split 1 of 8. Run 0050: completion-release doorway (same splits; sealed pair 0-1 wall copies, was 8-57) and a free triangle's anchor side binds nothing (open pair: 7 of 8 split with food left, bud copies 2 of 8). Run 0320: no doorway width gives M2 (the opening a strand enters by stays after the split; IDEAS, 2026-10-03); the bud's genome as its plug (a strand caught at its gap's edge lies in its wall, a 3-cell pore left): the bud alone copies in 3 of 4, the parent's half still leaks | demo budpore (`c`) |
+| Closure: one kind whose bud is the same kind (`structures.budKit`: R 5, every cell its own type, 7-cell pore, root = catching anchor + seed bond, last cell = seed site) | a lineage | designed, not demonstrated (run 20261003-1121): signal logic checked (test "closure (budKit)": the bud lets go only after its catch and is then in its parent's starting state); the doorway passes strands in 4 of 4 with the founder away from it, 1 of 4 with the founder where the kind holds it; growth from a part pool untested | structures.budKit, demo closure, IDEAS |
 | Proofreading / scanner against stray cast types | proofreading, selectivity | idea | backlog 4 |
 
 Every row marked works is guarded by `node tri/check.js` (one line per capability, about 30-40 minutes with 4 processes).
@@ -54,6 +55,12 @@ kind as its parent (so the cycle repeats). State in `budpore`, the nearest demo:
 | Bud seed site on the parent | where the next bud starts | none | re-made in every bud (closure, priority 2) |
 
 Spent walls cannot be templates, so ring material must come from an exposed, unspent surface (IDEAS, 2026-10-02).
+**Closure design (run 20261003-1121, `budKit`; IDEAS, "Closure by design")**: parent and bud are one kind, R 5, a
+7-cell pore; the bud ring grows on the parent's seed site `y` (its last cell, beside the pore) from copies made while
+earlier buds grew (every cell its own type: 47); the root's pore side is the catching anchor, which then holds the
+founder (one anchor, roles by time); the doorway is the two pores facing; the hold is the root's `&` seed bond
+(completion release after the catch); the seed site is plain glue, so a parent buds again. Nothing in the table above
+stays prepared but the first generation and an initial pool of one part of each type.
 
 ## Backlog (top first)
 
@@ -66,8 +73,8 @@ let the parent construct its offspring from one uniform food, and only that rout
    split (`budpore`; run 2321: not the anchor's geometry but food: the parent's leaked copies take it, see IDEAS; the
    sealed variant `budpore c` feeds the bud before the split; run 0320: no fixed doorway works, the bud's opening must
    be narrowed by a binding event after its strand is in, and nothing may leak: hooded pore; run 0751: cap release shuts the
-   parent's half by its own catch after the bud's, 2 of 4; the bud's food after the split and its anchor as a food sink remain); (b) closure by design: one organism kind whose bud is the same kind (ring
-   size, anchor roles, seed site, the first motif round), "designed, not demonstrated" counts; (c) grow the bud ring
+   parent's half by its own catch after the bud's, 2 of 4; the bud's food after the split and its anchor as a food sink remain); (b) closure by design: designed in run 20261003-1121 (`budKit`; the anchor must move off the doorway, the part
+   pool is untested); (c) grow the bud ring
    from copies on the parent's seed site (as `imprint`'s rings; fix the one-front 28/30 stall); (d) two generations;
    then (e) a core review of removing casting, stamp, fuel and machine marks that only the frozen lineage uses
    (`% ' $ ^ # = ! < >`, and since run 20261003-0050 also `* ~ +`: the copy lineage uses only `. @ & | ?`). Done so far: contact copying (run 0136), a sealed cell copies its genome from blanks
