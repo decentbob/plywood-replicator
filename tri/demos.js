@@ -177,6 +177,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(!tc){snap(s,'end',`t=${s.t}: ${n()} of ${N} cells`,focus(),false);snap(s,'endz',`the junction: the last site lies on the parent's root and opens only into the pair`,{units:[Pu[0],Pu[N-1]],radius:4},true);}
       const w=tb.map((x,k)=>k?x-tb[k-1]:x).filter((x,k)=>bud[k]>=0).sort((a,b)=>a-b),byType=cp.bud.map((c,k)=>c+cp.par[k]),used=n();
       console.log('copies per type (bud cell k, then the parent):',cp.bud.join(' '),'| parent:',cp.par.map((c,k)=>c?`${k}:${c}`:'').filter(Boolean).join(' '));
+      // later buds (observation): where each started (P: the parent's seed site; 0: the first bud's), its cells, whether its root still holds
+      console.log('later buds:',buds.slice(1).map(b=>`${b.on}:${b.cells.filter(x=>x>=0).length}${s.bonded(b.cells[0])&&s.partner(b.cells[0],K.rootSide)>=0?'':' free'}`).join(', ')||'none');
       {const g={};for(const u of all)if(!s.bonded(u)&&!kitT.has(canon(s.typeName(u)))){const k=canon(s.typeName(u));g[k]=(g[k]||0)+1;}console.log('free triangles not kit parts:',JSON.stringify(g));}
       console.log('waits by cell:',tb.map((x,k)=>bud[k]<0?'-':k?x-tb[k-1]:x).join(' '));
       console.log(`waits per cell: median ${w[w.length>>1]||0}, max ${w[w.length-1]||0}`);
