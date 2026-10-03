@@ -1,7 +1,27 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-0320, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-03 (after autorun run 20261003-0450, core-review). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
+
+**Handoff status (autorun run 20261003-0450, core-review).** Everything committed on branch
+`claude/autorun-20261003-0450` and merged into `main`. No simulations running; `node tri/test.js` 36 pass;
+`node tri/check.js` 37 of 37 before and after (after: run with changes 1-4 below; change 5 is output-identical by
+construction). **Slice: audit since 13461ae, refresh the inventory, make the core smaller. Done** (RULES, Core changes
+2026-10-03 and Core inventory):
+1. Removed `#` on a trigger side (key let go): no structure carried it, 0 events. `#` = pulse door only.
+2. Removed the option `zip: false` (one test only).
+3. Merged the two fill rules: a fill binds by the complement of the edge's glue (`latGlue` is the rule, option gone).
+   Cost: `copy` copies slower (a glued fill side passes its glue on); its check is now 4 worlds at 20000 steps, 3 of 4
+   (old form, seed 1 at 10000: 1 copy, would fail). Demos no longer pass `latGlue`.
+4. Fixed code to RULES: a free triangle binds by none of its anchor, close-only or spent sides in dock and fill too
+   (only glue catch tested them; a free `A|--` docked by its anchor side). New test.
+5. Removed a latch's reads of its partners' trigger and open state (0 deciding passes over every check world).
+Counts now: 16 mark meanings, 5 relayed signals, 9 exposed values, 9 states, 2 options (`pLoose`, `light`). The copy
+lineage uses 5 marks, 3 signals, no option. An independent reviewer (subagent) checked the diff: no bug; it found the
+close-only exception below and two weakened tests (fixed: the zip test has a positive case again).
+Hooks: coverage `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js`; the trigger-path
+hook used for change 5 is described in RULES (Core changes) and is not in the repository (a dozen lines: count, per
+servo pass, flaps and latches by which path triggered them).
 
 **Handoff status (autorun run 20261003-0320, build).** Everything committed on branch `claude/autorun-20261003-0320`
 and merged into `main`. No simulations running; `node tri/test.js` 35 pass; checks `imprint-hood` (new), `imprint-pore`
@@ -84,7 +104,11 @@ full copy on its plug strand in 3 of 4 (without the plug 1 of 3). With the paren
   the passage. Measure each with `DBGC=1`; target unchanged: one full copy in the bud after the split (4 releases on
   its strands) in 6 of 8 worlds of `budpore ... c`, then a check (`budpore-plug`).
 
-**Core-change candidates.** None open. Run 0050 settled both earlier ones: the spent latch (2) by design (the
+**Core-change candidates (core review 2026-10-03, both casting lineage; take with the removal of finding 2).**
+(a) A flap swings on a welded partner's bonded trigger read directly, besides hearing through `+`: only `budgrow`'s
+pulse-door hinges use the direct path (`grownBud`); a `+` on those weld sides would leave one path. (b) An attached
+close-only side still takes docks and fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free
+triangle"; documented as an exception in RULES Binding. Earlier: none open. Run 0050 settled both earlier ones: the spent latch (2) by design (the
 completion-release doorway), the anchor copies capping strands (1) by the narrowing "a free triangle's anchor side binds
 nothing" (RULES, Core changes 2026-10-03); the wider form (a free part binds only an attached `@` side) would change how
 kit roots attach to strand seeds and is not needed now.
@@ -145,9 +169,7 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 5 of 8); `core-review` takes finding 2 once priority 3 works.
 
 ### Open follow-ups (not priorities; take when a run's kind fits)
-- **Core review (after priority 3, see finding 2):** `#` on a trigger side ("let the key go") is now used only by the
-  gate's pulse option (the airlock demo was removed in run 1821): remove both together, then `#` means only "pulse
-  door". Lock signal has three uses (keys deaf, latches held, pulse doors ignore their trigger); a merge would need
+- **Core review (after priority 3, see finding 2):** `#` on a trigger side was removed in run 0450. Lock signal has three uses (keys deaf, latches held, pulse doors ignore their trigger); a merge would need
   non-pulse flaps to tell their own open latch from another door's. Same-pass partner reads (zip, gap, release, fn,
   cast) are allowed by convention (RULES, Locality audit); change only if a locality problem traces back to them.
   Coverage hook: `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js` (one JSON line
@@ -223,7 +245,7 @@ Casting-lineage and machine pitfalls (kits, pockets, doors, flaps): docs/IDEAS.m
 - **One gap per one-row ring.** A pore plus a doorway cuts a ring's wall into two bodies.
 - **Copy blanks go to every exposed side.** Walls take most of a batch (65-70% in a cell). Mark plain wall sides `&`:
   they are spent once the structure hears no open signal and are never copied. Copies of `&` cells used as fills are
-  cut when their `&` side hears none: use `latGlue` so only genome back copies fill.
+  cut when their `&` side hears none: give backs a lateral glue so only genome back copies fill (fills match the edge's glue).
 - **Latch sites emit no open signal** (`@~`): a front of latch sites carries the lock signal, not the open signal;
   something else must keep a structure open (ordinary sites, a content seed) or its `&` sides cut early.
 - **Physics leaks found 2026-10-02** (fixed): check new closed structures for escapes with a trace (cast products and

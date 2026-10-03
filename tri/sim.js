@@ -6,7 +6,7 @@
 // values from the previous pass; nothing counts, traverses or reads an organism.
 //
 //   glue binding   complementary glues (a<->A, ..., '-' inert) bind flush sides if one triangle is already attached
-//   chain copying  dock (face glue complement), fill (2 - gap fills), close, release, refractory (busy relay)
+//   chain copying  dock (face glue complement), fill (2 - gap fills, lateral glue complement), close, release, refractory (busy relay)
 //   casting        a triangle glue-bonded on all three sides to activated casters takes their instruction glues
 //   hinges         driven flaps: triggers, latches, hand-off/drop/pulse releases, interlock signal, carried cargo
 //   energy         charge state; discharged binds nothing; fuel sides; light zone recharge (environment)
@@ -27,7 +27,7 @@ const gcode=c=>{if(c==='-')return 0;let i=LOW.indexOf(c);if(i>=0)return 2*i+1;i=
 const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
-// ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
+// ! drop, ^ hand-off, # pulse door
 const MARKS='<>.!^#*~$+=%@&|?';
 // carried marks (stamp): marks written after an apostrophe (b.'@) do nothing on this side; a cast product takes them
 // with the glue (a caster's instruction side prints glue and marks, so a pocket can cast parts that carry marks)
@@ -43,7 +43,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+side
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
-  zip:true,pLoose:0,latGlue:false,light:null};
+  pLoose:0,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -170,6 +170,8 @@ class TriSim extends Physics{
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
+    // a free triangle binds (glue catch, dock, fill) by none of its anchor '|', close-only '.' or spent sides
+    const fs=(v,j)=>!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j];
     // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
     // orientation: binding turns it into place)
     const reach=(u,i,v,j)=>{const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
@@ -190,16 +192,17 @@ class TriSim extends Physics{
         // a trigger side catches only while its flap is at rest and its structure is complete (_deaf); a free triangle's
         // anchor side '|' binds nothing (catching strands is what attached anchors do, below)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
-        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])){const g=gl(u,r.free);
-          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
+        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&this.zip[u]){const g=gl(u,r.free);
+          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
             this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
-        // fill the prev edge of a docked or fill triangle that still needs fills (glue-agnostic unless latGlue)
-        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
+        // fill the prev edge of a docked or fill triangle that still needs fills, with the complement of that edge's glue
+        // (an inert edge takes an inert side)
+        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(gl(v,j)===comp(gl(u,r.prev))&&fs(v,j)&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
           if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fn[v]=1;this.fn[u]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its unbonded spare edge,
@@ -274,15 +277,14 @@ class TriSim extends Physics{
     for(let u=0;u<this.n;u++){if(this.chg[u]||this.bonded(u))continue;
       if(Math.hypot(this._dx(this.px[u]-L.x),this._dy(this.py[u]-L.y))<L.r&&this.rng()<L.p){this.chg[u]=1;this.count('recharge');}}}
   // ---------------- hinge drive ----------------
-  // latches let go while their triangle (or one bonded to it, not by a hinge) is triggered or hears a trigger (and no
-  // other door is unlatched: interlock), or while their door is opening; also without any hinge (e.g. a bud's seed latch)
-  _latches(){const n=this.n,P=(u,i)=>this.partner(u,i);
+  // latches let go while their triangle is triggered or hears a trigger (and no other door is unlatched: interlock), or
+  // while it is an opening pulse door; also without any hinge (e.g. a bud's seed latch)
+  _latches(){const n=this.n;
     // completion release '&': the bond on this side is cut once its triangle hears no open signal (its part is complete)
     // (the side is then spent: it binds nothing again, so the gap it leaves cannot be refilled)
     for(let u=0;u<n;u++)if(this.op[u]===0)for(let i=0;i<3;i++){const k=u*3+i;if(!this.done[k])continue;this.spent[k]=1;if(this.bond[k]>=0){this.cut(u,i);this.count('complete');}}
-    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;let trig=this.tb[u]||this.sg[u]>0,open=this.dOpen[u];
-      for(let e=0;e<3;e++)if(e!==i&&this.bond[u*3+e]>=0&&!this.isHingeBond(u,e)){const w=P(u,e);if(this.tb[w])trig=1;if(this.dOpen[w])open=1;}
-      if(open||(trig&&this.lockBusy[u]===0)){this.cut(u,i);this.count('unlatch');}}}
+    for(let u=0;u<n;u++)for(let i=0;i<3;i++){if(!this.ltc[u*3+i]||this.bond[u*3+i]<0)continue;
+      if(this.dOpen[u]||((this.tb[u]||this.sg[u]>0)&&this.lockBusy[u]===0)){this.cut(u,i);this.count('unlatch');}}}
   servo(){
     this._latches();
     if(!this.hinge.some(x=>x))return;this.gridSync();const n=this.n,p=this.p,th0=p.hingeAngle,rate=p.hingeRate,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
@@ -320,8 +322,6 @@ class TriSim extends Physics{
       // flap stalls: rigid parts do not squeeze)
       const c=this.hinge[u*3+i]===1?i:(i+1)%3,Px=this.px[u]+this.ox[u*3+c],Py=this.py[u]+this.oy[u*3+c];
       if(this.tryMove(body,0,0,d,Px,Py)<1)this.count('stall');}
-    // pulse triggers let the key go once it has been read
-    for(let u=0;u<n;u++)if(this.tb[u])for(let e=0;e<3;e++)if(this.trg[u*3+e]&&this.rel[u*3+e]===3&&this.bond[u*3+e]>=0){this.cut(u,e);this.count('keyRelease');}
   }
   step(){this.servo();this.t++;this.physics();this.derive();this.formBonds();this.chemistry();}
   run(steps){for(let k=0;k<steps;k++)this.step();}

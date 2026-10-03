@@ -8,6 +8,24 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Reuse glue letters in separate compartments; bigger cells (user, 2026-10-03)
+User (during core-review run 20261003-0450): "It seems it is useful to have many different basic structures that can
+be combined to a larger one. That needs a lot of different types of sides. One way to reduce type need is to have
+connection blocks for the basic structure be different in different environments (different combination of side
+types). Of course that means these areas have to be kept sterile, but possible with cell-like walls. Maybe also
+bigger 'cells' are needed - much is stuffed in there now."
+- Why it fits: glue letters are labels with no rule of their own, and binding is local, so a letter means something
+  only among the triangles that can meet. Two sealed compartments can use the same letters for different joints, as
+  cells reuse one genetic code in separate bodies. The letter budget (63 pairs, a grown bud of side 5 uses 54: NEXT,
+  Pitfalls) then limits one compartment, not the world. No core change: spent `&` walls already keep compartments
+  sterile (`imprint m`: every copy goes to the genome), and a hooded pore lets blanks in without letting strands out.
+- What it needs: each compartment's parts must never leave it (the way in is the way out, above: openings bent or
+  closed by binding), and food that enters must be uniform blanks (copy blanks carry no letters until they copy).
+- Bigger cells: today's cells are R 5-7 with the genome, an anchor, a doorway and the food inside; strands press
+  against walls (backs in a wedge get no copies). A larger ring costs only more wall cells, which are spent and so
+  cost no food; worth trying when a slice is limited by crowding (`budpore`'s parent half).
+- Not yet built or measured.
+
 ## The way in is the way out; nothing may leak (design lesson, build run 20261003-0320, 2026-10-03)
 
 Three findings from trying to keep the parent's copies in after `budpore`'s split (INNOVATIONS, run 0320):
@@ -127,9 +145,9 @@ docker types), and parts regrow on every copy from supply, as the typed arms alr
 - Any shape can be grown from a seed: lay its cells out as a spanning tree from the seed, give every tree edge its
   own glue pair (unique attachment), and give the remaining shared edges closure glues (they bind once both sides
   are attached), which closes rings. A pocket needs about 16 distinct types.
-- Information capacity: now only the two strand ends expose seeds (hidden backs are random fills). With `latGlue`
-  (fills must carry the complement of the docker's lateral glue) every back is determined by its face's docker type,
-  so the face sequence decides a sequence of parts along the back: a real genome-to-body mapping.
+- Information capacity: now only the two strand ends expose seeds (hidden backs are random fills). Since
+  2026-10-03 fills must carry the complement of the docker's lateral glue (once the option `latGlue`), so every back is determined by its face's docker type,
+  and the face sequence decides a sequence of parts along the back: a real genome-to-body mapping.
 - The bottleneck is supply: each copy needs its own kit types. A pocket that casts blanks into kit types would make
   its own parts (an autocatalytic factory, the core of a metabolism).
 
@@ -234,6 +252,6 @@ for current work stay in docs/NEXT.md.
   neighbour across its far edge. Close lids onto a target instead of carrying the target (lid pocket).
 - Kits: every functional pair (activator `%` pairs, instruction holders) must be a close-only closure or a unique activator glue (`%`);
   otherwise free kit cells, products or dockers stick at the wrong place. Free parts must bind only by `@`.
-- Dockers used as fills expose their side glues on hidden backs: use `latGlue` with dedicated fill types when dockers
-  carry seeds.
+- Dockers used as fills expose their side glues on hidden backs: give dockers dedicated fill types when they
+  carry seeds (fills match the lateral glue since 2026-10-03).
 - A latch must stay released while its door opens; any doorway makes a 2D ring a C (use airlocks).

@@ -63,8 +63,8 @@ function conveyor(){return [
 // together (unique weld glues), hinged to the wall at one end (pin on the outer boundary) and latched (L~) to the wall
 // at the other; a key (ggg) on an outward face of the panel (trigger G*) unlatches it and the panel swings 120 degrees
 // out (use hingeAngle 120 degrees or a wide hinge). The door is chosen so its whole swing is clear of the wall (a rigid
-// panel cannot squeeze past its neighbours): checked here by sweeping it. pulse: '#' marks (pulse door, key let go).
-function ring(R=4,rows=1,k=3,pulse=false){
+// panel cannot squeeze past its neighbours): checked here by sweeping it.
+function ring(R=4,rows=1,k=3){
   if(rows!==1)throw Error('ring: one row only on rigid physics');
   const cells=ringKit(R,'z').tris.map(t=>t.v),N=cells.length,shr=(a,b)=>a.filter(p=>b.some(q=>same(p,q)));
   const rot=(p,c,t)=>[c[0]+Math.cos(t)*(p[0]-c[0])-Math.sin(t)*(p[1]-c[1]),c[1]+Math.sin(t)*(p[0]-c[0])+Math.cos(t)*(p[1]-c[1])];
@@ -81,13 +81,13 @@ function ring(R=4,rows=1,k=3,pulse=false){
   const side=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(cells[a][i],cells[b][(j+1)%3])&&same(cells[a][(i+1)%3],cells[b][j]))return [i,j];return null;};
   const T=cells.map(()=>['-','-','-']),loose=new Set(door.panel),W='wvu';
   // hinge: first panel cell to the previous wall cell
-  {const [i,j]=side(door.panel[0],door.prev),v=cells[door.panel[0]];T[door.panel[0]][i]='h'+(same(v[i],door.P)?'<':'>')+(pulse?'#':'');T[door.prev][j]='H';}
+  {const [i,j]=side(door.panel[0],door.prev),v=cells[door.panel[0]];T[door.panel[0]][i]='h'+(same(v[i],door.P)?'<':'>');T[door.prev][j]='H';}
   // welds inside the panel, latch at the far end
   for(let q=0;q+1<door.panel.length;q++){const [i,j]=side(door.panel[q],door.panel[q+1]);T[door.panel[q]][i]=W[q]+'+';T[door.panel[q+1]][j]=W[q].toUpperCase()+'+';}   // weld sides hear: the key's signal reaches the hinge
   {const last=door.panel[door.panel.length-1],[i,j]=side(last,door.next);T[last][i]='L~';T[door.next][j]='l';}
   // key trigger on the panel cell nearest the latch with an outward free side (a latch hears triggers one bond away)
   for(const c of [...door.panel].reverse()){const f=[0,1,2].find(i=>T[c][i]==='-'&&!cells.some((w,x)=>x!==c&&side(c,x)&&side(c,x)[0]===i));
-    if(f===undefined)continue;const m=[(cells[c][f][0]+cells[c][(f+1)%3][0])/2,(cells[c][f][1]+cells[c][(f+1)%3][1])/2];if(hexr(m)>R-0.5){T[c][f]='G*'+(pulse?'#':'');break;}}
+    if(f===undefined)continue;const m=[(cells[c][f][0]+cells[c][(f+1)%3][0])/2,(cells[c][f][1]+cells[c][(f+1)%3][1])/2];if(hexr(m)>R-0.5){T[c][f]='G*';break;}}
   const tris=cells.map((v,x)=>({v,type:T[x].join(''),loose:loose.has(x)}));
   return {tris,R,door};}
 
