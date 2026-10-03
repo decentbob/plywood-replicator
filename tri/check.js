@@ -2,7 +2,8 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 30-40 minutes)
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 30-40 minutes;
+//   each check prints when its last world finishes, so lines come in finishing order)
 // Exit code 1 if a working capability fails.
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
@@ -100,12 +101,13 @@ function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'d
 
 async function main(){const want=process.argv.slice(2),sel=CHECKS.filter(c=>!want.length||want.includes(c.id));
   if(want.length&&sel.length!==want.length)throw Error('unknown check; one of '+CHECKS.map(c=>c.id).join(' '));
-  // jobs longest first, at most 4 at once
-  const jobs=sel.flatMap(c=>c.seeds.map(seed=>({c,seed}))).sort((a,b)=>b.c.secs-a.c.secs),res=new Map(),t0=Date.now();
-  let next=0;const worker=async()=>{while(next<jobs.length){const j=jobs[next++];res.set(j,await run(j.c,j.seed));}};
-  await Promise.all([1,2,3,4].map(worker));let fails=0;
-  for(const c of sel){const rs=c.seeds.map(seed=>[seed,res.get(jobs.find(j=>j.c===c&&j.seed===seed))]),k=rs.filter(([,r])=>r.ok).length,need=c.need||c.seeds.length,ok=k>=need;
+  // jobs longest first, at most 4 at once; each check's line is printed as soon as its last world finishes (a restart
+  // loses only the checks still running)
+  const jobs=sel.flatMap(c=>c.seeds.map(seed=>({c,seed}))).sort((a,b)=>b.c.secs-a.c.secs),res=new Map(),t0=Date.now(),left=new Map(sel.map(c=>[c,c.seeds.length]));
+  let next=0,fails=0;const report=c=>{const rs=c.seeds.map(seed=>[seed,res.get(jobs.find(j=>j.c===c&&j.seed===seed))]),k=rs.filter(([,r])=>r.ok).length,need=c.need||c.seeds.length,ok=k>=need;
     if(!ok&&!c.partial)fails++;const tag=ok?'PASS':c.partial?'PART':'FAIL',w=c.seeds.length>1?` ${k}/${c.seeds.length} worlds (need ${need}):`:':';
-    console.log(`${tag} ${c.id.padEnd(12)} ${c.cap}${w} ${rs.map(([seed,r])=>(c.seeds.length>1?`[${seed}${r.ok?'+':'-'}] `:'')+r.ev).join('; ')} (${Math.max(...rs.map(([,r])=>r.secs)).toFixed(0)} s)`);}
+    console.log(`${tag} ${c.id.padEnd(12)} ${c.cap}${w} ${rs.map(([seed,r])=>(c.seeds.length>1?`[${seed}${r.ok?'+':'-'}] `:'')+r.ev).join('; ')} (${Math.max(...rs.map(([,r])=>r.secs)).toFixed(0)} s)`);};
+  const worker=async()=>{while(next<jobs.length){const j=jobs[next++];res.set(j,await run(j.c,j.seed));left.set(j.c,left.get(j.c)-1);if(!left.get(j.c))report(j.c);}};
+  await Promise.all([1,2,3,4].map(worker));
   console.log(`${sel.length-fails} of ${sel.length} checks pass (partial ones never fail); ${((Date.now()-t0)/1000).toFixed(0)} s`);process.exitCode=fails?1:0;}
 main();

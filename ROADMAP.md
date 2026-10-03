@@ -79,12 +79,12 @@ let the parent construct its offspring from one uniform food, and only that rout
    how the kind feeds without leaking and still passes a strand to its next bud (two openings with a hooded feeding
    pore, a doorway narrowed by the caught strand, or fission), then move the anchor and rerun the transfer on the
    kind's layout; this replaces M2 on `budpore`'s layout, which stopped after four build runs (1921, 2321, 0320, 0751;
-   lessons in IDEAS); (c) two generations; (d) prune `budpore`'s diagnostic options (24 `BUD*` variables); (e) a
+   lessons in IDEAS); (c) two generations; (d) a
    core review weighs removing the casting lineage now (its checks are about half the check time; marks
    `% ' $ ^ # = ! < > * ~ +`; the copy lineage uses only `. @ & | ?`). Done so far: contact copying (run 0136), a
    sealed cell copies its genome from blanks (`imprint m`), a cell fed through a pore (`imprint p`), a hooded pore
    (`imprint ph`), `budpore` splits with food left (8 of 8, run 1921), completion release (run 0050), closure designed
-   (`budKit`, run 1121), the part pool law (run 1221).
+   (`budKit`, run 1121), the part pool law (run 1221), `budpore`'s dead-end options pruned (24 to 17 `BUD*` variables, run 1351).
 0b. **Speed** (harden runs): `budpore` worlds take about 3 minutes, the check suite 28 (run 0950: 1.34x by exact
    changes); lone blocks (`_single`), ring bodies (`_overlap`) and pairs share the time, no single hot spot left.
    Since run 20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
@@ -103,7 +103,7 @@ Frozen (casting lineage; kept for reference and checks):
 ## Known issues
 - Physics leak fixed 2026-10-02 (run 1050, midpoint check). Left from it: grown is partial (membrane closes 1 of 4);
   a one-front ring whose last two sites are open can be finished only by a part already inside (the gap is a rhombus
-  exactly one block wide: imprint's 28/30 stalls); see docs/NEXT.md, Pitfalls (one-front rings).
+  exactly one block wide: imprint's 28/30 stalls); see docs/IDEAS.md, Pitfalls learned (one-front rings).
 - Fuel is spent per fuel triangle, not per swing (two carriers on one triangle are both spent); designed fix in
   docs/NEXT.md at `c11ed14` (core review follow-up 2); casting lineage, frozen. The energy demo is not affected.
 - Core inventory and the rule-by-rule locality table: docs/RULES.md.
