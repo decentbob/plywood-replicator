@@ -1,31 +1,22 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-1420, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-03 (after autorun run 20261003-1520, harden). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `e3a3d06` for run 1351's, `7a98831` for run 1321's).
+handoffs: NEXT.md in git, e.g. at `8f6fddb` for run 1420's, `e3a3d06` for run 1351's).
 
-**Current slice (autorun 20261003-1520, harden; in progress).** Priority 6: run the full check suite and fix any
-failure; then raise the margins of `budpore-c` (6 of 8, need 6) and `imprint-hood` (3 of 4, need 3): measure each on
-more seeds, find the failure mode in the failing worlds from their pictures, fix it with the existing core (layout or
-demo parameters, no rule change). Done when the suite passes and each of the two has a failure mode named and either
-a fix that passes more worlds or a recorded reason why not. Stop there; no new capability.
+**Handoff status (autorun run 20261003-1520, harden).** Priority 6 done; merged into `main` (branch
+`claude/autorun-20261003-1520`); no simulations running; 38 tests pass. Full check suite on main at the start: 38 of
+38 pass (1926 s). Results (INNOVATIONS, run 1520; lesson in IDEAS, pitfall "Where a caught strand's backs face"):
+(1) `imprint-hood`'s failures were copying stalls, not leaks: a founder caught before any of its backs was copied
+leans onto the wall with its backs underneath and gets no fills (seeds 4, 14), or a strand stands in the pore (11, 13);
+no strand passed the hood in 14 worlds. The anchor moved one side (x = 0 to x = -1, `imprint p` layouts): `150ph` 14 of
+14 (was 10 of 14), check 4 of 4; `imprint-pore` 4 of 4, controls unchanged. (2) `budpore-c` seeds 2 and 3 are blocked
+(no split at 300000 steps): a doorway jam of nine strands in P, and strands in D the anchor never catches; layout
+frozen (run 1321), no fix. (3) `imprint` seeds 4 and 6 stop at 28 of 30 with plenty of every part (seed 4: the first
+ring lies across the second's last sites; seed 6 not diagnosed). Lesson for the kind: where a cell's anchor sits on
+its wall decides whether the caught strand's backs can be copied; dry-run every anchor before placing it.
 
-**Handoff status (autorun run 20261003-1420, build).** Priority 1 done and merged into `main` (branch
-`claude/autorun-20261003-1420`); no simulations running; 38 tests pass; check `budpool` 4 of 4. Demo `budpool`: a
-prepared parent of `budKit(5, 7)` grows its bud on its seed site from a pool of all 47 part types (8 each, 40 of the
-last cell E) and 8 copy blanks, held at that composition by a labelled harness, openRange 1; a stand-in catch at the
-end splits it. Results (INNOVATIONS, run 1420; lessons in IDEAS, "The kind's bud from a part pool"):
-(1) growth from the pool works, cell by cell, 0 stray bindings, a bud in 107-200 thousand steps (8 of 8 worlds);
-(2) refill 1.37 copies per used part on average at one part per type per blank, as run 1221's law predicts, but about
-45 percent of the types get no copy in a generation, and the copies of type k follow the wait for part k+1, not the
-count of k: **the pool has no per-type regulation** (neutral drift; a type that dies out ends the lineage);
-(3) **the last cell must come from inside the sealed pair**: by the pose's symmetry the bud's last cell E sits with its
-seed side on the parent's root and its third side faces the doorway, so after cell N-2 the last site opens only into
-the pair (with as many E parts as other types: 2 of 4 complete, exactly the worlds with an E part inside); every kind
-with facing pores has this. (4) Growth time goes as the square of the number of types; crowding, not distance, limits
-the rate (a denser 24 x 24 world was slower).
-
-**Exact next step.** The next `harden` run takes priority 6. The next `build` or `explore` run takes priority 2, now
+**Exact next step.** The next `build` or `explore` run takes priority 2, now
 with two more requirements from run 1420: the kind's last site must be reachable (from outside, or an E source inside)
 and the pool's per-type drift should be weighed (fewer types, or a template copied when its own type is scarce). The
 next `core-review` takes priority 5.
@@ -113,8 +104,10 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    time, a smaller core and RULES, nothing on the closure path uses them. Against: working capabilities (machines,
    pumps) leave the tree; they stay in git and could return if proofreading or transport needs them. If the review
    decides against, record why and keep them frozen.
-6. **Speed and margins** (`harden`): `budpore-c` (6 of 8, need 6) and `imprint-hood` (3 of 4, need 3) sit at their
-   margins; speed idea from run 2150 (a flat per-step grid by counting sort; outputs need re-checking). One `harden` per
+6. **Speed and margins** (`harden`): `imprint-hood` done in run 1520 (14 of 14). Left at their margins, failure modes
+   named (INNOVATIONS, run 1520): `budpore-c` 6 of 8 (frozen layout: fix only if priority 2 reuses it), `imprint` 3 of
+   4 (seed 6's stop at 28 of 30 not diagnosed: next harden's first look), `budpore` 3 of 4 (food used up). Speed: the
+   flat cell grid of run 2150's idea was built in run 0950; the full suite takes about 32 minutes. One `harden` per
    twelve runs is enough now: the work is limited by design questions, not by run time.
 **Rotation (autorun `projects/plywood/rotation.txt`):** the second `harden` (line 8) became an `explore`: priorities 1
 and 3 are `build` work, 2 is design work that `explore` and `build` can both take, 5 is the `core-review`'s.
@@ -159,7 +152,7 @@ Casting lineage and older (frozen; each has a check in `tri/check.js` with its s
 `factory`, `energy`, `conveyor`, `gate`, `import`, `grow` (`12`, `4s`), `stamp`, `ring`, `heir`, `cycle`, `wrap`,
 `cells`, `live`, `cell`, `grown`, `bud`, `split` (default, `g`, `o`), `budgrow` (default, `g`). Pictures go to
 `runs/NAME.png` with saved states; `TRI_NOPIC=1` turns them off. `TRI_RESUME=runs/x/NAME_tNNN.json.gz` continues a demo
-world from a saved state (not `split`: it places its parts after loading); `TRI_PARAMS='{...}'` overrides parameters.
+world from a saved state (not `split` or `budpore`: they place parts after loading); `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Pitfalls learned
 Read before designing a layout: docs/IDEAS.md, "Pitfalls learned (copy lineage)" (doorways, anchors, food sinks,
