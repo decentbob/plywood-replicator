@@ -144,7 +144,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         ring.sort((a,b)=>ang(a)-ang(b));if(!closed)ring=ring.slice(3);
         // the anchor: the inner side in the middle of the flat wall opposite the pore (at a corner the anchored strand
         // would lie along the next wall, its backs hidden, and no fill could be copied)
-        let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
+        let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]-(+process.env.IMPAX||0));if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
         best.t.type=[0,1,2].map(i=>i===best.i?'W|':'-').join('');}
       // 'h' (with p, a hooded pore): a hood over the pore (prepared, labelled): a strip one row thick two rows above the
       // wall, from x = -2 to the top wall's corner, held by a strut of 4 cells at its left end. Blanks reach the pore along
@@ -158,6 +158,15 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const NX=pore&&X.includes('x')?3:0,rivals=[[1,1],[1,c],[c,1]].slice(0,NX).map(([x,y])=>({gaps:[1,1,1],faces:'aAaA',x,y}));
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c},...rivals],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{}});
       const U=structures[0],F=founders[0];for(const G of founders)seedCopyGenome(s,G);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
+      if(process.env.IMPDRY){const {gcode}=require('./sim'),{triDepth}=require('./physics'),A6=new Float64Array(6),B6=new Float64Array(6),b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gcode('w');}),f=s.roles(b).inert;s.moveDepth=()=>0;
+        const site=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),q=P((i+1)%3),o=P((i+2)%3);return [(2*a[0]+2*q[0]-o[0])/3,(2*a[1]+2*q[1]-o[1])/3];};
+        const near=p=>Math.min(...U.map(v=>Math.hypot(s._dx(s.px[v]-p[0]),s._dy(s.py[v]-p[1]))));
+        for(const u of U.slice(0,NR))for(let i=0;i<3;i++){if(s.bond[u*3+i]>=0)continue;const m=site(u,i);if(Math.hypot(m[0]-c,m[1]-c)>(R-0.6)*H)continue;
+          if(!s._snapBody(b,f,u,i))continue;let ov=0;for(const x of F)for(const v of U){const dx=s._dx(s.px[v]-s.px[x]),dy=s._dy(s.py[v]-s.py[x]);if(dx*dx+dy*dy>1.4)continue;
+            for(let q=0;q<3;q++){A6[2*q]=s.ox[x*3+q];A6[2*q+1]=s.oy[x*3+q];B6[2*q]=dx+s.ox[v*3+q];B6[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A6,B6)>1e-6)ov++;}
+          const bk=[],fc=[];for(const x of F){const r=s.roles(x);if(r.free<0)continue;(r.role===2?bk:fc).push(+near(site(x,r.free)).toFixed(2));}
+          console.log(`cell ${U.indexOf(u)}:${i} at ${(m[0]-c).toFixed(2)},${(m[1]-c).toFixed(2)} ${s.anc[u*3+i]?'(anchor) ':''}overlaps ${ov} backs [${bk}] min ${Math.min(...bk)} faces [${fc}] min ${Math.min(...fc)}`);}
+        process.exit(0);}
       const prep=new Set([...U,...founders.flat()]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*(pore?c:R),y=(2*s.rng()-1)*(pore?c:R),h=S.hexr([x,y]);if(pore?h>R+0.6:h<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
       const wallT=new Set(U.map(u=>canon(typeName(s,u)))),strands=()=>census(s).filter(q=>q.n>=7&&!q.paired);
       // inside the ring: a strand's centre within the inner wall's distance from the ring's centre (unwrapped along bonds)
