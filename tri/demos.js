@@ -264,7 +264,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // a hear chain (code at e2634fb); its freed latch sides were copied 3-105 times per world.
     // Option 'c' (sealed): the doorway ends at x = 2.25 (BUDDC), so it joins P and D only; 80 blanks start inside P and
     // the founder hangs from the doorway's left edge; outside blanks get in only after the split (each half a pore).
-    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:X.includes('c')?80:0,DW=0.75,RP=7,RD=+(process.env.BUDRD||5),size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    // BUDNI=n: n blanks start inside P instead. BUDRP=r: P's radius (odd; default 7).
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=process.env.BUDNI?+process.env.BUDNI:X.includes('i')?60:X.includes('c')?80:0,DW=0.75,RP=+(process.env.BUDRP||7),RD=+(process.env.BUDRD||5),size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
@@ -299,7 +300,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // left edge (-1): the founder hangs under the doorway, so its copies are released at the way into D
       const PX=process.env.BUDPX==='b'?'':process.env.BUDPX||(X.includes('c')?-1:'');let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||(PX?m[1]<0:m[1]>0)||S.hexr(m)>RP-0.5)continue;const d=PX?Math.abs(m[0]-PX):Math.abs(m[0]);if(!pa||d<pa.d)pa={u,i,d};}}
       if(PX)console.log('P anchor at',S.hexr(mid(tris[U.indexOf(pa.u)].v,pa.i)).toFixed(2),mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));
-      s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
+      // BUDPF=x: the founder as P's plug: held by its high end z on an anchor Z| on the free side of P's top row nearest x
+      // (as BUDPA's catch: at the left edge of P's half it lies in P's row, faces into P), instead of W| holding its low end
+      let fe='w';if(process.env.BUDPF){const x0=+process.env.BUDPF;pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!pa||d<pa.d)pa={u,i,d};}}
+        fe='z';console.log(`P anchor Z| (founder's high end) on P cell ${U.indexOf(pa.u)} side ${pa.i} at`,mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));}
+      s.glue[pa.u*3+pa.i]=gc(fe.toUpperCase());s.anc[pa.u*3+pa.i]=1;
       // BUDPA=x (BUDPAG=glue, default W): a catching anchor W@| in P too, on the free side of P's top row whose midpoint is nearest x (a gap edge:
       // a strand caught there lies in P's row, the parent's plug); the doorway waits for it as well. BUDDRYPIC=P: its picture
       let ppa=null;if(process.env.BUDPA){const x0=+process.env.BUDPA;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!ppa||d<ppa.d)ppa={u,i,d};}}
@@ -322,7 +327,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(ppa&&(process.env.BUDDRYPIC||'').split(',').includes('P')){const e=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(ppa.g.toLowerCase());});s._snapBody(e,s.roles(e).inert,ppa.u,ppa.i);snap(s,'dryP',`dry-run: a strand caught by its low end on P's catching anchor`,{units:[...F,ppa.u],radius:6},false);}
         s.moveDepth=md;process.exit(0);}
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
-      {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
+      {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(fe);}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
         if(!ok)throw Error('budpore: founder not placed');s.bind(pa.u,pa.i,GLUE,b,f,GLUE);
         const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);for(const u of F)for(const v of U){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
           for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)throw Error('budpore: founder overlaps the wall');}}
