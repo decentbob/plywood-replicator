@@ -6,7 +6,7 @@ handoffs: NEXT.md in git, e.g. at `80c79ab` for run 1720's, `e5c6085` for run 16
 
 **Handoff status (autorun run 20261003-1921, build).** Slice done: a held founder's first copy reliable on the open
 pair, then the kind's own layout with `heldCopy`. Branch `claude/autorun-20261003-1921`, merged into `main` by PR; no
-simulations running; 40 tests pass; `node tri/check.js` result in the PR. (1) **P's anchor side** (`budpore` dry-run
+simulations running; 40 tests pass; `node tri/check.js` 44 of 44 (2438 s; `grown` partial as before). (1) **P's anchor side** (`budpore` dry-run
 `BUDDRYP=1`, new; `BUDPA=cell:side` puts P's anchor there): side `52:1` (R 7 bottom wall, x = +1.5) gives the bud 6-14
 copies after the split in 7 of 8 seeds (check `budpore-held` 4 of 4, now on `52:1`); `54:1`, `9:2` 4 of 8, `13:0`
 fails. (2) **The kind's layout** (R 5 rings, 7-cell pores, doorway bond = the bud root's seed bond): a strand held by
