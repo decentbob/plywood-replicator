@@ -65,7 +65,8 @@ let the parent construct its offspring from one uniform food, and only that rout
 0. **Organism on copies**, in order (docs/NEXT.md, Direction, priorities): (a) the bud copies its genome after the
    split (`budpore`; run 2321: not the anchor's geometry but food: the parent's leaked copies take it, see IDEAS; the
    sealed variant `budpore c` feeds the bud before the split; run 0320: no fixed doorway works, the bud's opening must
-   be narrowed by a binding event after its strand is in, and nothing may leak: hooded pore); (b) closure by design: one organism kind whose bud is the same kind (ring
+   be narrowed by a binding event after its strand is in, and nothing may leak: hooded pore; run 0751: cap release shuts the
+   parent's half by its own catch after the bud's, 2 of 4; the bud's food after the split and its anchor as a food sink remain); (b) closure by design: one organism kind whose bud is the same kind (ring
    size, anchor roles, seed site, the first motif round), "designed, not demonstrated" counts; (c) grow the bud ring
    from copies on the parent's seed site (as `imprint`'s rings; fix the one-front 28/30 stall); (d) two generations;
    then (e) a core review of removing casting, stamp, fuel and machine marks that only the frozen lineage uses

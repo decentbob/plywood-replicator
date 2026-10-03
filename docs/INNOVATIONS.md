@@ -6,6 +6,58 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-0751, build)
+
+- **Cap release: the parent plugs its own half of the doorway after the bud's catch and before the split** — partial
+  (splits in 2 of 4 worlds; the parent then keeps its strands; M2, the bud copying after the split, still 1 of 4). No
+  new rule; prepared structure (labelled).
+  - Design (`BUDCAP=-2.75 BUDRP=9 BUDNI=160 BUDPG=-2.75,2.25 BUDPX=b BUDRD=7 BUDDG=-1.75,3.25 BUDA=146:1 node
+    tri/demos.js budpore k 100000 runs 100c`): a parent of radius 9 with 160 blanks inside and its founder on the
+    bottom wall; its half of the doorway is 10 cells. Its two leftmost cells are a free cap: bonded only to the
+    doorway cell left of them, by `&` on the cap's side and a catching anchor `Z@|` on the parent's side, and touching
+    the bud's wall unbonded. While the bud's anchor waits, its open signal holds the cap and the doorway bond (`&` on
+    the parent's side only). When the bud catches, the signal decays: with openRange 6 the cap (4 bonds from the bud's
+    anchor) hears 0 one pass before the doorway cell does (the decaying value is R - t or R - 1 - t by the parity of
+    the distance), so the cap is cut first; the parent's freed `Z@|` emits and holds the doorway until it catches a
+    strand by its high end, which lies in the parent's row (its plug, a 3-cell pore left); then the doorway is cut.
+  - Evidence, seeds 1-4: split at 40000 / 60000 / - / - with two catches each; at the end the parent keeps 8 / 7
+    strands inside and 2 / 3 are outside (the same pair with the doorway cut at once, run 0320's plug layout: 1-2
+    inside, 7-13 outside). Seed 1: a full copy on the bud's plug after the split (6 releases); seed 2: 1 release.
+    Seeds 3-4: the bud never catches; its waiting anchor is copied 66-69 times (the wide passage lets the parent's
+    food reach it) and the parent's food runs out. With the narrowing below as a diagnostic hook: splits 3 of 4
+    (100 outside) and 4 of 4 (300 outside), the parent keeps 8-14 strands, full copies in the bud 1 of 4 and 0 of 4.
+    Costs: the bud's freed doorway side is plain (an `&` there would be cut in the same pass as the cap) and is copied
+    11-38 times (100 outside) or 60-115 (300); both plugs face in and expose their backs to the outside food (the
+    parent's plug backs take 33-87 copies after the split). Pictures: at the split, each plug in its own row
+    ![cap release at the split](pictures/budpore_cap_split.png) and the parent at t=100000, plug in its top row, 8
+    strands inside ![parent after the split](pictures/budpore_cap_parent.png)
+- **Plugging the parent's half: what fails** (measured, seeds 1-4 unless noted; demo options only, default outputs
+  unchanged). Run 0320's plug layout as is (`BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 ... 100c`): reproduced, a full copy
+  in the bud in 1 of 4; with 300 blanks outside also 1 of 4 (the parent's leaked strands copy 280-297 outside).
+  - *More food in the parent* (option 1): a radius-7 ring holds about 80 blanks (200 cannot be placed). A radius-9
+    parent with 160 (`BUDRP=9 BUDNI=160`) splits at 5000 in 3 of 4 with 144-165 blanks left, but the bud carries none:
+    after the split 0 copies inside the bud, 58-65 in the parent, 86-100 outside; full copies 0 of 4.
+  - *The founder as the parent's plug* (option 2, `BUDPF=-2.75`, half 12 cells, 5 left open): 1 of 4 split. A strand
+    lying in a wall faces the fed interior with its faces only: all 80 blanks became face copies, 12 docks, no fills.
+  - *The founder right of the doorway* (option 3, `BUDPX=3` or 4 in a radius-9 parent): it lies under the passage
+    facing in (fills 0) or makes no copy at all.
+  - *A catching anchor waiting in the parent* (`BUDPA=-1.75 BUDPAG=Z`, radius 9, 160 blanks): 0 of 4 split; its
+    `Z@|` is copied 29-47 times and the bud's `W@|` 33-37 (`BUDDBGA`: copy binds on the `@` sides themselves). With
+    copy binds on `@` sides refused (`BUDNOCA`, a diagnostic hook, not a rule): splits 3 of 8, full copies in the bud
+    in 3 of 8 (2 / 1 / 1), the parent keeps 5-14 strands; the other 5: the parent's plug catches first and its 3-cell
+    pore lets no strand reach the bud. A wider parent half (edge -2.75, 5 left open): 1 of 4; the bud anchor cell's
+    lower side is then exposed and, hearing its own signal, copied 60-68 times. A catch at -2.25 stands at 60 degrees
+    (only edges at -2.75 / -1.75 / -0.75 lie in the row).
+  - *A tooth* (`BUDTOOTH=-2.75`: the two cells bonded to the bud, the parent's anchor freed only by the split): the
+    parent catches about 10000 steps after the split; meanwhile 3-5 strands escape and copy outside (14 outside at
+    the end); no full copy in the bud. First try with a plain `Z|`: never caught, because a non-`@` attached anchor
+    takes lone face copies by glue catch (capped). A narrower half with the cap (edge to 0.75, 5 cells open): 0 of 4.
+  - Diagnosis: any parent strand outside after the split starves the bud (the bud alone made a full copy in 3 of 4,
+    run 0320), so the parent's half must be shut by the split, by a catch after the bud's (cap release does it); and
+    a catching anchor near food is a food sink (candidate narrowing, docs/NEXT.md). What remains is the bud's food:
+    after the split the outside blanks meet exposed templates (plug backs, the freed doorway side) sooner than they
+    pass the bud's 3-cell pore.
+
 ## 2026-10-03 (autorun run 20261003-0320, build)
 
 - **Hooded pore: a cell fed through a pore keeps every strand in** — works (8 of 8 worlds with 4+ strands inside, 7 of
