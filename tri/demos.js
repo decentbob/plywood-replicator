@@ -410,9 +410,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // BUDPF=x: the founder as P's plug: held by its high end z on an anchor Z| on the free side of P's top row nearest x
       // (at the left edge of P's half it lies in P's row, faces into P), instead of W| holding its low end
       // BUDAG=Z: D's catching anchor takes a strand's high end z (glue Z@|; also in the dry-run) instead of its low end.
-      // BUDPFE=w: BUDPF holds the founder's low end w (anchor W|) instead. BUDLX=x: the doorway bond is the P-D contact nearest x
+      // BUDPFE=w: BUDPF holds the founder's low end w (anchor W|) instead; BUDPFE=z without BUDPF: P's anchor (BUDPX) is Z|
+      // and holds the founder's high end. BUDLX=x: the doorway bond is the P-D contact nearest x
       // (default: the leftmost)
-      let fe='w';if(process.env.BUDPF){const x0=+process.env.BUDPF;pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!pa||d<pa.d)pa={u,i,d};}}
+      let fe=process.env.BUDPFE||'w';if(process.env.BUDPF){const x0=+process.env.BUDPF;pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!pa||d<pa.d)pa={u,i,d};}}
         fe=process.env.BUDPFE||'z';console.log(`P anchor ${fe.toUpperCase()}| (founder's ${fe==='z'?'high':'low'} end) on P cell ${U.indexOf(pa.u)} side ${pa.i} at`,mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));}
       s.glue[pa.u*3+pa.i]=gc(fe.toUpperCase());s.anc[pa.u*3+pa.i]=1;
       for(const k of BA?more:[best]){s.glue[k.A*3+k.f]=gc(process.env.BUDAG||'W');s.anc[k.A*3+k.f]=1;s.att[k.A*3+k.f]=1;}s.p.openRange=1;

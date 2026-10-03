@@ -8,6 +8,36 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1720, explore)
+
+- **Only a held strand is copied (option `heldCopy`)** — works in isolation (core change through the gate: RULES, Core
+  changes, run 1720; an option, off by default). A strand's high end starts the zip relay only while its spare edge is
+  held (bonded, not to a `&` side), so a free strand is never copied: leaked or rival strands are sterile and cannot
+  outrun a cell. Why: on paper none of the three designs for the kind's opening works in `budKit`'s geometry (IDEAS,
+  "The kind's opening: the parent cannot see its bud finish"); with sterile free strands a leak costs only the strand,
+  so the kind may keep its 7-cell pores.
+  - Demo `imprint` cell flags (with `p`): `z` the anchor is `Z@|` and holds a strand by its high end (`@`: a free face
+    copy carries `z` and capped a plain `Z|` before the founder came, 4 of 4 worlds in the first batch; openRange 1:
+    the anchor's signal reaches no wall side), at x = +1 (the mirror of `W|`'s x = -1: a high end leans the other way;
+    x = 0 and x = +2 also tried, 3 of 4 each); `o` the option; `w` a 7-cell pore.
+  - Evidence (150 blanks outside, 100000 steps; strands inside / in all): **three rival strands outside** (`150pzox`,
+    seeds 1-4): 7/12, 7/11, 7/11, 6/10 with the option (the rivals stay 3 sterile strands; the rest are the cell's
+    leaked copies); without it, same anchor (`150pzx`): 2/17, 2/15, 3/18, 2/13 (the rivals copy outside; with `W|`,
+    `150px`: 2/18, 1/15, 2/17, 2/12). **7-cell pore** (`150pzow`): 2/16, 0/1, 2/11, 1/8: the held founder keeps
+    copying (11-15 copies), its copies leave and stay sterile; seed 2's founder left before it was caught (a free
+    founder is sterile too). **Lone cell** (`150pzo`, seeds 1-8): 6, 7, 7, 1, 8, 7, 0, 6 inside (6 of 8 with 6+;
+    seed 4 stalled at its first copy: 3 docks and no fill, backs in the wall's wedge; seed 7's founder left uncaught);
+    the free-copying cell (`150p`) has 8-9: food, not the number of templates, limits the count at 150 blanks.
+  - Costs: copying inside a cell is linear (one held template); a founder must be caught before it copies anything,
+    so the anchor's lean decides more (a first copy whose backs face the wedge never gets fills: in a lone cell no back
+    copy exists anywhere until the held strand has made one); sterile strands pile up outside and their free sides are
+    still contact-copied (dockers and fills, which any held strand can use).
+  - Picture (seed 2 without and with the option, seed 1 with a 7-cell pore, t = 100000):
+    ![only a held strand is copied](pictures/held_copy.png)
+  - Commands: `node tri/demos.js imprint 2 100000 runs 150pzox` (`150pzx`: control; `150pzow`, `150pzo`); checks
+    `imprint-held` (3 of 4 needed: 4+ inside), `imprint-held-c` (control), `imprint-held-w` (5+ strands made);
+    test "heldCopy option".
+
 ## 2026-10-03 (autorun run 20261003-1650, build)
 
 - **The kind's last cell from an E source inside the pair** — works in isolation (4 of 4 check worlds; labelled: the
