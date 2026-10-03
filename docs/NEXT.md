@@ -4,6 +4,14 @@ State on 2026-10-03 (after autorun run 20261003-2121, core-review). Read AGENTS.
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `7415fd4` for run 1921's, `80c79ab` for run 1720's).
 
+**Current slice (autorun run 20261003-2221, build; in progress).** Goal: priority 3's first half, one generation of
+the kind from its own kit, in a new demo `budcycle` (`budpool` joined with `budpore-kind`): a prepared parent of
+`budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding its founder by the high end (labelled), `heldCopy`, among copy
+blanks and a pool of the kit's parts (budpool's harness), no stand-in catch. Done when: the bud completes, catches a
+real copy and splits in 3 of 4 worlds, measured (split, the bud's copies after it, early catches, leaks), with a check.
+Stop: if a step needs a core change, write the candidate here and stop there. Branch `claude/autorun-20261003-2221`;
+runs in `runs/bc*` (`node tri/demos.js budcycle SEED 300000 runs/bc1`).
+
 **Handoff status (autorun run 20261003-2121, core-review).** Slice done: the frozen casting lineage removed from the
 core (NEXT priority 5, decided by this review; case and result in RULES, Core changes), plus two narrowings left open
 by earlier reviews. Branch `claude/autorun-20261003-2121`, merged into `main` by PR; no simulations running.
