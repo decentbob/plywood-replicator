@@ -1,5 +1,12 @@
 # Next instance: start here
 
+**Current slice (autorun run 20261003-1121, build): closure by design (priority 2).** Goal: one organism kind whose
+bud is the same kind, every part grown from copies or taken from the environment, each step mapped to an existing demo
+or marked new, and the rules each step reads (locality). Done when: the design is written (IDEAS, ROADMAP parts table),
+its signal logic is checked deterministically in `tri/test.js` (growth order, completion, release) on a generated kit,
+and the least certain step (a strand passing an aligned 3+3 doorway into a bud of the parent's size) has been tried on
+`budpore`'s options in 4 worlds. Stop there: no M2 work, no growth-from-copies demo (priority 3).
+
 State on 2026-10-03 (after autorun run 20261003-0950, harden). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `a993d78`).
