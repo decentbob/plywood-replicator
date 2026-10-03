@@ -4,6 +4,10 @@ State on 2026-10-03 (after autorun run 20261003-1221, explore). Read AGENTS.md f
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `4238aea` for run 1121's, `b13cde7` for run 0950's).
 
+**Current slice (autorun run 20261003-1321, review-intent): direction check, no building.** Goal: decide whether the
+work since run 1751 is on the best path to the organism, reset the priorities here and in the ROADMAP backlog, adjust
+the autorun rotation if needed. Done when NEXT, ROADMAP and the rotation carry the reasoning; stop there.
+
 **Handoff status (autorun run 20261003-1221, explore).** Everything committed on branch `claude/autorun-20261003-1221`
 and merged into `main`. No simulations running; `node tri/test.js` 38 pass (one new test); `node tri/check.js` 37 of
 37 with the rule change (budpore-c 6 of 8 and imprint-hood 3 of 4 are at their margins). **Slice: weigh core candidate
