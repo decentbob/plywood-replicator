@@ -1,125 +1,56 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-0450, core-review). Read AGENTS.md first (rules of work), then this file.
-History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
+State on 2026-10-03 (after autorun run 20261003-0751, build). Read AGENTS.md first (rules of work), then this file.
+History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
+handoffs: NEXT.md in git, e.g. at `a993d78`).
 
-**Current slice (autorun run 20261003-0751, build): plug the parent's half too (priority 1, M2).** Goal: after the
-split the bud makes a full genome copy (4 releases on its own strands) in 6 of 8 worlds of the plugged sealed pair
-(`BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 ... budpore k 100000 runs 100c`), with the parent as a working organism (no
-`BUDNOP`). Plan: measure the three options of Exact next step below, cheapest first (more food in P; the founder as P's
-plug; the founder on P's top wall right of the doorway), seeds 1-4 with `DBGC=1`, then 8 worlds for the best one and a
-check `budpore-plug`. Stop when the check is in, or when all three are measured and none reaches 4 of 8: then record
-why and the next design.
+**Handoff status (autorun run 20261003-0751, build).** Everything committed on branch `claude/autorun-20261003-0751`
+and merged into `main`. No simulations running; `node tri/test.js` 36 pass. Only demo options were added (no rule,
+physics or shared-structure change; `budpore` without the new options takes the same code path), so the check suite
+was not rerun; checks `budpore`, `budpore-c` and the five `imprint` checks were run with the narrowing hook below (7 of
+7 pass). **Slice: plug the parent's half (priority 1, M2). Result: M2 not met (the bud makes a full copy after the split
+in at most 1 of 4 worlds of any layout); one new mechanism, cap release (partial, 2 of 4); a core-change candidate.**
+Details and numbers: INNOVATIONS (run 0751). In short:
+- All three options of the old next step fail: more food in a bigger parent never reaches the bud before the split; the
+  founder lying in a wall row turns all food into face copies (no fills); the founder right of the doorway lies facing
+  in or stalls.
+- A catching anchor that waits near food is a food sink (copied 29-69 times per world). With copy binds on `@` sides
+  refused (hook), a parent catching anchor plugs the parent in time (3 of 8 with a full copy in the bud), but when it
+  catches first its 3-cell pore lets no strand reach the bud.
+- *Cap release* (`BUDCAP`, see Commands): the parent's plug anchor is bonded to a free cap until the bud's catch; the
+  decaying open signal cuts the cap one pass before the doorway, the freed anchor holds the doorway until it has caught,
+  then the pair splits. Order solved, no leak window: the parent keeps 7-14 strands (old layout 1-2). Fails on the bud's
+  anchor sink (no catch in 2 of 4) and on the bud's food after the split.
+- New demo options (diagnostics): `budpore` `BUDPF=x` (the founder held by its high end in P's row), `BUDNI=n` (blanks in
+  P), `BUDRP=r` (P's radius, odd), `BUDTOOTH=a`, `BUDCAP=a`, `BUDDBGA=1` (which prepared sides copy blanks bind; after the
+  split by template body), `BUDNOCA=1` (copy binds on `@` sides let go at once: the candidate below, not a rule). The
+  hook used for the checks is `runs/noca.js` (four lines, recreate from INNOVATIONS run 0751 if needed:
+  `TriSim.prototype.bind` wrapped so a copy bind on an `@` side is cut at once), run as
+  `NODE_OPTIONS="-r $PWD/runs/noca.js" node tri/check.js ...`. Pitfall: with `BUDA`, D's cell indices move when P's gap
+  changes (count P's removed cells).
 
-**Handoff status (autorun run 20261003-0450, core-review).** Everything committed on branch
-`claude/autorun-20261003-0450` and merged into `main`. No simulations running; `node tri/test.js` 36 pass;
-`node tri/check.js` 37 of 37 before and after (after: run with changes 1-4 below; change 5 is output-identical by
-construction). **Slice: audit since 13461ae, refresh the inventory, make the core smaller. Done** (RULES, Core changes
-2026-10-03 and Core inventory):
-1. Removed `#` on a trigger side (key let go): no structure carried it, 0 events. `#` = pulse door only.
-2. Removed the option `zip: false` (one test only).
-3. Merged the two fill rules: a fill binds by the complement of the edge's glue (`latGlue` is the rule, option gone).
-   Cost: `copy` copies slower (a glued fill side passes its glue on); its check is now 4 worlds at 20000 steps, 3 of 4
-   (old form, seed 1 at 10000: 1 copy, would fail). Demos no longer pass `latGlue`.
-4. Fixed code to RULES: a free triangle binds by none of its anchor, close-only or spent sides in dock and fill too
-   (only glue catch tested them; a free `A|--` docked by its anchor side). New test.
-5. Removed a latch's reads of its partners' trigger and open state (0 deciding passes over every check world).
-Counts now: 16 mark meanings, 5 relayed signals, 9 exposed values, 9 states, 2 options (`pLoose`, `light`). The copy
-lineage uses 5 marks, 3 signals, no option. An independent reviewer (subagent) checked the diff: no bug; it found the
-close-only exception below and two weakened tests (fixed: the zip test has a positive case again).
-Hooks: coverage `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js`; the trigger-path
-hook used for change 5 is described in RULES (Core changes) and is not in the repository (a dozen lines: count, per
-servo pass, flaps and latches by which path triggered them).
+**Exact next step.** M2 has had four build runs (1921, 2321, 0320, 0751); the obstacles are now (1) the bud's waiting
+anchor as a food sink, which wants the core narrowing (c) below (an `explore` run), and (2) the bud's food after the
+split: outside blanks meet exposed templates (both plugs' backs face out, the bud's freed doorway side) before they
+pass its 3-cell pore. Recommended order: the next `build` run takes **priority 2, closure by design** (analysis; it
+decides what the bud's opening and anchors must be in every generation, which bounds the M2 design); the next
+`explore` run weighs candidate (c) and, if adopted, reruns the cap layout (`BUDCAP` command below, 8 worlds) as its
+evidence. A build run that returns to M2 should start from cap release and attack the bud's food: e.g. a bud whose
+pore is hooded (`imprint ph`), or a plug whose backs face a wall.
 
-**Handoff status (autorun run 20261003-0320, build).** Everything committed on branch `claude/autorun-20261003-0320`
-and merged into `main`. No simulations running; `node tri/test.js` 35 pass; checks `imprint-hood` (new), `imprint-pore`
-and `budpore-c` rerun (results in the PR; no rule, physics or shared-structure change, and default demo outputs are
-byte-identical to main for `budpore 100c`, `budpore 300`, `imprint 150p`, `imprint 60m`, so the full suite was not
-rerun; last full run 36 of 36 in run 0050). **Slice: M2 on the sealed pair, keep the parent's copies in. Result: M2
-not met; why, measured; and one new mechanism, the hooded pore.**
-- *No doorway width works* (INNOVATIONS run 0320, seeds 1-4 each): as is, the bud gets 2-24 genome copies after the
-  split, the parent's leaked strands 70-96; 300 outside blanks: still 9-32 against 257-282; with the parent's genome
-  made inert at the split (`BUDNOP=1`, diagnostic) the bud still loses its own copies and strands through its 6-cell
-  half (1 full copy in 3 splits); a 3-cell bud half lets no strand in, 4 cells lets one in (1 full copy in 3 splits); a
-  narrower parent half turns the founder's backs to the wall (no copying); two bud anchors: the second never catches.
-- *Why* (IDEAS, 2026-10-03, "The way in is the way out; nothing may leak"): motion is reversible, so the opening a
-  strand enters by stays open after the split; only binding is one-way. And free strands beat cells: 3 rival strands
-  outside leave an `imprint p` cell 1-2 strands. An organism on copies must not leak, and the bud's opening must be
-  narrowed by a binding event after its strand is in.
-- *Hooded pore* (`imprint ... 150ph`, check `imprint-hood`, picture `imprint_hood.png`): a hood over `imprint p`'s pore
-  (13 prepared cells: strut and strip, a corridor two rows high) lets blanks in and keeps strands in: 8 of 8 worlds with
-  4-7 strands inside, none lost in 7 of 8 (plain pore: 4-9 lost in 3 of 8). It does not help against rivals (1 inside).
-- *The bud's genome as its plug* (partial; INNOVATIONS run 0320, pictures `budpore_plug_dry.png`,
-  `budpore_plug_parent_dry.png`): see Exact next step.
-- New demo options (diagnostics): `budpore` `BUDDG=a,b` / `BUDPG=a,b` (x range of D's / P's half of the doorway),
-  `BUDA=c:s,c:s` (several bud anchors; the doorway waits for all), `BUDNOP=1`, `BUDDRYPIC=c:s` (a picture of a dry-run catch; `P` for P's), `BUDRD` (bud radius, odd), `BUDPA=x` / `BUDPAG` (a catching anchor in P), `BUDPX=b` (founder on P's bottom wall); `imprint` `x` (3 rival founders
-  outside), `h` (hood). Pitfall met: changing a gap changes which side the automatic anchor choice takes (it took the
-  gap's edge, strand outside); pass `BUDA` and check with `BUDDRY=1`.
+**Core-change candidates.** (c) *A copy blank binds no `@` side* (run 0751): a catching anchor waits unbonded and
+exposed, and every blank that touches it becomes a useless copy of the anchor cell (29-69 per world when food is near:
+`BUDDBGA`). The rule would read the site's own attach mark (the copy bind already reads the site's spent state); it
+narrows, adds nothing. Measured as a hook over `imprint`, `imprint-genome`, `imprint-cell`, `imprint-pore`,
+`imprint-hood`, `budpore`, `budpore-c`: all pass as before (rings 30/30 in 4 of 4). Cost to weigh: an anchor or ring
+front cell can then be copied only through its other free sides. (d) *Code vs RULES:* the anchor catch does not test
+`spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no structure has a spent anchor
+side, so nothing depends on it; a core review should add the test. (a) A flap swings on a welded partner's bonded
+trigger read directly, besides hearing through `+`: only `budgrow`'s pulse-door hinges use the direct path
+(`grownBud`); a `+` on those weld sides would leave one path. (b) An attached close-only side still takes docks and
+fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free triangle"; documented as an exception in
+RULES Binding. (a) and (b) are casting lineage; take them with the removal of finding 2.
 
-**Handoff status (autorun run 20261003-0050, explore).** Everything committed on branch `claude/autorun-20261003-0050`
-and merged into `main`. No simulations running; `node tri/test.js` 35 pass; `node tri/check.js` 36 of 36 pass (`grown` partial as before;
-`imprint-pore` 3 of 4, seed 2 as recorded; 37 minutes). **Done (slice: the bud lets go
-by completion release; plus one core change, a narrowing):**
-- *Completion-release doorway (no rule change), now the default of `budpore`:* the doorway bond is an `&` bond on both
-  sides; D's anchor `W@|` emits the open signal while it waits (`openRange` = its distance to the doorway cell + 3)
-  and the bond is cut by completion release once it has caught. Freed sides are spent, never copied. Walls start spent
-  (labelled). Same splits as the latch in every seed measured (sealed 7 of 8; open seeds 1-4); sealed pair: 0-1 wall
-  copies per world (latch 8-57), all 180 copies on the genome. Replaces trigger `*`, hear chain `+` and latch `~`
-  (code at `e2634fb`). Core-change candidate 2 (a spent latch) is not needed.
-- *Core change, narrowing (RULES, Core changes, 2026-10-03):* a free triangle's anchor side binds nothing (the
-  wider form, attached anchors too, cost `imprint p` seed 4 its strands). Free copies of the waiting anchor no longer cap strand ends: open pair (`budpore 300`, seeds
-  1-8) wall copies 20-35 per world (old rule 47-94), genome copies 265-280 of 300. Splits with food left 7 of 8 (seed
-  2 caught late, after the food was gone; old rule 8 of 8); full copies by the bud after the split 2 of 8 (old 3 of
-  8): M2 not moved. Candidate 1 (wider: a free part binds only an attached `@`) is no longer needed for this.
-- *What M2 still lacks* (unchanged diagnosis, now without the side sinks): after the split P's strands leave through
-  its half of the doorway and copy on the outside food (open pair: 89-161 genome copies outside, 2-54 inside D;
-  sealed: 60-99 outside, 0-25 inside D).
-
-**Handoff status (autorun run 20261002-2150, harden).** Everything committed on branch `claude/autorun-20261002-2150`
-and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (`grown`
-partial as before; `imprint-pore` 3 of 4, seed 2 as recorded since run 1551; run as six groups after a container
-restart, 31 minutes in all). **Done (slice: speed, Direction priority 5; target only partly met):**
-- *Bug fixed:* `imprint 60m`/`150p` crashed on main since d91de57 (`split is not defined`: a `budpore` report suffix
-  pasted into `imprintCell`'s report), so the checks imprint-cell, imprint-pore and their controls failed.
-- *Speed, same results:* demo outputs are byte-identical to main on 12 short runs of 10 demos (`runs/bench.sh <repo>
-  <out>` in this run's container: budpore 1-2, imprint 150p/60m/default, split o, budgrow g, cells 36, live 6x2,
-  grow 12, cycle, lid). Changes: a lone block's neighbour gather skips grid cells out of reach and its trials are
-  methods, not per-call closures; `gridSync` and `_pairs` inline their loops; free and grown triangles share one frozen
-  role record; a blocked move checks overlap early before summing it; `budPair`'s doorstop search skips lattice slots
-  away from the open panel and `sweepClear` flattens fixed cells once (`split o` setup 31 s -> 1.5 s, `split g` 6 s ->
-  0.5 s). Short runs 1.1-1.25x faster; `budpore` 1.1x (check worlds about 220 s, were about 270 s). The 1.5x target
-  for `budpore` was not met: after these changes no single spot is worth more than 20% (lone-block `_single` 40%
-  inclusive, of which the gather loop about 11%; ring moves `tryMove` 14%; `_pairs` 9%; `formBonds` 7%; `gridSync` 6%;
-  `derive` 5%). Next speed step, if one is wanted: a lone block's gather visits about 22 grid cells to find 2
-  neighbours (cell 1.4, reach about 1.7); a grid kept per step as flat arrays (counting sort) would cut the per-cell
-  cost, but neighbour order changes the order of overlap sums, so outputs would need re-checking, not byte comparison.
-
-**Exact next step (build, priority 1 below): plug the parent's half too.** Run 0320 found that no fixed doorway
-gives M2 (Handoff above; IDEAS 2026-10-03) and built the one-way step on the bud's side: **the bud's genome as its
-plug** (INNOVATIONS run 0320; `BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 node tri/demos.js budpore k 100000 runs 100c`): a
-bud of the parent's size with a 10-cell half and its catching anchor at the gap's left edge; the caught strand lies in
-the bud's wall row, faces in, a 3-cell pore left. Splits 4 of 4 (3-4 strands inside); the bud alone (`BUDNOP=1`) makes a
-full copy on its plug strand in 3 of 4 (without the plug 1 of 3). With the parent as is, the parent's 6-cell half lets
-7-13 strands out and they take the food (1 of 4). What is left is the parent's half:
-- Known (dry-runs, run 0320): on P's 10-cell half only a high-end catch at the left edge lies in P's row facing into
-  P (`BUDPG=-1.75,3.25 BUDPA=-1.75 BUDPAG=Z`; picture `budpore_plug_parent_dry.png`). Tried with the founder moved to
-  P's bottom wall (`BUDPX=b`): the waiting `Z@|` cell among P's 80 blanks is copied 36-44 times, P makes 1-2 strands,
-  1 of 4 split.
-- Options, cheapest first: (1) more food inside P (make NI a parameter; 200 blanks) so the anchor sink costs less
-  than it feeds; (2) the founder as P's plug: placed in P's row at t=0 (high end on the left edge, faces in), P's half
-  then 11-12 cells so 4-5 stay open as the passage (a 4-cell bud half let strands through, 3 of 4 split) and as P's
-  pore after the split; (3) the founder on P's top wall right of the doorway (`BUDPX` near 4), so its copies reach
-  the passage. Measure each with `DBGC=1`; target unchanged: one full copy in the bud after the split (4 releases on
-  its strands) in 6 of 8 worlds of `budpore ... c`, then a check (`budpore-plug`).
-
-**Core-change candidates (core review 2026-10-03, both casting lineage; take with the removal of finding 2).**
-(a) A flap swings on a welded partner's bonded trigger read directly, besides hearing through `+`: only `budgrow`'s
-pulse-door hinges use the direct path (`grownBud`); a `+` on those weld sides would leave one path. (b) An attached
-close-only side still takes docks and fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free
-triangle"; documented as an exception in RULES Binding. Earlier: none open. Run 0050 settled both earlier ones: the spent latch (2) by design (the
-completion-release doorway), the anchor copies capping strands (1) by the narrowing "a free triangle's anchor side binds
-nothing" (RULES, Core changes 2026-10-03); the wider form (a free part binds only an attached `@` side) would change how
-kit roots attach to strand seeds and is not needed now.
 
 ### Direction (autorun run 20261002-1751, review-intent): where the work stands and what comes first
 **Findings.**
@@ -156,7 +87,7 @@ kit roots attach to strand seeds and is not needed now.
 **Priorities (in order; each a slice).**
 1. **M2: the bud copies its genome after the split** (`budpore`, mid-wall anchor in D; as run 1551 set it; run 1921
    built the mid-wall low-end anchor, splits 8 of 8, but the caught strand's backs face the wall; run 2321: an anchor
-   with open backs does not help, the parent's leaked copies take the food; run 0320: no fixed doorway works, see Exact next step). After the
+   with open backs does not help, the parent's leaked copies take the food; run 0320: no fixed doorway works; run 0751: cap release keeps the parent's strands in, the bud still starves, see Exact next step). After the
    split D's half of the opening is its pore, so D is then an `imprint p` cell: the bud "lives on its own".
 2. **Closure by design (analysis slice; "designed, not demonstrated" is a valid result).** Specify one organism kind
    whose bud is the same kind: one ring size or a fixed alternation, which anchor holds the founder and which catches
@@ -169,9 +100,11 @@ kit roots attach to strand seeds and is not needed now.
    28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
 4. **Two generations:** the bud of priority 3 splits off, copies its genome (priority 1) and starts its own bud.
    This is the goal's whole cycle; then the core-review of finding 2.
-5. **Speed (for `harden` runs):** `budpore` worlds take about 4 minutes and the check suite 30-40 (run 2150: 1.1-1.25x by exact changes, see Handoff); copy-lineage worlds
+5. **Speed (for `harden` runs):** `budpore` worlds take about 4 minutes and the check suite 30-40 (run 2150: 1.1-1.25x by exact changes); copy-lineage worlds
    need hundreds of blanks, and lone blocks dominate physics (`_single`). Measure steps per second on `budpore` and
    optimise the lone-block path; keep capability lines identical or explain each difference.
+   Next idea (run 2150): a lone block's gather visits about 22 grid cells to find 2 neighbours; a grid kept per step as flat
+   arrays (counting sort) would cut that, but neighbour order changes overlap sums, so outputs need re-checking.
 **Rotation:** unchanged. Five `build` runs per twelve fit priorities 1-4; `explore` can take priority 2 or a core
 change it needs; the two `harden` runs take priority 5 and the copy lineage's partial checks (`budpore`, `imprint`
 5 of 8); `core-review` takes finding 2 once priority 3 works.
@@ -193,6 +126,9 @@ node tri/check.js [id ...]                         # capability checks: one PASS
 node tri/demos.js budpore 1 100000 runs 100c       # sealed bud pair: P feeds inside, founder under the doorway (7 of 8 split)
 node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, the doorway bond cut by completion release, split with food left (7 of 8); DBGC=1: where copies go, BUDF=20: frames;
                                                    # BUDDRY=1: dry-run a catch on every inner side of D; BUDA=cell:side: anchor
+BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 node tri/demos.js budpore 1 100000 runs 100c   # the bud's genome as its plug (run 0320)
+BUDCAP=-2.75 BUDRP=9 BUDNI=160 BUDPG=-2.75,2.25 BUDPX=b BUDRD=7 BUDDG=-1.75,3.25 BUDA=146:1 node tri/demos.js budpore 1 100000 runs 100c
+                                                   # cap release: the parent plugs its half after the bud's catch (2 of 4 split)
 node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
 node tri/demos.js imprint 1 100000 runs 150ph      # the same cell with a hooded pore: no strand leaves (x: 3 rival strands outside)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
@@ -207,6 +143,17 @@ world from a saved state (not `split`: it places its parts after loading); `TRI_
 
 ## Pitfalls learned
 Casting-lineage and machine pitfalls (kits, pockets, doors, flaps): docs/IDEAS.md, "Pitfalls from the casting lineage".
+- **A catching anchor must carry `@`** (2026-10-03, run 0751). An attached glued side without `@` binds any free
+  triangle with the complementary glue (glue catch): a plain `Z|` anchor was capped by a lone face copy and never
+  caught a strand. With `@` it binds only a part's `@` side, so only the anchor catch (strand ends) can take it.
+- **A waiting anchor near food is a food sink** (2026-10-03, run 0751). Its unbonded `@` side is copied by every blank
+  that touches it (29-69 copies per world), and the anchor cell's own `&` sides stay unspent while it hears its own
+  signal (60-68 copies once exposed). Keep waiting anchors away from food or covered.
+- **A strand lying in a wall row facing a fed interior gets no fills** (2026-10-03, run 0751). Its faces meet all the
+  food and its backs none: all blanks become face copies, no back copies, copying stalls (80 copies, 12 docks).
+- **Signal decay is simultaneous** (2026-10-03, run 0751). When an emitter stops, every cell within range reaches 0
+  within the same one or two passes (value R - t or R - 1 - t by distance parity), so `&` cuts cannot be staged by
+  distance, only by parity: a cell with R - d even reaches 0 one pass before one with R - d odd.
 - **An opening that lets a strand in lets it out** (2026-10-03, run 0320). Motion is reversible: a doorway, pore or
   gap a strand can pass one way it can pass the other, and it stays open after a split. Keep strands in with a bent
   opening (hooded pore) or a binding event (a catch, growth); never count on a narrow straight opening.

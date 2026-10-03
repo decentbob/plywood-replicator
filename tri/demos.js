@@ -279,10 +279,15 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // joined; with '@' a lone copy with a z side cannot cap it). When the
       // bud's catch cuts the bond, P's anchor is free and catches a strand's high end, which lies in P's row (P's plug)
       const TA=process.env.BUDTOOTH?+process.env.BUDTOOTH:null,tooth=TA===null?[]:Pc.filter(v=>cn(v)[1]>(RP-1)*H&&cn(v)[0]>TA&&cn(v)[0]<TA+1);
+      // BUDCAP=a (with BUDPG starting at a): the same two cells as a free cap instead, bonded only to P's cell left of them
+      // ('&' on the cap's side, a catching anchor Z@| on P's), touching D's wall unbonded. When the bud's catch silences
+      // its anchor the cap is cut one pass before the doorway's '&' (P's side only) would be (openRange set so the parity
+      // of the decaying signal does it); P's freed anchor emits and holds the doorway until it has caught its own plug
+      const CA=process.env.BUDCAP?+process.env.BUDCAP:null,capT=CA===null?[]:Pc.filter(v=>cn(v)[1]>(RP-1)*H&&cn(v)[0]>CA&&cn(v)[0]<CA+1);
       Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gP(v)));const Dk=[...Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gD(v))),...tooth];
-      const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
+      const tris=[...Pc,...Dk,...capT].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{}});
-      const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
+      const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP,NP+Dk.length),Cu=U.slice(NP+Dk.length),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
       // the hold: the leftmost P-D bond is the doorway bond L; the anchor A is the inner free side within MD ring bonds
       // of L farthest from D's corners
       const RC=[...Array(6).keys()].map(k=>[(RD-0.5)*Math.cos(k*Math.PI/3),dyL+(RD-0.5)*Math.sin(k*Math.PI/3)]);let pick=null;const MD=5;
@@ -296,6 +301,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(d>=MD&&!BA&&!process.env.BUDDRY)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
       if(!best)throw Error('budpore: no anchor side '+(BA||''));
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
+      let cap=null;if(CA!==null){for(const u of Cu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0)continue;const w=(b/3)|0;if(inD.has(w))s.cut(u,i);else if(inP.has(w))cap={u,i,P:w,j:b%3};}
+        if(!cap||cap.P!==pick.u)throw Error('budpore: the cap is not bonded to the doorway cell');}
       // the doorway bond carries no glue: once it is cut its two sides bind nothing
       s.glue[pick.u*3+pick.i]=0;s.glue[pick.L*3+pick.j]=0;const da={u:best.A,i:best.f};
       // prepared bonds need no glue: every wall side is inert (copies of wall cells then bind nothing; with the weld glue
@@ -341,7 +348,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // the walls start spent (one completion pass while only A hears its own signal; spent sides stay spent), then the
       // open range grows to reach P's side of the doorway bond, which becomes a completion-release bond ('&' both sides)
       const dMax=Math.max(...(BA?more:[best]).map(k=>k.d),ppa?ppa.dist:0);s._latches();s.p.openRange=dMax+3;for(let k=0;k<dMax+4;k++)s.derive();s.done[pick.L*3+pick.j]=1;
-      if(TA===null)s.done[pick.u*3+pick.i]=1;else{s.glue[pick.u*3+pick.i]=gc('Z');s.anc[pick.u*3+pick.i]=1;s.att[pick.u*3+pick.i]=1;console.log(`tooth: doorway bond from P cell ${U.indexOf(pick.u)} (anchor Z@|) to the tooth, D cell ${U.indexOf(pick.L)}`);}
+      if(cap){const dist=new Map([[da.u,0]]),Q=[da.u];for(let q=0;q<Q.length;q++)for(let e=0;e<3;e++){const b=s.bond[Q[q]*3+e];if(b<0||dist.has((b/3)|0))continue;dist.set((b/3)|0,dist.get(Q[q])+1);Q.push((b/3)|0);}
+        const dc=dist.get(cap.u);let R=Math.max(dMax+3,dc+2);if((R-dc)%2)R++;s.p.openRange=R;for(let k=0;k<R+2;k++)s.derive();
+        s.done[cap.u*3+cap.i]=1;s.glue[cap.P*3+cap.j]=gc('Z');s.anc[cap.P*3+cap.j]=1;s.att[cap.P*3+cap.j]=1;s.done[pick.u*3+pick.i]=1;if(!process.env.BUDCAPL)s.done[pick.L*3+pick.j]=0;
+        if(!(s.op[cap.u]>0))throw Error('budpore: the cap hears no open signal');console.log(`cap: on P cell ${U.indexOf(cap.P)} (anchor Z@|), ${dc} bonds from the bud's anchor; openRange ${R}`);}
+      else if(TA===null)s.done[pick.u*3+pick.i]=1;else{s.glue[pick.u*3+pick.i]=gc('Z');s.anc[pick.u*3+pick.i]=1;s.att[pick.u*3+pick.i]=1;console.log(`tooth: doorway bond from P cell ${U.indexOf(pick.u)} (anchor Z@|) to the tooth, D cell ${U.indexOf(pick.L)}`);}
       if(!(s.op[pick.u]>0&&s.op[pick.L]>0))throw Error('budpore: the doorway bond hears no open signal');
       const prep=new Set([...U,...F]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
         if(!placeFree(s,u,placed,()=>{for(;;){if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}
@@ -373,6 +384,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // BUDDBGA (diagnostic): which side of a prepared cell copy blanks bind ('@' side, '&' side, other). BUDNOCA
       // (diagnostic, not a rule): a copy blank that binds an attached '@' side is let go at once (as if no '@' side were copied)
       if(process.env.BUDDBGA||process.env.BUDNOCA){const ob=s.bind.bind(s),tl={};s.bind=(u,i,ku,v,j,kv)=>{const cp=s.cpy[v*3+j];if(prep.has(u)&&cp){const k=(s.att[u*3+i]?"@":s.done[u*3+i]?"&":"other")+(inP.has(u)?" P":inD.has(u)?" D":" founder");tl[k]=(tl[k]||0)+1;}
+          if(cp&&split){const {comp}=s.bodies(),cD=centre(Du),cP=centre(Pu),c0=comp[u],near=C=>Math.hypot(s._dx(s.px[u]-C[0]),s._dy(s.py[u]-C[1]));
+            const k='after split: '+(c0===comp[Pu[0]]?'P body':c0===comp[Du[0]]?'D body':near(cD)<(RD-1)*H?'strand in D':near(cP)<(RP-1)*H?'strand in P':'outside')+(s.roles(u).role===2?' back':'');tl[k]=(tl[k]||0)+1;}
           const r=ob(u,i,ku,v,j,kv);if(cp&&s.att[u*3+i]&&process.env.BUDNOCA)s.cut(u,i);return r;};process.on('exit',()=>console.log('copy binds on prepared cells',JSON.stringify(tl)));}
       console.log(`budpore: completion-release doorway bond on D cell ${U.indexOf(pick.L)}, anchor W@| on D cell ${U.indexOf(da.u)} (${best.d} bonds), openRange ${s.p.openRange}`);
       snap(s,'t0',`t=0: parent P (founder on its anchor${NI?`, ${NI} copy blanks`:''}) and bud D joined by one completion-release bond; ${nb} copy blanks outside`,{units:U,radius:14},false);

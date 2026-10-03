@@ -8,6 +8,21 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Shut the parent's half by a catch after the bud's (design lesson, build run 20261003-0751, 2026-10-03)
+
+- A bud on copies starves if any parent strand is outside after the split (free strands beat cells), so the parent's
+  half of the doorway must be shut by the time of the split. Shutting it by a binding event (a catch) is the one-way
+  step; the catch must come after the bud's, since a parent plug that catches first narrows the passage to a pore no
+  strand passes.
+- Ordering two catches locally: the parent's plug anchor is bonded to a free cap while the bud's anchor waits; the
+  decaying signal releases the cap one pass before the doorway (parity of distance), and the freed anchor's own signal
+  then holds the doorway until it has caught (`budpore` option `BUDCAP`, INNOVATIONS run 0751). A tooth bonded to the
+  bud does not work: it frees the anchor only at the split, and the window lets strands out.
+- Bigger cells (user, 2026-10-03) were tried for the parent: a radius-9 parent holds 160 blanks (radius 7: about 80);
+  the extra food stays in the parent unless the bud is fed before its catch.
+- Still open: after the split a plug in the wall exposes its backs to the outside food, and so does any freed plain
+  side; a bud on copies needs its food to reach its interior before such exposed templates take it.
+
 ## Reuse glue letters in separate compartments; bigger cells (user, 2026-10-03)
 User (during core-review run 20261003-0450): "It seems it is useful to have many different basic structures that can
 be combined to a larger one. That needs a lot of different types of sides. One way to reduce type need is to have
