@@ -25,6 +25,26 @@ not statistics.
     all 150 blanks in under 10000 steps. The hood's job is not to make rivals (IDEAS, 2026-10-03).
   - Picture (seed 1, t=50000: 5 strands inside, the hood at the upper right; the run ends with 7 of 7 inside):
     ![hooded pore](pictures/imprint_hood.png)
+- **The bud's genome as its plug: a caught strand lies in the bud's gap and closes it but for a pore** — partial: the
+  bud's half works (the plugged bud alone makes a full copy in 3 of 4 worlds); the parent's half still leaks.
+  - Design (`BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 node tri/demos.js budpore k 100000 runs 100c`): the bud is the
+    parent's size (R 7; the radius must be odd like P's or the two lattices do not meet) and its half of the doorway
+    is 10 cells; its catching anchor `W@|` is the slanted side at the gap's left edge. Dry-run (`BUDDRY=1
+    BUDDRYPIC=126:1`): a strand caught there by its low end lies exactly in the bud's wall row, faces into the bud,
+    backs out, and leaves a 3-cell pore; at the right edge it stands out at 60 degrees. The catch is the one-way step
+    the reversibility argument asks for: the doorway is 6 cells wide until the catch, the bud's opening 3 cells after.
+    ![plug dry-run](pictures/budpore_plug_dry.png)
+  - Evidence, seeds 1-4: split at 12500 / 17500 / 7500 / 20000 (4 of 4) with 3 / 4 / 0 / 4 strands inside the bud
+    besides the plug. With the parent as is, its half (6 cells) lets its strands out (7-13 outside at the end) and
+    they take the food: one full copy on the plug strand in 1 of 4. The bud alone (`BUDNOP=1`): strands inside grow to
+    7 / 7 / 3 / 6, 7-20 releases inside after the split, a full copy on the plug strand in 3 of 4 (releases 6 / 4 / 6 /
+    3); without the plug the bud alone made one in 1 of 3. Picture (the bud alone, seed 1, at t=100000: 7 strands inside,
+    the plug strand in the wall at the lower right beside the pore): ![plugged bud](pictures/budpore_plug.png)
+  - The parent's half (not solved): low-end catches on either edge of a 10-cell parent half stand at 60 degrees; a
+    high-end catch (`BUDPA=-1.75 BUDPAG=Z`: a `Z@|` anchor catching the `z` end) at the left edge lies in P's row with
+    faces into P, at the right edge faces out. ![parent plug dry-run](pictures/budpore_plug_parent_dry.png) Run with it
+    (founder moved to P's bottom wall, `BUDPX=b`, since the left edge is taken): blanks inside P copy the waiting anchor
+    cell (36-44 of 80 copies), P makes 1-2 strands, 1 of 4 split. Next step: docs/NEXT.md.
 - **M2 on the sealed bud pair (`budpore ... 100c`): not met; no doorway width works** (measured, seeds 1-4, 100000
   steps, `DBGC=1`; demo options only, default outputs byte-identical to main).
   - As is: split 37500 / - / 20000 / 30000 with 1 / - / 3 / 3 strands in the bud; genome copies after the split in the
@@ -45,11 +65,6 @@ not statistics.
   - Why (IDEAS, 2026-10-03): the physics is reversible, so the opening a strand used to enter the bud is still there
     after the split and lets strands and copies out; free strands outside take the food. The bud needs an opening that
     a binding event narrows after the strand is in. Next step: docs/NEXT.md.
-  - Designed, not demonstrated: the caught strand as the plug. Dry-run (`BUDRD=7 BUDDG=-1.75,3.25 BUDDRY=1
-    BUDDRYPIC=126:1`, a bud of the parent's size with a 10-cell half): a strand caught by its low end on the slanted
-    side at the left edge of the bud's gap lies exactly in the bud's wall row, faces into the bud, and leaves a 3-cell
-    pore; at the right edge it stands out at 60 degrees. With the bud's radius 5 the row is too short (docs/NEXT.md).
-    ![plug dry-run](pictures/budpore_plug_dry.png)
 
 ## 2026-10-03 (autorun run 20261003-0050, explore)
 

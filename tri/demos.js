@@ -295,11 +295,16 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // f/F, copies of the anchor and the freed latch sides glued onto each other and onto strands and grew clusters)
       for(const u of U)for(let i=0;i<3;i++)s.glue[u*3+i]=0;
       // P's anchor W| (middle of its bottom inner wall)
-      // BUDPX=x: P's anchor on P's top inner wall (beside the doorway) nearest x instead; with 'c' on the doorway's
+      // BUDPX=x: P's anchor on P's top inner wall (beside the doorway) nearest x instead ('b': the bottom wall's middle); with 'c' on the doorway's
       // left edge (-1): the founder hangs under the doorway, so its copies are released at the way into D
-      const PX=process.env.BUDPX||(X.includes('c')?-1:'');let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||(PX?m[1]<0:m[1]>0)||S.hexr(m)>RP-0.5)continue;const d=PX?Math.abs(m[0]-PX):Math.abs(m[0]);if(!pa||d<pa.d)pa={u,i,d};}}
+      const PX=process.env.BUDPX==='b'?'':process.env.BUDPX||(X.includes('c')?-1:'');let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||(PX?m[1]<0:m[1]>0)||S.hexr(m)>RP-0.5)continue;const d=PX?Math.abs(m[0]-PX):Math.abs(m[0]);if(!pa||d<pa.d)pa={u,i,d};}}
       if(PX)console.log('P anchor at',S.hexr(mid(tris[U.indexOf(pa.u)].v,pa.i)).toFixed(2),mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
+      // BUDPA=x (BUDPAG=glue, default W): a catching anchor W@| in P too, on the free side of P's top row whose midpoint is nearest x (a gap edge:
+      // a strand caught there lies in P's row, the parent's plug); the doorway waits for it as well. BUDDRYPIC=P: its picture
+      let ppa=null;if(process.env.BUDPA){const x0=+process.env.BUDPA;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!ppa||d<ppa.d)ppa={u,i,d};}}
+        ppa.g=process.env.BUDPAG||'W';s.glue[ppa.u*3+ppa.i]=gc(ppa.g);s.anc[ppa.u*3+ppa.i]=1;s.att[ppa.u*3+ppa.i]=1;const Q=[pick.u],dd=new Map([[pick.u,0]]);for(let q=0;q<Q.length;q++)for(let e=0;e<3;e++){const b=s.bond[Q[q]*3+e];if(b<0||!inP.has((b/3)|0)||dd.has((b/3)|0))continue;dd.set((b/3)|0,dd.get(Q[q])+1);Q.push((b/3)|0);}
+        ppa.dist=dd.get(ppa.u)+1;console.log(`P catching anchor on P cell ${U.indexOf(ppa.u)} side ${ppa.i} at`,mid(tris[U.indexOf(ppa.u)].v,ppa.i).map(x=>x.toFixed(2)).join(','),`(${ppa.dist} bonds)`);}
       for(const k of BA?more:[best]){s.glue[k.A*3+k.f]=gc('W');s.anc[k.A*3+k.f]=1;s.att[k.A*3+k.f]=1;}s.p.openRange=1;
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
       // BUDDRY: where a strand caught by its low end on each inner side of D would stand (placed as the anchor places it):
@@ -314,6 +319,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
           console.log(`cell ${U.indexOf(k.A)}:${k.f} bonds from the doorway cell ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);
           // BUDDRYPIC=cell:side,...: a picture of the strand placed there
           if((process.env.BUDDRYPIC||'').split(',').includes(`${U.indexOf(k.A)}:${k.f}`))snap(s,`dry${U.indexOf(k.A)}_${k.f}`,`dry-run: a strand caught by its low end on D cell ${U.indexOf(k.A)} side ${k.f}`,{units:[...F,k.A],radius:6},false);}
+        if(ppa&&(process.env.BUDDRYPIC||'').split(',').includes('P')){const e=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(ppa.g.toLowerCase());});s._snapBody(e,s.roles(e).inert,ppa.u,ppa.i);snap(s,'dryP',`dry-run: a strand caught by its low end on P's catching anchor`,{units:[...F,ppa.u],radius:6},false);}
         s.moveDepth=md;process.exit(0);}
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
@@ -323,7 +329,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       spendableSides(s,U);for(let k=0;k<60;k++)s.derive();
       // the walls start spent (one completion pass while only A hears its own signal; spent sides stay spent), then the
       // open range grows to reach P's side of the doorway bond, which becomes a completion-release bond ('&' both sides)
-      const dMax=Math.max(...(BA?more:[best]).map(k=>k.d));s._latches();s.p.openRange=dMax+3;for(let k=0;k<dMax+4;k++)s.derive();s.done[pick.u*3+pick.i]=1;s.done[pick.L*3+pick.j]=1;
+      const dMax=Math.max(...(BA?more:[best]).map(k=>k.d),ppa?ppa.dist:0);s._latches();s.p.openRange=dMax+3;for(let k=0;k<dMax+4;k++)s.derive();s.done[pick.u*3+pick.i]=1;s.done[pick.L*3+pick.j]=1;
       if(!(s.op[pick.u]>0&&s.op[pick.L]>0))throw Error('budpore: the doorway bond hears no open signal');
       const prep=new Set([...U,...F]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
         if(!placeFree(s,u,placed,()=>{for(;;){if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}

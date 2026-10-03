@@ -30,7 +30,8 @@ Three findings from trying to keep the parent's copies in after `budpore`'s spli
 Ways to give a bud its strand and then close its way in, each with a binding event (for the next build or explore):
 (a) **the genome as the plug:** the bud's anchor on the edge of its gap so a caught strand lies in the wall row and
 fills the gap but for a pore (a 10-cell gap, a 7-triangle strand, 3 cells left); the catch is the one-way step; which
-way its faces point (into the bud or out) decides where its copies form. (b) **a closure grown after the split:** a
+way its faces point (into the bud or out) decides where its copies form. Built the same run for the bud (faces in: the
+bud alone copies in 3 of 4 worlds); the parent's half is open (INNOVATIONS, run 0320). (b) **a closure grown after the split:** a
 growth site on the bud's opening whose place is filled by the parent's wall until the parent leaves, more bonds from
 the doorway bond than `openRange`, grown from copies. (c) **fission:** a septum grown across the parent.
 
