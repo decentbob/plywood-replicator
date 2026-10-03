@@ -1,24 +1,22 @@
 # Next instance: start here
 
-**Current slice (autorun 20261003-0950, harden; branch `claude/autorun-20261003-0950`).** Goal: (1) run the whole
-check suite (groups into `runs/check-{a,b,c}.log`) and fix what fails; (2) speed (priority 5): profile `budpore`, make
-the hot path faster by exact changes (identical report lines on the same seeds) or, if neighbour order must change,
-re-check the copy-lineage checks. Done when: the suite result is recorded, and `budpore 300` runs measurably faster
-(target 1.3x) with its capability lines unchanged or each difference explained. Stop there; if no exact speedup is
-found, record what was measured.
-
-
-State on 2026-10-03 (after autorun run 20261003-0751, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-03 (after autorun run 20261003-0950, harden). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `a993d78`).
 
-**Handoff status (autorun run 20261003-0751, build).** Everything committed on branch `claude/autorun-20261003-0751`
-and merged into `main`. No simulations running; `node tri/test.js` 36 pass. Only demo options were added (no rule,
-physics or shared-structure change; `budpore` without the new options takes the same code path), so the check suite
-was not rerun; checks `budpore`, `budpore-c` and the five `imprint` checks were run with the narrowing hook below (7 of
-7 pass). **Slice: plug the parent's half (priority 1, M2). Result: M2 not met (the bud makes a full copy after the split
-in at most 1 of 4 worlds of any layout); one new mechanism, cap release (partial, 2 of 4); a core-change candidate.**
-Details and numbers: INNOVATIONS (run 0751). In short:
+**Handoff status (autorun run 20261003-0950, harden).** Everything committed on branch `claude/autorun-20261003-0950`
+and merged into `main`. No simulations running; `node tri/test.js` 36 pass; the whole check suite was run before and
+after (37 of 37 pass, `grown` partial, result lines identical). **Slice: check suite and speed (priority 5). Result:
+1.34x by exact changes** (same output byte for byte on all 37 check configurations; suite 2286 -> 1701 s, a `budpore
+300` world 253 -> 178 s; details INNOVATIONS run 0950). Nothing failed, so nothing was fixed. The user's idea of growing
+a finished membrane by breaking it and inserting triangles is in IDEAS (top) with first feasibility notes; it bears on
+closure (priority 2: a bud born small that grows to its parent's size). The next speed idea, if a harden run wants
+one: `_overlap` on ring bodies scans mostly the body's own blocks (a per-body list of foreign neighbours gathered once
+per `tryMove` would help bodies that take several trials); `_single`'s gather visits about 10 cells per lone block.
+
+**M2 state (from build run 20261003-0751, unchanged).** Slice: plug the parent's half (priority 1, M2). Result: M2 not
+met (the bud makes a full copy after the split in at most 1 of 4 worlds of any layout); one new mechanism, cap release
+(partial, 2 of 4); a core-change candidate. Details and numbers: INNOVATIONS (run 0751). In short:
 - All three options of the old next step fail: more food in a bigger parent never reaches the bud before the split; the
   founder lying in a wall row turns all food into face copies (no fills); the founder right of the doorway lies facing
   in or stalls.
@@ -108,7 +106,7 @@ RULES Binding. (a) and (b) are casting lineage; take them with the removal of fi
    28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
 4. **Two generations:** the bud of priority 3 splits off, copies its genome (priority 1) and starts its own bud.
    This is the goal's whole cycle; then the core-review of finding 2.
-5. **Speed (for `harden` runs):** `budpore` worlds take about 4 minutes and the check suite 30-40 (run 2150: 1.1-1.25x by exact changes); copy-lineage worlds
+5. **Speed (for `harden` runs):** `budpore` worlds take about 3 minutes and the check suite 28 (run 2150: 1.1-1.25x, run 0950: 1.34x, both by exact changes); copy-lineage worlds
    need hundreds of blanks, and lone blocks dominate physics (`_single`). Measure steps per second on `budpore` and
    optimise the lone-block path; keep capability lines identical or explain each difference.
    Next idea (run 2150): a lone block's gather visits about 22 grid cells to find 2 neighbours; a grid kept per step as flat
@@ -130,7 +128,7 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~30-40 min, 4 processes)
+node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~28 min, 4 processes)
 node tri/demos.js budpore 1 100000 runs 100c       # sealed bud pair: P feeds inside, founder under the doorway (7 of 8 split)
 node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, the doorway bond cut by completion release, split with food left (7 of 8); DBGC=1: where copies go, BUDF=20: frames;
                                                    # BUDDRY=1: dry-run a catch on every inner side of D; BUDA=cell:side: anchor
