@@ -50,6 +50,10 @@ function eqDepth(ao,bo,dx,dy){let best=Infinity;const sk=SKIN.v;
 const BO=new Float64Array(6);
 function eqDepthOf(ao,ox,oy,v,dx,dy){for(let e=0;e<3;e++){BO[2*e]=ox[v*3+e];BO[2*e+1]=oy[v*3+e];}return eqDepth(ao,BO,dx,dy);}
 const TA=new Float64Array(6),TB=new Float64Array(6);
+// torus wrap ((x % W) + W) % W and minimum image d - W * round(d / W), bit for bit, without a float modulo or division
+// in the usual case (V8 computes a float % by a slow library call; positions are almost always inside [0, W))
+function wrapc(x,W){const m=(x>=0&&x<W)||(x>-W&&x<0)?x:x%W,s=m+W;return s<W?s:s<2*W?s-W:s-2*W;}
+function mimg(d,W){return d>-0.499*W&&d<0.499*W?d+0:d-W*Math.round(d/W);}
 
 class Physics{
   constructor(params={},n=params.n||0){
@@ -60,10 +64,10 @@ class Physics{
     for(let u=0;u<n;u++)this.resetShape(u);
   }
   // ---- torus and random numbers
-  _dx(d){const W=this.p.W;return d-W*Math.round(d/W);}
-  _dy(d){const H=this.p.H;return d-H*Math.round(d/H);}
-  _wx(x){const W=this.p.W;return ((x%W)+W)%W;}
-  _wy(y){const H=this.p.H;return ((y%H)+H)%H;}
+  _dx(d){return mimg(d,this.p.W);}
+  _dy(d){return mimg(d,this.p.H);}
+  _wx(x){return wrapc(x,this.p.W);}
+  _wy(y){return wrapc(y,this.p.H);}
   _gauss(){if(this._spare===this._spare){const g=this._spare;this._spare=NaN;return g;}
     let x,y,q;do{x=2*this.rng()-1;y=2*this.rng()-1;q=x*x+y*y;}while(q>=1||q===0);const f=Math.sqrt(-2*Math.log(q)/q);this._spare=y*f;return x*f;}
   // ---- geometry of one block
@@ -95,7 +99,7 @@ class Physics{
     if(!this._cells||this._cells.length!==gx*gy)this._cells=Array.from({length:gx*gy},()=>[]);else for(const c of this._cells)c.length=0;
     if(!this._cellOf||this._cellOf.length!==this.n)this._cellOf=new Int32Array(this.n);
     const px=this.px,py=this.py,cw=this._cw,ch=this._ch,cells=this._cells,cellOf=this._cellOf;
-    for(let u=0;u<this.n;u++){const x=px[u],y=py[u],c=Math.min(gy-1,Math.floor((((y%H)+H)%H)/ch))*gx+Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw));cellOf[u]=c;cells[c].push(u);}}
+    for(let u=0;u<this.n;u++){const x=px[u],y=py[u],c=Math.min(gy-1,Math.floor(wrapc(y,H)/ch))*gx+Math.min(gx-1,Math.floor(wrapc(x,W)/cw));cellOf[u]=c;cells[c].push(u);}}
   _cellAt(x,y){return Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch))*this._gx+Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw));}
   _regrid(u){const c=this._cellAt(this.px[u],this.py[u]),o=this._cellOf[u];if(c===o)return;const L=this._cells[o],k=L.indexOf(u);if(k>=0)L.splice(k,1);this._cells[c].push(u);this._cellOf[u]=c;}
   // visit blocks whose centres may lie within reach of (x, y)
@@ -107,7 +111,7 @@ class Physics{
   _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark,{px,py,ox,oy}=this,W=this.p.W,Hh=this.p.H;
     const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all,hw=W/2,hh=Hh/2;let sum=0;
     for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;let built=false;
-      const gxi=Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw)),gyi=Math.min(gy-1,Math.floor((((y%Hh)+Hh)%Hh)/ch));
+      const gxi=Math.min(gx-1,Math.floor(wrapc(x,W)/cw)),gyi=Math.min(gy-1,Math.floor(wrapc(y,Hh)/ch));
       for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;
         const L=all?null:cells[((gyi+b+gy)%gy)*gx+(gxi+a+gx)%gx],m=all?this.n:L.length;
         for(let q=0;q<m;q++){const v=all?q:L[q];if(mark[v]===st)continue;
@@ -210,7 +214,8 @@ class Physics{
     for(let u=0;u<this.n;u++){if(bond[u*3]<0&&bond[u*3+1]<0&&bond[u*3+2]<0)continue;cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
       for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
         for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u||(v<u&&(bond[v*3]>=0||bond[v*3+1]>=0||bond[v*3+2]>=0)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
-      if(cand.length>1)cand.sort((a,b)=>a-b);for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
+      for(let q=1;q<cand.length;q++){const x=cand[q];let r=q-1;while(r>=0&&cand[r]>x){cand[r+1]=cand[r];r--;}cand[r+1]=x;}   // ascending (few)
+      for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
     return out;}
   physics(){this.gridSync();this._jostle();this._pairs();}
   regrid(u){if(this._cells)this._regrid(u);}
