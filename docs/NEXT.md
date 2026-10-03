@@ -1,117 +1,114 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-1221, explore). Read AGENTS.md first (rules of work), then this file.
-History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `4238aea` for run 1121's, `b13cde7` for run 0950's).
+State on 2026-10-03 (after autorun run 20261003-1321, review-intent). Read AGENTS.md first (rules of work), then this
+file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
+handoffs: NEXT.md in git, e.g. at `30c5e5a` for run 1221's, `4238aea` for run 1121's).
 
-**Current slice (autorun run 20261003-1321, review-intent): direction check, no building.** Goal: decide whether the
-work since run 1751 is on the best path to the organism, reset the priorities here and in the ROADMAP backlog, adjust
-the autorun rotation if needed. Done when NEXT, ROADMAP and the rotation carry the reasoning; stop there.
+**Handoff status (autorun run 20261003-1321, review-intent).** Direction check only, no code changed: everything on
+branch `claude/autorun-20261003-1321`, merged into `main`. No simulations running; tests and checks as left by run 1221
+(38 tests, 37 of 37 checks). The result is the Direction section below (it replaces run 1751's; that one is in git at
+`30c5e5a`) and the ROADMAP backlog. The autorun rotation for plywood now has one `harden` and three `explore` runs per
+twelve (was two and two).
 
-**Handoff status (autorun run 20261003-1221, explore).** Everything committed on branch `claude/autorun-20261003-1221`
-and merged into `main`. No simulations running; `node tri/test.js` 38 pass (one new test); `node tri/check.js` 37 of
-37 with the rule change (budpore-c 6 of 8 and imprint-hood 3 of 4 are at their margins). **Slice: weigh core candidate
-(c) against closure. Result: (c) withdrawn; the narrower rule built: a copy blank binds no anchor side** (RULES, Core
-changes; INNOVATIONS run 1221). In short:
-- (c) (a copy blank binds no `@` side) would leave every cell whose only free sides are `@` uncopyable: the closure
-  kind's root, any in-wall anchor cell, each front's forward link. It cuts the lineage.
-- Built instead: an anchor side is never copied. `budpore 300` seeds 1-4: copies of the waiting anchor 22-35 -> 0,
-  genome copies 265-278 -> 300 of 300; splits with food left 3 of 4 as before; the bud's own copying after the split
-  unchanged (M2 open). Worlds with 0-1 anchor copies only diverge (`budpore 100c` 12 of 16, was 14; `imprint 150p` 8 of
-  8, was 7; `imprint 150ph` 7 of 8, was 8).
-- Part pool for the closure kind (IDEAS, "Closure: what a part pool costs"): a front waiting for its next part is copied
-  in proportion to blanks / next parts near it (demo `pool`: 0.90-1.03 x B/n at a lone copyable site, about half with
-  copyable neighbours). A steady pool needs about (r + 1)/2 to r + 1 parts of each type per blank near the growing bud
-  (r = openRange); with 46 types that is tens of parts per blank. Since this run the anchor cell follows the same law.
-- New: demo `pool` (measurement harness), test "copy side: a copy blank binds no anchor side".
+**Exact next step.** The next run is a `cleanup` (rotation): prune `budpore`'s diagnostic options (Direction, priority
+4), keep every check and every command still listed below working, outputs identical on the checked worlds. The next
+`build` run takes priority 1 below (the kind's bud grown from a part pool, in isolation); the next `explore` run takes
+priority 2 (the kind's opening).
 
-**Exact next step.** A `build` run continues closure, unchanged in order: (1) **move the anchor off the doorway** in the
-kind (root keeps the seed bond, the catching anchor k cells counter-clockwise, openRange k + 1; find k by dry-run on
-the 7-cell layout, `BUDDRY=1`, both catch ends with `BUDAG=Z`, Commands; a held strand must stand inside, backs open,
-leaning away from the doorway); rerun the transfer batch with the founder on the same side in P (`BUDPF`/`BUDPFE` or
-`BUDPX`) and the bud's anchor there (`BUDA`), 4 worlds, target 3 of 4; update `budKit` (anchor position as a parameter)
-and its test. (2) Priority 3 on this kind: a bud grows on a parent's seed site from a pool of free parts and copy
-blanks. Seed the pool at the steady ratio from this run (several parts of each type per blank where the bud grows, not
-one of each: from one of each, the first fronts take the food) and count the copies per type the growth leaves.
-
-**Core-change candidates.** (c) withdrawn (run 1221, above); its narrower form is the rule now. (d) *Code vs RULES:*
+**Core-change candidates.** (c) withdrawn (run 1221); its narrower form is the rule now. (d) *Code vs RULES:*
 the anchor catch does not test `spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no
 structure has a spent anchor side, so nothing depends on it; a core review should add the test. (a) A flap swings on a
 welded partner's bonded trigger read directly, besides hearing through `+`: only `budgrow`'s pulse-door hinges use the
 direct path (`grownBud`); a `+` on those weld sides would leave one path. (b) An attached close-only side still takes
 docks and fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free triangle"; documented as an
-exception in RULES Binding. (a) and (b) are casting lineage; take them with the removal of finding 2. New observation
+exception in RULES Binding. (a) and (b) are casting lineage; they go with its removal (priority 5). New observation
 (run 1221): the kind's seed site `y` (plain glue, never spent) is copied by every blank that reaches it while no bud
-sits on it (copies of E); measure in priority 3 before changing anything.
+sits on it (copies of E); measure in priority 1 before changing anything.
 
-
-### Direction (autorun run 20261002-1751, review-intent): where the work stands and what comes first
-**Findings.**
-1. **Two half-organisms.** Since the synthesis decision (run 0136: contact copying) the build line has alternated
-   between two lineages: the casting lineage (kit parts and stamp-cast dockers as prepared food: `split o`,
-   `budgrow`, `budgrow g`; run 1351 built here) and the copy lineage (one uniform food, copy blanks: `imprint m/p`,
-   `budpore`; runs 0236, 0921, 1551). Each covers part of the goal sentence with different prepared pieces; neither
-   is converging on the other. The copy lineage is the only one where the parent can construct its offspring from
-   uniform food (in the casting lineage the world supplies the bud's kit parts, the parent only a seed), and only it
-   lets a later core review shrink the core. **Decision: all new building goes to the copy lineage; the casting
-   lineage is frozen** (its checks keep running and passing; no new features, its open follow-ups are dropped:
-   `budgrow g`'s transport tail and second bud, `grown`'s membrane stall, fuel per swing, the airlock).
-2. **The core is not outgrowing the capabilities.** Since 10-01 the core gained one rule (copy side `?`) and lost or
-   narrowed several (K merged into `%`, the latch's open hold, 8 options, the anchor reads less). Good. The larger
-   win is ahead: the copy lineage uses only `@ . & | ? ~ *`, the open, busy and zip signals and binding; casting,
-   stamp, fuel and machine marks (`% ' $ ^ # = ! < > + * ~`) serve only the frozen lineage (measured with the coverage hook on 3000-step runs of `budpore 300`, `imprint`,
-   `imprint 60m`, `imprint 150p`; rerun in run 20261003-0050 with `budpore 100c`: marks present are `. @ & | ?` only;
-   `budpore` no longer uses trigger `*`, latch `~` or hear `+`, its doorway is a completion-release bond). Once the organism on
-   copies runs a whole cycle (priority 3), a `core-review` should weigh removing them (with their demos, into git
-   history, as the 10-01 restart did); the case goes through the RULES gate first.
-3. **Prepared structure does most of the organism's work.** In `budpore` only the genome copies are grown; both
-   rings, the bud's anchor, the doorway bond, the opening and the founder are prepared (ROADMAP, "Organism on copies:
-   parts and where they come from"). Of these, the bud ring and everything on it must be made each generation.
-4. **Nothing yet tests closure.** The goal is a lineage: the offspring must be able to do it again. `budpore`'s bud is
-   not its parent's kind (D is R 5 with a catching anchor `W@|` and a doorway `&` side; P is R 7 with anchor `W|` and a seed for no
-   bud), so even a perfect run would end the lineage after one generation. Closure is a design question to settle
-   early, before more prepared asymmetries are built on.
-5. **A design tension found.** Food protection needs spent `&` walls (spent sides are never copied: imprint m, p);
-   but a spent wall cannot be a template, so a complete parent cannot template its bud's ring. Ring material must
-   come from something exposed and unspent: the bud's own growing front (as `imprint`'s rings: one motif round grows
-   into a whole ring from copies, while open-signal sides are unspent), or templates carried where they stay exposed
-   (on the genome, inside the parent). Written into IDEAS.
+### Direction (autorun run 20261003-1321, review-intent): where the work stands and what comes first
+Ten runs since the last direction check (run 1751): four `build` runs on M2 (1921, 2321, 0320, 0751), one `build` on
+closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), one `core-review` (0450, removals), two
+`harden` (speed 1.1-1.25x, 1.34x), one `cleanup`. **Findings.**
+1. **M2 in `budpore` has stopped paying.** Four build runs gave real lessons (the way in is the way out; free strands
+   beat cells; completion release; the genome as the plug; cap release 2 of 4) but no bud that copies its genome after
+   the split, and `budpore` is a prepared pair that is not the organism's kind (finding 4 of run 1751). Further M2
+   work there tunes a layout the lineage will not use. **Decision: no more M2 work on `budpore`'s layout**; `budpore`
+   and `budpore c` stay as checks of transfer and split. M2 is now a question about the closure kind (priority 2).
+2. **The closure kind inherits the unsolved problem.** `budKit`'s 7-cell pore is both the doorway (strands must pass,
+   7 cells needed: 3-cell halves pass none) and the cell's feeding pore afterwards. By the law found in run 0320 (an
+   opening a strand passes one way it passes the other) both cells then leak strands (run 1121: 0 / 11 / 7 / 9 strands
+   outside after the split in 4 worlds), and leaked strands starve every cell near them. So the kind as designed cannot
+   live on its own after the split, whatever its growth does. The kind's opening must be settled by design before more
+   is built on its geometry, and the planned "move the anchor off the doorway" depends on that answer (an anchor at the
+   pore's edge is a jam for the parent's founder but a plug for the bud's: run 0320 vs run 1121).
+3. **Closure depends on an untested step with a large cost.** Every bud part comes from a pool of free parts of 46
+   types, kept by copies made while each bud grows; run 1221's law puts the steady pool at about (r + 1)/2 to r + 1
+   parts of each type per blank near the bud. If growth from such a pool stalls (crowding, wrong-type jams, the first
+   fronts taking the blanks) the kind is dead whatever its opening. And a pool the organism does not refill is the
+   casting lineage's prepared kit again (the reason it was frozen). This is the riskiest assumption left; test it first
+   and in isolation, measuring the refill, not only completion.
+4. **The core is shrinking; good.** Since run 1751: the latch, hear chain and trigger left the copy lineage; `#` key
+   release, `zip` and `latGlue` options and latch partner reads removed; anchors narrowed twice. Capabilities did not
+   pile up as separate demos (`budpore` combines `imprint p`, anchors and completion release), but **diagnostic options
+   piled up in one demo**: `budpore` reads 24 `BUD*` environment variables, most from options tried once and dropped.
+5. **The frozen casting lineage costs about half of every check run** (estimated worker time in `tri/check.js`: 5100 s
+   of 9200 s) and about a dozen of the core's marks, and nothing on the closure path uses it (the copy lineage uses `. @ & | ?`,
+   the open signal and binding). Run 1751 deferred its removal until a whole cycle works; that is several runs away
+   (priorities 1-3), so the cost is paid on every check until then.
+6. **Other paths, weighed.** *Fission* (a septum across a cell holding two strands) needs no strand transfer and no
+   wide doorway at all, but its halves are not the parent's shape until the membrane grows back (insertion growth: the
+   user's idea of 2026-10-03, hard on rigid physics: IDEAS). *A periodic ring* (7 motif types plus about 10 unique
+   cells) cuts the pool by about 3x but brings back the door-cell race. Neither is clearly simpler than fixing the
+   kind's opening; both stay candidates for priority 2's analysis. The goal sentence (the parent builds and feeds its
+   offspring, then splits it off) fits budding; no change to the goal is proposed.
 
 **Priorities (in order; each a slice).**
-1. **M2: the bud copies its genome after the split** (`budpore`, mid-wall anchor in D; as run 1551 set it; run 1921
-   built the mid-wall low-end anchor, splits 8 of 8, but the caught strand's backs face the wall; run 2321: an anchor
-   with open backs does not help, the parent's leaked copies take the food; run 0320: no fixed doorway works; run 0751: cap release keeps the parent's strands in, the bud still starves, see Exact next step). After the
-   split D's half of the opening is its pore, so D is then an `imprint p` cell: the bud "lives on its own".
-2. **Closure by design (analysis slice; "designed, not demonstrated" is a valid result).** Specify one organism kind
-   whose bud is the same kind: one ring size or a fixed alternation, which anchor holds the founder and which catches
-   (one glue for both roles, or roles by position), how the bud's seed site and doorway bond are re-made in the bud, and
-   where the bud ring's first motif round comes from (finding 5). Output: a parts list where every part is grown from
-   copies or comes from the environment, with each step mapped to an existing demo, and the rules it reads (locality
-   check). A `build` or `explore` run can take it; if it needs a core change, the case goes to RULES first.
-   **Designed in run 20261003-1121** (`budKit`, IDEAS "Closure by design"); open: the anchor's place, the part pool.
-3. **Grow the bud ring from copies** (replace D in `budpore`): the bud grows on P's seed site from copies of its own
-   motif round (as `imprint`), outside in the food; doorway bond and anchor as parts of its kit (its walls spent before its anchor emits: IDEAS, 2026-10-03). Fix `imprint`'s one-front
-   28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
-4. **Two generations:** the bud of priority 3 splits off, copies its genome (priority 1) and starts its own bud.
-   This is the goal's whole cycle; then the core-review of finding 2.
-5. **Speed (for `harden` runs):** `budpore` worlds take about 3 minutes and the check suite 28 (run 2150: 1.1-1.25x, run 0950: 1.34x, both by exact changes); copy-lineage worlds
-   need hundreds of blanks, and lone blocks dominate physics (`_single`). Measure steps per second on `budpore` and
-   optimise the lone-block path; keep capability lines identical or explain each difference.
-   Next idea (run 2150): a lone block's gather visits about 22 grid cells to find 2 neighbours; a grid kept per step as flat
-   arrays (counting sort) would cut that, but neighbour order changes overlap sums, so outputs need re-checking.
-**Rotation:** unchanged. Five `build` runs per twelve fit priorities 1-4; `explore` can take priority 2 or a core
-change it needs; the two `harden` runs take priority 5 and the copy lineage's partial checks (`budpore`, `imprint`
-5 of 8); `core-review` takes finding 2 once priority 3 works.
+1. **The kind's bud grown from a part pool, in isolation** (`build`; was priority 3). A fixed seed site `y` (the
+   parent's E alone, or a prepared parent ring without food or strands), a pool of `budKit` parts seeded at about
+   (r + 1)/2 parts of each type per blank, the anchor at a parameter k (r = k + 1; k from a quick dry-run, no transfer
+   batch). Measure: bud completed (target 3 of 4 worlds), steps to complete, copies made per type during the growth
+   (the refill: at least one per type used), stray bindings, crowding. If it stalls, find out why before anything else;
+   a fix to the kit or a smaller kind is the slice. This settles finding 3.
+2. **The kind's opening: feed without leaking, still pass a strand to the next bud** (analysis first; `explore` or
+   `build`; "designed, not demonstrated" is a valid result). The opening must be wide while a strand crosses to the bud
+   and closed to strands while each cell feeds, and only binding events are one-way. Weigh at least: (a) two openings,
+   a hooded feeding pore (`imprint ph`: no strand out) and a doorway that a binding event narrows after the transfer
+   (the bud's caught strand as its plug, run 0320) and that the next bud's growth reopens; two gaps cut a one-row ring
+   in two (Pitfalls), so the hood must join both sides of its pore (`imprint ph`'s hangs on one strut: untested); (b) one opening narrowed by its own caught strand and re-opened
+   by a release the next bud's growth triggers; (c) fission plus insertion growth (finding 6). Output: the revised kind
+   (`budKit` and its test), with each step mapped to a demo and the rules it reads (locality); a core change only
+   through the RULES gate. Then move the anchor where the chosen opening needs it, and rerun the transfer batch on the
+   kind's own layout (target 3 of 4). This replaces the old M2 priority.
+3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
+   The whole cycle; then priority 5's removal is no longer premature by anyone's measure.
+4. **Prune `budpore`** (`cleanup`, next run): drop options no check or listed command uses (dead ends such as
+   `BUDTOOTH`, `BUDNOCA`, `BUDDBGA`, `BUDNOP`; their results stay in INNOVATIONS and git); decide whether the plug
+   (`BUDRD=7`) and cap-release (`BUDCAP`) commands still earn their options once priority 2 has chosen; keep `300`,
+   `100c`, the 7-cell doorway and the dry-run; outputs identical on the checked worlds. Also: `tri/check.js` printing
+   each check as it finishes (autorun feedback, run 2150).
+5. **Weigh removing the casting lineage now, not after a whole cycle** (next `core-review`, case through the RULES
+   gate first): its demos and checks (`lid`, `factory`, `energy`, `conveyor`, `gate`, `import`, `grow`, `stamp`, `heir`,
+   `cycle`, `wrap`, `cells`, `live`, `cell`, `grown`, `bud`, `split`, `budgrow`) and the marks only they use (`% ' $ ^ #
+   = ! < > * ~ +`, re-measure with the coverage hook), into git history as the 10-01 restart did. For: half the check
+   time, a smaller core and RULES, nothing on the closure path uses them. Against: working capabilities (machines,
+   pumps) leave the tree; they stay in git and could return if proofreading or transport needs them. If the review
+   decides against, record why and keep them frozen.
+6. **Speed and margins** (`harden`): `budpore-c` (6 of 8, need 6) and `imprint-hood` (3 of 4, need 3) sit at their
+   margins; speed idea from run 2150 (a flat per-step grid by counting sort; outputs need re-checking). One `harden` per
+   twelve runs is enough now: the work is limited by design questions, not by run time.
+**Rotation (autorun `projects/plywood/rotation.txt`):** the second `harden` (line 8) became an `explore`: priorities 1
+and 3 are `build` work, 2 is design work that `explore` and `build` can both take, 5 is the `core-review`'s.
 
 ### Open follow-ups (not priorities; take when a run's kind fits)
-- **Core review (after priority 3, see finding 2):** `#` on a trigger side was removed in run 0450. Lock signal has three uses (keys deaf, latches held, pulse doors ignore their trigger); a merge would need
-  non-pulse flaps to tell their own open latch from another door's. Same-pass partner reads (zip, gap, release, fn,
-  cast) are allowed by convention (RULES, Locality audit); change only if a locality problem traces back to them.
-  Coverage hook: `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js` (one JSON line
-  per demo world: marks used, rule events).
-- **Frozen with the casting lineage (not pursued):** fuel per swing (two carriers on one fuel triangle are both spent;
-  design in git, NEXT.md at `c11ed14`), `grown`'s membrane stall at 72-76 of 78, `budgrow g`'s transport tail and
-  second bud.
+- **Core review:** `#` on a trigger side was removed in run 0450. Lock signal has three uses (keys deaf, latches held,
+  pulse doors ignore their trigger); moot if priority 5 removes the casting lineage. Same-pass partner reads (zip, gap,
+  release, fn, cast) are allowed by convention (RULES, Locality audit); change only if a locality problem traces back
+  to them. Coverage hook: `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js` (one JSON
+  line per demo world: marks used, rule events).
+- **Frozen with the casting lineage (not pursued):** fuel per swing (design in git, NEXT.md at `c11ed14`), `grown`'s
+  membrane stall at 72-76 of 78, `budgrow g`'s transport tail and second bud.
+- **Bigger cells and letter reuse** (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if
+  priority 1 or 2 needs a larger cell, reuse letters inside sealed compartments.
 
 ## Commands
 ```
