@@ -280,6 +280,33 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
 
+### Narrowing: a copy blank binds no anchor side, 2026-10-03, autorun run 20261003-1221 (explore)
+1. **Capability and why the goal needs it.** A waiting catching anchor must not eat the food its cell needs. An
+   anchor with `@` waits unbonded (it emits the open signal until it catches), and a copy blank binds any free side,
+   so every blank that touches it becomes a copy of the anchor cell. Measured in `budpore 300` (seeds 1-4, 200000
+   steps, hook counting copy binds on anchor sides): 22 / 22 / 35 / 28 copies of the waiting anchor per world, 7-12%
+   of the food, all of it lost to the genome (run 0751 counted 29-69 with food nearer the anchor). In the closure kind
+   (`budKit`, run 1121) the catching anchor is the bud's root waiting in the doorway, next to the parent's food.
+2. **Designs with the existing core, and why they fail.** Keeping food away from the waiting anchor (sealed `budpore
+   c`) works only while the anchor is unreachable, and the closure kind's anchor waits in the doorway the parent's
+   strands must cross. Spending the side is impossible (it must stay able to catch). The anchor cannot be covered
+   (anything bonded there would be the catch). Candidate (c) of run 0751, *a copy blank binds no `@` side*, also stops
+   it but is too wide: a cell whose only free sides are `@` would never be copied, and in a one-row ring that is the
+   root (`W@|Y@&b@`), any in-wall anchor cell (its only free side is the anchor) and, while it is the front, every
+   cell's forward link; closure (run 1121) needs every cell type copied in each generation, so (c) cuts the lineage.
+3. **Locality.** The copy bind already reads the site side's bond and spent state (the attached triangle's own state);
+   it now also reads that side's anchor mark (fixed type). Nothing else.
+4. **Generality.** An anchor side then binds only by catching a strand end while attached and by nothing while free
+   (run 0050): it is a catch side, never a template, as a spent side is never a template. Every cell of a grown ring
+   stays copyable while it is the growth front (through its forward link, before the next cell arrives), the anchor
+   cell included, so the closure kind keeps its lineage; what is lost is only the copying of an anchor while it waits.
+   Affects only copy-lineage worlds with an unbonded anchor near copy blanks (`budpore`, `imprint p` variants); the
+   casting lineage has no copy blanks. One glue-catch path of attached `@` anchors is kept (run 0050: removing it
+   changed `imprint p`).
+5. **What it replaces.** Nothing removed; the anchor's accidental use as a template is closed. Candidate (c) is
+   withdrawn in its favour.
+6. **Result.** (filled in below once measured)
+
 ### Core review 2026-10-03, autorun run 20261003-0450: four removals and one fix
 Measured with the coverage hook (`tri/coverage.js`) and a trigger-path hook over every check (37 checks, 38 demo
 variants); `node tri/check.js` before: 37 of 37; after all changes: 37 of 37 (the latch change was made after that run
