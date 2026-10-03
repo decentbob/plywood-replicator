@@ -45,6 +45,11 @@ not statistics.
   - Why (IDEAS, 2026-10-03): the physics is reversible, so the opening a strand used to enter the bud is still there
     after the split and lets strands and copies out; free strands outside take the food. The bud needs an opening that
     a binding event narrows after the strand is in. Next step: docs/NEXT.md.
+  - Designed, not demonstrated: the caught strand as the plug. Dry-run (`BUDRD=7 BUDDG=-1.75,3.25 BUDDRY=1
+    BUDDRYPIC=126:1`, a bud of the parent's size with a 10-cell half): a strand caught by its low end on the slanted
+    side at the left edge of the bud's gap lies exactly in the bud's wall row, faces into the bud, and leaves a 3-cell
+    pore; at the right edge it stands out at 60 degrees. With the bud's radius 5 the row is too short (docs/NEXT.md).
+    ![plug dry-run](pictures/budpore_plug_dry.png)
 
 ## 2026-10-03 (autorun run 20261003-0050, explore)
 

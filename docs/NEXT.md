@@ -22,7 +22,7 @@ not met; why, measured; and one new mechanism, the hooded pore.**
   (13 prepared cells: strut and strip, a corridor two rows high) lets blanks in and keeps strands in: 8 of 8 worlds with
   4-7 strands inside, none lost in 7 of 8 (plain pore: 4-9 lost in 3 of 8). It does not help against rivals (1 inside).
 - New demo options (diagnostics): `budpore` `BUDDG=a,b` / `BUDPG=a,b` (x range of D's / P's half of the doorway),
-  `BUDA=c:s,c:s` (several bud anchors; the doorway waits for all), `BUDNOP=1`; `imprint` `x` (3 rival founders
+  `BUDA=c:s,c:s` (several bud anchors; the doorway waits for all), `BUDNOP=1`, `BUDDRYPIC=c:s` (a picture of a dry-run catch); `imprint` `x` (3 rival founders
   outside), `h` (hood). Pitfall met: changing a gap changes which side the automatic anchor choice takes (it took the
   gap's edge, strand outside); pass `BUDA` and check with `BUDDRY=1`.
 
@@ -66,16 +66,20 @@ restart, 31 minutes in all). **Done (slice: speed, Direction priority 5; target 
 
 **Exact next step (build or explore, priority 1 below): M2 by a plug, "the genome closes the bud's way in".** Run
 0320 showed that no fixed doorway gives M2 (Handoff above; IDEAS 2026-10-03). The cheapest one-way design (IDEAS,
-option a): the bud's catching anchor `W@|` sits on the slanted side at one edge of its half of the doorway, so a caught
-strand (7 triangles) lies in the bud's wall row and fills its gap but for a 3-cell pore (gap 10 cells:
-`BUDDG=-0.75,4.25`). The catch is the one-way step; the doorway is wide (5 units) until then. Steps: (1) dry-run the
-catch on both gap edges with a picture (extend `BUDDRY` to snap the placed strand; its numbers alone do not show
-whether the strand lies in the row) and read which way its faces point: into the bud is wanted (its copies form
-inside; backs outside get their copies from blanks at the pore); (2) the parent's half needs the same, or it leaks: a
-second catching anchor on P's gap edge (the doorway bond waits for both open signals to fade) or P's founder as P's
-plug; (3) measure with `DBGC=1` and `BUDNOP=1` (the bud alone) before tuning. Target unchanged: one full copy in the bud
-after the split (4 releases) in 6 of 8 worlds of `budpore ... c`. If (1) shows the strand cannot lie in the row (the
-anchor places it at 60 degrees), record that and take option (b) or priority 2 instead.
+option a): the bud's catching anchor `W@|` sits on the slanted side at the left edge of its half of the doorway, so a
+caught strand (7 triangles) lies in the bud's wall row and fills its gap but for a 3-cell pore. The catch is the
+one-way step; the doorway is wide until then. **Dry-run done (run 0320, `BUDDRYPIC`, picture
+`docs/pictures/budpore_plug_dry.png`):** with a bud of the parent's size (`BUDRD=7`; RD must be odd, as P's 7, or the
+two lattices do not meet and there is no doorway bond) and D's half 10 cells (`BUDDG=-1.75,3.25`), a strand caught by
+its low end on D cell 126 side 1 (the slanted side at the gap's left edge) lies exactly in D's bottom row, **faces into
+the bud**, backs out, and leaves a 3-cell pore at the right (inner width 1, outer 2). Its first back site is covered by
+P's wall while joined (free after the split). With R 5 the bottom row is too short (7 cells plug the whole gap, or no
+contact cell is left for the doorway bond). On the gap's right edge a strand stands out into P at 60 degrees. Steps: (1) run it: `BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1` with `c`
+(the passage stays P's 6-cell half; check the anchor choice with `BUDDRY=1`); (2) the parent's half needs the same or it leaks: a second
+catching anchor on P's gap edge (the doorway bond waits for both open signals to fade), or P's founder as P's plug
+(placed in P's row, faces into P); (3) measure with `DBGC=1` and `BUDNOP=1` (the bud alone) before tuning. Target
+unchanged: one full copy in the bud after the split (4 releases) in 6 of 8 worlds of `budpore ... c`. A fully plugged
+bud (gap = 7, no pore) is `imprint m` (sealed, copies only from food it holds): worth one measurement too.
 
 **Core-change candidates.** None open. Run 0050 settled both earlier ones: the spent latch (2) by design (the
 completion-release doorway), the anchor copies capping strands (1) by the narrowing "a free triangle's anchor side binds

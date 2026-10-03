@@ -264,7 +264,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // a hear chain (code at e2634fb); its freed latch sides were copied 3-105 times per world.
     // Option 'c' (sealed): the doorway ends at x = 2.25 (BUDDC), so it joins P and D only; 80 blanks start inside P and
     // the founder hangs from the doorway's left edge; outside blanks get in only after the split (each half a pore).
-    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:X.includes('c')?80:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:X.includes('c')?80:0,DW=0.75,RP=7,RD=+(process.env.BUDRD||5),size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
@@ -311,7 +311,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
             for(let q=0;q<3;q++){A6[2*q]=s.ox[u*3+q];A6[2*q+1]=s.oy[u*3+q];B6[2*q]=dx+s.ox[v*3+q];B6[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A6,B6)>1e-6)ov++;}
           const bk=[],fc=[];for(const u of F){const r=s.roles(u);if(r.free<0)continue;(r.role===2?bk:fc).push(near(site(u,r.free)).toFixed(2));}
           let ex=0,ey=0;for(const u of F){ex+=s._dx(s.px[u]-cD[0]);ey+=s._dy(s.py[u]-cD[1]);}const inn=S.hexr([ex/F.length,ey/F.length])<RD-1;
-          console.log(`cell ${U.indexOf(k.A)}:${k.f} bonds from the doorway cell ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);}
+          console.log(`cell ${U.indexOf(k.A)}:${k.f} bonds from the doorway cell ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);
+          // BUDDRYPIC=cell:side,...: a picture of the strand placed there
+          if((process.env.BUDDRYPIC||'').split(',').includes(`${U.indexOf(k.A)}:${k.f}`))snap(s,`dry${U.indexOf(k.A)}_${k.f}`,`dry-run: a strand caught by its low end on D cell ${U.indexOf(k.A)} side ${k.f}`,{units:[...F,k.A],radius:6},false);}
         s.moveDepth=md;process.exit(0);}
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
