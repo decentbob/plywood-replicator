@@ -13,7 +13,7 @@ them.
 [docs/NEXT.md](docs/NEXT.md) (state, current slice, next steps), then as needed: [ROADMAP.md](ROADMAP.md) (goal,
 module table, backlog), [docs/RULES.md](docs/RULES.md) (every rule), [docs/INNOVATIONS.md](docs/INNOVATIONS.md) (what
 works, with pictures), [docs/IDEAS.md](docs/IDEAS.md) (the user's ideas and design lessons). Code in `tri/`: physics,
-sim (chemistry), world, structures (machines and kits), demos (one per capability), render, test (fast checks), check
+sim (chemistry), world, structures (kits), demos (one per capability), render, test (fast checks), check
 (one PASS/FAIL line per working capability).
 
 ## Principles (user)
