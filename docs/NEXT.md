@@ -1,5 +1,14 @@
 # Next instance: start here
 
+**Current slice (autorun run 20261003-1420, build): the kind's bud grown from a part pool, in isolation (priority 1).**
+Goal: a demo `budpool` where a prepared parent of the closure kind (`budKit(5, 7)`, food and strands absent, its anchor
+holding a stand-in) grows a bud on its seed site `y` from a pool of free parts of all 46 types plus copy blanks, with
+the pool held at its seeded composition by a labelled harness (each copy is counted and turned back into a blank).
+Done when: the bud completes in at least 3 of 4 worlds at about one part of each type per blank (openRange 1, the
+anchor on the root), with steps to complete, copies made per type (the refill: at least one per type used), stray
+bindings and copies of the seed site measured; a check in `tri/check.js`. Stop: if it stalls, find why and record it;
+no core change in this run.
+
 State on 2026-10-03 (after autorun run 20261003-1351, cleanup). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `7a98831` for run 1321's, `30c5e5a` for run 1221's).
