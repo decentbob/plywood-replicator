@@ -4,6 +4,14 @@ State on 2026-10-03 (after autorun run 20261003-1121, build). Read AGENTS.md fir
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `b13cde7` for run 0950's and `a993d78`).
 
+**Current slice (autorun run 20261003-1221, explore): weigh core candidate (c) against closure.** (c) as stated (a
+copy blank binds no `@` side) makes every cell whose only free side is `@` uncopyable (the kind's root, any in-wall
+anchor cell, every growth front's forward link): it cuts the lineage. Try instead the narrower (c'): *a copy blank binds
+no anchor side `|`*; every cell stays copyable while it is a growth front, the waiting anchor stops being a food sink.
+Measure with a hook first (`runs/noanc.js`, recreate from this run's INNOVATIONS entry) on budpore 300, budpore 100c,
+imprint 150p/150ph; build it as a rule only if it helps and keeps the checks (case in RULES first). Done when: a
+decision with numbers (rule built and 37 checks pass, or rejected with why). Stop at that.
+
 **Handoff status (autorun run 20261003-1121, build).** Everything committed on branch `claude/autorun-20261003-1121`
 and merged into `main`. No simulations running; `node tri/test.js` 37 pass (one new test); no rule, physics or shared
 structure changed, so the check suite was not rerun (`budpore`'s default output checked byte-identical to main, both
