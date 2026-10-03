@@ -6,6 +6,45 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1221, explore)
+
+- **Core narrowing: a copy blank binds no anchor side** — works (rule built; case in RULES, Core changes). An anchor
+  side `|` is now a catch side only: attached it catches strand ends, free it binds nothing (run 0050), and no copy
+  blank binds it, so a waiting anchor is never a template. Candidate (c) (a copy blank binds no `@` side) is withdrawn:
+  it would leave every cell whose only free sides are `@` uncopyable (the closure kind's root, any in-wall anchor
+  cell, each front's forward link) and cut the lineage.
+  - Evidence (same seeds, baseline vs rule; identical in every world where no blank touched an anchor):
+    `budpore 300` (the bud's anchor waits beside the parent's food; seeds 1-4, 200000 steps): copies of the waiting
+    anchor 22 / 22 / 35 / 28 -> 0; genome copies 278 / 278 / 265 / 272 -> 300 / 300 / 300 / 300 of 300; split with 50+
+    blanks left 3 of 4 both (baseline seeds 1, 3, 4: 165 / 170 / 183 blanks; rule seeds 1-3: 183 / 262 / 161, seed 2
+    at 10000); the bud's own copying after the split unchanged (0-1 full copies: M2 still open).
+    Worlds with 0-1 anchor copies change only by divergence: `budpore 100c` seeds 1-16: 13 identical, of the 3 others
+    one splits earlier (seed 14: 37500, was 92500) and two no longer split (3, 15): 12 of 16 (was 14 of 16; check
+    budpore-c seeds 1-8: 6 of 8, need 6). `imprint 150p` seeds 1-8: seed 2 6 strands inside (was 1: the founder caught
+    early), seed 5 same strands; 8 of 8 with 4+ inside (was 7 of 8). `imprint 150ph` seeds 1-8: seed 4 3 inside (was 7),
+    seed 7 5 (was 7), others identical; 7 of 8 with 4+ inside (was 8 of 8).
+  - Test: "copy side: a copy blank binds no anchor side (a waiting anchor is no template)" (fails on the old code);
+    the copy-side test now copies marks through a close-only side instead of an anchor side.
+  - Check suite: `node tri/check.js` 37 of 37 pass (`grown` partial as before); budpore-c 6 of 8 (need 6) and
+    imprint-hood 3 of 4 (need 3) are at their margins.
+    ![open bud pair with the rule, seed 2: split at 9600 with 263 blanks left, every copy on the genome](pictures/anchor_nocopy_split.png)
+  - Command: `node tri/demos.js budpore 2 12000 runs 300` (the picture); the comparisons: seeds 1-4 at 200000 steps.
+  - Hook used for the measurements (recreate as `runs/noanc.js`): wrap `TriSim.prototype.bind` to count binds whose
+    free partner side has `?` and whose attached side has `|`; print the counts on exit; load with
+    `NODE_OPTIONS="-r $PWD/runs/noanc.js"`. The baseline is the parent commit `4238aea` (main before this run).
+- **What a part pool costs (closure kind)** — the law measured on one front; the pool for the whole kind designed, not
+  demonstrated (IDEAS "Closure: what a part pool costs"). While a front waits for its next part, blanks reach it at
+  the same rate per triangle as parts do, so each cell gets copies in proportion to blanks / parts of the next type.
+  Demo `pool` (a prepared front `fb@-&` on a support, B copy blanks, n next parts `B@c@-&`; a harness turns each copy
+  back into a blank and cuts each bound part, so B and n stay fixed; seed 1, 100000 steps, 190-840 parts bound per run):
+  copies at the front's forward site per bound part 9.04 / 4.83 / 10.32 / 2.47 for B/n = 10 / 5 / 10 / 2.5 (B/n pairs
+  20/2, 20/4, 40/4, 20/8) when it is the body's only copyable side (`POOLISO=1`); 5.53 / 2.68 / 4.98 / 1.21 when three
+  more copyable sides are beside it (they take blanks first: about half), plus as many again at its `&` side. So a
+  steady pool needs about r + 1 parts of each type per blank near the growing bud (r = openRange), up to a factor two
+  for neighbouring sites: of the order of 46 to 92 parts per blank for the R 5 kind with the anchor on its root. With
+  this run's narrowing the anchor cell follows the same law (before, a waiting anchor was copied for as long as it
+  waited). Command: `POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4`.
+
 ## 2026-10-03 (autorun run 20261003-1121, build)
 
 - **Closure by design: one organism kind whose bud is the same kind** — designed, not demonstrated (signal logic
