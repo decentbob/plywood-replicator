@@ -189,7 +189,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // (BCI of them inside the parent). No stand-in: the parent copies its founder from blanks that come in through its
     // pore, a root part binds its seed site y, the bud grows from the pool, and once the bud is complete and its anchor
     // has caught one of the parent's copies by the high end, completion releases the bud's root (the split). The run goes
-    // on BCAFTER steps after the split: copies on the bud's caught strand, new roots on either seed site.
+    // on BCAFTER steps after both the split and the bud's completion (in either order): copies on the bud's caught strand, new roots on either seed site.
     // Harness (budpool's; labelled, BCHOLD=0 turns it off): every copy of a kit part (but those made at an E's pore side)
     // is turned back into a blank at a random place outside both cells, so the pool loses only the parts the buds use;
     // genome copies stay. extra: P (default 8); BCB: blanks (200), BCI: of them inside the parent (20); BCS: world size
@@ -242,7 +242,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(!tc&&bud[N-1]>=0){tc=t;snap(s,'done',`t=${t}: the bud is complete (${N} cells)${ev.catchT?', its anchor holding a strand':''}`,focus(),false);}
         if(!ts&&bud[0]>=0&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[N-1])){ts=t;ev.splitN=n();snap(s,'split',`t=${t}: the bud lets go of its parent (${n()} cells)`,focus(),false);}
         if(every(t,20))console.log(`t=${t} bud cells=${n()}/${N} catch=${ev.catchT||'no'} split=${ts||'no'} ${fmt(strands())} releases: parent ${ev.relP} bud ${ev.relB} free ${ev.relF}; copies: bud ${cp.bud} parent ${cp.par} genome ${cp.gen}; docks ${s.ev.dock||0} fills ${s.ev.fill||0}; blanks ${blanks()}; stray=${ev.stray}`);
-        if(ts&&t>=ts+after)break;}
+        if(ts&&tc&&t>=Math.max(ts,tc)+after)break;}
       const o=strands();console.log(`t=${s.t} bud cells=${n()}/${N} catch=${ev.catchT||'no'} split=${ts||'no'} ${fmt(o)}`);
       if(sealedIn)console.log(`at sealing (t=${sealedIn.t}): ${fmt(sealedIn)}; blanks inside ${sealedIn.blanks}, E parts inside ${sealedIn.E}`);
       {const g={};for(const u of all)if(!s.bonded(u)&&!kitT.has(canon(s.typeName(u)))){const k=canon(s.typeName(u));g[k]=(g[k]||0)+1;}console.log('free triangles not kit parts:',JSON.stringify(g));}
