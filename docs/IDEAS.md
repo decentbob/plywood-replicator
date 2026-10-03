@@ -8,6 +8,38 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## The kind's opening: the parent cannot see its bud finish; make free strands sterile instead (explore run 20261003-1720, 2026-10-03)
+
+Run 1650 asked the next `explore` to weigh three designs for the parent's opening (narrow at rest, wide once the bud
+has sealed the pair, narrow again after the catch). On paper, in the kind's geometry (`budKit`), none works:
+- **The bud's last cell touches its parent only on a spent side.** The bud is its parent turned by an involution T
+  that maps the root's seed edge onto E's seed-site edge, so it also maps E's seed edge onto the root's: the bud's root
+  sits on the parent's E (the seed bond) and the bud's E sits with its seed side on the parent's root's seed side, and
+  that is the only edge they share (E's link holds the bud's cell N-2, its third side faces the doorway). The root's
+  seed side was cut by completion release at the parent's own split, so it is spent and binds nothing: the event "the
+  bud is sealed" never reaches the parent. Design (i) (a resting emitter at the parent's root silenced by the bud's last
+  cell) has no bond to do it. Making that side reusable moves the cut to E's seed side, which is then spent after the
+  first bud (one bud per cell), and E's `&` seed side would be spent at rest anyway (E hears no signal).
+- **A release by signal fires at the wrong end.** Signals move through bonds only. The bud's root binds the parent's E
+  and emits (its anchor and its forward link) from the bud's first cell on, so a release by signal on the E side opens
+  the parent during the whole growth (100-200 thousand steps, the pair is not sealed until cell N-2); on the root side
+  it never fires (the bud's front is 40+ bonds away through bonds, and the kind's openRange is 1-3). Design (ii) fails
+  on timing, not on locality.
+- **Fission** (iii) needs a septum and insertion growth on rigid bodies (two cuts, halves re-aligned flush): no step
+  of it is near. A hood keeps strands in and therefore out: no transfer through it.
+- **Turn the problem round.** The opening matters only because a free strand outside copies itself from the open food
+  faster than any cell (run 0320). If only a strand held at the wall is copied, a leaked strand is sterile: it costs the
+  cell one strand and feeds nobody's copying (its free sides are still contact-copied, which makes dockers and fills that
+  any held strand can use). Then both cells may keep their 7-cell pores, the doorway needs no closing event, and the
+  parent's founder and the bud's caught copy are the templates. One condition on an existing relay does it: zip starts
+  at a strand's high end only while that end's spare edge is held (not by `&`). Option `heldCopy` (RULES, Core changes,
+  run 1720). Biology has the same arrangement: a bacterial chromosome is replicated from an origin attached to the
+  membrane, and naked DNA outside a cell is not replicated.
+- **What it asks of the kind.** Anchors must catch high ends (glue `Z`, the genome's high-end seed `z`) and carry `@`
+  (a free face copy carries `z` and caps a plain `Z|`: seen in this run's first batch, the pitfall of run 0751 again);
+  a cell's copying is linear (one held template) instead of exponential inside; leaked strands pile up as inert
+  material (and can be caught by any waiting anchor, which is a transfer, not a loss).
+
 ## The kind's opening: one opening per body, and only silence widens one (build run 20261003-1650, 2026-10-03): analysis
 
 Priority 2 asks for an opening that is wide while a strand crosses to the bud and closed to strands while each cell

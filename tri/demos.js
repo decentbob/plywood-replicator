@@ -138,17 +138,22 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // copy blanks start outside only (labelled). Every free side of the ring, outside, inside and the pore's edges, is a
     // spent '&' side, so blanks come in through the pore and copy only the genome. extra: blanks (default 150); 'n':
     // plain walls (control: the walls take the blanks); 'c': no pore (control: no blank gets in)
+    // 'z' (with p): the anchor is Z@| and holds a strand by its high end (seed z; '@': a free face copy, which carries z,
+    // cannot cap it; openRange 1: its signal reaches no wall side); 'o': option heldCopy (only a strand held
+    // by its high end is copied: free strands, leaked or rival, are sterile; RULES, Core changes, run 20261003-1720);
+    // 'w': a 7-cell pore (the closure kind's width: strands pass it)
     imprintCell(){const X=String(extra||''),pore=X.includes('p'),plain=X.includes('n'),closed=pore&&X.includes('c'),nb=parseInt(extra)||(pore?150:40),R=6,size=2*R+8,c=size/2;steps=steps||(pore?100000:40000);
       let ring=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));const mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       if(pore){const ang=t=>{const m=[0,1,2].map(i=>t.v[i]).reduce((a,p)=>[a[0]+p[0]/3,a[1]+p[1]/3],[0,0]);return Math.abs(Math.atan2(m[1],m[0])-Math.PI/2);};
-        ring.sort((a,b)=>ang(a)-ang(b));if(!closed)ring=ring.slice(3);
+        ring.sort((a,b)=>ang(a)-ang(b));if(!closed)ring=ring.slice(X.includes('w')?7:3);
         // the anchor: the inner side nearest x = -1 on the flat wall opposite the pore (at a corner the anchored strand
         // would lie along the next wall, its backs hidden, and no fill could be copied). A caught strand leans 60 degrees
         // onto the wall, backs underneath; on the side at x = 0 its two outer back sites are 1.53 and 1.73 from wall
         // cells and a founder caught before any back was copied stalled for 50000-90000 steps (no fills); at x = -1 they
         // are 1.53 and 2.31 (run 20261003-1520)
-        let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]+1);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
-        best.t.type=[0,1,2].map(i=>i===best.i?'W|':'-').join('');}
+        // with 'z' (a high end caught: the strand leans the other way) the mirror place x = +1; IMPX: another x (dry runs)
+        const ax=process.env.IMPX!==undefined?+process.env.IMPX:X.includes('z')?1:-1;let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]-ax);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
+        best.t.type=[0,1,2].map(i=>i===best.i?(X.includes('z')?'Z@|':'W|'):'-').join('');}
       // 'h' (with p, a hooded pore): a hood over the pore (prepared, labelled): a strip one row thick two rows above the
       // wall, from x = -2 to the top wall's corner, held by a strut of 4 cells at its left end. Blanks reach the pore along
       // the corridor under it (two rows high, open to the right); a strand (a rigid strip about 4 long) that leaves the
@@ -159,7 +164,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         for(let k=-2;k<=2;k++){ring.push(up(k,y0+2*H));if(k<2)ring.push({v:[[k+0.5,y0+3*H],[k+1,y0+2*H],[k+1.5,y0+3*H]],type:'---'});}}
       // 'x' (with p): three more founders start outside the cell (competitors for the food, as a parent's leaked copies)
       const NX=pore&&X.includes('x')?3:0,rivals=[[1,1],[1,c],[c,1]].slice(0,NX).map(([x,y])=>({gaps:[1,1,1],faces:'aAaA',x,y}));
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c},...rivals],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{}});
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c},...rivals],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{heldCopy:X.includes('o'),...(X.includes('z')?{openRange:1}:{})}});
       const U=structures[0],F=founders[0];for(const G of founders)seedCopyGenome(s,G);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
       const prep=new Set([...U,...founders.flat()]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*(pore?c:R),y=(2*s.rng()-1)*(pore?c:R),h=S.hexr([x,y]);if(pore?h>R+0.6:h<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
       const wallT=new Set(U.map(u=>canon(typeName(s,u)))),strands=()=>census(s).filter(q=>q.n>=7&&!q.paired);
