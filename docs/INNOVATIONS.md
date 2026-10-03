@@ -6,6 +6,48 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1121, build)
+
+- **Closure by design: one organism kind whose bud is the same kind** — designed, not demonstrated (signal logic
+  checked deterministically; the doorway step tried in 4+4+4+4 worlds). No new rule. Design and reasoning: IDEAS,
+  "Closure by design"; kit `structures.budKit(R, pore)`, pose `structures.budPose`.
+  - The kind (R 5): a one-row ring with a 7-cell pore in its top wall, grown from its root one way round to its last
+    cell E; every cell its own type (46 bond letters). Root (the pore's left edge): outer side `Y@&` (attaches to a seed
+    `y`, lets go on completion), pore side `W@|` (the catching anchor; afterwards it holds the cell's founder: one
+    anchor, both roles by time). E (the pore's right edge): outer side the seed site `y` (plain glue: never spent,
+    emits nothing, a parent can bud again). Every other free side `&`. A bud's root on its parent's E puts the bud at
+    the parent turned 180 degrees about the pore: the two pores face each other (a doorway joining the two cells only)
+    and the bud's E lies on the parent's root, covered until the split.
+  - Deterministic check (`node tri/test.js`, test "closure (budKit)"; no physics, cells bonded in growth order with
+    signal passes between, a stall of 300 passes half way, openRange 3): the bud holds on to its parent while it grows
+    and while its complete ring waits (only its anchor emits; 3 cells hear it), lets go within 10 passes of its catch,
+    and is then cell for cell in the parent's starting state (types, bonds, spent sides), with the parent's seed site
+    free again. Control: the root's anchor without `@` (it emits nothing) lets go during growth (the test fails).
+  - Why every cell is unique (analysis, IDEAS): growth cannot count motif repeats, so a ring grown from a periodic
+    motif ends only by closing onto a cell already there; it cannot stop beside a pore. A periodic ring needs door
+    cells released at ring closure while the root is held until the catch, which with one open signal races the other
+    growth front (about 1 in 10 buds lost for the smallest anchor distance). Cost: 46 letters, so R 5 is the largest
+    such cell (R 7 would need 70).
+  - The doorway, tried on `budpore`'s options (prepared rings of the kit's geometry, R 5 both, 20 blanks and 3 strands
+    inside P, 100 blanks outside, 100000 steps, seeds 1-4; new options below):
+    3-cell pores (a waist one unit wide, two rows long): 0 of 4 split with the founder on P's root at the doorway, 0 of
+    4 with it on P's bottom wall; no strand entered the bud in any world. 7-cell pores with the founder on P's bottom
+    wall: 4 of 4 split (15000 / 5000 / 17500 / 17500) with 1-2 strands in the bud; a full copy on the bud's caught
+    strand after the split in 3 of 4; both 7-cell pores then let strands out (0 / 11 / 7 / 9 outside). The designed
+    layout (founder on P's root, i.e. on the doorway's corner): 1 of 4 split (12500, a full copy in the bud after it);
+    in the others the founder hangs into the doorway and a second strand jams beside it.
+    ![7-cell doorway at the split, seed 2: the bud (top) has its strand](pictures/closure_doorway7_split.png)
+    ![founder at the doorway's corner, seed 2, t=50000: jammed](pictures/closure_founder_jam.png)
+  - Picture (`node tri/demos.js closure`, no physics): ![closure design](pictures/closure_design.png)
+  - Findings beyond the kit: candidate (c) (copy blanks bind no `@` side) would make a cell whose free sides are all
+    `@` uncopyable: the root (`W@|Y@&b@`) has none other, so the next generation could never get a root from copies
+    (NEXT, candidates). A close-only attach side `@.` with glue emits the open signal until a ring closes onto it
+    (existing rules): a closure signal, used in the periodic alternative (IDEAS).
+  - New `budpore` options (diagnostics, default output unchanged): `BUDPS=n` (n <= 2 more strands start in P),
+    `BUDPFE=w` (with `BUDPF`: P's anchor holds the founder's low end), `BUDLX=x` (the doorway bond is the P-D contact
+    nearest x), `BUDAG=Z` (D's anchor catches the high end; also in the dry-run), `BUDA` may name the doorway cell
+    itself; the dry-run prints each side's position. Commands: NEXT.
+
 ## 2026-10-03 (autorun run 20261003-0950, harden)
 
 - **Physics speed (third round, exact)** — works. The same output byte for byte, 1.34x faster on the whole check

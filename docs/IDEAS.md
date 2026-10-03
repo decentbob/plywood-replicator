@@ -8,6 +8,54 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Closure by design (build run 20261003-1121, 2026-10-03): designed, not demonstrated
+
+The question (NEXT, priority 2): one organism kind whose bud is the same kind, every part grown from copies or taken
+from the environment. Result: the kind of `structures.budKit` (INNOVATIONS, run 1121), found through four constraints.
+- **Growth cannot stop beside a gap.** A ring grown from a periodic motif (ringKit) ends only by closing onto a cell
+  already there: cells of the same motif index are interchangeable, so a special cell placed by its glue lands at any
+  of the six repeats. Hence every unique cell (anchor, seed site, closure target, door) must lie on a segment of unique
+  cells that grows from the root, and an opening in a grown ring is made either by all-unique cells up to its far edge
+  or by unique cells released later.
+- **A bud's pose is fixed by its seed bond.** A bud of the same kind attached by its root to the parent's seed cell on
+  the same wall is the parent turned 180 degrees about the midpoint between the parent's root and seed cell. So the two
+  pores face each other only if the pore lies between root and seed cell (the seed cell is the root's mirror image
+  across the pore), and then the bud's seed cell lies on the parent's root: covered until the split, free after it.
+- **One signal, two events.** With the open signal the only release, a door that must open at ring closure while the
+  bud still holds on until its catch can be ordered only by distance: the root must hear exactly 1 from the anchor
+  (openRange = k + 1, k = anchor distance) so the door's neighbour hears 0; that neighbour must also hear something
+  while its door cell has not arrived, which holds only while the other growth front is within reach: a race (estimated
+  1 bud in 10 lost at the smallest distance). The all-unique ring has no door: its doorway is open from the moment its
+  last cell arrives, and only one release remains (the split, by completion after the catch).
+- **Every part must be copyable at some time.** The next generation's parts are copies of this generation's cells,
+  made while their free sides are unspent (within openRange - 1 bonds of a growth front or the waiting anchor). Spent
+  walls protect the food and still pass the kit on, because each cell is copied during its own bud's growth. A cell
+  whose free sides are all `@` would be copied only through `@` sides (the root `W@|Y@&b@`): copy-blank narrowing (c)
+  would cut the lineage there.
+**The kind** (R 5, `budKit(5, 7)`): root `W@|Y@&b@` at the pore's left edge (seed bond out, anchor into the pore), 45
+unique wall cells (`&` free sides), last cell E with the seed site `y` at the right edge; 7-cell pore. Life cycle,
+each step with the demo closest to it: (1) the cell feeds through its pore and copies its genome (`imprint p`, works);
+(2) a free root copy binds its seed site `y` and the bud grows one cell after another from copies of earlier buds' cells
+(`imprint`: a ring's cells multiply and a second ring grows from the copies, 3 of 4, periodic R 3; along a parent's wall:
+`budgrow`, casting lineage; from a pool of 47 unique types: not demonstrated); (3) the last cell closes the pair: the
+doorway joins the two cells only, the bud's anchor waits (its open signal holds the root's `&`); (4) a parent strand
+crosses the doorway and the anchor catches it (`budpore`; with this kit's 7-cell doorway 4 of 4 with the founder away
+from the doorway, 1 of 4 with the founder on the parent's root as the kind puts it); (5) completion cuts the root's
+seed bond: split (`budpore`, test "closure (budKit)": the bud is then in its parent's starting state); (6) both cells
+feed through their pores again, the parent can bud again on its free seed site (M2: partial). Rules read: binding of
+parts by `@`, contact copying, the open signal (one bond per pass), completion release (own `&`, own signal), the anchor
+catch (labelled physics). No new rule.
+**Open, in order:** the anchor must not hold the founder in the doorway (move it k cells from the root, openRange k + 1;
+dry-run where a held strand leans away from the doorway); 7-cell pores leak strands after the split (M2's food problem,
+plus a hood or a narrower opening that strands still pass); the part pool (47 types kept across generations by the
+copies each bud's growth makes) is untested; a radius-5 cell holds only 3-4 strands and 20 blanks. Bigger cells need
+more letters: reuse letters in separate compartments (user idea below) or the periodic ring with door cells and its race.
+**The periodic alternative** (for R 7 and larger; not built): root, a unique segment with the anchor k cells
+counter-clockwise, and clockwise a buffer cell X, 4 door cells and E, whose far side is a closure target `@.` (it emits
+until the long periodic front closes onto it, so the door cells are held exactly until ring closure); X's door side `&`
+hears 0 after closure and is spent (no door cell can re-attach); needs k >= 5, openRange k + 1, and loses the bud if
+the anchor cell arrives before X and the first door cell.
+
 ## Grow a finished membrane by breaking it and inserting triangles (user, 2026-10-03)
 
 "A mechanism to grow or lengthen a membrane after it is built by breaking and inserting triangles. Just a thought,
