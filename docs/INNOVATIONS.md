@@ -29,6 +29,8 @@ not statistics.
     side lies on the parent's root by the pose's symmetry, its third side faces the doorway), so only an E part inside
     at the moment cell N-2 binds can finish it: E parts inside then were 1, 0, 1, 0, and 1-7 in the 8 worlds with 40.
     This holds for every kind whose pores face each other (IDEAS, run 1420).
+  - Without the harness (a stock of 100 blanks, seed 1): complete at 157048, but the seed site, the root and the first
+    7 cells took 70 of the 99 copies and the last 12 types none (IDEAS).
     ![bud grown from the pool, seed 1: parent among the pool, 12 / 24 / 36 cells, complete, split](pictures/budpool.png)
     ![seed 2 with 8 E parts, close-up of the junction (turned): the bud's cell N-2 (top) waits beside the parent's root (left, its anchor holding the stand-in); the last site between them is closed by the parent's root and opens only toward the doorway, and no E part is inside](pictures/budpool_stall.png)
   - Check: `budpool` (seeds 1-4, 250000 steps, need 3; about 3 minutes per world). Renderer: zoomed pictures are now

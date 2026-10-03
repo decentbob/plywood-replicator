@@ -39,6 +39,10 @@ in 14 worlds. Three lessons for the kind.
   to 1.85 copies per used part (mean 1.37) at one part of each type per blank (8 and 8), as the law of run 1221
   predicts ((r + 1)/2 to r + 1 parts per blank for one copy per use). Fewer types make each count larger and the drift
   slower; a template that is copied when its own type is scarce would regulate, and none exists in this kind.
+  Without the harness, with a stock of 100 blanks as the only food (`BPHOLD=0 BPB=100`, seed 1; the bud completed at
+  157048): the parent's free seed site took 15 blanks before the root bound (E copies), the root 24 and cells 1-7 another
+  31, and the stock was gone by cell 35; the last 12 types got no copy. As run 1221 predicted, the first fronts take a
+  stock: a refill for every type needs blanks arriving all through the growth (a supply), not a stock.
 - **Growth time grows as the square of the number of types.** Waits per cell spread from 8 to 32000 steps (median
   1500-2500) at 20 percent area cover, so a bud takes 100-200 thousand steps. At fixed cover each type's density goes as
   1/types, and a bud needs one wait per type. The same pool in a 24 x 24 world (30 percent cover) was slower (34 and 42
