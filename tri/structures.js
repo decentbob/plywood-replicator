@@ -604,7 +604,11 @@ function mapKit(K,A,i){const a=A[(i+1)%3],b=A[i],V=K.tris[K.root].v,j=K.rootSide
 // letters: bond glues (default: the lower-case letters minus the genome's a w z, the seed y and the weld f).
 // eSource: E's pore side is plain '-' instead of '&' (never spent, so copied by any copy blank that reaches it): copies
 // of E then form in the pore, which in a sealed pair is where the bud's last site opens (run 20261003-1650).
-function budKit(R=5,pore=7,letters=null,eSource=false){if(R%2!==1||(pore!==3&&pore!==7))throw Error('budKit: R odd, pore 3 or 7');const e=(pore+1)/4;
+// anchor={at:k,glue:'Z'}: the catching anchor on arc cell k's inner side instead of the root's pore side (the root's pore
+// side is then '-&'); glue 'Z' catches a strand's high end (option heldCopy: only a held strand is copied). On the root a
+// strand held by its high end stands out of the cell into the doorway (run 20261003-1921, dry-run); the open range must
+// then reach the root from cell k (openRange > k), so the root holds while the waiting anchor emits.
+function budKit(R=5,pore=7,letters=null,eSource=false,anchor={}){if(R%2!==1||(pore!==3&&pore!==7))throw Error('budKit: R odd, pore 3 or 7');const e=(pore+1)/4;
   const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),top=v=>cen(v)[1]>(R-1)*H,near=(v,x)=>top(v)&&Math.abs(cen(v)[0]-x)<0.1;
   const root=cells.find(v=>near(v,-e)),gap=cells.filter(v=>top(v)&&Math.abs(cen(v)[0])<e-0.1),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
   if(!root||gap.length!==pore)throw Error('budKit: no pore');const a0=ang(root),key=v=>((ang(v)-a0)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
@@ -612,14 +616,16 @@ function budKit(R=5,pore=7,letters=null,eSource=false){if(R%2!==1||(pore!==3&&po
   const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const L=letters||[...LOW].filter(c=>!'awzyf'.includes(c)).slice(0,N-1);if(L.length<N-1)throw Error(`budKit: needs ${N-1} letters`);
   const outer=(v,i)=>hexr([(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2]);
-  let rootSide=-1,anchorSide=-1,seedSide=-1,eSide=-1;
+  const AK=anchor.at||0,AG=(anchor.glue||'W')+'@|';let rootSide=-1,anchorSide=-1,seedSide=-1,eSide=-1;
   const types=arc.map((v,k)=>{const t=['-&','-&','-&'],prev=k>0?shared(v,arc[k-1]):-1,next=k<N-1?shared(v,arc[k+1]):-1;
     if((k>0&&prev<0)||(k<N-1&&next<0))throw Error('budKit: cells not adjacent');
     if(prev>=0)t[prev]=UP[LOW.indexOf(L[k-1])]+'@';if(next>=0)t[next]=L[k]+'@';
     if(k===0||k===N-1){const free=[0,1,2].filter(i=>i!==prev&&i!==next).sort((i,j)=>outer(v,j)-outer(v,i));   // outer side first
-      if(k===0){rootSide=free[0];anchorSide=free[1];t[free[0]]='Y@&';t[free[1]]='W@|';}else{seedSide=free[0];eSide=free[1];t[free[0]]='y';if(eSource)t[free[1]]='-';}}
+      if(k===0){rootSide=free[0];t[free[0]]='Y@&';if(AK===0){anchorSide=free[1];t[free[1]]=AG;}}else{seedSide=free[0];eSide=free[1];t[free[0]]='y';if(eSource)t[free[1]]='-';}}
+    else if(k===AK){const f=[0,1,2].find(i=>i!==prev&&i!==next);if(outer(v,f)>R-0.5)throw Error('budKit: anchor cell '+k+' has no inner side');anchorSide=f;t[f]=AG;}
     return t.join('');});
-  return {tris:arc.map((v,k)=>({v,type:types[k]})),types,root:0,last:N-1,rootSide,anchorSide,seedSide,eSide,letters:L.join(''),N,R,pore};}
+  if(AK<0||AK>=N-1)throw Error('budKit: anchor cell out of range');
+  return {tris:arc.map((v,k)=>({v,type:types[k]})),types,root:0,last:N-1,rootSide,anchorSide,anchorCell:AK,seedSide,eSide,letters:L.join(''),N,R,pore};}
 // a bud's pose on its parent (budKit): the parent's cells rotated 180 degrees about the middle of its pore's outer edge
 const budPose=(R,p)=>[-p[0],2*R*H-p[1]];
 

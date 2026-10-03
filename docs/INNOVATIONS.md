@@ -8,6 +8,51 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1921, build)
+
+- **The kind's own layout copies after the split, with its anchor off the pore's edge** — works on prepared rings of
+  the kind's geometry (4 of 4 check worlds; labelled: the prepared pair, 20 blanks and 2 free strands inside P, 300
+  outside). No new rule. `budpore 300c` with R 5 rings and 7-cell pores (`BUDRP=5 BUDRD=5 BUDPG=BUDDG=-1.75,1.75
+  BUDLX=2`: the doorway bond is the bud root's seed bond on the parent's E), `heldCopy`, both anchors `Z` (high ends).
+  - Dry-run (new: `BUDDRYP=1` snaps the founder onto every inner side of P, as `BUDDRY` does for D; `BUDPA=cell:side`
+    puts P's anchor there): on the root's pore side, where `budKit` puts the anchor, a strand held by its high end
+    stands **out** of the cell into the doorway, in P and in D alike. Sides two to six bonds round the arc hold it
+    inside; the best (back sites 2.31 and 1.53 from the wall, face sites 3.46 / 2.65 / 1.73 / 1.00) is arc cell 6 (P
+    `16:0`, D `90:2`).
+  - Evidence (200000 steps; split at, full copies on the bud's caught strand after the split): anchors on the roots
+    (`BUDPF=-1.75 BUDA=84:2`, the kind as designed), seeds 1-4: never split (the founder jams the doorway, the strands
+    pile up in P). On arc cell 6 (`BUDPA=16:0 BUDA=90:2`), seeds 1-8: 15000/11, 15000/5, 10000/5, 20000/3, 10000/7,
+    10000/10, 10000/8, 15000/9 (8 of 8 split, 7 of 8 with 5+ copies; check `budpore-kind`, 3+). On arc cell 4 (`14:0`,
+    `88:2`), seeds 1-4: 1, 2, 4, 4 copies (face sites nearer the wall). With 100 blanks outside instead of 300 the bud
+    copies 0-2 times: every blank becomes a free copy triangle by t = 25000-50000 (most on leaked, sterile strands, 5-11
+    outside at the end), and the held strands use those slowly.
+  - Without the two free strands (`BUDPS=0`: only copies the founder makes can cross), seeds 1-8: 8, 5, never split, 7,
+    never split, never split, 0, 10 copies (4 of 8). Each failure that never split is the held founder's first copy
+    stalling (3-4 docks, 2 releases, no fill): the 20 blanks inside are all copies by t = 5000, none of them a back
+    copy. The two strands stand for a parent that copied before its bud sealed the pair (labelled).
+  - In the kit: `structures.budKit(R, pore, letters, eSource, {at: k, glue: 'Z'})` puts the anchor `Z@|` on arc cell
+    k's inner side (even k: odd cells' free side is outer) and the root's pore side becomes `-&`; the open range must
+    reach the root from cell k. Test "closure (budKit, anchor on cell 6, Z@|)": with openRange 9 the bud holds while it
+    grows and waits, lets go after its catch and is then in its parent's state (with openRange 6 it lets go while
+    growing, at cell 6). `budpool` with the moved anchor (`BPA=6`, openRange 9; `BPES=1 BPE=0 BPB=16`), seeds 1-4:
+    complete and split at 132120 / 100402 / 96550 / 242955, 0 stray bindings, every last cell from the E source. Cost:
+    copies during growth 169-228 against 54-67 with the root anchor (openRange 1: fewer cells hear, so more sides are
+    spent), but more types refilled (34-39 of 47 against 18-26).
+  - Picture (seed 1: anchors on the roots, t = 50000, jammed; anchors on cell 6, the split at 15000; the bud at 200000
+    with its caught strand and a released copy beside it, leaked strands outside):
+    ![the kind's layout with the anchor off the pore's edge](pictures/budpore_kind_anchor6.png)
+  - Commands: `BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPFE=z BUDLX=2 BUDAG=Z BUDNI=20 BUDPS=2 BUDPA=16:0
+    BUDA=90:2 TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 1 200000 runs 300c`; dry-runs `BUDDRYP=1` (P)
+    and `BUDDRY=1` (D) on the same line; `BPA=6 BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs`.
+- **A held founder's first copy made reliable on the open pair** — works (`budpore-held` 4 of 4, was 3 of 4). The
+  P dry-run on `budpore 300` (R 7): the default anchor (bottom wall, x = -0.5, `48:1`) has back sites 1.73 / 1.53 from
+  the wall. Seeds 1-8 per side (copies on the bud's strand after the split): `52:1` (x = +1.5; backs 2.31 / 1.53,
+  faces 3.46 / 2.65 / 1.73 / 1.00): 9, 14, 6, 10, 9, 10, 10, never split (7 of 8; seed 8: a partial copy jammed against
+  the wall, 3 docks); `54:1` (x = +2.5, a face site 0.58 from the wall): 4 of 8; `9:2` (right wall by the doorway,
+  same distances as `52:1`): 4 of 8; `13:0` (top wall beside the doorway, backs 3.00 / 2.00): 1-2 docks in 60000 steps, seeds 1-4
+  (stopped). The distances are needed, not sufficient (near the doorway the copies leave). Check `budpore-held` now
+  uses `BUDPA=52:1`.
+
 ## 2026-10-03 (autorun run 20261003-1720, explore)
 
 - **The bud copies its genome after the split (M2), with `heldCopy`** — works in 3 of 4 check worlds (5 of 8 seeds

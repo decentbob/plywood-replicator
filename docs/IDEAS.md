@@ -8,6 +8,26 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## The kind's anchor moves off the pore's edge (build run 20261003-1921, 2026-10-03)
+
+With `heldCopy` an anchor holds a strand by its high end, and a strand held that way leans the other way from one held
+by its low end. On the root's pore side (where run 1121 put the kind's one anchor, so that it could both catch and
+hold) it stands out of the cell into the doorway, in parent and bud alike (`budpore` dry-runs `BUDDRYP`, `BUDDRY`), and
+the pair never splits. So the anchor goes on an inner side further round the arc: even arc cells only (in a one-row
+ring the free side alternates inner and outer), and of those cell 6 is best (backs and faces furthest from the wall;
+cell 4 copies 1-4 times after the split where cell 6 copies 3-11). What the move costs and keeps:
+- The root still holds the bud by its `&` seed bond, but now hears the waiting anchor from 6 bonds away, so openRange
+  must exceed 6 (9 in the test and `budpool`). More cells hear during growth, so fewer of their sides are spent while the
+  bud grows: about three times the copies (a food sink), and more of the pool's types refilled.
+- The anchor is exposed to the outside from cell 6's binding until the bud seals the pair (on the root it was exposed from the start). A strand caught then (a
+  leaked, sterile copy, which the catch makes fertile) would silence the anchor early; the root then holds only while
+  the growth front is within range of it, which it is not after cell 9 or so: an early catch would split an unfinished
+  bud. Not seen (`budpool` has no strands); a question for the whole cycle (priority 3).
+- The two numbers that decide a held founder's first copy (the back sites' distance from the wall, and no face site
+  nearer than 1.00) are necessary, not sufficient: sides beside the doorway with good numbers fail (copies leave).
+- A sealed parent with few blanks inside can still stall at its first copy (no back copy among its 20 blanks); in the
+  kind the parent copies through its open pore before a bud seals it, so the pair should start with copies made.
+
 ## The kind's opening: the parent cannot see its bud finish; make free strands sterile instead (explore run 20261003-1720, 2026-10-03)
 
 Run 1650 asked the next `explore` to weigh three designs for the parent's opening (narrow at rest, wide once the bud
