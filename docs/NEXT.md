@@ -4,6 +4,13 @@ State on 2026-10-03 (after autorun run 20261003-1520, harden). Read AGENTS.md fi
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `8f6fddb` for run 1420's, `e3a3d06` for run 1351's).
 
+**Current slice (autorun run 20261003-1650, build; started 16:50 UTC).** Priority 2, two parts. (1) Analysis of the
+kind's opening (record in IDEAS): which openings a one-body cell can have, and which binding events can widen an
+opening again. (2) Build: the kind's last site made reachable by an E source inside the pair: E's pore side plain
+(never spent), so the parent's own food copies E into the doorway where the bud's last site opens. Check: `budpool`
+with as many E parts as any other type (or none) completes in 3 of 4 worlds (was 2 of 4 with 8 E parts). Stop when the
+check passes or the reason it cannot is named; then records, PR, merge.
+
 **Handoff status (autorun run 20261003-1520, harden).** Priority 6 done; merged into `main` (branch
 `claude/autorun-20261003-1520`); no simulations running; 38 tests pass. Full check suite on main at the start: 38 of
 38 pass (1926 s). Results (INNOVATIONS, run 1520; lesson in IDEAS, pitfall "Where a caught strand's backs face"):
