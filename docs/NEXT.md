@@ -1,41 +1,32 @@
 # Next instance: start here
 
-**Current slice (autorun run 20261003-1921, build; in progress).** Goal: a held founder's first copy reliable on the
-open pair (`budpore-held` 4 of 4), by a dry-run of P's anchor sides (`BUDDRYP`, new; `BUDPA=cell:side` picks one).
-Done when: a side gives the bud 5+ copies after the split in 4 of 4 check worlds (and 6+ of 8 seeds). Then, if time is
-left: the kind's own layout (`budKit`, root anchor `Z@|`, heldCopy). Stop: if no side reaches 4 of 4, record the
-failure modes per side. Batch: `runs/b1921/q.sh OUT "cell:side ..." "seeds"` (in `runs/`, regenerate from git history
-of this note if lost: it runs budpore 300 with BUDPA, BUDAG=Z, BUDPFE=z, heldCopy, 4 at a time).
-
-State on 2026-10-03 (after autorun run 20261003-1720, explore). Read AGENTS.md first (rules of work), then this
+State on 2026-10-03 (after autorun run 20261003-1921, build). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `e5c6085` for run 1650's, `96c5221` for run 1520's).
+handoffs: NEXT.md in git, e.g. at `80c79ab` for run 1720's, `e5c6085` for run 1650's).
 
-**Handoff status (autorun run 20261003-1720, explore).** Priority 2 taken by analysis plus one gated core change;
-merged into `main` (branch `claude/autorun-20261003-1720`); no simulations running; 39 tests pass; `node tri/check.js`
-42 of 42 before the last edits (budpore labels, `budpore-held`, run alone: pass 3 of 4), so 43 checks now.
-(1) **Analysis** (IDEAS, "The kind's opening: the parent cannot see its bud finish"): none of run 1650's three designs
-works in `budKit`'s geometry. The bud's E touches the parent only on the root's seed side, which is spent at the
-parent's own split, so "the bud has sealed the pair" never reaches the parent (design i); a release by signal fires on
-the parent's E side from the bud's first cell and never on the root side (ii); fission needs insertion growth (iii).
-(2) **Core change, option `heldCopy`** (RULES, Core changes, run 1720; default off): zip starts at a strand's high end
-only while its spare edge is held (bonded, not to `&`), so free strands, leaked or rival, are never copied. Then leaks
-no longer starve a cell, and the kind may keep its 7-cell pores. `imprint` cell (flags `z` anchor `Z@|` at x = +1,
-`o` option, `w` 7-cell pore): 3 rivals outside, 6-7 strands inside in 4 of 4 (2-3 without; check `imprint-held`); a
-7-cell pore leaks every copy and the founder keeps copying (3 of 4, `imprint-held-w`). (3) **M2 on the open pair:**
-`budpore 300` with both anchors on high ends (`BUDAG=Z BUDPFE=z`) and the option: the bud makes 10-15 full copies after
-the split in every world that split (3 of 4 checked, `budpore-held`; 5 of 8 seeds; 0-1 without the option). Every
-failure: the parent's founder stalls at its first copy (backs in the wall's wedge; no back copy exists anywhere until
-a held strand has made one).
+**Handoff status (autorun run 20261003-1921, build).** Slice done: a held founder's first copy reliable on the open
+pair, then the kind's own layout with `heldCopy`. Branch `claude/autorun-20261003-1921`, merged into `main` by PR; no
+simulations running; 40 tests pass; `node tri/check.js` result in the PR. (1) **P's anchor side** (`budpore` dry-run
+`BUDDRYP=1`, new; `BUDPA=cell:side` puts P's anchor there): side `52:1` (R 7 bottom wall, x = +1.5) gives the bud 6-14
+copies after the split in 7 of 8 seeds (check `budpore-held` 4 of 4, now on `52:1`); `54:1`, `9:2` 4 of 8, `13:0`
+fails. (2) **The kind's layout** (R 5 rings, 7-cell pores, doorway bond = the bud root's seed bond): a strand held by
+its high end on the root's pore side stands out into the doorway (dry-run, P and D), and with both anchors there the
+pair never splits (0 of 4). Anchors `Z` on arc cell 6 (P `16:0`, D `90:2`): split 8 of 8, the bud copies its caught
+strand 3-11 times after the split (7 of 8 with 5+; check `budpore-kind`, 4 of 4); without the two free strands in P
+(`BUDPS=0`) 4 of 8 (the sealed founder's first copy stalls: no back copy among the 20 inside blanks). (3) **The kit:**
+`budKit(..., {at: 6, glue: 'Z'})` moves the anchor; test "closure (budKit, anchor on cell 6, Z@|)" (openRange 9; 6 lets
+the bud go while growing); `budpool BPA=6` grows and splits 4 of 4 with 3x the copies (more types refilled). IDEAS,
+"The kind's anchor moves off the pore's edge": the early-catch hazard (an anchor exposed during growth).
 
-**Exact next step.** The next run in the rotation is `build`: take the kind with `heldCopy` toward priority 3. (a) Make
-a held founder's first copy reliable: dry-run P's anchor sides in `budpore` as `BUDDRY` does for D's (where the backs of
-a strand held by its high end face open space), pick the side, target 4 of 4 for `budpore-held`. (b) Then the kind's
-own layout: `budKit` with the root's anchor `Z@|` (high end), the option, the 7-cell doorway; the transfer batch of
-run 1121 (founder where the kind holds it: 1 of 4 there, the jam) and the bud's copies after the split. Decide whether
-the kind needs the anchor off the pore's edge. Regenerate the pictures: `node tri/demos.js imprint 2 100000 runs
-150pzox` (and `150pzx`, `150pzow` seed 1); `BUDAG=Z BUDPFE=z TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 2
-200000 runs 300`. Making `heldCopy` the rule waits for priority 5 (the casting lineage's free chains copy).
+**Exact next step.** Priority 3's first half, one generation of the kind from its own kit: a demo (e.g. `budcycle`)
+that joins `budpool` and `budpore-kind`. A prepared parent of `budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding
+its founder `aAaA` by the high end on cell 6 (labelled), `heldCopy`, openRange 9, among copy blanks and a pool of the
+kit's parts (`budpool`'s harness to start; then without it). It feeds through its pore and copies, grows its bud on
+its seed site, the bud seals the pair, catches one of the parent's copies on its cell 6, and splits; measure the split,
+the bud's copies after it, early catches (the anchor exposed during growth), strands leaked. Target 3 of 4. If the
+founder's first copy stalls in the sealed pair, make sure copies exist before sealing (the parent copies through its
+open pore while the bud grows). Regenerate this run's pictures: the `budpore-kind` command (Commands) with seed 1 and
+`BUDF=8`; with `BUDPF=-1.75 BUDA=84:2` instead of `BUDPA`/`BUDA` for the jammed control (100000 steps, `BUDF=4`).
 
 **Core-change candidates.** (c) withdrawn (run 1221); its narrower form is the rule now. (d) *Code vs RULES:*
 the anchor catch does not test `spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no
@@ -108,7 +99,9 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    types, e.g. the periodic ring). Run 1650's analysis (IDEAS) narrows the opening: one opening per body, only
    silence widens; (a)'s hood joining both sides of its pore is no help. **Run 1720 (explore):** (i)-(iii) fail on paper in the kind's geometry;
    proposed instead: option `heldCopy` (free strands sterile), with which leaks cost nothing and the bud copies after
-   the split on `budpore`'s open pair (3 of 4); next: the kind's own layout with it (Exact next step).
+   the split on `budpore`'s open pair (3 of 4). **Run 1921 (build):** on the kind's own layout the anchors must leave
+   the root (a high end held there stands in the doorway); on arc cell 6 the bud copies after the split in 8 of 8
+   (check `budpore-kind`); the kit has the option. Next: priority 3 (Exact next step).
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
    The whole cycle; then priority 5's removal is no longer premature by anyone's measure.
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
@@ -164,8 +157,11 @@ BUDCAP=-2.75 BUDRP=9 BUDNI=160 BUDPG=-2.75,2.25 BUDPX=b BUDRD=7 BUDDG=-1.75,3.25
                                                    # cap release: the parent plugs its half after the bud's catch (2 of 4 split)
 node tri/demos.js imprint 2 100000 runs 150pzox    # heldCopy: anchor Z@| holds the founder's high end, 3 sterile rivals outside
                                                    # (150pzx: control without the option; 150pzow: 7-cell pore; 150pzo: alone)
-BUDAG=Z BUDPFE=z TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 2 200000 runs 300   # the bud copies after the split
-                                                   # (BUDPX=b1: P's anchor at x = +1; check budpore-held)
+BUDAG=Z BUDPFE=z BUDPA=52:1 TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 2 200000 runs 300   # the bud copies after the split
+                                                   # (check budpore-held; BUDDRYP=1: dry-run every inner side of P; BUDPA=cell:side: P's anchor)
+BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPFE=z BUDLX=2 BUDAG=Z BUDNI=20 BUDPS=2 BUDPA=16:0 BUDA=90:2 TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 1 200000 runs 300c
+                                                   # the kind's own layout, anchors on arc cell 6 (check budpore-kind)
+BPA=6 BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the kind's bud from the pool with the anchor Z@| on cell 6 (openRange 9)
 node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
 node tri/demos.js imprint 1 100000 runs 150ph      # the same cell with a hooded pore: no strand leaves (x: 3 rival strands outside)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
