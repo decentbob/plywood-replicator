@@ -8,6 +8,24 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Reuse glue letters in separate compartments; bigger cells (user, 2026-10-03)
+User (during core-review run 20261003-0450): "It seems it is useful to have many different basic structures that can
+be combined to a larger one. That needs a lot of different types of sides. One way to reduce type need is to have
+connection blocks for the basic structure be different in different environments (different combination of side
+types). Of course that means these areas have to be kept sterile, but possible with cell-like walls. Maybe also
+bigger 'cells' are needed - much is stuffed in there now."
+- Why it fits: glue letters are labels with no rule of their own, and binding is local, so a letter means something
+  only among the triangles that can meet. Two sealed compartments can use the same letters for different joints, as
+  cells reuse one genetic code in separate bodies. The letter budget (63 pairs, a grown bud of side 5 uses 54: NEXT,
+  Pitfalls) then limits one compartment, not the world. No core change: spent `&` walls already keep compartments
+  sterile (`imprint m`: every copy goes to the genome), and a hooded pore lets blanks in without letting strands out.
+- What it needs: each compartment's parts must never leave it (the way in is the way out, above: openings bent or
+  closed by binding), and food that enters must be uniform blanks (copy blanks carry no letters until they copy).
+- Bigger cells: today's cells are R 5-7 with the genome, an anchor, a doorway and the food inside; strands press
+  against walls (backs in a wedge get no copies). A larger ring costs only more wall cells, which are spent and so
+  cost no food; worth trying when a slice is limited by crowding (`budpore`'s parent half).
+- Not yet built or measured.
+
 ## The way in is the way out; nothing may leak (design lesson, build run 20261003-0320, 2026-10-03)
 
 Three findings from trying to keep the parent's copies in after `budpore`'s split (INNOVATIONS, run 0320):
