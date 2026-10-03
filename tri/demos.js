@@ -146,12 +146,22 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // would lie along the next wall, its backs hidden, and no fill could be copied)
         let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
         best.t.type=[0,1,2].map(i=>i===best.i?'W|':'-').join('');}
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c}],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{latGlue:true}});
-      const U=structures[0],F=founders[0];seedCopyGenome(s,F);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
-      const prep=new Set([...U,...F]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*(pore?c:R),y=(2*s.rng()-1)*(pore?c:R),h=S.hexr([x,y]);if(pore?h>R+0.6:h<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
+      // 'h' (with p, a hooded pore): a hood over the pore (prepared, labelled): a strip one row thick two rows above the
+      // wall, from x = -2 to the top wall's corner, held by a strut of 4 cells at its left end. Blanks reach the pore along
+      // the corridor under it (two rows high, open to the right); a strand (a rigid strip about 4 long) that leaves the
+      // pore cannot turn into the corridor, so it stays in
+      const NR=ring.length;if(pore&&X.includes('h')){const y0=R*H,up=(k,y)=>({v:[[k,y],[k+1,y],[k+0.5,y+H]],type:'---'});
+        // strut: row 1 up [-2,-1] on the wall, row 1 down under [-2.5,-1.5], row 2 up [-2.5,-1.5], row 2 down under [-2,-1]
+        ring.push(up(-2,y0),{v:[[-2.5,y0+H],[-2,y0],[-1.5,y0+H]],type:'---'},up(-2.5,y0+H),{v:[[-2,y0+2*H],[-1.5,y0+H],[-1,y0+2*H]],type:'---'});
+        for(let k=-2;k<=2;k++){ring.push(up(k,y0+2*H));if(k<2)ring.push({v:[[k+0.5,y0+3*H],[k+1,y0+2*H],[k+1.5,y0+3*H]],type:'---'});}}
+      // 'x' (with p): three more founders start outside the cell (competitors for the food, as a parent's leaked copies)
+      const NX=pore&&X.includes('x')?3:0,rivals=[[1,1],[1,c],[c,1]].slice(0,NX).map(([x,y])=>({gaps:[1,1,1],faces:'aAaA',x,y}));
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c},...rivals],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{latGlue:true}});
+      const U=structures[0],F=founders[0];for(const G of founders)seedCopyGenome(s,G);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
+      const prep=new Set([...U,...founders.flat()]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*(pore?c:R),y=(2*s.rng()-1)*(pore?c:R),h=S.hexr([x,y]);if(pore?h>R+0.6:h<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
       const wallT=new Set(U.map(u=>canon(typeName(s,u)))),strands=()=>census(s).filter(q=>q.n>=7&&!q.paired);
       // inside the ring: a strand's centre within the inner wall's distance from the ring's centre (unwrapped along bonds)
-      const centre=()=>{const set=new Set(U),L=[U[0]],seen=new Set(L);for(let q=0;q<L.length;q++)for(let i=0;i<3;i++){const b=s.bond[L[q]*3+i];if(b<0)continue;const w=(b/3)|0;if(set.has(w)&&!seen.has(w)){seen.add(w);L.push(w);}}
+      const centre=()=>{const set=new Set(U.slice(0,NR)),L=[U[0]],seen=new Set(L);for(let q=0;q<L.length;q++)for(let i=0;i<3;i++){const b=s.bond[L[q]*3+i];if(b<0)continue;const w=(b/3)|0;if(set.has(w)&&!seen.has(w)){seen.add(w);L.push(w);}}
           const RX=new Float64Array(L.length),RY=new Float64Array(L.length);s._unwrap(L,RX,RY);let x=0,y=0;for(let q=0;q<L.length;q++){x+=RX[q];y+=RY[q];}return [s.px[L[0]]+x/L.length,s.py[L[0]]+y/L.length];},
         inside=()=>{const [cx,cy]=centre();return strands().filter(q=>{let x=0,y=0;for(const u of q.units){x+=s._dx(s.px[u]-s.px[q.units[0]]);y+=s._dy(s.py[u]-s.py[q.units[0]]);}
           return Math.hypot(s._dx(s.px[q.units[0]]+x/q.n-cx),s._dy(s.py[q.units[0]]+y/q.n-cy))<(R-1)*H;}).length;};
@@ -260,7 +270,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
       // option 'c' (closed): the doorway ends at x = DC, so it joins P and D only (sealed while joined; each half becomes a pore after the split)
       const DC=X.includes('c')?+(process.env.BUDDC||2.25):1e9,gap=v=>cn(v)[0]>-DW&&cn(v)[0]<DC;
-      const PC=process.env.BUDPC?+process.env.BUDPC:DC;Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gap(v)&&cn(v)[0]<PC));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gap(v)));
+      // BUDPG=a,b / BUDDG=a,b: P's / D's half of the doorway is the contact-row cells with a < x < b instead
+      const rg=(e,g)=>{if(!e)return g;const [a,b]=e.split(',').map(Number);return v=>cn(v)[0]>a&&cn(v)[0]<b;},gP=rg(process.env.BUDPG,gap),gD=rg(process.env.BUDDG,gap);
+      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gP(v)));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gD(v)));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
@@ -270,10 +282,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0,x=cn(tris[U.indexOf(L)].v)[0];if(!pick||x<pick.x)pick={u,i,L,j:b%3,x};}
       if(!pick)throw Error('budpore: no doorway bond');
       // BUDA=cell:side (D cell index in the structure, side) chooses the anchor instead
-      const BA=process.env.BUDA,cands=[],prev=new Map([[pick.L,-1]]),Q=[pick.L],dist=new Map([[pick.L,0]]);let best=null;
+      const BA=process.env.BUDA,cands=[],more=[],prev=new Map([[pick.L,-1]]),Q=[pick.L],dist=new Map([[pick.L,0]]);let best=null;
       for(let q=0;q<Q.length;q++){const w=Q[q],d=dist.get(w);
         if(d>0){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));
-          const k={A:w,f,sc,d};cands.push(k);if(BA?BA===`${U.indexOf(w)}:${f}`:d<=MD&&(!best||sc>best.sc))best=k;}}
+          const k={A:w,f,sc,d};cands.push(k);if(BA?BA.split(',').includes(`${U.indexOf(w)}:${f}`):d<=MD&&(!best||sc>best.sc))best=k;if(BA&&BA.split(',').includes(`${U.indexOf(w)}:${f}`))more.push(k);}}
         if(d>=MD&&!BA&&!process.env.BUDDRY)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
       if(!best)throw Error('budpore: no anchor side '+(BA||''));
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
@@ -288,7 +300,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const PX=process.env.BUDPX||(X.includes('c')?-1:'');let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||(PX?m[1]<0:m[1]>0)||S.hexr(m)>RP-0.5)continue;const d=PX?Math.abs(m[0]-PX):Math.abs(m[0]);if(!pa||d<pa.d)pa={u,i,d};}}
       if(PX)console.log('P anchor at',S.hexr(mid(tris[U.indexOf(pa.u)].v,pa.i)).toFixed(2),mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
-      s.glue[da.u*3+da.i]=gc('W');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.p.openRange=1;
+      for(const k of BA?more:[best]){s.glue[k.A*3+k.f]=gc('W');s.anc[k.A*3+k.f]=1;s.att[k.A*3+k.f]=1;}s.p.openRange=1;
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
       // BUDDRY: where a strand caught by its low end on each inner side of D would stand (placed as the anchor places it):
       // overlap with the wall, and each back site's and face site's distance to the nearest wall cell; then exit
@@ -309,7 +321,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       spendableSides(s,U);for(let k=0;k<60;k++)s.derive();
       // the walls start spent (one completion pass while only A hears its own signal; spent sides stay spent), then the
       // open range grows to reach P's side of the doorway bond, which becomes a completion-release bond ('&' both sides)
-      s._latches();s.p.openRange=best.d+3;for(let k=0;k<best.d+4;k++)s.derive();s.done[pick.u*3+pick.i]=1;s.done[pick.L*3+pick.j]=1;
+      const dMax=Math.max(...(BA?more:[best]).map(k=>k.d));s._latches();s.p.openRange=dMax+3;for(let k=0;k<dMax+4;k++)s.derive();s.done[pick.u*3+pick.i]=1;s.done[pick.L*3+pick.j]=1;
       if(!(s.op[pick.u]>0&&s.op[pick.L]>0))throw Error('budpore: the doorway bond hears no open signal');
       const prep=new Set([...U,...F]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
         if(!placeFree(s,u,placed,()=>{for(;;){if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}
@@ -327,7 +339,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
         s.count=(k,d)=>{if(k==='release'&&!split&&lastT>=0){const {comp}=s.bodies(),cD=centre(Du);if(comp[lastT]===comp[Du[0]]&&Math.hypot(s._dx(s.px[lastT]-cD[0]),s._dy(s.py[lastT]-cD[1]))<(RD-1)*H)relJ++;}
           if(k==='release'&&split&&lastCut>=0){const cD=centre(Du);if(Math.hypot(s._dx(s.px[lastCut]-cD[0]),s._dy(s.py[lastCut]-cD[1]))<(RD-1)*H)relD++;
           if(lastT>=0){const {comp}=s.bodies();if(comp[lastT]===comp[Du[0]])relA++;}}return ok(k,d);};}
-      const report=t=>{const {comp}=s.bodies();if(!split&&comp[Pu[0]]!==comp[Du[0]]){split=t;atSplit=where();bSplit=typeCount(s)[canon('-?-?-?')]||0;snap(s,'split',`t=${t}: split, ${bSplit} blanks left`,{units:Pu,radius:16},false);}const L=where(),[gn,w]=tally();
+      const report=t=>{const {comp}=s.bodies();if(!split&&comp[Pu[0]]!==comp[Du[0]]){split=t;atSplit=where();bSplit=typeCount(s)[canon('-?-?-?')]||0;
+          // BUDNOP (diagnostic, not a mechanism): at the split every bonded triangle outside D's body and outside D (P's
+          // strands, the founder) is made inert and spent, as if the parent's genome were gone; the bud alone then
+          if(process.env.BUDNOP){const cD=centre(Du),inDb=new Set(Du);for(let u=0;u<s.n;u++){if(inP.has(u)||inD.has(u)||!s.bonded(u)||comp[u]===comp[Du[0]])continue;
+            if(Math.hypot(s._dx(s.px[u]-cD[0]),s._dy(s.py[u]-cD[1]))<RD*H)continue;for(let i=0;i<3;i++){s.glue[u*3+i]=0;s.spent[u*3+i]=1;}}}snap(s,'split',`t=${t}: split, ${bSplit} blanks left`,{units:Pu,radius:16},false);}const L=where(),[gn,w]=tally();
         console.log(`t=${t} strands in P ${nIn(L,'P')} in D ${nIn(L,'D')} out ${L.filter(x=>x==='out').length} [${L.join(' ')}] ${split?'SPLIT at '+split:'joined'} docks=${s.ev.dock||0} releases=${s.ev.release||0} anchors=${s.ev.anchor||0} copies=${s.ev.copy||0} (genome ${gn}, wall ${w}) blanks=${typeCount(s)[canon('-?-?-?')]||0}`);};
       // DBGC: where copies are made after the split (by the copied triangle: in D, in P, outside; wall or genome type)
       const afterW={};if(process.env.DBGC){const cl=[];cl.push=function(e){if(split){const [,u,ty]=e,cD=centre(Du),cP=centre(Pu),d=C=>Math.hypot(s._dx(s.px[u]-C[0]),s._dy(s.py[u]-C[1]));
