@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 18 minutes;
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 24 minutes;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Exit code 1 if a working capability fails.
