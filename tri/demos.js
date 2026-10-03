@@ -250,11 +250,15 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // and a latch lets go while its triangle hears a trigger signal: D lets go of P. No wall hears an open signal
     // (openRange 1: only A's own '@'), so every other free side is spent and never copied; A's copies are parts ('@')
     // and bind nothing. Copy blanks start outside ('i': also 60 inside P). extra: blanks outside (default 300).
-    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    // Option 'c' (sealed): the doorway ends at x = 2.25 (BUDDC), so it joins P and D only; 80 blanks start inside P and
+    // the founder hangs from the doorway's left edge; outside blanks get in only after the split (each half a pore).
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:X.includes('c')?80:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
-      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&cn(v)[0]>-DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&cn(v)[0]>-DW));
+      // option 'c' (closed): the doorway ends at x = DC, so it joins P and D only (sealed while joined; each half becomes a pore after the split)
+      const DC=X.includes('c')?+(process.env.BUDDC||2.25):1e9,gap=v=>cn(v)[0]>-DW&&cn(v)[0]<DC;
+      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gap(v)));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gap(v)));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
@@ -263,10 +267,13 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const RC=[...Array(6).keys()].map(k=>[(RD-0.5)*Math.cos(k*Math.PI/3),dyL+(RD-0.5)*Math.sin(k*Math.PI/3)]);let pick=null;
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0))continue;const L=(b/3)|0,x=cn(tris[U.indexOf(L)].v)[0];if(!pick||x<pick.x)pick={u,i,L,j:b%3,x};}
       if(!pick)throw Error('budpore: no latch site');
-      const prev=new Map([[pick.L,-1]]),Q=[pick.L],dist=new Map([[pick.L,0]]);let best=null;
+      // BUDA=cell:side (D cell index in the structure, side) chooses the anchor instead (sigRange grows to reach it)
+      const BA=process.env.BUDA,cands=[],prev=new Map([[pick.L,-1]]),Q=[pick.L],dist=new Map([[pick.L,0]]);let best=null;
       for(let q=0;q<Q.length;q++){const w=Q[q],d=dist.get(w);
-        if(d>0){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));if(!best||sc>best.sc)best={A:w,f,sc};}}
-        if(d>=s.p.sigRange-1)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
+        if(d>0){const v=tris[U.indexOf(w)].v;for(let f=0;f<3;f++){const m=mid(v,f);if(s.bond[w*3+f]>=0||S.hexr([m[0],m[1]-dyL])>RD-0.5)continue;const sc=Math.min(...RC.map(r=>Math.hypot(r[0]-m[0],r[1]-m[1])));
+          const k={A:w,f,sc,d};cands.push(k);if(BA?BA===`${U.indexOf(w)}:${f}`:d<=s.p.sigRange-1&&(!best||sc>best.sc))best=k;}}
+        if(d>=s.p.sigRange-1&&!BA&&!process.env.BUDDRY)continue;for(let e=0;e<3;e++){const b=s.bond[w*3+e];if(b<0||!inD.has((b/3)|0)||dist.has((b/3)|0))continue;dist.set((b/3)|0,d+1);prev.set((b/3)|0,w);Q.push((b/3)|0);}}
+      if(!best)throw Error('budpore: no anchor side '+(BA||''));if(best.d>s.p.sigRange-1)s.p.sigRange=best.d+1;
       const chain=[];for(let w=best.A;prev.get(w)>=0;w=prev.get(w)){const v=prev.get(w);chain.push(v);for(let e=0;e<3;e++)if(s.bond[v*3+e]>=0&&((s.bond[v*3+e]/3)|0)===w)s.hear[v*3+e]=1;}
       for(const u of Pu)for(let i=0;i<3;i++){const b=s.bond[u*3+i];if(b<0||!inD.has((b/3)|0)||(u===pick.u&&i===pick.i))continue;s.cut(u,i);s.glue[u*3+i]=0;s.glue[b]=0;}
       // the latch bond carries no glue: once it lets go its two sides bind nothing (with the weld glue f/F copies of them
@@ -276,10 +283,24 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // f/F, copies of the anchor and the freed latch sides glued onto each other and onto strands and grew clusters)
       for(const u of U)for(let i=0;i<3;i++)s.glue[u*3+i]=0;
       // P's anchor W| (middle of its bottom inner wall)
-      let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5)continue;if(!pa||Math.abs(m[0])<pa.d)pa={u,i,d:Math.abs(m[0])};}}
+      // BUDPX=x: P's anchor on P's top inner wall (beside the doorway) nearest x instead; with 'c' on the doorway's
+      // left edge (-1): the founder hangs under the doorway, so its copies are released at the way into D
+      const PX=process.env.BUDPX||(X.includes('c')?-1:'');let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||(PX?m[1]<0:m[1]>0)||S.hexr(m)>RP-0.5)continue;const d=PX?Math.abs(m[0]-PX):Math.abs(m[0]);if(!pa||d<pa.d)pa={u,i,d};}}
+      if(PX)console.log('P anchor at',S.hexr(mid(tris[U.indexOf(pa.u)].v,pa.i)).toFixed(2),mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
       s.glue[da.u*3+da.i]=gc('W');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();
+      // BUDDRY: where a strand caught by its low end on each inner side of D would stand (placed as the anchor places it):
+      // overlap with the wall, and each back site's and face site's distance to the nearest wall cell; then exit
+      if(process.env.BUDDRY){const {triDepth}=require('./physics'),A6=new Float64Array(6),B6=new Float64Array(6),b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;
+        const site=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),q=P((i+1)%3),o=P((i+2)%3);return [(2*a[0]+2*q[0]-o[0])/3,(2*a[1]+2*q[1]-o[1])/3];};
+        const near=p=>Math.min(...U.map(v=>Math.hypot(s._dx(s.px[v]-p[0]),s._dy(s.py[v]-p[1])))),cD=[c,cy+dyL];
+        for(const k of cands.sort((x,y)=>x.d-y.d)){s._snapBody(b,f,k.A,k.f);let ov=0;for(const u of F)for(const v of U){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
+            for(let q=0;q<3;q++){A6[2*q]=s.ox[u*3+q];A6[2*q+1]=s.oy[u*3+q];B6[2*q]=dx+s.ox[v*3+q];B6[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A6,B6)>1e-6)ov++;}
+          const bk=[],fc=[];for(const u of F){const r=s.roles(u);if(r.free<0)continue;(r.role===2?bk:fc).push(near(site(u,r.free)).toFixed(2));}
+          let ex=0,ey=0;for(const u of F){ex+=s._dx(s.px[u]-cD[0]);ey+=s._dy(s.py[u]-cD[1]);}const inn=S.hexr([ex/F.length,ey/F.length])<RD-1;
+          console.log(`cell ${U.indexOf(k.A)}:${k.f} bonds from latch ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);}
+        s.moveDepth=md;process.exit(0);}
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc('w');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
         if(!ok)throw Error('budpore: founder not placed');s.bind(pa.u,pa.i,GLUE,b,f,GLUE);
@@ -308,7 +329,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const afterW={};if(process.env.DBGC){const cl=[];cl.push=function(e){if(split){const [,u,ty]=e,cD=centre(Du),cP=centre(Pu),d=C=>Math.hypot(s._dx(s.px[u]-C[0]),s._dy(s.py[u]-C[1]));
         const k=(d(cD)<RD*H?'D':d(cP)<RP*H?'P':'out')+':'+(wallT.has(canon(ty))?ty:'genome');afterW[k]=(afterW[k]||0)+1;}return Array.prototype.push.call(this,e);};s.copyLog=cl;
         process.on('exit',()=>console.log('after split',JSON.stringify(afterW)));}
-      if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [tt,u,ty] of s.copyLog||[])if(wallT.has(canon(ty)))m[ty+(split&&tt>split?' after':' before')]=(m[ty+(split&&tt>split?' after':' before')]||0)+1;console.log(JSON.stringify(m),'hearing',U.filter(u=>s.op[u]>0).length,'unspent free sides',U.reduce((a,u)=>a+[0,1,2].filter(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i]).length,0));});
+      if(process.env.DBGC)process.on('exit',()=>{const m={};for(const [tt,u,ty] of s.copyLog||[])if(wallT.has(canon(ty)))m[ty+(split&&tt>split?' after':' before')]=(m[ty+(split&&tt>split?' after':' before')]||0)+1;const g={};for(const [,,ty] of s.copyLog||[])if(!wallT.has(canon(ty)))g[ty]=(g[ty]||0)+1;console.log('genome copies by type',JSON.stringify(g),'fills',s.ev.fill||0,'docks',s.ev.dock||0);console.log(JSON.stringify(m),'hearing',U.filter(u=>s.op[u]>0).length,'unspent free sides',U.reduce((a,u)=>a+[0,1,2].filter(i=>s.bond[u*3+i]<0&&!s.spent[u*3+i]).length,0));});
       console.log(`budpore: latch bond on D cell ${U.indexOf(pick.L)}, anchor W@|* on D cell ${U.indexOf(da.u)}, hear chain ${chain.length} bonds`);
       snap(s,'t0',`t=0: parent P (founder on its anchor${NI?`, ${NI} copy blanks`:''}) and bud D joined at one latch; ${nb} copy blanks outside`,{units:U,radius:14},false);
       for(let t=1;t<=steps;t++){s.step();if(every(t,40))report(t);if(every(t,+process.env.BUDF||4))snap(s,`t${t}`,`t=${t}: ${split?'split at '+split+', the bud':'joined'}`,split?{units:Du,radius:9}:{units:Pu,radius:16},false);}

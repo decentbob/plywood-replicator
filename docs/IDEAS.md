@@ -8,6 +8,17 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## A parent whose copies leak out feeds its competitors (design lesson, build run 20261002-2321, 2026-10-03)
+
+In `budpore` the parent's opening is also its way out: its genome copies leave, copy each other in the open food (free
+strands copy fastest: their backs are open) and take 7 to 100 times more food after the split than the bud does. A bud
+cannot "live on its own" beside that population, whatever its anchor. Two consequences: the parent must keep its
+copies (a pore one cell wide lets blanks in and keeps strands in, `imprint p`), and the bud is best fed **before** it
+leaves, while parent and bud share one sealed space (with 80 blanks inside a sealed P+D, 70% of the food went to the
+genome). Getting strands to the bud's anchor through an internal doorway took one more step: the founder hangs
+under the doorway, so its copies are released at the way into the bud (`budpore c`: splits 7 of 8, the bud leaves with
+1-4 strands). What remains is the time after the split, when both halves of the doorway are wide pores.
+
 ## Spent walls cannot be templates (design lesson, review-intent run 20261002-1751, 2026-10-02)
 
 Feeding on copies needs every wall side spent (`&`), because spent sides are never copied and the food goes to the
