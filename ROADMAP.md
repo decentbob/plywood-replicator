@@ -74,8 +74,8 @@ let the parent construct its offspring from one uniform food, and only that rout
    (`imprint m`), a cell fed through a pore (`imprint p`), anchors catch busy strands and `budpore` splits with food
    left in 4 of 8 seeds (run 1551), 8 of 8 with a mid-wall low-end anchor (run 1921; the bud's own copying is still
    starved, docs/NEXT.md).
-0b. **Speed** (harden runs): `budpore` worlds take about 4 minutes, the check suite 40; lone blocks dominate physics
-   (`_single`).
+0b. **Speed** (harden runs): `budpore` worlds take about 3 minutes, the check suite 28 (run 0950: 1.34x by exact
+   changes); lone blocks (`_single`), ring bodies (`_overlap`) and pairs share the time, no single hot spot left.
 
 Frozen (casting lineage; kept for reference and checks):
 1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`). Open

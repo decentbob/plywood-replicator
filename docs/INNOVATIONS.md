@@ -6,6 +6,23 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-0950, harden)
+
+- **Physics speed (third round, exact)** — works. The same output byte for byte, 1.34x faster on the whole check
+  suite. Changes (no rule, physics or parameter change): (1) torus wrap `((x % W) + W) % W` and minimum image
+  `d - W round(d / W)` computed without a float modulo in the usual case (V8 runs a float `%` as a library call),
+  bit for bit equal, signed zeros included (tested on 2e7 random and edge values); (2) `formBonds` allocates nothing
+  per pair (`_active` returns a bit set; the anchor loop has no array literals); (3) `derive` copies the previous
+  pass into kept buffers instead of eight new arrays per step; (4) pair candidates sorted by insertion; (5) the cell
+  grid is one `Int32Array` with a count per cell (same order within cells as the old arrays of arrays). Evidence: all
+  37 check configurations run 12000 steps on the old (`bb3152e`) and new code give identical output; the full suite
+  gives identical result lines (37 of 37 pass, `grown` partial as before) in 1701 s instead of 2286 s (4 processes);
+  per world: `budpore 300` 253 -> 178 s, `budpore 100c` 90 -> 62 s, `split o` 459 -> 311 s, `budgrow g` 399 -> 297 s,
+  `imprint` 171 -> 136 s. One process, 30000 steps of `budpore 300`: 28.7 -> 21.9 s. Profile now (same world):
+  `_single` 22% (its neighbour gather over about 10 grid cells), `_overlap` 12% (ring bodies: most cells it scans hold
+  the body's own blocks), `_pairs` 9%, `eqDepth` 8%; no single hot spot left. Command: `node --cpu-prof tri/demos.js
+  budpore 1 30000 runs 300` (TRI_NOPIC=1).
+
 ## 2026-10-03 (autorun run 20261003-0751, build)
 
 - **Cap release: the parent plugs its own half of the doorway after the bud's catch and before the split** — partial

@@ -8,6 +8,28 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Grow a finished membrane by breaking it and inserting triangles (user, 2026-10-03)
+
+"A mechanism to grow or lengthen a membrane after it is built by breaking and inserting triangles. Just a thought,
+don't know how feasible." Not built yet; first notes (harden run 20261003-0950, analysis only):
+- **Why it matters here.** Closure (NEXT priority 2) needs the bud to become its parent's kind; today the bud is a
+  smaller ring (R 5 vs R 7). A bud that is born small and grows its ring after the split would remove that asymmetry,
+  and a small bud is cheaper to grow and to wall off. It also gives a cell room for more food (bigger cells, above).
+- **Rigidity: one cut opens nothing.** A ring cut at one place is still one rigid body (physics moves bonded blocks as
+  one piece), so the gap never widens. It needs two cuts, so the ring falls into two halves that can move apart.
+- **Lattice closure: insert on opposite sides together.** A hexagonal ring of unit triangles with sides a1..a6 closes
+  only if a1 + a2 = a4 + a5 and a2 + a3 = a5 + a6. Lengthening two opposite sides by one each keeps that (an elongated
+  hexagon); one side alone does not. One-row walls alternate up and down cells, so each seam takes a rhombus (two
+  triangles). So: two seams on opposite sides, each a `&`-style bond that lets go, each refilled by two triangles.
+- **The hard part: keeping the halves aligned.** Two free halves drift and turn; re-closing needs them flush again
+  (glue closure only binds flush sides, 0.05). The one existing move that brings a whole body flush is the anchor
+  catch (`_snapBody`), which today takes only strand ends. Options to weigh: inserts that grow from one half as a
+  front (open signal holds the other seam closed until they arrive), so only one half moves at a time; or a seam
+  that hinges (casting-lineage hinge marks) so the halves stay joined at one corner while the gap opens. Either needs
+  a design sweep before a demo, and possibly a core case (a body catch on a seam side) under RULES "Core changes".
+- **Where the inserts come from:** copy blanks binding the exposed seam ends (as `imprint`'s growing front), so the
+  insert is a copy of the wall cell beside it; the walls must be unspent there while the seam is open.
+
 ## Shut the parent's half by a catch after the bud's (design lesson, build run 20261003-0751, 2026-10-03)
 
 - A bud on copies starves if any parent strand is outside after the split (free strands beat cells), so the parent's

@@ -50,6 +50,10 @@ function eqDepth(ao,bo,dx,dy){let best=Infinity;const sk=SKIN.v;
 const BO=new Float64Array(6);
 function eqDepthOf(ao,ox,oy,v,dx,dy){for(let e=0;e<3;e++){BO[2*e]=ox[v*3+e];BO[2*e+1]=oy[v*3+e];}return eqDepth(ao,BO,dx,dy);}
 const TA=new Float64Array(6),TB=new Float64Array(6);
+// torus wrap ((x % W) + W) % W and minimum image d - W * round(d / W), bit for bit, without a float modulo or division
+// in the usual case (V8 computes a float % by a slow library call; positions are almost always inside [0, W))
+function wrapc(x,W){const m=(x>=0&&x<W)||(x>-W&&x<0)?x:x%W,s=m+W;return s<W?s:s<2*W?s-W:s-2*W;}
+function mimg(d,W){return d>-0.499*W&&d<0.499*W?d+0:d-W*Math.round(d/W);}
 
 class Physics{
   constructor(params={},n=params.n||0){
@@ -60,10 +64,10 @@ class Physics{
     for(let u=0;u<n;u++)this.resetShape(u);
   }
   // ---- torus and random numbers
-  _dx(d){const W=this.p.W;return d-W*Math.round(d/W);}
-  _dy(d){const H=this.p.H;return d-H*Math.round(d/H);}
-  _wx(x){const W=this.p.W;return ((x%W)+W)%W;}
-  _wy(y){const H=this.p.H;return ((y%H)+H)%H;}
+  _dx(d){return mimg(d,this.p.W);}
+  _dy(d){return mimg(d,this.p.H);}
+  _wx(x){return wrapc(x,this.p.W);}
+  _wy(y){return wrapc(y,this.p.H);}
   _gauss(){if(this._spare===this._spare){const g=this._spare;this._spare=NaN;return g;}
     let x,y,q;do{x=2*this.rng()-1;y=2*this.rng()-1;q=x*x+y*y;}while(q>=1||q===0);const f=Math.sqrt(-2*Math.log(q)/q);this._spare=y*f;return x*f;}
   // ---- geometry of one block
@@ -89,28 +93,32 @@ class Physics{
     return {comp,members};}
   // the body of u (blocks reachable through bonds)
   bodyOf(u){const list=[u],seen=new Set(list);for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(!seen.has(y)){seen.add(y);list.push(y);}}}return list;}
-  // ---- cell grid of block centres (rebuilt each step; kept current by tryMove)
+  // ---- cell grid of block centres (rebuilt each step; kept current by tryMove). Flat: cell c holds _gcnt[c] blocks
+  // at _cells[c * _cap ...], in the order they arrived (a block leaving a cell keeps the others' order)
   gridSync(){const W=this.p.W,H=this.p.H,gx=Math.max(1,Math.floor(W/CELL)),gy=Math.max(1,Math.floor(H/CELL));
     this._gx=gx;this._gy=gy;this._cw=W/gx;this._ch=H/gy;this._all=gx<3||gy<3;
-    if(!this._cells||this._cells.length!==gx*gy)this._cells=Array.from({length:gx*gy},()=>[]);else for(const c of this._cells)c.length=0;
+    if(!this._cells||this._ncell!==gx*gy){this._ncell=gx*gy;this._cap=this._cap||16;this._cells=new Int32Array(gx*gy*this._cap);this._gcnt=new Int32Array(gx*gy);}else this._gcnt.fill(0);
     if(!this._cellOf||this._cellOf.length!==this.n)this._cellOf=new Int32Array(this.n);
-    const px=this.px,py=this.py,cw=this._cw,ch=this._ch,cells=this._cells,cellOf=this._cellOf;
-    for(let u=0;u<this.n;u++){const x=px[u],y=py[u],c=Math.min(gy-1,Math.floor((((y%H)+H)%H)/ch))*gx+Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw));cellOf[u]=c;cells[c].push(u);}}
+    const px=this.px,py=this.py,cw=this._cw,ch=this._ch,cellOf=this._cellOf;
+    for(let u=0;u<this.n;u++){const x=px[u],y=py[u],c=Math.min(gy-1,Math.floor(wrapc(y,H)/ch))*gx+Math.min(gx-1,Math.floor(wrapc(x,W)/cw));cellOf[u]=c;this._gpush(c,u);}}
+  _gpush(c,u){let k=this._gcnt[c];if(k===this._cap){const cap=this._cap,c2=2*cap,a=new Int32Array(this._ncell*c2);for(let z=0;z<this._ncell;z++)for(let q=0;q<this._gcnt[z];q++)a[z*c2+q]=this._cells[z*cap+q];this._cells=a;this._cap=c2;}
+    this._cells[c*this._cap+k]=u;this._gcnt[c]=k+1;}
   _cellAt(x,y){return Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch))*this._gx+Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw));}
-  _regrid(u){const c=this._cellAt(this.px[u],this.py[u]),o=this._cellOf[u];if(c===o)return;const L=this._cells[o],k=L.indexOf(u);if(k>=0)L.splice(k,1);this._cells[c].push(u);this._cellOf[u]=c;}
+  _regrid(u){const c=this._cellAt(this.px[u],this.py[u]),o=this._cellOf[u];if(c===o)return;const L=this._cells,b=o*this._cap,m=this._gcnt[o];
+    let k=0;while(k<m&&L[b+k]!==u)k++;if(k<m){for(;k<m-1;k++)L[b+k]=L[b+k+1];this._gcnt[o]=m-1;}this._gpush(c,u);this._cellOf[u]=c;}
   // visit blocks whose centres may lie within reach of (x, y)
   _around(x,y,fn){if(this._all){for(let v=0;v<this.n;v++)fn(v);return;}
     const cx=Math.min(this._gx-1,Math.floor(this._wx(x)/this._cw)),cy=Math.min(this._gy-1,Math.floor(this._wy(y)/this._ch));
-    for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const L=this._cells[((cy+b+this._gy)%this._gy)*this._gx+(cx+a+this._gx)%this._gx];for(let k=0;k<L.length;k++)fn(L[k]);}}
+    for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const c=((cy+b+this._gy)%this._gy)*this._gx+(cx+a+this._gx)%this._gx;for(let k=0;k<this._gcnt[c];k++)fn(this._cells[c*this._cap+k]);}}
   // total overlap of the marked blocks (relative offsets rx, ry from pivot (cx, cy)) moved by (tx, ty) and turned by da
   // about the pivot, against unmarked blocks; early: stop at the first overlap (then the value is only > 0)
   _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark,{px,py,ox,oy}=this,W=this.p.W,Hh=this.p.H;
-    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all,hw=W/2,hh=Hh/2;let sum=0;
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,cnt=this._gcnt,cap=this._cap,all=this._all,hw=W/2,hh=Hh/2;let sum=0;
     for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;let built=false;
-      const gxi=Math.min(gx-1,Math.floor((((x%W)+W)%W)/cw)),gyi=Math.min(gy-1,Math.floor((((y%Hh)+Hh)%Hh)/ch));
+      const gxi=Math.min(gx-1,Math.floor(wrapc(x,W)/cw)),gyi=Math.min(gy-1,Math.floor(wrapc(y,Hh)/ch));
       for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;
-        const L=all?null:cells[((gyi+b+gy)%gy)*gx+(gxi+a+gx)%gx],m=all?this.n:L.length;
-        for(let q=0;q<m;q++){const v=all?q:L[q];if(mark[v]===st)continue;
+        const g=all?0:((gyi+b+gy)%gy)*gx+(gxi+a+gx)%gx,o=g*cap,m=all?this.n:cnt[g];
+        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(mark[v]===st)continue;
           let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;
           if(early&&d2<IN2)return 1;   // centres closer than two inradii: certainly overlapping
           if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
@@ -157,14 +165,14 @@ class Physics{
   _single(u,tx,ty,da){const {px,py}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.hypot(tx,ty);
     SKIN.v=Math.max(TOUCH,p.skin);const r=2*R3+tl+1e-6,R2=r*r,nb=this._nb||(this._nb=[]);nb.length=0;
     // grid cells within reach r of the start (a block near its cell's edge reaches past the 3 x 3 cells around it)
-    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/ch),(gy-1)>>1);
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,cnt=this._gcnt,cap=this._cap,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/ch),(gy-1)>>1);
     // a cell whose nearest point lies r or more from the start holds no neighbour: skipped (only where the cells
     // scanned span less than half the torus, so direct offsets are minimum images; the start's place in its cell)
     const fx=x0-cx*cw,fy=y0-cy*ch,cut=!all&&gx>=2*ka+4&&gy>=2*kb+4&&fx>=0&&fx<=cw&&fy>=0&&fy<=ch,R2c=R2+1e-9;
     for(let b=-kb;b<=kb;b++){const gb=b>0?b*ch-fy:b<0?fy-(b+1)*ch:0,gb2=gb>0?gb*gb:0;if(cut&&gb2>=R2c)continue;let row=cy+b;row=(row<0?row+gy:row>=gy?row-gy:row)*gx;
       for(let a=-ka;a<=ka;a++){if(all&&(a||b))continue;if(cut){const ga=a>0?a*cw-fx:a<0?fx-(a+1)*cw:0;if(ga>0&&ga*ga+gb2>=R2c)continue;}
-        let col=cx+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;const L=all?null:cells[row+col],m=all?this.n:L.length;
-        for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}}
+        let col=cx+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;const o=(row+col)*cap,m=all?this.n:cnt[row+col];
+        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}}
     let f=this._strial(u,x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
     f=this._strial(u,px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
   // depth of lone block u at centre (x, y) turned by angle t from its current shape, against its gathered neighbours;
@@ -204,13 +212,14 @@ class Physics{
       if(p.split){this.tryMove(list,tx,ty,0,px[u0]+cx,py[u0]+cy);this.tryMove(list,0,0,da,px[list[0]]+this._dx(cx),py[list[0]]+this._dy(cy));}else this.tryMove(list,tx,ty,da,px[u0]+cx,py[u0]+cy);}}
   // blocks near enough to bond (centre distance within two radii plus pairTol)
   _pairs(){const reach=2*R3+this.p.pairTol*SIZE+EPS,r2=reach*reach,out=this.pairs,cand=[],{px,py}=this,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2;out.length=0;
-    const gx=this._gx,gy=this._gy,cells=this._cells,cellOf=this._cellOf,all=this._all;
+    const gx=this._gx,gy=this._gy,cells=this._cells,cnt=this._gcnt,cap=this._cap,cellOf=this._cellOf,all=this._all;
     // only pairs with a bonded block (free blocks never bind each other): scan around bonded blocks only
     const bond=this.bond;
     for(let u=0;u<this.n;u++){if(bond[u*3]<0&&bond[u*3+1]<0&&bond[u*3+2]<0)continue;cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
-      for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const L=all?null:cells[((cy+b+gy)%gy)*gx+(cx+a+gx)%gx],m=all?this.n:L.length;
-        for(let q=0;q<m;q++){const v=all?q:L[q];if(v===u||(v<u&&(bond[v*3]>=0||bond[v*3+1]>=0||bond[v*3+2]>=0)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
-      if(cand.length>1)cand.sort((a,b)=>a-b);for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
+      for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const g=all?0:((cy+b+gy)%gy)*gx+(cx+a+gx)%gx,o=g*cap,m=all?this.n:cnt[g];
+        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u||(v<u&&(bond[v*3]>=0||bond[v*3+1]>=0||bond[v*3+2]>=0)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
+      for(let q=1;q<cand.length;q++){const x=cand[q];let r=q-1;while(r>=0&&cand[r]>x){cand[r+1]=cand[r];r--;}cand[r+1]=x;}   // ascending (few)
+      for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
     return out;}
   physics(){this.gridSync();this._jostle();this._pairs();}
   regrid(u){if(this._cells)this._regrid(u);}
