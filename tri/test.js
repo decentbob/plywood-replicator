@@ -2,72 +2,50 @@
 // Fast checks of the triangle engine (about 20 s): node tri/test.js
 const assert=require('assert/strict');
 const {TriSim,gcode,parseType,canon,FACE,TFACE,GLUE}=require('./sim');
-const {createWorld,buildStructure,placeTri,band,rolesFromGaps,census,openBudDoors}=require('./world');
+const {createWorld,buildStructure,placeTri,band,rolesFromGaps,census}=require('./world');
 const S=require('./structures');
 const H=Math.sqrt(3)/2;let passed=0;
 const test=(name,fn)=>{const t0=Date.now();fn();passed++;console.log(`ok  ${name} (${Date.now()-t0} ms)`);};
 const symmetric=s=>{for(let q=0;q<3*s.n;q++){const r=s.bond[q];if(r>=0)assert.equal(s.bond[r],q,'bond table not symmetric');}};
 
 test('types: parse, name, canonical rotation',()=>{
-  const t=parseType('K<^dA*');assert.deepEqual(t.glue,[gcode('K'),gcode('d'),gcode('A')]);assert.deepEqual(t.hinge,[1,0,0]);assert.deepEqual(t.rel,[2,0,0]);assert.deepEqual(t.trig,[0,0,1]);
-  const s=new TriSim({},1);s.setType(0,'K<^dA*');assert.equal(s.typeName(0),'K<^dA*');assert.equal(canon('A--'),canon('-A-'));});
+  const t=parseType('K.dA@&');assert.deepEqual(t.glue,[gcode('K'),gcode('d'),gcode('A')]);assert.deepEqual(t.close,[1,0,0]);assert.deepEqual(t.att,[0,0,1]);assert.deepEqual(t.done,[0,0,1]);
+  const s=new TriSim({},1);s.setType(0,'K.dA@&');assert.equal(s.typeName(0),'K.dA@&');assert.equal(canon('A--'),canon('-A-'));
+  for(const old of ['K<dA*','a-b$','K%--',"Kb.'@X"])assert.throws(()=>parseType(old),/marks/,'removed mark accepted: '+old);});
 
 // a founder face with a docker placed exactly on it (no jostle): docks only with the complementary glue
-function dockWorld(dockerType,charged=true,end='high'){
+function dockWorld(dockerType,end='high'){
   const {s,founders}=createWorld({seed:3,size:12,founders:[{gaps:[1,1],faces:'aba',x:6,y:6}],supply:{[dockerType]:1},params:{sigma:0,sigmaRot:0}});
   const f=founders[0],u=end==='high'?f[f.length-1]:f[0],r=s.roles(u),d=s.n-1,i=r.free,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
   const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];placeTri(s,d,[b,a,x]);   // reflection of the face triangle across its face
-  s.setType(d,dockerType);if(!charged)s.chg[d]=0;s.derive();return {s,u,d,i};}
-test('copy: complementary docking only, not when discharged',()=>{
+  s.setType(d,dockerType);s.derive();return {s,u,d,i};}
+test('copy: complementary docking only',()=>{
   for(const [type,expect] of [['A--',true],['B--',false],['a--',false]]){const {s,u,d,i}=dockWorld(type);s.run(30);
-    assert.equal(s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===d,expect,`docker ${type}`);symmetric(s);}
-  const {s,u,i}=dockWorld('A--',false);s.run(30);assert.ok(s.bond[u*3+i]<0,'discharged docker must not bind');});
+    assert.equal(s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===d,expect,`docker ${type}`);symmetric(s);}});
 test('binding: a free triangle docks by none of its anchor, close-only or spent sides',()=>{
   for(const type of ['A|--','A.--','A--']){const {s,u,d,i}=dockWorld(type);if(type==='A--')s.spent[d*3]=1;s.derive();s.run(30);
     assert.ok(s.bond[u*3+i]<0,`docker ${type}${type==='A--'?' (side spent)':''} must not dock`);}});
+test('binding: an attached triangle\u2019s close-only side takes no dock or fill (a close-only side binds no free triangle)',()=>{
+  {const {s,u,i}=dockWorld('A--');s.cOnly[u*3+i]=1;s.derive();s.run(30);assert.ok(s.bond[u*3+i]<0,'a close-only face took a dock');}
+  // dockers whose prev side (the side a fill binds) is close-only: copies dock but take no fill (control: plain dockers)
+  for(const [mk,expect] of [['.',false],['',true]]){const {s}=createWorld({seed:2,size:18,founders:[{gaps:[1,0,2,1,1],faces:'abaabb'}],
+      supply:{[`A-${mk}-`]:14,[`B-${mk}-`]:14,'---':50}});s.run(3000);assert.ok((s.ev.dock||0)>0,'docks');assert.equal((s.ev.fill||0)>0,expect,`fills with dockers A-${mk}-`);}});
 test('copy: zip, a face takes a dock only from the high end on',()=>{
-  const {s,u,i}=dockWorld('A--',true,'low');s.run(30);assert.ok(s.bond[u*3+i]<0,'low end docked before the faces above it');
-  const h=dockWorld('A--',true,'high');h.s.run(30);assert.ok(h.s.bond[h.u*3+h.i]>=0,'the high end docks');});
+  const {s,u,i}=dockWorld('A--','low');s.run(30);assert.ok(s.bond[u*3+i]<0,'low end docked before the faces above it');
+  const h=dockWorld('A--','high');h.s.run(30);assert.ok(h.s.bond[h.u*3+h.i]>=0,'the high end docks');});
 
-test('casting: a pocket of three activated casters casts the instruction glues',()=>{
-  const tris=[{v:[[1,0],[1.5,H],[0.5,H]],type:'aaa'},
-    {v:[[0,0],[1,0],[0.5,H]],type:'bA.K%'},{v:[[1,0],[2,0],[1.5,H]],type:'K%cA.'},{v:[[0.5,H],[1.5,H],[1,2*H]],type:'AK%d'},
-    {v:[[0,0],[0.5,H],[-0.5,H]],type:'k--'},{v:[[1,0],[1.5,-H],[2,0]],type:'--k'},{v:[[1.5,H],[2,2*H],[1,2*H]],type:'--k'}];
-  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,4,4);
-  assert.equal(s.nbc.length,tris.length);s.derive();s.chemistry();
-  assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(0)),canon('bcd'));assert.ok(!s.bonded(0),'product released');});
-
-test('lid pocket: a target in the notch is caught, the lid closes (heard trigger), cast, the lid reopens',()=>{
-  const tris=[...S.lidPocket('bcd','A'),{v:[[0,0],[1,0],[0.5,H]],type:'aaa',loose:true}],T=tris.length-1;
-  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,4,4);for(let i=0;i<3;i++)s.cut(T,i);s.derive();
-  const a0=s.angle(2)-s.angle(3);s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('bcd'));
-  const back=Math.atan2(Math.sin(s.angle(2)-s.angle(3)-a0),Math.cos(s.angle(2)-s.angle(3)-a0));assert.ok(Math.abs(back)<0.1,`lid open again (got ${back.toFixed(2)})`);symmetric(s);});
-
-test('kit: unique tree glues; the kit-typed lid pocket bonds as designed and casts with activator sides',()=>{
-  const K=S.kit(S.lidPocket('-A-','X'),'auto','x','z'),glues=new Set();
-  for(const [x,y] of K.tree)assert.ok(K.types[y].includes('@'),'child has an attach side');
-  for(const t of K.types)for(const m of t.matchAll(/([a-zA-Z])[<>.!^#*~$+=%]*@/g)){assert.ok(!glues.has(m[1]),'attach glue used twice: '+m[1]);glues.add(m[1]);}
-  const tris=[...K.tris,{v:[[0,0],[1,0],[0.5,H]],type:'xxx',loose:true}],T=tris.length-1;
-  const s=new TriSim({sigma:0,sigmaRot:0,W:12,H:12},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,5,5);for(let i=0;i<3;i++)s.cut(T,i);
-  const {comp}=s.bodies();for(let u=0;u<T;u++)assert.equal(comp[u],comp[K.root],'cell '+u+' not bonded into the part');
-  s.derive();s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('-A-'));symmetric(s);});
-test('stamp: an instruction side carries marks; the cast product takes them',()=>{
-  assert.equal(new TriSim({},1).typeName(0),'---');const s0=new TriSim({},1);s0.setType(0,"Kb.'@X*");assert.equal(s0.typeName(0),"Kb.'@X*");assert.equal(s0.att[1],0,'carried mark inactive');
-  const tris=[...S.lidPocket(S.stampInstr('A@-b@'),'X'),{v:[[0,0],[1,0],[0.5,H]],type:'xxx',loose:true}],T=tris.length-1;
-  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,4,4);for(let i=0;i<3;i++)s.cut(T,i);s.derive();
-  s.run(150);assert.equal(s.ev.cast,1,'one cast');assert.equal(canon(s.typeName(T)),canon('A@-b@'));symmetric(s);});
 test('parts: a free triangle with an attach side binds only by it',()=>{
   for(const [part,expect] of [['A@--',true],['A-B@',false],['A--',true]]){
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'f-a'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[0,0],[0.5,H],[-0.5,H]],type:part,loose:true}];
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(30);
     assert.equal(s.partner(0,2)===2,expect,part);}});
 
-test('copy side: a copy blank binds any free side of an attached triangle, takes its type (turned, marks and carried marks) and lets go',()=>{
+test('copy side: a copy blank binds any free side of an attached triangle, takes its type (turned, with its marks) and lets go',()=>{
   // template (cell 0) welded to cell 1 by side 0; the copy blank (cell 2) sits flush in the site beside template side `at`
   const run=(tmpl,blank,at,attached=true)=>{const sites=[[[1,0],[1.5,H],[0.5,H]],[[0,0],[0.5,H],[-0.5,H]]];
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:tmpl},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:sites[at-1],type:blank,loose:true}];
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);if(!attached)s.cut(0,0);s.derive();s.run(5);symmetric(s);return s;};
-  for(const [tmpl,at] of [["fA.b|'@",1],["fA|b.'@",2],['f-b',1]]){const s=run(tmpl,'-?-?-?',at);
+  for(const [tmpl,at] of [["fA.b@|",1],["fA@|b.",2],['f-b',1]]){const s=run(tmpl,'-?-?-?',at);
     assert.equal(s.ev.copy,1,`one copy (${tmpl} side ${at})`);assert.equal(canon(s.typeName(2)),canon(tmpl),'the copy has the template type (not its mirror)');
     assert.ok(!s.bonded(2),'the copy lets go');assert.equal(s.typeName(0),tmpl,'the template is unchanged');assert.equal(s.partner(0,0),1);}
   assert.notEqual(canon('fbA'),canon('fAb'),'test types are chiral');
@@ -80,14 +58,14 @@ test('copy side: a copy blank binds no anchor side (a waiting anchor is no templ
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
     assert.equal(!!s.ev.copy,expect,tmpl);if(!expect)assert.equal(s.typeName(2),'-?-?-?','the blank stays a blank');symmetric(s);}});
 
-test('anchor: an anchor side catches a strand end seed and the strand is placed flush as one body',()=>{
-  for(const [ag,expect] of [['Z|',true],['Y|',false],['Z',false]]){
+test('anchor: an anchor side catches a strand end seed and the strand is placed flush as one body; a spent one catches nothing',()=>{
+  for(const [ag,expect,spent] of [['Z|',true],['Y|',false],['Z',false],['Z|',false,true]]){
     const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':2},params:{sigma:0,sigmaRot:0}});
     const F=founders[0],u=F[F.length-1],r=s.roles(u),i=r.inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
     const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]],sh=[0.12,-0.08];
     const V=[b,a,x].map(p=>[p[0]+sh[0],p[1]+sh[1]]);   // the anchor cell (its side 0 faces the end, a little off the flush place), welded on side 1
-    const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,ag+'f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);
-    s.derive();s.run(3);const ok=s.partner(u,i)===s.n-2;assert.equal(ok,expect,ag);
+    const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,ag+'f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);if(spent)s.spent[(s.n-2)*3]=1;   // a spent anchor side catches nothing
+    s.derive();s.run(3);const ok=s.partner(u,i)===s.n-2;assert.equal(ok,expect,ag+(spent?' (spent)':''));
     if(ok){assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');for(let q=0;q+1<F.length;q++)for(let e=0;e<3;e++){const qq=s.bond[F[q]*3+e];if(qq>=0)assert.ok(s.flushGap(F[q],e,(qq/3)|0,qq%3)<1e-6,'strand stays rigid');}}
     symmetric(s);}});
 test('anchor: catches a strand end while the strand is being copied (its docker moves with it)',()=>{
@@ -114,50 +92,6 @@ test('anchor: a free triangle\u2019s anchor side binds nothing',()=>{
     const F=founders[0],u=F[F.length-1],i=s.roles(u).inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);
     const v=s.n-1;placeTri(s,v,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(v,ty);s.derive();s.run(3);
     assert.equal(s.partner(u,i)===v,expect,ty);symmetric(s);}});
-test('import ring: the revolving door carries a caught blank inside and drops it',()=>{
-  const {tris,door,R}=S.importRing(4,'X'),all=[...tris,{v:door.keyV,type:'xxx',loose:true}],K=all.length-1;
-  const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},all.length);buildStructure(s,all.map((_,k)=>k),all,7,7);s.derive();assert.ok(s.bonded(K),'blank caught');
-  s.run(120);let x=0,y=0;for(let u=0;u<tris.length;u++){x+=s.px[u];y+=s.py[u];}x/=tris.length;y/=tris.length;
-  assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(K),'let go');assert.ok(Math.hypot(s.px[K]-x,s.py[K]-y)<(R-1)*H,'inside the ring');symmetric(s);});
-
-test('door ring kit: the last wall site faces outward; the key catches only once the wall is complete, then imports',()=>{
-  for(const R of [4,6,8]){const K=S.doorRingKit(R),v=K.tris[K.door.hp].v,f=[0,1,2].find(i=>K.tris.every((t,q)=>q===K.door.hp||!(t.v.some(p=>Math.hypot(p[0]-v[i][0],p[1]-v[i][1])<1e-6)&&t.v.some(p=>Math.hypot(p[0]-v[(i+1)%3][0],p[1]-v[(i+1)%3][1])<1e-6))));
-    assert.ok(S.hexr([(v[f][0]+v[(f+1)%3][0])/2,(v[f][1]+v[(f+1)%3][1])/2])>R-0.5,'last site faces outward, R='+R);}
-  for(const [missing,expect] of [[true,false],[false,true]]){const K=S.doorRingKit(4),R=4,ring=K.tris.filter((_,q)=>!(missing&&q===K.door.hp));
-    const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},ring.length+1);buildStructure(s,ring.map((_,k)=>k),ring,7,7);s.run(150);   // the open signal spreads
-    const hc=ring.findIndex(t=>t.type.includes('*')),i=[...s.typeName(hc).matchAll(/[a-zA-Z-][<>.!^#*~$+=%@&]*/g)].findIndex(m=>m[0].includes('*')),P=k=>[s.px[hc]+s.ox[hc*3+k],s.py[hc]+s.oy[hc*3+k]];
-    const a=P(i),b=P((i+1)%3),c=P((i+2)%3),B=ring.length;placeTri(s,B,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);s.setType(B,'xxx');s.derive();
-    s.run(5);assert.equal(s.bonded(B),expect,missing?'a key in an open wall must not catch':'the key of a complete wall catches');
-    if(expect){s.run(200);let x=0,y=0;for(let u=0;u<ring.length;u++){x+=s.px[u];y+=s.py[u];}x/=ring.length;y/=ring.length;
-      assert.equal(s.ev.drop,1,'dropped');assert.ok(!s.bonded(B)&&Math.hypot(s.px[B]-x,s.py[B]-y)<(R-1)*H,'blank inside');symmetric(s);}}});
-
-test('pore: a complete ring lets its panel go (spent release sides) and it swings out for good; an incomplete ring holds it',()=>{
-  for(const missing of [false,true]){const R=5,K=S.doorRingKit(R,'z','X',6,'',1,true,true),ring=K.tris.filter((_,q)=>!(missing&&q===5));
-    const s=new TriSim({sigma:0,sigmaRot:0,W:16,H:16},ring.length);buildStructure(s,ring.map((_,k)=>k),ring,8,8);for(let k=0;k<150;k++)s.derive();
-    s.run(300);const P=K.door.panel.map(q=>ring.findIndex(t=>t===K.tris[q]));let x=0,y=0;for(let u=0;u<ring.length;u++){x+=s.px[u];y+=s.py[u];}x/=ring.length;y/=ring.length;
-    const out=P.reduce((a,u)=>a+Math.hypot(s.px[u]-x,s.py[u]-y),0)/P.length;
-    if(missing)assert.ok(!s.ev.complete,'an incomplete ring must keep its pore closed');
-    else{assert.ok(s.ev.complete>=1,'released');assert.ok(out>(R-0.5)*H,'panel outside the ring');s.run(300);
-      const out2=P.reduce((a,u)=>a+Math.hypot(s.px[u]-x,s.py[u]-y),0)/P.length;assert.ok(out2>(R-0.5)*H,'stays open');}
-    symmetric(s);}});
-
-test('bud pair: joined while the bud cap is open; with nothing open it splits and both doors shut and lock',()=>{
-  for(const capGlue of ['a',null]){const bp=S.budPair({capGlue});const {s,structures}=createWorld({seed:2,size:30,structures:[{tris:bp.tris,x:15,y:12}],params:{sigma:0,sigmaRot:0}});
-    const U=structures[0];openBudDoors(s,U,bp);s.run(400);const {comp}=s.bodies(),joined=comp[U[bp.P[0]]]===comp[U[bp.D[0]]];
-    const shut=bp.doors.map(d=>s.bond[U[d.panel[d.panel.length-1]]*3+d.closeSide[0]]>=0);
-    if(capGlue){assert.ok(joined,'an open cap holds the pair');assert.deepEqual(shut,[false,false],'doors stay open');}
-    else{assert.ok(!joined,'split');assert.deepEqual(shut,[true,true],'both doors shut');}symmetric(s);}});
-test('grown bud: both doors shut while a wall site is open, open once the ring is closed, shut after the split',()=>{
-  // the bud as grown (structures.grownBud), without its last wall cell q / complete with an open cap seed / complete
-  // with its cap filled (nothing open)
-  for(const [withQ,capFilled] of [[false,false],[true,false],[true,true]]){const g=S.grownBud({RP:7,RD:5});
-    let tris=g.tris.filter((_,x)=>withQ||x!==g.q);const idx=x=>tris.indexOf(g.tris[x]);if(capFilled)tris=[...tris,...g.cap.slots.map(v=>({v,type:g.cap.type,loose:true}))];
-    const s=new TriSim({sigma:0,sigmaRot:0,W:44,H:44,lockRange:120},tris.length);buildStructure(s,tris.map((_,k)=>k),tris,22,16);for(let k=0;k<300;k++)s.derive();
-    const ang=(f,p)=>{const u=idx(f),v=idx(p),i=[0,1,2].find(i=>s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===v);return Math.abs(Math.atan2(Math.sin(s.angle(u)-s.angle(v)-s.hRel[u*3+i]),Math.cos(s.angle(u)-s.angle(v)-s.hRel[u*3+i])))*180/Math.PI;};
-    s.run(300);const {comp}=s.bodies(),joined=comp[idx(g.S)]===comp[idx(g.root)],aP=ang(g.panelP[0],g.doors[0].hinge),aD=ang(g.panelD[0],g.root);
-    if(!withQ){assert.ok(joined,'growing: joined');assert.ok(aP<1&&aD<1,`growing: both doors shut (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}
-    else if(!capFilled){assert.ok(joined,'cap open: joined');assert.ok(aP>40&&aD>40,`closed ring: both doors open (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}
-    else{assert.ok(!joined,'nothing open: split');assert.ok(aP<1&&aD<1,`after the split both doors shut (${aP.toFixed(0)}, ${aD.toFixed(0)})`);}symmetric(s);}});
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
@@ -167,26 +101,17 @@ test('budding: a ring on a seed lets go when complete (open signal), holds while
     assert.ok(s.partner(2,K.rootSide)===0,'root on the seed');for(let k=0;k<80;k++)s.step();
     assert.equal(s.partner(2,K.rootSide)<0,expect,missing?'incomplete ring must hold':'complete ring must let go');}});
 
-test('hinge: a triggered flap swings 60 degrees and returns when the trigger lets go',()=>{
-  // partner P (fixed by no jostle), flap F hinged at P's shared corner, trigger side of F faces cargo C
-  const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'--H'},{v:[[0,0],[0.5,H],[-0.5,H]],type:'h<-A*',loose:true},{v:[[0,0],[-0.5,H],[-1,0]],type:'a--',loose:true}];
-  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);
-  assert.ok(s.isHingeBond(1,0),'hinge bond');assert.ok(s.bond[1*3+2]>=0,'cargo bound to the trigger side');
-  const rel=()=>Math.atan2(Math.sin(s.angle(1)-s.angle(0)-s.hRel[3]),Math.cos(s.angle(1)-s.angle(0)-s.hRel[3]));
-  s.derive();s.run(80);assert.ok(Math.abs(Math.abs(rel())-Math.PI/3)<0.1,`swung to 60 degrees (got ${rel().toFixed(2)})`);
-  s.cut(1,2);s.px[2]=s._wx(s.px[2]+4);s.run(80);assert.ok(Math.abs(rel())<0.1,`back to flush (got ${rel().toFixed(2)})`);symmetric(s);});
-
 test('state: save and reload continue the same run',()=>{
   const {s}=createWorld({seed:5,size:12,founders:[{gaps:[1,1],faces:'aba'}],supply:{'A--':4,'B--':4,'---':6}});s.run(50);
   const a=TriSim.fromState(JSON.parse(JSON.stringify(s.saveState())));s.run(40);a.run(40);
   assert.deepEqual(Array.from(a.px),Array.from(s.px));assert.deepEqual(Array.from(a.bond),Array.from(s.bond));});
 
 test('physics: a closed ring keeps its tracers at the default jostle (no tunnelling)',()=>{
-  const {tris,R}=S.ring(4,1);for(const t of tris)t.type=t.type.replace(/[*~<>#]/g,'');   // a plain closed ring (door welded shut)
+  const R=4,tris=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));   // a plain closed ring (welded)
   const {s,structures}=createWorld({seed:2,size:16,structures:[{tris,x:8,y:8}],params:{}});
   // tracers inside: placed near the centre
   const ring=structures[0],{placeFree}=require('./world'),n0=s.n;void n0;assert.ok(ring.length>30);
-  const s2=new TriSim({...s.p},s.n+6);for(const k of ['px','py','pa','ox','oy','bond','hinge','glue','bkind'])s2[k].set(s[k]);
+  const s2=new TriSim({...s.p},s.n+6);for(const k of ['px','py','pa','ox','oy','bond','glue','bkind'])s2[k].set(s[k]);
   const placed=[...ring],inside=[];for(let u=s.n;u<s2.n;u++){if(!placeFree(s2,u,placed,()=>{const a=2*Math.PI*s2.rng(),r=1.4*s2.rng();return [8+r*Math.cos(a),8+r*Math.sin(a)];}))throw Error('place');placed.push(u);inside.push(u);}
   s2.derive();const cx=()=>{let x=0,y=0;for(const u of ring){x+=s2._dx(s2.px[u]-s2.px[ring[0]]);y+=s2._dy(s2.py[u]-s2.py[ring[0]]);}return [s2.px[ring[0]]+x/ring.length,s2.py[ring[0]]+y/ring.length];};
   s2.run(1500);const [x,y]=cx();for(const u of inside)assert.ok(Math.hypot(s2._dx(s2.px[u]-x),s2._dy(s2.py[u]-y))<(R-1)*H,'tracer left the ring');symmetric(s2);});
@@ -210,7 +135,7 @@ test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)'
   const A=new Float64Array(6),B=new Float64Array(6);let worst=0,gap=0;
   for(let u=0;u<s.n;u++)for(let v=u+1;v<s.n;v++){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
     for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}worst=Math.max(worst,triDepth(A,B));}
-  for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0&&!s.isHingeBond(u,i))gap=Math.max(gap,s.flushGap(u,i,(q/3)|0,q%3));}
+  for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0)gap=Math.max(gap,s.flushGap(u,i,(q/3)|0,q%3));}
   assert.ok(worst<1e-3,`overlap ${worst}`);assert.ok(gap<1e-6,`bond gap ${gap}`);assert.ok((s.ev.dock||0)+(s.ev.glue||0)>0,'something bound');symmetric(s);});
 
 test('physics: a body longer than half the world keeps its shape (offsets unwrapped along bonds)',()=>{
@@ -226,21 +151,6 @@ test('locality: release reads its chain partners\' fill state from the previous 
   s.chemistry();assert.ok(s.bond[3]>=0,'U holds its face while P has a fill beside it');
   B(4,1,PREV,5,0,NEXT);s.chemistry();assert.ok(s.bond[3]>=0,'the fill completed this pass: U hears it one pass later');
   s.chemistry();assert.ok(s.bond[3]<0,'U lets go in the next pass');s.derive();assert.ok(s.refr[1]===1||s.busy[1]===0,'released U is refractory');});
-test('locality: fuel, the flap never touches its hinge partner\'s carrier; the carrier spends itself one pass later',()=>{
-  // flap 0 hinged on 1, whose fuel side holds the charged carrier 2; flap 0 hears a trigger signal
-  const s=new TriSim({W:40,H:40,seed:1},3);s.setType(0,'a<--');s.setType(1,'A-b$');s.setType(2,'B--');for(let u=0;u<3;u++){s.px[u]=6*u+3;s.py[u]=5;}
-  s.link(0,0,1,0);s.bkind[0]=GLUE;s.bkind[3]=GLUE;s.link(1,2,2,0);s.bkind[5]=GLUE;s.bkind[6]=GLUE;s.derive();assert.equal(s.fu[1],2,'partner exposes a charged carrier');
-  s.sg[0]=1;s.servo();assert.equal(s.pw[0],1,'the flap starts its swing');assert.ok(s.chg[2]===1&&s.bond[5]>=0,'the start does not write the carrier (two bonds away)');
-  s.derive();assert.equal(s.fu[1],2,'the start reaches the partner only in the next pass (one bond per pass)');s.sg[0]=1;s.servo();assert.ok(s.chg[2]===1);
-  s.derive();assert.equal(s.fu[1],3,'the partner exposes the start');s.sg[0]=1;s.servo();
-  assert.ok(s.chg[2]===0&&s.bond[5]<0&&s.ev.fuelUsed===1,'the carrier discharged itself and let go');assert.equal(s.pw[0],2,'the flap stays powered');
-  s.setType(2,'B--');s.chg[2]=1;s.link(1,2,2,0);s.derive();assert.equal(s.fu[1],2);s.sg[0]=1;s.servo();assert.ok(s.chg[2]===1,'a carrier arriving mid-swing is not spent');});
-test('locality: fuel, a flap hinged onto another flap keeps its carrier when the other one swings',()=>{
-  // flap 0 hinged on 1 (fuel side, carrier 2); flap 3 hinged onto flap 0 (the hinge mark is on 3), its own fuel side holds carrier 4
-  const s=new TriSim({W:80,H:80,seed:1},5);['a<c-','A-b$','B--','C<b$-','B--'].forEach((t,u)=>{s.setType(u,t);s.px[u]=6*u+3;s.py[u]=5;});
-  const L=(u,i,v,j)=>{s.link(u,i,v,j);s.bkind[u*3+i]=GLUE;s.bkind[v*3+j]=GLUE;};L(0,0,1,0);L(0,1,3,0);L(1,2,2,0);L(3,1,4,0);
-  for(let k=0;k<4;k++){s.derive();s.sg[0]=1;s.servo();}
-  assert.equal(s.chg[2],0,'flap 0 spent the carrier on its hinge partner');assert.equal(s.chg[4],1,'flap 3 (not swinging) keeps its carrier');assert.equal(s.ev.fuelUsed,1);});
 test('copy: a docked triangle keeps its template while a fill that bound in this pass is incomplete',()=>{
   const {PREV,NEXT}=require('./sim');const {s}=createWorld({seed:2,size:18,founders:[{gaps:[1,0,2,1,1],faces:'abaabb'}],supply:{'A--':14,'B--':14,'a--':14,'b--':14,'---':50}});
   let bad=0;const chem=s.chemistry.bind(s);s.chemistry=()=>{const faces=[];for(let u=0;u<s.n;u++){const e=s._edges(u);if(e.face>=0)faces.push([u,e]);}chem();
@@ -251,17 +161,17 @@ test('copy side: only a triangle bonded by its copy side alone takes its partner
   s.link(0,0,1,0);s.bkind[0]=GLUE;s.bkind[3]=GLUE;s.link(1,2,2,0);s.bkind[5]=GLUE;s.bkind[6]=GLUE;s.chemistry();
   assert.equal(s.typeName(1),'a?-x','an attached triangle with a copy side is no copy blank');assert.ok(s.bond[3]>=0);
   s.cut(1,2);s.chemistry();assert.equal(s.typeName(1),'abc','bonded by its copy side alone it copies (the partner turned about the shared edge)');});
-test('conservation: blocks stay in play, types change only by cast and copy (lid pocket, copy blanks)',()=>{
+test('conservation: blocks stay in play, types change only by copy (a ring kit, copy blanks, a founder and its dockers)',()=>{
   const {triDepth}=require('./physics');
-  const {s}=createWorld({seed:2,size:14,structures:[{tris:S.lidPocket('bcd','A'),x:7,y:7}],supply:{'aaa':12,'---':10,'-?-?-?':8}});
+  const {s}=createWorld({seed:2,size:14,founders:[{gaps:[1,1],faces:'aba',x:3,y:3}],structures:[{tris:S.ringKit(3,'z').tris,x:8,y:8}],supply:{'A--':4,'B--':4,'---':10,'-?-?-?':12}});
   const before=[...Array(s.n).keys()].map(u=>s.typeName(u));s.run(3000);
   let changed=0,worst=0;const A=new Float64Array(6),B=new Float64Array(6);
   for(let u=0;u<s.n;u++){assert.ok(Number.isFinite(s.px[u])&&Number.isFinite(s.py[u])&&Number.isFinite(s.pa[u]),'block '+u+' left play');
     assert.ok(s.px[u]>=0&&s.px[u]<s.p.W&&s.py[u]>=0&&s.py[u]<s.p.H,'block '+u+' outside the torus');if(s.typeName(u)!==before[u])changed++;
     for(let v=u+1;v<s.n;v++){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
       for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}worst=Math.max(worst,triDepth(A,B));}}
-  assert.ok((s.ev.cast||0)>=1&&(s.ev.copy||0)>=1,`casts ${s.ev.cast} copies ${s.ev.copy}`);
-  assert.ok(changed<=(s.ev.cast||0)+(s.ev.copy||0),`${changed} types changed, ${s.ev.cast} casts + ${s.ev.copy} copies`);
+  assert.ok((s.ev.copy||0)>=1,`copies ${s.ev.copy}`);
+  assert.ok(changed<=(s.ev.copy||0),`${changed} types changed, ${s.ev.copy} copies`);
   assert.ok(worst<1e-3,`overlap ${worst}`);symmetric(s);});
 test('physics: a block in a hole of a one-row wall never hops across it through the apex pinch',()=>{
   const tris=[];for(let i=0;i<10;i++){if(i!==5)tris.push({v:[[i,0],[i+1,0],[i+0.5,H]],type:'---'});tris.push({v:[[i+1,0],[i+1.5,H],[i+0.5,H]],type:'---'});}
@@ -293,7 +203,7 @@ test('binding: a bonded triangle is never free (a docked template that lost its 
   placeTri(s,d,refl(t)(0));s.setType(d,'a--');s.bind(t,0,TFACE,d,0,FACE);s.gridSync();s.physics();s.derive();s.formBonds();
   assert.equal(s.bond[t*3],d*3,'the template keeps its face bond');symmetric(s);assert.throws(()=>s.bind(u,0,GLUE,t,0,GLUE),/already bonded/);});
 const closureCase=(K,range)=>{
-  // no physics: cells are bonded in growth order (as parts arriving), each followed by signal passes (derive, servo)
+  // no physics: cells are bonded in growth order (as parts arriving), each followed by signal passes (derive, release)
   const R=5,N=K.N,AK=K.anchorCell,SE=K.types[AK].includes('Z@|')?'z--':'w--',s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:range},2*N+2),O=[20,20],at=p=>[O[0]+p[0],O[1]+p[1]];
   const sh=(a,b)=>{const eq=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1])<1e-6;for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(eq(a[i],b[(j+1)%3])&&eq(a[(i+1)%3],b[j]))return [i,j];return null;};
   // geometry: the bud (the parent turned 180 degrees about its pore) puts its root on the parent's seed site and its E on the parent's root, without overlap
@@ -303,7 +213,7 @@ const closureCase=(K,range)=>{
   const cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];for(const b of Bv)for(const t of K.tris){const c=cen(b),d=cen(t.v);assert.ok(Math.hypot(c[0]-d[0],c[1]-d[1])>0.5,'bud overlaps parent');}
   assert.equal(new Set(K.letters).size,N-1,'one letter per bond');assert.ok(![...K.letters].some(c=>'awzyf'.includes(c)),'kit letter clashes with genome or seed');
   const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-  const pass=k=>{for(let q=0;q<k;q++){s.derive();s.servo();}},state=U=>U.map(u=>[0,1,2].map(i=>(s.bond[u*3+i]>=0?'b':'-')+(s.spent[u*3+i]?'s':'-')).join(' '));
+  const pass=k=>{for(let q=0;q<k;q++){s.derive();s._release();}},state=U=>U.map(u=>[0,1,2].map(i=>(s.bond[u*3+i]>=0?'b':'-')+(s.spent[u*3+i]?'s':'-')).join(' '));
   // the parent: complete, its founder held by its root's anchor side (a stand-in strand end w)
   const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1;buildStructure(s,Pu,K.tris,O[0],O[1]);
   placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,SE);s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);pass(10);

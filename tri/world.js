@@ -23,7 +23,7 @@ function placeTri(s,u,V){const c=[(V[0][0]+V[1][0]+V[2][0])/3,(V[0][1]+V[1][1]+V
   s.pa[u]=Math.atan2(V[0][1]-c[1],V[0][0]-c[0])-CORNER0;s.resetShape(u);}
 // a prepared structure: triangles {v, type, loose} in local lattice coordinates, moved to (x, y) and turned by rot.
 // Shared sides bind when their glues are complementary; two inert shared sides are welded by the structure glue pair
-// f/F (not for `loose` triangles, e.g. doors and hatches).
+// f/F (not for `loose` triangles, e.g. a free triangle placed in a site).
 function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.sin(rot),T=p=>[x+p[0]*cs-p[1]*sn,y+p[0]*sn+p[1]*cs];
   const W=tris.map(t=>{const V=t.v.map(T);if(cross(sub(V[1],V[0]),sub(V[2],V[0]))<0)throw Error('structure triangle not counter-clockwise');return V;});
   tris.forEach((t,k)=>{placeTri(s,units[k],W[k]);s.setType(units[k],t.type);});
@@ -56,34 +56,10 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
     if(st.n===n){const r=s.constructor.fromState(st);for(const k of Object.keys(r))s[k]=r[k];s._cells=null;console.log('resumed from',process.env.TRI_RESUME,'at t='+s.t);}}
   return out;}
 
-// open the prepared doors of a bud pair (structures.budPair) built as units U: cut the closing pair, turn each panel
-// open about its pin, rebind its hinge there (rest = open, the trigger turns it shut), bind its '&' doorstop pair
-// (a labelled starting condition)
-function openBudDoors(s,U,bp){
-  for(const d of bp.doors){const pc=d.panel.map(c=>U[c]),[ci,cj]=d.closeSide;s.cut(pc[pc.length-1],ci);
-    const [hi,hj]=d.hingeSide;s.cut(pc[0],hi);
-    const px=s.px[pc[0]]+s.ox[pc[0]*3+(s.hinge[pc[0]*3+hi]===1?hi:(hi+1)%3)],py=s.py[pc[0]]+s.oy[pc[0]*3+(s.hinge[pc[0]*3+hi]===1?hi:(hi+1)%3)],t=d.dir*d.ang*Math.PI/180,c=Math.cos(t),n=Math.sin(t);
-    for(const u of pc){const x=s._dx(s.px[u]-px),y=s._dy(s.py[u]-py);s.px[u]=s._wx(px+c*x-n*y);s.py[u]=s._wy(py+n*x+c*y);s.pa[u]+=t;s.resetShape(u);s.regrid(u);}
-    s.bind(pc[0],hi,GLUE,U[d.prev],hj,GLUE);s.hSign[pc[0]*3+hi]=-d.dir;
-    const [sc,si,sj]=d.stopSide;s.bind(U[sc],si,GLUE,U[d.stop],sj,GLUE);}
-  for(let k=0;k<200;k++)s.derive();}
 // place free triangle u at random points from gen() without overlapping `placed`; true on success
 function placeFree(s,u,placed,gen,tries=5000){for(let a=0;a<tries;a++){const [x,y]=gen();s.px[u]=s._wx(x);s.py[u]=s._wy(y);s.pa[u]=2*Math.PI*s.rng();s.resetShape(u);
     if(placed.every(v=>{const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);return Math.hypot(dx,dy)>2||!separation(s.outline(u),s.outline(v,dx,dy));}))return true;}
   return false;}
-// Where a kit part grown from strand end `end` would lie (lattice coordinates of the kit mapped so the root's seed side
-// meets the end's spare edge). ok when no part cell or clear cell (cells the part needs empty) meets a strand cell, a
-// dock site of the strand (a face's mirror cell) or a cell beside a dock site. Read-only planning for demos.
-function partPlacement(s,units,end,K,clear=[]){
-  const u0=units[0],P=(u,k)=>[s._dx(s.px[u]-s.px[u0])+s.ox[u*3+k],s._dy(s.py[u]-s.py[u0])+s.oy[u*3+k]];
-  const e=s.roles(end).inert,a=P(end,(e+1)%3),b=P(end,e),V=K.tris[K.root].v,i=K.rootSide,c=V[i],d=V[(i+1)%3];
-  const ang=Math.atan2(b[1]-a[1],b[0]-a[0])-Math.atan2(d[1]-c[1],d[0]-c[0]),cs=Math.cos(ang),sn=Math.sin(ang);
-  const T=p=>{const x=p[0]-c[0],y=p[1]-c[1];return [a[0]+cs*x-sn*y,a[1]+sn*x+cs*y];},cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
-  const cells=K.tris.map(t=>t.v.map(T)),clr=clear.map(v=>v.map(T)),strand=units.map(u=>[0,1,2].map(k=>P(u,k))),dock=[];
-  for(const u of units){const r=s.roles(u);if(r.role!==SFACE||r.free<0)continue;const f=r.free,A=P(u,f),B=P(u,(f+1)%3),C=P(u,(f+2)%3);dock.push([B,A,[A[0]+B[0]-C[0],A[1]+B[1]-C[1]]]);}
-  const dist=(v,w)=>{const p=cen(v),q=cen(w);return Math.hypot(p[0]-q[0],p[1]-q[1]);};
-  for(const v of [...cells,...clr]){for(const w of strand)if(dist(v,w)<0.3)return {ok:false,cells};for(const w of dock)if(dist(v,w)<0.7)return {ok:false,cells};}
-  return {ok:true,cells};}
 // read-only census: strands (chain-bonded components) with face glue sequence and gap string
 function census(s){const seen=new Set(),out=[];
   for(let u=0;u<s.n;u++){if(seen.has(u))continue;const e=s._edges(u);if(e.prev>=0||e.next<0)continue;
@@ -93,4 +69,4 @@ function census(s){const seen=new Set(),out=[];
     out.push({units,faces,gaps,n:units.length,paired:units.some(v=>s._edges(v).face>=0)});}
   return out;}
 const typeCount=s=>{const m={};for(let u=0;u<s.n;u++){const k=canon(typeName(s,u));m[k]=(m[k]||0)+1;}return m;};
-module.exports={createWorld,openBudDoors,partPlacement,buildStructure,placeTri,placeFree,band,rolesFromGaps,census,typeCount,H};
+module.exports={createWorld,buildStructure,placeTri,placeFree,band,rolesFromGaps,census,typeCount,H};

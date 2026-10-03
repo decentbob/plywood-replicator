@@ -1,11 +1,9 @@
 'use strict';
 // Rigid-part physics for unit triangles on a torus (all blocks are the same regular triangle, side 1).
 //   state   centre (px, py) and angle pa per triangle; the corner offsets (ox, oy) always follow from pa (rigid blocks)
-//   bonds   bond[u*3+i] = v*3+j: side i of u is joined to side j of v (-1: free); hinge[u*3+i] marks a hinged side
-//           (1: it pins its first corner, 2: its second). Bonded blocks are flush by construction: binding places them
-//           (sim.js), and nothing deforms afterwards.
-//   parts   a body is the set of blocks joined by bonds (hinged ones included); it moves and turns as one rigid piece.
-//           A hinged flap turns relative to its partner only when the chemistry drives it (sim.js servo, via tryMove).
+//   bonds   bond[u*3+i] = v*3+j: side i of u is joined to side j of v (-1: free). Bonded blocks are flush by
+//           construction: binding places them (sim.js), and nothing deforms afterwards.
+//   parts   a body is the set of blocks joined by bonds; it moves and turns as one rigid piece.
 //   motion  every step each body, in random order, proposes a Brownian kick (translation and turn; a larger body gets a
 //           smaller kick) and moves along it in short sub-steps until the next sub-step would overlap another block:
 //           move or stop. Nothing overlaps, deforms, squeezes or passes through a wall. A body that does overlap (binding
@@ -59,7 +57,7 @@ class Physics{
   constructor(params={},n=params.n||0){
     this.p={...DEFAULTS,...params};this.n=n;this.t=0;this.rng=mulberry32(this.p.seed);this._spare=NaN;
     this.px=new Float64Array(n);this.py=new Float64Array(n);this.pa=new Float64Array(n);
-    this.ox=new Float64Array(3*n);this.oy=new Float64Array(3*n);this.bond=new Int32Array(3*n).fill(-1);this.hinge=new Int8Array(3*n);
+    this.ox=new Float64Array(3*n);this.oy=new Float64Array(3*n);this.bond=new Int32Array(3*n).fill(-1);
     this.pairs=[];this._mark=new Int32Array(n);this._stamp=0;
     for(let u=0;u<n;u++)this.resetShape(u);
   }
@@ -84,8 +82,7 @@ class Physics{
   unlink(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bond[q]=-1;this.bond[u*3+i]=-1;}
   partner(u,i){const q=this.bond[u*3+i];return q<0?-1:(q/3)|0;}
   bonded(u){return this.bond[u*3]>=0||this.bond[u*3+1]>=0||this.bond[u*3+2]>=0;}
-  isHingeBond(u,i){const q=this.bond[u*3+i];return q>=0&&(this.hinge[u*3+i]>0||this.hinge[q]>0);}
-  // bodies: components through bonds (hinged bonds included)
+  // bodies: components through bonds
   bodies(){const n=this.n,comp=new Int32Array(n).fill(-1),members=[];
     for(let u=0;u<n;u++){if(comp[u]>=0)continue;const id=members.length,list=[u];comp[u]=id;
       for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(comp[y]<0){comp[y]=id;list.push(y);}}}
