@@ -39,6 +39,13 @@ has sealed the pair, narrow again after the catch). On paper, in the kind's geom
   (a free face copy carries `z` and caps a plain `Z|`: seen in this run's first batch, the pitfall of run 0751 again);
   a cell's copying is linear (one held template) instead of exponential inside; leaked strands pile up as inert
   material (and can be caught by any waiting anchor, which is a transfer, not a loss).
+- **Measured (same run).** `imprint` with a held founder: three rival strands outside leave the cell 6-7 strands (2-3
+  without the option); a 7-cell pore leaks every copy and the founder keeps copying. `budpore 300` (open pair, both
+  anchors on high ends): the bud makes 10-15 full copies after the split in every world that split (5 of 8 seeds and 3
+  of 4 checked; 0-1 without the option). M2, open since run 1921, came from one condition on zip, not from closing the
+  doorway. Left for the kind: a held founder must finish its first copy alone (its backs must face open space, since
+  no back copy exists until it has made one); the kind's root anchor holds the founder at the pore's edge (run 1121:
+  it jams the doorway), and the transfer on the kind's own layout is untested.
 
 ## The kind's opening: one opening per body, and only silence widens one (build run 20261003-1650, 2026-10-03): analysis
 

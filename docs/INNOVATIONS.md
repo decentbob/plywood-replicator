@@ -10,6 +10,25 @@ not statistics.
 
 ## 2026-10-03 (autorun run 20261003-1720, explore)
 
+- **The bud copies its genome after the split (M2), with `heldCopy`** — works in 3 of 4 check worlds (5 of 8 seeds
+  1-8 with the parent's default anchor; every world that split, 9 of 9, got 10-15 copies). `budpore 300` (the open pair:
+  the parent P and its bud D share an opening to the outside; 300 blanks) with both anchors on high ends (`BUDAG=Z`:
+  D's catching anchor `Z@|`; `BUDPFE=z`: P's anchor `Z|` holds the founder's high end) and the option. Leaked copies
+  of the parent stay sterile outside, so the food that remains after the split goes to the strand the bud caught.
+  - Evidence (200000 steps; split at / blanks left / full copies on the bud's caught strand after the split): with
+    the option, seeds 1-4: 65000/3/12, 30000/203/11, never split, 45000/149/11; with D's anchor on cell 103:1
+    (`BUDA=103:1`, back sites 2.31/1.53 in the dry run, against 1.73/1.53 for the automatic 101:1): 70000/2/11,
+    30000/209/14, never split, 40000/145/13; seeds 5-8: 25000/205/12, never split, never split, 30000/215/15. P's
+    anchor at x = +1 (`BUDPX=b1`, new): seeds 1-4 45000/42/10, 20000/222/11, 35000/130/10, never split. Without the option,
+    same anchors, seeds 1-4: 55000/147/1, 20000/232/1, never split, 80000/14/0 (earlier runs: one full copy in 2 of 8).
+  - Failure mode, every one: the parent's founder never finishes its first copy (four docks, no fill: its backs face
+    the wall's wedge, and with free strands sterile no back copy exists anywhere until the held strand has made one),
+    so no copy reaches the bud. Not yet fixed: a dry run of P's anchor sides (as `BUDDRY` does for D's) is the next
+    step.
+  - Picture (seed 2: the pair, the split at 30000, then the bud copying on its caught strand; leaked copies outside):
+    ![the bud copies after the split](pictures/budpore_held.png)
+  - Commands: `BUDAG=Z BUDPFE=z TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 2 200000 runs 300`; check
+    `budpore-held` (3 of 4 needed: 5+ copies on the bud's caught strand).
 - **Only a held strand is copied (option `heldCopy`)** — works in isolation (core change through the gate: RULES, Core
   changes, run 1720; an option, off by default). A strand's high end starts the zip relay only while its spare edge is
   held (bonded, not to a `&` side), so a free strand is never copied: leaked or rival strands are sterile and cannot
