@@ -1,5 +1,13 @@
 # Next instance: start here
 
+**Current slice (autorun 20261003-0950, harden; branch `claude/autorun-20261003-0950`).** Goal: (1) run the whole
+check suite (groups into `runs/check-{a,b,c}.log`) and fix what fails; (2) speed (priority 5): profile `budpore`, make
+the hot path faster by exact changes (identical report lines on the same seeds) or, if neighbour order must change,
+re-check the copy-lineage checks. Done when: the suite result is recorded, and `budpore 300` runs measurably faster
+(target 1.3x) with its capability lines unchanged or each difference explained. Stop there; if no exact speedup is
+found, record what was measured.
+
+
 State on 2026-10-03 (after autorun run 20261003-0751, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `a993d78`).
