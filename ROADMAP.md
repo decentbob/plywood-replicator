@@ -62,6 +62,8 @@ founder (one anchor, roles by time); the doorway is the two pores facing; the ho
 (completion release after the catch); the seed site is plain glue, so a parent buds again. Nothing in the table above
 stays prepared but the first generation and an initial pool of parts (run 20261003-1221, analysis: a steady pool holds
 about r + 1 parts of each type per blank near the growing bud, r = openRange; IDEAS, "Closure: what a part pool costs").
+Open (direction check, run 20261003-1321): the 7-cell pore is the doorway and afterwards the feeding pore, so both
+cells leak strands after the split; the kind needs an opening that a binding event closes to strands (NEXT, priority 2).
 
 ## Backlog (top first)
 
@@ -70,21 +72,22 @@ kit parts and cast dockers as prepared food) is frozen: its checks keep passing,
 let the parent construct its offspring from one uniform food, and only that route lets the core shrink later (docs/NEXT.md,
 "Direction").
 
-0. **Organism on copies**, in order (docs/NEXT.md, Direction, priorities): (a) the bud copies its genome after the
-   split (`budpore`; run 2321: not the anchor's geometry but food: the parent's leaked copies take it, see IDEAS; the
-   sealed variant `budpore c` feeds the bud before the split; run 0320: no fixed doorway works, the bud's opening must
-   be narrowed by a binding event after its strand is in, and nothing may leak: hooded pore; run 0751: cap release shuts the
-   parent's half by its own catch after the bud's, 2 of 4; the bud's food after the split remains; the waiting anchor is no longer a food sink since run 20261003-1221: a copy
-   blank binds no anchor side); (b) closure by design: designed in run 20261003-1121 (`budKit`; the anchor must move off the doorway; the part
-   pool's cost estimated in run 20261003-1221: about r + 1 parts of each type per blank near the growing bud, IDEAS); (c) grow the bud ring
-   from copies on the parent's seed site (as `imprint`'s rings; fix the one-front 28/30 stall); (d) two generations;
-   then (e) a core review of removing casting, stamp, fuel and machine marks that only the frozen lineage uses
-   (`% ' $ ^ # = ! < >`, and since run 20261003-0050 also `* ~ +`: the copy lineage uses only `. @ & | ?`). Done so far: contact copying (run 0136), a sealed cell copies its genome from blanks
-   (`imprint m`), a cell fed through a pore (`imprint p`), anchors catch busy strands and `budpore` splits with food
-   left in 4 of 8 seeds (run 1551), 8 of 8 with a mid-wall low-end anchor (run 1921; the bud's own copying is still
-   starved, docs/NEXT.md).
+0. **Organism on copies**, in order (docs/NEXT.md, Direction of run 20261003-1321, with the reasoning): (a) the
+   closure kind's bud grown from a part pool, in isolation (`budKit`, pool at about (r + 1)/2 parts of each type per
+   blank; measure completion and the refill: copies made per type used); (b) the kind's opening: its 7-cell pore is
+   both doorway and feeding pore, so after the split both cells leak strands (run 1121) and starve; settle by design
+   how the kind feeds without leaking and still passes a strand to its next bud (two openings with a hooded feeding
+   pore, a doorway narrowed by the caught strand, or fission), then move the anchor and rerun the transfer on the
+   kind's layout; this replaces M2 on `budpore`'s layout, which stopped after four build runs (1921, 2321, 0320, 0751;
+   lessons in IDEAS); (c) two generations; (d) prune `budpore`'s diagnostic options (24 `BUD*` variables); (e) a
+   core review weighs removing the casting lineage now (its checks are about half the check time; marks
+   `% ' $ ^ # = ! < > * ~ +`; the copy lineage uses only `. @ & | ?`). Done so far: contact copying (run 0136), a
+   sealed cell copies its genome from blanks (`imprint m`), a cell fed through a pore (`imprint p`), a hooded pore
+   (`imprint ph`), `budpore` splits with food left (8 of 8, run 1921), completion release (run 0050), closure designed
+   (`budKit`, run 1121), the part pool law (run 1221).
 0b. **Speed** (harden runs): `budpore` worlds take about 3 minutes, the check suite 28 (run 0950: 1.34x by exact
    changes); lone blocks (`_single`), ring bodies (`_overlap`) and pairs share the time, no single hot spot left.
+   Since run 20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
 
 Frozen (casting lineage; kept for reference and checks):
 1. **Heritable factory cycle.** Chains grow the pocket that casts the dockers their copying needs (demo `cycle`). Open

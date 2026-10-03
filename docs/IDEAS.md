@@ -8,6 +8,18 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## One opening cannot be both doorway and feeding pore (direction check, review-intent run 20261003-1321, 2026-10-03)
+
+The closure kind (below) feeds through the same 7-cell pore its parent's strand crosses to reach it. A doorway must
+pass a strand (3-cell halves pass none, run 1121); a feeding pore must pass none (free strands outside starve every
+cell, run 0320); and fixed openings pass strands both ways. So an organism on copies needs, at each opening, a binding
+event that closes it to strands after the transfer and, if the same opening serves the next bud, one that reopens it.
+Candidates for the design slice (NEXT, priority 2): a hooded feeding pore beside a doorway that the caught strand plugs
+(two gaps cut a one-row ring into two bodies; a hood held on both sides of its pore would join them, untested: the
+`imprint ph` hood hangs on a strut at one end); one opening plugged by
+the caught strand and released by the next bud's growth; fission, which needs no transfer but needs a membrane that
+grows back (insertion growth, below). Not yet weighed in detail.
+
 ## Closure by design (build run 20261003-1121, 2026-10-03): designed, not demonstrated
 
 The question (NEXT, priority 2): one organism kind whose bud is the same kind, every part grown from copies or taken
