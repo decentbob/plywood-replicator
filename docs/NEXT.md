@@ -58,12 +58,12 @@ bonds from the latch never caught. Two core-change candidates below.
 **Exact next step (build, priority 1 below): M2 on the sealed pair, keep P's copies in after the split.** `budpore
 100c` now delivers 1-4 genome strands into the bud before it leaves; what fails is the time after: each half of the
 3-unit doorway is a pore, P's 4-9 strands leave through P's half and copy outside on the food the bud needs (out 24-87
-genome copies, the bud 0-10). Options, cheapest first: (1) P catches its own copies: a second anchor `W|` in P near the
-doorway (no trigger) holding one more strand, and see how many leave; (2) more strands into the bud before the split,
-so the bud's interior out-competes: measure releases in D against strands in D at the split (seeds 1-8 now give
-1-4); (3) a doorway whose P half is narrower than its D half is impossible (the passage is their overlap), so if
-(1)-(2) fail, the parent needs a way to close its half after the split: write it under priority 2 (closure by
-design), not as a door machine (frozen lineage). Measure with `node tri/check.js budpore-c` plus `DBGC=1` (copies by
+genome copies, the bud 0-10). Tried in run 2321: a second anchor `W|` in P beside the doorway holds nothing back and
+costs splits (2-5 of 8). Options left: (1) more strands into the bud before the split, so its interior out-competes:
+measure releases in D against strands in D at the split (seeds 1-8 now give 1-4); (2) a doorway whose P half is
+narrower than its D half is impossible (the passage is their overlap), so the parent needs a way to close its half
+after the split, or the bud must leave with food: write it under priority 2 (closure by design), not as a door
+machine (frozen lineage). Measure with `node tri/check.js budpore-c` plus `DBGC=1` (copies by
 place and type after the split); target: one full copy in the bud after the split (4 releases on its strands) in 6 of
 8 worlds.
 

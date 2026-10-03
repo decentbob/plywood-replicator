@@ -26,6 +26,8 @@ not statistics.
     blanks outside: out 66-253, the bud 6-27, still no full copy on the bud's anchored strand.
   - Dropped: the founder hanging from the doorway's right edge stands up into D, but its backs face P's wall: no back
     copies at all (fills 0, 80 face copies) in 4 of 4.
+    A second plain anchor `W|` in P beside the doorway (to hold one of P's copies back): splits fall to 2 of 8 (right of
+    the doorway, x = 3.5) or 5 of 8 (left, x = -2.5), and as much food leaks out (out 61-86 genome copies).
   - Picture (seed 6 at the split, t=20000: the bud, upper right, leaves with 4 strands, several with partial copies on;
     P keeps the founder and many unused face copies): ![sealed bud pair](pictures/budpore_sealed.png)
 - **M2 (`budpore`: the bud copies its genome after the split): not yet; what limits it is food, not the anchor's
