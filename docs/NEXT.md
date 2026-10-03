@@ -1,5 +1,12 @@
 # Next instance: start here
 
+**Current slice (autorun run 20261003-1921, build; in progress).** Goal: a held founder's first copy reliable on the
+open pair (`budpore-held` 4 of 4), by a dry-run of P's anchor sides (`BUDDRYP`, new; `BUDPA=cell:side` picks one).
+Done when: a side gives the bud 5+ copies after the split in 4 of 4 check worlds (and 6+ of 8 seeds). Then, if time is
+left: the kind's own layout (`budKit`, root anchor `Z@|`, heldCopy). Stop: if no side reaches 4 of 4, record the
+failure modes per side. Batch: `runs/b1921/q.sh OUT "cell:side ..." "seeds"` (in `runs/`, regenerate from git history
+of this note if lost: it runs budpore 300 with BUDPA, BUDAG=Z, BUDPFE=z, heldCopy, 4 at a time).
+
 State on 2026-10-03 (after autorun run 20261003-1720, explore). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `e5c6085` for run 1650's, `96c5221` for run 1520's).

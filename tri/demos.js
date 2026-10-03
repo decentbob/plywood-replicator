@@ -416,6 +416,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // (default: the leftmost)
       let fe=process.env.BUDPFE||'w';if(process.env.BUDPF){const x0=+process.env.BUDPF;pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]<(RP-1)*H||m[1]>RP*H-0.1)continue;const d=Math.abs(m[0]-x0)+Math.abs(m[1]-(RP-0.5)*H);if(!pa||d<pa.d)pa={u,i,d};}}
         fe=process.env.BUDPFE||'z';console.log(`P anchor ${fe.toUpperCase()}| (founder's ${fe==='z'?'high':'low'} end) on P cell ${U.indexOf(pa.u)} side ${pa.i} at`,mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));}
+      // BUDPA=cell:side: P's anchor on that P cell's side instead (from BUDDRYP)
+      if(process.env.BUDPA){const [k,i]=process.env.BUDPA.split(':').map(Number);pa={u:U[k],i,d:0};if(s.bond[pa.u*3+i]>=0)throw Error('budpore: BUDPA side is bonded');}
       s.glue[pa.u*3+pa.i]=gc(fe.toUpperCase());s.anc[pa.u*3+pa.i]=1;
       for(const k of BA?more:[best]){s.glue[k.A*3+k.f]=gc(process.env.BUDAG||'W');s.anc[k.A*3+k.f]=1;s.att[k.A*3+k.f]=1;}s.p.openRange=1;
       for(const G of founders)seedCopyGenome(s,G);for(let k=0;k<40;k++)s.derive();
@@ -431,6 +433,17 @@ function demo(name,seed=1,steps,dir='runs',extra){
           const km=mid(tris[U.indexOf(k.A)].v,k.f);console.log(`cell ${U.indexOf(k.A)}:${k.f} at ${km[0].toFixed(2)},${(km[1]-dyL).toFixed(2)} (D frame) bonds from the doorway cell ${k.d} corner dist ${k.sc.toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk}] faces [${fc}]${k===best?' (chosen)':''}`);
           // BUDDRYPIC=cell:side,...: a picture of the strand placed there
           if((process.env.BUDDRYPIC||'').split(',').includes(`${U.indexOf(k.A)}:${k.f}`))snap(s,`dry${U.indexOf(k.A)}_${k.f}`,`dry-run: a strand caught by its low end on D cell ${U.indexOf(k.A)} side ${k.f}`,{units:[...F,k.A],radius:6},false);}
+        s.moveDepth=md;process.exit(0);}
+      // BUDDRYP: the same for the founder on every inner side of P, held by the end P's anchor takes (BUDPFE); then exit
+      if(process.env.BUDDRYP){const {triDepth}=require('./physics'),A6=new Float64Array(6),B6=new Float64Array(6),b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(fe);}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;
+        const site=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),q=P((i+1)%3),o=P((i+2)%3);return [(2*a[0]+2*q[0]-o[0])/3,(2*a[1]+2*q[1]-o[1])/3];};
+        const near=p=>Math.min(...U.map(v=>Math.hypot(s._dx(s.px[v]-p[0]),s._dy(s.py[v]-p[1]))));
+        for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||S.hexr(m)>RP-0.5)continue;if(!s._snapBody(b,f,u,i))continue;let ov=0;
+          for(const w of F)for(const x of U){const dx=s._dx(s.px[x]-s.px[w]),dy=s._dy(s.py[x]-s.py[w]);if(dx*dx+dy*dy>1.4)continue;
+            for(let q=0;q<3;q++){A6[2*q]=s.ox[w*3+q];A6[2*q+1]=s.oy[w*3+q];B6[2*q]=dx+s.ox[x*3+q];B6[2*q+1]=dy+s.oy[x*3+q];}if(triDepth(A6,B6)>1e-6)ov++;}
+          const bk=[],fc=[];for(const w of F){const r=s.roles(w);if(r.free<0)continue;(r.role===2?bk:fc).push(near(site(w,r.free)));}
+          let ex=0,ey=0;for(const w of F){ex+=s._dx(s.px[w]-c);ey+=s._dy(s.py[w]-cy);}const inn=S.hexr([ex/F.length,ey/F.length])<RP-1,sb=[...bk].sort((x,y)=>x-y);
+          console.log(`P cell ${U.indexOf(u)}:${i} at ${m[0].toFixed(2)},${m[1].toFixed(2)} overlaps ${ov} strand ${inn?'inside':'OUT'} backs [${bk.map(x=>x.toFixed(2))}] faces [${fc.map(x=>x.toFixed(2))}] 2nd-worst back ${sb[1]!==undefined?sb[1].toFixed(2):'-'}${u===pa.u&&i===pa.i?' (chosen)':''}`);}}
         s.moveDepth=md;process.exit(0);}
       // the founder starts held by P's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const r=s.roles(u);return r.inert>=0&&s.glue[u*3+r.inert]===gc(fe);}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,pa.u,pa.i);s.moveDepth=md;
