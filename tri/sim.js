@@ -27,7 +27,7 @@ const gcode=c=>{if(c==='-')return 0;let i=LOW.indexOf(c);if(i>=0)return 2*i+1;i=
 const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
 // side marks: < > hinge (pinned corner first/second) . close-only * trigger ~ latch $ fuel; release marks on a hinge side:
-// ! drop, ^ hand-off, # pulse (on a trigger side, # lets the key go after it has been read)
+// ! drop, ^ hand-off, # pulse door
 const MARKS='<>.!^#*~$+=%@&|?';
 // carried marks (stamp): marks written after an apostrophe (b.'@) do nothing on this side; a cast product takes them
 // with the glue (a caster's instruction side prints glue and marks, so a pocket can cast parts that carry marks)
@@ -43,7 +43,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+side
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
-  zip:true,pLoose:0,latGlue:false,light:null};
+  pLoose:0,latGlue:false,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -194,7 +194,7 @@ class TriSim extends Physics{
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
-        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&(!p.zip||this.zip[u])){const g=gl(u,r.free);
+        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&this.zip[u]){const g=gl(u,r.free);
           if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
             this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
@@ -320,8 +320,6 @@ class TriSim extends Physics{
       // flap stalls: rigid parts do not squeeze)
       const c=this.hinge[u*3+i]===1?i:(i+1)%3,Px=this.px[u]+this.ox[u*3+c],Py=this.py[u]+this.oy[u*3+c];
       if(this.tryMove(body,0,0,d,Px,Py)<1)this.count('stall');}
-    // pulse triggers let the key go once it has been read
-    for(let u=0;u<n;u++)if(this.tb[u])for(let e=0;e<3;e++)if(this.trg[u*3+e]&&this.rel[u*3+e]===3&&this.bond[u*3+e]>=0){this.cut(u,e);this.count('keyRelease');}
   }
   step(){this.servo();this.t++;this.physics();this.derive();this.formBonds();this.chemistry();}
   run(steps){for(let k=0;k<steps;k++)this.step();}
