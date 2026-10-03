@@ -8,7 +8,7 @@
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
 const count=(L,re)=>(L.match(re)||[]).length;
-// each check: id, capability, demo name, seeds, steps, extra, need (seeds that must pass), secs (rough time per world,
+// each check: id, capability, demo name, seeds, steps, extra, env (variables for the demo), need (seeds that must pass), secs (rough time per world,
 // for scheduling), pass(last report line, all output) -> [ok, short evidence]; partial: reported, never fails
 const CHECKS=[
   {id:'copy',cap:'Genome: typed chain copying (zip)',demo:'copy',seeds:[1,2,3,4],need:3,steps:20000,secs:8,
@@ -87,6 +87,8 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left, strands in D at the split (\d+)/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m,(m?`split at ${m[1]}, ${m[3]} strands in D`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
   {id:'budpool',cap:'The closure kind\'s bud grows from a pool of its 47 part types (8 each, 40 of the last; 8 blanks), splits on a stand-in catch',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) refilled=\S+ copies=(\d+) .*stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`${m[1]}/47 cells, split ${m[3]}, ${m[4]} copies, ${m[5]} stray`:'no result'];}},
+  {id:'budpool-e',cap:'  the same with no part of the last type: its pore side copied by the pool (E source inside the pair; 16 blanks)',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,env:{BPES:'1',BPE:'0',BPB:'16'},
+    pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) .*stray=(\d+) .*Esource=(\d+) lastFromSource=(\w+)/);return [!!m&&m[3]!=='not'&&+m[4]===0&&m[6]==='true',m?`${m[1]}/47 cells, split ${m[3]}, ${m[5]} copies of E's pore side, ${m[4]} stray`:'no result'];}},
   {id:'split-g',cap:'Segregation: the bud anchors a genome copy, splits',demo:'split',seeds:[1],steps:60000,extra:'g',secs:47,
     pass:L=>{const ok=/anchored in D/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${/anchored in D/.test(L)?'copy anchored in D':'no copy in D'}, ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
   {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:450000,extra:'o',secs:420,
@@ -95,7 +97,7 @@ const CHECKS=[
 ];
 
 function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'demos.js'),c.demo,String(seed),String(c.steps),path.join('runs','check')];if(c.extra)args.push(c.extra);
-  const p=spawn(process.execPath,args,{env:{...process.env,TRI_NOPIC:'1'}});let out='',err='';const t0=Date.now();
+  const p=spawn(process.execPath,args,{env:{...process.env,TRI_NOPIC:'1',...(c.env||{})}});let out='',err='';const t0=Date.now();
   p.stdout.on('data',d=>out+=d);p.stderr.on('data',d=>err+=d);
   p.on('close',code=>{const lines=out.split('\n').filter(l=>l.startsWith('t='));const L=lines[lines.length-1]||'';
     let ok=false,ev='';if(code!==0)ev='crashed: '+(err.trim().split('\n').find(l=>/Error/.test(l))||'exit '+code);else[ok,ev]=c.pass(L,out);

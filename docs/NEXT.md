@@ -1,25 +1,33 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-1520, harden). Read AGENTS.md first (rules of work), then this
+State on 2026-10-03 (after autorun run 20261003-1650, build). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `8f6fddb` for run 1420's, `e3a3d06` for run 1351's).
+handoffs: NEXT.md in git, e.g. at `96c5221` for run 1520's, `8f6fddb` for run 1420's).
 
-**Handoff status (autorun run 20261003-1520, harden).** Priority 6 done; merged into `main` (branch
-`claude/autorun-20261003-1520`); no simulations running; 38 tests pass. Full check suite on main at the start: 38 of
-38 pass (1926 s). Results (INNOVATIONS, run 1520; lesson in IDEAS, pitfall "Where a caught strand's backs face"):
-(1) `imprint-hood`'s failures were copying stalls, not leaks: a founder caught before any of its backs was copied
-leans onto the wall with its backs underneath and gets no fills (seeds 4, 14), or a strand stands in the pore (11, 13);
-no strand passed the hood in 14 worlds. The anchor moved one side (x = 0 to x = -1, `imprint p` layouts): `150ph` 14 of
-14 (was 10 of 14), check 4 of 4; `imprint-pore` 4 of 4, controls unchanged. (2) `budpore-c` seeds 2 and 3 are blocked
-(no split at 300000 steps): a doorway jam of nine strands in P, and strands in D the anchor never catches; layout
-frozen (run 1321), no fix. (3) `imprint` seeds 4 and 6 stop at 28 of 30 with plenty of every part (seed 4: the first
-ring lies across the second's last sites; seed 6 not diagnosed). Lesson for the kind: where a cell's anchor sits on
-its wall decides whether the caught strand's backs can be copied; dry-run every anchor before placing it.
+**Handoff status (autorun run 20261003-1650, build).** Priority 2, two parts done; merged into `main` (branch
+`claude/autorun-20261003-1650`); no simulations running; 38 tests pass; checks `budpool` (identical splits to run 1420) and the new `budpool-e` pass
+(the full suite was not rerun: no rule, physics or default changed; `budKit`'s default output is unchanged).
+(1) **Built: the kind's last cell from an E source inside** (INNOVATIONS, run 1650): E's pore side plain
+(`budKit(..., eSource)`), so blanks copy E in the pore, inside the pair once the bud has grown round. `budpool` with no
+E part in the pool and 16 blanks: 4 of 4 (check `budpool-e`), every last cell a copy of the parent's E; with 8 E parts
+4 of 4 (was 2 of 4); 8 blanks and no E: 5 of 7 (failures: nothing inside after sealing). The kind's pool needs no E
+parts. Cost not measured with a fed parent (the plain side is copied at rest too). `eSource` is a kit option, not yet
+the kit's default: make it the default when the kind is next revised (only `budpool` and the `closure` demo/test use
+`budKit`). (2) **Analysis: the kind's opening** (IDEAS, "The kind's opening: one opening per body, and only silence
+widens one"): a one-body cell has at most one opening (so option (a)'s hood joining both sides of its pore is no help,
+and a doorway beside a feeding pore exists only while the bud joins the wall pieces); completion release, the only
+cut, fires on silence and a resting cell is silent, so an opening narrowed at rest can widen again only through a
+resting emitter; near the junction the bud's root anchor emits from its binding to its catch, so the parent cannot be
+released there before the split. With the existing core the parent's opening needs replaceable narrowing parts and
+three parity orderings (outline only); a core candidate (a release by signal, the opposite polarity of `&`) is named,
+not proposed.
 
-**Exact next step.** The next `build` or `explore` run takes priority 2, now
-with two more requirements from run 1420: the kind's last site must be reachable (from outside, or an E source inside)
-and the pool's per-type drift should be weighed (fewer types, or a template copied when its own type is scarce). The
-next `core-review` takes priority 5.
+**Exact next step.** The next run in the rotation is `explore`: take priority 2's opening. Weigh three designs on paper
+first (IDEAS, run 1650's section): (i) the existing-core outline (resting emitter at the parent's root silenced by the
+bud's last cell; parent re-narrowed by a catch after the bud's; narrowing parts regrown each generation), (ii) the core
+candidate "release by signal" through the RULES gate, (iii) fission with insertion growth. Pick the one with the fewest
+races, then build its first untested step in isolation. The pool's per-type drift (run 1420) stays open. The next
+`core-review` takes priority 5.
 
 **Core-change candidates.** (c) withdrawn (run 1221); its narrower form is the rule now. (d) *Code vs RULES:*
 the anchor catch does not test `spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no
@@ -87,9 +95,10 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    (`budKit` and its test), with each step mapped to a demo and the rules it reads (locality); a core change only
    through the RULES gate. Then move the anchor where the chosen opening needs it, and rerun the transfer batch on the
    kind's own layout (target 3 of 4). This replaces the old M2 priority. Two more requirements from run 1420 (IDEAS):
-   the bud's last site opens only into the sealed pair (an E part must be inside, or the kind changes so the last
-   site is reachable: e.g. two fronts from two seed bonds meeting mid-wall, which needs a core change), and the
-   pool's per-type counts drift with nothing to restore them (weigh fewer types, e.g. the periodic ring).
+   the bud's last site opens only into the sealed pair (solved in isolation in run 1650: E's pore side plain, an E
+   source inside, check `budpool-e`), and the pool's per-type counts drift with nothing to restore them (weigh fewer
+   types, e.g. the periodic ring). Run 1650's analysis (IDEAS) narrows the opening: one opening per body, only
+   silence widens; (a)'s hood joining both sides of its pore is no help.
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
    The whole cycle; then priority 5's removal is no longer premature by anyone's measure.
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
@@ -131,6 +140,7 @@ POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front am
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;
                                                    # BPE: E parts, 40; BPB: blanks, 8; BPS: world size, 30; BPR: openRange, 1; BPHOLD=0: no harness)
+BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the same with E's pore side plain and no E part: the last cell from the source
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
 BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPX=b BUDLX=2 BUDA=84:2 BUDNI=20 BUDPS=2 node tri/demos.js budpore 1 100000 runs 100c
                                                    # the kind's 7-cell doorway, founder away (4 of 4 split); the kind's own layout:
