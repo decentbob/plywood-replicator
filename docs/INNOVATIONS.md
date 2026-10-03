@@ -8,6 +8,26 @@ not statistics.
 
 ## 2026-10-03 (autorun run 20261002-2321, build)
 
+- **Sealed bud pair (`budpore` option `c`): the parent feeds from food inside and fills its bud with genome copies;
+  splits in 7 of 8 worlds** — works as a split (check `budpore-c`); the bud's own copying after the split is still
+  1 of 8 (M2 not yet). No new rule; prepared layout (labelled).
+  - Design: the doorway joins P and D only (contact cells removed for -0.75 < x < 2.25; the walls touch, unbonded, on
+    both sides of it, held rigid by the one latch bond), so nothing gets in or out while joined. 80 copy blanks start
+    inside P, 100 outside. P's anchor `W|` is the side of P's wall facing into the doorway at its left edge: the founder
+    hangs under the doorway, and the copies made on it are released at the way into D, where D's mid-wall anchor
+    catches one and the latch lets go. Each half of the doorway is then a pore.
+  - Evidence (`node tri/check.js budpore-c`: `budpore k 100000 runs 100c`, seeds 1-8): split at 37500 / - / 20000 /
+    30000 / 12500 / 20000 / 5000 / 40000, strands in the bud at the split 1 / - / 3 / 3 / 1 / 4 / 1 / 3. Before the
+    split the food goes to the genome: 150-172 of 180 copies are genome triangles in 6 of 8 worlds (open layout: 107-193
+    of 300), and about half are back copies, so fills no longer starve. Controls: the same sealed layout with P's anchor
+    in the middle of P's far wall: 0 of 4 split (seeds 5-8; strands seldom pass the doorway); 2-unit doorway: 0 of 4.
+  - Still missing (M2): after the split both halves of the doorway are 3-unit pores; P's 4-9 strands leave P and take
+    the outside food (out 24-87 genome copies, the bud 0-10); one full copy in the bud in 1 of 8 (seed 7). With 300
+    blanks outside: out 66-253, the bud 6-27, still no full copy on the bud's anchored strand.
+  - Dropped: the founder hanging from the doorway's right edge stands up into D, but its backs face P's wall: no back
+    copies at all (fills 0, 80 face copies) in 4 of 4.
+  - Picture (seed 6 at the split, t=20000: the bud, upper right, leaves with 4 strands, several with partial copies on;
+    P keeps the founder and many unused face copies): ![sealed bud pair](pictures/budpore_sealed.png)
 - **M2 (`budpore`: the bud copies its genome after the split): not yet; what limits it is food, not the anchor's
   geometry** (measured). No rule change; the default demo output is unchanged.
   - Dry-run of the catch (`BUDDRY=1 node tri/demos.js budpore 1 10 runs 300`): a strand caught by its low end `w` is
@@ -27,10 +47,9 @@ not statistics.
     everywhere. Docked dockers expose their own free sides, so face copies breed at the strand while backs do not.
   - Dropped (measured): `latGlue` off (default anchor): fills from any blank, but wall copies 166-191 and no full copy
     in the bud; 20 blanks placed inside D at t=0: they go to copies of the anchor cell before the catch (wall copies
-    135-159), one full copy in 1 of 4; a closed doorway joining P and D only (80 blanks in P, a P with no way out):
-    P makes 3-5 strands from 80 blanks (70% of copies on the genome, nothing leaks out), but strands seldom pass a
-    2-3.5 unit internal doorway and reach D's anchor: 0 of 4 split (2 units), 1 of 4 (3 units, at 60000 or, with the
-    anchor beside the latch, at 190000). Code for these at commit `1a77906` (`budpore` extra `d`, `c`, `BUDDC`).
+    135-159), one full copy in 1 of 4; a closed doorway joining P and D only with P's anchor where it was (80 blanks in
+    P): P makes 3-5 strands (70% of copies on the genome, nothing leaks out), but strands seldom pass the internal
+    doorway: 0 of 4 split (2 units), 1 of 4 (3 units); fixed by moving the founder under the doorway (entry above). Code for `d` at commit `1a77906`; the sealed layout became option `c` (above).
   - Picture (seed 3, anchor 106:1, t=60000, the bud 37500 steps after its split: its strand beside the pore with
     dockers on, waiting for fills; almost no blanks inside): ![bud starved](pictures/budpore_starved.png)
 

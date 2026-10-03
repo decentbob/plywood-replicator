@@ -250,11 +250,15 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // and a latch lets go while its triangle hears a trigger signal: D lets go of P. No wall hears an open signal
     // (openRange 1: only A's own '@'), so every other free side is spent and never copied; A's copies are parts ('@')
     // and bind nothing. Copy blanks start outside ('i': also 60 inside P). extra: blanks outside (default 300).
-    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    // Option 'c' (sealed): the doorway ends at x = 2.25 (BUDDC), so it joins P and D only; 80 blanks start inside P and
+    // the founder hangs from the doorway's left edge; outside blanks get in only after the split (each half a pore).
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:X.includes('c')?80:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
-      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&cn(v)[0]>-DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&cn(v)[0]>-DW));
+      // option 'c' (closed): the doorway ends at x = DC, so it joins P and D only (sealed while joined; each half becomes a pore after the split)
+      const DC=X.includes('c')?+(process.env.BUDDC||2.25):1e9,gap=v=>cn(v)[0]>-DW&&cn(v)[0]<DC;
+      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gap(v)));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gap(v)));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
@@ -279,7 +283,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // f/F, copies of the anchor and the freed latch sides glued onto each other and onto strands and grew clusters)
       for(const u of U)for(let i=0;i<3;i++)s.glue[u*3+i]=0;
       // P's anchor W| (middle of its bottom inner wall)
-      let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||m[1]>0||S.hexr(m)>RP-0.5)continue;if(!pa||Math.abs(m[0])<pa.d)pa={u,i,d:Math.abs(m[0])};}}
+      // BUDPX=x: P's anchor on P's top inner wall (beside the doorway) nearest x instead; with 'c' on the doorway's
+      // left edge (-1): the founder hangs under the doorway, so its copies are released at the way into D
+      const PX=process.env.BUDPX||(X.includes('c')?-1:'');let pa=null;for(const u of Pu){const v=tris[U.indexOf(u)].v;for(let i=0;i<3;i++){const m=mid(v,i);if(s.bond[u*3+i]>=0||(PX?m[1]<0:m[1]>0)||S.hexr(m)>RP-0.5)continue;const d=PX?Math.abs(m[0]-PX):Math.abs(m[0]);if(!pa||d<pa.d)pa={u,i,d};}}
+      if(PX)console.log('P anchor at',S.hexr(mid(tris[U.indexOf(pa.u)].v,pa.i)).toFixed(2),mid(tris[U.indexOf(pa.u)].v,pa.i).map(x=>x.toFixed(2)).join(','));
       s.glue[pa.u*3+pa.i]=gc('W');s.anc[pa.u*3+pa.i]=1;
       s.glue[da.u*3+da.i]=gc('W');s.anc[da.u*3+da.i]=1;s.att[da.u*3+da.i]=1;s.trg[da.u*3+da.i]=1;s.p.openRange=1;
       seedCopyGenome(s,F);for(let k=0;k<40;k++)s.derive();

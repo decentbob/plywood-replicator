@@ -80,6 +80,8 @@ const CHECKS=[
       return [w<5&&op>=c&&an>=c&&sp>=an&&shut&&held,`closed ${c}, doors ${w}/open ${op}, anchored ${an}, split ${sp}, ${shut?'shut':'open'}${held?'':', copy lost'}`];}},
   {id:'budpore',cap:'Bud pair on copies: the bud catches a copy mid-wall, splits with food left (50+ blanks)',demo:'budpore',seeds:[1,2,3,4],need:3,steps:200000,extra:'300',secs:300,
     pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m&&+m[2]>=50,(m?`split at ${m[1]}, ${m[2]} blanks left`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
+  {id:'budpore-c',cap:'Sealed bud pair: the parent feeds from food inside, its founder under the doorway; the bud catches a copy and splits',demo:'budpore',seeds:[1,2,3,4,5,6,7,8],need:6,steps:100000,extra:'100c',secs:150,
+    pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left, strands in D at the split (\d+)/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m,(m?`split at ${m[1]}, ${m[3]} strands in D`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
   {id:'split-g',cap:'Segregation: the bud anchors a genome copy, splits',demo:'split',seeds:[1],steps:60000,extra:'g',secs:47,
     pass:L=>{const ok=/anchored in D/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${/anchored in D/.test(L)?'copy anchored in D':'no copy in D'}, ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
   {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:450000,extra:'o',secs:420,

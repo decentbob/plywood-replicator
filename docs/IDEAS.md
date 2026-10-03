@@ -15,10 +15,9 @@ strands copy fastest: their backs are open) and take 7 to 100 times more food af
 cannot "live on its own" beside that population, whatever its anchor. Two consequences: the parent must keep its
 copies (a pore one cell wide lets blanks in and keeps strands in, `imprint p`), and the bud is best fed **before** it
 leaves, while parent and bud share one sealed space (with 80 blanks inside a sealed P+D, 70% of the food went to the
-genome). The open problem in that layout is getting a strand to the bud's anchor through an internal doorway: so far
-the anchor waits for a strand to arrive by chance. Placing the bud's catch where the parent's copies are released, or
-letting the bud's own strand arrive with the bud (the parent's founder end caught by the bud while the doorway is
-open), are the next designs.
+genome). Getting strands to the bud's anchor through an internal doorway took one more step: the founder hangs
+under the doorway, so its copies are released at the way into the bud (`budpore c`: splits 7 of 8, the bud leaves with
+1-4 strands). What remains is the time after the split, when both halves of the doorway are wide pores.
 
 ## Spent walls cannot be templates (design lesson, review-intent run 20261002-1751, 2026-10-02)
 

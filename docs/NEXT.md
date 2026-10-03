@@ -4,20 +4,20 @@ State on 2026-10-03 (after autorun run 20261002-2321, build). Read AGENTS.md fir
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
 **Handoff status (autorun run 20261002-2321, build).** Everything committed on branch `claude/autorun-20261002-2321`
-and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `budpore`'s default output is byte-identical
-to main (diagnostic hooks only, no rule, physics or shared-structure change, so `tri/check.js` was not rerun; last
-full run 35 of 35 in run 2150). **Done (slice: M2 on `budpore`, anchor chosen by where the caught strand's backs face;
-target not met, ended at the stop condition):**
-- *Dry-run tool:* `BUDDRY=1 node tri/demos.js budpore 1 10 runs 300` places a low-end catch on every inner side of D
-  as the anchor rule does and prints overlap and back/face site clearance; `BUDA=cell:side` runs with that anchor.
-  Result: every flat-wall side has its first back site against a wall cell (0.58); only 106:1, beside the latch cell
-  (wedge open to the doorway), has all backs clear (1.00 / 2.00 / 2.65).
-- *Measured:* with 106:1 the bud still makes no copy (seeds 1-4: releases 0/0/0/1 with 300 blanks, 1/2/0/1 with 600,
-  although 300-410 blanks were left at the split). After the split the bud gets 2-17 genome copies, P's leaked copies
-  outside 118-256. Fills (back copies) limit copying everywhere (130 face copies vs 60 back copies, all 60 used as
-  fills). Dropped: `latGlue` off, 20 blanks inside D, and a sealed P+D layout (closed doorway, 80 blanks in P: food
-  goes 70% to the genome, but strands rarely reach D's anchor: 0-1 of 4 split). INNOVATIONS (run 2321), IDEAS
-  ("A parent whose copies leak out feeds its competitors"); code of the dropped options at commit `1a77906`.
+and merged into `main`. No simulations running; `node tri/test.js` 34 pass; new check `budpore-c` passes 7 of 8; the
+default `budpore` output is byte-identical to main (demo options and diagnostics only, no rule, physics or
+shared-structure change, so the full `tri/check.js` was not rerun; last full run 35 of 35 in run 2150). **Done (slice:
+M2 on `budpore`; M2 not met; a sealed variant that splits reliably came out of it):**
+- *Anchor geometry is not the limit.* `BUDDRY=1 node tri/demos.js budpore 1 10 runs 300` dry-runs a low-end catch on
+  every inner side of D (back/face site clearance); only side 106:1 beside the latch has all backs clear, and with it
+  (`BUDA=106:1`) the bud still makes no copy (300 or 600 blanks). After the split the bud gets 2-17 genome copies,
+  P's leaked copies outside 118-256 (IDEAS: "A parent whose copies leak out feeds its competitors").
+- *Sealed bud pair, `budpore ... 100c` (INNOVATIONS run 2321, picture `budpore_sealed`):* the doorway joins P and D
+  only, 80 blanks inside P, P's founder hangs under the doorway (`BUDPX=-1`, the default with `c`). Splits 7 of 8 at
+  5000-40000 with 1-4 strands in the bud; before the split the food goes to the genome. Bud copies after the split:
+  1 of 8 (both doorway halves are 3-unit pores; P's strands leave and take the outside food).
+- Dropped (measured, INNOVATIONS): `latGlue` off; 20 blanks inside D (code at `1a77906`); the founder standing up into
+  D from the doorway's right edge (backs against P's wall: no fills).
 
 **Handoff status (autorun run 20261002-2150, harden).** Everything committed on branch `claude/autorun-20261002-2150`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (`grown`
@@ -55,17 +55,17 @@ the mirrored layout (opening on the left: 2 of 4 split, no copies), and two anch
 locking the latch with an unbonded latch side `~`, one triggering; "replicate before dividing"): the trigger anchor 2
 bonds from the latch never caught. Two core-change candidates below.
 
-**Exact next step (build, priority 1 below): M2 in a sealed parent, the bud's catch where P releases its copies.**
-Run 2321 showed that the anchor's geometry is not what stops the bud: food is. The parent's copies leave through the
-opening and out-compete the bud (IDEAS, run 2321). So keep the food and the copies inside P+D until the split: take the
-sealed layout from commit `1a77906` (`budpore` extra `300c`, `BUDDC=2.25`: P and D joined by a 3-unit internal
-doorway, 80 blanks inside P, none get in from outside) and solve its one failure, that strands seldom reach D's
-anchor. Move P's anchor (it holds the founder, so copies are released there) to P's top wall next to the doorway, so
-released copies drift straight into D, and put D's anchor on the doorway's far side (dry-run it with `BUDDRY`).
-Measure on seeds 1-4: split (target 3 of 4 within 200000 steps) and releases inside D before and after the split.
-Before the split the bud's strand copies from the food inside the shared space ("replicate before dividing"), and
-after it D's half of the doorway is its pore. If strands still do not arrive, write the case under priority 2 (closure
-by design): where the bud's genome comes from decides the layout.
+**Exact next step (build, priority 1 below): M2 on the sealed pair, keep P's copies in after the split.** `budpore
+100c` now delivers 1-4 genome strands into the bud before it leaves; what fails is the time after: each half of the
+3-unit doorway is a pore, P's 4-9 strands leave through P's half and copy outside on the food the bud needs (out 24-87
+genome copies, the bud 0-10). Options, cheapest first: (1) P catches its own copies: a second anchor `W|` in P near the
+doorway (no trigger) holding one more strand, and see how many leave; (2) more strands into the bud before the split,
+so the bud's interior out-competes: measure releases in D against strands in D at the split (seeds 1-8 now give
+1-4); (3) a doorway whose P half is narrower than its D half is impossible (the passage is their overlap), so if
+(1)-(2) fail, the parent needs a way to close its half after the split: write it under priority 2 (closure by
+design), not as a door machine (frozen lineage). Measure with `node tri/check.js budpore-c` plus `DBGC=1` (copies by
+place and type after the split); target: one full copy in the bud after the split (4 releases on its strands) in 6 of
+8 worlds.
 
 **Core-change candidates (for an `explore` run; each needs its case in RULES first).**
 1. *A free part binds only an attached attach side `@`* (or narrower: a free triangle's anchor side `|` never binds by
@@ -149,6 +149,7 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~30-40 min, 4 processes)
+node tri/demos.js budpore 1 100000 runs 100c       # sealed bud pair: P feeds inside, founder under the doorway (7 of 8 split)
 node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, split with food left (8 of 8); DBGC=1: where copies go, BUDF=20: frames;
                                                    # BUDDRY=1: dry-run a catch on every inner side of D; BUDA=cell:side: anchor
 node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
