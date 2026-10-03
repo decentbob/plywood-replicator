@@ -306,7 +306,12 @@ behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
    changed `imprint p`).
 5. **What it replaces.** Nothing removed; the anchor's accidental use as a template is closed. Candidate (c) is
    withdrawn in its favour.
-6. **Result.** (filled in below once measured)
+6. **Result (built as the rule).** Outputs change only in worlds where a blank reached an anchor. `budpore 300` seeds
+   1-4: anchor copies 22 / 22 / 35 / 28 -> 0, genome copies 265-278 -> 300 of 300, split with 50+ blanks left 3 of 4
+   (as before, other seeds). Worlds with 0-1 anchor copies diverge either way: `budpore 100c` seeds 1-16 12 split (was
+   14; 13 identical worlds), `imprint 150p` seeds 1-8 8 with 4+ inside (was 7), `imprint 150ph` seeds 1-8 7 (was 8).
+   `node tri/check.js`: 37 of 37 (budpore-c 6 of 8 and imprint-hood 3 of 4, both at their margins). Test: "copy side: a
+   copy blank binds no anchor side (a waiting anchor is no template)". Candidate (c) withdrawn.
 
 ### Core review 2026-10-03, autorun run 20261003-0450: four removals and one fix
 Measured with the coverage hook (`tri/coverage.js`) and a trigger-path hook over every check (37 checks, 38 demo

@@ -1,64 +1,44 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-1121, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-03 (after autorun run 20261003-1221, explore). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `b13cde7` for run 0950's and `a993d78`).
+handoffs: NEXT.md in git, e.g. at `4238aea` for run 1121's, `b13cde7` for run 0950's).
 
-**Current slice (autorun run 20261003-1221, explore): weigh core candidate (c) against closure.** (c) as stated (a
-copy blank binds no `@` side) makes every cell whose only free side is `@` uncopyable (the kind's root, any in-wall
-anchor cell, every growth front's forward link): it cuts the lineage. Try instead the narrower (c'): *a copy blank binds
-no anchor side `|`*; every cell stays copyable while it is a growth front, the waiting anchor stops being a food sink.
-Measure with a hook first (`runs/noanc.js`, recreate from this run's INNOVATIONS entry) on budpore 300, budpore 100c,
-imprint 150p/150ph; build it as a rule only if it helps and keeps the checks (case in RULES first). Done when: a
-decision with numbers (rule built and 37 checks pass, or rejected with why). Stop at that.
+**Handoff status (autorun run 20261003-1221, explore).** Everything committed on branch `claude/autorun-20261003-1221`
+and merged into `main`. No simulations running; `node tri/test.js` 38 pass (one new test); `node tri/check.js` 37 of
+37 with the rule change (budpore-c 6 of 8 and imprint-hood 3 of 4 are at their margins). **Slice: weigh core candidate
+(c) against closure. Result: (c) withdrawn; the narrower rule built: a copy blank binds no anchor side** (RULES, Core
+changes; INNOVATIONS run 1221). In short:
+- (c) (a copy blank binds no `@` side) would leave every cell whose only free sides are `@` uncopyable: the closure
+  kind's root, any in-wall anchor cell, each front's forward link. It cuts the lineage.
+- Built instead: an anchor side is never copied. `budpore 300` seeds 1-4: copies of the waiting anchor 22-35 -> 0,
+  genome copies 265-278 -> 300 of 300; splits with food left 3 of 4 as before; the bud's own copying after the split
+  unchanged (M2 open). Worlds with 0-1 anchor copies only diverge (`budpore 100c` 12 of 16, was 14; `imprint 150p` 8 of
+  8, was 7; `imprint 150ph` 7 of 8, was 8).
+- Part pool for the closure kind (IDEAS, "Closure: what a part pool costs"): a front waiting for its next part is copied
+  in proportion to blanks / next parts near it (demo `pool`: 0.90-1.03 x B/n at a lone copyable site, about half with
+  copyable neighbours). A steady pool needs about (r + 1)/2 to r + 1 parts of each type per blank near the growing bud
+  (r = openRange); with 46 types that is tens of parts per blank. Since this run the anchor cell follows the same law.
+- New: demo `pool` (measurement harness), test "copy side: a copy blank binds no anchor side".
 
-**Handoff status (autorun run 20261003-1121, build).** Everything committed on branch `claude/autorun-20261003-1121`
-and merged into `main`. No simulations running; `node tri/test.js` 37 pass (one new test); no rule, physics or shared
-structure changed, so the check suite was not rerun (`budpore`'s default output checked byte-identical to main, both
-check variants, 6000 steps). **Slice: closure by design (priority 2). Result: designed, not demonstrated** (INNOVATIONS
-and IDEAS, run 1121; ROADMAP parts table). In short:
-- The kind: `structures.budKit(5, 7)`: a radius-5 ring with a 7-cell pore, every cell its own type (46 bond letters),
-  grown from its root one way round. Root = the pore's left edge: seed bond `Y@&` out, catching anchor `W@|` into the
-  pore (it later holds the founder). Last cell E = the pore's right edge with the seed site `y` (plain glue). A bud on
-  E is the parent turned 180 degrees about the pore: pores face (the doorway), the bud's E lies on the parent's root.
-- Why unique cells: growth cannot count motif repeats, so a periodic ring cannot stop beside a gap; the periodic
-  alternative (door cells released at ring closure, closure target `@.`) races its two growth fronts (IDEAS).
-- Checked: test "closure (budKit)" (deterministic, no physics): the bud holds while growing and waiting, lets go only
-  after its catch, and is then in the parent's starting state; the parent's seed site is free again (buds again).
-- Tried (`budpore` options, R 5 pair, 3 strands and 20 blanks in P, seeds 1-4, 100000 steps): 3-cell pores pass no
-  strand (0 of 8 worlds); 7-cell pores 4 of 4 split with the founder away from the doorway (a full copy in the bud
-  after the split in 3 of 4; strands leak out of the wide pores), 1 of 4 with the founder where the kind holds it (on
-  the parent's root, at the doorway's corner: it hangs into the doorway and jams it).
-- New: `structures.budKit`, `structures.budPose`, demo `closure` (picture only), `budpore` options `BUDPS`, `BUDPFE`,
-  `BUDLX`, `BUDAG`, `BUDA` on the doorway cell, dry-run positions (Commands).
+**Exact next step.** A `build` run continues closure, unchanged in order: (1) **move the anchor off the doorway** in the
+kind (root keeps the seed bond, the catching anchor k cells counter-clockwise, openRange k + 1; find k by dry-run on
+the 7-cell layout, `BUDDRY=1`, both catch ends with `BUDAG=Z`, Commands; a held strand must stand inside, backs open,
+leaning away from the doorway); rerun the transfer batch with the founder on the same side in P (`BUDPF`/`BUDPFE` or
+`BUDPX`) and the bud's anchor there (`BUDA`), 4 worlds, target 3 of 4; update `budKit` (anchor position as a parameter)
+and its test. (2) Priority 3 on this kind: a bud grows on a parent's seed site from a pool of free parts and copy
+blanks. Seed the pool at the steady ratio from this run (several parts of each type per blank where the bud grows, not
+one of each: from one of each, the first fronts take the food) and count the copies per type the growth leaves.
 
-**Exact next step.** A `build` run continues closure toward a demonstration, in this order: (1) **move the anchor off
-the doorway** in the kind: the root keeps the seed bond, the catching anchor goes k cells counter-clockwise (openRange
-k + 1, so the waiting anchor still holds the root and only cells within k of it stay unspent; no race, there is no
-door). Find k by dry-run on the 7-cell layout (`BUDDRY=1`, both catch ends with `BUDAG=Z`, Commands): a held strand
-must stand inside, backs open, leaning away from the doorway; then rerun the faithful transfer batch with the founder
-on the same side in P (`BUDPF`/`BUDPFE`, or `BUDPX`) and the bud's anchor there (`BUDA`), 4 worlds, target 3 of 4, and
-update `budKit` (anchor position as a parameter) and its test. (2) Priority 3 on this kind: a bud grows on a parent's
-seed site from a pool of free parts (one of each of the 47 types to start, labelled) and copy blanks; measure whether
-its growth leaves copies of every type for the next bud (the pool). M2 (the bud's food after the split) stays open;
-7-cell pores also leak strands. The next `explore` run weighs candidate (c) with the cost found here.
-
-**Core-change candidates.** (c) *A copy blank binds no `@` side* (run 0751): a catching anchor waits unbonded and
-exposed, and every blank that touches it becomes a useless copy of the anchor cell (29-69 per world when food is near:
-`BUDDBGA`). The rule would read the site's own attach mark (the copy bind already reads the site's spent state); it
-narrows, adds nothing. Measured as a hook over `imprint`, `imprint-genome`, `imprint-cell`, `imprint-pore`,
-`imprint-hood`, `budpore`, `budpore-c`: all pass as before (rings 30/30 in 4 of 4). Cost to weigh: an anchor or ring
-front cell can then be copied only through its other free sides; closure (run 1121) needs every cell type copied
-some time, and a cell whose free sides are all `@` (the kind's root `W@|Y@&b@`, an in-facing anchor cell) never would
-be: as stated (c) cuts the lineage unless such cells get a non-`@` free side. Hook for measuring it: `runs/noca.js` (recreate:
-`TriSim.prototype.bind` wrapped so a copy bind on an `@` side is cut at once; INNOVATIONS run 0751), run as
-`NODE_OPTIONS="-r $PWD/runs/noca.js" node tri/check.js ...`; `budpore` `BUDNOCA=1` does the same in one demo. (d) *Code vs RULES:* the anchor catch does not test
-`spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no structure has a spent anchor
-side, so nothing depends on it; a core review should add the test. (a) A flap swings on a welded partner's bonded
-trigger read directly, besides hearing through `+`: only `budgrow`'s pulse-door hinges use the direct path
-(`grownBud`); a `+` on those weld sides would leave one path. (b) An attached close-only side still takes docks and
-fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free triangle"; documented as an exception in
-RULES Binding. (a) and (b) are casting lineage; take them with the removal of finding 2.
+**Core-change candidates.** (c) withdrawn (run 1221, above); its narrower form is the rule now. (d) *Code vs RULES:*
+the anchor catch does not test `spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no
+structure has a spent anchor side, so nothing depends on it; a core review should add the test. (a) A flap swings on a
+welded partner's bonded trigger read directly, besides hearing through `+`: only `budgrow`'s pulse-door hinges use the
+direct path (`grownBud`); a `+` on those weld sides would leave one path. (b) An attached close-only side still takes
+docks and fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free triangle"; documented as an
+exception in RULES Binding. (a) and (b) are casting lineage; take them with the removal of finding 2. New observation
+(run 1221): the kind's seed site `y` (plain glue, never spent) is copied by every blank that reaches it while no bud
+sits on it (copies of E); measure in priority 3 before changing anything.
 
 
 ### Direction (autorun run 20261002-1751, review-intent): where the work stands and what comes first
@@ -133,6 +113,8 @@ change it needs; the two `harden` runs take priority 5 and the copy lineage's pa
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...]                         # capability checks: one PASS/FAIL line each (~28 min, 4 processes)
+POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
+                                                   # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
 BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPX=b BUDLX=2 BUDA=84:2 BUDNI=20 BUDPS=2 node tri/demos.js budpore 1 100000 runs 100c
                                                    # the kind's 7-cell doorway, founder away (4 of 4 split); the kind's own layout:
@@ -170,9 +152,10 @@ Casting-lineage and machine pitfalls (kits, pockets, doors, flaps): docs/IDEAS.m
 - **A catching anchor must carry `@`** (2026-10-03, run 0751). An attached glued side without `@` binds any free
   triangle with the complementary glue (glue catch): a plain `Z|` anchor was capped by a lone face copy and never
   caught a strand. With `@` it binds only a part's `@` side, so only the anchor catch (strand ends) can take it.
-- **A waiting anchor near food is a food sink** (2026-10-03, run 0751). Its unbonded `@` side is copied by every blank
-  that touches it (29-69 copies per world), and the anchor cell's own `&` sides stay unspent while it hears its own
-  signal (60-68 copies once exposed). Keep waiting anchors away from food or covered.
+- **A waiting anchor near food is a food sink** (2026-10-03, run 0751; narrowed run 1221). Its unbonded `@|` side was
+  copied by every blank that touched it (29-69 copies per world); since run 1221 no copy blank binds an anchor side.
+  The anchor cell's own `&` sides still stay unspent while it hears its own signal (60-68 copies once exposed): keep
+  waiting anchors' cells spent elsewhere or away from food.
 - **A strand lying in a wall row facing a fed interior gets no fills** (2026-10-03, run 0751). Its faces meet all the
   food and its backs none: all blanks become face copies, no back copies, copying stalls (80 copies, 12 docks).
 - **Signal decay is simultaneous** (2026-10-03, run 0751). When an emitter stops, every cell within range reaches 0

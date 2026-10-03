@@ -56,7 +56,7 @@ until the long periodic front closes onto it, so the door cells are held exactly
 hears 0 after closure and is spent (no door cell can re-attach); needs k >= 5, openRange k + 1, and loses the bud if
 the anchor cell arrives before X and the first door cell.
 
-## Closure: what a part pool costs (analysis, explore run 20261003-1221, 2026-10-03): designed, not demonstrated
+## Closure: what a part pool costs (explore run 20261003-1221, 2026-10-03): law measured on one front, pool designed
 
 The closure kind (above) grows its bud one unique cell after another from free parts, and the next generation's parts
 are copies made while cells are unspent. How large must the pool be? An argument, not a run (a pool of 47 types does
@@ -82,8 +82,12 @@ not exist yet in any world):
   needs m (r + 1) parts per blank (14 for m = 7), so the periodic alternative with door cells (above) is worth its race
   for large cells. (c) Every plain free side is copied for ever: the kind's seed site `y` (plain glue, never spent)
   makes copies of E whenever no bud sits on it; one of the kit's costs to measure.
-- **Not yet checked:** saturation (a site busy with one blank is not hit by another), parts binding where they should
-  not (a part binds only a complementary `@` front, so only one place), and crowding at 92 parts per blank.
+- **Measured on one front (demo `pool`, same run).** With B and n held fixed by a harness: copies at the forward site
+  per bound part = 0.90-1.03 x B/n when it is the only copyable side of its body, 0.48-0.55 x B/n with three more
+  copyable sides beside it (they absorb blanks before these reach the front; parts are not absorbed), plus about as many
+  again at the front's `&` side. So the estimate holds up to a geometric factor near one half: about (r + 1)/2 to
+  r + 1 parts of each type per blank near the bud.
+- **Not yet checked:** a whole bud growing from a pool (47 types), and crowding at that many parts per blank.
 
 ## Grow a finished membrane by breaking it and inserting triangles (user, 2026-10-03)
 

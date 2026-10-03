@@ -254,9 +254,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // stays unspent while it hears the open signal) welded to a support, in a world of B copy blanks and n parts
     // B@c@-& (the next cell). Harness (labelled, not a rule): every copy made is turned back into a blank and every part
     // that binds A is cut, both put back at random places, so B and n stay fixed. Reports the binds at A's forward site
-    // (blanks: copies; parts: growth) and at its '&' site. extra: n (default 4); POOLB: blanks (default 20)
-    pool(){steps=steps||200000;const n=parseInt(extra)||4,B=+(process.env.POOLB||20),size=16,{GLUE}=require('./sim');
-      const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fb@-&'},{v:[[0,0],[0.5,-H],[1,0]],type:'-&-&F'}];
+    // (blanks: copies; parts: growth) and at its '&' site. extra: n (default 4); POOLB: blanks (default 20); POOLISO=1:
+    // every other free side of the body is an inert anchor side (never copied), so only the forward site takes blanks
+    pool(){steps=steps||200000;const n=parseInt(extra)||4,B=+(process.env.POOLB||20),size=16,iso=!!process.env.POOLISO;
+      const tris=[{v:[[0,0],[1,0],[0.5,H]],type:iso?'fb@-|':'fb@-&'},{v:[[0,0],[0.5,-H],[1,0]],type:iso?'-|-|F':'-&-&F'}];
       const {s,structures}=createWorld({seed,size,structures:[{tris,x:size/2,y:size/2}],supply:{'-?-?-?':B,'B@c@-&':n}});const [A]=structures[0],all=[...Array(s.n).keys()];
       const ev={fwd:0,amp:0,other:0,part:0},ob=s.bind.bind(s);
       s.bind=(u,i,ku,v,j,kv)=>{const r=ob(u,i,ku,v,j,kv);if(s.cpy[v*3+j]){if(u===A&&i===1)ev.fwd++;else if(u===A&&i===2)ev.amp++;else ev.other++;}else if(u===A&&i===1&&s.att[v*3+j])ev.part++;return r;};

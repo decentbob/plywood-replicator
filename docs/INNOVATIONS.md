@@ -25,16 +25,25 @@ not statistics.
     seed 7 5 (was 7), others identical; 7 of 8 with 4+ inside (was 8 of 8).
   - Test: "copy side: a copy blank binds no anchor side (a waiting anchor is no template)" (fails on the old code);
     the copy-side test now copies marks through a close-only side instead of an anchor side.
-  - Check suite: CHECKRESULT
+  - Check suite: `node tri/check.js` 37 of 37 pass (`grown` partial as before); budpore-c 6 of 8 (need 6) and
+    imprint-hood 3 of 4 (need 3) are at their margins.
+    ![open bud pair with the rule, seed 2: split at 9600 with 263 blanks left, every copy on the genome](pictures/anchor_nocopy_split.png)
+  - Command: `node tri/demos.js budpore 2 12000 runs 300` (the picture); the comparisons: seeds 1-4 at 200000 steps.
   - Hook used for the measurements (recreate as `runs/noanc.js`): wrap `TriSim.prototype.bind` to count binds whose
     free partner side has `?` and whose attached side has `|`; print the counts on exit; load with
     `NODE_OPTIONS="-r $PWD/runs/noanc.js"`. The baseline is the parent commit `4238aea` (main before this run).
-- **What a part pool costs (closure kind)** — designed, not demonstrated (analysis, IDEAS "Closure: what a part pool
-  costs"). While a front waits for its next part, blanks reach it at the same rate per triangle as parts do, so each
-  cell gets about (r + 1) x (blanks / parts of the next type) copies per generation (r = openRange); a steady pool
-  needs about r + 1 parts of each type per blank near the growing bud (92 parts per blank for the R 5 kind with the
-  anchor on its root). With this run's narrowing the anchor cell follows the same law (before, a waiting anchor was
-  copied for as long as it waited).
+- **What a part pool costs (closure kind)** — the law measured on one front; the pool for the whole kind designed, not
+  demonstrated (IDEAS "Closure: what a part pool costs"). While a front waits for its next part, blanks reach it at
+  the same rate per triangle as parts do, so each cell gets copies in proportion to blanks / parts of the next type.
+  Demo `pool` (a prepared front `fb@-&` on a support, B copy blanks, n next parts `B@c@-&`; a harness turns each copy
+  back into a blank and cuts each bound part, so B and n stay fixed; seed 1, 100000 steps, 190-840 parts bound per run):
+  copies at the front's forward site per bound part 9.04 / 4.83 / 10.32 / 2.47 for B/n = 10 / 5 / 10 / 2.5 (B/n pairs
+  20/2, 20/4, 40/4, 20/8) when it is the body's only copyable side (`POOLISO=1`); 5.53 / 2.68 / 4.98 / 1.21 when three
+  more copyable sides are beside it (they take blanks first: about half), plus as many again at its `&` side. So a
+  steady pool needs about r + 1 parts of each type per blank near the growing bud (r = openRange), up to a factor two
+  for neighbouring sites: of the order of 46 to 92 parts per blank for the R 5 kind with the anchor on its root. With
+  this run's narrowing the anchor cell follows the same law (before, a waiting anchor was copied for as long as it
+  waited). Command: `POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4`.
 
 ## 2026-10-03 (autorun run 20261003-1121, build)
 
