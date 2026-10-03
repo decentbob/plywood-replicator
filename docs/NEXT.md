@@ -10,7 +10,7 @@ dead-end options `BUDTOOTH`, `BUDPA`/`BUDPAG`, `BUDNOP`, `BUDDBGA`, `BUDNOCA`, `
 `BUD*` variables; code in git at `7a98831`, noted in INNOVATIONS' header). Kept: every command below, `BUDCAP` and the
 plug (`BUDRD=7`) until priority 2 has chosen the kind's opening. Output byte-identical to main on 11 runs (300, 100c,
 the 7-cell doorway with `BUDPX=b` and with `BUDPF`, 3-cell pores, plug, cap release, `DBGC`, two dry-runs; 40000-60000
-steps); checks `budpore` and `budpore-c` rerun. (2) `tri/check.js` prints each check as soon as its last world
+steps); checks `budpore` 3 of 4 and `budpore-c` 6 of 8 pass, the same worlds as run 1221. (2) `tri/check.js` prints each check as soon as its last world
 finishes (finishing order), so a container restart loses only the checks still running. (3) The Pitfalls section moved
 from this file to docs/IDEAS.md ("Pitfalls learned (copy lineage)"); NEXT keeps a pointer. All pictures are linked.
 (4) The autorun plywood preamble now says: stop simulations by PID, never `pkill -f`; `mkdir -p runs` in a new
