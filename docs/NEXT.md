@@ -4,7 +4,8 @@ State on 2026-10-03 (after autorun run 20261003-0050, explore). Read AGENTS.md f
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
 **Handoff status (autorun run 20261003-0050, explore).** Everything committed on branch `claude/autorun-20261003-0050`
-and merged into `main`. No simulations running; `node tri/test.js` 35 pass; CHECKLINE. **Done (slice: the bud lets go
+and merged into `main`. No simulations running; `node tri/test.js` 35 pass; `node tri/check.js` 36 of 36 pass (`grown` partial as before;
+`imprint-pore` 3 of 4, seed 2 as recorded; 37 minutes). **Done (slice: the bud lets go
 by completion release; plus one core change, a narrowing):**
 - *Completion-release doorway (no rule change), now the default of `budpore`:* the doorway bond is an `&` bond on both
   sides; D's anchor `W@|` emits the open signal while it waits (`openRange` = its distance to the doorway cell + 3)
@@ -12,8 +13,8 @@ by completion release; plus one core change, a narrowing):**
   (labelled). Same splits as the latch in every seed measured (sealed 7 of 8; open seeds 1-4); sealed pair: 0-1 wall
   copies per world (latch 8-57), all 180 copies on the genome. Replaces trigger `*`, hear chain `+` and latch `~`
   (code at `e2634fb`). Core-change candidate 2 (a spent latch) is not needed.
-- *Core change, narrowing (RULES, Core changes, 2026-10-03):* an anchor side binds only as an anchor, never by glue
-  (free or attached). Free copies of the waiting anchor no longer cap strand ends: open pair (`budpore 300`, seeds
+- *Core change, narrowing (RULES, Core changes, 2026-10-03):* a free triangle's anchor side binds nothing (the
+  wider form, attached anchors too, cost `imprint p` seed 4 its strands). Free copies of the waiting anchor no longer cap strand ends: open pair (`budpore 300`, seeds
   1-8) wall copies 20-35 per world (old rule 47-94), genome copies 265-280 of 300. Splits with food left 7 of 8 (seed
   2 caught late, after the food was gone; old rule 8 of 8); full copies by the bud after the split 2 of 8 (old 3 of
   8): M2 not moved. Candidate 1 (wider: a free part binds only an attached `@`) is no longer needed for this.
@@ -70,8 +71,8 @@ design look. Measure with `node tri/check.js budpore-c` plus `DBGC=1` (copies by
 target: one full copy in the bud after the split (4 releases on its strands) in 6 of 8 worlds.
 
 **Core-change candidates.** None open. Run 0050 settled both earlier ones: the spent latch (2) by design (the
-completion-release doorway), the anchor copies capping strands (1) by the narrowing "an anchor side binds only as an
-anchor" (RULES, Core changes 2026-10-03); the wider form (a free part binds only an attached `@` side) would change how
+completion-release doorway), the anchor copies capping strands (1) by the narrowing "a free triangle's anchor side binds
+nothing" (RULES, Core changes 2026-10-03); the wider form (a free part binds only an attached `@` side) would change how
 kit roots attach to strand seeds and is not needed now.
 
 ### Direction (autorun run 20261002-1751, review-intent): where the work stands and what comes first
@@ -88,15 +89,16 @@ kit roots attach to strand seeds and is not needed now.
 2. **The core is not outgrowing the capabilities.** Since 10-01 the core gained one rule (copy side `?`) and lost or
    narrowed several (K merged into `%`, the latch's open hold, 8 options, the anchor reads less). Good. The larger
    win is ahead: the copy lineage uses only `@ . & | ? ~ *`, the open, busy and zip signals and binding; casting,
-   stamp, fuel and most machine marks (`% ' $ ^ # = ! < > +`) serve only the frozen lineage (measured with the coverage hook on 3000-step runs of `budpore 300`, `imprint`,
-   `imprint 60m`, `imprint 150p`: marks present are `. * ~ @ & | ?` only; since run 1921 `budpore` also uses `+`, its hear chain). Once the organism on
+   stamp, fuel and machine marks (`% ' $ ^ # = ! < > + * ~`) serve only the frozen lineage (measured with the coverage hook on 3000-step runs of `budpore 300`, `imprint`,
+   `imprint 60m`, `imprint 150p`; rerun in run 20261003-0050 with `budpore 100c`: marks present are `. @ & | ?` only;
+   `budpore` no longer uses trigger `*`, latch `~` or hear `+`, its doorway is a completion-release bond). Once the organism on
    copies runs a whole cycle (priority 3), a `core-review` should weigh removing them (with their demos, into git
    history, as the 10-01 restart did); the case goes through the RULES gate first.
 3. **Prepared structure does most of the organism's work.** In `budpore` only the genome copies are grown; both
-   rings, the bud's anchor, the latch bond, the opening and the founder are prepared (ROADMAP, "Organism on copies:
+   rings, the bud's anchor, the doorway bond, the opening and the founder are prepared (ROADMAP, "Organism on copies:
    parts and where they come from"). Of these, the bud ring and everything on it must be made each generation.
 4. **Nothing yet tests closure.** The goal is a lineage: the offspring must be able to do it again. `budpore`'s bud is
-   not its parent's kind (D is R 5 with anchor `Z@|*` and a latch side; P is R 7 with anchor `W|` and a seed for no
+   not its parent's kind (D is R 5 with a catching anchor `W@|` and a doorway `&` side; P is R 7 with anchor `W|` and a seed for no
    bud), so even a perfect run would end the lineage after one generation. Closure is a design question to settle
    early, before more prepared asymmetries are built on.
 5. **A design tension found.** Food protection needs spent `&` walls (spent sides are never copied: imprint m, p);
@@ -112,12 +114,12 @@ kit roots attach to strand seeds and is not needed now.
    split D's half of the opening is its pore, so D is then an `imprint p` cell: the bud "lives on its own".
 2. **Closure by design (analysis slice; "designed, not demonstrated" is a valid result).** Specify one organism kind
    whose bud is the same kind: one ring size or a fixed alternation, which anchor holds the founder and which catches
-   (one glue for both roles, or roles by position), how the bud's seed site and latch are re-made in the bud, and
+   (one glue for both roles, or roles by position), how the bud's seed site and doorway bond are re-made in the bud, and
    where the bud ring's first motif round comes from (finding 5). Output: a parts list where every part is grown from
    copies or comes from the environment, with each step mapped to an existing demo, and the rules it reads (locality
    check). A `build` or `explore` run can take it; if it needs a core change, the case goes to RULES first.
 3. **Grow the bud ring from copies** (replace D in `budpore`): the bud grows on P's seed site from copies of its own
-   motif round (as `imprint`), outside in the food; latch and anchor as parts of its kit. Fix `imprint`'s one-front
+   motif round (as `imprint`), outside in the food; doorway bond and anchor as parts of its kit (its walls spent before its anchor emits: IDEAS, 2026-10-03). Fix `imprint`'s one-front
    28/30 stall on the way (Pitfalls: one-front rings), since this ring uses the same growth. Target 3 of 4 worlds.
 4. **Two generations:** the bud of priority 3 splits off, copies its genome (priority 1) and starts its own bud.
    This is the goal's whole cycle; then the core-review of finding 2.

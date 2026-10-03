@@ -299,7 +299,7 @@ behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
    moved. Tried first, wider: no anchor side binds by glue, attached ones too (an attached `W|` also glue-caught free
    triangles with a `w` side). That changed `imprint p` seed 4: copying ran faster and most strands left through the
    pore (3 inside of 13, was 6 of 10), so check imprint-pore fell to 2 of 4; with the free-side test alone seed 4 is
-   identical to before. Kept narrow. Test: "anchor: a free triangle's anchor side binds nothing". Full check: CHECK2.
+   identical to before. Kept narrow. Test: "anchor: a free triangle's anchor side binds nothing". Full check: 36 of 36 pass.
 
 ### Generalization: an anchor catches a strand end whether or not the strand is being copied, 2026-10-02, autorun run 20261002-1551 (explore)
 1. **Capability and why the goal needs it.** Segregation on copies: a bud catches a copy of its parent's genome while

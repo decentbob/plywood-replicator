@@ -30,10 +30,12 @@ not statistics.
     (its walls must be complete before its anchor emits).
   - Picture (seed 6 at the split, t=20400: the bud, top, leaves with 4 strands; the doorway bond is cut, its sides
     spent): ![completion-release doorway](pictures/budpore_release.png)
-- **Core change (narrowing): an anchor side binds only as an anchor, never by glue** — works as intended; M2 not moved.
+- **Core change (narrowing): a free triangle's anchor side binds nothing** — works as intended; M2 not moved.
   - Before: free copies of the waiting anchor cell (`W@|`, parts) glue-bound strand low ends `w`, capping them, and
-    were copied again once attached. Gate entry in RULES (Core changes); test "anchor: an anchor side binds only as an
-    anchor, never by glue (free or attached)" (fails on the old rule).
+    were copied again once attached. Gate entry in RULES (Core changes); test "anchor: a free triangle's anchor side binds
+    nothing" (fails on the old rule). Tried first, wider: no anchor side binds by glue, attached ones too; identical in
+    `budpore`, but `imprint p` seed 4 then lost most strands through the pore (3 inside of 13, was 6 of 10;
+    imprint-pore 2 of 4), so the rule was kept to free triangles (seed 4 identical to before).
   - Evidence (`budpore k 200000 runs 300`, seeds 1-8, both with the completion-release doorway): copies of wall types
     22 / 22 / 35 / 28 / 22 / 30 / 31 / 20, only direct copies of the waiting anchor (old rule: 62 / 65 / 84 / 71 / 84 /
     94 / 47 / 64, of which 14-43 copies of anchor copies bound to strands); genome copies 265-280 of 300 (old 206-253).
@@ -41,7 +43,9 @@ not statistics.
     147 / 155 blanks left (old: all 8 with 118-199 left; seed 2 caught late, after the food was gone). Full copies on
     the bud's anchored strand after the split: seeds 5, 6 (old: seeds 1, 2, 7). M2 is still food going outside: after
     the split 89-161 genome copies outside, 2-54 inside D.
-  - Full check suite: CHECK_PENDING.
+  - Full check suite (`node tri/check.js`, with the rule as kept): 36 of 36 pass (`grown` partial as before).
+    Coverage hook on `budpore 300`, `budpore 100c`, `imprint`, `imprint 60m`, `imprint 150p` (3000 steps): marks
+    present `. @ & | ?` only.
 
 ## 2026-10-03 (autorun run 20261002-2321, build)
 
