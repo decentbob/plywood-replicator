@@ -4,6 +4,12 @@ State on 2026-10-03 (after autorun run 20261003-1420, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `e3a3d06` for run 1351's, `7a98831` for run 1321's).
 
+**Current slice (autorun 20261003-1520, harden; in progress).** Priority 6: run the full check suite and fix any
+failure; then raise the margins of `budpore-c` (6 of 8, need 6) and `imprint-hood` (3 of 4, need 3): measure each on
+more seeds, find the failure mode in the failing worlds from their pictures, fix it with the existing core (layout or
+demo parameters, no rule change). Done when the suite passes and each of the two has a failure mode named and either
+a fix that passes more worlds or a recorded reason why not. Stop there; no new capability.
+
 **Handoff status (autorun run 20261003-1420, build).** Priority 1 done and merged into `main` (branch
 `claude/autorun-20261003-1420`); no simulations running; 38 tests pass; check `budpool` 4 of 4. Demo `budpool`: a
 prepared parent of `budKit(5, 7)` grows its bud on its seed site from a pool of all 47 part types (8 each, 40 of the
