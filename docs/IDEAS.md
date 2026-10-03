@@ -8,6 +8,33 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## The way in is the way out; nothing may leak (design lesson, build run 20261003-0320, 2026-10-03)
+
+Three findings from trying to keep the parent's copies in after `budpore`'s split (INNOVATIONS, run 0320):
+- **Motion is reversible; only binding is one-way.** Rigid bodies move by random kicks, so any fixed opening a
+  strand can pass inward it can pass outward. When the bud lets go, the space the strand moved through is still
+  empty, so each half keeps an opening at least as wide as the passage. In `budpore c` the bud's 6-cell half lets its
+  copies and strands out (even with the parent's genome made inert at the split), a 3-cell half lets no strand in, and
+  a narrower parent half turns the founder's backs to the wall. Only binding events are one-way: an anchor's catch, a
+  copy, a release, growth. So a bud that gets a strand and then keeps it needs an opening that a binding event narrows
+  after the strand is in.
+- **Free strands beat cells.** A strand outside has open backs and direct access to the food; three of them beside
+  an `imprint p` cell take all 150 blanks in under 10000 steps and leave the cell 1-2 strands (alone it has 1-7). So an
+  organism on copies must never put a strand outside: one leaked strand starts a population that starves every cell
+  in reach, its own buds included. (Nothing in the world removes free strands; something that did would be a core
+  change. Until then the rule is: no leaks.)
+- **A bent opening keeps strands in.** A strand is a rigid strip about 4 long; blanks are single triangles. A pore
+  under a hood (a corridor two rows high leading sideways to the pore) lets blanks in and no strand out (`imprint ...
+  150ph`: no strand lost in 7 of 8 worlds; the plain pore loses 4-9 in 3 of 8). The same geometry would keep strands
+  out, so it cannot be how a bud gets its genome.
+Ways to give a bud its strand and then close its way in, each with a binding event (for the next build or explore):
+(a) **the genome as the plug:** the bud's anchor on the edge of its gap so a caught strand lies in the wall row and
+fills the gap but for a pore (a 10-cell gap, a 7-triangle strand, 3 cells left); the catch is the one-way step; which
+way its faces point (into the bud or out) decides where its copies form. Built the same run for the bud (faces in: the
+bud alone copies in 3 of 4 worlds); the parent's half is open (INNOVATIONS, run 0320). (b) **a closure grown after the split:** a
+growth site on the bud's opening whose place is filled by the parent's wall until the parent leaves, more bonds from
+the doorway bond than `openRange`, grown from copies. (c) **fission:** a septum grown across the parent.
+
 ## Let go by completion, not by a machine (design lesson, explore run 20261003-0050, 2026-10-03)
 
 A one-shot separation needs no latch, trigger or hear chain: an anchor with `@` is an open growth front until it

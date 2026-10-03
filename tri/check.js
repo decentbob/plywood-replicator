@@ -66,6 +66,8 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[1]<=3&&+m[4]>+m[3],m?`${m[1]} strands, copies to genome ${m[3]}, wall ${m[4]}`:'no result'];}},
   {id:'imprint-pore',cap:'A cell fed through a pore: copy blanks from outside copy only its genome (spent walls)',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150p',secs:70,
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]>=4&&+m[5]===0,m?`${m[2]} strands inside (${m[1]} in all), copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
+  {id:'imprint-hood',cap:'A hooded pore keeps the strands in: blanks reach the pore along a corridor no strand can turn into',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150ph',secs:70,
+    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]>=4&&+m[2]===+m[1],m?`${m[2]} of ${m[1]} strands inside, copies to genome ${m[4]}`:'no result'];}},
   {id:'imprint-pore-c',cap:'  control: no pore, no blank gets in',demo:'imprint',seeds:[1],steps:60000,extra:'150pc',secs:40,
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+)/);return [!!m&&+m[3]===0&&+m[1]===1,m?`${m[1]} strand, ${m[3]} copies`:'no result'];}},
   {id:'imprint-pore-n',cap:'  control: plain walls take the blanks',demo:'imprint',seeds:[1],steps:60000,extra:'150pn',secs:40,
