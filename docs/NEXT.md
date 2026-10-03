@@ -3,6 +3,14 @@
 State on 2026-10-03 (after autorun run 20261003-0450, core-review). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
+**Current slice (autorun run 20261003-0751, build): plug the parent's half too (priority 1, M2).** Goal: after the
+split the bud makes a full genome copy (4 releases on its own strands) in 6 of 8 worlds of the plugged sealed pair
+(`BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 ... budpore k 100000 runs 100c`), with the parent as a working organism (no
+`BUDNOP`). Plan: measure the three options of Exact next step below, cheapest first (more food in P; the founder as P's
+plug; the founder on P's top wall right of the doorway), seeds 1-4 with `DBGC=1`, then 8 worlds for the best one and a
+check `budpore-plug`. Stop when the check is in, or when all three are measured and none reaches 4 of 8: then record
+why and the next design.
+
 **Handoff status (autorun run 20261003-0450, core-review).** Everything committed on branch
 `claude/autorun-20261003-0450` and merged into `main`. No simulations running; `node tri/test.js` 36 pass;
 `node tri/check.js` 37 of 37 before and after (after: run with changes 1-4 below; change 5 is output-identical by
