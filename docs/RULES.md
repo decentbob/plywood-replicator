@@ -30,8 +30,8 @@ to weld prepared structures (a builder convention, not a rule).
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (the only activator) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
-| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one. A free triangle's anchor side binds nothing (since 2026-10-03) |
-| `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
+| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one. A free triangle's anchor side binds nothing (since 2026-10-03), and no copy blank binds an anchor side (since 2026-10-03, run 1221): an anchor is never a template |
+| `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle but an anchor side (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
@@ -81,7 +81,7 @@ Direction). Dates: when the item entered the core (the repository restarted on 2
 | `'` carried marks (stamp) | mark | 7 (stamp, grow 4s, split, split g, split o, budgrow, budgrow g) | - | 10-01 |
 | `?` copy side | mark | 10 (every `imprint` variant, `budpore`) | yes | 10-02 |
 | `$` fuel | mark | 2 (energy, energy dark) | - | 10-01 |
-| `\|` anchor | mark | 9 (split g, split o, budgrow g, imprint p variants, budpore) | yes | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 |
+| `\|` anchor | mark | 9 (split g, split o, budgrow g, imprint p variants, budpore) | yes | 10-01; catches busy strands 10-02; a free one binds nothing 10-03; never copied 10-03 (run 1221) |
 | `^` hand-off | mark | 1 (conveyor) | - | 10-01 |
 | `#` pulse door (hinge side) | mark | 2 (budgrow, budgrow g) | - | 10-01; its trigger-side meaning removed 10-03 |
 | busy (30, chain bonds) | relayed signal | 17 (all copying) | yes | 10-01 |
@@ -133,7 +133,7 @@ by an anchor side `|` moves as one body into a free flush place (all or nothing;
 | lock, open, hear signals | own sides; partners' values | previous pass | local (relay) |
 | tb, nbc, actE | own bonds and marks; glue of the partner side bonded to an activator side | own; fixed type | local |
 | fu (fuel) | own fuel sides; carrier's charge; own or hinge flap's start pulse (pwE) | partner current state; previous servo | local (fixed 2026-10-02) |
-| copy bind | the blank's copy sides; the site's bond and spent state | own; partner current state | local |
+| copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
 | glue catch, dock, fill | own role, need, zip, refr, away, deaf; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds) | physics (labelled); own | physics; local |
 | glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
@@ -177,7 +177,8 @@ The capture path (the turn the short way and the move) must be clear in sub-step
 a strand was pulled through a wall); a strand that already holds the anchor's triangle (one body) is not caught.
 This is the only way a strand joins an existing structure (two attached triangles otherwise bond only when flush).
 A free triangle's anchor side binds nothing (since 2026-10-03, Core changes: free copies of a waiting anchor
-glue-capped strand ends).
+glue-capped strand ends), and no copy blank binds an anchor side (since 2026-10-03, run 1221, Core changes: a waiting
+anchor was copied by every blank that reached it).
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
 released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and its face is free (an anchor
@@ -224,8 +225,8 @@ carried: a caster's instruction side prints glue and marks, so a pocket can cast
 blanks. A product never carries marks itself (a stamp cannot be stamped).
 
 **Contact copying (2026-10-02, copy side `?`):** a free triangle with a copy side binds by it to any free (unbonded, not
-spent) side of an attached triangle, whatever that side's glue and marks (close-only `.`, attach `@` and trigger sides
-too: the copy side is the only test), when its centre comes within `capture` of the site and
+spent, not anchor) side of an attached triangle, whatever that side's glue and marks (close-only `.`, attach `@` and
+trigger sides too; an anchor side `|` is the one mark it skips, since 2026-10-03, run 1221), when its centre comes within `capture` of the site and
 the site is free. In the same pass it takes its partner's type (side i+k takes the partner's side j+k, i and j the
 bonded sides: the partner turned about the shared edge; glues, marks and carried marks) and lets go. It binds nothing
 else (no glue binding, dock or fill) and is never itself a template. Free triangles never bind each other, so only
@@ -465,7 +466,7 @@ and is output-identical by construction, below).
    themselves. Once feeding and docker supply are rebuilt on copying, `'`, `%` and the cast rule are candidates for
    removal (a core-review question; not done here).
 
-Rule as built: a copy side `?` on a free triangle binds any free (unbonded, not spent) side of an attached triangle,
+Rule as built: a copy side `?` on a free triangle binds any free (unbonded, not spent; since run 1221 not anchor) side of an attached triangle,
 whatever its glue (inert too), when its centre comes within `capture` of the site and the site is free; a free
 triangle with a copy side binds only by it (never by glue, dock or fill). In the same pass it takes its partner's type
 (side i+k takes the partner's side j+k, k = 0, 1, 2, where i, j are the bonded sides: the copy is the partner turned
