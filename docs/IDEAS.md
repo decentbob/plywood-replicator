@@ -20,8 +20,8 @@ in 14 worlds. Three lessons for the kind.
   its third side faces the bud's pore, i.e. the doorway. So once cell N-2 binds, the pair is sealed, and the last site
   opens only into it: only an E part already inside can complete the bud. Measured: with 8 E parts (as many as every
   other type, 30 x 30 world) the bud completed in 2 of 4 worlds, exactly those with an E part inside at sealing (1, 0,
-  1, 0); with 40 E parts it completed in 7 of 7 (1-5 inside). E parts inside per E part in the world: 0.077, so
-  P(complete) is about 1 - exp(-0.077 n_E) here (an inside area of about 70 of 900). Any kind whose pore lies between
+  1, 0); with 40 E parts it completed in 8 of 8 (1-7 inside). E parts inside per E part in the world: 0.088, so
+  P(complete) is about 1 - exp(-0.088 n_E) here (an inside area of about 80 of 900). Any kind whose pore lies between
   root and seed cell (the condition for facing pores) has this property, and a stalled bud waits for ever.
   Where E parts come from: the seed site `y` is plain glue and is copied whenever no bud sits on it (parent and bud
   alike), so a lineage over-produces E by itself, at the cost of food. Ways out, for priority 2 (the kind's opening):
@@ -36,7 +36,7 @@ in 14 worlds. Three lessons for the kind.
   type's own count has no restoring force and drifts by about one per generation (Poisson copies, one used), so in a
   balanced pool some type dies out after about n^2 generations, and with it the lineage (walls are spent: no template
   of it is left). A supercritical pool (more than one copy per use) outruns the drift but grows on food. Measured: 0.91
-  to 1.72 copies per used part (mean 1.3) at one part of each type per blank (8 and 8), as the law of run 1221
+  to 1.85 copies per used part (mean 1.37) at one part of each type per blank (8 and 8), as the law of run 1221
   predicts ((r + 1)/2 to r + 1 parts per blank for one copy per use). Fewer types make each count larger and the drift
   slower; a template that is copied when its own type is scarce would regulate, and none exists in this kind.
 - **Growth time grows as the square of the number of types.** Waits per cell spread from 8 to 32000 steps (median
