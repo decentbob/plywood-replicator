@@ -8,6 +8,45 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## The kind's opening: one opening per body, and only silence widens one (build run 20261003-1650, 2026-10-03): analysis
+
+Priority 2 asks for an opening that is wide while a strand crosses to the bud and closed to strands while each cell
+feeds. Three arguments (not runs) narrow the designs:
+- **One opening per body.** A cell whose wall is one connected body has at most one opening (one passage between its
+  interior and the outside). Two passages would make a loop through the interior, one passage, the outside and the
+  other passage; the wall pieces between the passages lie on both sides of that loop, yet the wall is connected and
+  never crosses it (on the torus too, for a cell smaller than the world). So a hood joined to both sides of its pore
+  adds nothing (the ring already joins them; the corridor's mouth is still the one opening), and a feeding pore beside
+  a doorway can exist only while a second body (the attached bud) joins the two wall pieces; that doorway must be
+  closed by a binding event before the bud lets go, or the cell falls in two. Candidate (a) of NEXT reduces to "one
+  opening" or "a doorway that exists only while the pair is joined". The pitfall "one gap per one-row ring" is a case
+  of this.
+- **Only silence widens.** In the copy lineage the one rule that cuts a bond is completion release, which fires when a
+  triangle hears no open signal. A cell at rest (no growth front, no waiting anchor, no unbonded `@` side with glue)
+  hears nothing, so every `&` bond in it is already cut: an opening narrowed by bonds at rest (a plug, a cap, grown
+  cells) can widen later only if something within openRange of those bonds emits all through the rest and falls
+  silent at the right moment. An emitter at rest is an unbonded `@` side with glue (a waiting anchor; a seed site
+  written `y@`), and it keeps every side within openRange unspent, i.e. copied: a food sink.
+- **The bud cannot time its parent near the junction.** The bud's root carries its anchor, which emits from the moment
+  the root binds until it catches; so every parent cell within openRange of the bud's root (the parent's E and its
+  neighbours) hears a signal without a break from the root's binding to the catch, and the silence after the catch is
+  the split itself. A release in the parent before the catch can happen only far from the junction, at the parent's
+  root, which the bud's front reaches last (by the pose): there the bud's last part could bind and silence a parent
+  emitter, the one local event that marks the bud's completion.
+- **Consequence for the kind.** Each generation the parent's one opening must go narrow (rest), wide (before the bud's
+  catch), narrow (after the catch, before the split), each step a binding event: the widening a release (a resting
+  emitter at the parent's root, silenced when the bud completes), the narrowing a second catch ordered by parity after
+  the bud's (cap release, run 0751: 2 of 4). A released `&` side is spent and a bonded anchor catches nothing, so the
+  parts that narrow the opening must be replaced every generation (grown again from copies). Designed in outline only,
+  with three orderings that are each a race: not built. The next `explore` should weigh it against (i) fission with
+  insertion growth (no transfer, so no doorway at all) and (ii) a core candidate, a release by signal (a bond cut while
+  its triangle hears the open signal: the opposite polarity of `&`, read from the triangle's own signal), with which
+  the bud's approaching front would reopen the parent's opening directly; the narrowing after the catch would still be
+  a catch.
+- **The bud's half already has its event.** The bud's opening narrows by its own catch (its genome as the plug, run
+  0320: the bud alone made a full copy in 3 of 4), so the bud's half is solved by a binding event that exists; the
+  parent's half is what the arguments above constrain.
+
 ## The kind's bud from a part pool: the last cell comes from inside; the pool has no per-type regulation (build run 20261003-1420, 2026-10-03)
 
 Measured with demo `budpool` (INNOVATIONS, run 1420): a prepared parent of `budKit(5, 7)` grows its bud on its seed
@@ -29,6 +68,16 @@ in 14 worlds. Three lessons for the kind.
   copied by the parent's own food, a food sink); or a kind whose last site is not at the pore: two fronts from two
   seed bonds (one per pore edge) meeting mid-wall, which needs the parent root's seed side to bind again after its own
   split (a spent side binds nothing: a core change).
+  **Built (run 20261003-1650): an E source inside.** E's pore side plain (`budKit(..., eSource)`: `-` instead of `-&`,
+  never spent) is copied by any blank that reaches the pore, so E parts form in the pore, which is the pair's inside
+  once the bud has grown round. `budpool` with no E part in the pool (`BPES=1 BPE=0 BPB=16`): complete in 4 of 4, every
+  last cell a copy of the parent's E (12-14 such copies per world; check `budpool-e`); with 8 E parts like the other
+  types 4 of 4 (was 2 of 4); with 8 blanks and no E parts 5 of 7 (the two failures had no blank and no E copy inside
+  after sealing). In the 16-blank worlds the E part that finished the bud was made long before sealing and was
+  inside at sealing by drift (one in each), so the source works mostly by stocking the region around the pore, not
+  by copying after the seal (once, in an 8-blank world, a copy made after sealing finished it). The kind then needs
+  no E parts in its pool: each parent makes its bud's last cell. Cost: the plain side is copied at rest too (a food
+  sink, not measured with a fed parent), and the E parts it makes accumulate.
 - **A pool of unique types has no per-type regulation** (argument, supported by the runs). Copies of type k are made
   while cell k is the growth front, i.e. while it waits for part k+1 (openRange 1; with r > 1 also while the next r - 1
   cells arrive). So copies of k scale with the wait for k+1, which goes as 1/n(k+1), not with n(k): correlation of

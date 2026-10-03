@@ -8,6 +8,36 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1650, build)
+
+- **The kind's last cell from an E source inside the pair** — works in isolation (4 of 4 check worlds; labelled: the
+  prepared parent, seeded pool, harness and stand-in catch of `budpool`). No new rule. The last cell E's pore side is
+  plain (`structures.budKit(R, pore, letters, eSource)`: `-` instead of `-&`): never spent, so every copy blank that
+  reaches the pore copies E there. Once the bud has grown round, the pore is inside the sealed pair, where the bud's
+  last site opens (run 1420: only an E part inside at sealing can finish the bud). Demo option `BPES=1`: the kit with
+  the source; the harness keeps the copies made at an E's pore side as parts (every other copy still turns back into a
+  blank).
+  - Evidence (`budpool`, 250000 steps): no E part in the pool, 16 blanks (`BPES=1 BPE=0 BPB=16`, check `budpool-e`):
+    complete and split at 147463 / 128963 / 140908 / 95150 (4 of 4), every last cell a copy of the parent's E, 12-14
+    such copies per world, 0 stray bindings. With 8 E parts like every other type (`BPES=1 BPE=8`, seeds 1-4): 4 of 4
+    (175782 / 115275 / 186322 / 91343), each last cell from the source; without the source the same pool completed 2 of
+    4 (run 1420). No E part and 8 blanks (`BPES=1 BPE=0`, seeds 1-7): 5 of 7; seeds 4 and 5 stop at 46 of 47 with no
+    blank and no E copy inside after sealing (source copies 5 and 8, the last at 31867 and 84659; sealed at 107340 and
+    111109). In the 16-blank worlds the finishing E was made long before sealing and was inside at sealing by drift.
+  - Meaning for the kind: its pool needs no E parts, since each parent makes its bud's last cell. Cost (not measured
+    with a fed parent): the plain side is copied at rest too, a food sink at the pore, and E parts accumulate.
+  - Picture (no E part in the pool, seed 4: the parent among the pool, 12 / 24 / 36 cells, complete at 95148, split):
+    ![bud finished from the E source](pictures/budpool_esource.png)
+  - Commands: `BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 4 250000 runs`; `node tri/check.js budpool-e`. Check
+    entries can now set environment variables (`env`).
+- **The kind's opening: one opening per body, and only silence widens one** — analysis (IDEAS, same title): a cell
+  whose wall is one body has at most one opening, so a hood cannot rejoin a ring cut by pore and doorway, and a doorway
+  beside a feeding pore exists only while the bud joins the wall pieces; the only release (completion release) fires
+  on silence, and a cell at rest is silent, so an opening narrowed at rest widens again only through a resting emitter
+  whose silence marks the bud's completion; the bud's root anchor emits from its binding to its catch, so near the
+  junction the parent cannot be released before the split. Outline of a cycle with the existing core (replaceable
+  narrowing parts, three parity orderings) and a core candidate (a release by signal) left for the next `explore`.
+
 ## 2026-10-03 (autorun run 20261003-1520, harden)
 
 - **Hooded pore made reliable: the anchor one side over** — works (no new rule; prepared layout, labelled). Check
