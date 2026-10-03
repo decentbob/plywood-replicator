@@ -10,7 +10,7 @@ const count=(L,re)=>(L.match(re)||[]).length;
 // each check: id, capability, demo name, seeds, steps, extra, need (seeds that must pass), secs (rough time per world,
 // for scheduling), pass(last report line, all output) -> [ok, short evidence]; partial: reported, never fails
 const CHECKS=[
-  {id:'copy',cap:'Genome: typed chain copying (zip)',demo:'copy',seeds:[1],steps:10000,secs:4,
+  {id:'copy',cap:'Genome: typed chain copying (zip)',demo:'copy',seeds:[1,2,3,4],need:3,steps:20000,secs:8,
     pass:L=>{const n=count(L,/BBAABA\//g);return [n>=2,`${n} complete copies BBAABA`];}},
   {id:'lid',cap:'Factory: lid pocket casts (signals: heard trigger)',demo:'lid',seeds:[1,2,3,4],need:3,steps:4000,secs:2,
     pass:L=>{const c=num(L,/casts=(\d+)/);return [c>=5,`${c} casts`];}},

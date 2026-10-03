@@ -6,7 +6,7 @@
 // values from the previous pass; nothing counts, traverses or reads an organism.
 //
 //   glue binding   complementary glues (a<->A, ..., '-' inert) bind flush sides if one triangle is already attached
-//   chain copying  dock (face glue complement), fill (2 - gap fills), close, release, refractory (busy relay)
+//   chain copying  dock (face glue complement), fill (2 - gap fills, lateral glue complement), close, release, refractory (busy relay)
 //   casting        a triangle glue-bonded on all three sides to activated casters takes their instruction glues
 //   hinges         driven flaps: triggers, latches, hand-off/drop/pulse releases, interlock signal, carried cargo
 //   energy         charge state; discharged binds nothing; fuel sides; light zone recharge (environment)
@@ -43,7 +43,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+side
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
-  pLoose:0,latGlue:false,light:null};
+  pLoose:0,light:null};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -170,6 +170,8 @@ class TriSim extends Physics{
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
+    // a free triangle binds (glue catch, dock, fill) by none of its anchor '|', close-only '.' or spent sides
+    const fs=(v,j)=>!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j];
     // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
     // orientation: binding turns it into place)
     const reach=(u,i,v,j)=>{const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
@@ -190,16 +192,17 @@ class TriSim extends Physics{
         // a trigger side catches only while its flap is at rest and its structure is complete (_deaf); a free triangle's
         // anchor side '|' binds nothing (catching strands is what attached anchors do, below)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
         if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&!this.refr[u]&&this.zip[u]){const g=gl(u,r.free);
-          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
+          if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
             this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
-        // fill the prev edge of a docked or fill triangle that still needs fills (glue-agnostic unless latGlue)
-        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if((!p.latGlue||gl(v,j)===comp(gl(u,r.prev)))&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
+        // fill the prev edge of a docked or fill triangle that still needs fills, with the complement of that edge's glue
+        // (an inert edge takes an inert side)
+        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1){for(let j=0;j<3;j++)if(gl(v,j)===comp(gl(u,r.prev))&&fs(v,j)&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
           if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fn[v]=1;this.fn[u]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its unbonded spare edge,
