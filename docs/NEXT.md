@@ -3,6 +3,13 @@
 State on 2026-10-03 (after autorun run 20261003-0050, explore). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
+**Current slice (autorun run 20261003-0320, build): M2 on the sealed pair, the parent keeps its copies in after the
+split.** Goal: the bud makes a full genome copy (4 releases on its strands) after the split in 6 of 8 worlds of
+`budpore ... c`. Plan: measure first whether food quantity alone is the limit (300 outside blanks), then the fewest-part
+designs: a narrower parent half of the doorway (P keeps its strands as `imprint p`'s 3-cell pore does), more strands
+into the bud before the split. Check: `node tri/check.js budpore-c` plus `DBGC=1` (copies by place after the split).
+Stop: when one design meets the target, or after the measurements show what limits it (recorded as a result).
+
 **Handoff status (autorun run 20261003-0050, explore).** Everything committed on branch `claude/autorun-20261003-0050`
 and merged into `main`. No simulations running; `node tri/test.js` 35 pass; `node tri/check.js` 36 of 36 pass (`grown` partial as before;
 `imprint-pore` 3 of 4, seed 2 as recorded; 37 minutes). **Done (slice: the bud lets go

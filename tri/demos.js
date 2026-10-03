@@ -260,7 +260,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
       // option 'c' (closed): the doorway ends at x = DC, so it joins P and D only (sealed while joined; each half becomes a pore after the split)
       const DC=X.includes('c')?+(process.env.BUDDC||2.25):1e9,gap=v=>cn(v)[0]>-DW&&cn(v)[0]<DC;
-      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gap(v)));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gap(v)));
+      const PC=process.env.BUDPC?+process.env.BUDPC:DC;Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gap(v)&&cn(v)[0]<PC));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gap(v)));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
