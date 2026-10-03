@@ -6,6 +6,47 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-0050, explore)
+
+- **The bud lets go by completion release: `budpore`'s doorway bond is an `&` bond cut when the bud's anchor has
+  caught** — works (same splits as the latch; no rule change). The copy lineage no longer uses trigger `*`, hear `+`
+  or latch `~`.
+  - Design: the doorway bond (leftmost P-D contact) carries `&` on both sides and no glue. D's anchor `W@|` emits the
+    open signal while it waits (an unbonded `@` side with glue); `openRange` is the anchor's distance to the doorway
+    cell + 3, so both sides of the bond hear it. When the anchor catches a strand its `@` side is bonded, the signal
+    fades (one bond per pass) and completion release cuts the bond; both freed sides are then spent and never copied.
+    The walls start spent (labelled starting condition: one completion pass while only the anchor hears its own
+    signal, then the range is set; spent sides stay spent). Replaces the latch `~` on the bond, the anchor's trigger
+    `*` and the 4-bond hear chain `+` (code at `e2634fb`).
+  - Evidence, sealed pair (`budpore k 100000 runs 100c`, seeds 1-8, `DBGC=1`, before the anchor narrowing below):
+    split at 37500 / - / 20000 / 30000 / 12500 / 20000 / 5000 / 40000, the same as the latch version in every seed;
+    copies of wall types 0 / 0 / 1 / 0 / 0 / 0 / 0 / 0 (latch version: 15 / 0 / 20 / 30 / 57 / 12 / 8 / 24, mostly
+    copies of the freed latch side `-~--+` and of P's freed side): all 180 copies go to the genome. Copies made inside
+    the bud after the split 2 / - / 5 / 24 / 25 / 0 / 12 / 16 (latch: 6 / - / 1 / 12 / 12 / 0 / 4 / 7); a full copy on
+    the bud's anchored strand still only in seed 7. Open pair (`budpore k 200000 runs 300`, seeds 1-4): split at
+    35000 / 30000 / 60000 / 45000 (as the latch) with 182 / 199 / 124 / 150 blanks left (latch 176 / 193 / 113 / 136).
+  - Earlier `&` hold (run 1921, variant 3) lost 190-210 blanks to the walls: every wall cell hearing the anchor kept
+    its free side unspent. Starting the walls spent removes that; the caveat for a grown bud is recorded in IDEAS
+    (its walls must be complete before its anchor emits).
+  - Picture (seed 6 at the split, t=20400: the bud, top, leaves with 4 strands; the doorway bond is cut, its sides
+    spent): ![completion-release doorway](pictures/budpore_release.png)
+- **Core change (narrowing): a free triangle's anchor side binds nothing** — works as intended; M2 not moved.
+  - Before: free copies of the waiting anchor cell (`W@|`, parts) glue-bound strand low ends `w`, capping them, and
+    were copied again once attached. Gate entry in RULES (Core changes); test "anchor: a free triangle's anchor side binds
+    nothing" (fails on the old rule). Tried first, wider: no anchor side binds by glue, attached ones too; identical in
+    `budpore`, but `imprint p` seed 4 then lost most strands through the pore (3 inside of 13, was 6 of 10;
+    imprint-pore 2 of 4), so the rule was kept to free triangles (seed 4 identical to before).
+  - Evidence (`budpore k 200000 runs 300`, seeds 1-8, both with the completion-release doorway): copies of wall types
+    22 / 22 / 35 / 28 / 22 / 30 / 31 / 20, only direct copies of the waiting anchor (old rule: 62 / 65 / 84 / 71 / 84 /
+    94 / 47 / 64, of which 14-43 copies of anchor copies bound to strands); genome copies 265-280 of 300 (old 206-253).
+    Split at 35000 / 50000 / 40000 / 35000 / 20000 / 45000 / 35000 / 35000 with 165 / 0 / 170 / 183 / 233 / 170 /
+    147 / 155 blanks left (old: all 8 with 118-199 left; seed 2 caught late, after the food was gone). Full copies on
+    the bud's anchored strand after the split: seeds 5, 6 (old: seeds 1, 2, 7). M2 is still food going outside: after
+    the split 89-161 genome copies outside, 2-54 inside D.
+  - Full check suite (`node tri/check.js`, with the rule as kept): 36 of 36 pass (`grown` partial as before).
+    Coverage hook on `budpore 300`, `budpore 100c`, `imprint`, `imprint 60m`, `imprint 150p` (3000 steps): marks
+    present `. @ & | ?` only.
+
 ## 2026-10-03 (autorun run 20261002-2321, build)
 
 - **Sealed bud pair (`budpore` option `c`): the parent feeds from food inside and fills its bud with genome copies;

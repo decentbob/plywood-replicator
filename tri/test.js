@@ -89,6 +89,13 @@ test('anchor: catches a strand end while the strand is being copied (its docker 
   const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,'Z|f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);
   s.derive();assert.ok(s.busy[u]>0,'the strand is busy');s.run(3);assert.equal(s.partner(u,i),s.n-2,'caught while busy');assert.equal(s.partner(u,r.free),D,'the docker stays');
   assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');assert.ok(s.flushGap(u,r.free,D,s.bond[u*3+r.free]%3)<1e-6,'the docker moved with the strand');symmetric(s);});
+test('anchor: a free triangle\u2019s anchor side binds nothing',()=>{
+  // a free part with an anchor side beside a strand end's seed: binds only without the anchor mark (control)
+  for(const [ty,expect] of [['Z@|--',false],['Z@--',true]]){
+    const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':1},params:{sigma:0,sigmaRot:0}});
+    const F=founders[0],u=F[F.length-1],i=s.roles(u).inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);
+    const v=s.n-1;placeTri(s,v,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(v,ty);s.derive();s.run(3);
+    assert.equal(s.partner(u,i)===v,expect,ty);symmetric(s);}});
 test('import ring: the revolving door carries a caught blank inside and drops it',()=>{
   const {tris,door,R}=S.importRing(4,'X'),all=[...tris,{v:door.keyV,type:'xxx',loose:true}],K=all.length-1;
   const s=new TriSim({sigma:0,sigmaRot:0,W:14,H:14},all.length);buildStructure(s,all.map((_,k)=>k),all,7,7);s.derive();assert.ok(s.bonded(K),'blank caught');

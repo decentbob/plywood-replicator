@@ -187,9 +187,10 @@ class TriSim extends Physics{
           continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
-        // a trigger side catches only while its flap is at rest and its structure is complete (_deaf)
+        // a trigger side catches only while its flap is at rest and its structure is complete (_deaf); a free triangle's
+        // anchor side '|' binds nothing (catching strands is what attached anchors do, below)
         for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue

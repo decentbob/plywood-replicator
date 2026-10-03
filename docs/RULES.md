@@ -30,7 +30,7 @@ to weld prepared structures (a builder convention, not a rule).
 | `%` | activator side: counts as a casting activator while it is bonded by its glue (the only activator) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only) |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
-| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one |
+| `\|` | anchor: an unbonded anchor side catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). With `@` it emits the open signal until it has caught one. A free triangle's anchor side binds nothing (since 2026-10-03) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
@@ -71,7 +71,7 @@ the core (the repository restarted on 2026-10-01).
 | `<` `>` hinge | mark | 19 (pockets, doors, conveyor, gate) | 10-01 |
 | `.` close-only | mark | 21 (pockets, kits, rings) | 10-01 |
 | `*` trigger | mark | 19 | 10-01 |
-| `+` hear | mark | 18 (lid pocket, door panels); since run 20261002-1921 also `budpore` (hear chain from the bud anchor to the latch) | 10-01 |
+| `+` hear | mark | 18 (lid pocket, door panels; `budpore` used a hear chain from run 20261002-1921 to run 20261003-0050, now a completion-release doorway) | 10-01 |
 | `=` wide hinge | mark | 17 (lid pocket) | 10-01 |
 | `@` attach | mark | 16 (kits, rings, growth) | 10-01 |
 | `&` completion release | mark | 10 (buds, membranes, sealed cell) | 10-01 |
@@ -81,7 +81,7 @@ the core (the repository restarted on 2026-10-01).
 | `'` carried marks (stamp) | mark | 6 (stamp, grow 4s, split, split g, split o, budgrow) | 10-01 |
 | `?` copy side | mark | 4 (imprint) | 10-02 |
 | `$` fuel | mark | 2 (energy) | 10-01 |
-| `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02 |
+| `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 |
 | `^` hand-off | mark | 1 (conveyor) | 10-01 |
 | `#` pulse door (hinge side) | mark | 1 (budgrow) | 10-01 |
 | `#` key let go (trigger side) | mark (second meaning) | 0 (the gate's pulse option only; the airlock demo was removed 2026-10-02) | 10-01 |
@@ -173,6 +173,8 @@ spare edge, also while the strand is being copied: since 2026-10-02, Core change
 The capture path (the turn the short way and the move) must be clear in sub-steps, as every move (fixed 2026-10-02:
 a strand was pulled through a wall); a strand that already holds the anchor's triangle (one body) is not caught.
 This is the only way a strand joins an existing structure (two attached triangles otherwise bond only when flush).
+A free triangle's anchor side binds nothing (since 2026-10-03, Core changes: free copies of a waiting anchor
+glue-capped strand ends).
 
 Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
 released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and its face is free (an anchor
@@ -268,6 +270,36 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
+
+### Narrowing: a free triangle's anchor side binds nothing, 2026-10-03, autorun run 20261003-0050 (explore)
+1. **Capability and why the goal needs it.** A bud that catches a genome copy must not make strand caps. An anchor
+   side `|` is meant to do one thing: an attached triangle's unbonded anchor side catches a strand end's seed and the
+   strand moves into place. But the side also carries the complementary glue, and glue binding read it on free
+   triangles too: a free copy of the bud's anchor cell (`W@|`, a part: copy blanks copy the anchor while it waits)
+   bound a strand's low end `w` by glue. Measured in `budpore` (300 blanks, seeds 1-8, run 20261003-0050, with the
+   completion-release doorway): 47-94 copies of wall types per world, of which 14-43 were copies of anchor copies
+   bound to strands; run 2321 counted 5-17 strand ends capped this way per world (a capped end can no longer be
+   caught).
+2. **Designs with the existing core, and why they fail.** The anchor's glue must complement the strand end's seed
+   (that is what it catches), and every copy of the anchor cell carries the same glue, so no glue choice avoids it.
+   Without `@` the copy is not a part and binds by glue on any side, which is worse. Keeping blanks away from the
+   anchor until it catches (sealed layout `budpore c`) works only while the anchor is unreachable; spending the anchor
+   side is impossible (it must stay able to catch). A free part binding only an attached `@` side (wider) would also
+   stop it but changes how every kit root attaches to a strand seed (casting lineage).
+3. **Locality.** The rule reads only the mark of the free triangle's own side (fixed type). One test is added to glue
+   catch.
+4. **Generality.** A free triangle that carries an anchor side binds only by its other sides, as a free part binds
+   only by `@` and a free copier only by `?`: catching strands is what attached anchors do, and a free triangle catches
+   nothing. Affects only triangles with `|` sides while free: copies of anchor cells (`imprint`, `budpore`) and kit
+   parts carrying an anchor (`budgrow g`'s `Z@|` attaches by its other `@` side, as designed).
+5. **What it replaces.** Nothing removed; an accidental use of the anchor's glue is closed.
+6. **Result (built as the rule).** `budpore 300` seeds 1-8: wall copies 20-35 per world, all direct copies of the
+   waiting anchor (was 47-94); genome copies 265-280 of 300 (was 206-253); split with food left 7 of 8 (seed 2 caught
+   late, after the food was gone; was 8 of 8); full copies by the bud after the split 2 of 8 (was 3 of 8): M2 not
+   moved. Tried first, wider: no anchor side binds by glue, attached ones too (an attached `W|` also glue-caught free
+   triangles with a `w` side). That changed `imprint p` seed 4: copying ran faster and most strands left through the
+   pore (3 inside of 13, was 6 of 10), so check imprint-pore fell to 2 of 4; with the free-side test alone seed 4 is
+   identical to before. Kept narrow. Test: "anchor: a free triangle's anchor side binds nothing". Full check: 36 of 36 pass.
 
 ### Generalization: an anchor catches a strand end whether or not the strand is being copied, 2026-10-02, autorun run 20261002-1551 (explore)
 1. **Capability and why the goal needs it.** Segregation on copies: a bud catches a copy of its parent's genome while
