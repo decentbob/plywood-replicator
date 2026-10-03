@@ -23,7 +23,7 @@ to weld prepared structures (a builder convention, not a rule).
 | `<` `>` | hinge: a bond on this side pins only its first (`<`) or second (`>`) corner |
 | `*` | trigger: a flap swings while a trigger side is bonded |
 | `~` | latch: lets go while its door is triggered or opening |
-| `.` | close-only: binds only triangles that are already attached, never a free one |
+| `.` | close-only: binds only triangles that are already attached, never a free one (a free triangle binds by no close-only side) |
 | `$` | fuel side: a hinge here (or on its partner) spends one charged carrier per swing |
 | `+` | hear side: the triangle hears the trigger signal of the partner bonded here (relayed, below) |
 | `=` (hinge side) | wide hinge: swings 120 degrees instead of `hingeAngle` |
@@ -35,8 +35,7 @@ to weld prepared structures (a builder convention, not a rule).
 | `'` | carried marks (stamp): marks written after an apostrophe (`b.'@`) do nothing on this side; a cast product takes them with this side's instruction glue (below) |
 | `^` (hinge side) | hand-off: the flap lets go of its cargo once the cargo is also bonded elsewhere |
 | `!` (hinge side) | drop: the flap lets go of its cargo when its swing is complete |
-| `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back |
-| `#` (trigger side) | the key is let go one pass after it was read (not carried) |
+| `#` (hinge side) | pulse door: a trigger opens it, it swings open, resets there, swings back (its second meaning on a trigger side, "let the key go", was removed 2026-10-03: nothing carried it) |
 
 ## Physics (`tri/physics.js`): rigid parts, move or stop
 - Torus `W x H`. Blocks are rigid unit triangles; a **body** (blocks joined by bonds, hinged ones included) moves and
@@ -61,51 +60,53 @@ to weld prepared structures (a builder convention, not a rule).
   move: a blocked flap **stalls** (it does not push). A design must keep a flap's whole sweep clear.
 - `pairs`: blocks near enough to bond (centre distance within the two radii plus 0.23).
 
-## Core inventory (2026-10-02, core review run 20261002-0721)
-Users measured by running every capability check with a coverage hook (which demos' triangles carry the mark, which
-rule events fire); "checks" counts the demos of `node tri/check.js` (27 demo variants). Dates: when the item entered
-the core (the repository restarted on 2026-10-01).
+## Core inventory (2026-10-03, core review run 20261003-0450)
+Users measured by running every capability check with the coverage hook (`tri/coverage.js`: which demos' triangles
+carry the mark, which rule events fire); 37 checks, 38 demo variants. "Copy lineage" marks what the line now being
+built uses (`budpore`, `imprint` and its variants); everything else serves the frozen casting lineage (docs/NEXT.md,
+Direction). Dates: when the item entered the core (the repository restarted on 2026-10-01).
 
-| Item | Kind | Used by (checks) | Since |
-|---|---|---|---|
-| `<` `>` hinge | mark | 19 (pockets, doors, conveyor, gate) | 10-01 |
-| `.` close-only | mark | 21 (pockets, kits, rings) | 10-01 |
-| `*` trigger | mark | 19 | 10-01 |
-| `+` hear | mark | 18 (lid pocket, door panels; `budpore` used a hear chain from run 20261002-1921 to run 20261003-0050, now a completion-release doorway) | 10-01 |
-| `=` wide hinge | mark | 17 (lid pocket) | 10-01 |
-| `@` attach | mark | 16 (kits, rings, growth) | 10-01 |
-| `&` completion release | mark | 10 (buds, membranes, sealed cell) | 10-01 |
-| `~` latch | mark | 9 (doors) | 10-01 |
-| `!` drop | mark | 6 (doors, conveyor) | 10-01 |
-| `%` activator | mark | 6 (kits; since this run also the prepared pockets: all casting) | 10-01 |
-| `'` carried marks (stamp) | mark | 6 (stamp, grow 4s, split, split g, split o, budgrow) | 10-01 |
-| `?` copy side | mark | 4 (imprint) | 10-02 |
-| `$` fuel | mark | 2 (energy) | 10-01 |
-| `|` anchor | mark | 5 demos (split g, split o, budgrow g, imprint m and p, budpore) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 |
-| `^` hand-off | mark | 1 (conveyor) | 10-01 |
-| `#` pulse door (hinge side) | mark | 1 (budgrow) | 10-01 |
-| `#` key let go (trigger side) | mark (second meaning) | 0 (the gate's pulse option only; the airlock demo was removed 2026-10-02) | 10-01 |
-| busy (30, chain bonds) | relayed signal | 11 (all copying) | 10-01 |
-| zip (chain) | relayed signal | 11 (all copying) | 10-01 |
-| open (`openRange` 120) | relayed signal | 16 (growth: trigger sides deaf while open in 6, `&` release in 8) | 10-01 |
-| lock (`lockRange` 12) | relayed signal | 6 (keys deaf: split o, live, cell, import; latches held: + gate; pulse door: budgrow) | 10-01 |
-| hear (`sigRange` 6) | relayed signal | 18 (lid pocket, doors) | 10-01 |
-| fn, fu, need, gap, nb, tb, nbc, actE, pwE | exposed values (one bond) | copying (fn, need, gap, nb), energy (fu, pwE), machines (tb, nbc), casting (actE) | 10-01 / pwE 10-02 |
-| charge | state | 2 (energy) | 10-01 |
-| fill, refractory | state | 11 (copying) | 10-01 |
-| caught (`cg`) | state | 3 (pLoose: cycle, grown, grow 4s) | 10-01 |
-| door open, powered, away, hinge rest angle and side | state | machines | 10-01 |
-| spent | state | 10 (`&`) | 10-01 |
-| `pLoose` | option | 3 (cycle, grown, grow 4s) | 10-01 |
-| `latGlue` | option | set in 7 places in tri/demos.js (cells, split o, imprint m, ...) | 10-01 |
-| `light` | option (environment) | 1 (energy) | 10-01 |
-| `zip: false` | option | tests only | 10-01 |
+| Item | Kind | Used by (demo variants) | Copy lineage | Since |
+|---|---|---|---|---|
+| `<` `>` hinge | mark | 19 (pockets, doors, conveyor, gate) | - | 10-01 |
+| `.` close-only | mark | 22 (pockets, kits, rings; `imprint`'s ring) | yes | 10-01; a free triangle binds by none 10-03 |
+| `*` trigger | mark | 20 | - | 10-01 |
+| `+` hear | mark | 19 (lid pocket, door panels) | - | 10-01 |
+| `=` wide hinge | mark | 18 (lid pocket) | - | 10-01 |
+| `@` attach | mark | 19 (kits, rings, growth; `budpore`'s anchor) | yes | 10-01 |
+| `&` completion release | mark | 16 (buds, membranes, spent walls of `imprint m/p`, `budpore`'s doorway) | yes | 10-01 |
+| `~` latch | mark | 10 (doors) | - | 10-01 |
+| `!` drop | mark | 6 (doors, conveyor) | - | 10-01 |
+| `%` activator | mark | 16 (all casting) | - | 10-01 |
+| `'` carried marks (stamp) | mark | 7 (stamp, grow 4s, split, split g, split o, budgrow, budgrow g) | - | 10-01 |
+| `?` copy side | mark | 10 (every `imprint` variant, `budpore`) | yes | 10-02 |
+| `$` fuel | mark | 2 (energy, energy dark) | - | 10-01 |
+| `\|` anchor | mark | 9 (split g, split o, budgrow g, imprint p variants, budpore) | yes | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 |
+| `^` hand-off | mark | 1 (conveyor) | - | 10-01 |
+| `#` pulse door (hinge side) | mark | 2 (budgrow, budgrow g) | - | 10-01; its trigger-side meaning removed 10-03 |
+| busy (30, chain bonds) | relayed signal | 17 (all copying) | yes | 10-01 |
+| zip (chain) | relayed signal | 17 (all copying; option `zip: false` removed 10-03) | yes | 10-01 |
+| open (`openRange` 120) | relayed signal | 19 (growth; trigger sides deaf while open in 7, `&` release in 12) | yes | 10-01 |
+| lock (`lockRange` 12) | relayed signal | 7 (keys deaf: split o, grown, live, cell, import; latches held: + gate; pulse door: budgrow, budgrow g) | - | 10-01 |
+| hear (`sigRange` 6) | relayed signal | 19 (lid pocket, doors) | - | 10-01 |
+| fn, need, gap, nb | exposed values (one bond) | copying | yes | 10-01 |
+| fu, pwE; tb, nbc; actE | exposed values (one bond) | energy; machines; casting | - | 10-01 / pwE 10-02 |
+| fill, refractory | state | 17 (copying) | yes | 10-01 |
+| spent | state | 16 (`&`) | yes | 10-01 |
+| charge | state | 2 (energy) | - | 10-01 |
+| caught (`cg`) | state | 5 (pLoose: cycle, heir, grown, grow 12, grow 4s) | - | 10-01 |
+| door open, powered, away, hinge rest angle and side | state | machines | - | 10-01 |
+| `pLoose` | option | 5 (cycle, heir, grown, grow 12, grow 4s) | - | 10-01 |
+| `light` | option (environment) | 1 (energy) | - | 10-01 |
 
-**Counts (2026-10-02):** 17 mark meanings on 16 mark characters (`#` has two), 5 relayed signals, 9 exposed one-bond
-values, 9 states, 4 options (after removing 8 unused options this review: `caps` with its state and two relayed
-signals, `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`, `capture: 0`/`triTol`) and one rule
-branch merged (glue `K` as activator, into `%`). Rule branches that fired in no check: a latch held by the open signal
-(the key's deafness does that job; removed this run), and `#` on a trigger side (used by the gate's pulse option only since the airlock demo was removed); see docs/NEXT.md, Open follow-ups.
+**Counts (2026-10-03):** 16 mark meanings on 16 mark characters (was 17: `#` on a trigger side removed), 5 relayed
+signals, 9 exposed one-bond values, 9 states, 2 options (was 4: `zip: false` removed, `latGlue` became the fill rule).
+The copy lineage uses 5 marks (`. @ & | ?`), 3 relayed signals (busy, zip, open), the copying values and states, and no
+option. Every counted rule event fires in some check (the key release, 0 events in run 0721 and this run, is
+removed); of the uncounted branches, the latch's partner reads decided nothing and are removed (Core changes). Larger removals wait for the copy lineage to run a whole cycle (docs/NEXT.md, Direction, finding 2).
+
+Previous inventory (2026-10-02, run 20261002-0721): 17 mark meanings, 5 relayed signals, 9 exposed values, 9 states,
+4 options, after removing 8 unused options and merging the glue `K` into `%`.
 
 ## Locality audit (2026-10-02, rule by rule)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
@@ -143,11 +144,10 @@ by an anchor side `|` moves as one body into a free flush place (all or nothing;
 | cast | own three bonds; each partner's actE; instruction glue and carried marks | partner value from this step's derive; fixed type | local (convention) |
 | light | own position and charge | environment (labelled) | environment |
 | `&` release | own open signal, own `&` sides | own | local |
-| latches | own tb, sg, dOpen, lock, open; non-hinge partners' tb and dOpen | previous pass | local |
+| latches | own tb, sg, dOpen, lock | previous pass | local (partners' tb and dOpen no longer read, 2026-10-03) |
 | fuel spend | own charge; partner's fuel mark and fu | fixed type; previous pass | local |
 | hand-off, drop, swing, interlock, pulse | own marks, bonds, sg, dOpen, lock, pw; cargo's bond count; partners' tb and fu; hinge angle | previous pass; geometry | local |
 | flap lock and turn | the flap's body (traversal) | physics (labelled) | physics |
-| key release | own trigger side | own | local |
 
 Note: `_pairs` (physics) never lists two free triangles, so no chain of catches through free triangles can form in one
 pass; the chemistry relies on this.
@@ -159,7 +159,10 @@ in the site (activation by attachment: free triangles never bind each other). Tw
 when their sides are flush within 0.05 (rigid parts are exact, so a flap that has arrived, a ring that closes or a
 copy closes; two separately moving structures rarely meet that exactly). At probability
 `pBond` per step (1). A **discharged** triangle binds nothing. Close-only sides
-bind only when both triangles are attached. A free part (a triangle with an attach side `@`) binds only by its
+bind only when both triangles are attached, with one exception: an attached triangle's close-only side still takes a
+dock (template face) or a fill (prev edge); glue catch skips it (the casting lineage's dockers `Ay.z` take their fills
+`Y--` on the close-only `y.` side; recorded 2026-10-03, see Core changes: a candidate for the next review). A free triangle binds (glue catch, dock or fill) by none of its anchor
+`|`, close-only `.` or spent sides (one test for all three ways in; until 2026-10-03 dock and fill skipped it). A free part (a triangle with an attach side `@`) binds only by its
 attach side (an attached triangle's `@` side catches only a free part's `@` side; closures between two attached
 triangles do not look at `@`). A bonded triangle is never free (fixed 2026-10-02: a docked template that had lost its
 chain bonds was caught again), and a side binds only while unbonded. Option `pLoose` (proofreading, cooperative
@@ -188,8 +191,10 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
 - **dock:** a free triangle binds a template face with the complementary face glue (FACE on the copy end, TFACE on
   the template end).
 - **fill:** a free triangle binds the prev edge of a docked or fill triangle while that still needs fills
-  (need = 2 - template gap, relayed), glue-agnostic (option `latGlue`: the fill needs the complement of the lateral
-  glue, which makes backs heritable).
+  (need = 2 - template gap, relayed), by the complement of that edge's glue (an inert edge takes an inert side), so
+  backs are heritable. (Until 2026-10-03 fills were glue-agnostic unless the option `latGlue` was set; the copy
+  lineage's cell demos and most casting-lineage copy demos set it, `copy`, `factory`, `cell`, `grown` and `imprint g`
+  did not; now it is the rule, Core changes.)
 - **close:** a copy triangle's free prev edge binds another's free next edge, only when no more fills are needed.
 - **release:** a docked triangle lets go of its face once its prev and next partners are complete (each partner
   exposes `fn`: it is a fill or has a fill on a chain bond, from the previous pass, and from the pass a fill binds:
@@ -197,10 +202,11 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   once the template has no next (prev) bond there; the copy peels
   off as one strand and is a template itself. Copy faces carry the complement of the template's faces, so a copy
   of the copy restores them (the copy reads as the reverse complement).
-- **zip (default on):** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it, a
+- **zip:** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it, a
   face whose dock is bonded passes it on, backs relay it (previous pass). A copy therefore grows from the high end one
   face after another; parallel docking used to enclose an empty dock site between two partial copies (a hole no free
-  triangle can reach), which deadlocked copying. Option `zip: false` restores parallel docking.
+  triangle can reach), which deadlocked copying. (The option `zip: false`, parallel docking, was removed
+  2026-10-03: only a test used it.)
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
@@ -236,7 +242,10 @@ attached triangles are copied. Gate entry: Core changes.
   the cargo it handed off); a flap's catch side catches only while the flap is at rest. A trigger side binds nothing
   (catch or closure) while its triangle hears an open signal (below): a sensor is live once its structure is complete (a grown door's key,
   a grown pocket's slot; a prepared machine has no attach sides and hears none).
-- **Latches** `~` let go while their door is triggered (or the latch triangle hears a trigger signal) or opening (otherwise a door would re-latch before moving).
+- **Latches** `~` let go while their own triangle is triggered (a trigger side of its own bonded) or hears a trigger
+  signal (and hears no lock signal), or while it is a pulse door that is opening (otherwise a door would re-latch
+  before moving). (Until 2026-10-03 a latch also read its non-hinge partners' trigger and open state; that never
+  decided anything in any check, Core changes.)
   (A latch no longer holds a trigger while it hears an open signal: removed 2026-10-02, it decided nothing in any
   check; a grown door's key side is deaf while its structure hears the open signal, which keeps the door shut.)
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` that has a glue (an open growth front; an inert `@` side emits nothing) emits
@@ -270,6 +279,44 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
+
+### Core review 2026-10-03, autorun run 20261003-0450: four removals and one fix
+Measured with the coverage hook (`tri/coverage.js`) and a trigger-path hook over every check (37 checks, 38 demo
+variants); `node tri/check.js` before: 37 of 37; after all changes: 37 of 37 (the latch change was made after that run
+and is output-identical by construction, below).
+1. **Removed: `#` on a trigger side ("let the key go").** No structure carries `*` and `#` on one side (only
+   `grownBud` writes `#`, on its hinge cells; `ring`'s `pulse` argument was never passed; copies only reproduce
+   existing side mark sets): 0 key releases in every check world, here and in run 0721. `#` now has one meaning
+   (pulse door). Removes one servo loop.
+2. **Removed: option `zip: false`** (parallel docking). No demo set it; one physics test did (now runs with zip, still
+   crowded and binding). The zip test keeps its negative case and gained a positive one (the high end docks).
+3. **Merged: fills bind by the complement of the edge's glue (`latGlue` is the rule; the option is gone).** Two fill
+   rules did one job: glue-agnostic (the default) and glue-matched (the option, set by every cell demo of the copy
+   lineage and 7 casting-lineage demos). Glue-agnostic fills were the one binding that ignored glue; with the merge
+   every binding of a free triangle except contact copying (`?`) reads glue, and backs are always heritable. An inert
+   edge takes an inert side (comp of inert is inert), as under the option. Locality unchanged (the fill reads its own
+   side glue and the docked triangle's fixed type). Cost, measured: `copy` (dockers `A--`... and `---` blanks) copies
+   slower, because a fill bound by a glued side passes that glue to its prev edge, which then needs a complementary
+   fill: complete copies `BBAABA` in 10000 steps, seeds 1-8, 2 2 3 2 2 2 1 2 before, 1 1 1 2 2 2 1 2 after; at 20000
+   steps 2-4 before, 1-3 after (seed 2: 1). The `copy` check was seed 1 at 10000 steps (now 1 copy, fail); it is now a
+   4-world check (seeds 1-4, 20000 steps, 2+ copies, need 3): 3 of 4. Other outputs changed: `cell` 51 imports (was
+   50), `imprint g` 10/11/11 strands in seeds 2-4 (was 11/13/9). Every other check identical in outcome.
+4. **Fix (code to RULES): a free triangle binds by none of its anchor `|`, close-only `.` or spent sides**, in glue
+   catch, dock and fill (one helper; before, only glue catch tested these, so a free `A|--` docked by its anchor side:
+   test "binding: a free triangle docks by none of its anchor, close-only or spent sides" fails on the old code).
+   RULES already said so for `.` (binds no free triangle), spent (binds nothing again) and `|` (run 0050's narrowing).
+   Changed outputs: `imprint 150p` seed 2 copies to genome 133, wall 1 (was 130, 4); `imprint 150ph` seed 4: 7 of 7
+   strands (was 6 of 6). Found by an independent review (still open): on the attached side, a close-only side does
+   take docks and fills (the casting lineage's dockers `Ay.z` take fills `Y--` on `y.`); documented in Binding as an
+   exception, a candidate for the review that removes the casting lineage.
+5. **Removed: a latch reading its non-hinge partners' trigger and open state.** Trigger-path hook over every check
+   world: a latch whose own triangle was neither triggered nor hearing a trigger but whose partner was triggered: 0
+   passes; a latch whose partner was an open door but not itself: 0 passes. The branch never decided, so outputs are
+   identical by construction (spot-checked byte-identical: gate, import, cell, live, grown, split, split o 60000).
+   The latch now reads only its own triangle. Kept (measured, decides): a flap triggered by a welded partner's bonded
+   trigger read directly (not heard through `+`) is how `budgrow`'s pulse-door hinges swing (`d@-C<#@`, `-fb>#`: 2.1-2.5
+   million passes per 4 worlds; every other flap swings on its own trigger or by hearing). Replacing it by a `+` mark on
+   those weld sides would leave one trigger path; it needs `grownBud` rebuilt (casting lineage): NEXT, follow-ups.
 
 ### Narrowing: a free triangle's anchor side binds nothing, 2026-10-03, autorun run 20261003-0050 (explore)
 1. **Capability and why the goal needs it.** A bud that catches a genome copy must not make strand caps. An anchor
@@ -401,4 +448,4 @@ copied.
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
 capture 0.6, triTolClose 0.05, hingeAngle pi/3, hingeRate 0.05, dropTol 0.15, lockRange 12,
-sigRange 6, openRange 120, zip true`, other options off.
+sigRange 6, openRange 120`; options `pLoose` (0) and `light` (off).

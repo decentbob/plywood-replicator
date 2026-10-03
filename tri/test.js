@@ -22,8 +22,12 @@ test('copy: complementary docking only, not when discharged',()=>{
   for(const [type,expect] of [['A--',true],['B--',false],['a--',false]]){const {s,u,d,i}=dockWorld(type);s.run(30);
     assert.equal(s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===d,expect,`docker ${type}`);symmetric(s);}
   const {s,u,i}=dockWorld('A--',false);s.run(30);assert.ok(s.bond[u*3+i]<0,'discharged docker must not bind');});
+test('binding: a free triangle docks by none of its anchor, close-only or spent sides',()=>{
+  for(const type of ['A|--','A.--','A--']){const {s,u,d,i}=dockWorld(type);if(type==='A--')s.spent[d*3]=1;s.derive();s.run(30);
+    assert.ok(s.bond[u*3+i]<0,`docker ${type}${type==='A--'?' (side spent)':''} must not dock`);}});
 test('copy: zip, a face takes a dock only from the high end on',()=>{
-  const {s,u,i}=dockWorld('A--',true,'low');s.run(30);assert.ok(s.bond[u*3+i]<0,'low end docked before the faces above it');});
+  const {s,u,i}=dockWorld('A--',true,'low');s.run(30);assert.ok(s.bond[u*3+i]<0,'low end docked before the faces above it');
+  const h=dockWorld('A--',true,'high');h.s.run(30);assert.ok(h.s.bond[h.u*3+h.i]>=0,'the high end docks');});
 
 test('casting: a pocket of three activated casters casts the instruction glues',()=>{
   const tris=[{v:[[1,0],[1.5,H],[0.5,H]],type:'aaa'},

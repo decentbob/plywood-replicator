@@ -127,9 +127,9 @@ docker types), and parts regrow on every copy from supply, as the typed arms alr
 - Any shape can be grown from a seed: lay its cells out as a spanning tree from the seed, give every tree edge its
   own glue pair (unique attachment), and give the remaining shared edges closure glues (they bind once both sides
   are attached), which closes rings. A pocket needs about 16 distinct types.
-- Information capacity: now only the two strand ends expose seeds (hidden backs are random fills). With `latGlue`
-  (fills must carry the complement of the docker's lateral glue) every back is determined by its face's docker type,
-  so the face sequence decides a sequence of parts along the back: a real genome-to-body mapping.
+- Information capacity: now only the two strand ends expose seeds (hidden backs are random fills). Since
+  2026-10-03 fills must carry the complement of the docker's lateral glue (once the option `latGlue`), so every back is determined by its face's docker type,
+  and the face sequence decides a sequence of parts along the back: a real genome-to-body mapping.
 - The bottleneck is supply: each copy needs its own kit types. A pocket that casts blanks into kit types would make
   its own parts (an autocatalytic factory, the core of a metabolism).
 
@@ -234,6 +234,6 @@ for current work stay in docs/NEXT.md.
   neighbour across its far edge. Close lids onto a target instead of carrying the target (lid pocket).
 - Kits: every functional pair (activator `%` pairs, instruction holders) must be a close-only closure or a unique activator glue (`%`);
   otherwise free kit cells, products or dockers stick at the wrong place. Free parts must bind only by `@`.
-- Dockers used as fills expose their side glues on hidden backs: use `latGlue` with dedicated fill types when dockers
-  carry seeds.
+- Dockers used as fills expose their side glues on hidden backs: give dockers dedicated fill types when they
+  carry seeds (fills match the lateral glue since 2026-10-03).
 - A latch must stay released while its door opens; any doorway makes a 2D ring a C (use airlocks).
