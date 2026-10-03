@@ -269,6 +269,33 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
 
+### Narrowing: an anchor side binds only as an anchor, never by glue, 2026-10-03, autorun run 20261003-0050 (explore)
+1. **Capability and why the goal needs it.** A bud that catches a genome copy must not make strand caps. An anchor
+   side `|` is meant to do one thing: an attached triangle's unbonded anchor side catches a strand end's seed and the
+   strand moves into place. But the side also carries the complementary glue, and glue binding reads it like any
+   glue: a free copy of the bud's anchor cell (`W@|`, a part: copy blanks copy the anchor while it waits) binds a
+   strand's low end `w` by glue. Measured in `budpore` (300 blanks, seeds 1-4, run 20261003-0050): 62-84 copies of
+   wall types per world, almost all of them copies of the anchor cell and of anchor copies bound to strands
+   (`--W@|`, `-W@|-` after the split: 13-34 per world, outside the rings); run 2321 counted 5-17 strand ends capped
+   this way per world (a capped end can no longer be caught). An attached anchor without `@` (P's `W|`, `imprint`'s
+   `W|`) can likewise glue-catch any free triangle with a `w` side, e.g. a free copy of a genome triangle (`Awz`),
+   which then blocks it.
+2. **Designs with the existing core, and why they fail.** The anchor's glue must complement the strand end's seed
+   (that is what it catches), and every copy of the anchor cell carries the same glue, so no glue choice avoids it.
+   Without `@` the copy is not a part and binds by glue on any side, which is worse. Keeping blanks away from the
+   anchor until it catches (sealed layout `budpore c`) works only while the anchor is unreachable; spending the anchor
+   side is impossible (it must stay able to catch). A free part binding only an attached `@` side (NEXT candidate 1,
+   wider) would also stop it but changes how every kit root attaches to a strand seed (casting lineage).
+3. **Locality.** The rule reads only the mark of the side itself (fixed type), on the free triangle or on the
+   attached one. Nothing new is read; one test is added to glue catch and glue closure.
+4. **Generality.** One mark, one way of binding, as for the copy side `?` (binds only by copying): an anchor side
+   binds only by the anchor rule (an attached triangle's unbonded anchor side catching a strand end's seed). A free
+   triangle's anchor side binds nothing (free triangles catch nothing). Affects only triangles with `|` sides: anchors
+   in `split g`, `split o`, `budgrow g` (a kit part `Z@|` attaches by its other `@` side, as designed), `imprint m/p`
+   and `budpore`, and their copies.
+5. **What it replaces.** Nothing removed; an accidental second use of the anchor's glue is closed. Measure: `budpore`
+   wall copies and strands capped, `budpore-c`, `imprint` (p, m), and the full `node tri/check.js`.
+
 ### Generalization: an anchor catches a strand end whether or not the strand is being copied, 2026-10-02, autorun run 20261002-1551 (explore)
 1. **Capability and why the goal needs it.** Segregation on copies: a bud catches a copy of its parent's genome while
    the parent is still copying from a steady blank supply, so the bud leaves with food around it and can copy its
