@@ -56,6 +56,35 @@ until the long periodic front closes onto it, so the door cells are held exactly
 hears 0 after closure and is spent (no door cell can re-attach); needs k >= 5, openRange k + 1, and loses the bud if
 the anchor cell arrives before X and the first door cell.
 
+## Closure: what a part pool costs (analysis, explore run 20261003-1221, 2026-10-03): designed, not demonstrated
+
+The closure kind (above) grows its bud one unique cell after another from free parts, and the next generation's parts
+are copies made while cells are unspent. How large must the pool be? An argument, not a run (a pool of 47 types does
+not exist yet in any world):
+- **When a cell is copied.** With openRange r (the kind needs r = k + 1, k = the anchor's distance from the root) a
+  cell's `&` side is unspent while a front emitter is fewer than r bonds away, i.e. from its arrival until r more cells
+  have arrived; its forward link (an `@` side, never spent) is a free side until the next cell arrives. With the
+  narrowing of this run (a copy blank binds no anchor side) the anchor cell follows the same law; before it, a waiting
+  anchor was copied for as long as it waited (22-35 times per world in `budpore 300`), far more than any other cell.
+- **Blanks and parts reach a site at the same rate.** Both are single unit triangles moved by the same kicks, and
+  binding takes either within `capture` of the site whatever its orientation. So while front j waits for part j+1, the
+  expected number of copies it gets is the ratio of blanks to parts j+1 near the front, per free unspent side, summed
+  over the waits it stays unspent: two free sides during the first wait, the `&` side alone during the r - 1 waits
+  after, so c_j = (2 + (r - 1)) rho_blank / rho_part = (r + 1) rho_blank / rho_part.
+- **Steady state.** Each generation uses one part of each type and makes c_j copies of it, so the pool is steady when
+  c_j = 1: about r + 1 parts of each type per blank near the growing bud, and 46 (r + 1) parts per blank in all for
+  the R 5 kind (92 per blank with the anchor on the root, r = 1). A smaller pool grows by itself (each front waits
+  longer and is copied more) but converts the food into early types first: from one part of each type and 100 blanks,
+  the first fronts would take most of the blanks before the ring is half grown.
+- **Consequences for priority 3.** (a) Seed the first pool at the steady ratio (labelled), and keep blanks scarce
+  where the bud grows: the bud grows best outside the parent's food, in a part-rich medium, and the genome is fed
+  where parts are rare (inside, through the pore). (b) Fewer types help linearly: a periodic ring of m motif types
+  needs m (r + 1) parts per blank (14 for m = 7), so the periodic alternative with door cells (above) is worth its race
+  for large cells. (c) Every plain free side is copied for ever: the kind's seed site `y` (plain glue, never spent)
+  makes copies of E whenever no bud sits on it; one of the kit's costs to measure.
+- **Not yet checked:** saturation (a site busy with one blank is not hit by another), parts binding where they should
+  not (a part binds only a complementary `@` front, so only one place), and crowding at 92 parts per blank.
+
 ## Grow a finished membrane by breaking it and inserting triangles (user, 2026-10-03)
 
 "A mechanism to grow or lengthen a membrane after it is built by breaking and inserting triangles. Just a thought,

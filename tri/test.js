@@ -67,12 +67,18 @@ test('copy side: a copy blank binds any free side of an attached triangle, takes
   const run=(tmpl,blank,at,attached=true)=>{const sites=[[[1,0],[1.5,H],[0.5,H]],[[0,0],[0.5,H],[-0.5,H]]];
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:tmpl},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:sites[at-1],type:blank,loose:true}];
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);if(!attached)s.cut(0,0);s.derive();s.run(5);symmetric(s);return s;};
-  for(const [tmpl,at] of [["fA|b.'@",1],["fA|b.'@",2],['f-b',1]]){const s=run(tmpl,'-?-?-?',at);
+  for(const [tmpl,at] of [["fA.b|'@",1],["fA|b.'@",2],['f-b',1]]){const s=run(tmpl,'-?-?-?',at);
     assert.equal(s.ev.copy,1,`one copy (${tmpl} side ${at})`);assert.equal(canon(s.typeName(2)),canon(tmpl),'the copy has the template type (not its mirror)');
     assert.ok(!s.bonded(2),'the copy lets go');assert.equal(s.typeName(0),tmpl,'the template is unchanged');assert.equal(s.partner(0,0),1);}
   assert.notEqual(canon('fbA'),canon('fAb'),'test types are chiral');
   assert.ok(!run('f-b','---',1).bonded(2),'a blank without a copy side binds no inert side');
   assert.ok(!run('f-b','-?-?-?',1,false).ev.copy,'a free template is not copied (free triangles never bind each other)');});
+test('copy side: a copy blank binds no anchor side (a waiting anchor is no template)',()=>{
+  // template welded by side 0; a copy blank flush beside side 1: copied unless side 1 is an anchor side
+  for(const [tmpl,expect] of [['fW@|-&',false],['fW@-&',true],['fW|-&',false]]){
+    const tris=[{v:[[0,0],[1,0],[0.5,H]],type:tmpl},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:'-?-?-?',loose:true}];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
+    assert.equal(!!s.ev.copy,expect,tmpl);if(!expect)assert.equal(s.typeName(2),'-?-?-?','the blank stays a blank');symmetric(s);}});
 
 test('anchor: an anchor side catches a strand end seed and the strand is placed flush as one body',()=>{
   for(const [ag,expect] of [['Z|',true],['Y|',false],['Z',false]]){
