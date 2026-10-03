@@ -43,7 +43,7 @@ const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+side
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
 const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,hingeAngle:Math.PI/3,hingeRate:0.05,dropTol:0.15,lockRange:12,sigRange:6,openRange:120,
-  pLoose:0,light:null};
+  pLoose:0,light:null,heldCopy:false};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -98,10 +98,13 @@ class TriSim extends Physics{
     // zip: a strand triangle without a next bond (the strand's high end), or whose next partner is a face being copied
     // (a TFACE bond), or a back that hears zip from its next partner; a face takes a dock only while it hears zip, so a
     // copy grows from the high end one face after another and never encloses an empty dock site between two copies
+    // option heldCopy: a high end emits zip only while its spare edge is held (bonded, not to a '&' side), so a free strand
+    // is never copied (Core changes, run 20261003-1720)
+    const held=this.p.heldCopy;
     for(let u=0;u<n;u++){const r=R[u];let z=0;
       if(r.role===SFACE||r.role===SBACK){const e=this._edges(u);
         // a high end held by a completion-release side (a membrane growing around the strand) starts no copy
-        if(e.next<0){z=1;const sp=r.inert;if(sp>=0){const q=this.bond[u*3+sp];if(q>=0&&this.done[q])z=0;}}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
+        if(e.next<0){const sp=r.inert,q=sp>=0?this.bond[u*3+sp]:-1;z=q>=0?(this.done[q]?0:1):(held?0:1);}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
       this.zip[u]=z;}
     // lock signal (interlock): an unbonded latch side emits lockRange, relayed -1 per bond
     for(let u=0;u<n;u++){let v=0;for(let i=0;i<3;i++){if(this.ltc[u*3+i]&&this.bond[u*3+i]<0)v=this.p.lockRange;const q=this.bond[u*3+i];if(q>=0)v=Math.max(v,lb0[(q/3)|0]-1);}this.lockBusy[u]=v;}

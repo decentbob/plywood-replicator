@@ -281,6 +281,44 @@ the light zone `light: {x, y, r, p}` recharge at p per step.
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first.
 
+### Option `heldCopy`: only a strand held by its high end is copied, 2026-10-03, autorun run 20261003-1720 (explore)
+1. **Capability and why the goal needs it.** A cell that leaks strands must not starve. The closure kind's 7-cell pore
+   is both the doorway its strand crosses to the bud and its feeding pore afterwards, so after the split both cells lose
+   strands, and today a free strand outside copies itself from the open food faster than any cell (three rival strands
+   leave an `imprint p` cell 1-2 strands: run 0320). Every design so far tried to stop the leak (NEXT priority 2). If
+   a free strand cannot be copied, a leak costs the cell only the strand, and the opening problem goes away: the cell
+   keeps a held strand that copies, its leaked copies feed nobody's growth.
+2. **Designs with the existing core, and why they fail** (analysis in IDEAS, run 1720: "The kind's opening: the parent
+   cannot see its bud finish"). The parent's opening must widen after the bud has sealed the pair and narrow again after
+   the catch. (i) The existing-core outline (a resting emitter at the parent's root silenced by the bud's last cell)
+   needs a bond between the bud's last cell E and the parent's root, and the only edge they share is the seed edge,
+   whose root side is spent at the parent's own split: no bond can form there, so the parent cannot see its bud finish.
+   (ii) A release by signal (cut while hearing the open signal) fires on the parent's E side from the bud's first cell
+   (the bud's root binds E and emits), opening the parent during the whole growth, and never on the root side (the bud
+   front is 40+ bonds away through bonds, openRange is 1-3). (iii) Fission needs insertion growth on rigid bodies
+   (IDEAS, 2026-10-03): not a near step. A hood keeps strands in but also out (no transfer).
+3. **Locality.** The zip relay already starts at a strand's high end (no next bond) and already reads the bond on the
+   end's spare edge (zip 0 while it is held by a `&` side). With the option the high end emits zip only while its spare
+   edge is bonded, and not to a `&` side: its own bond and the partner side's fixed mark, nothing more. Docking is
+   unchanged (a face takes a dock only while it hears zip).
+4. **Generality.** One condition on zip's origin, the opposite of a case that exists: "held by `&`: no copy" becomes
+   "copied only while held, not by `&`". Any anchor that catches a strand's high end (glue complementing the high end's
+   spare edge, `z` in the copy lineage's genome) makes it a template; a free strand, a strand held by its low end and a
+   partial copy left on a free strand stay as they are. Contact copying of a free strand's triangles is unchanged (its
+   free sides are still copied: dockers and fills for the held ones). Biology: a chromosome is replicated where its
+   origin is attached to the membrane.
+5. **What it replaces.** An option, off by default (the casting lineage's free chains copy, `imprint g` and `imprint m`
+   copy free founders); if it carries the kind, it replaces the `&` case of zip as the rule when the casting lineage
+   leaves (priority 5) and the copy lineage's demos move their anchors to the high end.
+6. **Result (built as an option, `heldCopy`, default off).** Outputs with the option off are unchanged by construction
+   (the zip branch is the same when the option is off); `node tri/check.js` 42 of 42 (the 39 before plus three new).
+   `imprint` cell with a held founder (anchor `Z@|`, 150 blanks outside, 100000 steps; INNOVATIONS run 1720): three
+   rival strands outside, 6-7 strands inside in 4 of 4 (without the option 2-3, the rivals multiply); a 7-cell pore
+   leaks every copy and the founder keeps copying (3 of 4); a lone cell 6 of 8 with 6+ inside (free copying: 8-9).
+   `budpore 300` (open pair, both anchors on high ends, `BUDAG=Z BUDPFE=z`): the bud's caught strand makes 11-14 full
+   copies after the split in 3 of 4 worlds (without the option 0-1, as in every earlier run); the fourth world never
+   split (the parent's founder stalled at its first copy, backs in the wall's wedge). Test: "heldCopy option".
+
 ### Narrowing: a copy blank binds no anchor side, 2026-10-03, autorun run 20261003-1221 (explore)
 1. **Capability and why the goal needs it.** A waiting catching anchor must not eat the food its cell needs. An
    anchor with `@` waits unbonded (it emits the open signal until it catches), and a copy blank binds any free side,
