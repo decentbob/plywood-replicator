@@ -187,9 +187,10 @@ class TriSim extends Physics{
           continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only sides)
-        // a trigger side catches only while its flap is at rest and its structure is complete (_deaf)
-        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
+        // a trigger side catches only while its flap is at rest and its structure is complete (_deaf); an anchor side '|'
+        // binds only as an anchor (below), never by glue, on the attached triangle or on the free one
+        for(const e of this._active(u,r)){const g=gl(u,e);if(!g||this.anc[u*3+e]||this.cOnly[u*3+e]||this.spent[u*3+e]||(this.trg[u*3+e]&&this.away[u])||this._deaf(u,e))continue;
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j]&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};if(!part)this.cg[v]=1;this.count('glue');done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue
@@ -212,10 +213,10 @@ class TriSim extends Physics{
           if(hit)break;}
         if(hit)continue;}
       // two attached triangles: glue closure between active sides (a hand-off flap's catch side never closes: it catches
-      // free triangles only, so a handed-off cargo is not taken back)
+      // free triangles only, so a handed-off cargo is not taken back; an anchor side never closes by glue)
       let done=false;
-      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this._handCatch(u,e)||this.done[u*3+e]||this._deaf(u,e))continue;   // a released completion side never re-closes
-        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this._handCatch(v,f)&&!this.done[v*3+f]&&!this._deaf(v,f)&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
+      for(const e of this._active(u,ru)){const g=gl(u,e);if(!g||this.anc[u*3+e]||this._handCatch(u,e)||this.done[u*3+e]||this._deaf(u,e))continue;   // a released completion side never re-closes
+        for(const f of this._active(v,rv))if(gl(v,f)===comp(g)&&!this.anc[v*3+f]&&!this._handCatch(v,f)&&!this.done[v*3+f]&&!this._deaf(v,f)&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
       // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed
