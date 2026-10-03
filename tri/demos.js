@@ -280,14 +280,16 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // turned back into a blank at a random place, so the blanks stay B and the pool loses only the parts the bud uses.
     // When the bud is complete a stand-in strand end is put on its anchor (labelled, as in `closure`): completion
     // releases its root (the split). extra: P (default 8); BPB: blanks (8); BPS: world size (30); BPR: openRange (1)
-    budpool(){steps=steps||100000;const {GLUE}=require('./sim');const P=parseInt(extra)||8,B=+(process.env.BPB||8),size=+(process.env.BPS||30),r=+(process.env.BPR||1),hold=process.env.BPHOLD!=='0',R=5,K=S.budKit(R),N=K.N;
+    // BPES=1 (run 20261003-1650): E's pore side is plain (budKit eSource), and the copies made there are kept as parts
+    // (the harness turns every other copy back into a blank): an E source inside the pair
+    budpool(){steps=steps||100000;const {GLUE}=require('./sim');const P=parseInt(extra)||8,B=+(process.env.BPB||8),size=+(process.env.BPS||30),r=+(process.env.BPR||1),hold=process.env.BPHOLD!=='0',es=process.env.BPES==='1',R=5,K=S.budKit(R,7,null,es),N=K.N;
       const rv=K.tris[0].v,ai=K.anchorSide,stand=v=>{const a=v[ai],b=v[(ai+1)%3],c=v[(ai+2)%3];return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
       const supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BPE||5*P);
       const {s,structures}=createWorld({seed,size,structures:[{tris:[...K.tris,{v:stand(rv),type:'w-&-&'}],x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const U=structures[0],Pu=U.slice(0,N),all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k]));
-      const bud=new Array(N).fill(-1),tb=new Array(N).fill(0),cp={bud:new Array(N).fill(0),par:new Array(N).fill(0),other:0},ev={stray:0,next:0};
+      const bud=new Array(N).fill(-1),tb=new Array(N).fill(0),cp={bud:new Array(N).fill(0),par:new Array(N).fill(0),other:0},ev={stray:0,next:0},keep=new Set();
       const ob=s.bind.bind(s);s.bind=(u,i,ku,v,j,kv)=>{const res=ob(u,i,ku,v,j,kv);
-        if(s.cpy[v*3+j]){const kb=bud.indexOf(u),kp=Pu.indexOf(u);if(kb>=0)cp.bud[kb]++;else if(kp>=0)cp.par[kp]++;else cp.other++;}
+        if(s.cpy[v*3+j]){const kb=bud.indexOf(u),kp=Pu.indexOf(u);if(kb>=0)cp.bud[kb]++;else if(kp>=0)cp.par[kp]++;else cp.other++;if(es&&(kp===N-1||kb===N-1)&&i===K.eSide){keep.add(v);ev.src=(ev.src||[]).concat(s.t);}}
         else if(s.att[v*3+j]){const k=idx.get(canon(s.typeName(v)));
           if(k===0&&u===Pu[N-1]&&bud[0]<0||k>0&&bud[k]<0&&u===bud[k-1]){bud[k]=v;tb[k]=s.t;}else if(k===0&&u===bud[N-1])ev.next++;else ev.stray++;}
         return res;};
@@ -301,7 +303,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       snap(s,'t0',`t=0: the parent among ${P} parts of each of ${N} types and ${B} blanks`,null,false);
       let ci=0,tc=0,ts=0,shot=12;const sum=a=>a.reduce((x,y)=>x+y,0);
       for(let t=1;t<=steps;t++){s.step();const L=s.copyLog||[];
-        for(;ci<L.length;ci++){const u=L[ci][1];if(hold&&!s.bonded(u)){s.setType(u,'-?-?-?');back(u);}}
+        for(;ci<L.length;ci++){const u=L[ci][1];if(hold&&!s.bonded(u)&&!keep.has(u)){s.setType(u,'-?-?-?');back(u);}}
         if(eIn<0&&bud[N-2]>=0)eIn=all.filter(u=>!s.bonded(u)&&s.att[u*3]+s.att[u*3+1]+s.att[u*3+2]>0&&idx.get(canon(s.typeName(u)))===N-1&&inside(u)).length;
         if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells; copies made ${sum(cp.bud)+sum(cp.par)}`,focus(),false);shot+=12;}
         if(!tc&&bud[N-1]>=0){tc=t;snap(s,'done',`t=${t}: the bud is complete (${N} cells)`,focus(),false);
@@ -315,7 +317,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log('copies per type (bud cell k, then the parent):',cp.bud.join(' '),'| parent:',cp.par.map((c,k)=>c?`${k}:${c}`:'').filter(Boolean).join(' '));
       console.log('waits by cell:',tb.map((x,k)=>bud[k]<0?'-':k?x-tb[k-1]:x).join(' '));
       console.log(`waits per cell: median ${w[w.length>>1]||0}, max ${w[w.length-1]||0}`);
-      console.log(`result: cells=${used}/${N} complete=${tc||'not'} split=${ts||'not'} refilled=${byType.filter((c,k)=>bud[k]>=0&&c>=1).length}/${used} copies=${sum(byType)} min=${Math.min(...byType.filter((c,k)=>bud[k]>=0))} seedsite=${cp.par[N-1]} Einside=${eIn} stray=${ev.stray} next=${ev.next}`);
+      console.log(`result: cells=${used}/${N} complete=${tc||'not'} split=${ts||'not'} refilled=${byType.filter((c,k)=>bud[k]>=0&&c>=1).length}/${used} copies=${sum(byType)} min=${Math.min(...byType.filter((c,k)=>bud[k]>=0))} seedsite=${cp.par[N-1]} Einside=${eIn} stray=${ev.stray} next=${ev.next}${es?` Esource=${keep.size} lastFromSource=${bud[N-1]>=0&&keep.has(bud[N-1])} sealed=${tb[N-2]||'not'} sourceCopiesAt=${(ev.src||[]).join(',')}`:''}`);
       finish(`The closure kind's bud grown from a part pool (${P} parts of each type, ${supply[K.types[N-1]]} of the last, ${B} blanks)`,3);},
     // closure (designed, not demonstrated; docs/IDEAS.md "Closure by design"): the organism kind of structures.budKit
     // drawn, no physics. A complete parent (R 5, prepared, labelled) whose root's anchor holds a stand-in strand end; its
