@@ -8,6 +8,34 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1420, build)
+
+- **The closure kind's bud grown from a part pool, in isolation** — works (4 of 4 check worlds, 7 of 7 with the
+  default pool; labelled: a prepared parent, a seeded pool, a harness that holds the pool's composition, and a
+  stand-in catch at the end). Demo `budpool`: a prepared parent of `structures.budKit(5, 7)` (no food, no strands; its
+  anchor holds a stand-in end, so every wall side is spent) in a 30 x 30 world with 8 free parts of each of the kit's
+  47 types (40 of the last cell E) and 8 copy blanks; openRange 1 (the anchor on the root). A root part binds the
+  parent's seed site `y`, and the bud grows one unique cell after another from the pool; every copy a blank makes is
+  counted by the cell it copied and turned back into a blank at a random place (harness, `BPHOLD=0` turns it off).
+  When the bud is complete, a stand-in strand end is put on its anchor: completion releases its root (split).
+  - Evidence (seeds 1-4, check): complete and split at 143156 / 147804 / 199771 / 137179 steps; 0 stray bindings;
+    copies made 66 / 68 / 81 / 55 for 47 parts used (seeds 6-8: complete at 135692 / 107395 / 153495, 62 / 54 / 43
+    copies). Copies per used part 0.91-1.72 (mean 1.3) at one part of each type per blank, as run 1221's law predicts;
+    about 45 percent of the types get no copy in one generation, and the copies of type k follow the wait for part k+1
+    (correlation 0.56-0.78), not the count of k (IDEAS: the pool has no per-type regulation). Waits per cell 8-32000
+    steps (median 1500-2500).
+  - Failure found and explained: with 8 E parts like every other type the bud completed in 2 of 4 worlds (seeds 1, 3 at
+    99194 / 99492), and stopped at 46 of 47 in the other two. The last site opens only into the sealed pair (its seed
+    side lies on the parent's root by the pose's symmetry, its third side faces the doorway), so only an E part inside
+    at the moment cell N-2 binds can finish it: E parts inside then were 1, 0, 1, 0, and 1-5 in the 7 worlds with 40.
+    This holds for every kind whose pores face each other (IDEAS, run 1420).
+    ![bud grown from the pool, seed 1: parent among the pool, 12 / 24 / 36 cells, complete, split](pictures/budpool.png)
+    ![seed 2 with 8 E parts: 46 of 47 cells, the last site opens only into the sealed pair and no E part is inside](pictures/budpool_stall.png)
+  - Check: `budpool` (seeds 1-4, 250000 steps, need 3; about 3 minutes per world). Renderer: zoomed pictures are now
+    clipped to their frame.
+  - Command: `node tri/demos.js budpool 1 250000 runs` (extra: parts per type, 8; `BPE` E parts, 40; `BPB` blanks, 8;
+    `BPS` world size, 30; `BPR` openRange, 1); the stall: `BPE=8 node tri/demos.js budpool 2 130000 runs`.
+
 ## 2026-10-03 (autorun run 20261003-1351, cleanup)
 
 - **Leaner `budpore`, streaming checks** — works (no capability change). Seven dead-end `budpore` options removed (24

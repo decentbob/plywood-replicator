@@ -85,6 +85,8 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m&&+m[2]>=50,(m?`split at ${m[1]}, ${m[2]} blanks left`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
   {id:'budpore-c',cap:'Sealed bud pair: the parent feeds from food inside, its founder under the doorway; the bud catches a copy and splits',demo:'budpore',seeds:[1,2,3,4,5,6,7,8],need:6,steps:100000,extra:'100c',secs:150,
     pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left, strands in D at the split (\d+)/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m,(m?`split at ${m[1]}, ${m[3]} strands in D`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
+  {id:'budpool',cap:'The closure kind\'s bud grows from a pool of its 47 part types (8 each, 40 of the last; 8 blanks), splits on a stand-in catch',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,
+    pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) refilled=\S+ copies=(\d+) .*stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`${m[1]}/47 cells, split ${m[3]}, ${m[4]} copies, ${m[5]} stray`:'no result'];}},
   {id:'split-g',cap:'Segregation: the bud anchors a genome copy, splits',demo:'split',seeds:[1],steps:60000,extra:'g',secs:47,
     pass:L=>{const ok=/anchored in D/.test(L)&&/SPLIT/.test(L)&&/doors P:shut D:shut/.test(L);return [ok,`${/anchored in D/.test(L)?'copy anchored in D':'no copy in D'}, ${(L.match(/SPLIT at \d+|joined/)||['?'])[0]} ${(L.match(/doors P:\S+ D:\S+/)||['?'])[0]}`];}},
   {id:'split-o',cap:'Offspring that lives alone: own pocket, import, copy',demo:'split',seeds:[1,2,3,4],need:3,steps:450000,extra:'o',secs:420,

@@ -8,6 +8,43 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## The kind's bud from a part pool: the last cell comes from inside; the pool has no per-type regulation (build run 20261003-1420, 2026-10-03)
+
+Measured with demo `budpool` (INNOVATIONS, run 1420): a prepared parent of `budKit(5, 7)` grows its bud on its seed
+site from a pool of all 47 part types plus copy blanks (a harness turns each copy back into a blank, so the pool keeps
+its composition; openRange 1, the anchor on the root). Growth itself works: one cell after another, no stray binding
+in 14 worlds. Three lessons for the kind.
+- **The last cell can only come from inside the pair** (geometry, holds for the whole family). The bud is its parent
+  turned 180 degrees by T, with T(the root's seed edge) = the parent's seed-site edge. T is its own inverse, so the
+  bud's last cell E always lies with its seed side on the parent root's seed side. Its link side holds cell N-2, and
+  its third side faces the bud's pore, i.e. the doorway. So once cell N-2 binds, the pair is sealed, and the last site
+  opens only into it: only an E part already inside can complete the bud. Measured: with 8 E parts (as many as every
+  other type, 30 x 30 world) the bud completed in 2 of 4 worlds, exactly those with an E part inside at sealing (1, 0,
+  1, 0); with 40 E parts it completed in 7 of 7 (1-5 inside). E parts inside per E part in the world: 0.077, so
+  P(complete) is about 1 - exp(-0.077 n_E) here (an inside area of about 70 of 900). Any kind whose pore lies between
+  root and seed cell (the condition for facing pores) has this property, and a stalled bud waits for ever.
+  Where E parts come from: the seed site `y` is plain glue and is copied whenever no bud sits on it (parent and bud
+  alike), so a lineage over-produces E by itself, at the cost of food. Ways out, for priority 2 (the kind's opening):
+  keep it and count on E-rich surroundings; give the parent an E source inside (a plain side of E facing the doorway:
+  copied by the parent's own food, a food sink); or a kind whose last site is not at the pore: two fronts from two
+  seed bonds (one per pore edge) meeting mid-wall, which needs the parent root's seed side to bind again after its own
+  split (a spent side binds nothing: a core change).
+- **A pool of unique types has no per-type regulation** (argument, supported by the runs). Copies of type k are made
+  while cell k is the growth front, i.e. while it waits for part k+1 (openRange 1; with r > 1 also while the next r - 1
+  cells arrive). So copies of k scale with the wait for k+1, which goes as 1/n(k+1), not with n(k): correlation of
+  the wait for k+1 with the copies of k 0.56-0.78 in 4 worlds. The steady state (every n about c B) is neutral: a
+  type's own count has no restoring force and drifts by about one per generation (Poisson copies, one used), so in a
+  balanced pool some type dies out after about n^2 generations, and with it the lineage (walls are spent: no template
+  of it is left). A supercritical pool (more than one copy per use) outruns the drift but grows on food. Measured: 0.91
+  to 1.72 copies per used part (mean 1.3) at one part of each type per blank (8 and 8), as the law of run 1221
+  predicts ((r + 1)/2 to r + 1 parts per blank for one copy per use). Fewer types make each count larger and the drift
+  slower; a template that is copied when its own type is scarce would regulate, and none exists in this kind.
+- **Growth time grows as the square of the number of types.** Waits per cell spread from 8 to 32000 steps (median
+  1500-2500) at 20 percent area cover, so a bud takes 100-200 thousand steps. At fixed cover each type's density goes as
+  1/types, and a bud needs one wait per type. The same pool in a 24 x 24 world (30 percent cover) was slower (34 and 42
+  of 47 cells at 160000 steps): crowding, not distance, limits the rate. Another argument for the periodic ring with few
+  motif types for cells larger than R 5.
+
 ## One opening cannot be both doorway and feeding pore (direction check, review-intent run 20261003-1321, 2026-10-03)
 
 The closure kind (below) feeds through the same 7-cell pore its parent's strand crosses to reach it. A doorway must
@@ -99,7 +136,8 @@ not exist yet in any world):
   copyable sides beside it (they absorb blanks before these reach the front; parts are not absorbed), plus about as many
   again at the front's `&` side. So the estimate holds up to a geometric factor near one half: about (r + 1)/2 to
   r + 1 parts of each type per blank near the bud.
-- **Not yet checked:** a whole bud growing from a pool (47 types), and crowding at that many parts per blank.
+- **Not yet checked:** a whole bud growing from a pool (47 types), and crowding at that many parts per blank. (Checked
+  in run 1420, demo `budpool`: section above.)
 
 ## Grow a finished membrane by breaking it and inserting triangles (user, 2026-10-03)
 

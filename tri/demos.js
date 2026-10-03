@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | lid | stamp | split | closure | pool | budpore | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | cells | conveyor | gate | energy | factory | imprint
+// NAME: copy | lid | stamp | split | closure | pool | budpool | budpore | budgrow | grow | heir | cycle | ring | import | cell | bud | wrap | live | grown | cells | conveyor | gate | energy | factory | imprint
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,partPlacement,openBudDoors,buildStructure,placeTri}=require('./world');
 const {render,montage}=require('./render');
@@ -269,6 +269,51 @@ function demo(name,seed=1,steps,dir='runs',extra){
           else if(ty==='B@c@-&'&&s.bond[A*3+1]>=0&&((s.bond[A*3+1]/3)|0)===u){s.cut(A,1);back(u);}}
         if(every(t,10))console.log(`t=${t} copies at A's forward site ${ev.fwd}, at its & site ${ev.amp}, elsewhere ${ev.other}; parts bound ${ev.part}; forward copies per part ${(ev.fwd/Math.max(1,ev.part)).toFixed(2)} (B/n = ${(B/n).toFixed(2)}); A's & side spent ${s.spent[A*3+2]}`);}
       finish('A waiting front among blanks and parts');},
+    // budpool (build run 20261003-1420; IDEAS "Closure: what a part pool costs"): the closure kind's bud grown from a
+    // part pool, in isolation. A prepared parent of structures.budKit(5, 7) (labelled; no food, no strands; its anchor
+    // holds a stand-in end w-&-&, so nothing in it emits and every wall side is spent) among P free parts of each of the
+    // kit's 46 types and B copy blanks. A root part binds the parent's seed site y and the bud grows cell by cell from the
+    // pool. Harness (labelled, not a rule; BPHOLD=0 turns it off): every copy made is counted (by the cell it copied) and
+    // turned back into a blank at a random place, so the blanks stay B and the pool loses only the parts the bud uses.
+    // When the bud is complete a stand-in strand end is put on its anchor (labelled, as in `closure`): completion
+    // releases its root (the split). extra: P (default 8); BPB: blanks (8); BPS: world size (30); BPR: openRange (1)
+    budpool(){steps=steps||100000;const {GLUE}=require('./sim');const P=parseInt(extra)||8,B=+(process.env.BPB||8),size=+(process.env.BPS||30),r=+(process.env.BPR||1),hold=process.env.BPHOLD!=='0',R=5,K=S.budKit(R),N=K.N;
+      const rv=K.tris[0].v,ai=K.anchorSide,stand=v=>{const a=v[ai],b=v[(ai+1)%3],c=v[(ai+2)%3];return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+      const supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BPE||5*P);
+      const {s,structures}=createWorld({seed,size,structures:[{tris:[...K.tris,{v:stand(rv),type:'w-&-&'}],x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
+      const U=structures[0],Pu=U.slice(0,N),all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k]));
+      const bud=new Array(N).fill(-1),tb=new Array(N).fill(0),cp={bud:new Array(N).fill(0),par:new Array(N).fill(0),other:0},ev={stray:0,next:0};
+      const ob=s.bind.bind(s);s.bind=(u,i,ku,v,j,kv)=>{const res=ob(u,i,ku,v,j,kv);
+        if(s.cpy[v*3+j]){const kb=bud.indexOf(u),kp=Pu.indexOf(u);if(kb>=0)cp.bud[kb]++;else if(kp>=0)cp.par[kp]++;else cp.other++;}
+        else if(s.att[v*3+j]){const k=idx.get(canon(s.typeName(v)));
+          if(k===0&&u===Pu[N-1]&&bud[0]<0||k>0&&bud[k]<0&&u===bud[k-1]){bud[k]=v;tb[k]=s.t;}else if(k===0&&u===bud[N-1])ev.next++;else ev.stray++;}
+        return res;};
+      // inside the pair (observation): a lattice point of the parent's frame (two of its cells give the rigid map) inside
+      // the parent's ring, the bud's ring or the doorway between them
+      const cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],c0=cen(K.tris[0].v),c1=cen(K.tris[20].v),inside=u=>{const a=Pu[0],b=Pu[20],th=Math.atan2(s._dy(s.py[b]-s.py[a]),s._dx(s.px[b]-s.px[a]))-Math.atan2(c1[1]-c0[1],c1[0]-c0[0]);
+        const dx=s._dx(s.px[u]-s.px[a]),dy=s._dy(s.py[u]-s.py[a]),p=[c0[0]+Math.cos(th)*dx+Math.sin(th)*dy,c0[1]-Math.sin(th)*dx+Math.cos(th)*dy];
+        return S.hexr(p)<R-1||S.hexr(S.budPose(R,p))<R-1||Math.abs(p[0])<1.5&&p[1]>(R-1)*H&&p[1]<(R+1)*H;};
+      let eIn=-1;
+      const n=()=>bud.filter(u=>u>=0).length,focus=()=>({units:[...Pu,...bud.filter(u=>u>=0)],radius:11}),back=u=>{placeFree(s,u,all.filter(x=>x!==u),()=>[size*s.rng(),size*s.rng()]);s.regrid(u);};
+      snap(s,'t0',`t=0: the parent among ${P} parts of each of ${N} types and ${B} blanks`,null,false);
+      let ci=0,tc=0,ts=0,shot=12;const sum=a=>a.reduce((x,y)=>x+y,0);
+      for(let t=1;t<=steps;t++){s.step();const L=s.copyLog||[];
+        for(;ci<L.length;ci++){const u=L[ci][1];if(hold&&!s.bonded(u)){s.setType(u,'-?-?-?');back(u);}}
+        if(eIn<0&&bud[N-2]>=0)eIn=all.filter(u=>!s.bonded(u)&&s.att[u*3]+s.att[u*3+1]+s.att[u*3+2]>0&&idx.get(canon(s.typeName(u)))===N-1&&inside(u)).length;
+        if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells; copies made ${sum(cp.bud)+sum(cp.par)}`,focus(),false);shot+=12;}
+        if(!tc&&bud[N-1]>=0){tc=t;snap(s,'done',`t=${t}: the bud is complete (${N} cells)`,focus(),false);
+          const x=all.find(u=>s.typeName(u)==='-?-?-?'&&!s.bonded(u)),q=bud[0],e=[0,1,2].find(k=>s.anc[q*3+k]),V=[0,1,2].map(k=>{const z=(k-ai+e+3)%3;return [s.px[q]+s.ox[q*3+z],s.py[q]+s.oy[q*3+z]];});
+          s.setType(x,'w-&-&');placeTri(s,x,stand(V));s.regrid(x);ob(q,e,GLUE,x,0,GLUE);}
+        if(tc&&!ts&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[N-1])){ts=t;snap(s,'split',`t=${t}: the catch released the bud's root: split`,focus(),false);}
+        if(every(t,10)||ts&&t===ts)console.log(`t=${t} bud cells=${n()}/${N} copies: bud ${sum(cp.bud)} parent ${sum(cp.par)} other ${cp.other}; stray=${ev.stray}`);
+        if(ts&&t>=ts)break;}
+      if(!tc)snap(s,'end',`t=${s.t}: ${n()} of ${N} cells`,focus(),false);
+      const w=tb.map((x,k)=>k?x-tb[k-1]:x).filter((x,k)=>bud[k]>=0).sort((a,b)=>a-b),byType=cp.bud.map((c,k)=>c+cp.par[k]),used=n();
+      console.log('copies per type (bud cell k, then the parent):',cp.bud.join(' '),'| parent:',cp.par.map((c,k)=>c?`${k}:${c}`:'').filter(Boolean).join(' '));
+      console.log('waits by cell:',tb.map((x,k)=>bud[k]<0?'-':k?x-tb[k-1]:x).join(' '));
+      console.log(`waits per cell: median ${w[w.length>>1]||0}, max ${w[w.length-1]||0}`);
+      console.log(`result: cells=${used}/${N} complete=${tc||'not'} split=${ts||'not'} refilled=${byType.filter((c,k)=>bud[k]>=0&&c>=1).length}/${used} copies=${sum(byType)} min=${Math.min(...byType.filter((c,k)=>bud[k]>=0))} seedsite=${cp.par[N-1]} Einside=${eIn} stray=${ev.stray} next=${ev.next}`);
+      finish(`The closure kind's bud grown from a part pool (${P} parts of each type, ${supply[K.types[N-1]]} of the last, ${B} blanks)`,3);},
     // closure (designed, not demonstrated; docs/IDEAS.md "Closure by design"): the organism kind of structures.budKit
     // drawn, no physics. A complete parent (R 5, prepared, labelled) whose root's anchor holds a stand-in strand end; its
     // bud's cells are bonded one by one in growth order (as copies arriving), each followed by signal passes; then a
