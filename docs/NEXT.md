@@ -3,6 +3,15 @@
 State on 2026-10-03 (after autorun run 20261002-2321, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
+**Current slice (autorun run 20261003-0050, explore): the bud lets go by completion release, not by a latch.**
+Idea (existing core, no rule change): in `budpore` D's anchor `W@|` emits the open signal until it catches; make the
+doorway bond a completion-release bond (`&` on both sides) that hears it, so the bond is cut when the catch ends the
+signal. Spent sides are never copied, so the freed doorway sides stop being a food sink (core-change candidate 2,
+measured 19-105 copies per world) and the copy lineage no longer needs trigger `*`, hear `+` and latch `~`. Option
+`r` (`budpore ... 300r`, `100cr`). Done when: splits with food left at least as often as today (`budpore` 4 of 4 at
+300, `budpore-c` 7 of 8), no copies of freed doorway sides, and the bud's copies after the split measured. Stop at:
+if splits fail and the reason is clear, record it; make `r` the default only if it is at least as good.
+
 **Handoff status (autorun run 20261002-2321, build).** Everything committed on branch `claude/autorun-20261002-2321`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; new check `budpore-c` passes 7 of 8; the
 default `budpore` output is byte-identical to main (demo options and diagnostics only, no rule, physics or
