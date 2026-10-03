@@ -142,9 +142,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
       let ring=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));const mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       if(pore){const ang=t=>{const m=[0,1,2].map(i=>t.v[i]).reduce((a,p)=>[a[0]+p[0]/3,a[1]+p[1]/3],[0,0]);return Math.abs(Math.atan2(m[1],m[0])-Math.PI/2);};
         ring.sort((a,b)=>ang(a)-ang(b));if(!closed)ring=ring.slice(3);
-        // the anchor: the inner side in the middle of the flat wall opposite the pore (at a corner the anchored strand
-        // would lie along the next wall, its backs hidden, and no fill could be copied)
-        let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
+        // the anchor: the inner side nearest x = -1 on the flat wall opposite the pore (at a corner the anchored strand
+        // would lie along the next wall, its backs hidden, and no fill could be copied). A caught strand leans 60 degrees
+        // onto the wall, backs underneath; on the side at x = 0 its two outer back sites are 1.53 and 1.73 from wall
+        // cells and a founder caught before any back was copied stalled for 50000-90000 steps (no fills); at x = -1 they
+        // are 1.53 and 2.31 (run 20261003-1520)
+        let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]+1);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
         best.t.type=[0,1,2].map(i=>i===best.i?'W|':'-').join('');}
       // 'h' (with p, a hooded pore): a hood over the pore (prepared, labelled): a strip one row thick two rows above the
       // wall, from x = -2 to the top wall's corner, held by a strut of 4 cells at its left end. Blanks reach the pore along

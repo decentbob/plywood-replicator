@@ -8,6 +8,35 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-1520, harden)
+
+- **Hooded pore made reliable: the anchor one side over** — works (no new rule; prepared layout, labelled). Check
+  suite on main before the change: 38 of 38 pass (1926 s); `imprint-hood` 3 of 4 and `budpore-c` 6 of 8 at their
+  margins, `imprint` and `budpore` 3 of 4.
+  - Failure modes (`imprint k 100000 runs 150ph`, seeds 1-14, anchor at x = 0): 10 of 14 pass. Seeds 4 and 14 stall:
+    the founder, caught by its low end, leans 60 degrees onto the anchor's wall with its backs underneath; caught
+    before any of its backs was copied, it gets no fills (seed 14: every free copy a docker, no back copy until about
+    t = 75000; 0 releases in 70000 steps; 3 and 1 strands at the end). Seeds 11 and 13: 7 of 8 inside, the eighth not
+    lost but standing in the pore (half in). No strand passed the hood in any world.
+  - Dry-run (the founder snapped onto every inner side; distance of each back site to the nearest wall cell): the back
+    next to the anchor is always in the corner (0.58); at x = 0 the other two are 1.53 and 1.73, at x = -1 1.53 and 2.31.
+  - Fix: the anchor on the inner side nearest x = -1 of the wall opposite the pore (`imprint p`, `ph` and controls).
+    `150ph` seeds 1-14: 14 of 14 with 5-9 strands inside and every strand inside (copies 125-131); check
+    `imprint-hood` 4 of 4. Plain pore `150p` seeds 1-8: 8 of 8 with 4+ inside, wall copies 0 (check `imprint-pore` 4
+    of 4); it still loses 5-11 strands in 4 of 8 (seeds 5-8), which is what the hood is for. Controls `150pc`, `150pn`
+    unchanged in outcome.
+  - Picture (seed 14, t = 50000: left anchor x = 0, 1 strand, no fills; right x = -1, 6 strands):
+    ![hooded pore, anchor shift](pictures/imprint_hood_anchor.png)
+  - Command: `node tri/check.js imprint-hood imprint-pore imprint-pore-c imprint-pore-n`; the dry-run code is in git
+    (`IMPDRY`, commit 941aded).
+- **Margins named, not fixed (frozen layouts):** `budpore-c` seeds 2 and 3 are blocked, not slow (no split at 300000
+  steps): the 80 blanks inside P are used up by t = 12500; in seed 2 nine strands crowd P in front of the doorway and
+  none passes, in seed 3 two or three strands reach D and its anchor catches none. `budpore`'s layout is frozen (run
+  1321's decision), so no fix. `imprint` (contact-copied ring) seeds 1-7: 5 of 7; seed 4's second ring stops at 28 of
+  30 with 11-59 free parts of every type: the closed first ring lies across its last two sites (crowding of two
+  large bodies, not a shortage); seed 6 also stops at 28 of 30 with 12-74 of every part, the rings far apart (not
+  diagnosed). Both use up their 400 blanks by t = 25000-50000.
+
 ## 2026-10-03 (autorun run 20261003-1420, build)
 
 - **The closure kind's bud grown from a part pool, in isolation** — works (4 of 4 check worlds, 8 of 8 with the

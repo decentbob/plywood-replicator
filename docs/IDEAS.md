@@ -420,6 +420,10 @@ Roughly newest first. Add new ones here; docs/NEXT.md points to this section.
   wall, leaning one way fixed by which end is caught and the strand's handedness; its backs then face either the acute
   wedge (a back site can be covered by a wall cell) or the open side. Backs in the wedge get no copies, so there are
   no fills and copying stalls after a few docks. Dry-run the capture and measure back sites before placing an anchor.
+  On a flat wall the wedge differs by side: one side over (2026-10-03, run 1520) `imprint p`'s anchor at x = 0 left the
+  caught founder's outer back sites 1.53 and 1.73 from wall cells and 4 of 14 hooded worlds stalled (a founder caught
+  before any back was copied: 50000-90000 steps without a fill); at x = -1 they are 1.53 and 2.31 and 14 of 14 pass.
+  The back next to the anchor is always in the corner (0.58: a notch).
 - **Prepared bonds need no glue** (2026-10-02, run 1921). A weld glue left on a prepared side becomes active when the
   bond is cut (a latch letting go) or on every copy of the cell: copies of `f`/`F` cells glued onto each other and grew
   crystals. Zero the glue of prepared walls; give glue only to sides meant to bind.
