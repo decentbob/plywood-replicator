@@ -4,6 +4,11 @@ State on 2026-10-03 (after autorun run 20261003-1321, review-intent). Read AGENT
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `30c5e5a` for run 1221's, `4238aea` for run 1121's).
 
+**Current slice (autorun run 20261003-1351, cleanup; in progress).** Goal: prune `budpore`'s diagnostic options
+(Direction priority 4), make `tri/check.js` print each check as it finishes, drop unlinked pictures, shorten NEXT.
+Done when: `node tri/test.js` passes; `budpore` 300 and 100c give identical output to main on the checked seeds; the
+commands kept below still run; branch `claude/autorun-20261003-1351` merged. Stop there: no new capability, no core change.
+
 **Handoff status (autorun run 20261003-1321, review-intent).** Direction check only, no code changed: everything on
 branch `claude/autorun-20261003-1321`, merged into `main`. No simulations running; tests and checks as left by run 1221
 (38 tests, 37 of 37 checks). The result is the Direction section below (it replaces run 1751's; that one is in git at
