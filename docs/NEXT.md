@@ -3,6 +3,16 @@
 State on 2026-10-03 (after autorun run 20261003-0320, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
+**Current slice (autorun run 20261003-0450, core-review; started 04:50 UTC).** Goal: audit the rule set since the last
+review (13461ae..95c5f19: anchor generalization, narrowing, physics midpoint fix, completion-release doorway), refresh the
+core inventory with a coverage run of every check, and make the core smaller without losing a check. Candidates, in
+order: (1) remove `#` on a trigger side (key let go; no structure carries it: `ring(..., pulse)` is never called with
+pulse); (2) remove the option `zip: false` (one physics test only); (3) fills bind by the complementary lateral glue
+always (`latGlue` becomes the rule, the glue-agnostic fill and the option go) if every check still passes; (4) if
+time: a flap triggered by a welded partner's trigger read directly vs heard through `+` (two paths for one job).
+Done when: each candidate merged or recorded as measured-and-kept, `node tri/check.js` passes, RULES inventory current.
+Stop at: no structure rebuilds beyond marks; anything larger goes to NEXT as a design note.
+
 **Handoff status (autorun run 20261003-0320, build).** Everything committed on branch `claude/autorun-20261003-0320`
 and merged into `main`. No simulations running; `node tri/test.js` 35 pass; checks `imprint-hood` (new), `imprint-pore`
 and `budpore-c` rerun (results in the PR; no rule, physics or shared-structure change, and default demo outputs are
