@@ -56,6 +56,8 @@ const CHECKS=[
   {id:'budcycle',cap:'One generation of the kind from its own kit: the parent copies its held founder, grows its bud from the pool; the bud catches a real copy, splits and is complete',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:300000,secs:600,env:{BCAFTER:'2000'},
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) catch=(\S+) early=(\d) catchCells=(\d+) split=(\S+) .*budCopies=(\d+) .*newRoots=(\S+) .*stray=(\d+)/);
       return [!!m&&m[2]!=='not'&&m[3]!=='not'&&m[6]!=='not'&&+m[9]===0,m?`split ${m[6]} (catch at ${m[5]} cells), complete ${m[2]}, bud copies ${m[7]}, new roots ${m[8]}, ${m[9]} stray`:'no result'];}},
+  {id:'budcycle-2',cap:'Two generations from the kit: a bud grown on a bud\'s seed site completes and lets go after its catch',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:600000,secs:1200,env:{BCAFTER:'300000',BCSTOP2:'1'},
+    pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) stray=(\d+)/);return [!!m&&m[2]!=='not'&&+m[3]===0,m?`first split ${m[1]}, second generation let go at ${m[2]}, ${m[3]} stray`:'no result'];}},
 ];
 
 function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'demos.js'),c.demo,String(seed),String(c.steps),path.join('runs','check')];if(c.extra)args.push(c.extra);

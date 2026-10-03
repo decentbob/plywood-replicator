@@ -10,7 +10,7 @@ not statistics.
 
 ## 2026-10-03 (autorun run 20261003-2221, build)
 
-- **One generation of the kind from its own kit, with no stand-in** — works (check `budcycle` 4 of 4, 331 s; 8 of 8 seeds 1-8 split
+- **One and two generations of the kind from its own kit, with no stand-in** — works (check `budcycle` 4 of 4, 331 s; 8 of 8 seeds 1-8 split
   after a real catch and complete their bud, 0 stray bindings). No new rule. Labelled: the prepared parent holding
   its founder, the seeded pool, the 20 blanks inside the parent and budpool's harness (kit copies back to blanks). Demo
   `budcycle` joins `budpool` and `budpore-kind`: a prepared parent of `budKit(5, 7, null, true, {at: 6, glue: 'Z'})`
@@ -31,6 +31,16 @@ not statistics.
     157404/45/163988/1, 153639/41/184616/1, 52122/11/215146/5, 36890/8/206993/9. Afterwards both seed sites take new
     roots in 8 of 8 (the parent's next bud and the bud's own bud, 5-47 cells by the end); in seeds 7 and 8 the
     parent's second bud completed all 47 cells.
+  - **Two generations** (600000 steps, `BCAFTER=300000`; the `later buds:` line lists each later bud as seed site
+    (P: the parent; k: bud k), cells, and `free` once its root let go, which a bud of 7+ cells does only after its
+    anchor caught): a bud grown on a bud's seed site completed all 47 cells and let go in 6 of 6 worlds (seeds 1, 2, 3,
+    4, 7, 8; in 5 of them the first bud's own bud, in seed 8 a bud of the parent's second bud). Seed 1: `P:47 free,
+    0:47 free, P:46 free, 1:47 free, P:17 free, 0:19 free, 1:8`; seed 7: `P:47 free` three times, `0:47 free, 1:47
+    free, P:18 free, 1:10 free`. The parent itself buds 2-4 more times. Most catches after the first are leaked,
+    sterile strands (10-15 lie outside by the end): with `heldCopy` a leak is not lost, the next bud that passes holds
+    it and it copies again. Check `budcycle-2` (stops at the first such bud): GEN2CHECK. Picture (seed 1 at t =
+    458979: the parent, its buds and their buds, all grown from the pool):
+    ![two generations from the kit](pictures/budcycle_generations.png)
   - **openRange 50** (the root hears the front anywhere on the arc, so it lets go only after both completion and a
     catch; `BCR=50`, with the waste drive below at 0.05), seeds 1-4: the designed order in seed 1 (catch at 34
     cells, complete at 138342, split 51 steps later with all 47 cells; both seed sites then took roots); seed 2 stops
@@ -39,8 +49,8 @@ not statistics.
     the default.
   - **Food is the limit after the split.** The 200 blanks are gone by t = 75000 (about 180 genome copies: blanks
     copy the sides of every strand, held or free, and the copies pile up as free face and back triangles that only a
-    held strand can use). A bud that splits late finds no blanks and copies its strand about once; seeds 7 and 8,
-    split before t = 53000, copied 5 and 9 times. A labelled waste drive (`BCW=p`: every 100 steps each free genome
+    held strand can use). A bud that splits late finds no blanks and copies its strand about once; seeds 1, 7 and 8,
+    split before t = 53000, copied 7, 5 and 9 times. A labelled waste drive (`BCW=p`: every 100 steps each free genome
     triangle outside both cells becomes a blank with probability p) at 0.05 starved the copies instead (the parent's
     face copies drift out of the pore and were recycled before docking: seeds 3, 4 stalled at 3 docks); at 0.005
     (seeds 1-4, 100000 steps after): 4 of 4 split and complete, but still about 1 copy per bud (the blanks are copied

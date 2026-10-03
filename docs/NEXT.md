@@ -4,8 +4,8 @@ State on 2026-10-03 (after autorun run 20261003-2221, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `f05ed31` for run 2121's, `7415fd4` for run 1921's).
 
-**Handoff status (autorun run 20261003-2221, build).** Slice done: priority 3's first half, one generation of the
-kind from its own kit with no stand-in (new demo `budcycle`, check `budcycle` 4 of 4). Branch
+**Handoff status (autorun run 20261003-2221, build).** Slice done: priority 3, one generation of the kind from its
+own kit with no stand-in (new demo `budcycle`, check `budcycle` 4 of 4), and run on, two (check `budcycle-2`). Branch
 `claude/autorun-20261003-2221`, merged into `main` by PR; no simulations running. (1) **What runs:** a prepared parent
 of `budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding its founder by the high end on arc cell 6 (labelled),
 `heldCopy`, openRange 9, 8 free parts of each kit type but E, 200 blanks (20 inside), budpool's harness (kit copies back
@@ -19,16 +19,22 @@ wall 2-10 times more; 1 of 4 stopped at 46 of 47, 2 of 4 founders never copied).
 200 blanks are gone by t = 75000 (contact copies of every strand's sides pile up as free genome triangles only a held
 strand uses); buds that split late copy their strand 0-1 times, early ones (split before t = 53000) 5-9 times. A
 labelled waste-to-blank drive (`BCW`) did not help (at 0.05 it recycled the parent's face copies before they docked).
-LONGRUNS
+(4) **Two generations:** run on to 600000 steps (`BCAFTER=300000`), a bud grown on a bud's seed site completes and
+lets go after a catch in 6 of 6 worlds (seeds 1-4, 7, 8); check `budcycle-2` (stops at the first such bud): GEN2CHECK.
+Later buds mostly catch leaked strands (10-15 lie outside): with `heldCopy` a leak is held and copied again by the next
+bud that passes. Records: INNOVATIONS (run 2221), IDEAS ("A bud that catches early splits early and finishes
+alone"), ROADMAP rows; pictures `docs/pictures/budcycle.png`, `budcycle_generations.png` (commands below).
 
-**Exact next step** (the next `build`): priority 3's second half, two generations, on `budcycle`. The bud already
-starts its own bud in 8 of 8 (LONGSHORT); what is missing is food after the split, so that the bud copies its
-strand and its own bud has a copy to catch. Try first the cheapest: more blanks in a larger world (`BCB=400 BCS=36`,
-seed 2: 4 copies after the split instead of 1, 16 strands leaked), run 600000 steps with `BCAFTER=300000`, and measure
-second-generation catches and splits (the `later buds:` line: where each bud started, its cells, `free` once it let
-go). Target: the bud's own bud splits off after a real catch in 3 of 4. If food still runs out, weigh a steady supply
-outside (an environment drive, labelled) before anything in the kind. Then the harness: turn `BCHOLD=0` on and see
-whether the copies of bud cells made during growth (200-900 per generation) keep the pool alive.
+**Exact next step** (the next `build`). Priority 3 works with two labelled supports left: the prepared pool (8 parts
+of each of 46 types, enough for about 8 buds) and budpool's harness, which turns every copy of a kit part back into a
+blank. The kind's own refill is the copies blanks make of a bud's unspent cells while it grows (200-900 per bud with
+the harness). Next: turn the harness off (`BCHOLD=0`) so those copies stay as parts, give the world a steady food
+supply if the blanks run out first (an environment drive, labelled: e.g. blanks enter at the world's edge; the waste
+drive `BCW` recycled the parent's face copies and did not help), and measure the pool per type over two or three
+generations (does any type run out; which). Target: the second generation (`budcycle-2`) in 3 of 4 with the harness
+off. If the pool drifts (run 1420: no per-type regulation), that is the finding; weigh the periodic ring (fewer types)
+then. Food after the split also limits each bud's own copies (0-1 when it splits late, 5-9 early; 400 blanks in a 36
+world, seed 2: 4).
 
 **Core-change candidates (for the next `core-review` or `explore`).** (e) *`heldCopy` as the rule:* RULES (Core
 changes, run 1720) foresaw that it replaces the `&` case of zip once the casting lineage is gone and the copy lineage's
@@ -103,8 +109,8 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    the root (a high end held there stands in the doorway); on arc cell 6 the bud copies after the split in 8 of 8
    (check `budpore-kind`); the kit has the option. Next: priority 3 (Exact next step).
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
-   The whole cycle. First half done (run 2221: one generation from the kit, `budcycle`, check 4 of 4); second half:
-   Exact next step.
+   The whole cycle. Done (run 2221) with a prepared pool and budpool's harness: one generation (`budcycle`, 4 of 4)
+   and two (`budcycle-2`, GEN2SHORT; 6 of 6 long runs). Next: the pool without the harness (Exact next step).
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
    `BUDTOOTH`, `BUDNOCA`, `BUDDBGA`, `BUDNOP`; their results stay in INNOVATIONS and git); decide whether the plug
    (`BUDRD=7`) and cap-release (`BUDCAP`) commands still earn their options once priority 2 has chosen; keep `300`,
