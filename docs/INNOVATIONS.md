@@ -3,8 +3,17 @@
 One entry per capability: what it is, the evidence, the picture, the command, what it enables. Newest first.
 Status: **works** (does what was intended in demos), **partial**, **not yet**. Pictures from before 2026-10-01 were
 made with the pre-port engine (experiments/, history before commit `cac79c9`, same rules); `node tri/demos.js NAME`
-reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
+reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Demo options cited
+below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `BUDNOP`, `BUDDBGA`, `BUDNOCA`,
+`BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
+
+## 2026-10-03 (autorun run 20261003-1351, cleanup)
+
+- **Leaner `budpore`, streaming checks** — works (no capability change). Seven dead-end `budpore` options removed (24
+  to 17 `BUD*` variables; list and commit in the header above); output byte-identical to main on 11 runs covering
+  every kept command. `tri/check.js` prints each check when its last world finishes. NEXT's pitfalls moved to
+  docs/IDEAS.md. Command: `node tri/check.js budpore budpore-c`.
 
 ## 2026-10-03 (autorun run 20261003-1221, explore)
 

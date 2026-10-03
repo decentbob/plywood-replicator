@@ -346,10 +346,107 @@ into a C while it is open, hence airlocks.
 - In closed, material-limited worlds a part's cost so far outweighed its benefit (earlier triangle-chain batches):
   parts need supply that machines make, or an environment that pays for them.
 
+## Pitfalls learned (copy lineage; moved from docs/NEXT.md, cleanup run 20261003-1351)
+Roughly newest first. Add new ones here; docs/NEXT.md points to this section.
+- **Growth cannot stop beside a gap** (2026-10-03, run 1121). A ring grown from a periodic motif ends only by closing
+  onto a cell already there (cells of one motif index are interchangeable among the six repeats), so a grown ring with
+  a pore needs unique cells up to the pore's far edge, or cells released later. Unique cells lie on segments grown
+  from the root.
+- **Two aligned 3-cell halves pass no strand** (2026-10-03, run 1121; run 0320 for a 3-cell bud half). The doorway's
+  waist is one unit wide and two rows long: 0 of 8 worlds; 7-cell halves pass (4 of 4).
+- **An anchor at a doorway's edge holds its strand across the doorway** (2026-10-03, run 1121). A strand caught on the
+  pore side of an edge cell (or one cell from it) leans over the opening; as a parent's founder it jams the doorway
+  (1 of 4 transfers, 4 of 4 with the founder elsewhere).
+- **A catching anchor must carry `@`** (2026-10-03, run 0751). An attached glued side without `@` binds any free
+  triangle with the complementary glue (glue catch): a plain `Z|` anchor was capped by a lone face copy and never
+  caught a strand. With `@` it binds only a part's `@` side, so only the anchor catch (strand ends) can take it.
+- **A waiting anchor near food is a food sink** (2026-10-03, run 0751; narrowed run 1221). Its unbonded `@|` side was
+  copied by every blank that touched it (29-69 copies per world); since run 1221 no copy blank binds an anchor side.
+  The anchor cell's own `&` sides still stay unspent while it hears its own signal (60-68 copies once exposed): keep
+  waiting anchors' cells spent elsewhere or away from food.
+- **A strand lying in a wall row facing a fed interior gets no fills** (2026-10-03, run 0751). Its faces meet all the
+  food and its backs none: all blanks become face copies, no back copies, copying stalls (80 copies, 12 docks).
+- **Signal decay is simultaneous** (2026-10-03, run 0751). When an emitter stops, every cell within range reaches 0
+  within the same one or two passes (value R - t or R - 1 - t by distance parity), so `&` cuts cannot be staged by
+  distance, only by parity: a cell with R - d even reaches 0 one pass before one with R - d odd.
+- **An opening that lets a strand in lets it out** (2026-10-03, run 0320). Motion is reversible: a doorway, pore or
+  gap a strand can pass one way it can pass the other, and it stays open after a split. Keep strands in with a bent
+  opening (hooded pore) or a binding event (a catch, growth); never count on a narrow straight opening.
+- **Changing a layout moves the automatic anchor choice** (2026-10-03, run 0320). `budpore` picks D's anchor by distance
+  and corners; with another gap it took the gap's edge (the strand stood outside). Pass `BUDA` and dry-run (`BUDDRY=1`).
+- **Where a caught strand's backs face** (2026-10-02, run 1921). A strand caught by an end stands at 60 degrees to the
+  wall, leaning one way fixed by which end is caught and the strand's handedness; its backs then face either the acute
+  wedge (a back site can be covered by a wall cell) or the open side. Backs in the wedge get no copies, so there are
+  no fills and copying stalls after a few docks. Dry-run the capture and measure back sites before placing an anchor.
+- **Prepared bonds need no glue** (2026-10-02, run 1921). A weld glue left on a prepared side becomes active when the
+  bond is cut (a latch letting go) or on every copy of the cell: copies of `f`/`F` cells glued onto each other and grew
+  crystals. Zero the glue of prepared walls; give glue only to sides meant to bind.
+- **A freed side is a food sink.** Every free, unspent side of an attached triangle is copied by every copy blank that
+  reaches it, glue or not (a released latch side: up to 105 copies). Count exposed sides after each event, not only at t=0.
+  A bond that comes apart once should be an `&` bond: its freed sides are spent (`budpore` since run 0050).
+- **A strand caught while busy needs fills from elsewhere** (2026-10-02, run 1551). Anchors catch busy strands; the
+  strand and its partial copy are pinned in the anchor's orientation. If its backs then face a wall (a narrow wedge),
+  no back is copied there, and a copy caught before any back copy exists never gets a fill (`imprint p` seed 2). Place
+  anchors so a caught strand stands into the cell with backs open, or keep other strands copying nearby.
+- **Glue letters run out; seed letters clash** (2026-10-02, run 1351). The glue code is Int8: 63 letters, and a grown
+  bud of side 5 uses 54. A genome in the same world needs its own letters (`avoid`), and the bud's seed glue must not
+  be the genome's (a free part carrying the anchor's `Z@` bound the parent's seed side `z@~` in place of the root).
+  Prepared bonds that never let go can share one letter (`f`).
+- **The last open-signal source must arrive early.** A grown pair holds while anything hears an open signal; latch
+  sites emit none. If the content seed (cap seed, anchor) sits late on the wall front, the panel front completes first
+  and the root lets go of a half-grown bud. Put it early and give the cells before it more supply.
+- **A site needs an open approach, not just a free side** (2026-10-02, run 1050). Binding needs the part within the
+  capture tolerance of its place, so a site whose way in is a channel exactly one block wide (0.866) fills only by luck:
+  the grown bud's last site beside the parent's corner apex, an import door's drop place boxed in by its open panel,
+  the wall and a strand. Check new layouts: mirror the site across its free side; that place must share no side with
+  another cell, and anything a door drops needs room to leave its sweep.
+- **One-front rings: the last two sites.** Sites alternate outward / inward along a one-row ring, so with one growth
+  front and an outward root the second-to-last site faces inward. While it and the last site are both open, the gap
+  through the wall is a rhombus exactly one block wide: only a part already inside can fill the inward site (imprint's
+  rings stuck at 28/30). `ringKit(..., seedIn)` ends on an outward corner pair instead, but puts the root (and its
+  anchor) inside; that changed what imprint copies (tried, reverted: rings stalled at 7 cells).
+- **An open-signal hold exposes its whole range to copying** (2026-10-02, run 0921). `&` sides are spent only where
+  nothing is heard; every wall cell within `openRange` of an emitter keeps its free side and is copied by any blank
+  that reaches it, from inside or outside. With blanks outside, a pair held by `&` pairs (range 27, or 11 with two
+  anchors) lost 98% of the blanks to its walls. Start the structure spent and hold by one `&` bond that hears the
+  anchor (`budpore` since run 0050; spent sides stay spent), so only the anchor side is ever unspent.
+- **Anchors in the middle of a flat wall.** An anchor next to a hex corner lays its strand along the next wall with its
+  backs hidden: no back is copied, so no fill exists and copying deadlocks (`budPair`'s P anchor is such a place).
+- **One gap per one-row ring.** A pore plus a doorway cuts a ring's wall into two bodies.
+- **Copy blanks go to every exposed side.** Walls take most of a batch (65-70% in a cell). Mark plain wall sides `&`:
+  they are spent once the structure hears no open signal and are never copied. Copies of `&` cells used as fills are
+  cut when their `&` side hears none: give backs a lateral glue so only genome back copies fill (fills match the edge's glue).
+- **Latch sites emit no open signal** (`@~`): a front of latch sites carries the lock signal, not the open signal;
+  something else must keep a structure open (ordinary sites, a content seed) or its `&` sides cut early.
+- **Physics leaks found 2026-10-02** (fixed): check new closed structures for escapes with a trace (cast products and
+  released parts start touching their neighbours).
+- **Bodies longer than half the world** were folded by the torus minimum image (fixed 2026-10-01, `_unwrap`). Keep
+  world size larger than any body anyway (pictures and inside tests use minimum images).
+- **A closing door stalls on anything in its sweep**; a strand lying across a doorway can jam it for good.
+- **Apostrophes in test names**: `'` inside a single-quoted test name breaks the file (twice this session).
+- **Locality (user, 2026-10-01).** Before writing a rule, ask: does this triangle know this through its own bonds,
+  a direct partner's exposed value, or a relayed signal? "Same structure", "smaller body", "partner's partner" are
+  not local (all three were written once and undone). Physics may treat a structure as one body; chemistry may not.
+  See AGENTS.md (Locality) and RULES.md (Locality audit).
+- **Inside or outside a hex ring: use `hexr`, not Euclidean distance.** Near a hexagon's corners a side on the inner
+  boundary can lie farther from the centre than (R-0.5)H; for R >= 6 twelve sides were misjudged, so a door kit's last
+  site faced inward and the ring could only be closed by triangles already trapped inside (fixed 2026-10-01).
+- **Trailing comments in one-line code.** Twice a `// comment` appended inside a long line swallowed the code after it
+  (no error, wrong behaviour). Put comments on their own line.
+- **Rigid machines.** Every swing must be clear: sweep a design before building it (`structures.ring` shows how). A
+  flap whose catch side stays flush with its cargo re-closes on it at once (hence the hand-off and at-rest rules).
+- **Enclosed holes.** A site whose three neighbours are all present before it fills can never be filled (no free
+  triangle can reach it: rigid parts never pass through). This caused the copy deadlock (fixed by zip) and the grown pocket
+  stall (fixed by `pLoose`). Check every new design for sites that can become enclosed.
+- **lockBusy and other relays are Int8**: lockRange above 127 overflows (no lock at all). Use at most 120.
+- **Supply races decide reliability.** The founder's first dock races the membrane root (cells); leftover kit parts
+  trapped in a closed ring jam its door (live). Supply ratios are design parameters: check them on 4 worlds.
+- Shared edges of a prepared structure must have opposite directions when you write glue onto them.
+
 ## Pitfalls from the casting lineage (moved from docs/NEXT.md, cleanup run 20261002-1821)
 
 Design lessons from kits, pockets, doors and flaps (the casting lineage, frozen since run 20261002-1751). The pitfalls
-for current work stay in docs/NEXT.md.
+for current work are in "Pitfalls learned (copy lineage)" above.
 
 - **Kit races** (`structures.kitRace`): a cell whose every side may face a non-descendant (or a slot) is lost for good
   if that neighbour arrives first; kit depth does not order arrival. The lid pocket's cell beside the slot is a leaf of
