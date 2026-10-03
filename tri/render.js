@@ -17,7 +17,7 @@ function render(s,out,title,focus=null,labels=false){
   if(focus){const u0=focus.units[0];let sx=0,sy=0;for(const u of focus.units){sx+=s._dx(s.px[u]-s.px[u0]);sy+=s._dy(s.py[u]-s.py[u0]);}
     fx=s.px[u0]+sx/focus.units.length;fy=s.py[u0]+sy/focus.units.length;
     for(let u=0;u<s.n;u++)if(Math.hypot(s._dx(s.px[u]-fx),s._dy(s.py[u]-fy))<focus.radius*1.5)keep.add(u);k=S/(2*focus.radius);}
-  const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+30}"><rect width="${S}" height="${S+30}" fill="#f5f7f8"/><rect width="${S}" height="${S}" fill="#15222d"/>`];
+  const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+30}"><rect width="${S}" height="${S+30}" fill="#f5f7f8"/><rect width="${S}" height="${S}" fill="#15222d"/><clipPath id="v"><rect width="${S}" height="${S}"/></clipPath><g clip-path="url(#v)">`];
   const th=focus&&focus.align?focus.align.a0-s.angle(focus.align.u):0,cs=Math.cos(th),sn=Math.sin(th);
   if(s.p.light&&!focus){const L=s.p.light;svg.push(`<circle cx="${(s._wx(L.x)*k).toFixed(1)}" cy="${((W-s._wy(L.y))*k).toFixed(1)}" r="${(L.r*k).toFixed(1)}" fill="#f5e663" fill-opacity="0.13" stroke="#f5e663" stroke-opacity="0.5"/>`);}
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s.roles(u);
@@ -31,6 +31,7 @@ function render(s,out,title,focus=null,labels=false){
       if(g)svg.push(`<line x1="${A[0].toFixed(1)}" y1="${A[1].toFixed(1)}" x2="${B[0].toFixed(1)}" y2="${B[1].toFixed(1)}" stroke="${gcol(g)}" stroke-width="${focus?4:2}" stroke-dasharray="${g%2?'':'3,2'}"/>`);
       if(s.hinge[u*3+i]){const h=s.hinge[u*3+i]===1?A:B;svg.push(`<circle cx="${h[0].toFixed(1)}" cy="${h[1].toFixed(1)}" r="${focus?5:2}" fill="#fff"/>`);}
       if(labels&&g){const m=[(A[0]+B[0])/2*0.7+c[0]*0.3,(A[1]+B[1])/2*0.7+c[1]*0.3];svg.push(`<text x="${m[0].toFixed(1)}" y="${(m[1]+5).toFixed(1)}" font-family="Arial" font-weight="bold" font-size="${Math.max(9,k*0.22).toFixed(0)}" text-anchor="middle" fill="#fff">${gname(g)}</text>`);}}}
+  svg.push('</g>');
   svg.push(`<text x="8" y="${S+20}" font-family="Arial" font-size="13" fill="#233542">${title}</text></svg>`);
   const svgf=out.replace(/\.png$/,'.svg');fs.mkdirSync(path.dirname(path.resolve(out)),{recursive:true});fs.writeFileSync(svgf,svg.join('\n'));svgToPng(svgf,out,S,S+30+90);
   fs.writeFileSync(out.replace(/\.png$/,'.json.gz'),zlib.gzipSync(JSON.stringify(s.saveState())));}
