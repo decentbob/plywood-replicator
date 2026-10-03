@@ -6,6 +6,46 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-0320, build)
+
+- **Hooded pore: a cell fed through a pore keeps every strand in** — works (8 of 8 worlds with 4+ strands inside, 7 of
+  8 lose none; check `imprint-hood`). No new rule; prepared structure (labelled).
+  - Design (`imprint ... 150ph`): `imprint p`'s cell (R 6, 3-cell pore, spent walls, anchor `W|` opposite the pore,
+    150 copy blanks outside) plus a hood: a strip one row thick lying two rows above the wall over the pore, from x = -2
+    to the top wall's corner, held by a strut of 4 cells at its left end (13 cells, all sides spent). Blanks reach the
+    pore along the corridor under it (two rows high, open at the right). A strand is a rigid strip about 4 long: to
+    leave it must pass the pore nearly upright and then lie nearly flat in the corridor (within about 12 degrees), and
+    it cannot turn between the two. A unit triangle can.
+  - Evidence (`imprint k 100000 runs 150ph`, seeds 1-8): strands inside / in all 7/7, 4/4, 7/7, 6/6, 6/6, 7/7, 5/6,
+    6/6; copies 113-135 of 150 (the corridor slows intake). Plain pore (`150p`, same seeds): 4/13, 1/1, 7/7, 6/10,
+    7/7, 5/5, 6/11, 6/6, copies 134-150: in 3 of 8 worlds 4-9 strands leave. Seed 2's founder, caught while busy
+    with its backs to the wall in the plain cell (1 strand), copies in the hooded one (4).
+  - What it does not do: it does not help a cell compete. With 3 rival strands placed outside (`150phx`, seeds 1-4)
+    the hooded cell keeps only its founder (1 inside of 12-19); the plain one 1-2 of 12-17 (`150px`). The rivals take
+    all 150 blanks in under 10000 steps. The hood's job is not to make rivals (IDEAS, 2026-10-03).
+  - Picture (seed 1, t=50000: 5 strands inside, the hood at the upper right; the run ends with 7 of 7 inside):
+    ![hooded pore](pictures/imprint_hood.png)
+- **M2 on the sealed bud pair (`budpore ... 100c`): not met; no doorway width works** (measured, seeds 1-4, 100000
+  steps, `DBGC=1`; demo options only, default outputs byte-identical to main).
+  - As is: split 37500 / - / 20000 / 30000 with 1 / - / 3 / 3 strands in the bud; genome copies after the split in the
+    bud 2 / - / 4 / 24, outside 84 / - / 96 / 70 (the parent's strands leave through its half of the doorway); no full
+    copy on the bud's anchored strand (releases 2 / - / 0 / 1).
+  - More food (300 blanks outside, `300c`): outside 257-282 copies, the bud 9-32; one full copy in 1 of 3 splits.
+  - The bud alone (`BUDNOP=1`, a diagnostic: at the split every bonded triangle outside the bud is made inert and
+    spent, as if the parent's genome were gone): the bud makes 62 / - / 22 / 30 genome copies but its own strands and
+    copies leave through its half too (outside 30 / - / 78 / 40); one full copy in 1 of 3. So even without the
+    parent the bud's 6-cell opening loses what it makes.
+  - Narrower halves (`BUDDG` / `BUDPG` = x range of D's / P's half): the bud's half 3 cells: 0 of 4 split (no strand
+    reaches the bud in 100000 steps); 4 cells (`BUDDG=-0.25,1.75 BUDA=104:1`): split 3 of 4 with 1 strand in the bud
+    each, outside 57-97 copies, one full copy in 1 of 3. The parent's half 3 cells (`BUDPG=-0.75,0.75`) or both halves 4 cells
+    (`BUDDC=1.25`): the founder's top backs face the wall, P makes 0-1 copies, 0 of 8 split.
+  - Two anchors in the bud (`BUDA=104:1,114:2`, both `W@|`, the doorway waits for both): 0 of 4 split; strands reach
+    the bud 0-3 times in 100000 steps and the second anchor never catches.
+  - Rivals: `imprint p` with 3 free strands outside (above): the cell ends with 1-2 strands.
+  - Why (IDEAS, 2026-10-03): the physics is reversible, so the opening a strand used to enter the bud is still there
+    after the split and lets strands and copies out; free strands outside take the food. The bud needs an opening that
+    a binding event narrows after the strand is in. Next step: docs/NEXT.md.
+
 ## 2026-10-03 (autorun run 20261003-0050, explore)
 
 - **The bud lets go by completion release: `budpore`'s doorway bond is an `&` bond cut when the bud's anchor has

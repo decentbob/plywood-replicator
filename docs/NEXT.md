@@ -1,14 +1,30 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-0050, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-03 (after autorun run 20261003-0320, build). Read AGENTS.md first (rules of work), then this file.
 History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git.
 
-**Current slice (autorun run 20261003-0320, build): M2 on the sealed pair, the parent keeps its copies in after the
-split.** Goal: the bud makes a full genome copy (4 releases on its strands) after the split in 6 of 8 worlds of
-`budpore ... c`. Plan: measure first whether food quantity alone is the limit (300 outside blanks), then the fewest-part
-designs: a narrower parent half of the doorway (P keeps its strands as `imprint p`'s 3-cell pore does), more strands
-into the bud before the split. Check: `node tri/check.js budpore-c` plus `DBGC=1` (copies by place after the split).
-Stop: when one design meets the target, or after the measurements show what limits it (recorded as a result).
+**Handoff status (autorun run 20261003-0320, build).** Everything committed on branch `claude/autorun-20261003-0320`
+and merged into `main`. No simulations running; `node tri/test.js` 35 pass; checks `imprint-hood` (new), `imprint-pore`
+and `budpore-c` rerun (results in the PR; no rule, physics or shared-structure change, and default demo outputs are
+byte-identical to main for `budpore 100c`, `budpore 300`, `imprint 150p`, `imprint 60m`, so the full suite was not
+rerun; last full run 36 of 36 in run 0050). **Slice: M2 on the sealed pair, keep the parent's copies in. Result: M2
+not met; why, measured; and one new mechanism, the hooded pore.**
+- *No doorway width works* (INNOVATIONS run 0320, seeds 1-4 each): as is, the bud gets 2-24 genome copies after the
+  split, the parent's leaked strands 70-96; 300 outside blanks: still 9-32 against 257-282; with the parent's genome
+  made inert at the split (`BUDNOP=1`, diagnostic) the bud still loses its own copies and strands through its 6-cell
+  half (1 full copy in 3 splits); a 3-cell bud half lets no strand in, 4 cells lets one in (1 full copy in 3 splits); a
+  narrower parent half turns the founder's backs to the wall (no copying); two bud anchors: the second never catches.
+- *Why* (IDEAS, 2026-10-03, "The way in is the way out; nothing may leak"): motion is reversible, so the opening a
+  strand enters by stays open after the split; only binding is one-way. And free strands beat cells: 3 rival strands
+  outside leave an `imprint p` cell 1-2 strands. An organism on copies must not leak, and the bud's opening must be
+  narrowed by a binding event after its strand is in.
+- *Hooded pore* (`imprint ... 150ph`, check `imprint-hood`, picture `imprint_hood.png`): a hood over `imprint p`'s pore
+  (13 prepared cells: strut and strip, a corridor two rows high) lets blanks in and keeps strands in: 8 of 8 worlds with
+  4-7 strands inside, none lost in 7 of 8 (plain pore: 4-9 lost in 3 of 8). It does not help against rivals (1 inside).
+- New demo options (diagnostics): `budpore` `BUDDG=a,b` / `BUDPG=a,b` (x range of D's / P's half of the doorway),
+  `BUDA=c:s,c:s` (several bud anchors; the doorway waits for all), `BUDNOP=1`; `imprint` `x` (3 rival founders
+  outside), `h` (hood). Pitfall met: changing a gap changes which side the automatic anchor choice takes (it took the
+  gap's edge, strand outside); pass `BUDA` and check with `BUDDRY=1`.
 
 **Handoff status (autorun run 20261003-0050, explore).** Everything committed on branch `claude/autorun-20261003-0050`
 and merged into `main`. No simulations running; `node tri/test.js` 35 pass; `node tri/check.js` 36 of 36 pass (`grown` partial as before;
@@ -29,22 +45,6 @@ by completion release; plus one core change, a narrowing):**
   its half of the doorway and copy on the outside food (open pair: 89-161 genome copies outside, 2-54 inside D;
   sealed: 60-99 outside, 0-25 inside D).
 
-**Handoff status (autorun run 20261002-2321, build).** Everything committed on branch `claude/autorun-20261002-2321`
-and merged into `main`. No simulations running; `node tri/test.js` 34 pass; new check `budpore-c` passes 7 of 8; the
-default `budpore` output is byte-identical to main (demo options and diagnostics only, no rule, physics or
-shared-structure change, so the full `tri/check.js` was not rerun; last full run 35 of 35 in run 2150). **Done (slice:
-M2 on `budpore`; M2 not met; a sealed variant that splits reliably came out of it):**
-- *Anchor geometry is not the limit.* `BUDDRY=1 node tri/demos.js budpore 1 10 runs 300` dry-runs a low-end catch on
-  every inner side of D (back/face site clearance); only side 106:1 beside the latch has all backs clear, and with it
-  (`BUDA=106:1`) the bud still makes no copy (300 or 600 blanks). After the split the bud gets 2-17 genome copies,
-  P's leaked copies outside 118-256 (IDEAS: "A parent whose copies leak out feeds its competitors").
-- *Sealed bud pair, `budpore ... 100c` (INNOVATIONS run 2321, picture `budpore_sealed`):* the doorway joins P and D
-  only, 80 blanks inside P, P's founder hangs under the doorway (`BUDPX=-1`, the default with `c`). Splits 7 of 8 at
-  5000-40000 with 1-4 strands in the bud; before the split the food goes to the genome. Bud copies after the split:
-  1 of 8 (both doorway halves are 3-unit pores; P's strands leave and take the outside food).
-- Dropped (measured, INNOVATIONS): `latGlue` off; 20 blanks inside D (code at `1a77906`); the founder standing up into
-  D from the doorway's right edge (backs against P's wall: no fills).
-
 **Handoff status (autorun run 20261002-2150, harden).** Everything committed on branch `claude/autorun-20261002-2150`
 and merged into `main`. No simulations running; `node tri/test.js` 34 pass; `node tri/check.js` 35 of 35 pass (`grown`
 partial as before; `imprint-pore` 3 of 4, seed 2 as recorded since run 1551; run as six groups after a container
@@ -64,18 +64,18 @@ restart, 31 minutes in all). **Done (slice: speed, Direction priority 5; target 
   neighbours (cell 1.4, reach about 1.7); a grid kept per step as flat arrays (counting sort) would cut the per-cell
   cost, but neighbour order changes the order of overlap sums, so outputs would need re-checking, not byte comparison.
 
-**Exact next step (build, priority 1 below): M2 on the sealed pair, keep P's copies in after the split.** `budpore
-100c` delivers 1-4 genome strands into the bud before it leaves, and since run 0050 no food goes to wall sides (0-1
-wall copies per world); what fails is the time after: each half of the 3-unit doorway is a pore, P's strands leave
-through P's half and copy outside on the food the bud needs (out 60-99 genome copies, the bud 0-25; one full copy in
-the bud in 1 of 8). Tried in run 2321: a second anchor `W|` in P beside the doorway holds nothing back and costs splits
-(2-5 of 8). Options left: (1) more strands into the bud before the split, so its interior out-competes: measure
-releases in D against strands in D at the split (seeds 1-8 give 1-4); (2) the parent closes its half after the split,
-or the bud leaves with food: write it under priority 2 (closure by design), not as a door machine (frozen lineage).
-A completion-release bond can only cut, not close; a plug grown on an `@` site of P's doorway edge would emit the open
-signal and expose the spent walls near it only if they were not already spent (spent stays spent), so it is worth a
-design look. Measure with `node tri/check.js budpore-c` plus `DBGC=1` (copies by place and type after the split);
-target: one full copy in the bud after the split (4 releases on its strands) in 6 of 8 worlds.
+**Exact next step (build or explore, priority 1 below): M2 by a plug, "the genome closes the bud's way in".** Run
+0320 showed that no fixed doorway gives M2 (Handoff above; IDEAS 2026-10-03). The cheapest one-way design (IDEAS,
+option a): the bud's catching anchor `W@|` sits on the slanted side at one edge of its half of the doorway, so a caught
+strand (7 triangles) lies in the bud's wall row and fills its gap but for a 3-cell pore (gap 10 cells:
+`BUDDG=-0.75,4.25`). The catch is the one-way step; the doorway is wide (5 units) until then. Steps: (1) dry-run the
+catch on both gap edges with a picture (extend `BUDDRY` to snap the placed strand; its numbers alone do not show
+whether the strand lies in the row) and read which way its faces point: into the bud is wanted (its copies form
+inside; backs outside get their copies from blanks at the pore); (2) the parent's half needs the same, or it leaks: a
+second catching anchor on P's gap edge (the doorway bond waits for both open signals to fade) or P's founder as P's
+plug; (3) measure with `DBGC=1` and `BUDNOP=1` (the bud alone) before tuning. Target unchanged: one full copy in the bud
+after the split (4 releases) in 6 of 8 worlds of `budpore ... c`. If (1) shows the strand cannot lie in the row (the
+anchor places it at 60 degrees), record that and take option (b) or priority 2 instead.
 
 **Core-change candidates.** None open. Run 0050 settled both earlier ones: the spent latch (2) by design (the
 completion-release doorway), the anchor copies capping strands (1) by the narrowing "a free triangle's anchor side binds
@@ -117,7 +117,7 @@ kit roots attach to strand seeds and is not needed now.
 **Priorities (in order; each a slice).**
 1. **M2: the bud copies its genome after the split** (`budpore`, mid-wall anchor in D; as run 1551 set it; run 1921
    built the mid-wall low-end anchor, splits 8 of 8, but the caught strand's backs face the wall; run 2321: an anchor
-   with open backs does not help, the parent's leaked copies take the food: see Exact next step). After the
+   with open backs does not help, the parent's leaked copies take the food; run 0320: no fixed doorway works, see Exact next step). After the
    split D's half of the opening is its pore, so D is then an `imprint p` cell: the bud "lives on its own".
 2. **Closure by design (analysis slice; "designed, not demonstrated" is a valid result).** Specify one organism kind
    whose bud is the same kind: one ring size or a fixed alternation, which anchor holds the founder and which catches
@@ -157,6 +157,7 @@ node tri/demos.js budpore 1 100000 runs 100c       # sealed bud pair: P feeds in
 node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, the doorway bond cut by completion release, split with food left (7 of 8); DBGC=1: where copies go, BUDF=20: frames;
                                                    # BUDDRY=1: dry-run a catch on every inner side of D; BUDA=cell:side: anchor
 node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
+node tri/demos.js imprint 1 100000 runs 150ph      # the same cell with a hooded pore: no strand leaves (x: 3 rival strands outside)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
 node tri/demos.js imprint 1 200000 runs            # contact copying: a ring closes and a second grows from copy blanks only
@@ -169,6 +170,11 @@ world from a saved state (not `split`: it places its parts after loading); `TRI_
 
 ## Pitfalls learned
 Casting-lineage and machine pitfalls (kits, pockets, doors, flaps): docs/IDEAS.md, "Pitfalls from the casting lineage".
+- **An opening that lets a strand in lets it out** (2026-10-03, run 0320). Motion is reversible: a doorway, pore or
+  gap a strand can pass one way it can pass the other, and it stays open after a split. Keep strands in with a bent
+  opening (hooded pore) or a binding event (a catch, growth); never count on a narrow straight opening.
+- **Changing a layout moves the automatic anchor choice** (2026-10-03, run 0320). `budpore` picks D's anchor by distance
+  and corners; with another gap it took the gap's edge (the strand stood outside). Pass `BUDA` and dry-run (`BUDDRY=1`).
 - **Where a caught strand's backs face** (2026-10-02, run 1921). A strand caught by an end stands at 60 degrees to the
   wall, leaning one way fixed by which end is caught and the strand's handedness; its backs then face either the acute
   wedge (a back site can be covered by a wall cell) or the open side. Backs in the wedge get no copies, so there are
