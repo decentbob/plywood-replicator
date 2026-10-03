@@ -62,7 +62,7 @@ let the parent construct its offspring from one uniform food, and only that rout
 "Direction").
 
 0. **Organism on copies**, in order (docs/NEXT.md, Direction, priorities): (a) the bud copies its genome after the
-   split (`budpore`, mid-wall anchor in D); (b) closure by design: one organism kind whose bud is the same kind (ring
+   split (`budpore`; run 2321: not the anchor's geometry but food: the parent's leaked copies take it, see IDEAS); (b) closure by design: one organism kind whose bud is the same kind (ring
    size, anchor roles, seed site, the first motif round), "designed, not demonstrated" counts; (c) grow the bud ring
    from copies on the parent's seed site (as `imprint`'s rings; fix the one-front 28/30 stall); (d) two generations;
    then (e) a core review of removing casting, stamp, fuel and machine marks that only the frozen lineage uses

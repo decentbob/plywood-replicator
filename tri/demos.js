@@ -249,16 +249,14 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // A holds a strand its trigger side is bonded; the cells from A to L hear it (hear side '+' towards A; sigRange 6),
     // and a latch lets go while its triangle hears a trigger signal: D lets go of P. No wall hears an open signal
     // (openRange 1: only A's own '@'), so every other free side is spent and never copied; A's copies are parts ('@')
-    // and bind nothing. Copy blanks start outside ('i': also 60 inside P; 'd': also 20 inside D). extra: blanks outside (default 300).
-    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:X.includes('c')?80:0,ND=X.includes('d')?20:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
+    // and bind nothing. Copy blanks start outside ('i': also 60 inside P). extra: blanks outside (default 300).
+    budpore(){steps=steps||200000;const X=String(extra||''),nb=parseInt(extra)||300,NI=X.includes('i')?60:0,DW=0.75,RP=7,RD=5,size=40,c=size/2,cy=c-3,dyL=(RP+RD)*H;
       const cn=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3],mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
       let Pc=S.ringKit(RP,'z').tris.map(t=>t.v);const Dc=S.ringKit(RD,'z').tris.map(t=>t.v.map(p=>[p[0],p[1]+dyL]));
       // the doorway: contact-row cells of both walls with x > -DW (the junction opens into P, into D and to the outside)
-      // option 'c' (closed): the doorway ends at x = DC, so it joins P and D only (sealed while joined; each half becomes a pore after the split)
-      const DC=X.includes('c')?+(process.env.BUDDC||1.25):1e9,gap=v=>cn(v)[0]>-DW&&cn(v)[0]<DC;
-      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&gap(v)));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&gap(v)));
+      Pc=Pc.filter(v=>!(cn(v)[1]>(RP-1)*H&&cn(v)[0]>-DW));const Dk=Dc.filter(v=>!(cn(v)[1]<dyL-(RD-1)*H&&cn(v)[0]>-DW));
       const tris=[...Pc,...Dk].map(v=>({v,type:'---'})),NP=Pc.length;
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI+ND},params:{latGlue:true}});
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:c,y:cy}],structures:[{tris,x:c,y:cy}],supply:{'-?-?-?':nb+NI},params:{latGlue:true}});
       const U=structures[0],F=founders[0],Pu=U.slice(0,NP),Du=U.slice(NP),{gcode:gc,GLUE}=require('./sim'),inP=new Set(Pu),inD=new Set(Du);
       // the hold: the leftmost P-D bond is the latch bond L; the anchor A is the inner free side within 5 ring bonds of L
       // farthest from D's corners; the cells from L towards A get a hear side on the side bonded towards A
@@ -302,8 +300,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const {triDepth}=require('./physics'),A=new Float64Array(6),B=new Float64Array(6);for(const u of F)for(const v of U){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
           for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}if(triDepth(A,B)>1e-6)throw Error('budpore: founder overlaps the wall');}}
       spendableSides(s,U);for(let k=0;k<60;k++)s.derive();
-      const prep=new Set([...U,...F]),placed=[...prep],cD0=[0,0];let ni=0;for(const u of Du){cD0[0]+=s._dx(s.px[u]-s.px[Du[0]])/Du.length;cD0[1]+=s._dy(s.py[u]-s.py[Du[0]])/Du.length;}cD0[0]+=s.px[Du[0]];cD0[1]+=s.py[Du[0]];for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni<NI,inb=ni>=NI&&ni<NI+ND;ni++;
-        if(!placeFree(s,u,placed,()=>{for(;;){if(inb){const x=(2*s.rng()-1)*RD,y=(2*s.rng()-1)*RD;if(S.hexr([x,y])<RD-1.6)return [cD0[0]+x,cD0[1]+y];continue;}if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}
+      const prep=new Set([...U,...F]),placed=[...prep];let ni=0;for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=ni++<NI;
+        if(!placeFree(s,u,placed,()=>{for(;;){if(ins){const x=(2*s.rng()-1)*RP,y=(2*s.rng()-1)*RP;if(S.hexr([x,y])<RP-1.6)return [c+x,cy+y];continue;}const x=size*s.rng(),y=size*s.rng();if(S.hexr([s._dx(x-c),s._dy(y-cy)])>RP+0.6&&S.hexr([s._dx(x-c),s._dy(y-cy-dyL)])>RD+0.6)return [x,y];}},50000))throw Error('place');placed.push(u);}
       // inside a ring: within its inner wall's distance of its centre (unwrapped along bonds)
       const centre=L=>{const set=new Set(L),Q=[L[0]],seen=new Set(Q);for(let q=0;q<Q.length;q++)for(let i=0;i<3;i++){const b=s.bond[Q[q]*3+i];if(b<0)continue;const w=(b/3)|0;if(set.has(w)&&!seen.has(w)){seen.add(w);Q.push(w);}}
         const RX=new Float64Array(Q.length),RY=new Float64Array(Q.length);s._unwrap(Q,RX,RY);let x=0,y=0;for(let q=0;q<Q.length;q++){x+=RX[q];y+=RY[q];}return [s.px[Q[0]]+x/Q.length,s.py[Q[0]]+y/Q.length];};

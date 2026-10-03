@@ -6,6 +6,34 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261002-2321, build)
+
+- **M2 (`budpore`: the bud copies its genome after the split): not yet; what limits it is food, not the anchor's
+  geometry** (measured). No rule change; the default demo output is unchanged.
+  - Dry-run of the catch (`BUDDRY=1 node tri/demos.js budpore 1 10 runs 300`): a strand caught by its low end `w` is
+    placed on each inner side of D exactly as the anchor rule places it (`_snapBody`), and each back and face site's
+    distance to the nearest wall cell is printed. On every flat-wall side the first back site shares an edge with a
+    wall cell (0.58); at the corners the strand lies along the wall (all backs 0). Only side 106:1, next to the latch
+    cell, where the acute wedge opens into the doorway, has every back clear: 1.00 / 2.00 / 2.65 (the anchored end's own
+    face site is then the one at 0.58).
+  - With that anchor (`BUDA=106:1`, seeds 1-4, 300 blanks, 200000 steps): split 4 of 4 (25000-70000), releases on the
+    bud's anchored strand 0 / 0 / 0 / 1: no copy. With 600 blanks: 1 / 2 / 0 / 1, no copy, although 300-410 blanks were
+    left at the split. Where the food goes after the split (`DBGC=1`): inside D 2-17 genome copies, outside 118-256
+    (P's copies leave P through the opening, are free strands with open backs and copy fast in the open food), plus
+    freed latch sides (up to 82) and anchor-cell copies (up to 106). The bud's interior is one small target beside an
+    exponentially growing population of free strands.
+  - Copy economy (seed 3, `DBGC=1` prints copies by type): face copies (`wza`, `zAw` and rotations) 130, back copies
+    `-W-` 60, fills 60, docks 122: with `latGlue` every back copy becomes a fill, and fills, not dockers, limit copying
+    everywhere. Docked dockers expose their own free sides, so face copies breed at the strand while backs do not.
+  - Dropped (measured): `latGlue` off (default anchor): fills from any blank, but wall copies 166-191 and no full copy
+    in the bud; 20 blanks placed inside D at t=0: they go to copies of the anchor cell before the catch (wall copies
+    135-159), one full copy in 1 of 4; a closed doorway joining P and D only (80 blanks in P, a P with no way out):
+    P makes 3-5 strands from 80 blanks (70% of copies on the genome, nothing leaks out), but strands seldom pass a
+    2-3.5 unit internal doorway and reach D's anchor: 0 of 4 split (2 units), 1 of 4 (3 units, at 60000 or, with the
+    anchor beside the latch, at 190000). Code for these at commit `1a77906` (`budpore` extra `d`, `c`, `BUDDC`).
+  - Picture (seed 3, anchor 106:1, t=60000, the bud 37500 steps after its split: its strand beside the pore with
+    dockers on, waiting for fills; almost no blanks inside): ![bud starved](pictures/budpore_starved.png)
+
 ## 2026-10-02 (autorun run 20261002-1921, build)
 
 - **`budpore`: the bud catches mid-wall by the strand's low end and splits with food left** — works (8 of 8 seeds);
