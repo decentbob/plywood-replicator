@@ -268,7 +268,8 @@ don't know how feasible." Not built yet; first notes (harden run 20261003-0950, 
   (glue closure only binds flush sides, 0.05). The one existing move that brings a whole body flush is the anchor
   catch (`_snapBody`), which today takes only strand ends. Options to weigh: inserts that grow from one half as a
   front (open signal holds the other seam closed until they arrive), so only one half moves at a time; or a seam
-  that hinges (casting-lineage hinge marks) so the halves stay joined at one corner while the gap opens. Either needs
+  that hinges (casting-lineage hinge marks, removed from the core on 2026-10-03: they would come back only through
+  the RULES gate) so the halves stay joined at one corner while the gap opens. Either needs
   a design sweep before a demo, and possibly a core case (a body catch on a seam side) under RULES "Core changes".
 - **Where the inserts come from:** copy blanks binding the exposed seam ends (as `imprint`'s growing front), so the
   insert is a copy of the wall cell beside it; the walls must be unspent there while the seam is open.
@@ -388,7 +389,8 @@ mark `?`, gate entry in RULES "Core changes"). Reasoning:
   surface and blank supply: regulation is by where copy blanks are (import doors), selection acts on bodies.
 - **Biology.** Membranes and cortical patterns are inherited by templating in real cells (new membrane only grows from
   membrane); here every part is.
-- **What it may remove later:** stamp marks (`'`) and, once dockers are copied from strands, casting itself.
+- **What it may remove later:** stamp marks (`'`) and, once dockers are copied from strands, casting itself. (Done
+  2026-10-03, core review run 20261003-2121: the whole casting lineage left the core; RULES, Core changes.)
 
 ## Programmable synthesis: the next big blocker (2026-10-01, fourth session)
 
@@ -598,6 +600,8 @@ Roughly newest first. Add new ones here; docs/NEXT.md points to this section.
 - Shared edges of a prepared structure must have opposite directions when you write glue onto them.
 
 ## Pitfalls from the casting lineage (moved from docs/NEXT.md, cleanup run 20261002-1821)
+(The lineage was removed from the core on 2026-10-03, core review run 20261003-2121; code in git at `7415fd4`. These
+lessons stay for any machine that comes back through the RULES gate.)
 
 Design lessons from kits, pockets, doors and flaps (the casting lineage, frozen since run 20261002-1751). The pitfalls
 for current work are in "Pitfalls learned (copy lineage)" above.

@@ -190,7 +190,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const Bv=K.tris.map(t=>t.v.map(p=>S.budPose(R,p))),at=(v,dy=0)=>v.map(p=>[O[0]+p[0],O[1]+p[1]+dy]),Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1;
       const sh=(a,b)=>{const eq=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1])<1e-6;for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(eq(a[i],b[(j+1)%3])&&eq(a[(i+1)%3],b[j]))return [i,j];return null;};
       const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-      const pass=k=>{for(let q=0;q<k;q++){s.derive();s.servo();}},hear=()=>Bu.filter(u=>s.op[u]>0).length;
+      const pass=k=>{for(let q=0;q<k;q++){s.derive();s._release();}},hear=()=>Bu.filter(u=>s.op[u]>0).length;
       buildStructure(s,Pu,K.tris,O[0],O[1]);placeTri(s,Ps,refl(Pu[0],K.anchorSide));s.setType(Ps,'w--');s.bind(Pu[0],K.anchorSide,GLUE,Ps,0,GLUE);
       for(const u of [...Bu,Bs]){placeTri(s,u,[[1,1],[2,1],[1.5,1+H]]);s.px[u]=-40;}pass(10);
       const put=k=>{placeTri(s,Bu[k],at(Bv[k]));s.setType(Bu[k],K.types[k]);if(k===0)s.bind(Bu[0],K.rootSide,GLUE,Pu[N-1],K.seedSide,GLUE);else{const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,GLUE,Bu[k-1],j,GLUE);}pass(4);};
@@ -310,7 +310,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       spendableSides(s,U);for(let k=0;k<60;k++)s.derive();
       // the walls start spent (one completion pass while only A hears its own signal; spent sides stay spent), then the
       // open range grows to reach P's side of the doorway bond, which becomes a completion-release bond ('&' both sides)
-      const dMax=Math.max(...(BA?more:[best]).map(k=>k.d));s._latches();s.p.openRange=dMax+3;for(let k=0;k<dMax+4;k++)s.derive();s.done[pick.L*3+pick.j]=1;
+      const dMax=Math.max(...(BA?more:[best]).map(k=>k.d));s._release();s.p.openRange=dMax+3;for(let k=0;k<dMax+4;k++)s.derive();s.done[pick.L*3+pick.j]=1;
       if(cap){const dist=new Map([[da.u,0]]),Q=[da.u];for(let q=0;q<Q.length;q++)for(let e=0;e<3;e++){const b=s.bond[Q[q]*3+e];if(b<0||dist.has((b/3)|0))continue;dist.set((b/3)|0,dist.get(Q[q])+1);Q.push((b/3)|0);}
         const dc=dist.get(cap.u);let R=Math.max(dMax+3,dc+2);if((R-dc)%2)R++;s.p.openRange=R;for(let k=0;k<R+2;k++)s.derive();
         s.done[cap.u*3+cap.i]=1;s.glue[cap.P*3+cap.j]=gc('Z');s.anc[cap.P*3+cap.j]=1;s.att[cap.P*3+cap.j]=1;s.done[pick.u*3+pick.i]=1;s.done[pick.L*3+pick.j]=0;
