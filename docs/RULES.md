@@ -244,7 +244,7 @@ whole cycle works. Decided: remove. The case, then the result.
    (the completion release ran first in `servo`, which returned early without hinges; it now runs first as
    `_release`). So outputs must be identical, and they were checked to be (6).
 6. **Result.** `node tri/check.js` on the 20 kept checks with `CHECK_SAVE` (new: keeps each world's whole output),
-   before (`7415fd4`) and after: RESULT_PLACEHOLDER. `node tri/test.js`: 29 tests (was 40: 12 removed with the
+   before (`7415fd4`) and after: 20 of 20 pass both times (1139 s before, 1086 s after; the full suite with the casting lineage took 2438 s in run 1921), and all 69 worlds' outputs are byte for byte the same (`diff -r`); the demos outside the checks too (`closure`; `pool 4` and `budpool` seed 2, 20000-30000 steps). `node tri/test.js`: 29 tests (was 40: 12 removed with the
    lineage, the type test rewritten, 1 added for the close-only narrowing; the anchor test gained a spent case; both
    narrowings' tests fail when their condition is reverted). The core: 5 marks, 3 relayed signals, 4 exposed values,
    3 states, 1 option (Core inventory); `tri/sim.js` 336 -> 231 lines, the whole `tri/` about 1300 lines shorter.

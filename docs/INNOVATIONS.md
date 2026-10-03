@@ -8,6 +8,28 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-03 (autorun run 20261003-2121, core-review)
+
+- **The core without the casting lineage** — works (a simplification: same capabilities on the copy lineage, a third
+  of the core). Removed: casting and stamps, hinges and flaps, triggers, latches, heard triggers, the lock and hear
+  signals, energy (charge, fuel, light), proofreading (`pLoose`); the 18 demos and 24 checks that used them
+  (`lid`, `factory`, `energy`, `conveyor`, `gate`, `import`, `grow`, `stamp`, `heir`, `cycle`, `wrap`, `cells`, `live`,
+  `cell`, `grown`, `bud`, `split`, `budgrow`; their entries below stay as history, the code is in git at `7415fd4`).
+  Left: 5 marks (`. @ & | ?`), 3 relayed signals, 4 exposed values, 3 states, 1 option; `tri/sim.js` 336 -> 231 lines,
+  `tri/` about 1300 lines shorter. Two narrowings close the last exceptions: a spent anchor side catches nothing, and
+  an attached close-only side takes no dock or fill (binding has no exception left). Case and reasoning: RULES, Core
+  changes ("Removal: the casting lineage leaves the core").
+  - Evidence: `node tri/check.js` on the 20 kept checks before (`7415fd4`) and after: 20 of 20 both times; all 69 worlds' whole outputs byte for byte the same; `closure`, `pool 4` (20000 steps) and `budpool` seed 2 (30000) too. Check time 1086 s (was 2438 s for 44 checks in run 1921).
+  - An independent review (deep-reviewer, read-only) stepped `copy`, `imprint g`, `pool` and an imprint ring world old
+    and new side by side (every kept array and the random generator's state every 250 steps: identical), parsed 177
+    type strings of the kept kits both ways (identical), and found two leftover calls to removed functions (`budpore`'s
+    setup, `closure`'s signal passes), fixed before the check run.
+  - Tests: 29 (`node tri/test.js`); the two narrowings' tests fail when their condition is reverted.
+  - Command: `CHECK_SAVE=$PWD/runs/new node tri/check.js`, the same at `7415fd4` (another worktree, with the
+    `CHECK_SAVE` lines added to its `tri/check.js`), then `diff -r`.
+  - Enables: shorter checks and a core small enough to read in one sitting; the next core question is whether
+    `heldCopy` becomes the rule (NEXT, candidate (e)).
+
 ## 2026-10-03 (autorun run 20261003-1921, build)
 
 - **The kind's own layout copies after the split, with its anchor off the pore's edge** — works on prepared rings of

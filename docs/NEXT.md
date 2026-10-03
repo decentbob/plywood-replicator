@@ -1,43 +1,39 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-1921, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-03 (after autorun run 20261003-2121, core-review). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `80c79ab` for run 1720's, `e5c6085` for run 1650's).
+handoffs: NEXT.md in git, e.g. at `7415fd4` for run 1921's, `80c79ab` for run 1720's).
 
-**Handoff status (autorun run 20261003-1921, build).** Slice done: a held founder's first copy reliable on the open
-pair, then the kind's own layout with `heldCopy`. Branch `claude/autorun-20261003-1921`, merged into `main` by PR; no
-simulations running; 40 tests pass; `node tri/check.js` 44 of 44 (2438 s; `grown` partial as before). (1) **P's anchor side** (`budpore` dry-run
-`BUDDRYP=1`, new; `BUDPA=cell:side` puts P's anchor there): side `52:1` (R 7 bottom wall, x = +1.5) gives the bud 6-14
-copies after the split in 7 of 8 seeds (check `budpore-held` 4 of 4, now on `52:1`); `54:1`, `9:2` 4 of 8, `13:0`
-fails. (2) **The kind's layout** (R 5 rings, 7-cell pores, doorway bond = the bud root's seed bond): a strand held by
-its high end on the root's pore side stands out into the doorway (dry-run, P and D), and with both anchors there the
-pair never splits (0 of 4). Anchors `Z` on arc cell 6 (P `16:0`, D `90:2`): split 8 of 8, the bud copies its caught
-strand 3-11 times after the split (7 of 8 with 5+; check `budpore-kind`, 4 of 4); without the two free strands in P
-(`BUDPS=0`) 4 of 8 (the sealed founder's first copy stalls: no back copy among the 20 inside blanks). (3) **The kit:**
-`budKit(..., {at: 6, glue: 'Z'})` moves the anchor; test "closure (budKit, anchor on cell 6, Z@|)" (openRange 9; 6 lets
-the bud go while growing); `budpool BPA=6` grows and splits 4 of 4 with 3x the copies (more types refilled). IDEAS,
-"The kind's anchor moves off the pore's edge": the early-catch hazard (an anchor exposed during growth).
+**Handoff status (autorun run 20261003-2121, core-review).** Slice done: the frozen casting lineage removed from the
+core (NEXT priority 5, decided by this review; case and result in RULES, Core changes), plus two narrowings left open
+by earlier reviews. Branch `claude/autorun-20261003-2121`, merged into `main` by PR; no simulations running.
+(1) **Removed:** casting and stamps, hinges and flaps, triggers, latches, heard triggers, lock and hear signals, energy
+(charge, fuel, light), proofreading (`pLoose`); 18 demos, 24 checks, 12 tests, the casting structures (all in git at
+`7415fd4`). The core is now 5 marks (`. @ & | ?`), 3 relayed signals (busy, zip, open), 4 exposed values, 3 states,
+1 option (`heldCopy`); `tri/sim.js` 336 -> 231 lines. (2) **Narrowings:** a spent anchor side catches nothing (was
+candidate (d)); an attached close-only side takes no dock or fill, so binding has no exception left (was (b));
+candidate (a) left with the triggers. (3) **Evidence:** `node tri/check.js` 20 of 20 (1086 s, was 2438 s with the casting lineage's 24 checks); every kept check world's whole output byte for byte the same as at `7415fd4` (69 of 69 worlds, `CHECK_SAVE` runs before and after), and `closure`, `pool`, `budpool` spot runs too. `node tri/test.js` 29 tests. New:
+`CHECK_SAVE=dir node tri/check.js` keeps every world's whole output (compare runs byte for byte). An independent review
+(deep-reviewer) found two leftover calls (`_latches` in `budpore`, `servo` in `closure`) before the check run; fixed.
 
-**Exact next step.** Priority 3's first half, one generation of the kind from its own kit: a demo (e.g. `budcycle`)
-that joins `budpool` and `budpore-kind`. A prepared parent of `budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding
-its founder `aAaA` by the high end on cell 6 (labelled), `heldCopy`, openRange 9, among copy blanks and a pool of the
-kit's parts (`budpool`'s harness to start; then without it). It feeds through its pore and copies, grows its bud on
-its seed site, the bud seals the pair, catches one of the parent's copies on its cell 6, and splits; measure the split,
-the bud's copies after it, early catches (the anchor exposed during growth), strands leaked. Target 3 of 4. If the
-founder's first copy stalls in the sealed pair, make sure copies exist before sealing (the parent copies through its
-open pore while the bud grows). Regenerate this run's pictures: the `budpore-kind` command (Commands) with seed 1 and
-`BUDF=8`; with `BUDPF=-1.75 BUDA=84:2` instead of `BUDPA`/`BUDA` for the jammed control (100000 steps, `BUDF=4`).
+**Exact next step** (unchanged from run 1921; the next `build`). Priority 3's first half, one generation of the kind
+from its own kit: a demo (e.g. `budcycle`) that joins `budpool` and `budpore-kind`. A prepared parent of
+`budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding its founder `aAaA` by the high end on cell 6 (labelled),
+`heldCopy`, openRange 9, among copy blanks and a pool of the kit's parts (`budpool`'s harness to start; then without
+it). It feeds through its pore and copies, grows its bud on its seed site, the bud seals the pair, catches one of the
+parent's copies on its cell 6, and splits; measure the split, the bud's copies after it, early catches (the anchor
+exposed during growth), strands leaked. Target 3 of 4. If the founder's first copy stalls in the sealed pair, make sure
+copies exist before sealing (the parent copies through its open pore while the bud grows). Run 1921's pictures: the
+`budpore-kind` command (Commands) with seed 1 and `BUDF=8`.
 
-**Core-change candidates.** (c) withdrawn (run 1221); its narrower form is the rule now. (d) *Code vs RULES:*
-the anchor catch does not test `spent` (`sim.js`, anchor block), while RULES says a spent side binds nothing again; no
-structure has a spent anchor side, so nothing depends on it; a core review should add the test. (a) A flap swings on a
-welded partner's bonded trigger read directly, besides hearing through `+`: only `budgrow`'s pulse-door hinges use the
-direct path (`grownBud`); a `+` on those weld sides would leave one path. (b) An attached close-only side still takes
-docks and fills (dockers `Ay.z` take fills on `y.`), against "close-only binds no free triangle"; documented as an
-exception in RULES Binding. (a) and (b) are casting lineage; they go with its removal (priority 5). New observation
-(run 1221): the kind's seed site `y` (plain glue, never spent) is copied by every blank that reaches it while no bud
-sits on it (copies of E); measured in run 1420: 0-6 copies before the first root binds (about 1000 steps); in a
-lineage the site is free most of the time, so E is over-produced, which the last-cell problem needs: keep it for now.
+**Core-change candidates (for the next `core-review` or `explore`).** (e) *`heldCopy` as the rule:* RULES (Core
+changes, run 1720) foresaw that it replaces the `&` case of zip once the casting lineage is gone and the copy lineage's
+demos hold their strands by the high end. Today the option is off by default and `imprint g`, `imprint m`, `imprint
+p`, `budpore 300`, `budpore c` copy free or low-end-held strands, so making it the rule changes those checks; weigh it
+when the kind's cycle (priority 3) runs on it, moving or retiring those demos then. (f) *The seed site `y`* (plain
+glue, never spent) is copied by every blank that reaches it while no bud sits on it (copies of E; run 1420: 0-6 before
+the first root binds); the last-cell problem needs that source: keep. Nothing else in the core is unused: every mark,
+signal and value has a kept check that uses it (Core inventory).
 
 ### Direction (autorun run 20261003-1321, review-intent): where the work stands and what comes first
 Ten runs since the last direction check (run 1751): four `build` runs on M2 (1921, 2321, 0320, 0751), one `build` on
@@ -103,42 +99,36 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    the root (a high end held there stands in the doorway); on arc cell 6 the bud copies after the split in 8 of 8
    (check `budpore-kind`); the kit has the option. Next: priority 3 (Exact next step).
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
-   The whole cycle; then priority 5's removal is no longer premature by anyone's measure.
+   The whole cycle.
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
    `BUDTOOTH`, `BUDNOCA`, `BUDDBGA`, `BUDNOP`; their results stay in INNOVATIONS and git); decide whether the plug
    (`BUDRD=7`) and cap-release (`BUDCAP`) commands still earn their options once priority 2 has chosen; keep `300`,
    `100c`, the 7-cell doorway and the dry-run; outputs identical on the checked worlds. Also: `tri/check.js` printing
    each check as it finishes (autorun feedback, run 2150).
-5. **Weigh removing the casting lineage now, not after a whole cycle** (next `core-review`, case through the RULES
-   gate first): its demos and checks (`lid`, `factory`, `energy`, `conveyor`, `gate`, `import`, `grow`, `stamp`, `heir`,
-   `cycle`, `wrap`, `cells`, `live`, `cell`, `grown`, `bud`, `split`, `budgrow`) and the marks only they use (`% ' $ ^ #
-   = ! < > * ~ +`, re-measure with the coverage hook), into git history as the 10-01 restart did. For: half the check
-   time, a smaller core and RULES, nothing on the closure path uses them. Against: working capabilities (machines,
-   pumps) leave the tree; they stay in git and could return if proofreading or transport needs them. If the review
-   decides against, record why and keep them frozen.
+5. **Done (run 2121, core-review): the casting lineage removed** (RULES, Core changes): the decision was for removal;
+   every kept check's output is byte for byte the same.
 6. **Speed and margins** (`harden`): `imprint-hood` done in run 1520 (14 of 14). Left at their margins, failure modes
    named (INNOVATIONS, run 1520): `budpore-c` 6 of 8 (frozen layout: fix only if priority 2 reuses it), `imprint` 3 of
    4 (seed 6's stop at 28 of 30 not diagnosed: next harden's first look), `budpore` 3 of 4 (food used up). Speed: the
-   flat cell grid of run 2150's idea was built in run 0950; the full suite takes about 32 minutes. One `harden` per
+   flat cell grid of run 2150's idea was built in run 0950; the suite took about 32 minutes with the casting
+   lineage and 18 minutes without it. One `harden` per
    twelve runs is enough now: the work is limited by design questions, not by run time.
 **Rotation (autorun `projects/plywood/rotation.txt`):** the second `harden` (line 8) became an `explore`: priorities 1
-and 3 are `build` work, 2 is design work that `explore` and `build` can both take, 5 is the `core-review`'s.
+and 3 are `build` work, 2 is design work that `explore` and `build` can both take.
 
 ### Open follow-ups (not priorities; take when a run's kind fits)
-- **Core review:** `#` on a trigger side was removed in run 0450. Lock signal has three uses (keys deaf, latches held,
-  pulse doors ignore their trigger); moot if priority 5 removes the casting lineage. Same-pass partner reads (zip, gap,
-  release, fn, cast) are allowed by convention (RULES, Locality audit); change only if a locality problem traces back
-  to them. Coverage hook: `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js` (one JSON
-  line per demo world: marks used, rule events).
-- **Frozen with the casting lineage (not pursued):** fuel per swing (design in git, NEXT.md at `c11ed14`), `grown`'s
-  membrane stall at 72-76 of 78, `budgrow g`'s transport tail and second bud.
+- **Core review:** same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);
+  change only if a locality problem traces back to them. Coverage hook: `COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r
+  ./tri/coverage.js" node tri/check.js` (one JSON line per demo world: marks present, rule events). To show a change
+  leaves outputs the same: `CHECK_SAVE=$PWD/runs/a node tri/check.js` before and after (another worktree), then
+  `diff -r runs/a runs/b`.
 - **Bigger cells and letter reuse** (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if
   priority 1 or 2 needs a larger cell, reuse letters inside sealed compartments.
 
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~28 min, 4 processes)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~18 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;
@@ -168,12 +158,12 @@ node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & wall
 node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
 node tri/demos.js imprint 1 200000 runs            # contact copying: a ring closes and a second grows from copy blanks only
 ```
-Casting lineage and older (frozen; each has a check in `tri/check.js` with its seeds, steps and extra): `copy`, `lid`,
-`factory`, `energy`, `conveyor`, `gate`, `import`, `grow` (`12`, `4s`), `stamp`, `ring`, `heir`, `cycle`, `wrap`,
-`cells`, `live`, `cell`, `grown`, `bud`, `split` (default, `g`, `o`), `budgrow` (default, `g`). Pictures go to
+Older demos: `copy` (chain copying from dockers) and `ring` (a ring kit closes); each has a check in `tri/check.js`
+with its seeds, steps and extra. The casting lineage's demos were removed on 2026-10-03 (git `7415fd4`). Pictures go to
 `runs/NAME.png` with saved states; `TRI_NOPIC=1` turns them off. `TRI_RESUME=runs/x/NAME_tNNN.json.gz` continues a demo
-world from a saved state (not `split` or `budpore`: they place parts after loading); `TRI_PARAMS='{...}'` overrides parameters.
+world from a saved state (not `budpore`: it places parts after loading); `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Pitfalls learned
 Read before designing a layout: docs/IDEAS.md, "Pitfalls learned (copy lineage)" (doorways, anchors, food sinks,
-signals, rings, physics) and "Pitfalls from the casting lineage" (kits, pockets, doors, flaps).
+signals, rings, physics) and "Pitfalls from the casting lineage" (kits, pockets, doors, flaps; that lineage is
+removed, its lessons stay).
