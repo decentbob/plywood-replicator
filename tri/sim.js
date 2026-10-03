@@ -183,11 +183,12 @@ class TriSim extends Physics{
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)
       if(!this.chg[u]||!this.chg[v])continue;          // a discharged triangle binds nothing
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
-        // copy side '?': a free triangle that has one binds only by it, to any free (unbonded, not spent) side of an
-        // attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets go, so it
-        // stays free here (it binds nothing else and is never a template)
+        // copy side '?': a free triangle that has one binds only by it, to any free (unbonded, not spent, not anchor)
+        // side of an attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets
+        // go, so it stays free here (it binds nothing else and is never a template). An anchor side is no template:
+        // it binds only by catching a strand end
         if(this.cpy[v*3]||this.cpy[v*3+1]||this.cpy[v*3+2]){if(this.bonded(v))continue;
-          for(let e=0;e<3&&!done;e++){if(this.bond[u*3+e]>=0||this.spent[u*3+e])continue;
+          for(let e=0;e<3&&!done;e++){if(this.bond[u*3+e]>=0||this.spent[u*3+e]||this.anc[u*3+e])continue;
             for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
           continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
