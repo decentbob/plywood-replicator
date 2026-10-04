@@ -19,7 +19,8 @@ next pass hears 0 and is released as complete (candidate (o) below; oracle `LYFI
 ones byte for byte the same as main (31 worlds), 12 of 12 in all; `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s); `lysis` 4 of 4; tests 34. Nothing is running.
 Branch `claude/autorun-20261004-2051`, merged by PR. Scratch (container only): `runs/ly44`, `runs/ly4` (the default
 setup, seeds 1-4), `runs/lyf` and `runs/lyf1` (the oracle, 4 and 1 cutters; `LYC=1 LYFIX=1 node tri/demos.js lysis N
-2000000 runs/x/sN`), `runs/trace*.js` (the traces of the wave and of the spurious release).
+2000000 runs/x/sN`), `runs/lyfv` (the oracle with the fixed bookkeeping), `runs/pic1`, `runs/pic2` (the picture: seed 1
+defaults and seed 2 `LYC=1 LYFIX=1`, 600000 steps), `runs/trace*.js` (the traces of the wave and of the spurious release).
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
