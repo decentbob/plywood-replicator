@@ -29,7 +29,7 @@ convention, not a rule).
 | `.` | close-only: binds only triangles that are already attached, never a free one (no glue catch, dock or fill on it, and a free triangle binds by none of its close-only sides) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only); an unbonded glued `@` side of an attached triangle emits the open signal |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
-| `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). A free triangle's anchor side binds nothing, and no copy blank binds an anchor side: an anchor is never a template |
+| `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). No copy blank binds an anchor side: an anchor is never a template. Otherwise an anchor side binds as its glue does (a free one too since run 20261004-0820; an inert one `-\|` binds nothing: a closed side) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle but an anchor side (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 
 A type string with any other mark is rejected (the removed marks `< > * ~ $ + = % ' ^ ! #`).
@@ -67,7 +67,7 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | `.` close-only | mark | ring kits (the root's closure side), `imprint`'s rings | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121) |
 | `@` attach | mark | ring kits, `budKit` (`budpool`, `budcycle`, `closure`), `pool`, the cell anchor `Z@\|` (`imprint p`) | 10-01 |
 | `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
-| `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
+| `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
 | `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
 | busy (30, chain bonds) | relayed signal | all copying | 10-01 |
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
@@ -130,7 +130,8 @@ when their sides are flush within 0.05 (rigid parts are exact, so a ring that cl
 moving structures rarely meet that exactly). At probability `pBond` per step (1). A close-only side binds only an
 attached triangle: no glue catch, dock or fill binds a free triangle on it (until 2026-10-03, run 2121, an attached
 close-only side still took docks and fills: the casting lineage's dockers `Ay.z` took their fills on `y.`; Core
-changes). A free triangle binds (glue catch, dock or fill) by none of its anchor `|`, close-only `.` or spent sides.
+changes). A free triangle binds (glue catch, dock or fill) by none of its close-only `.` or spent sides (nor, from 2026-10-03
+to run 20261004-0820, by its anchor `|` sides: Core changes).
 A free part (a triangle with an attach side `@`) binds only by its attach side (an attached triangle's `@` side catches
 only a free part's `@` side; closures between two attached triangles do not look at `@`). A bonded triangle is never
 free (fixed 2026-10-02: a docked template that had lost its chain bonds was caught again), and a side binds only while
@@ -142,10 +143,11 @@ glue, when the end's centre comes within `capture` of the site: the whole strand
 moves rigidly into the flush place if that place is free (all or nothing). The capture path (the turn the short way and
 the move) must be clear in sub-steps, as every move (fixed 2026-10-02: a strand was pulled through a wall); a strand
 that already holds the anchor's triangle (one body) is not caught. This is the only way a strand joins an existing
-structure (two attached triangles otherwise bond only when flush). A free triangle's anchor side binds nothing (since
-2026-10-03, Core changes: free copies of a waiting anchor glue-capped strand ends), no copy blank binds an anchor side
+structure (two attached triangles otherwise bond only when flush). No copy blank binds an anchor side
 (since 2026-10-03, run 1221, Core changes: a waiting anchor was copied by every blank that reached it), and a spent
 anchor side catches nothing (since 2026-10-03, run 2121: the code had not tested it; no structure has one).
+Otherwise an anchor side binds as its glue does, free or attached (from 2026-10-03, run 0050, to run 20261004-0820 a
+free triangle's anchor side bound nothing: Core changes).
 
 Which sides of an attached triangle bind by glue: the free sides of a glue-bonded (grown) triangle, and no others
 (since 2026-10-04, run 20261004-0022, Core changes). A strand triangle binds by dock, fill and copy closure, and a
@@ -208,6 +210,20 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
+
+### Removal: run 0050's narrowing (a free triangle's anchor side binds nothing), 2026-10-04, autorun run 20261004-0820 (core-review)
+Candidate (i) of the direction check (run 0751). 1. **Why it existed.** Free copies of a waiting anchor (`W@|`, `W|`)
+glue-capped strands' low ends `w` (run 0050). 2. **Why it is no longer needed.** Since run 20261004-0022 no strand end
+binds by glue at all (only an anchor's catch binds it), and every glued anchor side in the kept worlds is on a part
+(`Z@|`: a free part binds only by `@`) or is attached and never copied (the hold cells, the cell anchor); a free
+triangle's anchor side could only glue-bind a grown triangle's free side, which no kept structure offers one.
+3. **Locality.** A read is removed (the free triangle's own anchor mark in glue catch, dock and fill). 4. **Generality.**
+An anchor side then binds as its glue does, free or attached (an attached grown one already glue-caught free
+triangles: run 0050 kept that path), and in addition an attached one catches strand ends and no copy blank binds it:
+one meaning instead of two. A free triangle binds by none of its close-only or spent sides. 5. **Measured.** The check
+suite on this run's code with and without the narrowing (`CHECK_SAVE`): all 35 worlds of the 11 checks byte for byte
+the same (11 of 11 pass both times). Tests: "binding: a free triangle docks by none of its close-only or spent sides"
+(the anchor case dropped) and "anchor: a free triangle's anchor side binds as its glue does" (was "... binds nothing").
 
 ### Rule: only a strand held by its high end is copied (`heldCopy` becomes the rule), 2026-10-04, autorun run 20261004-0820 (core-review)
 1. **Capability and why the goal needs it.** None new: the kind's cycle already runs on it. `budcycle` and

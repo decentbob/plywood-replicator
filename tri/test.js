@@ -23,8 +23,8 @@ function dockWorld(dockerType,end='high'){
 test('copy: complementary docking only',()=>{
   for(const [type,expect] of [['A--',true],['B--',false],['a--',false]]){const {s,u,d,i}=dockWorld(type);s.run(30);
     assert.equal(s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===d,expect,`docker ${type}`);symmetric(s);}});
-test('binding: a free triangle docks by none of its anchor, close-only or spent sides',()=>{
-  for(const type of ['A|--','A.--','A--']){const {s,u,d,i}=dockWorld(type);if(type==='A--')s.spent[d*3]=1;s.derive();s.run(30);
+test('binding: a free triangle docks by none of its close-only or spent sides',()=>{
+  for(const type of ['A.--','A--']){const {s,u,d,i}=dockWorld(type);if(type==='A--')s.spent[d*3]=1;s.derive();s.run(30);
     assert.ok(s.bond[u*3+i]<0,`docker ${type}${type==='A--'?' (side spent)':''} must not dock`);}});
 test('binding: an attached triangle\u2019s close-only side takes no dock or fill (a close-only side binds no free triangle)',()=>{
   {const {s,u,i}=dockWorld('A--');s.cOnly[u*3+i]=1;s.derive();s.run(30);assert.ok(s.bond[u*3+i]<0,'a close-only face took a dock');}
@@ -90,9 +90,10 @@ test('copy: only a strand held by its high end is copied (a free strand, or one 
       s.bind(s.n-3,1,GLUE,s.n-2,0,GLUE);s.bind(l,s.roles(l).inert,GLUE,s.n-3,0,GLUE);}
     const D=s.n-1;placeTri(s,D,refl(u,r.free));s.setType(D,'A--');s.derive();s.run(3);
     assert.equal(s.partner(u,r.free)===D,expect,hold?'held by its '+hold+' end':'free');}});
-test('anchor: a free triangle\u2019s anchor side binds nothing',()=>{
-  // a free triangle beside a grown triangle's glue side z: binds only without the anchor mark (control)
-  for(const [ty,expect] of [['Z|--',false],['Z--',true]]){
+test('anchor: a free triangle\u2019s anchor side binds as its glue does (an inert one binds nothing)',()=>{
+  // a free triangle beside a grown triangle's glue side z: binds by Z with or without the anchor mark (run 0050's
+  // narrowing, a free anchor side binds nothing, was removed in run 20261004-0820); a closed side -| binds nothing
+  for(const [ty,expect] of [['Z|--',true],['Z--',true],['-|--',false]]){
     const s=new TriSim({W:16,H:16,seed:5,sigma:0,sigmaRot:0},3),V=[[6,6],[7,6],[6.5,6+H]],W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];
     placeTri(s,0,V);placeTri(s,1,W2);s.setType(0,'zf-');s.setType(1,'F--');s.bind(0,1,GLUE,1,0,GLUE);
     const a=V[0],b=V[1],c=V[2];placeTri(s,2,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(2,ty);s.derive();s.run(3);

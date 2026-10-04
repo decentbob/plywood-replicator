@@ -139,8 +139,9 @@ class TriSim extends Physics{
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
-    // a free triangle binds (glue catch, dock, fill) by none of its anchor '|', close-only '.' or spent sides
-    const fs=(v,j)=>!this.anc[v*3+j]&&!this.cOnly[v*3+j]&&!this.spent[v*3+j];
+    // a free triangle binds (glue catch, dock, fill) by none of its close-only '.' or spent sides (an anchor side binds as
+    // its glue does: run 0050's narrowing was removed in run 20261004-0820, RULES Core changes)
+    const fs=(v,j)=>!this.cOnly[v*3+j]&&!this.spent[v*3+j];
     // a free triangle reaches the site beside side i of u: its centre is within `capture` of the site's centre (any
     // orientation: binding turns it into place)
     const reach=(u,i,v,j)=>{const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
@@ -157,8 +158,7 @@ class TriSim extends Physics{
             for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
           continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
-        // glue binding on an active side (not close-only or spent sides); a free triangle's anchor side '|' binds nothing
-        // (catching strands is what attached anchors do, below)
+        // glue binding on an active side (not close-only or spent sides)
         for(let e=0,am=this._active(u,r);e<3;e++){if(!(am>>e&1))continue;const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e])continue;
           for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');done=true;break;}
           if(done)break;}
