@@ -4,6 +4,18 @@ State on 2026-10-04 (after autorun run 20261004-0251, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `56618c3` for run 0022's, `faf6b8d` for run 2221's).
 
+**Current slice (autorun run 20261004-0621, explore; in progress).** Idea: *bud off the parent's corner, not across
+its pore.* With `heldCopy` a leaked strand is sterile but catchable, so the bud need not share a doorway with its parent:
+it can grow on a seed site elsewhere on the wall and catch the parent's leaked copies from open space. The pair is then
+never sealed, which removes run 0251's first failure (the bud completes before the parent's first copy, no food gets in,
+nothing is ever caught). Kit change only (`budKit(..., seedAt)`, demo flag `BCSEED=m`); no core change. Geometry
+(`budKit` poses for every outer cell): on cell 45 (beside E, the top-right corner) the bud hangs off the corner and the
+two pores face each other across an open 60-degree wedge. Check: `budcycle` gen2 with the harness off (closed walls,
+supply; the doorway kind gives 2 of 4) in at least 3 of 4 worlds, then the harness-on setup for comparison. Stop: after
+the 4-world comparison, with a record of what the corner pose does (works / not yet and why). Running (if the run was
+cut off): `BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 BCDBG=1 node tri/demos.js budcycle
+N 600000 runs/c45/sN`, seeds 1-4.
+
 **Handoff status (autorun run 20261004-0251, build).** Slice: the kind's cycle (`budcycle`) without budpool's harness.
 Branch `claude/autorun-20261004-0251`, merged into `main` by PR; no simulations running. No new rule; no new check
 (no setup reached 3 of 4). Results (INNOVATIONS, run 0251, table; IDEAS "Food goes to whatever templates are
