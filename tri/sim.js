@@ -8,7 +8,8 @@
 //   glue binding     complementary glues (a<->A, ..., '-' inert) bind flush sides if one triangle is already attached;
 //                    parts ('@'), close-only ('.') and anchor ('|') sides
 //   chain copying    dock (face glue complement), fill (2 - gap fills, lateral glue complement), close, release,
-//                    refractory (busy relay), zip
+//                    refractory (busy relay), zip (from a strand's high end while an anchor holds it: only held
+//                    strands are copied)
 //   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go
 //   completion       the open signal from open growth fronts; '&' sides let go and are spent once none is heard
 // (The casting lineage's rules, casting, hinges and machines, energy, proofreading, were removed on 2026-10-03: git

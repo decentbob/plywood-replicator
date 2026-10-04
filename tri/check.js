@@ -12,7 +12,12 @@ const count=(L,re)=>(L.match(re)||[]).length;
 // each check: id, capability, demo name, seeds, steps, extra, env (variables for the demo), need (seeds that must pass), secs (rough time per world,
 // for scheduling), pass(last report line, all output) -> [ok, short evidence]; partial: reported, never fails
 const CHECKS=[
-  {id:'copy',cap:'Genome: typed chain copying (zip)',demo:'copy',seeds:[1,2,3,4],need:3,steps:20000,secs:8,
+  // retired 2026-10-04 (autorun run 20261004-0820, core-review: heldCopy became the rule; INNOVATIONS keeps their
+  // entries, git `882b7d4` their code): imprint-cell(-n) and imprint-held(-c) (superseded by imprint-pore, which holds
+  // its founder), imprint-hood and imprint-held-w (pore leaks: leaked strands are sterile now), budpore, budpore-c,
+  // budpore-held, budpore-kind (doorway pairs: the corner bud needs no doorway), budpool-e (the sealed pair's last
+  // cell), budcycle-2 (two generations with the pool harness: budcycle-free has none)
+  {id:'copy',cap:'Genome: typed chain copying (zip; the founder held by its high end)',demo:'copy',seeds:[1,2,3,4],need:3,steps:20000,secs:8,
     pass:L=>{const n=count(L,/BBAABA\//g);return [n>=2,`${n} complete copies BBAABA`];}},
   {id:'ring',cap:'Membrane growth: ring kit closes (R=3)',demo:'ring',seeds:[1,2,3,4],need:3,steps:60000,extra:'3',secs:8,
     pass:L=>{const m=L.match(/closed=at (\d+)/);return [!!m,m?`closed at ${m[1]}`:'open '+(L.match(/cells=(\S+)/)||[])[1]];}},
@@ -22,42 +27,17 @@ const CHECKS=[
     pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n>=4,`${n} strands`];}},
   {id:'imprint-genome-c',cap:'  control: plain blanks, no copies',demo:'imprint',seeds:[1],steps:30000,extra:'gc',secs:15,
     pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n===1,`${n} strands`];}},
-  {id:'imprint-cell',cap:'Genome on copies inside a sealed cell (spent walls: every copy goes to the genome)',demo:'imprint',seeds:[1,2,3,4],need:3,steps:60000,extra:'60m',secs:50,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[1]>=4&&+m[4]===0,m?`${m[1]} strands, copies to genome ${m[3]}, wall ${m[4]}`:'no result'];}},
-  {id:'imprint-cell-n',cap:'  control: plain walls take most blanks',demo:'imprint',seeds:[1],steps:60000,extra:'60mn',secs:50,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[1]<=3&&+m[4]>+m[3],m?`${m[1]} strands, copies to genome ${m[3]}, wall ${m[4]}`:'no result'];}},
-  {id:'imprint-pore',cap:'A cell fed through a pore: copy blanks from outside copy only its genome (spent walls)',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150p',secs:70,
+  {id:'imprint-pore',cap:'A cell fed through a pore: copy blanks from outside copy only its held genome (spent walls); 3 rival strands outside stay sterile',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150px',secs:70,
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]>=4&&+m[5]===0,m?`${m[2]} strands inside (${m[1]} in all), copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
-  {id:'imprint-hood',cap:'A hooded pore keeps the strands in: blanks reach the pore along a corridor no strand can turn into',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150ph',secs:70,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]>=4&&+m[2]===+m[1],m?`${m[2]} of ${m[1]} strands inside, copies to genome ${m[4]}`:'no result'];}},
-  {id:'imprint-held',cap:'Only a held strand is copied (option heldCopy): 3 rival strands outside stay sterile, the cell keeps its copies',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150pzox',secs:70,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]>=4,m?`${m[2]} strands inside (${m[1]} in all)`:'no result'];}},
-  {id:'imprint-held-c',cap:'  control: without the option the rivals multiply outside and the cell keeps few',demo:'imprint',seeds:[1],steps:100000,extra:'150pzx',secs:70,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside/);return [!!m&&+m[2]<=3&&+m[1]>=10,m?`${m[2]} inside of ${m[1]}`:'no result'];}},
-  {id:'imprint-held-w',cap:'A 7-cell pore leaks every copy, the held founder keeps copying (heldCopy)',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150pzow',secs:70,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside/);return [!!m&&+m[1]>=5,m?`${m[1]} strands made (${m[2]} inside)`:'no result'];}},
   {id:'imprint-pore-c',cap:'  control: no pore, no blank gets in',demo:'imprint',seeds:[1],steps:60000,extra:'150pc',secs:40,
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+)/);return [!!m&&+m[3]===0&&+m[1]===1,m?`${m[1]} strand, ${m[3]} copies`:'no result'];}},
   {id:'imprint-pore-n',cap:'  control: plain walls take the blanks',demo:'imprint',seeds:[1],steps:60000,extra:'150pn',secs:40,
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]<=2&&+m[5]>+m[4],m?`${m[2]} inside, copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
-  {id:'budpore',cap:'Bud pair on copies: the bud catches a copy mid-wall, splits with food left (50+ blanks)',demo:'budpore',seeds:[1,2,3,4],need:3,steps:200000,extra:'300',secs:300,
-    pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m&&+m[2]>=50,(m?`split at ${m[1]}, ${m[2]} blanks left`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
-  {id:'budpore-held',cap:'The bud copies its genome after the split (heldCopy; both anchors on high ends, P\'s on side 52:1 from the dry-run): 5+ copies on its caught strand',demo:'budpore',seeds:[1,2,3,4],need:3,steps:200000,extra:'300',secs:300,env:{BUDAG:'Z',BUDPFE:'z',BUDPA:'52:1',TRI_PARAMS:'{"heldCopy":true}'},
-    pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m&&!!c&&+c[2]>=5,(m?`split at ${m[1]}, ${m[2]} blanks left`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
-  {id:'budpore-kind',cap:'The kind\'s own layout (R 5 pair, 7-cell pores, heldCopy, anchors Z on arc cell 6): the bud catches a strand, splits, copies it 3+ times',demo:'budpore',seeds:[1,2,3,4],need:3,steps:200000,extra:'300c',secs:150,
-    env:{BUDRP:'5',BUDRD:'5',BUDPG:'-1.75,1.75',BUDDG:'-1.75,1.75',BUDPFE:'z',BUDLX:'2',BUDAG:'Z',BUDNI:'20',BUDPS:'2',BUDPA:'16:0',BUDA:'90:2',TRI_PARAMS:'{"heldCopy":true}'},
-    pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m&&!!c&&+c[2]>=3,(m?`split at ${m[1]}`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
-  {id:'budpore-c',cap:'Sealed bud pair: the parent feeds from food inside, its founder under the doorway; the bud catches a copy and splits',demo:'budpore',seeds:[1,2,3,4,5,6,7,8],need:6,steps:100000,extra:'100c',secs:150,
-    pass:(L,o)=>{const m=o.match(/split at (\d+) with (\d+) blanks left, strands in D at the split (\d+)/),c=o.match(/anchored strand (\d+) \(copies (\d+)\)/);return [!!m,(m?`split at ${m[1]}, ${m[3]} strands in D`:'not split')+(c?`; bud copies after the split ${c[2]}`:'')];}},
   {id:'budpool',cap:'The closure kind\'s bud grows from a pool of its 47 part types (8 each, 40 of the last; 8 blanks), splits on a stand-in catch',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) refilled=\S+ copies=(\d+) .*stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`${m[1]}/47 cells, split ${m[3]}, ${m[4]} copies, ${m[5]} stray`:'no result'];}},
-  {id:'budpool-e',cap:'  the same with no part of the last type: its pore side copied by the pool (E source inside the pair; 16 blanks)',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,env:{BPES:'1',BPE:'0',BPB:'16'},
-    pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) .*stray=(\d+) .*Esource=(\d+) lastFromSource=(\w+)/);return [!!m&&m[3]!=='not'&&+m[4]===0&&m[6]==='true',m?`${m[1]}/47 cells, split ${m[3]}, ${m[5]} copies of E's pore side, ${m[4]} stray`:'no result'];}},
   {id:'budcycle',cap:'One generation of the kind from its own kit: the parent copies its held founder, grows its bud from the pool; the bud catches a real copy, splits and is complete',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:300000,secs:600,env:{BCAFTER:'2000'},
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) catch=(\S+) early=(\d) catchCells=(\d+) split=(\S+) .*budCopies=(\d+) .*newRoots=(\S+) .*stray=(\d+)/);
       return [!!m&&m[2]!=='not'&&m[3]!=='not'&&m[6]!=='not'&&+m[9]===0,m?`split ${m[6]} (catch at ${m[5]} cells), complete ${m[2]}, bud copies ${m[7]}, new roots ${m[8]}, ${m[9]} stray`:'no result'];}},
-  {id:'budcycle-2',cap:'Two generations from the kit: a bud grown on a bud\'s seed site completes and lets go after its catch',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:600000,secs:1200,env:{BCAFTER:'300000',BCSTOP2:'1'},
-    pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) stray=(\d+)/);return [!!m&&m[2]!=='not'&&+m[3]===0,m?`first split ${m[1]}, second generation let go at ${m[2]}, ${m[3]} stray`:'no result'];}},
   // run 20261004-0621 (explore): the bud off the parent's corner (seed site on cell 45: the pair is never sealed), budpool's
   // harness off; closed walls -| and a food supply (labelled environment drive: inert pre-food turning into blanks)
   {id:'budcycle-free',cap:'Two generations without the pool harness: the bud grows off its parent\'s corner (closed walls, a food supply)',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:600000,secs:700,env:{BCSEED:'45',BCK:'1',BCB:'20',BCF:'180',BCFP:'0.001',BCHOLD:'0',BCAFTER:'300000',BCSTOP2:'1'},
