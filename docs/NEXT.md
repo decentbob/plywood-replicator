@@ -15,13 +15,15 @@ with a complete bud that never catches stuck on its seed site, no free parts, no
 comes apart into its 47 parts, the parent's seed site frees, and a new bud grows from the returned parts, in 3 of 4
 worlds; all existing check worlds byte for byte the same (nothing carries `!`). Stop: the demo and its record; then,
 if time, `budcycle` with cutters (one batch) to see what it does to the lineage.
-Progress (22:00 UTC): the rule is in `tri/sim.js` (`_lyse`, `ly`, mark `!`; a lysed triangle binds nothing), test
-"lysis: ..." passes (34 tests), demo `lysis` runs (`TRI_NOPIC=1 node tri/demos.js lysis 1 400000 runs/x`; LYC cutters
-4, LYP parts per type 0, LYS world 30). Seed 1: the stuck bud is found and apart by t = 7012; its root re-binds the
-seed site at once with the in-place parts, and the root then lets go by a spurious completion (the open relay's
-one-pass lag: a part bound in the pass after the root reads 0 from partners not yet heard), leaving a 4-cell
-fragment with a spent root. Running: the 10 short checks on the new code (`runs/check_new.txt`, CHECK_SAVE `runs/b`;
-the baseline at main in the worktree `/home/user/pw-base`, `runs/a`: 10 of 10, 575 s).
+Progress (22:35 UTC): the rule is in `tri/sim.js` (`_lyse`, `ly`, mark `!`; a lysed triangle binds nothing), test
+"lysis: ..." passes (34 tests); the 10 short checks are byte for byte the same as main (31 worlds; `budcycle-3` not yet
+run). Demo `lysis` (`LYA=44 LYR=50 node tri/demos.js lysis N 2000000 runs/x/sN`, one output folder per seed): with the
+anchor on cell 6 (the default kind) the cutters kill every regrowing bud as soon as cell 6 attaches (seed 3: five buds
+lysed at 7 cells); with the anchor on cell 44 (openRange 50) the stuck bud is apart by t = 4005-10498 in 4 of 4 and a
+new bud grows on the seed site from its parts, but first the fresh root re-binds the seed site in place and is released
+at once by a spurious completion (traced, seed 1: root binds 4006, cell 1 binds 4007, released 4008: the open relay's
+one-pass lag), so the parts spend about 380k steps in a free arc until it too is lysed. Running: the oracle `LYFIX=1`
+(candidate (o): hear 0 only once every partner has heard) on 4 seeds, `runs/lyf/sN.txt`.
 
 **Handoff status (autorun run 20261004-1721, build).** Priority 2 below is done as a finding (INNOVATIONS run 1721);
 the next run (index 39) is an `explore`: priority 3, the reverse path. No rule change; the defaults unchanged
