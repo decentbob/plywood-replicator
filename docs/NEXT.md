@@ -4,6 +4,12 @@ State on 2026-10-04 (after autorun run 20261004-0022, explore). Read AGENTS.md f
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `faf6b8d` for run 2221's, `f05ed31` for run 2121's).
 
+**Current slice (autorun run 20261004-0251, build; in progress).** Goal: `budcycle` without budpool's harness
+(`BCHOLD=0`): copies of kit parts stay parts. Measure the pool per type over the run (new census line) and the genome
+monomers (`BCDBG=1`), one and two generations. Done when: either `budcycle-2` passes in 3 of 4 worlds with the
+harness off (then a check), or the census says what limits it (pool drift, food, monomers) and the smallest fix is
+tried. Stop at about 4 hours.
+
 **Handoff status (autorun run 20261004-0022, explore).** Slice done: run 2221's "food after the split" diagnosed, and
 one core change. Branch `claude/autorun-20261004-0022`, merged into `main` by PR; no simulations running. (1) **Core
 change (RULES, Core changes, "Narrowing: only grown triangles bind by glue"):** a strand end's seed binds only by an
