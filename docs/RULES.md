@@ -29,7 +29,7 @@ convention, not a rule).
 | `.` | close-only: binds only triangles that are already attached, never a free one (no glue catch, dock or fill on it, and a free triangle binds by none of its close-only sides) |
 | `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only); an unbonded glued `@` side of an attached triangle emits the open signal |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
-| `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). A free triangle's anchor side binds nothing, and no copy blank binds an anchor side: an anchor is never a template |
+| `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). No copy blank binds an anchor side: an anchor is never a template. Otherwise an anchor side binds as its glue does (a free one too since run 20261004-0820; an inert one `-\|` binds nothing: a closed side) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle but an anchor side (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 
 A type string with any other mark is rejected (the removed marks `< > * ~ $ + = % ' ^ ! #`).
@@ -57,26 +57,27 @@ A type string with any other mark is rejected (the removed marks `< > * ~ $ + = 
 - Labelled exceptions used by the chemistry: binding places a free triangle flush in a free site; an anchor's catch
   moves the caught strand (with anything bonded to it) as one body into a free flush place along a clear path.
 
-## Core inventory (2026-10-03, core review run 20261003-2121)
-After the removal of the casting lineage. Users from the kept demos and checks (coverage hook `tri/coverage.js` over
-the 20 checks before the removal; "demos": which of `copy`, `ring`, `imprint` (and its `g`, `m`, `p` variants), `pool`,
-`budpool`, `closure`, `budpore` carry or fire it). Dates: when the item entered the core (the repository restarted on
-2026-10-01).
+## Core inventory (2026-10-04, core review run 20261004-0820)
+Users from the kept demos and checks ("demos": which of `copy`, `ring`, `imprint` (its rings, its `g` strand and its
+`p`/`m` cells), `pool`, `budpool`, `budcycle`, `closure` carry or fire it; `budpore` was retired in run 0820). Dates:
+when the item entered the core (the repository restarted on 2026-10-01).
 
 | Item | Kind | Used by | Since |
 |---|---|---|---|
 | `.` close-only | mark | ring kits (the root's closure side), `imprint`'s rings | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121) |
-| `@` attach | mark | ring kits, `budKit`, `pool`, anchors (`budpore`) | 10-01 |
-| `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint m/p`, `budpore`), `budpore`'s doorway | 10-01 |
-| `\|` anchor | mark | `imprint p` variants, `budpore`, `budKit`, `budpool`, `closure` | 10-01; catches busy strands 10-02; a free one binds nothing 10-03; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
-| `?` copy side | mark | every `imprint` variant, `budpore`, `pool`, `budpool` | 10-02 |
+| `@` attach | mark | ring kits, `budKit` (`budpool`, `budcycle`, `closure`), `pool`, the cell anchor `Z@\|` (`imprint p`) | 10-01 |
+| `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
+| `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
+| `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
 | busy (30, chain bonds) | relayed signal | all copying | 10-01 |
-| zip (chain) | relayed signal | all copying | 10-01 |
+| zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill, refractory | state | copying | 10-01 |
 | spent | state | `&` sides | 10-01 |
-| `heldCopy` | option (off by default) | `imprint 150pzox` variants, `budpore-held`, `budpore-kind` | 10-03 (run 1720) |
+
+**Counts (2026-10-04, run 0820):** 5 marks, 3 relayed signals, 4 exposed one-bond values, 3 states, no option (was 1:
+`heldCopy` became the rule). Run 2121's removal and run 0022's narrowing below.
 
 **Counts (2026-10-03, run 2121):** 5 marks (was 16), 3 relayed signals (was 5: lock and hear removed), 4 exposed
 one-bond values (was 9: fu, pwE, tb, nbc, actE removed), 3 states (was 9: charge, caught, door open, powered, away and
@@ -107,7 +108,7 @@ place (all or nothing; never by size).
 | roles | own bonds and bond kinds, own fill | own | local |
 | busy, refractory | own bond kinds; partners' busy | previous pass | local (relay) |
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
-| zip | own bonds (whether the spare edge is bonded); next partner's role and its copy bond (TFACE); its zip | partner current state; previous pass | local (convention) |
+| zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
 | glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
@@ -129,7 +130,8 @@ when their sides are flush within 0.05 (rigid parts are exact, so a ring that cl
 moving structures rarely meet that exactly). At probability `pBond` per step (1). A close-only side binds only an
 attached triangle: no glue catch, dock or fill binds a free triangle on it (until 2026-10-03, run 2121, an attached
 close-only side still took docks and fills: the casting lineage's dockers `Ay.z` took their fills on `y.`; Core
-changes). A free triangle binds (glue catch, dock or fill) by none of its anchor `|`, close-only `.` or spent sides.
+changes). A free triangle binds (glue catch, dock or fill) by none of its close-only `.` or spent sides (nor, from 2026-10-03
+to run 20261004-0820, by its anchor `|` sides: Core changes).
 A free part (a triangle with an attach side `@`) binds only by its attach side (an attached triangle's `@` side catches
 only a free part's `@` side; closures between two attached triangles do not look at `@`). A bonded triangle is never
 free (fixed 2026-10-02: a docked template that had lost its chain bonds was caught again), and a side binds only while
@@ -141,10 +143,11 @@ glue, when the end's centre comes within `capture` of the site: the whole strand
 moves rigidly into the flush place if that place is free (all or nothing). The capture path (the turn the short way and
 the move) must be clear in sub-steps, as every move (fixed 2026-10-02: a strand was pulled through a wall); a strand
 that already holds the anchor's triangle (one body) is not caught. This is the only way a strand joins an existing
-structure (two attached triangles otherwise bond only when flush). A free triangle's anchor side binds nothing (since
-2026-10-03, Core changes: free copies of a waiting anchor glue-capped strand ends), no copy blank binds an anchor side
+structure (two attached triangles otherwise bond only when flush). No copy blank binds an anchor side
 (since 2026-10-03, run 1221, Core changes: a waiting anchor was copied by every blank that reached it), and a spent
 anchor side catches nothing (since 2026-10-03, run 2121: the code had not tested it; no structure has one).
+Otherwise an anchor side binds as its glue does, free or attached (from 2026-10-03, run 0050, to run 20261004-0820 a
+free triangle's anchor side bound nothing: Core changes).
 
 Which sides of an attached triangle bind by glue: the free sides of a glue-bonded (grown) triangle, and no others
 (since 2026-10-04, run 20261004-0022, Core changes). A strand triangle binds by dock, fill and copy closure, and a
@@ -167,15 +170,17 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   exposes `fn`: it is a fill or has a fill on a chain bond, from the previous pass, and from the pass a fill binds:
   fixed 2026-10-02, a fill bound in the same pass did not hold the release); at a copy end without a prev (next) bond,
   once the template has no next (prev) bond there; the copy peels
-  off as one strand and is a template itself. Copy faces carry the complement of the template's faces, so a copy
+  off as one strand and is a template itself once an anchor holds its high end (zip, below). Copy faces carry the complement of the template's faces, so a copy
   of the copy restores them (the copy reads as the reverse complement).
-- **zip:** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it, a
-  face whose dock is bonded passes it on, backs relay it (previous pass). A copy therefore grows from the high end one
-  face after another; parallel docking used to enclose an empty dock site between two partial copies (a hole no free
-  triangle can reach), which deadlocked copying. (The option `zip: false`, parallel docking, was removed
-  2026-10-03: only a test used it.) Option `heldCopy` (off by default, Core changes run 1720): the high end emits zip
-  only while its spare edge is held (by an anchor: since run 20261004-0022 nothing else binds it), so a free strand
-  is never copied.
+- **zip:** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it while its
+  spare edge is bonded, i.e. held by an attached anchor side (since run 20261004-0022 nothing else holds it: a copy
+  blank that binds it lets go in the same pass), a face whose dock is bonded passes it on, backs relay it (previous
+  pass). **Only a strand held by its high end is copied**: a free strand and one held by its low end take no dock (the
+  option `heldCopy` of run 1720, the rule since run 20261004-0820: Core changes). A hold is lost only if the anchor
+  side or the spare edge carries `&` (no kit has one); a copy in progress then still completes (zip passes on from its
+  bonded docks), and no new one starts. A copy grows from the high end one face after another;
+  parallel docking used to enclose an empty dock site between two partial copies (a hole no free triangle can reach),
+  which deadlocked copying. (The option `zip: false`, parallel docking, was removed 2026-10-03: only a test used it.)
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
@@ -205,6 +210,58 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
+
+### Removal: run 0050's narrowing (a free triangle's anchor side binds nothing), 2026-10-04, autorun run 20261004-0820 (core-review)
+Candidate (i) of the direction check (run 0751). 1. **Why it existed.** Free copies of a waiting anchor (`W@|`, `W|`)
+glue-capped strands' low ends `w` (run 0050). 2. **Why it is no longer needed.** Since run 20261004-0022 no strand end
+binds by glue at all (only an anchor's catch binds it), and every glued anchor side in the kept worlds is on a part
+(`Z@|`: a free part binds only by `@`) or is attached and never copied (the hold cells, the cell anchor); a free
+triangle's anchor side could only glue-bind a grown triangle's free side, which no kept structure offers one.
+3. **Locality.** A read is removed (the free triangle's own anchor mark in glue catch, dock and fill). 4. **Generality.**
+An anchor side then binds as its glue does, free or attached (an attached grown one already glue-caught free
+triangles: run 0050 kept that path), and in addition an attached one catches strand ends and no copy blank binds it:
+one meaning instead of two. A free triangle binds by none of its close-only or spent sides. 5. **Measured.** The check
+suite on this run's code with and without the narrowing (`CHECK_SAVE`): all 35 worlds of the 11 checks byte for byte
+the same (11 of 11 pass both times). Tests: "binding: a free triangle docks by none of its close-only or spent sides"
+(the anchor case dropped) and "anchor: a free triangle's anchor side binds as its glue does" (was "... binds nothing").
+
+### Rule: only a strand held by its high end is copied (`heldCopy` becomes the rule), 2026-10-04, autorun run 20261004-0820 (core-review)
+1. **Capability and why the goal needs it.** None new: the kind's cycle already runs on it. `budcycle` and
+   `budcycle-free` (one and two generations from the kit, runs 2221 and 0621) and the held-founder cells (`imprint
+   150pzox`, run 1720) set the option; leaked strands are then sterile, which is what dissolved the kind's opening
+   problem (run 1720) and lets the corner bud grow with no doorway (run 0621). As an option it is a fork: two zip
+   rules, six checks and every unit test of copying on the other branch, and every new layout has to choose (NEXT,
+   direction check run 0751, finding 2 and candidate (e)).
+2. **Designs with the existing core, and why they fail.** Keeping the option keeps two rules for one job. Keeping the
+   old default (every strand is copied wherever it lies) is what made leaks feed rivals: three rival strands outside an
+   `imprint p` cell left it 1-3 strands (runs 0320, 1720), and a bud on the old rule copied its caught strand 0-1 times
+   after the split in every run before 1720.
+3. **Locality.** Smaller than before: zip's origin reads the high end's own bond on its spare edge (own state) and no
+   option. Since run 20261004-0022 only an anchor's catch binds a strand end's spare edge, so "held" means "held by an
+   anchor" without reading the partner.
+4. **Generality.** Every strand, every world: a free strand and a strand held by its low end take no dock (a hold is
+   lost only through a `&` on the anchor side or the spare edge, which no kit has; a copy in progress then completes);
+   any anchor that catches a high end makes that strand a template.
+   Contact copying of a strand's free sides is unchanged (a free strand's triangles are still copied). Biology: a
+   chromosome is replicated where its origin is attached to the membrane.
+5. **What it replaces.** The option `heldCopy` and the old default branch (zip from every free high end): the core
+   has no option left. Checks that relied on free strands being copied adapt (the founder starts held by its high end
+   on a prepared anchor, labelled: `copy`, the `imprint p` cells, the unit tests of copying) or retire with the layouts
+   the lineage has left (NEXT priority 1: the doorway pairs `budpore*`, the sealed pair's last cell `budpool-e`, the
+   harness's two generations `budcycle-2`, and the `imprint` variants the held cell supersedes); each retired check's
+   INNOVATIONS entry stays and its ROADMAP row says "retired".
+6. **Result (built as the rule; test "copy: only a strand held by its high end is copied (a free strand, or one held
+   by its low end, takes no dock)").** `node tri/check.js` with `CHECK_SAVE`, before (`882b7d4`: 23 of 23, 2849 s) and
+   after (11 of 11, 1349 s): the worlds that already ran with the option or never copy a strand are byte for byte the
+   same (`ring`, `imprint`, `budpool`, `budcycle`, `budcycle-free`: 20 worlds), and the new `imprint-pore` (`150px`)
+   is the old `imprint-held` (`150pzox`) byte for byte (4 worlds). Adapted: `copy` (held founder) 4 of 4 with 2-4
+   copies (was 2-3 on free strands); `imprint-genome` (held founder) 4 of 4 with 11-15 strands (was 9-15: the free
+   copies copied too); `imprint-pore-c` and `-n` pass as before. Retired (12 checks; code in git at `882b7d4`, INNOVATIONS
+   entries kept): `imprint-cell`, `imprint-cell-n`, `imprint-held`, `imprint-held-c`, `imprint-held-w`, `imprint-hood`,
+   `budpore`, `budpore-c`, `budpore-held`, `budpore-kind`, `budpool-e`, `budcycle-2`; the `budpore` demo (146 lines)
+   left `tri/demos.js`. Founders can start held (`createWorld` founder option `hold`: an anchor cell and a support,
+   their other sides closed `-|`; found by an independent review: with plain sides copy blanks copied the hold cells,
+   44 of 195 copies in `imprint g`). `node tri/test.js`: 32 tests, the copying tests on held founders.
 
 ### Narrowing: only grown triangles bind by glue; a strand end binds only by an anchor's catch, 2026-10-04, autorun run 20261004-0022 (explore)
 1. **Capability and why the goal needs it.** A cell must turn its food into the genome monomers it uses. In `budcycle`
@@ -540,5 +597,6 @@ copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
-capture 0.6, triTolClose 0.05, openRange 120`; option `heldCopy` (false). (Removed 2026-10-03 with the casting
-lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`, `pLoose`, `light`.)
+capture 0.6, triTolClose 0.05, openRange 120`; no options (`heldCopy` became the rule 2026-10-04, run 0820).
+(Removed 2026-10-03 with the casting lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`,
+`pLoose`, `light`.)

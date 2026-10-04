@@ -1,15 +1,21 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-0751, review-intent). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-0820, core-review). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `8123a2d` for run 0621's, `9c8ca17` for run 0251's; the previous direction check,
-run 1321's, at `8123a2d` too).
+handoffs: NEXT.md in git, e.g. at `882b7d4` for run 0751's, `8123a2d` for run 0621's).
 
-**Handoff status (autorun run 20261004-0751, review-intent).** Direction check, no building: the findings and
-priorities below, ROADMAP backlog item 0 updated, picture `docs/pictures/stocks_burn_down.png` (INNOVATIONS, run 0751),
-rotation changed (the next run, index 35, is a `core-review`; below). Two census worlds of the `budcycle-free` setup
-(seeds 1, 3, `BCDBG=1`) were the only simulations; nothing is running. Branch `claude/autorun-20261004-0751`, merged
-by PR.
+**Handoff status (autorun run 20261004-0820, core-review).** Priority 1 below is done; the next run (index 36) is a
+`build`: priority 2. Done: (1) `heldCopy` is the rule (zip from a held high end only; the core has no option left);
+(2) run 0050's narrowing removed (candidate (i): a free triangle's anchor side now binds as its glue does; 35 of 35
+check worlds byte for byte the same without it); (3) 12 checks and the `budpore` demo retired, `copy`, `imprint g` and
+the `imprint p` cells moved onto held founders (`createWorld` founder option `hold`); suite 23 checks / 2849 s -> 11
+checks / 1349 s, all pass; the 20 worlds of the unaffected checks and the old `imprint-held` (now `imprint-pore`) byte
+for byte the same (RULES, Core changes; INNOVATIONS, run 0820). An independent review (deep-reviewer) confirmed the
+rule's locality and that only an anchor's catch holds a spare edge; its findings were fixed (hold cells copied by
+blanks, unchecked hold placement, wording on lost holds). No longer checked anywhere: a bud copying its caught strand
+after the split (was `budpore-held`/`-kind`): priority 2 brings it back on `budcycle`. Nothing is running. Branch
+`claude/autorun-20261004-0820`, merged by PR. Worktrees `/home/user/pw-base`, `/home/user/pw-i` were scratch (container
+only).
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
@@ -63,7 +69,7 @@ Eleven runs since the last direction check (run 1321): five `build` (1420, 1650,
    generations need about a million steps. One `harden` per twelve runs stays, aimed at `budcycle` worlds.
 
 **Priorities (in order; each a slice).**
-1. **`core-review` (next run, index 35): `heldCopy` as the rule, and retire the checks of layouts the lineage left.**
+1. **Done (run 0820, core-review): `heldCopy` as the rule, and retire the checks of layouts the lineage left.**
    Candidate (e) below: make `heldCopy` the rule (RULES gate), then for each check that runs without it decide
    adapt (anchor on a high end) or retire. Proposed to retire, with their INNOVATIONS entries kept and ROADMAP rows
    marked "retired (git `<commit>`)": `budpore` and `budpore-c` (doorway pairs, superseded by the corner bud),
@@ -96,16 +102,15 @@ run (index 35) is the `core-review` of priority 1 and the `cleanup` comes at ind
 corner the default (it then prunes what the build left). The mix (5 build, 3 explore, 1 each of the rest) still fits:
 the open work is building (priority 2) with design questions behind it.
 
-**Core-change candidates (for the next `core-review` or `explore`).** (e) *`heldCopy` as the rule:* RULES (Core
-changes, run 1720); the kind's cycle runs on it (`budcycle`, `budcycle-free`). Today the option is off by default and
-`copy`, `imprint g`, `imprint m`, `imprint p`, `budpore 300`, `budpore c` copy free or low-end-held strands, so making
-it the rule changes those checks (they need anchors on high ends, or retire: priority 1). (f) *The seed site `y`*
-(plain glue, never spent) is copied by every blank that reaches it while no bud sits on it; keep. (i) *Run 0050's
-narrowing (a free triangle's anchor side binds nothing)* may be redundant since run 0022 (no free triangle binds a
-strand end at all); weigh removing it by a byte-for-byte comparison of the check suite. (j) *Monomer mix:* a copy uses
-2 : 2 : 3 of a mix now made about 1 : 1 : 1, and a strand's middle faces are copied far less than its ends (IDEAS, run
-0022); no design yet. (k) *No copy blank binds an `&` side*: not needed, closed wall sides `-|` do it in the kit.
-Nothing else in the core is unused (Core inventory).
+**Core-change candidates (for the next `core-review` or `explore`).** (e) and (i) done in run 0820. (f) *The seed
+site `y`* (plain glue, never spent) is copied by every blank that reaches it while no bud sits on it; keep. (j)
+*Monomer mix:* a copy uses 2 : 2 : 3 of a mix now made about 1 : 1 : 1, and a strand's middle faces are copied far less
+than its ends (IDEAS, run 0022); no design yet. (k) *No copy blank binds an `&` side*: not needed, closed wall sides
+`-|` do it in the kit. (l) *A triangle with both a copy side `?` and a glued anchor side* (review, run 0820): once it
+has copy-bound in a pass it counts as attached, so its anchor side could catch a strand end in the same pass, after
+which it is no longer bonded by its copy side alone and never copies or lets go. No such type exists (blanks are
+`-?-?-?`, and a copy takes its template's type, which never carries `?`); a rule "a triangle with a copy side catches
+nothing" would close it if one ever appears. Nothing else in the core is unused (Core inventory).
 
 ### Open follow-ups (not priorities; take when a run's kind fits)
 - **Core review:** same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);
@@ -119,12 +124,12 @@ Nothing else in the core is unused (Core inventory).
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~35 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~23 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;
                                                    # BPE: E parts, 40; BPB: blanks, 8; BPS: world size, 30; BPR: openRange, 1; BPHOLD=0: no harness)
-BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the same with E's pore side plain and no E part: the last cell from the source
+BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the same with E's pore side plain and no E part: the last cell from the source (check budpool-e retired, run 0820)
 node tri/demos.js budcycle 1 300000 runs           # one generation from the kit: the parent copies its held founder, grows its bud from the
                                                    # pool, the bud catches a real copy, splits, completes (check budcycle; extra: parts per type, 8;
                                                    # BCB blanks 200, BCI inside 20, BCS world 32, BCR openRange 9, BCE E parts 0, BCAFTER 50000,
@@ -138,33 +143,17 @@ BCDBG=1 node tri/demos.js budcycle 3 300000 runs   # with the genome monomer cen
 BCG=1 BCDBG=1 node tri/demos.js budcycle 1 300000 runs   # the oracle for candidate (g): free strands not contact-copied (non-local)
 BCR=50 BCW=0.05 node tri/demos.js budcycle 1 300000 runs  # the designed order (complete, catch, split): the picture in INNOVATIONS
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
-BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPX=b BUDLX=2 BUDA=84:2 BUDNI=20 BUDPS=2 node tri/demos.js budpore 1 100000 runs 100c
-                                                   # the kind's 7-cell doorway, founder away (4 of 4 split); the kind's own layout:
-                                                   # BUDPF=-1.75 BUDPFE=w instead of BUDPX=b (1 of 4); 3-cell pores: BUDPG=BUDDG=-0.75,0.75
-                                                   # BUDLX=1 BUDA=90:2 (0 of 8); BUDDRY=1: dry-run every bud anchor side (BUDAG=Z: by the high end)
-node tri/demos.js budpore 1 100000 runs 100c       # sealed bud pair: P feeds inside, founder under the doorway (7 of 8 split)
-node tri/demos.js budpore 1 200000 runs 300        # bud pair on copies: mid-wall catch, the doorway bond cut by completion release, split with food left (7 of 8); DBGC=1: where copies go, BUDF=20: frames;
-                                                   # BUDDRY=1: dry-run a catch on every inner side of D; BUDA=cell:side: anchor
-BUDRD=7 BUDDG=-1.75,3.25 BUDA=126:1 node tri/demos.js budpore 1 100000 runs 100c   # the bud's genome as its plug (run 0320)
-BUDCAP=-2.75 BUDRP=9 BUDNI=160 BUDPG=-2.75,2.25 BUDPX=b BUDRD=7 BUDDG=-1.75,3.25 BUDA=146:1 node tri/demos.js budpore 1 100000 runs 100c
-                                                   # cap release: the parent plugs its half after the bud's catch (2 of 4 split)
-node tri/demos.js imprint 2 100000 runs 150pzox    # heldCopy: anchor Z@| holds the founder's high end, 3 sterile rivals outside
-                                                   # (150pzx: control without the option; 150pzow: 7-cell pore; 150pzo: alone)
-BUDAG=Z BUDPFE=z BUDPA=52:1 TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 2 200000 runs 300   # the bud copies after the split
-                                                   # (check budpore-held; BUDDRYP=1: dry-run every inner side of P; BUDPA=cell:side: P's anchor)
-BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPFE=z BUDLX=2 BUDAG=Z BUDNI=20 BUDPS=2 BUDPA=16:0 BUDA=90:2 TRI_PARAMS='{"heldCopy":true}' node tri/demos.js budpore 1 200000 runs 300c
-                                                   # the kind's own layout, anchors on arc cell 6 (check budpore-kind)
 BPA=6 BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the kind's bud from the pool with the anchor Z@| on cell 6 (openRange 9)
-node tri/demos.js imprint 1 100000 runs 150p       # a cell fed through a pore copies its genome from blanks outside (150pc, 150pn: controls)
+node tri/demos.js imprint 1 100000 runs 150px      # a cell fed through a pore copies its held genome from blanks outside; 3 sterile rivals (check imprint-pore; without x: alone; 150pc, 150pn: controls; 150pw: 7-cell pore) (150pc, 150pn: controls)
 node tri/demos.js imprint 1 100000 runs 150ph      # the same cell with a hooded pore: no strand leaves (x: 3 rival strands outside)
 node tri/demos.js imprint 1 60000 runs 60m         # a sealed cell (spent & walls) copies its genome from copy blanks (60mn: control)
-node tri/demos.js imprint 1 30000 runs g           # a strand copied from copies of its own triangles (gc: control)
+node tri/demos.js imprint 1 30000 runs g           # a held strand copied from copies of its own triangles (gc: control)
 node tri/demos.js imprint 1 200000 runs            # contact copying: a ring closes and a second grows from copy blanks only
 ```
-Older demos: `copy` (chain copying from dockers) and `ring` (a ring kit closes); each has a check in `tri/check.js`
+Older demos: `copy` (chain copying from dockers, the founder held by its high end) and `ring` (a ring kit closes); each has a check in `tri/check.js`
 with its seeds, steps and extra. The casting lineage's demos were removed on 2026-10-03 (git `7415fd4`). Pictures go to
 `runs/NAME.png` with saved states; `TRI_NOPIC=1` turns them off. `TRI_RESUME=runs/x/NAME_tNNN.json.gz` continues a demo
-world from a saved state (not `budpore`: it places parts after loading); `TRI_PARAMS='{...}'` overrides parameters.
+world from a saved state; `TRI_PARAMS='{...}'` overrides parameters.
 
 ## Pitfalls learned
 Read before designing a layout: docs/IDEAS.md, "Pitfalls learned (copy lineage)" (doorways, anchors, food sinks,
