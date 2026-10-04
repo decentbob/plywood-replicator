@@ -63,7 +63,7 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
 // eSource: E's pore side is plain '-' instead of '&' (never spent, so copied by any copy blank that reaches it): copies
 // of E then form in the pore, which in a sealed pair is where the bud's last site opens (run 20261003-1650).
 // anchor={at:k,glue:'Z'}: the catching anchor on arc cell k's inner side instead of the root's pore side (the root's pore
-// side is then '-&'); glue 'Z' catches a strand's high end (option heldCopy: only a held strand is copied). On the root a
+// side is then '-&'); glue 'Z' catches a strand's high end (only a strand held by its high end is copied). On the root a
 // strand held by its high end stands out of the cell into the doorway (run 20261003-1921, dry-run); the open range must
 // then reach the root from cell k (openRange > k), so the root holds while the waiting anchor emits.
 // seedAt=m (autorun run 20261004-0621, explore): the seed site 'y' on arc cell m's outer side instead of E's (E's outer

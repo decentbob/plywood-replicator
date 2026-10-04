@@ -57,25 +57,27 @@ A type string with any other mark is rejected (the removed marks `< > * ~ $ + = 
 - Labelled exceptions used by the chemistry: binding places a free triangle flush in a free site; an anchor's catch
   moves the caught strand (with anything bonded to it) as one body into a free flush place along a clear path.
 
-## Core inventory (2026-10-03, core review run 20261003-2121)
-After the removal of the casting lineage. Users from the kept demos and checks (coverage hook `tri/coverage.js` over
-the 20 checks before the removal; "demos": which of `copy`, `ring`, `imprint` (and its `g`, `m`, `p` variants), `pool`,
-`budpool`, `closure`, `budpore` carry or fire it). Dates: when the item entered the core (the repository restarted on
-2026-10-01).
+## Core inventory (2026-10-04, core review run 20261004-0820)
+Users from the kept demos and checks ("demos": which of `copy`, `ring`, `imprint` (its rings, its `g` strand and its
+`p`/`m` cells), `pool`, `budpool`, `budcycle`, `closure` carry or fire it; `budpore` was retired in run 0820). Dates:
+when the item entered the core (the repository restarted on 2026-10-01).
 
 | Item | Kind | Used by | Since |
 |---|---|---|---|
 | `.` close-only | mark | ring kits (the root's closure side), `imprint`'s rings | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121) |
-| `@` attach | mark | ring kits, `budKit`, `pool`, anchors (`budpore`) | 10-01 |
-| `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint m/p`, `budpore`), `budpore`'s doorway | 10-01 |
-| `\|` anchor | mark | `imprint p` variants, `budpore`, `budKit`, `budpool`, `closure` | 10-01; catches busy strands 10-02; a free one binds nothing 10-03; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
-| `?` copy side | mark | every `imprint` variant, `budpore`, `pool`, `budpool` | 10-02 |
+| `@` attach | mark | ring kits, `budKit` (`budpool`, `budcycle`, `closure`), `pool`, the cell anchor `Z@\|` (`imprint p`) | 10-01 |
+| `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
+| `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
+| `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
 | busy (30, chain bonds) | relayed signal | all copying | 10-01 |
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill, refractory | state | copying | 10-01 |
 | spent | state | `&` sides | 10-01 |
+
+**Counts (2026-10-04, run 0820):** 5 marks, 3 relayed signals, 4 exposed one-bond values, 3 states, no option (was 1:
+`heldCopy` became the rule). Run 2121's removal and run 0022's narrowing below.
 
 **Counts (2026-10-03, run 2121):** 5 marks (was 16), 3 relayed signals (was 5: lock and hear removed), 4 exposed
 one-bond values (was 9: fu, pwE, tb, nbc, actE removed), 3 states (was 9: charge, caught, door open, powered, away and
@@ -169,10 +171,12 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   off as one strand and is a template itself once an anchor holds its high end (zip, below). Copy faces carry the complement of the template's faces, so a copy
   of the copy restores them (the copy reads as the reverse complement).
 - **zip:** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it while its
-  spare edge is held (by an anchor: since run 20261004-0022 nothing else binds it), a face whose dock is bonded passes
-  it on, backs relay it (previous pass). **Only a strand held by its high end is copied**: a free strand and one held by
-  its low end take no dock (an anchor never lets go, so a hold is not lost; the option `heldCopy` of run
-  1720, the rule since run 20261004-0820: Core changes). A copy grows from the high end one face after another;
+  spare edge is bonded, i.e. held by an attached anchor side (since run 20261004-0022 nothing else holds it: a copy
+  blank that binds it lets go in the same pass), a face whose dock is bonded passes it on, backs relay it (previous
+  pass). **Only a strand held by its high end is copied**: a free strand and one held by its low end take no dock (the
+  option `heldCopy` of run 1720, the rule since run 20261004-0820: Core changes). A hold is lost only if the anchor
+  side or the spare edge carries `&` (no kit has one); a copy in progress then still completes (zip passes on from its
+  bonded docks), and no new one starts. A copy grows from the high end one face after another;
   parallel docking used to enclose an empty dock site between two partial copies (a hole no free triangle can reach),
   which deadlocked copying. (The option `zip: false`, parallel docking, was removed 2026-10-03: only a test used it.)
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
@@ -219,8 +223,9 @@ speak of rules removed with the casting lineage (triggers, latches, casting, fue
 3. **Locality.** Smaller than before: zip's origin reads the high end's own bond on its spare edge (own state) and no
    option. Since run 20261004-0022 only an anchor's catch binds a strand end's spare edge, so "held" means "held by an
    anchor" without reading the partner.
-4. **Generality.** Every strand, every world: a free strand and a strand held by its low end take no dock (an anchor
-   side never lets go, so a held strand stays held); any anchor that catches a high end makes that strand a template.
+4. **Generality.** Every strand, every world: a free strand and a strand held by its low end take no dock (a hold is
+   lost only through a `&` on the anchor side or the spare edge, which no kit has; a copy in progress then completes);
+   any anchor that catches a high end makes that strand a template.
    Contact copying of a strand's free sides is unchanged (a free strand's triangles are still copied). Biology: a
    chromosome is replicated where its origin is attached to the membrane.
 5. **What it replaces.** The option `heldCopy` and the old default branch (zip from every free high end): the core

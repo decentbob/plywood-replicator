@@ -115,7 +115,7 @@ test('budding: a ring on a seed lets go when complete (open signal), holds while
     assert.equal(s.partner(2,K.rootSide)<0,expect,missing?'incomplete ring must hold':'complete ring must let go');}});
 
 test('state: save and reload continue the same run',()=>{
-  const {s}=createWorld({seed:5,size:12,founders:[{gaps:[1,1],faces:'aba'}],supply:{'A--':4,'B--':4,'---':6}});s.run(50);
+  const {s}=createWorld({seed:5,size:12,founders:[{gaps:[1,1],faces:'aba',hold:'z'}],supply:{'A--':4,'B--':4,'---':6}});s.run(50);
   const a=TriSim.fromState(JSON.parse(JSON.stringify(s.saveState())));s.run(40);a.run(40);
   assert.deepEqual(Array.from(a.px),Array.from(s.px));assert.deepEqual(Array.from(a.bond),Array.from(s.bond));});
 

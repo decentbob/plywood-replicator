@@ -35,8 +35,9 @@ function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.s
   return W;}
 // founders: {gaps, faces, ends?, backs?, hold?, x?, y?}; structures: {tris, x, y, rot?}; supply: {type: count}
 // hold: glue letter (e.g. 'z'): the founder starts held by its high end (a labelled starting condition: only a strand
-// held by its high end is copied, RULES): its spare edge gets that glue, and an anchor cell (the complement with the
-// anchor mark '|') welded to a support cell is placed flush against it and bonded (out.holds: [anchor, support])
+// held by its high end is copied, RULES): its spare edge gets that glue (instead of ends[1]), and an anchor cell (the
+// complement with the anchor mark '|') welded to a support cell is placed flush against it and bonded (out.holds:
+// [anchor, support]); their other sides are closed '-|'
 function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params={}}={}){
   const bands=founders.map(f=>band(rolesFromGaps(f.gaps)));
   const n=bands.reduce((a,b)=>a+b.length,0)+2*founders.filter(f=>f.hold).length+structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
@@ -51,9 +52,13 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
     if(f.ends){const r0=s.roles(units[0]),r1=s.roles(units[units.length-1]);if(r0.inert>=0)s.glue[units[0]*3+r0.inert]=gcode(f.ends[0]);if(r1.inert>=0&&f.ends[1])s.glue[units[units.length-1]*3+r1.inert]=gcode(f.ends[1]);}
     if(f.hold){const u=units[units.length-1],i=s.roles(u).inert,A=next++,A2=next++,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
       s.glue[u*3+i]=gcode(f.hold);const a=P(i),b=P((i+1)%3),V=[b,a,sub(add(a,b),P((i+2)%3))],cen=T=>[(T[0][0]+T[1][0]+T[2][0])/3,(T[0][1]+T[1][1]+T[2][1])/3];
-      // the support across the anchor cell's side 1, or its side 2 where that place is the strand's
-      let e=1,W2=[V[2],V[1],sub(add(V[1],V[2]),V[0])];if(Wv.some(T=>same(cen(T),cen(W2)))){e=2;W2=[V[0],V[2],sub(add(V[2],V[0]),V[1])];}
-      placeTri(s,A,V);placeTri(s,A2,W2);s.setType(A,gname(comp(gcode(f.hold)))+(e===1?'|f-':'|-f'));s.setType(A2,'F--');s.bind(A,e,GLUE,A2,0,GLUE);s.bind(u,i,GLUE,A,0,GLUE);
+      // the support across the anchor cell's side 1, or its side 2 where that place is the strand's (lattice cells: a
+      // place is taken iff a cell has the same centre); every other side of the two cells is closed '-|' (an anchor mark
+      // without a glue: it catches nothing and no copy blank binds it, so the hold cells are never copied)
+      const taken=T=>Wv.some(X=>Math.hypot(cen(X)[0]-cen(T)[0],cen(X)[1]-cen(T)[1])<0.5);
+      if(!(i>=0)||taken(V))throw Error('createWorld: no place for the hold anchor (the founder needs a high end with a spare edge facing out)');
+      let e=1,W2=[V[2],V[1],sub(add(V[1],V[2]),V[0])];if(taken(W2)){e=2;W2=[V[0],V[2],sub(add(V[2],V[0]),V[1])];if(taken(W2))throw Error('createWorld: no place for the hold support');}
+      placeTri(s,A,V);placeTri(s,A2,W2);s.setType(A,gname(comp(gcode(f.hold)))+(e===1?'|f-|':'|-|f'));s.setType(A2,'F-|-|');s.bind(A,e,GLUE,A2,0,GLUE);s.bind(u,i,GLUE,A,0,GLUE);
       placed.push(A,A2);out.holds.push([A,A2]);}
     placed.push(...units);out.founders.push(units);});
   for(const st of structures){const units=st.tris.map(()=>next++);buildStructure(s,units,st.tris,st.x,st.y,st.rot||0);placed.push(...units);out.structures.push(units);}

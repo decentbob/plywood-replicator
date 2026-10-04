@@ -191,7 +191,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       finish(`The closure kind's bud grown from a part pool (${P} parts of each type, ${supply[K.types[N-1]]} of the last, ${B} blanks)`,3);},
     // budcycle (build run 20261003-2221): one generation of the closure kind from its own kit, budpool and budpore-kind
     // joined. A prepared parent of structures.budKit(5, 7, eSource, anchor Z@| on arc cell 6) (labelled) holds its founder
-    // aAaA by the high end on its anchor (placed where the anchor puts it; labelled), option heldCopy (only a held strand
+    // aAaA by the high end on its anchor (placed where the anchor puts it; labelled; only a strand held by its high end
     // is copied). Around it P free parts of each kit type but E (the parent's E source makes E parts) and B copy blanks
     // (BCI of them inside the parent). No stand-in: the parent copies its founder from blanks that come in through its
     // pore, a root part binds its seed site y, the bud grows from the pool, and once the bud is complete and its anchor
@@ -207,7 +207,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // BCDBG=1: genome copies by source (copied type, role, side) at the end; BCG=1: the oracle for candidate (g) (below)
     budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||200),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD!=='0',after=+(process.env.BCAFTER||50000),W=+(process.env.BCW||0),WK=+(process.env.BCWK||0),SF=+(process.env.BCF||0),SFP=+(process.env.BCFP||0.0003),R=5;
       const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='1'?'-|':'-&',+(process.env.BCSEED||-1)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r,heldCopy:true}});
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys());seedCopyGenome(s,F);
       // the founder starts held by its high end z on the parent's anchor (placed where the anchor puts a strand; labelled)
       {const b=F.find(u=>{const q=s.roles(u);return q.inert>=0&&s.glue[u*3+q.inert]===gc('z');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,Pu[AK],K.anchorSide);s.moveDepth=md;
