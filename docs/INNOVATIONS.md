@@ -8,6 +8,47 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-1021, build)
+
+- **Three generations from the kit on a slow supply of copy blanks: a bud of the bud's bud complete, let go and
+  holding a caught strand, in 4 of 4 worlds; the lineage still runs down its stocks** — works for three generations
+  (check `budcycle-3`, CHECKRESULT); not yet a lineage that does not burn down. No rule change. `budcycle`'s default is now
+  the corner bud (seed site on cell 45, closed walls `-|`, no harness) on a slow supply (labelled environment drive:
+  400 inert pre-food `---` in a 36 x 36 world, each turning into a copy blank with probability 0.0003 per 100 steps;
+  "food" in these records means copy blanks, the untyped building blocks: user, 2026-10-04, IDEAS). New observation:
+  a `letgo:` line for every bud (its generation, cells, completion, catch, and the stocks at that moment), the
+  generations reached (a bud of generation g or later complete, let go and holding a caught strand; until now a bud
+  that let go with no strand counted too), and `ownCopies` (each let-go bud's full copies of its caught strand after
+  its let-go). New labelled drives `BCL`/`BCLK` (free monomers / free kit parts turn into blanks); pruned: the oracles
+  `BCA`, `BCG`, the drives `BCW`, `BCWK`, `BCSTOP2` (in git at `7c9bbac`).
+
+  Four setups, seeds 1-4, up to 1.2M steps, stopped at generation 3 (A-D with the monomer loop `BCL=0.002`):
+
+  | setup | generation 3 | generation 2 | the lineage's own copies after let-go | what ran out |
+  |---|---|---|---|---|
+  | A: 20 blanks + 180 pre-food at 0.001 (world 32) | 1 of 4 (573400) | 3 of 4 | gen2 1 copy (seed 4) | blanks 0-12 at every let-go; seeds 1-3 stalled with none by 900k |
+  | B: 20 blanks + 400 pre-food at 0.0003 (world 36) | **4 of 4** (735900, 827100, 977300, 1031000) | 4 of 4 | gen1 / gen2: 2 / 1 (seed 3), 1 / 3 (seed 2); seed 4's first bud and seed 1's second never let go (they budded while attached), the others copied 3-4 times | pre-food nearly all fed by the end; pool fewest 0-3 |
+  | C: 200 blanks, no pre-food, + free kit parts back to blanks (`BCLK=0.0003`) | stopped at 360k | 0 of 2 | (parent about 15 copies by 360k) | kit decay empties the rarely copied types: 7 and 2 types at 0 |
+  | D: 200 blanks, no pre-food | 0 of 4 | 2 of 4 | 0 | blanks gone by 180-360k, made into kit parts; the parent never copied in seeds 1, 3 |
+
+  - **Where the blanks go.** Kit copies at the bud's waiting fronts (100-170 per world, its own type while it waits
+    for the next part) and at the parent's E source (30-70), then into new bodies: in B 300 kit copies against 200-345
+    parts used by the end; the pool's mean holds (10.5 -> 5.5-9) but its fewest falls to 0-3 (seed 2: two types at 0 at
+    850k). Genome monomers made on leaked strands only churn under the loop (made, returned, made again: 420-860
+    returned per world). The lineage's pace is the parent's genome copy rate (2-6 full copies per world), which needs
+    blanks near the held strand; the fronts and the leaked strands take them first.
+  - **Why the slow supply works:** blanks arrive while the buds grow and wait (0-19 free at every let-go, 120 -> 27
+    pre-food left), so the first and second buds still find blanks after their split and copy their strands (A: the
+    stock is gone by the first let-go). Generation 3 comes at 0.74-1.03M steps, 1.5-2.6x the first split.
+  - **Still a burn-down** (the user, 2026-10-04: "the simulation will just run out"): only blanks change type; parts,
+    leaked strands and finished bodies never return. Returning free parts by a drive empties types (C). An indefinite
+    lineage needs a reverse path in the core (IDEAS: the user's ideas, a bond-cutting type, wider molding, molding one
+    side at a time; NEXT, candidate (m)).
+    ![seed 3: growth, catch, split, the bud after the split and the world at generation 3](pictures/budcycle_gen3.png)
+  - Command: `BCL=0.002 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x` (B, the picture; about 30
+    minutes); the check runs the defaults without the loop: `BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle SEED
+    1200000 runs/x`.
+
 ## 2026-10-04 (autorun run 20261004-0820, core-review)
 
 - **Only a strand held by its high end is copied: the option `heldCopy` is the rule; the check suite halves** — core
