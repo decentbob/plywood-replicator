@@ -224,16 +224,19 @@ class Physics{
     return f;}
   // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
   _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,n=this.n;
-    // bodies: a lone block is its own body (no list allocated); bonded blocks are grouped by a search through bonds
-    const comp=this._comp&&this._comp.length===n?this._comp:(this._comp=new Int32Array(n));comp.fill(-1);const members=[],one=[0];
-    for(let u=0;u<n;u++){if(comp[u]>=0)continue;const id=members.length;comp[u]=id;
-      if(this.bond[u*3]<0&&this.bond[u*3+1]<0&&this.bond[u*3+2]<0){members.push(u);continue;}
+    // bodies: a lone block is its own body (its id in the member list, no list allocated); bonded blocks are grouped by
+    // a search through bonds (member ~k: body list k); members shuffled in place (an Int32Array: the same swaps as an array)
+    const comp=this._comp&&this._comp.length===n?this._comp:(this._comp=new Int32Array(n));comp.fill(-1);
+    const mem=this._mem&&this._mem.length===n?this._mem:(this._mem=new Int32Array(n)),bl=[],one=[0];let nm=0;
+    for(let u=0;u<n;u++){if(comp[u]>=0)continue;const id=nm;comp[u]=id;
+      if(this.bond[u*3]<0&&this.bond[u*3+1]<0&&this.bond[u*3+2]<0){mem[nm++]=u;continue;}
       const list=[u];for(let k=0;k<list.length;k++){const x=list[k];for(let i=0;i<3;i++){const q=this.bond[x*3+i];if(q<0)continue;const y=(q/3)|0;if(comp[y]<0){comp[y]=id;list.push(y);}}}
-      members.push(list);}
-    for(let k=members.length-1;k>0;k--){const j=Math.floor(this.rng()*(k+1));const t=members[k];members[k]=members[j];members[j]=t;}
-    for(const M of members){const list=typeof M==='number'?(one[0]=M,one):M,m=list.length,u0=list[0];
-      if(m===1){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
-        if(p.split)this._single(u0,tx,ty,da);else this.tryMove(list,tx,ty,da,px[u0],py[u0]);continue;}
+      mem[nm++]=~bl.length;bl.push(list);}
+    for(let k=nm-1;k>0;k--){const j=Math.floor(this.rng()*(k+1));const t=mem[k];mem[k]=mem[j];mem[j]=t;}
+    for(let z=0;z<nm;z++){const M=mem[z];
+      if(M>=0){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
+        if(p.split)this._single(M,tx,ty,da);else{one[0]=M;this.tryMove(one,tx,ty,da,px[M],py[M]);}continue;}
+      const list=bl[~M],m=list.length,u0=list[0];
       let cx=0,cy=0;const rx=new Float64Array(m),ry=new Float64Array(m);
       this._unwrap(list,rx,ry);for(let q=0;q<m;q++){cx+=rx[q];cy+=ry[q];}cx/=m;cy/=m;
       let inertia=0,tq=0;const ib=1/wr;
