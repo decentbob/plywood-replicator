@@ -8,6 +8,18 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## A stock is not a metabolism (direction check, review-intent run 20261004-0751, 2026-10-04)
+
+Measured with the census in `budcycle-free` (INNOVATIONS, run 0751): the food stock is gone by the first split and
+the part pool's mean halves over two generations, so the lineage ends when either stock ends. With conservation,
+indefinite cycles need a material loop: food that keeps arriving, which in a closed world means material returning to
+food (waste monomers, free kit parts and abandoned bodies decaying to blanks: a labelled drive) or an open boundary.
+The pool is renewable in principle (a growing bud makes about 2 kit copies per part used while food lasts) but has no
+per-type regulation: a front waiting for part k+1 exposes part k, so scarcity makes copies of the type before the
+scarce one, not of the scarce one. Lessons: (1) count every prepared stock's balance per generation before calling a
+cycle self-sustaining; (2) "lives on its own" (the goal) has a local measure, the bud's own copies after the split and
+its own bud's catch of one, and that is the target, not the number of generations alone.
+
 ## Sterile leaks make the doorway unnecessary: bud off the corner (explore run 20261004-0621, 2026-10-04)
 
 The kind's doorway (the bud's pore facing the parent's) was designed when the bud had to receive a strand directly.
