@@ -16,7 +16,7 @@ nearly complete or waiting buds are exposed; 4 cutters find an open anchor in 4-
 two parts arrive, so regrown buds die at 44-46 cells (1 cutter with the oracle below: complete in 2 of 4 by 2M);
 (2) the open relay lags one pass behind a new bond: a fresh root re-bound in place and joined by its next cell in the
 next pass hears 0 and is released as complete (candidate (o) below; oracle `LYFIX=1` removes it). Checks: the 10 short
-ones byte for byte the same as main (31 worlds); `budcycle-3` RESULT_B3; `lysis` 4 of 4; tests 34. Nothing is running.
+ones byte for byte the same as main (31 worlds), 12 of 12 in all; `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s); `lysis` 4 of 4; tests 34. Nothing is running.
 Branch `claude/autorun-20261004-2051`, merged by PR. Scratch (container only): `runs/ly44`, `runs/ly4` (the default
 setup, seeds 1-4), `runs/lyf` and `runs/lyf1` (the oracle, 4 and 1 cutters; `LYC=1 LYFIX=1 node tri/demos.js lysis N
 2000000 runs/x/sN`), `runs/trace*.js` (the traces of the wave and of the spurious release).
@@ -144,6 +144,10 @@ BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the linea
                                                    # about 30 minutes); 'letgo:' lines per bud, ownCopies in the result. Options: extra parts per
                                                    # type (8); BCB blanks, BCI inside, BCS world, BCR openRange (9), BCE E parts (0), BCF/BCFP the
                                                    # supply, BCL=q / BCLK=q free monomers / kit parts back to blanks (labelled loops), BCDBG=1 census
+node tri/demos.js lysis 1 1000000 runs/x           # run 2051: a bud stuck on its parent's seed site taken apart by cutters 'z@!-|-|' at its
+                                                   # waiting anchor (cell 44, openRange 50; check lysis, 2.5 minutes); a new bud grows from its
+                                                   # parts. LYC cutters (4), LYP parts per type (0), LYA anchor cell, LYR openRange, LYS world (30),
+                                                   # LYFIX=1 the oracle for candidate (o); one output folder per seed when running several
 BCGATE=1 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1721's oracle: a bud buds only after
                                                    # letting go (BCES=0 BCE=8: no E source, 8 E parts; BCES=2: E source outside); 'sinks', 'chain:' lines
 BCL=0.002 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1021's setup B (generation 3 in 4 of 4; the picture)

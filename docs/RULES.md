@@ -274,7 +274,7 @@ IDEAS). The case, then the result.
 7. **Result (built as the rule; test "lysis: a part with a lysis side bound to a waiting anchor takes the bud apart
    into its parts, fresh; the parent behind its & joint stays whole"; demo and check `lysis`; INNOVATIONS run 2051).**
    No kept world carries `!`: the 10 short checks with `CHECK_SAVE` at `ef27e51` and on this code, 31 worlds, byte for
-   byte the same (10 of 10 both times, 575 / 580 s); `budcycle-3` RESULT_B3. In `lysis` (a parent with a complete bud stuck on its
+   byte the same (10 of 10 both times, 575 / 580 s); `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s). In `lysis` (a parent with a complete bud stuck on its
    seed site, no food, 4 cutters, the anchor on cell 44): the stuck bud comes apart into its 47 parts in 4 of 4 worlds
    (t = 4005-10498) and a later bud on the parent's seed site is built from 45-46 of them in 4 of 4 by 1M steps. Two
    findings for the kind and the core: (a) a cutter at the waiting anchor also kills a growing bud once its anchor cell

@@ -24,10 +24,10 @@ not statistics.
     the anchor on cell 44, openRange 50), seeds 1-4, 1M steps: the stuck bud is apart (each of its 47 cells free, 48
     cuts in one wave of about 45 passes) at t = 4005, 10498, 4062, 5834; all 47 parts fresh and free; the parent and
     its founder untouched; a later bud on the parent's seed site is built from 45, 45, 46, 45 of the stuck bud's parts
-    (then lysed in turn when its own anchor opens, at 642k-908k). Test "lysis: ..." (no motion): the wave, the fresh
+    (then lysed in turn when its own anchor opens, at 642k-908k); check `lysis` 4 of 4 (135 s). Test "lysis: ..." (no motion): the wave, the fresh
     parts, the parent's seed site free and fresh, the `&` joint holding the parent out; control without `!`: nothing
     comes apart. Every existing world is unchanged (no kept structure carries `!`): 31 worlds of the 10 short checks
-    byte for byte the same as main; `budcycle-3` RESULT_B3.
+    byte for byte the same as main; `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s).
   - **Two findings.** (1) *Where the anchor sits decides who dies.* With budcycle's anchor on cell 6, cutters kill
     every regrowing bud the moment its cell 6 attaches (seed 3, 4 cutters: five buds lysed at 7 cells in 480k steps);
     on cell 44 only a bud with two cells to go or waiting is exposed. Even then 4 cutters in a 30 x 30 world find an open
@@ -39,7 +39,8 @@ not statistics.
     a pass before) and completion releases it at once (traced in seed 1: root binds 4006, cell 1 binds 4007, released
     4008, its seed side spent); the freed parts then grow a free arc off the parent until a cutter finds it too (seed
     1: about 380k steps). An oracle (`LYFIX=1`: a triangle that would hear 0 while a partner had not yet heard keeps -1)
-    removes it: the regrowth starts on the seed site at once in 3 of 4. The lag predates lysis (any root joined by its
+    removes it: the first regrown bud starts on the seed site at once in 4 of 4 and reaches its anchor sooner (lysed at
+    352-773k against 642-908k without it; seed 1 completes a second regrown bud, 47 of 47 parts, at 970310). The lag predates lysis (any root joined by its
     next cell in the next pass); it shows here because freed parts lie next to their old sites. Candidate (o) in NEXT.
     ![lysis: the stuck bud, apart, and a new bud of its parts](pictures/lysis.png)
   - Command: `node tri/demos.js lysis N 1000000 runs/x` (defaults: 4 cutters `LYC`, anchor cell `LYA` 44, openRange
