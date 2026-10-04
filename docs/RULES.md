@@ -71,12 +71,11 @@ the 20 checks before the removal; "demos": which of `copy`, `ring`, `imprint` (a
 | `\|` anchor | mark | `imprint p` variants, `budpore`, `budKit`, `budpool`, `closure` | 10-01; catches busy strands 10-02; a free one binds nothing 10-03; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
 | `?` copy side | mark | every `imprint` variant, `budpore`, `pool`, `budpool` | 10-02 |
 | busy (30, chain bonds) | relayed signal | all copying | 10-01 |
-| zip (chain) | relayed signal | all copying | 10-01 |
+| zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill, refractory | state | copying | 10-01 |
 | spent | state | `&` sides | 10-01 |
-| `heldCopy` | option (off by default) | `imprint 150pzox` variants, `budpore-held`, `budpore-kind` | 10-03 (run 1720) |
 
 **Counts (2026-10-03, run 2121):** 5 marks (was 16), 3 relayed signals (was 5: lock and hear removed), 4 exposed
 one-bond values (was 9: fu, pwE, tb, nbc, actE removed), 3 states (was 9: charge, caught, door open, powered, away and
@@ -107,7 +106,7 @@ place (all or nothing; never by size).
 | roles | own bonds and bond kinds, own fill | own | local |
 | busy, refractory | own bond kinds; partners' busy | previous pass | local (relay) |
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
-| zip | own bonds (whether the spare edge is bonded); next partner's role and its copy bond (TFACE); its zip | partner current state; previous pass | local (convention) |
+| zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
 | glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
@@ -167,15 +166,15 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   exposes `fn`: it is a fill or has a fill on a chain bond, from the previous pass, and from the pass a fill binds:
   fixed 2026-10-02, a fill bound in the same pass did not hold the release); at a copy end without a prev (next) bond,
   once the template has no next (prev) bond there; the copy peels
-  off as one strand and is a template itself. Copy faces carry the complement of the template's faces, so a copy
+  off as one strand and is a template itself once an anchor holds its high end (zip, below). Copy faces carry the complement of the template's faces, so a copy
   of the copy restores them (the copy reads as the reverse complement).
-- **zip:** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it, a
-  face whose dock is bonded passes it on, backs relay it (previous pass). A copy therefore grows from the high end one
-  face after another; parallel docking used to enclose an empty dock site between two partial copies (a hole no free
-  triangle can reach), which deadlocked copying. (The option `zip: false`, parallel docking, was removed
-  2026-10-03: only a test used it.) Option `heldCopy` (off by default, Core changes run 1720): the high end emits zip
-  only while its spare edge is held (by an anchor: since run 20261004-0022 nothing else binds it), so a free strand
-  is never copied.
+- **zip:** a face takes a dock only while it hears zip: the strand's high end (no next bond) emits it while its
+  spare edge is held (by an anchor: since run 20261004-0022 nothing else binds it), a face whose dock is bonded passes
+  it on, backs relay it (previous pass). **Only a strand held by its high end is copied**: a free strand and one held by
+  its low end take no dock (an anchor never lets go, so a hold is not lost; the option `heldCopy` of run
+  1720, the rule since run 20261004-0820: Core changes). A copy grows from the high end one face after another;
+  parallel docking used to enclose an empty dock site between two partial copies (a hole no free triangle can reach),
+  which deadlocked copying. (The option `zip: false`, parallel docking, was removed 2026-10-03: only a test used it.)
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
@@ -220,8 +219,8 @@ speak of rules removed with the casting lineage (triggers, latches, casting, fue
 3. **Locality.** Smaller than before: zip's origin reads the high end's own bond on its spare edge (own state) and no
    option. Since run 20261004-0022 only an anchor's catch binds a strand end's spare edge, so "held" means "held by an
    anchor" without reading the partner.
-4. **Generality.** Every strand, every world: a free strand, a strand held by its low end and a partial copy left on a
-   strand that lost its hold take no new dock; any anchor that catches a high end makes that strand a template.
+4. **Generality.** Every strand, every world: a free strand and a strand held by its low end take no dock (an anchor
+   side never lets go, so a held strand stays held); any anchor that catches a high end makes that strand a template.
    Contact copying of a strand's free sides is unchanged (a free strand's triangles are still copied). Biology: a
    chromosome is replicated where its origin is attached to the membrane.
 5. **What it replaces.** The option `heldCopy` and the old default branch (zip from every free high end): the core
@@ -566,5 +565,6 @@ copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
-capture 0.6, triTolClose 0.05, openRange 120`; option `heldCopy` (false). (Removed 2026-10-03 with the casting
-lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`, `pLoose`, `light`.)
+capture 0.6, triTolClose 0.05, openRange 120`; no options (`heldCopy` became the rule 2026-10-04, run 0820).
+(Removed 2026-10-03 with the casting lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`,
+`pLoose`, `light`.)
