@@ -82,6 +82,8 @@ the 20 checks before the removal; "demos": which of `copy`, `ring`, `imprint` (a
 one-bond values (was 9: fu, pwE, tb, nbc, actE removed), 3 states (was 9: charge, caught, door open, powered, away and
 the hinge's rest angle and side removed), 1 option (was 2 plus the environment drive `light`: `pLoose` and `light`
 removed). Physics lost one exception (a hinged flap turned by the chemistry). `tri/sim.js` 336 -> about 230 lines.
+Run 20261004-0022 (explore): the same counts; glue binding lost two cases (a strand end's seed, a released back: only
+grown triangles bind by glue) and zip its `&` case (Core changes).
 
 Previous inventories: 2026-10-03 run 0450 (16 marks, 5 signals, 9 exposed values, 9 states, 2 options), 2026-10-02
 run 0721 (17 marks, 5 signals, 9 values, 9 states, 4 options): RULES.md in git at `7415fd4`.
@@ -105,10 +107,10 @@ place (all or nothing; never by size).
 | roles | own bonds and bond kinds, own fill | own | local |
 | busy, refractory | own bond kinds; partners' busy | previous pass | local (relay) |
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
-| zip | own bonds; next partner's role and its copy bond (TFACE); its zip; the `&` mark of the side bonded to the spare edge | partner current state; previous pass; fixed type | local (convention) |
+| zip | own bonds (whether the spare edge is bonded); next partner's role and its copy bond (TFACE); its zip | partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
-| glue catch, dock, fill | own role, need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
+| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
 | glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
 | release | own face bond; chain partners' fn; template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
@@ -144,10 +146,11 @@ structure (two attached triangles otherwise bond only when flush). A free triang
 (since 2026-10-03, run 1221, Core changes: a waiting anchor was copied by every blank that reached it), and a spent
 anchor side catches nothing (since 2026-10-03, run 2121: the code had not tested it; no structure has one).
 
-Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
-released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and its
-face is free (an anchor reads only that the spare edge is unbonded, above). A strand's high end held by a
-completion-release side `&` (a membrane growing around the strand) starts no copy.
+Which sides of an attached triangle bind by glue: the free sides of a glue-bonded (grown) triangle, and no others
+(since 2026-10-04, run 20261004-0022, Core changes). A strand triangle binds by dock, fill and copy closure, and a
+strand end's seed only by an anchor's catch (above). Until then the back of a released strand triangle and the spare
+edge of a strand end that was not being copied also bound by glue: free back monomers capped strands' low ends, and a
+high end held by a completion-release side `&` started no copy (a case of zip, removed with it).
 
 ## Chains and copying
 A strand is triangles joined by chain bonds (PREV/NEXT ends). A strand triangle's free edge is a **face** if its
@@ -171,7 +174,8 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   face after another; parallel docking used to enclose an empty dock site between two partial copies (a hole no free
   triangle can reach), which deadlocked copying. (The option `zip: false`, parallel docking, was removed
   2026-10-03: only a test used it.) Option `heldCopy` (off by default, Core changes run 1720): the high end emits zip
-  only while its spare edge is held (bonded, not to a `&` side), so a free strand is never copied.
+  only while its spare edge is held (by an anchor: since run 20261004-0022 nothing else binds it), so a free strand
+  is never copied.
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
@@ -201,6 +205,56 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
+
+### Narrowing: only grown triangles bind by glue; a strand end binds only by an anchor's catch, 2026-10-04, autorun run 20261004-0022 (explore)
+1. **Capability and why the goal needs it.** A cell must turn its food into the genome monomers it uses. In `budcycle`
+   (the kind's cycle, run 2221) the 200 blanks are gone by t = 75000 and the buds that split late copy their strand
+   0-3 times. Measured in this run (`budcycle`, seeds 1-4, 300000 steps, census of every contact copy by the role and
+   side of the copied triangle): the blanks become genome monomers 5x faster than copying uses them (seed 1: 194 made,
+   about 40 used by t = 70000), and in the wrong proportions: awz : Awz : --W = 30 : 64 : 100 made, 2 : 2 : 3 used per
+   copy, so the face monomer `awz` runs out first (4 left at the end of seed 1, against 38 `Awz` and 49 `--W`). The
+   cause is one binding: a free back monomer `--W` glue-binds a strand's low-end seed `w` (the spare edge, which carries
+   the docker's prev glue, the one a fill binds). That cap hides the low end's own copyable spare edge (4 copies of the
+   low end's spare against 36 of the high end's) and is itself a grown triangle with two free sides that blanks copy
+   (5 caps made 61 of the 100 back monomers). Candidate (g) of run 2221 (free strands not contact-copied) was weighed
+   first with a non-local oracle (`BCG=1`, the most any local rule could do) and does not help: the blanks are copied
+   at the held strands instead (seed 1: 186 of 186 genome copies from held bodies; seed 2: the parent made 2 copies and
+   the bud never caught). Withdrawn.
+2. **Designs with the existing core, and why they fail.** The cap needs a back monomer whose next side complements the
+   docker's prev side (that is what a fill is), and every face triangle is a docker type, so a strand's low end always
+   exposes a fill site's glue: no genome design avoids it. A `.` (close-only) prev side on dockers stops the cap and
+   stops every fill with it (test "an attached triangle's close-only side takes no dock or fill"). Recycling monomers
+   (waste drive `BCW`, run 2221) returns blanks that are copied in the same skewed proportions.
+3. **Locality.** Nothing new is read: glue binding and glue closure already ask which sides of an attached triangle are
+   active (its own role and bonds); the change removes two of the three cases (the spare edge of a strand end that is
+   not being copied, which also read the triangle's busy relay; the back edge of a released strand triangle). A strand
+   triangle then binds only by dock, fill and copy closure, and its end's seed only by an anchor's catch (a rule of its
+   own, unchanged).
+4. **Generality.** One rule for glue: only grown (glue-bonded) triangles bind by glue, free triangles and attached ones
+   alike. With it the `&` case of zip (a high end held by a completion-release side starts no copy) can no longer
+   arise, since only an anchor side holds a strand end and no anchor side carries `&`: it is removed too. The
+   strand-end catch by glue was the casting lineage's (caps, a ring grown on a strand's seed); nothing kept uses it on
+   purpose (point 7: every check still passes; the margins moved both ways).
+5. **What it replaces.** Two branches of the active-side rule and one case of zip; the busy relay is then read by
+   refractory alone. The narrowing of run 0050 (a free triangle's anchor side binds nothing) was made because free copies
+   of a waiting anchor glue-capped strand ends; it stays (a free anchor-side triangle could still bind a grown side).
+6. **Measured before the change** (`budcycle` `BCH=1`, the same rule as a demo what-if, seeds 1-4, 300000 steps;
+   without it in brackets): monomers made awz : Awz : --W about 1 : 1 : 1 (1 : 2 : 3.3); used in copies 47-86% of those
+   made (17-46%); full copies, parent and bud together, 10 / 11 / 13 / 13 (12 / 8 / 8 / 4); strands leaked 9-17 (1-11);
+   the split at 144301 / 127592 / 58302 / 73532 (47081 / 217572 / 145137 / 217631); the bud's copies after the split 1 /
+   6 / 8 / 7 (8 / 2 / 3 / 0); 0 stray bindings, every bud complete.
+7. **Result (built as the rule; tests "binding: a strand end's seed and a strand's back bind no free triangle by
+   glue", "anchor: a free triangle's anchor side binds nothing" now against a grown side).** `node tri/check.js` 21 of 22 with the change (the old code: 22 of 22, 2151 s; new 2072 s): `copy` 3 -> 4 of 4,
+   `budpore` 3 -> 4 of 4, `budpore-c` 6 -> 7 of 8, `budpore-held` 4 -> 3 of 4 (seed 1 never split), `imprint-cell` 4 -> 3
+   of 4 (5 / 5 / 5 / 3 strands, was 8 / 6 / 5 / 7: in a sealed cell with 60 blanks the back monomers run short now,
+   since the caps' copies had supplied them: 13-19 fills to 30-36 docks), `imprint-held-w` 3 -> 2 of 4, the rest
+   unchanged. `imprint-held-w`'s failures (and seed 2's on the old code) were a race in the setup: the founder started
+   free beside the anchor and left through the 7-cell pore before it was caught (seeds 1-8: 1 of 8 on the old code, 3
+   of 8 on the new). The `z` variants of `imprint` now start with the founder held on the anchor (labelled, as in
+   `budcycle`); seeds 1-8 then pass on both codes in all three held checks (`imprint-held-w` 5-11 strands made, new
+   code), and `node tri/check.js imprint-held imprint-held-c imprint-held-w`: 3 of 3 (4/4, 1/1, 4/4). So 22 of 22. The
+   20 worlds in which nothing can glue-bind a strand (`ring`, `imprint`'s rings, `budpool`, `budpool-e`, the controls
+   with inert blanks) are byte for byte the same; the 57 others differ.
 
 ### Removal: the casting lineage leaves the core, 2026-10-03, autorun run 20261003-2121 (core-review)
 NEXT.md's priority 5 (direction check, run 1321): weigh removing the frozen casting lineage now rather than after a

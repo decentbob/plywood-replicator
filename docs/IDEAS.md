@@ -8,6 +8,22 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Monomers are made in proportion to exposure, not to need (explore run 20261004-0022, 2026-10-04)
+Contact copying turns every blank into a copy of whatever attached side it touches first, so the mix of genome
+monomers follows which sides are exposed, not what copying uses. Anything that adds exposed sides of one type skews
+the mix, and the scarcest monomer sets the copy rate while the others pile up as dead food. In `budcycle` one binding
+did it (a back monomer glue-capping a strand's low end: the cap hid one face monomer's source and was itself copied
+over and over; INNOVATIONS, run 0022); removing strand-end glue binding brought the mix to about 1 : 1 : 1 and the use
+from 17-46% to 47-86% of what was made. Lessons: (1) count a food sink by what is made and what is used, per type,
+before blaming the amount of food ("food after the split" in run 2221 was mostly this); (2) a rule that stops copies
+in one place moves them elsewhere (the oracle for free strands, candidate (g): the blanks went to the held strands
+instead), because every blank is copied somewhere; (3) left over: a copy still uses 2 : 2 : 3 of a mix made about
+1 : 1 : 1, so back monomers can run short first now (seed 1: 18 left with 77 face monomers), and the strand's
+middle faces are copied far less than its ends (seed 3: 9-10 copies each, against 43-53 for each end's two free
+sides). In a sealed cell with little food (`imprint m`, 60 blanks) the backs are the limit already: 13-19 fills to
+30-36 docks, 3-5 strands where the caps' back copies had allowed 5-8. A genome whose exposure matches its use would
+waste less; not tried.
+
 ## A bud that catches early splits early and finishes alone (build run 20261003-2221, 2026-10-03)
 The kind was designed for one order: the bud completes (sealing the pair), then catches a copy, then lets go. In
 `budcycle` (no stand-in) the bud's anchor on arc cell 6 is exposed from the moment cell 6 binds, next to the pore
