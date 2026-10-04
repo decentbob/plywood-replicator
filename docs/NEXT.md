@@ -19,9 +19,14 @@ genomes (gB) 17-36, seed sites 4-12. The chain's own copies after let-go: 2 of 4
 bud on the chain never catches, so never lets go (its own bud carries the lineage on). (2) `BCES=0 BCE=8` (no E source,
 8 E parts in the pool): the parent copies 3-12 times (was 3-6), first split 136k-419k (was 395k-637k), generation 2 in
 4 of 4 at 511k-770k, buds' genomes 41-128; but generation 3 in only 2 of 4 by 1.2M (974400, 809600): the pool empties
-(9-10 types at 0) as more buds start and let go incomplete. (3) Running: `BCES=2` (the E source on E's outer side, its
-pore side a wall), seeds 1-4, `runs/o_N.txt`; rerun: `BCES=2 BCGEN=3 BCAFTER=900000 TRI_NOPIC=1 node tri/demos.js
-budcycle N 1200000 runs/o`.
+(9-10 types at 0) as more buds start and let go incomplete. (3) `BCES=2` (the E source on E's outer side, its pore side a wall): generation 3 in 3 of 4 (955700, 892800, 848700),
+E copies 72-94; chains 1 <- 3, 4 <- 2, held <- 3 (seed 2 to generation 2: 6 <- 5): within noise of the defaults, not
+adopted. (4) Every failing chain (defaults seeds 1, 4; `BCES=2` seed 4) fails the same way: a bud waiting for its
+catch grows its own bud from its seed site, and that bud catches first. No seed cell hides the attached bud's seed
+site against the parent (all 25 outer cells posed, `runs/geo.js`: a root's place stays at least 1.0 from the parent), so
+no layout gates it. (5) Running: the oracle `BCGATE=1` (a bud's seed site spent until the bud lets go; not a rule),
+seeds 1-4, `runs/g_N.txt`; rerun: `BCGATE=1 BCGEN=3 BCAFTER=900000 TRI_NOPIC=1 node tri/demos.js budcycle N 1200000
+runs/g`. If it fixes the chains, the rule behind it is a core candidate (n) for the next explore.
 
 **Handoff status (autorun run 20261004-1421, harden).** Priority 1 below is done; the next run (index 38) is a
 `build`: priority 2. Done: lone-block moves (`_single`, about 780 of a `budcycle` world's 842 triangles, 74% of the
