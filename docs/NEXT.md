@@ -5,6 +5,16 @@ file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core c
 handoffs: NEXT.md in git, e.g. at `8123a2d` for run 0621's, `9c8ca17` for run 0251's; the previous direction check,
 run 1321's, at `8123a2d` too).
 
+**Current slice (autorun run 20261004-0820, core-review; in progress, branch `claude/autorun-20261004-0820`).**
+Goal: priority 1 below. Make `heldCopy` the rule (RULES Core changes entry first), then for each check that ran
+without it adapt (founder held by its high end on an anchor) or retire (layouts the lineage left; INNOVATIONS kept,
+ROADMAP rows "retired"); weigh candidate (i) byte for byte. Done when: `node tri/test.js` passes, every kept check
+passes (3 of 4 where it claims 4 worlds), the checks that never copy a strand (`ring`, `imprint`, `budpool`,
+`budcycle*`) are byte for byte the same as on `882b7d4`, and the suite is about half as long. Stop there: no layout
+changes to `budcycle` (that is the build's). Baseline suite of `882b7d4` with `CHECK_SAVE` runs in a worktree
+`/home/user/pw-base` (`runs/check-base.txt`, outputs `runs/a/`; rerun: `git worktree add ../pw-base 882b7d4`, then
+`CHECK_SAVE=$PWD/runs/a node tri/check.js > runs/check-base.txt` there).
+
 **Handoff status (autorun run 20261004-0751, review-intent).** Direction check, no building: the findings and
 priorities below, ROADMAP backlog item 0 updated, picture `docs/pictures/stocks_burn_down.png` (INNOVATIONS, run 0751),
 rotation changed (the next run, index 35, is a `core-review`; below). Two census worlds of the `budcycle-free` setup
