@@ -211,6 +211,46 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Rule: a lysis side `!` takes a body apart into its units, 2026-10-04, autorun run 20261004-2051 (explore)
+NEXT priority 3, candidate (m) (the user, 2026-10-04: "if only blanks [change], the simulation will just run out";
+IDEAS). The case, then the result.
+1. **Capability and why the goal needs it.** A reverse path: blocks locked in bodies return to the mix. Today nothing
+   comes apart: the only cuts are a copy's release, a copy blank letting go and completion release `&` (one bond, the
+   bud's root), so every closed world runs down (runs 0751, 1021, 1721: parts end in surplus and waiting buds, the pool's
+   fewest type falls to 0, the lineage stalls after 2-3 generations). An indefinite lineage under conservation needs
+   bodies that die and return their material; the user's first choice is a bond-cutting type (predation, scavenging).
+2. **Designs with the existing core, and why they fail.** No rule cuts a link bond between two grown triangles, so
+   none can free a body. Labelled drives that turn free typed triangles back into blanks (`BCL`, `BCLK`, run 1021) only
+   churn what is already free, and returning parts as blanks empties the rarely copied types (setup C: a part type is
+   remade only by copying an exposed attached copy of it), so the information in a body is lost with it. A drive that
+   cuts bonds at random breaks a one-row arc into two pieces whose ends are open fronts: each piece regrows (two more
+   sinks), strands fragment, and nothing tells the dead from the living. The user's other options were weighed: wider
+   molding and molding one side at a time change types but free nothing; reverting to blanks is the drive above. A body
+   taken apart whole returns exactly one of each of its parts: the reverse path that keeps every type.
+3. **The rule.** A new side mark `!` (lysis side). It binds as its glue and other marks say (no binding rule of its
+   own; who it can bind is chosen by glue, like everything else). A triangle bonded to a partner's `!` side is
+   **lysed**; lysis is relayed one bond per pass across every bond but one on an `&` side (either end: the joint
+   between a bud and its parent, the one kit bond made to come apart, so a bud's death does not reach its parent and a
+   parent's does not reach its attached bud); a triangle lysed for a whole pass (its partners have heard it) cuts all its
+   bonds and returns to a fresh state of its type (spent sides, fill and refractory cleared). The body comes apart
+   whole, one bond further per pass, before a fragment can regrow; each part leaves as the part it was made as (a
+   lysed root's spent seed side is fresh again), each strand triangle as a monomer.
+4. **Locality.** Reads: its own bonds and lysis value; a bonded partner's fixed side mark (`!` on the bonded side), the
+   `&` marks of the bond's two sides (fixed types) and the partner's lysis value from the previous pass. Writes: its own
+   bonds (all of them at once, as a copy blank lets go of all of them) and its own state. No count, no body, no
+   organism: a lysed triangle does not know what it belongs to.
+5. **Generality and cost.** One mark and one relayed one-bit signal (6 marks, 4 signals); nothing else changes, and no
+   kept structure carries `!`, so every existing world runs as before (to be shown byte for byte). Copies take the
+   mark with the rest of the type. What a `!` side cuts is decided by its glue: the first user is a prepared cutter
+   part `z@!-|-|` (labelled starting condition, never copied: its other sides are closed), which binds only a waiting
+   anchor `Z@|` (a free part binds an attached `@` side of complementary glue), so it takes apart a bud waiting for its
+   catch (or growing past its anchor cell) and never an adult, whose anchor holds a strand. Biology: lysis by a
+   predator or a phage at a receptor.
+6. **What it replaces.** Nothing yet; if it carries the lineage, the labelled food loops (`BCL`, `BCLK`) become
+   unnecessary for bodies (monomers of lysed strands are monomers again) and candidate (n) (bud only after letting go)
+   may not be needed: a bud stuck waiting is taken apart instead of starving its line.
+7. **Result.** (to come: test, demo `lysis`, the check suite before and after)
+
 ### Removal: run 0050's narrowing (a free triangle's anchor side binds nothing), 2026-10-04, autorun run 20261004-0820 (core-review)
 Candidate (i) of the direction check (run 0751). 1. **Why it existed.** Free copies of a waiting anchor (`W@|`, `W|`)
 glue-capped strands' low ends `w` (run 0050). 2. **Why it is no longer needed.** Since run 20261004-0022 no strand end
