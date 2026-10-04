@@ -13,7 +13,7 @@ completion, catch, stocks), generations (a bud of generation g or later complete
 `BCGEN=n` stops there), `ownCopies` (each let-go bud's copies after its let-go) and labelled loop drives `BCL`, `BCLK`;
 (c) **three generations in 4 of 4 worlds** with the monomer loop (setup B, now the default; without the loop 0 of 4,
 though buds split earlier and copy more: INNOVATIONS run 1021); the check
-`budcycle-3` (the defaults, B) CHECKRESULT and replaces `budcycle-free`. The strict target (every bud of the chain
+`budcycle-3` (the defaults, B) passes 4 of 4 (generation 3 at 735900-1031000 steps; suite 11 of 11, about an hour) and replaces `budcycle-free`. The strict target (every bud of the chain
 let go and copied its own strand at least once after) holds in 2 of 4: in the other two one bud of the chain budded
 while still attached and never let go. **Not reached: a lineage that does not burn down.** Only blanks change type,
 so blanks end as kit parts (fronts and the E source), leaked strands and new bodies; a drive returning free kit parts

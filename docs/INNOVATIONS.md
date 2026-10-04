@@ -12,7 +12,7 @@ not statistics.
 
 - **Three generations from the kit on a slow supply of copy blanks: a bud of the bud's bud complete, let go and
   holding a caught strand, in 4 of 4 worlds; the lineage still runs down its stocks** — works for three generations
-  (check `budcycle-3`, CHECKRESULT); not yet a lineage that does not burn down. No rule change. `budcycle`'s default is now
+  (check `budcycle-3`, 4 of 4 check worlds, generation 3 at 735900-1031000; the suite 11 of 11); not yet a lineage that does not burn down. No rule change. `budcycle`'s default is now
   the corner bud (seed site on cell 45, closed walls `-|`, no harness) on a slow supply (labelled environment drive:
   400 inert pre-food `---` in a 36 x 36 world, each turning into a copy blank with probability 0.0003 per 100 steps;
   "food" in these records means copy blanks, the untyped building blocks: user, 2026-10-04, IDEAS). New observation:
