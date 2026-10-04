@@ -4,6 +4,14 @@ State on 2026-10-04 (after autorun run 20261004-0820, core-review). Read AGENTS.
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `882b7d4` for run 0751's, `8123a2d` for run 0621's).
 
+**Current slice (autorun run 20261004-1021, build; in progress).** NEXT priority 2: a lineage that does not burn
+down. Goal: (a) the corner as `budcycle`'s default (seed site 45, closed walls `-|`, no harness, supply) and its
+one-off oracles `BCA`, `BCG` pruned; (b) a steady food loop (labelled drive: free waste returning to food) with a
+per-generation census (each bud's own copies after its split, kit copies against parts used, pool fewest/mean/most,
+food fed); (c) a third-generation measure. Done when: three generations without the harness in 3 of 4 worlds with each
+bud copying its own strand at least once after its split, and a check in `tri/check.js`; or, if not reached, the
+census says which stock or geometry limits it. Stop at about four hours of work.
+
 **Handoff status (autorun run 20261004-0820, core-review).** Priority 1 below is done; the next run (index 36) is a
 `build`: priority 2. Done: (1) `heldCopy` is the rule (zip from a held high end only; the core has no option left);
 (2) run 0050's narrowing removed (candidate (i): a free triangle's anchor side now binds as its glue does; 35 of 35
