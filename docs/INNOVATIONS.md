@@ -8,6 +8,43 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-0621, explore)
+
+- **The bud grows off its parent's corner instead of across its pore: the pair is never sealed, and two generations
+  without budpool's harness come in 3 of 4 worlds (6 of 8; the doorway kind 3 of 8)** — works (check `budcycle-free`,
+  3 of 4). Kit change only, no core change: `budKit(..., seedAt)` puts the seed site `y` on any arc cell's outer side
+  (E's outer side is then a wall side) and returns the bud's pose (`K.pose`, `K.unpose`: the motion that puts the
+  root's seed side on the seed site). On cell 45 (beside E, the top-right corner) the bud hangs off the corner: its pore
+  faces the parent's pore across an open 60-degree wedge (geometry: every outer cell's pose computed; none overlaps).
+  Why it can work: with `heldCopy` a leaked strand is sterile but catchable, so the bud need not take its strand
+  through a doorway; it catches one of the parent's leaked copies from open space. Test "closure (budKit, seed site on
+  cell 45)" (signal logic: the bud holds until its catch and lets go in the parent's state).
+
+  Same setup as run 0251's best (`BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1`, 600000 steps):
+
+  | seed | corner (`BCSEED=45`): first split / gen2 | parent copies | doorway (default): first split / gen2 | parent copies |
+  |---|---|---|---|---|
+  | 1 | 270457 / 536700 | 5 | run 0251: 4 of 4 split, gen2 2 of 4 (seeds 3, 4) | |
+  | 2 | 457856 / not (its bud complete, waiting for a catch at the cap) | 3 | | |
+  | 3 | 189061 / 440000 | 3 | | |
+  | 4 | 369532 / 396600 | 3 | | |
+  | 5 | 229334 / not | 5 | not (bud complete, sealed, no catch) / not | 1 |
+  | 6 | 235440 / 382400 | 4 | 224013 / 487300 | 5 |
+  | 7 | not / 310100 (the first bud's own bud let go; the first bud still waits) | 4 | not (bud 46 of 47, sealed) / not | 0 |
+  | 8 | 156086 / 298900 | 4 | 163390 / not | 2 |
+
+  - **The parent copies in every world** (3-5 full copies against 0-5 for the doorway kind): its pore stays open to the
+    food while the bud grows and waits. The buds complete first (125-262 thousand steps) and wait 40-250 thousand steps
+    for a catch without starving anyone; the catch is a leaked parent copy (2-9 leaked per world). Run 0251's first
+    failure (sealed before the parent's first copy) is gone; the doorway kind showed it in 2 of 4 new worlds.
+  - **Lineages branch:** seed 1 ended with 9 later buds (the parent's seed site budded three times, buds budded), several
+    of them complete and free. The food supply is used up by the end (172-180 of 180 pre-food fed).
+  - **Left:** the first bud copies its caught strand 0-2 times after the split (as before): the lineage still runs on
+    the parent's copies and the supply's stock. A failed world waits for a catch (seed 2) or stalls a grand-bud (seed 5).
+    ![the bud off the corner, seed 1: growth, the wait, the catch, and the world after two generations](pictures/budcycle_corner.png)
+  - Command: `BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle 1
+    600000 runs/x` (about 10 minutes per world).
+
 ## 2026-10-04 (autorun run 20261004-0251, build)
 
 - **The kind's cycle without budpool's harness: food, not the pool, is the limit; closed walls and a food supply
