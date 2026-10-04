@@ -4,6 +4,15 @@ State on 2026-10-03 (after autorun run 20261003-2221, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `f05ed31` for run 2121's, `7415fd4` for run 1921's).
 
+**Current slice (autorun run 20261004-0022, explore; in progress).** Goal: settle core candidate (g) (free strands not
+contact-copied) and find what actually limits the bud's copies after the split ("food", run 2221). Done when: (g) is
+measured with a non-local oracle (`budcycle` `BCG=1`, the most any local rule could buy) and either a local rule is
+proposed through the RULES gate or (g) is withdrawn with the reason; and the real sink is named with numbers. Stop
+there. Found so far: (g)'s oracle does not save food (blanks are copied into genome monomers at held strands instead;
+seed 2 never split); the genome monomers are made 5x faster than used and skewed (awz : Awz : --W = 30 : 64 : 100 made,
+2 : 2 : 3 used per copy) because free back monomers glue-cap strands' low ends (5 caps gave 61 back copies and hid the
+low end's seed); testing candidate (h), strand ends bind no free triangle by glue (`BCH=1`, demo what-if).
+
 **Handoff status (autorun run 20261003-2221, build).** Slice done: priority 3, one generation of the kind from its
 own kit with no stand-in (new demo `budcycle`, check `budcycle` 4 of 4), and run on, two (check `budcycle-2`). Branch
 `claude/autorun-20261003-2221`, merged into `main` by PR; no simulations running. (1) **What runs:** a prepared parent
