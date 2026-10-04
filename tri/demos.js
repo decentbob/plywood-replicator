@@ -198,9 +198,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // site y, the bud grows off the parent's top-right corner from the pool, and once it is complete and its anchor has
     // caught a copy by the high end, completion releases its root (the split); its own seed site then buds, and so on.
     // The run goes on BCAFTER steps after both the first split and the first bud's completion, or stops at generation BCGEN.
-    // extra: P (default 8); BCB: blanks (20), BCI: of them inside the parent (20); BCS: world size (32); BCR: openRange
+    // extra: P (default 8); BCB: blanks (20), BCI: of them inside the parent (20); BCS: world size (36); BCR: openRange
     // (9); BCE: E parts (0); BCAFTER (50000);
-    // BCF=n, BCFP=p (a supply, labelled environment drive): n pre-food (180), each turning into a blank with probability p (0.001) every 100 steps
+    // BCF=n, BCFP=p (a supply, labelled environment drive): n pre-food (400), each turning into a blank with probability p (0.0003) every 100 steps
     // BCL=q: a food loop (labelled drive): free genome monomers become blanks (q per 100 steps), anywhere; BCLK=q: free kit parts too
     // BCGEN=n: stop once a bud of generation n (1: the parent's bud, 2: its bud, ...) is complete, has let go and holds a caught strand
     // ('letgo:' lines: each bud's let-go with the stocks then; ownCopies in the result: generation:copies on the bud's caught
@@ -208,9 +208,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // The setup before run 1021 (check budcycle): BCSEED=-1 (the seed site on E: the bud across the parent's pore, a
     // doorway pair), BCK=0 (wall sides -&, copyable until completion spends them), BCHOLD=1 (budpool's harness, labelled:
     // every copy of a kit part but those made at an E's pore side becomes a blank at a random place outside both cells),
-    // BCB=200, BCF=0.
+    // BCB=200, BCF=0, BCS=32. The setup of runs 0621-0751 (check budcycle-free, retired in run 1021): BCS=32 BCF=180 BCFP=0.001.
     // BCDBG=1: genome copies by source (copied type, role, side) at the end
-    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??180),SFP=+(process.env.BCFP||0.001),LP=+(process.env.BCL||0),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),R=5;
+    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL||0),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),R=5;
       const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys());seedCopyGenome(s,F);
@@ -267,7 +267,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();const L=s.copyLog||[];
         for(;ci<L.length;ci++){const u=L[ci][1];if(hold&&!s.bonded(u)&&!keep.has(u)&&kitT.has(canon(s.typeName(u)))){s.setType(u,'-?-?-?');back(u);}}
         // BCF=n (a supply drive, labelled): n inert triangles '---' (binding nothing: pre-food) start outside; every 100 steps
-        // each becomes a blank with probability BCFP (0.001), so food arrives over the run instead of as one stock
+        // each becomes a blank with probability BCFP (0.0003), so food arrives over the run instead of as one stock
         if(SF&&t%100===0)for(const u of all)if(s.rng()<SFP&&!s.bonded(u)&&s.typeName(u)==='---'){s.setType(u,'-?-?-?');ev.fed++;}
         // BCL=q (a food loop, labelled environment drive): every 100 steps each free triangle that is neither a blank, pre-food
         // nor a kit part (a genome monomer nobody used) becomes a blank with probability q, wherever it is; BCLK=q the same for free kit parts
