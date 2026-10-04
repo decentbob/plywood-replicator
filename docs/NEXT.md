@@ -11,6 +11,9 @@ per-generation census (each bud's own copies after its split, kit copies against
 food fed); (c) a third-generation measure. Done when: three generations without the harness in 3 of 4 worlds with each
 bud copying its own strand at least once after its split, and a check in `tri/check.js`; or, if not reached, the
 census says which stock or geometry limits it. Stop at about four hours of work.
+Running (container only): batch A, food loop `BCL=0.002` on the corner setup, seeds 1-4, 1.2M steps, stop at
+generation 3: `BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCL=0.002 BCAFTER=900000 BCGEN=3 TRI_NOPIC=1 node
+tri/demos.js budcycle SEED 1200000 runs/a` (about 40 minutes).
 
 **Handoff status (autorun run 20261004-0820, core-review).** Priority 1 below is done; the next run (index 36) is a
 `build`: priority 2. Done: (1) `heldCopy` is the rule (zip from a held high end only; the core has no option left);
