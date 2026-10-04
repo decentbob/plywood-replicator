@@ -202,6 +202,45 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Narrowing: only grown triangles bind by glue; a strand end binds only by an anchor's catch, 2026-10-04, autorun run 20261004-0022 (explore)
+1. **Capability and why the goal needs it.** A cell must turn its food into the genome monomers it uses. In `budcycle`
+   (the kind's cycle, run 2221) the 200 blanks are gone by t = 75000 and the buds that split late copy their strand
+   0-3 times. Measured in this run (`budcycle`, seeds 1-4, 300000 steps, census of every contact copy by the role and
+   side of the copied triangle): the blanks become genome monomers 5x faster than copying uses them (seed 1: 194 made,
+   about 40 used by t = 70000), and in the wrong proportions: awz : Awz : --W = 30 : 64 : 100 made, 2 : 2 : 3 used per
+   copy, so the face monomer `awz` runs out first (4 left at the end of seed 1, against 38 `Awz` and 49 `--W`). The
+   cause is one binding: a free back monomer `--W` glue-binds a strand's low-end seed `w` (the spare edge, which carries
+   the docker's prev glue, the one a fill binds). That cap hides the low end's own copyable spare edge (4 copies of the
+   low end's spare against 36 of the high end's) and is itself a grown triangle with two free sides that blanks copy
+   (5 caps made 61 of the 100 back monomers). Candidate (g) of run 2221 (free strands not contact-copied) was weighed
+   first with a non-local oracle (`BCG=1`, the most any local rule could do) and does not help: the blanks are copied
+   at the held strands instead (seed 1: 186 of 186 genome copies from held bodies; seed 2: the parent made 2 copies and
+   the bud never caught). Withdrawn.
+2. **Designs with the existing core, and why they fail.** The cap needs a back monomer whose next side complements the
+   docker's prev side (that is what a fill is), and every face triangle is a docker type, so a strand's low end always
+   exposes a fill site's glue: no genome design avoids it. A `.` (close-only) prev side on dockers stops the cap and
+   stops every fill with it (test "an attached triangle's close-only side takes no dock or fill"). Recycling monomers
+   (waste drive `BCW`, run 2221) returns blanks that are copied in the same skewed proportions.
+3. **Locality.** Nothing new is read: glue binding and glue closure already ask which sides of an attached triangle are
+   active (its own role and bonds); the change removes two of the three cases (the spare edge of a strand end that is
+   not being copied, which also read the triangle's busy relay; the back edge of a released strand triangle). A strand
+   triangle then binds only by dock, fill and copy closure, and its end's seed only by an anchor's catch (a rule of its
+   own, unchanged).
+4. **Generality.** One rule for glue: only grown (glue-bonded) triangles bind by glue, free triangles and attached ones
+   alike. With it the `&` case of zip (a high end held by a completion-release side starts no copy) can no longer
+   arise, since only an anchor side holds a strand end and no anchor side carries `&`: it is removed too. The
+   strand-end catch by glue was the casting lineage's (caps, a ring grown on a strand's seed); nothing kept uses it on
+   purpose (to be confirmed by the check suite: every world in which no strand end or released back took a glue bind
+   is byte for byte the same).
+5. **What it replaces.** Two branches of the active-side rule and one case of zip; the busy relay is then read by
+   refractory alone. The narrowing of run 0050 (a free triangle's anchor side binds nothing) was made because free copies
+   of a waiting anchor glue-capped strand ends; it stays (a free anchor-side triangle could still bind a grown side).
+6. **Measured before the change** (`budcycle` `BCH=1`, the same rule as a demo what-if, seeds 1-4, 300000 steps;
+   without it in brackets): monomers made awz : Awz : --W about 1 : 1 : 1 (1 : 2 : 3.3); used in copies 47-86% of those
+   made (17-46%); full copies, parent and bud together, 10 / 11 / 13 / 13 (12 / 8 / 8 / 4); strands leaked 9-17 (1-11);
+   the split at 144301 / 127592 / 58302 / 73532 (47081 / 217572 / 145137 / 217631); the bud's copies after the split 1 /
+   6 / 8 / 7 (8 / 2 / 3 / 0); 0 stray bindings, every bud complete.
+
 ### Removal: the casting lineage leaves the core, 2026-10-03, autorun run 20261003-2121 (core-review)
 NEXT.md's priority 5 (direction check, run 1321): weigh removing the frozen casting lineage now rather than after a
 whole cycle works. Decided: remove. The case, then the result.

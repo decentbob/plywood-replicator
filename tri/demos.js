@@ -236,9 +236,6 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(process.env.BCG==='1'){const of=s.formBonds.bind(s),tmp=[];s.formBonds=()=>{const {members}=s.bodies();tmp.length=0;
         for(const b of members){if(b.length<2||b.some(u=>kitT.has(canon(s.typeName(u)))))continue;for(const u of b)for(let i=0;i<3;i++){const k=u*3+i;if(s.bond[k]<0&&!s.spent[k]){s.spent[k]=1;tmp.push(k);}}}
         of();for(const k of tmp)s.spent[k]=0;};}
-      // BCH=1 (a what-if, demo only; core candidate (h)): a strand end's spare edge and a released back bind no free triangle by
-      // glue (only grown triangles do), so no free back monomer caps a strand's low end
-      if(process.env.BCH==='1'){const oa=s._active.bind(s);s._active=(u,r)=>r.role===4?oa(u,r):0;}
       // strands (7 triangles, not being copied): held by the parent, held by the bud, free in P, in D, out
       const strands=()=>{const o={held:0,budHeld:0,P:0,D:0,out:0};for(const q of census(s)){if(q.n<7||q.paired)continue;const b=s.bodyOf(q.units[0]);if(b.includes(Pu[0])){o.held++;continue;}if(bud[0]>=0&&b.includes(bud[0])){o.budHeld++;continue;}
           let x=0,y=0;for(const u of q.units){x+=s._dx(s.px[u]-s.px[q.units[0]]);y+=s._dy(s.py[u]-s.py[q.units[0]]);}o[where(s.px[q.units[0]]+x/q.n,s.py[q.units[0]]+y/q.n)]++;}return o;};

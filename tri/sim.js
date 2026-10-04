@@ -89,13 +89,13 @@ class TriSim extends Physics{
     // zip: a strand triangle without a next bond (the strand's high end), or whose next partner is a face being copied
     // (a TFACE bond), or a back that hears zip from its next partner; a face takes a dock only while it hears zip, so a
     // copy grows from the high end one face after another and never encloses an empty dock site between two copies
-    // option heldCopy: a high end emits zip only while its spare edge is held (bonded, not to a '&' side), so a free strand
-    // is never copied (Core changes, run 20261003-1720)
+    // option heldCopy: a high end emits zip only while its spare edge is held (by an anchor), so a free strand is never
+    // copied (Core changes, run 20261003-1720)
     const held=this.p.heldCopy;
     for(let u=0;u<n;u++){const r=R[u];let z=0;
       if(r.role===SFACE||r.role===SBACK){const e=this._edges(u);
-        // a high end held by a completion-release side (a membrane growing around the strand) starts no copy
-        if(e.next<0){const sp=r.inert,q=sp>=0?this.bond[u*3+sp]:-1;z=q>=0?(this.done[q]?0:1):(held?0:1);}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
+        // (a high end held by a completion-release side started no copy until 2026-10-04: only an anchor holds a strand end now)
+        if(e.next<0){const sp=r.inert;z=sp>=0&&this.bond[u*3+sp]>=0?1:(held?0:1);}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
       this.zip[u]=z;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
@@ -130,13 +130,12 @@ class TriSim extends Physics{
     for(let q=0;q<k;q++){const w=body[q],rx=RX[q],ry=RY[q];this.px[w]=this._wx(ox+co*rx-si*ry+tx);this.py[w]=this._wy(oy+si*rx+co*ry+ty);this.pa[w]+=da;this.resetShape(w);this.regrid(w);}
     return true;}
   cut(u,i){const q=this.bond[u*3+i];if(q<0)return;this.bkind[u*3+i]=0;this.bkind[q]=0;this.unlink(u,i);}
-  // sides of an attached triangle that bind by glue: free sides of a grown (glue-bonded) triangle, the back of a
-  // released strand triangle, the spare edge of a strand end that is not being copied
+  // sides of an attached triangle that bind by glue: the free sides of a grown (glue-bonded) triangle, and no others: a
+  // strand triangle binds by dock, fill and copy closure, its end's seed only by an anchor's catch (since 2026-10-04,
+  // run 20261004-0022: a free back monomer glue-capped strands' low ends; RULES, Core changes)
   // (as a bit set: bit i for side i, so the per-pair loops allocate nothing)
   _active(u,r){const B=this.bond,k=u*3;
     if(r.role===GROWN)return (B[k]<0?1:0)|(B[k+1]<0?2:0)|(B[k+2]<0?4:0);
-    if(r.role===SBACK&&!r.fill&&r.prev>=0&&r.next>=0&&r.free>=0&&B[k+r.free]<0)return 1<<r.free;
-    if(r.role===SFACE&&r.inert>=0&&B[k+r.inert]<0&&!(r.free>=0&&B[k+r.free]>=0)&&this.busy[u]===0)return 1<<r.inert;   // an end's seed: only while the strand is not being copied
     return 0;}
   formBonds(){
     const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);

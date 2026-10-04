@@ -76,9 +76,10 @@ test('anchor: catches a strand end while the strand is being copied (its docker 
   const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,'Z|f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);
   s.derive();assert.ok(s.busy[u]>0,'the strand is busy');s.run(3);assert.equal(s.partner(u,i),s.n-2,'caught while busy');assert.equal(s.partner(u,r.free),D,'the docker stays');
   assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');assert.ok(s.flushGap(u,r.free,D,s.bond[u*3+r.free]%3)<1e-6,'the docker moved with the strand');symmetric(s);});
-test('heldCopy option: a free strand takes no dock; held by its high end (not by a completion side) it does',()=>{
-  // a strand's high end, a docker A-- at its face; the high end's spare edge free, held by an anchor Z|, or held by Z&
-  for(const [hold,expect] of [[null,false],['Z|f-',true],['Z&f-',false]]){
+test('heldCopy option: a free strand takes no dock; held by its high end it does',()=>{
+  // a strand's high end, a docker A-- at its face; the high end's spare edge free or held by an anchor Z| (a completion
+  // side Z& no longer holds one: only an anchor's catch binds a strand end, run 20261004-0022)
+  for(const [hold,expect] of [[null,false],['Z|f-',true]]){
     const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':3},params:{sigma:0,sigmaRot:0,heldCopy:true}});
     const F=founders[0],u=F[F.length-1],r=s.roles(u),i=r.inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],refl=e=>{const a=P(e),b=P((e+1)%3),c=P((e+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
     if(hold){const V=refl(i),W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,hold);s.setType(s.n-1,'F--');
@@ -86,12 +87,20 @@ test('heldCopy option: a free strand takes no dock; held by its high end (not by
     const D=s.n-3;placeTri(s,D,refl(r.free));s.setType(D,'A--');s.derive();s.run(3);
     assert.equal(s.partner(u,r.free)===D,expect,hold?'held by '+hold:'free');}});
 test('anchor: a free triangle\u2019s anchor side binds nothing',()=>{
-  // a free part with an anchor side beside a strand end's seed: binds only without the anchor mark (control)
-  for(const [ty,expect] of [['Z@|--',false],['Z@--',true]]){
+  // a free triangle beside a grown triangle's glue side z: binds only without the anchor mark (control)
+  for(const [ty,expect] of [['Z|--',false],['Z--',true]]){
+    const s=new TriSim({W:16,H:16,seed:5,sigma:0,sigmaRot:0},3),V=[[6,6],[7,6],[6.5,6+H]],W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];
+    placeTri(s,0,V);placeTri(s,1,W2);s.setType(0,'zf-');s.setType(1,'F--');s.bind(0,1,GLUE,1,0,GLUE);
+    const a=V[0],b=V[1],c=V[2];placeTri(s,2,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(2,ty);s.derive();s.run(3);
+    assert.equal(s.partner(0,0)===2,expect,ty);symmetric(s);}});
+test('binding: a strand end\u2019s seed and a strand\u2019s back bind no free triangle by glue (only an anchor catches an end)',()=>{
+  // a free triangle with the complementary glue beside the high end's spare edge z, or beside a back's free edge b
+  for(const [ty,where] of [['Z@--','end'],['Z--','end'],['B--','back']]){
     const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':1},params:{sigma:0,sigmaRot:0}});
-    const F=founders[0],u=F[F.length-1],i=s.roles(u).inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);
+    const F=founders[0],u=where==='end'?F[F.length-1]:F.find(w=>s.roles(w).role===2),r=s.roles(u),i=where==='end'?r.inert:r.free;if(where==='back')s.glue[u*3+i]=gcode('b');
+    const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);
     const v=s.n-1;placeTri(s,v,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(v,ty);s.derive();s.run(3);
-    assert.equal(s.partner(u,i)===v,expect,ty);symmetric(s);}});
+    assert.ok(s.partner(u,i)!==v&&!s.ev.glue,ty+' bound the '+where);symmetric(s);}});
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
