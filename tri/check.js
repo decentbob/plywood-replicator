@@ -58,6 +58,10 @@ const CHECKS=[
       return [!!m&&m[2]!=='not'&&m[3]!=='not'&&m[6]!=='not'&&+m[9]===0,m?`split ${m[6]} (catch at ${m[5]} cells), complete ${m[2]}, bud copies ${m[7]}, new roots ${m[8]}, ${m[9]} stray`:'no result'];}},
   {id:'budcycle-2',cap:'Two generations from the kit: a bud grown on a bud\'s seed site completes and lets go after its catch',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:600000,secs:1200,env:{BCAFTER:'300000',BCSTOP2:'1'},
     pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) stray=(\d+)/);return [!!m&&m[2]!=='not'&&+m[3]===0,m?`first split ${m[1]}, second generation let go at ${m[2]}, ${m[3]} stray`:'no result'];}},
+  // run 20261004-0621 (explore): the bud off the parent's corner (seed site on cell 45: the pair is never sealed), budpool's
+  // harness off; closed walls -| and a food supply (labelled environment drive: inert pre-food turning into blanks)
+  {id:'budcycle-free',cap:'Two generations without the pool harness: the bud grows off its parent\'s corner (closed walls, a food supply)',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:600000,secs:700,env:{BCSEED:'45',BCK:'1',BCB:'20',BCF:'180',BCFP:'0.001',BCHOLD:'0',BCAFTER:'300000',BCSTOP2:'1'},
+    pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) stray=(\d+)/);return [!!m&&m[2]!=='not'&&+m[3]===0,m?`first split ${m[1]}, second generation let go at ${m[2]}, ${m[3]} stray`:'no result'];}},
 ];
 
 function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'demos.js'),c.demo,String(seed),String(c.steps),path.join('runs','check')];if(c.extra)args.push(c.extra);
