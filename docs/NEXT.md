@@ -4,6 +4,18 @@ State on 2026-10-04 (after autorun run 20261004-1721, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
+**Current slice (autorun run 20261004-2051, explore; in progress).** Goal: a reverse path (priority 3, candidate (m)):
+blocks locked in bodies return to the mix as the units they are made of. Design (case in RULES, Core changes, before the
+code): a lysis side `!` (a side mark: it binds as its glue and other marks say; the triangle bonded to it is lysed);
+lysis is relayed one bond per pass (not across a bond on a `&` side: a bud and its parent stay separate) and a lysed
+triangle cuts all its bonds a pass later and returns to a fresh state of its type (spent sides cleared). A labelled
+prepared "cutter" part `z@!-|-|` binds only a waiting anchor `Z@|` (as a part binds a front), so it takes apart a bud
+that waits for a catch, and an adult (anchor holding) is immune. Check that shows it done: a new demo `lysis` (a parent
+with a complete bud that never catches stuck on its seed site, no free parts, no blanks, a few cutters): the stuck bud
+comes apart into its 47 parts, the parent's seed site frees, and a new bud grows from the returned parts, in 3 of 4
+worlds; all existing check worlds byte for byte the same (nothing carries `!`). Stop: the demo and its record; then,
+if time, `budcycle` with cutters (one batch) to see what it does to the lineage.
+
 **Handoff status (autorun run 20261004-1721, build).** Priority 2 below is done as a finding (INNOVATIONS run 1721);
 the next run (index 39) is an `explore`: priority 3, the reverse path. No rule change; the defaults unchanged
 (`budcycle-3`'s four worlds re-run with the census: the same outputs as run 1021). Done: a sink census in `budcycle`
