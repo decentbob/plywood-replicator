@@ -199,6 +199,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // genome copies stay. extra: P (default 8); BCB: blanks (200), BCI: of them inside the parent (20); BCS: world size
     // (32); BCR: openRange (9); BCE: E parts (0); BCAFTER (50000); BCW: a waste drive (labelled; 0: off);
     // BCSTOP2=1: stop once a bud grown on a bud's seed site is complete and has let go (gen2 in the result: the second generation)
+    // BCDBG=1: genome copies by source (copied type, role, side) at the end; BCG=1: the oracle for candidate (g) (below)
     budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||200),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD!=='0',after=+(process.env.BCAFTER||50000),W=+(process.env.BCW||0),R=5;
       const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'}),N=K.N,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r,heldCopy:true}});

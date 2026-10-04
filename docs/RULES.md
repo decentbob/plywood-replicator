@@ -244,6 +244,18 @@ speak of rules removed with the casting lineage (triggers, latches, casting, fue
    made (17-46%); full copies, parent and bud together, 10 / 11 / 13 / 13 (12 / 8 / 8 / 4); strands leaked 9-17 (1-11);
    the split at 144301 / 127592 / 58302 / 73532 (47081 / 217572 / 145137 / 217631); the bud's copies after the split 1 /
    6 / 8 / 7 (8 / 2 / 3 / 0); 0 stray bindings, every bud complete.
+7. **Result (built as the rule; tests "binding: a strand end's seed and a strand's back bind no free triangle by
+   glue", "anchor: a free triangle's anchor side binds nothing" now against a grown side).** `node tri/check.js` 21 of 22 with the change (the old code: 22 of 22, 2151 s; new 2072 s): `copy` 3 -> 4 of 4,
+   `budpore` 3 -> 4 of 4, `budpore-c` 6 -> 7 of 8, `budpore-held` 4 -> 3 of 4 (seed 1 never split), `imprint-cell` 4 -> 3
+   of 4 (5 / 5 / 5 / 3 strands, was 8 / 6 / 5 / 7: in a sealed cell with 60 blanks the back monomers run short now,
+   since the caps' copies had supplied them: 13-19 fills to 30-36 docks), `imprint-held-w` 3 -> 2 of 4, the rest
+   unchanged. `imprint-held-w`'s failures (and seed 2's on the old code) were a race in the setup: the founder started
+   free beside the anchor and left through the 7-cell pore before it was caught (seeds 1-8: 1 of 8 on the old code, 3
+   of 8 on the new). The `z` variants of `imprint` now start with the founder held on the anchor (labelled, as in
+   `budcycle`); seeds 1-8 then pass on both codes in all three held checks (`imprint-held-w` 5-11 strands made, new
+   code), and `node tri/check.js imprint-held imprint-held-c imprint-held-w`: 3 of 3 (4/4, 1/1, 4/4). So 22 of 22. The
+   20 worlds in which nothing can glue-bind a strand (`ring`, `imprint`'s rings, `budpool`, `budpool-e`, the controls
+   with inert blanks) are byte for byte the same; the 57 others differ.
 
 ### Removal: the casting lineage leaves the core, 2026-10-03, autorun run 20261003-2121 (core-review)
 NEXT.md's priority 5 (direction check, run 1321): weigh removing the frozen casting lineage now rather than after a

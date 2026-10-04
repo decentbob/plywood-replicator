@@ -20,7 +20,9 @@ in one place moves them elsewhere (the oracle for free strands, candidate (g): t
 instead), because every blank is copied somewhere; (3) left over: a copy still uses 2 : 2 : 3 of a mix made about
 1 : 1 : 1, so back monomers can run short first now (seed 1: 18 left with 77 face monomers), and the strand's
 middle faces are copied far less than its ends (seed 3: 9-10 copies each, against 43-53 for each end's two free
-sides). A genome whose exposure matches its use would waste less; not tried.
+sides). In a sealed cell with little food (`imprint m`, 60 blanks) the backs are the limit already: 13-19 fills to
+30-36 docks, 3-5 strands where the caps' back copies had allowed 5-8. A genome whose exposure matches its use would
+waste less; not tried.
 
 ## A bud that catches early splits early and finishes alone (build run 20261003-2221, 2026-10-03)
 The kind was designed for one order: the bud completes (sealing the pair), then catches a copy, then lets go. In

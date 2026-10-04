@@ -11,7 +11,7 @@ not statistics.
 ## 2026-10-04 (autorun run 20261004-0022, explore)
 
 - **Only grown triangles bind by glue: no more glue caps on strand ends, and the genome monomers are used** — works
-  (a narrowing of the core: RULES, Core changes; check suite: CHECKS_PENDING). A strand end's seed now binds only by an
+  (a narrowing of the core: RULES, Core changes; `node tri/check.js` 22 of 22 after one setup fix, below). A strand end's seed now binds only by an
   anchor's catch; a released back binds nothing by glue; zip's `&` case (a high end held by a completion side) is gone
   with it, since nothing but an anchor can hold a strand end.
   - **What limited the bud's copies.** Run 2221 read "food after the split" (200 blanks gone by t = 75000). A census of
@@ -32,6 +32,13 @@ not statistics.
     127592 / 58302 / 73532 (47081 / 217572 / 145137 / 217631); the bud's own copies after the split 1 / 6 / 8 / 7 (8 / 2
     / 3 / 0); every bud complete, 0 stray bindings. Seed 1 is the one loss (its bud split late, at 144301).
     ![monomers made and used, before and after](pictures/glue_caps_monomers.png)
+  - **Elsewhere** (check suite, old code against new): `copy` 3 -> 4 of 4, `budpore` 3 -> 4, `budpore-c` 6 -> 7 of
+    8, `budpore-held` 4 -> 3, `imprint-cell` 4 -> 3 (a sealed cell with 60 blanks now runs short of back monomers, which
+    the caps' copies had supplied), `imprint-held-w` 3 -> 2 of 4: there the founder started free and in some worlds
+    left through the 7-cell pore before the anchor caught it (1 of 8 seeds on the old code, 3 of 8 on the new). The
+    `imprint` `z` variants now start with the founder held (labelled, as in `budcycle`): 8 of 8 seeds in all three
+    held checks on both codes; check suite 22 of 22. The 20 worlds where nothing can glue-bind a strand are byte for
+    byte the same.
   - Commands: `BCDBG=1 node tri/demos.js budcycle 3 300000 runs` (the census lines `genome copies by source`, `by type`
     and `genome triangles bound`); `BCG=1` for the oracle. Tests: "binding: a strand end's seed and a strand's back
     bind no free triangle by glue", "anchor: a free triangle's anchor side binds nothing" (now against a grown side),

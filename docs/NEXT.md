@@ -8,7 +8,10 @@ handoffs: NEXT.md in git, e.g. at `faf6b8d` for run 2221's, `f05ed31` for run 21
 one core change. Branch `claude/autorun-20261004-0022`, merged into `main` by PR; no simulations running. (1) **Core
 change (RULES, Core changes, "Narrowing: only grown triangles bind by glue"):** a strand end's seed binds only by an
 anchor's catch and a released back binds nothing by glue (two cases of the active-side rule gone); zip's `&` case
-went with them. Check suite: CHECKS_PENDING. (2) **What it fixed:** in `budcycle` the blanks became genome monomers 5x
+went with them. Check suite 22 of 22 (2072 s) after one setup fix: the `imprint` `z` variants start with the founder
+held on the anchor (it could leave through the 7-cell pore before the catch: `imprint-held-w` had failed 2 of 4).
+Margins moved (RULES, the entry's point 7): `copy`, `budpore`, `budpore-c` gained a world; `budpore-held` (seed 1
+never split) and `imprint-cell` (a sealed cell now runs short of back monomers) are at 3 of 4. (2) **What it fixed:** in `budcycle` the blanks became genome monomers 5x
 faster than copying used them, in the mix awz : Awz : --W = 30 : 64 : 100 against 2 : 2 : 3 used per copy, because
 free back monomers glue-capped strands' low ends (the cap hid a face monomer's source and was copied over and over:
 5 caps, 61 of 100 back monomers). Now about 1 : 1 : 1 made and 47-86% used (was 17-46%); parent and bud make 10-13
@@ -147,6 +150,8 @@ node tri/demos.js budcycle 1 300000 runs           # one generation from the kit
                                                    # BCB blanks 200, BCI inside 20, BCS world 32, BCR openRange 9, BCE E parts 0, BCAFTER 50000,
                                                    # BCHOLD=0 no harness, BCW waste-to-blank drive 0)
 BCAFTER=300000 node tri/demos.js budcycle 1 600000 runs   # the same run on: both seed sites start new buds ('later buds:' line)
+BCDBG=1 node tri/demos.js budcycle 3 300000 runs   # with the genome monomer census: copies by source, by type, monomers bound (run 0022)
+BCG=1 BCDBG=1 node tri/demos.js budcycle 1 300000 runs   # the oracle for candidate (g): free strands not contact-copied (non-local)
 BCR=50 BCW=0.05 node tri/demos.js budcycle 1 300000 runs  # the designed order (complete, catch, split): the picture in INNOVATIONS
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
 BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPX=b BUDLX=2 BUDA=84:2 BUDNI=20 BUDPS=2 node tri/demos.js budpore 1 100000 runs 100c
