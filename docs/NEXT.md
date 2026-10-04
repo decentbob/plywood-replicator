@@ -4,6 +4,17 @@ State on 2026-10-04 (after autorun run 20261004-2051, explore). Read AGENTS.md f
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `ef27e51` for run 1721's, `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
+### Current slice (autorun run 20261004-2221, build; in progress)
+**Goal:** NEXT priority 3a, lysis in the lineage: `budcycle` with the kind's anchor on cell 44 (openRange 50) and 1-2
+cutters `z@!-|-|` (labelled); measure what returns (pool per type over time, `sinks`), generations reached, whether
+the pool's fewest type still falls to 0, and the relay-lag releases (candidate (o)). **Done when:** the numbers are in
+INNOVATIONS; if lysis carries the lineage further than without it (generation 3 or more, or the fewest type held above
+0) in 3 of 4 worlds, a check. **Stop:** a clear answer either way within this run. New `budcycle` options (observation
+and labelled setup): `BCA` anchor cell (6), `BCC` cutters (0), `BCT` cutter type; 'letgo:' lines mark lysed buds;
+the result line adds cutBinds, lysedBuds, cuts, falseRel (buds released incomplete without lysis), poolMin.
+Running (container only): `runs/la` (BCC=0), `runs/lb` (1), `runs/lc` (2, pictures), `runs/ld` (2, seed 2), each
+`BCA=44 BCR=50 BCC=n BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle SEED 1200000 runs/lX`.
+
 **Handoff status (autorun run 20261004-2051, explore).** Priority 3 below is done in isolation: the core has a reverse
 path, the lysis side `!` (RULES, Core changes and "Lysis"; INNOVATIONS run 2051; IDEAS). A triangle bonded to a
 partner's `!` side is lysed; lysis moves one bond per pass, not across a bond on an `&` side; a lysed triangle cuts all
