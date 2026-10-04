@@ -8,6 +8,17 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Rules must let replication go on indefinitely: a way back to blanks (user, 2026-10-04)
+
+The user asked whether any block can be changed or only blanks: only blanks change (contact copying turns a blank
+into a copy of the part it touches); typed parts never turn back and bodies never come apart. "If only blanks then
+the simulation will just run out. Rules in the simulation should be set so it can continue replicating indefinitely
+(and probably reverse stuff)." Measured the same day (build run 20261004-1021, INNOVATIONS): in a closed world the
+blanks end as kit parts, leaked strands and new bodies, and the lineage stalls after 2-3 generations; a labelled
+drive returning unused monomers to blanks only churns, and one returning free kit parts empties the rarely copied
+types. So the core needs a reverse path (typed triangles back to blanks) that keeps every part type available, and a
+way for finished or dead bodies to come apart: a core change (explore or core-review run; NEXT, candidate (m)).
+
 ## "Feeding" the offspring means giving it building blocks (user, 2026-10-04)
 
 The user, on the goal sentence "feeds it until it can live on its own": the intent is that the parent provides the
