@@ -11,10 +11,10 @@ not statistics.
 ## 2026-10-04 (autorun run 20261004-1421, harden)
 
 - **Physics speed (fourth round, exact): lone-block moves** — works. The same output byte for byte (all 35 check worlds,
-  `CHECK_SAVE` before at `ef7e74a` and after, `diff -r` empty); the suite 11 of 11 in 2148 s instead of 2530 s (1.18x,
-  4 processes); `budcycle-3` 2121 -> 1808 s, `budpool` 196 -> 156 s, `budcycle` 367 -> 310 s, `imprint` 145 -> 121 s;
-  one process on a `budcycle` world at t = 20000 (seed 3): 2.26 -> 1.70 ms per step (1.33x). No rule, physics or
-  parameter change.
+  `CHECK_SAVE` before at `ef7e74a` and after both commits, `diff -r` empty); the suite 11 of 11 in 2148-2155 s instead
+  of 2530 s (1.17x, 4 processes); `budcycle-3` 2121 -> 1808-1812 s, `budpool` 196 -> 156-159 s, `budcycle` 367 -> 310 s,
+  `imprint` 145 -> 118-121 s; one process on a `budcycle` world at t = 20000 (seed 3): 2.26 -> 1.65 ms per step
+  (1.37x; at t = 250000, seed 2, with a second process running: 2.21 -> 1.91). No rule, physics or parameter change.
   - Profile before (`budcycle 3`, 200000 steps, one process): physics 91%, of it lone blocks (`_single`) 74%: about
     780 of the world's 842 triangles are free (400 inert pre-food, the part pool, blanks) and each makes a move and a
     turn trial per step. Per lone block: 8 grid cells, 11 candidates, 3 neighbours kept, 4 depth tests, 7 pair tests.
@@ -26,7 +26,8 @@ not statistics.
     by `push` cost about 90 ns per block); (3) the pair test reads the neighbour's corners in place and A's edge normals
     once per depth test (`eqDepthN`, the same operations as `eqDepth`); (4) `cos`/`sin` only when a pair is near, and
     none for a move trial (turn 0); (5) `Math.sqrt` for the trial length, with `Math.hypot` (slow in V8) only where its
-    last bit could change a comparison (within 1e-9 of `direct` or of a sub-step multiple).
+    last bit could change a comparison (within 1e-9 of `direct` or of a sub-step multiple); (6) `_jostle`'s member list
+    an `Int32Array` (lone blocks by id, bodies by index; the same shuffle swaps), not an array mixing numbers and arrays.
   - New test: lone-block moves with the capsule list equal those with the disk list, bit for bit, in a crowded world
     with overlapping starts (overlap-reducing moves taken); a capsule 0.2 too narrow fails it.
   - Tried, no measurable gain: a bounding-circle shortcut in the pair test and ternaries instead of `Math.min`

@@ -9,7 +9,7 @@ handoffs: NEXT.md in git, e.g. at `ef7e74a` for run 1021's, `7c9bbac` for run 08
 time) made faster by exact changes (INNOVATIONS run 1421): neighbours gathered along the move (a capsule) instead of a
 wide disk, a kept typed neighbour list, pair tests without copies, trig only when needed, `sqrt` with `hypot` only
 near thresholds, `_jostle`'s member list typed. The suite: 11 of 11, all 35 check worlds' outputs byte for byte the same
-as at `ef7e74a` (`CHECK_SAVE`, `diff -r`), 2530 -> 2148 s (`budcycle-3` 2121 -> 1808 s per world with four running;
+as at `ef7e74a` (`CHECK_SAVE`, `diff -r`), 2530 -> 2155 s (`budcycle-3` 2121 -> 1812 s per world with four running;
 one process at t = 20000: 2.26 -> 1.65 ms per step). A new test pins the capsule list to the disk list. What is left:
 inside `_single` the gather (11 candidates per block), the pair test and the depth loop share the time; no hot spot
 worth another exact round (tried and reverted: a bounding-circle shortcut, ternaries for `Math.min`). A real speed-up
