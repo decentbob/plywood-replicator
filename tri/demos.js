@@ -199,7 +199,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // caught a copy by the high end, completion releases its root (the split); its own seed site then buds, and so on.
     // The run goes on BCAFTER steps after both the first split and the first bud's completion, or stops at generation BCGEN.
     // extra: P (default 8); BCB: blanks (20), BCI: of them inside the parent (20); BCS: world size (36); BCR: openRange
-    // (9); BCE: E parts (0); BCES=0: no E source (E's pore side a closed wall: E parts only from the pool, BCE); BCAFTER (50000);
+    // (9); BCE: E parts (0); BCES=0: no E source (E's pore side a closed wall: E parts only from the pool, BCE); BCES=2: the E source on E's outer side (its pore side a wall); BCAFTER (50000);
     // BCF=n, BCFP=p (a supply, labelled environment drive): n pre-food (400), each turning into a blank with probability p (0.0003) every 100 steps
     // BCL=q: a monomer loop (labelled drive): free genome monomers become blanks (q per 100 steps, 0.002), anywhere; BCLK=q: free kit parts too (0)
     // BCGEN=n: stop once a bud of generation n (1: the parent's bud, 2: its bud, ...) is complete, has let go and holds a caught strand
@@ -211,7 +211,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // BCB=200, BCF=0, BCS=32, BCL=0. The setup of runs 0621-0751 (check budcycle-free, retired in run 1021): BCS=32 BCF=180 BCFP=0.001 BCL=0.
     // BCDBG=1: genome copies by source (copied type, role, side) at the end
     budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),R=5;
-      const K=S.budKit(R,7,null,process.env.BCES!=='0',{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
+      const K=S.budKit(R,7,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys());seedCopyGenome(s,F);
       // the founder starts held by its high end z on the parent's anchor (placed where the anchor puts a strand; labelled)
