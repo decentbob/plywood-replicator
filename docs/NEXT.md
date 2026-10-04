@@ -11,17 +11,18 @@ per-generation census (each bud's own copies after its split, kit copies against
 food fed); (c) a third-generation measure. Done when: three generations without the harness in 3 of 4 worlds with each
 bud copying its own strand at least once after its split, and a check in `tri/check.js`; or, if not reached, the
 census says which stock or geometry limits it. Stop at about four hours of work.
-Results so far (corner setup, 1.2M steps, stop at generation 3; `letgo:` census lines): **A** (supply 180 + 20
-blanks, monomer loop `BCL=0.002`): generation 3 in 1 of 4 (seed 4, 573400), generation 2 in 3 of 4; blanks 0-12 at
-every let-go, all 180 pre-food fed by then; seeds 1-3 stalled with no food by 900k. Food ends as kit copies (156-173,
-the bud's waiting fronts) and new bodies; the loop only churns monomers (made on leaked strands, returned, made again).
-**B** (supply 400 slow, world 36, same loop): slower (generation 1 at 431700 / 442300 in seeds 1, 3; seeds 2, 4
-stopped at 480k without one); more food went to kit copies again (bud 130-162, pool mean 10, most 27), parent copies
-2-4 by 480k. Reading: the lineage's pace is the parent's genome copy rate, which needs a high blank density near the
-held strand; the bud's waiting fronts and the leaked strands take the blanks first. Running: **C** (200 blanks, no
-supply, loops `BCL=0.002 BCLK=0.0003`: free kit parts return too), `runs/qc.txt` lines through `runs/q.sh` (a queue,
-at most 4 processes: `./runs/q.sh < runs/qc.txt`; q.sh is in runs/, recreate from this: each line `dir seed ENV...`
-runs `env ENV TRI_NOPIC=1 node tri/demos.js budcycle seed 1200000 runs/dir`).
+Results so far (corner setup, 1.2M steps, stop at generation 3; `letgo:` census lines; "food" below means copy
+blanks, the untyped building blocks: user 2026-10-04, IDEAS): **A** (180 pre-food + 20 blanks, monomer loop
+`BCL=0.002`): generation 3 in 1 of 4 (seed 4, 573400), generation 2 in 3 of 4; blanks 0-12 at every let-go; seeds
+1-3 stalled with no blanks by 900k. Blanks end as kit copies (156-173, the bud's waiting fronts) and new bodies; the
+loop only churns monomers (made on leaked strands, returned, made again). **B** (400 pre-food, slow `BCFP=0.0003`,
+world 36, same loop): seed 3 generation 3 at 735900 with own copies after let-go gen1 2, gen2 1 (the target's
+measure met for the chain); seed 1 at 840k had generation-3 buds growing; seeds 2, 4 stopped at 480k by mistake,
+rerunning. **C** (200 blanks, no pre-food, loops `BCL=0.002 BCLK=0.0003`): copying much faster (parent about 15
+copies by 360k) but kit-part decay empties the rare types (seed 2: 7 types at 0 by 360k, seed 1: 2): stopped.
+**D** running: 200 blanks, no pre-food, monomer loop only. Queue: `runs/q.sh` (each line `dir seed ENV...` runs
+`env ENV TRI_NOPIC=1 node tri/demos.js budcycle seed 1200000 runs/dir`, at most 4 at once); lists `runs/qd.txt`,
+`runs/qe.txt` (B seeds 2, 4).
 
 **Handoff status (autorun run 20261004-0820, core-review).** Priority 1 below is done; the next run (index 36) is a
 `build`: priority 2. Done: (1) `heldCopy` is the rule (zip from a held high end only; the core has no option left);
