@@ -82,6 +82,8 @@ the 20 checks before the removal; "demos": which of `copy`, `ring`, `imprint` (a
 one-bond values (was 9: fu, pwE, tb, nbc, actE removed), 3 states (was 9: charge, caught, door open, powered, away and
 the hinge's rest angle and side removed), 1 option (was 2 plus the environment drive `light`: `pLoose` and `light`
 removed). Physics lost one exception (a hinged flap turned by the chemistry). `tri/sim.js` 336 -> about 230 lines.
+Run 20261004-0022 (explore): the same counts; glue binding lost two cases (a strand end's seed, a released back: only
+grown triangles bind by glue) and zip its `&` case (Core changes).
 
 Previous inventories: 2026-10-03 run 0450 (16 marks, 5 signals, 9 exposed values, 9 states, 2 options), 2026-10-02
 run 0721 (17 marks, 5 signals, 9 values, 9 states, 4 options): RULES.md in git at `7415fd4`.
@@ -105,10 +107,10 @@ place (all or nothing; never by size).
 | roles | own bonds and bond kinds, own fill | own | local |
 | busy, refractory | own bond kinds; partners' busy | previous pass | local (relay) |
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
-| zip | own bonds; next partner's role and its copy bond (TFACE); its zip; the `&` mark of the side bonded to the spare edge | partner current state; previous pass; fixed type | local (convention) |
+| zip | own bonds (whether the spare edge is bonded); next partner's role and its copy bond (TFACE); its zip | partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
-| glue catch, dock, fill | own role, need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
+| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
 | glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
 | release | own face bond; chain partners' fn; template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
@@ -144,10 +146,11 @@ structure (two attached triangles otherwise bond only when flush). A free triang
 (since 2026-10-03, run 1221, Core changes: a waiting anchor was copied by every blank that reached it), and a spent
 anchor side catches nothing (since 2026-10-03, run 2121: the code had not tested it; no structure has one).
 
-Which sides of an attached triangle bind by glue: all free sides of a glue-bonded (grown) triangle; the back of a
-released strand triangle; the spare edge of a strand end while the strand is not being copied (busy relay 0) and its
-face is free (an anchor reads only that the spare edge is unbonded, above). A strand's high end held by a
-completion-release side `&` (a membrane growing around the strand) starts no copy.
+Which sides of an attached triangle bind by glue: the free sides of a glue-bonded (grown) triangle, and no others
+(since 2026-10-04, run 20261004-0022, Core changes). A strand triangle binds by dock, fill and copy closure, and a
+strand end's seed only by an anchor's catch (above). Until then the back of a released strand triangle and the spare
+edge of a strand end that was not being copied also bound by glue: free back monomers capped strands' low ends, and a
+high end held by a completion-release side `&` started no copy (a case of zip, removed with it).
 
 ## Chains and copying
 A strand is triangles joined by chain bonds (PREV/NEXT ends). A strand triangle's free edge is a **face** if its
@@ -171,7 +174,8 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   face after another; parallel docking used to enclose an empty dock site between two partial copies (a hole no free
   triangle can reach), which deadlocked copying. (The option `zip: false`, parallel docking, was removed
   2026-10-03: only a test used it.) Option `heldCopy` (off by default, Core changes run 1720): the high end emits zip
-  only while its spare edge is held (bonded, not to a `&` side), so a free strand is never copied.
+  only while its spare edge is held (by an anchor: since run 20261004-0022 nothing else binds it), so a free strand
+  is never copied.
 - **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
   chain bond) is 0, i.e. until the whole copy has let go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only

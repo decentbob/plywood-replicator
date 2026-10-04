@@ -8,6 +8,35 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-0022, explore)
+
+- **Only grown triangles bind by glue: no more glue caps on strand ends, and the genome monomers are used** — works
+  (a narrowing of the core: RULES, Core changes; check suite: CHECKS_PENDING). A strand end's seed now binds only by an
+  anchor's catch; a released back binds nothing by glue; zip's `&` case (a high end held by a completion side) is gone
+  with it, since nothing but an anchor can hold a strand end.
+  - **What limited the bud's copies.** Run 2221 read "food after the split" (200 blanks gone by t = 75000). A census of
+    every contact copy in `budcycle` (`BCDBG=1`: the copied triangle's type, role and side) shows the blanks becoming
+    genome monomers 5x faster than copying used them (seed 1: 194 made, about 40 used by t = 70000) and in the wrong
+    mix: awz : Awz : --W = 30 : 64 : 100 made where a copy uses 2 : 2 : 3. The cause was one binding: a free back
+    monomer `--W` glue-binds a strand's low-end seed `w` (the docker's prev glue, which a fill binds), which hides the
+    low end's own copyable spare (4 copies of it against 36 of the high end's spare) and is itself a grown triangle
+    with two free sides (5 caps made 61 of the 100 back monomers in seed 1). So `awz` ran out first (4 left at the end,
+    against 38 `Awz` and 49 `--W`).
+  - **Candidate (g) withdrawn** (free strands not contact-copied, run 2221): its non-local oracle (`BCG=1`: no copy
+    blank binds a free body without a kit cell; the most any local rule could do) does not save food. The blanks are
+    copied at the held strands instead (seed 1: all 186 genome copies from held bodies, against 27 of 194 without it),
+    and seed 2's parent made only 2 copies and its bud never caught.
+  - **With the narrowing** (`budcycle`, seeds 1-4, 300000 steps; before in brackets): monomers made about 1 : 1 : 1
+    (1 : 2 : 3.3), used in copies 47-86% of those made (17-46%); full copies, parent and bud together, 10 / 11 / 13 / 13
+    (12 / 8 / 8 / 4); leaked strands 9 / 17 / 16 / 15 (11 / 6 / 4 / 1), so the bud catches earlier: split at 144301 /
+    127592 / 58302 / 73532 (47081 / 217572 / 145137 / 217631); the bud's own copies after the split 1 / 6 / 8 / 7 (8 / 2
+    / 3 / 0); every bud complete, 0 stray bindings. Seed 1 is the one loss (its bud split late, at 144301).
+    ![monomers made and used, before and after](pictures/glue_caps_monomers.png)
+  - Commands: `BCDBG=1 node tri/demos.js budcycle 3 300000 runs` (the census lines `genome copies by source`, `by type`
+    and `genome triangles bound`); `BCG=1` for the oracle. Tests: "binding: a strand end's seed and a strand's back
+    bind no free triangle by glue", "anchor: a free triangle's anchor side binds nothing" (now against a grown side),
+    "heldCopy option" (the `Z&` hold dropped).
+
 ## 2026-10-03 (autorun run 20261003-2221, build)
 
 - **One and two generations of the kind from its own kit, with no stand-in** — works (check `budcycle` 4 of 4, 331 s; 8 of 8 seeds 1-8 split
