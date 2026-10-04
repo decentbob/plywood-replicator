@@ -13,7 +13,12 @@ So far: `BCHOLD=0` (seeds 1-4, 600000 steps, `BCAFTER=300000 BCSTOP2=1 BCDBG=1`,
 are gone by t = 60000-90000, 130-170 of them made into kit parts of cells 0-9 (pool per type at the end: 13-76 of
 types 0-7, none copied from about type 12 on); first split 3 of 4, gen2 0 of 4 (later buds complete from the pool but
 no strand is copied to catch). Running: the same with `BCWK=0.0001` (new: free kit parts outside decay to blanks,
-labelled), logs `runs/k1_N.log`.
+labelled), logs `runs/k1_N.log`: gen2 1 of 4 (seed 4); `BCWK=0.00003` (`runs/k3_N.log`): 1 of 4 (seed 1), seeds 3-4 never
+catch (no food for a strand copy). Decay returns food, but the kit copies take it again and the rare types run out.
+Census of kit copies by template (`BCDBG=1`, new line `kit copies by template`, `runs/c_N.log`, 150000 steps): about
+90% come from the first bud's cells 0-9, on their `-&` wall sides while they hear the open signal (the front, and from
+cell 6 on the waiting anchor, keep cells 0-15 open), the rest from the parent's E source. Running: oracle `BCA=1` (no
+copy blank binds an `&` side; candidate (k)), logs `runs/a_N.log`.
 
 **Handoff status (autorun run 20261004-0022, explore).** Slice done: run 2221's "food after the split" diagnosed, and
 one core change. Branch `claude/autorun-20261004-0022`, merged into `main` by PR; no simulations running. (1) **Core

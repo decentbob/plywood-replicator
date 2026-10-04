@@ -225,6 +225,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // genome triangles taken from the free pool, by bond kind (observation: docks 4, fills 1, glue 5) and type
         if(vf&&!s.cpy[v*3+j]&&!kitT.has(canon(s.typeName(v)))){const k=ku+':'+canon(s.typeName(v));gb[k]=(gb[k]||0)+1;}
         if(s.cpy[v*3+j]&&process.env.BCDBG&&!kitT.has(canon(s.typeName(u)))){const r=s.roles(u),e=s._edges(u),rn=['free','face','back','docked','grown'][r.role],pos=r.role===1?(e.prev<0?'lo':e.next<0?'hi':'mid'):'',sk=i===r.free?'free':i===r.inert?'spare':'other',k=`${canon(s.typeName(u))}:${rn}${pos}:${sk}`;(cp.dbg=cp.dbg||{})[k]=(cp.dbg[k]||0)+1;}
+        if(s.cpy[v*3+j]&&process.env.BCDBG&&kitT.has(canon(s.typeName(u)))){const k=`${Pu.includes(u)?'P':bud.includes(u)?'B':'o'}${idx.get(canon(s.typeName(u)))}:${i}${s.op[u]>0?'o':''}`;(cp.kdbg=cp.kdbg||{})[k]=(cp.kdbg[k]||0)+1;}
         if(s.cpy[v*3+j]){if(bud.includes(u))cp.bud++;else if(Pu.includes(u))cp.par++;else if(!kitT.has(canon(s.typeName(u)))){cp.gen++;if(s.bodyOf(u).some(x=>kitT.has(canon(s.typeName(x)))))cp.genH++;}else cp.other++;if(i===K.eSide&&(u===Pu[N-1]||u===bud[N-1]))keep.add(v);}
         else if(s.att[v*3+j]&&!s.anc[u*3+i]){const k=idx.get(canon(s.typeName(v))),w=cellOf.get(u);
           // a root on a seed site (the parent's E or a bud's E) starts a bud; part k on cell k-1 of a bud grows it
@@ -241,6 +242,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // contact-copied" would buy (NEXT, core candidate (g)). Its free sides are marked spent during formBonds only.
       if(process.env.BCG==='1'){const of=s.formBonds.bind(s),tmp=[];s.formBonds=()=>{const {members}=s.bodies();tmp.length=0;
         for(const b of members){if(b.length<2||b.some(u=>kitT.has(canon(s.typeName(u)))))continue;for(const u of b)for(let i=0;i<3;i++){const k=u*3+i;if(s.bond[k]<0&&!s.spent[k]){s.spent[k]=1;tmp.push(k);}}}
+        of();for(const k of tmp)s.spent[k]=0;};}
+      // BCA=1 (a what-if for a core candidate, NEXT (k); measurement only): no copy blank binds an '&' side (a wall
+      // side that completion will spend), so kit parts are copied only at '@' fronts and the E source. The unbonded '&'
+      // sides of attached triangles are marked spent during formBonds only ('-&' sides have no glue: nothing else binds there)
+      if(process.env.BCA==='1'){const of=s.formBonds.bind(s),tmp=[];s.formBonds=()=>{tmp.length=0;
+        for(let u=0;u<s.n;u++){if(!s.bonded(u))continue;for(let i=0;i<3;i++){const k=u*3+i;if(s.done[k]&&s.bond[k]<0&&!s.spent[k]){s.spent[k]=1;tmp.push(k);}}}
         of();for(const k of tmp)s.spent[k]=0;};}
       // strands (7 triangles, not being copied): held by the parent, held by the bud, free in P, in D, out
       const strands=()=>{const o={held:0,budHeld:0,P:0,D:0,out:0};for(const q of census(s)){if(q.n<7||q.paired)continue;const b=s.bodyOf(q.units[0]);if(b.includes(Pu[0])){o.held++;continue;}if(bud[0]>=0&&b.includes(bud[0])){o.budHeld++;continue;}
@@ -269,7 +276,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // later buds (observation): where each started (P: the parent's seed site; 0: the first bud's), its cells, whether its root still holds
       console.log('later buds:',buds.slice(1).map(b=>`${b.on}:${b.cells.filter(x=>x>=0).length}${s.bonded(b.cells[0])&&s.partner(b.cells[0],K.rootSide)>=0?'':' free'}`).join(', ')||'none');
       {const g={};for(const u of all)if(!s.bonded(u)&&!kitT.has(canon(s.typeName(u)))){const k=canon(s.typeName(u));g[k]=(g[k]||0)+1;}console.log('free triangles not kit parts:',JSON.stringify(g));}
-      {const g={};for(const [,u,ty] of s.copyLog||[])if(!kitT.has(canon(ty))){const k=canon(ty);g[k]=(g[k]||0)+1;}if(cp.dbg)console.log('genome copies by source:',JSON.stringify(cp.dbg));console.log('genome copies by type:',JSON.stringify(g),'genome triangles bound (kind:type):',JSON.stringify(gb));}
+      {const g={};for(const [,u,ty] of s.copyLog||[])if(!kitT.has(canon(ty))){const k=canon(ty);g[k]=(g[k]||0)+1;}if(cp.dbg)console.log('genome copies by source:',JSON.stringify(cp.dbg));if(cp.kdbg)console.log('kit copies by template (P parent, B first bud, o other; cell:side, o hears open):',JSON.stringify(Object.entries(cp.kdbg).sort((a,b)=>b[1]-a[1])));console.log('genome copies by type:',JSON.stringify(g),'genome triangles bound (kind:type):',JSON.stringify(gb));}
       console.log('pool per type at the end (cells 0..'+(N-2)+'):',pool().join(' '));
       console.log('waits by cell:',tb.map((x,k)=>bud[k]<0?'-':k?x-tb[k-1]:x).join(' '));
       {const {comp,members}=s.bodies();if(bud[0]>=0)snap(s,'end',`t=${s.t}: the bud${ts?' after the split':''}`,{units:members[comp[bud[0]]],radius:8},false);snap(s,'endw',`t=${s.t}: the world`,null,false);}
