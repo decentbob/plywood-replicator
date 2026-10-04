@@ -8,6 +8,21 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Sterile leaks make the doorway unnecessary: bud off the corner (explore run 20261004-0621, 2026-10-04)
+
+The kind's doorway (the bud's pore facing the parent's) was designed when the bud had to receive a strand directly.
+Since `heldCopy` (run 1720) a leaked strand is sterile but catchable: the parent's 7-cell pore leaks every copy, and
+any waiting anchor can catch one from open space. So the bud can grow anywhere on the wall. Placing it across the pore
+cost the most: the growing bud sat in the parent's food stream, and once complete it sealed the pair, so a parent
+without a copy by then never made one (run 0251). With the seed site on the cell beside the top-right corner
+(`budKit(..., seedAt=45)`) the bud hangs off the corner, its pore facing the parent's across an open wedge: food reaches
+both pores, leaked copies drift into the bud's, and the bud may complete long before it catches (it waits; its root
+holds while the waiting anchor emits). Lessons: (1) a mechanism made redundant by a later rule can be the next
+bottleneck: re-check old layout choices when a rule changes; (2) the order "complete, then catch" is now safe, so the
+race between growth and the parent's copying no longer matters. Still open: the bud copies its caught strand only 0-2
+times after the split, so a lineage runs on its first parent's copies; a bud whose own copies feed its own bud is the
+next step for indefinite cycles. Other outer cells give other wedges (the pose of each is in `budKit`); only 45 tried.
+
 ## Food goes to whatever templates are exposed; walls should not be templates (build run 20261004-0251, 2026-10-04)
 
 Measured with `budcycle` without the harness (INNOVATIONS, run 0251). Contact copying turns a blank into whatever

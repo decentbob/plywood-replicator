@@ -216,9 +216,10 @@ const closureCase=(K,range)=>{
   const R=5,N=K.N,AK=K.anchorCell,SE=K.types[AK].includes('Z@|')?'z--':'w--',s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:range},2*N+2),O=[20,20],at=p=>[O[0]+p[0],O[1]+p[1]];
   const sh=(a,b)=>{const eq=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1])<1e-6;for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(eq(a[i],b[(j+1)%3])&&eq(a[(i+1)%3],b[j]))return [i,j];return null;};
   // geometry: the bud (the parent turned 180 degrees about its pore) puts its root on the parent's seed site and its E on the parent's root, without overlap
-  const Bv=K.tris.map(t=>t.v.map(p=>S.budPose(R,p)));
-  assert.deepEqual(sh(Bv[0],K.tris[N-1].v),[K.rootSide,K.seedSide],'bud root on the parent seed site');
-  assert.deepEqual(sh(Bv[N-1],K.tris[0].v),[K.seedSide,K.rootSide],'bud seed site on the parent root');
+  // (seedAt, run 20261004-0621: the seed site on another outer cell; K.pose puts the root's seed side on it)
+  const SC=K.seedCell,Bv=K.tris.map(t=>t.v.map(K.pose));if(SC===N-1)K.tris.forEach((t,k)=>t.v.forEach((p,q)=>{const b=S.budPose(R,p);assert.ok(Math.hypot(b[0]-Bv[k][q][0],b[1]-Bv[k][q][1])<1e-9,'pose is the turn about the pore');}));
+  assert.deepEqual(sh(Bv[0],K.tris[SC].v),[K.rootSide,K.seedSide],'bud root on the parent seed site');
+  if(SC===N-1)assert.deepEqual(sh(Bv[N-1],K.tris[0].v),[K.seedSide,K.rootSide],'bud seed site on the parent root');
   const cen=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];for(const b of Bv)for(const t of K.tris){const c=cen(b),d=cen(t.v);assert.ok(Math.hypot(c[0]-d[0],c[1]-d[1])>0.5,'bud overlaps parent');}
   assert.equal(new Set(K.letters).size,N-1,'one letter per bond');assert.ok(![...K.letters].some(c=>'awzyf'.includes(c)),'kit letter clashes with genome or seed');
   const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
@@ -227,24 +228,26 @@ const closureCase=(K,range)=>{
   const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1;buildStructure(s,Pu,K.tris,O[0],O[1]);
   placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,SE);s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);pass(10);
   const P0=state(Pu);assert.ok(Pu.every(u=>s.op[u]===0),'the parent hears no open signal');
-  assert.ok(s.bond[Pu[N-1]*3+K.seedSide]<0&&!s.spent[Pu[N-1]*3+K.seedSide],'the parent seed site is free');
+  assert.ok(s.bond[Pu[SC]*3+K.seedSide]<0&&!s.spent[Pu[SC]*3+K.seedSide],'the parent seed site is free');
   Bv.forEach((v,k)=>{placeTri(s,Bu[k],v.map(at));s.setType(Bu[k],K.types[k]);});
   // growth: the root on the parent's seed site, then each cell on its predecessor; a stall of 300 passes half way
-  const held=()=>s.bond[Bu[0]*3+K.rootSide]===Pu[N-1]*3+K.seedSide;
-  s.bind(Bu[0],K.rootSide,GLUE,Pu[N-1],K.seedSide,GLUE);pass(5);assert.ok(held(),'root let go');
+  const held=()=>s.bond[Bu[0]*3+K.rootSide]===Pu[SC]*3+K.seedSide;
+  s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);pass(5);assert.ok(held(),'root let go');
   for(let k=1;k<N;k++){const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,GLUE,Bu[k-1],j,GLUE);pass(k===25?300:4);assert.ok(held(),'the bud let go while growing (cell '+k+')');}
   pass(20);assert.ok(held(),'the complete bud let go before its anchor caught');
   assert.deepEqual(Bu.filter(u=>s.op[u]>0),Bu.filter((u,k)=>Math.abs(k-AK)<range),'only the waiting anchor emits; its range only is unspent');assert.ok(s.op[Bu[0]]>0,'the root hears no open signal');
   // the catch: the bud's anchor takes a strand end; completion releases the root from the parent
   placeTri(s,Bs,refl(Bu[AK],K.anchorSide));s.setType(Bs,SE);s.bind(Bu[AK],K.anchorSide,GLUE,Bs,0,GLUE);pass(10);
   assert.ok(s.bond[Bu[0]*3+K.rootSide]<0,'the bud did not let go after its catch');
-  assert.ok(s.bond[Pu[N-1]*3+K.seedSide]<0&&!s.spent[Pu[N-1]*3+K.seedSide],'the parent seed site is not free again');
+  assert.ok(s.bond[Pu[SC]*3+K.seedSide]<0&&!s.spent[Pu[SC]*3+K.seedSide],'the parent seed site is not free again');
   // closure: the bud is now in the parent's starting state (same types, bonds and spent sides cell by cell), and so is the parent
   assert.deepEqual(state(Bu),P0,'the bud is not in the parent\'s state');assert.deepEqual(state(Pu),P0,'the parent changed');symmetric(s);};
 test('closure (budKit): a bud grown cell by cell on its parent holds until its anchor catches, then lets go in the parent\'s own state',()=>closureCase(S.budKit(5),3));
 // the anchor Z@| on arc cell 6 (run 20261003-1921): the open range reaches the root from there
 test('closure (budKit, anchor on cell 6, Z@|): the bud holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'}),9));
 test('closure (budKit, anchor on cell 6, closed walls -|): the same with walls nothing binds or copies',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|'),9));
+// the seed site on cell 45 (run 20261004-0621): the bud grows off the parent's top-right corner, pores facing across an open wedge
+test('closure (budKit, seed site on cell 45): the bud off the corner holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45),9));
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

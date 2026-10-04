@@ -1,33 +1,30 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-0251, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-0621, explore). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `56618c3` for run 0022's, `faf6b8d` for run 2221's).
+handoffs: NEXT.md in git, e.g. at `9c8ca17` for run 0251's, `56618c3` for run 0022's).
 
-**Handoff status (autorun run 20261004-0251, build).** Slice: the kind's cycle (`budcycle`) without budpool's harness.
-Branch `claude/autorun-20261004-0251`, merged into `main` by PR; no simulations running. No new rule; no new check
-(no setup reached 3 of 4). Results (INNOVATIONS, run 0251, table; IDEAS "Food goes to whatever templates are
-exposed"): (1) **food, not the pool, is the limit.** Without the harness the 200 blanks are gone by t = 60000-90000,
-three quarters made into kit parts (90% on the first bud's open `-&` wall sides, in the doorway); the pool keeps 4-7
-of every type over two generations; gen2 0 of 4. (2) Decay of kit parts (`BCWK`) 1 of 4; an oracle that no copy blank
-binds an `&` side (`BCA=1`) 1 of 4 (copies move to the fronts: a stock goes to the fronts of its time). (3) **A food
-supply plus closed walls: 2 of 4** in three supply settings (alone, the supply gives 0 of 4). Closed walls need no
-core change: `budKit(..., wall='-|')` (the anchor mark with no glue: nothing binds, catches or copies it), demo flag
-`BCK=1`, byte for byte the oracle. (4) The failures left: the pair seals (bud complete before its catch, pores facing)
-with no food inside, so the parent never copies and nothing is ever caught; or the supply runs out before the second
-bud has a copy to catch. New demo options (`budcycle`): `BCWK` (decay), `BCF`/`BCFP` (supply: inert `---` pre-food
-turning into blanks), `BCK` (closed walls), `BCA` (oracle); census lines (pool per type, `kit copies by template`).
-Picture `docs/pictures/budcycle_free.png`. Check suite 22 of 22 (2076 s; defaults unchanged).
+**Handoff status (autorun run 20261004-0621, explore).** Idea tried: *the bud grows off its parent's corner instead of
+across its pore.* Since `heldCopy` a leaked strand is sterile but catchable, so the bud needs no doorway: it catches
+one of the parent's leaked copies from open space. Kit change only (no core change): `budKit(..., seedAt)` puts the
+seed site on any arc cell's outer side and returns the bud's pose (`K.pose`, `K.unpose`); demo flag `budcycle`
+`BCSEED=m`. On cell 45 (beside the top-right corner) the bud hangs off the corner with its pore facing the parent's
+across an open wedge, so the pair is never sealed (run 0251's first failure). Result (harness off, closed walls,
+supply; INNOVATIONS, run 0621, table): **gen2 in 3 of 4 check worlds, 6 of 8 seeds; the doorway kind 3 of 8**; the
+parent makes 3-5 copies in every world (doorway 0-5); buds complete first and wait for their catch. New check
+`budcycle-free` (need 3); test "closure (budKit, seed site on cell 45)". Defaults unchanged (`budKit` default pose is
+byte for byte `budPose`). Picture `docs/pictures/budcycle_corner.png`. Check suite 23 of 23 (2437 s). Branch
+`claude/autorun-20261004-0621`, merged by PR; no simulations running.
 
-**Exact next step** (the next `build`). Target unchanged: `budcycle-2` in 3 of 4 with the harness off; start from
-`BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle N 600000 runs/x` (2 of
-4: seeds 3, 4). Attack the sealed-before-catch failure first: (a) make closed walls the kit's default and rerun the
-checks (`budpool`, `budcycle`, `budcycle-2`; expect less food lost, outputs change); (b) find out why 30 blanks inside
-the parent gave 0 of 4 (monomers made, almost no full copy: the monomer mix of run 0022 again?) and whether a
-cell's own food inside can carry it to the catch; (c) a slower bud (fewer parts per type, or the anchor nearer the
-root) so the parent's copy comes before the seal. Then the second failure (supply too short): a supply that keeps
-pace (recycling free genome waste, `BCW`, with the supply) before larger stocks. If 3 of 4 is reached, add check
-`budcycle-free` (env as above, need 3).
+**Exact next step** (the next `build`). (a) Make the corner the kind's default (`seedAt=45` and closed walls `-|` in
+`budcycle`; rerun `budcycle`, `budcycle-2` with the harness and `budcycle-free`; keep `BCSEED=46` for the doorway as
+a comparison). (b) The next limit for indefinite cycles: the bud copies its caught strand only 0-2 times after the
+split (both kinds), so a lineage lives on its first parent's copies and the supply's stock (172-180 of 180 pre-food
+used by the end). Find why (census `BCDBG=1` on the bud after the split: food reaching its pore, its founder's backs
+facing open space?) and whether a steady supply (pre-food arriving over the run, not one stock) carries a third
+generation. (c) Failure modes left: a complete bud that waits too long for a catch (seed 2: few leaked copies reach
+the corner wedge), a grand-bud stalled at 38 cells (seed 5). Other outer cells give other wedges (`budKit(5, 7, null, true, {at: 6, glue: 'Z'}, '-|',
+m).pose` for each outer cell m; only 45 tried).
 
 **Core-change candidates (for the next `core-review` or `explore`).** (e) *`heldCopy` as the rule:* RULES (Core
 changes, run 1720); the kind's cycle runs on it (`budcycle`, two generations). Today the option is off by default and
@@ -109,7 +106,8 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    (check `budpore-kind`); the kit has the option. Next: priority 3 (Exact next step).
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
    The whole cycle. Done (run 2221) with a prepared pool and budpool's harness: one generation (`budcycle`, 4 of 4)
-   and two (`budcycle-2`, 4 of 4; 6 of 6 long runs). Next: the pool without the harness (run 0251: 2 of 4; Exact next step).
+   and two (`budcycle-2`, 4 of 4; 6 of 6 long runs). The pool without the harness: run 0251 2 of 4 (doorway); run 0621 3 of 4 with the bud off the parent's corner (check
+   `budcycle-free`). Next: the bud's own copies after the split (Exact next step).
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
    `BUDTOOTH`, `BUDNOCA`, `BUDDBGA`, `BUDNOP`; their results stay in INNOVATIONS and git); decide whether the plug
    (`BUDRD=7`) and cap-release (`BUDCAP`) commands still earn their options once priority 2 has chosen; keep `300`,
@@ -151,6 +149,8 @@ node tri/demos.js budcycle 1 300000 runs           # one generation from the kit
 BCAFTER=300000 node tri/demos.js budcycle 1 600000 runs   # the same run on: both seed sites start new buds ('later buds:' line)
 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle 3 600000 runs/x   # no harness: closed walls and a
                                                    # food supply (gen2 2 of 4; BCWK=q kit parts decay, BCA=1 oracle; BCDBG=1: pool and kit-copy census)
+BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle 1 600000 runs/x   # the bud off the
+                                                   # parent's corner (seed site on cell 45): no sealed pair; gen2 3 of 4 (check budcycle-free)
 BCDBG=1 node tri/demos.js budcycle 3 300000 runs   # with the genome monomer census: copies by source, by type, monomers bound (run 0022)
 BCG=1 BCDBG=1 node tri/demos.js budcycle 1 300000 runs   # the oracle for candidate (g): free strands not contact-copied (non-local)
 BCR=50 BCW=0.05 node tri/demos.js budcycle 1 300000 runs  # the designed order (complete, catch, split): the picture in INNOVATIONS

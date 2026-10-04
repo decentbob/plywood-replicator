@@ -198,10 +198,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // is turned back into a blank at a random place outside both cells, so the pool loses only the parts the buds use;
     // genome copies stay. extra: P (default 8); BCB: blanks (200), BCI: of them inside the parent (20); BCS: world size
     // (32); BCR: openRange (9); BCE: E parts (0); BCAFTER (50000); BCW: a waste drive (labelled; 0: off); BCWK: kit parts decay (labelled; 0: off); BCF, BCFP: a supply drive (labelled; below);
+    // BCSEED=m: the seed site on arc cell m's outer side (budKit seedAt; 45: the bud grows off the parent's top-right corner, its
+    // pore facing the parent's across an open wedge, so the pair is never sealed; run 20261004-0621)
     // BCSTOP2=1: stop once a bud grown on a bud's seed site is complete and has let go (gen2 in the result: the second generation)
     // BCDBG=1: genome copies by source (copied type, role, side) at the end; BCG=1: the oracle for candidate (g) (below)
     budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||200),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD!=='0',after=+(process.env.BCAFTER||50000),W=+(process.env.BCW||0),WK=+(process.env.BCWK||0),SF=+(process.env.BCF||0),SFP=+(process.env.BCFP||0.0003),R=5;
-      const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='1'?'-|':'-&'),N=K.N,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
+      const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='1'?'-|':'-&',+(process.env.BCSEED||-1)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r,heldCopy:true}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys());seedCopyGenome(s,F);
       // the founder starts held by its high end z on the parent's anchor (placed where the anchor puts a strand; labelled)
@@ -213,7 +215,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const buds=[],cellOf=new Map(),tb=new Array(N).fill(0);let bud=new Array(N).fill(-1),ts=0;
       // where a point lies: in the parent (P), in the bud or, before the split, the bud's place and the doorway (D), or out
       const where=(x,y)=>{const p=toKit(Pu[0],0,Pu[20],20,x,y);if(S.hexr(p)<R-1)return 'P';
-        if(!ts)return S.hexr(S.budPose(R,p))<R-1||Math.abs(p[0])<1.5&&p[1]>(R-1)*H&&p[1]<(R+1)*H?'D':'out';
+        if(!ts)return S.hexr(K.unpose(p))<R-1||Math.abs(p[0])<1.5&&p[1]>(R-1)*H&&p[1]<(R+1)*H?'D':'out';
         const kb=bud.reduce((m,u,k)=>u>=0?k:m,0);return kb>=2&&S.hexr(toKit(bud[0],0,bud[kb],kb,x,y))<R-1?'D':'out';};
       // re-place every free triangle (pool and blanks) clear of the founder; BI blanks inside the parent
       const prep=new Set([...Pu,...F]),placed=[...prep];let ni=0;
@@ -229,7 +231,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(s.cpy[v*3+j]){if(bud.includes(u))cp.bud++;else if(Pu.includes(u))cp.par++;else if(!kitT.has(canon(s.typeName(u)))){cp.gen++;if(s.bodyOf(u).some(x=>kitT.has(canon(s.typeName(x)))))cp.genH++;}else cp.other++;if(i===K.eSide&&(u===Pu[N-1]||u===bud[N-1]))keep.add(v);}
         else if(s.att[v*3+j]&&!s.anc[u*3+i]){const k=idx.get(canon(s.typeName(v))),w=cellOf.get(u);
           // a root on a seed site (the parent's E or a bud's E) starts a bud; part k on cell k-1 of a bud grows it
-          if(k===0&&(u===Pu[N-1]||w&&w[1]===N-1)){const b=new Array(N).fill(-1);b[0]=v;buds.push({cells:b,on:u===Pu[N-1]?'P':w[0]});cellOf.set(v,[buds.length-1,0]);if(buds.length===1)tb[0]=s.t;else if(u===Pu[N-1])ev.par2++;else ev.bud2++;}
+          if(k===0&&(u===Pu[SC]||w&&w[1]===SC)){const b=new Array(N).fill(-1);b[0]=v;buds.push({cells:b,on:u===Pu[SC]?'P':w[0]});cellOf.set(v,[buds.length-1,0]);if(buds.length===1)tb[0]=s.t;else if(u===Pu[SC])ev.par2++;else ev.bud2++;}
           else if(k>0&&w&&w[1]===k-1&&buds[w[0]].cells[k]<0){buds[w[0]].cells[k]=v;cellOf.set(v,[w[0],k]);if(w[0]===0)tb[k]=s.t;}else ev.stray++;}
         else if(s.anc[u*3+i]&&u===bud[AK]&&!ev.catchT){ev.catchT=s.t;ev.catchN=n();if(bud[N-1]<0)ev.early=1;snap(s,'catch',`t=${s.t}: the bud's anchor catches a strand (${n()} of ${N} cells)`,focus(),false);}
         return res;};
@@ -272,7 +274,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(!sealedIn&&bud[N-2]>=0){sealedIn={t,...strands(),blanks:all.filter(u=>!s.bonded(u)&&s.typeName(u)==='-?-?-?'&&where(s.px[u],s.py[u])!=='out').length,E:all.filter(u=>!s.bonded(u)&&idx.get(canon(s.typeName(u)))===N-1&&where(s.px[u],s.py[u])!=='out').length};}
         if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells`,focus(),false);shot+=12;}
         if(!tc&&bud[N-1]>=0){tc=t;snap(s,'done',`t=${t}: the bud is complete (${N} cells)${ev.catchT?', its anchor holding a strand':''}`,focus(),false);}
-        if(!ts&&bud[0]>=0&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[N-1])){ts=t;ev.splitN=n();snap(s,'split',`t=${t}: the bud lets go of its parent (${n()} cells)`,focus(),false);}
+        if(!ts&&bud[0]>=0&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[SC])){ts=t;ev.splitN=n();snap(s,'split',`t=${t}: the bud lets go of its parent (${n()} cells)`,focus(),false);}
         if(every(t,20))console.log(`t=${t} bud cells=${n()}/${N} catch=${ev.catchT||'no'} split=${ts||'no'} ${fmt(strands())} releases: parent ${ev.relP} bud ${ev.relB} free ${ev.relF}; copies: bud ${cp.bud} parent ${cp.par} genome ${cp.gen} (of held ${cp.genH}); docks ${s.ev.dock||0} fills ${s.ev.fill||0}; blanks ${blanks()}; ${pfmt(pool())}; stray=${ev.stray}`);
         // the second generation (observation): a bud grown on a bud's seed site is complete and has let go (BCSTOP2=1: stop then)
         if(!ev.gen2&&t%100===0&&buds.some(b=>b.on!=='P'&&b.cells[N-1]>=0&&s.bond[b.cells[0]*3+K.rootSide]<0)){ev.gen2=t;if(process.env.BCSTOP2)break;}
