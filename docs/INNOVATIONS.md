@@ -40,14 +40,19 @@ not statistics.
   - **Why the slow supply works:** blanks arrive while the buds grow and wait (0-19 free at every let-go, 120 -> 27
     pre-food left), so the first and second buds still find blanks after their split and copy their strands (A: the
     stock is gone by the first let-go). Generation 3 comes at 0.74-1.03M steps, 1.5-2.6x the first split.
+  - **The monomer loop is what carries the third generation.** The same defaults without it (`BCL=0`, the check's
+    first run): generation 3 in 0 of 4 by 1.2M, generation 2 in 2 of 4 (511100, 623500), although the buds split
+    earlier (first split 146912-299850, against 394894-636560 with the loop) and copy their own strands more after
+    let-go (0-10 copies per bud; 22 of 26 let-go buds copied at least once). Reading (the check keeps no census): unused
+    monomers pile up as a stock that copies the genome fast, but nothing returns them to blanks, so the later kit copies
+    and buds starve. The loop is now `budcycle`'s default (labelled drive).
   - **Still a burn-down** (the user, 2026-10-04: "the simulation will just run out"): only blanks change type; parts,
     leaked strands and finished bodies never return. Returning free parts by a drive empties types (C). An indefinite
     lineage needs a reverse path in the core (IDEAS: the user's ideas, a bond-cutting type, wider molding, molding one
     side at a time; NEXT, candidate (m)).
     ![seed 3: growth, catch, split, the bud after the split and the world at generation 3](pictures/budcycle_gen3.png)
-  - Command: `BCL=0.002 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x` (B, the picture; about 30
-    minutes); the check runs the defaults without the loop: `BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle SEED
-    1200000 runs/x`.
+  - Command: `BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x` (setup B is now the default; the
+    picture; about 30 minutes); `BCL=0` without the loop.
 
 ## 2026-10-04 (autorun run 20261004-0820, core-review)
 

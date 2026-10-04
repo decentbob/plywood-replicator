@@ -11,8 +11,9 @@ pinned check `budcycle` (byte for byte the same output, new result fields aside)
 drives `BCW`, `BCWK`, `BCSTOP2` pruned (git `7c9bbac`); (b) a per-bud census (`letgo:` lines: generation, cells,
 completion, catch, stocks), generations (a bud of generation g or later complete, let go and holding a caught strand;
 `BCGEN=n` stops there), `ownCopies` (each let-go bud's copies after its let-go) and labelled loop drives `BCL`, `BCLK`;
-(c) **three generations in 4 of 4 worlds** with the monomer loop (setup B, INNOVATIONS run 1021); the check
-`budcycle-3` (the defaults, no loop) CHECKRESULT and replaces `budcycle-free`. The strict target (every bud of the chain
+(c) **three generations in 4 of 4 worlds** with the monomer loop (setup B, now the default; without the loop 0 of 4,
+though buds split earlier and copy more: INNOVATIONS run 1021); the check
+`budcycle-3` (the defaults, B) CHECKRESULT and replaces `budcycle-free`. The strict target (every bud of the chain
 let go and copied its own strand at least once after) holds in 2 of 4: in the other two one bud of the chain budded
 while still attached and never let go. **Not reached: a lineage that does not burn down.** Only blanks change type,
 so blanks end as kit parts (fronts and the E source), leaked strands and new bodies; a drive returning free kit parts
@@ -130,7 +131,7 @@ nothing" would close it if one ever appears. Nothing else in the core is unused 
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~23 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~60 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;
