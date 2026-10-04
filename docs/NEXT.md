@@ -1,28 +1,26 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-1721, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-2051, explore). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
+handoffs: NEXT.md in git, e.g. at `ef27e51` for run 1721's, `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
-**Handoff status (autorun run 20261004-1721, build).** Priority 2 below is done as a finding (INNOVATIONS run 1721);
-the next run (index 39) is an `explore`: priority 3, the reverse path. No rule change; the defaults unchanged
-(`budcycle-3`'s four worlds re-run with the census: the same outputs as run 1021). Done: a sink census in `budcycle`
-(`sinks`: copy binds by template; `chain:`: each bud's own copies after let-go along the line to the last generation),
-options `BCES=0` / `BCES=2` (no E source / the E source on E's outer side, `budKit(..., eSource='out')`) and the oracle
-`BCGATE=1` (a bud's seed site spent until the bud lets go; not a rule). Findings: (1) per world the blanks go to free
-strands' monomers 421-867 (mostly looped back), growth fronts 235-258 (the pool's only renewal), the parent's genome
-48-65, the E source 43-60, buds' genomes 17-36. (2) The target (both chain buds copy after let-go, 3 of 4 on the
-defaults) is not met by any kit change: defaults 2 of 4, no E source and E source outside within noise or worse for
-generation 3 (2 and 3 of 4). (3) Every failing chain fails the same way: a bud waiting for its catch buds from its own
-seed site and its bud catches first; no seed cell's geometry prevents it. (4) The oracle fixes the order (every chain
-bud copies, 4 of 4) but the lineage slows (catch waits of 100-400 thousand steps), and with more parent copies (no E
-source) the parent and every adult bud again and again until the fixed pool is gone (generation 3 0 of 4). Breadth
-starves depth while stocks burn down: candidate (n) below pays only with the reverse path (m). Checks: 10 of 10
-(`budcycle-3`: the defaults batch, 4 of 4). Nothing is running.
-Branch `claude/autorun-20261004-1721`, merged by PR. Scratch (container only): `runs/base_N.txt`, `e_`, `o_`, `g_`,
-`ge_` (the five setups; regenerate with the commands in INNOVATIONS run 1721), `runs/geo.js` (the seed-cell geometry:
-for each outer cell k, `budKit(5,7,null,true,{at:6,glue:'Z'},'-|',k)`, pose the kit and measure where a root on the
-posed bud's seed site would sit against the parent's cells; all at least 1.0 away), `runs/chart.js` (the picture).
+**Handoff status (autorun run 20261004-2051, explore).** Priority 3 below is done in isolation: the core has a reverse
+path, the lysis side `!` (RULES, Core changes and "Lysis"; INNOVATIONS run 2051; IDEAS). A triangle bonded to a
+partner's `!` side is lysed; lysis moves one bond per pass, not across a bond on an `&` side; a lysed triangle cuts all
+its bonds after a pass, binds nothing meanwhile, and once free is fresh (spent sides cleared, hears nothing). The cutter
+`z@!-|-|` (labelled, prepared, never copied) is a part that binds only a waiting anchor `Z@|`. New demo and check
+`lysis` (a parent with a bud stuck on its seed site, no food, 4 cutters, the anchor on cell 44, openRange 50): the stuck
+bud comes apart into its 47 parts in 4 of 4 and a later bud on the parent is built from 45-46 of them in 4 of 4.
+Findings: (1) with budcycle's anchor on cell 6 cutters kill every bud the moment its cell 6 attaches; on cell 44 only
+nearly complete or waiting buds are exposed; 4 cutters find an open anchor in 4-10k steps, faster than a bud's last
+two parts arrive, so regrown buds die at 44-46 cells (1 cutter with the oracle below: complete in 2 of 4 by 2M);
+(2) the open relay lags one pass behind a new bond: a fresh root re-bound in place and joined by its next cell in the
+next pass hears 0 and is released as complete (candidate (o) below; oracle `LYFIX=1` removes it). Checks: the 10 short
+ones byte for byte the same as main (31 worlds), 12 of 12 in all; `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s); `lysis` 4 of 4; tests 34. Nothing is running.
+Branch `claude/autorun-20261004-2051`, merged by PR. Scratch (container only): `runs/ly44`, `runs/ly4` (the default
+setup, seeds 1-4), `runs/lyf` and `runs/lyf1` (the oracle, 4 and 1 cutters; `LYC=1 LYFIX=1 node tri/demos.js lysis N
+2000000 runs/x/sN`), `runs/lyfv` (the oracle with the fixed bookkeeping), `runs/pic1`, `runs/pic2` (the picture: seed 1
+defaults and seed 2 `LYC=1 LYFIX=1`, 600000 steps), `runs/trace*.js` (the traces of the wave and of the spurious release).
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
@@ -82,14 +80,14 @@ the rule and the checks retired; the corner default, the census and three genera
 2. *(Done as a finding, run 1721: no kit change meets the target; the failing chains are buds that bud before they
    catch; INNOVATIONS. The speed side note stays open: a supply drive that keeps its stock outside the world, about
    1.6x early in a run, changes outputs; decide it in a `build` that changes the setup.)*
-3. **`explore` (index 39): a reverse path, so blocks circulate (candidate (m), the user's request).** Today only
-   blanks change type and nothing comes apart, so every closed world runs out. Weigh the user's options (IDEAS,
-   2026-10-04): a bond-cutting side or type (local: it reads only the bond it touches; frees material locked in
-   bodies, which is where most of it ends; could grow into predation and scavenging), contact copying widened to
-   typed triangles, molding one side at a time (types move step by step in both directions, back toward a blank), or
-   plain decay (cheapest, but setup C shows it empties the rarely copied types unless something keeps every type
-   available). Make the case in RULES (Core changes) before code; first demonstration in isolation (a dead body taken
-   apart into blanks or parts that a growing bud then uses).
+3. *(Done in isolation, run 2051: the lysis side `!`; INNOVATIONS, RULES.)* Next for it, in this order:
+   a. **`build` (index 40): lysis in the lineage.** `budcycle` with the kind's anchor late (budKit `anchor:{at:44}`,
+      openRange 50 so the root holds while it waits) and 1-2 cutters (option, labelled); measure what returns (parts
+      per type over time, the `sinks` census), generations reached and whether the pool's fewest type still falls to 0.
+      Watch for the relay lag (o): roots re-bound in place after a lysis are released as complete; count them. With the
+      anchor on cell 44 the seed site (cell 45) is next to it, which is the layout candidate (n) needs: weigh (n) with
+      the result.
+   b. **Core change (o) (next `explore`, index 43, or `core-review`):** the open relay's lag, below.
 4. **"Feeding" the offspring (the goal's second half, user 2026-10-04, IDEAS):** the parent should pass its bud the
    building blocks it needs to grow and later replicate; today the bud takes them from the shared environment and
    the parent gives only a seed site and a strand. Design question for an `explore` after (m), together with the
@@ -97,19 +95,24 @@ the rule and the checks retired; the corner default, the census and three genera
 5. **Later: N generations as the organism's own check** (a lineage that runs until stopped once blocks circulate),
    then the backlog (scanner gate, membrane growth).
 
-**Rotation (autorun `projects/plywood/rotation.txt`):** unchanged: 37 harden, 38 build, 39 explore, 40 build, 41
-cleanup (prunes what the builds left in `budcycle`: the harness and doorway setup kept only for the pinned `budcycle`
-check, `BCLK`), 42 build, 43 explore, ... The reverse path (priority 3) lands on the first explore.
+**Rotation (autorun `projects/plywood/rotation.txt`):** unchanged: 40 build (priority 3a), 41 cleanup (prunes what
+the builds left in `budcycle`: the harness and doorway setup kept only for the pinned `budcycle` check, `BCLK`), 42
+build, 43 explore (priority 3b), 44 build, 45 explore, 46 review-intent, 47 core-review.
 
-**Core-change candidates (for the next `core-review` or `explore`).** (n) *Bud only after letting go* (run 1721): a seed site binds a
+**Core-change candidates (for the next `core-review` or `explore`).** (o) *The open relay hears "complete" too early
+after a new bond* (run 2051): a bonded triangle whose partners all had 0 or -1 in the previous pass hears 0, so a
+triangle joined by a partner that was free a pass ago (-1: not yet heard) can conclude "complete". Proposed: a triangle
+that would hear 0 while a bonded partner had -1 hears -1 (not yet heard). Locality: partners' previous values, as now.
+Effect: `&` releases wait one more pass in such cases; a -1 wave may cross silent bodies when a dock or root binds
+them (one pass each). Evidence: traced in `lysis` (root binds 4006, cell 1 binds 4007, released 4008); oracle `LYFIX=1`
+in `lysis` removes the detour. Before deciding: the check suite with `CHECK_SAVE` to see which worlds change. (m) *A
+reverse path*: first step done (lysis, run 2051). (n) *Bud only after letting go* (run 1721): a seed site binds a
 root only while its triangle hears no open signal (as `&` releases only then), so a bud still growing or waiting for
 its catch (its anchor emits open) cannot start its own bud. Locality: the triangle's own open signal, relayed. Layout
 it needs: the seed cell within `openRange` of the anchor (today 39 bonds apart, range 9: e.g. seed cell 1-5 beside the
 anchor on cell 6, wedges not yet tried). The oracle `BCGATE=1` shows the effect (every chain bud copies its strand
 after let-go) and the cost (slower; with a fixed pool, surplus buds still starve the next generation): worth it with
-(m), weigh together. (m) *A reverse path* (user, 2026-10-04;
-priority 3): blocks must be able to return to the mix, or every closed world runs out; first choice to weigh: a
-bond-cutting side or type. (e) and (i) done in run 0820. (f) *The seed
+(m), weigh together; with the anchor on cell 44 (priority 3a) the seed cell 45 is beside it. (e) and (i) done in run 0820. (f) *The seed
 site `y`* (plain glue, never spent) is copied by every blank that reaches it while no bud sits on it; keep. (j)
 *Monomer mix:* a copy uses 2 : 2 : 3 of a mix now made about 1 : 1 : 1, and a strand's middle faces are copied far less
 than its ends (IDEAS, run 0022); no design yet. (k) *No copy blank binds an `&` side*: not needed, closed wall sides
@@ -142,6 +145,10 @@ BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the linea
                                                    # about 30 minutes); 'letgo:' lines per bud, ownCopies in the result. Options: extra parts per
                                                    # type (8); BCB blanks, BCI inside, BCS world, BCR openRange (9), BCE E parts (0), BCF/BCFP the
                                                    # supply, BCL=q / BCLK=q free monomers / kit parts back to blanks (labelled loops), BCDBG=1 census
+node tri/demos.js lysis 1 1000000 runs/x           # run 2051: a bud stuck on its parent's seed site taken apart by cutters 'z@!-|-|' at its
+                                                   # waiting anchor (cell 44, openRange 50; check lysis, 2.5 minutes); a new bud grows from its
+                                                   # parts. LYC cutters (4), LYP parts per type (0), LYA anchor cell, LYR openRange, LYS world (30),
+                                                   # LYFIX=1 the oracle for candidate (o); one output folder per seed when running several
 BCGATE=1 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1721's oracle: a bud buds only after
                                                    # letting go (BCES=0 BCE=8: no E source, 8 E parts; BCES=2: E source outside); 'sinks', 'chain:' lines
 BCL=0.002 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1021's setup B (generation 3 in 4 of 4; the picture)

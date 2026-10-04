@@ -31,8 +31,10 @@ convention, not a rule).
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
 | `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). No copy blank binds an anchor side: an anchor is never a template. Otherwise an anchor side binds as its glue does (a free one too since run 20261004-0820; an inert one `-\|` binds nothing: a closed side) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle but an anchor side (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
+| `!` | lysis side (since 2026-10-04, run 2051): binds as its glue and other marks say; the triangle bonded to it is lysed (Lysis, below) |
 
-A type string with any other mark is rejected (the removed marks `< > * ~ $ + = % ' ^ ! #`).
+A type string with any other mark is rejected (the removed marks `< > * ~ $ + = % ' ^ #`; `!`, the casting lineage's drop, was
+removed on 2026-10-03 and is the lysis side since 2026-10-04).
 
 ## Physics (`tri/physics.js`): rigid parts, move or stop
 - Torus `W x H`. Blocks are rigid unit triangles; a **body** (blocks joined by bonds) moves and turns as one rigid
@@ -69,12 +71,17 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
 | `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
 | `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
+| `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`) | 10-04 (run 2051) |
 | busy (30, chain bonds) | relayed signal | all copying | 10-01 |
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
+| lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill, refractory | state | copying | 10-01 |
 | spent | state | `&` sides | 10-01 |
+
+**Counts (2026-10-04, run 2051):** 6 marks, 4 relayed signals, 4 exposed one-bond values, 3 states, no option (the
+lysis side and its signal added; Core changes).
 
 **Counts (2026-10-04, run 0820):** 5 marks, 3 relayed signals, 4 exposed one-bond values, 3 states, no option (was 1:
 `heldCopy` became the rule). Run 2121's removal and run 0022's narrowing below.
@@ -118,6 +125,7 @@ place (all or nothing; never by size).
 | fn | own fill; chain partners' fill | partner current state | local (convention) |
 | copy (`?`) | the one partner's whole type | fixed type | local (gated, Core changes) |
 | `&` release | own open signal, own `&` sides | own | local |
+| lysis, `_lyse` (run 2051) | own bonds and lysis; a bonded partner's side mark `!` and the two sides' `&` marks; partners' lysis | own; fixed type; previous pass | local (relay); writes own bonds (all at once, as a copy blank lets go) and own state |
 
 Note: `_pairs` (physics) never lists two free triangles, so no chain of catches through free triangles can form in one
 pass; the chemistry relies on this.
@@ -205,11 +213,77 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
   panel lets go of the wall and the gap cannot be refilled). An `&` side catches free triangles but never closes onto
   an attached one (also before it is spent). The release runs first in each step, before physics.
 
+## Lysis (lysis side `!`, 2026-10-04, run 2051)
+- A triangle bonded to a partner's lysis side `!` is **lysed**. Lysis is relayed one bond per pass (previous pass)
+  across every bond but one on which either side carries `&` (the joint between a bud and its parent stops it). A side
+  `!` binds as its glue and other marks say; no binding rule of its own.
+- A triangle lysed for a whole pass (its partners have heard it) cuts all its bonds. A lysed triangle that is then free
+  (by its own cuts or its partners') returns to a fresh state of its type: spent sides, fill and refractory cleared, and
+  it hears nothing (open -1). So a body comes apart whole, one bond further per pass, each part as the part it was made
+  as, each strand triangle as a monomer.
+- A lysed triangle binds nothing (no glue catch, dock, fill, copy, anchor catch or closure on it), so no freed part
+  rejoins a body that is coming apart.
+- Lysis runs first in the chemistry of each pass. Gate entry: Core changes, run 2051.
+
 ## Core changes
 
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
+
+### Rule: a lysis side `!` takes a body apart into its units, 2026-10-04, autorun run 20261004-2051 (explore)
+NEXT priority 3, candidate (m) (the user, 2026-10-04: "if only blanks [change], the simulation will just run out";
+IDEAS). The case, then the result.
+1. **Capability and why the goal needs it.** A reverse path: blocks locked in bodies return to the mix. Today nothing
+   comes apart: the only cuts are a copy's release, a copy blank letting go and completion release `&` (one bond, the
+   bud's root), so every closed world runs down (runs 0751, 1021, 1721: parts end in surplus and waiting buds, the pool's
+   fewest type falls to 0, the lineage stalls after 2-3 generations). An indefinite lineage under conservation needs
+   bodies that die and return their material; the user's first choice is a bond-cutting type (predation, scavenging).
+2. **Designs with the existing core, and why they fail.** No rule cuts a link bond between two grown triangles, so
+   none can free a body. Labelled drives that turn free typed triangles back into blanks (`BCL`, `BCLK`, run 1021) only
+   churn what is already free, and returning parts as blanks empties the rarely copied types (setup C: a part type is
+   remade only by copying an exposed attached copy of it), so the information in a body is lost with it. A drive that
+   cuts bonds at random breaks a one-row arc into two pieces whose ends are open fronts: each piece regrows (two more
+   sinks), strands fragment, and nothing tells the dead from the living. The user's other options were weighed: wider
+   molding and molding one side at a time change types but free nothing; reverting to blanks is the drive above. A body
+   taken apart whole returns exactly one of each of its parts: the reverse path that keeps every type.
+3. **The rule.** A new side mark `!` (lysis side). It binds as its glue and other marks say (no binding rule of its
+   own; who it can bind is chosen by glue, like everything else). A triangle bonded to a partner's `!` side is
+   **lysed**; lysis is relayed one bond per pass across every bond but one on an `&` side (either end: the joint
+   between a bud and its parent, the one kit bond made to come apart, so a bud's death does not reach its parent and a
+   parent's does not reach its attached bud); a triangle lysed for a whole pass (its partners have heard it) cuts all its
+   bonds and returns to a fresh state of its type (spent sides, fill and refractory cleared). The body comes apart
+   whole, one bond further per pass, before a fragment can regrow; each part leaves as the part it was made as (a
+   lysed root's spent seed side is fresh again), each strand triangle as a monomer. A lysed triangle binds nothing, so
+   no freed part rejoins the body behind the wave (added while building: designed from a race on paper, a freed cell
+   re-binding a lysed neighbour's open front in the pass before that neighbour cuts; not observed without it).
+4. **Locality.** Reads: its own bonds and lysis value; a bonded partner's fixed side mark (`!` on the bonded side), the
+   `&` marks of the bond's two sides (fixed types) and the partner's lysis value from the previous pass. Writes: its own
+   bonds (all of them at once, as a copy blank lets go of all of them) and its own state. No count, no body, no
+   organism: a lysed triangle does not know what it belongs to.
+5. **Generality and cost.** One mark and one relayed one-bit signal (6 marks, 4 signals); nothing else changes, and no
+   kept structure carries `!`, so every existing world runs as before (to be shown byte for byte). Copies take the
+   mark with the rest of the type. What a `!` side cuts is decided by its glue: the first user is a prepared cutter
+   part `z@!-|-|` (labelled starting condition, never copied: its other sides are closed), which binds only a waiting
+   anchor `Z@|` (a free part binds an attached `@` side of complementary glue), so it takes apart a bud waiting for its
+   catch (or growing past its anchor cell) and never an adult, whose anchor holds a strand. Biology: lysis by a
+   predator or a phage at a receptor.
+6. **What it replaces.** Nothing yet; if it carries the lineage, the labelled food loops (`BCL`, `BCLK`) become
+   unnecessary for bodies (monomers of lysed strands are monomers again) and candidate (n) (bud only after letting go)
+   may not be needed: a bud stuck waiting is taken apart instead of starving its line.
+7. **Result (built as the rule; test "lysis: a part with a lysis side bound to a waiting anchor takes the bud apart
+   into its parts, fresh; the parent behind its & joint stays whole"; demo and check `lysis`; INNOVATIONS run 2051).**
+   No kept world carries `!`: the 10 short checks with `CHECK_SAVE` at `ef27e51` and on this code, 31 worlds, byte for
+   byte the same (10 of 10 both times, 575 / 580 s); `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s). In `lysis` (a parent with a complete bud stuck on its
+   seed site, no food, 4 cutters, the anchor on cell 44): the stuck bud comes apart into its 47 parts in 4 of 4 worlds
+   (t = 4005-10498) and a later bud on the parent's seed site is built from 45-46 of them in 4 of 4 by 1M steps. Two
+   findings for the kind and the core: (a) a cutter at the waiting anchor also kills a growing bud once its anchor cell
+   is attached; on cell 6 (budcycle's kind) every regrowing bud died at 7 cells, on cell 44 only nearly complete or
+   waiting buds are exposed; (b) the open relay's one-pass lag (a triangle bonded to a partner that was free in the
+   previous pass hears 0, "complete") releases a fresh root that re-binds the seed site together with its next cell in
+   consecutive passes (traced: root binds 4006, cell 1 binds 4007, released 4008); the parts then grow a free arc off
+   the parent (seed 1: until it too was lysed at about 380k). An oracle that keeps such a triangle at -1 (`LYFIX=1`) removes the detour
+   (candidate (o) in NEXT; not changed in this run: one core change per run).
 
 ### Removal: run 0050's narrowing (a free triangle's anchor side binds nothing), 2026-10-04, autorun run 20261004-0820 (core-review)
 Candidate (i) of the direction check (run 0751). 1. **Why it existed.** Free copies of a waiting anchor (`W@|`, `W|`)
