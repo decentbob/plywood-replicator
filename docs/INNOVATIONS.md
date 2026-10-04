@@ -18,7 +18,7 @@ not statistics.
   faces the parent's pore across an open 60-degree wedge (geometry: every outer cell's pose computed; none overlaps).
   Why it can work: with `heldCopy` a leaked strand is sterile but catchable, so the bud need not take its strand
   through a doorway; it catches one of the parent's leaked copies from open space. Test "closure (budKit, seed site on
-  cell 45)" (signal logic: the bud holds until its catch and lets go in the parent's state).
+  cell 45)" (signal logic: the bud holds until its catch and lets go in the parent's state). Check suite 23 of 23 (2437 s; defaults unchanged).
 
   Same setup as run 0251's best (`BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1`, 600000 steps):
 

@@ -13,7 +13,7 @@ across an open wedge, so the pair is never sealed (run 0251's first failure). Re
 supply; INNOVATIONS, run 0621, table): **gen2 in 3 of 4 check worlds, 6 of 8 seeds; the doorway kind 3 of 8**; the
 parent makes 3-5 copies in every world (doorway 0-5); buds complete first and wait for their catch. New check
 `budcycle-free` (need 3); test "closure (budKit, seed site on cell 45)". Defaults unchanged (`budKit` default pose is
-byte for byte `budPose`). Picture `docs/pictures/budcycle_corner.png`. CHECKSUITE. Branch
+byte for byte `budPose`). Picture `docs/pictures/budcycle_corner.png`. Check suite 23 of 23 (2437 s). Branch
 `claude/autorun-20261004-0621`, merged by PR; no simulations running.
 
 **Exact next step** (the next `build`). (a) Make the corner the kind's default (`seedAt=45` and closed walls `-|` in
