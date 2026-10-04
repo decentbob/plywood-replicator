@@ -1,21 +1,28 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-0820, core-review). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-1021, build). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `882b7d4` for run 0751's, `8123a2d` for run 0621's).
+handoffs: NEXT.md in git, e.g. at `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
-**Handoff status (autorun run 20261004-0820, core-review).** Priority 1 below is done; the next run (index 36) is a
-`build`: priority 2. Done: (1) `heldCopy` is the rule (zip from a held high end only; the core has no option left);
-(2) run 0050's narrowing removed (candidate (i): a free triangle's anchor side now binds as its glue does; 35 of 35
-check worlds byte for byte the same without it); (3) 12 checks and the `budpore` demo retired, `copy`, `imprint g` and
-the `imprint p` cells moved onto held founders (`createWorld` founder option `hold`); suite 23 checks / 2849 s -> 11
-checks / 1349 s, all pass; the 20 worlds of the unaffected checks and the old `imprint-held` (now `imprint-pore`) byte
-for byte the same (RULES, Core changes; INNOVATIONS, run 0820). An independent review (deep-reviewer) confirmed the
-rule's locality and that only an anchor's catch holds a spare edge; its findings were fixed (hold cells copied by
-blanks, unchecked hold placement, wording on lost holds). No longer checked anywhere: a bud copying its caught strand
-after the split (was `budpore-held`/`-kind`): priority 2 brings it back on `budcycle`. Nothing is running. Branch
-`claude/autorun-20261004-0820`, merged by PR. Worktrees `/home/user/pw-base`, `/home/user/pw-i` were scratch (container
-only).
+**Handoff status (autorun run 20261004-1021, build).** Priority 2 below is done as far as the core allows; the next
+run (index 37) is a `harden`: priority 3. Done: (a) `budcycle`'s default is the corner bud (seed site 45, closed walls
+`-|`, no harness) on a slow supply (400 pre-food at 0.0003 per 100 steps, world 36); its old setup lives on only in the
+pinned check `budcycle` (byte for byte the same output, new result fields aside); the oracles `BCA`, `BCG` and the
+drives `BCW`, `BCWK`, `BCSTOP2` pruned (git `7c9bbac`); (b) a per-bud census (`letgo:` lines: generation, cells,
+completion, catch, stocks), generations (a bud of generation g or later complete, let go and holding a caught strand;
+`BCGEN=n` stops there), `ownCopies` (each let-go bud's copies after its let-go) and labelled loop drives `BCL`, `BCLK`;
+(c) **three generations in 4 of 4 worlds** with the monomer loop (setup B, now the default; without the loop 0 of 4,
+though buds split earlier and copy more: INNOVATIONS run 1021); the check
+`budcycle-3` (the defaults, B) passes 4 of 4 (generation 3 at 735900-1031000 steps; suite 11 of 11, about an hour) and replaces `budcycle-free`. The strict target (every bud of the chain
+let go and copied its own strand at least once after) holds in 2 of 4: in the other two one bud of the chain budded
+while still attached and never let go. **Not reached: a lineage that does not burn down.** Only blanks change type,
+so blanks end as kit parts (fronts and the E source), leaked strands and new bodies; a drive returning free kit parts
+empties the rarely copied types (setup C), and without a slow supply the parent stops copying (D). The user (2026-10-04,
+IDEAS) asks for rules under which replication can go on indefinitely, with blocks circulating back (decay or a
+mechanism; a bond-cutting type, predation and scavenging; wider molding; molding one side at a time): candidate (m)
+below. Nothing is running. Branch `claude/autorun-20261004-1021`, merged by PR. Scratch (container only): `runs/q.sh`
+(a queue of demo worlds, at most 4 at once) and the batch logs `runs/a`-`runs/d`, `runs/pic` (regenerate with the
+INNOVATIONS commands).
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
@@ -68,41 +75,41 @@ Eleven runs since the last direction check (run 1321): five `build` (1420, 1650,
 8. **Speed matters again for the lineage.** A `budcycle-free` world takes 10-20 minutes for two generations; three
    generations need about a million steps. One `harden` per twelve runs stays, aimed at `budcycle` worlds.
 
-**Priorities (in order; each a slice).**
-1. **Done (run 0820, core-review): `heldCopy` as the rule, and retire the checks of layouts the lineage left.**
-   Candidate (e) below: make `heldCopy` the rule (RULES gate), then for each check that runs without it decide
-   adapt (anchor on a high end) or retire. Proposed to retire, with their INNOVATIONS entries kept and ROADMAP rows
-   marked "retired (git `<commit>`)": `budpore` and `budpore-c` (doorway pairs, superseded by the corner bud),
-   `budpore-held` and `budpore-kind` (unless one tests a step `budcycle-free` does not: transfer through a doorway is
-   no longer used), `budpool-e` (the sealed pair's last cell: the corner bud's last site opens to the outside),
-   `budcycle-2` (the harness; `budcycle-free` is the two-generation check). Keep `budpool` (growth in isolation) and a
-   short one-generation `budcycle`. Also weigh candidate (i) (run 0050's narrowing, likely redundant) by a byte-for-byte
-   comparison. Target: the same capabilities on the kept checks, a smaller core, the suite about half as long.
-2. **`build`: a lineage that does not burn down.** (a) Make the corner the kind's default (`seedAt=45`, closed walls
-   `-|`, no harness in `budcycle`; keep `BCSEED=46` as the doorway comparison only if a check needs it); prune
-   `budcycle`'s one-off options (oracles `BCA`, `BCG`; results stay in INNOVATIONS). (b) A steady food loop: food
-   arriving for the whole run, not one stock (labelled drive; first try the existing pieces: a slow pre-food inflow
-   from material returning, `BCWK`-style decay of free kit parts and free monomers outside any body back to blanks, a
-   larger world). Measure per generation: the bud's own copies after the split, kit copies made against parts used,
-   the pool's fewest/mean/most per type, food fed. Target: **three generations without the harness in 3 of 4 worlds,
-   with each bud copying its own strand at least once after the split**. If the pool's mean holds but types empty
-   (drift), the next slice is fewer types or a front that copies what runs short; if the bud still does not copy with
-   food present, look at its geometry (founder's backs facing open space, pore direction) before any release-rule
-   change.
-3. **`harden` (index 37): speed of `budcycle` worlds** (profile a `budcycle-free` world; the suite's long checks are
-   all `budcycle`); and the margins left from run 1520 (`imprint` seed 6) if time remains.
-4. **`explore`: the release condition as "until it can live on its own"** (finding 4), only if priority 2 shows fed
-   buds that still fail to copy after letting go; otherwise candidate (j) (monomer mix) or fewer part types if the
-   pool drifts.
-5. **Later: N generations as the organism's own check** (a lineage that runs until stopped in a steady world, the
-   goal's check), then the backlog (scanner gate, membrane growth).
+**Priorities (in order; each a slice).** (Runs 0820 and 1021 did priorities 1 and 2 of run 0751's list: `heldCopy`
+the rule and the checks retired; the corner default, the census and three generations. Their text is in git at
+`7c9bbac`.)
+1. **`harden` (index 37): speed of `budcycle` worlds.** A three-generation world takes 25-35 minutes (1.8 ms per step
+   with four running; `budcycle-3` dominates the suite). Profile a default world (`node --cpu-prof tri/demos.js
+   budcycle 3 200000 runs/x` with `TRI_NOPIC=1`), make it faster without changing outputs (`CHECK_SAVE` before and
+   after, `diff -r`); then the margins left from run 1520 (`imprint` seed 6) if time remains.
+2. **`build` (index 38): where the blanks go, within the core.** In every setup kit copies take most blanks: each
+   waiting front copies its own type (100-170 per world), the parent's E source makes 30-70 E parts (one per bud is
+   used), leaked strands turn blanks into monomers. Measure first what each sink costs the genome (the parent's copies,
+   the buds' own copies after let-go) by the census, then try kit or layout changes only (no rule change): E parts in
+   the pool instead of the source, a different seed cell (other wedges, IDEAS run 0621), fewer part types (a periodic
+   ring, run 1321). Target: the chain's own copies after let-go in 3 of 4 worlds on the defaults.
+3. **`explore` (index 39): a reverse path, so blocks circulate (candidate (m), the user's request).** Today only
+   blanks change type and nothing comes apart, so every closed world runs out. Weigh the user's options (IDEAS,
+   2026-10-04): a bond-cutting side or type (local: it reads only the bond it touches; frees material locked in
+   bodies, which is where most of it ends; could grow into predation and scavenging), contact copying widened to
+   typed triangles, molding one side at a time (types move step by step in both directions, back toward a blank), or
+   plain decay (cheapest, but setup C shows it empties the rarely copied types unless something keeps every type
+   available). Make the case in RULES (Core changes) before code; first demonstration in isolation (a dead body taken
+   apart into blanks or parts that a growing bud then uses).
+4. **"Feeding" the offspring (the goal's second half, user 2026-10-04, IDEAS):** the parent should pass its bud the
+   building blocks it needs to grow and later replicate; today the bud takes them from the shared environment and
+   the parent gives only a seed site and a strand. Design question for an `explore` after (m), together with the
+   release condition "until it can live on its own" (Direction finding 4).
+5. **Later: N generations as the organism's own check** (a lineage that runs until stopped once blocks circulate),
+   then the backlog (scanner gate, membrane growth).
 
-**Rotation (autorun `projects/plywood/rotation.txt`):** lines 5 and 11 swapped (core-review and cleanup), so the next
-run (index 35) is the `core-review` of priority 1 and the `cleanup` comes at index 41, after the build has made the
-corner the default (it then prunes what the build left). The mix (5 build, 3 explore, 1 each of the rest) still fits:
-the open work is building (priority 2) with design questions behind it.
+**Rotation (autorun `projects/plywood/rotation.txt`):** unchanged: 37 harden, 38 build, 39 explore, 40 build, 41
+cleanup (prunes what the builds left in `budcycle`: the harness and doorway setup kept only for the pinned `budcycle`
+check, `BCLK`), 42 build, 43 explore, ... The reverse path (priority 3) lands on the first explore.
 
-**Core-change candidates (for the next `core-review` or `explore`).** (e) and (i) done in run 0820. (f) *The seed
+**Core-change candidates (for the next `core-review` or `explore`).** (m) *A reverse path* (user, 2026-10-04;
+priority 3): blocks must be able to return to the mix, or every closed world runs out; first choice to weigh: a
+bond-cutting side or type. (e) and (i) done in run 0820. (f) *The seed
 site `y`* (plain glue, never spent) is copied by every blank that reaches it while no bud sits on it; keep. (j)
 *Monomer mix:* a copy uses 2 : 2 : 3 of a mix now made about 1 : 1 : 1, and a strand's middle faces are copied far less
 than its ends (IDEAS, run 0022); no design yet. (k) *No copy blank binds an `&` side*: not needed, closed wall sides
@@ -124,24 +131,21 @@ nothing" would close it if one ever appears. Nothing else in the core is unused 
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~23 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~60 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;
                                                    # BPE: E parts, 40; BPB: blanks, 8; BPS: world size, 30; BPR: openRange, 1; BPHOLD=0: no harness)
 BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the same with E's pore side plain and no E part: the last cell from the source (check budpool-e retired, run 0820)
-node tri/demos.js budcycle 1 300000 runs           # one generation from the kit: the parent copies its held founder, grows its bud from the
-                                                   # pool, the bud catches a real copy, splits, completes (check budcycle; extra: parts per type, 8;
-                                                   # BCB blanks 200, BCI inside 20, BCS world 32, BCR openRange 9, BCE E parts 0, BCAFTER 50000,
-                                                   # BCHOLD=0 no harness, BCW waste-to-blank drive 0)
-BCAFTER=300000 node tri/demos.js budcycle 1 600000 runs   # the same run on: both seed sites start new buds ('later buds:' line)
-BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle 3 600000 runs/x   # no harness: closed walls and a
-                                                   # food supply (gen2 2 of 4; BCWK=q kit parts decay, BCA=1 oracle; BCDBG=1: pool and kit-copy census)
-BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle 1 600000 runs/x   # the bud off the
-                                                   # parent's corner (seed site on cell 45): no sealed pair; gen2 3 of 4 (check budcycle-free)
-BCDBG=1 node tri/demos.js budcycle 3 300000 runs   # with the genome monomer census: copies by source, by type, monomers bound (run 0022)
-BCG=1 BCDBG=1 node tri/demos.js budcycle 1 300000 runs   # the oracle for candidate (g): free strands not contact-copied (non-local)
-BCR=50 BCW=0.05 node tri/demos.js budcycle 1 300000 runs  # the designed order (complete, catch, split): the picture in INNOVATIONS
+BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the lineage (defaults: corner bud, closed walls, no harness,
+                                                   # 20 blanks + 400 pre-food at 0.0003, world 36): three generations (check budcycle-3;
+                                                   # about 30 minutes); 'letgo:' lines per bud, ownCopies in the result. Options: extra parts per
+                                                   # type (8); BCB blanks, BCI inside, BCS world, BCR openRange (9), BCE E parts (0), BCF/BCFP the
+                                                   # supply, BCL=q / BCLK=q free monomers / kit parts back to blanks (labelled loops), BCDBG=1 census
+BCL=0.002 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1021's setup B (generation 3 in 4 of 4; the picture)
+BCS=32 BCF=180 BCFP=0.001 BCAFTER=300000 BCGEN=2 node tri/demos.js budcycle 1 600000 runs/x   # runs 0621-0751's setup (check budcycle-free, retired)
+BCAFTER=2000 BCSEED=-1 BCK=0 BCHOLD=1 BCB=200 BCF=0 BCS=32 node tri/demos.js budcycle 1 300000 runs   # one generation, the doorway
+                                                   # kind with budpool's harness (check budcycle; BCR=50: the designed order, run 2221's picture)
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
 BPA=6 BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the kind's bud from the pool with the anchor Z@| on cell 6 (openRange 9)
 node tri/demos.js imprint 1 100000 runs 150px      # a cell fed through a pore copies its held genome from blanks outside; 3 sterile rivals (check imprint-pore; without x: alone; 150pc, 150pn: controls; 150pw: 7-cell pore) (150pc, 150pn: controls)

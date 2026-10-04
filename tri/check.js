@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 23 minutes;
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about an hour, budcycle-3 the longest;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Exit code 1 if a working capability fails.
@@ -35,13 +35,15 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]<=2&&+m[5]>+m[4],m?`${m[2]} inside, copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
   {id:'budpool',cap:'The closure kind\'s bud grows from a pool of its 47 part types (8 each, 40 of the last; 8 blanks), splits on a stand-in catch',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) refilled=\S+ copies=(\d+) .*stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`${m[1]}/47 cells, split ${m[3]}, ${m[4]} copies, ${m[5]} stray`:'no result'];}},
-  {id:'budcycle',cap:'One generation of the kind from its own kit: the parent copies its held founder, grows its bud from the pool; the bud catches a real copy, splits and is complete',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:300000,secs:600,env:{BCAFTER:'2000'},
+  {id:'budcycle',cap:'One generation of the kind from its own kit: the parent copies its held founder, grows its bud from the pool; the bud catches a real copy, splits and is complete',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:300000,secs:600,env:{BCAFTER:'2000',BCSEED:'-1',BCK:'0',BCHOLD:'1',BCB:'200',BCF:'0',BCS:'32',BCL:'0'},
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) catch=(\S+) early=(\d) catchCells=(\d+) split=(\S+) .*budCopies=(\d+) .*newRoots=(\S+) .*stray=(\d+)/);
       return [!!m&&m[2]!=='not'&&m[3]!=='not'&&m[6]!=='not'&&+m[9]===0,m?`split ${m[6]} (catch at ${m[5]} cells), complete ${m[2]}, bud copies ${m[7]}, new roots ${m[8]}, ${m[9]} stray`:'no result'];}},
-  // run 20261004-0621 (explore): the bud off the parent's corner (seed site on cell 45: the pair is never sealed), budpool's
-  // harness off; closed walls -| and a food supply (labelled environment drive: inert pre-food turning into blanks)
-  {id:'budcycle-free',cap:'Two generations without the pool harness: the bud grows off its parent\'s corner (closed walls, a food supply)',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:600000,secs:700,env:{BCSEED:'45',BCK:'1',BCB:'20',BCF:'180',BCFP:'0.001',BCHOLD:'0',BCAFTER:'300000',BCSTOP2:'1'},
-    pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) stray=(\d+)/);return [!!m&&m[2]!=='not'&&+m[3]===0,m?`first split ${m[1]}, second generation let go at ${m[2]}, ${m[3]} stray`:'no result'];}},
+  // run 20261004-1021 (build): three generations on a slow supply (labelled environment drive: 400 inert pre-food turning
+  // into copy blanks, the untyped building blocks, at 0.0003 per 100 steps; world 36) and a monomer loop (labelled: free genome monomers turn back into blanks, 0.002 per
+  // 100 steps; without it 0 of 4, run 1021); the bud grows off its parent's corner
+  // (closed walls, no harness). Replaces budcycle-free (two generations, 180 pre-food at 0.001, world 32; runs 0621-0751).
+  {id:'budcycle-3',cap:'Three generations from the kit on a slow supply: a bud of the bud\'s bud complete, let go and holding a caught strand',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:1200000,secs:2000,env:{BCAFTER:'900000',BCGEN:'3'},
+    pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) gen3=(\S+) ownCopies=(\S+) stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`first split ${m[1]}, generation 2 at ${m[2]}, 3 at ${m[3]}, own copies after let-go (generation:copies) ${m[4]}, ${m[5]} stray`:'no result'];}},
 ];
 
 function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'demos.js'),c.demo,String(seed),String(c.steps),path.join('runs','check')];if(c.extra)args.push(c.extra);

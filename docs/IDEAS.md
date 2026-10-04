@@ -8,6 +8,36 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Rules must let replication go on indefinitely: a way back to blanks (user, 2026-10-04)
+
+The user asked whether any block can be changed or only blanks: only blanks change (contact copying turns a blank
+into a copy of the part it touches); typed parts never turn back and bodies never come apart. "If only blanks then
+the simulation will just run out. Rules in the simulation should be set so it can continue replicating indefinitely
+(and probably reverse stuff)." Measured the same day (build run 20261004-1021, INNOVATIONS): in a closed world the
+blanks end as kit parts, leaked strands and new bodies, and the lineage stalls after 2-3 generations; a labelled
+drive returning unused monomers to blanks only churns, and one returning free kit parts empties the rarely copied
+types. So the core needs a reverse path (typed triangles back to blanks) that keeps every part type available, and a
+way for finished or dead bodies to come apart: a core change (explore or core-review run; NEXT, candidate (m)).
+
+The user's follow-up ideas (same day, "just ideas, not thought through"): whatever rule set the world settles on must
+have no limit that eventually stops replication, so blocks must circulate back into the mix, by decay or by a
+mechanism. (1) **A block type or mechanism that cuts other bodies' bonds** (very interesting to the user: it could
+evolve into predation and scavenging: something that takes apart dead or living bodies and returns their parts).
+(2) **Wider molding:** contact copying could act on typed triangles too, not only blanks. (3) **A way to revert
+blocks to blanks.** (4) **Molding one side at a time:** a copy changes one side per contact, so a triangle can move
+step by step to more or fewer side rules (types change gradually, in both directions, instead of a blank becoming a
+whole copy at once).
+
+## "Feeding" the offspring means giving it building blocks (user, 2026-10-04)
+
+The user, on the goal sentence "feeds it until it can live on its own": the intent is that the parent provides the
+offspring with all the usual building blocks it needs to grow and later replicate itself, not a new block type or an
+energy type (energy existed in the removed casting lineage). In this world the building blocks are the unit
+triangles themselves: copy blanks `-?-?-?` (untyped) and the parts and monomers made from them by contact copying.
+Records have called blanks "food"; read that as "building blocks". Today the bud takes its parts and blanks from the
+shared environment directly and the parent gives it only a seed site and a strand, so the goal's feeding step (the
+parent passing building blocks to its bud) is not built yet.
+
 ## A stock is not a metabolism (direction check, review-intent run 20261004-0751, 2026-10-04)
 
 Measured with the census in `budcycle-free` (INNOVATIONS, run 0751): the food stock is gone by the first split and
