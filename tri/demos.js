@@ -76,7 +76,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // 'w': a 7-cell pore (the closure kind's width: strands pass it)
     imprintCell(){const X=String(extra||''),pore=X.includes('p'),plain=X.includes('n'),closed=pore&&X.includes('c'),nb=parseInt(extra)||(pore?150:40),R=6,size=2*R+8,c=size/2;steps=steps||(pore?100000:40000);
       let ring=S.ringKit(R,'z').tris.map(t=>({v:t.v,type:'---'}));const mid=(v,i)=>[(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2];
-      if(pore){const ang=t=>{const m=[0,1,2].map(i=>t.v[i]).reduce((a,p)=>[a[0]+p[0]/3,a[1]+p[1]/3],[0,0]);return Math.abs(Math.atan2(m[1],m[0])-Math.PI/2);};
+      let best=null;if(pore){const ang=t=>{const m=[0,1,2].map(i=>t.v[i]).reduce((a,p)=>[a[0]+p[0]/3,a[1]+p[1]/3],[0,0]);return Math.abs(Math.atan2(m[1],m[0])-Math.PI/2);};
         ring.sort((a,b)=>ang(a)-ang(b));if(!closed)ring=ring.slice(X.includes('w')?7:3);
         // the anchor: the inner side nearest x = -1 on the flat wall opposite the pore (at a corner the anchored strand
         // would lie along the next wall, its backs hidden, and no fill could be copied). A caught strand leans 60 degrees
@@ -84,7 +84,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // cells and a founder caught before any back was copied stalled for 50000-90000 steps (no fills); at x = -1 they
         // are 1.53 and 2.31 (run 20261003-1520)
         // with 'z' (a high end caught: the strand leans the other way) the mirror place x = +1; IMPX: another x (dry runs)
-        const ax=process.env.IMPX!==undefined?+process.env.IMPX:X.includes('z')?1:-1;let best=null;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]-ax);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
+        const ax=process.env.IMPX!==undefined?+process.env.IMPX:X.includes('z')?1:-1;for(const t of ring)for(let i=0;i<3;i++){const m=mid(t.v,i),d=Math.abs(m[0]-ax);if(m[1]<0&&S.hexr(m)<R-0.5&&(!best||d<best.d))best={t,i,d};}
         best.t.type=[0,1,2].map(i=>i===best.i?(X.includes('z')?'Z@|':'W|'):'-').join('');}
       // 'h' (with p, a hooded pore): a hood over the pore (prepared, labelled): a strip one row thick two rows above the
       // wall, from x = -2 to the top wall's corner, held by a strut of 4 cells at its left end. Blanks reach the pore along
@@ -98,6 +98,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const NX=pore&&X.includes('x')?3:0,rivals=[[1,1],[1,c],[c,1]].slice(0,NX).map(([x,y])=>({gaps:[1,1,1],faces:'aAaA',x,y}));
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:pore?c-1:c,y:c},...rivals],structures:[{tris:ring,x:c,y:c}],supply:{'-?-?-?':nb},params:{heldCopy:X.includes('o'),...(X.includes('z')?{openRange:1}:{})}});
       const U=structures[0],F=founders[0];for(const G of founders)seedCopyGenome(s,G);if(!plain)spendableSides(s,U);for(let k=0;k<40;k++)s.derive();
+      // 'z': the founder starts held by its high end on the anchor (placed where the anchor puts a strand; labelled, as in
+      // budcycle). Until run 20261004-0022 it started free beside the anchor and had to be caught before it left through
+      // the pore: with a 7-cell pore ('w') 1 of 8 seeds lost it that way, 3 of 8 after the strand-end glue narrowing
+      if(X.includes('z')){const {GLUE,gcode:gc}=require('./sim'),ak=U[ring.indexOf(best.t)],b=F.find(u=>{const q=s.roles(u);return q.inert>=0&&s.glue[u*3+q.inert]===gc('z');}),md=s.moveDepth;
+        s.moveDepth=()=>0;const ok=s._snapBody(b,s.roles(b).inert,ak,best.i);s.moveDepth=md;if(!ok)throw Error('imprint: founder not placed');s.bind(ak,best.i,GLUE,b,s.roles(b).inert,GLUE);for(let k=0;k<40;k++)s.derive();}
       const prep=new Set([...U,...founders.flat()]),placed=[...prep];for(let u=0;u<s.n;u++){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=(2*s.rng()-1)*(pore?c:R),y=(2*s.rng()-1)*(pore?c:R),h=S.hexr([x,y]);if(pore?h>R+0.6:h<R-1.6)return [c+x,c+y];}},50000))throw Error('place');placed.push(u);}
       const wallT=new Set(U.map(u=>canon(typeName(s,u)))),strands=()=>census(s).filter(q=>q.n>=7&&!q.paired);
       // inside the ring: a strand's centre within the inner wall's distance from the ring's centre (unwrapped along bonds)
