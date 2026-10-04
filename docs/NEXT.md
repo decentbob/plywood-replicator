@@ -15,6 +15,13 @@ with a complete bud that never catches stuck on its seed site, no free parts, no
 comes apart into its 47 parts, the parent's seed site frees, and a new bud grows from the returned parts, in 3 of 4
 worlds; all existing check worlds byte for byte the same (nothing carries `!`). Stop: the demo and its record; then,
 if time, `budcycle` with cutters (one batch) to see what it does to the lineage.
+Progress (22:00 UTC): the rule is in `tri/sim.js` (`_lyse`, `ly`, mark `!`; a lysed triangle binds nothing), test
+"lysis: ..." passes (34 tests), demo `lysis` runs (`TRI_NOPIC=1 node tri/demos.js lysis 1 400000 runs/x`; LYC cutters
+4, LYP parts per type 0, LYS world 30). Seed 1: the stuck bud is found and apart by t = 7012; its root re-binds the
+seed site at once with the in-place parts, and the root then lets go by a spurious completion (the open relay's
+one-pass lag: a part bound in the pass after the root reads 0 from partners not yet heard), leaving a 4-cell
+fragment with a spent root. Running: the 10 short checks on the new code (`runs/check_new.txt`, CHECK_SAVE `runs/b`;
+the baseline at main in the worktree `/home/user/pw-base`, `runs/a`: 10 of 10, 575 s).
 
 **Handoff status (autorun run 20261004-1721, build).** Priority 2 below is done as a finding (INNOVATIONS run 1721);
 the next run (index 39) is an `explore`: priority 3, the reverse path. No rule change; the defaults unchanged
