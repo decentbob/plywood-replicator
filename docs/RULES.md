@@ -206,6 +206,32 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Rule: only a strand held by its high end is copied (`heldCopy` becomes the rule), 2026-10-04, autorun run 20261004-0820 (core-review)
+1. **Capability and why the goal needs it.** None new: the kind's cycle already runs on it. `budcycle` and
+   `budcycle-free` (one and two generations from the kit, runs 2221 and 0621) and the held-founder cells (`imprint
+   150pzox`, run 1720) set the option; leaked strands are then sterile, which is what dissolved the kind's opening
+   problem (run 1720) and lets the corner bud grow with no doorway (run 0621). As an option it is a fork: two zip
+   rules, six checks and every unit test of copying on the other branch, and every new layout has to choose (NEXT,
+   direction check run 0751, finding 2 and candidate (e)).
+2. **Designs with the existing core, and why they fail.** Keeping the option keeps two rules for one job. Keeping the
+   old default (every strand is copied wherever it lies) is what made leaks feed rivals: three rival strands outside an
+   `imprint p` cell left it 1-3 strands (runs 0320, 1720), and a bud on the old rule copied its caught strand 0-1 times
+   after the split in every run before 1720.
+3. **Locality.** Smaller than before: zip's origin reads the high end's own bond on its spare edge (own state) and no
+   option. Since run 20261004-0022 only an anchor's catch binds a strand end's spare edge, so "held" means "held by an
+   anchor" without reading the partner.
+4. **Generality.** Every strand, every world: a free strand, a strand held by its low end and a partial copy left on a
+   strand that lost its hold take no new dock; any anchor that catches a high end makes that strand a template.
+   Contact copying of a strand's free sides is unchanged (a free strand's triangles are still copied). Biology: a
+   chromosome is replicated where its origin is attached to the membrane.
+5. **What it replaces.** The option `heldCopy` and the old default branch (zip from every free high end): the core
+   has no option left. Checks that relied on free strands being copied adapt (the founder starts held by its high end
+   on a prepared anchor, labelled: `copy`, the `imprint p` cells, the unit tests of copying) or retire with the layouts
+   the lineage has left (NEXT priority 1: the doorway pairs `budpore*`, the sealed pair's last cell `budpool-e`, the
+   harness's two generations `budcycle-2`, and the `imprint` variants the held cell supersedes); each retired check's
+   INNOVATIONS entry stays and its ROADMAP row says "retired".
+6. **Result.** (In progress, this run.)
+
 ### Narrowing: only grown triangles bind by glue; a strand end binds only by an anchor's catch, 2026-10-04, autorun run 20261004-0022 (explore)
 1. **Capability and why the goal needs it.** A cell must turn its food into the genome monomers it uses. In `budcycle`
    (the kind's cycle, run 2221) the 200 blanks are gone by t = 75000 and the buds that split late copy their strand
