@@ -18,7 +18,15 @@ the complete bud never catches; `lb` (seed 1, 1 cutter, which never binds): gene
 `lc` (seed 1, 2 cutters, pictures): 3 waiting buds lysed at 46-47 cells, generation 3 at 995600, pool min 0; `ld`
 (seed 2, 2 cutters): 7 lysed at 47 cells, generation 4 at 1174500 (via roots released at one cell), pool min 5,
 mean 12. falseRel (roots released at 1-12 cells, the relay lag (o)) 4, 11, 10: they grow into free rings.
-Batch 2 running: `runs/le` (2 cutters, seed 3), `lf` (2, seed 4, pictures), `lg` (0, seed 2), `lh` (0, seed 3).
+Batch 2: `runs/le` (2 cutters, seed 3): 5 lysed (45-47 cells), generation 2 at 886400, pool min 1; `lf` (2, seed 4,
+pictures): no cutter binds, generation 2 at 628800, pool min 0; `lg`, `lh` (0 cutters, seeds 2, 3): the same jam as
+`la` (3 docks, 2 fills, 2 releases within the first 3000 steps, then nothing; complete bud never catches).
+The jam (traced, `runs/jam.js` on a saved state): with the anchor on cell 44 the held founder hangs in the parent's
+pore (cell 44 is 2.65 from the pore's middle); a copy docked on its face 2 waits for a fill `-W-` that cannot enter.
+The default (anchor 6, range 9) also starts jammed (seed 1: 4 docks, 1 fill by t = 3000, unchanged at 30000) yet
+reaches generation 3: there the jam clears later. Anchor 40 and 38 (range 50) jam in the first 60k steps too.
+Batch 3 running (BCA=40, 6 cells from E as cell 6 is from the root): `runs/lm` (0 cutters, seed 1), `ln`, `lo`, `lp`
+(2 cutters, seeds 1-3).
 
 **Handoff status (autorun run 20261004-2051, explore).** Priority 3 below is done in isolation: the core has a reverse
 path, the lysis side `!` (RULES, Core changes and "Lysis"; INNOVATIONS run 2051; IDEAS). A triangle bonded to a
