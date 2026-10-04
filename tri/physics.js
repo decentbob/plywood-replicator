@@ -48,6 +48,18 @@ function eqDepth(ao,bo,dx,dy){let best=Infinity;const sk=SKIN.v;
 const BO=new Float64Array(6);
 function eqDepthOf(ao,ox,oy,v,dx,dy){for(let e=0;e<3;e++){BO[2*e]=ox[v*3+e];BO[2*e+1]=oy[v*3+e];}return eqDepth(ao,BO,dx,dy);}
 const TA=new Float64Array(6),TB=new Float64Array(6);
+// eqDepth for block A (corner offsets ao, its edge normals an from normals()) against block v read from the corner
+// arrays: the same operations, without copying v's corners or recomputing A's normals per pair
+function normals(ao,an){for(let k=0;k<3;k++){const o=2*((k+2)%3);an[2*k]=-ao[o]*S3;an[2*k+1]=-ao[o+1]*S3;}}
+function eqDepthN(ao,an,ox,oy,v,dx,dy){let best=Infinity;const sk=SKIN.v,b=v*3,x0=dx+ox[b],y0=dy+oy[b],x1=dx+ox[b+1],y1=dy+oy[b+1],x2=dx+ox[b+2],y2=dy+oy[b+2];
+  for(let k=0;k<6;k+=2){const nx=an[k],ny=an[k+1];let p=x0*nx+y0*ny,bmin=p,bmax=p;p=x1*nx+y1*ny;if(p<bmin)bmin=p;if(p>bmax)bmax=p;p=x2*nx+y2*ny;if(p<bmin)bmin=p;if(p>bmax)bmax=p;
+    const d=Math.min(RI-bmin,bmax+RO);if(d<=sk)return 0;if(d<best)best=d;}
+  for(let k=0;k<3;k++){const w=b+(k+2)%3,nx=-ox[w]*S3,ny=-oy[w]*S3,c=dx*nx+dy*ny;
+    let p=ao[0]*nx+ao[1]*ny,amin=p,amax=p;p=ao[2]*nx+ao[3]*ny;if(p<amin)amin=p;if(p>amax)amax=p;p=ao[4]*nx+ao[5]*ny;if(p<amin)amin=p;if(p>amax)amax=p;
+    const d=Math.min(amax-(c-RO),(c+RI)-amin);if(d<=sk)return 0;if(d<best)best=d;}
+  return best;}
+const TN=new Float64Array(6);
+
 // torus wrap ((x % W) + W) % W and minimum image d - W * round(d / W), bit for bit, without a float modulo or division
 // in the usual case (V8 computes a float % by a slow library call; positions are almost always inside [0, W))
 function wrapc(x,W){const m=(x>=0&&x<W)||(x>-W&&x<0)?x:x%W,s=m+W;return s<W?s:s<2*W?s-W:s-2*W;}
@@ -158,35 +170,57 @@ class Physics{
     for(let q=0;q<k;q++){const u=list[q];this._mark[u]=st;rx[q]-=px0;ry[q]-=py0;}
     return this._overlap(list,rx,ry,cx,cy,tx,ty,da,st,true);}
   // a lone block's two trials (move, then turn about its centre), with tryMove's rules (direct move, sub-steps,
-  // bisection, overlap-reducing moves) but against its neighbours gathered once (most cost is blocked trials)
-  _single(u,tx,ty,da){const {px,py}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.hypot(tx,ty);
-    SKIN.v=Math.max(TOUCH,p.skin);const r=2*R3+tl+1e-6,R2=r*r,nb=this._nb||(this._nb=[]);nb.length=0;
-    // grid cells within reach r of the start (a block near its cell's edge reaches past the 3 x 3 cells around it)
-    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,cnt=this._gcnt,cap=this._cap,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/ch),(gy-1)>>1);
-    // a cell whose nearest point lies r or more from the start holds no neighbour: skipped (only where the cells
-    // scanned span less than half the torus, so direct offsets are minimum images; the start's place in its cell)
+  // bisection, overlap-reducing moves) but against its neighbours gathered once (most cost is blocked trials): every
+  // block whose centre comes within two circumradii of a centre tried lies within that reach of the move's segment
+  // (the capsule); the depth sums of an overlap-reducing move (rare) use the blocks within reach of the start in grid
+  // order (_nbDisk), so outputs are bit for bit those of the gathering before 2026-10-04 (run 20261004-1421)
+  _single(u,tx,ty,da){const {px,py}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,x0=px[u],y0=py[u],tl=Math.sqrt(tx*tx+ty*ty);
+    SKIN.v=Math.max(TOUCH,p.skin);if(!this._nb||this._nb.length<this.n)this._nb=new Int32Array(this.n);const nb=this._nb;let nn=0;
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,cnt=this._gcnt,cap=this._cap,all=this._all,c0=this._cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
+    this._s0u=u;this._s0x=x0;this._s0y=y0;this._s0c=c0;this._s0t=tl;this._s0ok=false;
+    // the capsule: centres within rc of the segment from the start to start + (tx, ty) (rc: two circumradii and a margin)
+    const rc=2*R3+1e-6,rc2=rc*rc,t2=tx*tx+ty*ty,it2=t2>0?1/t2:0,xa=Math.min(0,tx)-rc,xb=Math.max(0,tx)+rc,ya=Math.min(0,ty)-rc,yb=Math.max(0,ty)+rc;
+    const ka=Math.min(Math.ceil((tl+rc)/cw),(gx-1)>>1),kb=Math.min(Math.ceil((tl+rc)/ch),(gy-1)>>1);
+    // only the cells that meet the capsule's box are scanned (where the cells scanned span less than half the torus, so
+    // direct offsets are minimum images, and the start lies in its cell)
+    const fx=x0-cx*cw,fy=y0-cy*ch,cut=!all&&gx>=2*ka+4&&gy>=2*kb+4&&fx>=0&&fx<=cw&&fy>=0&&fy<=ch;
+    const a0=cut?Math.max(-ka,Math.floor((fx+xa)/cw-1e-9)):-ka,a1=cut?Math.min(ka,Math.floor((fx+xb)/cw+1e-9)):ka,b0=cut?Math.max(-kb,Math.floor((fy+ya)/ch-1e-9)):-kb,b1=cut?Math.min(kb,Math.floor((fy+yb)/ch+1e-9)):kb;
+    for(let b=b0;b<=b1;b++){let row=cy+b;row=(row<0?row+gy:row>=gy?row-gy:row)*gx;
+      for(let a=a0;a<=a1;a++){if(all&&(a||b))continue;let col=cx+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;const o=(row+col)*cap,m=all?this.n:cnt[row+col];
+        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
+          if(dx<xa||dx>xb||dy<ya||dy>yb)continue;let g=(dx*tx+dy*ty)*it2;if(g<0)g=0;else if(g>1)g=1;const ex=dx-g*tx,ey=dy-g*ty;if(ex*ex+ey*ey<rc2)nb[nn++]=v;}}}
+    this._nn=nn;
+    let f=this._strial(u,x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
+    f=this._strial(u,px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
+  // the blocks within reach 2 circumradii + |move| of the current lone block's start, in grid order (the neighbour list
+  // of the gathering before run 20261004-1421: the order of its depth sums); built once per lone block, when needed
+  _nbDisk(){if(!this._nbd||this._nbd.length<this.n)this._nbd=new Int32Array(this.n);const nd=this._nbd;if(this._s0ok)return nd;this._s0ok=true;let nn=0;
+    const {px,py}=this,p=this.p,W=p.W,Hh=p.H,hw=W/2,hh=Hh/2,u=this._s0u,x0=this._s0x,y0=this._s0y,tl=this._s0t,r=2*R3+tl+1e-6,R2=r*r;
+    const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,cnt=this._gcnt,cap=this._cap,all=this._all,c0=this._s0c,cx=c0%gx,cy=(c0/gx)|0,ka=Math.min(Math.ceil(r/cw),(gx-1)>>1),kb=Math.min(Math.ceil(r/ch),(gy-1)>>1);
     const fx=x0-cx*cw,fy=y0-cy*ch,cut=!all&&gx>=2*ka+4&&gy>=2*kb+4&&fx>=0&&fx<=cw&&fy>=0&&fy<=ch,R2c=R2+1e-9;
     for(let b=-kb;b<=kb;b++){const gb=b>0?b*ch-fy:b<0?fy-(b+1)*ch:0,gb2=gb>0?gb*gb:0;if(cut&&gb2>=R2c)continue;let row=cy+b;row=(row<0?row+gy:row>=gy?row-gy:row)*gx;
       for(let a=-ka;a<=ka;a++){if(all&&(a||b))continue;if(cut){const ga=a>0?a*cw-fx:a<0?fx-(a+1)*cw:0;if(ga>0&&ga*ga+gb2>=R2c)continue;}
         let col=cx+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;const o=(row+col)*cap,m=all?this.n:cnt[row+col];
-        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nb.push(v);}}}
-    let f=this._strial(u,x0,y0,tx,ty,0);if(f>0){px[u]=this._wx(x0+f*tx);py[u]=this._wy(y0+f*ty);this._regrid(u);}
-    f=this._strial(u,px[u],py[u],0,0,da);if(f>0){this.pa[u]+=f*da;this.resetShape(u);}}
-  // depth of lone block u at centre (x, y) turned by angle t from its current shape, against its gathered neighbours;
+        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u)continue;let dx=px[v]-x0,dy=py[v]-y0;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<R2)nd[nn++]=v;}}}
+    this._ndn=nn;return nd;}
+  // depth of lone block u at centre (x, y) turned by angle t from its current shape, against the blocks of nb;
   // early: true at the first overlap
-  _sdepth(u,x,y,t,early){const {px,py,ox,oy}=this,nb=this._nb,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2,c=Math.cos(t),s=Math.sin(t);let built=false,sum=0;
-    for(let k=0;k<nb.length;k++){const v=nb[k];let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
+  _sdepth(u,x,y,t,early,nb=this._nb,nn=this._nn){const {px,py,ox,oy}=this,W=this.p.W,Hh=this.p.H,hw=W/2,hh=Hh/2;let built=false,sum=0;
+    for(let k=0;k<nn;k++){const v=nb[k];let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;
       const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;if(early&&d2<IN2)return 1;
-      if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
-      const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}
+      if(!built){const c=t===0?1:Math.cos(t),s=t===0?0:Math.sin(t);for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}normals(TA,TN);built=true;}
+      const dd=eqDepthN(TA,TN,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}
     return sum;}
   // one trial of lone block u from (xs, ys): translation (mx, my) or turn t (as tryMove: the fraction f of the move that is free)
-  _strial(u,xs,ys,mx,my,t){const p=this.p,dist=Math.max(Math.hypot(mx,my),R3*Math.abs(t));
+  _strial(u,xs,ys,mx,my,t){const p=this.p;let h=Math.sqrt(mx*mx+my*my);
+    // Math.hypot (slow in V8) only where its last bit could change a comparison below: within 1e-9 of `direct` or of a sub-step multiple
+    if(h>0){const q=h/p.subStep;if(Math.abs(q-Math.round(q))<1e-9||Math.abs(h-p.direct)<1e-9)h=Math.hypot(mx,my);}
+    const dist=Math.max(h,R3*Math.abs(t));
     const tried=dist<=p.direct;let f=0;if(tried&&this._sdepth(u,xs+mx,ys+my,t,true)===0&&(dist<=p.subStep||this._sdepth(u,xs+0.5*mx,ys+0.5*my,0.5*t,true)===0))return 1;
     const nsub=Math.max(1,Math.ceil(dist/p.subStep));let blocked=-1;
     for(let q=1;q<=nsub;q++){const g=q/nsub;if((g===1&&tried)||this._sdepth(u,xs+g*mx,ys+g*my,g*t,true)>0){blocked=g;break;}f=g;}
     if(blocked>0)for(let b=0;b<p.bisect;b++){const g=(f+blocked)/2;if(this._sdepth(u,xs+g*mx,ys+g*my,g*t,true)>0)blocked=g;else f=g;}
-    if(f===0&&tried&&this._sdepth(u,xs,ys,0,true)>0){const d0=this._sdepth(u,xs,ys,0,false);if(d0>0&&this._sdepth(u,xs+mx,ys+my,t,false)<d0-EPS)f=1;}
+    if(f===0&&tried&&this._sdepth(u,xs,ys,0,true)>0){const nd=this._nbDisk(),d0=this._sdepth(u,xs,ys,0,false,nd,this._ndn);if(d0>0&&this._sdepth(u,xs+mx,ys+my,t,false,nd,this._ndn)<d0-EPS)f=1;}
     return f;}
   // ---- motion: every body proposes a Brownian kick (a body: the mean of its blocks' kicks, turned by their torque)
   _jostle(){const p=this.p,{px,py}=this,w=1/AREA,wr=1/INERTIA,sw=Math.sqrt(w),spin=p.sigmaRot*w,n=this.n;

@@ -143,6 +143,16 @@ test('physics: a lone block sees blocks beyond the 3 x 3 grid cells around it (l
   // before A (its neighbour search once covered only cells 0..2)
   const s=new TriSim({W:14,H:14,seed:1,sigma:0,sigmaRot:0},2),tri=(x,y)=>[[x-0.5,y-H/3],[x+0.5,y-H/3],[x,y+2*H/3]];placeTri(s,0,tri(4.3,7));placeTri(s,1,tri(1.45,7));
   s.gridSync();s._single(1,2.2,0,0);assert.ok(s.moveDepth([1],0,0,0,s.px[1],s.py[1])===0,`B overlaps A (B at x=${s.px[1].toFixed(2)})`);assert.ok(s.px[1]<3.4,'B stopped before A');});
+// run 20261004-1421 (harden): a lone block's neighbours are gathered along its move (the capsule), not in a disk of
+// reach 2 circumradii + |move| around its start; every overlap test must give the same answer, and the depth sums of an
+// overlap-reducing move must add the disk's blocks in grid order, so the moves are bit for bit those of the disk
+test('physics: lone-block moves with the capsule neighbour list equal those with the disk list (crowded, overlaps)',()=>{
+  const mk=()=>{const {s}=createWorld({seed:5,size:12,supply:{'---':110}});for(let k=0;k<12;k++){s.px[k]=s.px[k+12]+0.3;s.py[k]=s.py[k+12]+0.2;}s.gridSync();return s;};
+  const a=mk(),b=mk(),sd=b._sdepth;let reduce=0;
+  b._sdepth=function(u,x,y,t,early){const nd=this._nbDisk();return sd.call(this,u,x,y,t,early,nd,this._ndn);};   // every test against the disk list
+  const nbd=a._nbDisk;a._nbDisk=function(){reduce++;return nbd.call(this);};
+  for(let t=0;t<150;t++){a.physics();b.physics();}
+  for(const k of ['px','py','pa'])assert.deepEqual(a[k],b[k],k+' differ');assert.ok(reduce>0,'no overlap-reducing move was tried');});
 test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)',()=>{
   const {triDepth}=require('./physics');
   const {s}=createWorld({seed:4,size:12,founders:[{gaps:[1,0,2],faces:'abab',hold:'z'}],supply:{'A--':10,'B--':10,'a--':10,'b--':10,'---':20}});s.run(600);
