@@ -18,7 +18,13 @@ catch (no food for a strand copy). Decay returns food, but the kit copies take i
 Census of kit copies by template (`BCDBG=1`, new line `kit copies by template`, `runs/c_N.log`, 150000 steps): about
 90% come from the first bud's cells 0-9, on their `-&` wall sides while they hear the open signal (the front, and from
 cell 6 on the waiting anchor, keep cells 0-15 open), the rest from the parent's E source. Running: oracle `BCA=1` (no
-copy blank binds an `&` side; candidate (k)), logs `runs/a_N.log`.
+copy blank binds an `&` side; candidate (k)), logs `runs/a_N.log`: gen2 1 of 4, kit copies unchanged (~150; they move
+to the `@` fronts): with a stock, copies per used part go as blanks / parts near the front (run 1221's law), whichever
+sides are copyable. Supply drive (new `BCF=180 BCFP=0.0005`: 180 inert `---` outside turn into blanks over the run,
+labelled; `BCB=20`, all inside; `runs/f5_N.log`): gen2 0 of 4; kit copies still ~160 of ~190 blanks, the parent makes 1-2
+strand copies. Supply + `BCA=1` (`runs/fa_N.log`): gen2 2 of 4 (seeds 2, 3), kit copies 66-141; seeds 1 and 4 sealed
+(bud complete, pores face each other) before any catch with no blank inside. Running: supply with 30 blanks inside
+(`BCB=30 BCI=30`), logs `runs/fi_N.log`.
 
 **Handoff status (autorun run 20261004-0022, explore).** Slice done: run 2221's "food after the split" diagnosed, and
 one core change. Branch `claude/autorun-20261004-0022`, merged into `main` by PR; no simulations running. (1) **Core
