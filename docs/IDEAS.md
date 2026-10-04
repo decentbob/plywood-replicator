@@ -19,6 +19,15 @@ drive returning unused monomers to blanks only churns, and one returning free ki
 types. So the core needs a reverse path (typed triangles back to blanks) that keeps every part type available, and a
 way for finished or dead bodies to come apart: a core change (explore or core-review run; NEXT, candidate (m)).
 
+The user's follow-up ideas (same day, "just ideas, not thought through"): whatever rule set the world settles on must
+have no limit that eventually stops replication, so blocks must circulate back into the mix, by decay or by a
+mechanism. (1) **A block type or mechanism that cuts other bodies' bonds** (very interesting to the user: it could
+evolve into predation and scavenging: something that takes apart dead or living bodies and returns their parts).
+(2) **Wider molding:** contact copying could act on typed triangles too, not only blanks. (3) **A way to revert
+blocks to blanks.** (4) **Molding one side at a time:** a copy changes one side per contact, so a triangle can move
+step by step to more or fewer side rules (types change gradually, in both directions, instead of a blank becoming a
+whole copy at once).
+
 ## "Feeding" the offspring means giving it building blocks (user, 2026-10-04)
 
 The user, on the goal sentence "feeds it until it can live on its own": the intent is that the parent provides the
