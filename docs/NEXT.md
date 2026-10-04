@@ -4,6 +4,11 @@ State on 2026-10-04 (after autorun run 20261004-1021, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
+**Current slice (autorun run 20261004-1421, harden; in progress).** Goal: `budcycle` worlds faster with outputs byte
+for byte the same (priority 1 below). Check: `node tri/check.js` passes as before; `CHECK_SAVE` outputs before (worktree
+at `ef7e74a`) and after identical (`diff -r`); a default `budcycle` world's step time measurably lower. Stop when the
+profile shows no single hot spot worth more than ~10%, or after about four hours.
+
 **Handoff status (autorun run 20261004-1021, build).** Priority 2 below is done as far as the core allows; the next
 run (index 37) is a `harden`: priority 3. Done: (a) `budcycle`'s default is the corner bud (seed site 45, closed walls
 `-|`, no harness) on a slow supply (400 pre-food at 0.0003 per 100 steps, world 36); its old setup lives on only in the
