@@ -17,7 +17,7 @@ core change: `budKit(..., wall='-|')` (the anchor mark with no glue: nothing bin
 with no food inside, so the parent never copies and nothing is ever caught; or the supply runs out before the second
 bud has a copy to catch. New demo options (`budcycle`): `BCWK` (decay), `BCF`/`BCFP` (supply: inert `---` pre-food
 turning into blanks), `BCK` (closed walls), `BCA` (oracle); census lines (pool per type, `kit copies by template`).
-Picture `docs/pictures/budcycle_free.png`. Check suite: see the PR (run at the end of this run).
+Picture `docs/pictures/budcycle_free.png`. Check suite 22 of 22 (2076 s; defaults unchanged).
 
 **Exact next step** (the next `build`). Target unchanged: `budcycle-2` in 3 of 4 with the harness off; start from
 `BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle N 600000 runs/x` (2 of
