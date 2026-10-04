@@ -189,27 +189,29 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log(`waits per cell: median ${w[w.length>>1]||0}, max ${w[w.length-1]||0}`);
       console.log(`result: cells=${used}/${N} complete=${tc||'not'} split=${ts||'not'} refilled=${byType.filter((c,k)=>bud[k]>=0&&c>=1).length}/${used} copies=${sum(byType)} min=${Math.min(...byType.filter((c,k)=>bud[k]>=0))} seedsite=${cp.par[N-1]} Einside=${eIn} stray=${ev.stray} next=${ev.next}${es?` Esource=${keep.size} lastFromSource=${bud[N-1]>=0&&keep.has(bud[N-1])} sealed=${tb[N-2]||'not'} sourceCopiesAt=${(ev.src||[]).join(',')}`:''}`);
       finish(`The closure kind's bud grown from a part pool (${P} parts of each type, ${supply[K.types[N-1]]} of the last, ${B} blanks)`,3);},
-    // budcycle (build run 20261003-2221): one generation of the closure kind from its own kit, budpool and budpore-kind
-    // joined. A prepared parent of structures.budKit(5, 7, eSource, anchor Z@| on arc cell 6) (labelled) holds its founder
-    // aAaA by the high end on its anchor (placed where the anchor puts it; labelled; only a strand held by its high end
-    // is copied). Around it P free parts of each kit type but E (the parent's E source makes E parts) and B copy blanks
-    // (BCI of them inside the parent). No stand-in: the parent copies its founder from blanks that come in through its
-    // pore, a root part binds its seed site y, the bud grows from the pool, and once the bud is complete and its anchor
-    // has caught one of the parent's copies by the high end, completion releases the bud's root (the split). The run goes
-    // on BCAFTER steps after both the split and the bud's completion (in either order): copies on the bud's caught strand, new roots on either seed site.
-    // Harness (budpool's; labelled, BCHOLD=0 turns it off): every copy of a kit part (but those made at an E's pore side)
-    // is turned back into a blank at a random place outside both cells, so the pool loses only the parts the buds use;
-    // genome copies stay. extra: P (default 8); BCB: blanks (200), BCI: of them inside the parent (20); BCS: world size
-    // (32); BCR: openRange (9); BCE: E parts (0); BCAFTER (50000); BCW: a waste drive (labelled; 0: off); BCWK: kit parts decay (labelled; 0: off); BCF, BCFP: a supply drive (labelled; below);
-    // BCSEED=m: the seed site on arc cell m's outer side (budKit seedAt; 45: the bud grows off the parent's top-right corner, its
-    // pore facing the parent's across an open wedge, so the pair is never sealed; run 20261004-0621)
-    // BCSTOP2=1: stop once a bud grown on a bud's seed site is complete and has let go (gen2 in the result: the second generation)
+    // budcycle (build run 20261003-2221; the corner setup the default since run 20261004-1021): the closure kind's cycle from
+    // its own kit. A prepared parent of structures.budKit(5, 7, eSource, anchor Z@| on arc cell 6, closed walls -|, seed
+    // site on arc cell 45) (labelled) holds its founder aAaA by the high end on its anchor (placed where the anchor puts it;
+    // labelled; only a strand held by its high end is copied). Around it P free parts of each kit type but E (the parent's
+    // E source makes E parts), B copy blanks (BCI of them inside the parent) and BCF inert pre-food '---' outside (below).
+    // No stand-in: the parent copies its founder from blanks that come in through its pore, a root part binds its seed
+    // site y, the bud grows off the parent's top-right corner from the pool, and once it is complete and its anchor has
+    // caught a copy by the high end, completion releases its root (the split); its own seed site then buds, and so on.
+    // The run goes on BCAFTER steps after both the first split and the first bud's completion, or stops at generation BCGEN.
+    // extra: P (default 8); BCB: blanks (20), BCI: of them inside the parent (20); BCS: world size (32); BCR: openRange
+    // (9); BCE: E parts (0); BCAFTER (50000);
+    // BCF=n, BCFP=p (a supply, labelled environment drive): n pre-food (180), each turning into a blank with probability p (0.001) every 100 steps
     // BCL=q: a food loop (labelled drive): free genome monomers become blanks (q per 100 steps), anywhere; BCLK=q: free kit parts too
-    // BCGEN=n: stop once a bud of generation n (1: the parent's bud, 2: its bud, ...) is complete and has let go
-    // ('letgo:' lines: each bud's let-go with the stocks then; ownCopies in the result: generation:copies on the bud's caught strand after its let-go)
-    // BCDBG=1: genome copies by source (copied type, role, side) at the end; BCG=1: the oracle for candidate (g) (below)
-    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||200),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD!=='0',after=+(process.env.BCAFTER||50000),W=+(process.env.BCW||0),WK=+(process.env.BCWK||0),SF=+(process.env.BCF||0),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL||0),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),R=5;
-      const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='1'?'-|':'-&',+(process.env.BCSEED||-1)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
+    // BCGEN=n: stop once a bud of generation n (1: the parent's bud, 2: its bud, ...) is complete, has let go and holds a caught strand
+    // ('letgo:' lines: each bud's let-go with the stocks then; ownCopies in the result: generation:copies on the bud's caught
+    // strand after its let-go, for each bud that has let go holding one)
+    // The setup before run 1021 (check budcycle): BCSEED=-1 (the seed site on E: the bud across the parent's pore, a
+    // doorway pair), BCK=0 (wall sides -&, copyable until completion spends them), BCHOLD=1 (budpool's harness, labelled:
+    // every copy of a kit part but those made at an E's pore side becomes a blank at a random place outside both cells),
+    // BCB=200, BCF=0.
+    // BCDBG=1: genome copies by source (copied type, role, side) at the end
+    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??180),SFP=+(process.env.BCFP||0.001),LP=+(process.env.BCL||0),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),R=5;
+      const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys());seedCopyGenome(s,F);
       // the founder starts held by its high end z on the parent's anchor (placed where the anchor puts a strand; labelled)
@@ -228,7 +230,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let u=0;u<s.n;u++){if(prep.has(u))continue;const ins=s.typeName(u)==='-?-?-?'&&ni++<BI;
         if(!placeFree(s,u,placed,()=>{for(;;){const x=size*s.rng(),y=size*s.rng(),w=where(x,y);if(ins?w==='P'&&S.hexr(toKit(Pu[0],0,Pu[20],20,x,y))<R-1.6:w==='out')return [x,y];}},50000))throw Error('budcycle: could not place');placed.push(u);s.regrid(u);}
       for(let k=0;k<40;k++)s.derive();
-      const cp={bud:0,par:0,gen:0,genH:0,other:0},ev={waste:0,decay:0,fed:0,loop:0,gens:{},stray:0,early:0,catchT:0,catchN:0,par2:0,bud2:0,relP:0,relB:0,relF:0},keep=new Set();
+      const cp={bud:0,par:0,gen:0,genH:0,other:0},ev={fed:0,loop:0,gens:{},stray:0,early:0,catchT:0,catchN:0,par2:0,bud2:0,relP:0,relB:0,relF:0},keep=new Set();
       const gb={},ob=s.bind.bind(s);s.bind=(u,i,ku,v,j,kv)=>{const vf=!s.bonded(v),res=ob(u,i,ku,v,j,kv);if(buds.length)bud=buds[0].cells;
         // genome triangles taken from the free pool, by bond kind (observation: docks 4, fills 1, glue 5) and type
         if(vf&&!s.cpy[v*3+j]&&!kitT.has(canon(s.typeName(v)))){const k=ku+':'+canon(s.typeName(v));gb[k]=(gb[k]||0)+1;}
@@ -237,9 +239,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(s.cpy[v*3+j]){if(bud.includes(u))cp.bud++;else if(Pu.includes(u))cp.par++;else if(!kitT.has(canon(s.typeName(u)))){cp.gen++;if(s.bodyOf(u).some(x=>kitT.has(canon(s.typeName(x)))))cp.genH++;}else cp.other++;if(i===K.eSide&&(u===Pu[N-1]||u===bud[N-1]))keep.add(v);}
         else if(s.att[v*3+j]&&!s.anc[u*3+i]){const k=idx.get(canon(s.typeName(v))),w=cellOf.get(u);
           // a root on a seed site (the parent's E or a bud's E) starts a bud; part k on cell k-1 of a bud grows it
-          if(k===0&&(u===Pu[SC]||w&&w[1]===SC)){const b=new Array(N).fill(-1);b[0]=v;const on=u===Pu[SC]?'P':w[0];buds.push({cells:b,on,gen:on==='P'?1:buds[on].gen+1,t0:s.t,tc:0,tl:0,rel:0,relAfter:0});cellOf.set(v,[buds.length-1,0]);if(buds.length===1)tb[0]=s.t;else if(u===Pu[SC])ev.par2++;else ev.bud2++;}
+          if(k===0&&(u===Pu[SC]||w&&w[1]===SC)){const b=new Array(N).fill(-1);b[0]=v;const on=u===Pu[SC]?'P':w[0];buds.push({cells:b,on,gen:on==='P'?1:buds[on].gen+1,t0:s.t,tc:0,tl:0,tk:0,rel:0,relAfter:0});cellOf.set(v,[buds.length-1,0]);if(buds.length===1)tb[0]=s.t;else if(u===Pu[SC])ev.par2++;else ev.bud2++;}
           else if(k>0&&w&&w[1]===k-1&&buds[w[0]].cells[k]<0){buds[w[0]].cells[k]=v;cellOf.set(v,[w[0],k]);if(w[0]===0)tb[k]=s.t;}else ev.stray++;}
         else if(s.anc[u*3+i]&&u===bud[AK]&&!ev.catchT){ev.catchT=s.t;ev.catchN=n();if(bud[N-1]<0)ev.early=1;snap(s,'catch',`t=${s.t}: the bud's anchor catches a strand (${n()} of ${N} cells)`,focus(),false);}
+        // each bud's catch (observation): its anchor cell binds a strand end
+        if(s.anc[u*3+i]&&!s.cpy[v*3+j]){const w=cellOf.get(u);if(w&&w[1]===AK&&!buds[w[0]].tk)buds[w[0]].tk=s.t;}
         return res;};
       // copy releases (a docked triangle lets go of its template): on the parent's founder, on the bud's caught strand, on free strands
       let lastT=-1;{const oc=s.cut.bind(s),ok=s.count.bind(s);s.cut=(u,i)=>{const q=s.bond[u*3+i];lastT=q>=0?(q/3)|0:-1;return oc(u,i);};
@@ -248,21 +252,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
           const L=[lastT],seen=new Set(L);let h=-1;for(let q=0;q<L.length&&h<0;q++)for(let i=0;i<3;i++){const y=s.partner(L[q],i);if(y<0||seen.has(y))continue;seen.add(y);if(kitT.has(canon(s.typeName(y)))){h=y;break;}L.push(y);}
           const w=h>=0&&cellOf.get(h);if(w&&w[1]===AK){const B=buds[w[0]];B.rel++;if(B.tl)B.relAfter++;}}return ok(k,d);};}
       const n=()=>bud.filter(u=>u>=0).length,focus=()=>({units:[...Pu,...bud.filter(u=>u>=0)],radius:11}),back=u=>{placeFree(s,u,all.filter(x=>x!==u),()=>{for(;;){const x=size*s.rng(),y=size*s.rng();if(where(x,y)==='out')return [x,y];}});s.regrid(u);};
-      // BCG=1 (an oracle, not a rule: it reads whole bodies; measurement only): no copy blank binds a triangle of a free
-      // body without a kit cell (a free strand, with any copy docked on it), i.e. what a rule "free strands are not
-      // contact-copied" would buy (NEXT, core candidate (g)). Its free sides are marked spent during formBonds only.
-      if(process.env.BCG==='1'){const of=s.formBonds.bind(s),tmp=[];s.formBonds=()=>{const {members}=s.bodies();tmp.length=0;
-        for(const b of members){if(b.length<2||b.some(u=>kitT.has(canon(s.typeName(u)))))continue;for(const u of b)for(let i=0;i<3;i++){const k=u*3+i;if(s.bond[k]<0&&!s.spent[k]){s.spent[k]=1;tmp.push(k);}}}
-        of();for(const k of tmp)s.spent[k]=0;};}
-      // BCK=1: the kit's wall sides (each cell's side that is neither a link, the seed bond, the anchor nor E's sides) are
+      // Closed walls (default; BCK=0: '-&'): the kit's wall sides (each cell's side that is neither a link, the seed bond, the anchor nor E's sides) are
       // closed sides '-|' (the anchor mark without a glue: it catches nothing, and no copy blank or free triangle binds it)
       // instead of '-&' (copyable until completion spends them), so kit parts are copied only at '@' fronts and the E source
-      // BCA=1 (a what-if for a core candidate, NEXT (k); measurement only): no copy blank binds an '&' side (a wall
-      // side that completion will spend), so kit parts are copied only at '@' fronts and the E source. The unbonded '&'
-      // sides of attached triangles are marked spent during formBonds only ('-&' sides have no glue: nothing else binds there)
-      if(process.env.BCA==='1'){const of=s.formBonds.bind(s),tmp=[];s.formBonds=()=>{tmp.length=0;
-        for(let u=0;u<s.n;u++){if(!s.bonded(u))continue;for(let i=0;i<3;i++){const k=u*3+i;if(s.done[k]&&s.bond[k]<0&&!s.spent[k]){s.spent[k]=1;tmp.push(k);}}}
-        of();for(const k of tmp)s.spent[k]=0;};}
       // strands (7 triangles, not being copied): held by the parent, held by the bud, free in P, in D, out
       const strands=()=>{const o={held:0,budHeld:0,P:0,D:0,out:0};for(const q of census(s)){if(q.n<7||q.paired)continue;const b=s.bodyOf(q.units[0]);if(b.includes(Pu[0])){o.held++;continue;}if(bud[0]>=0&&b.includes(bud[0])){o.budHeld++;continue;}
           let x=0,y=0;for(const u of q.units){x+=s._dx(s.px[u]-s.px[q.units[0]]);y+=s._dy(s.py[u]-s.py[q.units[0]]);}o[where(s.px[q.units[0]]+x/q.n,s.py[q.units[0]]+y/q.n)]++;}return o;};
@@ -274,28 +266,23 @@ function demo(name,seed=1,steps,dir='runs',extra){
       let ci=0,tc=0,shot=12,sealedIn=null;
       for(let t=1;t<=steps;t++){s.step();const L=s.copyLog||[];
         for(;ci<L.length;ci++){const u=L[ci][1];if(hold&&!s.bonded(u)&&!keep.has(u)&&kitT.has(canon(s.typeName(u)))){s.setType(u,'-?-?-?');back(u);}}
-        // BCW=p (an environment drive, labelled): every 100 steps each free genome triangle outside both cells becomes a blank with probability p (waste back to food)
         // BCF=n (a supply drive, labelled): n inert triangles '---' (binding nothing: pre-food) start outside; every 100 steps
-        // each becomes a blank with probability BCFP (0.0003), so food arrives over the run instead of as one stock
+        // each becomes a blank with probability BCFP (0.001), so food arrives over the run instead of as one stock
         if(SF&&t%100===0)for(const u of all)if(s.rng()<SFP&&!s.bonded(u)&&s.typeName(u)==='---'){s.setType(u,'-?-?-?');ev.fed++;}
         // BCL=q (a food loop, labelled environment drive): every 100 steps each free triangle that is neither a blank, pre-food
         // nor a kit part (a genome monomer nobody used) becomes a blank with probability q, wherever it is; BCLK=q the same for free kit parts
         if((LP||LK)&&t%100===0)for(const u of all){if(s.bonded(u))continue;const tn=s.typeName(u);if(tn==='-?-?-?'||tn==='---')continue;if(s.rng()<(kitT.has(canon(tn))?LK:LP)){s.setType(u,'-?-?-?');ev.loop++;}}
-        // each bud's completion and let-go (observation), with the stocks at that moment; the first let-go bud of each generation
-        if(t%100===0)for(let i=0;i<buds.length;i++){const B=buds[i];if(!B.tc&&B.cells[N-1]>=0)B.tc=t;
-          if(!B.tl&&B.cells[0]>=0&&s.bond[B.cells[0]*3+K.rootSide]<0){B.tl=t;const c=pool(),used=buds.reduce((a,b)=>a+b.cells.filter(x=>x>=0).length,0);
-            console.log(`letgo: bud ${i} gen ${B.gen} on ${B.on} t=${t} cells=${B.cells.filter(x=>x>=0).length}/${N} complete=${B.tc||'not'} | blanks ${blanks()} prefood ${all.filter(u=>!s.bonded(u)&&s.typeName(u)==='---').length} fed ${ev.fed} looped ${ev.loop} | ${pfmt(c)} kitCopies ${cp.bud+cp.par+cp.other} partsUsed ${used} | ${fmt(strands())}`);}
-          if(B.tc&&B.tl&&!ev.gens[B.gen]){ev.gens[B.gen]=t;console.log(`generation ${B.gen}: bud ${i} complete and let go at t=${t}`);}}
-        if(GSTOP&&ev.gens[GSTOP])break;
-        // BCWK=q (the same drive for kit parts): each free kit part outside both cells becomes a blank with probability q (decay)
-        if((W||WK)&&t%100===0)for(const u of all)if(!s.bonded(u)&&s.typeName(u)!=='-?-?-?'&&where(s.px[u],s.py[u])==='out'){const kp=kitT.has(canon(s.typeName(u)));if(s.rng()<(kp?WK:W)){s.setType(u,'-?-?-?');if(kp)ev.decay++;else ev.waste++;}}
         if(!sealedIn&&bud[N-2]>=0){sealedIn={t,...strands(),blanks:all.filter(u=>!s.bonded(u)&&s.typeName(u)==='-?-?-?'&&where(s.px[u],s.py[u])!=='out').length,E:all.filter(u=>!s.bonded(u)&&idx.get(canon(s.typeName(u)))===N-1&&where(s.px[u],s.py[u])!=='out').length};}
         if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells`,focus(),false);shot+=12;}
         if(!tc&&bud[N-1]>=0){tc=t;snap(s,'done',`t=${t}: the bud is complete (${N} cells)${ev.catchT?', its anchor holding a strand':''}`,focus(),false);}
         if(!ts&&bud[0]>=0&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[SC])){ts=t;ev.splitN=n();snap(s,'split',`t=${t}: the bud lets go of its parent (${n()} cells)`,focus(),false);}
         if(every(t,20))console.log(`t=${t} bud cells=${n()}/${N} catch=${ev.catchT||'no'} split=${ts||'no'} ${fmt(strands())} releases: parent ${ev.relP} bud ${ev.relB} free ${ev.relF}; copies: bud ${cp.bud} parent ${cp.par} genome ${cp.gen} (of held ${cp.genH}); docks ${s.ev.dock||0} fills ${s.ev.fill||0}; blanks ${blanks()}; ${pfmt(pool())}; stray=${ev.stray}`);
-        // the second generation (observation): a bud grown on a bud's seed site is complete and has let go (BCSTOP2=1: stop then)
-        if(!ev.gen2&&t%100===0&&buds.some(b=>b.on!=='P'&&b.cells[N-1]>=0&&s.bond[b.cells[0]*3+K.rootSide]<0)){ev.gen2=t;if(process.env.BCSTOP2)break;}
+        // each bud's completion and let-go (observation), with the stocks at that moment; generation g reached: the first bud of generation g or later complete, let go and holding a caught strand
+        if(t%100===0)for(let i=0;i<buds.length;i++){const B=buds[i];if(!B.tc&&B.cells[N-1]>=0)B.tc=t;
+          if(!B.tl&&B.cells[0]>=0&&s.bond[B.cells[0]*3+K.rootSide]<0){B.tl=t;const c=pool(),used=buds.reduce((a,b)=>a+b.cells.filter(x=>x>=0).length,0);
+            console.log(`letgo: bud ${i} gen ${B.gen} on ${B.on} t=${t} cells=${B.cells.filter(x=>x>=0).length}/${N} complete=${B.tc||'not'} catch=${B.tk||'not'} | blanks ${blanks()} prefood ${all.filter(u=>!s.bonded(u)&&s.typeName(u)==='---').length} fed ${ev.fed} looped ${ev.loop} | ${pfmt(c)} kitCopies ${cp.bud+cp.par+cp.other} partsUsed ${used} | ${fmt(strands())}`);}
+          if(B.tc&&B.tl&&B.tk)for(let g=1;g<=B.gen;g++)if(!ev.gens[g]){ev.gens[g]=t;console.log(`generation ${g}: bud ${i} (generation ${B.gen}) complete and let go at t=${t}`);}}
+        if(GSTOP&&ev.gens[GSTOP])break;
         if(ts&&tc&&t>=Math.max(ts,tc)+after)break;}
       const o=strands();console.log(`t=${s.t} bud cells=${n()}/${N} catch=${ev.catchT||'no'} split=${ts||'no'} ${fmt(o)}`);
       if(sealedIn)console.log(`at sealing (t=${sealedIn.t}): ${fmt(sealedIn)}; blanks inside ${sealedIn.blanks}, E parts inside ${sealedIn.E}`);
@@ -306,7 +293,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log('pool per type at the end (cells 0..'+(N-2)+'):',pool().join(' '));
       console.log('waits by cell:',tb.map((x,k)=>bud[k]<0?'-':k?x-tb[k-1]:x).join(' '));
       {const {comp,members}=s.bodies();if(bud[0]>=0)snap(s,'end',`t=${s.t}: the bud${ts?' after the split':''}`,{units:members[comp[bud[0]]],radius:8},false);snap(s,'endw',`t=${s.t}: the world`,null,false);}
-      console.log(`result: cells=${n()}/${N} complete=${tc||'not'} catch=${ev.catchT||'not'} early=${ev.early} catchCells=${ev.catchN} split=${ts||'not'} splitCells=${ev.splitN||0} budCopies=${Math.floor(ev.relB/4)} parentCopies=${Math.floor(ev.relP/4)} leaked=${o.out} newRoots=${ev.par2}/${ev.bud2} nextCells=${Math.max(0,...buds.slice(1).filter(b=>b.on==='P').map(b=>b.cells.filter(x=>x>=0).length))}/${Math.max(0,...buds.slice(1).filter(b=>b.on===0).map(b=>b.cells.filter(x=>x>=0).length))} gen2=${ev.gen2||'not'} gen3=${ev.gens[3]||'not'} ownCopies=${buds.filter(b=>b.tl).map(b=>`${b.gen}:${Math.floor(b.relAfter/4)}`).join(',')||'none'} stray=${ev.stray} kitCopies=${cp.bud+cp.par+cp.other} genomeCopies=${cp.gen} ofHeld=${cp.genH}${W?` wasteToBlanks=${ev.waste}`:''}${WK?` decayed=${ev.decay}`:''}${SF?` fed=${ev.fed}`:''}${LP||LK?` looped=${ev.loop}`:''}`);
+      console.log(`result: cells=${n()}/${N} complete=${tc||'not'} catch=${ev.catchT||'not'} early=${ev.early} catchCells=${ev.catchN} split=${ts||'not'} splitCells=${ev.splitN||0} budCopies=${Math.floor(ev.relB/4)} parentCopies=${Math.floor(ev.relP/4)} leaked=${o.out} newRoots=${ev.par2}/${ev.bud2} nextCells=${Math.max(0,...buds.slice(1).filter(b=>b.on==='P').map(b=>b.cells.filter(x=>x>=0).length))}/${Math.max(0,...buds.slice(1).filter(b=>b.on===0).map(b=>b.cells.filter(x=>x>=0).length))} gen2=${ev.gens[2]||'not'} gen3=${ev.gens[3]||'not'} ownCopies=${buds.filter(b=>b.tl&&b.tk).map(b=>`${b.gen}:${Math.floor(b.relAfter/4)}`).join(',')||'none'} stray=${ev.stray} kitCopies=${cp.bud+cp.par+cp.other} genomeCopies=${cp.gen} ofHeld=${cp.genH}${SF?` fed=${ev.fed}`:''}${LP||LK?` looped=${ev.loop}`:''}`);
       finish(`One generation of the kind from its own kit: the parent copies its founder, grows its bud from the pool, the bud catches a copy and splits`,3);},
     // closure (designed, not demonstrated; docs/IDEAS.md "Closure by design"): the organism kind of structures.budKit
     // drawn, no physics. A complete parent (R 5, prepared, labelled) whose root's anchor holds a stand-in strand end; its
