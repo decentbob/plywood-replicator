@@ -4,6 +4,15 @@ State on 2026-10-04 (after autorun run 20261004-1421, harden). Read AGENTS.md fi
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
+**Current slice (autorun run 20261004-1721, build, in progress): where the blanks go (priority 2).** Goal: the
+lineage's buds copy their own caught strand after let-go (`ownCopies` >= 1 for the generation-1 and generation-2 buds
+that let go) in 3 of 4 worlds on the defaults, by kit or layout changes only (no rule change). Steps: (1) a sink census
+in `budcycle` (each copy bind by template: E source, seed site, fronts, genome on the parent's / a bud's / a free
+strand; `sinks` in the `letgo:` lines and after the result) on the 4 check seeds; (2) try the cheapest kit change the
+census points to (first candidate: E parts in the pool instead of the E source); (3) if one works in 3 of 4, make it
+the default and re-run `budcycle-3`. Stop: one change tried to a result, or a reason none of the kit changes can do it.
+Branch `claude/autorun-20261004-1721`.
+
 **Handoff status (autorun run 20261004-1421, harden).** Priority 1 below is done; the next run (index 38) is a
 `build`: priority 2. Done: lone-block moves (`_single`, about 780 of a `budcycle` world's 842 triangles, 74% of the
 time) made faster by exact changes (INNOVATIONS run 1421): neighbours gathered along the move (a capsule) instead of a
