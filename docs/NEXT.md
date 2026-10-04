@@ -1,38 +1,48 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-2121, core-review). Read AGENTS.md first (rules of work), then this
+State on 2026-10-03 (after autorun run 20261003-2221, build). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `7415fd4` for run 1921's, `80c79ab` for run 1720's).
+handoffs: NEXT.md in git, e.g. at `f05ed31` for run 2121's, `7415fd4` for run 1921's).
 
-**Handoff status (autorun run 20261003-2121, core-review).** Slice done: the frozen casting lineage removed from the
-core (NEXT priority 5, decided by this review; case and result in RULES, Core changes), plus two narrowings left open
-by earlier reviews. Branch `claude/autorun-20261003-2121`, merged into `main` by PR; no simulations running.
-(1) **Removed:** casting and stamps, hinges and flaps, triggers, latches, heard triggers, lock and hear signals, energy
-(charge, fuel, light), proofreading (`pLoose`); 18 demos, 24 checks, 12 tests, the casting structures (all in git at
-`7415fd4`). The core is now 5 marks (`. @ & | ?`), 3 relayed signals (busy, zip, open), 4 exposed values, 3 states,
-1 option (`heldCopy`); `tri/sim.js` 336 -> 231 lines. (2) **Narrowings:** a spent anchor side catches nothing (was
-candidate (d)); an attached close-only side takes no dock or fill, so binding has no exception left (was (b));
-candidate (a) left with the triggers. (3) **Evidence:** `node tri/check.js` 20 of 20 (1086 s, was 2438 s with the casting lineage's 24 checks); every kept check world's whole output byte for byte the same as at `7415fd4` (69 of 69 worlds, `CHECK_SAVE` runs before and after), and `closure`, `pool`, `budpool` spot runs too. `node tri/test.js` 29 tests. New:
-`CHECK_SAVE=dir node tri/check.js` keeps every world's whole output (compare runs byte for byte). An independent review
-(deep-reviewer) found two leftover calls (`_latches` in `budpore`, `servo` in `closure`) before the check run; fixed.
+**Handoff status (autorun run 20261003-2221, build).** Slice done: priority 3, one generation of the kind from its
+own kit with no stand-in (new demo `budcycle`, check `budcycle` 4 of 4), and run on, two (check `budcycle-2`). Branch
+`claude/autorun-20261003-2221`, merged into `main` by PR; no simulations running. (1) **What runs:** a prepared parent
+of `budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding its founder by the high end on arc cell 6 (labelled),
+`heldCopy`, openRange 9, 8 free parts of each kit type but E, 200 blanks (20 inside), budpool's harness (kit copies back
+to blanks). The parent copies its founder through its pore, grows its bud from the pool, the bud catches a real copy
+and lets go. Seeds 1-8: 8 of 8 split after a real catch and complete their bud, 0 stray bindings; both seed sites then
+start new buds in 8 of 8. (2) **The order is left to chance:** in 7 of 8 the bud catches while growing (8-45 cells),
+lets go 10 steps later (its root hears nothing once the front is 9+ bonds away) and finishes its wall alone from the
+pool; its last site then opens outward, so the sealed pair's last-cell problem does not arise. openRange 50 forces the
+designed order (complete, catch, split: seed 1 of 4) but keeps the whole bud copyable while it grows (blanks copy its
+wall 2-10 times more; 1 of 4 stopped at 46 of 47, 2 of 4 founders never copied). (3) **Food is the next limit:** the
+200 blanks are gone by t = 75000 (contact copies of every strand's sides pile up as free genome triangles only a held
+strand uses); buds that split late copy their strand 0-1 times, early ones (split before t = 53000) 5-9 times. A
+labelled waste-to-blank drive (`BCW`) did not help (at 0.05 it recycled the parent's face copies before they docked).
+(4) **Two generations:** run on to 600000 steps (`BCAFTER=300000`), a bud grown on a bud's seed site completes and
+lets go after a catch in 6 of 6 worlds (seeds 1-4, 7, 8); check `budcycle-2` (stops at the first such bud): 4 of 4 (seeds 1-4: let go at 397900 / 414300 / 420600 / 506500, 0 stray; 702 s).
+Later buds mostly catch leaked strands (10-15 lie outside): with `heldCopy` a leak is held and copied again by the next
+bud that passes. Records: INNOVATIONS (run 2221), IDEAS ("A bud that catches early splits early and finishes
+alone"), ROADMAP rows; pictures `docs/pictures/budcycle.png`, `budcycle_generations.png` (commands below).
 
-**Exact next step** (unchanged from run 1921; the next `build`). Priority 3's first half, one generation of the kind
-from its own kit: a demo (e.g. `budcycle`) that joins `budpool` and `budpore-kind`. A prepared parent of
-`budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding its founder `aAaA` by the high end on cell 6 (labelled),
-`heldCopy`, openRange 9, among copy blanks and a pool of the kit's parts (`budpool`'s harness to start; then without
-it). It feeds through its pore and copies, grows its bud on its seed site, the bud seals the pair, catches one of the
-parent's copies on its cell 6, and splits; measure the split, the bud's copies after it, early catches (the anchor
-exposed during growth), strands leaked. Target 3 of 4. If the founder's first copy stalls in the sealed pair, make sure
-copies exist before sealing (the parent copies through its open pore while the bud grows). Run 1921's pictures: the
-`budpore-kind` command (Commands) with seed 1 and `BUDF=8`.
+**Exact next step** (the next `build`). Priority 3 works with two labelled supports left: the prepared pool (8 parts
+of each of 46 types, enough for about 8 buds) and budpool's harness, which turns every copy of a kit part back into a
+blank. The kind's own refill is the copies blanks make of a bud's unspent cells while it grows (200-900 per bud with
+the harness). Next: turn the harness off (`BCHOLD=0`) so those copies stay as parts, give the world a steady food
+supply if the blanks run out first (an environment drive, labelled: e.g. blanks enter at the world's edge; the waste
+drive `BCW` recycled the parent's face copies and did not help), and measure the pool per type over two or three
+generations (does any type run out; which). Target: the second generation (`budcycle-2`) in 3 of 4 with the harness
+off. If the pool drifts (run 1420: no per-type regulation), that is the finding; weigh the periodic ring (fewer types)
+then. Food after the split also limits each bud's own copies (0-1 when it splits late, 5-9 early; 400 blanks in a 36
+world, seed 2: 4).
 
 **Core-change candidates (for the next `core-review` or `explore`).** (e) *`heldCopy` as the rule:* RULES (Core
 changes, run 1720) foresaw that it replaces the `&` case of zip once the casting lineage is gone and the copy lineage's
 demos hold their strands by the high end. Today the option is off by default and `imprint g`, `imprint m`, `imprint
 p`, `budpore 300`, `budpore c` copy free or low-end-held strands, so making it the rule changes those checks; weigh it
-when the kind's cycle (priority 3) runs on it, moving or retiring those demos then. (f) *The seed site `y`* (plain
+when the kind's cycle (priority 3) runs on it, moving or retiring those demos then. Run 2221: the kind's cycle now runs on it (`budcycle`, two generations), so (e) is ripe for the next `core-review`. (f) *The seed site `y`* (plain
 glue, never spent) is copied by every blank that reaches it while no bud sits on it (copies of E; run 1420: 0-6 before
-the first root binds); the last-cell problem needs that source: keep. Nothing else in the core is unused: every mark,
+the first root binds); the last-cell problem needs that source: keep. (g) *Free strands not contact-copied* (run 2221): sterile strands are still food sinks (every blank that touches a free strand becomes a free genome triangle that only a held strand can use; 200 blanks gone by t = 75000 in `budcycle`); a rule that reads whether a strand end is held, as `heldCopy` does, could keep blanks off free strands; weigh only if a supply in the environment does not solve the food after the split. Nothing else in the core is unused: every mark,
 signal and value has a kept check that uses it (Core inventory).
 
 ### Direction (autorun run 20261003-1321, review-intent): where the work stands and what comes first
@@ -99,7 +109,8 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    the root (a high end held there stands in the doorway); on arc cell 6 the bud copies after the split in 8 of 8
    (check `budpore-kind`); the kit has the option. Next: priority 3 (Exact next step).
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
-   The whole cycle.
+   The whole cycle. Done (run 2221) with a prepared pool and budpool's harness: one generation (`budcycle`, 4 of 4)
+   and two (`budcycle-2`, 4 of 4; 6 of 6 long runs). Next: the pool without the harness (Exact next step).
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
    `BUDTOOTH`, `BUDNOCA`, `BUDDBGA`, `BUDNOP`; their results stay in INNOVATIONS and git); decide whether the plug
    (`BUDRD=7`) and cap-release (`BUDCAP`) commands still earn their options once priority 2 has chosen; keep `300`,
@@ -128,12 +139,18 @@ and 3 are `build` work, 2 is design work that `explore` and `build` can both tak
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~18 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~35 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;
                                                    # BPE: E parts, 40; BPB: blanks, 8; BPS: world size, 30; BPR: openRange, 1; BPHOLD=0: no harness)
 BPES=1 BPE=0 BPB=16 node tri/demos.js budpool 1 250000 runs   # the same with E's pore side plain and no E part: the last cell from the source
+node tri/demos.js budcycle 1 300000 runs           # one generation from the kit: the parent copies its held founder, grows its bud from the
+                                                   # pool, the bud catches a real copy, splits, completes (check budcycle; extra: parts per type, 8;
+                                                   # BCB blanks 200, BCI inside 20, BCS world 32, BCR openRange 9, BCE E parts 0, BCAFTER 50000,
+                                                   # BCHOLD=0 no harness, BCW waste-to-blank drive 0)
+BCAFTER=300000 node tri/demos.js budcycle 1 600000 runs   # the same run on: both seed sites start new buds ('later buds:' line)
+BCR=50 BCW=0.05 node tri/demos.js budcycle 1 300000 runs  # the designed order (complete, catch, split): the picture in INNOVATIONS
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (picture, no physics)
 BUDRP=5 BUDRD=5 BUDPG=-1.75,1.75 BUDDG=-1.75,1.75 BUDPX=b BUDLX=2 BUDA=84:2 BUDNI=20 BUDPS=2 node tri/demos.js budpore 1 100000 runs 100c
                                                    # the kind's 7-cell doorway, founder away (4 of 4 split); the kind's own layout:

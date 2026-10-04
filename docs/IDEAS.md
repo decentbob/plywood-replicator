@@ -8,6 +8,28 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## A bud that catches early splits early and finishes alone (build run 20261003-2221, 2026-10-03)
+The kind was designed for one order: the bud completes (sealing the pair), then catches a copy, then lets go. In
+`budcycle` (no stand-in) the bud's anchor on arc cell 6 is exposed from the moment cell 6 binds, next to the pore
+the parent's copies come out of, and catches one while growing in 7 of 8 worlds. With openRange 9 its root then hears
+nothing (the front is more than 9 bonds away) and lets go: the bud leaves as an open arc holding its strand and grows
+the rest of its wall alone from the pool. Three consequences. (1) It is a working cycle, not a failure: every such bud
+completed and ended in its parent's state. (2) The sealed pair's last-cell problem (run 1420: only an E part inside at
+sealing finishes the bud) disappears, because the early-split bud's last site opens outward; it returns only when the
+bud completes first (seed 2 of the openRange 50 batch stopped at 46 of 47). (3) Making the root wait for both
+(openRange at least N - 1, 46) keeps the whole bud unspent while it grows, and blanks copy its wall 2-10 times more
+(time and food at the doorway, and in 2 of 4 worlds the founder's first copy stalled). So openRange 9 stays: the
+order of catch and completion is left to chance, and both orders end in the same state.
+
+**Food after the split is the next limit.** Blanks copy the sides of every strand, held or free (sterile strands are
+still contact-copied), and the copies pile up as free face and back triangles only a held strand can use: 200 blanks
+are gone by t = 75000, long before most splits (t = 145000-218000). Recycling free genome triangles outside the cells
+into blanks (a labelled drive) recycles the parent's own face copies before they dock and did not raise the bud's
+copies. Ideas for the next run: the strand's triangles as `&`-like sides that are not copied once the strand is free
+(no core: would need a mark that reads "held"), a hooded feeding pore on the kind (IDEAS, run 1650: one opening per
+body), a larger or steady food supply outside, or fewer strands per generation (one copy per bud is enough for the
+cycle: the bud catches one).
+
 ## The kind's anchor moves off the pore's edge (build run 20261003-1921, 2026-10-03)
 
 With `heldCopy` an anchor holds a strand by its high end, and a strand held that way leans the other way from one held
