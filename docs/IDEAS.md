@@ -8,6 +8,25 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## A body taken apart whole returns one of each of its parts: lysis (explore run 20261004-2051, 2026-10-04)
+
+The first reverse path (RULES, Core changes; INNOVATIONS run 2051). Why this one of the user's four ideas: turning
+typed triangles back into blanks loses what a body knows (a part type is remade only by copying an exposed copy of
+it, so decayed types run out: run 1021's setup C); cutting single bonds at random splits a one-row arc into two
+pieces whose open fronts both regrow. Taking a body apart whole, in one wave, returns exactly one of each of its parts,
+fresh, the per-type balance a pool needs. Lessons: (1) **a cut must spread, or the pieces regrow**: lysis moves one bond
+per pass, and a lysed triangle binds nothing until it is free; (2) **a joint stops it**: the `&` bond between a bud and
+its parent is the one bond made to come apart, so lysis does not cross it and a parent survives its bud's death;
+(3) **who dies is chosen by glue and by where the target sits in the growth order**: a cutter is a part that binds a
+waiting anchor, the site that is open only while a bud has no strand; with the anchor early in growth (cell 6) every
+growing bud dies, with it late (cell 44) only a nearly complete or waiting one; (4) **the kill rate must lose to growth
+and catch**: 4 cutters in a 30 x 30 world find an open anchor in 4-10 thousand steps, faster than a bud's last two
+parts arrive one copy each, so a lineage needs few cutters, more parts, or an anchor that opens last; (5) **freed parts
+lie next to their old sites**, so they re-bind within a pass or two: that exposed a one-pass lag in the open relay (a
+triangle joined by partners that were free a pass ago hears 0, so a re-bound root is released as complete), an old
+weakness that slow growth from a pool hid (candidate (o) in NEXT). Predation and scavenging (the user's interest)
+follow from the same mark with other glues: a cutter whose side matches an adult's exposed site would prey on adults.
+
 ## Rules must let replication go on indefinitely: a way back to blanks (user, 2026-10-04)
 
 The user asked whether any block can be changed or only blanks: only blanks change (contact copying turns a blank

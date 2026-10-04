@@ -8,6 +8,44 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-2051, explore)
+
+- **A reverse path: the lysis side `!` takes a body apart into its parts, and a new bud grows from them** — works in
+  isolation (core change, RULES Core changes; check `lysis`, 4 of 4 worlds); not yet in the lineage. The user's first
+  choice for a reverse path (IDEAS, 2026-10-04: a type that cuts other bodies' bonds). One mark and one relayed bit: a
+  triangle bonded to a partner's `!` side is lysed; lysis moves one bond per pass, never across a bond on an `&` side
+  (the bud-parent joint); a triangle lysed for a pass cuts all its bonds, and once free it is fresh (spent sides
+  cleared, hears nothing); a lysed triangle binds nothing. Who a `!` side lyses is chosen by its glue: the cutter
+  `z@!-|-|` (labelled, prepared, never copied) is a part whose attach side complements a waiting anchor `Z@|`, so it
+  binds only an anchor that holds no strand: a bud waiting for its catch (or still growing past its anchor cell), never
+  an adult.
+  - **Evidence.** Demo `lysis` (closed world, no food, no blanks: a prepared parent of the kind holding its founder, a
+    complete bud of the kind stuck on its seed site waiting for a catch that cannot come, 4 cutters, no free parts;
+    the anchor on cell 44, openRange 50), seeds 1-4, 1M steps: the stuck bud is apart (each of its 47 cells free, 48
+    cuts in one wave of about 45 passes) at t = 4005, 10498, 4062, 5834; all 47 parts fresh and free; the parent and
+    its founder untouched; a later bud on the parent's seed site is built from 45, 45, 46, 45 of the stuck bud's parts
+    (then lysed in turn when its own anchor opens, at 642k-908k). Test "lysis: ..." (no motion): the wave, the fresh
+    parts, the parent's seed site free and fresh, the `&` joint holding the parent out; control without `!`: nothing
+    comes apart. Every existing world is unchanged (no kept structure carries `!`): 31 worlds of the 10 short checks
+    byte for byte the same as main; `budcycle-3` RESULT_B3.
+  - **Two findings.** (1) *Where the anchor sits decides who dies.* With budcycle's anchor on cell 6, cutters kill
+    every regrowing bud the moment its cell 6 attaches (seed 3, 4 cutters: five buds lysed at 7 cells in 480k steps);
+    on cell 44 only a bud with two cells to go or waiting is exposed. Even then 4 cutters in a 30 x 30 world find an open
+    anchor in about 4-10k steps, faster than the last two single parts arrive, so regrown buds die at 44-46 cells; with
+    one cutter and the oracle below, a regrown bud of the stuck bud's parts completes in 2 of 4 by 2M steps (425020,
+    1701490; 46 of 47 in the others). Kill rate against growth and catch time is the number a lineage must win. (2)
+    *The open relay lags one pass behind a new bond.* A fresh root that re-binds the parent's seed site in the pass
+    after it was freed, joined by its next cell in the following pass, hears 0 ("complete": both partners were free
+    a pass before) and completion releases it at once (traced in seed 1: root binds 4006, cell 1 binds 4007, released
+    4008, its seed side spent); the freed parts then grow a free arc off the parent until a cutter finds it too (seed
+    1: about 380k steps). An oracle (`LYFIX=1`: a triangle that would hear 0 while a partner had not yet heard keeps -1)
+    removes it: the regrowth starts on the seed site at once in 3 of 4. The lag predates lysis (any root joined by its
+    next cell in the next pass); it shows here because freed parts lie next to their old sites. Candidate (o) in NEXT.
+    ![lysis: the stuck bud, apart, and a new bud of its parts](pictures/lysis.png)
+  - Command: `node tri/demos.js lysis N 1000000 runs/x` (defaults: 4 cutters `LYC`, anchor cell `LYA` 44, openRange
+    `LYR` 50, world `LYS` 30; `LYP` free parts per type, 0; `LYFIX=1` the oracle; `LYT` the cutter's type); about 2.5
+    minutes per world.
+
 ## 2026-10-04 (autorun run 20261004-1721, build)
 
 - **Where the blanks go in the lineage, and why a bud's own copies fail: buds that bud before they catch** — a
