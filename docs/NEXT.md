@@ -20,7 +20,7 @@ wall 2-10 times more; 1 of 4 stopped at 46 of 47, 2 of 4 founders never copied).
 strand uses); buds that split late copy their strand 0-1 times, early ones (split before t = 53000) 5-9 times. A
 labelled waste-to-blank drive (`BCW`) did not help (at 0.05 it recycled the parent's face copies before they docked).
 (4) **Two generations:** run on to 600000 steps (`BCAFTER=300000`), a bud grown on a bud's seed site completes and
-lets go after a catch in 6 of 6 worlds (seeds 1-4, 7, 8); check `budcycle-2` (stops at the first such bud): GEN2CHECK.
+lets go after a catch in 6 of 6 worlds (seeds 1-4, 7, 8); check `budcycle-2` (stops at the first such bud): 4 of 4 (seeds 1-4: let go at 397900 / 414300 / 420600 / 506500, 0 stray; 702 s).
 Later buds mostly catch leaked strands (10-15 lie outside): with `heldCopy` a leak is held and copied again by the next
 bud that passes. Records: INNOVATIONS (run 2221), IDEAS ("A bud that catches early splits early and finishes
 alone"), ROADMAP rows; pictures `docs/pictures/budcycle.png`, `budcycle_generations.png` (commands below).
@@ -40,7 +40,7 @@ world, seed 2: 4).
 changes, run 1720) foresaw that it replaces the `&` case of zip once the casting lineage is gone and the copy lineage's
 demos hold their strands by the high end. Today the option is off by default and `imprint g`, `imprint m`, `imprint
 p`, `budpore 300`, `budpore c` copy free or low-end-held strands, so making it the rule changes those checks; weigh it
-when the kind's cycle (priority 3) runs on it, moving or retiring those demos then. (f) *The seed site `y`* (plain
+when the kind's cycle (priority 3) runs on it, moving or retiring those demos then. Run 2221: the kind's cycle now runs on it (`budcycle`, two generations), so (e) is ripe for the next `core-review`. (f) *The seed site `y`* (plain
 glue, never spent) is copied by every blank that reaches it while no bud sits on it (copies of E; run 1420: 0-6 before
 the first root binds); the last-cell problem needs that source: keep. (g) *Free strands not contact-copied* (run 2221): sterile strands are still food sinks (every blank that touches a free strand becomes a free genome triangle that only a held strand can use; 200 blanks gone by t = 75000 in `budcycle`); a rule that reads whether a strand end is held, as `heldCopy` does, could keep blanks off free strands; weigh only if a supply in the environment does not solve the food after the split. Nothing else in the core is unused: every mark,
 signal and value has a kept check that uses it (Core inventory).
@@ -110,7 +110,7 @@ closure (1121), two `explore` (0050 completion release, 1221 anchor narrowing), 
    (check `budpore-kind`); the kit has the option. Next: priority 3 (Exact next step).
 3. **Two generations** (was 4): a grown bud catches a strand, splits, feeds without leaking, and starts its own bud.
    The whole cycle. Done (run 2221) with a prepared pool and budpool's harness: one generation (`budcycle`, 4 of 4)
-   and two (`budcycle-2`, GEN2SHORT; 6 of 6 long runs). Next: the pool without the harness (Exact next step).
+   and two (`budcycle-2`, 4 of 4; 6 of 6 long runs). Next: the pool without the harness (Exact next step).
 4. **Prune `budpore`** (done in run 1351, cleanup; left: decide on `BUDCAP` and `BUDRD=7` once priority 2 has chosen): drop options no check or listed command uses (dead ends such as
    `BUDTOOTH`, `BUDNOCA`, `BUDDBGA`, `BUDNOP`; their results stay in INNOVATIONS and git); decide whether the plug
    (`BUDRD=7`) and cap-release (`BUDCAP`) commands still earn their options once priority 2 has chosen; keep `300`,
@@ -139,7 +139,7 @@ and 3 are `build` work, 2 is design work that `explore` and `build` can both tak
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~24 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~35 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;

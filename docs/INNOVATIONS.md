@@ -38,7 +38,7 @@ not statistics.
     0:47 free, P:46 free, 1:47 free, P:17 free, 0:19 free, 1:8`; seed 7: `P:47 free` three times, `0:47 free, 1:47
     free, P:18 free, 1:10 free`. The parent itself buds 2-4 more times. Most catches after the first are leaked,
     sterile strands (10-15 lie outside by the end): with `heldCopy` a leak is not lost, the next bud that passes holds
-    it and it copies again. Check `budcycle-2` (stops at the first such bud): GEN2CHECK. Picture (seed 1 at t =
+    it and it copies again. Check `budcycle-2` (stops at the first such bud): 4 of 4 (seeds 1-4: let go at 397900 / 414300 / 420600 / 506500, 0 stray; 702 s). Picture (seed 1 at t =
     458979: the parent, its buds and their buds, all grown from the pool):
     ![two generations from the kit](pictures/budcycle_generations.png)
   - **openRange 50** (the root hears the front anywhere on the arc, so it lets go only after both completion and a
