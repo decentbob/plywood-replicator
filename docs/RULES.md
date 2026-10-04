@@ -234,8 +234,7 @@ speak of rules removed with the casting lineage (triggers, latches, casting, fue
    alike. With it the `&` case of zip (a high end held by a completion-release side starts no copy) can no longer
    arise, since only an anchor side holds a strand end and no anchor side carries `&`: it is removed too. The
    strand-end catch by glue was the casting lineage's (caps, a ring grown on a strand's seed); nothing kept uses it on
-   purpose (to be confirmed by the check suite: every world in which no strand end or released back took a glue bind
-   is byte for byte the same).
+   purpose (point 7: every check still passes; the margins moved both ways).
 5. **What it replaces.** Two branches of the active-side rule and one case of zip; the busy relay is then read by
    refractory alone. The narrowing of run 0050 (a free triangle's anchor side binds nothing) was made because free copies
    of a waiting anchor glue-capped strand ends; it stays (a free anchor-side triangle could still bind a grown side).
