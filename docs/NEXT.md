@@ -12,8 +12,13 @@ INNOVATIONS; if lysis carries the lineage further than without it (generation 3 
 0) in 3 of 4 worlds, a check. **Stop:** a clear answer either way within this run. New `budcycle` options (observation
 and labelled setup): `BCA` anchor cell (6), `BCC` cutters (0), `BCT` cutter type; 'letgo:' lines mark lysed buds;
 the result line adds cutBinds, lysedBuds, cuts, falseRel (buds released incomplete without lysis), poolMin.
-Running (container only): `runs/la` (BCC=0), `runs/lb` (1), `runs/lc` (2, pictures), `runs/ld` (2, seed 2), each
-`BCA=44 BCR=50 BCC=n BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle SEED 1200000 runs/lX`.
+Batch 1 (container only; each `BCA=44 BCR=50 BCC=n BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle SEED 1200000
+runs/lX`, about 65 minutes): `runs/la` (seed 1, 0 cutters): the founder's copy jams (3 docks in 1.2M), nothing leaks,
+the complete bud never catches; `lb` (seed 1, 1 cutter, which never binds): generation 3 at 776800, pool min 1;
+`lc` (seed 1, 2 cutters, pictures): 3 waiting buds lysed at 46-47 cells, generation 3 at 995600, pool min 0; `ld`
+(seed 2, 2 cutters): 7 lysed at 47 cells, generation 4 at 1174500 (via roots released at one cell), pool min 5,
+mean 12. falseRel (roots released at 1-12 cells, the relay lag (o)) 4, 11, 10: they grow into free rings.
+Batch 2 running: `runs/le` (2 cutters, seed 3), `lf` (2, seed 4, pictures), `lg` (0, seed 2), `lh` (0, seed 3).
 
 **Handoff status (autorun run 20261004-2051, explore).** Priority 3 below is done in isolation: the core has a reverse
 path, the lysis side `!` (RULES, Core changes and "Lysis"; INNOVATIONS run 2051; IDEAS). A triangle bonded to a
