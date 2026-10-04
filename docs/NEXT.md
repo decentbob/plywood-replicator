@@ -9,6 +9,11 @@ handoffs: NEXT.md in git, e.g. at `faf6b8d` for run 2221's, `f05ed31` for run 21
 monomers (`BCDBG=1`), one and two generations. Done when: either `budcycle-2` passes in 3 of 4 worlds with the
 harness off (then a check), or the census says what limits it (pool drift, food, monomers) and the smallest fix is
 tried. Stop at about 4 hours.
+So far: `BCHOLD=0` (seeds 1-4, 600000 steps, `BCAFTER=300000 BCSTOP2=1 BCDBG=1`, logs `runs/h0_N.log`): the 200 blanks
+are gone by t = 60000-90000, 130-170 of them made into kit parts of cells 0-9 (pool per type at the end: 13-76 of
+types 0-7, none copied from about type 12 on); first split 3 of 4, gen2 0 of 4 (later buds complete from the pool but
+no strand is copied to catch). Running: the same with `BCWK=0.0001` (new: free kit parts outside decay to blanks,
+labelled), logs `runs/k1_N.log`.
 
 **Handoff status (autorun run 20261004-0022, explore).** Slice done: run 2221's "food after the split" diagnosed, and
 one core change. Branch `claude/autorun-20261004-0022`, merged into `main` by PR; no simulations running. (1) **Core
