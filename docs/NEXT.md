@@ -1,25 +1,28 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-1421, harden). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-1721, build). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
+handoffs: NEXT.md in git, e.g. at `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
-**Handoff status (autorun run 20261004-1421, harden).** Priority 1 below is done; the next run (index 38) is a
-`build`: priority 2. Done: lone-block moves (`_single`, about 780 of a `budcycle` world's 842 triangles, 74% of the
-time) made faster by exact changes (INNOVATIONS run 1421): neighbours gathered along the move (a capsule) instead of a
-wide disk, a kept typed neighbour list, pair tests without copies, trig only when needed, `sqrt` with `hypot` only
-near thresholds, `_jostle`'s member list typed. The suite: 11 of 11, all 35 check worlds' outputs byte for byte the same
-as at `ef7e74a` (`CHECK_SAVE`, `diff -r`), 2530 -> 2155 s (`budcycle-3` 2121 -> 1812 s per world with four running;
-one process at t = 20000: 2.26 -> 1.65 ms per step). A new test pins the capsule list to the disk list. What is left:
-inside `_single` the gather (11 candidates per block), the pair test and the depth loop share the time; no hot spot
-worth another exact round (tried and reverted: a bounding-circle shortcut, ternaries for `Math.min`). A real speed-up
-now needs fewer simulated free triangles (the 400 inert pre-food are half of them: a drive that adds blanks without
-keeping their stock in the world would change outputs, so it belongs to a `build` that changes the setup) or a change
-of physics (not a harden). Margins not touched: `imprint` seed 4 and `ring` seed 1 fail as before (3 of 4 each).
-**The lineage (run 1021, unchanged):** three generations in 4 of 4 on the slow supply, but it burns down its stocks;
-the user asks for rules under which replication goes on indefinitely (priorities 2-3, candidate (m)). Nothing is
-running. Branch `claude/autorun-20261004-1421`, merged by PR. Scratch (container only): `runs/a`, `runs/b`, `runs/c`
-(the check outputs before and after; regenerate with the command in INNOVATIONS run 1421).
+**Handoff status (autorun run 20261004-1721, build).** Priority 2 below is done as a finding (INNOVATIONS run 1721);
+the next run (index 39) is an `explore`: priority 3, the reverse path. No rule change; the defaults unchanged
+(`budcycle-3`'s four worlds re-run with the census: the same outputs as run 1021). Done: a sink census in `budcycle`
+(`sinks`: copy binds by template; `chain:`: each bud's own copies after let-go along the line to the last generation),
+options `BCES=0` / `BCES=2` (no E source / the E source on E's outer side, `budKit(..., eSource='out')`) and the oracle
+`BCGATE=1` (a bud's seed site spent until the bud lets go; not a rule). Findings: (1) per world the blanks go to free
+strands' monomers 421-867 (mostly looped back), growth fronts 235-258 (the pool's only renewal), the parent's genome
+48-65, the E source 43-60, buds' genomes 17-36. (2) The target (both chain buds copy after let-go, 3 of 4 on the
+defaults) is not met by any kit change: defaults 2 of 4, no E source and E source outside within noise or worse for
+generation 3 (2 and 3 of 4). (3) Every failing chain fails the same way: a bud waiting for its catch buds from its own
+seed site and its bud catches first; no seed cell's geometry prevents it. (4) The oracle fixes the order (every chain
+bud copies, 4 of 4) but the lineage slows (catch waits of 100-400 thousand steps), and with more parent copies (no E
+source) the parent and every adult bud again and again until the fixed pool is gone (generation 3 0 of 4). Breadth
+starves depth while stocks burn down: candidate (n) below pays only with the reverse path (m). Checks: 10 of 10
+(`budcycle-3`: the defaults batch, 4 of 4). Nothing is running.
+Branch `claude/autorun-20261004-1721`, merged by PR. Scratch (container only): `runs/base_N.txt`, `e_`, `o_`, `g_`,
+`ge_` (the five setups; regenerate with the commands in INNOVATIONS run 1721), `runs/geo.js` (the seed-cell geometry:
+for each outer cell k, `budKit(5,7,null,true,{at:6,glue:'Z'},'-|',k)`, pose the kit and measure where a root on the
+posed bud's seed site would sit against the parent's cells; all at least 1.0 away), `runs/chart.js` (the picture).
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
@@ -76,16 +79,9 @@ Eleven runs since the last direction check (run 1321): five `build` (1420, 1650,
 the rule and the checks retired; the corner default, the census and three generations. Their text is in git at
 `7c9bbac`.)
 1. *(Done, run 1421: `budcycle` worlds 1.2-1.4x faster, outputs the same; INNOVATIONS.)*
-2. **`build` (index 38): where the blanks go, within the core.** In every setup kit copies take most blanks: each
-   waiting front copies its own type (100-170 per world), the parent's E source makes 30-70 E parts (one per bud is
-   used), leaked strands turn blanks into monomers. Measure first what each sink costs the genome (the parent's copies,
-   the buds' own copies after let-go) by the census, then try kit or layout changes only (no rule change): E parts in
-   the pool instead of the source, a different seed cell (other wedges, IDEAS run 0621), fewer part types (a periodic
-   ring, run 1321). Target: the chain's own copies after let-go in 3 of 4 worlds on the defaults. Speed side note (run 1421):
-   the 400 inert pre-food are half of the free triangles at the start (lone blocks take about 75% of the time); a supply
-   drive that keeps its stock outside the world (a blank placed at a random free spot at the same rate) would be up to
-   about 1.6x faster early in a run (less later, as pre-food turns into blanks), but changes outputs (and crowding):
-   decide it here, not in a `harden`.
+2. *(Done as a finding, run 1721: no kit change meets the target; the failing chains are buds that bud before they
+   catch; INNOVATIONS. The speed side note stays open: a supply drive that keeps its stock outside the world, about
+   1.6x early in a run, changes outputs; decide it in a `build` that changes the setup.)*
 3. **`explore` (index 39): a reverse path, so blocks circulate (candidate (m), the user's request).** Today only
    blanks change type and nothing comes apart, so every closed world runs out. Weigh the user's options (IDEAS,
    2026-10-04): a bond-cutting side or type (local: it reads only the bond it touches; frees material locked in
@@ -105,7 +101,13 @@ the rule and the checks retired; the corner default, the census and three genera
 cleanup (prunes what the builds left in `budcycle`: the harness and doorway setup kept only for the pinned `budcycle`
 check, `BCLK`), 42 build, 43 explore, ... The reverse path (priority 3) lands on the first explore.
 
-**Core-change candidates (for the next `core-review` or `explore`).** (m) *A reverse path* (user, 2026-10-04;
+**Core-change candidates (for the next `core-review` or `explore`).** (n) *Bud only after letting go* (run 1721): a seed site binds a
+root only while its triangle hears no open signal (as `&` releases only then), so a bud still growing or waiting for
+its catch (its anchor emits open) cannot start its own bud. Locality: the triangle's own open signal, relayed. Layout
+it needs: the seed cell within `openRange` of the anchor (today 39 bonds apart, range 9: e.g. seed cell 1-5 beside the
+anchor on cell 6, wedges not yet tried). The oracle `BCGATE=1` shows the effect (every chain bud copies its strand
+after let-go) and the cost (slower; with a fixed pool, surplus buds still starve the next generation): worth it with
+(m), weigh together. (m) *A reverse path* (user, 2026-10-04;
 priority 3): blocks must be able to return to the mix, or every closed world runs out; first choice to weigh: a
 bond-cutting side or type. (e) and (i) done in run 0820. (f) *The seed
 site `y`* (plain glue, never spent) is copied by every blank that reaches it while no bud sits on it; keep. (j)
@@ -140,6 +142,8 @@ BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the linea
                                                    # about 30 minutes); 'letgo:' lines per bud, ownCopies in the result. Options: extra parts per
                                                    # type (8); BCB blanks, BCI inside, BCS world, BCR openRange (9), BCE E parts (0), BCF/BCFP the
                                                    # supply, BCL=q / BCLK=q free monomers / kit parts back to blanks (labelled loops), BCDBG=1 census
+BCGATE=1 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1721's oracle: a bud buds only after
+                                                   # letting go (BCES=0 BCE=8: no E source, 8 E parts; BCES=2: E source outside); 'sinks', 'chain:' lines
 BCL=0.002 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 1021's setup B (generation 3 in 4 of 4; the picture)
 BCS=32 BCF=180 BCFP=0.001 BCAFTER=300000 BCGEN=2 node tri/demos.js budcycle 1 600000 runs/x   # runs 0621-0751's setup (check budcycle-free, retired)
 BCAFTER=2000 BCSEED=-1 BCK=0 BCHOLD=1 BCB=200 BCF=0 BCS=32 node tri/demos.js budcycle 1 300000 runs   # one generation, the doorway

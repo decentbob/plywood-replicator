@@ -62,6 +62,7 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
 // letters: bond glues (default: the lower-case letters minus the genome's a w z, the seed y and the weld f).
 // eSource: E's pore side is plain '-' instead of '&' (never spent, so copied by any copy blank that reaches it): copies
 // of E then form in the pore, which in a sealed pair is where the bud's last site opens (run 20261003-1650).
+// eSource='out' (run 20261004-1721): the plain side is E's outer side instead (its pore side a wall); needs seedAt off E.
 // anchor={at:k,glue:'Z'}: the catching anchor on arc cell k's inner side instead of the root's pore side (the root's pore
 // side is then '-&'); glue 'Z' catches a strand's high end (only a strand held by its high end is copied). On the root a
 // strand held by its high end stands out of the cell into the doorway (run 20261003-1921, dry-run); the open range must
@@ -82,7 +83,7 @@ function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt
     if((k>0&&prev<0)||(k<N-1&&next<0))throw Error('budKit: cells not adjacent');
     if(prev>=0)t[prev]=UP[LOW.indexOf(L[k-1])]+'@';if(next>=0)t[next]=L[k]+'@';
     if(k===0||k===N-1){const free=[0,1,2].filter(i=>i!==prev&&i!==next).sort((i,j)=>outer(v,j)-outer(v,i));   // outer side first
-      if(k===0){rootSide=free[0];t[free[0]]='Y@&';if(AK===0){anchorSide=free[1];t[free[1]]=AG;}}else{eSide=free[1];if(seedAt<0||seedAt===N-1){seedSide=free[0];t[free[0]]='y';}if(eSource)t[free[1]]='-';}}
+      if(k===0){rootSide=free[0];t[free[0]]='Y@&';if(AK===0){anchorSide=free[1];t[free[1]]=AG;}}else{eSide=free[eSource==='out'?0:1];if(seedAt<0||seedAt===N-1){if(eSource==='out')throw Error('budKit: an outer E source needs the seed site elsewhere');seedSide=free[0];t[free[0]]='y';}if(eSource)t[eSide]='-';}}
     else if(k===seedAt){const f=[0,1,2].find(i=>i!==prev&&i!==next);if(outer(v,f)<R-0.5)throw Error('budKit: seed cell '+k+' has no outer side');seedSide=f;t[f]='y';}
     else if(k===AK){const f=[0,1,2].find(i=>i!==prev&&i!==next);if(outer(v,f)>R-0.5)throw Error('budKit: anchor cell '+k+' has no inner side');anchorSide=f;t[f]=AG;}
     return t.join('');});
