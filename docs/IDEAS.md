@@ -38,6 +38,21 @@ Records have called blanks "food"; read that as "building blocks". Today the bud
 shared environment directly and the parent gives it only a seed site and a strand, so the goal's feeding step (the
 parent passing building blocks to its bud) is not built yet.
 
+## Breadth starves depth: a bud should bud only after it lets go (build run 20261004-1721, 2026-10-04)
+
+Measured in `budcycle` with a sink census (INNOVATIONS, run 1721). Every chain whose bud never copied its own strand
+failed the same way: the bud, complete and waiting for its catch, grew its own bud from its seed site, and that bud
+caught the next leaked strand first. Food was there; the order was wrong. Nothing local stops an attached bud from
+budding, and no seed cell hides the attached bud's seed site. An oracle that opens a bud's seed site only after it
+lets go makes every chain bud copy its strand after let-go, which is the goal's "lives on its own" in local terms, but
+two costs show: the lineage now waits on catches (100-400 thousand steps each: the parent copies its strand only
+4-12 times), and when catches come faster (no E source) the parent and every adult keep budding, so surplus buds of
+generation 1 take the fixed pool before generation 3 starts. Lessons: (1) in a closed world, breadth (the number of
+buds each adult makes) and depth (generations) draw on the same stocks; a lineage that should go deep needs either
+material coming back (the reverse path) or a limit on breadth; (2) a sink census per template is cheap and settles
+"is it food or order?" before a layout is changed; (3) a component placed at the pore (the E source) takes the food
+that comes in first: placement decides who eats, as with the fronts in run 0251.
+
 ## A stock is not a metabolism (direction check, review-intent run 20261004-0751, 2026-10-04)
 
 Measured with the census in `budcycle-free` (INNOVATIONS, run 0751): the food stock is gone by the first split and

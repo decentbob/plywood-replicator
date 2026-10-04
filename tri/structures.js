@@ -62,6 +62,7 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
 // letters: bond glues (default: the lower-case letters minus the genome's a w z, the seed y and the weld f).
 // eSource: E's pore side is plain '-' instead of '&' (never spent, so copied by any copy blank that reaches it): copies
 // of E then form in the pore, which in a sealed pair is where the bud's last site opens (run 20261003-1650).
+// eSource='out' (run 20261004-1721): the plain side is E's outer side instead (its pore side a wall); needs seedAt off E.
 // anchor={at:k,glue:'Z'}: the catching anchor on arc cell k's inner side instead of the root's pore side (the root's pore
 // side is then '-&'); glue 'Z' catches a strand's high end (only a strand held by its high end is copied). On the root a
 // strand held by its high end stands out of the cell into the doorway (run 20261003-1921, dry-run); the open range must

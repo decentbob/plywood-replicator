@@ -8,6 +8,55 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-1721, build)
+
+- **Where the blanks go in the lineage, and why a bud's own copies fail: buds that bud before they catch** — a
+  finding (no new capability; no rule change; the defaults unchanged). Target of the slice (NEXT priority 2): the
+  chain's buds (generation 1 and 2 on the line to the last generation) copy their caught strand after let-go in 3 of 4
+  worlds on the defaults, by kit or layout changes. Not met: no kit change tried keeps generation 3 and meets it.
+  New observation in `budcycle`: `sinks` (each copy bind by its template: growth fronts, E source, seed sites, the
+  parent's genome, buds' genomes, free strands; in every `letgo:` line and after the result) and `chain:` (from the bud
+  that reached the last generation back to the parent: each bud's own copies after let-go, or `held` if it never let go).
+  New options: `BCES=0` (no E source: E's pore side a closed wall; E parts from the pool, `BCE`), `BCES=2` (the E source
+  on E's outer side; `budKit(..., eSource='out')`), the oracle `BCGATE=1` (below).
+
+  Five setups, seeds 1-4, the check's settings (`BCGEN=3 BCAFTER=900000`, 1.2M steps):
+
+  | setup | generation 3 | generation 2 | chain copies after let-go (gen 1, gen 2) | parent copies | pool types empty at the end |
+  |---|---|---|---|---|---|
+  | defaults (the same outputs as run 1021) | 4 of 4 (1031000, 977300, 735900, 827100) | 4 of 4 | 2 of 4 (seeds 2, 3: 1 / 3, 2 / 1); seeds 1, 4: a chain bud `held` | 3-6 | 0-2 |
+  | `BCES=0 BCE=8`: no E source, 8 E parts | 2 of 4 (974400, 809600) | 4 of 4 (511k-770k) | both seeds reaching generation 3 (3 / 1, 4 / 4) | 3-12 | 4-13 |
+  | `BCES=2`: the E source outside | 3 of 4 (955700, 892800, 848700) | 4 of 4 | 2 of 3 reaching generation 3 (1 / 3, 4 / 2; seed 4 held); seed 2 to generation 2: 6 / 5 | 5-7 | 0-10 |
+  | `BCGATE=1` (oracle) | 2 of 4 (1179500, 1024900) | 3 of 4 | every chain bud, as far as reached (3 / 1, 2 / 2, 3 / 4, 2) | 4-12 | 0-9 |
+  | `BCGATE=1 BCES=0 BCE=8` | 0 of 4 | 4 of 4 (546k-770k) | to generation 2: 3 of 4 (4 / 0, 4 / 2, 3 / 1, 5 / 11) | 3-10 | 2-13 |
+
+  - **Where the blanks go** (copy binds per world, defaults): free strands 421-867 (monomers made on leaked strands;
+    the loop returns most: looped 419-857), growth fronts 235-258 (kit parts: the pool's only renewal), the parent's
+    genome 48-65, the E source 43-60 (one E used per bud), buds' genomes 17-36, seed sites 4-12. Without the E source
+    the parent's genome gets about 1.7x the blanks (gP 94) and the buds' 3x (gB 79): the E source sits at the pore
+    and takes the blanks that come in first. The cycle speeds up (first split 136k-419k instead of 395k-637k, seed 4 never), so the
+    fronts wait less and make fewer kit copies (158-290 in all, against 297-330), while more buds start: the pool empties and generation 3
+    fails. Outside, the E source eats more (71) and changes little.
+  - **Every failing chain fails the same way** (defaults seeds 1 and 4, `BCES=2` seed 4): a complete bud waiting for its
+    catch grows its own bud from its seed site (nothing stops a bud from budding while attached), and that bud catches
+    the next leaked strand first; the waiting bud never lets go. Food is not what is missing. No layout stops it: on
+    all 25 outer seed cells the posed bud's own seed site stays open (a root's place at least 1.0 from the parent;
+    geometry script in NEXT).
+  - **The oracle `BCGATE=1`** (not a rule: it reads whether the bud's root is bonded, about 40 bonds away): a bud's seed
+    site is spent until the bud has let go. Every bud on a chain then copies its own strand after let-go (1-4 copies,
+    4 of 4 as far as each world got: "lives on its own" in the goal's local sense), but the lineage slows
+    (generation 1 at 432k-714k): a complete bud waits 100-400 thousand steps for a catch, because the parent copies only
+    4-12 times and few strands leak. With the E source removed as well, catches come sooner (generation 2 in 4 of 4 by 770k),
+    but the parent and every adult bud keep budding (7-8 complete buds per world, most of generation 1), and the
+    fixed pool runs out before generation 3 (0 of 4).
+  - **Meaning.** In a world that burns down its stocks, breadth (the parent and every adult budding again and again)
+    starves depth (the next generation). The order "catch, let go, then bud" needs a rule (candidate (n) in NEXT: a
+    seed site binds only while its triangle hears no open signal, with the seed site within `openRange` of the anchor);
+    it pays only with a reverse path (candidate (m)), when parts locked in surplus buds come back.
+    ![copy binds by template in five setups](pictures/blank_sinks.png)
+  - Command: `BCGEN=3 BCAFTER=900000 TRI_NOPIC=1 node tri/demos.js budcycle N 1200000 runs/x` with `BCES=0 BCE=8`,
+    `BCES=2`, `BCGATE=1` (about 25 minutes per world with four running); `sinks` and `chain:` after the result.
+
 ## 2026-10-04 (autorun run 20261004-1421, harden)
 
 - **Physics speed (fourth round, exact): lone-block moves** — works. The same output byte for byte (all 35 check worlds,
