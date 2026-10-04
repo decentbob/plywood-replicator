@@ -8,6 +8,26 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Food goes to whatever templates are exposed; walls should not be templates (build run 20261004-0251, 2026-10-04)
+
+Measured with `budcycle` without the harness (INNOVATIONS, run 0251). Contact copying turns a blank into whatever
+attached triangle it touches first, so food divides among templates by exposure, not by need. The kind exposes
+dozens of open wall sides and one held strand; three quarters of the food became kit parts. Three lessons.
+- **A stock is taken by the fronts of its time.** Copies per part used go as blanks / parts near the front (run 1221's
+  law), so a stock is converted at the first fronts (types 0-9 here) and nothing is left for later ones or for the
+  genome. Narrowing which sides are copyable alone does not help (oracle: the copies move to the `@` fronts); food must
+  arrive over time (a supply, labelled) and templates that need none must be closed.
+- **Walls should be closed sides.** The kind's wall sides were `-&` (copyable until completion spends them); a growing
+  or anchor-waiting bud keeps 16 cells open for a long time, in the doorway where the parent's food passes. A `-|` side
+  (the anchor mark, no glue) is closed from the start: a wall needs no other property. With a supply, closed walls
+  move the food to the genome (gen2 0 -> 2 of 4).
+- **The sealed pair starves the parent.** Once the bud is complete before its anchor has caught, the pair is sealed
+  (pores face each other): no food reaches the parent's founder, so no copy is made and no catch ever comes. The
+  parent must copy while its bud grows: the order "catch, then complete" (7 of 8 in run 2221) is a race against the
+  food supply. Ways: a bud that grows slower than the parent copies (fewer parts per type), food inside the parent at
+  the start (30 blanks inside made it worse: 0 of 4, monomers made but not assembled; not understood), or a kind
+  whose bud cannot seal before its catch.
+
 ## Monomers are made in proportion to exposure, not to need (explore run 20261004-0022, 2026-10-04)
 Contact copying turns every blank into a copy of whatever attached side it touches first, so the mix of genome
 monomers follows which sides are exposed, not what copying uses. Anything that adds exposed sides of one type skews

@@ -201,7 +201,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // BCSTOP2=1: stop once a bud grown on a bud's seed site is complete and has let go (gen2 in the result: the second generation)
     // BCDBG=1: genome copies by source (copied type, role, side) at the end; BCG=1: the oracle for candidate (g) (below)
     budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=6,P=parseInt(extra)||8,B=+(process.env.BCB||200),BI=+(process.env.BCI||20),size=+(process.env.BCS||32),r=+(process.env.BCR||9),hold=process.env.BCHOLD!=='0',after=+(process.env.BCAFTER||50000),W=+(process.env.BCW||0),WK=+(process.env.BCWK||0),SF=+(process.env.BCF||0),SFP=+(process.env.BCFP||0.0003),R=5;
-      const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'}),N=K.N,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
+      const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},process.env.BCK==='1'?'-|':'-&'),N=K.N,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r,heldCopy:true}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys());seedCopyGenome(s,F);
       // the founder starts held by its high end z on the parent's anchor (placed where the anchor puts a strand; labelled)
@@ -243,6 +243,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(process.env.BCG==='1'){const of=s.formBonds.bind(s),tmp=[];s.formBonds=()=>{const {members}=s.bodies();tmp.length=0;
         for(const b of members){if(b.length<2||b.some(u=>kitT.has(canon(s.typeName(u)))))continue;for(const u of b)for(let i=0;i<3;i++){const k=u*3+i;if(s.bond[k]<0&&!s.spent[k]){s.spent[k]=1;tmp.push(k);}}}
         of();for(const k of tmp)s.spent[k]=0;};}
+      // BCK=1: the kit's wall sides (each cell's side that is neither a link, the seed bond, the anchor nor E's sides) are
+      // closed sides '-|' (the anchor mark without a glue: it catches nothing, and no copy blank or free triangle binds it)
+      // instead of '-&' (copyable until completion spends them), so kit parts are copied only at '@' fronts and the E source
       // BCA=1 (a what-if for a core candidate, NEXT (k); measurement only): no copy blank binds an '&' side (a wall
       // side that completion will spend), so kit parts are copied only at '@' fronts and the E source. The unbonded '&'
       // sides of attached triangles are marked spent during formBonds only ('-&' sides have no glue: nothing else binds there)

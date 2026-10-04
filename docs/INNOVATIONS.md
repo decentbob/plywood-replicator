@@ -8,6 +8,50 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-0251, build)
+
+- **The kind's cycle without budpool's harness: food, not the pool, is the limit; closed walls and a food supply
+  bring two generations to 2 of 4** — partial (no check: no setup reached 3 of 4). No new rule. `budcycle` with
+  `BCHOLD=0` (copies of kit parts stay parts), seeds 1-4, 600000 steps, `BCAFTER=300000 BCSTOP2=1` (the `budcycle-2`
+  setup; with the harness: first split 4 of 4, second generation 4 of 4). New observation lines (`BCDBG=1`): the pool
+  per type (in the progress line and at the end) and `kit copies by template` (parent or bud, cell, side).
+
+  | setup (labelled drives in brackets) | first split | gen2 | kit copies | genome monomers |
+  |---|---|---|---|---|
+  | 200 blanks (20 inside), no harness | 3 of 4 | 0 of 4 | 149-170 | 30-51 |
+  | + kit parts outside decay to blanks (`BCWK=0.0001`) | 4 of 4 | 1 of 4 | 143-285 | 68-189 |
+  | + the same, `BCWK=0.00003` | 2 of 4 | 1 of 4 | 138-251 | 29-149 |
+  | 200 blanks, no copy blank binds an `&` side (oracle `BCA=1`) | 3 of 4 | 1 of 4 | 144-157 | 43-56 |
+  | 20 blanks inside + 180 pre-food outside (supply `BCF=180 BCFP=0.0005`) | 4 of 4 | 0 of 4 | 157-166 | 25-32 |
+  | the same, 30 blanks inside | 0 of 4 | 0 of 4 | 115-169 | 33-80 |
+  | supply + closed walls (`BCK=1`; byte for byte the oracle's runs) | 3 of 4 | 2 of 4 | 66-141 | 46-124 |
+  | supply `BCFP=0.001` + closed walls | 4 of 4 | 2 of 4 | 86-160 | 37-113 |
+  | supply `BCF=300 BCFP=0.0006`, world 34 + closed walls | 3 of 4 | 2 of 4 | 116-163 | 46-192 |
+
+  - **Without the harness the 200 blanks are gone by t = 60000-90000, three quarters of them made into kit parts**,
+    not genome monomers: the parent makes 0-1 strand copies after the first, the bud none after its split, so the
+    second-generation bud completes from the pool (2 of 4) but has nothing to catch. The pool itself is not the limit
+    over two generations: at the end 4-7 parts of every type are left (8 at the start), types 0-9 hold 13-76.
+  - **Where the copies come from** (census, 150000 steps): about 90% from the first bud's cells 0-9, on their `-&` wall
+    sides while they hear the open signal (the front and, from cell 6 on, the waiting anchor keep cells 0-15 open);
+    the young bud sits in the doorway, in the food stream to the parent. The rest from the parent's E source.
+  - **Which sides are copyable does not set the amount.** With the oracle (no copy blank binds an `&` side) the kit
+    copies move to the `@` fronts and stay about 150: with a stock, the copies made per part used go as blanks / parts
+    near the front (run 1221's law), so the fronts that exist while the stock lasts take it. Decay returns food but the
+    kit copies take it again, and the decay empties types that no front copies (1-2 types at 0 by the end).
+  - **A supply plus closed walls works best.** Food that arrives over the run (inert `---` pre-food turning into
+    blanks: an environment drive) alone changes nothing (the open walls still take it); with walls nothing copies,
+    the kit is copied only at fronts and the parent's founder gets the food: gen2 in 2 of 4 in each of three supply
+    settings. Closed walls need no core change: a wall side `-|` (the anchor mark with no glue) catches nothing, and no
+    copy blank or free triangle binds it (`budKit(..., wall)`, test "closure (budKit, anchor on cell 6, closed walls
+    -|)"); its runs are byte for byte those of the oracle.
+  - **Two failures remain.** (1) The pair seals before the parent has a copy (the bud completes first, the pores face
+    each other, no blank inside): no catch, ever (1 of 4 in two of the three supply settings). (2) The second-generation bud is still
+    growing, or the bud has no copy to offer it, when the supply runs out.
+    ![a world after two generations: parent, bud, the bud's bud let go, more buds starting (closed walls, supply; seed 3)](pictures/budcycle_free.png)
+  - Commands: `BCHOLD=0 BCDBG=1 BCAFTER=300000 BCSTOP2=1 node tri/demos.js budcycle 1 600000 runs/x` (harness off);
+    `BCK=1 BCB=20 BCF=180 BCFP=0.001` (closed walls and supply); `BCWK=q` (decay), `BCA=1` (oracle).
+
 ## 2026-10-04 (autorun run 20261004-0022, explore)
 
 - **Only grown triangles bind by glue: no more glue caps on strand ends, and the genome monomers are used** — works
