@@ -76,7 +76,7 @@ then, was removed on 2026-10-03 (core review run 2121).
    pore, a doorway narrowed by the caught strand, or fission), then move the anchor and rerun the transfer on the
    kind's layout (run 20261003-1720, explore: none of the three works in the kind's geometry on paper; proposed
    instead: option `heldCopy`, free strands sterile, so the pores may stay wide; works in isolation, `imprint pzox`); this replaces M2 on `budpore`'s layout, which stopped after four build runs (1921, 2321, 0320, 0751;
-   lessons in IDEAS); (c) two generations: done in run 20261003-2221 with a prepared pool and budpool's harness (demo `budcycle`, checks `budcycle`, `budcycle-2`); next, (e) the pool without the harness, the kind refilling it from copies of its growing buds, with food after the split; (d) the
+   lessons in IDEAS); (c) two generations: done in run 20261003-2221 with a prepared pool and budpool's harness (demo `budcycle`, checks `budcycle`, `budcycle-2`); (e) the pool without the harness: run 20261004-0251 (build) found food, not the pool, to be the limit (kit copies take three quarters of a stock); closed walls (`-|`) and a food supply give two generations in 2 of 4 (INNOVATIONS); next, the sealed-before-catch failure; (d) the
    casting lineage removed (core review run 2121: 5 marks left, `. @ & | ?`; every kept check's output byte for byte
    the same). Done so far: contact copying (run 0136), a
    sealed cell copies its genome from blanks (`imprint m`), a cell fed through a pore (`imprint p`), a hooded pore

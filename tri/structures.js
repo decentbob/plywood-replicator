@@ -66,7 +66,7 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
 // side is then '-&'); glue 'Z' catches a strand's high end (option heldCopy: only a held strand is copied). On the root a
 // strand held by its high end stands out of the cell into the doorway (run 20261003-1921, dry-run); the open range must
 // then reach the root from cell k (openRange > k), so the root holds while the waiting anchor emits.
-function budKit(R=5,pore=7,letters=null,eSource=false,anchor={}){if(R%2!==1||(pore!==3&&pore!==7))throw Error('budKit: R odd, pore 3 or 7');const e=(pore+1)/4;
+function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&'){if(R%2!==1||(pore!==3&&pore!==7))throw Error('budKit: R odd, pore 3 or 7');const e=(pore+1)/4;
   const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),top=v=>cen(v)[1]>(R-1)*H,near=(v,x)=>top(v)&&Math.abs(cen(v)[0]-x)<0.1;
   const root=cells.find(v=>near(v,-e)),gap=cells.filter(v=>top(v)&&Math.abs(cen(v)[0])<e-0.1),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
   if(!root||gap.length!==pore)throw Error('budKit: no pore');const a0=ang(root),key=v=>((ang(v)-a0)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
@@ -75,7 +75,7 @@ function budKit(R=5,pore=7,letters=null,eSource=false,anchor={}){if(R%2!==1||(po
   const L=letters||[...LOW].filter(c=>!'awzyf'.includes(c)).slice(0,N-1);if(L.length<N-1)throw Error(`budKit: needs ${N-1} letters`);
   const outer=(v,i)=>hexr([(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2]);
   const AK=anchor.at||0,AG=(anchor.glue||'W')+'@|';let rootSide=-1,anchorSide=-1,seedSide=-1,eSide=-1;
-  const types=arc.map((v,k)=>{const t=['-&','-&','-&'],prev=k>0?shared(v,arc[k-1]):-1,next=k<N-1?shared(v,arc[k+1]):-1;
+  const types=arc.map((v,k)=>{const t=[wall,wall,wall],prev=k>0?shared(v,arc[k-1]):-1,next=k<N-1?shared(v,arc[k+1]):-1;
     if((k>0&&prev<0)||(k<N-1&&next<0))throw Error('budKit: cells not adjacent');
     if(prev>=0)t[prev]=UP[LOW.indexOf(L[k-1])]+'@';if(next>=0)t[next]=L[k]+'@';
     if(k===0||k===N-1){const free=[0,1,2].filter(i=>i!==prev&&i!==next).sort((i,j)=>outer(v,j)-outer(v,i));   // outer side first

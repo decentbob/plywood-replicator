@@ -244,6 +244,7 @@ const closureCase=(K,range)=>{
 test('closure (budKit): a bud grown cell by cell on its parent holds until its anchor catches, then lets go in the parent\'s own state',()=>closureCase(S.budKit(5),3));
 // the anchor Z@| on arc cell 6 (run 20261003-1921): the open range reaches the root from there
 test('closure (budKit, anchor on cell 6, Z@|): the bud holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'}),9));
+test('closure (budKit, anchor on cell 6, closed walls -|): the same with walls nothing binds or copies',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|'),9));
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);
