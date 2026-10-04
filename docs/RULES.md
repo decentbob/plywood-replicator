@@ -250,7 +250,18 @@ the same (11 of 11 pass both times). Tests: "binding: a free triangle docks by n
    the lineage has left (NEXT priority 1: the doorway pairs `budpore*`, the sealed pair's last cell `budpool-e`, the
    harness's two generations `budcycle-2`, and the `imprint` variants the held cell supersedes); each retired check's
    INNOVATIONS entry stays and its ROADMAP row says "retired".
-6. **Result.** (In progress, this run.)
+6. **Result (built as the rule; test "copy: only a strand held by its high end is copied (a free strand, or one held
+   by its low end, takes no dock)").** `node tri/check.js` with `CHECK_SAVE`, before (`882b7d4`: 23 of 23, 2849 s) and
+   after (11 of 11, 1349 s): the worlds that already ran with the option or never copy a strand are byte for byte the
+   same (`ring`, `imprint`, `budpool`, `budcycle`, `budcycle-free`: 20 worlds), and the new `imprint-pore` (`150px`)
+   is the old `imprint-held` (`150pzox`) byte for byte (4 worlds). Adapted: `copy` (held founder) 4 of 4 with 2-4
+   copies (was 2-3 on free strands); `imprint-genome` (held founder) 4 of 4 with 11-15 strands (was 9-15: the free
+   copies copied too); `imprint-pore-c` and `-n` pass as before. Retired (12 checks; code in git at `882b7d4`, INNOVATIONS
+   entries kept): `imprint-cell`, `imprint-cell-n`, `imprint-held`, `imprint-held-c`, `imprint-held-w`, `imprint-hood`,
+   `budpore`, `budpore-c`, `budpore-held`, `budpore-kind`, `budpool-e`, `budcycle-2`; the `budpore` demo (146 lines)
+   left `tri/demos.js`. Founders can start held (`createWorld` founder option `hold`: an anchor cell and a support,
+   their other sides closed `-|`; found by an independent review: with plain sides copy blanks copied the hold cells,
+   44 of 195 copies in `imprint g`). `node tri/test.js`: 32 tests, the copying tests on held founders.
 
 ### Narrowing: only grown triangles bind by glue; a strand end binds only by an anchor's catch, 2026-10-04, autorun run 20261004-0022 (explore)
 1. **Capability and why the goal needs it.** A cell must turn its food into the genome monomers it uses. In `budcycle`

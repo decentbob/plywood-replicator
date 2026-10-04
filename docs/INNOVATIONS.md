@@ -8,6 +8,29 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-0820, core-review)
+
+- **Only a strand held by its high end is copied: the option `heldCopy` is the rule; the check suite halves** — core
+  change (RULES, Core changes, two entries), no new capability. Zip now starts at a high end only while an anchor holds
+  its spare edge, in every world; the core has no option left. Run 0050's narrowing (a free triangle's anchor side binds
+  nothing) is removed: since run 0022 it decided nothing (all 35 check worlds byte for byte the same without it).
+  - **Evidence:** the suite before (`882b7d4`, 23 of 23, 2849 s) and after (11 of 11, 1349 s, with `CHECK_SAVE`): the
+    20 worlds of `ring`, `imprint`, `budpool`, `budcycle`, `budcycle-free` are byte for byte the same, and the new
+    `imprint-pore` (a cell fed through a pore, held founder, 3 sterile rivals: 7 / 7 / 6 / 8 strands inside, wall 0)
+    is run 1720's `imprint-held` byte for byte. `copy` on a held founder 4 of 4 (2-4 copies BBAABA); `imprint g` on a
+    held founder 4 of 4, 11-15 strands from 200 blanks (free strands copied too before: 9-15).
+  - **Retired** (layouts the lineage has left, or superseded by the held cell; code in git at `882b7d4`, entries below
+    kept): the doorway pairs (`budpore`, `budpore-c`, `budpore-held`, `budpore-kind` and the demo), the sealed pair's
+    last cell (`budpool-e`), the harness's two generations (`budcycle-2`), the sealed cell (`imprint-cell`, `-n`), the
+    hooded pore (`imprint-hood`), the option's control and leak checks (`imprint-held-c`, `imprint-held-w`). Their last
+    results on `882b7d4`: all passed (`budpore-held` 3 of 4, `budpore-kind` 4 of 4 with 11-13 bud copies after the split).
+    Not checked anywhere now: a bud copying its caught strand after the split (it was `budpore-held`/`-kind`; in the
+    lineage it is NEXT priority 2's measure).
+  - New labelled starting condition: `createWorld` founders with `hold: 'z'` start held by their high end on an anchor
+    cell `Z|` welded to a support (other sides closed `-|`, so blanks never copy them).
+    ![a held founder copied from copy blanks alone; its copies are free and sterile](pictures/held_genome_copies.png)
+  - Command: `node tri/demos.js imprint 1 30000 runs g` (the picture); `node tri/check.js` (about 23 minutes).
+
 ## 2026-10-04 (autorun run 20261004-0751, review-intent)
 
 - **Measurement: the two-generation lineage burns down its prepared food stock and part pool** — a finding (no new
