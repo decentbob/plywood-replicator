@@ -1,28 +1,25 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-1021, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-1421, harden). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
+handoffs: NEXT.md in git, e.g. at `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
 
-**Handoff status (autorun run 20261004-1021, build).** Priority 2 below is done as far as the core allows; the next
-run (index 37) is a `harden`: priority 3. Done: (a) `budcycle`'s default is the corner bud (seed site 45, closed walls
-`-|`, no harness) on a slow supply (400 pre-food at 0.0003 per 100 steps, world 36); its old setup lives on only in the
-pinned check `budcycle` (byte for byte the same output, new result fields aside); the oracles `BCA`, `BCG` and the
-drives `BCW`, `BCWK`, `BCSTOP2` pruned (git `7c9bbac`); (b) a per-bud census (`letgo:` lines: generation, cells,
-completion, catch, stocks), generations (a bud of generation g or later complete, let go and holding a caught strand;
-`BCGEN=n` stops there), `ownCopies` (each let-go bud's copies after its let-go) and labelled loop drives `BCL`, `BCLK`;
-(c) **three generations in 4 of 4 worlds** with the monomer loop (setup B, now the default; without the loop 0 of 4,
-though buds split earlier and copy more: INNOVATIONS run 1021); the check
-`budcycle-3` (the defaults, B) passes 4 of 4 (generation 3 at 735900-1031000 steps; suite 11 of 11, about an hour) and replaces `budcycle-free`. The strict target (every bud of the chain
-let go and copied its own strand at least once after) holds in 2 of 4: in the other two one bud of the chain budded
-while still attached and never let go. **Not reached: a lineage that does not burn down.** Only blanks change type,
-so blanks end as kit parts (fronts and the E source), leaked strands and new bodies; a drive returning free kit parts
-empties the rarely copied types (setup C), and without a slow supply the parent stops copying (D). The user (2026-10-04,
-IDEAS) asks for rules under which replication can go on indefinitely, with blocks circulating back (decay or a
-mechanism; a bond-cutting type, predation and scavenging; wider molding; molding one side at a time): candidate (m)
-below. Nothing is running. Branch `claude/autorun-20261004-1021`, merged by PR. Scratch (container only): `runs/q.sh`
-(a queue of demo worlds, at most 4 at once) and the batch logs `runs/a`-`runs/d`, `runs/pic` (regenerate with the
-INNOVATIONS commands).
+**Handoff status (autorun run 20261004-1421, harden).** Priority 1 below is done; the next run (index 38) is a
+`build`: priority 2. Done: lone-block moves (`_single`, about 780 of a `budcycle` world's 842 triangles, 74% of the
+time) made faster by exact changes (INNOVATIONS run 1421): neighbours gathered along the move (a capsule) instead of a
+wide disk, a kept typed neighbour list, pair tests without copies, trig only when needed, `sqrt` with `hypot` only
+near thresholds, `_jostle`'s member list typed. The suite: 11 of 11, all 35 check worlds' outputs byte for byte the same
+as at `ef7e74a` (`CHECK_SAVE`, `diff -r`), 2530 -> 2155 s (`budcycle-3` 2121 -> 1812 s per world with four running;
+one process at t = 20000: 2.26 -> 1.65 ms per step). A new test pins the capsule list to the disk list. What is left:
+inside `_single` the gather (11 candidates per block), the pair test and the depth loop share the time; no hot spot
+worth another exact round (tried and reverted: a bounding-circle shortcut, ternaries for `Math.min`). A real speed-up
+now needs fewer simulated free triangles (the 400 inert pre-food are half of them: a drive that adds blanks without
+keeping their stock in the world would change outputs, so it belongs to a `build` that changes the setup) or a change
+of physics (not a harden). Margins not touched: `imprint` seed 4 and `ring` seed 1 fail as before (3 of 4 each).
+**The lineage (run 1021, unchanged):** three generations in 4 of 4 on the slow supply, but it burns down its stocks;
+the user asks for rules under which replication goes on indefinitely (priorities 2-3, candidate (m)). Nothing is
+running. Branch `claude/autorun-20261004-1421`, merged by PR. Scratch (container only): `runs/a`, `runs/b`, `runs/c`
+(the check outputs before and after; regenerate with the command in INNOVATIONS run 1421).
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
@@ -78,16 +75,17 @@ Eleven runs since the last direction check (run 1321): five `build` (1420, 1650,
 **Priorities (in order; each a slice).** (Runs 0820 and 1021 did priorities 1 and 2 of run 0751's list: `heldCopy`
 the rule and the checks retired; the corner default, the census and three generations. Their text is in git at
 `7c9bbac`.)
-1. **`harden` (index 37): speed of `budcycle` worlds.** A three-generation world takes 25-35 minutes (1.8 ms per step
-   with four running; `budcycle-3` dominates the suite). Profile a default world (`node --cpu-prof tri/demos.js
-   budcycle 3 200000 runs/x` with `TRI_NOPIC=1`), make it faster without changing outputs (`CHECK_SAVE` before and
-   after, `diff -r`); then the margins left from run 1520 (`imprint` seed 6) if time remains.
+1. *(Done, run 1421: `budcycle` worlds 1.2-1.4x faster, outputs the same; INNOVATIONS.)*
 2. **`build` (index 38): where the blanks go, within the core.** In every setup kit copies take most blanks: each
    waiting front copies its own type (100-170 per world), the parent's E source makes 30-70 E parts (one per bud is
    used), leaked strands turn blanks into monomers. Measure first what each sink costs the genome (the parent's copies,
    the buds' own copies after let-go) by the census, then try kit or layout changes only (no rule change): E parts in
    the pool instead of the source, a different seed cell (other wedges, IDEAS run 0621), fewer part types (a periodic
-   ring, run 1321). Target: the chain's own copies after let-go in 3 of 4 worlds on the defaults.
+   ring, run 1321). Target: the chain's own copies after let-go in 3 of 4 worlds on the defaults. Speed side note (run 1421):
+   the 400 inert pre-food are half of the free triangles at the start (lone blocks take about 75% of the time); a supply
+   drive that keeps its stock outside the world (a blank placed at a random free spot at the same rate) would be up to
+   about 1.6x faster early in a run (less later, as pre-food turns into blanks), but changes outputs (and crowding):
+   decide it here, not in a `harden`.
 3. **`explore` (index 39): a reverse path, so blocks circulate (candidate (m), the user's request).** Today only
    blanks change type and nothing comes apart, so every closed world runs out. Weigh the user's options (IDEAS,
    2026-10-04): a bond-cutting side or type (local: it reads only the bond it touches; frees material locked in
@@ -131,7 +129,7 @@ nothing" would close it if one ever appears. Nothing else in the core is unused 
 ## Commands
 ```
 node tri/test.js                                   # fast checks (~5 s)
-node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~60 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes (~36 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part vs B/n
                                                    # (seconds; without POOLISO three more copyable sides beside it)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (extra: parts per type, 8;

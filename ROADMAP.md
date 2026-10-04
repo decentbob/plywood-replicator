@@ -85,8 +85,9 @@ then, was removed on 2026-10-03 (core review run 2121).
    (`imprint ph`), `budpore` splits with food left (8 of 8, run 1921), completion release (run 0050), closure designed
    (`budKit`, run 1121), the part pool law (run 1221), `budpore`'s dead-end options pruned (24 to 17 `BUD*` variables, run 1351), the bud
    grown from a part pool (`budpool`, run 1420).
-0b. **Speed** (harden runs): `budcycle` worlds take 10-20 minutes for two generations, the check suite 23 (run 0820;
-   was 47 before the retirements; run 0950: 1.34x by exact changes); lone blocks (`_single`), ring bodies (`_overlap`) and pairs share the time, no single hot spot left.
+0b. **Speed** (harden runs): a three-generation `budcycle` world takes about 30 minutes, the check suite 36 (run 1421;
+   run 0950: 1.34x, run 1421: 1.18x on the suite, both exact); lone blocks (`_single`: about 780 free triangles in a
+   `budcycle` world) take most of the time; no single hot spot left inside them.
    Since run 20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
 
 Removed with the casting lineage (2026-10-03; in git at `7415fd4`): the heritable factory cycle, the factory on lid
