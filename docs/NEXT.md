@@ -1,58 +1,46 @@
 # Next instance: start here
 
-State on 2026-10-03 (after autorun run 20261003-2221, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-04 (after autorun run 20261004-0022, explore). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `f05ed31` for run 2121's, `7415fd4` for run 1921's).
+handoffs: NEXT.md in git, e.g. at `faf6b8d` for run 2221's, `f05ed31` for run 2121's).
 
-**Current slice (autorun run 20261004-0022, explore; in progress).** Goal: settle core candidate (g) (free strands not
-contact-copied) and find what actually limits the bud's copies after the split ("food", run 2221). Done when: (g) is
-measured with a non-local oracle (`budcycle` `BCG=1`, the most any local rule could buy) and either a local rule is
-proposed through the RULES gate or (g) is withdrawn with the reason; and the real sink is named with numbers. Stop
-there. Found so far: (g)'s oracle does not save food (blanks are copied into genome monomers at held strands instead;
-seed 2 never split); the genome monomers are made 5x faster than used and skewed (awz : Awz : --W = 30 : 64 : 100 made,
-2 : 2 : 3 used per copy) because free back monomers glue-cap strands' low ends (5 caps gave 61 back copies and hid the
-low end's seed); testing candidate (h), strand ends bind no free triangle by glue (`BCH=1`, demo what-if).
+**Handoff status (autorun run 20261004-0022, explore).** Slice done: run 2221's "food after the split" diagnosed, and
+one core change. Branch `claude/autorun-20261004-0022`, merged into `main` by PR; no simulations running. (1) **Core
+change (RULES, Core changes, "Narrowing: only grown triangles bind by glue"):** a strand end's seed binds only by an
+anchor's catch and a released back binds nothing by glue (two cases of the active-side rule gone); zip's `&` case
+went with them. Check suite: CHECKS_PENDING. (2) **What it fixed:** in `budcycle` the blanks became genome monomers 5x
+faster than copying used them, in the mix awz : Awz : --W = 30 : 64 : 100 against 2 : 2 : 3 used per copy, because
+free back monomers glue-capped strands' low ends (the cap hid a face monomer's source and was copied over and over:
+5 caps, 61 of 100 back monomers). Now about 1 : 1 : 1 made and 47-86% used (was 17-46%); parent and bud make 10-13
+full copies per world (4-12); the bud copies 6-8 times after the split in 3 of 4 worlds (0-3 before; seed 1, split
+late, 1). (3) **Candidate (g) withdrawn:** its oracle (`BCG=1`) moved the copying to the held strands and saved no food.
+(4) Census tools in `budcycle`: `BCDBG=1` (genome copies by source, by type, and genome triangles bound by kind),
+`BCG=1` (the oracle). Records: INNOVATIONS (run 0022), IDEAS ("Monomers are made in proportion to exposure, not to
+need"), picture `docs/pictures/glue_caps_monomers.png` (made with a one-off chart script from the census lines of
+`budcycle` seeds 3 and 4).
 
-**Handoff status (autorun run 20261003-2221, build).** Slice done: priority 3, one generation of the kind from its
-own kit with no stand-in (new demo `budcycle`, check `budcycle` 4 of 4), and run on, two (check `budcycle-2`). Branch
-`claude/autorun-20261003-2221`, merged into `main` by PR; no simulations running. (1) **What runs:** a prepared parent
-of `budKit(5, 7, null, true, {at: 6, glue: 'Z'})` holding its founder by the high end on arc cell 6 (labelled),
-`heldCopy`, openRange 9, 8 free parts of each kit type but E, 200 blanks (20 inside), budpool's harness (kit copies back
-to blanks). The parent copies its founder through its pore, grows its bud from the pool, the bud catches a real copy
-and lets go. Seeds 1-8: 8 of 8 split after a real catch and complete their bud, 0 stray bindings; both seed sites then
-start new buds in 8 of 8. (2) **The order is left to chance:** in 7 of 8 the bud catches while growing (8-45 cells),
-lets go 10 steps later (its root hears nothing once the front is 9+ bonds away) and finishes its wall alone from the
-pool; its last site then opens outward, so the sealed pair's last-cell problem does not arise. openRange 50 forces the
-designed order (complete, catch, split: seed 1 of 4) but keeps the whole bud copyable while it grows (blanks copy its
-wall 2-10 times more; 1 of 4 stopped at 46 of 47, 2 of 4 founders never copied). (3) **Food is the next limit:** the
-200 blanks are gone by t = 75000 (contact copies of every strand's sides pile up as free genome triangles only a held
-strand uses); buds that split late copy their strand 0-1 times, early ones (split before t = 53000) 5-9 times. A
-labelled waste-to-blank drive (`BCW`) did not help (at 0.05 it recycled the parent's face copies before they docked).
-(4) **Two generations:** run on to 600000 steps (`BCAFTER=300000`), a bud grown on a bud's seed site completes and
-lets go after a catch in 6 of 6 worlds (seeds 1-4, 7, 8); check `budcycle-2` (stops at the first such bud): 4 of 4 (seeds 1-4: let go at 397900 / 414300 / 420600 / 506500, 0 stray; 702 s).
-Later buds mostly catch leaked strands (10-15 lie outside): with `heldCopy` a leak is held and copied again by the next
-bud that passes. Records: INNOVATIONS (run 2221), IDEAS ("A bud that catches early splits early and finishes
-alone"), ROADMAP rows; pictures `docs/pictures/budcycle.png`, `budcycle_generations.png` (commands below).
-
-**Exact next step** (the next `build`). Priority 3 works with two labelled supports left: the prepared pool (8 parts
-of each of 46 types, enough for about 8 buds) and budpool's harness, which turns every copy of a kit part back into a
-blank. The kind's own refill is the copies blanks make of a bud's unspent cells while it grows (200-900 per bud with
-the harness). Next: turn the harness off (`BCHOLD=0`) so those copies stay as parts, give the world a steady food
-supply if the blanks run out first (an environment drive, labelled: e.g. blanks enter at the world's edge; the waste
-drive `BCW` recycled the parent's face copies and did not help), and measure the pool per type over two or three
-generations (does any type run out; which). Target: the second generation (`budcycle-2`) in 3 of 4 with the harness
-off. If the pool drifts (run 1420: no per-type regulation), that is the finding; weigh the periodic ring (fewer types)
-then. Food after the split also limits each bud's own copies (0-1 when it splits late, 5-9 early; 400 blanks in a 36
-world, seed 2: 4).
+**Exact next step** (the next `build`; unchanged in aim from run 2221, sharper in what to measure). Priority 3 works
+with two labelled supports left: the prepared pool (8 parts of each of 46 types) and budpool's harness, which turns
+every copy of a kit part back into a blank. Turn the harness off (`BCHOLD=0`) so those copies stay as parts, and
+measure the pool per type and the monomers per type (`BCDBG=1`) over two or three generations. Before adding a food
+supply (an environment drive, labelled), check with the census whether food is the limit at all: in run 0022 the
+limit was the monomer mix, not the number of blanks. Target: the second generation (`budcycle-2`) in 3 of 4 with the
+harness off. If the pool drifts (run 1420: no per-type regulation), that is the finding; weigh the periodic ring
+(fewer types) then.
 
 **Core-change candidates (for the next `core-review` or `explore`).** (e) *`heldCopy` as the rule:* RULES (Core
-changes, run 1720) foresaw that it replaces the `&` case of zip once the casting lineage is gone and the copy lineage's
-demos hold their strands by the high end. Today the option is off by default and `imprint g`, `imprint m`, `imprint
-p`, `budpore 300`, `budpore c` copy free or low-end-held strands, so making it the rule changes those checks; weigh it
-when the kind's cycle (priority 3) runs on it, moving or retiring those demos then. Run 2221: the kind's cycle now runs on it (`budcycle`, two generations), so (e) is ripe for the next `core-review`. (f) *The seed site `y`* (plain
-glue, never spent) is copied by every blank that reaches it while no bud sits on it (copies of E; run 1420: 0-6 before
-the first root binds); the last-cell problem needs that source: keep. (g) *Free strands not contact-copied* (run 2221): sterile strands are still food sinks (every blank that touches a free strand becomes a free genome triangle that only a held strand can use; 200 blanks gone by t = 75000 in `budcycle`); a rule that reads whether a strand end is held, as `heldCopy` does, could keep blanks off free strands; weigh only if a supply in the environment does not solve the food after the split. Nothing else in the core is unused: every mark,
-signal and value has a kept check that uses it (Core inventory).
+changes, run 1720); the kind's cycle runs on it (`budcycle`, two generations). Today the option is off by default and
+`copy`, `imprint g`, `imprint m`, `imprint p`, `budpore 300`, `budpore c` copy free or low-end-held strands, so making
+it the rule changes those checks (they need anchors on high ends, or retire). Ripe for the next `core-review`. (f) *The
+seed site `y`* (plain glue, never spent) is copied by every blank that reaches it while no bud sits on it; the
+last-cell problem needs that source: keep. (g) withdrawn (run 0022, above). (i) *Run 0050's narrowing (a free
+triangle's anchor side binds nothing)* was made because free copies of a waiting anchor glue-capped strand ends; since
+run 0022 no free triangle binds a strand end at all, so it may be redundant (a free anchor-side triangle could still
+bind a grown side with the complementary glue: no kit has one). Weigh removing it in the next `core-review` (byte for
+byte comparison of the check suite). (j) *Monomer mix:* a copy uses 2 : 2 : 3 of a mix now made about 1 : 1 : 1, and a
+strand's middle faces are copied far less than its ends (IDEAS, run 0022); a genome whose exposure matches its use
+would waste less (no design yet). Nothing else in the core is unused: every mark, signal and value has a kept check
+that uses it (Core inventory); the busy relay is now read only by refractory.
 
 ### Direction (autorun run 20261003-1321, review-intent): where the work stands and what comes first
 Ten runs since the last direction check (run 1751): four `build` runs on M2 (1921, 2321, 0320, 0751), one `build` on
