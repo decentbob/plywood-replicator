@@ -8,6 +8,16 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## "Feeding" the offspring means giving it building blocks (user, 2026-10-04)
+
+The user, on the goal sentence "feeds it until it can live on its own": the intent is that the parent provides the
+offspring with all the usual building blocks it needs to grow and later replicate itself, not a new block type or an
+energy type (energy existed in the removed casting lineage). In this world the building blocks are the unit
+triangles themselves: copy blanks `-?-?-?` (untyped) and the parts and monomers made from them by contact copying.
+Records have called blanks "food"; read that as "building blocks". Today the bud takes its parts and blanks from the
+shared environment directly and the parent gives it only a seed site and a strand, so the goal's feeding step (the
+parent passing building blocks to its bud) is not built yet.
+
 ## A stock is not a metabolism (direction check, review-intent run 20261004-0751, 2026-10-04)
 
 Measured with the census in `budcycle-free` (INNOVATIONS, run 0751): the food stock is gone by the first split and
