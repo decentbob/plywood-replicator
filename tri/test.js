@@ -11,6 +11,7 @@ const symmetric=s=>{for(let q=0;q<3*s.n;q++){const r=s.bond[q];if(r>=0)assert.eq
 test('types: parse, name, canonical rotation',()=>{
   const t=parseType('K.dA@&');assert.deepEqual(t.glue,[gcode('K'),gcode('d'),gcode('A')]);assert.deepEqual(t.close,[1,0,0]);assert.deepEqual(t.att,[0,0,1]);assert.deepEqual(t.done,[0,0,1]);
   const s=new TriSim({},1);s.setType(0,'K.dA@&');assert.equal(s.typeName(0),'K.dA@&');assert.equal(canon('A--'),canon('-A-'));
+  {const q=new TriSim({},1);q.setType(0,'z@!-|-|');assert.equal(q.typeName(0),'z@!-|-|');}
   for(const old of ['K<dA*','a-b$','K%--',"Kb.'@X"])assert.throws(()=>parseType(old),/marks/,'removed mark accepted: '+old);});
 
 // a founder face with a docker placed exactly on it (no jostle): docks only with the complementary glue (the founder is
@@ -263,6 +264,35 @@ test('closure (budKit, anchor on cell 6, Z@|): the bud holds until its catch and
 test('closure (budKit, anchor on cell 6, closed walls -|): the same with walls nothing binds or copies',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|'),9));
 // the seed site on cell 45 (run 20261004-0621): the bud grows off the parent's top-right corner, pores facing across an open wedge
 test('closure (budKit, seed site on cell 45): the bud off the corner holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45),9));
+// lysis (run 20261004-2051, explore; RULES Core changes): a parent holding a stand-in strand end, its complete bud waiting
+// for a catch on the parent's seed site (cell 45), and a free part placed in the bud's anchor site; no motion (so the
+// freed parts stay where they were: the root binds the parent's seed site again and a new bud regrows from them)
+const lysisCase=cutter=>{const K=S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45),N=K.N,AK=K.anchorCell,SC=K.seedCell,s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:9},2*N+2),O=[20,20];
+  const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,C=2*N+1;buildStructure(s,Pu,K.tris,O[0],O[1]);buildStructure(s,Bu,K.tris.map(t=>({...t,v:t.v.map(K.pose)})),O[0],O[1]);
+  const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,'z--');s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);
+  const wall=[0,1,2].find(i=>s.bond[Bu[20]*3+i]<0);s.spent[Bu[20]*3+wall]=1;   // a spent side (labelled: set by hand) to see the fresh state after lysis
+  for(let k=0;k<40;k++)s.derive();assert.ok(s.op[Bu[0]]>0,'the waiting bud holds (its anchor emits)');
+  placeTri(s,C,refl(Bu[AK],K.anchorSide));s.setType(C,cutter);s.gridSync();
+  const types=[...Array(s.n).keys()].map(u=>s.typeName(u)),bonds=U=>U.map(u=>[0,1,2].map(i=>u===Pu[SC]&&i===K.seedSide?'seed':s.bond[u*3+i]).join(',')),P0=bonds([...Pu,Ps]);
+  // each bud cell's first pass free (the waves run from the anchor cell to both ends, one bond per pass), and whether it
+  // was then fresh (no spent side) and quiet (no lysis); the parent's seed site once the root is free
+  const freed=new Array(N).fill(0);let fresh=true,quiet=true,seed=false;
+  for(let k=1;k<=60;k++){s.step();Bu.forEach((u,c)=>{if(freed[c]||s.bonded(u))return;freed[c]=k;if([0,1,2].some(i=>s.spent[u*3+i]))fresh=false;if(s.ly[u])quiet=false;
+      if(!c)seed=s.bond[Pu[SC]*3+K.seedSide]<0&&!s.spent[Pu[SC]*3+K.seedSide];});
+    assert.deepEqual(bonds([...Pu,Ps]),P0,'the parent changed');}
+  const apart=freed.every(x=>x>0)?Math.max(...freed):0;
+  assert.deepEqual([...Array(s.n).keys()].map(u=>s.typeName(u)),types,'a type changed');symmetric(s);
+  return {s,Bu,C,wall,apart,fresh,quiet,seed,freed};};
+test('lysis: a part with a lysis side bound to a waiting anchor takes the bud apart into its parts, fresh; the parent behind its & joint stays whole',()=>{
+  const {s,apart,fresh,quiet,seed,freed}=lysisCase('z@!-|-|');
+  assert.ok(apart>0&&apart<=45,`every bud cell freed by pass ${apart} (${freed.join(' ')})`);assert.ok(seed,'the parent\'s seed site was not free and fresh when the root let go');
+  assert.ok(fresh,'a lysed part keeps a spent side');assert.ok(quiet,'a free triangle keeps its lysis');assert.ok(s.ev.lyse>=46,`cuts ${s.ev.lyse}`);
+  // control: the same part without the lysis side binds the anchor and nothing comes apart (the bud then hears no open
+  // signal and lets go of its parent by completion, as after a catch)
+  const c=lysisCase('z@-|-|');assert.ok([0,1,2].some(i=>c.s.partner(c.Bu[6],i)===c.C),'the control part did not bind the anchor');
+  assert.ok(!c.apart&&c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud came apart without a lysis side');assert.ok(!c.s.ev.lyse,'lysis without a lysis side');
+  assert.ok(c.s.spent[c.Bu[20]*3+c.wall],'the spent side was cleared without lysis');});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

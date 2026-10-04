@@ -12,6 +12,8 @@
 //                    strands are copied)
 //   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go
 //   completion       the open signal from open growth fronts; '&' sides let go and are spent once none is heard
+//   lysis            a triangle bonded to a lysis side ('!') is lysed; lysis is relayed one bond per pass (not across
+//                    a bond on an '&' side); a lysed triangle cuts all its bonds and returns to a fresh state
 // (The casting lineage's rules, casting, hinges and machines, energy, proofreading, were removed on 2026-10-03: git
 // `7415fd4`, docs/RULES.md Core changes.)
 const {Physics}=require('./physics');
@@ -30,13 +32,13 @@ const GL='αβγδεζηθικλμνξοπρστυφχψω',GU=GL.toUpperCase(),
 const gcode=c=>{if(c==='-')return 0;let i=LOW.indexOf(c);if(i>=0)return 2*i+1;i=UP.indexOf(c);if(i>=0)return 2*i+2;throw Error('glue letter '+c);};
 const gname=g=>g===0?'-':g%2?LOW[(g-1)/2]:UP[(g-2)/2];
 const comp=g=>g===0?0:g%2?g+1:g-1;
-// side marks: . close-only, @ attach (parts), & completion release, | anchor, ? copy side
-const MARKS='.@&|?';
+// side marks: . close-only, @ attach (parts), & completion release, | anchor, ? copy side, ! lysis side
+const MARKS='.@&|?!';
 const LET='a-zA-Zα-ωΑ-Ωа-яА-Я-',TOK=new RegExp(`([${LET}])([${MARKS}]*)`,'g');
 function parseType(str){const t=[...str.matchAll(TOK)];if(t.length!==3||t.map(m=>m[0]).join('')!==str)throw Error('type needs 3 sides with marks '+MARKS+': '+str);
   const has=(m,c)=>m[2].includes(c)?1:0;
-  return {glue:t.map(m=>gcode(m[1])),close:t.map(m=>has(m,'.')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),anc:t.map(m=>has(m,'|')),cpy:t.map(m=>has(m,'?'))};}
-const sideMarks=(s,k)=>(s.cOnly[k]?'.':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+(s.anc[k]?'|':'')+(s.cpy[k]?'?':'');
+  return {glue:t.map(m=>gcode(m[1])),close:t.map(m=>has(m,'.')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),anc:t.map(m=>has(m,'|')),cpy:t.map(m=>has(m,'?')),lys:t.map(m=>has(m,'!'))};}
+const sideMarks=(s,k)=>(s.cOnly[k]?'.':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+(s.anc[k]?'|':'')+(s.cpy[k]?'?':'')+(s.lys[k]?'!':'');
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k);}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
@@ -46,14 +48,14 @@ class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
-    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);
+    this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.lys=I8(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);
-    this.zip=I8(n);this.fn=I8(n);this.op=new Int16Array(n).fill(-1);
+    this.zip=I8(n);this.fn=I8(n);this.ly=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
   setType(u,str){const t=parseType(str);for(let i=0;i<3;i++){const k=u*3+i;this.spent[k]=0;this.glue[k]=t.glue[i];this.cOnly[k]=t.close[i];
-    this.att[k]=t.att[i];this.done[k]=t.done[i];this.anc[k]=t.anc[i];this.cpy[k]=t.cpy[i];}}
+    this.att[k]=t.att[i];this.done[k]=t.done[i];this.anc[k]=t.anc[i];this.cpy[k]=t.cpy[i];this.lys[k]=t.lys[i];}}
   typeName(u){return typeName(this,u);}
   // ---------------- roles (from a triangle's own bonds) ----------------
   _edges(u){let prev=-1,next=-1,face=-1;for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];
@@ -73,7 +75,7 @@ class TriSim extends Physics{
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
     // previous-pass values, copied into buffers kept between passes
     const sv=this._sv||(this._sv={}),old=k=>{const a=this[k];let b=sv[k];if(!b||b.length!==a.length)b=sv[k]=new a.constructor(a.length);b.set(a);return b;};
-    const nb0=old('nb'),gap0=old('gap'),need0=old('need'),busy0=old('busy'),zip0=old('zip'),op0=old('op');
+    const nb0=old('nb'),gap0=old('gap'),need0=old('need'),busy0=old('busy'),zip0=old('zip'),op0=old('op'),ly0=old('ly');
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
     // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond. Refractory: a
     // triangle that had a face bond in the previous pass (busy BUSY) and has none now was released; it stays
@@ -103,6 +105,13 @@ class TriSim extends Physics{
       if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){v=this.p.openRange;break;}}
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}
+    // ly (lysis): 1 for a triangle bonded to a partner's lysis side '!', or hearing lysis from a partner (previous pass)
+    // across a bond on which neither side carries '&' (the joint between a bud and its parent stops it); 2 for a
+    // bonded triangle that was lysed in the previous pass (its partners have heard it: it cuts its bonds this pass)
+    for(let u=0;u<n;u++){let L=0;
+      for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;if(ly0[u]){L=2;break;}
+        if(this.lys[q]||ly0[(q/3)|0]&&!this.done[u*3+i]&&!this.done[q])L=1;}
+      this.ly[u]=L;}
   }
   // ---------------- bonds ----------------
   bind(u,i,ku,v,j,kv){if(this.bond[u*3+i]>=0||this.bond[v*3+j]>=0)throw Error('bind: side already bonded');this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;}
@@ -146,8 +155,10 @@ class TriSim extends Physics{
     // orientation: binding turns it into place)
     const reach=(u,i,v,j)=>{const X=k=>this.ox[u*3+k],Y=k=>this.oy[u*3+k],k2=(i+2)%3;
       const sx=(2*(X(i)+X((i+1)%3))-X(k2))/3,sy=(2*(Y(i)+Y((i+1)%3))-Y(k2))/3,dx=this._dx(this.px[v]-this.px[u])-sx,dy=this._dy(this.py[v]-this.py[u])-sy;return dx*dx+dy*dy<=p.capture*p.capture;};
+    const ly=this.ly;
     for(let k=0;k<pairs.length;k+=2){let u=pairs[k],v=pairs[k+1];const ru=R[u],rv=R[v];
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)
+      if(ly[u]||ly[v])continue;                        // a lysed triangle binds nothing (no part rejoins a body coming apart)
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
         // copy side '?': a free triangle that has one binds only by it, to any free (unbonded, not spent, not anchor)
         // side of an attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets
@@ -199,6 +210,7 @@ class TriSim extends Physics{
   // ---------------- state changes ----------------
   chemistry(){
     const n=this.n,p=this.p,P=(u,i)=>this.partner(u,i);
+    this._lyse();
     // fills become ordinary strand triangles once they have both chain bonds
     for(let u=0;u<n;u++)if(this.fill[u]){const e=this._edges(u);if(e.prev>=0&&e.next>=0)this.fill[u]=0;}
     // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face (the
@@ -215,7 +227,7 @@ class TriSim extends Physics{
   // contact copying: a triangle bonded by a copy side '?' and by nothing else (a copy blank that bound this pass) takes
   // its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the partner turned about the
   // shared edge; glues and marks) and lets go
-  _copy(){const A=['glue','cOnly','att','done','anc','cpy'];
+  _copy(){const A=['glue','cOnly','att','done','anc','cpy','lys'];
     for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){if(!this.cpy[u*3+i])continue;const q=this.bond[u*3+i];if(q<0||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
       const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
       for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
@@ -223,6 +235,13 @@ class TriSim extends Physics{
   // completion release '&': the bond on this side is cut once its triangle hears no open signal (its part is complete);
   // the side is then spent: it binds nothing again, so the gap it leaves cannot be refilled
   _release(){for(let u=0;u<this.n;u++)if(this.op[u]===0)for(let i=0;i<3;i++){const k=u*3+i;if(!this.done[k])continue;this.spent[k]=1;if(this.bond[k]>=0){this.cut(u,i);this.count('complete');}}}
+  // lysis: a triangle lysed for a whole pass (ly 2) cuts all its bonds; a lysed triangle that is then free (by its own
+  // cuts or its partners') returns to a fresh state of its type (spent sides, fill and refractory cleared), so each
+  // part leaves a lysed body as the part it was made as; it hears nothing (op -1, as a free triangle: a stale completion
+  // signal would spend its '&' side in the next release)
+  _lyse(){const n=this.n,L=this.ly;let any=false;for(let u=0;u<n;u++)if(L[u]){any=true;break;}if(!any)return;
+    for(let u=0;u<n;u++)if(L[u]===2){for(let i=0;i<3;i++)if(this.bond[u*3+i]>=0){this.cut(u,i);this.count('lyse');}}
+    for(let u=0;u<n;u++)if(L[u]&&!this.bonded(u)){for(let i=0;i<3;i++)this.spent[u*3+i]=0;this.fill[u]=0;this.refr[u]=0;this.fn[u]=0;this.op[u]=-1;L[u]=0;}}
   step(){this._release();this.t++;this.physics();this.derive();this.formBonds();this.chemistry();}
   run(steps){for(let k=0;k<steps;k++)this.step();}
 }
