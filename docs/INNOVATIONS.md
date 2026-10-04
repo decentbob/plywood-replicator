@@ -8,6 +8,28 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-04 (autorun run 20261004-0751, review-intent)
+
+- **Measurement: the two-generation lineage burns down its prepared food stock and part pool** — a finding (no new
+  capability, no code change). Two worlds of the `budcycle-free` setup with the census (`BCDBG=1`, seeds 1 and 3,
+  600000 steps, stopped at the second generation): first split at 270457 / 189061, second generation at 536700 /
+  440000 (as in run 0621).
+  - **Food:** 179-180 of 180 pre-food fed; free blanks fall from about 30 to 0-7 by the first split and stay at 0
+    after it. The first bud copies its caught strand 0 / 1 times after the split: no food is left for it.
+  - **Part pool** (free parts per kit type, 8 of each of 46 types at the start): mean 8.0 -> 4.2 (seed 1, two types
+    at 0 near the end) and 8.0 -> 6.6 (seed 3, fewest 3); kit copies 114 / 148 in the whole run against about 290 /
+    190 parts used by the first bud and the later buds (seed 1: 9 later buds, 4 of them complete). The copies come
+    while food lasts: seed 1 made 91 by t = 150000, when the first bud's 47 parts were in place (about 2 per part used),
+    and few after; the spread per type widens from the start (5-6 fewest, 15-21 most within one bud): copies go to
+    the cells whose fronts wait longest, not to the types that run short.
+  - Meaning (NEXT, Direction of run 0751): "two generations without the harness" lives on two stocks that end; an
+    indefinite lineage needs food arriving for ever (in a closed world, material returning to food) and a pool whose
+    copies keep up per type.
+    ![free parts per type and free blanks over two generations, seeds 1 and 3](pictures/stocks_burn_down.png)
+  - Command: `BCDBG=1 BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 TRI_NOPIC=1 node
+    tri/demos.js budcycle 1 600000 runs/ri` (about 20 minutes per world with two running; the `pool` field of the
+    progress lines is fewest/mean/most free parts per type).
+
 ## 2026-10-04 (autorun run 20261004-0621, explore)
 
 - **The bud grows off its parent's corner instead of across its pore: the pair is never sealed, and two generations
