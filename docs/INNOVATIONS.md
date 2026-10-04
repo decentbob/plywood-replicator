@@ -56,6 +56,7 @@ not statistics.
     ![copy binds by template in five setups](pictures/blank_sinks.png)
   - Command: `BCGEN=3 BCAFTER=900000 TRI_NOPIC=1 node tri/demos.js budcycle N 1200000 runs/x` with `BCES=0 BCE=8`,
     `BCES=2`, `BCGATE=1` (about 25 minutes per world with four running); `sinks` and `chain:` after the result.
+  - Checks: 10 of 10 without `budcycle-3` (605 s); `budcycle-3`'s settings are the defaults row above (4 of 4, 0 stray).
 
 ## 2026-10-04 (autorun run 20261004-1421, harden)
 

@@ -17,7 +17,8 @@ generation 3 (2 and 3 of 4). (3) Every failing chain fails the same way: a bud w
 seed site and its bud catches first; no seed cell's geometry prevents it. (4) The oracle fixes the order (every chain
 bud copies, 4 of 4) but the lineage slows (catch waits of 100-400 thousand steps), and with more parent copies (no E
 source) the parent and every adult bud again and again until the fixed pool is gone (generation 3 0 of 4). Breadth
-starves depth while stocks burn down: candidate (n) below pays only with the reverse path (m). Nothing is running.
+starves depth while stocks burn down: candidate (n) below pays only with the reverse path (m). Checks: 10 of 10
+(`budcycle-3`: the defaults batch, 4 of 4). Nothing is running.
 Branch `claude/autorun-20261004-1721`, merged by PR. Scratch (container only): `runs/base_N.txt`, `e_`, `o_`, `g_`,
 `ge_` (the five setups; regenerate with the commands in INNOVATIONS run 1721), `runs/geo.js` (the seed-cell geometry:
 for each outer cell k, `budKit(5,7,null,true,{at:6,glue:'Z'},'-|',k)`, pose the kit and measure where a root on the
