@@ -38,6 +38,11 @@ const CHECKS=[
   {id:'budcycle',cap:'One generation of the kind from its own kit: the parent copies its held founder, grows its bud from the pool; the bud catches a real copy, splits and is complete',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:300000,secs:600,env:{BCAFTER:'2000',BCSEED:'-1',BCK:'0',BCHOLD:'1',BCB:'200',BCF:'0',BCS:'32',BCL:'0'},
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) catch=(\S+) early=(\d) catchCells=(\d+) split=(\S+) .*budCopies=(\d+) .*newRoots=(\S+) .*stray=(\d+)/);
       return [!!m&&m[2]!=='not'&&m[3]!=='not'&&m[6]!=='not'&&+m[9]===0,m?`split ${m[6]} (catch at ${m[5]} cells), complete ${m[2]}, bud copies ${m[7]}, new roots ${m[8]}, ${m[9]} stray`:'no result'];}},
+  // run 20261004-2051 (explore): the lysis side '!' (RULES Core changes). A parent with a complete bud stuck on its seed
+  // site (no food), 4 cutters 'z@!-|-|' (labelled), the anchor on cell 44 (openRange 50): the stuck bud comes apart into
+  // its 47 parts and a later bud on the seed site is built from at least 40 of them
+  {id:'lysis',cap:'Lysis: a stuck bud taken apart into its parts by a cutter at its waiting anchor; a new bud on the parent grows from them',demo:'lysis',seeds:[1,2,3,4],need:3,steps:1000000,secs:150,
+    pass:(L,o)=>{const m=o.match(/result: lysedFirst=(\S+) .*max=(\d+) .*reused=(\d+) cuts=(\d+)/);return [!!m&&m[1]!=='not'&&+m[3]>=40,m?`apart at ${m[1]}, a later bud of ${m[2]} cells, ${m[3]} of them the stuck bud's parts, ${m[4]} cuts`:'no result'];}},
   // run 20261004-1021 (build): three generations on a slow supply (labelled environment drive: 400 inert pre-food turning
   // into copy blanks, the untyped building blocks, at 0.0003 per 100 steps; world 36) and a monomer loop (labelled: free genome monomers turn back into blanks, 0.002 per
   // 100 steps; without it 0 of 4, run 1021); the bud grows off its parent's corner

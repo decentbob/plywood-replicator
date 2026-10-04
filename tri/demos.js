@@ -330,11 +330,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // (no blanks: nothing is copied, no strand leaks); LYC cutters 'z@!-|-|' (labelled: a part whose attach side carries
     // the lysis mark; it binds only a waiting anchor Z@|) and LYP free parts of each kit type (0). Observation: each bud on
     // the parent's seed site (its root and the cells joined to it), its size, completion and lysis; how many of its cells
-    // are parts of the first (stuck) bud. extra: unused. LYS: world size (30); LYR: openRange (9); LYA: the anchor cell (6;
-    // with 44 the anchor opens only when the bud is nearly complete: LYR must then exceed 44 so the root holds while it waits)
-    lysis(){steps=steps||400000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.LYA||6),R=5,C=+(process.env.LYC??4),P=+(process.env.LYP||0),size=+(process.env.LYS||30),cut=process.env.LYT||'z@!-|-|';
+    // are parts of the first (stuck) bud. extra: unused. LYS: world size (30); LYA: the anchor cell (44: the anchor opens
+    // only when a bud is nearly complete; budcycle's kind has 6, where cutters kill every bud as its cell 6 attaches); LYR:
+    // openRange (50: more than the anchor cell, so the root holds while the anchor waits; 9 with LYA=6); LYFIX=1 (below)
+    lysis(){steps=steps||400000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.LYA||44),R=5,C=+(process.env.LYC??4),P=+(process.env.LYP||0),size=+(process.env.LYS||30),cut=process.env.LYT||'z@!-|-|';
       const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},'-|',45),N=K.N,SC=K.seedCell,O=[size/2,size/2-R*H],supply={};if(C)supply[cut]=C;if(P)for(const t of K.types)supply[t]=P;
-      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:O[0],y:O[1]},{tris:K.tris.map(t=>({...t,v:t.v.map(K.pose)})),x:O[0],y:O[1]}],supply,params:{openRange:+(process.env.LYR||9)}});
+      const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:O[0],y:O[1]},{tris:K.tris.map(t=>({...t,v:t.v.map(K.pose)})),x:O[0],y:O[1]}],supply,params:{openRange:+(process.env.LYR||50)}});
       const Pu=structures[0],B0=structures[1],F=founders[0],all=[...Array(s.n).keys()],kitT=new Set(K.types.map(canon)),first=new Set(B0);seedCopyGenome(s,F);
       s.bind(B0[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);
       {const b=F.find(u=>{const q=s.roles(u);return q.inert>=0&&s.glue[u*3+q.inert]===gc('z');}),f=s.roles(b).inert,md=s.moveDepth;s.moveDepth=()=>0;const ok=s._snapBody(b,f,Pu[AK],K.anchorSide);s.moveDepth=md;
@@ -351,24 +352,26 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // the bud on the parent's seed site (observation: its root and the kit cells joined to it, the parent's cells excluded)
       const parent=new Set([...Pu,...F]),budNow=()=>{const r=s.partner(Pu[SC],K.seedSide);if(r<0)return null;const seen=new Set([r]),L=[r];
         for(let q=0;q<L.length;q++)for(let i=0;i<3;i++){const y=s.partner(L[q],i);if(y<0||seen.has(y)||parent.has(y)||!kitT.has(canon(s.typeName(y))))continue;seen.add(y);L.push(y);}return L;};
-      const buds=[],focus=()=>({units:[...Pu,...(budNow()||[])],radius:12});let cur=null,lysedFirst=0,lyse0=0;const freedAt=new Array(N).fill(0);
+      const buds=[{root:B0[0],t0:0,max:N,tc:1,reused:N,n:N}],focus=()=>({units:[...Pu,...(budNow()||[])],radius:12});let cur=buds[0],lysedFirst=0,lyse0=0;const pic={};const freedAt=new Array(N).fill(0);
       snap(s,'t0',`t=0: the parent and its stuck bud (complete, waiting for a catch), ${C} cutters, ${P} parts per type, no blanks`,null,false);
       const free=()=>all.filter(u=>!s.bonded(u)&&kitT.has(canon(s.typeName(u)))).length;
       for(let t=1;t<=steps;t++){s.step();
         // the stuck bud is apart once each of its cells has been free (the waves run from its anchor cell to both ends; a
         // new bud may start on the parent's seed site from the first parts freed before the far end is apart)
         if(!lysedFirst&&s.ev.lyse){B0.forEach((u,k)=>{if(!freedAt[k]&&!s.bonded(u))freedAt[k]=t;});if(freedAt.every(x=>x)){lysedFirst=t;snap(s,'lysed',`t=${t}: the stuck bud has come apart into its ${N} parts`,null,false);console.log(`lysed: every cell of the stuck bud free by t=${t} (from t=${Math.min(...freedAt)}; ${s.ev.lyse} cuts); free kit parts ${free()}`);}}
-        if(t%50)continue;const L=budNow(),root=L?L[0]:-1;
-        if(cur&&cur.root!==root){cur.end=t;cur.lysed=(s.ev.lyse||0)>lyse0;console.log(`bud ${buds.length-1} ends at t=${t}: max ${cur.max} cells, complete ${cur.tc||'not'}, ${cur.lysed?'lysed':'let go'}`);cur=null;}
-        if(L&&!cur){cur={root,t0:t,max:0,tc:0,reused:0};buds.push(cur);lyse0=s.ev.lyse||0;}
-        if(cur){const n=L.length;if(n>cur.max){cur.max=n;cur.reused=L.filter(u=>first.has(u)).length;}if(n>=N&&!cur.tc){cur.tc=t;if(buds.length===2)snap(s,'regrown',`t=${t}: a new bud complete, ${cur.reused} of its ${N} cells parts of the stuck bud`,focus(),false);console.log(`bud ${buds.length-1} complete at t=${t}: ${cur.reused} of ${N} cells from the stuck bud`);}
-          if(buds.length===2&&n===24&&!cur.half){cur.half=t;snap(s,'half',`t=${t}: a new bud on the parent's seed site, 24 of ${N} cells`,focus(),false);}}
+        // a bud ends when its root leaves the seed site or it loses cells (lysis); a new one starts from a root alone (or
+        // with one cell: the root may bind again at once)
+        if(t%10)continue;const L=budNow(),root=L?L[0]:-1;
+        if(cur&&(cur.root!==root||L.length<cur.n-1)){cur.end=t;cur.lysed=(s.ev.lyse||0)>lyse0;console.log(`bud ${buds.length-1} ends at t=${t}: max ${cur.max} cells, complete ${cur.tc||'not'}, ${cur.lysed?'lysed':'let go'}`);cur=null;}
+        if(L&&!cur&&L.length<=2){cur={root,t0:t,max:0,tc:0,reused:0,n:L.length};buds.push(cur);lyse0=s.ev.lyse||0;}
+        if(cur){const n=L.length;cur.n=n;if(n>cur.max){cur.max=n;cur.reused=L.filter(u=>first.has(u)).length;}if(n>=N&&!cur.tc){cur.tc=t;if(!pic.regrown){pic.regrown=t;snap(s,'regrown',`t=${t}: a new bud complete, ${cur.reused} of its ${N} cells parts of the stuck bud`,focus(),false);}console.log(`bud ${buds.length-1} complete at t=${t}: ${cur.reused} of ${N} cells from the stuck bud`);}
+          if(cur!==buds[0]&&n===36&&!pic.half){pic.half=t;snap(s,'half',`t=${t}: a new bud on the parent's seed site, 36 of ${N} cells, ${L.filter(u=>first.has(u)).length} of them parts of the stuck bud`,focus(),false);}}
         if(every(t,20))console.log(`t=${t} bud ${L?L.length:0}/${N} buds ${buds.length} complete ${buds.filter(b=>b.tc).length} lysed ${buds.filter(b=>b.lysed).length} cuts ${s.ev.lyse||0} free parts ${free()}`);}
       if(process.env.LYDBG){const {canon:cn}=require('./sim');console.log('first bud cells still bonded:',B0.map((u,k)=>s.bonded(u)?k+':'+[0,1,2].map(i=>{const y=s.partner(u,i);return y<0?'-':B0.includes(y)?'b'+B0.indexOf(y):Pu.includes(y)?'p'+Pu.indexOf(y):s.typeName(y);}).join(','):'').filter(Boolean).join(' '));}
       // kit bodies off the parent (observation): bodies of two or more kit parts not joined to the parent, by size
       const frag=[];{const seen=new Set(parent);const bp=budNow();if(bp)bp.forEach(u=>seen.add(u));for(const u of all){if(seen.has(u)||!s.bonded(u)||!kitT.has(canon(s.typeName(u))))continue;const b=s.bodyOf(u);b.forEach(x=>seen.add(x));frag.push(b.filter(x=>kitT.has(canon(s.typeName(x)))).length);}}
       const later=buds.slice(1);snap(s,'end',`t=${s.t}: ${later.length} buds after the stuck one, ${later.filter(b=>b.tc).length} complete`,null,false);
-      console.log(`t=${s.t} result: lysedFirst=${lysedFirst||'not'} buds=${later.length} complete=${later.filter(b=>b.tc).length} lysed=${buds.filter(b=>b.lysed).length} max=${Math.max(0,...later.map(b=>b.max))} firstComplete=${(later.find(b=>b.tc)||{}).tc||'not'} reused=${later.length?later[0].reused:0} cuts=${s.ev.lyse||0} offParent=${frag.sort((a,b)=>b-a).join(',')||'none'}`);
+      console.log(`t=${s.t} result: lysedFirst=${lysedFirst||'not'} buds=${later.length} complete=${later.filter(b=>b.tc).length} lysed=${buds.filter(b=>b.lysed).length} max=${Math.max(0,...later.map(b=>b.max))} firstComplete=${(later.find(b=>b.tc)||{}).tc||'not'} reused=${Math.max(0,...later.map(b=>b.reused))} cuts=${s.ev.lyse||0} offParent=${frag.sort((a,b)=>b-a).join(',')||'none'}`);
       finish('Lysis: a stuck bud taken apart into its parts, which grow the next bud (no food; the lysis side \'!\')',3);},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
