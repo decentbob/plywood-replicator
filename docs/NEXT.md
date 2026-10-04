@@ -12,6 +12,16 @@ strand; `sinks` in the `letgo:` lines and after the result) on the 4 check seeds
 census points to (first candidate: E parts in the pool instead of the E source); (3) if one works in 3 of 4, make it
 the default and re-run `budcycle-3`. Stop: one change tried to a result, or a reason none of the kit changes can do it.
 Branch `claude/autorun-20261004-1721`.
+Progress (18:40 UTC): (1) baseline (defaults, seeds 1-4, the check's settings, census): the same outputs as run 1021
+(generation 3 at 1031000 / 977300 / 735900 / 827100); copy binds by template over the run: free strands (gF) 421-867
+(monomers, mostly looped back: looped 419-857), fronts 235-258, the parent's genome (gP) 48-65, the E source 43-60, buds'
+genomes (gB) 17-36, seed sites 4-12. The chain's own copies after let-go: 2 of 4 (seeds 2, 3); seeds 1, 4 fail because a
+bud on the chain never catches, so never lets go (its own bud carries the lineage on). (2) `BCES=0 BCE=8` (no E source,
+8 E parts in the pool): the parent copies 3-12 times (was 3-6), first split 136k-419k (was 395k-637k), generation 2 in
+4 of 4 at 511k-770k, buds' genomes 41-128; but generation 3 in only 2 of 4 by 1.2M (974400, 809600): the pool empties
+(9-10 types at 0) as more buds start and let go incomplete. (3) Running: `BCES=2` (the E source on E's outer side, its
+pore side a wall), seeds 1-4, `runs/o_N.txt`; rerun: `BCES=2 BCGEN=3 BCAFTER=900000 TRI_NOPIC=1 node tri/demos.js
+budcycle N 1200000 runs/o`.
 
 **Handoff status (autorun run 20261004-1421, harden).** Priority 1 below is done; the next run (index 38) is a
 `build`: priority 2. Done: lone-block moves (`_single`, about 780 of a `budcycle` world's 842 triangles, 74% of the
