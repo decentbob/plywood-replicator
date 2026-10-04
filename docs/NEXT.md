@@ -15,6 +15,9 @@ supply; the doorway kind gives 2 of 4) in at least 3 of 4 worlds, then the harne
 the 4-world comparison, with a record of what the corner pose does (works / not yet and why). Running (if the run was
 cut off): `BCSEED=45 BCK=1 BCB=20 BCF=180 BCFP=0.001 BCHOLD=0 BCAFTER=300000 BCSTOP2=1 BCDBG=1 node tri/demos.js budcycle
 N 600000 runs/c45/sN`, seeds 1-4.
+First result (seeds 1-4): gen2 in 3 of 4 (seeds 1, 3, 4; seed 2's second bud complete and waiting for its catch at
+the 600000 cap); the doorway kind gives 2 of 4 in the same setup. Buds complete first and wait 90-200 thousand steps
+for a catch without starving the parent. Running: seeds 5-8 (`runs/c45/s5..8.log`), then the doorway kind on 5-8.
 
 **Handoff status (autorun run 20261004-0251, build).** Slice: the kind's cycle (`budcycle`) without budpool's harness.
 Branch `claude/autorun-20261004-0251`, merged into `main` by PR; no simulations running. No new rule; no new check
