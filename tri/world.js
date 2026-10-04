@@ -33,12 +33,15 @@ function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.s
     if(gu===0&&gv===0){if(tris[a].loose||tris[b].loose)continue;gu=gcode('f');gv=gcode('F');s.glue[u*3+i]=gu;s.glue[v*3+j]=gv;}
     if(gu&&gv===comp(gu))s.bind(u,i,GLUE,v,j,GLUE);}
   return W;}
-// founders: {gaps, faces, ends?, backs?, x?, y?}; structures: {tris, x, y, rot?}; supply: {type: count}
+// founders: {gaps, faces, ends?, backs?, hold?, x?, y?}; structures: {tris, x, y, rot?}; supply: {type: count}
+// hold: glue letter (e.g. 'z'): the founder starts held by its high end (a labelled starting condition: only a strand
+// held by its high end is copied, RULES): its spare edge gets that glue, and an anchor cell (the complement with the
+// anchor mark '|') welded to a support cell is placed flush against it and bonded (out.holds: [anchor, support])
 function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params={}}={}){
   const bands=founders.map(f=>band(rolesFromGaps(f.gaps)));
-  const n=bands.reduce((a,b)=>a+b.length,0)+structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
+  const n=bands.reduce((a,b)=>a+b.length,0)+2*founders.filter(f=>f.hold).length+structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
   // TRI_PARAMS (environment, JSON) overrides parameters for experiments, e.g. TRI_PARAMS='{"sigma":0.2}'
-  const s=new TriSim({...params,...JSON.parse(process.env.TRI_PARAMS||'{}'),seed,W:size,H:size},n);let next=0;const placed=[],out={s,founders:[],structures:[]};
+  const s=new TriSim({...params,...JSON.parse(process.env.TRI_PARAMS||'{}'),seed,W:size,H:size},n);let next=0;const placed=[],out={s,founders:[],structures:[],holds:[]};
   bands.forEach((tris,k)=>{const f=founders[k],units=tris.map(()=>next++),cx=f.x??size*(k+1)/(bands.length+1),cy=f.y??size*(k+1)/(bands.length+1);
     let mx=0,my=0;for(const t of tris)for(const p of t.v){mx+=p[0]/(3*tris.length);my+=p[1]/(3*tris.length);}
     const Wv=tris.map((t,q)=>{const V=ccw(t.v).map(p=>[p[0]-mx+cx,p[1]-my+cy]);placeTri(s,units[q],V);return V;});
@@ -46,6 +49,12 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
     units.forEach(u=>s.setType(u,'---'));
     let fi=0;for(const u of units){const r=s.roles(u);if(r.role===SFACE)s.glue[u*3+r.free]=gcode(f.faces[fi++]||'-');else if(r.role===SBACK&&f.backs)s.glue[u*3+r.free]=gcode(f.backs);}
     if(f.ends){const r0=s.roles(units[0]),r1=s.roles(units[units.length-1]);if(r0.inert>=0)s.glue[units[0]*3+r0.inert]=gcode(f.ends[0]);if(r1.inert>=0&&f.ends[1])s.glue[units[units.length-1]*3+r1.inert]=gcode(f.ends[1]);}
+    if(f.hold){const u=units[units.length-1],i=s.roles(u).inert,A=next++,A2=next++,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
+      s.glue[u*3+i]=gcode(f.hold);const a=P(i),b=P((i+1)%3),V=[b,a,sub(add(a,b),P((i+2)%3))],cen=T=>[(T[0][0]+T[1][0]+T[2][0])/3,(T[0][1]+T[1][1]+T[2][1])/3];
+      // the support across the anchor cell's side 1, or its side 2 where that place is the strand's
+      let e=1,W2=[V[2],V[1],sub(add(V[1],V[2]),V[0])];if(Wv.some(T=>same(cen(T),cen(W2)))){e=2;W2=[V[0],V[2],sub(add(V[2],V[0]),V[1])];}
+      placeTri(s,A,V);placeTri(s,A2,W2);s.setType(A,gname(comp(gcode(f.hold)))+(e===1?'|f-':'|-f'));s.setType(A2,'F--');s.bind(A,e,GLUE,A2,0,GLUE);s.bind(u,i,GLUE,A,0,GLUE);
+      placed.push(A,A2);out.holds.push([A,A2]);}
     placed.push(...units);out.founders.push(units);});
   for(const st of structures){const units=st.tris.map(()=>next++);buildStructure(s,units,st.tris,st.x,st.y,st.rot||0);placed.push(...units);out.structures.push(units);}
   for(const [t,c] of Object.entries(supply))for(let q=0;q<c;q++){const u=next++;s.setType(u,t);

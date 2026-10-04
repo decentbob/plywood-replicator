@@ -39,7 +39,7 @@ const sideMarks=(s,k)=>(s.cOnly[k]?'.':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k);}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,heldCopy:false};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -86,16 +86,14 @@ class TriSim extends Physics{
         if(nx>=0){this.nb[u]=role[nx]===SBACK?1:0;if(r.role===SFACE)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+nb0[nx]:-1;}
         if(r.fill&&nx>=0)this.need[u]=Math.max(0,need0[nx]-1);}
       else if(r.role===DOCKED){const t=P(u,r.face);this.need[u]=gap0[t]>=0?Math.max(0,2-gap0[t]):0;}}
-    // zip: a strand triangle without a next bond (the strand's high end), or whose next partner is a face being copied
-    // (a TFACE bond), or a back that hears zip from its next partner; a face takes a dock only while it hears zip, so a
-    // copy grows from the high end one face after another and never encloses an empty dock site between two copies
-    // option heldCopy: a high end emits zip only while its spare edge is held (by an anchor), so a free strand is never
-    // copied (Core changes, run 20261003-1720)
-    const held=this.p.heldCopy;
+    // zip: a strand's high end (no next bond) while its spare edge is held (only an anchor's catch binds it), a strand
+    // triangle whose next partner is a face being copied (a TFACE bond), or a back that hears zip from its next partner;
+    // a face takes a dock only while it hears zip, so only a strand held by its high end is copied (a free strand never:
+    // Core changes, run 20261004-0820, the option heldCopy of run 20261003-1720 made the rule), and a copy grows from the
+    // high end one face after another and never encloses an empty dock site between two copies
     for(let u=0;u<n;u++){const r=R[u];let z=0;
       if(r.role===SFACE||r.role===SBACK){const e=this._edges(u);
-        // (a high end held by a completion-release side started no copy until 2026-10-04: only an anchor holds a strand end now)
-        if(e.next<0){const sp=r.inert;z=sp>=0&&this.bond[u*3+sp]>=0?1:(held?0:1);}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
+        if(e.next<0){const sp=r.inert;z=sp>=0&&this.bond[u*3+sp]>=0?1:0;}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
       this.zip[u]=z;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
