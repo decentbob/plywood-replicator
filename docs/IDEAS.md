@@ -18,6 +18,21 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## The scavenger's dilemma: clearing has to scale with the population (build run 20261005-1051, 2026-10-05)
+
+Measured with prepared scavengers (`Z@|!&`, run 0721) in 4M-step lineage worlds (INNOVATIONS run 1051). A leaked
+strand is two things at once: the genome the next bud must catch, and the largest blank sink (a free strand's sides
+turn every blank that reaches them into monomers; 20-76% of the blanks copied by genome triangles went to free strands).
+Eight scavengers clear every strand and no bud ever catches; two leave the buds their catches but fall behind once
+bodies multiply (6-8 free strands at 0.5M, 18-40 at 2-3M), and only 1 of 4 worlds still made offspring near 4M. A
+fixed, prepared clearer cannot track a population. Two ways out, both local: (1) clearing that grows with the bodies,
+e.g. a scavenger side on each body's own outer wall (a lysis anchor that eats strands near it; to design: it must
+not take its own bud's catch, and an adult's `&` is spent once it hears no open signal, so the side needs another
+stop for the lysis); (2) free strands that are not copied at all (candidate (p): contact copying follows the same
+"held" condition as chain copying), so a leaked strand only waits for a catch and costs no blanks. Also learned:
+with closed walls, a uniform part decay must be slower than a bud's passage (`BCLK=0.0003` emptied types within 0.4M;
+0.0001 held), and a hazard that holds a lineage at 1-4 bodies lets it die out by chance (3 of 4 by 4M).
+
 ## Material flows by exposure, not by need: what a world that runs on requires (explore run 20261005-0721, 2026-10-05)
 
 Measured while trying a world that runs indefinitely with the existing core (INNOVATIONS run 0721). Every attached
