@@ -91,6 +91,19 @@ test('copy: only a strand held by its high end is copied (a free strand, or one 
       s.bind(s.n-3,1,GLUE,s.n-2,0,GLUE);s.bind(l,s.roles(l).inert,GLUE,s.n-3,0,GLUE);}
     const D=s.n-1;placeTri(s,D,refl(u,r.free));s.setType(D,'A--');s.derive();s.run(3);
     assert.equal(s.partner(u,r.free)===D,expect,hold?'held by its '+hold+' end':'free');}});
+test('copy side (heldContact, candidate (p)): a strand triangle is a template only while its strand is held by its high end (hold relayed along the strand)',()=>{
+  // a copy blank flush at the low end's free face of a 5-triangle strand: free, held by its high end (an anchor on the
+  // spare edge z, 4 bonds away), or held but the hold lost (the anchor bond cut: hold fades over the relay)
+  const run=(hold,hc,cutAfter)=>{const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',hold:hold?'z':undefined,x:6,y:8}],supply:{'-?-?-?':1},params:{sigma:0,sigmaRot:0,heldContact:hc}});
+    const F=founders[0],u=F[0],r=s.roles(u),P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(r.free),b=P((r.free+1)%3),c=P((r.free+2)%3);
+    for(let k=0;k<8;k++)s.derive();
+    if(cutAfter!==undefined){const h=F[F.length-1],q=s.roles(h).inert;s.cut(h,q);for(let k=0;k<cutAfter;k++)s.derive();}
+    const D=s.n-1;placeTri(s,D,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);s.derive();const h0=s.hold[u];s.run(2);return {copied:!!s.ev.copy,low:h0};};
+  assert.ok(run(false,false).copied,'without heldContact a free strand is copied');
+  assert.ok(!run(false,true).copied,'a free strand is not copied');
+  const h=run(true,true);assert.ok(h.copied,'a held strand is copied at its low end');assert.equal(h.low,26,'hold 30 at the high end, 26 four bonds down');
+  assert.ok(run(true,true,2).copied,'two passes after losing its hold the strand still hears it');
+  assert.ok(!run(true,true,40).copied,'the hold fades: a strand that lost its hold is not copied');});
 test('anchor: a free triangle\u2019s anchor side binds as its glue does (an inert one binds nothing)',()=>{
   // a free triangle beside a grown triangle's glue side z: binds by Z with or without the anchor mark (run 0050's
   // narrowing, a free anchor side binds nothing, was removed in run 20261004-0820); a closed side -| binds nothing

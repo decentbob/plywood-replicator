@@ -231,6 +231,45 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Candidate (p): contact copying of a strand triangle follows "held", 2026-10-05, autorun run 20261005-1422 (explore)
+NEXT step 1 (Direction 1, a world that runs indefinitely; IDEAS "The scavenger's dilemma"). The case, written before
+the code; then the result.
+1. **Capability and why the goal needs it.** A leaked genome copy (a free strand) should wait for a catch without
+   eating the world's food. Today chain copying already ignores a free strand (only a strand held by its high end takes
+   a dock, run 0820), but contact copying does not: every copy blank that reaches a free strand's free side turns into a
+   monomer of that triangle. In run 1051's 4M worlds 20-76% of the blanks copied by genome triangles went to free
+   strands, and 52-60 free strands held about 40% of all triangles at 1.3M (run 0721): the largest blank sink, and it
+   grows with the population (each adult leaks copies). An indefinite world needs that sink closed or cleared in
+   proportion to the bodies.
+2. **Designs with the existing core, and why they fail.** (a) Prepared scavengers (run 0721, 1051): a fixed number
+   cannot track a population; eight eat every offspring's genome, two fall behind (1 of 4 worlds runs on to 4M).
+   (b) Each body its own scavenger (a lysis anchor `!` on an outer wall cell): clearing would scale, but such a side
+   lyses whatever strand it catches, its own bud's next catch included, and an adult's `&` sides are spent once it hears
+   no open signal, so the scavenger's `&` (which stops the lysis at its own bond) stays unspent only beside a glued `@`
+   side no part matches, an open front that never closes, which must then sit out of `openRange` of every `&` joint
+   that has to release. Not designed further: two constraints on every kit, for a fix of one sink. (c) Reading an existing relay: zip reaches a
+   held strand's faces only one after another while it is being copied (at rest only the high end hears it), so
+   gating on zip would leave the held strand's other triangles uncopyable and the parent without monomers; busy is 0
+   on a held strand between copies, so gating on busy deadlocks (no monomers, so no dock, so no busy). (d) Labelled
+   drives that dissolve free strands (decay from an unheld end) are possible but are environment, not chemistry.
+3. **The rule.** A new relayed value `hold` on strand triangles (role face, back or docked; fills too): a strand's
+   high end (no next bond) whose spare edge is bonded (held: only an anchor's catch binds it) has `hold` = 30 (the busy
+   range); every other strand triangle takes the largest `hold` of its chain and face partners (previous pass) less 1,
+   floor 0. A copy blank binds a strand triangle's free side only while that triangle has `hold` > 0. Grown
+   triangles (kit parts, walls) are copied as before. So a free strand, and one held only by its low end, is not
+   contact-copied; a released copy stops being copied within the relay's fade (at most 30 passes).
+4. **Locality.** Reads: own role and own bond on the spare edge (as zip's origin does), the chain and face partners'
+   `hold` from the previous pass (one bond per pass, fading, like busy). The copy bind reads the site triangle's own
+   `hold` (the site's own state, as it already reads its bond, spent and anchor state). No count, no body, no organism.
+5. **Generality and cost.** One relayed value (4 -> 5 relayed signals), one added condition on copy bind. It makes the
+   two copying paths read the same "held" condition: a strand is a template (for a copy and for monomers) only while
+   held by its high end. Biology: a chromosome's genes are read where the chromosome is attached; a free fragment is
+   inert until taken up.
+6. **What it replaces.** If it carries the lineage: the prepared scavengers (`BCSV`) and the case for each body its
+   own scavenger; free strands then cost material only by what they hold (the hazard and the monomer loop return it).
+   It does not replace zip (zip orders docking; `hold` gates monomer making).
+7. **Result.** (to be filled: built first as the parameter `heldContact`, default off.)
+
 ### Rule: a lysis side `!` takes a body apart into its units, 2026-10-04, autorun run 20261004-2051 (explore)
 NEXT priority 3, candidate (m) (the user, 2026-10-04: "if only blanks [change], the simulation will just run out";
 IDEAS). The case, then the result.

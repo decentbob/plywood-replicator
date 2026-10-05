@@ -42,7 +42,7 @@ const sideMarks=(s,k)=>(s.cOnly[k]?'.':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+
 const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k);}).join('');
 const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
 
-const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,heldContact:false};   // heldContact: candidate (p), RULES Core changes (run 20261005-1422)
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -50,7 +50,7 @@ class TriSim extends Physics{
     const I8=k=>new Int8Array(k);
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.lys=I8(3*n);
     this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);this.busy=I8(n);this.refr=I8(n);
-    this.zip=I8(n);this.fn=I8(n);this.ly=I8(n);this.op=new Int16Array(n).fill(-1);
+    this.zip=I8(n);this.hold=I8(n);this.fn=I8(n);this.ly=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
   count(k,d=1){this.ev[k]=(this.ev[k]||0)+d;}
@@ -75,7 +75,7 @@ class TriSim extends Physics{
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
     // previous-pass values, copied into buffers kept between passes
     const sv=this._sv||(this._sv={}),old=k=>{const a=this[k];let b=sv[k];if(!b||b.length!==a.length)b=sv[k]=new a.constructor(a.length);b.set(a);return b;};
-    const nb0=old('nb'),gap0=old('gap'),need0=old('need'),busy0=old('busy'),zip0=old('zip'),op0=old('op'),ly0=old('ly');
+    const nb0=old('nb'),gap0=old('gap'),need0=old('need'),busy0=old('busy'),zip0=old('zip'),hold0=old('hold'),op0=old('op'),ly0=old('ly');
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
     // busy: BUSY on a triangle with a bonded face (either end), relayed along chain bonds -1 per bond. Refractory: a
     // triangle that had a face bond in the previous pass (busy BUSY) and has none now was released; it stays
@@ -98,6 +98,14 @@ class TriSim extends Physics{
       if(r.role===SFACE||r.role===SBACK){const e=this._edges(u);
         if(e.next<0){const sp=r.inert;z=sp>=0&&this.bond[u*3+sp]>=0?1:0;}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
       this.zip[u]=z;}
+    // hold (candidate (p), read by copy bind only with heldContact): a strand's high end whose spare edge is bonded (held)
+    // has BUSY; every other strand triangle (face, back, docked) the largest hold of its chain and face partners (previous
+    // pass) less 1, floor 0
+    for(let u=0;u<n;u++){const r=R[u];let h=0;
+      if(r.role===SFACE||r.role===SBACK||r.role===DOCKED){
+        if(r.role!==DOCKED&&r.inert>=0&&r.next<0&&this.bond[u*3+r.inert]>=0)h=BUSY;
+        else for(let i=0;i<3;i++){if(this.bond[u*3+i]<0)continue;const k=this.bkind[u*3+i];if(k===PREV||k===NEXT||k===FACE||k===TFACE)h=Math.max(h,hold0[P(u,i)]-1);}}
+      this.hold[u]=h;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
     // attachment) emits nothing.
@@ -165,6 +173,8 @@ class TriSim extends Physics{
         // go, so it stays free here (it binds nothing else and is never a template). An anchor side is no template:
         // it binds only by catching a strand end
         if(this.cpy[v*3]||this.cpy[v*3+1]||this.cpy[v*3+2]){if(this.bonded(v))continue;
+          // heldContact (candidate (p)): a strand triangle (not grown) is a template only while it hears hold
+          if(p.heldContact&&r.role!==GROWN&&!this.hold[u])continue;
           for(let e=0;e<3&&!done;e++){if(this.bond[u*3+e]>=0||this.spent[u*3+e]||this.anc[u*3+e])continue;
             for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
           continue;}
