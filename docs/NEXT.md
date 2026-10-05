@@ -25,6 +25,9 @@ At 1.5-2M the lineage does worse than run 1051's (highest living generation 0-1,
 94-295, 1-8 types empty). Seeds 2-3 stopped at 2M; **running (15:36 UTC):** the control without the change, same drives,
 `BCSV=0 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N 2000000
 runs/cN > runs/cN.txt` for N = 2, 3 (then 4, 5 once p4, p5 reach 2M).
+At 1.2M (seeds 2-3): control blanks 0, parts 177-208, monomers 38-81, sink `gF` 1262-1493, hazard hits 29-30 (free
+strands are bodies); with the change blanks 11-39, parts 541-576, monomers 42-47, `gF` 0, hits 0-1; highest generation
+1 in both. Controls 4-5 started 15:47 UTC (to 2M).
 
 **Handoff status (autorun run 20261005-1051, build).** Direction 1 with scavengers (step 1a of run 0721): **not yet,
 1 of 4** (INNOVATIONS run 1051; IDEAS "The scavenger's dilemma"; picture `scavenger_4m.png`). Part decay faster than a
