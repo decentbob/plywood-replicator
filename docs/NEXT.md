@@ -1,30 +1,31 @@
 # Next instance: start here
 
-State on 2026-10-05 (after autorun run 20261005-1921, core-review). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261005-2320, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge: run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
-
-**In progress (autorun run 20261005-2320, build): the pair in isolation** (priority 2). Goal: `structures.pairKit`,
-demo `pair`, check `pair` (one founder among 300 copy blanks grows to 20 bodies in at least 3 of 4 worlds); stop once
-the check passes and bodies, generations and the R : S pool are measured. First finding: the IDEAS side order fails
-(S's only source is its seed site, covered by a waiting bud: 2 bodies by 20k steps); with the anchor mark moved to the
-seed site (S `B@-y|`) and the front (R `Y@&b@|-`) 4 of 4 worlds reach 20 bodies by about 400-800 steps.
+at each run's merge: run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-**Handoff status (autorun run 20261005-1921, core-review).** Core smaller, no capability lost: `heldContact` with its
-relay `hold` removed (priority 1 done); the busy relay and the state refractory removed (removal (q)); candidate (o)
-closed without a change (its oracle never fades; a fading variant did not lower false releases). Core: 6 marks, 3
-relayed signals, 4 exposed one-bond values, 2 states, no option (RULES, Core inventory and Core changes). `node
-tri/test.js` 38 tests pass; `tri/check.js` 12 of 12 on the final rules (`budcycle-3` 3 of 4: over seeds 1-8 the lineage
-reaches generation 3 in 5 of 8, base 6 of 8; expect this check near its margin). Nothing is running. Previous run
-(1850, review-intent): Directions 1-3 move to **the pair** (2 cells, 2 types; designed, not demonstrated: IDEAS,
-"Sources in proportion to use"); the 47-type lineage is frozen, its checks stay.
+**Handoff status (autorun run 20261005-2320, build).** **The pair works in isolation** (priority 2 done): one founder
+among 300 copy blanks reaches 20 bodies by 350-530 steps in 4 of 4 worlds and turns every blank into parts (134-149 of
+151 possible bodies, generation 9-10 by 3000 steps; 4 of 4 in each of 5 settings; INNOVATIONS run 2320, picture
+`docs/pictures/pair.png`). One correction to run 1850's design, no core change: a type's source must not be a binding
+site (IDEAS, "Built"). The kit is R `Y@&b@|-`, S `B@-y|`: each cell's plain `-` is its one source; the anchor marks
+keep the seed site and the front from being copied (the IDEAS order `B@y-|` stalls at 1-5 bodies: control `pair-c`).
+The bud points away (a strip). New: `structures.pairKit`, demo `pair`, checks `pair` and `pair-c`; render escapes
+titles. `node tri/test.js` 38 tests pass; `tri/check.js` CHECKRESULT. Nothing is running. Previous run (1921,
+core-review): core 6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no option.
 
-**Next step (rotation 48, build): the pair in isolation** (priority 2 below). The core it needs (`@` binding, contact
-copying, the open signal, `&` release) is unchanged by this run.
+**Next step (rotation 49, harden): speed for long pair worlds** (priority 3). The pair world runs about 1300 steps per
+second with 300 triangles; Direction 1 needs worlds of 1000-3000 triangles over 10^5-10^6 steps (doubling about 100-150
+steps while blanks last). Profile `PAB=1000 PAS=50 node tri/demos.js pair 1 5000 runs` (physics vs chemistry; the
+per-step census in the demo is O(n) and can go to every 10 steps); make it faster without changing outputs
+(`CHECK_SAVE` diff on `pair`, `copy`, `imprint`). Then (rotation 50, build) **Direction 1 on the pair** (priority 4):
+labelled drives, free parts decay into blanks at rate d, a body hazard h (a body comes apart into its two parts, as
+`BCH` does); mean field (IDEAS) predicts free R = free S = about 2h/a with a the binding rate; measure a, then pick h
+and d so that a world of about 1000 triangles keeps 50-200 bodies.
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
@@ -39,7 +40,7 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
    proportion to the bodies that carry it. A one-row ring with a lumen cannot meet it, nor a filled hexagon (its root's
    one outer side is the joint, spent after the split). A strip can: its end cells have two free sides.
 3. **The pair:** root R `Y@&` `b@` `-` and second cell S `B@` `y` `-|` (side order chosen so a bud points away from its
-   parent). A free R binds a body's seed site `y`; its open `b@` emits; a free S binds there; R hears nothing (openRange
+   parent; as built in run 2320: R `Y@&b@|-`, S `B@-y|`, IDEAS "Built"). A free R binds a body's seed site `y`; its open `b@` emits; a free S binds there; R hears nothing (openRange
    1 suffices: R is the emitter) and its `&` lets go. Rules used: `@` binding, contact copying, the open signal, `&`
    release. No new rule. R is exposed by its `-` side, S by `y` (while no bud sits on it).
 4. **Why switch now** (AGENTS: mechanisms in isolation, then combined): on the pair none of the three interacting sinks
@@ -57,9 +58,9 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
 
 **Priorities (each a slice; rotation index in brackets).**
 1. Done in run 1921 (core-review): `heldContact` removed; (o) closed without a change; busy and refractory removed.
-2. [48 build] **The pair in isolation:** `structures.pairKit`, demo `pair`: one founder pair among copy blanks (about
-   300, world about 30); measure bodies over time, generation depth, the R : S pool. Check: at least 3 of 4 worlds grow
-   from one founder to 20 bodies. Look at the pictures first: does the bud point away, do buds jam beside parents?
+2. Done in run 2320 (build): the pair in isolation (`pairKit` R `Y@&b@|-`, S `B@-y|`; demo `pair`; checks `pair`,
+   `pair-c`). Buds point away; no jam seen (a parent buds again once its last bud has moved off: children per body
+   0.99 on average, founder 4, at most 7, while blanks lasted; seed 1).
 3. [49 harden] Speed for long worlds of many small bodies; `budcycle` untouched.
 4. [50 build] **Direction 1 on the pair:** labelled drives (free parts decay to blanks; a body hazard, lysis into parts,
    as `BCH` does); 4 long worlds; check: bodies still budding at the end in 3 of 4, many generations past the founder,
@@ -127,6 +128,9 @@ node tri/demos.js lysis 1 1000000 runs/x           # a stuck bud taken apart by 
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (check budpool; extra: parts per
                                                    # type, 8; BPE: E parts, 40; BPB: blanks, 8; BPS: world, 30; BPR: openRange, 1; BPHOLD=0: no
                                                    # harness; BPES=1: E's pore side plain; BPA=k: the anchor on cell k)
+node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world
+                                                   # (30), PAR openRange (1), PAT=1 the turned order, PAKR/PAKS other R/S types (pair-c:
+                                                   # PAKS='B@y-|' PAKR='Y@&b@-'); result: bodies, gen, copies by type, doublings, children
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (no physics)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part
 node tri/demos.js imprint 1 100000 runs 150px      # a cell fed through a pore copies its held genome; 3 sterile rivals (check imprint-pore;

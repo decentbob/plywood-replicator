@@ -409,11 +409,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // turned side order (S 'B@y-|'); extra: bodies to report the time of (20)
     pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
       const {s,structures}=createWorld({seed,size,structures:[{tris:K.tris,x:size/2,y:size/2}],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
-      const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gen=new Map([[structures[0][0],0]]),born=[0];let reached=0,maxGen=0;
+      const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gen=new Map([[structures[0][0],0]]),kids=new Map(),dbl=[];let reached=0,maxGen=0;
       const side=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===g);
       // a new body: an R bonded to an S by its front (seen within a pass of S binding; its Y lets go one pass later)
       const scan=t=>{for(const u of all){if(gen.has(u)||canon(s.typeName(u))!==cR)continue;const f=s.partner(u,side(u,gc('b')));if(f<0)continue;
-          const y=s.partner(u,side(u,Y)),pr=y>=0?s.partner(y,side(y,B)):-1,g=pr>=0&&gen.has(pr)?gen.get(pr)+1:-1;gen.set(u,g);born.push(t);if(g>maxGen)maxGen=g;}};
+          const y=s.partner(u,side(u,Y)),pr=y>=0?s.partner(y,side(y,B)):-1,g=pr>=0&&gen.has(pr)?gen.get(pr)+1:-1;gen.set(u,g);if(pr>=0)kids.set(pr,(kids.get(pr)||0)+1);if(g>maxGen)maxGen=g;if(!(gen.size&(gen.size-1)))dbl.push(t);}};
       const pools=()=>{let r=0,q=0,b=0,w=0;for(const u of all){const c=canon(s.typeName(u));if(c===cB)b++;else if(s.bonded(u)){if(c===cR&&s.partner(u,side(u,gc('b')))<0)w++;}else if(c===cR)r++;else if(c===cS)q++;}return {r,q,b,w};};
       const line=t=>{const P=pools();console.log(`t=${t} bodies=${gen.size} gen=${maxGen} waiting=${P.w} freeR=${P.r} freeS=${P.q} blanks=${P.b} copies=${s.ev.copy||0}`);};
       snap(s,'t0',`t=0: one founder pair (R ${K.R}, S ${K.S}) among ${NB} copy blanks, no free parts`,null,false);
@@ -425,7 +425,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(every(t,20))line(t);}
       const P=pools(),gens={};for(const g of gen.values())gens[g]=(gens[g]||0)+1;
       snap(s,'end',`t=${s.t}: ${gen.size} bodies, generation ${maxGen}, free R ${P.r}, free S ${P.q}, blanks ${P.b}`,null,false);
-      console.log(`t=${s.t} result: bodies=${gen.size} reached${goal}=${reached||'not'} gen=${maxGen} perGen=${Object.keys(gens).sort((a,b)=>a-b).map(g=>g+':'+gens[g]).join(',')} freeR=${P.r} freeS=${P.q} waiting=${P.w} blanks=${P.b} copies=${s.ev.copy||0} firstBud=${first||'not'}`);
+      // copies by type (R, S); children per body (a parent buds again once its last bud has moved off its seed site)
+      const cp={};for(const [,,ty] of s.copyLog||[]){const c=canon(ty);cp[c]=(cp[c]||0)+1;}const kv=[...gen.keys()].map(u=>kids.get(u)||0);
+      console.log(`t=${s.t} result: bodies=${gen.size} reached${goal}=${reached||'not'} gen=${maxGen} perGen=${Object.keys(gens).sort((a,b)=>a-b).map(g=>g+':'+gens[g]).join(',')} freeR=${P.r} freeS=${P.q} waiting=${P.w} blanks=${P.b} copies=${s.ev.copy||0} copiesR=${cp[cR]||0} copiesS=${cp[cS]||0} firstBud=${first||'not'} doublings=${dbl.join(',')} founderKids=${kids.get(structures[0][0])||0} maxKids=${Math.max(...kv)} kidsMean=${(kv.reduce((a,b)=>a+b,0)/kv.length).toFixed(2)}`);
       finish(`The pair: one founder among copy blanks (S ${K.S})`,3);},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)

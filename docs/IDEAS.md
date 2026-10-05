@@ -18,7 +18,7 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
-## Sources in proportion to use: every cell exposes one side; the smallest kind, the pair (direction check, review-intent run 20261005-1850, 2026-10-05): designed, not demonstrated
+## Sources in proportion to use: every cell exposes one side; the smallest kind, the pair (direction check, review-intent run 20261005-1850, 2026-10-05): built in run 20261005-2320 with one correction (below)
 
 The question left by run 1422: under closed walls type k is made only at a waiting front of cell k, where it is no
 longer needed. Weighed: (a) few part types, (b) parts made where they are used next, (c) a source of every type in
@@ -49,6 +49,18 @@ each living body with need-limited exposure.
   bud sits on it; settled candidate (f)), and R's `b@` while a bud waits for its S; S's third side is closed (`-|`, an
   anchor side, never copied), so both types are exposed once per adult. Rules used: `@` binding, contact copying, the
   open signal, `&` release; no new rule, no strand, no lumen.
+- **Built (build run 20261005-2320): a source must not be a binding site.** As written above the pair stalls: S's
+  only source is its seed site `y`, and R, the more common part at first, covers it at once; a waiting bud then makes
+  R at its front and its `-` while nothing makes S (1-5 bodies in 4 worlds, copies R 181-289 against S 0-6). Moving
+  the anchor mark (no glue: never a template) from S's third side to the seed site, S `B@-y|`, and onto R's front, R
+  `Y@&b@|-`, makes each cell's plain `-` its one source and keeps binding sites out of the copying: one founder among
+  300 copy blanks makes 134-149 bodies in 4 of 4 worlds (INNOVATIONS run 2320). The general lesson for any kind
+  built on contact copying: **expose a type on a side that nothing binds**, else the source closes exactly when the
+  type is needed (the seed site) or opens exactly when it is not (a waiting front makes surplus root parts: 92-99
+  stranded buds with the front copyable). The seed site opposite R's Y gives a strip (the bud points away); beside it
+  (S `B@y|-`) a bud turns 120 degrees and three generations close a hexagon (also grows, fewer bodies). Remaining
+  asymmetry: a waiting bud's R is attached, so its `-` is one extra R source; the surplus equals the buds still
+  waiting when the blanks run out.
 - **Mean-field count.** Bodies N, free R and S pools r and s, blanks b; a part binding a waiting site at rate a per
   part, copying at c per exposed side per blank, a labelled body hazard h (lysis into parts) and decay d of free parts
   into blanks. An idle body buds at about a r s / (r + s); births = deaths gives r = s = 2h/a; copying then only has to
