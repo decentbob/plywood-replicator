@@ -4,8 +4,12 @@ State on 2026-10-05 (after autorun run 20261005-0251, cleanup). Read AGENTS.md f
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Direction text of run 0751).
 
-**Handoff status (autorun run 20261005-0251, cleanup; in progress).** Retiring check `budcycle` and the `budcycle`
-options only it used; NEXT shortened. Results follow at the end of the run.
+**Handoff status (autorun run 20261005-0251, cleanup).** Check `budcycle` retired (the doorway kind with budpool's
+harness; `budcycle-3` shows the same steps three times in the default setup) with the options only it used (`BCHOLD`,
+`BCSEED`, `BCK`) and run 1021's `BCLK`: 21 to 17 `BC*` variables, outputs byte for byte the same on four 150000-step
+worlds (INNOVATIONS run 0251). The suite now has 12 checks, about an hour. This file 191 to about 115 lines (run
+0751's Direction condensed below; full text in git at `a2f3914`); README's quick start runs the slow-supply default
+to generation 1 (`BCGEN=1`, 800000 steps). Branch `claude/autorun-20261005-0251`, merged by PR. Nothing is running.
 
 **Next steps (proposals).**
 1. **Does lysis make the lineage longer?** (a `build`, index 42): long `budcycle` worlds (no `BCGEN`, 3-4M steps)
