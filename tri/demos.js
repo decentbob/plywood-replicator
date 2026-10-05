@@ -202,6 +202,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // (9); BCE: E parts (0); BCES=0: no E source (E's pore side a closed wall: E parts only from the pool, BCE); BCES=2: the E source on E's outer side (its pore side a wall); BCAFTER (50000);
     // BCF=n, BCFP=p (a supply, labelled environment drive): n pre-food (400), each turning into a blank with probability p (0.0003) every 100 steps
     // BCL=q: a monomer loop (labelled drive): free genome monomers become blanks (q per 100 steps, 0.002), anywhere
+    // A world that runs on (explore run 20261005-0721): BCLK=q: free kit parts decay into blanks too (q per 100 steps, 0: never;
+    // the same draw as the loop's); BCH=h: a hazard (labelled drive, below: each body lysed at rate h per 100 steps), from
+    // step BCHT on; BCP=k: a 'pop:' line every k steps (population, stocks, generations). BCW=1: open walls ('-', copyable:
+    // every cell a source of its type; fails on the 7-cell pore, run 0721); BCO=n: the opening (pore) in cells (7; odd, 27 a
+    // half ring: budKit), BCSC: the seed cell (45)
     // BCGATE=1 (an oracle, not a rule: it reads whether the bud's root is bonded, 40 bonds away): a bud's seed site binds
     // nothing (spent) until the bud has let go, so a bud waiting for its catch cannot start its own bud (NEXT, candidate (n))
     // BCGEN=n: stop once a bud of generation n (1: the parent's bud, 2: its bud, ...) is complete, has let go and holds a caught strand
@@ -217,8 +222,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // with BCR=50 it binds a cutter only while E hears its waiting anchor, 40 bonds away, so only complete buds waiting
     // for a catch are lysed). Observation: 'letgo:' lines mark lysed buds; the result adds cutBinds, lysedBuds, cuts,
     // falseRel (roots released incomplete without lysis: the open relay's lag, NEXT candidate (o)), lysedAt, poolMin
-    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),RQ=process.env.BCQ==='1',cut=process.env.BCT||(RQ?'г@!-|-|':'z@!-|-|'),P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',OW=process.env.BCW==='1',LK=+(process.env.BCLK||0),HZ=+(process.env.BCH||0),HT=+(process.env.BCHT||0),R=5;
-      const K=S.budKit(R,7,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},OW?'-':'-|',45,RQ?'Г@&':null),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};
+    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),RQ=process.env.BCQ==='1',cut=process.env.BCT||(RQ?'г@!-|-|':'z@!-|-|'),P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',OW=process.env.BCW==='1',LK=+(process.env.BCLK||0),HZ=+(process.env.BCH||0),HT=+(process.env.BCHT||0),PO=+(process.env.BCO||7),PD=+(process.env.BCPD||0),R=5;
+      const K=S.budKit(R,PO,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},OW?'-':'-|',+(process.env.BCSC||45),RQ?'Г@&':null),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};
       for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;if(CU)supply[cut]=CU;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys()),cutC=canon(cut),isCut=u=>CU>0&&canon(s.typeName(u))===cutC;seedCopyGenome(s,F);
@@ -277,12 +282,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
         pfmt=c=>`pool ${Math.min(...c)}/${(c.reduce((a,x)=>a+x,0)/c.length).toFixed(1)}/${Math.max(...c)} (empty ${c.filter(x=>!x).length})`;
       // BCP=k (observation for long worlds): every k steps a 'pop:' line: complete bodies (attached E cells), of them holding a
       // strand (an attached anchor cell whose anchor side is bonded), attached kit cells, free blanks, pre-food, monomers and
-      // parts, the pool, buds started, buds let go complete and holding a catch, as a generation counts them (in all, since the last line, highest generation), hazard hits
+      // parts, the pool, buds started, buds complete, let go and holding a catch, as a generation counts them (in all, since the last line, highest generation), hazard hits
       const IP=+(process.env.BCP||0);let ipLast=0;
       const indef=t=>{let E=0,held=0,cells=0,bl=0,pf=0,mono=0,parts=0;for(const u of all){const tn=s.typeName(u),k=idx.get(canon(tn));
           if(s.bonded(u)){if(k!==undefined){cells++;if(k===N-1)E++;if(k===AK&&[0,1,2].some(i=>s.anc[u*3+i]&&s.bond[u*3+i]>=0))held++;}continue;}
           if(tn==='-?-?-?')bl++;else if(tn==='---')pf++;else if(k!==undefined)parts++;else if(!isCut(u))mono++;}
-        const lg=buds.filter(b=>b.tl&&b.tk&&b.tc&&b.tc<=b.tl&&!b.ly),w=lg.filter(b=>b.tl>ipLast).length,g=Math.max(0,...lg.map(b=>b.gen));ipLast=t;
+        const lg=buds.filter(b=>b.tl&&b.tk&&b.tc&&!b.ly),w=lg.filter(b=>Math.max(b.tl,b.tc,b.tk)>ipLast).length,g=Math.max(0,...lg.map(b=>b.gen));ipLast=t;
         console.log(`pop: t=${t} bodies ${E} holding ${held} cells ${cells} | blanks ${bl} prefood ${pf} monomers ${mono} parts ${parts} ${pfmt(pool())} | buds ${buds.length} letgo ${lg.length} (+${w}) maxGen ${g} | hits ${ev.hits} lysed ${ev.lysed} decayedParts ${ev.loopK}`);};
       snap(s,'t0',`t=0: the parent holding its founder among ${P} parts of each of ${N-1} types, ${B} blanks (${BI} inside)`,null,false);
       let tc=0,shot=12,sealedIn=null;
@@ -299,6 +304,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // rule takes the body apart from there (not across an '&' joint: a bud and its parent die apart), its parts free and
         // fresh, a strand's triangles monomers; mean life 100/h steps. BCHT=t0: from step t0 on (0)
         if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
+        // BCPD=p (pair decay, labelled environment drive): every 100 steps a free typed triangle (not a blank, pre-food or cutter)
+        // touching a free triangle of its own type (centres within 1) becomes a blank with probability p: abundant types are
+        // trimmed where their copies crowd (a waiting front's surplus), rare ones are kept
+        if(PD&&t%100===0){const by=new Map();for(const u of all){if(s.bonded(u))continue;const tn=s.typeName(u);if(tn==='-?-?-?'||tn==='---'||isCut(u))continue;const k=canon(tn);if(!by.has(k))by.set(k,[]);by.get(k).push(u);}
+          const hit=[];for(const L of by.values())for(let a=0;a<L.length;a++)for(let b=0;b<L.length;b++){if(a===b)continue;const u=L[a],v=L[b];if(Math.hypot(s._dx(s.px[v]-s.px[u]),s._dy(s.py[v]-s.py[u]))<1){hit.push(u);break;}}
+          for(const u of hit)if(s.rng()<PD){const kit=kitT.has(canon(s.typeName(u)));s.setType(u,'-?-?-?');ev.loop++;if(kit)ev.loopK++;}}
         if(IP&&t%IP===0)indef(t);
         if(!sealedIn&&bud[N-2]>=0){sealedIn={t,...strands(),blanks:all.filter(u=>!s.bonded(u)&&s.typeName(u)==='-?-?-?'&&where(s.px[u],s.py[u])!=='out').length,E:all.filter(u=>!s.bonded(u)&&idx.get(canon(s.typeName(u)))===N-1&&where(s.px[u],s.py[u])!=='out').length};}
         if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells`,focus(),false);shot+=12;}

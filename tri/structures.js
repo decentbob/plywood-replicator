@@ -72,11 +72,16 @@ function ringKit(R=3,seed='z',letters=null,bud=false,twoWay=false,seedIn=false){
 // point of the parent lies in its bud, unpose its inverse (the motion that puts the bud's root seed side on the parent's seed site).
 // receptor=side (autorun run 20261004-2221, build): E's outer side (a wall side when the seed site is elsewhere) carries
 // this side instead, e.g. 'Г@&': a lysis receptor that binds a cutter only while E hears an open signal (receptorSide).
-function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt=-1,receptor=null){if(R%2!==1||(pore!==3&&pore!==7))throw Error('budKit: R odd, pore 3 or 7');const e=(pore+1)/4;
+function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt=-1,receptor=null){if(R%2!==1||pore%2!==1||pore<3||pore===5)throw Error('budKit: R odd, pore 3, 7 or odd above 7');const e=(pore+1)/4;
   const cells=lattice(R).filter(v=>{const r=hexr(cen(v));return r<R&&r>R-1;}),top=v=>cen(v)[1]>(R-1)*H,near=(v,x)=>top(v)&&Math.abs(cen(v)[0]-x)<0.1;
-  const root=cells.find(v=>near(v,-e)),gap=cells.filter(v=>top(v)&&Math.abs(cen(v)[0])<e-0.1),ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);};
-  if(!root||gap.length!==pore)throw Error('budKit: no pore');const a0=ang(root),key=v=>((ang(v)-a0)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  const arc=cells.filter(v=>!gap.includes(v)).sort((a,b)=>key(a)-key(b)),N=arc.length;if(!near(arc[N-1],e))throw Error('budKit: the arc does not end at the pore');
+  const ang=v=>{const c=cen(v);return Math.atan2(c[1],c[0]);},wrap=a=>(a%(2*Math.PI)+2*Math.PI)%(2*Math.PI);let root,gap;
+  // pore 3 or 7: cells of the top wall; a wider opening (odd, above 7; explore run 20261005-0721): the pore ring cells nearest
+  // the top by angle, so the arc is a C whose inner walls the outside reaches; the root is the arc cell just counterclockwise of it
+  if(pore<=7){root=cells.find(v=>near(v,-e));gap=cells.filter(v=>top(v)&&Math.abs(cen(v)[0])<e-0.1);}
+  else{const d=v=>Math.abs(Math.atan2(Math.sin(ang(v)-Math.PI/2),Math.cos(ang(v)-Math.PI/2)));gap=[...cells].sort((a,b)=>d(a)-d(b)).slice(0,pore);
+    const gl=Math.max(...gap.map(ang));root=cells.filter(v=>!gap.includes(v)).sort((a,b)=>wrap(ang(a)-gl)-wrap(ang(b)-gl))[0];}
+  if(!root||gap.length!==pore)throw Error('budKit: no pore');const a0=ang(root),key=v=>wrap(ang(v)-a0);
+  const arc=cells.filter(v=>!gap.includes(v)).sort((a,b)=>key(a)-key(b)),N=arc.length;if(pore<=7&&!near(arc[N-1],e))throw Error('budKit: the arc does not end at the pore');
   const shared=(a,b)=>{for(let i=0;i<3;i++)for(let j=0;j<3;j++)if(same(a[i],b[(j+1)%3])&&same(a[(i+1)%3],b[j]))return i;return -1;};
   const L=letters||[...LOW].filter(c=>!'awzyf'.includes(c)).slice(0,N-1);if(L.length<N-1)throw Error(`budKit: needs ${N-1} letters`);
   const outer=(v,i)=>hexr([(v[i][0]+v[(i+1)%3][0])/2,(v[i][1]+v[(i+1)%3][1])/2]);
