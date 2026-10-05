@@ -234,6 +234,34 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Core review 2026-10-05, autorun run 20261005-1921: (p) removed, (o) closed without a change
+1. **Removal: the option `heldContact` (candidate (p)) and its relayed value `hold`.** Why it existed: a free strand's
+   triangles took copy blanks (run 1422, entry below). Why it goes: it was never made the rule (it closed the strand
+   sink but moved the blanks to stalled fronts), and the direction check of run 1850 moved the evolution work to a kind
+   without strands (the pair). No default world read it: 17 short worlds (`copy`, `ring`, `imprint-genome(-c)`,
+   `lysis`) byte for byte as on `main` (`f1ec517`), and the check suite on this code 12 of 12. Code in git at `4f65d5c`.
+2. **Candidate (o), the open relay hears "complete" too early after a new bond: closed, no change.**
+   - *The oracle as proposed is wrong.* Run 2051's `LYFIX` (a triangle that would hear 0 while a bonded partner had -1
+     in the previous pass hears -1) never fades: in a body with no open front, a triangle set to -1 makes its partners
+     -1 in the next pass while it hears 0 again, a standing period-2 wave. Bond graphs of flush unit triangles are
+     bipartite (every bond joins an up and a down triangle), so two new bonds at passes of opposite parity leave every
+     triangle -1 on every pass: the body never hears 0 and its `&` sides never release. Shown on a held 9-triangle
+     strand with two monomers bound 3 passes apart: all 9 at -1 from the 8th pass on, still at the 60th.
+   - *A fading variant (o') was built and measured:* a bonded partner that had -1 in the previous pass (free then, so
+     its bond is new) counts as open one bond away, i.e. contributes 1 instead of nothing (`v=max(v, w<0 ? 1 : w-1)`).
+     It fades (the 1 relays to 0), reads only partners' previous-pass values, and closes the traced race (a root
+     `Y@&b@-` on a silent site joined in the next pass by an open part `B@c@-` heard 0, then 1). An independent review
+     found the race open for a chain of three new triangles bound in one pass (formBonds lets a part bind a triangle
+     that bound earlier in the same pass), and no other flaw. Check suite with `CHECK_SAVE` against this run's baseline:
+     12 of 12; `budcycle-3` and the `imprint`, `copy`, `ring` worlds byte for byte the same; `budpool` splits one pass
+     later in 4 of 4 (nothing else changes); `lysis` mixed (seed 1: a complete later bud of 47 of the stuck bud's
+     parts, base 45; seed 2: no off-parent arc, base 37 parts; seeds 3, 4: off-parent arcs of 6 and 29 parts, base
+     none); `budcycle-lysis` roots released incomplete 8, 0, 2, 14 (base 8, 0, 2, 13). **Not adopted:** the false
+     releases it was meant to remove are not the one-pass race (their count did not fall), and a rule branch that
+     does not change what it was made for is not worth its place. Before any further fix, trace one `falseRel` in
+     `budcycle-lysis` seed 4 (what the root heard in the passes before it let go). `LYFIX` is removed from
+     `tri/demos.js` (in git at `f1ec517`).
+
 ### Candidate (p): contact copying of a strand triangle follows "held", 2026-10-05, autorun run 20261005-1422 (explore)
 NEXT step 1 (Direction 1, a world that runs indefinitely; IDEAS "The scavenger's dilemma"). The case, written before
 the code; then the result.

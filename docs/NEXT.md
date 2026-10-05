@@ -123,7 +123,7 @@ BCQ=1 BCR=50 BCC=2 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 r
                                                    # (6), BCT cutter type; result: lysedBuds, lysedAt, falseRel, poolMin
 node tri/demos.js lysis 1 1000000 runs/x           # a stuck bud taken apart by cutters at its waiting anchor (cell 44, openRange 50;
                                                    # check lysis, 2.5 minutes); a new bud grows from its parts. LYC cutters (4), LYP parts
-                                                   # per type (0), LYA anchor cell, LYR openRange, LYS world (30), LYFIX=1 candidate (o)'s oracle
+                                                   # per type (0), LYA anchor cell, LYR openRange, LYS world (30)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (check budpool; extra: parts per
                                                    # type, 8; BPE: E parts, 40; BPB: blanks, 8; BPS: world, 30; BPR: openRange, 1; BPHOLD=0: no
                                                    # harness; BPES=1: E's pore side plain; BPA=k: the anchor on cell k)
