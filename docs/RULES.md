@@ -71,7 +71,7 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
 | `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
 | `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
-| `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`) | 10-04 (run 2051) |
+| `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`), `г@!-\|-\|` at a receptor `Г@&` on E (`budcycle` `BCQ`, run 2221) | 10-04 (run 2051) |
 | busy (30, chain bonds) | relayed signal | all copying | 10-01 |
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |

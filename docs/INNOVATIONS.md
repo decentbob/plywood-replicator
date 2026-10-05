@@ -8,6 +8,44 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261004-2221, build)
+
+- **Lysis in the lineage: a receptor on the bud's last cell, so cutters take apart only complete buds waiting for
+  their catch** — works as a selective mechanism in the lineage (check `budcycle-lysis`, 3 of 4 worlds); a longer
+  lineage from it: not yet shown. NEXT priority 3a. A kit change, no core change: `budKit(..., receptor)` puts
+  `Г@&` on E's outer side (a wall side `-|` before); cutters `г@!-|-|` (labelled, 2 per world) and openRange 50 (more
+  than the 40 bonds from the anchor on cell 6 to E). E exists only once a bud is complete; its `&` side binds only while
+  E hears an open signal, which on a complete bud only its waiting anchor sends; once the bud has caught, E hears none
+  and the side is spent for good. So a growing bud (no E yet) and an adult (spent) are never targets, and the anchor
+  stays on cell 6, where the founder's copies flow. Every parent's receptor is spent once it stands alone after its
+  catch; a parent whose own bud is already growing then keeps it open (found by the test; buds that bud before they
+  catch, run 1721).
+  - **Evidence.** Test "receptor: ..." (no motion): a cutter placed at the receptor of a complete bud waiting for its
+    catch binds it and the bud comes apart, the parent whole; a bud holding a stand-in strand has its receptor spent
+    and nothing binds. `budcycle` with `BCQ=1 BCR=50 BCC=2` (budcycle-3's setup otherwise), seeds 1-4, 1.2M steps:
+    generation 3 at 855000, 736900, 1083700 in seeds 2-4 (budcycle-3 on the same seeds: 977300, 735900, 827100);
+    16 buds lysed, every one complete and waiting (47 cells: 8, 0, 1, 7 per world); fewest free part type at the end
+    6, 1, 3, 1 (budcycle-3: 1, 0, 3, 1). Seed 1 fails for another reason: its founder's first copy never completes
+    (below), no strand ever leaves the parent, its buds wait for ever and the cutters return 8 of them to the pool. Control without cutters
+    (`BCQ=1 BCR=50`): CONTROL.
+  - **Priority 3a as written (anchor on cell 44, openRange 50, 0-2 cutters) fails, and why.** 12 worlds: with the
+    anchor late the held founder hangs in or beside the parent's pore (cell 44: 2.65 from the pore's middle), its first
+    copy docks within the first 3000 steps and then waits for a fill `-W-` (made when an incoming blank touches one of
+    the founder's backs) that never comes: 5 of 5 cutter-free worlds never leak a strand in 1.2M steps; of 7 with
+    cutters one never leaks and one leaks 2. The default (anchor 6) starts with the same jam and clears it at
+    100-180k, when blanks from the supply reach the founder (traced: fills at 55933 and 113984 in seed 1). Anchor 40
+    (the mirror of cell 6) and 38 jam too (4 of 4 to 360k); moving E's source outside (`BCES=2`) does not help (3 of 4
+    jammed). With cutters at the late anchor: 0-11 waiting buds lysed per world (45-47 cells), generation 3 or more in
+    4 of 7 by 1.2M (one of them via a free ring, below). The fewest free part type at the end follows the lysed count
+    loosely: 7 and 11 lysed, 5 and 4; 3-5 lysed, 0-3; none, 0-1.
+  - **The open relay's lag (candidate (o)) is in the default lineage too.** budcycle-3's four worlds (rerun on this
+    code: generation 3 at 1031000, 977300, 735900, 827100, the recorded numbers) release 3-9 roots incomplete per world
+    (14 of 22 at one cell); with openRange 50 and cutters 0-16. The released roots grow into free rings of the kind,
+    and some catch a strand (seed 2 at anchor 44: generation 4 from a root released at one cell).
+    ![lysis in the lineage](pictures/lysis_lineage.png)
+  - Command: `BCQ=1 BCR=50 BCC=2 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle N 1200000 runs/x` (about 30 minutes;
+    `BCA` anchor cell, `BCT` cutter type; result line: cutBinds, lysedBuds, cuts, falseRel, lysedAt, poolMin).
+
 ## 2026-10-04 (autorun run 20261004-2051, explore)
 
 - **A reverse path: the lysis side `!` takes a body apart into its parts, and a new bud grows from them** — works in

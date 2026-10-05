@@ -212,6 +212,12 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // every copy of a kit part but those made at an E's pore side becomes a blank at a random place outside both cells),
     // BCB=200, BCF=0, BCS=32, BCL=0. The setup of runs 0621-0751 (check budcycle-free, retired in run 1021): BCS=32 BCF=180 BCFP=0.001 BCL=0.
     // BCDBG=1: genome copies by source (copied type, role, side) at the end
+    // Lysis in the lineage (build run 20261004-2221): BCC=n cutters (labelled, placed outside; 0), BCT their type
+    // ('z@!-|-|': binds a waiting anchor Z@|; with BCQ=1 'г@!-|-|'); BCA: the anchor cell (6; 44 or 40 put the held strand
+    // in or beside the pore, where its first copy jams); BCQ=1: a lysis receptor 'Г@&' on E's outer side (budKit receptor;
+    // with BCR=50 it binds a cutter only while E hears its waiting anchor, 40 bonds away, so only complete buds waiting
+    // for a catch are lysed). Observation: 'letgo:' lines mark lysed buds; the result adds cutBinds, lysedBuds, cuts,
+    // falseRel (roots released incomplete without lysis: the open relay's lag, NEXT candidate (o)), lysedAt, poolMin
     budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),RQ=process.env.BCQ==='1',cut=process.env.BCT||(RQ?'г@!-|-|':'z@!-|-|'),P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',R=5;
       const K=S.budKit(R,7,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45),RQ?'Г@&':null),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};
       for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;if(CU)supply[cut]=CU;
@@ -244,7 +250,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(s.cpy[v*3+j]){let k;if(kitT.has(canon(s.typeName(u)))){const kk=Pu.includes(u)?Pu.indexOf(u):(cellOf.get(u)||[0,-1])[1];k=kk<0?'kitX':kk===N-1&&i===K.eSide?'E':kk===SC&&i===K.seedSide?'seed':'front';}
           else{const b=s.bodyOf(u);k=b.includes(Pu[0])?'gP':b.some(x=>cellOf.has(x))?'gB':'gF';}sk[k]++;}
         if(s.cpy[v*3+j]){if(bud.includes(u))cp.bud++;else if(Pu.includes(u))cp.par++;else if(!kitT.has(canon(s.typeName(u)))){cp.gen++;if(s.bodyOf(u).some(x=>kitT.has(canon(s.typeName(x)))))cp.genH++;}else cp.other++;if(i===K.eSide&&(u===Pu[N-1]||u===bud[N-1]))keep.add(v);}
-        else if(s.att[v*3+j]&&!s.anc[u*3+i]){const k=idx.get(canon(s.typeName(v))),w=cellOf.get(u);
+        else if(s.att[v*3+j]&&!s.anc[u*3+i]&&!isCut(v)){const k=idx.get(canon(s.typeName(v))),w=cellOf.get(u);
           // a root on a seed site (the parent's E or a bud's E) starts a bud; part k on cell k-1 of a bud grows it
           if(k===0&&(u===Pu[SC]||w&&w[1]===SC)){const b=new Array(N).fill(-1);b[0]=v;const on=u===Pu[SC]?'P':w[0];buds.push({cells:b,on,gen:on==='P'?1:buds[on].gen+1,t0:s.t,tc:0,tl:0,tk:0,rel:0,relAfter:0});cellOf.set(v,[buds.length-1,0]);if(buds.length===1)tb[0]=s.t;else if(u===Pu[SC])ev.par2++;else ev.bud2++;}
           else if(k>0&&w&&w[1]===k-1&&buds[w[0]].cells[k]<0){buds[w[0]].cells[k]=v;cellOf.set(v,[w[0],k]);if(GATE&&k===SC&&!buds[w[0]].tl)s.spent[v*3+K.seedSide]=1;if(w[0]===0)tb[k]=s.t;}else ev.stray++;}
@@ -283,7 +289,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(!sealedIn&&bud[N-2]>=0){sealedIn={t,...strands(),blanks:all.filter(u=>!s.bonded(u)&&s.typeName(u)==='-?-?-?'&&where(s.px[u],s.py[u])!=='out').length,E:all.filter(u=>!s.bonded(u)&&idx.get(canon(s.typeName(u)))===N-1&&where(s.px[u],s.py[u])!=='out').length};}
         if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells`,focus(),false);shot+=12;}
         if(!tc&&bud[N-1]>=0){tc=t;snap(s,'done',`t=${t}: the bud is complete (${N} cells)${ev.catchT?', its anchor holding a strand':''}`,focus(),false);}
-        if(!ts&&bud[0]>=0&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[SC])){ts=t;ev.splitN=n();snap(s,'split',`t=${t}: the bud lets go of its parent (${n()} cells)`,focus(),false);}
+        if(!ts&&bud[0]>=0&&![0,1,2].some(k=>s.partner(bud[0],k)===Pu[SC])){ts=t;ev.splitN=n();snap(s,'split',`t=${t}: the bud ${buds[0].ly?'is taken apart (lysis)':'lets go of its parent'} (${n()} cells)`,focus(),false);}
         if(every(t,20))console.log(`t=${t} bud cells=${n()}/${N} catch=${ev.catchT||'no'} split=${ts||'no'} ${fmt(strands())} releases: parent ${ev.relP} bud ${ev.relB} free ${ev.relF}; copies: bud ${cp.bud} parent ${cp.par} genome ${cp.gen} (of held ${cp.genH}); docks ${s.ev.dock||0} fills ${s.ev.fill||0}; blanks ${blanks()}; ${pfmt(pool())}; stray=${ev.stray}${CU?`; buds ${buds.length} lysed ${ev.lysed} cuts ${s.ev.lyse||0}`:''}`);
         // each bud's completion and let-go (observation), with the stocks at that moment; generation g reached: the first bud of generation g or later complete, let go and holding a caught strand
         if(t%100===0)for(let i=0;i<buds.length;i++){const B=buds[i];if(!B.tc&&B.cells[N-1]>=0)B.tc=t;
