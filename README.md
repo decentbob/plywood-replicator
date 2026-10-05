@@ -20,7 +20,8 @@ node tri/test.js                        # fast checks
 node tri/demos.js imprint 1 100000 runs 150p  # a cell fed through a pore copies its genome from blanks outside
 node tri/demos.js budcycle 1 300000 runs     # one generation: a parent grows its bud from parts, the bud catches a copy and splits
 node tri/demos.js lysis 1 1000000 runs        # a stuck bud taken apart into its parts; a new bud grows from them
-node tri/check.js                       # one PASS/FAIL line per working capability (~40 min)
+BCQ=1 BCR=50 BCC=2 node tri/demos.js budcycle 3 600000 runs   # the lineage with cutters that take apart only buds stuck waiting
+node tri/check.js                       # one PASS/FAIL line per working capability (~70 min)
 ```
 Pictures appear in `runs/` (needs Chromium; see tri/render.js). Plain Node.js, no dependencies.
 

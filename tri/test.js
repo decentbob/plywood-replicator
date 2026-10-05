@@ -293,6 +293,26 @@ test('lysis: a part with a lysis side bound to a waiting anchor takes the bud ap
   const c=lysisCase('z@-|-|');assert.ok([0,1,2].some(i=>c.s.partner(c.Bu[6],i)===c.C),'the control part did not bind the anchor');
   assert.ok(!c.apart&&c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud came apart without a lysis side');assert.ok(!c.s.ev.lyse,'lysis without a lysis side');
   assert.ok(c.s.spent[c.Bu[20]*3+c.wall],'the spent side was cleared without lysis');});
+// receptor (run 20261004-2221, build): the kit with a lysis receptor 'Г@&' on E's outer side (openRange 50, more than the
+// 40 bonds from the anchor cell 6 to E); a parent holding a stand-in strand end, its complete bud on the seed site (cell
+// 45), waiting for a catch or (caught) holding a stand-in strand end; a cutter 'г@!-|-|' placed at the bud's receptor; no motion
+const receptorCase=caught=>{const K=S.budKit(5,7,null,true,{at:6,glue:'Z'},'-|',45,'Г@&'),N=K.N,AK=K.anchorCell,SC=K.seedCell,E=N-1,s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:50},2*N+3),O=[20,20];
+  const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1,C=2*N+2;buildStructure(s,Pu,K.tris,O[0],O[1]);buildStructure(s,Bu,K.tris.map(t=>({...t,v:t.v.map(K.pose)})),O[0],O[1]);
+  const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,'z--');s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);
+  if(caught){placeTri(s,Bs,refl(Bu[AK],K.anchorSide));s.setType(Bs,'z--');s.bind(Bu[AK],K.anchorSide,GLUE,Bs,0,GLUE);}else{placeTri(s,Bs,[[1,1],[2,1],[1.5,1+Math.sqrt(3)/2]]);s.px[Bs]=-30;}
+  // the parent stood alone once (as every parent has: it was a bud that caught and let go), so its receptor is spent; then the bud's root binds its seed site
+  for(let k=0;k<60;k++)s.derive();s.step();s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);for(let k=0;k<60;k++)s.derive();s.step();
+  const parentSpent=!!s.spent[Pu[E]*3+K.receptorSide],budSpent=!!s.spent[Bu[E]*3+K.receptorSide];
+  placeTri(s,C,refl(Bu[E],K.receptorSide));s.setType(C,'г@!-|-|');s.gridSync();
+  let bound=0,apart=0;for(let k=1;k<=120;k++){s.step();if(!bound&&s.partner(Bu[E],K.receptorSide)===C)bound=k;if(!apart&&Bu.every(u=>!s.bonded(u)))apart=k;}
+  const whole=Pu.slice(1).every((u,k)=>[0,1,2].some(i=>s.partner(u,i)===Pu[k]))&&s.partner(Pu[AK],K.anchorSide)===Ps;
+  return {s,K,Bu,parentSpent,budSpent,bound,apart,whole};};
+test('receptor: a cutter binds the receptor on the last cell of a complete bud waiting for its catch and takes the bud apart; a bud that has caught and its parent are immune',()=>{
+  const w=receptorCase(false);assert.ok(w.parentSpent,'the parent\'s receptor (holding its strand) is not spent');assert.ok(!w.budSpent,'the waiting bud\'s receptor is spent');
+  assert.ok(w.bound>0,'the cutter did not bind the waiting bud\'s receptor');assert.ok(w.apart>0,`the waiting bud did not come apart (bound at pass ${w.bound})`);assert.ok(w.whole,'the parent did not stay whole');
+  const c=receptorCase(true);assert.ok(c.budSpent,'the receptor of a bud holding a strand is not spent');assert.ok(!c.bound&&!c.s.ev.lyse,'a cutter bound or lysed a bud that has caught');
+  assert.ok(c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud that has caught came apart');});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

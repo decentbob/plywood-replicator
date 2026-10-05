@@ -1,26 +1,43 @@
 # Next instance: start here
 
-State on 2026-10-04 (after autorun run 20261004-2051, explore). Read AGENTS.md first (rules of work), then this
+State on 2026-10-05 (after autorun run 20261004-2221, build). Read AGENTS.md first (rules of work), then this
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
-handoffs: NEXT.md in git, e.g. at `ef27e51` for run 1721's, `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `7c9bbac` for run 0820's, `882b7d4` for run 0751's).
+handoffs: NEXT.md in git, e.g. at `faeb75b` for run 2051's, `ef27e51` for run 1721's, `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `882b7d4` for run 0751's).
 
-**Handoff status (autorun run 20261004-2051, explore).** Priority 3 below is done in isolation: the core has a reverse
-path, the lysis side `!` (RULES, Core changes and "Lysis"; INNOVATIONS run 2051; IDEAS). A triangle bonded to a
-partner's `!` side is lysed; lysis moves one bond per pass, not across a bond on an `&` side; a lysed triangle cuts all
-its bonds after a pass, binds nothing meanwhile, and once free is fresh (spent sides cleared, hears nothing). The cutter
-`z@!-|-|` (labelled, prepared, never copied) is a part that binds only a waiting anchor `Z@|`. New demo and check
-`lysis` (a parent with a bud stuck on its seed site, no food, 4 cutters, the anchor on cell 44, openRange 50): the stuck
-bud comes apart into its 47 parts in 4 of 4 and a later bud on the parent is built from 45-46 of them in 4 of 4.
-Findings: (1) with budcycle's anchor on cell 6 cutters kill every bud the moment its cell 6 attaches; on cell 44 only
-nearly complete or waiting buds are exposed; 4 cutters find an open anchor in 4-10k steps, faster than a bud's last
-two parts arrive, so regrown buds die at 44-46 cells (1 cutter with the oracle below: complete in 2 of 4 by 2M);
-(2) the open relay lags one pass behind a new bond: a fresh root re-bound in place and joined by its next cell in the
-next pass hears 0 and is released as complete (candidate (o) below; oracle `LYFIX=1` removes it). Checks: the 10 short
-ones byte for byte the same as main (31 worlds), 12 of 12 in all; `budcycle-3` 4 of 4 with the same results as runs 1021 and 1721 (generation 3 at 1031000, 977300, 735900, 827100; 0 stray; 1880 s); `lysis` 4 of 4; tests 34. Nothing is running.
-Branch `claude/autorun-20261004-2051`, merged by PR. Scratch (container only): `runs/ly44`, `runs/ly4` (the default
-setup, seeds 1-4), `runs/lyf` and `runs/lyf1` (the oracle, 4 and 1 cutters; `LYC=1 LYFIX=1 node tri/demos.js lysis N
-2000000 runs/x/sN`), `runs/lyfv` (the oracle with the fixed bookkeeping), `runs/pic1`, `runs/pic2` (the picture: seed 1
-defaults and seed 2 `LYC=1 LYFIX=1`, 600000 steps), `runs/trace*.js` (the traces of the wave and of the spurious release).
+**Handoff status (autorun run 20261004-2221, build).** Priority 3a below is done, by another design than the one
+written: **a lysis receptor on the bud's last cell** (INNOVATIONS run 2221; IDEAS; kit only, no core change).
+`budKit(..., receptor)` puts `Г@&` on E's outer side; cutters `г@!-|-|` (labelled), openRange 50. E exists only on a
+complete bud and its `&` side binds only while E hears the waiting anchor (cell 6, 40 bonds away), so cutters take
+apart complete buds waiting for a catch and nothing else; the anchor stays on cell 6. New check `budcycle-lysis`
+(budcycle-3's setup with `BCQ=1 BCR=50 BCC=2`): generation 3 in 3 of 4 (seeds 2-4: 855000, 736900, 1083700), 16 of 16
+lysed buds complete (47 cells), fewest part type at the end 6, 1, 3, 1 (budcycle-3: 1, 0, 3, 1). Control without
+cutters: generation 3 in 2 of 4; seed 4's first bud waits for ever where with cutters it was lysed and the line went on
+(openRange 50 alone costs the lineage; budcycle-3 at range 9: 4 of 4). Test "receptor: ..." (35 tests). Seed 1 fails: its founder's first copy never completes, so no
+strand leaves and the cutters return its 8 waiting buds to the pool.
+Why not as written (anchor on cell 44): a late anchor hangs the held founder in or beside the pore and its first copy
+jams for good (5 of 5 cutter-free worlds at 44, 4 of 4 at 40/38 to 360k; E's source outside does not help); the default
+anchor 6 starts with the same jam and clears it at 100-180k when supply blanks reach the founder.
+Also measured: the open relay's lag (o) releases 3-9 roots incomplete per world in the default lineage (14 of 22 at
+one cell; rerun of budcycle-3 on this code gives the recorded generation-3 times, 0 stray), 0-16 with openRange 50.
+New `budcycle` options: `BCA` anchor cell, `BCC`/`BCT` cutters, `BCQ` receptor; result line: cutBinds, lysedBuds, cuts,
+falseRel, lysedAt, poolMin. Checks: 12 of 12 (all but `budcycle-3`, 2069 s; `budcycle-lysis` 3 of 4, 1758 s);
+`budcycle-3` as four worlds on this run's demo code (same generation-3 times; `budKit`'s receptor defaults off).
+Branch `claude/autorun-20261004-2221`, merged by PR. Nothing is running.
+Scratch (container only, regenerate with the commands in INNOVATIONS run 2221): `runs/la`-`lt` (anchor 44/40 batches),
+`runs/d1-4` (budcycle-3 rerun), `runs/q1-4` (the receptor, q1 with pictures), `runs/c1-4` (its control), `runs/jam.js`
+(prints a saved state's founder body: `node runs/jam.js runs/x/budcycle_endw.json.gz`), `runs/pic.js` (the picture).
+
+**Next steps (proposals).**
+1. **Does lysis make the lineage longer?** (a `build`): long `budcycle` worlds (no `BCGEN`, 3-4M steps) with and without
+   the receptor's cutters, counting generations and the fewest part type over time; 1.2M steps with a stop at
+   generation 3 cannot show it. If yes, the labelled food loops (`BCL`, `BCLK`) may become unnecessary for bodies.
+2. **The founder's start-up jam** (seed 1 of the receptor setup never copies; the default clears it slowly): a held
+   strand whose first copy waits for a fill no blank brings. Measure in a `harden` how often and how long across seeds;
+   a layout where incoming blanks pass the strand, or more blanks inside at the start (labelled), may remove it.
+3. **Candidate (o)** at the next `explore` (index 43) or `core-review`: now with evidence from the default lineage.
+4. The parent's open receptor while its own bud grows (IDEAS run 2221) is closed by candidate (n): weigh them together.
+The check suite now takes about 70 minutes (`budcycle-3` and `budcycle-lysis` 2000 s each); the `cleanup` run (index 41)
+may weigh which lineage check to keep once item 1 is answered.
 
 ### Direction (autorun run 20261004-0751, review-intent): where the work stands and what comes first
 Eleven runs since the last direction check (run 1321): five `build` (1420, 1650, 1921, 2221, 0251), three `explore`
@@ -81,12 +98,8 @@ the rule and the checks retired; the corner default, the census and three genera
    catch; INNOVATIONS. The speed side note stays open: a supply drive that keeps its stock outside the world, about
    1.6x early in a run, changes outputs; decide it in a `build` that changes the setup.)*
 3. *(Done in isolation, run 2051: the lysis side `!`; INNOVATIONS, RULES.)* Next for it, in this order:
-   a. **`build` (index 40): lysis in the lineage.** `budcycle` with the kind's anchor late (budKit `anchor:{at:44}`,
-      openRange 50 so the root holds while it waits) and 1-2 cutters (option, labelled); measure what returns (parts
-      per type over time, the `sinks` census), generations reached and whether the pool's fewest type still falls to 0.
-      Watch for the relay lag (o): roots re-bound in place after a lysis are released as complete; count them. With the
-      anchor on cell 44 the seed site (cell 45) is next to it, which is the layout candidate (n) needs: weigh (n) with
-      the result.
+   a. *(Done, run 2221, by a receptor on the last cell instead of a late anchor: check `budcycle-lysis`; INNOVATIONS.
+      Its next steps are the handoff's items 1-2.)*
    b. **Core change (o) (next `explore`, index 43, or `core-review`):** the open relay's lag, below.
 4. **"Feeding" the offspring (the goal's second half, user 2026-10-04, IDEAS):** the parent should pass its bud the
    building blocks it needs to grow and later replicate; today the bud takes them from the shared environment and
@@ -95,9 +108,10 @@ the rule and the checks retired; the corner default, the census and three genera
 5. **Later: N generations as the organism's own check** (a lineage that runs until stopped once blocks circulate),
    then the backlog (scanner gate, membrane growth).
 
-**Rotation (autorun `projects/plywood/rotation.txt`):** unchanged: 40 build (priority 3a), 41 cleanup (prunes what
-the builds left in `budcycle`: the harness and doorway setup kept only for the pinned `budcycle` check, `BCLK`), 42
-build, 43 explore (priority 3b), 44 build, 45 explore, 46 review-intent, 47 core-review.
+**Rotation (autorun `projects/plywood/rotation.txt`):** unchanged: 41 cleanup (prunes what the builds left in
+`budcycle`: the harness and doorway setup kept only for the pinned `budcycle` check, `BCLK`; the anchor-44 findings
+need no option kept but `BCA`), 42 build (handoff item 1), 43 explore (candidate (o)), 44 build, 45 explore, 46
+review-intent, 47 core-review.
 
 **Core-change candidates (for the next `core-review` or `explore`).** (o) *The open relay hears "complete" too early
 after a new bond* (run 2051): a bonded triangle whose partners all had 0 or -1 in the previous pass hears 0, so a
@@ -145,6 +159,9 @@ BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the linea
                                                    # about 30 minutes); 'letgo:' lines per bud, ownCopies in the result. Options: extra parts per
                                                    # type (8); BCB blanks, BCI inside, BCS world, BCR openRange (9), BCE E parts (0), BCF/BCFP the
                                                    # supply, BCL=q / BCLK=q free monomers / kit parts back to blanks (labelled loops), BCDBG=1 census
+BCQ=1 BCR=50 BCC=2 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # run 2221: the lineage with a lysis
+                                                   # receptor on each body's last cell and 2 cutters (check budcycle-lysis; about 30 minutes);
+                                                   # BCA anchor cell (6), BCC cutters, BCT cutter type; result: lysedBuds, lysedAt, falseRel, poolMin
 node tri/demos.js lysis 1 1000000 runs/x           # run 2051: a bud stuck on its parent's seed site taken apart by cutters 'z@!-|-|' at its
                                                    # waiting anchor (cell 44, openRange 50; check lysis, 2.5 minutes); a new bud grows from its
                                                    # parts. LYC cutters (4), LYP parts per type (0), LYA anchor cell, LYR openRange, LYS world (30),

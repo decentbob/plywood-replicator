@@ -8,6 +8,20 @@ file keeps the reasoning so it is not lost. Add new ideas at the top of their se
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
 
+## Ask "who is waiting" at the part that exists only when waiting is possible: a receptor on the last cell (build run 20261004-2221, 2026-10-05)
+The anchor cell does two jobs: in a parent it holds the strand where blanks reach it, in a bud it decides from when
+the bud can catch (and, with a cutter at the anchor, from when it can die). One cell cannot serve both: on cell 6 the
+strand is copied but a cutter kills every growing bud at 7 cells (run 2051); on cell 44 (or 40, 38) only nearly
+complete buds are exposed but the held strand hangs in the pore and its first copy jams (12 worlds, INNOVATIONS run
+2221). Decoupled with what the kit already has: the cutter's target is a second site on the last cell E, an
+attach-and-release side `Г@&`. E exists only on a complete bud; an `&` side binds only while its triangle hears an
+open signal, and on a complete bud only a waiting anchor sends one; once it hears none the side is spent for ever.
+So the receptor is open exactly while a complete bud waits for its catch (openRange covering the 40 bonds from anchor
+to E). The pattern is general: a site placed on the part made last, with an `&` mark, asks "complete and still
+waiting?" with no new rule. Cost found: a parent hears its attached bud's open signal (its seed cell is next to E), so
+a parent whose own bud is already growing when it catches keeps its receptor open; buds that bud only after letting
+go (candidate (n)) would close that too.
+
 ## A body taken apart whole returns one of each of its parts: lysis (explore run 20261004-2051, 2026-10-04)
 
 The first reverse path (RULES, Core changes; INNOVATIONS run 2051). Why this one of the user's four ideas: turning
@@ -649,6 +663,10 @@ into a C while it is open, hence airlocks.
 
 ## Pitfalls learned (copy lineage; moved from docs/NEXT.md, cleanup run 20261003-1351)
 Roughly newest first. Add new ones here; docs/NEXT.md points to this section.
+- *(run 2221)* **A late anchor starves the founder.** The held strand hangs from the anchor cell; on cells 38-44 it
+  sits in or beside the pore, its first copy jams waiting for a fill, and no incoming blank reaches it (12 worlds at 44,
+  4 at 40/38). The anchor on cell 6 jams too at first but clears in 100-180k steps. Place the strand where incoming
+  blanks pass it.
 - **Growth cannot stop beside a gap** (2026-10-03, run 1121). A ring grown from a periodic motif ends only by closing
   onto a cell already there (cells of one motif index are interchangeable among the six repeats), so a grown ring with
   a pore needs unique cells up to the pore's far edge, or cells released later. Unique cells lie on segments grown
