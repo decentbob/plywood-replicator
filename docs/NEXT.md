@@ -14,6 +14,10 @@ the code). Built as a parameter first (`heldContact`, default off: outputs uncha
 motion; four 4M `budcycle` worlds with `BCSV=0` and run 1051's drives (seeds 2-5). Done when: a world still makes
 generations after 4M in 3 of 4 (works), or the result says why not (not yet). If it carries, make it the rule and rerun
 the check suite; if not, remove it (git keeps it). Stop at about 4-5 hours.
+Progress: case in RULES, code (`heldContact`, the `hold` relay), test "copy side (heldContact ...)"; default outputs
+byte for byte the same (100k `budcycle` seed 1 against main). **Running (started 14:26-14:30 UTC, about 2 h each):**
+`TRI_PARAMS='{"heldContact":true}' BCSV=0 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000
+node tri/demos.js budcycle N 4000000 runs/pN > runs/pN.txt` for N = 2-5 (rerun the same if lost).
 
 **Handoff status (autorun run 20261005-1051, build).** Direction 1 with scavengers (step 1a of run 0721): **not yet,
 1 of 4** (INNOVATIONS run 1051; IDEAS "The scavenger's dilemma"; picture `scavenger_4m.png`). Part decay faster than a
