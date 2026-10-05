@@ -234,6 +234,25 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Removal candidate (q): the busy relay and refractory, 2026-10-05, autorun run 20261005-1921 (core-review)
+1. **What they do.** busy: 30 on a triangle with a bonded face (either end of a dock), relayed -1 per chain bond.
+   Refractory: a triangle that had a face bond in the previous pass and has none now takes no dock until busy around it
+   is 0. Since run 20261004-0022 nothing else reads busy (Core changes, that entry's point 5). Purpose (run of
+   2026-10-01, before zip gated docking): stop a released face from re-docking under a copy that is still peeling off.
+2. **Why they may be redundant now.** (a) A face docks only while it hears zip, which starts at a held high end and
+   passes face by face as docks bond, so docking is already ordered from the high end. (b) A released face's dock site
+   is occupied by the copy triangle that sat there until the whole copy has let go: that triangle stays bonded by chain
+   bonds to copy triangles still docked, so the copy is one rigid body with the template, and binding places a free
+   triangle only into a free site (physics). (c) A copy that has let go entirely is a bonded body, never a free
+   triangle, so no template face can dock it. So a re-dock under a peeling copy cannot happen; what refractory still
+   does is delay the next copy by up to 30 passes after the last face lets go.
+3. **What removal changes.** One relayed signal and one state leave the core (5 -> 4 signals counting lysis; 3 -> 2
+   states); dock reads zip, its site and the glue only. Copies may start sooner after a release, so copying worlds
+   change from the first release on.
+4. **Test of the claim.** The check suite with `CHECK_SAVE` against this run's baseline: every capability must still
+   pass; look for strands that dock under a peeling copy (stray partial copies), and for copy counts.
+5. **Result.** (below, when measured)
+
 ### Core review 2026-10-05, autorun run 20261005-1921: (p) removed, (o) closed without a change
 1. **Removal: the option `heldContact` (candidate (p)) and its relayed value `hold`.** Why it existed: a free strand's
    triangles took copy blanks (run 1422, entry below). Why it goes: it was never made the rule (it closed the strand
