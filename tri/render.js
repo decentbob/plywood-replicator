@@ -39,18 +39,20 @@ function montage(out,cols,title,files){
   imgs.forEach((d,i)=>svg.push(`<image href="${d}" x="${(i%cols)*(w+6)}" y="${40+Math.floor(i/cols)*(h+6)}" width="${w}" height="${h}"/>`));svg.push('</svg>');
   const svgf=out.replace(/\.png$/,'.svg');fs.writeFileSync(svgf,svg.join(''));svgToPng(svgf,out,W,Hh+90);}
 // popChart (observation, build run 20261005-1051): small multiples of budcycle's 'pop:' lines (BCP), one line per world:
-// node tri/render.js pop OUT.png "title" label=runs/x/out.txt ...
+// node tri/render.js pop OUT.png "title" label=runs/x/out.txt ... (a label starting with '~': a dashed line, coloured in its own order: a
+// control beside its treatment)
 const POPM=[['bodies',/bodies (\d+)/],['blanks',/blanks (\d+)/],['monomers',/monomers (\d+)/],['parts',/parts (\d+)/],['let-gos (cumulative)',/\(\+(\d+)\)/,1]];
 function popChart(out,title,runs){const SER=['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4','#008300'],pw=300,ph=170,pad=44,cols=POPM.length;
-  const data=runs.map(([lab,f])=>{const L=fs.readFileSync(f,'utf8').split('\n').filter(l=>l.startsWith('pop:'));return {lab,rows:L.map(l=>[+l.match(/t=(\d+)/)[1],...POPM.map(m=>+(l.match(m[1])||[0,0])[1])])};});
+  const data=runs.map(([lab,f])=>{const L=fs.readFileSync(f,'utf8').split('\n').filter(l=>l.startsWith('pop:'));const dash=lab.startsWith('~');return {lab:dash?lab.slice(1):lab,dash,rows:L.map(l=>[+l.match(/t=(\d+)/)[1],...POPM.map(m=>+(l.match(m[1])||[0,0])[1])])};});
+  data.forEach((d,i)=>{d.col=SER[data.slice(0,i).filter(e=>e.dash===d.dash).length%SER.length];d.da=d.dash?' stroke-dasharray="5 3"':'';});
   for(const d of data)POPM.forEach((m,k)=>{if(m[2]){let c=0;for(const r of d.rows){c+=r[k+1];r[k+1]=c;}}});
   const tmax=Math.max(...data.flatMap(d=>d.rows.map(r=>r[0]))),W=cols*(pw+pad)+pad,H=ph+130,svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" font-family="Arial"><rect width="${W}" height="${H}" fill="#fff"/><text x="${pad}" y="24" font-size="16" font-weight="bold" fill="#233542">${title}</text>`];
-  data.forEach((d,i)=>svg.push(`<rect x="${pad+i*110}" y="38" width="18" height="3" rx="1.5" fill="${SER[i]}"/><text x="${pad+i*110+24}" y="44" font-size="12" fill="#233542">${d.lab}</text>`));
+  data.forEach((d,i)=>svg.push(`<line x1="${pad+i*110}" y1="39.5" x2="${pad+i*110+18}" y2="39.5" stroke="${d.col}" stroke-width="3"${d.da}/><text x="${pad+i*110+24}" y="44" font-size="12" fill="#233542">${d.lab}</text>`));
   POPM.forEach((m,k)=>{const x0=pad+k*(pw+pad),y0=70,ymax=Math.max(1,...data.flatMap(d=>d.rows.map(r=>r[k+1]))),X=t=>x0+t/tmax*pw,Y=v=>y0+ph-v/ymax*ph;
     svg.push(`<text x="${x0}" y="${y0-8}" font-size="13" fill="#233542">${m[0]}</text><line x1="${x0}" y1="${y0+ph}" x2="${x0+pw}" y2="${y0+ph}" stroke="#c9ced3"/>`);
     for(const f of [0.5,1])svg.push(`<line x1="${x0}" y1="${Y(ymax*f)}" x2="${x0+pw}" y2="${Y(ymax*f)}" stroke="#eef0f2"/><text x="${x0-4}" y="${Y(ymax*f)+4}" font-size="10" text-anchor="end" fill="#6b7680">${Math.round(ymax*f)}</text>`);
     for(let s=0;s<=tmax;s+=1e6)svg.push(`<text x="${X(s)}" y="${y0+ph+14}" font-size="10" text-anchor="middle" fill="#6b7680">${s/1e6}M</text>`);
-    data.forEach((d,i)=>svg.push(`<polyline fill="none" stroke="${SER[i]}" stroke-width="2" stroke-linejoin="round" points="${d.rows.map(r=>X(r[0]).toFixed(1)+','+Y(r[k+1]).toFixed(1)).join(' ')}"/>`));});
+    data.forEach((d,i)=>svg.push(`<polyline fill="none" stroke="${d.col}" stroke-width="2"${d.da} stroke-linejoin="round" points="${d.rows.map(r=>X(r[0]).toFixed(1)+','+Y(r[k+1]).toFixed(1)).join(' ')}"/>`));});
   svg.push(`<text x="${pad}" y="${H-14}" font-size="11" fill="#6b7680">steps (millions); one line per world, from its 'pop:' lines</text></svg>`);
   const svgf=out.replace(/\.png$/,'.svg');fs.writeFileSync(svgf,svg.join(''));svgToPng(svgf,out,W,H+90);}
 if(require.main===module&&process.argv[2]==='pop')popChart(process.argv[3],process.argv[4],process.argv.slice(5).map(a=>a.split('=')));

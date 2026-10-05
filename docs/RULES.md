@@ -76,9 +76,13 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
 | lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
+| hold (30, chain and face bonds; read only with the option `heldContact`) | relayed signal | `budcycle` with `TRI_PARAMS='{"heldContact":true}'`, test | 10-05 (run 1422; an option under evaluation) |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill, refractory | state | copying | 10-01 |
 | spent | state | `&` sides | 10-01 |
+
+**Counts (2026-10-05, run 1422):** 6 marks, 5 relayed signals, 4 exposed one-bond values, 3 states, 1 option
+(`heldContact`, candidate (p): adopt or remove at the next core review; Core changes).
 
 **Counts (2026-10-04, run 2051):** 6 marks, 4 relayed signals, 4 exposed one-bond values, 3 states, no option (the
 lysis side and its signal added; Core changes).
@@ -117,6 +121,7 @@ place (all or nothing; never by size).
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
 | zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
+| hold (option `heldContact`, run 1422) | own role and own spare-edge bond; chain and face partners' hold | own; previous pass | local (relay); copy bind reads the site's own hold |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
 | glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
@@ -203,6 +208,10 @@ In the same pass it takes its partner's type (side i+k takes the partner's side 
 partner turned about the shared edge; glues and marks) and lets go. It binds nothing else (no glue binding, dock or
 fill) and is never itself a template. Free triangles never bind each other, so only attached triangles are copied.
 This is the only way a type changes (casting, the other, was removed 2026-10-03). Gate entry: Core changes.
+Option `heldContact` (candidate (p), run 20261005-1422; off by default): a strand triangle (face, back or docked) is
+a template for a copy blank only while it hears `hold`: 30 at a strand's high end whose spare edge is bonded (held),
+relayed along chain and face bonds -1 per bond (previous pass); so a free strand's triangles are not copied. Core
+changes, candidate (p).
 
 ## Open signal and completion release
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` that has a glue (an open growth
@@ -268,7 +277,19 @@ the code; then the result.
 6. **What it replaces.** If it carries the lineage: the prepared scavengers (`BCSV`) and the case for each body its
    own scavenger; free strands then cost material only by what they hold (the hazard and the monomer loop return it).
    It does not replace zip (zip orders docking; `hold` gates monomer making).
-7. **Result.** (to be filled: built first as the parameter `heldContact`, default off.)
+7. **Result (built as the parameter `heldContact`, default off; not made the rule in this run).** Test "copy side
+   (heldContact, candidate (p)) ...": a free strand's triangle takes no copy blank, a held strand's low end (hold 26, four
+   bonds from the high end) does, and a strand that lost its hold is copied for a few passes more and then not. Default
+   outputs byte for byte the same (`budcycle` 100k seed 1 against main; the check suite on this code). In four
+   `budcycle` worlds with run 1051's drives and no scavengers (`BCSV=0 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000`,
+   seeds 2-5, to 2M) against the same worlds without it (INNOVATIONS run 1422): the strand sink closes (blanks copied by
+   free strands' triangles 0, against 1133-1979), blanks stay at 2-39 (control 0-1) and complete bodies at 2M are 2, 3,
+   3, 5 (control 1, 0, 1, 2); but the blanks it saves go to kit fronts (1363, 453, 1387, 1286 copies, control 144-237)
+   and pile up as surplus parts at stalled fronts (parts 519-670, one type at 61-356; control 45-122), so the lineage is
+   not deeper (highest generation by 2M: 1, 0, 3, 3; control 2, 2, 2, 2). The free strands' monomers had been the fast
+   loop that kept blanks from the fronts (IDEAS, "Closing one sink moves the blanks to the next"). Not adopted yet:
+   the parameter stays (one option in the core) for the next `core-review` to make it the rule or remove it, after the
+   front sink has a design (NEXT).
 
 ### Rule: a lysis side `!` takes a body apart into its units, 2026-10-04, autorun run 20261004-2051 (explore)
 NEXT priority 3, candidate (m) (the user, 2026-10-04: "if only blanks [change], the simulation will just run out";
