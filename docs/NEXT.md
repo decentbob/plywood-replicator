@@ -1,45 +1,43 @@
 # Next instance: start here
 
-State on 2026-10-05 (after autorun run 20261005-1051, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-05 (after autorun run 20261005-1422, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Direction text of run 0751).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction" below during run 0321.
 
-**Handoff status (autorun run 20261005-1051, build).** Direction 1 with scavengers (step 1a of run 0721): **not yet,
-1 of 4** (INNOVATIONS run 1051; IDEAS "The scavenger's dilemma"; picture `scavenger_4m.png`). Part decay faster than a
-bud's passage starves it (`BCLK=0.0003`: 4-17 types empty by 0.4-0.8M; 0.0001 holds); eight scavengers eat every leaked
-genome (no bud catches), two let buds catch; in four 4M worlds (`BCSV=2 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000`,
-seeds 2-5) complete let-gos go on to 3.8M in seed 2 (generation 3), stop at 2.8M and 1.0M in seeds 3 and 4, never
-happen in seed 5; three of four are extinct by 4M. Blanks are 0 from about 1M: the material cycles through monomers
-(100-530) and free strands again (18-40 at 2-3M: two scavengers fall behind as bodies multiply), and the hazard holds
-the lineage at 1-4 bodies, so it dies out by chance. Run 0721's findings stand (closed walls make a type only at its
-own front; open walls and the half ring fail; the strand sink: INNOVATIONS run 0721). No core change; no world code
-changed (new: `popChart` in `tri/render.js`, a chart of `pop:` lines); `node tri/test.js` 37 tests; checks not rerun
-(no rule, physics or shared structure changed). Nothing is running. Raw logs were in `runs/` (regenerate with the
-INNOVATIONS command, about 2 h 10 min per 4M world).
+**Handoff status (autorun run 20261005-1422, explore).** Candidate (p), free strands not contact-copied: **not yet**
+(INNOVATIONS run 1422; RULES Core changes, candidate (p); IDEAS "Closing one sink moves the blanks to the next";
+picture `heldcontact_2m.png`). Built as the option `heldContact` (off by default; the relayed value `hold` and a gate
+in copy bind; test "copy side (heldContact ...)"); default outputs unchanged. Four 2M `budcycle` worlds (run 1051's
+drives, no scavengers, seeds 2-5) against the same worlds without it: the strand sink closes (`gF` 0 against
+1133-1979), blanks stay 2-39 (control 0-1) and 2-5 complete bodies live at 2M (control 0-2), but the saved blanks go to
+stalled kit fronts, which copy their own type (parts 519-670, one type up to 356; control 45-122), and the lineage is
+no deeper (highest generation 1, 0, 3, 3 against 2, 2, 2, 2). Also seen in both: nearly every let-go is incomplete
+without scavengers (a growing bud's anchor catches a nearby free strand at 18-33 cells; the root, beyond `openRange`
+9 of the front, then lets go). Not made the rule; the option stays for the `core-review` (47) to adopt or remove.
+`node tri/test.js` 38 tests; `node tri/check.js` on this code: 12 of 12 pass (4448 s; `budcycle-3` with the same generation times as runs 1021-1721). Nothing is
+running. Raw logs were in `runs/` (regenerate with the INNOVATIONS command: about 65 minutes per world with the option,
+85 without, 4 at once). Small tool change: `popChart` draws a label starting with `~` dashed (a control).
 
 **Next steps (proposals).**
-1. **Clearing that scales with the population** (Direction 1 continued; next `explore` at index 45, or a `build`).
-   A fixed number of prepared scavengers cannot track a growing lineage (run 1051). Two candidates, both local:
-   (a) **Candidate (p), a core change (for the `explore`):** contact copying follows the same "held" condition as chain
-   copying, so a free strand's triangles are never copied (a leaked strand waits for a catch and costs no blanks;
-   20-76% of genome copying went to free strands in run 1051). Cost: chain triangles do not know today whether their
-   strand is held (zip reads only the high end's own bond), so it needs a relayed "held" value along the strand (new
-   state, relayed one bond per pass like the open signal) read by the copy blank from its partner; it generalizes
-   `heldCopy` to both copying paths. Make the case in RULES (Core changes) first; test without motion, then
-   `budcycle` with `BCSV=0`, the run 1051 drives, 4M. (b) **Each body its own scavenger** (existing core, a kit
-   change): a strand-eating lysis anchor on an outer wall cell of the kind, so clearing grows with the bodies. To
-   design: keep it off its own bud's catch, and stop the lysis at its own bond without `&` (an adult's `&` is spent).
-   The scavenger itself (run 0721): `Z@|!&` `Ж@|` welded to `-|-|`, test "scavenger", `budcycle` option `BCSV`.
-   Earlier options kept: free strands that decay from an unheld end (a labelled drive), a parent that stops copying
-   while a copy waits uncaught. Also open: the founder jam of seed 1 (docks 3, fills 2 from 180k; use seeds 2-5) and
-   buds that catch before they are complete and let go incomplete (seed 5: at 31 cells; candidate (o)). Success as
-   before: a world still making generations after 4M steps, 3 of 4.
-2. **The simplest heritable variation** (Direction 2; a core change for an `explore`, case in RULES first).
-3. **Competition** (Direction 3), then the older items: the founder's start-up jam (seed 1 of the receptor setup
-   still never copies at 4M: 88 buds lysed and regrown), candidate (o), candidate (n) with lysis.
+1. **The front sink (next `review-intent`, 46: a design question).** Under closed walls type k is made only at a
+   waiting front of cell k, exactly where k is no longer needed; a front stalled for want of k+1 piles up k while k+1
+   stays empty (runs 0721, 1051, 1422). Every run of Direction 1 has ended on this weakest-link structure of the
+   47-type kind. Weigh: (a) a kind with few part types (a periodic ring: each type used many times per body, so no
+   single type limits; closure then has to come from geometry or a count-free signal; run 0751 left it for later),
+   (b) parts made where they are used next (a front of cell k a template for k+1: not possible with contact copying,
+   which copies the template's own type), (c) a source of every type in each living body with need-limited exposure.
+   Decide which one a `build` or `explore` tries next.
+2. **Core review (47): `heldContact` the rule or removed.** Evidence above: it closes the strand sink and keeps more
+   bodies alive but does not by itself make the lineage longer. Suggestion: keep it only if the next design (step 1)
+   still leaks strands; otherwise remove it (git keeps it at this run's merge). With it on as the rule, run the check
+   suite (`CHECK_SAVE`) to see which worlds change. Also (o) and the incomplete let-gos above (a growing bud catching
+   early): either the catch waits for completion (candidate (n)-like gate on the anchor, read from the open signal) or
+   the release reads more than `openRange` 9.
+3. **The simplest heritable variation** (Direction 2) and **competition** (Direction 3), as before; then the older
+   items: the founder's start-up jam (seed 1), candidate (o), candidate (n) with lysis.
 
 ### Direction (user, 2026-10-05, approved during run 20261005-0321): complex evolution first
 The goal is complex evolution (AGENTS.md, IDEAS 2026-10-05); the organism that feeds its bud is a direction, not the
@@ -47,7 +45,8 @@ finish line. The user approved this order for the next slices, ahead of the prio
 vehicle's to-do list):
 1. **A world that runs indefinitely:** material returns to blanks under conservation, with a steady, labelled
    environment drive; today every `budcycle` world freezes once its food stock is spent (run 0321); with decay and
-   death as labelled drives the blanks end in leaked genome copies (run 0721: not yet); with two scavengers 1 of 4 worlds still makes offspring near 4M (run 1051; next step 1 above).
+   death as labelled drives the blanks end in leaked genome copies (run 0721: not yet); with two scavengers 1 of 4 worlds still makes offspring near 4M (run 1051); with free strands not copied the blanks
+   move to stalled fronts (run 1422; next step 1 above).
 2. **The simplest heritable variation:** e.g. contact copying that now and then makes a different part type, the
    variant itself copied true (heredity with mutation in one rule; a core change: make the case in RULES first).
 3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
@@ -73,11 +72,12 @@ generations (1021), speed (1421), where the blanks go (1721), lysis in isolation
    gate, membrane growth). Other paths weighed in run 0751 and left for later: fewer part types (a periodic ring),
    a genome whose exposure matches its use (candidate (j)).
 
-**Rotation (autorun `projects/plywood/rotation.txt`):** 44 build (done: run 1051, not yet, 1 of 4),
-45 explore, 46 review-intent, 47 core-review, 48 build, 49 harden.
+**Rotation (autorun `projects/plywood/rotation.txt`):** 45 explore (done: run 1422, candidate (p), not yet),
+46 review-intent, 47 core-review, 48 build, 49 harden, 50 build.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
-- (p) *Contact copying follows "held"* (run 1051): next steps 1a.
+- (p) *Contact copying follows "held"* (run 1051): built as the option `heldContact` in run 1422 (not yet: it closes
+  the strand sink, the blanks then pile up at stalled fronts); adopt or remove at the core review (next step 2).
 - (o) *The open relay hears "complete" too early after a new bond* (run 2051): a bonded triangle whose partners all had
   0 or -1 in the previous pass hears 0, so a triangle joined by a partner that was free a pass ago (-1: not yet heard)
   can conclude "complete". Proposed: a triangle that would hear 0 while a bonded partner had -1 hears -1. Locality:

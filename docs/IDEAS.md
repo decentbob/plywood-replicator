@@ -18,6 +18,19 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Closing one sink moves the blanks to the next (explore run 20261005-1422, 2026-10-05)
+
+Measured with candidate (p) (free strands not contact-copied; INNOVATIONS run 1422). With the strand sink closed, no
+blank is spent on a free strand, but the blanks do not go where they are needed: they go to the next most exposed
+copyable side, a kit front stalled for want of the next type, which copies its own type again and again (parts 519-670
+against 45-122 without the change; one type up to 356). The strand sink had been a fast loop: its monomers turned back
+into blanks within about 100 / 0.001 = 100k steps; surplus parts return ten times slower. So sinks are not independent:
+in a closed world with need-blind sources, removing one sink only matters if the next one is not worse. The source that
+is blind to need here is the growth front: under closed walls type k is made only at a waiting front of cell k, i.e.
+exactly where type k is no longer needed (the front needs k+1). A kind whose parts are made where they are used next,
+or a kind with few part types (each type used many times per body, so no single type is the weakest link), would avoid
+this; both are design questions for the next review (NEXT).
+
 ## The scavenger's dilemma: clearing has to scale with the population (build run 20261005-1051, 2026-10-05)
 
 Measured with prepared scavengers (`Z@|!&`, run 0721) in 4M-step lineage worlds (INNOVATIONS run 1051). A leaked

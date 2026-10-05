@@ -9,6 +9,40 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261005-1422, explore)
+
+- **Candidate (p), free strands not contact-copied: the strand sink closes, the lineage does not run longer — not
+  yet.** Direction 1 (NEXT step 1a). One core change, built as the option `heldContact` (off by default; RULES, Core
+  changes, candidate (p)): a relayed value `hold` (30 at a strand's high end while its spare edge is held, -1 per chain
+  or face bond) and a copy blank binds a strand triangle only while it hears it. Test "copy side (heldContact,
+  candidate (p)) ..."; default outputs byte for byte the same.
+  - **Worlds:** run 1051's drives without scavengers (`BCSV=0 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000`), seeds
+    2-5, to 2M, with the option and without it (control). At 2M, option / control:
+    | | seed 2 | seed 3 | seed 4 | seed 5 |
+    |---|---|---|---|---|
+    | highest generation (time) | 1 (0.32M) / 2 (1.81M) | 0 / 2 (1.75M) | 3 (1.51M; 4 at 2.14M) / 2 (1.09M) | 3 (1.97M) / 2 (1.62M) |
+    | complete bodies | 2 / 1 | 3 / 0 | 3 / 1 | 5 / 2 |
+    | blanks, monomers, parts | 18, 18, 670 / 0, 9, 82 | 39, 33, 561 / 0, 70, 122 | 2, 5, 588 / 0, 56, 111 | 6, 5, 519 / 1, 36, 45 |
+    | fullest pool type, empty types | 82, 1 / 7, 12 | 356, 9 / 7, 4 | 104, 1 / 5, 3 | 61, 4 / 7, 24 |
+    | blanks copied by free strands (`gF`), by kit fronts | 0, 1363 / 1605, 237 | 0, 453 / 1536, 205 | 0, 1387 / 1133, 156 | 0, 1286 / 1979, 144 |
+    | hazard hits | 7 / 83 | 0 / 84 | 8 / 93 | 4 / 94 |
+  - **What it shows.** The rule does what it says: no blank is spent on a free strand, blanks stay above 0 and more
+    bodies live (2-5 against 0-2; the control's hazard hits mostly free strands, which are bodies). But the saved blanks
+    go to the next exposure, the kit fronts: a front stalled for want of the next type keeps copying its own type, so
+    parts pile up (519-670, one type at 61-356) and return only through the slow part decay; seed 3 froze at 1.2M with
+    9 types empty and one at 356. The free strands' monomers, returned by the fast monomer loop, had been what kept the
+    blanks away from the fronts (IDEAS, "Closing one sink moves the blanks to the next"). The lineage is not deeper:
+    highest generation 1, 0, 3, 3 against 2, 2, 2, 2. In both setups nearly every let-go is incomplete (2-19 per world;
+    complete 0-1): without scavengers a free strand is near a growing bud's anchor, which catches it at 18-33 cells,
+    and the root, more than `openRange` (9) from the front, then hears no open signal and lets go (the open arc grows on
+    as a free body and may complete later: generations still count it). Not adopted: the option stays for the next
+    `core-review` (NEXT).
+    ![candidate (p) against the control, seeds 2-5 to 2M](pictures/heldcontact_2m.png)
+  - Commands: `TRI_PARAMS='{"heldContact":true}' BCSV=0 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000
+    BCAFTER=100000000 node tri/demos.js budcycle N 2000000 runs/pN` (about 65 minutes per world at 4 at once; the
+    control without `TRI_PARAMS`, about 85 minutes); chart: `node tri/render.js pop OUT.png "title" "seed 2=runs/p2.txt"
+    ... "~control 2=runs/c2.txt" ...` (a label starting with `~` is drawn dashed: new in this run).
+
 ## 2026-10-05 (autorun run 20261005-1051, build)
 
 - **Scavengers in the lineage: a world that runs on to 4M in 1 of 4 — not yet; the scavenger's dilemma measured.**
