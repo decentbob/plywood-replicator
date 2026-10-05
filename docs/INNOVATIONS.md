@@ -9,6 +9,64 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261005-0721, explore)
+
+- **A world that runs indefinitely with the existing core — not yet; the material economy measured.** Direction 1
+  (NEXT). Idea: no core change, two labelled environment drives and kit choices: free kit parts decay into blanks as
+  the monomer loop already does (`BCLK=q`), bodies die (a hazard `BCH=h`: each body, two or more bonded triangles, is
+  hit at rate h per 100 steps from step `BCHT`, one random triangle of it lysed; the lysis rule takes the body apart, not
+  across an `&` joint), and, so that decay does not empty a type, every living body a source of every part type
+  (open walls `-`, `BCW=1`). No world ran on; each attempt failed for a measured reason:
+  - **Closed walls (default kit) with slow decay and death** (`BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000`, seeds
+    1-4, stopped at 1.3-1.4M of a planned 4M): blanks 0 from 0.6-0.8M in 3 of 4, the pool's empty types 7-9 at
+    1.3-1.4M, highest generation 2, 2, 2 (at 0.94M, 1.11M, 0.74M; budcycle-3 reaches 3 by 0.74-1.03M); seed 2 stalled
+    from 0.37M to 1.3M with 88-108 blanks: one or two types empty, and with closed walls a type is made only at a growth front
+    of that type, so an emptied type comes back only when a body that holds one dies. Where the material was: **52-60
+    free strands** (leaked genome copies, about 40% of all triangles) in seeds 1, 3, 4. Faster decay (`BCLK=0.0005`,
+    seeds 1-2) empties 6-9 types by 0.4M (17 by 0.5M) (fronts make too few). A per-triangle hazard (first version) killed the lone
+    founder parent within 0.35M in 3 of 5 worlds (leaving at most one bud) and left 7-triangle strands 8x longer-lived than bodies: hence the
+    per-body hazard and its start time.
+  - **Open walls on the kind's ring** (`BCW=1`): inner-facing cells (about half; their wall faces the inside, reached
+    only through the pore) are copied 3x (blanks scarce) to 20x (`BCLK=0.002`, 80-108 blanks) less than outer ones,
+    whatever `pBond` (1 to 0.01: 0.9-1.1 vs 2.7-3.2 copies per cell in 100k); with decay their types empty (7-16 of 46,
+    the bud stuck at cell 4, an inner type); without decay the walls take every blank (blanks 0, nothing let go in
+    400k).
+  - **A half ring** (`budKit(5, 27)`: a wider opening, odd above 7, makes the arc a C of 27 cells, every wall reachable
+    from outside; anchor on cell 7, seed site on cell 24; `BCO=27 BCA=7 BCSC=24`; test "closure (budKit, half ring)").
+    The geometry works: no overlap between bud and parent, the bud complete at 142-171k (the 47-cell kind in this run's
+    worlds: 344-352k). Alone among 300 blanks the inner and outer walls are copied alike (854 vs 1054 per cell in 20k steps); but
+    crowded (500 blanks and parts, as in the lineage world) one side's sites stay blocked (outer bottom cells 9-38
+    copies vs inner 1000+; in the lineage the deep inner cells get 0-5), and 6-10 of 26 types empty by 0.27-0.6M at
+    `BCLK=0.001-0.005` (4 worlds). The founder's first copy jams in 5 of 5 (no complete copy by 0.24-0.6M: docks 1-3,
+    fills 0-2; the jam of run 2221): the walls around it take the blanks.
+  - **A density-dependent decay** (a drive tried and removed: a free typed triangle that touches one of its own type
+    becomes a blank, p = 0.05-0.2 per 100 steps; code in git at `f83351a`): worse; the blanks it freed went into leaked
+    strands (66-86 free strands by 0.6M in 4 of 4).
+  - **A scavenger for the strand sink** — designed and tested without motion, not yet in a world (NEXT step 1a): a
+    prepared body of two welded triangles (labelled, never copied) whose side `Z@|!&` catches a free strand's high end
+    (anchor), lyses it (`!`), stops the lysis at that bond (`&`) and keeps free monomers off (`@`), with a glued attach
+    side `Ж@|` that no part matches so the `&` side always hears the open signal and is never spent. Test "scavenger":
+    the strand it holds comes apart into monomers, the scavenger stays whole, its anchor free and unspent; without `&`
+    the lysis comes back and the scavenger dies too; without `@` the freed high end glue-binds the side again every
+    other pass. Existing core only. In the lineage (smoke test: `BCSV=8`, 8 scavengers on a circle around the parent,
+    spared by the hazard, with the closed-wall drives above; seeds 1-3, stopped at 0.9M): free strands 0 throughout and
+    blanks 18-70 (without scavengers 0 from 0.6-0.8M); but genome copying nearly stops (the parent's copies 0-1 by
+    0.9M; monomers 0-9), because the leaked strands had also been where most monomers were made (seed 1 without
+    scavengers: 1660 of 1894 genome copies at 0.6M on free strands). The founder's first copy jammed in 2 of 3 (the
+    start-up jam of run 2221); seed 3 reached generation 1 (424k), seed 2's parent died (hazard). Next limit: monomers
+    at the held strand.
+  - **What it shows** (IDEAS, "Material flows by exposure, not by need"): every copyable side turns the blanks that
+    reach it into copies of itself whether or not anything needs them, so the blanks end at the most exposure: leaked
+    genome copies first, then surplus parts and monomers. A world that runs on needs a way back for every sink, a source
+    of every part type in living bodies (or parts conserved), and sources limited by need. The strand sink is the
+    largest and comes first. Default outputs are unchanged (100k-step `budcycle`, default and `BCQ=1 BCR=50 BCC=2`, byte
+    for byte the same as `5480172`; and `lysis` 60k).
+    ![the strand sink: a closed-wall world at 1.2M, about 60 leaked strands around a few bodies](pictures/strand_sink.png)
+    ![a half ring and its bud](pictures/halfring_bud.png)
+  - Commands: `BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N
+    4000000 runs/x` (the closed-wall worlds; `pop:` lines every 100k: bodies, blanks, pool, generations); `BCW=1 BCO=27
+    BCA=7 BCSC=24 BCLK=0.002 BCL=0.005 ...` (the half ring).
+
 ## 2026-10-05 (autorun run 20261005-0321, build)
 
 - **Does lysis make the lineage longer? No: every lineage stops when its food stock is spent** — a question settled

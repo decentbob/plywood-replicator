@@ -262,6 +262,13 @@ test('closure (budKit): a bud grown cell by cell on its parent holds until its a
 // the anchor Z@| on arc cell 6 (run 20261003-1921): the open range reaches the root from there
 test('closure (budKit, anchor on cell 6, Z@|): the bud holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'}),9));
 test('closure (budKit, anchor on cell 6, closed walls -|): the same with walls nothing binds or copies',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|'),9));
+// a wide opening (explore run 20261005-0721): a half ring (pore 27, 27 cells, open walls '-'), anchor on cell 7, seed site on
+// cell 24; its bud on the seed site overlaps neither its parent nor (one generation on) its parent's parent's place
+test('closure (budKit, half ring: pore 27): the same cycle, and the bud placed on the seed site overlaps no parent cell',()=>{
+  const K=S.budKit(5,27,null,true,{at:7,glue:'Z'},'-',24),c=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
+  assert.equal(K.N,27);const P=K.tris.map(t=>c(t.v)),B=K.tris.map(t=>c(t.v.map(K.pose))),G=K.tris.map(t=>c(t.v.map(K.pose).map(K.pose)));
+  for(const a of P)for(const b of [...B,...G])assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])>0.5,'a bud cell overlaps its parent');
+  closureCase(S.budKit(5,27,null,false,{at:7,glue:'Z'},'-|',24),9);});
 // the seed site on cell 45 (run 20261004-0621): the bud grows off the parent's top-right corner, pores facing across an open wedge
 test('closure (budKit, seed site on cell 45): the bud off the corner holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45),9));
 // lysis (run 20261004-2051, explore; RULES Core changes): a parent holding a stand-in strand end, its complete bud waiting
@@ -313,6 +320,19 @@ test('receptor: a cutter binds the receptor on the last cell of a complete bud w
   assert.ok(w.bound>0,'the cutter did not bind the waiting bud\'s receptor');assert.ok(w.apart>0,`the waiting bud did not come apart (bound at pass ${w.bound})`);assert.ok(w.whole,'the parent did not stay whole');
   const c=receptorCase(true);assert.ok(c.budSpent,'the receptor of a bud holding a strand is not spent');assert.ok(!c.bound&&!c.s.ev.lyse,'a cutter bound or lysed a bud that has caught');
   assert.ok(c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud that has caught came apart');});
+// scavenger (designed in explore run 20261005-0721, NEXT step 1a; not yet in a demo): two welded triangles whose anchor side
+// Z@|!& holds a strand's high end, lyses it (!) and stops the lysis at that bond (&); its '@' keeps free monomers off it
+// (without it the freed high end, 'z' on its spare edge, glue-bound the side again every other pass); a glued attach side
+// no part matches (Ж@|) emits the open signal, so the & side never hears "complete" and is never spent. Without & the
+// lysis comes back and takes the scavenger apart too
+const scavengerCase=amp=>{const {s,founders,holds}=createWorld({seed:5,size:16,founders:[{gaps:[1,1,1],faces:'aAaA',hold:'z',x:8,y:8}],params:{sigma:0,sigmaRot:0}});
+  const [A,A2]=holds[0],F=founders[0];s.setType(A,s.typeName(A).replace('Z|','Z@|!'+(amp?'&':'')).replace('-|','Ж@|'));
+  for(let k=0;k<5;k++)s.derive();for(let k=0;k<12;k++)s.step();   // the open signal settles first (the scavenger is prepared so)
+  return {s,A,A2,F,apart:F.every(u=>!s.bonded(u)),whole:[0,1,2].some(i=>s.partner(A,i)===A2),free:[0,1,2].every(i=>!(s.anc[A*3+i]&&s.glue[A*3+i]===s.glue[A*3+[0,1,2].find(j=>s.lys[A*3+j])])||s.bond[A*3+i]<0),
+    spent:[0,1,2].some(i=>s.lys[A*3+i]&&s.spent[A*3+i])};};
+test('scavenger: an anchor side Z@|!& takes apart the strand it holds into monomers and stays whole, its anchor free and unspent; without & it dies too',()=>{
+  const w=scavengerCase(true);assert.ok(w.apart,'the held strand did not come apart');assert.ok(w.whole,'the scavenger came apart');assert.ok(w.free,'the anchor side still holds');assert.ok(!w.spent,'the anchor side was spent');
+  const c=scavengerCase(false);assert.ok(c.apart,'the held strand did not come apart (no &)');assert.ok(!c.whole,'without & the scavenger stayed whole');});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);
