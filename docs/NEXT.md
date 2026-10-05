@@ -15,8 +15,11 @@ parent cannot copy. Batch 1 (seeds 1-2, to 0.4-0.84M, stopped): `BCLK=0.0003` st
 types empty, one type at 178-386 parts): with closed walls type k+1 is made only at a k+1 front, so decay empties it;
 `BCLK=0.0001` and 0 let the bud complete (35/47 and 47/47 at 360k); seed 1 is the known founder jam (docks 3, fills 2,
 frozen from 180k, nothing leaks), so a bad test bed; the hazard killed one lone founder before any let-go (656k).
-Running (batch 2, started 11:20 UTC, about 40 min): `BCSV=<8|2> BCL=0.0005 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000
-BCAFTER=100000000 TRI_NOPIC=1 node tri/demos.js budcycle <2|3> 1200000 runs/b2_v<n>_s<seed>`.
+Batch 2 (seeds 2-3, `BCL=0.0005 BCLK=0.0001`): 8 scavengers eat every leaked copy (strands free 0, the complete bud
+never catches by 480k); 2 scavengers keep free strands at 6-8, the bud catches at 263-285k, generation 1 at 476k (seed
+2), but monomers become the sink (160-212, blanks 3-8). Running (started 11:33 UTC; 4M worlds about 2 h):
+`BCSV=2 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle <seed> 4000000
+runs/L4_s<seed>` (seeds 2, 3; 4, 5 to follow), and batch 2's 2-scavenger worlds to 1.2M (`runs/b2_v2_s<seed>`).
 
 **Handoff status (autorun run 20261005-0721, explore).** Direction 1, a world that runs indefinitely with the existing
 core: **not yet**; the material economy measured (INNOVATIONS run 0721; IDEAS "Material flows by exposure, not by
