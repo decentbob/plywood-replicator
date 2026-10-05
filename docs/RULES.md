@@ -268,8 +268,8 @@ IDEAS). The case, then the result.
    anchor `Z@|` (a free part binds an attached `@` side of complementary glue), so it takes apart a bud waiting for its
    catch (or growing past its anchor cell) and never an adult, whose anchor holds a strand. Biology: lysis by a
    predator or a phage at a receptor.
-6. **What it replaces.** Nothing yet; if it carries the lineage, the labelled food loops (`BCL`, `BCLK`) become
-   unnecessary for bodies (monomers of lysed strands are monomers again) and candidate (n) (bud only after letting go)
+6. **What it replaces.** Nothing yet; if it carries the lineage, the labelled food loop (`BCL`; `BCLK` removed in run
+   20261005-0251) becomes unnecessary for bodies (monomers of lysed strands are monomers again) and candidate (n) (bud only after letting go)
    may not be needed: a bud stuck waiting is taken apart instead of starving its line.
 7. **Result (built as the rule; test "lysis: a part with a lysis side bound to a waiting anchor takes the bud apart
    into its parts, fresh; the parent behind its & joint stays whole"; demo and check `lysis`; INNOVATIONS run 2051).**
