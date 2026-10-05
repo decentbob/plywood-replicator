@@ -18,6 +18,21 @@ monomers (copying) -> bodies -> parts (death) -> blanks (decay). Steps: options 
 of kit parts), `BCH` (hazard) in `budcycle`; short worlds to see the pool balance; then 4M-step worlds. Done when:
 a world still makes generations after 4M steps in 3 of 4 (or a clear "not yet" with the reason). Stop after the long
 batch.
+Progress (08:15 UTC). Short worlds (`runs/e1`-`e4`, seeds 1-2, 0.4-1M steps; `pop:` lines every 100k):
+- Open walls fail: inner-facing cells (about half the kit; the wall faces the parent's inside) are copied 3-20x less
+  than outer ones (only blanks that come in through the pore reach them), so under decay their pool types die out
+  (`BCW=1 BCLK=0.002`: 7-16 types empty, the bud stuck at cell 4, an inner type); without decay the walls take every
+  blank (blanks 0, no strand copied). Changing `pBond` (1 to 0.01) does not change the ratio (about 1 : 3 when blanks
+  are scarce). Dropped.
+- Closed walls with part decay: `BCLK=0.0005` empties 6-17 types by 400k (fronts make too few); `0.00005`-`0.0001`
+  keeps the pool's fewest type at 2-7 through 500k. Monomer loop 0.005 (not 0.002) keeps monomers at 30-40 (else
+  100-460: leaked free strands are copied into monomers far faster than the held one).
+- A per-triangle hazard killed the lone founder before its first bud in 3 of 5 worlds and leaves free strands (7
+  triangles) 8x longer-lived than bodies; switched to a per-body hazard (each body hit at rate h, mean life 100/h
+  steps) starting at `BCHT`.
+- Running (4 processes, started 08:15 UTC, about 3-4 h): `BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000
+  BCAFTER=100000000 node tri/demos.js budcycle N 4000000 runs/long/sN > runs/long/sN.log`, N = 1-4. Read the `pop:`
+  lines (bodies, blanks, pool, let-gos per 100k, highest generation).
 
 **Handoff status (autorun run 20261005-0321, build).** Settled: lysis does not make the lineage longer (INNOVATIONS
 run 0321). 8 long `budcycle` worlds without a generation stop (seeds 1-4, 3-4M steps; receptor with cutters vs the
