@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | ring | imprint | pool | budpool | budcycle | lysis | closure (budpore, the doorway pairs, retired 2026-10-04: git `882b7d4`; the casting lineage's demos were removed on 2026-10-03; git `7415fd4`)
+// NAME: copy | ring | imprint | pool | budpool | budcycle | lysis | closure | pair (budpore, the doorway pairs, retired 2026-10-04: git `882b7d4`; the casting lineage's demos were removed on 2026-10-03; git `7415fd4`)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,buildStructure,placeTri}=require('./world');
 const {render,montage}=require('./render');
@@ -401,6 +401,32 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const later=buds.slice(1);snap(s,'end',`t=${s.t}: ${later.length} buds after the stuck one, ${later.filter(b=>b.tc).length} complete`,null,false);
       console.log(`t=${s.t} result: lysedFirst=${lysedFirst||'not'} buds=${later.length} complete=${later.filter(b=>b.tc).length} lysed=${buds.filter(b=>b.lysed).length} max=${Math.max(0,...later.map(b=>b.max))} firstComplete=${(later.find(b=>b.tc)||{}).tc||'not'} reused=${Math.max(0,...later.map(b=>b.reused))} cuts=${s.ev.lyse||0} offParent=${frag.sort((a,b)=>b-a).join(',')||'none'}`);
       finish('Lysis: a stuck bud taken apart into its parts, which grow the next bud (no food; the lysis side \'!\')',3);},
+    // the pair (build run 20261005-2320; IDEAS "Sources in proportion to use"): one founder pair (pairKit, a labelled
+    // start) among copy blanks only: no free parts. A blank that touches an adult's exposed side becomes a part (R at R's
+    // '-', S at S's seed site y while no bud sits on it); a free R binds a pair's y, a free S binds its open front b@, and
+    // the new pair lets go ('&'). Observation only: bodies (R bonded to S), each body's generation (its parent: the body
+    // whose y its R was bound to), the free part pools. PAB blanks (300), PAS world (30), PAR openRange (1), PAT=1 the
+    // turned side order (S 'B@y-|'); extra: bodies to report the time of (20)
+    pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
+      const {s,structures}=createWorld({seed,size,structures:[{tris:K.tris,x:size/2,y:size/2}],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
+      const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gen=new Map([[structures[0][0],0]]),born=[0];let reached=0,maxGen=0;
+      const side=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===g);
+      // a new body: an R bonded to an S by its front (seen within a pass of S binding; its Y lets go one pass later)
+      const scan=t=>{for(const u of all){if(gen.has(u)||canon(s.typeName(u))!==cR)continue;const f=s.partner(u,side(u,gc('b')));if(f<0)continue;
+          const y=s.partner(u,side(u,Y)),pr=y>=0?s.partner(y,side(y,B)):-1,g=pr>=0&&gen.has(pr)?gen.get(pr)+1:-1;gen.set(u,g);born.push(t);if(g>maxGen)maxGen=g;}};
+      const pools=()=>{let r=0,q=0,b=0,w=0;for(const u of all){const c=canon(s.typeName(u));if(c===cB)b++;else if(s.bonded(u)){if(c===cR&&s.partner(u,side(u,gc('b')))<0)w++;}else if(c===cR)r++;else if(c===cS)q++;}return {r,q,b,w};};
+      const line=t=>{const P=pools();console.log(`t=${t} bodies=${gen.size} gen=${maxGen} waiting=${P.w} freeR=${P.r} freeS=${P.q} blanks=${P.b} copies=${s.ev.copy||0}`);};
+      snap(s,'t0',`t=0: one founder pair (R ${K.R}, S ${K.S}) among ${NB} copy blanks, no free parts`,null,false);
+      const pic={};let first=0;
+      for(let t=1;t<=steps;t++){s.step();scan(t);
+        if(!first&&gen.size>1){first=t;const fu=[...gen.keys()];snap(s,'bud1',`t=${t}: the founder's first bud`,{units:fu,radius:3},true);}
+        if(!reached&&gen.size>=goal){reached=t;snap(s,'goal',`t=${t}: ${gen.size} bodies, generation ${maxGen}`,null,false);}
+        for(const k of [5,10]){if(!pic[k]&&gen.size>=k){pic[k]=t;snap(s,'b'+k,`t=${t}: ${gen.size} bodies`,null,false);}}
+        if(every(t,20))line(t);}
+      const P=pools(),gens={};for(const g of gen.values())gens[g]=(gens[g]||0)+1;
+      snap(s,'end',`t=${s.t}: ${gen.size} bodies, generation ${maxGen}, free R ${P.r}, free S ${P.q}, blanks ${P.b}`,null,false);
+      console.log(`t=${s.t} result: bodies=${gen.size} reached${goal}=${reached||'not'} gen=${maxGen} perGen=${Object.keys(gens).sort((a,b)=>a-b).map(g=>g+':'+gens[g]).join(',')} freeR=${P.r} freeS=${P.q} waiting=${P.w} blanks=${P.b} copies=${s.ev.copy||0} firstBud=${first||'not'}`);
+      finish(`The pair: one founder among copy blanks (S ${K.S})`,3);},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
     ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;

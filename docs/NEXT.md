@@ -4,6 +4,12 @@ State on 2026-10-05 (after autorun run 20261005-1921, core-review). Read AGENTS.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge: run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
+**In progress (autorun run 20261005-2320, build): the pair in isolation** (priority 2). Goal: `structures.pairKit`,
+demo `pair`, check `pair` (one founder among 300 copy blanks grows to 20 bodies in at least 3 of 4 worlds); stop once
+the check passes and bodies, generations and the R : S pool are measured. First finding: the IDEAS side order fails
+(S's only source is its seed site, covered by a waiting bud: 2 bodies by 20k steps); with the anchor mark moved to the
+seed site (S `B@-y|`) and the front (R `Y@&b@|-`) 4 of 4 worlds reach 20 bodies by about 400-800 steps.
+
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).

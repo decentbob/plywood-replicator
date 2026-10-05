@@ -5,6 +5,8 @@
 const fs=require('fs'),path=require('path'),zlib=require('zlib'),{execFileSync}=require('child_process');
 const {SFACE,SBACK,DOCKED,GROWN,gname}=require('./sim');
 const PAL=['#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#46f0f0','#f032e6','#bcf60c','#fabebe','#008080','#e6beff'];
+// titles may carry type names ('&', '<'): escaped for the SVG
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const gcol=g=>g===0?'#56646e':PAL[((g-1)>>1)%PAL.length];
 const chrome=()=>{const root='/opt/pw-browsers';if(!fs.existsSync(root))return null;
   return fs.readdirSync(root).filter(d=>d.startsWith('chromium')).map(d=>`${root}/${d}/chrome-linux/chrome`).find(fs.existsSync)||null;};
@@ -29,13 +31,13 @@ function render(s,out,title,focus=null,labels=false){
       svg.push(`<line x1="${A[0].toFixed(1)}" y1="${A[1].toFixed(1)}" x2="${B[0].toFixed(1)}" y2="${B[1].toFixed(1)}" stroke="${gcol(g)}" stroke-width="${focus?4:2}" stroke-dasharray="${g%2?'':'3,2'}"/>`);
       if(labels&&g){const m=[(A[0]+B[0])/2*0.7+c[0]*0.3,(A[1]+B[1])/2*0.7+c[1]*0.3];svg.push(`<text x="${m[0].toFixed(1)}" y="${(m[1]+5).toFixed(1)}" font-family="Arial" font-weight="bold" font-size="${Math.max(9,k*0.22).toFixed(0)}" text-anchor="middle" fill="#fff">${gname(g)}</text>`);}}}
   svg.push('</g>');
-  svg.push(`<text x="8" y="${S+20}" font-family="Arial" font-size="13" fill="#233542">${title}</text></svg>`);
+  svg.push(`<text x="8" y="${S+20}" font-family="Arial" font-size="13" fill="#233542">${esc(title)}</text></svg>`);
   const svgf=out.replace(/\.png$/,'.svg');fs.mkdirSync(path.dirname(path.resolve(out)),{recursive:true});fs.writeFileSync(svgf,svg.join('\n'));svgToPng(svgf,out,S,S+30+90);
   fs.writeFileSync(out.replace(/\.png$/,'.json.gz'),zlib.gzipSync(JSON.stringify(s.saveState())));}
 // a grid of PNG pictures with a title (inline images, rendered like render())
 function montage(out,cols,title,files){
   const imgs=files.filter(f=>fs.existsSync(f)).map(f=>`data:image/png;base64,${fs.readFileSync(f).toString('base64')}`),w=560,h=680,rows=Math.ceil(imgs.length/cols),W=cols*(w+6),Hh=rows*(h+6)+40;
-  const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${Hh}"><rect width="${W}" height="${Hh}" fill="#fff"/><text x="10" y="26" font-family="Arial" font-size="18" font-weight="bold">${title}</text>`];
+  const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${Hh}"><rect width="${W}" height="${Hh}" fill="#fff"/><text x="10" y="26" font-family="Arial" font-size="18" font-weight="bold">${esc(title)}</text>`];
   imgs.forEach((d,i)=>svg.push(`<image href="${d}" x="${(i%cols)*(w+6)}" y="${40+Math.floor(i/cols)*(h+6)}" width="${w}" height="${h}"/>`));svg.push('</svg>');
   const svgf=out.replace(/\.png$/,'.svg');fs.writeFileSync(svgf,svg.join(''));svgToPng(svgf,out,W,Hh+90);}
 // popChart (observation, build run 20261005-1051): small multiples of budcycle's 'pop:' lines (BCP), one line per world:

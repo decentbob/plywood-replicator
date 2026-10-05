@@ -101,7 +101,19 @@ function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt
   const th=Math.atan2(B[1]-A[1],B[0]-A[0])-Math.atan2(b[1]-a[1],b[0]-a[0]),c=Math.cos(th),sn=Math.sin(th);
   const pose=p=>{const x=p[0]-a[0],y=p[1]-a[1];return [A[0]+c*x-sn*y,A[1]+sn*x+c*y];},unpose=p=>{const x=p[0]-A[0],y=p[1]-A[1];return [a[0]+c*x+sn*y,a[1]-sn*x+c*y];};
   return {tris:arc.map((v,k)=>({v,type:types[k]})),types,root:0,last:N-1,seedCell:SC,rootSide,anchorSide,anchorCell:AK,seedSide,eSide,receptorSide,pose,unpose,letters:L.join(''),N,R,pore};}
+// Pair kit (build run 20261005-2320; IDEAS "Sources in proportion to use"): the smallest kind, two cells of two
+// types. Root R 'Y@&b@|-': its outer side Y attaches to a seed site y and lets go once R hears no open signal; b@| is the
+// growth front (an anchor mark: never a copy template, so a waiting bud is no extra R source); '-' its exposed side.
+// Second cell S 'B@-y|' across R's side b: '-' its exposed side; y| the seed site (binds a free R's Y; an anchor mark:
+// never copied, so S's source does not vanish while a bud sits on it). The seed site is the side opposite R's Y, so a
+// bud is its parent moved one cell side along a strip (it points away). turn: S 'B@y|-': y beside Y at the pair's
+// obtuse corner, a bud is its parent turned 120 degrees about it (three generations close a hexagon). Every adult
+// exposes exactly one copyable side of each type, R's '-' and S's '-'. The order first written in IDEAS (S 'B@y-|', y
+// the source) fails: a waiting bud covers S's only source and nothing makes S (run 2320).
+function pairKit(turn=false){const R={v:[[0,0],[1,0],[0.5,H]],type:'Y@&b@|-'},a=R.v[1],b=R.v[2],c=R.v[0];
+  const S={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:turn?'B@y|-':'B@-y|'};
+  return {tris:[R,S],R:R.type,S:S.type,rootSide:0,growSide:1,seedSide:turn?1:2};}
 // a bud's pose on its parent (budKit): the parent's cells rotated 180 degrees about the middle of its pore's outer edge
 const budPose=(R,p)=>[-p[0],2*R*H-p[1]];
 
-module.exports={budKit,budPose,ringKit,lattice,hexr,H};
+module.exports={budKit,budPose,pairKit,ringKit,lattice,hexr,H};
