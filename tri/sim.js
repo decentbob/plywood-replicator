@@ -100,8 +100,9 @@ class TriSim extends Physics{
       this.zip[u]=z;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
-    // attachment) emits nothing.
-    for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;v=Math.max(v,op0[(q/3)|0]-1);}}
+    // attachment) emits nothing. A partner that had not yet heard (-1: it was free in the previous pass, so its bond is
+    // new) counts as open one bond away (1): its own value arrives in the next pass (run 20261005-1921, candidate (o))
+    for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;const w=op0[(q/3)|0];v=Math.max(v,w<0?1:w-1);}}
       if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){v=this.p.openRange;break;}}
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}

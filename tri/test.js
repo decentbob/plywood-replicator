@@ -298,6 +298,18 @@ const lysisCase=cutter=>{const K=S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45
   const apart=freed.every(x=>x>0)?Math.max(...freed):0;
   assert.deepEqual([...Array(s.n).keys()].map(u=>s.typeName(u)),types,'a type changed');symmetric(s);
   return {s,Bu,C,wall,apart,fresh,quiet,seed,freed};};
+test('open signal: a partner bonded since the last pass counts as open one bond away (1), then fades (candidate (o), run 20261005-1921)',()=>{
+  // a root Y@& on a silent site, joined in the next pass by an open part: the root hears 1, never 0 ("complete"), then the
+  // part's own 120; and a silent body touched by a new bond hears 1 for one pass at that bond and 0 again after
+  const s=new TriSim({sigma:0,sigmaRot:0,W:12,H:12},4);
+  const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];const a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  placeTri(s,0,[[5,5],[6,5],[5.5,5+H]]);s.setType(0,'f-y');placeTri(s,1,refl(0,0));s.setType(1,'F--');s.bind(0,0,GLUE,1,0,GLUE);
+  for(let k=0;k<3;k++)s.derive();assert.deepEqual([s.op[0],s.op[1]],[0,0],'a body without open fronts is silent');
+  placeTri(s,2,refl(0,2));s.setType(2,'Y@&b@-');s.bind(0,2,GLUE,2,0,GLUE);s.derive();
+  assert.deepEqual([s.op[2],s.op[0],s.op[1]],[120,1,0],'the root emits; the seed cell hears its new partner as 1, not further');
+  placeTri(s,3,refl(2,1));s.setType(3,'B@c@-');s.bind(2,1,GLUE,3,0,GLUE);const ops=[];for(let k=0;k<3;k++){s.derive();ops.push(s.op[2]);}
+  assert.deepEqual(ops,[1,119,119],'the root never hears 0 while its new part is open');
+  s.cut(2,0);s.cut(2,1);for(let k=0;k<130;k++)s.derive();assert.deepEqual([s.op[0],s.op[1]],[0,0],'the body falls silent again once the root is gone (the signal fades one per pass)');});
 test('lysis: a part with a lysis side bound to a waiting anchor takes the bud apart into its parts, fresh; the parent behind its & joint stays whole',()=>{
   const {s,apart,fresh,quiet,seed,freed}=lysisCase('z@!-|-|');
   assert.ok(apart>0&&apart<=45,`every bud cell freed by pass ${apart} (${freed.join(' ')})`);assert.ok(seed,'the parent\'s seed site was not free and fresh when the root let go');

@@ -9,6 +9,6 @@ const origSet=P.setType;P.setType=function(u,str){for(const m of str.matchAll(M.
 const origStep=P.step;P.step=function(){if(!this.__cov){this.__cov=1;cov.sims.push(this);}return origStep.call(this);};
 process.on('exit',()=>{const out=process.env.COV_OUT;if(!out)return;
   const ev={},present={};for(const s of cov.sims){for(const k in s.ev)ev[k]=(ev[k]||0)+s.ev[k];
-    const A={'.':'cOnly','@':'att','&':'done','|':'anc','?':'cpy'};
+    const A={'.':'cOnly','@':'att','&':'done','|':'anc','?':'cpy','!':'lys'};
     for(const c in A){let k=0;for(const x of s[A[c]])if(x)k++;present[c]=(present[c]||0)+k;}}
   fs.appendFileSync(out,JSON.stringify({argv:cov.argv,marks:cov.marks,present,ev})+'\n');});
