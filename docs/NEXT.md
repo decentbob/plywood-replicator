@@ -17,7 +17,7 @@ stalled kit fronts, which copy their own type (parts 519-670, one type up to 356
 no deeper (highest generation 1, 0, 3, 3 against 2, 2, 2, 2). Also seen in both: nearly every let-go is incomplete
 without scavengers (a growing bud's anchor catches a nearby free strand at 18-33 cells; the root, beyond `openRange`
 9 of the front, then lets go). Not made the rule; the option stays for the `core-review` (47) to adopt or remove.
-`node tri/test.js` 38 tests; `node tri/check.js` on this code (default unchanged): see the merge commit. Nothing is
+`node tri/test.js` 38 tests; `node tri/check.js` on this code: 12 of 12 pass (4448 s; `budcycle-3` with the same generation times as runs 1021-1721). Nothing is
 running. Raw logs were in `runs/` (regenerate with the INNOVATIONS command: about 65 minutes per world with the option,
 85 without, 4 at once). Small tool change: `popChart` draws a label starting with `~` dashed (a control).
 
