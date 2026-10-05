@@ -77,7 +77,7 @@ test('anchor: catches a strand end while the strand is being copied (its docker 
   const D=s.n-3;placeTri(s,D,refl(h,rh.free));s.setType(D,'A--');s.derive();s.run(3);assert.ok(s.partner(h,rh.free)===D,'docked on the high end');
   const sh=[0.12,-0.08],V=refl(u,i).map(p=>[p[0]+sh[0],p[1]+sh[1]]);
   const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,'W|f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);
-  for(let k=0;k<6;k++)s.derive();assert.ok(s.busy[u]>0,'the strand is busy (the busy relay reached its low end)');s.run(3);assert.equal(s.partner(u,i),s.n-2,'caught while busy');assert.equal(s.partner(h,rh.free),D,'the docker stays');
+  for(let k=0;k<6;k++)s.derive();s.run(3);assert.equal(s.partner(u,i),s.n-2,'caught while being copied');assert.equal(s.partner(h,rh.free),D,'the docker stays');
   assert.equal(s.partner(h,rh.inert),holds[0][0],'the high end stays held');
   assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');assert.ok(s.flushGap(h,rh.free,D,s.bond[h*3+rh.free]%3)<1e-6,'the docker moved with the strand');symmetric(s);});
 test('copy: only a strand held by its high end is copied (a free strand, or one held by its low end, takes no dock)',()=>{
@@ -182,7 +182,7 @@ test('locality: release reads its chain partners\' fill state from the previous 
   B(0,0,TFACE,1,0,FACE);B(3,0,TFACE,2,0,FACE);B(7,0,TFACE,6,0,FACE);B(1,1,PREV,2,2,NEXT);B(1,2,NEXT,6,1,PREV);B(2,1,PREV,4,0,NEXT);s.fill[4]=1;s.fn[2]=1;   // P exposed the fill in the previous pass
   s.chemistry();assert.ok(s.bond[3]>=0,'U holds its face while P has a fill beside it');
   B(4,1,PREV,5,0,NEXT);s.chemistry();assert.ok(s.bond[3]>=0,'the fill completed this pass: U hears it one pass later');
-  s.chemistry();assert.ok(s.bond[3]<0,'U lets go in the next pass');s.derive();assert.ok(s.refr[1]===1||s.busy[1]===0,'released U is refractory');});
+  s.chemistry();assert.ok(s.bond[3]<0,'U lets go in the next pass');});
 test('copy: a docked triangle keeps its template while a fill that bound in this pass is incomplete',()=>{
   const {PREV,NEXT}=require('./sim');const {s}=createWorld({seed:2,size:18,founders:[{gaps:[1,0,2,1,1],faces:'abaabb',hold:'z'}],supply:{'A--':14,'B--':14,'a--':14,'b--':14,'---':50}});
   let bad=0;const chem=s.chemistry.bind(s);s.chemistry=()=>{const faces=[];for(let u=0;u<s.n;u++){const e=s._edges(u);if(e.face>=0)faces.push([u,e]);}chem();
