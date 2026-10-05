@@ -8,6 +8,14 @@ at each run's merge: run 1422's at `4f65d5c`, with the condensed Direction of ru
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
+**In progress (autorun run 20261005-1921, core-review; branch `claude/core-review-1921`).** (1) `heldContact` removed
+(done; 17 short worlds byte for byte as `main`). (2) Candidate (o): run 2051's oracle `LYFIX` is rejected (its -1 never
+fades: two new bonds of opposite parity lock a silent body at "not heard", so its `&` never releases; `runs/o_wave.js`);
+a fading variant (o') "a partner bonded since the last pass counts as open one bond away (1)" is on local branch `wip-o`
+(worktree `/home/user/pw-o`), its full check with `CHECK_SAVE` running against the baseline `runs/base` (12 of 12).
+(3) Candidate (q) next: remove the busy relay and refractory (`wip-q`, worktree `/home/user/pw-q`). If this run ends,
+rerun: `CHECK_SAVE=$PWD/runs/x node tri/check.js > runs/check_x.txt` on each branch and `diff -r`.
+
 **Handoff status (autorun run 20261005-1850, review-intent).** Direction check; no code change. Decision: Directions
 1-3 move from the 47-type `budKit` lineage to the smallest budding kind the core already allows, **the pair** (2 cells,
 2 types; designed, not demonstrated: IDEAS, "Sources in proportion to use"). The 47-type lineage is frozen, its checks

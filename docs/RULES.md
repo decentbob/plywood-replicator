@@ -76,7 +76,6 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
 | lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
-| hold (30, chain and face bonds; read only with the option `heldContact`) | relayed signal | `budcycle` with `TRI_PARAMS='{"heldContact":true}'`, test | 10-05 (run 1422; an option under evaluation) |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill, refractory | state | copying | 10-01 |
 | spent | state | `&` sides | 10-01 |
@@ -121,7 +120,6 @@ place (all or nothing; never by size).
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
 | zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
-| hold (option `heldContact`, run 1422) | own role and own spare-edge bond; chain and face partners' hold | own; previous pass | local (relay); copy bind reads the site's own hold |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
 | glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
@@ -208,10 +206,6 @@ In the same pass it takes its partner's type (side i+k takes the partner's side 
 partner turned about the shared edge; glues and marks) and lets go. It binds nothing else (no glue binding, dock or
 fill) and is never itself a template. Free triangles never bind each other, so only attached triangles are copied.
 This is the only way a type changes (casting, the other, was removed 2026-10-03). Gate entry: Core changes.
-Option `heldContact` (candidate (p), run 20261005-1422; off by default): a strand triangle (face, back or docked) is
-a template for a copy blank only while it hears `hold`: 30 at a strand's high end whose spare edge is bonded (held),
-relayed along chain and face bonds -1 per bond (previous pass); so a free strand's triangles are not copied. Core
-changes, candidate (p).
 
 ## Open signal and completion release
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` that has a glue (an open growth
@@ -289,7 +283,8 @@ the code; then the result.
    not deeper (highest generation by 2M: 1, 0, 3, 3; control 2, 2, 2, 2). The free strands' monomers had been the fast
    loop that kept blanks from the fronts (IDEAS, "Closing one sink moves the blanks to the next"). Not adopted yet:
    the parameter stays (one option in the core) for the next `core-review` to make it the rule or remove it, after the
-   front sink has a design (NEXT).
+   front sink has a design (NEXT). **Removed in run 20261005-1921 (core-review)**: the direction check of run 1850 moved
+   the evolution work to a kind without strands (the pair); the code is in git at `4f65d5c`.
 
 ### Rule: a lysis side `!` takes a body apart into its units, 2026-10-04, autorun run 20261004-2051 (explore)
 NEXT priority 3, candidate (m) (the user, 2026-10-04: "if only blanks [change], the simulation will just run out";
