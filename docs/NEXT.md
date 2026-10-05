@@ -11,9 +11,9 @@ it is tried on (below).
 **In progress (autorun run 20261005-1921, core-review; branch `claude/core-review-1921`).** (1) `heldContact` removed
 (done; 17 short worlds byte for byte as `main`). (2) Candidate (o): run 2051's oracle `LYFIX` is rejected (its -1 never
 fades: two new bonds of opposite parity lock a silent body at "not heard", so its `&` never releases; `runs/o_wave.js`);
-a fading variant (o') "a partner bonded since the last pass counts as open one bond away (1)" is on local branch `wip-o`
+a fading variant (o') "a partner bonded since the last pass counts as open one bond away (1)" is on branch `claude/core-review-1921-o`
 (worktree `/home/user/pw-o`), its full check with `CHECK_SAVE` running against the baseline `runs/base` (12 of 12).
-(3) Candidate (q) next: remove the busy relay and refractory (`wip-q`, worktree `/home/user/pw-q`). If this run ends,
+(3) Candidate (q) next: remove the busy relay and refractory (`claude/core-review-1921-q`, worktree `/home/user/pw-q`). If this run ends,
 rerun: `CHECK_SAVE=$PWD/runs/x node tri/check.js > runs/check_x.txt` on each branch and `diff -r`.
 
 **Handoff status (autorun run 20261005-1850, review-intent).** Direction check; no code change. Decision: Directions
