@@ -38,7 +38,8 @@ a source in every living body, or parts are conserved and recycled whole (lysis 
 cannot drain the others. A density-dependent loss (a free triangle that touches one of its own type reverts) is the
 smallest local form of (3): a pool then settles near the square root of its source, not proportional to it. Tried
 as a labelled drive in this run, it made things worse: the blanks it freed went into leaked strands (66-86 free
-strands by 600k), so the strand sink has to be closed first. Candidates for the next attempt, smallest first: (a) copy
+strands by 600k), so the strand sink has to be closed first. Closing it with scavengers (same run) showed the other side: the leaked
+strands had also been where most genome monomers were made, so the held strand's copying nearly stopped. Candidates for the next attempt, smallest first: (a) copy
 only what is needed: a parent that stops copying its strand while a copy waits uncaught, or free strands that come
 apart (the strand sink); (b) parts conserved: copy blanks do not copy kit parts, so every type
 keeps its count and lysis recycles it, blanks serving only the genome (indefinite, but no new parts: the kit cannot

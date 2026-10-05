@@ -7,42 +7,42 @@ at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Di
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction" below during run 0321.
 
-**Handoff status (autorun run 20261005-0721, explore).** Direction 1, a world that runs indefinitely with the
-existing core: **not yet**; the material economy measured (INNOVATIONS run 0721; IDEAS "Material flows by exposure,
-not by need"). Tried, as labelled drives and kit choices: decay of free kit parts (`BCLK`), a per-body hazard that
-lyses bodies (`BCH`, from `BCHT`), open walls (`BCW`), a half-ring kit (`budKit(5, 27)`, `BCO=27 BCA=7 BCSC=24`) and a
-density-dependent decay (removed; git `f83351a`). No world ran on: closed walls make a type only at its own growth
-front, so decay empties types (7-9 empty at 1.3-1.4M) and an empty type returns only with a death (seed 2 stalled
-0.37-1.3M with 100 blanks); open walls starve the ring's inner cells (3-20x fewer copies); the half ring is fair alone
-but jams its founder's first copy (5 of 5); and in every setup the blanks end in **leaked genome copies** (52-86 free
-strands, about 40% of all triangles). No core change; default outputs byte for byte unchanged (100k steps, two
-setups); `node tri/test.js` 36 tests (new: closure on the half ring); checks not rerun (no rule or physics changed;
-`budKit` gives the same kit as on main for all 14 option sets the demos, checks and tests use). Nothing is running. Raw logs were in `runs/` (regenerate
-with the INNOVATIONS commands).
-
-**Running at handoff time (09:50 UTC; if this note is still here the run ended early):** 3 scavenger worlds,
-`BCSV=8 BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N 1200000
-runs/e8 > runs/e8/svN.log` (N = 1-3), and the picture world (the same without `BCSV`, seed 1, `runs/pic`).
+**Handoff status (autorun run 20261005-0721, explore).** Direction 1, a world that runs indefinitely with the existing
+core: **not yet**; the material economy measured (INNOVATIONS run 0721; IDEAS "Material flows by exposure, not by
+need"). Tried, as labelled drives and kit choices: decay of free kit parts (`BCLK`), a per-body hazard that lyses
+bodies (`BCH`, from `BCHT`), open walls (`BCW`), a half-ring kit (`budKit(5, 27)`, `BCO=27 BCA=7 BCSC=24`) and a
+density-dependent decay (removed; git `f83351a`); then scavengers for the strand sink (`BCSV`, step 1 below). No world
+ran on: closed walls make a type only at its own growth front, so decay empties types (7-9 empty at 1.3-1.4M) and an
+empty type returns only with a death (seed 2 stalled 0.37-1.3M with 100 blanks); open walls starve the ring's inner
+cells (3-20x fewer copies); the half ring is fair alone but jams its founder's first copy (5 of 5); and in every setup
+the blanks end in **leaked genome copies** (52-86 free strands, about 40% of all triangles). No core change; default
+outputs byte for byte unchanged (100k steps, two setups); `node tri/test.js` 37 tests (new: closure on the half ring,
+scavenger); checks not rerun (no rule or physics changed; `budKit` gives the same kit as on main for all 14 option
+sets the demos, checks and tests use). Nothing is running. Raw logs were in `runs/` (regenerate with the INNOVATIONS
+commands).
 
 **Next steps (proposals).**
 1. **Close the strand sink** (Direction 1 continued; the `build` at index 44): leaked genome copies take the blanks in
    every setup, so nothing else can run on until they come back. Candidates, smallest first: (a) a **scavenger**
-   (labelled prepared body, never copied), designed in this run, not yet in a world: two welded triangles (an attached triangle
-   is needed for an anchor's catch), `Z@|!&` `Ж@|` `f` and `F` `-|` `-|`. The side `Z@|!&` is an anchor that catches a
-   free strand's high end `z`, a lysis side that lyses the end it holds, `&` so the lysis does not come back across
-   that bond, and `@` so free monomers with a `z` side cannot glue-bind it; `Ж@|` is a glued attach side no part
-   matches (it emits the open signal, so `&` never hears "complete" and is never spent; its anchor mark keeps copy
-   blanks off it, like the closed sides `-|`). A caught strand comes apart into monomers (the loop `BCL` returns
+   (labelled prepared body, never copied), designed in this run (`budcycle` option `BCSV=n`): two welded triangles (an attached
+   triangle is needed for an anchor's catch), `Z@|!&` `Ж@|` `f` and `F` `-|` `-|`. The side `Z@|!&` is an anchor that
+   catches a free strand's high end `z`, a lysis side that lyses the end it holds, `&` so the lysis does not come back
+   across that bond, and `@` so free monomers with a `z` side cannot glue-bind it; `Ж@|` is a glued attach side no
+   part matches (it emits the open signal, so `&` never hears "complete" and is never spent; its anchor mark keeps
+   copy blanks off it, like the closed sides `-|`). A caught strand comes apart into monomers (the loop `BCL` returns
    them); its end's cut frees the anchor for the next one. Held strands are never caught (their high end is bonded);
    scavengers compete with buds for leaked copies: an ecology, in the spirit of the user's predation idea (IDEAS
    2026-10-04). Test without motion done in this run (test "scavenger": the strand it holds comes apart into monomers,
    the scavenger stays whole, its anchor free and unspent; without `&` it dies too; `Z|!&` without `@` glue-bound the
    freed high end again every other pass). Risk to test: a copy still docked on a held strand is one body with its
    parent, so a scavenger catching its end would lyse through the face bonds into the parent (lysis crosses every bond
-   but `&`). Next: in `budcycle` with `BCLK` and `BCH` (this run's long-world command). (b) Free strands decay from an
-   unheld end (a labelled drive; but a held strand's low end is unheld too). (c) A parent that stops copying while a
-   copy waits uncaught (no local design yet). Success as before: a world still making generations after 4M steps, 3 of
-   4.
+   but `&`). Smoke test in the lineage done (`BCSV=8`, seeds 1-3 to 0.9M; INNOVATIONS run 0721): 0 free strands and
+   blanks 18-70, but the parent's copying nearly stops (0-1 copies): leaked strands had been the main monomer source,
+   and the founder's start-up jam held in 2 of 3. Next: scavengers with a slower monomer loop (`BCL` 0.0005-0.001, so
+   monomers made at the held strand last until used) and faster part decay (600 surplus parts at `BCLK=0.0001`), then
+   4M-step worlds. (b) Free strands decay from an unheld end (a labelled drive; but a held strand's low end is unheld
+   too). (c) A parent that stops copying while a copy waits uncaught (no local design yet). Success as before: a world
+   still making generations after 4M steps, 3 of 4.
 2. **The simplest heritable variation** (Direction 2; a core change for an `explore`, case in RULES first).
 3. **Competition** (Direction 3), then the older items: the founder's start-up jam (seed 1 of the receptor setup
    still never copies at 4M: 88 buds lysed and regrown), candidate (o), candidate (n) with lysis.

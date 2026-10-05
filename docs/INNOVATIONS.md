@@ -48,13 +48,20 @@ not statistics.
     side `Ж@|` that no part matches so the `&` side always hears the open signal and is never spent. Test "scavenger":
     the strand it holds comes apart into monomers, the scavenger stays whole, its anchor free and unspent; without `&`
     the lysis comes back and the scavenger dies too; without `@` the freed high end glue-binds the side again every
-    other pass. Existing core only.
+    other pass. Existing core only. In the lineage (smoke test: `BCSV=8`, 8 scavengers on a circle around the parent,
+    spared by the hazard, with the closed-wall drives above; seeds 1-3, stopped at 0.9M): free strands 0 throughout and
+    blanks 18-70 (without scavengers 0 from 0.6-0.8M); but genome copying nearly stops (the parent's copies 0-1 by
+    0.9M; monomers 0-9), because the leaked strands had also been where most monomers were made (seed 1 without
+    scavengers: 1660 of 1894 genome copies at 0.6M on free strands). The founder's first copy jammed in 2 of 3 (the
+    start-up jam of run 2221); seed 3 reached generation 1 (424k), seed 2's parent died (hazard). Next limit: monomers
+    at the held strand.
   - **What it shows** (IDEAS, "Material flows by exposure, not by need"): every copyable side turns the blanks that
     reach it into copies of itself whether or not anything needs them, so the blanks end at the most exposure: leaked
     genome copies first, then surplus parts and monomers. A world that runs on needs a way back for every sink, a source
     of every part type in living bodies (or parts conserved), and sources limited by need. The strand sink is the
     largest and comes first. Default outputs are unchanged (100k-step `budcycle`, default and `BCQ=1 BCR=50 BCC=2`, byte
     for byte the same as `5480172`).
+    ![the strand sink: a closed-wall world at 1.2M, about 60 leaked strands around a few bodies](pictures/strand_sink.png)
     ![a half ring and its bud](pictures/halfring_bud.png)
   - Commands: `BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N
     4000000 runs/x` (the closed-wall worlds; `pop:` lines every 100k: bodies, blanks, pool, generations); `BCW=1 BCO=27
