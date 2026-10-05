@@ -7,6 +7,18 @@ at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Di
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction" below during run 0321.
 
+**Current slice (autorun run 20261005-0721, explore; in progress).** Goal: Direction 1, a world that runs
+indefinitely, with no core change. Idea (analysis in this run): a part type is made only where an attached copy of it
+is exposed, and with closed walls a body exposes only its growth front, so free parts can never decay to blanks
+without some type dying out (run 1021's `BCLK`). If every body exposes all its cells (open walls `-`: E's source
+generalised to every cell), every living body makes every type, and then (1) free typed triangles may decay to blanks
+(the loop `BCL` extended to kit parts, labelled) and (2) bodies may die (a labelled hazard: a bonded triangle is
+lysed now and then, and the existing lysis takes its body apart). Material then circulates: blanks -> parts and
+monomers (copying) -> bodies -> parts (death) -> blanks (decay). Steps: options `BCW` (open walls), `BCLK` (decay
+of kit parts), `BCH` (hazard) in `budcycle`; short worlds to see the pool balance; then 4M-step worlds. Done when:
+a world still makes generations after 4M steps in 3 of 4 (or a clear "not yet" with the reason). Stop after the long
+batch.
+
 **Handoff status (autorun run 20261005-0321, build).** Settled: lysis does not make the lineage longer (INNOVATIONS
 run 0321). 8 long `budcycle` worlds without a generation stop (seeds 1-4, 3-4M steps; receptor with cutters vs the
 default): highest generation 0, 4, 3, 4 with lysis vs 4, 3, 3, 3 without; every world stops once its 400 pre-food
