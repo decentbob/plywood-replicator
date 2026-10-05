@@ -1,103 +1,92 @@
 # Next instance: start here
 
-State on 2026-10-05 (after autorun run 20261005-1422, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-05 (after autorun run 20261005-1850, review-intent). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Direction text of run 0751).
+at each run's merge: run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
-user approved the order in "Direction" below during run 0321.
+user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
+it is tried on (below).
 
-**Handoff status (autorun run 20261005-1422, explore).** Candidate (p), free strands not contact-copied: **not yet**
-(INNOVATIONS run 1422; RULES Core changes, candidate (p); IDEAS "Closing one sink moves the blanks to the next";
-picture `heldcontact_2m.png`). Built as the option `heldContact` (off by default; the relayed value `hold` and a gate
-in copy bind; test "copy side (heldContact ...)"); default outputs unchanged. Four 2M `budcycle` worlds (run 1051's
-drives, no scavengers, seeds 2-5) against the same worlds without it: the strand sink closes (`gF` 0 against
-1133-1979), blanks stay 2-39 (control 0-1) and 2-5 complete bodies live at 2M (control 0-2), but the saved blanks go to
-stalled kit fronts, which copy their own type (parts 519-670, one type up to 356; control 45-122), and the lineage is
-no deeper (highest generation 1, 0, 3, 3 against 2, 2, 2, 2). Also seen in both: nearly every let-go is incomplete
-without scavengers (a growing bud's anchor catches a nearby free strand at 18-33 cells; the root, beyond `openRange`
-9 of the front, then lets go). Not made the rule; the option stays for the `core-review` (47) to adopt or remove.
-`node tri/test.js` 38 tests; `node tri/check.js` on this code: 12 of 12 pass (4448 s; `budcycle-3` with the same generation times as runs 1021-1721). Nothing is
-running. Raw logs were in `runs/` (regenerate with the INNOVATIONS command: about 65 minutes per world with the option,
-85 without, 4 at once). Small tool change: `popChart` draws a label starting with `~` dashed (a control).
+**Handoff status (autorun run 20261005-1850, review-intent).** Direction check; no code change. Decision: Directions
+1-3 move from the 47-type `budKit` lineage to the smallest budding kind the core already allows, **the pair** (2 cells,
+2 types; designed, not demonstrated: IDEAS, "Sources in proportion to use"). The 47-type lineage is frozen, its checks
+stay in the suite. `node tri/test.js` 38 tests pass; `tri/check.js` not rerun (no code change; run 1422: 12 of 12).
+Nothing is running. Previous run (1422, explore): candidate (p) `heldContact` not yet (it closes the strand sink; the
+blanks then pile up at stalled kit fronts; INNOVATIONS run 1422).
 
-**Next steps (proposals).**
-1. **The front sink (next `review-intent`, 46: a design question).** Under closed walls type k is made only at a
-   waiting front of cell k, exactly where k is no longer needed; a front stalled for want of k+1 piles up k while k+1
-   stays empty (runs 0721, 1051, 1422). Every run of Direction 1 has ended on this weakest-link structure of the
-   47-type kind. Weigh: (a) a kind with few part types (a periodic ring: each type used many times per body, so no
-   single type limits; closure then has to come from geometry or a count-free signal; run 0751 left it for later),
-   (b) parts made where they are used next (a front of cell k a template for k+1: not possible with contact copying,
-   which copies the template's own type), (c) a source of every type in each living body with need-limited exposure.
-   Decide which one a `build` or `explore` tries next.
-2. **Core review (47): `heldContact` the rule or removed.** Evidence above: it closes the strand sink and keeps more
-   bodies alive but does not by itself make the lineage longer. Suggestion: keep it only if the next design (step 1)
-   still leaks strands; otherwise remove it (git keeps it at this run's merge). With it on as the rule, run the check
-   suite (`CHECK_SAVE`) to see which worlds change. Also (o) and the incomplete let-gos above (a growing bud catching
-   early): either the catch waits for completion (candidate (n)-like gate on the anchor, read from the open signal) or
-   the release reads more than `openRange` 9.
-3. **The simplest heritable variation** (Direction 2) and **competition** (Direction 3), as before; then the older
-   items: the founder's start-up jam (seed 1), candidate (o), candidate (n) with lysis.
+### Direction (review-intent run 20261005-1850)
+The argument is in IDEAS ("Sources in proportion to use"); in short:
+1. **The front sink is structural.** A part type is made where its free sides are exposed. In the 47-type kind that is
+   growth fronts (type k exposed while the front waits for k+1) and, with open walls, only the outward half of a
+   one-row ring (the inward half faces the lumen). Exposure differs from type to type, and with 47 unique types in one
+   pool the least exposed type sets the rate. Runs 0721, 1051 and 1422 each closed one sink and found the next; no
+   drive can make unequal sources equal.
+2. **Design rule: every cell of a complete body exposes exactly one copyable side to the outside.** Each living body is
+   then one source of each of its types, so types are made in the proportion buds use them, by symmetry, with no need
+   signal (run 1422's option (c), met by geometry). The same rule is what heredity needs: a variant part is made in
+   proportion to the bodies that carry it. A one-row ring with a lumen cannot meet it, nor a filled hexagon (its root's
+   one outer side is the joint, spent after the split). A strip can: its end cells have two free sides.
+3. **The pair:** root R `Y@&` `b@` `-` and second cell S `B@` `y` `-|` (side order chosen so a bud points away from its
+   parent). A free R binds a body's seed site `y`; its open `b@` emits; a free S binds there; R hears nothing (openRange
+   1 suffices: R is the emitter) and its `&` lets go. Rules used: `@` binding, contact copying, the open signal, `&`
+   release. No new rule. R is exposed by its `-` side, S by `y` (while no bud sits on it).
+4. **Why switch now** (AGENTS: mechanisms in isolation, then combined): on the pair none of the three interacting sinks
+   (strands, fronts, lumen) exists, a generation should take thousands of steps instead of about 300 thousand, and a
+   variant changes one of two types, so Directions 2 and 3 become measurable. If the pair cannot run on with labelled
+   drives, no larger kind will; if it can, the rule and the drive rates carry over. Risk, stated: in template worlds the
+   smallest fastest replicator usually wins; what could pay for a longer kind here (predation by `!` outer sides,
+   protection, crowding) is Direction 3's question, and it is the research.
+5. **Not taken:** run 1422's (b), parts made where they are next used, needs complementary contact copying (a core
+   change) and turns growth into crystal growth. (a), few periodic types in a ring, helps only linearly and keeps the
+   lumen; a periodic ring comes back later as a compartment on the evolution vehicle.
+6. **Housekeeping found:** `budcycle` carries about 20 option variables, many from dead ends (`BCLK`, `BCH`, `BCHT`,
+   `BCP`, `BCW`, `BCO`, `BCSV`, `BCGATE`): prune at the next cleanup, after the pair world has taken the drives it reuses.
+   Since run 0751 the core grew by one rule (lysis: a capability) and one option (`heldContact`: none); fine.
+
+**Priorities (each a slice; rotation index in brackets).**
+1. [47 core-review] Remove `heldContact` (the vehicle has no strands; git keeps it at `4f65d5c`). Decide candidate (o)
+   with `CHECK_SAVE`: adopt only if just `lysis` and `budcycle-lysis` change, and for the better.
+2. [48 build] **The pair in isolation:** `structures.pairKit`, demo `pair`: one founder pair among copy blanks (about
+   300, world about 30); measure bodies over time, generation depth, the R : S pool. Check: at least 3 of 4 worlds grow
+   from one founder to 20 bodies. Look at the pictures first: does the bud point away, do buds jam beside parents?
+3. [49 harden] Speed for long worlds of many small bodies; `budcycle` untouched.
+4. [50 build] **Direction 1 on the pair:** labelled drives (free parts decay to blanks; a body hazard, lysis into parts,
+   as `BCH` does); 4 long worlds; check: bodies still budding at the end in 3 of 4, many generations past the founder,
+   pool R : S near 1.
+5. [51 explore] **Direction 2:** heritable variation: contact copying now and then makes a variant (core change; case in
+   RULES first: which sides may change; outer sides change behaviour without breaking assembly, joint sides are lethal;
+   how a longer kind could arise).
+6. [52 build] **Direction 3:** two kinds on one supply (the pair and a 3-cell strip): who wins, and why.
+7. Frozen: the 47-type organism (feeding, (n), the front sink, lysis in the lineage); it returns as the complex end once
+   the pair world runs on and varies.
+
+**Rotation (autorun `projects/plywood/rotation.txt`): unchanged**; its mix (5 build, 3 explore, 1 harden, 1 cleanup, 1
+review-intent, 1 core-review per 12) fits a new vehicle that needs mostly building. 47 core-review, 48 build, 49
+harden, 50 build, 51 explore, 52 build, 53 cleanup, 54 build, 55 explore, 56 build, 57 explore, 58 review-intent.
 
 ### Direction (user, 2026-10-05, approved during run 20261005-0321): complex evolution first
 The goal is complex evolution (AGENTS.md, IDEAS 2026-10-05); the organism that feeds its bud is a direction, not the
-finish line. The user approved this order for the next slices, ahead of the priorities below (which stay as the
-vehicle's to-do list):
+finish line. The user approved this order for the next slices:
 1. **A world that runs indefinitely:** material returns to blanks under conservation, with a steady, labelled
-   environment drive; today every `budcycle` world freezes once its food stock is spent (run 0321); with decay and
-   death as labelled drives the blanks end in leaked genome copies (run 0721: not yet); with two scavengers 1 of 4 worlds still makes offspring near 4M (run 1051); with free strands not copied the blanks
-   move to stalled fronts (run 1422; next step 1 above).
+   environment drive. On the 47-type kind: food stock spent (0321), blanks in leaked strands (0721), scavengers cannot
+   track the population (1051), blanks at stalled fronts (1422). Next: on the pair (priority 4 above).
 2. **The simplest heritable variation:** e.g. contact copying that now and then makes a different part type, the
    variant itself copied true (heredity with mutation in one rule; a core change: make the case in RULES first).
 3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
 
-### Direction (review-intent run 20261004-0751, condensed; full text in git at `a2f3914`)
-Standing conclusions: (a) capabilities are being combined in one demo, `budcycle` (pool growth, anchors, `heldCopy`,
-completion release, contact copying, now lysis); the path to the organism is that demo. (b) The lineage burns down its
-prepared stocks (food, part pool); an indefinite lineage under conservation needs material returning to use (lysis,
-run 2051, is the first step; the monomer loop `BCL` a labelled stand-in). (c) **The goal's second half is not met:
-"feeds it until it can live on its own".** Local measure: the bud copies its own strand after the split and its own bud
-catches one of those copies (`ownCopies` in `budcycle`'s result). (d) Retire checks of layouts the lineage has left
-instead of re-tuning them; keep diagnostic options few. (e) Speed matters for the lineage: one `harden` per twelve runs.
-
-**Priorities (in order; each a slice).** Done since run 0751: `heldCopy` the rule (0820), the corner default and three
-generations (1021), speed (1421), where the blanks go (1721), lysis in isolation (2051) and in the lineage (2221).
-1. **Core change (o)** (next `explore` or `core-review`): the open relay's lag, below.
-2. **"Feeding" the offspring (user 2026-10-04, IDEAS):** the parent should pass its bud the building blocks it needs
-   to grow and later replicate; today the bud takes them from the shared environment and the parent gives only a seed
-   site and a strand. Design question for an `explore`, together with the release condition "until it can live on its
-   own" (a hold that lasts until the caught strand has been copied once would read the anchor's strand's busy relay: a
-   core change, worth it only if a fed bud still fails to copy after letting go).
-3. **Later:** N generations as the organism's own check (a lineage that runs until stopped), then the backlog (scanner
-   gate, membrane growth). Other paths weighed in run 0751 and left for later: fewer part types (a periodic ring),
-   a genome whose exposure matches its use (candidate (j)).
-
-**Rotation (autorun `projects/plywood/rotation.txt`):** 45 explore (done: run 1422, candidate (p), not yet),
-46 review-intent, 47 core-review, 48 build, 49 harden, 50 build.
-
 **Core-change candidates (for the next `core-review` or `explore`).**
-- (p) *Contact copying follows "held"* (run 1051): built as the option `heldContact` in run 1422 (not yet: it closes
-  the strand sink, the blanks then pile up at stalled fronts); adopt or remove at the core review (next step 2).
+- (p) *Contact copying follows "held"* (run 1051): the option `heldContact` (run 1422, not yet); remove (priority 1).
 - (o) *The open relay hears "complete" too early after a new bond* (run 2051): a bonded triangle whose partners all had
-  0 or -1 in the previous pass hears 0, so a triangle joined by a partner that was free a pass ago (-1: not yet heard)
-  can conclude "complete". Proposed: a triangle that would hear 0 while a bonded partner had -1 hears -1. Locality:
-  partners' previous values, as now. Effect: `&` releases wait one more pass in such cases; a -1 wave may cross silent
-  bodies when a dock or root binds them (one pass each). Evidence: traced in `lysis` (root binds 4006, cell 1 binds
-  4007, released 4008); oracle `LYFIX=1` in `lysis` removes the detour; 3-9 incomplete root releases per world in
-  `budcycle` (run 2221). Before deciding: the check suite with `CHECK_SAVE` to see which worlds change.
-- (n) *Bud only after letting go* (run 1721): a seed site binds a root only while its triangle hears no open signal,
-  so a bud still growing or waiting for its catch cannot start its own bud. Locality: the triangle's own open signal,
-  relayed. Needs the seed cell within `openRange` of the anchor (today 39 bonds apart, range 9). Oracle `BCGATE=1`
-  shows the effect (every chain bud copies its strand after let-go) and the cost (slower; surplus buds still starve
-  the next generation). Weigh with lysis.
-- (j) *Monomer mix:* a copy uses 2 : 2 : 3 of a mix made about 1 : 1 : 1, and a strand's middle faces are copied far
-  less than its ends (IDEAS, run 0022); no design yet.
-- (l) *A triangle with both a copy side `?` and a glued anchor side* could catch a strand end in the pass it
-  copy-binds and then never copy or let go (review, run 0820). No such type exists; a rule "a triangle with a copy
-  side catches nothing" would close it if one ever appears.
-- Settled, keep: (f) the seed site `y` (plain glue, never spent) is copied by every blank that reaches it while no
-  bud sits on it. Not needed: (k) no copy blank binds an `&` side (closed walls `-|` do it). Done: (e), (i) (run
-  0820), (m) first step (lysis, run 2051). Nothing else in the core is unused (RULES, Core inventory).
+  0 or -1 in the previous pass hears 0, so a triangle joined by a partner that was free a pass ago can conclude
+  "complete". Proposed: a triangle that would hear 0 while a bonded partner had -1 hears -1. Locality: partners'
+  previous values, as now. Evidence: traced in `lysis` (oracle `LYFIX=1`); 3-9 incomplete root releases per
+  `budcycle` world (run 2221). The pair's release is not affected (R hears its own emission).
+- (n) *Bud only after letting go* (run 1721): a seed site binds a root only while its triangle hears no open signal
+  (oracle `BCGATE=1`). Organism lineage; frozen with it.
+- (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
+- Settled, keep: (f) the seed site `y` is copied while no bud sits on it (the pair relies on it). Not needed: (k).
+  Done: (e), (i), (m) first step (lysis). Nothing else in the core is unused (RULES, Core inventory).
 
 ### Open follow-ups (not priorities; take when a run's kind fits)
 - **Core review:** same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);

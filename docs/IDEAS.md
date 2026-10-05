@@ -18,6 +18,53 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Sources in proportion to use: every cell exposes one side; the smallest kind, the pair (direction check, review-intent run 20261005-1850, 2026-10-05): designed, not demonstrated
+
+The question left by run 1422: under closed walls type k is made only at a waiting front of cell k, where it is no
+longer needed. Weighed: (a) few part types, (b) parts made where they are used next, (c) a source of every type in
+each living body with need-limited exposure.
+- **Why the sink is structural.** Contact copying makes a type where its free sides are exposed, at a rate set by how
+  often blanks reach them. In the 47-type kind those places are growth fronts (type k while the front waits for k+1)
+  and, with open walls, the outward half of a one-row ring (the inward half faces the lumen and gets 3-20x fewer
+  blanks, run 0721). So each type has its own source strength, need-blind; with 47 unique types in one pool the
+  weakest source empties first and every bud stops before it. A decay drive only sets each pool to its source
+  divided by the decay rate, so it cannot make unequal sources equal (runs 0721, 1051, 1422).
+- **The rule that removes it: every cell of a complete body exposes exactly one copyable side to the outside.** Then
+  each living body is one source of each of its cells' types, so with N bodies of one kind type k is made at rate
+  about c b N m_k (c: copy rate per exposed side per blank, b: blank density, m_k: cells of type k per body), and buds
+  use it at rate (births) x m_k: supply follows use by symmetry, with no need signal. This is (c) met by geometry
+  instead of by a gate. Heredity needs the same property: a variant part is made in proportion to the bodies that
+  carry it, so a variant that helps its bodies spreads (the pool mixes types between lineages, so selection acts on
+  each type separately unless offspring use parts made nearby; locality makes them partly linked).
+- **Which shapes meet it.** A one-row ring with a lumen cannot (each cell has one free side, half of them face in).
+  A filled hexagon (6 cells around a vertex, each with one outer side) almost does, but its root's one outer side is
+  the joint to its parent, spent after the split, so the root type has no source in an adult. A strip can: its end
+  cells have two free sides, one for the joint or the seed site and one exposed. Growth of a strip of unique types
+  ends by itself (the last cell has no glued `@` side left), so no closure problem arises.
+- **The pair (2 cells, 2 types).** R `Y@&` `b@` `-`, S `B@` `y` `-|` (the side order chosen so that a bud points away
+  from its parent; to check with pictures). A free R binds a body's seed site `y` by `Y@&` (as `budKit`'s root binds
+  `y`); its unbonded `b@` emits the open signal; a free S binds `b@`; R then hears nothing (openRange 1 is enough, R
+  being the emitter) and its `&` lets go and is spent: two pairs. A prepared founder needs no spent state (an `&` side
+  emits nothing, so the founder's free `Y@&` is spent in its first pass). Sources: R's `-` (always), S's `y` (while no
+  bud sits on it; settled candidate (f)), and R's `b@` while a bud waits for its S; S's third side is closed (`-|`, an
+  anchor side, never copied), so both types are exposed once per adult. Rules used: `@` binding, contact copying, the
+  open signal, `&` release; no new rule, no strand, no lumen.
+- **Mean-field count.** Bodies N, free R and S pools r and s, blanks b; a part binding a waiting site at rate a per
+  part, copying at c per exposed side per blank, a labelled body hazard h (lysis into parts) and decay d of free parts
+  into blanks. An idle body buds at about a r s / (r + s); births = deaths gives r = s = 2h/a; copying then only has to
+  replace decayed parts, c b N = d r for each type. So a steady state exists once material exceeds a threshold set by h, a, c and
+  d, with no condition on any single type. To measure, not assume: crowding, buds jammed beside their parents, the
+  seed site exposed only while idle.
+- **Not taken.** (b) needs contact copying to make the complement of its template (a core change), and then every blank
+  at a front becomes the next cell and binds there: crystal growth that only geometry stops. (a) few periodic types in a
+  ring helps only linearly (the pool law, run 1221) and keeps the lumen; a periodic ring with an odd motif puts every
+  type in both inward and outward cells, a later way to give the vehicle a compartment.
+- **What the pair does not answer.** Complexity: in template worlds the smallest fastest replicator usually wins
+  (Spiegelman's experiment). What could pay for a longer kind here (outer sides that prey with `!`, that shield, that
+  catch parts; spatial crowding) is the competition test's question. Variation: a copy error on an outer side changes
+  behaviour without breaking assembly; one on a joint side (`b@`, `B@`, `Y@`, `y`) is lethal; a longer kind needs a
+  new `@` site and a part that fits it, two changes at once (the variation explore must say how that can happen).
+
 ## Closing one sink moves the blanks to the next (explore run 20261005-1422, 2026-10-05)
 
 Measured with candidate (p) (free strands not contact-copied; INNOVATIONS run 1422). With the strand sink closed, no
