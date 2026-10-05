@@ -9,6 +9,39 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261005-1051, build)
+
+- **Scavengers in the lineage: a world that runs on to 4M in 1 of 4 — not yet; the scavenger's dilemma measured.**
+  Direction 1 (NEXT step 1a of run 0721). Existing core; labelled drives and prepared scavengers only (`budcycle`
+  options of run 0721, no code change to the world). Setup: closed walls, hazard `BCH=0.0001 BCHT=600000`, scavengers
+  `BCSV`, monomer loop `BCL`, decay of free kit parts `BCLK`.
+  - **Part decay must stay slow** (`BCSV=8 BCL=0.0005-0.001`, seeds 1-2, to 0.4-0.84M): at `BCLK=0.0003` the first bud
+    stalls at 21-28 of 47 cells (complete at about 350k without decay), 4-17 types empty while one type piles up
+    (178-386 parts: the stalled front copies its own type). With closed walls type k+1 is made only at a k+1 front,
+    so a uniform decay faster than the bud's passage empties it. At `BCLK=0.0001` or 0 the bud completes (360k).
+  - **Eight scavengers eat the offspring's genomes** (seeds 2-3, `BCL=0.0005 BCLK=0.0001`, to 480k): free strands 0,
+    the complete bud never catches. **Two** keep free strands at 6-8 at 0.5M, the bud catches at 263-285k and both
+    worlds reach generation 2 (0.89M, 1.02M; 1.2M worlds); but with the slow loop monomers hold 160-212 triangles and
+    blanks fall to 0-8.
+  - **4M worlds** (`BCSV=2 BCL=0.001 BCLK=0.0001`, seeds 2-5; seed 1 is the founder jam, docks 3 fills 2 from 180k):
+    complete let-gos 9, 5, 3, 0, the last at 3.8M, 2.8M, 1.0M, none; highest generation 3, 2, 2, 0; complete bodies at
+    4M: 2, 0, 0, 0 (seed 5 extinct at 3.1M: its first bud caught at 31 cells and let go incomplete). So **1 of 4** still
+    makes offspring near 4M (target 3 of 4). What limits it: blanks are 0 from about 1M in seeds 2-4 (prefood spent at
+    1.7-2M); the material cycles through **monomers** (100-530) and **free strands** again (two scavengers fall behind as
+    bodies multiply: 18-40 free strands at 2-3M); of the blanks copied by genome triangles 836-8906 per world (20-76%) went to
+    free strands (sink `gF`), the rest to bodies (the founder parent 141-560, later bodies 2298-5762); kit fronts take 541-1449 blanks; the hazard (96-168
+    hits, free strands included) holds complete bodies at 1-4, so a lineage of a few bodies dies out by chance. No parent
+    was lost before the hazard started (the risk of run 0721, a scavenger lysing through a docked copy into its parent:
+    not seen in 6 worlds).
+  - **What it shows** (IDEAS, "The scavenger's dilemma"): a leaked strand is both the next generation's genome and the
+    largest blank sink (each free strand turns every blank that reaches it into monomers). A fixed number of prepared
+    scavengers cannot track a population: many eat the offspring, few fall behind. Clearing has to scale with the bodies
+    (e.g. each body a scavenger) or free strands must stop being copied (candidate (p), NEXT).
+    ![four 4M worlds: bodies, blanks, monomers, parts and complete let-gos](pictures/scavenger_4m.png)
+  - Commands: `BCSV=2 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle
+    N 4000000 runs/x` (about 2 h 10 min per world, 4 at once); chart: `node tri/render.js pop OUT.png "title" "seed
+    2=runs/x/out.txt" ...` (small multiples of the `pop:` lines; new in `tri/render.js`, observation only).
+
 ## 2026-10-05 (autorun run 20261005-0721, explore)
 
 - **A world that runs indefinitely with the existing core — not yet; the material economy measured.** Direction 1
