@@ -18,6 +18,30 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Material flows by exposure, not by need: what a world that runs on requires (explore run 20261005-0721, 2026-10-05)
+
+Measured while trying a world that runs indefinitely with the existing core (INNOVATIONS run 0721). Every attached
+triangle with a copyable free side turns the blanks that reach it into copies of itself, at a rate set by how often
+blanks reach it (geometry, crowding), not by whether anything needs the copies. So in a closed world the blanks end
+wherever the most exposure is: surplus parts at waiting fronts, monomers at free strands, and above all **leaked
+genome copies** (52-60 free strands, about 40% of all triangles, at 1.3-1.4M steps in 3 of 4 long worlds: each adult
+copies its held strand while blanks reach it, each bud catches one). A labelled decay of free typed triangles returns
+blanks, but at a uniform rate a type's pool settles at (its sources) / (the decay rate), and a kind with 47 (or 27)
+unique part types in one shared pool is a chain whose weakest link sets the rate: whichever type has the weakest
+source empties, and every bud stops at the cell before it. Sources tried: growth fronts only (closed walls: an emptied
+type comes back only when a body that holds one dies), every cell's wall (open walls: the inner walls of a closed ring
+get 3-20x fewer blanks; on a half ring every wall is reached alike in isolation, 854 vs 1054 copies per cell, but in the
+crowded lineage world one side's sites stay blocked). Conditions for a world that runs on, as found here: (1) every
+sink has a way back (decay for free monomers and parts, death for bodies and free strands); (2) every part type has
+a source in every living body, or parts are conserved and recycled whole (lysis returns exactly one of each);
+(3) sources limited by need, or losses that grow faster than linearly with abundance, so that one type's surplus
+cannot drain the others. A density-dependent loss (a free triangle that touches one of its own type reverts) is the
+smallest local form of (3): a pool then settles near the square root of its source, not proportional to it.
+Candidates for the next attempt, smallest first: (a) copy only what is needed: a parent that stops copying its strand
+once a copy waits uncaught (the strand sink); (b) parts conserved: copy blanks do not copy kit parts, so every type
+keeps its count and lysis recycles it, blanks serving only the genome (indefinite, but no new parts: the kit cannot
+vary); (c) a kind with few, periodic part types (each type in many cells and many bodies, so its sources are many).
+
 ## Earlier goal, now a direction (user, 2026-10-01)
 
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits

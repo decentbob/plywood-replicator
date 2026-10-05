@@ -262,6 +262,13 @@ test('closure (budKit): a bud grown cell by cell on its parent holds until its a
 // the anchor Z@| on arc cell 6 (run 20261003-1921): the open range reaches the root from there
 test('closure (budKit, anchor on cell 6, Z@|): the bud holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'}),9));
 test('closure (budKit, anchor on cell 6, closed walls -|): the same with walls nothing binds or copies',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|'),9));
+// a wide opening (explore run 20261005-0721): a half ring (pore 27, 27 cells, open walls '-'), anchor on cell 7, seed site on
+// cell 24; its bud on the seed site overlaps neither its parent nor (one generation on) its parent's parent's place
+test('closure (budKit, half ring: pore 27): the same cycle, and the bud placed on the seed site overlaps no parent cell',()=>{
+  const K=S.budKit(5,27,null,true,{at:7,glue:'Z'},'-',24),c=v=>[(v[0][0]+v[1][0]+v[2][0])/3,(v[0][1]+v[1][1]+v[2][1])/3];
+  assert.equal(K.N,27);const P=K.tris.map(t=>c(t.v)),B=K.tris.map(t=>c(t.v.map(K.pose))),G=K.tris.map(t=>c(t.v.map(K.pose).map(K.pose)));
+  for(const a of P)for(const b of [...B,...G])assert.ok(Math.hypot(a[0]-b[0],a[1]-b[1])>0.5,'a bud cell overlaps its parent');
+  closureCase(S.budKit(5,27,null,false,{at:7,glue:'Z'},'-|',24),9);});
 // the seed site on cell 45 (run 20261004-0621): the bud grows off the parent's top-right corner, pores facing across an open wedge
 test('closure (budKit, seed site on cell 45): the bud off the corner holds until its catch and lets go in the parent\'s state',()=>closureCase(S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45),9));
 // lysis (run 20261004-2051, explore; RULES Core changes): a parent holding a stand-in strand end, its complete bud waiting

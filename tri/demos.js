@@ -222,7 +222,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // with BCR=50 it binds a cutter only while E hears its waiting anchor, 40 bonds away, so only complete buds waiting
     // for a catch are lysed). Observation: 'letgo:' lines mark lysed buds; the result adds cutBinds, lysedBuds, cuts,
     // falseRel (roots released incomplete without lysis: the open relay's lag, NEXT candidate (o)), lysedAt, poolMin
-    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),RQ=process.env.BCQ==='1',cut=process.env.BCT||(RQ?'г@!-|-|':'z@!-|-|'),P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',OW=process.env.BCW==='1',LK=+(process.env.BCLK||0),HZ=+(process.env.BCH||0),HT=+(process.env.BCHT||0),PO=+(process.env.BCO||7),PD=+(process.env.BCPD||0),R=5;
+    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),RQ=process.env.BCQ==='1',cut=process.env.BCT||(RQ?'г@!-|-|':'z@!-|-|'),P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',OW=process.env.BCW==='1',LK=+(process.env.BCLK||0),HZ=+(process.env.BCH||0),HT=+(process.env.BCHT||0),PO=+(process.env.BCO||7),R=5;
       const K=S.budKit(R,PO,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},OW?'-':'-|',+(process.env.BCSC||45),RQ?'Г@&':null),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};
       for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;if(CU)supply[cut]=CU;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
@@ -304,12 +304,6 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // rule takes the body apart from there (not across an '&' joint: a bud and its parent die apart), its parts free and
         // fresh, a strand's triangles monomers; mean life 100/h steps. BCHT=t0: from step t0 on (0)
         if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
-        // BCPD=p (pair decay, labelled environment drive): every 100 steps a free typed triangle (not a blank, pre-food or cutter)
-        // touching a free triangle of its own type (centres within 1) becomes a blank with probability p: abundant types are
-        // trimmed where their copies crowd (a waiting front's surplus), rare ones are kept
-        if(PD&&t%100===0){const by=new Map();for(const u of all){if(s.bonded(u))continue;const tn=s.typeName(u);if(tn==='-?-?-?'||tn==='---'||isCut(u))continue;const k=canon(tn);if(!by.has(k))by.set(k,[]);by.get(k).push(u);}
-          const hit=[];for(const L of by.values())for(let a=0;a<L.length;a++)for(let b=0;b<L.length;b++){if(a===b)continue;const u=L[a],v=L[b];if(Math.hypot(s._dx(s.px[v]-s.px[u]),s._dy(s.py[v]-s.py[u]))<1){hit.push(u);break;}}
-          for(const u of hit)if(s.rng()<PD){const kit=kitT.has(canon(s.typeName(u)));s.setType(u,'-?-?-?');ev.loop++;if(kit)ev.loopK++;}}
         if(IP&&t%IP===0)indef(t);
         if(!sealedIn&&bud[N-2]>=0){sealedIn={t,...strands(),blanks:all.filter(u=>!s.bonded(u)&&s.typeName(u)==='-?-?-?'&&where(s.px[u],s.py[u])!=='out').length,E:all.filter(u=>!s.bonded(u)&&idx.get(canon(s.typeName(u)))===N-1&&where(s.px[u],s.py[u])!=='out').length};}
         if(n()>=shot&&!tc){snap(s,`g${shot}`,`t=${t}: ${n()} of ${N} cells`,focus(),false);shot+=12;}
