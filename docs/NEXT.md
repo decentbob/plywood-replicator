@@ -11,6 +11,10 @@ the fewest free part type over time. Done when the 8 worlds are in and the answe
 recorded; if yes, try the lysis setup without the monomer loop (`BCL=0`). Stop there; no core change.
 Runs: `runs/long/{lys,def}N.txt`; rerun: `BCAFTER=100000000 [BCQ=1 BCR=50 BCC=2] TRI_NOPIC=1 node tri/demos.js budcycle N
 4000000 runs/long > runs/long/xN.txt`.
+Progress (04:20 UTC, batch 1 at 1.8M of 4M: lysis and default, seeds 1-2): the pre-food stock is nearly spent by
+1.8M in all four. Default: generation 4 at 1558000 (seed 1), generation 3 at 977300 (seed 2), pool min 0 with 4-5
+types empty. Lysis: seed 1 (founder jam, no strand leaves) 23 waiting buds lysed and regrown, pool min 4, none empty,
+no generation; seed 2 generation 3 at 855000 and nothing lysed (every bud caught), pool min 0, 11 types empty.
 
 **Handoff status (autorun run 20261005-0251, cleanup).** Check `budcycle` retired (the doorway kind with budpool's
 harness; `budcycle-3` shows the same steps three times in the default setup) with the options only it used (`BCHOLD`,
