@@ -7,6 +7,13 @@ at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Di
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction" below during run 0321.
 
+**Current slice (autorun run 20261005-1051, build, in progress).** Goal: close the strand sink with scavengers (NEXT step
+1a) and keep the parent copying: `BCSV=8` with a slower monomer loop (`BCL` 0.0005-0.001) and faster part decay
+(`BCLK=0.0003`), closed walls, hazard `BCH=0.0001 BCHT=600000`. Done when: a world still makes generations after 4M steps
+in 3 of 4 (or, if not reached, what limits it, measured). Stop: after one 4M batch, or earlier if 1.2M worlds show the
+parent cannot copy. Running (batch 1, started 10:52 UTC, about 40 min): `BCSV=8 BCL=<0.0005|0.001> BCLK=0.0003
+BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 TRI_NOPIC=1 node tri/demos.js budcycle <1|2> 1200000 runs/sv_L<L>_s<seed>`.
+
 **Handoff status (autorun run 20261005-0721, explore).** Direction 1, a world that runs indefinitely with the existing
 core: **not yet**; the material economy measured (INNOVATIONS run 0721; IDEAS "Material flows by exposure, not by
 need"). Tried, as labelled drives and kit choices: decay of free kit parts (`BCLK`), a per-body hazard that lyses
