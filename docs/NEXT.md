@@ -20,6 +20,10 @@ setups); `node tri/test.js` 36 tests (new: closure on the half ring); checks not
 `budKit` gives the same kit as on main for all 14 option sets the demos, checks and tests use). Nothing is running. Raw logs were in `runs/` (regenerate
 with the INNOVATIONS commands).
 
+**Running at handoff time (09:50 UTC; if this note is still here the run ended early):** 3 scavenger worlds,
+`BCSV=8 BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N 1200000
+runs/e8 > runs/e8/svN.log` (N = 1-3), and the picture world (the same without `BCSV`, seed 1, `runs/pic`).
+
 **Next steps (proposals).**
 1. **Close the strand sink** (Direction 1 continued; the `build` at index 44): leaked genome copies take the blanks in
    every setup, so nothing else can run on until they come back. Candidates, smallest first: (a) a **scavenger**
