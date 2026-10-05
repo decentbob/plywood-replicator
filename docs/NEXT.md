@@ -20,7 +20,9 @@ anchor 6 starts with the same jam and clears it at 100-180k when supply blanks r
 Also measured: the open relay's lag (o) releases 3-9 roots incomplete per world in the default lineage (14 of 22 at
 one cell; rerun of budcycle-3 on this code gives the recorded generation-3 times, 0 stray), 0-16 with openRange 50.
 New `budcycle` options: `BCA` anchor cell, `BCC`/`BCT` cutters, `BCQ` receptor; result line: cutBinds, lysedBuds, cuts,
-falseRel, lysedAt, poolMin. Branch `claude/autorun-20261004-2221`, merged by PR. Nothing is running.
+falseRel, lysedAt, poolMin. Checks: 12 of 12 (all but `budcycle-3`, 2069 s; `budcycle-lysis` 3 of 4, 1758 s);
+`budcycle-3` as four worlds on this run's demo code (same generation-3 times; `budKit`'s receptor defaults off).
+Branch `claude/autorun-20261004-2221`, merged by PR. Nothing is running.
 Scratch (container only, regenerate with the commands in INNOVATIONS run 2221): `runs/la`-`lt` (anchor 44/40 batches),
 `runs/d1-4` (budcycle-3 rerun), `runs/q1-4` (the receptor, q1 with pictures), `runs/c1-4` (its control), `runs/jam.js`
 (prints a saved state's founder body: `node runs/jam.js runs/x/budcycle_endw.json.gz`), `runs/pic.js` (the picture).

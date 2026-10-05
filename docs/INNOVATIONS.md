@@ -24,7 +24,8 @@ not statistics.
     catch binds it and the bud comes apart, the parent whole; a bud holding a stand-in strand has its receptor spent
     and nothing binds. `budcycle` with `BCQ=1 BCR=50 BCC=2` (budcycle-3's setup otherwise), seeds 1-4, 1.2M steps:
     generation 3 at 855000, 736900, 1083700 in seeds 2-4 (budcycle-3 on the same seeds: 977300, 735900, 827100);
-    16 buds lysed, every one complete and waiting (47 cells: 8, 0, 1, 7 per world); fewest free part type at the end
+    16 buds lysed, every one complete and waiting (47 cells: 8, 0, 1, 7 per world; check `budcycle-lysis` 3 of 4, the
+    same numbers, 1758 s; the other 11 checks pass, `budcycle-3` reran with its recorded results); fewest free part type at the end
     6, 1, 3, 1 (budcycle-3: 1, 0, 3, 1). Seed 1 fails for another reason: its founder's first copy never completes
     (below), no strand ever leaves the parent, its buds wait for ever and the cutters return 8 of them to the pool. Control without cutters
     (`BCQ=1 BCR=50`, same seeds): generation 3 in 2 of 4 (seeds 2, 3: 989500, 937900; seed 1 reaches generation 2;
