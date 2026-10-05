@@ -9,12 +9,10 @@ user approved the order in "Direction (user)" below during run 0321. Run 1850 ke
 it is tried on (below).
 
 **In progress (autorun run 20261005-1921, core-review; branch `claude/core-review-1921`).** (1) `heldContact` removed
-(done; 17 short worlds byte for byte as `main`). (2) Candidate (o): run 2051's oracle `LYFIX` is rejected (its -1 never
-fades: two new bonds of opposite parity lock a silent body at "not heard", so its `&` never releases; `runs/o_wave.js`);
-a fading variant (o') "a partner bonded since the last pass counts as open one bond away (1)" is on branch `claude/core-review-1921-o`
-(worktree `/home/user/pw-o`), its full check with `CHECK_SAVE` running against the baseline `runs/base` (12 of 12).
-(3) Candidate (q) next: remove the busy relay and refractory (`claude/core-review-1921-q`, worktree `/home/user/pw-q`). If this run ends,
-rerun: `CHECK_SAVE=$PWD/runs/x node tri/check.js > runs/check_x.txt` on each branch and `diff -r`.
+(17 short worlds byte for byte as `main`). (2) Candidate (o) closed without a change (RULES, Core changes). (3)
+Candidate (q), removing busy and refractory (branch `claude/core-review-1921-q`, worktree `/home/user/pw-q`): check
+suite 12 of 12 (`budcycle-3` 3 of 4, base 4 of 4; `copy` byte for byte the same); running now: `budcycle-3` seeds 5-8
+on base and (q) (`runs/ext.sh`, outputs in `runs/ext/` of each worktree) to tell noise from harm.
 
 **Handoff status (autorun run 20261005-1850, review-intent).** Direction check; no code change. Decision: Directions
 1-3 move from the 47-type `budKit` lineage to the smallest budding kind the core already allows, **the pair** (2 cells,
