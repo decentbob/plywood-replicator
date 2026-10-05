@@ -21,6 +21,10 @@ node tri/demos.js budcycle N 4000000 runs/pN > runs/pN.txt` for N = 2-5 (rerun t
 At 1.0-1.1M: free-strand sink `gF` 0 in all four (the rule does what it says); blanks 5-34; free strands 0-2; highest
 generation 1, 0, 1, 2; but the pool has 1-3 empty types while one type piles up to 74-149 parts (a stalled front copies
 its own type: kit fronts took 293-764 blanks).
+At 1.5-2M the lineage does worse than run 1051's (highest living generation 0-1, parts 550-700 with one type at
+94-295, 1-8 types empty). Seeds 2-3 stopped at 2M; **running (15:36 UTC):** the control without the change, same drives,
+`BCSV=0 BCL=0.001 BCLK=0.0001 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N 2000000
+runs/cN > runs/cN.txt` for N = 2, 3 (then 4, 5 once p4, p5 reach 2M).
 
 **Handoff status (autorun run 20261005-1051, build).** Direction 1 with scavengers (step 1a of run 0721): **not yet,
 1 of 4** (INNOVATIONS run 1051; IDEAS "The scavenger's dilemma"; picture `scavenger_4m.png`). Part decay faster than a
