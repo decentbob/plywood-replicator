@@ -9,6 +9,33 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261005-0321, build)
+
+- **Does lysis make the lineage longer? No: every lineage stops when its food stock is spent** — a question settled
+  by measurement (no capability, no code change). Long `budcycle` worlds without a generation stop
+  (`BCAFTER=100000000`), seeds 1-4 (1-2 to 4M steps, 3-4 to 3M), the receptor with cutters (`BCQ=1 BCR=50 BCC=2`)
+  against the default (budcycle-3's setup).
+  - **Generations.** Default: highest generation 4, 3, 3, 3 (the last at 1558000, 977300, 735900, 827100); the last
+    let-go of any bud at 1353500, 1525100, 1765900, 1200200. Lysis: 0, 4, 3, 4 (generation 4 at 1932000 and 1330200);
+    buds lysed 88, 0, 2, 31. Seed 1's founder jam (run 2221) never ends: 88 waiting buds lysed and regrown from their
+    parts to 4M with no strand ever leaving the parent. In sum lysis adds a generation in two worlds and loses four in
+    the jammed one: not a longer lineage.
+  - **Why: the lineage is limited by blanks, and lysis returns parts.** All 400 pre-food are fed by about 1.8M; blanks
+    are 0 from 0.6-1.4M on in all 8 worlds, and free genome monomers 0 at the end, so the monomer loop (`BCL`) has
+    nothing left to turn back. Without blanks no held strand is copied: adults sit holding strands they cannot copy.
+    The pool freezes unbalanced (default: 4-10 of 46 types empty while others keep 14-24 parts; lysis 1-12 empty).
+    Lysis only fires on a complete bud waiting for a catch; buds that stall incomplete for want of a part type have no
+    last cell and so no receptor (seed 2: nothing lysed, 12 types empty). Where blanks go in default seed 1 (sinks):
+    354 kit copies (parts, never turned back), 96 copies on held strands, 607 contact copies of free strands' sides
+    (monomers the loop returns). Lysis does keep a world busy longer (seed 4 let-gos to 2954000): parts cycle, food
+    does not.
+  - **What follows.** An indefinite lineage needs blanks to come back, not parts: a steady supply drive and/or a way
+    from surplus parts and strands to blanks (IDEAS 2026-10-04, "a way back to blanks"). This is the first step of the
+    user's new direction (IDEAS 2026-10-05: complex evolution; NEXT): a world that runs indefinitely.
+    ![the default lineage frozen at 4M](pictures/lineage_frozen.png)
+  - Command: `BCAFTER=100000000 [BCQ=1 BCR=50 BCC=2] node tri/demos.js budcycle N 4000000 runs/x` (about 2 hours per
+    world at 4M; `t=` lines every 200000 steps show blanks and the pool).
+
 ## 2026-10-05 (autorun run 20261005-0251, cleanup)
 
 - **Leaner `budcycle` and a shorter suite** — works (no capability change). Check `budcycle` retired (the doorway

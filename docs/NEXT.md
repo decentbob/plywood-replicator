@@ -1,28 +1,44 @@
 # Next instance: start here
 
-State on 2026-10-05 (after autorun run 20261005-0251, cleanup). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-05 (after autorun run 20261005-0321, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Direction text of run 0751).
 
-**Handoff status (autorun run 20261005-0251, cleanup).** Check `budcycle` retired (the doorway kind with budpool's
-harness; `budcycle-3` shows the same steps three times in the default setup) with the options only it used (`BCHOLD`,
-`BCSEED`, `BCK`) and run 1021's `BCLK`: 21 to 17 `BC*` variables, outputs byte for byte the same on four 150000-step
-worlds (INNOVATIONS run 0251). The suite now has 12 checks, about an hour. This file 191 to about 115 lines (run
-0751's Direction condensed below; full text in git at `a2f3914`); README's quick start runs the slow-supply default
-to generation 1 (`BCGEN=1`, 800000 steps). Branch `claude/autorun-20261005-0251`, merged by PR. Nothing is running.
+**The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
+user approved the order in "Direction" below during run 0321.
+
+**Handoff status (autorun run 20261005-0321, build).** Settled: lysis does not make the lineage longer (INNOVATIONS
+run 0321). 8 long `budcycle` worlds without a generation stop (seeds 1-4, 3-4M steps; receptor with cutters vs the
+default): highest generation 0, 4, 3, 4 with lysis vs 4, 3, 3, 3 without; every world stops once its 400 pre-food
+are spent (blanks 0 from 0.6-1.4M, the last let-go by 1.2-1.8M without lysis). The lineage is limited by blanks;
+lysis returns parts, and fires only on complete waiting buds (buds stalled for want of a part type have no
+receptor). No code change; checks not rerun (nothing shared changed); `node tri/test.js` passes. Branch
+`claude/autorun-20261005-0321`, merged by PR. Nothing is running. Raw logs were in `runs/long/` (regenerate with the
+INNOVATIONS command).
 
 **Next steps (proposals).**
-1. **Does lysis make the lineage longer?** (a `build`, index 42): long `budcycle` worlds (no `BCGEN`, 3-4M steps)
-   with and without the receptor's cutters (`BCQ=1 BCR=50 BCC=2`), counting generations and the fewest part type over
-   time; 1.2M steps with a stop at generation 3 cannot show it. If yes, the labelled monomer loop (`BCL`) may become
-   unnecessary, and one of the two lineage checks (`budcycle-3`, `budcycle-lysis`, 2000 s each) can go.
-2. **The founder's start-up jam** (run 2221, INNOVATIONS): a held strand whose first copy docks and then waits for a
-   fill no blank brings; seed 1 of the receptor setup never copies, the default clears it at 100-180k. Measure in a
-   `harden` how often and how long across seeds; a layout where incoming blanks pass the strand, or more blanks inside
-   at the start (labelled), may remove it.
-3. **Candidate (o)** (below) at the next `explore` (index 43) or `core-review`: 3-9 roots released incomplete per world
-   in the default lineage (run 2221).
-4. The parent's open receptor while its own bud grows (IDEAS run 2221) is closed by candidate (n): weigh them together.
+1. **A world that runs indefinitely** (Direction 1; the `explore` at index 43 or the `build` at 44): blanks must come
+   back. Evidence for the design (run 0321): at the freeze, free monomers are 0 (the loop `BCL` has taken them all),
+   so the remaining material sits in surplus kit parts (types with 14-24 free parts beside empty ones), free strands
+   (6-26 per world) and adults holding strands they cannot copy. Pitfall: free kit parts decaying to blanks (run
+   1021's `BCLK`) empties the rarely copied types (setup C, 0 of 2). Candidates, smallest first: (a) a steady supply
+   drive (labelled; the stock outside the world, speed side note below) to see whether parts or blanks limit when
+   food never ends; (b) lysis of free strands and of bodies that stopped (a death that is not only for waiting buds),
+   with the parts returning to blanks; (c) contact copying in reverse. Success: a world still making generations
+   after 4M steps, 3 of 4.
+2. **The simplest heritable variation** (Direction 2; a core change for an `explore`, case in RULES first).
+3. **Competition** (Direction 3), then the older items: the founder's start-up jam (seed 1 of the receptor setup
+   still never copies at 4M: 88 buds lysed and regrown), candidate (o), candidate (n) with lysis.
+
+### Direction (user, 2026-10-05, approved during run 20261005-0321): complex evolution first
+The goal is complex evolution (AGENTS.md, IDEAS 2026-10-05); the organism that feeds its bud is a direction, not the
+finish line. The user approved this order for the next slices, ahead of the priorities below (which stay as the
+vehicle's to-do list):
+1. **A world that runs indefinitely:** material returns to blanks under conservation, with a steady, labelled
+   environment drive; today every `budcycle` world freezes once its food stock is spent (run 0321).
+2. **The simplest heritable variation:** e.g. contact copying that now and then makes a different part type, the
+   variant itself copied true (heredity with mutation in one rule; a core change: make the case in RULES first).
+3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
 
 ### Direction (review-intent run 20261004-0751, condensed; full text in git at `a2f3914`)
 Standing conclusions: (a) capabilities are being combined in one demo, `budcycle` (pool growth, anchors, `heldCopy`,
@@ -45,7 +61,7 @@ generations (1021), speed (1421), where the blanks go (1721), lysis in isolation
    gate, membrane growth). Other paths weighed in run 0751 and left for later: fewer part types (a periodic ring),
    a genome whose exposure matches its use (candidate (j)).
 
-**Rotation (autorun `projects/plywood/rotation.txt`):** 42 build (next step 1), 43 explore (candidate (o)), 44 build,
+**Rotation (autorun `projects/plywood/rotation.txt`):** 42 build (done: lysis, run 0321), 43 explore, 44 build,
 45 explore, 46 review-intent, 47 core-review, 48 build, 49 harden.
 
 **Core-change candidates (for the next `core-review` or `explore`).**

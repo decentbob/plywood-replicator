@@ -1,8 +1,10 @@
 # Typed-triangle world — working agreement
 
 A world of conserved unit triangles whose sides carry glues should grow, by local rules, into replicators with
-machines and a metabolism. **Goal (user): an organism that builds its offspring, feeds it until it can live on its
-own, and splits it off** — complexity emerging from a small set of simple rules. Plain JavaScript, no dependencies.
+machines and a metabolism. **Goal (user, 2026-10-05): complex evolution** — the more complex what evolves and the
+simpler the rules, the better; a result that looks different from what was planned is welcome. An organism that builds
+its offspring, feeds it until it can live on its own and splits it off (the goal of 2026-10-01) is a direction to work
+toward when unsure, not the goal itself. Plain JavaScript, no dependencies.
 
 `CLAUDE.md` imports this file; the user's current request overrides it. Earlier simulations (letter chemistry,
 half-cells, seeded engine) were removed on 2026-10-01 and stay in git history at `cac79c9` and before; do not revive
