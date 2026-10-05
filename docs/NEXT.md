@@ -15,7 +15,7 @@ among 300 copy blanks reaches 20 bodies by 350-530 steps in 4 of 4 worlds and tu
 site (IDEAS, "Built"). The kit is R `Y@&b@|-`, S `B@-y|`: each cell's plain `-` is its one source; the anchor marks
 keep the seed site and the front from being copied (the IDEAS order `B@y-|` stalls at 1-5 bodies: control `pair-c`).
 The bud points away (a strip). New: `structures.pairKit`, demo `pair`, checks `pair` and `pair-c`; render escapes
-titles. `node tri/test.js` 38 tests pass; `tri/check.js` CHECKRESULT. Nothing is running. Previous run (1921,
+titles. `node tri/test.js` 39 tests pass (new: the pair mechanism); `tri/check.js` CHECKRESULT. Nothing is running. Previous run (1921,
 core-review): core 6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no option.
 
 **Next step (rotation 49, harden): speed for long pair worlds** (priority 3). The pair world runs about 1300 steps per
