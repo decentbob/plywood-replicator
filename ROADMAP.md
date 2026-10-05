@@ -1,9 +1,10 @@
 # Roadmap — typed-triangle world (2026-10-04)
 
-## BIG goal (user, 2026-10-01)
+## BIG goal (user, 2026-10-05)
 
-**An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then
-splits it off.** Build every mechanism in isolation, then combine them.
+**Complex evolution: the more complex what evolves and the simpler the rules, the better** (IDEAS, 2026-10-05).
+Direction when unsure (the goal of 2026-10-01): an organism with a metabolism that constructs its offspring and feeds
+it until it can live on its own, then splits it off. Build every mechanism in isolation, then combine them.
 
 | Module | Biology | Status | Where |
 |---|---|---|---|

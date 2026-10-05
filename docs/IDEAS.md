@@ -3,7 +3,22 @@
 Ideas and design lessons for the typed-triangle simulation, most of them the user's. ROADMAP ranks the work; this
 file keeps the reasoning so it is not lost. Add new ideas at the top of their section, with the date.
 
-## The BIG goal (user, 2026-10-01)
+## The goal is complex evolution (user, 2026-10-05)
+
+The user, during autorun run 20261005-0321: "I think the declared goal for you was something like get a replicator
+that builds and feeds offspring until it can do it by itself. I am not sure it's a good goal. Maybe some direction to
+work towards if unsure. The overall goal is to get complex evolution. If it looks different it is still welcome. The
+more complex and the simpler the rules the better." So the organism below is a direction, not the finish line; work
+is judged by how much evolves and how few rules it takes.
+
+What evolution needs here, as of this run (notes, not the user's words): (1) **a world that does not stop**: every
+`budcycle` world freezes once its food stock is spent (run 0321: blanks 0 by 1.0-1.4M steps, nothing happens after
+1.6-1.9M), so a lineage has a fixed number of generations, not a population that turns over; (2) **heritable
+variation that changes what is built**: today the strand (`aAaA`) is copied but encodes nothing the body uses, and the
+kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
+variants competing for the same blanks, so the ones that copy faster or waste less take over.
+
+## Earlier goal, now a direction (user, 2026-10-01)
 
 An organism with a metabolism that constructs its offspring and feeds it until it can live on its own, then splits
 it off. Build every mechanism in isolation and combine them later. Module table in ROADMAP.
