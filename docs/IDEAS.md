@@ -36,9 +36,11 @@ sink has a way back (decay for free monomers and parts, death for bodies and fre
 a source in every living body, or parts are conserved and recycled whole (lysis returns exactly one of each);
 (3) sources limited by need, or losses that grow faster than linearly with abundance, so that one type's surplus
 cannot drain the others. A density-dependent loss (a free triangle that touches one of its own type reverts) is the
-smallest local form of (3): a pool then settles near the square root of its source, not proportional to it.
-Candidates for the next attempt, smallest first: (a) copy only what is needed: a parent that stops copying its strand
-once a copy waits uncaught (the strand sink); (b) parts conserved: copy blanks do not copy kit parts, so every type
+smallest local form of (3): a pool then settles near the square root of its source, not proportional to it. Tried
+as a labelled drive in this run, it made things worse: the blanks it freed went into leaked strands (66-86 free
+strands by 600k), so the strand sink has to be closed first. Candidates for the next attempt, smallest first: (a) copy
+only what is needed: a parent that stops copying its strand while a copy waits uncaught, or free strands that come
+apart (the strand sink); (b) parts conserved: copy blanks do not copy kit parts, so every type
 keeps its count and lysis recycles it, blanks serving only the genome (indefinite, but no new parts: the kit cannot
 vary); (c) a kind with few, periodic part types (each type in many cells and many bodies, so its sources are many).
 

@@ -1,58 +1,39 @@
 # Next instance: start here
 
-State on 2026-10-05 (after autorun run 20261005-0321, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-05 (after autorun run 20261005-0721, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Direction text of run 0751).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction" below during run 0321.
 
-**Current slice (autorun run 20261005-0721, explore; in progress).** Goal: Direction 1, a world that runs
-indefinitely, with no core change. Idea (analysis in this run): a part type is made only where an attached copy of it
-is exposed, and with closed walls a body exposes only its growth front, so free parts can never decay to blanks
-without some type dying out (run 1021's `BCLK`). If every body exposes all its cells (open walls `-`: E's source
-generalised to every cell), every living body makes every type, and then (1) free typed triangles may decay to blanks
-(the loop `BCL` extended to kit parts, labelled) and (2) bodies may die (a labelled hazard: a bonded triangle is
-lysed now and then, and the existing lysis takes its body apart). Material then circulates: blanks -> parts and
-monomers (copying) -> bodies -> parts (death) -> blanks (decay). Steps: options `BCW` (open walls), `BCLK` (decay
-of kit parts), `BCH` (hazard) in `budcycle`; short worlds to see the pool balance; then 4M-step worlds. Done when:
-a world still makes generations after 4M steps in 3 of 4 (or a clear "not yet" with the reason). Stop after the long
-batch.
-Progress (08:15 UTC). Short worlds (`runs/e1`-`e4`, seeds 1-2, 0.4-1M steps; `pop:` lines every 100k):
-- Open walls fail: inner-facing cells (about half the kit; the wall faces the parent's inside) are copied 3-20x less
-  than outer ones (only blanks that come in through the pore reach them), so under decay their pool types die out
-  (`BCW=1 BCLK=0.002`: 7-16 types empty, the bud stuck at cell 4, an inner type); without decay the walls take every
-  blank (blanks 0, no strand copied). Changing `pBond` (1 to 0.01) does not change the ratio (about 1 : 3 when blanks
-  are scarce). Dropped.
-- Closed walls with part decay: `BCLK=0.0005` empties 6-17 types by 400k (fronts make too few); `0.00005`-`0.0001`
-  keeps the pool's fewest type at 2-7 through 500k. Monomer loop 0.005 (not 0.002) keeps monomers at 30-40 (else
-  100-460: leaked free strands are copied into monomers far faster than the held one).
-- A per-triangle hazard killed the lone founder before its first bud in 3 of 5 worlds and leaves free strands (7
-  triangles) 8x longer-lived than bodies; switched to a per-body hazard (each body hit at rate h, mean life 100/h
-  steps) starting at `BCHT`.
-- Running (4 processes, started 08:15 UTC, about 3-4 h): `BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000
-  BCAFTER=100000000 node tri/demos.js budcycle N 4000000 runs/long/sN > runs/long/sN.log`, N = 1-4. Read the `pop:`
-  lines (bodies, blanks, pool, let-gos per 100k, highest generation).
-
-**Handoff status (autorun run 20261005-0321, build).** Settled: lysis does not make the lineage longer (INNOVATIONS
-run 0321). 8 long `budcycle` worlds without a generation stop (seeds 1-4, 3-4M steps; receptor with cutters vs the
-default): highest generation 0, 4, 3, 4 with lysis vs 4, 3, 3, 3 without; every world stops once its 400 pre-food
-are spent (blanks 0 from 0.6-1.4M, the last let-go by 1.2-1.8M without lysis). The lineage is limited by blanks;
-lysis returns parts, and fires only on complete waiting buds (buds stalled for want of a part type have no
-receptor). No code change; checks not rerun (nothing shared changed); `node tri/test.js` passes. Branch
-`claude/autorun-20261005-0321`, merged by PR. Nothing is running. Raw logs were in `runs/long/` (regenerate with the
-INNOVATIONS command).
+**Handoff status (autorun run 20261005-0721, explore).** Direction 1, a world that runs indefinitely with the
+existing core: **not yet**; the material economy measured (INNOVATIONS run 0721; IDEAS "Material flows by exposure,
+not by need"). Tried, as labelled drives and kit choices: decay of free kit parts (`BCLK`), a per-body hazard that
+lyses bodies (`BCH`, from `BCHT`), open walls (`BCW`), a half-ring kit (`budKit(5, 27)`, `BCO=27 BCA=7 BCSC=24`) and a
+density-dependent decay (removed; git `f83351a`). No world ran on: closed walls make a type only at its own growth
+front, so decay empties types (7-9 empty at 1.3-1.4M) and an empty type returns only with a death (seed 2 stalled
+0.37-1.3M with 100 blanks); open walls starve the ring's inner cells (3-20x fewer copies); the half ring is fair alone
+but jams its founder's first copy (5 of 5); and in every setup the blanks end in **leaked genome copies** (52-86 free
+strands, about 40% of all triangles). No core change; default outputs byte for byte unchanged (100k steps, two
+setups); `node tri/test.js` 36 tests (new: closure on the half ring); checks not rerun (no rule or physics changed;
+`budKit` gives the same kit as on main for all 14 option sets the demos, checks and tests use). Nothing is running. Raw logs were in `runs/` (regenerate
+with the INNOVATIONS commands).
 
 **Next steps (proposals).**
-1. **A world that runs indefinitely** (Direction 1; the `explore` at index 43 or the `build` at 44): blanks must come
-   back. Evidence for the design (run 0321): at the freeze, free monomers are 0 (the loop `BCL` has taken them all),
-   so the remaining material sits in surplus kit parts (types with 14-24 free parts beside empty ones), free strands
-   (6-26 per world) and adults holding strands they cannot copy. Pitfall: free kit parts decaying to blanks (run
-   1021's `BCLK`) empties the rarely copied types (setup C, 0 of 2). Candidates, smallest first: (a) a steady supply
-   drive (labelled; the stock outside the world, speed side note below) to see whether parts or blanks limit when
-   food never ends; (b) lysis of free strands and of bodies that stopped (a death that is not only for waiting buds),
-   with the parts returning to blanks; (c) contact copying in reverse. Success: a world still making generations
-   after 4M steps, 3 of 4.
+1. **Close the strand sink** (Direction 1 continued; the `build` at index 44): leaked genome copies take the blanks
+   in every setup, so nothing else can run on until they come back. Candidates, smallest first: (a) a **scavenger**
+   (labelled prepared body, never copied), designed in this run, not built: two welded triangles (an attached triangle
+   is needed for an anchor's catch), `Z|!&` `Ж@|` `f` and `F` `-|` `-|`. The side `Z|!&` is an anchor that catches a
+   free strand's high end `z`, a lysis side that lyses the end it holds, and `&` so the lysis does not come back
+   across that bond; `Ж@|` is a glued attach side no part matches (it emits the open signal, so `&` never hears
+   "complete" and is never spent; its anchor mark keeps copy blanks off it, like the closed sides `-|`). A caught
+   strand comes apart into monomers (the loop `BCL` returns them); its end's cut frees the anchor for the next one.
+   Held strands are never caught (their high end is bonded); scavengers compete with buds for leaked copies: an
+   ecology, in the spirit of the user's predation idea (IDEAS 2026-10-04). Test first without motion (catch, lysis, the scavenger whole and free again),
+   then in `budcycle` with `BCLK` and `BCH` (this run's long-world command). (b) Free strands decay from an unheld end
+   (a labelled drive; but a held strand's low end is unheld too). (c) A parent that stops copying while a copy waits
+   uncaught (no local design yet). Success as before: a world still making generations after 4M steps, 3 of 4.
 2. **The simplest heritable variation** (Direction 2; a core change for an `explore`, case in RULES first).
 3. **Competition** (Direction 3), then the older items: the founder's start-up jam (seed 1 of the receptor setup
    still never copies at 4M: 88 buds lysed and regrown), candidate (o), candidate (n) with lysis.
@@ -62,7 +43,8 @@ The goal is complex evolution (AGENTS.md, IDEAS 2026-10-05); the organism that f
 finish line. The user approved this order for the next slices, ahead of the priorities below (which stay as the
 vehicle's to-do list):
 1. **A world that runs indefinitely:** material returns to blanks under conservation, with a steady, labelled
-   environment drive; today every `budcycle` world freezes once its food stock is spent (run 0321).
+   environment drive; today every `budcycle` world freezes once its food stock is spent (run 0321); with decay and
+   death as labelled drives the blanks end in leaked genome copies (run 0721: not yet; next step 1 above).
 2. **The simplest heritable variation:** e.g. contact copying that now and then makes a different part type, the
    variant itself copied true (heredity with mutation in one rule; a core change: make the case in RULES first).
 3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
@@ -88,7 +70,7 @@ generations (1021), speed (1421), where the blanks go (1721), lysis in isolation
    gate, membrane growth). Other paths weighed in run 0751 and left for later: fewer part types (a periodic ring),
    a genome whose exposure matches its use (candidate (j)).
 
-**Rotation (autorun `projects/plywood/rotation.txt`):** 42 build (done: lysis, run 0321), 43 explore, 44 build,
+**Rotation (autorun `projects/plywood/rotation.txt`):** 43 explore (done: run 0721, not yet), 44 build,
 45 explore, 46 review-intent, 47 core-review, 48 build, 49 harden.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
