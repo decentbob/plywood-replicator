@@ -38,6 +38,16 @@ to generation 1 (`BCGEN=1`, 800000 steps). Branch `claude/autorun-20261005-0251`
    in the default lineage (run 2221).
 4. The parent's open receptor while its own bud grows (IDEAS run 2221) is closed by candidate (n): weigh them together.
 
+### Direction (user, 2026-10-05, approved during run 20261005-0321): complex evolution first
+The goal is complex evolution (AGENTS.md, IDEAS 2026-10-05); the organism that feeds its bud is a direction, not the
+finish line. The user approved this order for the next slices, ahead of the priorities below (which stay as the
+vehicle's to-do list):
+1. **A world that runs indefinitely:** material returns to blanks under conservation, with a steady, labelled
+   environment drive; today every `budcycle` world freezes once its food stock is spent (run 0321).
+2. **The simplest heritable variation:** e.g. contact copying that now and then makes a different part type, the
+   variant itself copied true (heredity with mutation in one rule; a core change: make the case in RULES first).
+3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
+
 ### Direction (review-intent run 20261004-0751, condensed; full text in git at `a2f3914`)
 Standing conclusions: (a) capabilities are being combined in one demo, `budcycle` (pool growth, anchors, `heldCopy`,
 completion release, contact copying, now lysis); the path to the organism is that demo. (b) The lineage burns down its
