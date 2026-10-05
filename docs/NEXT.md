@@ -4,6 +4,14 @@ State on 2026-10-05 (after autorun run 20261004-2221, build). Read AGENTS.md fir
 file. History of earlier runs: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (older
 handoffs: NEXT.md in git, e.g. at `faeb75b` for run 2051's, `ef27e51` for run 1721's, `3d99dbd` for run 1421's, `ef7e74a` for run 1021's, `882b7d4` for run 0751's).
 
+**Current slice (autorun run 20261005-0251, cleanup; in progress).** Goal: a leaner `budcycle` and a shorter suite and
+NEXT, no capability or core change. (1) Retire check `budcycle` (the doorway kind with budpool's harness, 2400 s of
+worker time; superseded by `budcycle-3`, which shows the same steps three times in the default setup) and remove the
+options only it used (`BCHOLD`, `BCSEED`, `BCK`) and `BCLK` (run 1021's setup C, 0 of 2). (2) Shrink NEXT: the
+Direction section to its standing conclusions, stale commands out. Done when: four short `budcycle` worlds (default,
+receptor with cutters, `BCGATE`+`BCES=0`, `BCES=2 BCA=44`) give byte for byte the same output before and after, tests
+pass, records follow. Stop there.
+
 **Handoff status (autorun run 20261004-2221, build).** Priority 3a below is done, by another design than the one
 written: **a lysis receptor on the bud's last cell** (INNOVATIONS run 2221; IDEAS; kit only, no core change).
 `budKit(..., receptor)` puts `Г@&` on E's outer side; cutters `г@!-|-|` (labelled), openRange 50. E exists only on a
