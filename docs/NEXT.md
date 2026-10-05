@@ -4,6 +4,14 @@ State on 2026-10-05 (after autorun run 20261005-0251, cleanup). Read AGENTS.md f
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Direction text of run 0751).
 
+**Current slice (autorun run 20261005-0321, build, in progress).** NEXT step 1: does lysis make the lineage longer?
+Long `budcycle` worlds without a generation stop (`BCAFTER=100000000`, 4M steps), seeds 1-4: the receptor with cutters
+(`BCQ=1 BCR=50 BCC=2`) against the default (budcycle-3's setup). Measure generations reached and when, buds lysed,
+the fewest free part type over time. Done when the 8 worlds are in and the answer (yes / no / not at this length) is
+recorded; if yes, try the lysis setup without the monomer loop (`BCL=0`). Stop there; no core change.
+Runs: `runs/long/{lys,def}N.txt`; rerun: `BCAFTER=100000000 [BCQ=1 BCR=50 BCC=2] TRI_NOPIC=1 node tri/demos.js budcycle N
+4000000 runs/long > runs/long/xN.txt`.
+
 **Handoff status (autorun run 20261005-0251, cleanup).** Check `budcycle` retired (the doorway kind with budpool's
 harness; `budcycle-3` shows the same steps three times in the default setup) with the options only it used (`BCHOLD`,
 `BCSEED`, `BCK`) and run 1021's `BCLK`: 21 to 17 `BC*` variables, outputs byte for byte the same on four 150000-step
