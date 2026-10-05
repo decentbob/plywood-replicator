@@ -21,19 +21,24 @@ setups); `node tri/test.js` 36 tests (new: closure on the half ring); checks not
 with the INNOVATIONS commands).
 
 **Next steps (proposals).**
-1. **Close the strand sink** (Direction 1 continued; the `build` at index 44): leaked genome copies take the blanks
-   in every setup, so nothing else can run on until they come back. Candidates, smallest first: (a) a **scavenger**
-   (labelled prepared body, never copied), designed in this run, not built: two welded triangles (an attached triangle
-   is needed for an anchor's catch), `Z|!&` `Ж@|` `f` and `F` `-|` `-|`. The side `Z|!&` is an anchor that catches a
-   free strand's high end `z`, a lysis side that lyses the end it holds, and `&` so the lysis does not come back
-   across that bond; `Ж@|` is a glued attach side no part matches (it emits the open signal, so `&` never hears
-   "complete" and is never spent; its anchor mark keeps copy blanks off it, like the closed sides `-|`). A caught
-   strand comes apart into monomers (the loop `BCL` returns them); its end's cut frees the anchor for the next one.
-   Held strands are never caught (their high end is bonded); scavengers compete with buds for leaked copies: an
-   ecology, in the spirit of the user's predation idea (IDEAS 2026-10-04). Test first without motion (catch, lysis, the scavenger whole and free again),
-   then in `budcycle` with `BCLK` and `BCH` (this run's long-world command). (b) Free strands decay from an unheld end
-   (a labelled drive; but a held strand's low end is unheld too). (c) A parent that stops copying while a copy waits
-   uncaught (no local design yet). Success as before: a world still making generations after 4M steps, 3 of 4.
+1. **Close the strand sink** (Direction 1 continued; the `build` at index 44): leaked genome copies take the blanks in
+   every setup, so nothing else can run on until they come back. Candidates, smallest first: (a) a **scavenger**
+   (labelled prepared body, never copied), designed in this run, not yet in a world: two welded triangles (an attached triangle
+   is needed for an anchor's catch), `Z@|!&` `Ж@|` `f` and `F` `-|` `-|`. The side `Z@|!&` is an anchor that catches a
+   free strand's high end `z`, a lysis side that lyses the end it holds, `&` so the lysis does not come back across
+   that bond, and `@` so free monomers with a `z` side cannot glue-bind it; `Ж@|` is a glued attach side no part
+   matches (it emits the open signal, so `&` never hears "complete" and is never spent; its anchor mark keeps copy
+   blanks off it, like the closed sides `-|`). A caught strand comes apart into monomers (the loop `BCL` returns
+   them); its end's cut frees the anchor for the next one. Held strands are never caught (their high end is bonded);
+   scavengers compete with buds for leaked copies: an ecology, in the spirit of the user's predation idea (IDEAS
+   2026-10-04). Test without motion done in this run (test "scavenger": the strand it holds comes apart into monomers,
+   the scavenger stays whole, its anchor free and unspent; without `&` it dies too; `Z|!&` without `@` glue-bound the
+   freed high end again every other pass). Risk to test: a copy still docked on a held strand is one body with its
+   parent, so a scavenger catching its end would lyse through the face bonds into the parent (lysis crosses every bond
+   but `&`). Next: in `budcycle` with `BCLK` and `BCH` (this run's long-world command). (b) Free strands decay from an
+   unheld end (a labelled drive; but a held strand's low end is unheld too). (c) A parent that stops copying while a
+   copy waits uncaught (no local design yet). Success as before: a world still making generations after 4M steps, 3 of
+   4.
 2. **The simplest heritable variation** (Direction 2; a core change for an `explore`, case in RULES first).
 3. **Competition** (Direction 3), then the older items: the founder's start-up jam (seed 1 of the receptor setup
    still never copies at 4M: 88 buds lysed and regrown), candidate (o), candidate (n) with lysis.

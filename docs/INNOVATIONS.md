@@ -42,6 +42,13 @@ not statistics.
   - **A density-dependent decay** (a drive tried and removed: a free typed triangle that touches one of its own type
     becomes a blank, p = 0.05-0.2 per 100 steps; code in git at `f83351a`): worse; the blanks it freed went into leaked
     strands (66-86 free strands by 0.6M in 4 of 4).
+  - **A scavenger for the strand sink** — designed and tested without motion, not yet in a world (NEXT step 1a): a
+    prepared body of two welded triangles (labelled, never copied) whose side `Z@|!&` catches a free strand's high end
+    (anchor), lyses it (`!`), stops the lysis at that bond (`&`) and keeps free monomers off (`@`), with a glued attach
+    side `Ж@|` that no part matches so the `&` side always hears the open signal and is never spent. Test "scavenger":
+    the strand it holds comes apart into monomers, the scavenger stays whole, its anchor free and unspent; without `&`
+    the lysis comes back and the scavenger dies too; without `@` the freed high end glue-binds the side again every
+    other pass. Existing core only.
   - **What it shows** (IDEAS, "Material flows by exposure, not by need"): every copyable side turns the blanks that
     reach it into copies of itself whether or not anything needs them, so the blanks end at the most exposure: leaked
     genome copies first, then surplus parts and monomers. A world that runs on needs a way back for every sink, a source
