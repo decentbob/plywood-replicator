@@ -27,7 +27,10 @@ not statistics.
     16 buds lysed, every one complete and waiting (47 cells: 8, 0, 1, 7 per world); fewest free part type at the end
     6, 1, 3, 1 (budcycle-3: 1, 0, 3, 1). Seed 1 fails for another reason: its founder's first copy never completes
     (below), no strand ever leaves the parent, its buds wait for ever and the cutters return 8 of them to the pool. Control without cutters
-    (`BCQ=1 BCR=50`): CONTROL.
+    (`BCQ=1 BCR=50`, same seeds): generation 3 in 2 of 4 (seeds 2, 3: 989500, 937900; seed 1 reaches generation 2;
+    seed 4's first bud waits for ever from t = 310500, where with cutters it was taken apart and the line reached
+    generation 3); fewest type at the end 0, 1, 2, 6. So openRange 50 alone costs the lineage (budcycle-3 at range 9:
+    4 of 4) and the cutters win part of it back by clearing a stuck bud: the first sign of what lysis is for, in one world.
   - **Priority 3a as written (anchor on cell 44, openRange 50, 0-2 cutters) fails, and why.** 12 worlds: with the
     anchor late the held founder hangs in or beside the parent's pore (cell 44: 2.65 from the pore's middle), its first
     copy docks within the first 3000 steps and then waits for a fill `-W-` (made when an incoming blank touches one of

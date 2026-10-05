@@ -11,7 +11,8 @@ complete bud and its `&` side binds only while E hears the waiting anchor (cell 
 apart complete buds waiting for a catch and nothing else; the anchor stays on cell 6. New check `budcycle-lysis`
 (budcycle-3's setup with `BCQ=1 BCR=50 BCC=2`): generation 3 in 3 of 4 (seeds 2-4: 855000, 736900, 1083700), 16 of 16
 lysed buds complete (47 cells), fewest part type at the end 6, 1, 3, 1 (budcycle-3: 1, 0, 3, 1). Control without
-cutters: CONTROL. Test "receptor: ..." (35 tests). Seed 1 fails: its founder's first copy never completes, so no
+cutters: generation 3 in 2 of 4; seed 4's first bud waits for ever where with cutters it was lysed and the line went on
+(openRange 50 alone costs the lineage; budcycle-3 at range 9: 4 of 4). Test "receptor: ..." (35 tests). Seed 1 fails: its founder's first copy never completes, so no
 strand leaves and the cutters return its 8 waiting buds to the pool.
 Why not as written (anchor on cell 44): a late anchor hangs the held founder in or beside the pore and its first copy
 jams for good (5 of 5 cutter-free worlds at 44, 4 of 4 at 40/38 to 360k; E's source outside does not help); the default
