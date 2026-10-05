@@ -212,8 +212,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // every copy of a kit part but those made at an E's pore side becomes a blank at a random place outside both cells),
     // BCB=200, BCF=0, BCS=32, BCL=0. The setup of runs 0621-0751 (check budcycle-free, retired in run 1021): BCS=32 BCF=180 BCFP=0.001 BCL=0.
     // BCDBG=1: genome copies by source (copied type, role, side) at the end
-    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),cut=process.env.BCT||'z@!-|-|',P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',R=5;
-      const K=S.budKit(R,7,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45)),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;if(CU)supply[cut]=CU;
+    budcycle(){steps=steps||300000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.BCA||6),CU=+(process.env.BCC||0),RQ=process.env.BCQ==='1',cut=process.env.BCT||(RQ?'г@!-|-|':'z@!-|-|'),P=parseInt(extra)||8,B=+(process.env.BCB||20),BI=+(process.env.BCI||20),size=+(process.env.BCS||36),r=+(process.env.BCR||9),hold=process.env.BCHOLD==='1',after=+(process.env.BCAFTER||50000),SF=+(process.env.BCF??400),SFP=+(process.env.BCFP||0.0003),LP=+(process.env.BCL??0.002),LK=+(process.env.BCLK||0),GSTOP=+(process.env.BCGEN||0),GATE=process.env.BCGATE==='1',R=5;
+      const K=S.budKit(R,7,null,process.env.BCES==='0'?false:process.env.BCES==='2'?'out':true,{at:AK,glue:'Z'},process.env.BCK==='0'?'-&':'-|',+(process.env.BCSEED||45),RQ?'Г@&':null),N=K.N,SC=K.seedCell,supply={'-?-?-?':B};
+      for(const t of K.types)supply[t]=P;supply[K.types[N-1]]=+(process.env.BCE||0);if(SF)supply['---']=SF;if(CU)supply[cut]=CU;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:size/2,y:size/2-R*H}],supply,params:{openRange:r}});
       const Pu=structures[0],F=founders[0],all=[...Array(s.n).keys()],idx=new Map(Pu.map((u,k)=>[canon(s.typeName(u)),k])),kitT=new Set(idx.keys()),cutC=canon(cut),isCut=u=>CU>0&&canon(s.typeName(u))===cutC;seedCopyGenome(s,F);
       // the founder starts held by its high end z on the parent's anchor (placed where the anchor puts a strand; labelled)
@@ -250,7 +251,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         else if(s.anc[u*3+i]&&u===bud[AK]&&!ev.catchT&&!isCut(v)){ev.catchT=s.t;ev.catchN=n();if(bud[N-1]<0)ev.early=1;snap(s,'catch',`t=${s.t}: the bud's anchor catches a strand (${n()} of ${N} cells)`,focus(),false);}
         // each bud's catch (observation): its anchor cell binds a strand end
         if(s.anc[u*3+i]&&!s.cpy[v*3+j]&&!isCut(v)){const w=cellOf.get(u);if(w&&w[1]===AK&&!buds[w[0]].tk)buds[w[0]].tk=s.t;}
-        if(isCut(v)&&s.anc[u*3+i]){ev.cutBind++;const w=cellOf.get(u);if(w){const B=buds[w[0]];if(!B.cb)B.cb=s.t;}}
+        if(isCut(v)){ev.cutBind++;const w=cellOf.get(u);if(w){const B=buds[w[0]];if(!B.cb)B.cb=s.t;}}
         return res;};
       // copy releases (a docked triangle lets go of its template): on the parent's founder, on the bud's caught strand, on free strands
       let lastT=-1,lastU=-1;{const oc=s.cut.bind(s),ok=s.count.bind(s);s.cut=(u,i)=>{const q=s.bond[u*3+i];lastT=q>=0?(q/3)|0:-1;lastU=u;return oc(u,i);};

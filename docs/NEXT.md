@@ -25,8 +25,21 @@ The jam (traced, `runs/jam.js` on a saved state): with the anchor on cell 44 the
 pore (cell 44 is 2.65 from the pore's middle); a copy docked on its face 2 waits for a fill `-W-` that cannot enter.
 The default (anchor 6, range 9) also starts jammed (seed 1: 4 docks, 1 fill by t = 3000, unchanged at 30000) yet
 reaches generation 3: there the jam clears later. Anchor 40 and 38 (range 50) jam in the first 60k steps too.
-Batch 3 running (BCA=40, 6 cells from E as cell 6 is from the root): `runs/lm` (0 cutters, seed 1), `ln`, `lo`, `lp`
-(2 cutters, seeds 1-3).
+Batch 3 (BCA=40): founder jammed (4 docks, 0 fills, nothing leaked) in 4 of 4 by 360k; stopped. Batch 4 (BCA=44,
+BCES=2: E source outside): jammed in 3 of 4 (`lq`, `lr`, `lt`); `ls` generation 3 at 1062100 (5 lysed, pool min 3);
+`lt` 11 lysed, pool min 4, no strand ever. Regression (`runs/d1-4`, the budcycle-3 setup on this code): generation 3
+at 1031000, 977300, 735900, 827100, 0 stray (the recorded numbers); 3-9 incomplete let-goes per world there too
+(14 of 24 at one cell): the relay lag (o) is in the default lineage.
+**New design (kit only, no core change): a lysis receptor on the last cell.** `budKit(..., receptor)`: E's outer
+side `Г@&` (option `BCQ=1`, cutter `г@!-|-|`, openRange 50). E exists only once the bud is complete; its `&` side is
+bindable only while E hears an open signal, i.e. while the anchor (cell 6, 40 bonds away) waits; spent for good once
+it hears none (after the catch). So cutters take apart complete buds waiting for a catch and nothing else; the anchor
+stays on cell 6 where the founder's copies flow. Test "receptor: ..." passes (no motion). Caveat found by the test: a
+parent hears its attached bud's open signal (8 bonds), so a receptor not yet spent stays bindable; every parent's
+receptor is spent once it stands alone after its catch, unless its own bud is already growing then (buds that bud
+before they catch).
+Running: `runs/q1`-`q4` (`BCQ=1 BCR=50 BCC=2 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle SEED 1200000 runs/qN`;
+q1 with pictures), about 40 minutes.
 
 **Handoff status (autorun run 20261004-2051, explore).** Priority 3 below is done in isolation: the core has a reverse
 path, the lysis side `!` (RULES, Core changes and "Lysis"; INNOVATIONS run 2051; IDEAS). A triangle bonded to a
