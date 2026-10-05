@@ -1,19 +1,24 @@
 # Next instance: start here
 
-State on 2026-10-05 (after autorun run 20261005-1850, review-intent). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-05 (after autorun run 20261005-1921, core-review). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge: run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
+at each run's merge: run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-**Handoff status (autorun run 20261005-1850, review-intent).** Direction check; no code change. Decision: Directions
-1-3 move from the 47-type `budKit` lineage to the smallest budding kind the core already allows, **the pair** (2 cells,
-2 types; designed, not demonstrated: IDEAS, "Sources in proportion to use"). The 47-type lineage is frozen, its checks
-stay in the suite. `node tri/test.js` 38 tests pass; `tri/check.js` not rerun (no code change; run 1422: 12 of 12).
-Nothing is running. Previous run (1422, explore): candidate (p) `heldContact` not yet (it closes the strand sink; the
-blanks then pile up at stalled kit fronts; INNOVATIONS run 1422).
+**Handoff status (autorun run 20261005-1921, core-review).** Core smaller, no capability lost: `heldContact` with its
+relay `hold` removed (priority 1 done); the busy relay and the state refractory removed (removal (q)); candidate (o)
+closed without a change (its oracle never fades; a fading variant did not lower false releases). Core: 6 marks, 3
+relayed signals, 4 exposed one-bond values, 2 states, no option (RULES, Core inventory and Core changes). `node
+tri/test.js` 38 tests pass; `tri/check.js` 12 of 12 on the final rules (`budcycle-3` 3 of 4: over seeds 1-8 the lineage
+reaches generation 3 in 5 of 8, base 6 of 8; expect this check near its margin). Nothing is running. Previous run
+(1850, review-intent): Directions 1-3 move to **the pair** (2 cells, 2 types; designed, not demonstrated: IDEAS,
+"Sources in proportion to use"); the 47-type lineage is frozen, its checks stay.
+
+**Next step (rotation 48, build): the pair in isolation** (priority 2 below). The core it needs (`@` binding, contact
+copying, the open signal, `&` release) is unchanged by this run.
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
@@ -45,8 +50,7 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
    Since run 0751 the core grew by one rule (lysis: a capability) and one option (`heldContact`: none); fine.
 
 **Priorities (each a slice; rotation index in brackets).**
-1. [47 core-review] Remove `heldContact` (the vehicle has no strands; git keeps it at `4f65d5c`). Decide candidate (o)
-   with `CHECK_SAVE`: adopt only if just `lysis` and `budcycle-lysis` change, and for the better.
+1. Done in run 1921 (core-review): `heldContact` removed; (o) closed without a change; busy and refractory removed.
 2. [48 build] **The pair in isolation:** `structures.pairKit`, demo `pair`: one founder pair among copy blanks (about
    300, world about 30); measure bodies over time, generation depth, the R : S pool. Check: at least 3 of 4 worlds grow
    from one founder to 20 bodies. Look at the pictures first: does the bud point away, do buds jam beside parents?
@@ -76,12 +80,10 @@ finish line. The user approved this order for the next slices:
 3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
 
 **Core-change candidates (for the next `core-review` or `explore`).**
-- (p) *Contact copying follows "held"* (run 1051): the option `heldContact` (run 1422, not yet); remove (priority 1).
-- (o) *The open relay hears "complete" too early after a new bond* (run 2051): a bonded triangle whose partners all had
-  0 or -1 in the previous pass hears 0, so a triangle joined by a partner that was free a pass ago can conclude
-  "complete". Proposed: a triangle that would hear 0 while a bonded partner had -1 hears -1. Locality: partners'
-  previous values, as now. Evidence: traced in `lysis` (oracle `LYFIX=1`); 3-9 incomplete root releases per
-  `budcycle` world (run 2221). The pair's release is not affected (R hears its own emission).
+- Closed in run 1921: (p) removed (git `4f65d5c`); (o) not adopted: the oracle `LYFIX` never fades and is removed, a
+  fading variant ("a partner bonded since the last pass counts as open one bond away") left false releases at 8, 0, 2,
+  14 (base 8, 0, 2, 13). Before any new fix for (o), trace one `falseRel` in `budcycle-lysis` seed 4. Done: (q) busy
+  and refractory removed (RULES, Core changes).
 - (n) *Bud only after letting go* (run 1721): a seed site binds a root only while its triangle hears no open signal
   (oracle `BCGATE=1`). Organism lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
@@ -115,7 +117,7 @@ BCQ=1 BCR=50 BCC=2 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 r
                                                    # (6), BCT cutter type; result: lysedBuds, lysedAt, falseRel, poolMin
 node tri/demos.js lysis 1 1000000 runs/x           # a stuck bud taken apart by cutters at its waiting anchor (cell 44, openRange 50;
                                                    # check lysis, 2.5 minutes); a new bud grows from its parts. LYC cutters (4), LYP parts
-                                                   # per type (0), LYA anchor cell, LYR openRange, LYS world (30), LYFIX=1 candidate (o)'s oracle
+                                                   # per type (0), LYA anchor cell, LYR openRange, LYS world (30)
 node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from a pool of its 47 part types (check budpool; extra: parts per
                                                    # type, 8; BPE: E parts, 40; BPB: blanks, 8; BPS: world, 30; BPR: openRange, 1; BPHOLD=0: no
                                                    # harness; BPES=1: E's pore side plain; BPA=k: the anchor on cell k)

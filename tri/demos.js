@@ -364,7 +364,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // the parent's seed site (its root and the cells joined to it), its size, completion and lysis; how many of its cells
     // are parts of the first (stuck) bud. extra: unused. LYS: world size (30); LYA: the anchor cell (44: the anchor opens
     // only when a bud is nearly complete; budcycle's kind has 6, where cutters kill every bud as its cell 6 attaches); LYR:
-    // openRange (50: more than the anchor cell, so the root holds while the anchor waits; 9 with LYA=6); LYFIX=1 (below)
+    // openRange (50: more than the anchor cell, so the root holds while the anchor waits; 9 with LYA=6); the oracle LYFIX
+    // (candidate (o)) was removed in run 20261005-1921 (RULES, Core changes: its -1 never fades)
     lysis(){steps=steps||400000;const {GLUE,gcode:gc}=require('./sim');const AK=+(process.env.LYA||44),R=5,C=+(process.env.LYC??4),P=+(process.env.LYP||0),size=+(process.env.LYS||30),cut=process.env.LYT||'z@!-|-|';
       const K=S.budKit(R,7,null,true,{at:AK,glue:'Z'},'-|',45),N=K.N,SC=K.seedCell,O=[size/2,size/2-R*H],supply={};if(C)supply[cut]=C;if(P)for(const t of K.types)supply[t]=P;
       const {s,structures,founders}=createWorld({seed,size,founders:[{gaps:[1,1,1],faces:'aAaA',x:2,y:2}],structures:[{tris:K.tris,x:O[0],y:O[1]},{tris:K.tris.map(t=>({...t,v:t.v.map(K.pose)})),x:O[0],y:O[1]}],supply,params:{openRange:+(process.env.LYR||50)}});
@@ -375,11 +376,6 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // free triangles placed outside both rings (centres of the parent and of the posed bud)
       const cB=K.pose([0,0]),cen=[[O[0],O[1]],[O[0]+cB[0],O[1]+cB[1]]],prep=new Set([...Pu,...B0,...F]),placed=[...prep];
       for(const u of all){if(prep.has(u))continue;if(!placeFree(s,u,placed,()=>{for(;;){const x=size*s.rng(),y=size*s.rng();if(cen.every(c=>Math.hypot(s._dx(x-c[0]),s._dy(y-c[1]))>R+1))return [x,y];}},50000))throw Error('lysis: could not place');placed.push(u);s.regrid(u);}
-      // LYFIX=1 (an oracle, not a rule; NEXT candidate (o)): a bonded triangle that would hear no open signal (0) while a
-      // partner had not yet heard (-1 in the previous pass: it was free) has not heard either (-1), so a root bound to a
-      // silent seed site and joined by its next cell in the next pass is not released as complete
-      if(process.env.LYFIX==='1'){const od=s.derive.bind(s);let prev=null;s.derive=()=>{prev=Int16Array.from(s.op);od();
-        for(let u=0;u<s.n;u++){if(s.op[u]!==0)continue;for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0&&prev[(q/3)|0]===-1){s.op[u]=-1;break;}}}};}
       for(let k=0;k<40;k++)s.derive();
       // the bud on the parent's seed site (observation: its root and the kit cells joined to it, the parent's cells excluded)
       const parent=new Set([...Pu,...F]),budNow=()=>{const r=s.partner(Pu[SC],K.seedSide);if(r<0)return null;const seen=new Set([r]),L=[r];
