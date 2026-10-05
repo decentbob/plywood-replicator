@@ -5,8 +5,20 @@ Status: **works** (does what was intended in demos), **partial**, **not yet**. P
 made with the pre-port engine (experiments/, history before commit `cac79c9`, same rules); `node tri/demos.js NAME`
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Demo options cited
 below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `BUDNOP`, `BUDDBGA`, `BUDNOCA`,
-`BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup). Results are from one or a few worlds; they show mechanisms,
+`BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup); `budcycle`'s `BCHOLD`, `BCSEED`, `BCK`, `BCLK`
+at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
+
+## 2026-10-05 (autorun run 20261005-0251, cleanup)
+
+- **Leaner `budcycle` and a shorter suite** — works (no capability change). Check `budcycle` retired (the doorway
+  kind with budpool's harness, one generation; 600 s per world, 4 worlds): `budcycle-3` shows the same steps three
+  times in the default setup (corner bud, closed walls, no harness). Removed with it the options only that setup used
+  (`BCHOLD` the harness, `BCSEED` the seed cell, `BCK` the wall sides) and run 1021's `BCLK` (free kit parts back to
+  blanks: setup C, 0 of 2); 21 to 17 `BC*` variables. Output byte for byte the same as main on four 150000-step
+  worlds (default; receptor with cutters `BCQ=1 BCR=50 BCC=2`; `BCGATE=1 BCES=0 BCE=8`; `BCL=0 BCES=2 BCA=44 BCR=50`).
+  docs/NEXT.md 191 to about 115 lines: run 0751's Direction condensed to its standing conclusions (full text in git at
+  `a2f3914`), commands of retired setups dropped. Command: `node tri/check.js budcycle-3`.
 
 ## 2026-10-05 (autorun run 20261004-2221, build)
 
