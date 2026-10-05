@@ -59,7 +59,7 @@ removed on 2026-10-03 and is the lysis side since 2026-10-04).
 - Labelled exceptions used by the chemistry: binding places a free triangle flush in a free site; an anchor's catch
   moves the caught strand (with anything bonded to it) as one body into a free flush place along a clear path.
 
-## Core inventory (2026-10-04, core review run 20261004-0820)
+## Core inventory (2026-10-05, core review run 20261005-1921)
 Users from the kept demos and checks ("demos": which of `copy`, `ring`, `imprint` (its rings, its `g` strand and its
 `p`/`m` cells), `pool`, `budpool`, `budcycle`, `closure` carry or fire it; `budpore` was retired in run 0820). Dates:
 when the item entered the core (the repository restarted on 2026-10-01).
@@ -72,13 +72,17 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
 | `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
 | `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`), `г@!-\|-\|` at a receptor `Г@&` on E (`budcycle` `BCQ`, run 2221) | 10-04 (run 2051) |
-| busy (30, chain bonds) | relayed signal | all copying | 10-01 |
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
 | open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
 | lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
-| fill, refractory | state | copying | 10-01 |
+| fill | state | copying | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
 | spent | state | `&` sides | 10-01 |
+
+**Counts (2026-10-05, run 1921):** 6 marks, 3 relayed signals (zip, open, lysis), 4 exposed one-bond values, 2 states
+(fill, spent), no option. Removed: the option `heldContact` with its relay `hold`, and the busy relay with the state
+refractory (removal (q)); candidate (o) closed without a change (Core changes). Every mark and every rule event fires in
+the check suite's 40 worlds (coverage hook, this run).
 
 **Counts (2026-10-05, run 1422):** 6 marks, 5 relayed signals, 4 exposed one-bond values, 3 states, 1 option
 (`heldContact`, candidate (p): adopt or remove at the next core review; Core changes).
@@ -102,7 +106,7 @@ run 0721 (17 marks, 5 signals, 9 values, 9 states, 4 options): RULES.md in git a
 ## Locality audit (2026-10-02, rule by rule; rows of removed rules dropped 2026-10-03)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
 glue and marks of the side bonded to it; for a copy blank, its whole type); values a direct partner exposed in the
-previous pass; and relayed signals that move one bond per pass and fade (busy, zip, open). Convention (made explicit
+previous pass; and relayed signals that move one bond per pass and fade (zip, open, lysis; busy until run 20261005-1921). Convention (made explicit
 2026-10-02): a rule may also read a direct partner's own current state (its bonds, role, fill) as it stands when the
 rule runs; that state was not relayed from anywhere, so information still moves at most one bond per step. Writes: a
 rule changes its own state or one of its own bonds; binding sets the state of both parties of the new bond (the caught
@@ -116,12 +120,11 @@ place (all or nothing; never by size).
 | Rule (sim.js) | Reads | From where | Verdict |
 |---|---|---|---|
 | roles | own bonds and bond kinds, own fill | own | local |
-| busy, refractory | own bond kinds; partners' busy | previous pass | local (relay) |
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
 | zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values | previous pass | local (relay) |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
-| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip, refr; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
+| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
 | glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
 | release | own face bond; chain partners' fn; template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
@@ -192,8 +195,9 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   bonded docks), and no new one starts. A copy grows from the high end one face after another;
   parallel docking used to enclose an empty dock site between two partial copies (a hole no free triangle can reach),
   which deadlocked copying. (The option `zip: false`, parallel docking, was removed 2026-10-03: only a test used it.)
-- **refractory:** a released face takes no new dock until the busy relay around it (30 on a bonded face, -1 per
-  chain bond) is 0, i.e. until the whole copy has let go.
+- **refractory** (a released face took no new dock until a busy relay, 30 on a bonded face and -1 per chain bond, was
+  0 around it) was removed on 2026-10-05 (run 20261005-1921, removal (q), Core changes): zip orders docking from the
+  held high end, and a released face's dock site stays occupied by its copy triangle until the whole copy lets go.
 - Removed 2026-10-02 (core review; no demo used them): options `caps` (capped ends emitted two relayed signals; only
   intact strands were copied), `pDissolve`, `triUndock`, `pFray`, `castComp`, `noDock`, `snap: false`; and (run
   20261002-0721) `capture: 0` with `triTol` (binding by a flush side instead of the capture radius).
@@ -221,7 +225,7 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
   across every bond but one on which either side carries `&` (the joint between a bud and its parent stops it). A side
   `!` binds as its glue and other marks say; no binding rule of its own.
 - A triangle lysed for a whole pass (its partners have heard it) cuts all its bonds. A lysed triangle that is then free
-  (by its own cuts or its partners') returns to a fresh state of its type: spent sides, fill and refractory cleared, and
+  (by its own cuts or its partners') returns to a fresh state of its type: spent sides and fill cleared, and
   it hears nothing (open -1). So a body comes apart whole, one bond further per pass, each part as the part it was made
   as, each strand triangle as a monomer.
 - A lysed triangle binds nothing (no glue catch, dock, fill, copy, anchor catch or closure on it), so no freed part
@@ -234,7 +238,7 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
-### Removal candidate (q): the busy relay and refractory, 2026-10-05, autorun run 20261005-1921 (core-review)
+### Removal (q): the busy relay and refractory, 2026-10-05, autorun run 20261005-1921 (core-review)
 1. **What they do.** busy: 30 on a triangle with a bonded face (either end of a dock), relayed -1 per chain bond.
    Refractory: a triangle that had a face bond in the previous pass and has none now takes no dock until busy around it
    is 0. Since run 20261004-0022 nothing else reads busy (Core changes, that entry's point 5). Purpose (run of
@@ -251,7 +255,16 @@ speak of rules removed with the casting lineage (triggers, latches, casting, fue
    change from the first release on.
 4. **Test of the claim.** The check suite with `CHECK_SAVE` against this run's baseline: every capability must still
    pass; look for strands that dock under a peeling copy (stray partial copies), and for copy counts.
-5. **Result.** (below, when measured)
+5. **Result: removed.** Check suite with `CHECK_SAVE` against this run's baseline (both on this run's code but for the
+   removal): 12 of 12. Byte for byte the same: `copy` (4 worlds: refractory never decided a dock there), `ring`,
+   `imprint`, the `imprint-pore` worlds, `budpool`, `lysis`, `budcycle-3` seed 3, `budcycle-lysis` seeds 1, 3. Changed:
+   `imprint-genome` (strands 14, 13, 11, 13; base 15, 13, 11, 13), `budcycle-3` seeds 1, 2, 4 and `budcycle-lysis` seeds
+   2, 4. No stray part in any world. Generation 3 by 1.2M in the lineage worlds (`budcycle-3` seeds 1-8 and
+   `budcycle-lysis` seeds 1-4; seeds 5-8 run for this decision): base 9 of 12, without refractory 8 of 12 (seed 1 of
+   `budcycle-3` reached generation 2 at 935600, base 1031000, and not 3; base reached 3 in the same pass as 2). Where
+   both reach it (8 worlds), generation 3 comes earlier without refractory in 5, in the same pass in 2, later in 1 (e.g. `budcycle-lysis` seed 4 856900,
+   base 1083700) and parents make more copies (`budcycle-3` parentCopies 4, 8, 3, 4; base 3, 6, 3, 3). Read as
+   noise around the same reliability: base `budcycle-3` alone is 6 of 8 over seeds 1-8 (seeds 5, 6 fail in both).
 
 ### Core review 2026-10-05, autorun run 20261005-1921: (p) removed, (o) closed without a change
 1. **Removal: the option `heldContact` (candidate (p)) and its relayed value `hold`.** Why it existed: a free strand's

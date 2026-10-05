@@ -9,6 +9,20 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261005-1921, core-review)
+
+- **The core lost an option with its relay, a relayed signal and a state; every capability still works.** No new
+  capability. Removed: the option `heldContact` with its relay `hold` (candidate (p): no default world read it, 17 short
+  worlds byte for byte as before), and the busy relay with the state refractory (removal (q): zip and occupancy already
+  keep a released face from re-docking under its copy; `copy` byte for byte the same). Check suite 12 of 12 on the
+  final code; generation 3 by 1.2M in 8 of 12 lineage worlds against 9 of 12 before (`budcycle-3` seeds 1-8,
+  `budcycle-lysis` 1-4; read as noise: earlier in 5 of the 8 worlds where both reach it). Candidate (o) (the open relay
+  hears "complete" one pass early after a new bond) closed without a change: run 2051's oracle never fades (a standing
+  -1 wave locks a silent body "not heard", so its `&` never releases), and a fading variant did not lower the
+  incomplete root releases it was meant for (8, 0, 2, 14 against 8, 0, 2, 13). Core now: 6 marks, 3 relayed signals,
+  4 exposed one-bond values, 2 states, no option. Details: RULES, Core changes and Core inventory. Status: **works**
+  (`node tri/check.js`).
+
 ## 2026-10-05 (autorun run 20261005-1422, explore)
 
 - **Candidate (p), free strands not contact-copied: the strand sink closes, the lineage does not run longer — not
