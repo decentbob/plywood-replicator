@@ -60,7 +60,7 @@ not statistics.
     genome copies first, then surplus parts and monomers. A world that runs on needs a way back for every sink, a source
     of every part type in living bodies (or parts conserved), and sources limited by need. The strand sink is the
     largest and comes first. Default outputs are unchanged (100k-step `budcycle`, default and `BCQ=1 BCR=50 BCC=2`, byte
-    for byte the same as `5480172`).
+    for byte the same as `5480172`; and `lysis` 60k).
     ![the strand sink: a closed-wall world at 1.2M, about 60 leaked strands around a few bodies](pictures/strand_sink.png)
     ![a half ring and its bud](pictures/halfring_bud.png)
   - Commands: `BCLK=0.0001 BCL=0.005 BCH=0.0001 BCHT=600000 BCP=100000 BCAFTER=100000000 node tri/demos.js budcycle N

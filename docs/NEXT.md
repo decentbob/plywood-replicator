@@ -16,7 +16,7 @@ ran on: closed walls make a type only at its own growth front, so decay empties 
 empty type returns only with a death (seed 2 stalled 0.37-1.3M with 100 blanks); open walls starve the ring's inner
 cells (3-20x fewer copies); the half ring is fair alone but jams its founder's first copy (5 of 5); and in every setup
 the blanks end in **leaked genome copies** (52-86 free strands, about 40% of all triangles). No core change; default
-outputs byte for byte unchanged (100k steps, two setups); `node tri/test.js` 37 tests (new: closure on the half ring,
+outputs byte for byte unchanged (100k steps, two setups, and lysis 60k); `node tri/test.js` 37 tests (new: closure on the half ring,
 scavenger); checks not rerun (no rule or physics changed; `budKit` gives the same kit as on main for all 14 option
 sets the demos, checks and tests use). Nothing is running. Raw logs were in `runs/` (regenerate with the INNOVATIONS
 commands).
