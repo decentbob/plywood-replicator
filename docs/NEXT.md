@@ -7,6 +7,14 @@ at each run's merge, e.g. `a2f3914` for run 2221's, which also holds the full Di
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction" below during run 0321.
 
+**Current slice (autorun run 20261005-1422, explore; in progress).** Candidate (p): contact copying follows "held".
+Goal: a free strand's triangles are not contact-copied (a leaked strand waits for a catch and costs no blanks), by one
+core change (a relayed `hold` value along a strand from its held high end; case in RULES, Core changes, written before
+the code). Built as a parameter first (`heldContact`, default off: outputs unchanged), then measured: test without
+motion; four 4M `budcycle` worlds with `BCSV=0` and run 1051's drives (seeds 2-5). Done when: a world still makes
+generations after 4M in 3 of 4 (works), or the result says why not (not yet). If it carries, make it the rule and rerun
+the check suite; if not, remove it (git keeps it). Stop at about 4-5 hours.
+
 **Handoff status (autorun run 20261005-1051, build).** Direction 1 with scavengers (step 1a of run 0721): **not yet,
 1 of 4** (INNOVATIONS run 1051; IDEAS "The scavenger's dilemma"; picture `scavenger_4m.png`). Part decay faster than a
 bud's passage starves it (`BCLK=0.0003`: 4-17 types empty by 0.4-0.8M; 0.0001 holds); eight scavengers eat every leaked
