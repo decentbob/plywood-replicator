@@ -1,60 +1,38 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-0450, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-0621, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge: run 0251's at `f7b31f3`, run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
-
-**Current slice (autorun run 20261006-0621, build, in progress): a world that keeps evolving** (priority 6). Goal: in
-the mutagen world (`PAM=0.01 PAHU=1`, seeds 1-4, 300k), a labelled drive on demo `pair` (no core change) under which
-dead material returns as blanks (a lysed triangle becomes a copy blank once free), so material held by binding
-variants flows. Done when, in at least 3 of 4 worlds, mean blanks stay above about 100 and copies above 10k per 5000
-steps through 300k while variants still arise and sweep, against the baseline (same seeds without the drive), with a
-check in `tri/check.js`. Stop: if no setting of the drive keeps material flowing, record why (a cost for holding,
-IDEAS) and hand off.
-Progress: drive `PAHB` added to demo `pair` (1: the hit triangle returns as a blank once free; 2: every lysed
-triangle). Baseline (no drive) reproduces the lock: seeds 1, 3, 4 at 300k blanks 18, 2, 8 and copies 4420, 371, 1720 per
-5000; seed 2 flows. `PAHB=2`: copies 16-28k per 5000 to 300k in seeds 2, 3, 4 (blanks 42, 153, 34 at the end); seed 1
-dies out at 260k after an S with a lysis side (`B@p!y`) sweeps. `PAHB=1`: seeds 1 and 4 die out by 240k (an R or S
-variant that is copied less sweeps first), 2 and 3 flow. `PAHB=2` in a 3x world (`PAB=3000 PAS=87`, about 25 minutes per
-300k): 4 of 4 alive at 300k, copies 53-84k per 5000, new kinds still sweeping at 235-275k (one-type replicators
-`Y@&b@y`, `O@&b@o`: a part that buds its own kind). Demo prints an `evolving:` result line with the mutagen; checks
-`pair-flow` (200k, need 3) and `pair-flow-c` (no drive, seeds 3 and 4) added, being run (`node tri/check.js pair-flow
-pair-flow-c > runs/check-flow.txt`).
+at each run's merge: run 0450's at `b61a14e`, run 0251's at `f7b31f3`, run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-**Handoff status (autorun run 20261006-0450, explore).** **Heritable variation and selection on the pair, no rule
-change** (priority 5 done, Direction 2; INNOVATIONS run 0450, IDEAS "Variation on the pair", RULES candidate (r)).
-Contact copying is exact, so a variant part type in a body is copied true; demo `pair` gained labelled starts and a
-drive (all off by default, default output byte for byte the same): `PAV`/`PAVK`/`PAVP`/`PAVT` put a neutral marker or
-an exposure variant into some R or S; `PAM` is a mutagen (each free part, with probability m per 100 steps, one side's
-glue or one mark changed); `PAHU=1` the hazard per triangle. Findings:
-1. A neutral marker drifts (half the world marked: fixed or lost in 45-215k steps; from 1 in 10: 0.31-0.51 or lost by
-   40k later); patches dissolve within 5000 steps: heredity is by part type in a mixed pool, not by lineage.
-2. **Selection:** a seed site or a front without its anchor mark (copied while free, so its part has two sources) put
-   into 1 in 10 S (R) fixes by 50k (40k) in 4 of 4 worlds each; bodies do not increase (part-type selection). This
-   is Direction 3's minimal test too (two variants on one supply, one wins for a reason: exposure).
-3. Under the mutagen (m 0.001-0.03) these exposure variants arise and sweep by themselves (6 of 8 worlds by 60k). Then
-   **binding variants win** (a glued `@` side that keeps a body joined; parts binding their own kind, `F@f@&J@` rosettes;
-   two types binding each other; in one world R that buds R, then two R-derived types and no S): they catch free parts
-   before decay, blanks fall to 2-30, copying to a third or less, evolution slows. 4 of 4 worlds with the per-body
-   hazard (it rewards joined bodies), 3 of 4 with the hazard per triangle (one stays a pair to 300k).
-Checks: new `pair-sel` 4/4, `pair-sel-c` 4/4 (control), `pair-mut` 4/4; `pair`, `pair-c`, `pair-run` pass as before (the
-full suite was not rerun: only demo `pair` and `check.js` changed). `node tri/test.js` 40 pass. Nothing is running.
-Pictures `pair-mutagen-rosettes.png`, `pair-variation.png`. Regenerate: `PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6
-PAD=1 node tri/demos.js pair SEED STEPS runs` plus `PAM=0.01 PAHU=1` (300k, about 10 minutes) or `PAV=mix PAVP=0.1
-PAVK=seed PAVT=20000` (200k); the chart was drawn by a one-off script from the `var:`/`pop:` lines (not kept).
+**Handoff status (autorun run 20261006-0621, build).** **A pair world that keeps evolving** (priority 6 done;
+INNOVATIONS run 0621, IDEAS "Deaths that return blanks"). New labelled drive on demo `pair`, off by default (default
+output byte for byte the same): `PAHB=2`, every lysed triangle returns as a copy blank once free (`PAHB=1`: only the one
+the hazard hits). With the mutagen the demo ends with an `evolving:` line. Findings (m 0.01, hazard per triangle 0.6,
+decay 1):
+1. Without the drive binding variants lock the material (seeds 1, 3, 4 at 300k: copies 371-4420 per 5000 steps).
+   With `PAHB=2` copying stays at 15-28k per 5000 at 200k in 4 of 4 worlds, and new variant types still sweep after
+   100k (4-10 per world). Copies equal deaths in a steady state, so binding cannot stop the flow.
+2. The slice's second bar, free blanks above about 100, is met in 1 of the 3 small worlds alive at 300k (34-150):
+   I judge it the wrong measure (the winners draw blanks lowest, as in resource competition; IDEAS), copies are.
+3. Small worlds (100-250 bodies) can die out: seed 1 at 260k after a selfish S swept (a seed site with a lysis mark
+   kills buds that bind it, so it is free and copied more); `PAHB=1` lost 2 of 4. In a 3x world (`PAB=3000 PAS=87`)
+   4 of 4 lived to 300k with kinds still sweeping late; one-type replicators (a part that buds its own kind, `Y@&b@y`)
+   evolved in 2 of 4. RUNNING_1M
+Checks: new `pair-flow` 4/4, `pair-flow-c` 2/2 (control); `check.js` now creates the `CHECK_SAVE` directory. `node
+tri/test.js` 40 pass. The full suite was not rerun (only demo `pair` and `check.js` changed; default pair output
+unchanged). Picture `pair-flow.png` (a one-off script from the `pop:`/`mut:` lines, not kept). Regenerate:
+`PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair SEED 300000 runs`
+(about 4 minutes; without `PAHB` the baseline).
 
-**Next step (rotation 52, build): a world that keeps evolving** (priority 6). The mutagen world locks its material
-once binding variants appear. Try, as labelled drives on demo `pair` (no core change): deaths that return raw
-material, i.e. a hazard per triangle whose hit triangle (and the part it lyses) becomes blanks instead of parts, so
-that material held in bodies flows through copying at a fixed rate whatever binds; then `PAM=0.01` in 4 worlds to 300k
-against the lock worlds above (seeds 1, 3, 4 lock by 140k): do blanks stay above about 100 and copies above 10k per
-5000 steps, and what evolves? Measure first what share of births are fresh copies in the lock worlds (the `fresh`
-field counts only R and S). If a drive cannot keep material flowing, write down why (the core may need a cost for
-holding: IDEAS). Direction 3 (two kinds on one supply) follows; the mutagen world already makes new kinds compete.
+**Next step (rotation 53, cleanup).** Prune what the pair world no longer needs: `budcycle`'s dead option variables
+(Direction item 6 below: `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSV`, `BCGATE`) once nothing cites them as
+working; consider retiring `pair-mut` (its evidence is within `pair-flow`'s worlds) and keep the full suite green.
+Then (54, build) Direction 3 on the flowing world: two kinds on one supply; and (55, explore) heredity of
+combinations, which the selfish-S extinction shows is now the limit (selection sees part types, not bodies).
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
@@ -94,8 +72,7 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
 4. Done in run 0251 (build): Direction 1 on the pair (`PAH` 0.6, `PAD` 1: 4 of 4 worlds to 10^6 steps; check `pair-run`).
 5. Done in run 0450 (explore): Direction 2, heritable variation and selection with a labelled mutagen (no core change;
    candidate (r), copy error, not needed yet).
-6. [52 build] **A world that keeps evolving:** material keeps flowing once binding variants appear (deaths return
-   blanks; Next step above).
+6. Done in run 0621 (build): a world that keeps evolving (deaths return blanks, `PAHB=2`; check `pair-flow`).
 7. [54 build] **Direction 3:** two kinds on one supply (the pair and a 3-cell strip, or kinds the mutagen made): who
    wins, and why. [55 explore] heredity of combinations: a body's parts come mostly from its own copies (IDEAS).
 8. Frozen: the 47-type organism (feeding, (n), the front sink, lysis in the lineage); it returns as the complex end once
@@ -116,6 +93,9 @@ finish line. The user approved this order for the next slices:
 3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
 
 **Core-change candidates (for the next `core-review` or `explore`).**
+- (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
+  free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
+  would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
 - (r) *Copy error in contact copying* (run 0450): not needed yet; a labelled mutagen on free parts gives the same
   variants (RULES, Core changes). Open: whether the core or the environment should limit parts that bind their own
   kind (`g@` and `G@` on one part), which lock the material in the mutagen world.
