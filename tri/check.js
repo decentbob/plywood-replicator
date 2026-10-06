@@ -44,6 +44,15 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) reached20=(\S+) gen=(\d+) .*copiesR=(\d+) copiesS=(\d+)/);return [!!m&&m[2]!=='not',m?`20 bodies at ${m[2]}, ${m[1]} at the end, generation ${m[3]}, copies R ${m[4]} S ${m[5]}`:'no result'];}},
   {id:'pair-c',cap:'  control: S\'s seed site its only source (S B@y-|, R Y@&b@-)',demo:'pair',seeds:[1],steps:5000,secs:20,env:{PAKS:'B@y-|',PAKR:'Y@&b@-'},
     pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) .*freeR=(\d+) freeS=(\d+)/);return [!!m&&+m[1]<20,m?`${m[1]} bodies, free R ${m[2]}, free S ${m[3]}`:'no result'];}},
+  // run 20261006-0251 (build): Direction 1 on the pair, a world that runs on. 1000 copy blanks in world 50 and two labelled
+  // drives from step 1000 on: every 100 steps each body is hit with probability 0.7 (lysis into its two parts) and each
+  // free part becomes a blank with probability 1, so new bodies are built from fresh copies, not from a dead body's parts.
+  // Passes a world still budding in its last 1000 steps with at least 20 bodies, generation 100 or more, R and S copied
+  // within a factor 1.5 of each other and at least half of the parts born fresh copies
+  {id:'pair-run',cap:'The pair runs on: bodies die (hazard) and free parts decay into blanks (labelled drives); births keep up for 100k steps, generations accumulate',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:300,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.7',PAD:'1'},
+    pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) .*gen=(\d+) .*copiesR=(\d+) copiesS=(\d+) .* alive=(\d+) deaths=(\d+) .*fresh=(\S+) lastBirth=(\d+)/);if(!m)return [false,'no result'];
+      const q=+m[3]/Math.max(1,+m[4]),ok=+m[5]>=20&&+m[8]>=99000&&+m[2]>=100&&q<=1.5&&q>=1/1.5&&+m[7]>=0.5;
+      return [ok,`${m[5]} alive, ${m[1]} born, ${m[6]} died, generation ${m[2]}, last birth ${m[8]}, copies R:S ${q.toFixed(2)}, fresh ${m[7]}`];}},
   // run 20261004-2051 (explore): the lysis side '!' (RULES Core changes). A parent with a complete bud stuck on its seed
   // site (no food), 4 cutters 'z@!-|-|' (labelled), the anchor on cell 44 (openRange 50): the stuck bud comes apart into
   // its 47 parts and a later bud on the seed site is built from at least 40 of them
