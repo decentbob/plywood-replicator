@@ -174,6 +174,15 @@ test('physics: lone-block moves with the capsule neighbour list equal those with
   const nbd=a._nbDisk;a._nbDisk=function(){reduce++;return nbd.call(this);};
   for(let t=0;t<150;t++){a.physics();b.physics();}
   for(const k of ['px','py','pa'])assert.deepEqual(a[k],b[k],k+' differ');assert.ok(reduce>0,'no overlap-reducing move was tried');});
+// run 20261006-0021 (harden): a body's overlap test skips grid cells beyond the overlap reach of each block's centre;
+// every test must give the answer of a scan over all blocks (early tests: overlap or not; sums: the same within rounding)
+test('physics: body overlap tests skipping far cells equal a scan over all blocks (random overlapping blocks)',()=>{
+  const s=new TriSim({W:12,H:12,seed:3},220),R=require('./physics').mulberry32(7);for(let u=0;u<s.n;u++){s.px[u]=12*R();s.py[u]=12*R();s.pa[u]=7*R();s.resetShape(u);}s.gridSync();
+  const rx=new Float64Array(2),ry=new Float64Array(2);let far=0;
+  for(let k=0;k<20000;k++){const u=(R()*s.n)|0,st=++s._stamp;s._mark[u]=st;rx[0]=0;ry[0]=0;const a=[[u],rx,ry,s.px[u],s.py[u],2*R()-1,2*R()-1,R()<0.5?0:3*R()-1.5,st];
+    const r=s._overlap(...a,false),e=s._overlap(...a,true);s._all=true;const q=s._overlap(...a,false),f=s._overlap(...a,true);s._all=false;
+    assert.equal(e>0,f>0,'early test differs');assert.ok(Math.abs(r-q)<1e-12,'depth sum differs');if(q>0)far++;}
+  assert.ok(far>1000,'few overlapping tests');});
 test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)',()=>{
   const {triDepth}=require('./physics');
   const {s}=createWorld({seed:4,size:12,founders:[{gaps:[1,0,2],faces:'abab',hold:'z'}],supply:{'A--':10,'B--':10,'a--':10,'b--':10,'---':20}});s.run(600);

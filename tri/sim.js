@@ -38,8 +38,11 @@ function parseType(str){const t=[...str.matchAll(TOK)];if(t.length!==3||t.map(m=
   const has=(m,c)=>m[2].includes(c)?1:0;
   return {glue:t.map(m=>gcode(m[1])),close:t.map(m=>has(m,'.')),att:t.map(m=>has(m,'@')),done:t.map(m=>has(m,'&')),anc:t.map(m=>has(m,'|')),cpy:t.map(m=>has(m,'?')),lys:t.map(m=>has(m,'!'))};}
 const sideMarks=(s,k)=>(s.cOnly[k]?'.':'')+(s.att[k]?'@':'')+(s.done[k]?'&':'')+(s.anc[k]?'|':'')+(s.cpy[k]?'?':'')+(s.lys[k]?'!':'');
-const typeName=(s,u)=>[0,1,2].map(i=>{const k=u*3+i;return gname(s.glue[k])+sideMarks(s,k);}).join('');
-const canon=name=>{const t=[...name.matchAll(TOK)].map(m=>m[0]);return [0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];};
+const typeName=(s,u)=>{let o='';for(let k=u*3;k<u*3+3;k++)o+=gname(s.glue[k])+sideMarks(s,k);return o;};
+// canon (the least of a type's three rotations) is remembered per name: demos call it on every triangle many times
+const CANON=new Map();
+const canon=name=>{let c=CANON.get(name);if(c!==undefined)return c;const t=[...name.matchAll(TOK)].map(m=>m[0]);c=[0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];
+  if(CANON.size>=1e5)CANON.clear();CANON.set(name,c);return c;};
 
 const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120};
 
@@ -208,7 +211,7 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++)if(this.fill[u]){const e=this._edges(u);if(e.prev>=0&&e.next>=0)this.fill[u]=0;}
     // release: a docked triangle whose prev and next edges are bonded to complete partners lets go of its face (the
     // partners' fn from the previous pass)
-    for(let u=0;u<n;u++){const e=this._edges(u);if(e.face<0)continue;const t=P(u,e.face),rt=this.roles(t);
+    for(let u=0;u<n;u++){if(!this.bonded(u))continue;const e=this._edges(u);if(e.face<0)continue;const t=P(u,e.face),rt=this.roles(t);
       const done=i=>!this.fn[P(u,i)];   // my chain partner exposes that neither it nor its chain neighbours are fills
       const pOK=e.prev>=0?done(e.prev):rt.next<0,nOK=e.next>=0?done(e.next):rt.prev<0;
       if(pOK&&nOK){this.cut(u,e.face);this.count('release');}}

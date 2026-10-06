@@ -13,7 +13,7 @@ const R3=1/Math.sqrt(3);
 const REST=[[R3*Math.cos(-Math.PI/3),R3*Math.sin(-Math.PI/3)],[R3*Math.cos(Math.PI/3),R3*Math.sin(Math.PI/3)],[-R3,0]];   // counter-clockwise; side 0 faces +x
 const AREA=Math.sqrt(3)/4,INERTIA=AREA/12,SIZE=Math.sqrt(AREA);   // unit density: mass = area; moment about the centroid = area * side^2 / 12
 const DEFAULTS={seed:1,W:18,H:18,sigma:0.3,sigmaRot:0.45,pairTol:0.35,subStep:0.8,direct:1.0,bisect:1,skin:0,split:true};
-const EPS=1e-10,TOUCH=1e-6,CELL=1.4,NEAR2=(2*R3)*(2*R3),IN2=(R3-1e-4)*(R3-1e-4);   // IN2: (two inradii)^2, a little less   // overlaps below TOUCH count as touching; CELL >= reach of overlap and pair checks
+const EPS=1e-10,TOUCH=1e-6,CELL=1.4,NEAR2=(2*R3)*(2*R3),FAR2=NEAR2+1e-6,IN2=(R3-1e-4)*(R3-1e-4);   // IN2: (two inradii)^2, a little less   // overlaps below TOUCH count as touching; CELL >= reach of overlap and pair checks
 
 function mulberry32(seed){let a=seed|0;const f=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
   f.getState=()=>a;f.setState=s=>{a=s|0;};return f;}
@@ -124,14 +124,18 @@ class Physics{
   _overlap(list,rx,ry,cx,cy,tx,ty,da,st,early){const c=Math.cos(da),s=Math.sin(da),mark=this._mark,{px,py,ox,oy}=this,W=this.p.W,Hh=this.p.H;
     const gx=this._gx,gy=this._gy,cw=this._cw,ch=this._ch,cells=this._cells,cnt=this._gcnt,cap=this._cap,all=this._all,hw=W/2,hh=Hh/2;let sum=0;
     for(let k=0;k<list.length;k++){const u=list[k],x=cx+c*rx[k]-s*ry[k]+tx,y=cy+s*rx[k]+c*ry[k]+ty;let built=false;
-      const gxi=Math.min(gx-1,Math.floor(wrapc(x,W)/cw)),gyi=Math.min(gy-1,Math.floor(wrapc(y,Hh)/ch));
-      for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;
-        const g=all?0:((gyi+b+gy)%gy)*gx+(gxi+a+gx)%gx,o=g*cap,m=all?this.n:cnt[g];
+      const wx=wrapc(x,W),wy=wrapc(y,Hh),gxi=Math.min(gx-1,Math.floor(wx/cw)),gyi=Math.min(gy-1,Math.floor(wy/ch));
+      // a neighbouring cell whose nearest point lies beyond the overlap reach holds no block the distance test keeps:
+      // skipped (gaps from the centre to the cell's sides; a grid of at least 4 cells each way, so no cell wraps closer)
+      const fx=wx-gxi*cw,fy=wy-gyi*ch,cut=!all&&gx>=4&&gy>=4,gl=fx*fx,gr=(cw-fx)*(cw-fx),gd=fy*fy,gu=(ch-fy)*(ch-fy);
+      for(let b=-1;b<=1;b++){const gb=b<0?gd:b>0?(fy<ch?gu:0):0;if(cut&&gb>=FAR2)continue;let row=gyi+b;row=(row<0?row+gy:row>=gy?row-gy:row)*gx;
+        for(let a=-1;a<=1;a++){if(all&&(a||b))continue;if(cut&&(a<0?gl:a>0?(fx<cw?gr:0):0)+gb>=FAR2)continue;let col=gxi+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;
+        const g=all?0:row+col,o=g*cap,m=all?this.n:cnt[g];
         for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(mark[v]===st)continue;
           let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;const d2=dx*dx+dy*dy;if(d2>=NEAR2)continue;
           if(early&&d2<IN2)return 1;   // centres closer than two inradii: certainly overlapping
-          if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}built=true;}
-          const dd=eqDepthOf(TA,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}}}
+          if(!built){for(let e=0;e<3;e++){const ax=ox[u*3+e],ay=oy[u*3+e];TA[2*e]=c*ax-s*ay;TA[2*e+1]=s*ax+c*ay;}normals(TA,TN);built=true;}
+          const dd=eqDepthN(TA,TN,ox,oy,v,dx,dy);if(dd>0){if(early)return dd;sum+=dd;}}}}}
     return sum;}
   // offsets of the blocks of `list` from list[0], unwrapped along bonds (each block measured from a bonded block earlier
   // in the list: lists are in search order), so a body longer than half the torus keeps its shape (the minimum image
@@ -237,7 +241,7 @@ class Physics{
       if(M>=0){const tx=p.sigma*sw*this._gauss(),ty=p.sigma*sw*this._gauss(),da=spin*this._gauss();
         if(p.split)this._single(M,tx,ty,da);else{one[0]=M;this.tryMove(one,tx,ty,da,px[M],py[M]);}continue;}
       const list=bl[~M],m=list.length,u0=list[0];
-      let cx=0,cy=0;const rx=new Float64Array(m),ry=new Float64Array(m);
+      let cx=0,cy=0;if(!this._jrx||this._jrx.length<m){this._jrx=new Float64Array(Math.max(64,2*m));this._jry=new Float64Array(Math.max(64,2*m));}const rx=this._jrx,ry=this._jry;
       this._unwrap(list,rx,ry);for(let q=0;q<m;q++){cx+=rx[q];cy+=ry[q];}cx/=m;cy/=m;
       let inertia=0,tq=0;const ib=1/wr;
       for(let q=0;q<m;q++){const r2=(rx[q]-cx)**2+(ry[q]-cy)**2;inertia+=r2+ib;tq+=r2*p.sigma*p.sigma*w+ib*ib*spin*spin;}
@@ -250,8 +254,8 @@ class Physics{
     // only pairs with a bonded block (free blocks never bind each other): scan around bonded blocks only
     const bond=this.bond;
     for(let u=0;u<this.n;u++){if(bond[u*3]<0&&bond[u*3+1]<0&&bond[u*3+2]<0)continue;cand.length=0;const x=px[u],y=py[u],c0=cellOf[u],cx=c0%gx,cy=(c0/gx)|0;
-      for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){if(all&&(a||b))continue;const g=all?0:((cy+b+gy)%gy)*gx+(cx+a+gx)%gx,o=g*cap,m=all?this.n:cnt[g];
-        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u||(v<u&&(bond[v*3]>=0||bond[v*3+1]>=0||bond[v*3+2]>=0)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}
+      for(let b=-1;b<=1;b++){let row=cy+b;row=(row<0?row+gy:row>=gy?row-gy:row)*gx;for(let a=-1;a<=1;a++){if(all&&(a||b))continue;let col=cx+a;if(col<0)col+=gx;else if(col>=gx)col-=gx;const g=all?0:row+col,o=g*cap,m=all?this.n:cnt[g];
+        for(let q=0;q<m;q++){const v=all?q:cells[o+q];if(v===u||(v<u&&(bond[v*3]>=0||bond[v*3+1]>=0||bond[v*3+2]>=0)))continue;let dx=px[v]-x,dy=py[v]-y;if(dx>hw)dx-=W;else if(dx<-hw)dx+=W;if(dy>hh)dy-=Hh;else if(dy<-hh)dy+=Hh;if(dx*dx+dy*dy<=r2)cand.push(v);}}}
       for(let q=1;q<cand.length;q++){const x=cand[q];let r=q-1;while(r>=0&&cand[r]>x){cand[r+1]=cand[r];r--;}cand[r+1]=x;}   // ascending (few)
       for(let q=0;q<cand.length;q++){const v=cand[q];if(v<u)out.push(v,u);else out.push(u,v);}}
     return out;}

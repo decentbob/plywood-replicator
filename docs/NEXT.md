@@ -1,32 +1,29 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261005-2320, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-0021, harden). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge: run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
+at each run's merge: run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-**Handoff status (autorun run 20261005-2320, build).** **The pair works in isolation** (priority 2 done): one founder
-among 300 copy blanks reaches 20 bodies by 350-530 steps in 4 of 4 worlds and turns every blank into parts (134-148 of
-151 possible bodies, generation 9-10 by 3000 steps; 4 of 4 in each of 5 settings; INNOVATIONS run 2320, picture
-`docs/pictures/pair.png`). One correction to run 1850's design, no core change: a type's source must not be a binding
-site (IDEAS, "Built"). The kit is R `Y@&b@|-`, S `B@-y|`: each cell's plain `-` is its one source; the anchor marks
-keep the seed site and the front from being copied (the IDEAS order `B@y-|` stalls at 1-5 bodies: control `pair-c`).
-The bud points away (a strip). New: `structures.pairKit`, demo `pair`, checks `pair` and `pair-c`; render escapes
-titles. `node tri/test.js` 39 tests pass (new: the pair mechanism); `tri/check.js` 14 of 14 (`budcycle-3` and `budcycle-lysis` 3 of 4 each, as before; `pair-c`
-rerun after its threshold was fixed: 5 bodies, not 3 or fewer). Nothing is running. Previous run (1921,
-core-review): core 6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no option.
+**Handoff status (autorun run 20261006-0021, harden).** **The pair world is 1.8-2.1x faster, output unchanged**
+(priority 3 done): 1050 triangles (PAB=1000 PAS=50) run 5000 steps in 10.0 s instead of 17.9 (about 500 steps per
+second; growth phase 2.1x), the default `pair` 1.8x. All 44 check worlds byte for byte the same (`CHECK_SAVE` before
+at `5850fe7` and after, `diff -r` empty); suite 14 of 14 both times, 3581 -> 3459 s (`budcycle-3` and `budcycle-lysis`
+3 of 4 each, as before). Changes: `canon` remembered per name, the pair scan and the release loop skip unbonded
+triangles, exact trims in body overlap tests (INNOVATIONS run 0021). `node tri/test.js` 40 tests pass (new: body
+overlap tests skipping far cells equal a scan over all blocks). Nothing is running. Physics is now 85% of a pair world
+(body moves 47%, the pair list 13%); no single hot spot is left, so the next speed step would change outputs (e.g.
+fewer trials per body) and belongs to a build. A Direction 1 world of about 1000 triangles: about 35 minutes per 10^6
+steps.
 
-**Next step (rotation 49, harden): speed for long pair worlds** (priority 3). The pair world runs about 1300 steps per
-second with 300 triangles; Direction 1 needs worlds of 1000-3000 triangles over 10^5-10^6 steps (doubling about 100-150
-steps while blanks last). Profile `PAB=1000 PAS=50 node tri/demos.js pair 1 5000 runs` (physics vs chemistry; the
-per-step census in the demo is O(n) and can go to every 10 steps); make it faster without changing outputs
-(`CHECK_SAVE` diff on `pair`, `copy`, `imprint`). Then (rotation 50, build) **Direction 1 on the pair** (priority 4):
-labelled drives, free parts decay into blanks at rate d, a body hazard h (a body comes apart into its two parts, as
-`BCH` does); mean field (IDEAS) predicts free R = free S = about 2h/a with a the binding rate; measure a, then pick h
-and d so that a world of about 1000 triangles keeps 50-200 bodies.
+**Next step (rotation 50, build): Direction 1 on the pair** (priority 4): labelled drives, free parts decay into blanks
+at rate d, a body hazard h (a body comes apart into its two parts, as `BCH` does); mean field (IDEAS) predicts free R =
+free S = about 2h/a with a the binding rate; measure a, then pick h and d so that a world of about 1000 triangles keeps
+50-200 bodies. Start from `PAB=1000 PAS=50 node tri/demos.js pair 1 N runs` (a new option for the drives); 4 long
+worlds; check: bodies still budding at the end in 3 of 4, many generations past the founder, pool R : S near 1.
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
@@ -62,7 +59,7 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
 2. Done in run 2320 (build): the pair in isolation (`pairKit` R `Y@&b@|-`, S `B@-y|`; demo `pair`; checks `pair`,
    `pair-c`). Buds point away; no jam seen (a parent buds again once its last bud has moved off: children per body
    0.99 on average, founder 4, at most 7, while blanks lasted; seed 1).
-3. [49 harden] Speed for long worlds of many small bodies; `budcycle` untouched.
+3. Done in run 0021 (harden): speed for pair worlds, 1.8-2.1x, exact.
 4. [50 build] **Direction 1 on the pair:** labelled drives (free parts decay to blanks; a body hazard, lysis into parts,
    as `BCH` does); 4 long worlds; check: bodies still budding at the end in 3 of 4, many generations past the founder,
    pool R : S near 1.
