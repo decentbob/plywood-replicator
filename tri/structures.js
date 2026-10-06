@@ -113,7 +113,11 @@ function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt
 function pairKit(turn=false){const R={v:[[0,0],[1,0],[0.5,H]],type:'Y@&b@|-'},a=R.v[1],b=R.v[2],c=R.v[0];
   const S={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:turn?'B@y|-':'B@-y|'};
   return {tris:[R,S],R:R.type,S:S.type,rootSide:0,growSide:1,seedSide:turn?1:2};}
+// a strip of cells, each across the previous one's side 1 (pairKit's geometry: a pair is a strip of two), types in order
+function stripKit(types){const tris=[{v:[[0,0],[1,0],[0.5,H]],type:types[0]}];
+  for(let k=1;k<types.length;k++){const [c,a,b]=tris[k-1].v;tris.push({v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:types[k]});}
+  return {tris,types};}
 // a bud's pose on its parent (budKit): the parent's cells rotated 180 degrees about the middle of its pore's outer edge
 const budPose=(R,p)=>[-p[0],2*R*H-p[1]];
 
-module.exports={budKit,budPose,pairKit,ringKit,lattice,hexr,H};
+module.exports={budKit,budPose,pairKit,stripKit,ringKit,lattice,hexr,H};
