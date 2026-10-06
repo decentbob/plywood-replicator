@@ -11,6 +11,12 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261006-2350, build; in progress).** Priority 11: the z kind and length by mutation, in
+the diets world at openRange 9. Goal: say what limits the z kind and whether chains of 4+ cells complete and persist,
+with the front-only mutagen (a..z) and with the mutagen on every glue (`PAMF` off). Check: a kind of 3+ cells that arose
+by mutation holds 10+ individuals at the end in 3 of 4 worlds (new check), or a clear negative with its reason. Stop
+when the check passes or the negative is explained; records and handoff.
+
 **Handoff status (autorun run 20261006-1920, core-review).** Priority 10 done with one core change: **the open signal
 stops at `&` joints** (a bud and its parent no longer hear each other; lysis already stopped there) and **a part caught
 with an open front emits in the pass it binds** (candidate (o)). Case, grid and suite diff in RULES Core changes
