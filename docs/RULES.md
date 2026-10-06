@@ -59,7 +59,7 @@ removed on 2026-10-03 and is the lysis side since 2026-10-04).
 - Labelled exceptions used by the chemistry: binding places a free triangle flush in a free site; an anchor's catch
   moves the caught strand (with anything bonded to it) as one body into a free flush place along a clear path.
 
-## Core inventory (2026-10-05, core review run 20261005-1921)
+## Core inventory (2026-10-06, core review run 20261006-1920; table from run 20261005-1921)
 Users from the kept demos and checks ("demos": which of `copy`, `ring`, `imprint` (its rings, its `g` strand and its
 `p`/`m` cells), `pool`, `budpool`, `budcycle`, `closure` carry or fire it; `budpore` was retired in run 0820). Dates:
 when the item entered the core (the repository restarted on 2026-10-01).
@@ -73,11 +73,17 @@ when the item entered the core (the repository restarted on 2026-10-01).
 | `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
 | `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`), `г@!-\|-\|` at a receptor `Г@&` on E (`budcycle` `BCQ`, run 2221) | 10-04 (run 2051) |
 | zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
-| open (`openRange` 120) | relayed signal | growth and `&` release | 10-01 |
+| open (`openRange` 120) | relayed signal | growth and `&` release | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
 | lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
 | nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
 | fill | state | copying | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
 | spent | state | `&` sides | 10-01 |
+
+**Counts (2026-10-06, run 1920):** unchanged (6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no
+option). The open signal now stops at `&` joints, the condition lysis already had (one condition for both relays), and a
+part caught with an open front emits in the pass it binds (candidate (o), adopted with the joint; Core changes). One
+openRange then serves every body length up to it; the per-demo ranges (pair 1, strips 3, lineage 9 and 50, imprint 1)
+remain as set, and the pair-world checks pass at the default 120 (run 1920).
 
 **Counts (2026-10-05, run 1921):** 6 marks, 3 relayed signals (zip, open, lysis), 4 exposed one-bond values, 2 states
 (fill, spent), no option. Removed: the option `heldContact` with its relay `hold`, and the busy relay with the state
@@ -226,7 +232,8 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
 
 ## Lysis (lysis side `!`, 2026-10-04, run 2051)
 - A triangle bonded to a partner's lysis side `!` is **lysed**. Lysis is relayed one bond per pass (previous pass)
-  across every bond but one on which either side carries `&` (the joint between a bud and its parent stops it). A side
+  across every bond but a joint, one on which either side carries `&` (the joint between a bud and its parent stops it,
+  as it stops the open signal since run 1920). A side
   `!` binds as its glue and other marks say; no binding rule of its own.
 - A triangle lysed for a whole pass (its partners have heard it) cuts all its bonds. A lysed triangle that is then free
   (by its own cuts or its partners') returns to a fresh state of its type: spent sides and fill cleared, and
@@ -275,6 +282,25 @@ lineage, a body-length knob in disguise). The case, written before the rule; the
    part binds (the signal fades one per pass, echoing inside the body) for 3 or more cells; immediately for 2.
 5. **Test.** The strip measurement on the oracles `openJoint`, `openCatch`; the check suite with `CHECK_SAVE` against
    `main` with both on, every changed outcome explained; then the pair-world checks at one range.
+6. **Result: adopted (the rule since run 1920; the oracles are gone).**
+   - *Strips* (oracles, 2 seeds each, 6000 steps; complete / incomplete releases): with both parts, openRange 3 buds 2-
+     to 4-cell strips with none incomplete (5 cells: 11 and 33 incomplete, as 5 > openRange + 1), openRange 5, 9 and 120
+     every length 2 to 5 (e.g. at 120: 91, 75-81, 27-35, 19-20 complete, none incomplete). Main at 120: 80-100, 63-76
+     (2 incomplete each), 2-9, 4-7. Each part alone fails: the joint alone leaves the root of every strip of 3 or more
+     a pass of silence (all releases incomplete at every range); the catch alone removes the incomplete releases but
+     not the stall. Release comes about openRange passes after the last cell binds for 3 or more cells (the median
+     delay: 2 at openRange 3, 8 at 9, 96-120 at 120), at once for 2.
+   - *Suite* (`CHECK_SAVE` against main `e63366e`, both on this branch's checks): 34 of 34 pass on both. Byte for byte
+     the same: every pair world without a strip (`pair`, `pair-c`, `pair-run`, `pair-sel(-c)`, `pair-mut`,
+     `pair-flow(-c)`, `pair-host(-c, -mx)`: a 2-cell kind at openRange 1 hears the same), `copy`, `ring`, `imprint`,
+     `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budpool`, `budcycle-3` seeds 3, 4 and `budcycle-lysis` seeds 1-3.
+     Changed, same outcome: `duo*` and `diets*` (openRange 3: a pair's or diet's root now lets go one pass after its
+     front closes instead of three, as its parent no longer echoes; means within a few percent, e.g. `duo` pair 369-379,
+     base 376-385; `duo-stock-hi` the pair extinct in 4 of 4 worlds, base 2 of 4, the check's claim either way);
+     `lysis` (openRange 50; later bud 47, 45, 45, 46 parts, base 45, 45, 46, 45); `budcycle-3` seeds 1, 2 from 699k and
+     880k on (generation 3 of seed 2 at 928600, base 908100; seed 1 reaches 2, not 3, as before); `budcycle-lysis` seed
+     4 (generation 3 at 1094000, base 856900; 3 buds lysed, base 6). The lineage's incomplete root releases (`falseRel`
+     8, 1, 2, 9) did not change: they are not this race (run 1921 found the same).
 
 ### Candidate (r): copy error in contact copying, 2026-10-06, autorun run 20261006-0450 (explore): not needed yet
 NEXT priority 5 (Direction 2, heritable variation). The case, written before any code; then what was done instead.
