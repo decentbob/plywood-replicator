@@ -457,13 +457,14 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(!vEnd.lost&&N&&f===0)vEnd.lost=t;if(!vEnd.fixed&&N&&f===1)vEnd.fixed=t;
         const o=opened();console.log(`var: t=${t} alive ${N} marked ${m.reduce((a,b)=>a+b,0)} share ${f.toFixed(3)} sameNeighbours ${cnt?(same/cnt).toFixed(3):'-'} random ${(f*f+(1-f)*(1-f)).toFixed(3)} copies x ${cp[cV]||0} openSeed ${o.S} openFront ${o.R}`);};
       // mutation census: bodies (two or more bonded triangles) by their types; variant types ever seen in a body
-      const seenV=new Map(),census=t=>{const {members}=s.bodies(),by=new Map();let mb=0,fm=0;
+      let mutLast={t:0,bodies:0,kinds:0,c:0,dc:0};const seenV=new Map(),census=t=>{const {members}=s.bodies(),by=new Map();let mb=0,fm=0;
         for(const m of members){if(m.length<2)continue;const ty=m.map(u=>canon(s.typeName(u))),k=ty.slice().sort().join(' + ');by.set(k,(by.get(k)||0)+1);
           if(ty.some(c=>c!==cR&&c!==cS)){mb++;for(const c of new Set(ty))if(c!==cR&&c!==cS){const v=seenV.get(c)||{first:t,last:t,max:0,n:0};v.last=t;v.n++;seenV.set(c,v);}}}
-        for(const [c,v] of seenV)if(v.last===t){let k=0;for(const m of members)if(m.length>1&&m.some(u=>canon(s.typeName(u))===c))k++;v.max=Math.max(v.max,k);}
+        const nb=[...by.values()].reduce((a,b)=>a+b,0);for(const [c,v] of seenV)if(v.last===t){let k=0;for(const m of members)if(m.length>1&&m.some(u=>canon(s.typeName(u))===c))k++;v.max=Math.max(v.max,k);v.ms=Math.max(v.ms||0,nb?k/nb:0);}
         for(const u of all)if(!s.bonded(u)){const c=canon(s.typeName(u));if(c!==cR&&c!==cS&&c!==cB)fm++;}
         const top=[...by].sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,n])=>n+'x '+k).join(' | '),o=opened();
-        console.log(`mut: t=${t} bodies ${[...by.values()].reduce((a,b)=>a+b,0)} withVariant ${mb} kinds ${by.size} freeVariants ${fm} mutated ${ev.mutated} openSeed ${o.S} openFront ${o.R} | ${top}`);};
+        mutLast={t,bodies:nb,kinds:by.size,c:s.ev.copy||0,dc:(s.ev.copy||0)-mutLast.c};
+        console.log(`mut: t=${t} bodies ${nb} withVariant ${mb} kinds ${by.size} freeVariants ${fm} mutated ${ev.mutated} openSeed ${o.S} openFront ${o.R} | ${top}`);};
       // the two variants that expose a part more: among attached S-like triangles (a side B@ and a side y), the share whose
       // y side has no anchor mark (the seed site copied while free); among attached R-like ones (Y@ and b@), the share whose
       // b@ side has none (the front copied while a bud waits)
@@ -502,6 +503,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
       console.log(`t=${s.t} result: bodies=${ev.births} reached${goal}=${reached||'not'} gen=${maxGen} perGen=${Object.keys(gens).sort((a,b)=>a-b).map(g=>g+':'+gens[g]).join(',')} freeR=${P.r} freeS=${P.q} waiting=${P.w} blanks=${P.b} copies=${s.ev.copy||0} copiesR=${cp[cR]||0} copiesS=${cp[cS]||0} firstBud=${first||'not'} doublings=${dbl.join(',')} founderKids=${kids.get(0)||0} maxKids=${kv.reduce((a,b)=>Math.max(a,b),0)} kidsMean=${(kv.reduce((a,b)=>a+b,0)/kv.length).toFixed(2)}${drv}`);
       if(VM){const o=opened();console.log(`t=${s.t} marker: lost=${vEnd.lost||'not'} fixed=${vEnd.fixed||'not'} copiesX=${cp[cV]||0} openSeed=${o.S} openFront=${o.R}`);}
       if(MU){const o=opened();console.log(`t=${s.t} result: openSeed=${o.S} openFront=${o.R} mutated=${ev.mutated} copies=${s.ev.copy||0}`);}
+      // still evolving: variant types that were in at least a tenth of the bodies at some census, and those of them first
+      // seen in a body in the run's second half; bodies, kinds and copies at the last census
+      if(MU){const V=[...seenV.values()].filter(v=>(v.ms||0)>=0.1);console.log(`t=${s.t} evolving: bodies=${mutLast.bodies} kinds=${mutLast.kinds} common=${V.length} lateCommon=${V.filter(v=>v.first>steps/2).length} copiesLast=${mutLast.dc} blanks=${P.b}`);}
       if(MU)console.log(`t=${s.t} variants (in a body at some census; max bodies, first, last seen): ${[...seenV].sort((a,b)=>b[1].max-a[1].max).slice(0,15).map(([c,v])=>`${c} ${v.max} ${v.first}-${v.last}`).join(' | ')||'none'}`);
       finish(`The pair: one founder among copy blanks (S ${K.S})${HZ||DK?`, hazard ${HZ}, decay ${DK}`:''}`,3);},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root

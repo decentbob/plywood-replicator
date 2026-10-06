@@ -15,9 +15,11 @@ Progress: drive `PAHB` added to demo `pair` (1: the hit triangle returns as a bl
 triangle). Baseline (no drive) reproduces the lock: seeds 1, 3, 4 at 300k blanks 18, 2, 8 and copies 4420, 371, 1720 per
 5000; seed 2 flows. `PAHB=2`: copies 16-28k per 5000 to 300k in seeds 2, 3, 4 (blanks 42, 153, 34 at the end); seed 1
 dies out at 260k after an S with a lysis side (`B@p!y`) sweeps. `PAHB=1`: seeds 1 and 4 die out by 240k (an R or S
-variant that is copied less sweeps first), 2 and 3 flow. Running: `PAHB=2` in a 3x world (`PAB=3000 PAS=87`), seeds 1-4,
-300k, `runs/big` (rerun: `PAHB=2 PAB=3000 PAS=87 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair
-SEED 300000 runs/big`).
+variant that is copied less sweeps first), 2 and 3 flow. `PAHB=2` in a 3x world (`PAB=3000 PAS=87`, about 25 minutes per
+300k): 4 of 4 alive at 300k, copies 53-84k per 5000, new kinds still sweeping at 235-275k (one-type replicators
+`Y@&b@y`, `O@&b@o`: a part that buds its own kind). Demo prints an `evolving:` result line with the mutagen; checks
+`pair-flow` (200k, need 3) and `pair-flow-c` (no drive, seeds 3 and 4) added, being run (`node tri/check.js pair-flow
+pair-flow-c > runs/check-flow.txt`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
