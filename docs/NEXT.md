@@ -15,7 +15,7 @@ Results (INNOVATIONS run 0920):
 1. `budcycle`'s dead options removed (`BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`, `BCSV`, `BCGATE`) with the
    chart `node tri/render.js pop`; in git at `20e9a88`. Output byte for byte the same on 8 worlds of 150k steps.
 2. Check suite 20 of 20 (5075 s, about 85 minutes: the frozen lineage's `budcycle-3` and `budcycle-lysis`, about 2100 s
-   per world, take most of it). Both pass 3 of 4 with seed 1 failing (BASE_SEED1).
+   per world, take most of it). Both pass 3 of 4 with seed 1 failing (the same on main: both seed-1 outputs byte for byte the same over 1.2M steps).
 3. `pair-mut` kept, against the last handoff's suggestion: its criterion holds in only 1 of 4 `pair-flow` worlds.
 4. ROADMAP's frozen-lineage sections and this file condensed; autorun plywood prompts fixed for three repeated
    frictions (waits, remote branch deletes, the harden baseline).

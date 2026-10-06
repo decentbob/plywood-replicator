@@ -18,7 +18,7 @@ not statistics.
   (pore and seed cell), `BCSV` (scavengers; test "scavenger" stays, it tests the rule) and the oracle `BCGATE`; in git at
   `20e9a88`. Output byte for byte the same as main on 8 worlds of 150000 steps (default and `BCQ=1 BCR=50 BCC=2`, seeds
   1-4). Check suite 20 of 20 (5075 s); `budcycle-3` and `budcycle-lysis` 3 of 4 each, seed 1 failing in both
-  (BASE_SEED1). `pair-mut` kept: its criterion (an exposure variant in most S or R by 100k) holds in 4 of 4 of its own
+  (on main too: both seed-1 worlds byte for byte the same over 1.2M steps). `pair-mut` kept: its criterion (an exposure variant in most S or R by 100k) holds in 4 of 4 of its own
   worlds but in only 1 of 4 `pair-flow` worlds (`PAHB=2` changes which variants win), so `pair-flow` does not cover it.
   ROADMAP: the frozen organism lineage's parts table and backlog record condensed to their standing conclusions (full
   text at `20e9a88`); NEXT 170 to about 100 lines (run 1850's Direction in full at `20e9a88`). Autorun plywood prompts:
