@@ -8,6 +8,13 @@ at each run's merge: run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422'
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
+**Current slice (autorun run 20261006-0021, harden; in progress).** Goal: the pair demo fast for long worlds (1000+
+triangles, 10^5+ steps) without changing any output. Done when: (1) `tri/check.js` passes as before; (2) `pair` at PAB=1000
+PAS=50 runs at least 2x faster than at the start (baseline measured first); (3) `CHECK_SAVE` outputs of `pair`, `pair-c`,
+`copy`, `imprint` and a long pair world byte for byte the same before and after. Stop there; if physics itself dominates
+and needs an output-changing change, record the measurement and leave it to a build. Running: `node tri/check.js >
+runs/check.txt` (started 00:22 UTC; rerun missing ids by name).
+
 **Handoff status (autorun run 20261005-2320, build).** **The pair works in isolation** (priority 2 done): one founder
 among 300 copy blanks reaches 20 bodies by 350-530 steps in 4 of 4 worlds and turns every blank into parts (134-148 of
 151 possible bodies, generation 9-10 by 3000 steps; 4 of 4 in each of 5 settings; INNOVATIONS run 2320, picture
