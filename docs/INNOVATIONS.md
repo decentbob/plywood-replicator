@@ -36,7 +36,8 @@ not statistics.
   - **Command:** `PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 1000000 runs/x` (about 35
     minutes; PAH hazard, PAD decay, PAHT hazard start, PAP a `pop:` line every k steps: living bodies, births, deaths,
     generations, mean pools, copies by type, fresh share, copied-to-born distance). Check `pair-run` (100k steps, 4
-    worlds, need 3: still budding at the end, 20+ bodies, generation 100+, copies R : S within 1.5, half the parts fresh).
+    worlds, need 3: still budding at the end, 20+ bodies, generation 100+, copies R : S within 1.5, half the parts fresh):
+    4 of 4, 267-285 bodies, generation 620-635, fresh 0.95 (194 s).
   - **Status:** works. Next (NEXT): heritable variation (Direction 2, explore); the locality of copying is what a variant
     would be inherited by.
 

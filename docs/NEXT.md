@@ -18,7 +18,7 @@ decay (d 0.01-0.3) runs on too but rebuilds bodies from a dead body's parts (5-2
 mean field's birth law (IDEAS) did not decide the numbers: material (slow decay) or the meeting of two fresh parts (fast
 decay) did. **Copying is local**: a part is born into a body 2.3 side lengths from where it was copied (91% within 5;
 random: about 19); bodies cluster in patches. New check `pair-run` (100k steps, h 0.6, d 1; 4 worlds, need 3): `pair`,
-`pair-c` and `pair-run` pass (`runs/check-pair.txt`); the full suite was not rerun (only demo `pair` changed, and its
+`pair-c` and `pair-run` pass (`pair-run` 4 of 4: 267-285 bodies, generation 620-635 at 100k steps, 194 s); the full suite was not rerun (only demo `pair` changed, and its
 default output is byte for byte the same: seeds 1 and 2 compared). `node tri/test.js` 40 pass. Nothing is running.
 To regenerate the long worlds: `PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair SEED 1000000
 runs/x` (about 35 minutes each; PAH=0.7 for the edge).
