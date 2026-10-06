@@ -18,6 +18,33 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## One supply, one winner: the kind that wastes fewest copies (build run 20261006-1150, 2026-10-06)
+
+Measured with the pair and a 3-cell strip of the same design in the flowing world (INNOVATIONS run 1150).
+- **Competitive exclusion by R*.** With one resource (copy blanks) and deaths that return it, each kind alone leaves the
+  free blanks at a level of its own (pair 11, strip about 100 at h 0.1, decay 1), and the kind with the lower level wins
+  from every start: from one founder each, entering the other's world, or resisting entry (4 of 4 each). This is the
+  ecologists' R* rule, and it makes the "smallest fastest replicator wins" risk of run 1850 a measured fact here.
+- **Why length costs.** A birth needs every cell's part copied apart, carried to the bud and bound in turn before it
+  decays. The pair binds 85% of its copies, the strip 23%: three sequential bindings under decay waste most parts, and
+  each extra cell adds a triangle at risk. So the strip lives only below about a sixth of the pair's hazard (0.12
+  against 0.7). Any longer kind on this design pays this; adding cells is not neutral.
+- **A kind of three or more cells needs openRange 3 (relay lag).** When the second cell binds, the root stops emitting
+  in the same pass the new front starts, so the root hears nothing for one pass and its `&` lets go: at openRange 1 or 2
+  the bud leaves its parent half built. At 3 the echo through the parent covers the pass. A core fix would let binding
+  set the new part's open signal at once (binding already sets both parties' state); not needed while the range works
+  (candidate (o), NEXT).
+- **A trap for free parts gives at most a priority effect.** A cell can only catch free parts (attached triangles bind
+  each other only when flush), and its one exposed side must stay its copy source, so a predator cell has one trap.
+  Lysing the rival's free roots slows an invasion at slow decay (parts live long enough to meet traps) and repelled it in
+  1 world of 4 beyond chance; at fast decay it changes nothing. It does not pay for the waste of length.
+- **What could pay for a longer kind** (to test): (a) lower waste: parts made where they bind (a bud that copies its own
+  next part), or fewer free stages; (b) lower risk per cell: a hazard per body instead of per triangle (an individual
+  then dies at the same rate whatever its size; run 0450) or shelter; (c) a second resource only the longer kind can use (Tilman: two
+  resources allow two kinds to coexist when each is limited by a different one), e.g. a second blank type that only a
+  cell with a second copy side takes; (d) spatial structure (patches) in larger worlds. Of these, (c) is the first to
+  try: it needs no rule change, only a second labelled supply.
+
 ## Deaths that return blanks keep material flowing; selection of part types can still kill the world (build run 20261006-0621, 2026-10-06)
 
 Measured on the mutagen pair world (m 0.01, hazard per triangle h 0.6, decay d 1; INNOVATIONS run 0621).

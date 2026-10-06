@@ -10,6 +10,56 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-1150, build)
+
+- **Two kinds on one supply: the pair against a 3-cell strip; the kind that draws free blanks lowest wins from any
+  start** — works (a competition test with a measured reason; 4 of 4 worlds each way). Direction 3 (user-approved order,
+  run 0321), no rule change. Demo `pair` gained a second kind (`PA2`: `structures.stripKit`, a strip of the given types,
+  each cell across the previous one's side 1; the pair is a strip of two), `PA1=0` (no pair founder), late founders
+  (`PA1T`/`PA2T` at step t, `PAEN` of them: free copy blanks become the founder's cells at a clear spot; labelled start,
+  material conserved) and `duo:` lines (per kind: complete individuals, held, free parts by type, copies). All off by
+  default (default output byte for byte as before). The strip: R3 `Z@&c@|-`, M `C@d@|-`, T `D@-z|` (the pair's design,
+  every cell exposes its plain side; own letters, so the kinds share only blanks and space). Setting: the flowing world
+  without the mutagen (1000 blanks, world 50, `PAHB=2`, hazard per triangle h, decay d 1, hazard from step 4000).
+  - **A 3-cell bud needs openRange 3.** At openRange 1 or 2 (outputs identical) the strip's bud lets go of its parent
+    when its middle cell binds: R stops emitting in the pass M starts, so R hears nothing for one pass (the relay lag of
+    candidate (o)); the parent's seed site then starts the next bud while the last waits free for its T. At openRange 3
+    the echo through the parent's T (3, heard there as 2) covers that pass and the bud stays until it is complete. Used
+    for both kinds below (`PAR=3`).
+  - **Alone:** the strip grows from one founder (240 individuals by 5000 steps under decay alone; doubling about 300
+    steps without decay, 500 with it; the pair about 100-270) but lives under the hazard only below h about 0.12 (seed
+    1: h 0.1 alive at 60k with 161-175 strips; 0.15 extinct at 30k; 0.2, 0.25 by 10k), the pair to about 0.7 (run 0251).
+    At h 0.1 the pair holds about 390 bodies with free blanks at 11, the strip 140-171 (4 of 4 worlds at 25k) with
+    blanks about 100. **Why:** the strip binds about 23% of its copies (about 16k copies per 5000 steps for about 1200
+    births), the pair 85% (4557 copies, 1930 births): a birth needs three parts bound in turn, each copied apart and
+    decaying while free, so most strip parts decay before their site is ready (free R3 : M : T about 120 : 60 : 55; R3 is
+    also made by every waiting bud); and each strip carries three triangles at risk.
+  - **Competition (h 0.1):** from one founder each the pair wins in 3 of 3 worlds (strip 1-4 individuals at 5000 steps,
+    extinct by 10k; pair 372-381 at 100k). Five pairs entering an established strip world at 30k drive it extinct by
+    40-45k in 4 of 4 (one pair founder: 1 of 4; the others died before budding, at blanks 0.04 per unit area). Five
+    strips entering a pair world die within 5000 steps in 4 of 4. Each outcome is the one predicted by the free blanks
+    each kind leaves alone (Tilman's R*): 11 against about 100.
+  - **Can length pay? Not by a trap for free parts.** The strip's extra cell given a function, M `C@d@|y!`: its one exposed
+    side (still its copy source) binds a free pair R by `Y@&` and lyses it (the relay stops at R's `&`; under `PAHB=2` the
+    R returns as a blank). At d 1 nothing changes (pair wins from one founder each, 5 pairs invade 4 of 4, 5 predators
+    entering a pair world die 4 of 4). At d 0.1 (parts live about 1000 steps; R* pair 11, strip 44-60) the trap
+    suppresses the invader's free R (R : S 1:27 to 14:64, against 21:25 to 54:53 with the plain strip) and delays the
+    invasion (10 and 63 pairs at 40k in seeds 1 and 4, against 67 and 331), but the pairs still win in 2 of 4 worlds,
+    and of the two repelled worlds one (seed 3) also repels them without the trap: one world in 4 is the trap's.
+  - **Pictures:** [duo-chart.png](pictures/duo-chart.png) (complete individuals of each kind as 5 pairs enter a strip
+    world at 30k: d 1 plain, d 0.1 plain, d 0.1 predator won and repelled; drawn from the `duo:` lines);
+    [duo-invasion.png](pictures/duo-invasion.png) (d 1 seed 3 at 35k: a patch of pairs, red and green glue bars,
+    spreading through the strips); [duo-predator.png](pictures/duo-predator.png) (d 0.1, predator strip, seed 1 at 40k:
+    11 pairs among strips and their many free parts).
+  - **Commands** (common: `PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=1 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|- C@d@|- D@-z|'
+    node tri/demos.js pair SEED STEPS runs`): even start (20k steps, about 1.5 minutes); `PA1=0` the strip alone;
+    `PA1T=30000 PAEN=5` pairs enter (50k); `PA2T=30000 PAEN=5` strips enter; predator `PA2='Z@&c@|- C@d@|y! D@-z|'`, slow
+    decay `PAD=0.1`. The run ends with `duo: pair=alive|extinct@T mean2=N strip=...` (mean individuals in the second
+    half). Checks `duo` (even start), `duo-inv` (pairs enter), `duo-inv-c` (strips enter): CHECKRESULT.
+  - **Status:** works as a competition test (one supply, one winner, for a measured reason); not yet: a longer kind
+    that wins or coexists. Next (IDEAS "One supply, one winner"): what an extra cell would have to change (waste, risk,
+    a second resource).
+
 ## 2026-10-06 (autorun run 20261006-0920, cleanup)
 
 - **Leaner `budcycle`, ROADMAP and NEXT** — works (no capability change). Removed from `budcycle` the options of run
