@@ -1,41 +1,37 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-1150, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-1322, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`).
-
-**Current slice (autorun run 20261006-1322, explore, in progress): heredity of combinations by locality.** Goal: find
-whether the existing core can make a body's parts come mostly from its own parent, and whether that lets selection see
-bodies. Steps: (1) observation in demo `pair`: the parental share (a newborn's R and S copied from its parent body) and
-the decay of linkage between two markers (x on R, z on S, both put into half the bodies); (2) a labelled lever with no
-rule change: faster decay of free parts (a decay interval), lower density, the side arrangement; (3) the selfish S
-(seed site `y!`: lyses the R that binds it) put into a tenth of S, with low and high parental share. Done when (1) is
-measured in 4 worlds and (3) has an answer either way; stop there (no core change unless locality cannot do it).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261006-1150, build).** Direction 3 done as a test; no rule change.
-Results (INNOVATIONS run 1150, IDEAS "One supply, one winner"):
-1. Demo `pair` takes a second kind (`PA2`, `structures.stripKit`), late founders (`PA1T`, `PA2T`, `PAEN`) and prints
-   `duo:` lines; default output byte for byte as before.
-2. A 3-cell strip of the pair's design (`Z@&c@|- C@d@|- D@-z|`) needs openRange 3: at 1 or 2 its bud lets go half built
-   (relay lag, candidate (o) below). It lives alone only below h about 0.12 (pair 0.7): it binds 23% of its copies, the
-   pair 85%.
-3. At h 0.1, decay 1, one supply: the pair wins from every start (one founder each 4 of 4; 5 pairs entering a strip world
-   4 of 4; 5 strips entering a pair world die 4 of 4): alone the pair leaves 11 free blanks, the strip about 100 (R*).
-4. A trap on the strip's extra cell (M `C@d@|y!`, lyses free pair roots) does not pay: no change at decay 1; at decay
-   0.1 it slows the pairs' entry and repels it in 1 world of 4 beyond chance.
-5. Checks `duo`, `duo-inv`, `duo-inv-c`: 4 of 4 each (subset of the suite with the pair checks, 11 of 11 in 1604 s; the pair checks report the numbers recorded before): `duo` strip extinct by 10k, pair 376-385 in the second half; `duo-inv` 151-179 strips before entry, extinct by 40-45k; `duo-inv-c` 370-381 pairs, the strips extinct by 35k
-Nothing is running. Chart: `docs/pictures/duo-chart.png`, drawn from the `duo:` lines of the commands in INNOVATIONS.
+**Handoff status (autorun run 20261006-1322, explore).** Priority 7, heredity of combinations, settled by measurement
+and a test; no rule change. Results (INNOVATIONS run 1322, IDEAS "Heredity of combinations is locality"):
+1. Demo `pair` measures the parental share s (`PAPS=1`: a newborn's R, S, both copied from its parent body) and two-marker
+   linkage (`PAV=link`), and takes a parasite S (`PAVK=parasite`, `B@-q`: copied at two sides, never buds), run 0621's
+   selfish S (`PAVK=selfish`), a decay interval (`PADI`) and stirring (`PAMX`, labelled drive); default output byte for
+   byte as main. `sim.js`'s observation log `copyLog` names each copy's template (no rule change).
+2. Heredity is half parental: at h 0.6, decay every 100 steps, s is 0.39 for R and 0.44 for S, both parts 0.20; linkage
+   between two markers is gone within about 35 generations. A lean pool raises s (decay every 10 steps, h 0.3: 0.58),
+   a larger pool or stirring lowers it (0.25; 0.22). Fast decay at h 0.6 kills the world.
+3. The parasite threshold (1 - s) k > 1 holds: k about 2; excluded at s 0.43 and 0.58, holds about half the bodies at
+   0.25 (model 0.5), and the excluding world stirred lets it in and crashes (checks `pair-host`, `pair-host-c`,
+   `pair-host-mx`, 4 of 4 each). Run 0621's selfish S (`B@-y!`) is lethal here, not selfish (gone in 2000 steps).
+4. Analysis (parity): in a pair a fresh copy binds at once only beside its own template (so only one-type chains have
+   parts made where they bind: why they win under the mutagen); parts made beside a different cell need four cells in
+   an arc round a vertex. Designed, not built.
+5. Full suite run on the branch (`runs/check.txt`): see the merge commit; the subset with the new checks 3 of 3 in 300 s.
+Nothing is running after the merge. Chart: `docs/pictures/parasite-share.png`, drawn from the `par:`
+lines of the worlds in INNOVATIONS' commands (an ad hoc script, not kept).
 
-**Next step (rotation 55, explore): heredity of combinations** (priority 7 below): the selfish-S extinction of run
-0621 shows selection sees part types, not bodies (IDEAS "Deaths that return blanks"). Then (56, build) what pays for a
-longer kind: a second labelled supply only a longer kind can use (IDEAS "One supply, one winner", (c)); the `duo`
-setting is the test bed.
+**Next step (rotation 56, build): what pays for a longer kind**, first a second labelled supply only a longer kind can
+use (IDEAS "One supply, one winner", (c)); the `duo` setting is the test bed. Report s (`PAPS=1`) in any selection test:
+a cooperative combination resists a cheat only while s > 1 - 1/k.
 
 ## Direction and priorities
 
@@ -50,12 +46,13 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
 5. Done: cleanup (run 0920): budcycle's dead options pruned.
 6. Done: (3) Direction 3, two kinds on one supply (run 1150, checks `duo`, `duo-inv`, `duo-inv-c`): the pair beats a
    3-cell strip from every start (lower R*); a trap for free parts on the extra cell does not pay.
-7. [55 explore] heredity of combinations: a body's parts come mostly from its own copies (IDEAS).
+7. Done: heredity of combinations by locality (run 1322, checks `pair-host`, `-c`, `-mx`): s about 0.44, a lean pool
+   0.58; a parasite part is excluded once s > 1 - 1/k. By construction (s near 1): not in a pair (parity, IDEAS).
 8. [56 build] what pays for a longer kind: first a second resource only it can use (IDEAS "One supply, one winner").
 9. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
 
-Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 55 explore, 56 build, 57 explore, 58 review-intent, 59
-core-review, 60 build.
+Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 56 build, 57 explore, 58 review-intent, 59 core-review,
+60 build.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
@@ -76,6 +73,8 @@ core-review, 60 build.
   Core inventory).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
+- Heredity by construction (run 1322, IDEAS parity): a kind of four or more cells in an arc round a vertex whose
+  parts are copied beside the cell they join; or a compartment. An `explore` may design it; not needed for priority 8.
 - Core review: same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);
   change only if a locality problem traces back to them.
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
@@ -105,6 +104,11 @@ PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=1 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|
                                                    # two kinds on one supply (check duo; about 1.5 minutes): the pair and a 3-cell
                                                    # strip; PA1=0 the strip alone; PA1T=30000 PAEN=5 pairs enter later (duo-inv),
                                                    # PA2T strips (duo-inv-c); 'duo:' lines, a last 'duo: pair=... strip=...' line
+PAHB=2 PAB=1000 PAS=50 PAHT=1000 PAD=1 PAHU=1 PAP=2000 PAH=0.3 PADI=10 PAV=mix PAVP=0.1 PAVK=parasite PAVT=20000 node tri/demos.js pair 1 40000 runs/x
+                                                   # heredity by locality (check pair-host; about 2 minutes): PAPS=1 'par:' lines
+                                                   # (parental share), PAV=link two-marker linkage, PAVK=parasite/selfish S variants,
+                                                   # PADI decay interval (100), PAMX stirring; without PADI the parasite holds
+                                                   # (pair-host-c), with PAMX=0.2 it spreads (pair-host-mx)
 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the frozen lineage (corner bud, closed walls, 20 blanks +
                                                    # 400 pre-food at 0.0003, monomer loop BCL 0.002, world 36): three generations (check
                                                    # budcycle-3; about 30 minutes). Options: extra parts per type (8); BCB blanks, BCI

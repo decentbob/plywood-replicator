@@ -34,7 +34,7 @@ run 1322), no rule change.
 - **The parasite threshold.** A part type copied k times as often as its rival, whose own body never buds, can fill only
   the births the parents' own copies do not take, a share 1 - s; it spreads only if (1 - s) k > 1, to about
   ((1 - s) k - 1) / (k - 1) of the bodies. Tested with S `B@-q` (its seed site a glue nothing binds, no anchor: copied
-  at two sides, k about 2, threshold s = 0.5): s 0.58 and 0.43, gone within 2000-4000 steps (4 of 4 each); s 0.25, holds
+  at two sides, k about 2, threshold s = 0.5): s 0.58 and 0.43, gone within 2000-6000 steps (4 of 4 each); s 0.25, holds
   0.42-0.52 of the bodies to 80k (model 0.5; 4 of 4); the excluding world stirred to s 0.22, spreads to 0.51-0.53 within
   2000 steps, the hosts crash to 32-44 bodies, the parasite dies with them and the pair recovers (2 of 2); stirred at
   h 0.6, it spreads and the world dies (1 world). So locality alone lets selection see bodies against a cheat that does
