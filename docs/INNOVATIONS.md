@@ -53,7 +53,7 @@ not statistics.
     `PAF='C@d@|-|:600 D@-|z|:600'` or `:200` the stock; `PA1T=30000 PAEN=5` (60k steps) pairs enter, `PA2T=30000 PAEN=5`
     strips enter; `PA2='Z@&c@|- C@d@|- D@-z|' PAF=` the plain strip. Checks `duo-stock` (coexistence), `duo-stock-inv`
     (pairs enter and settle), `duo-stock-c` (plain strip dies), `duo-stock-tri` (hazard per triangle: pair wins),
-    `duo-stock-hi` (stock 600: strip wins): CHECKRESULTS.
+    `duo-stock-hi` (stock 600: strip wins): 4 of 4 each (987 s for the five): `duo-stock` pair 127-134, strip 299-309; `duo-stock-inv` 294-305 strips before entry, pair 108-111 after; `duo-stock-c` strip extinct by 10k; `duo-stock-tri` strip extinct by 20-35k; `duo-stock-hi` pair 0-3 at 40k.
   - **Status:** works as a test: a longer kind persists, and can win, when its extra cells are made of a resource the
     shorter kind cannot use and its risk does not grow with its size. Not yet: such a kind arising by mutation (a front
     glue that catches a stock part), or a second resource without a stock (candidate (t)).

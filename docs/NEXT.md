@@ -23,7 +23,7 @@ second resource; no rule change. Results (INNOVATIONS run 1620, IDEAS "A resourc
 3. Why (per individual): births per individual are about one copy source's rate for either kind, so length costs
    through waste and risk; a stock part removes the waste, and a hazard per individual removes the risk.
 4. Not explained: in the mix the pair holds about 130 at mean blanks 25, alone 380 at 9.
-5. Checks `duo-stock`, `duo-stock-inv`, `duo-stock-c`, `duo-stock-tri`, `duo-stock-hi`: CHECKRESULTS.
+5. Checks `duo-stock`, `duo-stock-inv`, `duo-stock-c`, `duo-stock-tri`, `duo-stock-hi`: 5 of 5 pass, 4 of 4 worlds each (987 s); the existing duo checks rerun unchanged (below).
 Nothing is running after the merge. Chart `docs/pictures/stock-chart.png` was drawn from the `duo:` lines of the
 INNOVATIONS commands by an ad hoc script (not kept).
 
