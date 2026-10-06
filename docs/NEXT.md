@@ -4,6 +4,14 @@ State on 2026-10-06 (after autorun run 20261006-0450, explore). Read AGENTS.md f
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
 at each run's merge: run 0251's at `f7b31f3`, run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
+**Current slice (autorun run 20261006-0621, build, in progress): a world that keeps evolving** (priority 6). Goal: in
+the mutagen world (`PAM=0.01 PAHU=1`, seeds 1-4, 300k), a labelled drive on demo `pair` (no core change) under which
+dead material returns as blanks (a lysed triangle becomes a copy blank once free), so material held by binding
+variants flows. Done when, in at least 3 of 4 worlds, mean blanks stay above about 100 and copies above 10k per 5000
+steps through 300k while variants still arise and sweep, against the baseline (same seeds without the drive), with a
+check in `tri/check.js`. Stop: if no setting of the drive keeps material flowing, record why (a cost for holding,
+IDEAS) and hand off.
+
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
