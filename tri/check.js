@@ -106,6 +106,21 @@ const CHECKS=[
   {id:'duo-stock-hi',cap:'  a stock of 600 each: the strip drives the pair out (or nearly)',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:300,env:{...env,PAF:'C@d@|-|:600 D@-|z|:600'},
     pass:(L,o)=>{const m=res(o),n=at(o,40000,1);if(!m)return [false,'no result'];return [m[3]==='alive'&&n<=10,`pair ${n} at 40k (${m[1]}), strip mean ${m[4]}`];}},
   ];})(),
+  // run 20261006-1750 (explore): heritable diets. A 2-cell kind 'Z@&c@|- C@-|z|' (one copy, one stock part per birth)
+  // among stocks C, E, G (150 each) and a labelled mutagen limited to front glues (PAMF=1, letters c..h): mutants whose
+  // front catches an unused stock arise, spread and live beside the founder's diet (diets); without the mutagen one diet
+  // (diets-c); with only the founder's stock no mutant diet spreads (diets-ns)
+  ...(()=>{const env={PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'0',PAP:'5000',PAR:'3',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAM:'0.01',PAMA:'cdefgh',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150'},
+    res=o=>{const m=o.match(/diets: maxHeld=(\d+) at \S+ first=(\S+) mean2=(\S+)/);if(!m)return null;const mean={};for(const w of m[3].split(','))if(w.includes(':'))mean[w.split(':')[0]]=+w.split(':')[1];return {held:+m[1],first:m[2],mean};},
+    big=r=>Object.entries(r.mean).filter(([,v])=>v>=50).map(([L])=>L).join(''),ev=r=>`most diets held at once ${r.held}, first held ${r.first}, mean ${Object.entries(r.mean).map(([L,v])=>L+' '+v).join(', ')}`;
+    return [
+  {id:'diets',cap:'Heritable diets: mutant fronts that catch an unused stock arise, spread and live beside the founder\'s diet',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:330,env,
+    pass:(L,o)=>{const r=res(o);if(!r)return [false,'no result'];return [r.held>=2&&big(r).length>=2,ev(r)];}},
+  {id:'diets-c',cap:'  control: without the mutagen the founder\'s diet stays alone',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:150,env:{...env,PAM:'0'},
+    pass:(L,o)=>{const r=res(o);if(!r)return [false,'no result'];return [r.held===1&&big(r)==='c',ev(r)];}},
+  {id:'diets-ns',cap:'  control: with only the founder\'s stock no mutant diet spreads',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:150,env:{...env,PAF:'C@-|z|:150'},
+    pass:(L,o)=>{const r=res(o);if(!r)return [false,'no result'];return [r.held===1&&big(r)==='c',ev(r)];}},
+  ];})(),
   // run 20261006-0621 (build): a world that keeps evolving. pair-mut's setting plus a labelled drive: every lysed triangle
   // returns as a copy blank once free (PAHB=2), so material held by binding variants flows through copying at the
   // hazard's rate. Passes a world with bodies at 200k, at least 10k copies in the last 5000 steps and a variant type first

@@ -12,8 +12,9 @@ const chrome=()=>{const root='/opt/pw-browsers';if(!fs.existsSync(root))return n
   return fs.readdirSync(root).filter(d=>d.startsWith('chromium')).map(d=>`${root}/${d}/chrome-linux/chrome`).find(fs.existsSync)||null;};
 function svgToPng(svgFile,out,w,h){const c=chrome();if(!c){console.warn('no chromium: kept',svgFile);return;}
   execFileSync(c,['--headless','--no-sandbox','--disable-gpu','--hide-scrollbars',`--screenshot=${path.resolve(out)}`,`--window-size=${w},${h}`,'file://'+path.resolve(svgFile)],{stdio:'ignore'});fs.unlinkSync(svgFile);}
-// focus = {units, radius, align?: {u, a0}} zooms on those units (align turns the picture so unit u keeps angle a0)
-function render(s,out,title,focus=null,labels=false){
+// focus = {units, radius, align?: {u, a0}} zooms on those units (align turns the picture so unit u keeps angle a0);
+// fillOf(u), optional: a triangle's fill colour instead of its role's (undefined: the role's)
+function render(s,out,title,focus=null,labels=false,fillOf=null){
   const W=s.p.W,S=560;let k=S/W,fx=0,fy=0;const keep=new Set();
   if(focus){const u0=focus.units[0];let sx=0,sy=0;for(const u of focus.units){sx+=s._dx(s.px[u]-s.px[u0]);sy+=s._dy(s.py[u]-s.py[u0]);}
     fx=s.px[u0]+sx/focus.units.length;fy=s.py[u0]+sy/focus.units.length;
@@ -23,7 +24,7 @@ function render(s,out,title,focus=null,labels=false){
   for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s.roles(u);
     const P=q=>{if(!focus)return [(s._wx(s.px[u])+s.ox[u*3+q])*k,(W-s._wy(s.py[u])-s.oy[u*3+q])*k];
       const x=s._dx(s.px[u]-fx)+s.ox[u*3+q],y=s._dy(s.py[u]-fy)+s.oy[u*3+q];return [(focus.radius+cs*x-sn*y)*k,(focus.radius-(sn*x+cs*y))*k];};
-    const fill=r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':r.role===SBACK?(r.fill?'#3f9e8f':'#c98f2e'):r.role===GROWN?'#8a9bb0':'#3a4852';
+    const fill=(fillOf&&fillOf(u))||(r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':r.role===SBACK?(r.fill?'#3f9e8f':'#c98f2e'):r.role===GROWN?'#8a9bb0':'#3a4852');
     svg.push(`<polygon points="${[0,1,2].map(q=>P(q).map(z=>z.toFixed(1)).join(',')).join(' ')}" fill="${fill}" stroke="#1b2a33" stroke-width="0.8"/>`);
     const c=[[0,1,2].reduce((a,q)=>a+P(q)[0],0)/3,[0,1,2].reduce((a,q)=>a+P(q)[1],0)/3];
     for(let i=0;i<3;i++){const g=s.glue[u*3+i];if(!g)continue;const a=P(i),b=P((i+1)%3),sh=0.22;

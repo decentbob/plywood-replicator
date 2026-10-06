@@ -55,6 +55,26 @@ run 1322), no rule change.
 - **For complex evolution:** keep the free-part pool lean (fast turnover), and measure s before a selection test. A
   kind whose cooperative parts must stay together needs s above 1 - 1/k for every cheat's k it is to resist.
 
+## Diets evolve by one letter; the resident guards the seed sites (explore run 20261006-1750, 2026-10-06)
+
+Measured with a 2-cell kind `Z@&c@|- C@-|z|` among stocks C, E, G and a mutagen on front glues (INNOVATIONS run 1750).
+- **A diet is one heritable letter.** The front glue decides which stock a kind eats, and copies carry it exactly, so a
+  mutagen on fronts alone makes diets evolve: no core change, no new mark. From one founder, three diets live side by
+  side in 4 of 4 worlds, each holding about as many individuals as its stock has parts (Tilman: k resources, k kinds).
+- **The barrier is the seed sites, not the food.** A stock-limited kind keeps a starving bud on nearly every seed site,
+  so a mutant that could eat an unused stock rarely finds a site, and its own site is usually taken by the resident's
+  copies, which outnumber its own a hundredfold. Most such mutants are lost (roughly 1 in 130-280 takes hold, after
+  15k-35k steps); one that takes hold fills its stock within 5-10k steps. Shared growth sites make a priority effect
+  (as run 1620's bistability): the resident holds the ground until a mutant's local luck carries it past it.
+- **Eating other kinds' parts is one mutation away.** Every root carries an attach side `Z@`; a front `z@|` catches it,
+  so a mutant root takes another kind's free root as its second cell (which then catches its own stock): a 3-cell kind
+  made from the copy cloud of others, and z-z chains. Any glue that every kind exposes is a resource a mutant front can
+  claim: here is a route to longer bodies and to kinds that live on kinds, both from one letter. It persists in a
+  minority (8-15 of 400 individuals to 120k); what limits it is open.
+- **Blanks become the shared bottleneck.** Each new diet adds individuals that copy from the same blanks (free blanks
+  510 with one diet, 40-120 with three); with more diets than blanks support, diets would compete for blanks again and
+  the kind that wastes fewest copies would win (IDEAS "One supply, one winner"), unless diets also differ in that.
+
 ## A resource of one's own is bound by glue, not copied (build run 20261006-1620, 2026-10-06)
 
 Measured with the pair and a 3-cell strip whose extra cells come from a stock of parts (INNOVATIONS run 1620).

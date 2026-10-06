@@ -10,6 +10,56 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-1750, explore)
+
+- **Heritable diets: from one founder, mutant fronts that catch an unused stock arise, spread and live beside the
+  founder's diet; three diets side by side, each near its own stock** — works (4 of 4 worlds with each mutagen
+  alphabet; controls 4 of 4; no rule change). NEXT priority 9 (IDEAS "A resource of one's own", designed in run 1620).
+  - **The kind:** `Z@&c@|- C@-|z|`, the stock strip of run 1620 cut to two cells: a root (copied from blanks at its one
+    source `-`) whose front `c@|` catches a stock part `C@-|z|` (closed side `-|`: never copied) that carries the seed
+    site `z|`. One copy and one stock part per birth. Its diet is its front glue, carried by the root and copied with it.
+  - **The world:** run 1620's duo world (1000 blanks, world 50, `PAHB=2`, decay 1, h 0.1 per individual, openRange 3),
+    one founder of diet c (`PA1=0`), stocks `C@-|z|`, `E@-|z|`, `G@-|z|` of 150 each (`PAF`). New in demo `pair`, off by
+    default (default, `pair-flow` and `duo-stock` output byte for byte as main): `PAMF=1` limits the mutagen `PAM` to
+    fronts (a glued side marked `@|` of a free part that is not a stock type: its glue becomes another letter of `PAMA`,
+    a..z by default); `diet:` census lines (per front letter: complete individuals, waiting roots, free roots; free stock)
+    and a `diets:` result line; a diets picture (`render` gains an optional fill per triangle).
+  - **One diet fills its stock and clogs every seed site.** Alone, diet c holds 120-140 complete individuals (stock
+    150; 5-25 C free) and nearly as many waiting buds (113-134): almost every adult's seed site holds a c root starving for C,
+    while about 500 blanks stay free. So the kind is stock-limited, and a new root finds hardly a free seed site.
+  - **Mutagen c..h (`PAM=0.01`): 4 of 4 worlds reach three diets.** Diets e and g are first held (10 or more
+    individuals) at 15k-35k steps, then grow to the size of their stock within 5-10k steps: second-half means c 134-138,
+    e 123-136, g 107-137 (check `diets`). Mutants of the three letters without a stock appear as waiting buds (up to 17 at a time) and
+    never complete. Before a diet takes hold, roughly 130-280 mutants with a stocked letter arise and are lost (about 22
+    mutations per 1000 steps, 2 in 5 to e or g): a mutant must bind a seed site among c's clogging buds, catch its stock,
+    and win its own seed site against c's copies, which outnumber its own a hundredfold.
+  - **Mutagen a..z (`PAM=0.02`): 4 of 4 reach three or more diets** (c and g in all four,
+    second-half means g 119-137; e in three, one only after 50k; z, below, in two).
+  - **Unplanned: a kind that is built from other kinds' copies.** A root mutated to front `z@|` catches another kind's
+    free root by its `Z@` side, whose own front then catches its stock: a 3-cell individual `Z@&z@|- + Z@&e@|- + E@-|z|`
+    (also z-z chains). Its middle cell is taken from the copy cloud of the other diets; its copies of both roots feed
+    them back. It arose in 2 of 4 a..z worlds (at 15k and 50k), peaked at 60 individuals and persists at 8-15 to 120k in
+    the long world. Nobody designed it: a longer kind arising by one mutation, an eater of other kinds' parts.
+  - **Each diet follows its stock.** Stocks C 150, E 250, G 75 (2 worlds): c 133-135, e 236-239, g 26-42 (g established
+    late, 20k-35k, into a world whose blanks had fallen to about 40, and still growing at 60k).
+  - **Controls (4 of 4 each):** no mutagen (`PAM=0`): diet c alone (129-133); only the founder's stock (`PAF='C@-|z|:150'`,
+    mutagen on): mutants appear, none spreads (c 136-137).
+  - **Material:** with three diets the free blanks fall from about 510 to 40-120: the kinds begin to share the blanks,
+    the one resource they all need. More stocks than the blanks can support would make diets compete again (untested).
+  - **Pictures:** [diets-world.png](pictures/diets-world.png) (world 3 at 40k: roots and stock parts filled by diet, c
+    yellow, e orange, g cyan; dim: free; bodies of mixed diet are a parent carrying a bud of another diet);
+    [diets-chart.png](pictures/diets-chart.png) (complete individuals per diet, every setting above; drawn from the
+    `diet:` lines by an ad hoc script, not kept).
+  - **Commands** (common: `PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA1=0 PA2='Z@&c@|- C@-|z|'
+    PAMF=1 PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150' PAM=0.01 PAMA=cdefgh node tri/demos.js pair SEED 60000 runs`, about 5
+    minutes): `PAM=0.02` without `PAMA` the a..z mutagen (`120000` steps: the long world, seed 2); `PAM=0` no mutagen;
+    `PAF='C@-|z|:150'` only the founder's stock; `PAF='C@-|z|:150 E@-|z|:250 G@-|z|:75'` unequal stocks. Checks
+    `diets`, `diets-c`, `diets-ns`: 4 of 4 each (360 s for the three): `diets` three diets held at once in every world,
+    first held at 15k-35k; `diets-c` c 128-133 alone; `diets-ns` c 135-138 alone.
+  - **Status:** works: diet is heritable and evolves without a core change, and kinds with different diets live side by
+    side (Tilman: three resources, three kinds). Not yet: diets that differ in more than a letter (body length, a chain
+    of stocks), the z kind's dynamics, a world with more diets than its blanks support.
+
 ## 2026-10-06 (autorun run 20261006-1620, build)
 
 - **A second resource pays for length: a 3-cell strip whose extra cells come from a stock the pair cannot bind coexists
