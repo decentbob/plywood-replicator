@@ -107,7 +107,7 @@ function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'d
   p.stdout.on('data',d=>out+=d);p.stderr.on('data',d=>err+=d);
   p.on('close',code=>{const lines=out.split('\n').filter(l=>l.startsWith('t='));const L=lines[lines.length-1]||'';
     let ok=false,ev='';if(code!==0)ev='crashed: '+(err.trim().split('\n').find(l=>/Error/.test(l))||'exit '+code);else[ok,ev]=c.pass(L,out);
-    if(process.env.CHECK_SAVE)require('fs').writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);   // whole output, to compare runs
+    if(process.env.CHECK_SAVE){require('fs').mkdirSync(process.env.CHECK_SAVE,{recursive:true});require('fs').writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);}   // whole output, to compare runs
     res({ok,ev,secs:(Date.now()-t0)/1000});});});}
 
 async function main(){const want=process.argv.slice(2),sel=CHECKS.filter(c=>!want.length||want.includes(c.id));

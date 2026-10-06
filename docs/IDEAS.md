@@ -18,6 +18,35 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Deaths that return blanks keep material flowing; selection of part types can still kill the world (build run 20261006-0621, 2026-10-06)
+
+Measured on the mutagen pair world (m 0.01, hazard per triangle h 0.6, decay d 1; INNOVATIONS run 0621).
+- **Flow by construction.** If every lysed triangle comes back as a copy blank (labelled drive `PAHB=2`), each
+  triangle held in a body dies at the hazard's rate whatever binds it, and by conservation copying must replace it:
+  in a steady state copies per step equal deaths per step, about held material x h/200. Binding variants can no
+  longer stop the flow, only lower the free blanks. Measured: copies 16-28k per 5000 steps through 300k where the same
+  seeds without the drive fall to 0.4-4k.
+- **Few blanks is competition, not a lock.** With the drive, the types that win are the ones that keep the free
+  blanks lowest (they copy fastest from few blanks), as the consumer that draws a resource lowest wins in ecology
+  (Tilman's R*). Blanks 34-150 with copying at full rate is a busy world, not a stuck one. Copies per 5000 steps, not
+  free blanks, is the measure of flow.
+- **Selfish parts.** Heredity is by part type in a mixed pool, so selection favours a type that is copied more even
+  when it harms the bodies it is in. The clearest case: S whose seed site carries a lysis mark (`-y!B@`, `B@p!y`,
+  `-!y!B@`): an R that binds it is lysed (and, under the drive, becomes a blank; the relay stops at R's `&` side), so
+  the seed site is free again and S is copied there more, while no bud ever grows on it. In a world of 1000 blanks
+  (100-250 bodies) such sweeps ended 1 of 4 worlds by 260k (and 2 of 4 with `PAHB=1`, where variants copied less
+  swept first): evolutionary suicide. In a 3x world (3000 blanks, 200-1000 bodies) 4 of 4 lived to 300k: the selfish
+  S swept there too, and R answered by evolving its own seed site (`Y@&b@|y@`: R buds R, S still binds the front).
+- **What evolves when material flows:** a succession of kinds, still sweeping at 235-275k of 300k: one-type
+  replicators (`Y@&b@y`, `O@&b@o`: a part that binds its own kind's seed site, buds it and lets go, in chains of 2-6),
+  chains of mutually binding types (`L@V@v@&`, `V@i@v@&`), R-chains carrying S. The pair simplifies more often than it
+  grows: with selection on part types, the type that is copied most wins, and a type that is its own template wins
+  by not needing the other.
+- **What this asks for next:** heredity of combinations (a body's parts from its own copies) so that selection sees
+  bodies and selfish parts cost their carriers, and larger populations (or many patches) against drift and suicide.
+  The drive stays labelled; a core rule that returns lysed material as blanks would make it the physics (a candidate,
+  not needed yet).
+
 ## Variation on the pair: exposure is fitness, and binding beats copying (explore run 20261006-0450, 2026-10-06)
 
 Measured on the running pair world (h 0.6, d 1, 1000 blanks, world 50) with no rule change (INNOVATIONS run 0450).
