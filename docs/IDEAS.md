@@ -18,6 +18,43 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Heredity of combinations is locality: a parasite needs (1 - s) k > 1 (explore run 20261006-1322, 2026-10-06)
+
+Measured on the flowing pair world without the mutagen (1000 blanks, world 50, `PAHB=2`, hazard per triangle; INNOVATIONS
+run 1322), no rule change.
+- **Heredity is half parental, not by body.** A newborn's R was copied from its own parent 39% of the time, its S 44%,
+  both 20%, its two parts from one body (any) 22-23% (a random living body: 0.9%; h 0.6, decay every 100 steps). Two
+  neutral markers put into the same half of the bodies (x on R, z on S) lose their linkage within 5000 steps (about 35
+  generations: r from 1 to between -0.15 and 0.32): a newborn keeps its parent's combination about one time in five.
+- **What sets the parental share is how many free parts compete for a site.** The parent's own copy is made 1.2 side
+  lengths from where its bud needs it; it wins when the pool is lean: faster decay (every 10 steps: S 0.58 at h 0.3)
+  and more births per copy (h 0.6: 0.43; h 0.3 with decay every 100 steps: 0.25, the pool is larger). Stirring the free
+  parts (a labelled drive) takes it to 0.22, or 0.03. Fast decay costs material: at h 0.6 it kills the world (Allee). The
+  levers move the share between about 0.2 and 0.6, not to 1.
+- **The parasite threshold.** A part type copied k times as often as its rival, whose own body never buds, can fill only
+  the births the parents' own copies do not take, a share 1 - s; it spreads only if (1 - s) k > 1, to about
+  ((1 - s) k - 1) / (k - 1) of the bodies. Tested with S `B@-q` (its seed site a glue nothing binds, no anchor: copied
+  at two sides, k about 2, threshold s = 0.5): s 0.58 and 0.43, gone within 2000-4000 steps (4 of 4 each); s 0.25, holds
+  0.42-0.52 of the bodies to 80k (model 0.5; 4 of 4); the excluding world stirred to s 0.22, spreads to 0.51-0.53 within
+  2000 steps, the hosts crash to 32-44 bodies, the parasite dies with them and the pair recovers (2 of 2); stirred at
+  h 0.6, it spreads and the world dies (1 world). So locality alone lets selection see bodies against a cheat that does
+  not make its own body bud, once s > 1 - 1/k. A cheat with a larger k, or one that costs its body only part of its
+  births, needs a higher s.
+- **Run 0621's selfish S is lethal here, not selfish.** `B@-y!` put into 1 in 10 S is gone within 2000 steps (4 of 4):
+  its seed site is mostly covered by R being lysed, so it is copied less than plain S. Its sweeps in run 0621 came in
+  worlds that had already evolved other R types. "Selection sees part types, not bodies" (above) holds only below the
+  threshold.
+- **Why the pair cannot get much higher (parity).** A copy is made in the site beside its template's side and lets go;
+  the sites within capture (0.6) of it are that site and its three neighbours (0.58 away). Sites and cells form a
+  honeycomb, which has no cycle shorter than six, so a site beside a different cell of the same body is within reach of
+  a fresh copy only when that cell is three bonds from the template (four cells in an arc round one vertex). In a pair a
+  copy can bind at once only beside its own template, and only if its type binds its own kind: a one-type chain. That is
+  a reason one-type chains win in the mutagen world (run 0621): they are the only pair-sized kind whose parts are made
+  where they bind, with heredity by construction. A kind with parts made beside the cell they join needs four or more
+  cells in an arc (designed, not built), or a compartment.
+- **For complex evolution:** keep the free-part pool lean (fast turnover), and measure s before a selection test. A
+  kind whose cooperative parts must stay together needs s above 1 - 1/k for every cheat's k it is to resist.
+
 ## One supply, one winner: the kind that wastes fewest copies (build run 20261006-1150, 2026-10-06)
 
 Measured with the pair and a 3-cell strip of the same design in the flowing world (INNOVATIONS run 1150).

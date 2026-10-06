@@ -416,10 +416,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // were copied from one body (any); PAV=link puts two markers into a share PAVP (0.5) of the living bodies at PAVT, x on
     // R's plain side and z on S's, and prints 'link:' lines (their linkage r); PAVK=selfish with PAV=mix: S's seed site y
     // in a share PAVP of S loses its anchor mark and takes a lysis mark (S 'B@-y!': copied while free, lyses the R that
-    // binds it; the variant that swept in run 0621); PAVK=parasite: that seed site becomes q, no anchor (S 'B@-q': copied at
+    // binds it; the variant that swept in run 0621); PAMX=m: stirring, a labelled drive (each step each free part changes
+    // places with a random free triangle with probability m); PAVK=parasite: that seed site becomes q, no anchor (S 'B@-q': copied at
     // two sides, nothing binds q, so its body never buds); PADI=k: PAD's decay every k steps instead of 100
     pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
-      const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
+      const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
       const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
       const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
@@ -509,6 +510,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // PAM=m (labelled drive, a mutagen): one side of a free part changed now and then (at mid-interval: PAD 1 would
         // turn a part mutated at the decay's step back into a blank at once)
         if(MU&&t%100===50)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||s.rng()>=MU)continue;mutate(u);ev.mutated++;}
+        // PAMX=m (labelled drive, stirring): every step each free part, with probability m, changes places with a free
+        // triangle drawn at random (blank or part; each takes the other's exact place, so nothing overlaps): copies no
+        // longer stay near where they were made
+        if(MX)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||s.rng()>=MX)continue;
+          for(let a=0;a<20;a++){const w=Math.floor(s.rng()*s.n);if(w===u||s.bonded(w)||s.ly[w])continue;for(const k of ['px','py','pa']){const x=s[k][u];s[k][u]=s[k][w];s[k][w]=x;}for(const v of [u,w]){s.resetShape(v);s._regrid(v);}break;}}
         if(T1&&t===T1)for(let q=0;q<EN;q++){const U=enter(K.tris,t);if(U)alive.set(U[0],{id:0,g:0,t});}
         if(T2&&t===T2&&K2)for(let q=0;q<EN;q++)enter(K2.tris,t);
         scan(t);

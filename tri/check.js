@@ -98,6 +98,22 @@ const CHECKS=[
   {id:'pair-flow-c',cap:'  control: without the drive binding variants lock the material (under 10k copies per 5000 steps at 200k)',demo:'pair',seeds:[3,4],steps:200000,secs:200,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000'},
     pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
       return [+m[5]<10000,`${m[5]} copies in the last 5000 steps, blanks ${m[6]}, ${m[1]} bodies`];}},
+  // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
+  // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
+  // from its own parent with share s (PAPS); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
+  // near ((1 - s) k - 1) / (k - 1). Free parts decaying every 10 steps at hazard 0.3: s about 0.58, the parasite dies out;
+  // every 100 steps: s about 0.25, it holds near half the bodies; the first world stirred (PAMX, labelled): s about 0.22,
+  // it spreads and the hosts crash
+  ...(()=>{const env={PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.3',PAD:'1',PAHU:'1',PAHB:'2',PAP:'2000',PAV:'mix',PAVP:'0.1',PAVK:'parasite',PAVT:'20000'},
+    res=o=>o.match(/parental: births=\d+ R=(\S+) S=(\S+) .*alive=(\d+) .*copiesParasite=(\d+)(?: parasite ([0-9.]+))?/),
+    peak=o=>Math.max(0,...[...o.matchAll(/^par: t=(\d+) .* parasite ([0-9.]+)/gm)].filter(m=>+m[1]>20000).map(m=>+m[2]));return [
+  {id:'pair-host',cap:'Selection sees bodies when parts are made near their use: a parasite S that never buds dies out where a newborn\'s S comes from its parent more than half the time',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:150,env:{...env,PADI:'10'},
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];return [+m[2]>=0.5&&+m[3]>0&&+(m[5]||0)===0,`S from parent ${m[2]}, ${m[3]} bodies, parasite ${m[5]||0} at 40k (peak ${peak(o)})`];}},
+  {id:'pair-host-c',cap:'  control: at a lower parental share (slower decay) the parasite holds a large share',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:150,env,
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];return [+m[2]<0.5&&+(m[5]||0)>=0.2,`S from parent ${m[2]}, ${m[3]} bodies, parasite ${m[5]||0} at 40k`];}},
+  {id:'pair-host-mx',cap:'  control: the first world stirred (labelled drive) loses its locality and the parasite spreads',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:120,env:{...env,PADI:'10',PAMX:'0.2'},
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];const p=peak(o);return [+m[2]<0.5&&p>=0.3,`S from parent ${m[2]}, parasite peak ${p}, ${m[3]} bodies at 30k`];}},
+  ];})(),
   // run 20261004-2051 (explore): the lysis side '!' (RULES Core changes). A parent with a complete bud stuck on its seed
   // site (no food), 4 cutters 'z@!-|-|' (labelled), the anchor on cell 44 (openRange 50): the stuck bud comes apart into
   // its 47 parts and a later bud on the seed site is built from at least 40 of them
