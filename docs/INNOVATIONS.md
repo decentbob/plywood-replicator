@@ -6,7 +6,8 @@ made with the pre-port engine (experiments/, history before commit `cac79c9`, sa
 reproduces each demo with the current engine (`tri/`), except demos marked removed (their code is in git). Demo options cited
 below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `BUDNOP`, `BUDDBGA`, `BUDNOCA`,
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup); `budcycle`'s `BCHOLD`, `BCSEED`, `BCK`, `BCLK`
-at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
+at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`,
+`BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
 ## 2026-10-06 (autorun run 20261006-0621, build)
