@@ -17,6 +17,12 @@ hears its child's front across the `&` joint). Candidate under test: the open si
 already does) and a caught part with an open front emits from the pass it binds (candidate (o)); oracles `openJoint`,
 `openCatch` in `tri/sim.js`. Check: suite with `CHECK_SAVE` against main, every changed outcome explained. Stop when the
 case is decided (adopted or recorded as not needed).
+State (19:47 UTC): the rule is in `tri/sim.js` on branch `claude/core-review-1920` (tests 41 pass, new test `strip`);
+demo `strip` (extra: lengths, `PAR` range) measures it. Strip grid (oracles, 2 seeds, 6000 steps): with both parts,
+openRange 3-120 buds 2-5 cells with no incomplete release (5 cells need 4 or more); each part alone does not. Running:
+the baseline suite on `main` (`CHECK_SAVE=$PWD/runs/a node tri/check.js` in a worktree of `e63366e`); next the suite on
+the branch (`CHECK_SAVE=$PWD/runs/b`), `diff -r`, then the pair-family checks at one range
+(`TRI_PARAMS='{"openRange":120}' node tri/check.js pair ... duo ... diets ...`).
 
 **Handoff status (autorun run 20261006-1851, review-intent).** Direction check after priority 9; no code change
 (`node tri/test.js` 40 pass; `tri/check.js` not rerun, run 1750's suite stands). Reasoning in IDEAS, "After nine slices

@@ -122,9 +122,9 @@ place (all or nothing; never by size).
 | roles | own bonds and bond kinds, own fill | own | local |
 | nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
 | zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
-| open signal | own sides; partners' values | previous pass | local (relay) |
+| open signal | own sides; partners' values; the two sides' `&` marks of each bond (run 1920) | previous pass; fixed type | local (relay) |
 | copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
-| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags |
+| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags (a fill's fill flag; a caught part's open signal, run 1920) |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
 | glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
 | release | own face bond; chain partners' fn; template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
@@ -213,8 +213,12 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
 
 ## Open signal and completion release
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` that has a glue (an open growth
-  front; an inert `@` side emits nothing) emits `openRange` (120), relayed -1 per bond (through every bond). An `&`
-  side (a spent attachment) emits nothing. A free triangle hears nothing (-1: not yet heard).
+  front; an inert `@` side emits nothing) emits `openRange` (120), relayed -1 per bond, across every bond but a
+  **joint**: a bond on which either side carries `&` (a bud and its parent; lysis stops there too). So a body between
+  joints hears only its own fronts (since 2026-10-06, run 1920: until then it crossed every bond, and a parent heard its
+  growing bud; Core changes). An `&` side (a spent attachment) emits nothing. A free triangle hears nothing (-1: not
+  yet heard). A triangle caught by glue that has an open front emits from the pass it binds (since run 1920: it emitted
+  from the next pass, and the cells behind it heard a pass of silence).
 - **Completion release `&`:** a triangle that hears no open signal is complete; its `&` sides let go then and are
   spent (they never bind again: a bud's seed side: a daughter ring lets go of its parent once it has closed; a pore's
   panel lets go of the wall and the gap cannot be refilled). An `&` side catches free triangles but never closes onto
