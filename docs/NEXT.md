@@ -16,15 +16,15 @@ them. The 47-type organism lineage is frozen; it returns as the complex end once
    duo world with stocks C, E, G of 150 each. New in demo `pair` (off by default; default, `pair-flow` and `duo-stock`
    output byte for byte as main): `PAMF=1` limits the mutagen to front glues (letters `PAMA`), `diet:` lines, a
    `diets:` result line, a diets picture (`render` gains an optional fill per triangle).
-2. From one founder of diet c: mutants e and g take hold at 15k-30k steps and fill their stocks within 5-10k; three
+2. From one founder of diet c: mutants e and g take hold at 15k-35k steps and fill their stocks within 5-10k; three
    diets side by side, each near its stock (4 of 4 with letters c..h; 4 of 4 reach three or more with a..z). Controls
    4 of 4: no mutagen, or only stock C: one diet. Unequal stocks (150, 250, 75): diets follow them (2 worlds).
-3. Why the wait: diet c alone keeps a starving bud on nearly every seed site (120-140 individuals, as many waiting), so
+3. Why the wait: diet c alone keeps a starving bud on nearly every seed site (120-140 individuals, nearly as many waiting buds), so
    a mutant rarely finds a site and loses its own to c's copies; about 1 in 130-280 mutants with a stocked letter takes
    hold.
 4. Unplanned: a front `z@|` catches other kinds' roots by their `Z@` side: a 3-cell kind built from the others' copies
    (2 of 4 a..z worlds; 8-15 individuals to 120k). A longer kind by one mutation.
-5. Checks `diets`, `diets-c`, `diets-ns`: CHECKRESULTS. Chart `docs/pictures/diets-chart.png` drawn from the `diet:`
+5. Checks `diets`, `diets-c`, `diets-ns`: 3 of 3 pass, 4 of 4 worlds each (360 s). Chart `docs/pictures/diets-chart.png` drawn from the `diet:`
    lines by an ad hoc script (not kept); its worlds are the INNOVATIONS commands.
 Nothing is running after the merge.
 

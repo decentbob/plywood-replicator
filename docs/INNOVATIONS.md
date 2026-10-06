@@ -28,13 +28,13 @@ not statistics.
     150; 5-25 C free) and nearly as many waiting buds (113-134): almost every adult's seed site holds a c root starving for C,
     while about 500 blanks stay free. So the kind is stock-limited, and a new root finds hardly a free seed site.
   - **Mutagen c..h (`PAM=0.01`): 4 of 4 worlds reach three diets.** Diets e and g are first held (10 or more
-    individuals) at 15k-30k steps, then grow to the size of their stock within 5-10k steps: second-half means c 134-140,
-    e 123-133, g 134-137. Mutants of the three letters without a stock appear as waiting buds (up to 17 at a time) and
+    individuals) at 15k-35k steps, then grow to the size of their stock within 5-10k steps: second-half means c 134-138,
+    e 123-136, g 107-137 (check `diets`). Mutants of the three letters without a stock appear as waiting buds (up to 17 at a time) and
     never complete. Before a diet takes hold, roughly 130-280 mutants with a stocked letter arise and are lost (about 22
     mutations per 1000 steps, 2 in 5 to e or g): a mutant must bind a seed site among c's clogging buds, catch its stock,
     and win its own seed site against c's copies, which outnumber its own a hundredfold.
   - **Mutagen a..z (`PAM=0.02`): 4 of 4 reach three or more diets** (c and g in all four,
-    second-half means g 110-133; e in three, one only after 50k; z, below, in two).
+    second-half means g 119-137; e in three, one only after 50k; z, below, in two).
   - **Unplanned: a kind that is built from other kinds' copies.** A root mutated to front `z@|` catches another kind's
     free root by its `Z@` side, whose own front then catches its stock: a 3-cell individual `Z@&z@|- + Z@&e@|- + E@-|z|`
     (also z-z chains). Its middle cell is taken from the copy cloud of the other diets; its copies of both roots feed
@@ -54,7 +54,8 @@ not statistics.
     PAMF=1 PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150' PAM=0.01 PAMA=cdefgh node tri/demos.js pair SEED 60000 runs`, about 5
     minutes): `PAM=0.02` without `PAMA` the a..z mutagen (`120000` steps: the long world, seed 2); `PAM=0` no mutagen;
     `PAF='C@-|z|:150'` only the founder's stock; `PAF='C@-|z|:150 E@-|z|:250 G@-|z|:75'` unequal stocks. Checks
-    `diets`, `diets-c`, `diets-ns`: CHECKRESULTS.
+    `diets`, `diets-c`, `diets-ns`: 4 of 4 each (360 s for the three): `diets` three diets held at once in every world,
+    first held at 15k-35k; `diets-c` c 128-133 alone; `diets-ns` c 135-138 alone.
   - **Status:** works: diet is heritable and evolves without a core change, and kinds with different diets live side by
     side (Tilman: three resources, three kinds). Not yet: diets that differ in more than a letter (body length, a chain
     of stocks), the z kind's dynamics, a world with more diets than its blanks support.

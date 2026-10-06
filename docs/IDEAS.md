@@ -64,7 +64,7 @@ Measured with a 2-cell kind `Z@&c@|- C@-|z|` among stocks C, E, G and a mutagen 
 - **The barrier is the seed sites, not the food.** A stock-limited kind keeps a starving bud on nearly every seed site,
   so a mutant that could eat an unused stock rarely finds a site, and its own site is usually taken by the resident's
   copies, which outnumber its own a hundredfold. Most such mutants are lost (roughly 1 in 130-280 takes hold, after
-  15k-30k steps); one that takes hold fills its stock within 5-10k steps. Shared growth sites make a priority effect
+  15k-35k steps); one that takes hold fills its stock within 5-10k steps. Shared growth sites make a priority effect
   (as run 1620's bistability): the resident holds the ground until a mutant's local luck carries it past it.
 - **Eating other kinds' parts is one mutation away.** Every root carries an attach side `Z@`; a front `z@|` catches it,
   so a mutant root takes another kind's free root as its second cell (which then catches its own stock): a 3-cell kind
