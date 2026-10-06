@@ -258,7 +258,7 @@ NEXT priority 5 (Direction 2, heritable variation). The case, written before any
 5. **What the drive showed for the core** (INNOVATIONS run 0450, IDEAS "Variation on the pair"): variants are inherited
    and selected with no rule change; the variants that win expose their part more (an anchor mark lost from a seed site
    or a front), or bind more (a glued `@` side that keeps a body joined, then parts that bind their own kind or each
-   other), and the latter lock the material in rosettes and networks, so copying falls 3-15x. Nothing in the rule set
+   other), and the latter lock the material in rosettes and networks, so copying falls 3-15x (3 of 4 worlds by 140k even with the hazard per triangle). Nothing in the rule set
    stops a part from carrying both `g@` and `G@`; such a part grows by binding its own kind (crystal growth), which is
    legitimate chemistry. Whether the core or the environment should limit it is open (NEXT).
 

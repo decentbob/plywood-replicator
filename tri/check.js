@@ -54,6 +54,22 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) .*gen=(\d+) .*copiesR=(\d+) copiesS=(\d+) .* alive=(\d+) deaths=(\d+) .*fresh=(\S+) lastBirth=(\d+)/);if(!m)return [false,'no result'];
       const q=+m[3]/Math.max(1,+m[4]),ok=+m[5]>=20&&+m[8]>=99000&&+m[2]>=100&&q<=1.5&&q>=1/1.5&&+m[7]>=0.5;
       return [ok,`${m[5]} alive, ${m[1]} born, ${m[6]} died, generation ${m[2]}, last birth ${m[8]}, copies R:S ${q.toFixed(2)}, fresh ${m[7]}`];}},
+  // run 20261006-0450 (explore): Direction 2, heritable variation on the pair world (pair-run's setting, no rule change).
+  // Selection: at step 20000, 1 in 10 S get a seed site without its anchor mark (copied while no bud sits on it: two
+  // sources instead of one); passes a world where at least 90% of the S in bodies carry it 40000 steps later (4 of 4
+  // fixed by 50k in run 0450; neutral expectation: fixation in 1 of 10 worlds, after about 100k steps). Control: a neutral
+  // marker (glue x on R's plain side) put into 1 in 10 R never fixes by then. Variation: a labelled mutagen (each free
+  // part, with probability 0.01 per 100 steps, one side's glue or mark changed) and the hazard per triangle: an exposure
+  // variant (seed site or front without its anchor) arises and is in more than half the S or R at a census (every 5000
+  // steps) by 100k steps (later the pair-like parts may be gone: binding variants take over, INNOVATIONS run 0450)
+  {id:'pair-sel',cap:'Selection on the pair: a seed site copied while free (S without its anchor mark), put into 1 in 10 S, spreads to 90% of S in 40k steps',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAV:'mix',PAVP:'0.1',PAVK:'seed',PAVT:'20000',PAP:'5000'},
+    pass:(L,o)=>{const m=o.match(/marker: .*openSeed=(\S+) openFront=(\S+)/);return [!!m&&+m[1]>=0.9,m?`open seed sites ${m[1]} of S in bodies at 60k (1 in 10 at 20k)`:'no result'];}},
+  {id:'pair-sel-c',cap:'  control: a neutral marker in 1 in 10 R does not fix in the same time',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAV:'mix',PAVP:'0.1',PAVT:'20000',PAP:'5000'},
+    pass:(L,o)=>{const m=o.match(/marker: lost=(\S+) fixed=(\S+)/),v=[...o.matchAll(/var: t=\d+ alive \d+ marked \d+ share (\S+)/g)].pop();return [!!m&&m[2]==='not',m?`marker ${m[1]!=='not'?'lost at '+m[1]:m[2]!=='not'?'fixed at '+m[2]:'share '+(v?v[1]:'-')+' at 60k'}`:'no result'];}},
+  {id:'pair-mut',cap:'Variation on the pair: under a labelled mutagen an exposure variant arises and spreads to most bodies (hazard per triangle)',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:300,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000'},
+    pass:(L,o)=>{const m=o.match(/result: openSeed=(\S+) openFront=(\S+) mutated=(\d+) copies=(\d+)/),c=[...o.matchAll(/mut: t=(\d+) .*openSeed (\S+) openFront (\S+)/g)];
+      const at=k=>{const x=c.find(q=>+q[k]>0.5);return x?x[1]:'not';},sd=at(2),fr=at(3);
+      return [!!m&&(sd!=='not'||fr!=='not'),m?`most S with open seed sites at ${sd}, most R with open fronts at ${fr}; at 100k ${m[1]}, ${m[2]} ('-': no pair-like part left), ${m[3]} parts mutated, ${m[4]} copies`:'no result'];}},
   // run 20261004-2051 (explore): the lysis side '!' (RULES Core changes). A parent with a complete bud stuck on its seed
   // site (no food), 4 cutters 'z@!-|-|' (labelled), the anchor on cell 44 (openRange 50): the stuck bud comes apart into
   // its 47 parts and a later bud on the seed site is built from at least 40 of them

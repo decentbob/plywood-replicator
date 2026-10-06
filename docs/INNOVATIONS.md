@@ -9,6 +9,53 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-0450, explore)
+
+- **Heritable variation and selection on the pair, with no rule change** — works (selection: 4 of 4 worlds for each of
+  two variants; variation under a labelled mutagen: 4 of 4 worlds). Direction 2 (user, 2026-10-05). Contact copying is
+  exact, so a variant part type, once in a body, is copied true; demo `pair` gained labelled starts and a drive to put
+  variants in, all off by default (default output byte for byte as before: seeds 1 and 2 against `main`). Copy error as
+  a core rule (candidate (r)) was not needed: the drive gives the same variants (RULES, Core changes).
+  - **Neutral marker** (glue x on R's plain side, nothing binds X; half the world's R marked at 100k, `PAV=half`): exactly
+    neutral (seed 1 with the other half marked gives the complementary share at every census: the marker draws no random
+    number, so the world is the same); fixed in 4 of 4 (one draw per world) at 145k, 150k, 200k, 315k, about what drift
+    gives with 280 bodies. Patches dissolve within 5000 steps: same-marker share among a body's 6 nearest bodies only
+    0.04-0.06 above random mixing. Heredity here is by part type in a well-mixed pool, not by lineage.
+  - **Selection** (no mutagen; at 20k, 1 in 10 of the S or R made a variant, `PAV=mix PAVP=0.1`): S whose seed site `y`
+    has lost its anchor mark (copied while no bud sits on it: two sources) went from 7-14% to 90-99% of S by 35k and
+    fixed by 50k in 4 of 4 worlds; R whose front `b@` lost it (copied while a bud waits) from 7-13% to 81-99% by 30k,
+    fixed by 40k in 4 of 4. Neutral expectation: fixation in about 1 world in 10; the control (a neutral marker in 1
+    in 10 R, check `pair-sel-c`) stood at 0.31, 0.51, 0.51 or was lost 40k steps later: drift is strong, selection faster. After the
+    seed-site sweep S is copied more than R (8.0k against 6.2k per 5000 steps) but bodies do not increase (265 and 218
+    at 200k against 288 and 228 before): selection of a part type in its pool, not of bodies.
+  - **Variation** (mutagen `PAM`=m, labelled: every 100 steps each free part, with probability m, gets one side drawn at
+    random changed: its glue, inert or a..z, A..Z, or one mark of `.@&|?!` toggled): at m 0.001 and 0.01 the same two
+    exposure variants arose and swept unprompted: at least one of them in more than half the S or R by 20-60k in 6 of 8
+    worlds (m 0.01 seeds 1-4 with the hazard per triangle, the check `pair-mut`; m 0.01 and 0.001 seed 1 with the
+    per-body hazard); m 0.001 seed 2: the front only at about 210k (its seed-site variants were outer-glue markers that
+    drifted); m 0.03 seed 2: binding variants first. Then the variants that bind more win: a glued `@` side that never closes keeps a body joined (its `&`
+    never lets go), then parts that bind their own kind (`g@` and `G@` on one part: `F@f@&J@` closes rings of six,
+    rosettes) or each other (R `X@...`, S `...x@`). They capture free parts before decay returns them, blanks fall from
+    about 150 to 2-20 and copying 3-15x: a material lock. With the per-body hazard (a hit takes one part between `&`
+    joints, so a joined body's parts die about k times less often) in 4 of 4 worlds by 75-140k (m 0.01, 0.03, and two
+    worlds of an intermediate hazard); with the hazard per triangle (`PAHU=1`) at m 0.01 in 3 of 4 worlds (seed 1 at
+    140k by mutual binding; seeds 3 and 4 by 80k), one a pair to 300k (seed 2: only the exposure sweeps and drifting
+    markers). So the per-body hazard speeds the lock, but the lock comes without it. Some of what takes over are new
+    kinds, not only clumps: in seed 4 R became `N@&|b@n`, whose outer side `n` is a seed site for its own kind (R buds
+    R, S still binds the front), and by 100k two R-derived types `N@&|Q@d` and `N@&|q@P` bind each other with no S left;
+    blanks about 30 and copying a third of the pair world's in both.
+  - **Pictures:** [pair-mutagen-rosettes.png](pictures/pair-mutagen-rosettes.png) (m 0.03, seed 2, 140k: the pair
+    extinct, rosettes of `F@f@&J@` hold almost all material); [pair-variation.png](pictures/pair-variation.png) (variant
+    shares over time: seed site, front, neutral marker; blanks under the mutagen with the two hazards).
+  - **Commands** (common: `PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair SEED STEPS runs`):
+    marker `PAV=half PAVT=100000` (600k); selection `PAV=mix PAVP=0.1 PAVK=seed` (or `front`) `PAVT=20000` (200k, about 7
+    minutes); mutagen `PAM=0.01` (`PAHU=1`: hazard per triangle; 300k). `var:` lines: marker share, clustering, open
+    seed sites and fronts; `mut:` lines: bodies by their types, variants. Checks `pair-sel` (60k steps), `pair-sel-c`
+    (the neutral marker at 1 in 10 does not fix), `pair-mut` (100k, `PAHU=1`, m 0.01: an exposure variant in most bodies).
+  - **Status:** works (heredity of part types, selection of exposure); not yet: heredity of combinations (a body's parts
+    come from its whole neighbourhood) and a world that keeps evolving once binding variants appear (material lock).
+    Next: IDEAS, "Variation on the pair"; NEXT.
+
 ## 2026-10-06 (autorun run 20261006-0251, build)
 
 - **A world that runs on: the pair turns over for 10^6 steps under a body hazard and decay of free parts** — works

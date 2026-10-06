@@ -18,6 +18,34 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Variation on the pair: exposure is fitness, and binding beats copying (explore run 20261006-0450, 2026-10-06)
+
+Measured on the running pair world (h 0.6, d 1, 1000 blanks, world 50) with no rule change (INNOVATIONS run 0450).
+- **Heredity is by part type, mixed fast.** A neutral marker (glue x on R's plain side) put into half the world drifts
+  to fixation or loss in 45k-215k steps (4 worlds), about what a well-mixed population of 280 bodies gives. Patches
+  dissolve within 5000 steps (same-marker share among a body's 6 nearest only 0.04-0.06 above random), so the 2.3 side
+  lengths from copy to birth do not make lineages: a bud's parts come from its whole neighbourhood, and bodies move.
+  Selection acts on each part type in its pool, not on bodies (as foreseen in "Sources in proportion to use").
+- **Exposure is fitness.** A part type's copies are made where its free sides are exposed, so a variant that exposes
+  itself more is copied more: S whose seed site lost its anchor mark (copied while no bud sits on it) went from 1 in
+  10 to all S in 15-30k steps in 4 of 4 worlds; R whose front lost it (copied while a bud waits) likewise (see the
+  INNOVATIONS entry). Under the mutagen they arose and swept unprompted (6 of 8 worlds by 60k). The pair as designed hid its
+  binding sites from copying ("expose a type on a side that nothing binds", run 2320) to keep sources in proportion to
+  use; evolution undoes that at once, because what counts for a type is its own copies, not the balance of the pool.
+- **Binding beats copying.** The next winners are variants that keep a body joined (a glued `@` side that never closes:
+  the part hears an open front forever, so its `&` never lets go) and then parts that bind their own kind (`g@` and
+  `G@` on one part: `F@f@&J@` closes rings of six, rosettes) or each other (R `X@...` with S `...x@`). They capture
+  free parts before decay can return them to blanks, so blanks fall from about 150 to 2-20 and copying falls 3-15x:
+  a material lock, and evolution nearly stops. A per-body hazard rewards this strongly (a hit takes one part between `&`
+  joints, so a joined body's parts die k times less often): 4 of 4 worlds. With the hazard per triangle the pair held
+  to 300k in 1 of 4 worlds at the same mutation rate; the others locked up by 80-140k. Some winners are new kinds,
+  not clumps: R that buds its own kind at its outer side (`N@&|b@n`), then two R-derived types binding each other with
+  no S left. Evolution happens; it runs toward holding material, and then slows (copying a third).
+- **What follows for the vehicle.** Complex evolution needs (a) heredity of combinations, not only of part types (a
+  body's parts should come mostly from its own copies: compartments, or copying that binds the copy to its template's
+  body), and (b) a reason why material held in bodies still flows: deaths that return blanks rather than parts, or
+  costs for holding. Without (a) only single-type improvements are selected; without (b) the first aggregator wins.
+
 ## A world that runs on: a death must give back raw material, not parts (build run 20261006-0251, 2026-10-06)
 
 Measured on the pair with two labelled drives, a body hazard h (lysis into the two parts) and decay d of free parts
