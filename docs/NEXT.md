@@ -8,7 +8,6 @@ at each run's merge: run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850'
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-
 **Handoff status (autorun run 20261006-0021, harden).** **The pair world is 1.8-2.1x faster, output unchanged**
 (priority 3 done): 1050 triangles (PAB=1000 PAS=50) run 5000 steps in 10.0 s instead of 17.9 (about 500 steps per
 second; growth phase 2.1x), the default `pair` 1.8x. All 44 check worlds byte for byte the same (`CHECK_SAVE` before
