@@ -52,7 +52,7 @@ not statistics.
     parental share and linkage `PAH=0.6 PAV=link PAVT=20000` (100k, about 4 minutes); parasite `PAV=mix PAVP=0.1
     PAVK=parasite PAVT=20000` with `PADI=10 PAH=0.3` (excluded), `PAH=0.3` (holds), `PADI=10 PAH=0.3 PAMX=0.2`
     (stirred); selfish `PAVK=selfish PAH=0.6`. Checks `pair-host` (s 0.57-0.58, parasite 0 at 40k), `pair-host-c` (s
-    0.24, parasite 0.43-0.56 at 40k), `pair-host-mx` (s 0.25 over the run, peak 0.48-0.53): 4 of 4 each, 300 s together.
+    0.24, parasite 0.43-0.56 at 40k), `pair-host-mx` (s 0.25 over the run, peak 0.48-0.53): 4 of 4 each, 300 s together; the full suite 26 of 26 (6404 s).
   - **Status:** works as a measurement and a test; not yet: heredity of combinations by construction (s near 1). What
     it changes: a selection test on the pair must report s; cooperative parts resist a cheat only while s > 1 - 1/k.
 

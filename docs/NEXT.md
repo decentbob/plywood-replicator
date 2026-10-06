@@ -25,7 +25,7 @@ and a test; no rule change. Results (INNOVATIONS run 1322, IDEAS "Heredity of co
 4. Analysis (parity): in a pair a fresh copy binds at once only beside its own template (so only one-type chains have
    parts made where they bind: why they win under the mutagen); parts made beside a different cell need four cells in
    an arc round a vertex. Designed, not built.
-5. Full suite run on the branch (`runs/check.txt`): see the merge commit; the subset with the new checks 3 of 3 in 300 s.
+5. Full suite on the branch: 26 of 26 pass in 6404 s (about 107 minutes; imprint and ring 3 of 4 as before).
 Nothing is running after the merge. Chart: `docs/pictures/parasite-share.png`, drawn from the `par:`
 lines of the worlds in INNOVATIONS' commands (an ad hoc script, not kept).
 
