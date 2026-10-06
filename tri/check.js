@@ -42,6 +42,12 @@ const CHECKS=[
   // (S 'B@y-|': its seed site is its only source, covered by a waiting bud) never reaches the pair's 20 bodies (5 by 5000 steps)
   {id:'pair',cap:'The pair: one founder among 300 copy blanks grows to 20 bodies (2 cells, 2 types; no free parts)',demo:'pair',seeds:[1,2,3,4],need:3,steps:3000,secs:12,
     pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) reached20=(\S+) gen=(\d+) .*copiesR=(\d+) copiesS=(\d+)/);return [!!m&&m[2]!=='not',m?`20 bodies at ${m[2]}, ${m[1]} at the end, generation ${m[3]}, copies R ${m[4]} S ${m[5]}`:'no result'];}},
+  // run 20261006-1920 (core-review): one range for every length. Strips of 2 to 5 cells (structures strip(k), one
+  // founder each among 300 blanks, world 30) at the core's default openRange (120): every '&' release lets go a complete
+  // individual. On main before the rule (the open signal crossing '&' joints, a caught part emitting one pass late), 3- to
+  // 5-cell roots let go incomplete at small ranges and 4- and 5-cell kinds stall at large ones (RULES, Core changes)
+  {id:'strips',cap:'One range for every length: strips of 2 to 5 cells bud and every release is complete (default openRange)',demo:'strip',seeds:[1,2,3,4],need:3,steps:6000,extra:'2345',secs:30,
+    pass:L=>{const m=[...L.matchAll(/k(\d)=(\d+)\/(\d+)\//g)];return [m.length===4&&m.every(x=>+x[2]>=5&&+x[3]===0),m.map(x=>`${x[1]} cells ${x[2]} complete, ${x[3]} incomplete`).join(', ')||'no result'];}},
   {id:'pair-c',cap:'  control: S\'s seed site its only source (S B@y-|, R Y@&b@-)',demo:'pair',seeds:[1],steps:5000,secs:20,env:{PAKS:'B@y-|',PAKR:'Y@&b@-'},
     pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) .*freeR=(\d+) freeS=(\d+)/);return [!!m&&+m[1]<20,m?`${m[1]} bodies, free R ${m[2]}, free S ${m[3]}`:'no result'];}},
   // run 20261006-0251 (build): Direction 1 on the pair, a world that runs on. 1000 copy blanks in world 50 and two labelled
@@ -71,8 +77,8 @@ const CHECKS=[
       const at=k=>{const x=c.find(q=>+q[k]>0.5);return x?x[1]:'not';},sd=at(2),fr=at(3);
       return [!!m&&(sd!=='not'||fr!=='not'),m?`most S with open seed sites at ${sd}, most R with open fronts at ${fr}; at 100k ${m[1]}, ${m[2]} ('-': no pair-like part left), ${m[3]} parts mutated, ${m[4]} copies`:'no result'];}},
   // run 20261006-1150 (build): Direction 3, two kinds on one supply. The flowing world without the mutagen at a hazard both
-  // kinds survive alone (h 0.1 per triangle, decay 1, PAHB=2, openRange 3: a 3-cell bud otherwise lets go of its parent
-  // when its second cell binds), the pair against a 3-cell strip 'Z@&c@|- C@d@|- D@-z|' (own letters: they share only
+  // kinds survive alone (h 0.1 per triangle, decay 1, PAHB=2, openRange 3: before run 20261006-1920 a 3-cell bud let go of its
+  // parent at openRange 1 or 2 when its second cell bound; since then any openRange of 2 or more serves), the pair against a 3-cell strip 'Z@&c@|- C@d@|- D@-z|' (own letters: they share only
   // blanks and space). Alone the pair draws free blanks to about 11, the strip to about 100 (it wastes three quarters of its
   // copies), so the pair should win from any start: from one founder each (duo), entering an established strip world
   // (duo-inv: 5 pair founders at 30k), and a strip cannot enter a pair world (duo-inv-c: 5 strip founders at 30k)

@@ -11,7 +11,8 @@
 //                    zip (from a strand's high end while an anchor holds it: only held
 //                    strands are copied)
 //   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go
-//   completion       the open signal from open growth fronts; '&' sides let go and are spent once none is heard
+//   completion       the open signal from open growth fronts (not across '&' joints); '&' sides let go and are spent
+//                    once none is heard
 //   lysis            a triangle bonded to a lysis side ('!') is lysed; lysis is relayed one bond per pass (not across
 //                    a bond on an '&' side); a lysed triangle cuts all its bonds and returns to a fresh state
 // (The casting lineage's rules, casting, hinges and machines, energy, proofreading, were removed on 2026-10-03: git
@@ -95,10 +96,11 @@ class TriSim extends Physics{
         if(e.next<0){const sp=r.inert;z=sp>=0&&this.bond[u*3+sp]>=0?1:0;}else{const v=P(u,e.next);if(role[v]===SFACE)z=[0,1,2].some(i=>this.bond[v*3+i]>=0&&this.bkind[v*3+i]===TFACE)?1:0;else if(role[v]===SBACK)z=zip0[v];}}
       this.zip[u]=z;}
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
-    // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
-    // attachment) emits nothing.
-    for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;v=Math.max(v,op0[(q/3)|0]-1);}}
-      if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){v=this.p.openRange;break;}}
+    // openRange, relayed -1 per bond but not across a joint (a bond on which either side carries '&': a bud and its
+    // parent do not hear each other; since run 20261006-1920); a part that hears none is complete. A completion release
+    // side '&' (a spent attachment) emits nothing.
+    for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;if(!this.done[u*3+i]&&!this.done[q])v=Math.max(v,op0[(q/3)|0]-1);}}
+      if(b&&this._front(u))v=this.p.openRange;
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}
     // ly (lysis): 1 for a triangle bonded to a partner's lysis side '!', or hearing lysis from a partner (previous pass)
@@ -109,6 +111,11 @@ class TriSim extends Physics{
         if(this.lys[q]||ly0[(q/3)|0]&&!this.done[u*3+i]&&!this.done[q])L=1;}
       this.ly[u]=L;}
   }
+  // an open front: an unbonded glued attach side '@' that is not '&'. A triangle caught by glue with one emits the open
+  // signal from the pass it binds (since run 20261006-1920: a part emitting only from the next pass left the cells
+  // behind it a pass of silence, and the root let go before its individual was complete)
+  _front(u){for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k])return true;}return false;}
+  caught(v){if(this._front(v))this.op[v]=this.p.openRange;}
   // ---------------- bonds ----------------
   bind(u,i,ku,v,j,kv){if(this.bond[u*3+i]>=0||this.bond[v*3+j]>=0)throw Error('bind: side already bonded');this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;}
   // binding pulls a free triangle in: v is placed exactly flush with side j against side i of u (it moves at most about
@@ -167,7 +174,7 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only or spent sides)
         for(let e=0,am=this._active(u,r);e<3;e++){if(!(am>>e&1))continue;const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e])continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');this.caught(v);done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue (a close-only side binds no free triangle)

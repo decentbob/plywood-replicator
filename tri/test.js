@@ -127,6 +127,20 @@ test('pair: a free R binds the seed site, a free S its front, the pair lets go; 
   // copy blanks: at R's '-' and S's '-' a copy of that cell; at the seed site y| none (an anchor side is no template)
   for(const [u,i,want] of [[0,2,K.R],[1,1,K.S],[1,K.seedSide,'-?-?-?']]){const s=world(['-?-?-?']);tri(s,2,site(s,u,i));s.step();
     assert.equal(canon(s.typeName(2)),canon(want),`blank at side ${i} of cell ${u}`);assert.ok(!s.bonded(2));}});
+// one range for every length (core-review run 20261006-1920): the open signal stops at '&' joints and a caught part with an
+// open front emits from the pass it binds, so a 3-cell strip's bud holds through each catch at the default range 120,
+// lets go once complete, and its parent never hears it
+test('strip: a 3-cell bud holds through every catch and lets go complete; its parent hears none of it (openRange 120)',()=>{
+  const K=S.strip(3),tri=(s,u,V)=>{placeTri(s,u,V);s.regrid(u);};
+  const site=(s,u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  const s=new TriSim({sigma:0,sigmaRot:0,W:20,H:20},6);buildStructure(s,[0,1,2],K.tris,10,10);for(let k=0;k<3;k++)s.setType(3+k,K.types[k]);
+  [3,4,5].forEach((u,k)=>tri(s,u,[[1+2*k,1],[2+2*k,1],[1.5+2*k,1+H]]));s.run(130);assert.ok([0,1,2].every(u=>s.op[u]===0),'the founder is complete');
+  const sideOf=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===gcode(g)),hold=()=>s.partner(3,0)===2,quiet=()=>[0,1,2].every(u=>s.op[u]<=0);
+  tri(s,3,site(s,2,sideOf(2,'z')));s.step();assert.ok(hold(),'root on the seed site');s.run(5);assert.ok(hold()&&quiet(),'root holds; the parent hears nothing');
+  tri(s,4,site(s,3,sideOf(3,'c')));s.step();assert.equal(s.partner(4,0),3,'second cell on the root');
+  for(let k=0;k<5;k++){s.step();assert.ok(hold()&&quiet(),'the root let go after its second cell bound (pass '+k+')');}
+  tri(s,5,site(s,4,sideOf(4,'d')));s.step();assert.equal(s.partner(5,0),4,'last cell');s.run(130);
+  assert.ok(s.partner(3,0)<0&&s.spent[3*3],'the complete bud let go');assert.ok(s.bonded(4)&&s.bonded(5),'the bud stays whole');});
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};
@@ -277,8 +291,8 @@ const closureCase=(K,range)=>{
   Bv.forEach((v,k)=>{placeTri(s,Bu[k],v.map(at));s.setType(Bu[k],K.types[k]);});
   // growth: the root on the parent's seed site, then each cell on its predecessor; a stall of 300 passes half way
   const held=()=>s.bond[Bu[0]*3+K.rootSide]===Pu[SC]*3+K.seedSide;
-  s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);pass(5);assert.ok(held(),'root let go');
-  for(let k=1;k<N;k++){const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,GLUE,Bu[k-1],j,GLUE);pass(k===25?300:4);assert.ok(held(),'the bud let go while growing (cell '+k+')');}
+  s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);s.caught(Bu[0]);pass(5);assert.ok(held(),'root let go');
+  for(let k=1;k<N;k++){const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,GLUE,Bu[k-1],j,GLUE);s.caught(Bu[k]);pass(k===25?300:4);assert.ok(held(),'the bud let go while growing (cell '+k+')');}
   pass(20);assert.ok(held(),'the complete bud let go before its anchor caught');
   assert.deepEqual(Bu.filter(u=>s.op[u]>0),Bu.filter((u,k)=>Math.abs(k-AK)<range),'only the waiting anchor emits; its range only is unspent');assert.ok(s.op[Bu[0]]>0,'the root hears no open signal');
   // the catch: the bud's anchor takes a strand end; completion releases the root from the parent
