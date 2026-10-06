@@ -73,7 +73,7 @@ proportion to use": the 47-type kind's front, strand and lumen sinks come from u
 avoids by geometry).
 
 A. **Evolution vehicle: the pair**, in order (NEXT priorities): (1) done (run 20261005-2320): the pair in isolation,
-   one founder among copy blanks; (2) speed for many small bodies (harden); (3) a world that runs on: decay and body hazard as labelled
+   one founder among copy blanks; (2) done (run 20261006-0021): speed for many small bodies, 1.8-2.1x, exact; (3) a world that runs on: decay and body hazard as labelled
    drives (build; Direction 1); (4) heritable variation by copy errors (explore, core change; Direction 2); (5) two kinds
    on one supply (build; Direction 3); then what pays for a longer kind.
 
@@ -100,7 +100,8 @@ then, was removed on 2026-10-03 (core review run 2121).
    (`budKit`, run 1121), the part pool law (run 1221), `budpore`'s dead-end options pruned (24 to 17 `BUD*` variables, run 1351), the bud
    grown from a part pool (`budpool`, run 1420).
 0b. **Speed** (harden runs): a three-generation `budcycle` world takes about 30 minutes, the check suite about an hour (run 0251; 36 minutes at run 1421;
-   run 0950: 1.34x, run 1421: 1.18x on the suite, both exact); lone blocks (`_single`: about 780 free triangles in a
+   run 0950: 1.34x, run 1421: 1.18x on the suite, both exact; run 20261006-0021: the pair world 1.8-2.1x, exact, about 500
+   steps per second at 1050 triangles); lone blocks (`_single`: about 780 free triangles in a
    `budcycle` world) take most of the time; no single hot spot left inside them.
    Since run 20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
 

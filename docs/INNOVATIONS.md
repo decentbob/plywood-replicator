@@ -9,6 +9,31 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-0021, harden)
+
+- **Speed for pair worlds (exact)** — works. The pair world runs 1.8-2.1x faster with the same output byte for byte
+  (all 44 check worlds, `CHECK_SAVE` before at `5850fe7` and after, `diff -r` empty; the 1000-blank world below compared
+  too). No rule, physics or parameter change.
+  - **Numbers** (one process): `PAB=1000 PAS=50 node tri/demos.js pair 1 5000` (1050 triangles; 476 bodies by the end)
+    17.9 -> 10.0 s (1.79x; about 500 steps per second, 2.0 ms per step); its first 1000 steps (growth, blanks still
+    free) 4.2 -> 2.0 s (2.1x); the default `pair 1 3000` 3.7 -> 2.0 s (1.8x); `imprint 1 30000 g` 12.0 -> 11.2 s. The
+    suite: 3581 -> 3459 s (14 of 14 both times; `pair` 4 -> 2 s, `pair-c` 7 -> 3 s, `budcycle-3` 2058 -> 2003 s).
+    So a Direction 1 world of about 1000 triangles takes about 35 minutes per 10^6 steps.
+  - **Profile before:** the demo's own census was 34% (each step it named every triangle and found the least rotation
+    of each name with a regular expression); physics 53%. After: physics 85%, of it body moves (`tryMove`, 2-cell
+    bodies, two trials per step, 1.5 overlap tests each) 47% and the pair list 13%.
+  - **Changes:** (1) `sim.canon` remembers each name's result (a pure function of the name); `typeName` a plain loop;
+    (2) the pair scan skips unbonded triangles and triangles without glue `b` before naming them; the release loop in
+    `chemistry` skips unbonded triangles; (3) body overlap tests use `eqDepthN` (the same operations as `eqDepth`, edge
+    normals once per block) and skip the neighbouring grid cells whose nearest point is beyond the overlap reach of the
+    block's centre (a margin of 1e-6; only for grids of at least 4 cells each way); the grid walks in `_overlap` and
+    `_pairs` wrap without `%`; `_jostle` keeps its offset buffers.
+  - **New test:** body overlap tests (early and summed) equal a scan over all blocks, for 20000 random moves among 220
+    randomly placed, overlapping blocks; a reach 10% short fails it (5% does not: overlaps of centres that far apart
+    are rare).
+  - **Not done:** gathering a body's neighbours once per move (round four's capsule, for lone blocks) does not pay here:
+    a body move makes 1.5 overlap tests on average. What is left is the inner neighbour loops themselves.
+
 ## 2026-10-05 (autorun run 20261005-2320, build)
 
 - **The pair: a two-cell, two-type replicator grows from one founder on copy blanks alone — works in isolation.** The
