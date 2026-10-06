@@ -1,37 +1,37 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-0021, harden). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-0251, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge: run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
+at each run's merge: run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-**Current slice (autorun run 20261006-0251, build; in progress).** Goal: Direction 1 on the pair: a world of about
-1000 triangles that runs on under two labelled drives, free parts decaying into blanks (rate d per 100 steps) and a
-body hazard (rate h per 100 steps: one triangle lysed, the body comes apart into its parts, as `BCH`). Plan: add the
-drives and living-body bookkeeping to `pair` (deaths, births, a `pop:` line), measure the binding rate, scan h and d
-in short worlds, then 4 long worlds. Done when: bodies still budding at the end in 3 of 4 worlds, many generations past
-the founder, pool R : S near 1, with 50-200 bodies; a check in `tri/check.js`. Stop there; if no (h, d) holds the
-population, record the measurements and the reason.
+**Handoff status (autorun run 20261006-0251, build).** **The pair world runs on** (priority 4 done, Direction 1):
+two labelled drives in demo `pair`, a body hazard (`PAH`=h: every 100 steps each body hit with probability h, lysed
+into its R and S) and decay of free parts into blanks (`PAD`=d), keep 1000 blanks in world 50 turning over. At h 0.6,
+d 1: 4 of 4 worlds alive at 10^6 steps, 217-324 bodies throughout, 1.41M births each, generation 5884-6071, 95% of the
+parts born fresh copies, copies R : S 1.22 (INNOVATIONS run 0251, picture `pair-runs-on.png`). The 50-200 bodies first
+proposed lie at an extinction edge: h 0.7 gives 50-190 bodies and 2 of 4 worlds die by 10^6, h 0.8 dies in 4 of 4. Slow
+decay (d 0.01-0.3) runs on too but rebuilds bodies from a dead body's parts (5-20% fresh), useless for heredity. The
+mean field's birth law (IDEAS) did not decide the numbers: material (slow decay) or the meeting of two fresh parts (fast
+decay) did. **Copying is local**: a part is born into a body 2.3 side lengths from where it was copied (91% within 5;
+random: about 19); bodies cluster in patches. New check `pair-run` (100k steps, h 0.6, d 1; 4 worlds, need 3): `pair`,
+`pair-c` and `pair-run` pass (`runs/check-pair.txt`); the full suite was not rerun (only demo `pair` changed, and its
+default output is byte for byte the same: seeds 1 and 2 compared). `node tri/test.js` 40 pass. Nothing is running.
+To regenerate the long worlds: `PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair SEED 1000000
+runs/x` (about 35 minutes each; PAH=0.7 for the edge).
 
-**Handoff status (autorun run 20261006-0021, harden).** **The pair world is 1.8-2.1x faster, output unchanged**
-(priority 3 done): 1050 triangles (PAB=1000 PAS=50) run 5000 steps in 10.0 s instead of 17.9 (about 500 steps per
-second; growth phase 2.1x), the default `pair` 1.8x. All 44 check worlds byte for byte the same (`CHECK_SAVE` before
-at `5850fe7` and after, `diff -r` empty); suite 14 of 14 both times, 3581 -> 3459 s (`budcycle-3` and `budcycle-lysis`
-3 of 4 each, as before). Changes: `canon` remembered per name, the pair scan and the release loop skip unbonded
-triangles, exact trims in body overlap tests (INNOVATIONS run 0021). `node tri/test.js` 40 tests pass (new: body
-overlap tests skipping far cells equal a scan over all blocks). Nothing is running. Physics is now 85% of a pair world
-(body moves 47%, the pair list 13%); no single hot spot is left, so the next speed step would change outputs (e.g.
-fewer trials per body) and belongs to a build. A Direction 1 world of about 1000 triangles: about 35 minutes per 10^6
-steps.
+**Next step (rotation 51, explore): Direction 2, heritable variation** (priority 5) on the running pair world (h 0.6,
+d 1). Make the case in RULES (Core changes) first: contact copying now and then makes a different type, the variant
+then copied true. Which sides may vary: an outer side (R's `-`, S's `-`) changes behaviour without breaking assembly; a
+joint side (`Y@&`, `b@|`, `B@`, `y|`) is lethal or makes a new kind. Inheritance here is by neighbourhood (copies land
+2-3 side lengths away), so measure first: does a neutral marked variant (a label glue on an outer side, behaving like
+`-`) stay in patches and drift, and how long does it last against 280 bodies? Then a variant with an effect. To know
+whether a body's copies go to its own buds, the copy log would need the template (observation only, `sim.js` copy
+event).
 
-**Next step (rotation 50, build): Direction 1 on the pair** (priority 4): labelled drives, free parts decay into blanks
-at rate d, a body hazard h (a body comes apart into its two parts, as `BCH` does); mean field (IDEAS) predicts free R =
-free S = about 2h/a with a the binding rate; measure a, then pick h and d so that a world of about 1000 triangles keeps
-50-200 bodies. Start from `PAB=1000 PAS=50 node tri/demos.js pair 1 N runs` (a new option for the drives); 4 long
-worlds; check: bodies still budding at the end in 3 of 4, many generations past the founder, pool R : S near 1.
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
@@ -68,9 +68,7 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
    `pair-c`). Buds point away; no jam seen (a parent buds again once its last bud has moved off: children per body
    0.99 on average, founder 4, at most 7, while blanks lasted; seed 1).
 3. Done in run 0021 (harden): speed for pair worlds, 1.8-2.1x, exact.
-4. [50 build] **Direction 1 on the pair:** labelled drives (free parts decay to blanks; a body hazard, lysis into parts,
-   as `BCH` does); 4 long worlds; check: bodies still budding at the end in 3 of 4, many generations past the founder,
-   pool R : S near 1.
+4. Done in run 0251 (build): Direction 1 on the pair (`PAH` 0.6, `PAD` 1: 4 of 4 worlds to 10^6 steps; check `pair-run`).
 5. [51 explore] **Direction 2:** heritable variation: contact copying now and then makes a variant (core change; case in
    RULES first: which sides may change; outer sides change behaviour without breaking assembly, joint sides are lethal;
    how a longer kind could arise).
@@ -137,6 +135,9 @@ node tri/demos.js budpool 1 250000 runs             # the kind's bud grown from 
 node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world
                                                    # (30), PAR openRange (1), PAT=1 the turned order, PAKR/PAKS other R/S types (pair-c:
                                                    # PAKS='B@y-|' PAKR='Y@&b@-'); result: bodies, gen, copies by type, doublings, children
+PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 1000000 runs/x   # the pair world that runs on
+                                                   # (check pair-run at 100k steps; about 35 minutes per 10^6): PAH body hazard,
+                                                   # PAD decay of free parts (per 100 steps), PAHT hazard start, PAP 'pop:' lines
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (no physics)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part
 node tri/demos.js imprint 1 100000 runs 150px      # a cell fed through a pore copies its held genome; 3 sterile rivals (check imprint-pore;
