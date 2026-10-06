@@ -72,6 +72,10 @@ A. **Evolution vehicle: the pair**, in order (NEXT priorities): (1) done (run 20
    (9) done (run 20261006-1750): heritable diets: front-glue mutants reach unused stocks, spread and coexist (three diets,
    4 of 4; checks `diets`, `-c`, `-ns`); unplanned, a front that eats other kinds' roots makes a 3-cell kind (IDEAS
    "Diets evolve by one letter").
+   Next (direction check run 20261006-1851, IDEAS "After nine slices on the pair"): (10) one openRange that buds kinds
+   of every length (core-review; candidate (o) if needed), (11) the z kind and body length by mutation, also under the
+   mutagen on every glue, (12) a kinds census in every pair world, (13) one standard evolving world with the fewest
+   drives, (14) grown instead of prepared resources (candidate (t), or kinds that live on kinds).
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held

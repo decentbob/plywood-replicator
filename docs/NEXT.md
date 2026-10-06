@@ -1,38 +1,25 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-1750, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-1851, review-intent). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
-pair Direction of run 1850 in full at `20e9a88`).
+pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261006-1750, explore).** Priority 9, heritable diets, works; no rule change. Results
-(INNOVATIONS run 1750, IDEAS "Diets evolve by one letter"):
-1. A 2-cell stock kind `Z@&c@|- C@-|z|` (one copy, one stock part per birth; its diet is its front glue) in run 1620's
-   duo world with stocks C, E, G of 150 each. New in demo `pair` (off by default; default, `pair-flow` and `duo-stock`
-   output byte for byte as main): `PAMF=1` limits the mutagen to front glues (letters `PAMA`), `diet:` lines, a
-   `diets:` result line, a diets picture (`render` gains an optional fill per triangle).
-2. From one founder of diet c: mutants e and g take hold at 15k-35k steps and fill their stocks within 5-10k; three
-   diets side by side, each near its stock (4 of 4 with letters c..h; 4 of 4 reach three or more with a..z). Controls
-   4 of 4: no mutagen, or only stock C: one diet. Unequal stocks (150, 250, 75): diets follow them (2 worlds).
-3. Why the wait: diet c alone keeps a starving bud on nearly every seed site (120-140 individuals, nearly as many waiting buds), so
-   a mutant rarely finds a site and loses its own to c's copies; about 1 in 130-280 mutants with a stocked letter takes
-   hold.
-4. Unplanned: a front `z@|` catches other kinds' roots by their `Z@` side: a 3-cell kind built from the others' copies
-   (2 of 4 a..z worlds; 8-15 individuals to 120k). A longer kind by one mutation.
-5. Checks `diets`, `diets-c`, `diets-ns`: 3 of 3 pass, 4 of 4 worlds each (360 s). Chart `docs/pictures/diets-chart.png` drawn from the `diet:`
-   lines by an ad hoc script (not kept); its worlds are the INNOVATIONS commands.
-Nothing is running after the merge.
+**Handoff status (autorun run 20261006-1851, review-intent).** Direction check after priority 9; no code change
+(`node tri/test.js` 40 pass; `tri/check.js` not rerun, run 1750's suite stands). Reasoning in IDEAS, "After nine slices
+on the pair". In short: the core has not changed since run 1921 and nine capabilities came from combinations, but they
+live in five different world settings, the environment grew to 11 drive options, the only growth in body length (the
+z kind) came unplanned in a world with a front-only mutagen and prepared stocks, openRange is set per kind (a
+body-length knob in disguise), and there is no common measure of complexity. Decision: priority 10 is (a), the z kind
+and length by mutation, prepared by a core review of the range and followed by a census, one standard world, and
+grown instead of prepared resources (priorities 10-14 below). Rotation unchanged. Nothing is running.
 
-**Next step (rotation 58, review-intent).** Weigh the direction after priority 9. Candidates for priority 10, each a
-slice: (a) the z kind: what limits a kind that eats other kinds' roots, and do longer z chains evolve (body length by
-mutation); (b) diets that differ in length: stocks that carry a front of their own (run 1620's `C@d@|-|`), so a
-mutant reaches a longer diet; (c) more diets than the blanks support: do diets then compete, and on what. (a) is the
-most open-ended (kinds that live on kinds) and needs no new option.
+**Next step (rotation 59, core-review): one openRange for every body length** (priority 10 below).
 
 ## Direction and priorities
 
@@ -53,11 +40,33 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
    binds, when risk is per individual (coexistence at stock 400, the strip wins at 600; hazard per triangle: the pair).
 9. Done: heritable diets (run 1750, checks `diets`, `-c`, `-ns`): front-glue mutants reach unused stocks and coexist
    (three diets, 4 of 4); a z front that eats other kinds' roots makes an unplanned 3-cell kind.
-10. [58 review-intent decides] candidates (a)-(c) above.
-10. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
+10. [59 core-review] **One range for every length.** Measure budding of k-cell strips (demo `pair`, `PA1=0`
+    `PA2=...`, k = 2 to 5, own letters, no hazard, no mutagen) at openRange 1, 3, 5 and 120: does each bud let go only
+    once complete, and how long after? If the range a strip needs grows with k, weigh candidate (o) (binding sets the
+    caught part's open signal at once) as the fix, gated as usual (case in RULES first; `CHECK_SAVE` diff of the suite,
+    every changed outcome explained). Done when one range is shown to bud strips of 2 to 5 cells, with or without (o),
+    and the pair-world checks can run at it (or the reason they cannot is recorded). Why first: priority 11 asks
+    whether longer kinds evolve, and in a world tuned for one length the answer would be the parameter's.
+11. [60 build] **The z kind and length by mutation** (candidate (a) of run 1750). In the diets world with the a..z
+    mutagen at the range from 10: what limits the z kind (other diets' free roots, seed sites, its own copies), do z
+    chains of 4 or more cells complete and persist; and the same world with the mutagen on every glue (`PAMF` off): do
+    diets and z survive, or does it collapse to aggregators as run 0621 did? Check: a kind of 3 or more cells that arose
+    by mutation holds 10 or more individuals at the end in 3 of 4 worlds, or a clear negative with its reason.
+12. [61 harden] **A kinds census** in every pair world (one `kinds:` line: kinds by body composition, how many hold 5
+    or more individuals, the longest body held, kinds holding another kind's parts; other output unchanged), and suite
+    time (follow-up below: the frozen lineage's checks to fewer seeds).
+13. [62 build] **One standard evolving world**: the settings 10 and 11 need with the fewest drives (one hazard rule,
+    one mutagen, blanks and stocks), made the default for later pair slices and checks, so results add up in one world.
+14. [63 explore] **Grown instead of prepared resources**: the stocks are the prepared structure doing most work now.
+    Candidate (t) (a copy side that reads glue: a blank type only some kinds copy) or kinds that live on kinds alone
+    (the z route without stocks), chosen by 11's result.
+15. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
+Not taken from run 1750's list: (b) diets of different length (more prepared stocks with fronts) and (c) more diets
+than blanks (run 1150's R* rule again); either may return inside 11 or 13.
 
-Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 58 review-intent, 59 core-review, 60 build, 61 harden,
-62 build.
+Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 1851: the mix fits the order above):
+59 core-review, 60 build, 61 harden, 62 build, 63 explore, 64 build, 65 cleanup (the pair demo's 29 options), 70
+review-intent.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an
@@ -74,7 +83,8 @@ Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 58 review-intent,
 - (o) the open relay's one-pass lag (false releases in the lineage): closed in run 1921 without a change. Seen again in
   a minimal kind (run 1150): a 3-cell strip's root lets go when its second cell binds (it stops emitting in the pass the
   new front starts) at openRange 1 or 2; openRange 3 covers it by the echo through the parent. A fix to weigh: binding
-  sets the caught part's open signal at once (binding already sets both parties' state). Not needed while the range works.
+  sets the caught part's open signal at once (binding already sets both parties' state). Reopened by run 1851: the
+  range is set per kind (1, 3, 9, 50), so longer kinds may need a larger one; priority 10 decides.
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
   lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.

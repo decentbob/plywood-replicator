@@ -18,6 +18,39 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## After nine slices on the pair: one world, one range, one measure, then longer kinds by mutation (direction check, review-intent run 20261006-1851, 2026-10-06)
+
+Weighed after priority 9 (runs 2320-1750 on the pair; candidates (a) the z kind, (b) diets of different length,
+(c) more diets than blanks support).
+- **The core is not growing; the world is.** No rule changed since run 1921 (6 marks, 3 relays, 4 exposed values, 2
+  states), and nine capabilities came from combinations. But demo `pair` now has 29 options, 11 of them drives or their
+  settings (`PAD`, `PADI`, `PAH`, `PAHT`, `PAHU`, `PAHB`, `PAM`, `PAMF`, `PAMA`, `PAMX`, `PAF`). Labelled drives are
+  allowed, but "the simpler the rules the better" counts the world's rules too: the environment is where rules now pile up.
+- **Combined in sequence, not in one world.** Each slice built on the last (flow, two kinds, stock, diets), but the
+  checks run five different settings: hazard per triangle (`pair-flow`, `pair-host`) or per individual (`duo-stock`,
+  `diets`), openRange 1 or 3, the mutagen on every glue or on fronts only. No world carries all the results at once.
+- **What evolved, and under which hands.** Complexity grew twice: three diets side by side (sideways: more kinds, same
+  size) and, unplanned, the z kind (3 cells from one mutation). Both came in a world whose mutagen was confined to
+  fronts and whose second resources were prepared stocks (immortal typed parts returned as themselves). Under the
+  general mutagen without stocks the pair simplified to one-type chains and rosettes (run 0621). So the diets result
+  shows a mechanism, not yet evolution that is open-ended on its own terms.
+- **Prepared structure doing work:** the stocks. The z kind is the first resource that is grown (other kinds' copies),
+  and the first increase of body length by mutation: that is why (a) comes first. (b) needs more prepared stocks with
+  fronts of their own; (c) is run 1150's R* rule in a new setting, and its answer is largely predictable.
+- **A body-length knob in disguise: openRange.** It is set per kind: 1 for the pair, 3 for strips and diets, 9 in the
+  lineage, 50 in lysis (core default 120). Run 1150: a 3-cell strip lets its bud go half built below 3 (relay lag,
+  candidate (o)); whether 4- and 5-cell kinds need more is unmeasured. If they do, a world tuned for one length caps
+  the length that can evolve in it (AGENTS: no body sizes), and the z kind's longer z-z chains may fail for that reason,
+  not a biological one. Kinds of different length can evolve in one world only if budding works at one fixed range
+  for every length.
+- **No measure of the goal.** Each slice writes its own census (`mut:`, `duo:`, `diet:`, `par:`). Complex evolution
+  needs one census every pair world prints: kinds by body composition, how many hold 5 or more individuals, the
+  longest body held, and kinds whose bodies hold another kind's parts. Then runs can be compared over time and with
+  each other.
+- **Order chosen** (NEXT priorities 10-14): one range for every length (core-review), the z kind and length by mutation,
+  including the general mutagen (build), the kinds census (harden), one standard evolving world with the fewest drives
+  (build), then grown instead of prepared resources: candidate (t) or kinds that live on kinds (explore).
+
 ## Heredity of combinations is locality: a parasite needs (1 - s) k > 1 (explore run 20261006-1322, 2026-10-06)
 
 Measured on the flowing pair world without the mutagen (1000 blanks, world 50, `PAHB=2`, hazard per triangle; INNOVATIONS
