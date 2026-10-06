@@ -97,7 +97,8 @@ class TriSim extends Physics{
     // op (open signal): an attached triangle with an unbonded attach side '@' (a growth front still open) emits
     // openRange, relayed -1 per bond; a part that hears none is complete. A completion release side '&' (a spent
     // attachment) emits nothing.
-    for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;v=Math.max(v,op0[(q/3)|0]-1);}}
+    const oj=this.p.openJoint;
+    for(let u=0;u<n;u++){let v=0,b=false;for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q>=0){b=true;if(oj&&(this.done[u*3+i]||this.done[q]))continue;v=Math.max(v,op0[(q/3)|0]-1);}}
       if(b)for(let i=0;i<3;i++){const k=u*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){v=this.p.openRange;break;}}
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}
@@ -167,7 +168,7 @@ class TriSim extends Physics{
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only or spent sides)
         for(let e=0,am=this._active(u,r);e<3;e++){if(!(am>>e&1))continue;const g=gl(u,e);if(!g||this.cOnly[u*3+e]||this.spent[u*3+e])continue;
-          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');done=true;break;}
+          for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');if(p.openCatch)this._opNow(v);done=true;break;}
           if(done)break;}
         if(done||part)continue;
         // dock on a free template face with the complementary glue (a close-only side binds no free triangle)
@@ -203,6 +204,8 @@ class TriSim extends Physics{
           this.bind(a,ra.prev,PREV,b,rb.next,NEXT);this.count('close');break;}
     }
   }
+  // (oracle openCatch) a caught triangle with an open front emits from the pass it binds
+  _opNow(v){for(let i=0;i<3;i++){const k=v*3+i;if(this.att[k]&&this.glue[k]&&this.bond[k]<0&&!this.done[k]){this.op[v]=this.p.openRange;return;}}}
   // ---------------- state changes ----------------
   chemistry(){
     const n=this.n,p=this.p,P=(u,i)=>this.partner(u,i);

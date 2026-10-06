@@ -10,6 +10,14 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261006-1920, core-review, in progress): one range for every length** (priority 10).
+Goal: a single openRange under which strips of 2 to 5 cells bud complete, or the reason none exists. Measured (main):
+the range a k-strip needs grows with k (3 cells need 3, 4 need 4) and a large one stalls 4- and 5-cell kinds (the parent
+hears its child's front across the `&` joint). Candidate under test: the open signal stops at `&` joints (as lysis
+already does) and a caught part with an open front emits from the pass it binds (candidate (o)); oracles `openJoint`,
+`openCatch` in `tri/sim.js`. Check: suite with `CHECK_SAVE` against main, every changed outcome explained. Stop when the
+case is decided (adopted or recorded as not needed).
+
 **Handoff status (autorun run 20261006-1851, review-intent).** Direction check after priority 9; no code change
 (`node tri/test.js` 40 pass; `tri/check.js` not rerun, run 1750's suite stands). Reasoning in IDEAS, "After nine slices
 on the pair". In short: the core has not changed since run 1921 and nine capabilities came from combinations, but they
