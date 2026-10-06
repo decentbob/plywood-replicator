@@ -9,6 +9,47 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-0621, build)
+
+- **A pair world that keeps evolving: dead material returns as blanks** — works with a labelled drive (4 of 4 worlds
+  to 200k, check `pair-flow`; 3 of 4 to 300k in the standard world, 4 of 4 in a 3x world). Priority 6 of NEXT, no
+  rule change. In the mutagen world of run 0450 (m 0.01, hazard per triangle h 0.6, decay 1, 1000 blanks, world 50)
+  binding variants lock the material: without the new drive, seeds 1, 3, 4 end at 300k with blanks 18, 2, 8 and
+  copies 4420, 371, 1720 per 5000 steps (seed 2 flows), as in run 0450. The drive `PAHB` (labelled, off by default;
+  default output byte for byte as before): `PAHB=2`, every lysed triangle (the one the hazard hits and the part the
+  lysis takes apart, up to its `&` joints) becomes a copy blank once it is free; `PAHB=1`, only the hit triangle.
+  - **Flow:** with `PAHB=2` copying stays at 15-28k per 5000 steps at 200k in 4 of 4 worlds (control without the
+    drive, seeds 3 and 4: 766 and 2203), and in each world 4-10 variant types first seen after 100k reached a tenth of
+    the bodies (late sweeps; 12-22 such types in all). By conservation, copies equal deaths in a steady state, so
+    binding can no longer stop the flow; free blanks may still fall (34-150 in seeds 2-4 at 300k) because the winners
+    draw blanks lowest (IDEAS).
+  - **Extinction by a selfish part:** to 300k, seed 1 died out at 260k after an S whose seed site carries a lysis mark
+    (`B@p!y`: an R that binds it is lysed, so the seed site is free and copied again, but no bud grows on it) swept;
+    `PAHB=1` lost seeds 1 and 4 by 240k (variants copied less swept first). Heredity is by part type in a mixed pool,
+    so selection favours what is copied more even when it kills its bodies (100-250 bodies here).
+  - **3x world** (3000 blanks, world 87, 200-1000 bodies; about 25 minutes per 300k): 4 of 4 alive at 300k, copies
+    53-84k per 5000 steps, 42-179 kinds of bodies, kinds still sweeping at 235-275k. What evolved: one-type
+    replicators, a part that binds its own kind's seed site, buds it and lets go (`Y@&b@y`, `O@&b@o`, in chains of
+    2-6; seeds 3 and 4), chains of mutually binding types (`L@V@v@&`, `V@i@v@&`; seed 1), and in seed 2 the selfish S
+    (`-!y!B@`) answered by R growing its own seed site (`Y@&b@|y@`: R buds R, S binds R's front).
+    **To 10^6 steps** (3x world, `PAP=10000`): 4 of 4 alive, 321-496 bodies of 34-189 kinds, copies 53-73k per 5000
+    steps, blanks 120-680 (one world 1246); 31-38 variant types reached a tenth of the bodies at some census, 3-8 of
+    them first seen after 500k. By 450-500k each world has become one-type chains and rosettes (`M@y@Y@&`, `W@b@!w@&`,
+    `B@&t@b@`, `L@V@v@&`; picture), and their variants keep replacing one another (seed 4: `B@&b@y@!`, then `B@&t@b@`
+    from 460k, then `B@&b@y@!` again at 1M). Variation keeps going but complexity does not grow: no world went back to
+    two types.
+  - **Pictures:** [pair-flow.png](pictures/pair-flow.png) (copies, blanks and bodies over 300k, seeds 1-4, with and
+    without the drive); [pair-flow-1M.png](pictures/pair-flow-1M.png) (3x world seed 4 at 10^6 steps: arcs and rings
+    of one self-binding type and its variants; the title's "0 bodies alive" counts only bodies with an R and an S).
+  - **Commands:** `PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair SEED
+    300000 runs` (about 4 minutes; `PAB=3000 PAS=87` for the 3x world, 10^6 steps with `PAP=10000` in about 90 minutes); with the mutagen the demo ends with an
+    `evolving:` line (bodies and kinds at the last census, variant types ever in a tenth of the bodies, those first
+    seen in the second half, copies since the previous census). Checks `pair-flow` (200k, need 3) and `pair-flow-c`
+    (no drive, seeds 3 and 4 lock).
+  - **Status:** works (material keeps flowing, variants keep sweeping); not yet: heredity of combinations (selection
+    sees part types, not bodies, so selfish parts can end a small world), and the drive is an environment rule, not
+    physics.
+
 ## 2026-10-06 (autorun run 20261006-0450, explore)
 
 - **Heritable variation and selection on the pair, with no rule change** — works (selection: 4 of 4 worlds for each of

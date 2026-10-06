@@ -70,6 +70,18 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: openSeed=(\S+) openFront=(\S+) mutated=(\d+) copies=(\d+)/),c=[...o.matchAll(/mut: t=(\d+) .*openSeed (\S+) openFront (\S+)/g)];
       const at=k=>{const x=c.find(q=>+q[k]>0.5);return x?x[1]:'not';},sd=at(2),fr=at(3);
       return [!!m&&(sd!=='not'||fr!=='not'),m?`most S with open seed sites at ${sd}, most R with open fronts at ${fr}; at 100k ${m[1]}, ${m[2]} ('-': no pair-like part left), ${m[3]} parts mutated, ${m[4]} copies`:'no result'];}},
+  // run 20261006-0621 (build): a world that keeps evolving. pair-mut's setting plus a labelled drive: every lysed triangle
+  // returns as a copy blank once free (PAHB=2), so material held by binding variants flows through copying at the
+  // hazard's rate. Passes a world with bodies at 200k, at least 10k copies in the last 5000 steps and a variant type first
+  // seen after 100k that was in a tenth of the bodies at some census (a late sweep). Control: without the drive, seeds 3
+  // and 4 lock (binding variants hold the material: under 10k copies per 5000 steps; INNOVATIONS run 0450). In a 3x world
+  // (3000 blanks, world 87) 4 of 4 to 300k, too slow for a check (about 25 minutes per world; INNOVATIONS run 0621)
+  {id:'pair-flow',cap:'A pair world that keeps evolving: dead material returns as blanks (labelled drive), copying goes on and new variants still sweep at 200k',demo:'pair',seeds:[1,2,3,4],need:3,steps:200000,secs:200,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000',PAHB:'2'},
+    pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
+      return [+m[1]>0&&+m[5]>=10000&&+m[4]>=1,`${m[1]} bodies of ${m[2]} kinds, ${m[5]} copies in the last 5000 steps, blanks ${m[6]}; ${m[3]} variant types in a tenth of the bodies, ${m[4]} of them new after 100k`];}},
+  {id:'pair-flow-c',cap:'  control: without the drive binding variants lock the material (under 10k copies per 5000 steps at 200k)',demo:'pair',seeds:[3,4],steps:200000,secs:200,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000'},
+    pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
+      return [+m[5]<10000,`${m[5]} copies in the last 5000 steps, blanks ${m[6]}, ${m[1]} bodies`];}},
   // run 20261004-2051 (explore): the lysis side '!' (RULES Core changes). A parent with a complete bud stuck on its seed
   // site (no food), 4 cutters 'z@!-|-|' (labelled), the anchor on cell 44 (openRange 50): the stuck bud comes apart into
   // its 47 parts and a later bud on the seed site is built from at least 40 of them
@@ -95,7 +107,7 @@ function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'d
   p.stdout.on('data',d=>out+=d);p.stderr.on('data',d=>err+=d);
   p.on('close',code=>{const lines=out.split('\n').filter(l=>l.startsWith('t='));const L=lines[lines.length-1]||'';
     let ok=false,ev='';if(code!==0)ev='crashed: '+(err.trim().split('\n').find(l=>/Error/.test(l))||'exit '+code);else[ok,ev]=c.pass(L,out);
-    if(process.env.CHECK_SAVE)require('fs').writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);   // whole output, to compare runs
+    if(process.env.CHECK_SAVE){require('fs').mkdirSync(process.env.CHECK_SAVE,{recursive:true});require('fs').writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);}   // whole output, to compare runs
     res({ok,ev,secs:(Date.now()-t0)/1000});});});}
 
 async function main(){const want=process.argv.slice(2),sel=CHECKS.filter(c=>!want.length||want.includes(c.id));
