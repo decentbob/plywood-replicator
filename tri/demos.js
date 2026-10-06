@@ -415,17 +415,19 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // generations, pools)
     // Direction 2 (explore run 20261006-0450), observation and labelled starts and drives, all off by default: PAV=half|right|mix,
     // a neutral marker put in at step PAVT (100000): every R in the left (half) or right half of the world (right), or each R with
-    // probability 1/2 (mix), attached or free, gets glue x on its plain side '-' (R 'Y@&b@|x': nothing carries X, so
-    // nothing binds it; copies carry it); 'var:' lines every PAP steps give the marked share of living bodies and how
+    // probability PAVP (0.5; mix), attached or free, gets glue x on its plain side '-' (R 'Y@&b@|x': nothing carries X, so
+    // nothing binds it; copies carry it); PAVK=seed or front puts in a variant instead: S's seed site y or R's front b@
+    // without its anchor mark (copied while free: while no bud sits on it, while a bud waits for its S); 'var:' lines every PAP steps give the marked share of living bodies and how
     // clustered they are (same-marker share among each body's 6 nearest bodies, against random mixing). PAM=m, a labelled
     // mutagen drive: every 100 steps (at step 50 of each 100) each free part (a free triangle without a copy side) has, with probability m, one
     // side drawn at random changed: its glue (half the time: inert or one of a..z, A..Z) or one of its marks toggled
     // ('.@&|?!'); 'mut:' lines every PAP steps count bodies by their types. With either, PAD decays every free part,
     // variant or not, into a blank (without them only R and S are ever free parts). PAHU=1: the hazard per triangle
-    // instead of per body (a body of k triangles is hit with probability 1 - (1 - h/2)^k: a pair about as often as before,
-    // a larger body more often; per body, a body's size lowers each of its triangles' risk)
+    // instead of per body: every triangle of a body is lysed with probability h/2 (a pair is hit about as often as
+    // before); per body, a hit lyses one part between '&' joints, so a body of k such parts loses each about k times
+    // less often (a body's size lowers its parts' risk)
     pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
-      const DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1';
+      const DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5);
       const {s,structures}=createWorld({seed,size,structures:[{tris:K.tris,x:size/2,y:size/2}],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
       const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),cV=canon(K.R.replace(/-(?![.@&|?!])/,'x')),RL=new Set([cR,cV]),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gb=gc('b'),alive=new Map([[structures[0][0],{id:0,g:0,t:0}]]),kids=new Map(),dbl=[],ev={births:1,deaths:0,hits:0,decayed:0,life:0,lastBirth:0,reused:0,mutated:0},rec=new Int8Array(s.n),pg=new Int32Array(s.n).fill(-1),cp={},cx=new Float32Array(s.n).fill(NaN),cy=new Float32Array(s.n),dist={n:0,sum:0,near:0};let reached=0,maxGen=0;
@@ -450,15 +452,22 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const vEnd={lost:0,fixed:0},marker=t=>{const L=[...alive.keys()],m=L.map(u=>canon(s.typeName(u))===cV?1:0),N=L.length,f=N?m.reduce((a,b)=>a+b,0)/N:0;let same=0,cnt=0;
         for(let a=0;a<N;a++){const d=[];for(let b=0;b<N;b++)if(b!==a)d.push([Math.hypot(s._dx(s.px[L[b]]-s.px[L[a]]),s._dy(s.py[L[b]]-s.py[L[a]])),m[b]]);d.sort((x,y)=>x[0]-y[0]);for(const [,q] of d.slice(0,6)){same+=q===m[a]?1:0;cnt++;}}
         if(!vEnd.lost&&N&&f===0)vEnd.lost=t;if(!vEnd.fixed&&N&&f===1)vEnd.fixed=t;
-        console.log(`var: t=${t} alive ${N} marked ${m.reduce((a,b)=>a+b,0)} share ${f.toFixed(3)} sameNeighbours ${cnt?(same/cnt).toFixed(3):'-'} random ${(f*f+(1-f)*(1-f)).toFixed(3)} copies x ${cp[cV]||0}`);};
+        const o=opened();console.log(`var: t=${t} alive ${N} marked ${m.reduce((a,b)=>a+b,0)} share ${f.toFixed(3)} sameNeighbours ${cnt?(same/cnt).toFixed(3):'-'} random ${(f*f+(1-f)*(1-f)).toFixed(3)} copies x ${cp[cV]||0} openSeed ${o.S} openFront ${o.R}`);};
       // mutation census: bodies (two or more bonded triangles) by their types; variant types ever seen in a body
       const seenV=new Map(),census=t=>{const {members}=s.bodies(),by=new Map();let mb=0,fm=0;
         for(const m of members){if(m.length<2)continue;const ty=m.map(u=>canon(s.typeName(u))),k=ty.slice().sort().join(' + ');by.set(k,(by.get(k)||0)+1);
           if(ty.some(c=>c!==cR&&c!==cS)){mb++;for(const c of new Set(ty))if(c!==cR&&c!==cS){const v=seenV.get(c)||{first:t,last:t,max:0,n:0};v.last=t;v.n++;seenV.set(c,v);}}}
         for(const [c,v] of seenV)if(v.last===t){let k=0;for(const m of members)if(m.length>1&&m.some(u=>canon(s.typeName(u))===c))k++;v.max=Math.max(v.max,k);}
         for(const u of all)if(!s.bonded(u)){const c=canon(s.typeName(u));if(c!==cR&&c!==cS&&c!==cB)fm++;}
-        const top=[...by].sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,n])=>n+'x '+k).join(' | ');
-        console.log(`mut: t=${t} bodies ${[...by.values()].reduce((a,b)=>a+b,0)} withVariant ${mb} kinds ${by.size} freeVariants ${fm} mutated ${ev.mutated} | ${top}`);};
+        const top=[...by].sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,n])=>n+'x '+k).join(' | '),o=opened();
+        console.log(`mut: t=${t} bodies ${[...by.values()].reduce((a,b)=>a+b,0)} withVariant ${mb} kinds ${by.size} freeVariants ${fm} mutated ${ev.mutated} openSeed ${o.S} openFront ${o.R} | ${top}`);};
+      // the two variants that expose a part more: among attached S-like triangles (a side B@ and a side y), the share whose
+      // y side has no anchor mark (the seed site copied while free); among attached R-like ones (Y@ and b@), the share whose
+      // b@ side has none (the front copied while a bud waits)
+      const yy=gc('y'),opened=()=>{let sn=0,so=0,rn=0,ro=0;const has=(u,g,a)=>[0,1,2].find(i=>s.glue[u*3+i]===g&&(!a||s.att[u*3+i]));
+        for(const u of all){if(!s.bonded(u))continue;const iB=has(u,B,1),iy=has(u,yy),iY=has(u,Y,1),ib=has(u,gb,1);
+          if(iB!==undefined&&iy!==undefined){sn++;if(!s.anc[u*3+iy])so++;}if(iY!==undefined&&ib!==undefined){rn++;if(!s.anc[u*3+ib])ro++;}}
+        return {S:sn?(so/sn).toFixed(2):'-',R:rn?(ro/rn).toFixed(2):'-'};};
       snap(s,'t0',`t=0: one founder pair (R ${K.R}, S ${K.S}) among ${NB} copy blanks, no free parts`,null,false);
       const pic={};let first=0;
       for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,u,ty] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;cx[u]=s.px[u];cy[u]=s.py[u];}s.copyLog.length=0;}
@@ -466,9 +475,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // PAD=d (labelled drive): free parts return to blanks
         if(DK&&t%100===0)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2])continue;if(s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;cx[u]=NaN;ev.decayed++;}}
         // PAH=h (labelled drive): a body hazard, mean life 100/h steps
-        if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();for(const m of members)if(m.length>1&&s.rng()<(HU?1-Math.pow(1-HZ/2,m.length):HZ)){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
+        if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();if(HU){for(const m of members)if(m.length>1)for(const u of m)if(s.rng()<HZ/2&&!s.ly[u]){s.ly[u]=1;ev.hits++;}}else for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
         // PAV (labelled start): the neutral marker, glue x on R's plain side (its spent '&' side stays spent)
-        if(VM&&t===VT)for(const u of all){if(canon(s.typeName(u))!==cR||(VM==='half'?s._wx(s.px[u])>=size/2:VM==='right'?s._wx(s.px[u])<size/2:s.rng()>=0.5))continue;for(let i=0;i<3;i++){const k=u*3+i;if(!s.glue[k]&&!s.cOnly[k]&&!s.att[k]&&!s.done[k]&&!s.anc[k]&&!s.cpy[k]&&!s.lys[k])s.glue[k]=gc('x');}}
+        if(VM&&t===VT)for(const u of all){if(canon(s.typeName(u))!==(VK==='seed'?cS:cR)||(VM==='half'?s._wx(s.px[u])>=size/2:VM==='right'?s._wx(s.px[u])<size/2:s.rng()>=VP))continue;
+          for(let i=0;i<3;i++){const k=u*3+i;if(VK==='seed'){if(s.glue[k]===yy)s.anc[k]=0;}else if(VK==='front'){if(s.glue[k]===gb)s.anc[k]=0;}else if(!s.glue[k]&&!s.cOnly[k]&&!s.att[k]&&!s.done[k]&&!s.anc[k]&&!s.cpy[k]&&!s.lys[k])s.glue[k]=gc('x');}}
         // PAM=m (labelled drive, a mutagen): one side of a free part changed now and then (at mid-interval: PAD 1 would
         // turn a part mutated at the decay's step back into a blank at once)
         if(MU&&t%100===50)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||s.rng()>=MU)continue;mutate(u);ev.mutated++;}
@@ -486,7 +496,8 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const kv=[...Array(ev.births).keys()].map(i=>kids.get(i)||0);
       const drv=HZ||DK?` alive=${alive.size} deaths=${ev.deaths} hits=${ev.hits} decayed=${ev.decayed} meanLife=${ev.deaths?(ev.life/ev.deaths).toFixed(0):'-'} fresh=${(1-ev.reused/Math.max(1,2*(ev.births-1))).toFixed(2)} lastBirth=${ev.lastBirth} aliveGens=${Object.keys(gens).sort((a,b)=>a-b).join(',')}`:'';
       console.log(`t=${s.t} result: bodies=${ev.births} reached${goal}=${reached||'not'} gen=${maxGen} perGen=${Object.keys(gens).sort((a,b)=>a-b).map(g=>g+':'+gens[g]).join(',')} freeR=${P.r} freeS=${P.q} waiting=${P.w} blanks=${P.b} copies=${s.ev.copy||0} copiesR=${cp[cR]||0} copiesS=${cp[cS]||0} firstBud=${first||'not'} doublings=${dbl.join(',')} founderKids=${kids.get(0)||0} maxKids=${kv.reduce((a,b)=>Math.max(a,b),0)} kidsMean=${(kv.reduce((a,b)=>a+b,0)/kv.length).toFixed(2)}${drv}`);
-      if(VM)console.log(`t=${s.t} marker: lost=${vEnd.lost||'not'} fixed=${vEnd.fixed||'not'} copiesX=${cp[cV]||0}`);
+      if(VM){const o=opened();console.log(`t=${s.t} marker: lost=${vEnd.lost||'not'} fixed=${vEnd.fixed||'not'} copiesX=${cp[cV]||0} openSeed=${o.S} openFront=${o.R}`);}
+      if(MU){const o=opened();console.log(`t=${s.t} result: openSeed=${o.S} openFront=${o.R} mutated=${ev.mutated} copies=${s.ev.copy||0}`);}
       if(MU)console.log(`t=${s.t} variants (in a body at some census; max bodies, first, last seen): ${[...seenV].sort((a,b)=>b[1].max-a[1].max).slice(0,15).map(([c,v])=>`${c} ${v.max} ${v.first}-${v.last}`).join(' | ')||'none'}`);
       finish(`The pair: one founder among copy blanks (S ${K.S})${HZ||DK?`, hazard ${HZ}, decay ${DK}`:''}`,3);},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
