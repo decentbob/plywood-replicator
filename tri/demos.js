@@ -413,17 +413,19 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // drawn at random, is lysed and the lysis rule takes it apart into its parts (not across an '&' joint), as budcycle's
     // BCH. A body dies when its R loses its S. PAP=k: a 'pop:' line every k steps (living bodies, births, deaths,
     // generations, pools)
-    // Direction 2 (explore run 20261006-0450), observation and labelled starts and drives, all off by default: PAV=half|mix,
-    // a neutral marker put in at step PAVT (100000): every R in the left half of the world (half) or each R with
+    // Direction 2 (explore run 20261006-0450), observation and labelled starts and drives, all off by default: PAV=half|right|mix,
+    // a neutral marker put in at step PAVT (100000): every R in the left (half) or right half of the world (right), or each R with
     // probability 1/2 (mix), attached or free, gets glue x on its plain side '-' (R 'Y@&b@|x': nothing carries X, so
     // nothing binds it; copies carry it); 'var:' lines every PAP steps give the marked share of living bodies and how
     // clustered they are (same-marker share among each body's 6 nearest bodies, against random mixing). PAM=m, a labelled
     // mutagen drive: every 100 steps (at step 50 of each 100) each free part (a free triangle without a copy side) has, with probability m, one
     // side drawn at random changed: its glue (half the time: inert or one of a..z, A..Z) or one of its marks toggled
     // ('.@&|?!'); 'mut:' lines every PAP steps count bodies by their types. With either, PAD decays every free part,
-    // variant or not, into a blank (without them only R and S are ever free parts)
+    // variant or not, into a blank (without them only R and S are ever free parts). PAHU=1: the hazard per triangle
+    // instead of per body (a body of k triangles is hit with probability 1 - (1 - h/2)^k: a pair about as often as before,
+    // a larger body more often; per body, a body's size lowers each of its triangles' risk)
     pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
-      const DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0);
+      const DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1';
       const {s,structures}=createWorld({seed,size,structures:[{tris:K.tris,x:size/2,y:size/2}],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
       const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),cV=canon(K.R.replace(/-(?![.@&|?!])/,'x')),RL=new Set([cR,cV]),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gb=gc('b'),alive=new Map([[structures[0][0],{id:0,g:0,t:0}]]),kids=new Map(),dbl=[],ev={births:1,deaths:0,hits:0,decayed:0,life:0,lastBirth:0,reused:0,mutated:0},rec=new Int8Array(s.n),pg=new Int32Array(s.n).fill(-1),cp={},cx=new Float32Array(s.n).fill(NaN),cy=new Float32Array(s.n),dist={n:0,sum:0,near:0};let reached=0,maxGen=0;
@@ -464,9 +466,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // PAD=d (labelled drive): free parts return to blanks
         if(DK&&t%100===0)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2])continue;if(s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;cx[u]=NaN;ev.decayed++;}}
         // PAH=h (labelled drive): a body hazard, mean life 100/h steps
-        if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
+        if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();for(const m of members)if(m.length>1&&s.rng()<(HU?1-Math.pow(1-HZ/2,m.length):HZ)){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
         // PAV (labelled start): the neutral marker, glue x on R's plain side (its spent '&' side stays spent)
-        if(VM&&t===VT)for(const u of all){if(canon(s.typeName(u))!==cR||(VM==='half'?s._wx(s.px[u])>=size/2:s.rng()>=0.5))continue;for(let i=0;i<3;i++){const k=u*3+i;if(!s.glue[k]&&!s.cOnly[k]&&!s.att[k]&&!s.done[k]&&!s.anc[k]&&!s.cpy[k]&&!s.lys[k])s.glue[k]=gc('x');}}
+        if(VM&&t===VT)for(const u of all){if(canon(s.typeName(u))!==cR||(VM==='half'?s._wx(s.px[u])>=size/2:VM==='right'?s._wx(s.px[u])<size/2:s.rng()>=0.5))continue;for(let i=0;i<3;i++){const k=u*3+i;if(!s.glue[k]&&!s.cOnly[k]&&!s.att[k]&&!s.done[k]&&!s.anc[k]&&!s.cpy[k]&&!s.lys[k])s.glue[k]=gc('x');}}
         // PAM=m (labelled drive, a mutagen): one side of a free part changed now and then (at mid-interval: PAD 1 would
         // turn a part mutated at the decay's step back into a blank at once)
         if(MU&&t%100===50)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||s.rng()>=MU)continue;mutate(u);ev.mutated++;}

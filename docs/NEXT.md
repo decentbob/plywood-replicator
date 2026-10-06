@@ -16,10 +16,19 @@ without a core change: a labelled mutagen drive (each free part, now and then, g
 mark), and a body census by type: which variants appear, which persist, does any spread? Done when (1) is measured in
 4 worlds and (2) is run in 4 worlds with the variants listed; a core change (copy error inside contact copying) only if
 the drive shows something the core needs; otherwise its case is written as "not needed yet". Stop at about 4 hours.
-*Progress:* demo `pair` has `PAV`/`PAVT` (neutral marker) and `PAM` (mutagen) with `var:`/`mut:` lines; default
-output byte for byte the same (seeds 1, 2 against main). Running: `PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1
-PAV=half PAVT=100000 node tri/demos.js pair K 600000 runs` (K 1-4, outputs `runs/vK.txt`). Smoke test (seed 1, marker at
-10k): mixing is fast, same-marker share among 6 nearest 0.94 at insertion, 0.58-0.67 (random 0.50-0.56) from 2000 steps on.
+*Progress:* demo `pair` has `PAV`/`PAVT` (neutral marker), `PAM` (mutagen) and `PAHU` (hazard per triangle) with
+`var:`/`mut:` lines; default output byte for byte the same (seeds 1, 2 against main).
+- Marker (half the world's R marked at 100k, seeds 1-4, `runs/vK.txt`): exactly neutral (seed 1 with the other half
+  marked gives the complementary share at every census: the marker draws no random number, so the world is the same);
+  fixed in 4 of 4 at 145k-315k (one draw per world: the left half won each time); patches dissolve within 5000 steps,
+  same-marker share among the 6 nearest bodies only 0.04-0.06 above random mixing.
+- Mutagen (`PAM` 0.01 seed 1, 0.03 seed 2, 200k, `runs/m1.txt`, `m2.txt`): m1: S's seed site losing its anchor (`y`,
+  copied while free) swept 15-25k, R's front losing it 30-35k (more exposure, more copies); then `@` on S's seed site
+  and R's outer side kept bodies joined (open fronts never let go), and self-binding parts (`D@&b@d@`, `F@f@&b@`: a
+  part with g@ and G@) took over; the pair was gone by 130k in both, blanks 1000 -> 2, copies per 5000 steps 16k -> 1k.
+  Suspect: the per-body hazard rewards size. Running: `PAHU=1` (per triangle) `PAM=0.01` seeds 1, 2 to 300k
+  (`runs/u1.txt`, `u2.txt`), `PAM=0.001` seed 1 to 600k (`runs/l1.txt`), pictures of m2 to 140k (`runs/pic2/`). Common
+  settings: `PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair SEED STEPS runs`.
 
 **Handoff status (autorun run 20261006-0251, build).** **The pair world runs on** (priority 4 done, Direction 1):
 two labelled drives in demo `pair`, a body hazard (`PAH`=h: every 100 steps each body hit with probability h, lysed
