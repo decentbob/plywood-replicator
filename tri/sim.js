@@ -222,12 +222,12 @@ class TriSim extends Physics{
   }
   // contact copying: a triangle bonded by a copy side '?' and by nothing else (a copy blank that bound this pass) takes
   // its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the partner turned about the
-  // shared edge; glues and marks) and lets go
+  // shared edge; glues and marks) and lets go (copyLog, observation only: time, copy, its new type, its template)
   _copy(){const A=['glue','cOnly','att','done','anc','cpy','lys'];
     for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){if(!this.cpy[u*3+i])continue;const q=this.bond[u*3+i];if(q<0||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
       const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
       for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
-      for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u)]);break;}}
+      for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u),w]);break;}}
   // completion release '&': the bond on this side is cut once its triangle hears no open signal (its part is complete);
   // the side is then spent: it binds nothing again, so the gap it leaves cannot be refilled
   _release(){for(let u=0;u<this.n;u++)if(this.op[u]===0)for(let i=0;i<3;i++){const k=u*3+i;if(!this.done[k])continue;this.spent[k]=1;if(this.bond[k]>=0){this.cut(u,i);this.count('complete');}}}
