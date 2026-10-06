@@ -21,7 +21,7 @@ function spendableSides(s,U){for(const u of U)for(let i=0;i<3;i++){const k=u*3+i
 function demo(name,seed=1,steps,dir='runs',extra){
   // TRI_NOPIC=1: no pictures or saved states (each picture starts a Chromium; tri/check.js reads only the reports)
   const shots=[],out=f=>path.join(dir,`${name}_${f}.png`),pics=!process.env.TRI_NOPIC;
-  const snap=(s,f,title,focus,labels=true)=>{if(!pics)return;render(s,out(f),title,focus,labels);shots.push(out(f));};
+  const snap=(s,f,title,focus,labels=true,fillOf=null)=>{if(!pics)return;render(s,out(f),title,focus,labels,fillOf);shots.push(out(f));};
   const finish=(title,cols=4)=>{if(!pics)return;montage(path.join(dir,`${name}.png`),cols,title,shots);console.log('pictures:',path.join(dir,`${name}.png`));};
   const every=(t,k)=>t%Math.max(1,(steps/k)|0)===0;
   const D={
@@ -424,8 +424,13 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // glue is the only way a resource can be one kind's own). Stock types never decay (PAD) and are not turned into blanks
     // when lysed (PAHB): the lysis rule returns them as themselves, so the stock is conserved. A late founder (PA1T, PA2T)
     // takes its stock cells from the free stock
-    pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
-      const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
+    // Heritable diets (explore run 20261006-1750), a labelled drive, off by default: PAMF=1 limits the mutagen PAM to fronts:
+    // each free part that is not a stock type and has a front (a glued side marked '@|') has, with probability m, that
+    // side's glue changed to another letter of PAMA (a..z): the part then catches a different stock (its diet). 'diet:'
+    // lines every PAP steps: per front letter (50 steps before each PAP step: between two decay steps), complete individuals (a root, a part with a front and an '&' side, whose
+    // front is bonded), waiting roots (front unbonded), free roots; free stock by type; a 'diets:' result line
+    pair(){steps=steps||200000;const {gcode:gc,gname}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
+      const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),MF=process.env.PAMF==='1',MA=process.env.PAMA||'abcdefghijklmnopqrstuvwxyz',LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
       const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));
       const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
       const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB,...Object.fromEntries(FST)},params:{openRange:+(process.env.PAR||1)}});
@@ -485,6 +490,13 @@ function demo(name,seed=1,steps,dir='runs',extra){
         for(const u of all){if(!s.bonded(u))continue;const iB=has(u,B,1),iy=has(u,yy),iY=has(u,Y,1),ib=has(u,gb,1);
           if(iB!==undefined&&iy!==undefined){sn++;if(!s.anc[u*3+iy])so++;}if(iY!==undefined&&ib!==undefined){rn++;if(!s.anc[u*3+ib])ro++;}}
         return {S:sn?(so/sn).toFixed(2):'-',R:rn?(ro/rn).toFixed(2):'-'};};
+      // diets (PAMF): a front is a glued side marked '@|'; a root has a front and an '&' side; per front letter its complete
+      // individuals (front bonded), waiting roots, free roots; free stock by type; per letter the first census with 10 or
+      // more complete individuals, and the most letters held at once (10 or more each) in the run's second half
+      const fside=u=>{for(let i=0;i<3;i++){const k=u*3+i;if(s.att[k]&&s.anc[k]&&s.glue[k]&&!s.cpy[k])return i;}return -1;},isRoot=u=>s.done[u*3]||s.done[u*3+1]||s.done[u*3+2];
+      const dEnd={first:{},maxHeld:0,maxAt:0,sum:{},m:0},diet=t=>{const by={},fs={};for(const u of all){const i=fside(u);if(i>=0&&isRoot(u)){const L=gname(s.glue[u*3+i]),o=by[L]||(by[L]={n:0,w:0,f:0});if(!s.bonded(u))o.f++;else if(s.partner(u,i)>=0)o.n++;else o.w++;}else if(!s.bonded(u)&&stk(u)){const c=canon(s.typeName(u));fs[c]=(fs[c]||0)+1;}}
+        const Ls=Object.keys(by).sort(),held=Ls.filter(L=>by[L].n>=10);for(const L of held)if(!dEnd.first[L])dEnd.first[L]=t;if(t>steps/2){dEnd.m++;for(const L of Ls)dEnd.sum[L]=(dEnd.sum[L]||0)+by[L].n;if(held.length>dEnd.maxHeld){dEnd.maxHeld=held.length;dEnd.maxAt=t;}}
+        console.log(`diet: t=${t} ${Ls.filter(L=>by[L].n||by[L].w).map(L=>`${L} ${by[L].n}/${by[L].w}/${by[L].f}`).join(' ')||'none'} | held ${held.join('')||'-'} | free stock ${FST.map(([ty])=>fs[canon(ty)]||0).join(':')} | blanks ${avg.n?(avg.b/avg.n).toFixed(0):'-'}`);};
       // two kinds: per kind its types, individuals (attached last cells), held, free parts, copies; extinction times
       // (counted 50 steps before the line: between two decay steps)
       let duoO=null;const DK2=K2?[{name:'pair',T:[cR,cS]},{name:'strip',T:K2.types.map(canon)}].map(k=>({...k,last:k.T[k.T.length-1],set:new Set(k.T),c0:0,ext:0,sum:0,m:0})):[],duoCount=()=>{
@@ -515,7 +527,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
           for(let i=0;i<3;i++){const k=u*3+i;if(VK==='seed'){if(s.glue[k]===yy)s.anc[k]=0;}else if(VK==='selfish'){if(s.glue[k]===yy){s.anc[k]=0;s.lys[k]=1;}}else if(VK==='parasite'){if(s.glue[k]===yy){s.anc[k]=0;s.glue[k]=gc('q');}}else if(VK==='front'){if(s.glue[k]===gb)s.anc[k]=0;}else if(!s.glue[k]&&!s.cOnly[k]&&!s.att[k]&&!s.done[k]&&!s.anc[k]&&!s.cpy[k]&&!s.lys[k])s.glue[k]=gc('x');}}
         // PAM=m (labelled drive, a mutagen): one side of a free part changed now and then (at mid-interval: PAD 1 would
         // turn a part mutated at the decay's step back into a blank at once)
-        if(MU&&t%100===50)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||s.rng()>=MU)continue;mutate(u);ev.mutated++;}
+        if(MU&&t%100===50)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2])continue;if(MF){const i=fside(u);if(i<0||stk(u)||s.rng()>=MU)continue;const o=gname(s.glue[u*3+i]),L=MA.replace(o,'');s.glue[u*3+i]=gc(L[Math.floor(s.rng()*L.length)]);ev.mutated++;continue;}if(s.rng()>=MU)continue;mutate(u);ev.mutated++;}
         // PAMX=m (labelled drive, stirring): every step each free part, with probability m, changes places with a free
         // triangle drawn at random (blank or part; each takes the other's exact place, so nothing overlaps): copies no
         // longer stay near where they were made
@@ -528,6 +540,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(LK&&PP&&t%PP===0&&t>=VT)link(t);
         if(PS&&PP&&t%PP===0)parLine(t);
         if(MU&&PP&&t%PP===0)census(t);
+        if(MF&&PP>=100&&t%PP===PP-50)diet(t);
         if(!first&&ev.births>1){first=t;const fu=[...alive.keys()];snap(s,'bud1',`t=${t}: the founder's first bud`,{units:fu,radius:3},true);}
         if(!reached&&ev.births>=goal){reached=t;snap(s,'goal',`t=${t}: ${ev.births} bodies, generation ${maxGen}`,null,false);}
         for(const k of [5,10]){if(!pic[k]&&ev.births>=k){pic[k]=t;snap(s,'b'+k,`t=${t}: ${ev.births} bodies`,null,false);}}
@@ -545,6 +558,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // seen in a body in the run's second half; bodies, kinds and copies at the last census
       if(MU){const V=[...seenV.values()].filter(v=>(v.ms||0)>=0.1);console.log(`t=${s.t} evolving: bodies=${mutLast.bodies} kinds=${mutLast.kinds} common=${V.length} lateCommon=${V.filter(v=>v.first>steps/2).length} copiesLast=${mutLast.dc} blanks=${P.b}`);}
       if(PS){const m=Math.max(1,par.n);console.log(`t=${s.t} parental: births=${par.n} R=${(par.R/m).toFixed(3)} S=${(par.S/m).toFixed(3)} both=${(par.both/m).toFixed(3)} sameBody=${(par.same/m).toFixed(3)} random=${(par.rand/m).toFixed(4)} alive=${alive.size} openSeed=${opened().S} copiesS=${cp[cS]||0} copiesSelfish=${cp[cSf]||0} copiesParasite=${cp[cSq]||0}${sCount()}${LK?` linkR0=${lkEnd.r0.toFixed(3)} linkHalf=${lkEnd.half||'not'} linkLast=${Number.isNaN(lkEnd.last)?'-':lkEnd.last.toFixed(3)}`:''}`);}
+      // the diets picture (PAMF): a root filled by its front letter's colour, a stock part by its own letter's (bright when
+      // attached, dim when free); blanks and other triangles as usual
+      if(MF){const D={c:'#ffd31a',e:'#ff7a1a',g:'#3fd8e8',z:'#e83fd0'},dc=(u,L)=>{const c=D[L.toLowerCase()]||'#b9c2c9';return s.bonded(u)?c:c+'55';};
+        snap(s,'diets',`t=${s.t}: diets by front glue (c yellow, e orange, g cyan, z magenta, others grey); dim: free`,null,false,u=>{const i=fside(u);if(i>=0&&isRoot(u))return dc(u,gname(s.glue[u*3+i]));if(stk(u)){for(let k=0;k<3;k++)if(s.att[u*3+k]&&s.glue[u*3+k])return dc(u,gname(s.glue[u*3+k]));}});}
+      if(MF)console.log(`t=${s.t} diets: maxHeld=${dEnd.maxHeld} at ${dEnd.maxAt||'-'} first=${Object.entries(dEnd.first).map(([L,t])=>L+'@'+t).join(',')||'none'} mean2=${Object.entries(dEnd.sum).filter(([,v])=>v/dEnd.m>=1).map(([L,v])=>L+':'+(v/dEnd.m).toFixed(0)).join(',')||'-'} mutated=${ev.mutated}`);
       if(K2)console.log(`t=${s.t} duo: ${DK2.map(k=>`${k.name}=${k.ext?'extinct@'+k.ext:'alive'} mean2=${k.m?(k.sum/k.m).toFixed(0):'-'}`).join(' ')} strip=${K2.types.join(',')}`);
       if(MU)console.log(`t=${s.t} variants (in a body at some census; max bodies, first, last seen): ${[...seenV].sort((a,b)=>b[1].max-a[1].max).slice(0,15).map(([c,v])=>`${c} ${v.max} ${v.first}-${v.last}`).join(' | ')||'none'}`);
       finish(`The pair: one founder among copy blanks (S ${K.S})${HZ||DK?`, hazard ${HZ}, decay ${DK}`:''}`,3);},
