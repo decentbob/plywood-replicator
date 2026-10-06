@@ -9,6 +9,38 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-0251, build)
+
+- **A world that runs on: the pair turns over for 10^6 steps under a body hazard and decay of free parts** — works
+  (4 of 4 worlds). Direction 1 (user, 2026-10-05), on the evolution vehicle; no rule, physics or kit change. Two
+  labelled environment drives in demo `pair`, both off by default (output byte for byte as before): every 100 steps
+  each body is hit with probability h (one of its triangles lysed; the lysis rule takes it apart into its R and S, not
+  across an `&` joint, as `budcycle`'s `BCH`), and each free part becomes a copy blank with probability d. Material is
+  conserved: blanks become parts only by contact copying at a living body's `-` sides.
+  - **Evidence** (1000 copy blanks, world 50, drives from step 1000, 10^6 steps; `pop:` lines every 20000 steps):
+    h = 0.6, d = 1: 4 of 4 worlds alive at the end with 275-304 bodies (217-324 at every sample), 1.41 million births and
+    as many deaths each (mean life 150 steps), generation 5884-6071 (about 300 per 50000 steps; at any sample the living bodies span
+    18-89 generations: the population turns over completely); births in the last 3 steps of each world. 95% of the
+    parts born into bodies are fresh copies (not a dead body's parts). Mean pools: free R 194, free S 147, buds waiting
+    100, blanks 133; copies R : S 1.22 (a waiting bud's R exposes its `-`). A part is born into a body 2.3 side
+    lengths from where it was copied (91% within 5; a random place is about 19 away). About 30000 steps per minute.
+  - **The scan** (seed 1 unless said, 30-100k steps): with slow decay (d 0.01-0.3) and h 0.05-0.5 the world also runs on
+    but a dead body's parts rebind at once: 370-425 bodies (all the material), copies per part born 0.05-0.2. With d = 1:
+    h 0.5 340 bodies (4 of 4 to 100k), 0.6 285, 0.7 50-190 fluctuating (4 of 4 to 100k, 2 of 4 to 10^6: seeds 2 and 4
+    extinct at 673k and 921k after generation 4978 and 6879; seeds 1 and 3 at generation 7452 and 7524), 0.8 extinct in
+    4 of 4 by 3000-6000 steps, 0.9 and 1.0 extinct. A fold: births need two parts to meet a seed site before they decay,
+    which fails in a sparse population (IDEAS, "A world that runs on").
+  - **Picture:** [pair-runs-on.png](pictures/pair-runs-on.png) (h 0.6, seed 1 at 10^6 steps: 275 bodies, generation
+    5884); [pair-runs-on-h07-1M.png](pictures/pair-runs-on-h07-1M.png) (h 0.7, seed 1: 136 bodies in patches,
+    generation 7452).
+  - **Command:** `PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 1000000 runs/x` (about 35
+    minutes; PAH hazard, PAD decay, PAHT hazard start, PAP a `pop:` line every k steps: living bodies, births, deaths,
+    generations, mean pools, copies by type, fresh share, copied-to-born distance). Check `pair-run` (100k steps, 4
+    worlds, need 3: still budding at the end, 20+ bodies, generation 100+, copies R : S within 1.5, half the parts fresh):
+    4 of 4, 267-285 bodies, generation 620-635, fresh 0.95 (194 s).
+  - **Status:** works. Next (NEXT): heritable variation (Direction 2, explore); the locality of copying is what a variant
+    would be inherited by.
+
 ## 2026-10-06 (autorun run 20261006-0021, harden)
 
 - **Speed for pair worlds (exact)** — works. The pair world runs 1.8-2.1x faster with the same output byte for byte

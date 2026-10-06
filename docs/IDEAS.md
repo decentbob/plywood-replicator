@@ -18,6 +18,30 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## A world that runs on: a death must give back raw material, not parts (build run 20261006-0251, 2026-10-06)
+
+Measured on the pair with two labelled drives, a body hazard h (lysis into the two parts) and decay d of free parts
+into blanks, 1000 blanks in world 50 (INNOVATIONS run 0251).
+- **Slow decay recycles parts, not material.** With d of 0.01-0.3 per 100 steps, a dead body's R and S rebind at once
+  (a waiting seed site is always near), so births follow deaths one for one and the population is set by the material
+  (370-425 bodies of at most about 500), whatever h (0.05-0.5). New bodies are then built from old parts: copies made
+  per part born 0.05-0.2. That world runs on, but it would not evolve: a part type is made only by copying, so a
+  variant could spread only as fast as parts are copied, not reused.
+- **Fast decay makes every birth a copy.** With d = 1 (every free part a blank again within 100 steps) 94-96% of the
+  parts born into bodies are fresh copies, and the population is set by the hazard: about 340 bodies at h = 0.5, 285
+  at 0.6, 50-190 at 0.7 (fluctuating), none at 0.8-1.0.
+- **An extinction edge (an Allee effect).** A birth needs an R and an S copied, moving to a seed site and binding
+  before either decays. In a sparse population both decay first, so below some density births cannot keep up: between
+  h = 0.7 and 0.8 the steady state disappears, and at 0.7 a world of about 100 bodies drifts across it (2 of 4 extinct
+  by 10^6 steps). The 50-200 bodies first proposed lie just above that edge; a robust world keeps more.
+- **Copying is local.** A part is born into a body on average 2.3 side lengths from where it was copied (91% within 5;
+  a random place in this world would be about 19 away). The pair has no heredity of its own (a bud is built from any free
+  parts that reach the seed site), but with copies this local, the parts a body copies end in buds a few side lengths away
+  (its own or its neighbours'): heredity by neighbourhood, and bodies cluster in patches (picture). Direction 2 depends on this: a
+  variant part made by copy error is copied again by the body that carries it, and its copies go to that body's
+  neighbourhood.
+- **Remaining asymmetry, measured:** copies R : S 1.20-1.22 (a waiting bud's R exposes its `-`; 30-100 buds wait).
+
 ## Sources in proportion to use: every cell exposes one side; the smallest kind, the pair (direction check, review-intent run 20261005-1850, 2026-10-05): built in run 20261005-2320 with one correction (below)
 
 The question left by run 1422: under closed walls type k is made only at a waiting front of cell k, where it is no
