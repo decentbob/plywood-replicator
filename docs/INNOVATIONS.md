@@ -20,9 +20,9 @@ not statistics.
   is one source of each type wherever its buds are. The bud is its parent moved one cell side along a strip: it points
   away (picture, first bud).
   - **Evidence** (demo `pair`, world 30, openRange 1, 3000-5000 steps): 300 copy blanks: 20 bodies at 401, 404, 524,
-    350 steps (seeds 1-4); every blank used by about 1000-2000 steps, 134-149 bodies of 151 possible, generation 9-10;
-    bodies doubled at 63, 186, 288, 351, 506, 687, 973 steps (seed 1: 2 to 128). Copies made R 149-175, S 125-151: the
-    surplus R are buds still waiting for an S when the blanks ran out (2-50). Other settings, 4 of 4 worlds each: 100
+    350 steps (seeds 1-4); every blank used by about 1000-2000 steps, 134-148 bodies of 151 possible by 3000 steps, generation 9-10;
+    bodies doubled at 63, 186, 288, 351, 506, 687, 973 steps (seed 1: 2 to 128). Copies made R 150-167, S 133-150: the
+    surplus R are buds still waiting for an S when the blanks ran out (0-34). Other settings, 4 of 4 worlds each: 100
     blanks (20 bodies at 878-1412, 43-49 of 51), world 20 (348-613, generation up to 15), world 45 (675-1226), 1000
     blanks in world 50 (305-492; 448-476 of 501 bodies, generation 13-14). About 1300 steps per second for 300
     triangles.
@@ -36,7 +36,7 @@ not statistics.
     3000 steps).
   - **Command:** `node tri/demos.js pair 1 3000 runs` (options: PAB blanks 300, PAS world 30, PAR openRange 1, PAT=1
     the turned order, PAKR / PAKS other R and S types; extra: the body count to time, 20). Checks `pair` (4 of 4 worlds
-    pass, need 3) and `pair-c` (control). Result line: bodies, generations, free R and S, buds waiting, copies by type,
+    pass, need 3) and `pair-c` (control: 5 bodies by 5000 steps, never 20). Result line: bodies, generations, free R and S, buds waiting, copies by type,
     doubling times, children per body.
   - **Status:** works in isolation. A closed world only: material runs out once every blank is a part. Next (NEXT):
     a world that runs on (labelled decay of free parts, a body hazard), then heritable variation.

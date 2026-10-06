@@ -54,7 +54,7 @@ each living body with need-limited exposure.
   R at its front and its `-` while nothing makes S (1-5 bodies in 4 worlds, copies R 181-289 against S 0-6). Moving
   the anchor mark (no glue: never a template) from S's third side to the seed site, S `B@-y|`, and onto R's front, R
   `Y@&b@|-`, makes each cell's plain `-` its one source and keeps binding sites out of the copying: one founder among
-  300 copy blanks makes 134-149 bodies in 4 of 4 worlds (INNOVATIONS run 2320). The general lesson for any kind
+  300 copy blanks makes 134-148 bodies in 4 of 4 worlds (INNOVATIONS run 2320). The general lesson for any kind
   built on contact copying: **expose a type on a side that nothing binds**, else the source closes exactly when the
   type is needed (the seed site) or opens exactly when it is not (a waiting front makes surplus root parts: 92-99
   stranded buds with the front copyable). The seed site opposite R's Y gives a strip (the bud points away); beside it
