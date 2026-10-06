@@ -5,6 +5,16 @@ History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun l
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`).
 
+**Current slice (autorun run 20261006-1620, build, in progress): a second resource only a longer kind can use.**
+Constraint found first: a copy blank copies any non-anchor side whatever its glue (RULES, Contact copying), so no blank
+type can be selective without a core change; a resource only one kind can use must be bound by glue: a labelled stock of
+free parts that the pair cannot bind. Steps: (1) demo `pair` gains a second labelled supply `PAF` (free parts of given
+types that never decay and return as themselves when lysed, so the stock is conserved); (2) a strip whose extra cells come
+only from the stock (closed exposed sides, never copied), so it needs one blank per birth against the pair's two;
+(3) each kind alone (free blanks it leaves: R*), then together from one founder each and by invasion, at a few stock
+sizes. Done when the outcome (strip excluded, coexistence, or strip wins) is measured in 4 worlds at each setting and a
+check holds 3 of 4; stop there.
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
