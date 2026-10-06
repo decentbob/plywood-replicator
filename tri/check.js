@@ -86,6 +86,26 @@ const CHECKS=[
   {id:'duo-inv-c',cap:'  5 strips entering a pair world die out',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:200,env:{...env,PA2T:'30000',PAEN:'5'},
     pass:(L,o)=>{const m=res(o),n=at(o,30000,1);if(!m)return [false,'no result'];return [n>=200&&m[1]==='alive'&&m[3]!=='alive',`${n} pairs before entry; strip ${m[3]}`];}},
   ];})(),
+  // run 20261006-1620 (build): a second resource only the longer kind can use. Copying is glue-blind, so a resource only
+  // one kind can use is a stock of parts it binds by glue (PAF: never decays, returns as itself when lysed). The strip
+  // 'Z@&c@|- C@d@|-| D@-|z|' takes its middle and last cells from a stock of 400 each (closed exposed sides: never
+  // copied), so it needs one blank per birth. With a hazard per individual (PAHU=0) it coexists with the pair from one
+  // founder each (duo-stock) and when pairs enter its world (duo-stock-inv); the plain strip dies out under the same hazard
+  // (duo-stock-c), the stock strip under a hazard per triangle (duo-stock-tri); a stock of 600 drives the pair out (duo-stock-hi)
+  ...(()=>{const env={PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'0',PAP:'5000',PAR:'3',PAD:'1',PAH:'0.1',PA2:'Z@&c@|- C@d@|-| D@-|z|',PAF:'C@d@|-|:400 D@-|z|:400'},
+    res=o=>o.match(/duo: pair=(\S+) mean2=(\S+) strip=(\S+) mean2=(\S+)/),at=(o,t,k)=>{const m=o.match(new RegExp(`duo: t=${t} pair (\\d+) .*\\| strip (\\d+) `));return m?+m[k]:NaN;};
+    return [
+  {id:'duo-stock',cap:'A second resource pays for length: a 3-cell strip whose extra cells come from a stock the pair cannot bind coexists with the pair (hazard per individual)',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:300,env,
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];return [m[1]==='alive'&&m[3]==='alive'&&+m[2]>=50&&+m[4]>=150,`pair ${m[1]} (mean ${m[2]} in the second half), strip ${m[3]} (mean ${m[4]})`];}},
+  {id:'duo-stock-inv',cap:'  5 pairs entering an established stock-strip world settle beside it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:450,env:{...env,PA1T:'30000',PAEN:'5'},
+    pass:(L,o)=>{const m=res(o),n=at(o,30000,2);if(!m)return [false,'no result'];return [n>=150&&m[1]==='alive'&&m[3]==='alive'&&+m[4]>=150,`${n} strips before entry; pair ${m[1]} (mean ${m[2]}), strip mean ${m[4]}`];}},
+  {id:'duo-stock-c',cap:'  control: the plain strip (every cell copied, no stock) under the same hazard dies out',demo:'pair',seeds:[1,2,3,4],need:3,steps:20000,secs:120,env:{...env,PA2:'Z@&c@|- C@d@|- D@-z|',PAF:''},
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];return [m[1]==='alive'&&m[3]!=='alive',`pair ${m[1]} (mean ${m[2]}), strip ${m[3]}`];}},
+  {id:'duo-stock-tri',cap:'  control: with a hazard per triangle (three at risk against two) the pair drives the stock strip out',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:300,env:{...env,PAHU:'1'},
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];return [m[1]==='alive'&&m[3]!=='alive',`pair ${m[1]} (mean ${m[2]}), strip ${m[3]}`];}},
+  {id:'duo-stock-hi',cap:'  a stock of 600 each: the strip drives the pair out (or nearly)',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:300,env:{...env,PAF:'C@d@|-|:600 D@-|z|:600'},
+    pass:(L,o)=>{const m=res(o),n=at(o,40000,1);if(!m)return [false,'no result'];return [m[3]==='alive'&&n<=10,`pair ${n} at 40k (${m[1]}), strip mean ${m[4]}`];}},
+  ];})(),
   // run 20261006-0621 (build): a world that keeps evolving. pair-mut's setting plus a labelled drive: every lysed triangle
   // returns as a copy blank once free (PAHB=2), so material held by binding variants flows through copying at the
   // hazard's rate. Passes a world with bodies at 200k, at least 10k copies in the last 5000 steps and a variant type first
