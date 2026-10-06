@@ -305,6 +305,12 @@ lineage, a body-length knob in disguise). The case, written before the rule; the
      4); 2-cell kinds byte for byte as at their own range. Cost: a body of 3 or more cells lets go about openRange
      passes after its last part binds, so at 120 the duo worlds' 3-cell strips are weaker (INNOVATIONS run 1920). The
      range is now a completion delay, not a body-length limit (it must exceed k - 2 for a k-cell kind).
+   - *Independent review* (run 1920, no defect found; locality, several catches in one pass, lysis, spent sides, copy
+     blanks and deadlock traced). Two behaviour changes to know: a complete parent now spends its unbonded `&` sides
+     (budKit walls `-&`, the receptor `Г@&`) while its bud still grows, since the bud's signal no longer keeps them
+     unspent; and a mutant that carries `&` on an inner side (the full mutagen can toggle it, e.g. a middle cell
+     `C@&d@|-`) splits its body at that bond into pieces released separately: "a body between joints" is then smaller
+     than the individual.
 
 ### Candidate (r): copy error in contact copying, 2026-10-06, autorun run 20261006-0450 (explore): not needed yet
 NEXT priority 5 (Direction 2, heritable variation). The case, written before any code; then what was done instead.

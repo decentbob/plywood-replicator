@@ -22,7 +22,8 @@ openRange 120. **What the range still does:** a body of 3 or more cells lets go 
 part binds (the signal echoes and fades one per pass), so at 120 the duo worlds' 3-cell strips are weaker than at 3
 (`duo-stock-hi` 3 of 4). The demos keep their own ranges (pair 1, duo and diets 3, lineage 9 and 50, imprint 1); for
 priority 11 use a small range that exceeds the longest kind expected (e.g. 9: delay about 8, lengths up to 10).
-Not changed: the lineage's incomplete root releases (`falseRel` in `budcycle-lysis`) are a different cause (they did
+Under the full mutagen (priority 11, `PAMF` off) a part that gains `&` on an inner side splits its body at that bond
+(independent review, RULES). Not changed: the lineage's incomplete root releases (`falseRel` in `budcycle-lysis`) are a different cause (they did
 not move). Tests 41 pass. Nothing is running.
 
 **Next step (rotation 60, build): priority 11, the z kind and length by mutation** (below), at openRange 9 or so.
