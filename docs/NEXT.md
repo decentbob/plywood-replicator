@@ -5,6 +5,14 @@ History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun l
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`).
 
+**Current slice (autorun run 20261006-1322, explore, in progress): heredity of combinations by locality.** Goal: find
+whether the existing core can make a body's parts come mostly from its own parent, and whether that lets selection see
+bodies. Steps: (1) observation in demo `pair`: the parental share (a newborn's R and S copied from its parent body) and
+the decay of linkage between two markers (x on R, z on S, both put into half the bodies); (2) a labelled lever with no
+rule change: faster decay of free parts (a decay interval), lower density, the side arrangement; (3) the selfish S
+(seed site `y!`: lyses the R that binds it) put into a tenth of S, with low and high parental share. Done when (1) is
+measured in 4 worlds and (3) has an answer either way; stop there (no core change unless locality cannot do it).
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
