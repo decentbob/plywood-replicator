@@ -10,6 +10,54 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-1620, build)
+
+- **A second resource pays for length: a 3-cell strip whose extra cells come from a stock the pair cannot bind coexists
+  with the pair, and wins when the stock is large** — works as a competition test when the hazard is per individual
+  (4 of 4 worlds at each setting; no rule change). NEXT priority 8 (IDEAS "One supply, one winner", (c)).
+  - **Why a stock, not a second blank type.** A copy side binds any non-anchor side whatever its glue (RULES, Contact
+    copying), so every blank copies every kind: no blank type can be one kind's own without a core change (candidate
+    (t), NEXT). What a kind can own is what it binds by glue: free parts of a type only its front catches. New in demo
+    `pair`, off by default (default and `duo` output byte for byte as main): `PAF='TYPE:N ...'`, a labelled stock of N
+    free triangles of each type beside the blanks; stock types never decay (`PAD`) and are not turned into blanks when
+    lysed (`PAHB`), so the lysis rule returns them as themselves and the stock is conserved; a late founder takes its
+    stock cells from the stock.
+  - **The stock strip:** `Z@&c@|- C@d@|-| D@-|z|` with a stock of C and D (400 each in the duo world: 1000 blanks,
+    world 50, `PAHB=2`, decay 1, h 0.1, openRange 3). C and D expose closed sides `-|` (never copied), so the strip is
+    made of one copy (Z, from its one source `-`) and two stock parts: one blank per birth against the pair's two.
+  - **Accounting per individual:** at a blank level b each kind's births per individual are about one source's copy
+    rate (the pair: two sources, two copies per birth; the stock strip: one and one). What decides is then deaths and the
+    stock: with a hazard per triangle the strip carries three triangles at risk against two, with a hazard per
+    individual both die alike.
+  - **Hazard per triangle (`PAHU=1`, run 1150's setting): the pair wins.** Alone the stock strip holds 248-255
+    individuals (4 of 4), limited by its stock (free C 71-102 of 400; blanks stay at 217-238); against the pair from one
+    founder each it is extinct by 20k, 20k, 25k and 35k (4 of 4; the plain strip by 10k).
+  - **Hazard per individual (`PAHU=0`, the same h per body): coexistence.** From one founder each: pair 123-134 and
+    strip 299-309 individuals (mean of the second half to 40k), steady from 20k on (4 of 4); mean free blanks 25-31.
+    Control, the plain strip (every cell copied, no stock) under the same hazard: extinct by 10k, pair 380-382, blanks
+    8-9 (4 of 4). So it is the stock that pays, given equal risk per individual.
+  - **The stock decides the winner.** Stock 200 each: the strip dies out by 15-20k (4 of 4; pair 371-377). Stock 400:
+    coexistence (above). Stock 600: the strip drives the pair out (pair extinct by 35k and 40k in 2 worlds, 3 left at 40k
+    in the other 2; strip 461-476). Stock 800 does not fit the world (placement fails).
+  - **Bistable at stock 400.** Five pairs entering an established strip world at 30k settle beside it in 4 of 4 (pair
+    108-111, strip 305-308 by 60k: the same mix as from an even start). Five strips entering an established pair world
+    at 30k die out by 35k in 4 of 4 (pair 353-359). So the pair world resists the strip, while the mix, once reached, holds.
+    Not explained: in the mix the pair holds about 130 at mean blanks 25, though alone it holds 380 at 9 (the strip
+    lowers the pair more than by the blanks it takes; crowding or the strips' cloud of Z copies, untested).
+  - **Pictures:** [stock-chart.png](pictures/stock-chart.png) (complete individuals of each kind: stock 200, 400, 600,
+    pairs entering a strip world, strips entering a pair world, hazard per triangle; drawn from the `duo:` lines by an
+    ad hoc script, not kept); [stock-coexist.png](pictures/stock-coexist.png) (stock 400, seed 1 at 30k: strips, three
+    cells, among pairs, mixed through the world).
+  - **Commands** (common: `PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|- C@d@|-| D@-|z|'
+    PAF='C@d@|-|:400 D@-|z|:400' node tri/demos.js pair SEED 40000 runs`, about 3 minutes): `PAHU=1` hazard per triangle;
+    `PAF='C@d@|-|:600 D@-|z|:600'` or `:200` the stock; `PA1T=30000 PAEN=5` (60k steps) pairs enter, `PA2T=30000 PAEN=5`
+    strips enter; `PA2='Z@&c@|- C@d@|- D@-z|' PAF=` the plain strip. Checks `duo-stock` (coexistence), `duo-stock-inv`
+    (pairs enter and settle), `duo-stock-c` (plain strip dies), `duo-stock-tri` (hazard per triangle: pair wins),
+    `duo-stock-hi` (stock 600: strip wins): CHECKRESULTS.
+  - **Status:** works as a test: a longer kind persists, and can win, when its extra cells are made of a resource the
+    shorter kind cannot use and its risk does not grow with its size. Not yet: such a kind arising by mutation (a front
+    glue that catches a stock part), or a second resource without a stock (candidate (t)).
+
 ## 2026-10-06 (autorun run 20261006-1322, explore)
 
 - **Heredity of combinations by locality: a newborn's parts come from its own parent about half the time, and above

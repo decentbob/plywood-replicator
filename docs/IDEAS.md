@@ -55,6 +55,31 @@ run 1322), no rule change.
 - **For complex evolution:** keep the free-part pool lean (fast turnover), and measure s before a selection test. A
   kind whose cooperative parts must stay together needs s above 1 - 1/k for every cheat's k it is to resist.
 
+## A resource of one's own is bound by glue, not copied (build run 20261006-1620, 2026-10-06)
+
+Measured with the pair and a 3-cell strip whose extra cells come from a stock of parts (INNOVATIONS run 1620).
+- **Copying is shared by everyone.** A copy side binds any non-anchor side whatever its glue, so every blank can become
+  a part of every kind: blanks are one common resource, and no blank type can be one kind's own (that would take a
+  copy side that reads glue: candidate (t), NEXT). What a kind can own is what it binds by glue: free parts that only its
+  front catches. A stock of such parts is a second resource in Tilman's sense.
+- **Per individual, length costs only risk and waste.** If each part a birth needs comes from one copy source on the
+  body, births per individual at a blank level are about one source's copy rate whatever the length (the pair: two
+  sources, two copies per birth). Length then costs through waste (each part copied apart and decaying before its site
+  is ready: run 1150's 23% against 85%) and through risk (more triangles hit). Parts taken from a stock remove the
+  waste of their copies and the blanks they would use; risk per triangle still costs. Measured: with a hazard per
+  triangle the stock strip still loses; with a hazard per individual it coexists, and with a larger stock it wins.
+- **The stock sets the balance, and history matters.** Stock 200: the pair wins; 400: the two coexist; 600: the strip
+  wins. At 400 pairs can enter a strip world but strips cannot enter a pair world: two stable states, so which kind
+  came first matters (a priority effect), and the mix cannot be reached from the pair's side.
+- **Diet is heritable without a core change** (designed, not demonstrated): which stock a kind uses is the glue of its
+  fronts, and a part's glue is copied exactly, so a mutagen that changes a front glue changes the kind's diet. A world
+  with several stock types (each a part only some fronts catch) offers as many niches as types (Tilman: k resources
+  can hold up to k kinds). That is a route to many kinds evolving side by side, each with its own diet and a body
+  length that its diet pays for; the next test is whether a mutant front reaches an unused stock and spreads.
+- **Risk per triangle is the remaining cost of size.** Under the hazard per triangle (the default of the flowing
+  world since run 0621) every extra cell costs as much as in run 1150; a kind gets size for free only if risk does not
+  grow with it (shelter, a body that sheds hits: IDEAS "One supply, one winner", (b)).
+
 ## One supply, one winner: the kind that wastes fewest copies (build run 20261006-1150, 2026-10-06)
 
 Measured with the pair and a 3-cell strip of the same design in the flowing world (INNOVATIONS run 1150).
@@ -80,7 +105,9 @@ Measured with the pair and a 3-cell strip of the same design in the flowing worl
   then dies at the same rate whatever its size; run 0450) or shelter; (c) a second resource only the longer kind can use (Tilman: two
   resources allow two kinds to coexist when each is limited by a different one), e.g. a second blank type that only a
   cell with a second copy side takes; (d) spatial structure (patches) in larger worlds. Of these, (c) is the first to
-  try: it needs no rule change, only a second labelled supply.
+  try: it needs no rule change, only a second labelled supply. Tested in run 1620 (section above): a stock of parts only the
+  strip binds pays when risk is per individual (coexistence at stock 400, the strip wins at 600), not when it is per
+  triangle; a second blank type cannot be one kind's own in the core (copying is glue-blind).
 
 ## Deaths that return blanks keep material flowing; selection of part types can still kill the world (build run 20261006-0621, 2026-10-06)
 
