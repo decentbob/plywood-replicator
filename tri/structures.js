@@ -113,11 +113,20 @@ function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt
 function pairKit(turn=false){const R={v:[[0,0],[1,0],[0.5,H]],type:'Y@&b@|-'},a=R.v[1],b=R.v[2],c=R.v[0];
   const S={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:turn?'B@y|-':'B@-y|'};
   return {tris:[R,S],R:R.type,S:S.type,rootSide:0,growSide:1,seedSide:turn?1:2};}
-// a strip of cells, each across the previous one's side 1 (pairKit's geometry: a pair is a strip of two), types in order
+// a strip of cells, types in order, each bound by its side 0 across the previous one's front (its side marked '@|' other
+// than side 0; side 1 if none: pairKit's geometry, a pair is a strip of two)
 function stripKit(types){const tris=[{v:[[0,0],[1,0],[0.5,H]],type:types[0]}];
-  for(let k=1;k<types.length;k++){const [c,a,b]=tris[k-1].v;tris.push({v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:types[k]});}
+  for(let k=1;k<types.length;k++){const t=[...types[k-1].matchAll(/([^.@&|?!])([.@&|?!]*)/g)],f=[1,2].find(i=>t[i]&&t[i][2].includes('@')&&t[i][2].includes('|'))||1;
+    const v=tris[k-1].v,a=v[f],b=v[(f+1)%3],c=v[(f+2)%3];tris.push({v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:types[k]});}
   return {tris,types};}
+// a straight strip of k cells (run 20261006-1920): root 'Z@&c@|-', fronts on sides 1 and 2 in turn (a straight band),
+// each cell's own letters (c d e g h i j k; not f, the weld), the seed site 'z|' on the last cell's side that turns off
+// the band (its other side plain, so the last type is copied)
+function strip(k){const L='cdeghijk',types=[];if(k<2||k>L.length+1)throw Error('strip: 2 to '+(L.length+1)+' cells');
+  for(let i=0;i<k;i++){const f=i%2?2:1,t=['','',''];t[0]=i?L[i-1].toUpperCase()+'@':'Z@&';
+    if(i<k-1){t[f]=L[i]+'@|';t[3-f]='-';}else{t[3-f]='z|';t[f]='-';}types.push(t.join(''));}
+  return stripKit(types);}
 // a bud's pose on its parent (budKit): the parent's cells rotated 180 degrees about the middle of its pore's outer edge
 const budPose=(R,p)=>[-p[0],2*R*H-p[1]];
 
-module.exports={budKit,budPose,pairKit,stripKit,ringKit,lattice,hexr,H};
+module.exports={budKit,budPose,pairKit,stripKit,strip,ringKit,lattice,hexr,H};

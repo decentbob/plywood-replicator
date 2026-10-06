@@ -238,6 +238,40 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Candidate (o) with the joint: one range for every length, 2026-10-06, autorun run 20261006-1920 (core-review)
+NEXT priority 10 (run 1851: openRange was set per kind, 1 for the pair, 3 for the 3-cell strip, 9 and 50 in the
+lineage, a body-length knob in disguise). The case, written before the rule; the measurement and the decision follow.
+1. **What fails (measured on `main`, `e63366e`).** Strips of k cells (each cell bound by its side 0 to the previous
+   one's front `x@|`, a root `Z@&c@|-` on the last cell's seed site `z|`; own letters, no hazard, no mutagen; 300 blanks,
+   world 30, 6000 steps, seeds 1 and 2; script and numbers below). A k-strip's root lets go before its individual is
+   complete unless openRange is at least about k (3 cells: every release incomplete at 1 and 2, complete at 3; 4 cells:
+   incomplete at 3, complete at 4 or more), and a large range stalls long kinds (openRange 120: 4- and 5-cell strips made
+   2 to 11 individuals in 6000 steps, chains of up to 23 triangles; the pair 92, the 3-cell strip 66-79). No one range
+   serves 2 to 5 cells.
+2. **Why, from the rule.** (a) *The parent hears its child.* The open signal crosses every bond, the `&` joint between
+   a bud's root and its parent's seed site too. A parent is released only when it hears nothing, so a child's open front
+   within openRange of the parent's root holds the parent (and the grandparent behind it) until the child is complete:
+   with a large range, generations stay joined and a body's release waits on its descendants (the stall). Lysis already
+   stops at this joint (Lysis, run 2051). (b) *The new part's lag (candidate (o)).* A part caught at a front emits from
+   the next pass only (it was free, -1, when the previous pass's values were taken), while the front it closed stops
+   emitting at once. The cells behind hear a dip for one pass: the root of a strip whose front is cell j hears at least
+   openRange - j - 1 and lets go at 0, so a k-strip needs openRange >= k. The root itself (j = 1) hears nothing in that
+   pass but the echo from its parent across the joint: so stopping the signal at the joint alone breaks every strip of
+   3 or more (measured: every release incomplete at every range), and the two parts go together.
+3. **The rule as proposed.** (a) The open signal is not relayed across a bond on which either side carries `&` (the
+   joint between a bud and its parent), as lysis already is not: one condition for both relayed signals. (b) A triangle
+   caught by glue that has an open front (an unbonded glued `@` side that is not `&`) emits openRange from the pass it
+   binds, not from the next (binding already sets the caught triangle's state: the fill flag of a fill). Locality: (a)
+   reads the marks of the two sides of a bond (fixed types); (b) reads the caught triangle's own sides. Nothing new is
+   counted or exposed; no new mark, signal or state. Cost: one condition in the open relay (shared with lysis), one line
+   in glue binding.
+4. **What it should change.** A body between `&` joints hears only its own fronts, so openRange needs only to reach
+   across one individual (openRange >= k - 1 for a k-strip), and the default 120 serves every kind shorter than that.
+   The pair (2 cells) behaves at every range as at openRange 1 now. Release comes about openRange passes after the last
+   part binds (the signal fades one per pass, echoing inside the body) for 3 or more cells; immediately for 2.
+5. **Test.** The strip measurement on the oracles `openJoint`, `openCatch`; the check suite with `CHECK_SAVE` against
+   `main` with both on, every changed outcome explained; then the pair-world checks at one range.
+
 ### Candidate (r): copy error in contact copying, 2026-10-06, autorun run 20261006-0450 (explore): not needed yet
 NEXT priority 5 (Direction 2, heritable variation). The case, written before any code; then what was done instead.
 1. **Capability and why the goal needs it.** Heritable variation: a part type that differs from its template and is

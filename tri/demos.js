@@ -1,7 +1,7 @@
 'use strict';
 // Demos of every capability (one or two small worlds each; pictures + saved states in the output directory).
 //   node tri/demos.js NAME [seed] [steps] [outdir] [extra]
-// NAME: copy | ring | imprint | pool | budpool | budcycle | lysis | closure | pair (budpore, the doorway pairs, retired 2026-10-04: git `882b7d4`; the casting lineage's demos were removed on 2026-10-03; git `7415fd4`)
+// NAME: copy | ring | imprint | pool | budpool | budcycle | lysis | closure | pair | strip (budpore, the doorway pairs, retired 2026-10-04: git `882b7d4`; the casting lineage's demos were removed on 2026-10-03; git `7415fd4`)
 const path=require('path');
 const {createWorld,placeFree,census,typeCount,buildStructure,placeTri}=require('./world');
 const {render,montage}=require('./render');
@@ -566,6 +566,25 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(K2)console.log(`t=${s.t} duo: ${DK2.map(k=>`${k.name}=${k.ext?'extinct@'+k.ext:'alive'} mean2=${k.m?(k.sum/k.m).toFixed(0):'-'}`).join(' ')} strip=${K2.types.join(',')}`);
       if(MU)console.log(`t=${s.t} variants (in a body at some census; max bodies, first, last seen): ${[...seenV].sort((a,b)=>b[1].max-a[1].max).slice(0,15).map(([c,v])=>`${c} ${v.max} ${v.first}-${v.last}`).join(' | ')||'none'}`);
       finish(`The pair: one founder among copy blanks (S ${K.S})${HZ||DK?`, hazard ${HZ}, decay ${DK}`:''}`,3);},
+    // strips of k cells (core-review run 20261006-1920, RULES Core changes: one range for every length): one founder strip
+    // (structures strip(k), a labelled start) among PAB copy blanks (300), world PAS (30), openRange PAR (the core's
+    // default); extra: the lengths, one world each in turn (2345). Observation only: each '&' release, whether the
+    // released individual (the chain of fronts from its root) is complete, and how many passes after its last cell bound
+    strip(){steps=steps||6000;const ks=String(extra||'2345').split('').map(Number),NB=+(process.env.PAB||300),size=+(process.env.PAS||30),out=[];
+      for(const k of ks){const K=S.strip(k),T=K.types.map(canon),params=process.env.PAR?{openRange:+process.env.PAR}:{};
+        const {s}=createWorld({seed,size,structures:[{tris:K.tris,x:size/2,y:size/2}],supply:{'-?-?-?':NB},params});
+        const bt=new Int32Array(s.n).fill(-1),bind=s.bind.bind(s);s.bind=(u,i,ku,v,j,kv)=>{bind(u,i,ku,v,j,kv);bt[u]=bt[v]=s.t;};
+        const fr=u=>{for(let i=0;i<3;i++){const q=u*3+i;if(s.att[q]&&s.anc[q]&&s.glue[q])return i;}return -1;},o={ok:0,bad:0,d:[]},rel=s._release.bind(s);
+        s._release=()=>{for(let u=0;u<s.n;u++){if(s.op[u]!==0)continue;for(let i=0;i<3;i++){const q=u*3+i;if(!s.done[q]||s.bond[q]<0)continue;
+          let x=u,n=1;for(let f=fr(x);f>=0&&s.partner(x,f)>=0;f=fr(x)){x=s.partner(x,f);n++;}
+          if(n===k&&canon(s.typeName(x))===T[k-1]){o.ok++;o.d.push(s.t-bt[x]);}else o.bad++;}}rel();};
+        for(let t=1;t<=steps;t++)s.step();
+        let ind=0,big=0;for(let u=0;u<s.n;u++)if(s.bonded(u)&&canon(s.typeName(u))===T[k-1])ind++;for(const m of s.bodies().members)big=Math.max(big,m.length);
+        const d=o.d.sort((a,b)=>a-b),med=d.length?d[d.length>>1]:'-';
+        console.log(`k=${k} ${K.types.join(' ')} openRange=${s.p.openRange}: complete releases ${o.ok}, incomplete ${o.bad}, passes from last cell to release (median) ${med}, individuals ${ind}, largest body ${big}`);
+        out.push(`k${k}=${o.ok}/${o.bad}/${med}`);
+        if(k===ks[ks.length-1])snap(s,'end',`t=${s.t}: ${k}-cell strips, openRange ${s.p.openRange}`,null,false);}
+      console.log(`t=${steps} result: complete/incomplete/delay ${out.join(' ')}`);finish('Strips of k cells: one range for every length',1);},
     // ring membrane grown from a periodic kit (2R-1 motif types) on an anchor + root (labelled start); closes on the root
     // (extra: R, default 3; copies of each motif type 12)
     ring(){steps=steps||30000;const R=parseInt(extra)||3,K=S.ringKit(R,'z'),r=K.tris[0],i=K.rootSide,per=12;
