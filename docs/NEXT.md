@@ -27,11 +27,10 @@ runs/x` (about 35 minutes each; PAH=0.7 for the edge).
 d 1). Make the case in RULES (Core changes) first: contact copying now and then makes a different type, the variant
 then copied true. Which sides may vary: an outer side (R's `-`, S's `-`) changes behaviour without breaking assembly; a
 joint side (`Y@&`, `b@|`, `B@`, `y|`) is lethal or makes a new kind. Inheritance here is by neighbourhood (copies land
-2-3 side lengths away), so measure first: does a neutral marked variant (a label glue on an outer side, behaving like
-`-`) stay in patches and drift, and how long does it last against 280 bodies? Then a variant with an effect. To know
+2-3 side lengths away), so measure first: does a neutral marked variant (a mark that changes nothing, e.g. on an outer side that
+still takes copy blanks: check what a blank binds first) stay in patches and drift, and how long does it last against 280 bodies? Then a variant with an effect. To know
 whether a body's copies go to its own buds, the copy log would need the template (observation only, `sim.js` copy
 event).
-
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
