@@ -10,6 +10,52 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-1322, explore)
+
+- **Heredity of combinations by locality: a newborn's parts come from its own parent about half the time, and above
+  half a parasite part that never buds dies out** — works as a measurement and a selection test (4 of 4 worlds each
+  way; no rule change). NEXT priority 7. Setting: the flowing pair world without the mutagen (1000 blanks, world 50,
+  `PAHB=2`, hazard per triangle `PAHU=1`, decay `PAD=1`). New in demo `pair`, all off by default (default output byte
+  for byte as main: `pair 1 3000` and the mutagen world `pair 2 20000`): `PAPS=1` (`par:` lines and a `parental:`
+  result line: the share of births whose R, S, both were copied from the newborn's parent body, and whose two parts
+  came from one body), `PAV=link` (two markers, x on R and z on S, put into the same half of the living bodies at
+  `PAVT`; `link:` lines give their linkage r), `PAVK=selfish` (S `B@-y!`, run 0621's variant) and `PAVK=parasite` (S
+  `B@-q`: its seed site a glue nothing binds, no anchor; copied at two sides, never buds), `PADI` (decay every k steps,
+  100) and `PAMX` (stirring, a labelled drive: each step each free part changes places with a random free triangle
+  with probability m). `sim.js`'s observation log `copyLog` now names each copy's template.
+  - **Half parental.** At h 0.6, decay every 100 steps: R from the parent 0.39, S 0.44, both 0.20, two parts from one body
+    0.22-0.23 (a random living body 0.009; 4 of 4 worlds, 80k births each). Two markers put into the same half of the
+    bodies at 20k lose their linkage within 5000 steps (r 1 to -0.15..0.32, about 35 generations; 4 of 4), and drift then
+    fixes or loses each (population 120-220). Copies are local (born 1.9 side lengths from where copied), but a bud's
+    site takes whichever part arrives first, and about half the time a neighbour's copy does.
+  - **What moves it.** The leaner the pool of free parts, the more the parent's own copy wins: decay every 10 steps, h
+    0.3: S 0.58 (both 0.34); every 30 steps: 0.44; every 100 steps, h 0.3: 0.25 (both 0.07; fewer births per copy, a
+    larger pool); stirred (`PAMX` 0.05 / 0.2): 0.47 / 0.22 at decay 10, 0.15-0.2 / 0.03 at decay 100, h 0.6. Decay every
+    10 or 30 steps at h 0.6 kills the world within 2000 steps of the hazard's start (the extinction edge of run 0251).
+  - **The parasite threshold, as predicted.** A part copied k times as often as its rival that never makes its own body
+    bud can fill only the births the parents' own copies leave, a share 1 - s, so it spreads only if (1 - s) k > 1, to
+    about ((1 - s) k - 1) / (k - 1) (IDEAS). S `B@-q` (k about 2) put into 1 in 10 S at 20k: s 0.58 (decay 10, h 0.3) gone
+    by 22-26k, 4 of 4; s 0.43 (decay 100, h 0.6) gone by 22k, 4 of 4; s 0.25 (decay 100, h 0.3) holds 0.42-0.52 of the
+    bodies to 80k, 4 of 4 (model 0.5); the first world stirred (s 0.22) spreads to 0.51-0.53 within 2000 steps, the hosts
+    crash to 32-44 bodies, the parasite dies with them and the pair recovers (2 of 2; check `pair-host-mx` 4 of 4, one
+    world down to 81 bodies at 30k); stirred at h 0.6 (s 0.03) it spread to 0.42 and the world died (1 world; the other
+    stirred worlds there died before the parasite went in). Light stirring (s 0.47, at the threshold) leaves it near 0.1
+    for 20k steps, then at 0.008 and 0 by 50k (2 worlds).
+  - **Run 0621's selfish S is lethal here, not selfish.** `B@-y!` put into 1 in 10 S at 20k is gone by 22k (4 of 4): its
+    seed site is mostly covered by R being lysed, so it is copied less than plain S (about 10 copies per body per 2000
+    steps against 28).
+  - **Why not higher (parity, analysis):** in a pair a fresh copy can bind at once only beside its own template (IDEAS);
+    parts made beside a different cell they join need four cells in an arc round a vertex. Designed, not built.
+  - **Picture:** [parasite-share.png](pictures/parasite-share.png) (share of living bodies with the parasite S in the
+    four regimes, 4 worlds each, 2 for the stirred one; dashed: the model's share at s 0.25), drawn from the `par:` lines.
+  - **Commands** (common: `PAHB=2 PAB=1000 PAS=50 PAHT=1000 PAD=1 PAHU=1 PAP=2000 node tri/demos.js pair SEED STEPS runs`):
+    parental share and linkage `PAH=0.6 PAV=link PAVT=20000` (100k, about 4 minutes); parasite `PAV=mix PAVP=0.1
+    PAVK=parasite PAVT=20000` with `PADI=10 PAH=0.3` (excluded), `PAH=0.3` (holds), `PADI=10 PAH=0.3 PAMX=0.2`
+    (stirred); selfish `PAVK=selfish PAH=0.6`. Checks `pair-host` (s 0.57-0.58, parasite 0 at 40k), `pair-host-c` (s
+    0.24, parasite 0.43-0.56 at 40k), `pair-host-mx` (s 0.25 over the run, peak 0.48-0.53): 4 of 4 each, 300 s together; the full suite 26 of 26 (6404 s).
+  - **Status:** works as a measurement and a test; not yet: heredity of combinations by construction (s near 1). What
+    it changes: a selection test on the pair must report s; cooperative parts resist a cheat only while s > 1 - 1/k.
+
 ## 2026-10-06 (autorun run 20261006-1150, build)
 
 - **Two kinds on one supply: the pair against a 3-cell strip; the kind that draws free blanks lowest wins from any
