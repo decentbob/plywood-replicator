@@ -1,39 +1,31 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-1851, review-intent). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-1920, core-review). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
-pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`).
+pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`, the direction
+check of run 1851 at `e63366e`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Current slice (autorun run 20261006-1920, core-review, in progress): one range for every length** (priority 10).
-Goal: a single openRange under which strips of 2 to 5 cells bud complete, or the reason none exists. Measured (main):
-the range a k-strip needs grows with k (3 cells need 3, 4 need 4) and a large one stalls 4- and 5-cell kinds (the parent
-hears its child's front across the `&` joint). Candidate under test: the open signal stops at `&` joints (as lysis
-already does) and a caught part with an open front emits from the pass it binds (candidate (o)); oracles `openJoint`,
-`openCatch` in `tri/sim.js`. Check: suite with `CHECK_SAVE` against main, every changed outcome explained. Stop when the
-case is decided (adopted or recorded as not needed).
-State (19:47 UTC): the rule is in `tri/sim.js` on branch `claude/core-review-1920` (tests 41 pass, new test `strip`);
-demo `strip` (extra: lengths, `PAR` range) measures it. Strip grid (oracles, 2 seeds, 6000 steps): with both parts,
-openRange 3-120 buds 2-5 cells with no incomplete release (5 cells need 4 or more); each part alone does not. Running:
-the baseline suite on `main` (`CHECK_SAVE=$PWD/runs/a node tri/check.js` in a worktree of `e63366e`); next the suite on
-the branch (`CHECK_SAVE=$PWD/runs/b`), `diff -r`, then the pair-family checks at one range
-(`TRI_PARAMS='{"openRange":120}' node tri/check.js pair ... duo ... diets ...`).
+**Handoff status (autorun run 20261006-1920, core-review).** Priority 10 done with one core change: **the open signal
+stops at `&` joints** (a bud and its parent no longer hear each other; lysis already stopped there) and **a part caught
+with an open front emits in the pass it binds** (candidate (o)). Case, grid and suite diff in RULES Core changes
+("Candidate (o) with the joint"); evidence in INNOVATIONS (run 1920). In short: on main a k-cell strip needed openRange
+about k (smaller: roots let go half built) and a large range stalled 4- and 5-cell kinds (parents held by their buds);
+now openRange 120 buds 2- to 5-cell strips with every release complete (new demo `strip`, `structures.strip(k)`, check
+`strips` 4 of 4). Suite 34 of 34 (plus `strips`), every changed world explained; the pair-family checks pass at
+openRange 120. **What the range still does:** a body of 3 or more cells lets go about openRange passes after its last
+part binds (the signal echoes and fades one per pass), so at 120 the duo worlds' 3-cell strips are weaker than at 3
+(`duo-stock-hi` 3 of 4). The demos keep their own ranges (pair 1, duo and diets 3, lineage 9 and 50, imprint 1); for
+priority 11 use a small range that exceeds the longest kind expected (e.g. 9: delay about 8, lengths up to 10).
+Not changed: the lineage's incomplete root releases (`falseRel` in `budcycle-lysis`) are a different cause (they did
+not move). Tests 41 pass. Nothing is running.
 
-**Handoff status (autorun run 20261006-1851, review-intent).** Direction check after priority 9; no code change
-(`node tri/test.js` 40 pass; `tri/check.js` not rerun, run 1750's suite stands). Reasoning in IDEAS, "After nine slices
-on the pair". In short: the core has not changed since run 1921 and nine capabilities came from combinations, but they
-live in five different world settings, the environment grew to 11 drive options, the only growth in body length (the
-z kind) came unplanned in a world with a front-only mutagen and prepared stocks, openRange is set per kind (a
-body-length knob in disguise), and there is no common measure of complexity. Decision: priority 10 is (a), the z kind
-and length by mutation, prepared by a core review of the range and followed by a census, one standard world, and
-grown instead of prepared resources (priorities 10-14 below). Rotation unchanged. Nothing is running.
-
-**Next step (rotation 59, core-review): one openRange for every body length** (priority 10 below).
+**Next step (rotation 60, build): priority 11, the z kind and length by mutation** (below), at openRange 9 or so.
 
 ## Direction and priorities
 
@@ -54,7 +46,7 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
    binds, when risk is per individual (coexistence at stock 400, the strip wins at 600; hazard per triangle: the pair).
 9. Done: heritable diets (run 1750, checks `diets`, `-c`, `-ns`): front-glue mutants reach unused stocks and coexist
    (three diets, 4 of 4); a z front that eats other kinds' roots makes an unplanned 3-cell kind.
-10. [59 core-review] **One range for every length.** Measure budding of k-cell strips (demo `pair`, `PA1=0`
+10. Done (run 1920, check `strips`): **one range for every length.** Was: [59 core-review] Measure budding of k-cell strips (demo `pair`, `PA1=0`
     `PA2=...`, k = 2 to 5, own letters, no hazard, no mutagen) at openRange 1, 3, 5 and 120: does each bud let go only
     once complete, and how long after? If the range a strip needs grows with k, weigh candidate (o) (binding sets the
     caught part's open signal at once) as the fix, gated as usual (case in RULES first; `CHECK_SAVE` diff of the suite,
@@ -62,7 +54,7 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
     and the pair-world checks can run at it (or the reason they cannot is recorded). Why first: priority 11 asks
     whether longer kinds evolve, and in a world tuned for one length the answer would be the parameter's.
 11. [60 build] **The z kind and length by mutation** (candidate (a) of run 1750). In the diets world with the a..z
-    mutagen at the range from 10: what limits the z kind (other diets' free roots, seed sites, its own copies), do z
+    mutagen at one range (run 1920: any openRange above the longest kind's length; the delay grows with it, so about 9): what limits the z kind (other diets' free roots, seed sites, its own copies), do z
     chains of 4 or more cells complete and persist; and the same world with the mutagen on every glue (`PAMF` off): do
     diets and z survive, or does it collapse to aggregators as run 0621 did? Check: a kind of 3 or more cells that arose
     by mutation holds 10 or more individuals at the end in 3 of 4 worlds, or a clear negative with its reason.
@@ -94,11 +86,8 @@ review-intent.
 - (r) *Copy error in contact copying* (run 0450): not needed yet; a labelled mutagen on free parts gives the same
   variants (RULES, Core changes). Open: whether the core or the environment should limit parts that bind their own
   kind (`g@` and `G@` on one part), which lock the material in the mutagen world.
-- (o) the open relay's one-pass lag (false releases in the lineage): closed in run 1921 without a change. Seen again in
-  a minimal kind (run 1150): a 3-cell strip's root lets go when its second cell binds (it stops emitting in the pass the
-  new front starts) at openRange 1 or 2; openRange 3 covers it by the echo through the parent. A fix to weigh: binding
-  sets the caught part's open signal at once (binding already sets both parties' state). Reopened by run 1851: the
-  range is set per kind (1, 3, 9, 50), so longer kinds may need a larger one; priority 10 decides.
+- (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
+  lineage's false releases (`falseRel`) did not change and have another cause (trace one before any fix).
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
   lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
@@ -123,6 +112,8 @@ review-intent.
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
                                                    # (about 85 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/demos.js strip 1 6000 runs/x 2345         # strips of 2 to 5 cells, one world each (check strips; 30 s): complete and
+                                                   # incomplete releases, delay from the last cell; PAR openRange (default 120)
 node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world
                                                    # (30), PAR openRange (1), PAT=1 the turned order, PAKR/PAKS other R/S types (pair-c:
                                                    # PAKS='B@y-|' PAKR='Y@&b@-'); result: bodies, gen, copies by type, doublings, children

@@ -10,6 +10,32 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-1920, core-review)
+
+- **One range for every length: strips of 2 to 5 cells bud at the default openRange, every release complete** — works
+  (check `strips`, 4 of 4 worlds; one core change, RULES Core changes "Candidate (o) with the joint"). NEXT priority 10.
+  - **What failed.** openRange was set per kind (pair 1, 3-cell strip 3, lineage 9 and 50). Measured on main: a k-cell
+    strip's root let go incomplete unless openRange was about k or more, and at a large range 4- and 5-cell strips
+    stalled (2-11 individuals in 6000 steps, chains of up to 23 triangles), because a parent heard its growing bud across
+    the `&` joint and was released only when its descendants were silent.
+  - **The rule.** The open signal stops at `&` joints (as lysis already did), and a part caught with an open front
+    emits in the pass it binds (candidate (o)). Neither part works alone (strip grid in RULES). No new mark, signal,
+    state or option.
+  - **Evidence.** Demo `strip` (new; `structures.strip(k)`: a straight band of k cells, fronts on sides 1 and 2 in
+    turn, own letters): at openRange 120, seeds 1-4, 6000 steps, complete releases 91-100 (2 cells), 75-81 (3), 23-35
+    (4), 10-20 (5), none incomplete. Suite with `CHECK_SAVE` against main: 34 of 34 on both; every pair world without a
+    strip, `copy`, `ring`, `imprint*`, `budpool` byte for byte the same; the changed worlds keep their outcomes (RULES).
+    The 15 pair-family checks (`pair`, `pair-c`, `pair-host`, `duo*`, `diets*`, `strips`) pass at openRange 120
+    (`TRI_PARAMS='{"openRange":120}'`): 2-cell kinds byte for byte as at their own range.
+  - **The cost the range now sets.** A body of 3 or more cells lets go about openRange passes after its last part binds
+    (the signal echoes inside the body and fades one per pass; median 96 at 120, 8 at 9, 2 at 3); a 2-cell body at once.
+    At 120 the 3-cell strips of the duo worlds are weaker (`duo-stock-hi`: the pair survives in all 4 worlds at 3-49
+    individuals, the check passes 3 of 4; `duo-stock` pair means 139-188, at openRange 3 133-140). So the range no
+    longer decides which lengths bud, only how long a longer kind waits before it lets go: a world that compares
+    lengths should use a small range that still exceeds its longest kind (openRange >= k - 1).
+  - Picture: docs/pictures/strips-5cell.png (5-cell strips at openRange 120, t=6000).
+  - Command: `node tri/demos.js strip 1 6000 runs/x 2345` (extra: lengths; `PAR` openRange, `PAB` blanks, `PAS` world).
+
 ## 2026-10-06 (autorun run 20261006-1750, explore)
 
 - **Heritable diets: from one founder, mutant fronts that catch an unused stock arise, spread and live beside the

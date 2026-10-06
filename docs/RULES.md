@@ -301,6 +301,10 @@ lineage, a body-length knob in disguise). The case, written before the rule; the
      880k on (generation 3 of seed 2 at 928600, base 908100; seed 1 reaches 2, not 3, as before); `budcycle-lysis` seed
      4 (generation 3 at 1094000, base 856900; 3 buds lysed, base 6). The lineage's incomplete root releases (`falseRel`
      8, 1, 2, 9) did not change: they are not this race (run 1921 found the same).
+   - *One range* (`TRI_PARAMS='{"openRange":120}'`): the 15 pair-family checks and `strips` pass (`duo-stock-hi` 3 of
+     4); 2-cell kinds byte for byte as at their own range. Cost: a body of 3 or more cells lets go about openRange
+     passes after its last part binds, so at 120 the duo worlds' 3-cell strips are weaker (INNOVATIONS run 1920). The
+     range is now a completion delay, not a body-length limit (it must exceed k - 2 for a k-cell kind).
 
 ### Candidate (r): copy error in contact copying, 2026-10-06, autorun run 20261006-0450 (explore): not needed yet
 NEXT priority 5 (Direction 2, heritable variation). The case, written before any code; then what was done instead.
