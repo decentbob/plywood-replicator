@@ -12,8 +12,11 @@ it is tried on (below).
 triangles, 10^5+ steps) without changing any output. Done when: (1) `tri/check.js` passes as before; (2) `pair` at PAB=1000
 PAS=50 runs at least 2x faster than at the start (baseline measured first); (3) `CHECK_SAVE` outputs of `pair`, `pair-c`,
 `copy`, `imprint` and a long pair world byte for byte the same before and after. Stop there; if physics itself dominates
-and needs an output-changing change, record the measurement and leave it to a build. Running: `node tri/check.js >
-runs/check.txt` (started 00:22 UTC; rerun missing ids by name).
+and needs an output-changing change, record the measurement and leave it to a build. Progress: baseline suite at
+`5850fe7` 14 of 14 (3581 s; outputs in the worktree `/home/user/base/runs/a`, lost with the container: regenerate with
+`CHECK_SAVE=$PWD/runs/a node tri/check.js` on `main`). Pair world PAB=1000 PAS=50, 5000 steps: 17.9 -> 10.0 s, output
+the same (the demo's per-step census was 34%: `canon` remembered, unbonded skipped; then exact physics trims). Running:
+`CHECK_SAVE=$PWD/runs/b node tri/check.js > runs/check.txt` on this branch, then `diff -r` against the baseline.
 
 **Handoff status (autorun run 20261005-2320, build).** **The pair works in isolation** (priority 2 done): one founder
 among 300 copy blanks reaches 20 bodies by 350-530 steps in 4 of 4 worlds and turns every blank into parts (134-148 of
