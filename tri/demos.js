@@ -412,7 +412,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gen=new Map([[structures[0][0],0]]),kids=new Map(),dbl=[];let reached=0,maxGen=0;
       const side=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===g);
       // a new body: an R bonded to an S by its front (seen within a pass of S binding; its Y lets go one pass later)
-      const scan=t=>{for(const u of all){if(!s.bonded(u)||gen.has(u)||canon(s.typeName(u))!==cR)continue;const f=s.partner(u,side(u,gc('b')));if(f<0)continue;
+      const gb=gc('b'),scan=t=>{for(const u of all){if(!s.bonded(u)||gen.has(u)||(s.glue[u*3]!==gb&&s.glue[u*3+1]!==gb&&s.glue[u*3+2]!==gb)||canon(s.typeName(u))!==cR)continue;const f=s.partner(u,side(u,gb));if(f<0)continue;
           const y=s.partner(u,side(u,Y)),pr=y>=0?s.partner(y,side(y,B)):-1,g=pr>=0&&gen.has(pr)?gen.get(pr)+1:-1;gen.set(u,g);if(pr>=0)kids.set(pr,(kids.get(pr)||0)+1);if(g>maxGen)maxGen=g;if(!(gen.size&(gen.size-1)))dbl.push(t);}};
       const pools=()=>{let r=0,q=0,b=0,w=0;for(const u of all){const c=canon(s.typeName(u));if(c===cB)b++;else if(s.bonded(u)){if(c===cR&&s.partner(u,side(u,gc('b')))<0)w++;}else if(c===cR)r++;else if(c===cS)q++;}return {r,q,b,w};};
       const line=t=>{const P=pools();console.log(`t=${t} bodies=${gen.size} gen=${maxGen} waiting=${P.w} freeR=${P.r} freeS=${P.q} blanks=${P.b} copies=${s.ev.copy||0}`);};
