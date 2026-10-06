@@ -8,6 +8,15 @@ at each run's merge: run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921'
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
+**Current slice (autorun run 20261006-0450, explore; in progress): Direction 2, heritable variation on the pair world.**
+Goal: show whether a variant part type is inherited on the running pair world (h 0.6, d 1, 1000 blanks, world 50), with
+the existing core first. (1) A neutral marked variant (R `Y@&b@|x`: its outer side carries a glue nothing binds) put
+into half the world at 100k steps: does it stay in patches, how does its share drift, how long does it last? (2) Variation
+without a core change: a labelled mutagen drive (each free part, now and then, gets one side changed: its glue or one
+mark), and a body census by type: which variants appear, which persist, does any spread? Done when (1) is measured in
+4 worlds and (2) is run in 4 worlds with the variants listed; a core change (copy error inside contact copying) only if
+the drive shows something the core needs; otherwise its case is written as "not needed yet". Stop at about 4 hours.
+
 **Handoff status (autorun run 20261006-0251, build).** **The pair world runs on** (priority 4 done, Direction 1):
 two labelled drives in demo `pair`, a body hazard (`PAH`=h: every 100 steps each body hit with probability h, lysed
 into its R and S) and decay of free parts into blanks (`PAD`=d), keep 1000 blanks in world 50 turning over. At h 0.6,
