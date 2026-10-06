@@ -417,25 +417,25 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0);
       const {s,structures}=createWorld({seed,size,structures:[{tris:K.tris,x:size/2,y:size/2}],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
-      const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gb=gc('b'),alive=new Map([[structures[0][0],{id:0,g:0,t:0}]]),kids=new Map(),dbl=[],ev={births:1,deaths:0,hits:0,decayed:0,life:0,lastBirth:0,reused:0},rec=new Int8Array(s.n),pg=new Int32Array(s.n).fill(-1),cp={};let reached=0,maxGen=0;
+      const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gb=gc('b'),alive=new Map([[structures[0][0],{id:0,g:0,t:0}]]),kids=new Map(),dbl=[],ev={births:1,deaths:0,hits:0,decayed:0,life:0,lastBirth:0,reused:0},rec=new Int8Array(s.n),pg=new Int32Array(s.n).fill(-1),cp={},cx=new Float32Array(s.n).fill(NaN),cy=new Float32Array(s.n),dist={n:0,sum:0,near:0};let reached=0,maxGen=0;
       const side=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===g),front=u=>{const i=side(u,gb);return i===undefined?-1:s.partner(u,i);};
       // a new body: an R bonded to an S by its front (seen within a pass of S binding; its Y lets go one pass later); a
       // death: a living body's R no longer bonded to an S by its front (lysed)
       const scan=t=>{if(HZ)for(const [u,b] of alive)if(front(u)<0){alive.delete(u);ev.deaths++;ev.life+=t-b.t;}
         for(const u of all){if(!s.bonded(u)||alive.has(u)||(s.glue[u*3]!==gb&&s.glue[u*3+1]!==gb&&s.glue[u*3+2]!==gb)||canon(s.typeName(u))!==cR)continue;const f=s.partner(u,side(u,gb)),y=s.partner(u,side(u,Y)),pr=y>=0?s.partner(y,side(y,B)):-1,P=pr>=0?alive.get(pr):undefined;
           // a waiting bud remembers its parent's generation (the parent may die in the pass its bud completes)
-          if(f<0){if(P)pg[u]=P.g+1;continue;}const g=P?P.g+1:pg[u];pg[u]=-1;alive.set(u,{id:ev.births,g,t});ev.births++;ev.reused+=rec[u]+rec[f];rec[u]=rec[f]=0;ev.lastBirth=t;if(P)kids.set(P.id,(kids.get(P.id)||0)+1);if(g>maxGen)maxGen=g;if(!(ev.births&(ev.births-1)))dbl.push(t);}};
+          if(f<0){if(P)pg[u]=P.g+1;continue;}const g=P?P.g+1:pg[u];pg[u]=-1;alive.set(u,{id:ev.births,g,t});ev.births++;ev.reused+=rec[u]+rec[f];rec[u]=rec[f]=0;for(const v of [u,f])if(!Number.isNaN(cx[v])){const d=Math.hypot(s._dx(s.px[v]-cx[v]),s._dy(s.py[v]-cy[v]));dist.n++;dist.sum+=d;if(d<5)dist.near++;cx[v]=NaN;}ev.lastBirth=t;if(P)kids.set(P.id,(kids.get(P.id)||0)+1);if(g>maxGen)maxGen=g;if(!(ev.births&(ev.births-1)))dbl.push(t);}};
       const pools=()=>{let r=0,q=0,b=0,w=0;for(const u of all){const c=canon(s.typeName(u));if(c===cB)b++;else if(s.bonded(u)){if(c===cR&&front(u)<0)w++;}else if(c===cR)r++;else if(c===cS)q++;}return {r,q,b,w};};
       const line=t=>{const P=pools();console.log(`t=${t} bodies=${ev.births} gen=${maxGen} waiting=${P.w} freeR=${P.r} freeS=${P.q} blanks=${P.b} copies=${s.ev.copy||0}`);};
       let pb=1,pd=0,pc=0,pcR=0,pcS=0,pu=0;const avg={n:0,r:0,q:0,b:0,w:0},acc=()=>{const P=pools();avg.n++;for(const k of ['r','q','b','w'])avg[k]+=P[k];};
       const pop=t=>{const P={},m=Math.max(1,avg.n);for(const k of ['r','q','b','w']){P[k]=(avg[k]/m).toFixed(0);avg[k]=0;}avg.n=0;const gs=[...alive.values()].map(b=>b.g),mg=gs.length?gs.reduce((a,b)=>a+b,0)/gs.length:0;
-        console.log(`pop: t=${t} alive ${alive.size} births ${ev.births} (+${ev.births-pb}) deaths ${ev.deaths} (+${ev.deaths-pd}) gen max ${maxGen} mean ${mg.toFixed(1)} min ${gs.length?gs.reduce((a,b)=>Math.min(a,b)):'-'} | mean pools: freeR ${P.r} freeS ${P.q} waiting ${P.w} blanks ${P.b} | hits ${ev.hits} decayed ${ev.decayed} copies ${s.ev.copy||0} (+${(s.ev.copy||0)-pc}: R ${(cp[cR]||0)-pcR} S ${(cp[cS]||0)-pcS}) fresh ${(1-(ev.reused-pu)/Math.max(1,2*(ev.births-pb))).toFixed(2)}`);pb=ev.births;pd=ev.deaths;pc=s.ev.copy||0;pcR=cp[cR]||0;pcS=cp[cS]||0;pu=ev.reused;};
+        console.log(`pop: t=${t} alive ${alive.size} births ${ev.births} (+${ev.births-pb}) deaths ${ev.deaths} (+${ev.deaths-pd}) gen max ${maxGen} mean ${mg.toFixed(1)} min ${gs.length?gs.reduce((a,b)=>Math.min(a,b)):'-'} | mean pools: freeR ${P.r} freeS ${P.q} waiting ${P.w} blanks ${P.b} | hits ${ev.hits} decayed ${ev.decayed} copies ${s.ev.copy||0} (+${(s.ev.copy||0)-pc}: R ${(cp[cR]||0)-pcR} S ${(cp[cS]||0)-pcS}) fresh ${(1-(ev.reused-pu)/Math.max(1,2*(ev.births-pb))).toFixed(2)} | copied-to-born distance ${dist.n?(dist.sum/dist.n).toFixed(1):'-'}, within 5: ${dist.n?(dist.near/dist.n).toFixed(2):'-'}`);dist.n=dist.sum=dist.near=0;pb=ev.births;pd=ev.deaths;pc=s.ev.copy||0;pcR=cp[cR]||0;pcS=cp[cS]||0;pu=ev.reused;};
       snap(s,'t0',`t=0: one founder pair (R ${K.R}, S ${K.S}) among ${NB} copy blanks, no free parts`,null,false);
       const pic={};let first=0;
-      for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,,ty] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;}s.copyLog.length=0;}
+      for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,u,ty] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;cx[u]=s.px[u];cy[u]=s.py[u];}s.copyLog.length=0;}
         if(HZ)for(let u=0;u<s.n;u++)if(s.ly[u])rec[u]=1;
         // PAD=d (labelled drive): free parts return to blanks
-        if(DK&&t%100===0)for(const u of all){if(s.bonded(u)||s.ly[u])continue;const c=canon(s.typeName(u));if((c===cR||c===cS)&&s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;ev.decayed++;}}
+        if(DK&&t%100===0)for(const u of all){if(s.bonded(u)||s.ly[u])continue;const c=canon(s.typeName(u));if((c===cR||c===cS)&&s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;cx[u]=NaN;ev.decayed++;}}
         // PAH=h (labelled drive): a body hazard, mean life 100/h steps
         if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;ev.hits++;}}}
         scan(t);
@@ -445,7 +445,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(PP){if(t%10===5)acc();if(t%PP===0)pop(t);}
         if(every(t,20))line(t);}
       const P=pools(),gens={};for(const b of alive.values())gens[b.g]=(gens[b.g]||0)+1;
-      snap(s,'end',`t=${s.t}: ${alive.size} bodies${ev.deaths?` alive (${ev.births} born, ${ev.deaths} died)`:''}, generation ${maxGen}, free R ${P.r}, free S ${P.q}, blanks ${P.b}`,null,false);
+      snap(s,'end',`t=${s.t}: ${alive.size} bodies${ev.deaths?` alive (${ev.births} born, ${ev.deaths} died)`:''}, generation ${maxGen}${DK?'':`, free R ${P.r}, free S ${P.q}`}, blanks ${P.b}`,null,false);
       // copies by type (R, S); children per body (a parent buds again once its last bud has moved off its seed site)
       const kv=[...Array(ev.births).keys()].map(i=>kids.get(i)||0);
       const drv=HZ||DK?` alive=${alive.size} deaths=${ev.deaths} hits=${ev.hits} decayed=${ev.decayed} meanLife=${ev.deaths?(ev.life/ev.deaths).toFixed(0):'-'} fresh=${(1-ev.reused/Math.max(1,2*(ev.births-1))).toFixed(2)} lastBirth=${ev.lastBirth} aliveGens=${Object.keys(gens).sort((a,b)=>a-b).join(',')}`:'';
