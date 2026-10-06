@@ -8,6 +8,14 @@ at each run's merge: run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850'
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
+**Current slice (autorun run 20261006-0251, build; in progress).** Goal: Direction 1 on the pair: a world of about
+1000 triangles that runs on under two labelled drives, free parts decaying into blanks (rate d per 100 steps) and a
+body hazard (rate h per 100 steps: one triangle lysed, the body comes apart into its parts, as `BCH`). Plan: add the
+drives and living-body bookkeeping to `pair` (deaths, births, a `pop:` line), measure the binding rate, scan h and d
+in short worlds, then 4 long worlds. Done when: bodies still budding at the end in 3 of 4 worlds, many generations past
+the founder, pool R : S near 1, with 50-200 bodies; a check in `tri/check.js`. Stop there; if no (h, d) holds the
+population, record the measurements and the reason.
+
 **Handoff status (autorun run 20261006-0021, harden).** **The pair world is 1.8-2.1x faster, output unchanged**
 (priority 3 done): 1050 triangles (PAB=1000 PAS=50) run 5000 steps in 10.0 s instead of 17.9 (about 500 steps per
 second; growth phase 2.1x), the default `pair` 1.8x. All 44 check worlds byte for byte the same (`CHECK_SAVE` before
