@@ -431,7 +431,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // front is bonded), waiting roots (front unbonded), free roots; free stock by type; a 'diets:' result line
     pair(){steps=steps||200000;const {gcode:gc,gname}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
       const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),MF=process.env.PAMF==='1',MA=process.env.PAMA||'abcdefghijklmnopqrstuvwxyz',LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
-      const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));
+      const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));const DW=MF||(MU>0&&FS.size>0);
       const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
       const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB,...Object.fromEntries(FST)},params:{openRange:+(process.env.PAR||1)}});
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
@@ -497,6 +497,17 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const dEnd={first:{},maxHeld:0,maxAt:0,sum:{},m:0},diet=t=>{const by={},fs={};for(const u of all){const i=fside(u);if(i>=0&&isRoot(u)){const L=gname(s.glue[u*3+i]),o=by[L]||(by[L]={n:0,w:0,f:0});if(!s.bonded(u))o.f++;else if(s.partner(u,i)>=0)o.n++;else o.w++;}else if(!s.bonded(u)&&stk(u)){const c=canon(s.typeName(u));fs[c]=(fs[c]||0)+1;}}
         const Ls=Object.keys(by).sort(),held=Ls.filter(L=>by[L].n>=10);for(const L of held)if(!dEnd.first[L])dEnd.first[L]=t;if(t>steps/2){dEnd.m++;for(const L of Ls)dEnd.sum[L]=(dEnd.sum[L]||0)+by[L].n;if(held.length>dEnd.maxHeld){dEnd.maxHeld=held.length;dEnd.maxAt=t;}}
         console.log(`diet: t=${t} ${Ls.filter(L=>by[L].n||by[L].w).map(L=>`${L} ${by[L].n}/${by[L].w}/${by[L].f}`).join(' ')||'none'} | held ${held.join('')||'-'} | free stock ${FST.map(([ty])=>fs[canon(ty)]||0).join(':')} | blanks ${avg.n?(avg.b/avg.n).toFixed(0):'-'}`);};
+      // kinds (with diets, or the mutagen and stocks): an individual is the chain of fronts from a head (a root not caught
+      // by another root's front) to the part with no front that ends it; its kind is its roots' front letters in order (c:
+      // root and stock part, 2 cells; ze: 3 cells). Per kind complete individuals (the chain ends in a stock part) and
+      // incomplete ones (it ends in an open front); per kind of 3 or more cells the first census with 10 or more
+      // complete individuals and the most held; the longest complete individual
+      const kEnd={first:{},max:{},last:{},longest:0},kinds=t=>{const R=[],caught=new Set();for(const u of all){if(!s.bonded(u))continue;const i=fside(u);if(i<0||!isRoot(u))continue;R.push(u);const p=s.partner(u,i);if(p>=0)caught.add(p);}
+        const n={},w={};let longest=0;for(const u of R){if(caught.has(u))continue;let x=u,L='',ok=false;for(let a=0;a<40;a++){const i=fside(x);if(i<0||!isRoot(x)){ok=stk(x);break;}L+=gname(s.glue[x*3+i]);const p=s.partner(x,i);if(p<0)break;x=p;}
+          if(ok){n[L]=(n[L]||0)+1;longest=Math.max(longest,L.length+1);}else w[L]=(w[L]||0)+1;}
+        kEnd.last=n;kEnd.longest=Math.max(kEnd.longest,longest);for(const [L,k] of Object.entries(n))if(L.length>=2){kEnd.max[L]=Math.max(kEnd.max[L]||0,k);if(k>=10&&!kEnd.first[L])kEnd.first[L]=t;}
+        const f=o=>Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([L,k])=>L+' '+k).join(', ')||'-';
+        console.log(`kinds: t=${t} complete ${f(n)} | incomplete ${f(w)} | longest ${longest}`);};
       // two kinds: per kind its types, individuals (attached last cells), held, free parts, copies; extinction times
       // (counted 50 steps before the line: between two decay steps)
       let duoO=null;const DK2=K2?[{name:'pair',T:[cR,cS]},{name:'strip',T:K2.types.map(canon)}].map(k=>({...k,last:k.T[k.T.length-1],set:new Set(k.T),c0:0,ext:0,sum:0,m:0})):[],duoCount=()=>{
@@ -540,7 +551,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(LK&&PP&&t%PP===0&&t>=VT)link(t);
         if(PS&&PP&&t%PP===0)parLine(t);
         if(MU&&PP&&t%PP===0)census(t);
-        if(MF&&PP>=100&&t%PP===PP-50)diet(t);
+        if(DW&&PP>=100&&t%PP===PP-50){diet(t);kinds(t);}
         if(!first&&ev.births>1){first=t;const fu=[...alive.keys()];snap(s,'bud1',`t=${t}: the founder's first bud`,{units:fu,radius:3},true);}
         if(!reached&&ev.births>=goal){reached=t;snap(s,'goal',`t=${t}: ${ev.births} bodies, generation ${maxGen}`,null,false);}
         for(const k of [5,10]){if(!pic[k]&&ev.births>=k){pic[k]=t;snap(s,'b'+k,`t=${t}: ${ev.births} bodies`,null,false);}}
@@ -560,9 +571,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(PS){const m=Math.max(1,par.n);console.log(`t=${s.t} parental: births=${par.n} R=${(par.R/m).toFixed(3)} S=${(par.S/m).toFixed(3)} both=${(par.both/m).toFixed(3)} sameBody=${(par.same/m).toFixed(3)} random=${(par.rand/m).toFixed(4)} alive=${alive.size} openSeed=${opened().S} copiesS=${cp[cS]||0} copiesSelfish=${cp[cSf]||0} copiesParasite=${cp[cSq]||0}${sCount()}${LK?` linkR0=${lkEnd.r0.toFixed(3)} linkHalf=${lkEnd.half||'not'} linkLast=${Number.isNaN(lkEnd.last)?'-':lkEnd.last.toFixed(3)}`:''}`);}
       // the diets picture (PAMF): a root filled by its front letter's colour, a stock part by its own letter's (bright when
       // attached, dim when free); blanks and other triangles as usual
-      if(MF){const D={c:'#ffd31a',e:'#ff7a1a',g:'#3fd8e8',z:'#e83fd0'},dc=(u,L)=>{const c=D[L.toLowerCase()]||'#b9c2c9';return s.bonded(u)?c:c+'55';};
+      if(DW){const D={c:'#ffd31a',e:'#ff7a1a',g:'#3fd8e8',z:'#e83fd0'},dc=(u,L)=>{const c=D[L.toLowerCase()]||'#b9c2c9';return s.bonded(u)?c:c+'55';};
         snap(s,'diets',`t=${s.t}: diets by front glue (c yellow, e orange, g cyan, z magenta, others grey); dim: free`,null,false,u=>{const i=fside(u);if(i>=0&&isRoot(u))return dc(u,gname(s.glue[u*3+i]));if(stk(u)){for(let k=0;k<3;k++)if(s.att[u*3+k]&&s.glue[u*3+k])return dc(u,gname(s.glue[u*3+k]));}});}
-      if(MF)console.log(`t=${s.t} diets: maxHeld=${dEnd.maxHeld} at ${dEnd.maxAt||'-'} first=${Object.entries(dEnd.first).map(([L,t])=>L+'@'+t).join(',')||'none'} mean2=${Object.entries(dEnd.sum).filter(([,v])=>v/dEnd.m>=1).map(([L,v])=>L+':'+(v/dEnd.m).toFixed(0)).join(',')||'-'} mutated=${ev.mutated}`);
+      if(DW){const E=Object.entries(kEnd.last).filter(([L])=>L.length>=2).sort((a,b)=>b[1]-a[1]),M=Object.entries(kEnd.max).sort((a,b)=>b[1]-a[1]);
+        console.log(`t=${s.t} kinds: endLong=${E.map(([L,k])=>L+':'+k).slice(0,6).join(',')||'-'} maxLong=${M.slice(0,6).map(([L,k])=>L+':'+k+'@'+(kEnd.first[L]||'-')).join(',')||'-'} longest=${kEnd.longest}`);}
+      if(DW)console.log(`t=${s.t} diets: maxHeld=${dEnd.maxHeld} at ${dEnd.maxAt||'-'} first=${Object.entries(dEnd.first).map(([L,t])=>L+'@'+t).join(',')||'none'} mean2=${Object.entries(dEnd.sum).filter(([,v])=>v/dEnd.m>=1).map(([L,v])=>L+':'+(v/dEnd.m).toFixed(0)).join(',')||'-'} mutated=${ev.mutated}`);
       if(K2)console.log(`t=${s.t} duo: ${DK2.map(k=>`${k.name}=${k.ext?'extinct@'+k.ext:'alive'} mean2=${k.m?(k.sum/k.m).toFixed(0):'-'}`).join(' ')} strip=${K2.types.join(',')}`);
       if(MU)console.log(`t=${s.t} variants (in a body at some census; max bodies, first, last seen): ${[...seenV].sort((a,b)=>b[1].max-a[1].max).slice(0,15).map(([c,v])=>`${c} ${v.max} ${v.first}-${v.last}`).join(' | ')||'none'}`);
       finish(`The pair: one founder among copy blanks (S ${K.S})${HZ||DK?`, hazard ${HZ}, decay ${DK}`:''}`,3);},
