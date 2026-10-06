@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-1620, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-1750, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`).
@@ -10,34 +10,29 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Current slice (autorun run 20261006-1750, explore): heritable diets.** Goal: a kind whose second cell comes from a
-stock (`Z@&c@|- C@-|z|`, one copy and one stock part per birth) in a world with several stock types (C, E, G) and a
-labelled mutagen limited to front glues: does a mutant front that catches an unused stock arise and spread, and do
-kinds with different diets then live side by side? Done when: 3 of 4 worlds reach two or more diets held at once, with
-controls (no mutagen: one diet; no spare stocks: mutants do not spread), or a clear "not yet" with the reason. No core
-change planned. Stop at the measurement plus records; candidate (t) only if a stock proves unworkable.
+**Handoff status (autorun run 20261006-1750, explore).** Priority 9, heritable diets, works; no rule change. Results
+(INNOVATIONS run 1750, IDEAS "Diets evolve by one letter"):
+1. A 2-cell stock kind `Z@&c@|- C@-|z|` (one copy, one stock part per birth; its diet is its front glue) in run 1620's
+   duo world with stocks C, E, G of 150 each. New in demo `pair` (off by default; default, `pair-flow` and `duo-stock`
+   output byte for byte as main): `PAMF=1` limits the mutagen to front glues (letters `PAMA`), `diet:` lines, a
+   `diets:` result line, a diets picture (`render` gains an optional fill per triangle).
+2. From one founder of diet c: mutants e and g take hold at 15k-30k steps and fill their stocks within 5-10k; three
+   diets side by side, each near its stock (4 of 4 with letters c..h; 4 of 4 reach three or more with a..z). Controls
+   4 of 4: no mutagen, or only stock C: one diet. Unequal stocks (150, 250, 75): diets follow them (2 worlds).
+3. Why the wait: diet c alone keeps a starving bud on nearly every seed site (120-140 individuals, as many waiting), so
+   a mutant rarely finds a site and loses its own to c's copies; about 1 in 130-280 mutants with a stocked letter takes
+   hold.
+4. Unplanned: a front `z@|` catches other kinds' roots by their `Z@` side: a 3-cell kind built from the others' copies
+   (2 of 4 a..z worlds; 8-15 individuals to 120k). A longer kind by one mutation.
+5. Checks `diets`, `diets-c`, `diets-ns`: CHECKRESULTS. Chart `docs/pictures/diets-chart.png` drawn from the `diet:`
+   lines by an ad hoc script (not kept); its worlds are the INNOVATIONS commands.
+Nothing is running after the merge.
 
-**Handoff status (autorun run 20261006-1620, build).** Priority 8, what pays for a longer kind, answered with a
-second resource; no rule change. Results (INNOVATIONS run 1620, IDEAS "A resource of one's own is bound by glue"):
-1. A copy side copies any non-anchor side whatever its glue, so a blank type cannot be one kind's own (candidate (t)
-   below). Demo `pair` gains `PAF='TYPE:N ...'`, a labelled stock of free parts that never decay and return as
-   themselves when lysed; default and `duo` output byte for byte as main.
-2. The stock strip `Z@&c@|- C@d@|-| D@-|z|` (C and D from a stock of 400 each, never copied: one blank per birth) in
-   run 1150's duo world: with a hazard per triangle the pair still wins (4 of 4); with a hazard per individual
-   (`PAHU=0`) the two coexist from one founder each (pair about 130, strip about 300, 4 of 4) and pairs entering a
-   strip world settle beside it (4 of 4); the plain strip under that hazard dies (4 of 4). Stock 200: the pair wins;
-   600: the strip wins (4 of 4 each). Strips cannot enter a pair world at stock 400 (4 of 4): bistable.
-3. Why (per individual): births per individual are about one copy source's rate for either kind, so length costs
-   through waste and risk; a stock part removes the waste, and a hazard per individual removes the risk.
-4. Not explained: in the mix the pair holds about 130 at mean blanks 25, alone 380 at 9.
-5. Checks `duo-stock`, `duo-stock-inv`, `duo-stock-c`, `duo-stock-tri`, `duo-stock-hi`: 5 of 5 pass, 4 of 4 worlds each (987 s); the existing duo checks rerun unchanged (below).
-Nothing is running after the merge. Chart `docs/pictures/stock-chart.png` was drawn from the `duo:` lines of the
-INNOVATIONS commands by an ad hoc script (not kept).
-
-**Next step (rotation 57, explore): heritable diets.** Several stock types (`PAF`), each caught only by a front with
-the matching glue, and a labelled mutagen on front glues (as `PAM`, limited to the front side): does a mutant that
-catches an unused stock arise and spread, and do kinds with different diets then live side by side? Start from the
-coexisting duo world (hazard per individual). Alternatively candidate (t) if a core change is wanted.
+**Next step (rotation 58, review-intent).** Weigh the direction after priority 9. Candidates for priority 10, each a
+slice: (a) the z kind: what limits a kind that eats other kinds' roots, and do longer z chains evolve (body length by
+mutation); (b) diets that differ in length: stocks that carry a front of their own (run 1620's `C@d@|-|`), so a
+mutant reaches a longer diet; (c) more diets than the blanks support: do diets then compete, and on what. (a) is the
+most open-ended (kinds that live on kinds) and needs no new option.
 
 ## Direction and priorities
 
@@ -56,11 +51,13 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
    0.58; a parasite part is excluded once s > 1 - 1/k. By construction (s near 1): not in a pair (parity, IDEAS).
 8. Done: what pays for a longer kind (run 1620, checks `duo-stock`, `-inv`, `-c`, `-tri`, `-hi`): a stock of parts only it
    binds, when risk is per individual (coexistence at stock 400, the strip wins at 600; hazard per triangle: the pair).
-9. [57 explore] heritable diets: several stock types and mutant front glues (IDEAS "A resource of one's own").
+9. Done: heritable diets (run 1750, checks `diets`, `-c`, `-ns`): front-glue mutants reach unused stocks and coexist
+   (three diets, 4 of 4); a z front that eats other kinds' roots makes an unplanned 3-cell kind.
+10. [58 review-intent decides] candidates (a)-(c) above.
 10. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
 
-Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 57 explore, 58 review-intent, 59 core-review, 60 build,
-61 harden.
+Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 58 review-intent, 59 core-review, 60 build, 61 harden,
+62 build.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an
@@ -120,6 +117,10 @@ PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=1 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|
 PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|- C@d@|-| D@-|z|' PAF='C@d@|-|:400 D@-|z|:400' node tri/demos.js pair 1 40000 runs/x
                                                    # a second resource (check duo-stock; about 3 minutes): PAF a labelled stock of
                                                    # parts (never decay, return as themselves); PAHU=0 hazard per individual
+PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA1=0 PA2='Z@&c@|- C@-|z|' PAMF=1 PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150' PAM=0.01 PAMA=cdefgh node tri/demos.js pair 1 60000 runs/x
+                                                   # heritable diets (check diets; about 5 minutes): PAMF=1 the mutagen on front
+                                                   # glues only (letters PAMA, a..z), 'diet:' lines and a diets picture; PAM=0.02
+                                                   # without PAMA: the a..z mutagen (z fronts eat other kinds' roots)
 PAHB=2 PAB=1000 PAS=50 PAHT=1000 PAD=1 PAHU=1 PAP=2000 PAH=0.3 PADI=10 PAV=mix PAVP=0.1 PAVK=parasite PAVT=20000 node tri/demos.js pair 1 40000 runs/x
                                                    # heredity by locality (check pair-host; about 2 minutes): PAPS=1 'par:' lines
                                                    # (parental share), PAV=link two-marker linkage, PAVK=parasite/selfish S variants,
