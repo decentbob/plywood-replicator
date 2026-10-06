@@ -17,11 +17,11 @@ Results (INNOVATIONS run 1150, IDEAS "One supply, one winner"):
 2. A 3-cell strip of the pair's design (`Z@&c@|- C@d@|- D@-z|`) needs openRange 3: at 1 or 2 its bud lets go half built
    (relay lag, candidate (o) below). It lives alone only below h about 0.12 (pair 0.7): it binds 23% of its copies, the
    pair 85%.
-3. At h 0.1, decay 1, one supply: the pair wins from every start (one founder each 3 of 3; 5 pairs entering a strip world
+3. At h 0.1, decay 1, one supply: the pair wins from every start (one founder each 4 of 4; 5 pairs entering a strip world
    4 of 4; 5 strips entering a pair world die 4 of 4): alone the pair leaves 11 free blanks, the strip about 100 (R*).
 4. A trap on the strip's extra cell (M `C@d@|y!`, lyses free pair roots) does not pay: no change at decay 1; at decay
    0.1 it slows the pairs' entry and repels it in 1 world of 4 beyond chance.
-5. Checks `duo`, `duo-inv`, `duo-inv-c`: CHECKRESULT
+5. Checks `duo`, `duo-inv`, `duo-inv-c`: 4 of 4 each (subset of the suite with the pair checks, 11 of 11 in 1604 s; the pair checks report the numbers recorded before): `duo` strip extinct by 10k, pair 376-385 in the second half; `duo-inv` 151-179 strips before entry, extinct by 40-45k; `duo-inv-c` 370-381 pairs, the strips extinct by 35k
 Nothing is running. Chart: `docs/pictures/duo-chart.png`, drawn from the `duo:` lines of the commands in INNOVATIONS.
 
 **Next step (rotation 55, explore): heredity of combinations** (priority 7 below): the selfish-S extinction of run

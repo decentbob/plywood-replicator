@@ -34,7 +34,7 @@ not statistics.
     births), the pair 85% (4557 copies, 1930 births): a birth needs three parts bound in turn, each copied apart and
     decaying while free, so most strip parts decay before their site is ready (free R3 : M : T about 120 : 60 : 55; R3 is
     also made by every waiting bud); and each strip carries three triangles at risk.
-  - **Competition (h 0.1):** from one founder each the pair wins in 3 of 3 worlds (strip 1-4 individuals at 5000 steps,
+  - **Competition (h 0.1):** from one founder each the pair wins in 4 of 4 worlds (strip 1-4 individuals at 5000 steps,
     extinct by 10k; pair 372-381 at 100k). Five pairs entering an established strip world at 30k drive it extinct by
     40-45k in 4 of 4 (one pair founder: 1 of 4; the others died before budding, at blanks 0.04 per unit area). Five
     strips entering a pair world die within 5000 steps in 4 of 4. Each outcome is the one predicted by the free blanks
@@ -55,7 +55,7 @@ not statistics.
     node tri/demos.js pair SEED STEPS runs`): even start (20k steps, about 1.5 minutes); `PA1=0` the strip alone;
     `PA1T=30000 PAEN=5` pairs enter (50k); `PA2T=30000 PAEN=5` strips enter; predator `PA2='Z@&c@|- C@d@|y! D@-z|'`, slow
     decay `PAD=0.1`. The run ends with `duo: pair=alive|extinct@T mean2=N strip=...` (mean individuals in the second
-    half). Checks `duo` (even start), `duo-inv` (pairs enter), `duo-inv-c` (strips enter): CHECKRESULT.
+    half). Checks `duo` (even start), `duo-inv` (pairs enter), `duo-inv-c` (strips enter): 4 of 4 each (subset of the suite with the pair checks, 11 of 11 in 1604 s; the pair checks report the numbers recorded before): `duo` strip extinct by 10k, pair 376-385 in the second half; `duo-inv` 151-179 strips before entry, extinct by 40-45k; `duo-inv-c` 370-381 pairs, the strips extinct by 35k.
   - **Status:** works as a competition test (one supply, one winner, for a measured reason); not yet: a longer kind
     that wins or coexists. Next (IDEAS "One supply, one winner"): what an extra cell would have to change (waste, risk,
     a second resource).
