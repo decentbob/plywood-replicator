@@ -1,4 +1,4 @@
-# Roadmap — typed-triangle world (2026-10-05)
+# Roadmap — typed-triangle world (2026-10-06)
 
 ## BIG goal (user, 2026-10-05)
 
@@ -25,10 +25,10 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 | Three generations from the kit on a slow supply: the bud grows off its parent's corner (seed site on cell 45, `budKit(..., seedAt)`; the pair is never sealed), closed walls `-\|`, no harness; 400 pre-food turning slowly into copy blanks and unused monomers returning to blanks (labelled drives) | a lineage that feeds itself from the environment | works for three generations (run 20261004-1021: 4 of 4 check worlds, generation 3 at 0.74-1.03M steps; without the monomer loop 0 of 4; the chain's own copies after let-go 1-3 per bud in 2 of 4); run 20261004-1721 (build): where the blanks go (census `sinks`, `chain:`): the chains fail because a bud waiting for its catch buds first and its bud catches first; no kit change (E source removed or outside) meets 3 of 4 and keeps generation 3; an oracle that lets a bud bud only after let-go makes every chain bud copy, but slows the lineage and, with a fixed pool, surplus buds starve the next generation (candidate (n)); a burn-down, not yet a metabolism: only blanks change type, so blanks end as kit parts and bodies and the pool's fewest falls to 0-3 (INNOVATIONS run 1021). Before: two generations on 180 pre-food in 3 of 4 (run 0621, check `budcycle-free`, retired in run 1021); census run 0751. Next: a reverse path in the core (NEXT, candidate (m); first step: the lysis side, run 2051, row below) | demo budcycle (defaults), check budcycle-3 |
 | Lysis (reverse path): a lysis side `!` lyses the triangle it binds; lysis moves one bond per pass (not across `&` joints) and each lysed triangle cuts its bonds and leaves fresh, so a body comes apart whole into the parts it was made of; a cutter part `z@!-\|-\|` binds only a waiting anchor | death and recycling (predation, lysis) | works in isolation (run 20261004-2051: a bud stuck on its parent's seed site taken apart in 4 of 4 worlds, a new bud on the parent built from 45-46 of its 47 parts in 4 of 4; check `lysis`); in the lineage (run 20261004-2221): a receptor `Г@&` on each body's last cell (`budKit(..., receptor)`, kit only) lets cutters `г@!-\|-\|` take apart only complete buds waiting for a catch: 16 of 16 lysed buds complete, generation 3 in 3 of 4 (check `budcycle-lysis`); a longer lineage from it: no (run 20261005-0321: 8 long worlds; every lineage stops once its food stock is spent, and lysis returns parts, not blanks); the open relay's one-pass lag releases roots incomplete in the default lineage too (candidate (o)) | sim.js `_lyse`, demo lysis, budcycle `BCQ`, checks lysis, budcycle-lysis |
 | Evolution vehicle: the pair (2 cells, 2 types: root `Y@&b@\|-` binds a seed site `y\|`, second cell `B@-y\|`; every adult exposes one copyable side of each type, `-` on each cell, and neither the seed site nor the front is copied, so types are made in the proportion buds use them) | the simplest replicating body | **works in isolation** (build run 20261005-2320: one founder among 300 copy blanks reaches 20 bodies by 350-830 steps in 4 of 4 worlds and uses up the blanks, 134-148 of 151 possible bodies by 3000 steps, generation 9-10; 4 of 4 in each of 5 settings; control, the side order first designed: 1-5 bodies); runs on under labelled drives (row below, run 20261006-0251); heritable variation and selection (row after next, run 20261006-0450) | structures.pairKit, demo pair, checks pair, pair-c |
-| A world that runs indefinitely: material returns to blanks and bodies die (labelled drives: decay of free parts `BCLK`, a per-body hazard `BCH`), so a lineage turns over instead of burning a stock | a steady-state ecology | **works on the pair** (build run 20261006-0251: hazard 0.6 and decay 1 per 100 steps, 1000 blanks: 4 of 4 worlds alive at 10^6 steps, 217-324 bodies, 1.41M births each, generation 5884-6071, 95% of the parts born fresh copies; hazard 0.7: 2 of 4, 0.8: 0 of 4; slow decay recycles a dead body's parts instead of material; INNOVATIONS, IDEAS "A world that runs on"). On the 47-type kind **not yet** (explore run 20261005-0721): closed walls make a type only at its own growth front, so decay empties types and an empty one returns only with a death; open walls starve the inner cells of a ring; a half ring (`budKit(5, 27)`, every wall reachable) jams its founder's first copy; in every setup the blanks end in leaked genome copies (52-86 free strands, about 40% of all triangles). Needs: a way back for every sink, the strand sink first (IDEAS, "Material flows by exposure"); scavengers (prepared, `Z@|!&`) clear every leaked strand (smoke test, 3 worlds) but the held strand's copying then starves for monomers; with two scavengers (build run 20261005-1051) buds catch again and 1 of 4 worlds still makes offspring near 4M (generation 3), the others die out with blanks at 0: a fixed number of scavengers cannot track the population (IDEAS, "The scavenger's dilemma"); free strands not contact-copied (candidate (p), option `heldContact`, explore run 20261005-1422) close the strand sink and keep 2-5 bodies alive to 2M (control 0-2), but the blanks then pile up as surplus parts at stalled fronts and the lineage is no deeper (IDEAS, "Closing one sink moves the blanks to the next") | demo pair `PAH`, `PAD`, `PAHT`, `PAP`, check pair-run; demo budcycle `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSV`, option `heldContact`; tests scavenger, copy side (heldContact) |
+| A world that runs indefinitely: material returns to blanks and bodies die (labelled drives: decay of free parts, a per-body hazard), so a lineage turns over instead of burning a stock | a steady-state ecology | **works on the pair** (build run 20261006-0251: hazard 0.6 and decay 1 per 100 steps, 1000 blanks: 4 of 4 worlds alive at 10^6 steps, 217-324 bodies, 1.41M births each, generation 5884-6071, 95% of the parts born fresh copies; hazard 0.7: 2 of 4, 0.8: 0 of 4; slow decay recycles a dead body's parts instead of material; INNOVATIONS, IDEAS "A world that runs on"). On the 47-type kind **not yet** (explore run 20261005-0721): closed walls make a type only at its own growth front, so decay empties types and an empty one returns only with a death; open walls starve the inner cells of a ring; a half ring (`budKit(5, 27)`, every wall reachable) jams its founder's first copy; in every setup the blanks end in leaked genome copies (52-86 free strands, about 40% of all triangles). Needs: a way back for every sink, the strand sink first (IDEAS, "Material flows by exposure"); scavengers (prepared, `Z@|!&`) clear every leaked strand (smoke test, 3 worlds) but the held strand's copying then starves for monomers; with two scavengers (build run 20261005-1051) buds catch again and 1 of 4 worlds still makes offspring near 4M (generation 3), the others die out with blanks at 0: a fixed number of scavengers cannot track the population (IDEAS, "The scavenger's dilemma"); free strands not contact-copied (candidate (p), option `heldContact`, explore run 20261005-1422) close the strand sink and keep 2-5 bodies alive to 2M (control 0-2), but the blanks then pile up as surplus parts at stalled fronts and the lineage is no deeper (IDEAS, "Closing one sink moves the blanks to the next") | demo pair `PAH`, `PAD`, `PAHT`, `PAP`, check pair-run; demo budcycle `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSV` (removed in run 20261006-0920, in git at `20e9a88`), option `heldContact` (removed in run 1921); tests scavenger, copy side (heldContact) |
 | Heritable variation and selection: a variant part type, once in a body, is copied true (contact copying is exact); variants from a labelled mutagen (one side of a free part changed now and then) | mutation, heredity, selection | **works on the pair, no rule change** (explore run 20261006-0450): a neutral marker drifts (fixed or lost in 45-215k steps, 4 worlds; patches dissolve in 5000 steps: heredity is by part type, not lineage); a variant that exposes its part more (seed site or front without its anchor) put into 1 in 10 fixes by 40-50k in 4 of 4 for each (neutral: 1 in 10); under the mutagen both arise and sweep unprompted. Without more, parts that bind more (open `@` sides, self-binding `g@`/`G@` parts forming rosettes, mutual binding) lock the material and copying falls 3-15x (4 of 4 with the per-body hazard, 3 of 4 with the hazard per triangle). **A world that keeps evolving works with a labelled drive** (build run 20261006-0621): every lysed triangle returns as a copy blank (`PAHB=2`), so copying equals deaths whatever binds: 4 of 4 worlds copying 15-28k per 5000 steps at 200k with variants first seen after 100k sweeping (check pair-flow; control pair-flow-c locks); to 300k 3 of 4 (one dies out after a selfish S sweeps: a seed site with a lysis mark kills the buds on it), in a 3x world 4 of 4, kinds still sweeping late; what evolves: one-type replicators (a part that buds its own kind), mutually binding chains (IDEAS "Deaths that return blanks"). **Not yet:** heredity of combinations (selection sees part types, not bodies) | demo pair `PAV`, `PAVK`, `PAVP`, `PAVT`, `PAM`, `PAHU`, `PAHB`; checks pair-sel, pair-sel-c, pair-mut, pair-flow, pair-flow-c |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about an hour with 4 processes; `budcycle-3` and `budcycle-lysis` 30-50 minutes each)
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 85 minutes with 4 processes (run 0920); `budcycle-3` and `budcycle-lysis` 30-50 minutes each)
 or by a test in `tri/test.js`.
 
 **Removed 2026-10-03 (core review run 20261003-2121; RULES, Core changes): the casting lineage.** Rows that worked and
@@ -38,33 +38,15 @@ import doors (`import`, grown door `live`), heritable machines (`grow`, `heir`, 
 cells (`wrap`, `cells`), the protocell (`cell`, partial `grown`), feeding and division on kits (`split`, `split g`,
 `split o`, `bud`), the grown bud (`budgrow`, `budgrow g`). Proofreading by cooperative binding (option `pLoose`) left with it; a scanner gate is backlog 1.
 
-## Organism on copies: parts and where they come from (2026-10-02, review-intent run 20261002-1751)
+## Organism on copies (frozen since run 20261005-1850)
 
-The goal is reached when every part below is grown from copies or comes from the environment, and the bud is the same
-kind as its parent (so the cycle repeats). State in `budpore`, then the nearest demo (retired 2026-10-04; the kind of
-`budKit` in `budcycle` replaced every prepared row but the first generation, the pool and the food: below):
-
-| Part | Role | Source now | Must become |
-|---|---|---|---|
-| Copy blanks `-?-?-?` | the one food | environment | (stays) |
-| Genome `aAaA` | template for its own dockers and fills | founder prepared; copies grown | founder = the parent's own inherited copy |
-| Parent ring with `&` walls and one gap (pore) | compartment; spent walls are never copied | prepared (R 7) | the previous generation's bud |
-| Parent anchor `W\|` | holds the founder mid-wall | prepared | a part of the ring's kit, same as the bud's anchor role |
-| Bud ring (R 5), its half of the opening | the offspring's compartment; its pore after the split | prepared | grown from copies on the parent's seed site (priority 3) |
-| Bud anchor `W@\|` (mid-wall, same glue as the parent's) | catches a copy by its low end; its open signal holds the doorway bond until then | prepared | a part of the bud's kit |
-| Doorway bond `&` between the rings | holds the pair until the bud has its copy (completion release); its sides are spent after | prepared, walls start spent | made by the bud's growth, with its walls spent before its anchor emits (IDEAS, 2026-10-03) |
-| Bud seed site on the parent | where the next bud starts | none | re-made in every bud (closure, priority 2) |
-
-Spent walls cannot be templates, so ring material must come from an exposed, unspent surface (IDEAS, 2026-10-02).
-**Closure design (run 20261003-1121, `budKit`; IDEAS, "Closure by design")**: parent and bud are one kind, R 5, a
-7-cell pore; the bud ring grows on the parent's seed site `y` (its last cell, beside the pore) from copies made while
-earlier buds grew (every cell its own type: 47); the root's pore side is the catching anchor (run 1921: with
-heldCopy it moves to arc cell 6's inner side), which then holds the founder (one anchor, roles by time); the doorway is the two pores facing; the hold is the root's `&` seed bond
-(completion release after the catch); the seed site is plain glue, so a parent buds again. Nothing in the table above
-stays prepared but the first generation and an initial pool of parts (run 20261003-1221, analysis: a steady pool holds
-about r + 1 parts of each type per blank near the growing bud, r = openRange; IDEAS, "Closure: what a part pool costs").
-Open (direction check, run 20261003-1321): the 7-cell pore is the doorway and afterwards the feeding pore, so both
-cells leak strands after the split; the kind needs an opening that a binding event closes to strands (NEXT, priority 2).
+The organism direction's kind is `budKit` (IDEAS, "Closure by design"): parent and bud one kind, R 5, 47 part types,
+the bud grown off the parent's corner from copies, a catching anchor on cell 6, completion release after the catch.
+Every prepared part of the old `budpore` table is grown in `budcycle` except the first generation, the initial pool
+and the food (three generations on a slow supply: check `budcycle-3`). It stopped because part types are made where
+they are exposed, not where they are needed (front, strand and lumen sinks; IDEAS "Sources in proportion to use").
+The parts table and the lineage's step-by-step record (backlog item 0) are in git at `20e9a88`, the results in
+INNOVATIONS.
 
 ## Backlog (top first)
 
@@ -76,31 +58,13 @@ avoids by geometry).
 A. **Evolution vehicle: the pair**, in order (NEXT priorities): (1) done (run 20261005-2320): the pair in isolation,
    one founder among copy blanks; (2) done (run 20261006-0021): speed for many small bodies, 1.8-2.1x, exact; (3) done (run 20261006-0251): a world that runs on, decay and body hazard as labelled
    drives (Direction 1; 4 of 4 worlds to 10^6 steps); (4) done (run 20261006-0450): heritable variation and selection with a labelled mutagen, no core change (Direction 2);
-   (5) done (run 20261006-0621): a world that keeps evolving once binding variants appear (deaths return blanks, a labelled drive); next heredity of combinations; (6) two kinds
-   on one supply (build; Direction 3); then what pays for a longer kind.
+   (5) done (run 20261006-0621): a world that keeps evolving once binding variants appear (deaths return blanks, a labelled drive); (6) two kinds
+   on one supply (build; Direction 3); (7) heredity of combinations (explore); then what pays for a longer kind.
 
-Since run 20261002-1751 all new building goes to the organism on copies (item 0): only copies let the parent construct
-its offspring from one uniform food. The casting lineage (kit parts and cast dockers as prepared food), frozen since
-then, was removed on 2026-10-03 (core review run 2121).
-
-0. **Organism on copies**, in order (docs/NEXT.md, Direction of run 20261003-1321, with the reasoning): (a) the
-   closure kind's bud grown from a part pool, in isolation: done (run 1420, demo `budpool`: works, 1.37 copies per used
-   part; found that the last cell must come from inside the sealed pair and that the pool has no per-type regulation,
-   both inputs to (b); the last cell from an E source inside: done in isolation, run 1650, check `budpool-e`); (b) the
-   kind's opening (run 1650's analysis, IDEAS: one opening per body, only silence widens; an outline with the existing
-   core and a core candidate to weigh in the next `explore`): its 7-cell pore is
-   both doorway and feeding pore, so after the split both cells leak strands (run 1121) and starve; settle by design
-   how the kind feeds without leaking and still passes a strand to its next bud (two openings with a hooded feeding
-   pore, a doorway narrowed by the caught strand, or fission), then move the anchor and rerun the transfer on the
-   kind's layout (run 20261003-1720, explore: none of the three works in the kind's geometry on paper; proposed
-   instead: option `heldCopy`, free strands sterile, so the pores may stay wide; works in isolation, `imprint pzox`); this replaces M2 on `budpore`'s layout, which stopped after four build runs (1921, 2321, 0320, 0751;
-   lessons in IDEAS); (c) two generations: done in run 20261003-2221 with a prepared pool and budpool's harness (demo `budcycle`, checks `budcycle`, `budcycle-2`); (e) the pool without the harness: run 20261004-0251 (build) found food, not the pool, to be the limit (kit copies take three quarters of a stock); closed walls (`-|`) and a food supply give two generations in 2 of 4 (INNOVATIONS); run 20261004-0621 (explore): the bud off the parent's corner (no sealed pair) gives 3 of 4 (check `budcycle-free`); (f) a lineage that does not burn down (direction check run 20261004-0751: the two generations live on a food stock and a part pool that both run down; NEXT priorities 1-2: `heldCopy` as the rule and retire the checks of layouts the lineage left (done, core review run 20261004-0820: 23 checks to 11, the suite 2849 s to 1349 s), then three generations: done in build run 20261004-1021 on a slow supply (check `budcycle-3`), a steady loop not: blanks end as parts and bodies, and returning free parts by a drive empties types; an indefinite lineage needs a reverse path in the core, NEXT candidate (m)); (d) the
-   casting lineage removed (core review run 2121: 5 marks left, `. @ & | ?`; every kept check's output byte for byte
-   the same). Done so far: contact copying (run 0136), a
-   sealed cell copies its genome from blanks (`imprint m`), a cell fed through a pore (`imprint p`), a hooded pore
-   (`imprint ph`), `budpore` splits with food left (8 of 8, run 1921), completion release (run 0050), closure designed
-   (`budKit`, run 1121), the part pool law (run 1221), `budpore`'s dead-end options pruned (24 to 17 `BUD*` variables, run 1351), the bud
-   grown from a part pool (`budpool`, run 1420).
+0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
+   fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
+   copying as the rule, the corner bud, three generations on a slow supply (`budcycle-3`), lysis in the lineage
+   (`budcycle-lysis`). Open when it returns: a lineage that does not burn down (feeding, candidate (n), the front sink).
 0b. **Speed** (harden runs): a three-generation `budcycle` world takes about 30 minutes, the check suite about an hour (run 0251; 36 minutes at run 1421;
    run 0950: 1.34x, run 1421: 1.18x on the suite, both exact; run 20261006-0021: the pair world 1.8-2.1x, exact, about 500
    steps per second at 1050 triangles); lone blocks (`_single`: about 780 free triangles in a
