@@ -10,13 +10,16 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Current slice (autorun run 20261006-1150, build; in progress): Direction 3, two kinds on one supply.** In the flowing
-world without the mutagen (`PAHB=2`, hazard per triangle h 0.6, decay 1, 1000 blanks, world 50) a pair founder and a
-founder of a 3-cell strip (R3 `Z@&c@|-`, M `C@d@|-`, T `D@-z|`: same design, own letters, so the kinds share only blanks
-and space). Done when: (a) each kind alone runs on (steady bodies, free blanks: the R* each draws) and the two together
-end the same way in 3 of 4 worlds, with the reason measured; (b) the strip's extra cell given a function (M's exposed side
-`y@!`: it binds a free pair R by its root and lyses it, returning it as a blank) and the same test: can length pay?
-Checks for both in `tri/check.js`. Stop there; kinds the mutagen made are the next step.
+**Current slice (autorun run 20261006-1150, build; in progress): Direction 3, two kinds on one supply.** Demo `pair`
+gained `PA2` (a second kind: `stripKit` types), `PA1=0`, late founders `PA1T`/`PA2T` with `PAEN`, and `duo:` lines; checks
+`duo`, `duo-inv`, `duo-inv-c` added (not yet run as a suite). Results so far (common: `PAB=1000 PAS=50 PAHT=4000 PAHB=2
+PAHU=1 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|- C@d@|- D@-z|'`): the strip needs openRange 3 (else its bud lets go
+when the middle cell binds: the relay lag) and lives alone only below h about 0.12 (pair: 0.7); alone the pair draws
+blanks to 11, the strip to about 100 (it uses 23% of its copies, the pair 85%); the pair wins from one founder each (3 of
+3), 5 pairs entering a strip world at 30k win (4 of 4), 5 strips entering a pair world die (4 of 4). The predator strip
+(M `C@d@|y!`, lyses free pair R) does not change that at d 1 (4 of 4 both ways); at `PAD=0.1` it suppresses the pair's
+free R and repelled the pairs in seed 2 (seed 1: pair won at 60k). Running: `runs/inv5.sh` (d 0.1, seeds 3-4 predator,
+2-4 plain strip; outputs `runs/d01_*`). Next: finish (b) at d 0.1, records, suite.
 
 **Handoff status (autorun run 20261006-0920, cleanup).** No new capability, no rule change.
 Results (INNOVATIONS run 0920):

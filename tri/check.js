@@ -70,6 +70,22 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: openSeed=(\S+) openFront=(\S+) mutated=(\d+) copies=(\d+)/),c=[...o.matchAll(/mut: t=(\d+) .*openSeed (\S+) openFront (\S+)/g)];
       const at=k=>{const x=c.find(q=>+q[k]>0.5);return x?x[1]:'not';},sd=at(2),fr=at(3);
       return [!!m&&(sd!=='not'||fr!=='not'),m?`most S with open seed sites at ${sd}, most R with open fronts at ${fr}; at 100k ${m[1]}, ${m[2]} ('-': no pair-like part left), ${m[3]} parts mutated, ${m[4]} copies`:'no result'];}},
+  // run 20261006-1150 (build): Direction 3, two kinds on one supply. The flowing world without the mutagen at a hazard both
+  // kinds survive alone (h 0.1 per triangle, decay 1, PAHB=2, openRange 3: a 3-cell bud otherwise lets go of its parent
+  // when its second cell binds), the pair against a 3-cell strip 'Z@&c@|- C@d@|- D@-z|' (own letters: they share only
+  // blanks and space). Alone the pair draws free blanks to about 11, the strip to about 100 (it wastes three quarters of its
+  // copies), so the pair should win from any start: from one founder each (duo), entering an established strip world
+  // (duo-inv: 5 pair founders at 30k), and a strip cannot enter a pair world (duo-inv-c: 5 strip founders at 30k)
+  ...(()=>{const env={PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'1',PAP:'5000',PAR:'3',PAD:'1',PAH:'0.1',PA2:'Z@&c@|- C@d@|- D@-z|'},
+    res=o=>o.match(/duo: pair=(\S+) mean2=(\S+) strip=(\S+) mean2=(\S+)/),at=(o,t,k)=>{const m=o.match(new RegExp(`duo: t=${t} pair (\\d+) .*\\| strip (\\d+) `));return m?+m[k]:NaN;};
+    return [
+  {id:'duo',cap:'Two kinds on one supply: the pair and a 3-cell strip from one founder each; the pair takes the material and the strip dies out',demo:'pair',seeds:[1,2,3,4],need:3,steps:20000,secs:100,env,
+    pass:(L,o)=>{const m=res(o);if(!m)return [false,'no result'];return [m[1]==='alive'&&m[3]!=='alive'&&+m[2]>=200,`pair ${m[1]} (mean ${m[2]} in the second half), strip ${m[3]}`];}},
+  {id:'duo-inv',cap:'  5 pairs entering an established strip world (100+ strips) drive it extinct',demo:'pair',seeds:[1,2,3,4],need:3,steps:50000,secs:250,env:{...env,PA1T:'30000',PAEN:'5'},
+    pass:(L,o)=>{const m=res(o),n=at(o,30000,2);if(!m)return [false,'no result'];return [n>=100&&m[1]==='alive'&&m[3]!=='alive',`${n} strips before entry; pair ${m[1]}, strip ${m[3]}`];}},
+  {id:'duo-inv-c',cap:'  5 strips entering a pair world die out',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:200,env:{...env,PA2T:'30000',PAEN:'5'},
+    pass:(L,o)=>{const m=res(o),n=at(o,30000,1);if(!m)return [false,'no result'];return [n>=200&&m[1]==='alive'&&m[3]!=='alive',`${n} pairs before entry; strip ${m[3]}`];}},
+  ];})(),
   // run 20261006-0621 (build): a world that keeps evolving. pair-mut's setting plus a labelled drive: every lysed triangle
   // returns as a copy blank once free (PAHB=2), so material held by binding variants flows through copying at the
   // hazard's rate. Passes a world with bodies at 200k, at least 10k copies in the last 5000 steps and a variant type first
