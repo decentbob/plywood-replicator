@@ -419,10 +419,16 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // binds it; the variant that swept in run 0621); PAMX=m: stirring, a labelled drive (each step each free part changes
     // places with a random free triangle with probability m); PAVK=parasite: that seed site becomes q, no anchor (S 'B@-q': copied at
     // two sides, nothing binds q, so its body never buds); PADI=k: PAD's decay every k steps instead of 100
+    // A second resource (build run 20261006-1620), a labelled start, off by default: PAF='TYPE:N ...', a stock of N free
+    // triangles of each TYPE beside the blanks (a part only a kind with the matching front binds: copying is glue-blind, so
+    // glue is the only way a resource can be one kind's own). Stock types never decay (PAD) and are not turned into blanks
+    // when lysed (PAHB): the lysis rule returns them as themselves, so the stock is conserved. A late founder (PA1T, PA2T)
+    // takes its stock cells from the free stock
     pair(){steps=steps||200000;const {gcode:gc}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
       const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
+      const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));
       const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
-      const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB},params:{openRange:+(process.env.PAR||1)}});
+      const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB,...Object.fromEntries(FST)},params:{openRange:+(process.env.PAR||1)}});
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
       const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),cV=canon(K.R.replace(/-(?![.@&|?!])/,'x')),RL=new Set([cR,cV]),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gb=gc('b'),alive=new Map(P1?[[structures[0][0],{id:0,g:0,t:0}]]:[]),kids=new Map(),dbl=[],dead=new Uint8Array(s.n),ev={births:1,deaths:0,hits:0,decayed:0,returned:0,life:0,lastBirth:0,reused:0,mutated:0},rec=new Int8Array(s.n),pg=new Int32Array(s.n).fill(-1),cp={},cx=new Float32Array(s.n).fill(NaN),cy=new Float32Array(s.n),dist={n:0,sum:0,near:0},src=new Int32Array(s.n).fill(-1),pid=new Int32Array(s.n).fill(-1),par={n:0,R:0,S:0,both:0,same:0,rand:0},parW={n:0,R:0,S:0,both:0,same:0,rand:0};let reached=0,maxGen=0;
       const side=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===g),front=u=>{const i=side(u,gb);return i===undefined?-1:s.partner(u,i);};
@@ -489,7 +495,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         console.log(`duo: t=${t} ${parts.join(' | ')} | blanks ${avg.n?(avg.b/avg.n).toFixed(0):'-'}`);};
       // a late founder (PA1T, PA2T; labelled start): free copy blanks become the founder's cells, placed at a random spot with
       // no other triangle within reach of its cells (material conserved)
-      const enter=(tris,t)=>{const U=[];for(const u of all){if(U.length===tris.length)break;if(!s.bonded(u)&&canon(s.typeName(u))===cB)U.push(u);}if(U.length<tris.length)return null;
+      const enter=(tris,t)=>{const U=[];for(const q of tris){const w=FS.has(canon(q.type))?canon(q.type):cB,u=all.find(u=>!U.includes(u)&&!s.bonded(u)&&canon(s.typeName(u))===w);if(u===undefined)return null;U.push(u);}
         const V=tris.flatMap(q=>q.v),mx=V.reduce((a,p)=>a+p[0],0)/V.length,my=V.reduce((a,p)=>a+p[1],0)/V.length,R=Math.max(...V.map(p=>Math.hypot(p[0]-mx,p[1]-my)))+0.6;
         for(let a=0;a<5000;a++){const x=s.rng()*size,y=s.rng()*size;if(all.some(u=>!U.includes(u)&&Math.hypot(s._dx(s.px[u]-x-mx),s._dy(s.py[u]-y-my))<R))continue;
           buildStructure(s,U,tris,x,y);for(const u of U)s._regrid(u);console.log(`t=${t} entry: ${tris.map(q=>q.type).join(' ')} at ${x.toFixed(1)},${y.toFixed(1)}`);return U;}
@@ -498,11 +504,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const pic={};let first=0;
       for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,u,ty,w] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;cx[u]=s.px[u];cy[u]=s.py[u];if(PS)src[u]=bid(w);}s.copyLog.length=0;}
         // PAHB (labelled drive): a dead triangle, once free, returns as a copy blank
-        if(HZ)for(let u=0;u<s.n;u++){if(s.ly[u]){rec[u]=1;if(HB===2)dead[u]=1;}else if(dead[u]&&!s.bonded(u)){dead[u]=0;s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.returned++;}}
+        if(HZ)for(let u=0;u<s.n;u++){if(s.ly[u]){rec[u]=1;if(HB===2&&!stk(u))dead[u]=1;}else if(dead[u]&&!s.bonded(u)){dead[u]=0;s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.returned++;}}
         // PAD=d (labelled drive): free parts return to blanks (every PADI steps, 100)
-        if(DK&&t%DI===0)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2])continue;if(s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.decayed++;}}
+        if(DK&&t%DI===0)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||stk(u))continue;if(s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.decayed++;}}
         // PAH=h (labelled drive): a body hazard, mean life 100/h steps
-        if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();if(HU){for(const m of members)if(m.length>1)for(const u of m)if(s.rng()<HZ/2&&!s.ly[u]){s.ly[u]=1;if(HB)dead[u]=1;ev.hits++;}}else for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;if(HB)dead[u]=1;ev.hits++;}}}
+        if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();if(HU){for(const m of members)if(m.length>1)for(const u of m)if(s.rng()<HZ/2&&!s.ly[u]){s.ly[u]=1;if(HB&&!stk(u))dead[u]=1;ev.hits++;}}else for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;if(HB&&!stk(u))dead[u]=1;ev.hits++;}}}
         // PAV (labelled start): the neutral marker, glue x on R's plain side (its spent '&' side stays spent)
         if(LK&&t===VT)for(const [u] of alive){if(s.rng()>=VP)continue;const f=front(u);for(const [v,g] of [[u,'x'],[f,'z']])if(v>=0)for(let i=0;i<3;i++){const k=v*3+i;if(!s.glue[k]&&!s.cOnly[k]&&!s.att[k]&&!s.done[k]&&!s.anc[k]&&!s.cpy[k]&&!s.lys[k]){s.glue[k]=gc(g);break;}}}
         if(VM&&!LK&&t===VT)for(const u of all){if(canon(s.typeName(u))!==(VK==='seed'||VK==='selfish'||VK==='parasite'?cS:cR)||(VM==='half'?s._wx(s.px[u])>=size/2:VM==='right'?s._wx(s.px[u])<size/2:s.rng()>=VP))continue;
