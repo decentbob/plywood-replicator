@@ -11,10 +11,15 @@ kind where every cell of a body exposes exactly one copyable side, so part types
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
 **Handoff status (autorun run 20261006-0920, cleanup).** No new capability, no rule change.
-In progress (09:51 UTC): the full suite on branch `claude/cleanup-0920` (`CHECK_SAVE=$PWD/runs/b node tri/check.js >
-runs/check.txt`). Done: budcycle's dead options removed (`BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`, `BCSV`,
-`BCGATE`) with the chart `node tri/render.js pop`; output byte for byte the same on 8 worlds of 150k steps (default
-and lysis setups, seeds 1-4); ROADMAP's frozen-lineage sections condensed; this file shortened.
+Results (INNOVATIONS run 0920):
+1. `budcycle`'s dead options removed (`BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`, `BCSV`, `BCGATE`) with the
+   chart `node tri/render.js pop`; in git at `20e9a88`. Output byte for byte the same on 8 worlds of 150k steps.
+2. Check suite 20 of 20 (5075 s, about 85 minutes: the frozen lineage's `budcycle-3` and `budcycle-lysis`, about 2100 s
+   per world, take most of it). Both pass 3 of 4 with seed 1 failing (BASE_SEED1).
+3. `pair-mut` kept, against the last handoff's suggestion: its criterion holds in only 1 of 4 `pair-flow` worlds.
+4. ROADMAP's frozen-lineage sections and this file condensed; autorun plywood prompts fixed for three repeated
+   frictions (waits, remote branch deletes, the harden baseline).
+Nothing is running.
 
 **Next step (rotation 54, build): Direction 3 on the flowing world** (priority 7 below): two kinds on one supply in
 the `pair-flow` setting (the pair and a 3-cell strip, or kinds the mutagen made): who wins, and why. Then (55,
@@ -62,6 +67,8 @@ review-intent, 59 core-review, 60 build.
   change only if a locality problem traces back to them.
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
+- Suite time (run 0920): the frozen lineage's two checks are about three quarters of the suite's CPU time; a `harden`
+  or `review-intent` run may cut them to fewer seeds or shorter worlds while the lineage stays frozen.
 - Bigger cells and letter reuse (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if a
   slice needs a larger cell, reuse letters inside sealed compartments.
 
@@ -69,7 +76,7 @@ review-intent, 59 core-review, 60 build.
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about an hour, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 85 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world
                                                    # (30), PAR openRange (1), PAT=1 the turned order, PAKR/PAKS other R/S types (pair-c:
                                                    # PAKS='B@y-|' PAKR='Y@&b@-'); result: bodies, gen, copies by type, doublings, children

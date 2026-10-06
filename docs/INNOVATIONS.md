@@ -10,6 +10,21 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-06 (autorun run 20261006-0920, cleanup)
+
+- **Leaner `budcycle`, ROADMAP and NEXT** — works (no capability change). Removed from `budcycle` the options of run
+  0721's world that runs on and of candidate (n), which the pair world replaced: `BCLK` (part decay), `BCH`/`BCHT`
+  (hazard), `BCP` (`pop:` lines) with the chart `node tri/render.js pop` that read them, `BCW` (open walls), `BCO`/`BCSC`
+  (pore and seed cell), `BCSV` (scavengers; test "scavenger" stays, it tests the rule) and the oracle `BCGATE`; in git at
+  `20e9a88`. Output byte for byte the same as main on 8 worlds of 150000 steps (default and `BCQ=1 BCR=50 BCC=2`, seeds
+  1-4). Check suite 20 of 20 (5075 s); `budcycle-3` and `budcycle-lysis` 3 of 4 each, seed 1 failing in both
+  (BASE_SEED1). `pair-mut` kept: its criterion (an exposure variant in most S or R by 100k) holds in 4 of 4 of its own
+  worlds but in only 1 of 4 `pair-flow` worlds (`PAHB=2` changes which variants win), so `pair-flow` does not cover it.
+  ROADMAP: the frozen organism lineage's parts table and backlog record condensed to their standing conclusions (full
+  text at `20e9a88`); NEXT 170 to about 100 lines (run 1850's Direction in full at `20e9a88`). Autorun plywood prompts:
+  waits as one background command, no remote branch deletes, the harden baseline in a worktree of main.
+  Command: `node tri/check.js`.
+
 ## 2026-10-06 (autorun run 20261006-0621, build)
 
 - **A pair world that keeps evolving: dead material returns as blanks** — works with a labelled drive (4 of 4 worlds
