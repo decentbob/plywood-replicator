@@ -16,6 +16,10 @@ without a core change: a labelled mutagen drive (each free part, now and then, g
 mark), and a body census by type: which variants appear, which persist, does any spread? Done when (1) is measured in
 4 worlds and (2) is run in 4 worlds with the variants listed; a core change (copy error inside contact copying) only if
 the drive shows something the core needs; otherwise its case is written as "not needed yet". Stop at about 4 hours.
+*Progress:* demo `pair` has `PAV`/`PAVT` (neutral marker) and `PAM` (mutagen) with `var:`/`mut:` lines; default
+output byte for byte the same (seeds 1, 2 against main). Running: `PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1
+PAV=half PAVT=100000 node tri/demos.js pair K 600000 runs` (K 1-4, outputs `runs/vK.txt`). Smoke test (seed 1, marker at
+10k): mixing is fast, same-marker share among 6 nearest 0.94 at insertion, 0.58-0.67 (random 0.50-0.56) from 2000 steps on.
 
 **Handoff status (autorun run 20261006-0251, build).** **The pair world runs on** (priority 4 done, Direction 1):
 two labelled drives in demo `pair`, a body hazard (`PAH`=h: every 100 steps each body hit with probability h, lysed
