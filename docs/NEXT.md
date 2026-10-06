@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-0920, cleanup). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-1150, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`).
@@ -10,21 +10,24 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261006-0920, cleanup).** No new capability, no rule change.
-Results (INNOVATIONS run 0920):
-1. `budcycle`'s dead options removed (`BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`, `BCSV`, `BCGATE`) with the
-   chart `node tri/render.js pop`; in git at `20e9a88`. Output byte for byte the same on 8 worlds of 150k steps.
-2. Check suite 20 of 20 (5075 s, about 85 minutes: the frozen lineage's `budcycle-3` and `budcycle-lysis`, about 2100 s
-   per world, take most of it). Both pass 3 of 4 with seed 1 failing (the same on main: both seed-1 outputs byte for byte the same over 1.2M steps).
-3. `pair-mut` kept, against the last handoff's suggestion: its criterion holds in only 1 of 4 `pair-flow` worlds.
-4. ROADMAP's frozen-lineage sections and this file condensed; autorun plywood prompts fixed for three repeated
-   frictions (waits, remote branch deletes, the harden baseline).
-Nothing is running.
+**Handoff status (autorun run 20261006-1150, build).** Direction 3 done as a test; no rule change.
+Results (INNOVATIONS run 1150, IDEAS "One supply, one winner"):
+1. Demo `pair` takes a second kind (`PA2`, `structures.stripKit`), late founders (`PA1T`, `PA2T`, `PAEN`) and prints
+   `duo:` lines; default output byte for byte as before.
+2. A 3-cell strip of the pair's design (`Z@&c@|- C@d@|- D@-z|`) needs openRange 3: at 1 or 2 its bud lets go half built
+   (relay lag, candidate (o) below). It lives alone only below h about 0.12 (pair 0.7): it binds 23% of its copies, the
+   pair 85%.
+3. At h 0.1, decay 1, one supply: the pair wins from every start (one founder each 4 of 4; 5 pairs entering a strip world
+   4 of 4; 5 strips entering a pair world die 4 of 4): alone the pair leaves 11 free blanks, the strip about 100 (R*).
+4. A trap on the strip's extra cell (M `C@d@|y!`, lyses free pair roots) does not pay: no change at decay 1; at decay
+   0.1 it slows the pairs' entry and repels it in 1 world of 4 beyond chance.
+5. Checks `duo`, `duo-inv`, `duo-inv-c`: 4 of 4 each (subset of the suite with the pair checks, 11 of 11 in 1604 s; the pair checks report the numbers recorded before): `duo` strip extinct by 10k, pair 376-385 in the second half; `duo-inv` 151-179 strips before entry, extinct by 40-45k; `duo-inv-c` 370-381 pairs, the strips extinct by 35k
+Nothing is running. Chart: `docs/pictures/duo-chart.png`, drawn from the `duo:` lines of the commands in INNOVATIONS.
 
-**Next step (rotation 54, build): Direction 3 on the flowing world** (priority 7 below): two kinds on one supply in
-the `pair-flow` setting (the pair and a 3-cell strip, or kinds the mutagen made): who wins, and why. Then (55,
-explore) heredity of combinations: the selfish-S extinction of run 0621 shows the limit is that selection sees part
-types, not bodies (IDEAS "Deaths that return blanks").
+**Next step (rotation 55, explore): heredity of combinations** (priority 7 below): the selfish-S extinction of run
+0621 shows selection sees part types, not bodies (IDEAS "Deaths that return blanks"). Then (56, build) what pays for a
+longer kind: a second labelled supply only a longer kind can use (IDEAS "One supply, one winner", (c)); the `duo`
+setting is the test bed.
 
 ## Direction and priorities
 
@@ -37,14 +40,14 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
 4. Done: a world that keeps evolving: deaths return blanks (`PAHB=2`; run 0621, `pair-flow`). By 500k a 3x world is
    one-type chains and rosettes whose variants keep replacing one another; no world grows more complex.
 5. Done: cleanup (run 0920): budcycle's dead options pruned.
-6. [54 build] **(3) Direction 3:** two kinds on one supply. Risk, stated in run 1850: in template worlds the smallest
-   fastest replicator usually wins; what could pay for a longer kind (predation by `!` outer sides, protection,
-   crowding) is the research.
+6. Done: (3) Direction 3, two kinds on one supply (run 1150, checks `duo`, `duo-inv`, `duo-inv-c`): the pair beats a
+   3-cell strip from every start (lower R*); a trap for free parts on the extra cell does not pay.
 7. [55 explore] heredity of combinations: a body's parts come mostly from its own copies (IDEAS).
-8. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
+8. [56 build] what pays for a longer kind: first a second resource only it can use (IDEAS "One supply, one winner").
+9. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
 
-Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 54 build, 55 explore, 56 build, 57 explore, 58
-review-intent, 59 core-review, 60 build.
+Rotation (autorun `projects/plywood/rotation.txt`), unchanged: 55 explore, 56 build, 57 explore, 58 review-intent, 59
+core-review, 60 build.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
@@ -53,8 +56,10 @@ review-intent, 59 core-review, 60 build.
 - (r) *Copy error in contact copying* (run 0450): not needed yet; a labelled mutagen on free parts gives the same
   variants (RULES, Core changes). Open: whether the core or the environment should limit parts that bind their own
   kind (`g@` and `G@` on one part), which lock the material in the mutagen world.
-- (o) the open relay's one-pass lag (false releases in the lineage): closed in run 1921 without a change; before any new
-  fix, trace one `falseRel` in `budcycle-lysis` seed 4.
+- (o) the open relay's one-pass lag (false releases in the lineage): closed in run 1921 without a change. Seen again in
+  a minimal kind (run 1150): a 3-cell strip's root lets go when its second cell binds (it stops emitting in the pass the
+  new front starts) at openRange 1 or 2; openRange 3 covers it by the echo through the parent. A fix to weigh: binding
+  sets the caught part's open signal at once (binding already sets both parties' state). Not needed while the range works.
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
   lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
@@ -88,6 +93,10 @@ PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri
                                                    # lysed triangle returns as a blank; PAM the mutagen, PAHU=1 hazard per triangle;
                                                    # 'mut:' census lines, 'evolving:' result line; PAB=3000 PAS=87: 3x world
                                                    # (selection: PAV, PAVK, PAVP, PAVT, checks pair-sel, pair-sel-c)
+PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=1 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|- C@d@|- D@-z|' node tri/demos.js pair 1 20000 runs/x
+                                                   # two kinds on one supply (check duo; about 1.5 minutes): the pair and a 3-cell
+                                                   # strip; PA1=0 the strip alone; PA1T=30000 PAEN=5 pairs enter later (duo-inv),
+                                                   # PA2T strips (duo-inv-c); 'duo:' lines, a last 'duo: pair=... strip=...' line
 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the frozen lineage (corner bud, closed walls, 20 blanks +
                                                    # 400 pre-food at 0.0003, monomer loop BCL 0.002, world 36): three generations (check
                                                    # budcycle-3; about 30 minutes). Options: extra parts per type (8); BCB blanks, BCI
