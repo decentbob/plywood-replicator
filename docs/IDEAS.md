@@ -41,7 +41,8 @@ Measured on the mutagen pair world (m 0.01, hazard per triangle h 0.6, decay d 1
   replicators (`Y@&b@y`, `O@&b@o`: a part that binds its own kind's seed site, buds it and lets go, in chains of 2-6),
   chains of mutually binding types (`L@V@v@&`, `V@i@v@&`), R-chains carrying S. The pair simplifies more often than it
   grows: with selection on part types, the type that is copied most wins, and a type that is its own template wins
-  by not needing the other.
+  by not needing the other. Run to 10^6 steps (3x world), all 4 worlds end as one-type chains and rosettes whose
+  variants keep replacing one another: turnover without growth in complexity.
 - **What this asks for next:** heredity of combinations (a body's parts from its own copies) so that selection sees
   bodies and selfish parts cost their carriers, and larger populations (or many patches) against drift and suicide.
   The drive stays labelled; a core rule that returns lysed material as blanks would make it the physics (a candidate,

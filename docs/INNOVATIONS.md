@@ -31,11 +31,18 @@ not statistics.
     53-84k per 5000 steps, 42-179 kinds of bodies, kinds still sweeping at 235-275k. What evolved: one-type
     replicators, a part that binds its own kind's seed site, buds it and lets go (`Y@&b@y`, `O@&b@o`, in chains of
     2-6; seeds 3 and 4), chains of mutually binding types (`L@V@v@&`, `V@i@v@&`; seed 1), and in seed 2 the selfish S
-    (`-!y!B@`) answered by R growing its own seed site (`Y@&b@|y@`: R buds R, S binds R's front). RESULT_1M
-  - **Picture:** [pair-flow.png](pictures/pair-flow.png) (copies, blanks and bodies over 300k, seeds 1-4, with and
-    without the drive).
+    (`-!y!B@`) answered by R growing its own seed site (`Y@&b@|y@`: R buds R, S binds R's front).
+    **To 10^6 steps** (3x world, `PAP=10000`): 4 of 4 alive, 321-496 bodies of 34-189 kinds, copies 53-73k per 5000
+    steps, blanks 120-680 (one world 1246); 31-38 variant types reached a tenth of the bodies at some census, 3-8 of
+    them first seen after 500k. By 450-500k each world has become one-type chains and rosettes (`M@y@Y@&`, `W@b@!w@&`,
+    `B@&t@b@`, `L@V@v@&`; picture), and their variants keep replacing one another (seed 4: `B@&b@y@!`, then `B@&t@b@`
+    from 460k, then `B@&b@y@!` again at 1M). Variation keeps going but complexity does not grow: no world went back to
+    two types.
+  - **Pictures:** [pair-flow.png](pictures/pair-flow.png) (copies, blanks and bodies over 300k, seeds 1-4, with and
+    without the drive); [pair-flow-1M.png](pictures/pair-flow-1M.png) (3x world seed 4 at 10^6 steps: arcs and rings
+    of one self-binding type and its variants; the title's "0 bodies alive" counts only bodies with an R and an S).
   - **Commands:** `PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair SEED
-    300000 runs` (about 4 minutes; `PAB=3000 PAS=87` for the 3x world); with the mutagen the demo ends with an
+    300000 runs` (about 4 minutes; `PAB=3000 PAS=87` for the 3x world, 10^6 steps with `PAP=10000` in about 90 minutes); with the mutagen the demo ends with an
     `evolving:` line (bodies and kinds at the last census, variant types ever in a tenth of the bodies, those first
     seen in the second half, copies since the previous census). Checks `pair-flow` (200k, need 3) and `pair-flow-c`
     (no drive, seeds 3 and 4 lock).

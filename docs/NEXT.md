@@ -21,7 +21,9 @@ decay 1):
 3. Small worlds (100-250 bodies) can die out: seed 1 at 260k after a selfish S swept (a seed site with a lysis mark
    kills buds that bind it, so it is free and copied more); `PAHB=1` lost 2 of 4. In a 3x world (`PAB=3000 PAS=87`)
    4 of 4 lived to 300k with kinds still sweeping late; one-type replicators (a part that buds its own kind, `Y@&b@y`)
-   evolved in 2 of 4. RUNNING_1M
+   evolved in 2 of 4. To 10^6 steps (3x world): 4 of 4 alive, copies
+   53-73k per 5000; by 500k every world is one-type chains and rosettes whose variants keep replacing one another (3-8
+   common types first seen after 500k), but no world grows more complex (no two-type kind returns). Nothing is running.
 Checks: new `pair-flow` 4/4, `pair-flow-c` 2/2 (control); `check.js` now creates the `CHECK_SAVE` directory. `node
 tri/test.js` 40 pass. The full suite was not rerun (only demo `pair` and `check.js` changed; default pair output
 unchanged). Picture `pair-flow.png` (a one-off script from the `pop:`/`mut:` lines, not kept). Regenerate:
@@ -146,6 +148,9 @@ node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s):
 PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 1000000 runs/x   # the pair world that runs on
                                                    # (check pair-run at 100k steps; about 35 minutes per 10^6): PAH body hazard,
                                                    # PAD decay of free parts (per 100 steps), PAHT hazard start, PAP 'pop:' lines
+PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair 1 300000 runs/x   # the mutagen
+                                                   # world that keeps evolving (check pair-flow at 200k; about 4 minutes): PAHB=2 every
+                                                   # lysed triangle returns as a blank; 'evolving:' result line; PAB=3000 PAS=87: 3x world
 node tri/demos.js closure                          # the designed kind (budKit): parent, bud grown in signal passes, catch, split (no physics)
 POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4   # a waiting front among 20 blanks and 4 next parts: copies per bound part
 node tri/demos.js imprint 1 100000 runs 150px      # a cell fed through a pore copies its held genome; 3 sterile rivals (check imprint-pore;
