@@ -9,6 +9,38 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-05 (autorun run 20261005-2320, build)
+
+- **The pair: a two-cell, two-type replicator grows from one founder on copy blanks alone — works in isolation.** The
+  evolution vehicle of run 1850 (IDEAS, "Sources in proportion to use"), built with the core as it is (no rule
+  changed). `structures.pairKit`: root R `Y@&b@|-` and second cell S `B@-y|` across R's front `b@|`. A copy blank that
+  touches an adult's exposed side becomes a part (R at R's `-`, S at S's `-`); a free R binds a body's seed site `y|`
+  by `Y@&`, its open front emits, a free S binds the front, R hears nothing (openRange 1) and its `&` lets go: two
+  bodies. The anchor marks on the seed site and on the front only keep them from being copy templates, so every adult
+  is one source of each type wherever its buds are. The bud is its parent moved one cell side along a strip: it points
+  away (picture, first bud).
+  - **Evidence** (demo `pair`, world 30, openRange 1, 3000-5000 steps): 300 copy blanks: 20 bodies at 401, 404, 524,
+    350 steps (seeds 1-4); every blank used by about 1000-2000 steps, 134-148 bodies of 151 possible by 3000 steps, generation 9-10;
+    bodies doubled at 63, 186, 288, 351, 506, 687, 973 steps (seed 1: 2 to 128). Copies made R 150-167, S 133-150: the
+    surplus R are buds still waiting for an S when the blanks ran out (0-34). Other settings, 4 of 4 worlds each: 100
+    blanks (20 bodies at 878-1412, 43-49 of 51), world 20 (348-613, generation up to 15), world 45 (675-1226), 1000
+    blanks in world 50 (305-492; 448-476 of 501 bodies, generation 13-14). About 1300 steps per second for 300
+    triangles.
+  - **Failure that shaped it:** the side order first designed (R `Y@&b@-`, S `B@y-|`: S's seed site its only source)
+    stalls: the founder's first bud R covers the seed site at once and nothing makes S again while the waiting R's
+    front and `-` keep making R (control `pair-c`, 4 of 4 worlds: 1-5 bodies, copies R 181-289 against S 0-6). With
+    the front left copyable (R `Y@&b@-`, S `B@-y|`) all 4 worlds reach 20 bodies but 92-99 buds end waiting (92-118
+    bodies). The turned order (S `B@y|-`, a bud is its parent turned 120 degrees, three generations close a hexagon):
+    20 bodies in 4 of 4, 92-101 bodies, about 95 buds left waiting (not analysed).
+  - **Picture:** [pair.png](pictures/pair.png) (t=0; the founder's first bud, zoomed; 5, 10, 21 bodies; 134 bodies at
+    3000 steps).
+  - **Command:** `node tri/demos.js pair 1 3000 runs` (options: PAB blanks 300, PAS world 30, PAR openRange 1, PAT=1
+    the turned order, PAKR / PAKS other R and S types; extra: the body count to time, 20). Checks `pair` (4 of 4 worlds
+    pass, need 3) and `pair-c` (control: 5 bodies by 5000 steps, never 20). Result line: bodies, generations, free R and S, buds waiting, copies by type,
+    doubling times, children per body.
+  - **Status:** works in isolation. A closed world only: material runs out once every blank is a part. Next (NEXT):
+    a world that runs on (labelled decay of free parts, a body hazard), then heritable variation.
+
 ## 2026-10-05 (autorun run 20261005-1921, core-review)
 
 - **The core lost an option with its relay, a relayed signal and a state; every capability still works.** No new

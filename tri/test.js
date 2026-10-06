@@ -114,6 +114,19 @@ test('binding: a strand end\u2019s seed and a strand\u2019s back bind no free tr
     const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);
     const v=s.n-1;placeTri(s,v,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(v,ty);s.derive();s.run(3);
     assert.ok(s.partner(u,i)!==v&&!s.ev.glue,ty+' bound the '+where);symmetric(s);}});
+test('pair: a free R binds the seed site, a free S its front, the pair lets go; only the plain sides are copied',()=>{
+  const K=S.pairKit(),tri=(s,u,V)=>{placeTri(s,u,V);s.regrid(u);};
+  // the place across side i of attached unit u (free triangles moved there bind in the next pass: sigma 0)
+  const site=(s,u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  const world=free=>{const s=new TriSim({sigma:0,sigmaRot:0,W:16,H:16,openRange:1},2+free.length);buildStructure(s,[0,1],K.tris,8,8);
+    free.forEach((t,k)=>{s.setType(2+k,t);tri(s,2+k,[[1+k,1],[2+k,1],[1.5+k,1+H]]);});for(let k=0;k<40;k++)s.derive();return s;};
+  {const s=world([K.R,K.S]);tri(s,2,site(s,1,K.seedSide));s.step();assert.equal(s.partner(2,K.rootSide),1,'R on the seed site');
+    for(let k=0;k<5;k++)s.step();assert.equal(s.partner(2,K.rootSide),1,'R holds while its front is open');
+    tri(s,3,site(s,2,K.growSide));s.step();assert.equal(s.partner(2,K.growSide),3,'S on the front');
+    for(let k=0;k<3;k++)s.step();assert.ok(s.partner(2,K.rootSide)<0&&s.spent[2*3+K.rootSide],'the new pair lets go');assert.equal(s.partner(2,K.growSide),3);}
+  // copy blanks: at R's '-' and S's '-' a copy of that cell; at the seed site y| none (an anchor side is no template)
+  for(const [u,i,want] of [[0,2,K.R],[1,1,K.S],[1,K.seedSide,'-?-?-?']]){const s=world(['-?-?-?']);tri(s,2,site(s,u,i));s.step();
+    assert.equal(canon(s.typeName(2)),canon(want),`blank at side ${i} of cell ${u}`);assert.ok(!s.bonded(2));}});
 test('budding: a ring on a seed lets go when complete (open signal), holds while a front is open',()=>{
   for(const [missing,expect] of [[0,true],[1,false]]){const K=S.ringKit(3,'z',null,true),r=K.tris[0],i=K.rootSide,a=r.v[i],b=r.v[(i+1)%3],c=r.v[(i+2)%3];
     const anc={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'z--'},base={v:null,type:'---'};

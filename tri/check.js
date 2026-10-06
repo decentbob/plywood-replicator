@@ -37,6 +37,13 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]<=2&&+m[5]>+m[4],m?`${m[2]} inside, copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
   {id:'budpool',cap:'The closure kind\'s bud grows from a pool of its 47 part types (8 each, 40 of the last; 8 blanks), splits on a stand-in catch',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:220,
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) refilled=\S+ copies=(\d+) .*stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`${m[1]}/47 cells, split ${m[3]}, ${m[4]} copies, ${m[5]} stray`:'no result'];}},
+  // run 20261005-2320 (build): the pair (pairKit, 2 cells, 2 types; IDEAS "Sources in proportion to use"): one founder
+  // among 300 copy blanks (world 30, openRange 1) grows to 20 bodies; control: the side order first written in IDEAS
+  // (S 'B@y-|': its seed site is its only source, covered by a waiting bud) never reaches the pair's 20 bodies (5 by 5000 steps)
+  {id:'pair',cap:'The pair: one founder among 300 copy blanks grows to 20 bodies (2 cells, 2 types; no free parts)',demo:'pair',seeds:[1,2,3,4],need:3,steps:3000,secs:12,
+    pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) reached20=(\S+) gen=(\d+) .*copiesR=(\d+) copiesS=(\d+)/);return [!!m&&m[2]!=='not',m?`20 bodies at ${m[2]}, ${m[1]} at the end, generation ${m[3]}, copies R ${m[4]} S ${m[5]}`:'no result'];}},
+  {id:'pair-c',cap:'  control: S\'s seed site its only source (S B@y-|, R Y@&b@-)',demo:'pair',seeds:[1],steps:5000,secs:20,env:{PAKS:'B@y-|',PAKR:'Y@&b@-'},
+    pass:(L,o)=>{const m=o.match(/result: bodies=(\d+) .*freeR=(\d+) freeS=(\d+)/);return [!!m&&+m[1]<20,m?`${m[1]} bodies, free R ${m[2]}, free S ${m[3]}`:'no result'];}},
   // run 20261004-2051 (explore): the lysis side '!' (RULES Core changes). A parent with a complete bud stuck on its seed
   // site (no food), 4 cutters 'z@!-|-|' (labelled), the anchor on cell 44 (openRange 50): the stuck bud comes apart into
   // its 47 parts and a later bud on the seed site is built from at least 40 of them
