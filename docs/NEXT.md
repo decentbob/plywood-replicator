@@ -10,6 +10,13 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261006-1750, explore): heritable diets.** Goal: a kind whose second cell comes from a
+stock (`Z@&c@|- C@-|z|`, one copy and one stock part per birth) in a world with several stock types (C, E, G) and a
+labelled mutagen limited to front glues: does a mutant front that catches an unused stock arise and spread, and do
+kinds with different diets then live side by side? Done when: 3 of 4 worlds reach two or more diets held at once, with
+controls (no mutagen: one diet; no spare stocks: mutants do not spread), or a clear "not yet" with the reason. No core
+change planned. Stop at the measurement plus records; candidate (t) only if a stock proves unworkable.
+
 **Handoff status (autorun run 20261006-1620, build).** Priority 8, what pays for a longer kind, answered with a
 second resource; no rule change. Results (INNOVATIONS run 1620, IDEAS "A resource of one's own is bound by glue"):
 1. A copy side copies any non-anchor side whatever its glue, so a blank type cannot be one kind's own (candidate (t)
