@@ -238,6 +238,30 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Candidate (r): copy error in contact copying, 2026-10-06, autorun run 20261006-0450 (explore): not needed yet
+NEXT priority 5 (Direction 2, heritable variation). The case, written before any code; then what was done instead.
+1. **Capability and why the goal needs it.** Heritable variation: a part type that differs from its template and is
+   then copied true. Evolution needs it; the core has no source of new types (contact copying is exact, and casting,
+   the other way a type changed, was removed on 2026-10-03).
+2. **The rule as proposed.** With probability `pErr` per contact copy, the copy takes one of its three sides wrong: a
+   side drawn at random gets a random glue (inert or a letter) or one of its marks toggled. Locality: the copying
+   triangle changes its own type, as now; the draw is noise, as `pBond`'s. Cost: one parameter and one branch in
+   `_copy`. Biology: replication errors.
+3. **Can the existing core do it? Yes, with a labelled environment drive.** In a world where free parts decay
+   (`PAD`), nearly every free part is a fresh copy, so a drive that changes one side of a free part now and then (a
+   mutagen, labelled like decay, which already changes free parts' types) makes the same variants at nearly the same
+   places in the life cycle; a variant that binds into a body is copied true by the existing rule. The only
+   difference: an error inside the rule happens at a rate per copy, the drive at a rate per free part per time.
+4. **Decision: not changed.** Built as demo `pair`'s drive `PAM` (no rule change; INNOVATIONS run 0450). Revisit only
+   if a world without free-part decay needs variation, or if a rate per copy turns out to matter (e.g. a kind that
+   copies faster should also vary faster).
+5. **What the drive showed for the core** (INNOVATIONS run 0450, IDEAS "Variation on the pair"): variants are inherited
+   and selected with no rule change; the variants that win expose their part more (an anchor mark lost from a seed site
+   or a front), or bind more (a glued `@` side that keeps a body joined, then parts that bind their own kind or each
+   other), and the latter lock the material in rosettes and networks, so copying falls 3-15x (3 of 4 worlds by 140k even with the hazard per triangle). Nothing in the rule set
+   stops a part from carrying both `g@` and `G@`; such a part grows by binding its own kind (crystal growth), which is
+   legitimate chemistry. Whether the core or the environment should limit it is open (NEXT).
+
 ### Removal (q): the busy relay and refractory, 2026-10-05, autorun run 20261005-1921 (core-review)
 1. **What they do.** busy: 30 on a triangle with a bonded face (either end of a dock), relayed -1 per chain bond.
    Refractory: a triangle that had a face bond in the previous pass and has none now takes no dock until busy around it

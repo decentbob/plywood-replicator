@@ -1,36 +1,43 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-0251, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-06 (after autorun run 20261006-0450, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log and git (earlier handoffs: NEXT.md
-at each run's merge: run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
+at each run's merge: run 0251's at `f7b31f3`, run 0021's at `c98bb3c`, run 2320's at `5850fe7`, run 1921's at `908502a`, run 1850's at `f1ec517`, run 1422's at `4f65d5c`, with the condensed Direction of run 0751; that Direction in full at `a2f3914`).
 
 **The goal changed (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism is a direction. The
 user approved the order in "Direction (user)" below during run 0321. Run 1850 keeps that order and changes the vehicle
 it is tried on (below).
 
-**Handoff status (autorun run 20261006-0251, build).** **The pair world runs on** (priority 4 done, Direction 1):
-two labelled drives in demo `pair`, a body hazard (`PAH`=h: every 100 steps each body hit with probability h, lysed
-into its R and S) and decay of free parts into blanks (`PAD`=d), keep 1000 blanks in world 50 turning over. At h 0.6,
-d 1: 4 of 4 worlds alive at 10^6 steps, 217-324 bodies throughout, 1.41M births each, generation 5884-6071, 95% of the
-parts born fresh copies, copies R : S 1.22 (INNOVATIONS run 0251, picture `pair-runs-on.png`). The 50-200 bodies first
-proposed lie at an extinction edge: h 0.7 gives 50-190 bodies and 2 of 4 worlds die by 10^6, h 0.8 dies in 4 of 4. Slow
-decay (d 0.01-0.3) runs on too but rebuilds bodies from a dead body's parts (5-20% fresh), useless for heredity. The
-mean field's birth law (IDEAS) did not decide the numbers: material (slow decay) or the meeting of two fresh parts (fast
-decay) did. **Copying is local**: a part is born into a body 2.3 side lengths from where it was copied (91% within 5;
-random: about 19); bodies cluster in patches. New check `pair-run` (100k steps, h 0.6, d 1; 4 worlds, need 3): `pair`,
-`pair-c` and `pair-run` pass (`pair-run` 4 of 4: 267-285 bodies, generation 620-635 at 100k steps, 194 s); the full suite was not rerun (only demo `pair` changed, and its
-default output is byte for byte the same: seeds 1 and 2 compared). `node tri/test.js` 40 pass. Nothing is running.
-To regenerate the long worlds: `PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair SEED 1000000
-runs/x` (about 35 minutes each; PAH=0.7 for the edge).
+**Handoff status (autorun run 20261006-0450, explore).** **Heritable variation and selection on the pair, no rule
+change** (priority 5 done, Direction 2; INNOVATIONS run 0450, IDEAS "Variation on the pair", RULES candidate (r)).
+Contact copying is exact, so a variant part type in a body is copied true; demo `pair` gained labelled starts and a
+drive (all off by default, default output byte for byte the same): `PAV`/`PAVK`/`PAVP`/`PAVT` put a neutral marker or
+an exposure variant into some R or S; `PAM` is a mutagen (each free part, with probability m per 100 steps, one side's
+glue or one mark changed); `PAHU=1` the hazard per triangle. Findings:
+1. A neutral marker drifts (half the world marked: fixed or lost in 45-215k steps; from 1 in 10: 0.31-0.51 or lost by
+   40k later); patches dissolve within 5000 steps: heredity is by part type in a mixed pool, not by lineage.
+2. **Selection:** a seed site or a front without its anchor mark (copied while free, so its part has two sources) put
+   into 1 in 10 S (R) fixes by 50k (40k) in 4 of 4 worlds each; bodies do not increase (part-type selection). This
+   is Direction 3's minimal test too (two variants on one supply, one wins for a reason: exposure).
+3. Under the mutagen (m 0.001-0.03) these exposure variants arise and sweep by themselves (6 of 8 worlds by 60k). Then
+   **binding variants win** (a glued `@` side that keeps a body joined; parts binding their own kind, `F@f@&J@` rosettes;
+   two types binding each other; in one world R that buds R, then two R-derived types and no S): they catch free parts
+   before decay, blanks fall to 2-30, copying to a third or less, evolution slows. 4 of 4 worlds with the per-body
+   hazard (it rewards joined bodies), 3 of 4 with the hazard per triangle (one stays a pair to 300k).
+Checks: new `pair-sel` 4/4, `pair-sel-c` 4/4 (control), `pair-mut` 4/4; `pair`, `pair-c`, `pair-run` pass as before (the
+full suite was not rerun: only demo `pair` and `check.js` changed). `node tri/test.js` 40 pass. Nothing is running.
+Pictures `pair-mutagen-rosettes.png`, `pair-variation.png`. Regenerate: `PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6
+PAD=1 node tri/demos.js pair SEED STEPS runs` plus `PAM=0.01 PAHU=1` (300k, about 10 minutes) or `PAV=mix PAVP=0.1
+PAVK=seed PAVT=20000` (200k); the chart was drawn by a one-off script from the `var:`/`pop:` lines (not kept).
 
-**Next step (rotation 51, explore): Direction 2, heritable variation** (priority 5) on the running pair world (h 0.6,
-d 1). Make the case in RULES (Core changes) first: contact copying now and then makes a different type, the variant
-then copied true. Which sides may vary: an outer side (R's `-`, S's `-`) changes behaviour without breaking assembly; a
-joint side (`Y@&`, `b@|`, `B@`, `y|`) is lethal or makes a new kind. Inheritance here is by neighbourhood (copies land
-2-3 side lengths away), so measure first: does a neutral marked variant (a mark that changes nothing, e.g. on an outer side that
-still takes copy blanks: check what a blank binds first) stay in patches and drift, and how long does it last against 280 bodies? Then a variant with an effect. To know
-whether a body's copies go to its own buds, the copy log would need the template (observation only, `sim.js` copy
-event).
+**Next step (rotation 52, build): a world that keeps evolving** (priority 6). The mutagen world locks its material
+once binding variants appear. Try, as labelled drives on demo `pair` (no core change): deaths that return raw
+material, i.e. a hazard per triangle whose hit triangle (and the part it lyses) becomes blanks instead of parts, so
+that material held in bodies flows through copying at a fixed rate whatever binds; then `PAM=0.01` in 4 worlds to 300k
+against the lock worlds above (seeds 1, 3, 4 lock by 140k): do blanks stay above about 100 and copies above 10k per
+5000 steps, and what evolves? Measure first what share of births are fresh copies in the lock worlds (the `fresh`
+field counts only R and S). If a drive cannot keep material flowing, write down why (the core may need a cost for
+holding: IDEAS). Direction 3 (two kinds on one supply) follows; the mutagen world already makes new kinds compete.
 
 ### Direction (review-intent run 20261005-1850)
 The argument is in IDEAS ("Sources in proportion to use"); in short:
@@ -68,16 +75,18 @@ The argument is in IDEAS ("Sources in proportion to use"); in short:
    0.99 on average, founder 4, at most 7, while blanks lasted; seed 1).
 3. Done in run 0021 (harden): speed for pair worlds, 1.8-2.1x, exact.
 4. Done in run 0251 (build): Direction 1 on the pair (`PAH` 0.6, `PAD` 1: 4 of 4 worlds to 10^6 steps; check `pair-run`).
-5. [51 explore] **Direction 2:** heritable variation: contact copying now and then makes a variant (core change; case in
-   RULES first: which sides may change; outer sides change behaviour without breaking assembly, joint sides are lethal;
-   how a longer kind could arise).
-6. [52 build] **Direction 3:** two kinds on one supply (the pair and a 3-cell strip): who wins, and why.
-7. Frozen: the 47-type organism (feeding, (n), the front sink, lysis in the lineage); it returns as the complex end once
+5. Done in run 0450 (explore): Direction 2, heritable variation and selection with a labelled mutagen (no core change;
+   candidate (r), copy error, not needed yet).
+6. [52 build] **A world that keeps evolving:** material keeps flowing once binding variants appear (deaths return
+   blanks; Next step above).
+7. [54 build] **Direction 3:** two kinds on one supply (the pair and a 3-cell strip, or kinds the mutagen made): who
+   wins, and why. [55 explore] heredity of combinations: a body's parts come mostly from its own copies (IDEAS).
+8. Frozen: the 47-type organism (feeding, (n), the front sink, lysis in the lineage); it returns as the complex end once
    the pair world runs on and varies.
 
 **Rotation (autorun `projects/plywood/rotation.txt`): unchanged**; its mix (5 build, 3 explore, 1 harden, 1 cleanup, 1
-review-intent, 1 core-review per 12) fits a new vehicle that needs mostly building. 47 core-review, 48 build, 49
-harden, 50 build, 51 explore, 52 build, 53 cleanup, 54 build, 55 explore, 56 build, 57 explore, 58 review-intent.
+review-intent, 1 core-review per 12) fits a new vehicle that needs mostly building. 52 build, 53 cleanup, 54 build, 55 explore, 56 build,
+57 explore, 58 review-intent, 59 core-review.
 
 ### Direction (user, 2026-10-05, approved during run 20261005-0321): complex evolution first
 The goal is complex evolution (AGENTS.md, IDEAS 2026-10-05); the organism that feeds its bud is a direction, not the
@@ -90,6 +99,9 @@ finish line. The user approved this order for the next slices:
 3. **A minimal competition test:** two variants on one food supply; does one win, and for a reason?
 
 **Core-change candidates (for the next `core-review` or `explore`).**
+- (r) *Copy error in contact copying* (run 0450): not needed yet; a labelled mutagen on free parts gives the same
+  variants (RULES, Core changes). Open: whether the core or the environment should limit parts that bind their own
+  kind (`g@` and `G@` on one part), which lock the material in the mutagen world.
 - Closed in run 1921: (p) removed (git `4f65d5c`); (o) not adopted: the oracle `LYFIX` never fades and is removed, a
   fading variant ("a partner bonded since the last pass counts as open one bond away") left false releases at 8, 0, 2,
   14 (base 8, 0, 2, 13). Before any new fix for (o), trace one `falseRel` in `budcycle-lysis` seed 4. Done: (q) busy
