@@ -10,6 +10,14 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261006-1150, build; in progress): Direction 3, two kinds on one supply.** In the flowing
+world without the mutagen (`PAHB=2`, hazard per triangle h 0.6, decay 1, 1000 blanks, world 50) a pair founder and a
+founder of a 3-cell strip (R3 `Z@&c@|-`, M `C@d@|-`, T `D@-z|`: same design, own letters, so the kinds share only blanks
+and space). Done when: (a) each kind alone runs on (steady bodies, free blanks: the R* each draws) and the two together
+end the same way in 3 of 4 worlds, with the reason measured; (b) the strip's extra cell given a function (M's exposed side
+`y@!`: it binds a free pair R by its root and lyses it, returning it as a blank) and the same test: can length pay?
+Checks for both in `tri/check.js`. Stop there; kinds the mutagen made are the next step.
+
 **Handoff status (autorun run 20261006-0920, cleanup).** No new capability, no rule change.
 Results (INNOVATIONS run 0920):
 1. `budcycle`'s dead options removed (`BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`, `BCSV`, `BCGATE`) with the
