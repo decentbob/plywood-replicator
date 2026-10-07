@@ -510,20 +510,21 @@ function demo(name,seed=1,steps,dir='runs',extra){
         console.log(`kinds: t=${t} complete ${f(n)} | incomplete ${f(w)} | longest ${longest} | by cells ${Object.entries(len).map(([c,k])=>c+':'+k).join(' ')||'-'} || ${indiv(t)}`);};
       // census of individuals (every pair world with PAP; observation only): an individual is a set of triangles joined by
       // bonds that are not joints (a bond with an '&' side on either end); its kind is its composition (the sorted types).
-      // Per census: individuals of 2 or more cells and their kinds, kinds with 5 or more individuals (held), the most
-      // cells in a held kind, lone bonded triangles (heads on a seed site), individuals holding by a joint a triangle of a
+      // Per census: complete individuals of 2 or more cells (no open front: an unbonded glued attach side without '&') and
+      // their kinds, kinds with 5 or more individuals (held), the most cells in a held kind, growing individuals (2 or more
+      // cells, an open front), lone bonded triangles (heads on a seed site), complete individuals holding by a joint a triangle of a
       // type not in their own kind (another kind's part), the commonest kinds. End line 'census:' (second half: most kinds
       // held at once, most holding; whole run: longest held)
       const iEnd={maxHeld:0,maxAt:0,longest:0,longAt:0,maxHold:0},indiv=t=>{const c=new Int32Array(s.n).fill(-1),M=[];
         for(let u=0;u<s.n;u++){if(c[u]>=0||!s.bonded(u))continue;const L=[u];c[u]=M.length;for(let k=0;k<L.length;k++){const x=L[k];for(let i=0;i<3;i++){const q=s.bond[x*3+i];if(q<0||s.done[x*3+i]||s.done[q])continue;const y=(q/3)|0;if(c[y]<0){c[y]=M.length;L.push(y);}}}M.push(L);}
-        const by=new Map(),key=M.map(L=>{const T=L.map(u=>canon(s.typeName(u)));return {T:new Set(T),k:T.sort().join('+')};});let one=0,hold=0;const hk=new Map();
-        M.forEach((L,m)=>{if(L.length<2){one++;return;}by.set(key[m].k,(by.get(key[m].k)||0)+1);let h=null;
+        const by=new Map(),key=M.map(L=>{const T=L.map(u=>canon(s.typeName(u)));return {T:new Set(T),k:T.sort().join('+')};});let one=0,grow=0,hold=0;const hk=new Map();
+        M.forEach((L,m)=>{if(L.length<2){one++;return;}if(L.some(x=>[0,1,2].some(i=>s.att[x*3+i]&&s.glue[x*3+i]&&!s.done[x*3+i]&&s.bond[x*3+i]<0))){grow++;return;}by.set(key[m].k,(by.get(key[m].k)||0)+1);let h=null;
           for(const x of L)for(let i=0;i<3;i++){const q=s.bond[x*3+i];if(q<0||s.done[x*3+i]||!s.done[q])continue;const y=(q/3)|0;if(!key[m].T.has(canon(s.typeName(y)))){h=c[y];break;}}
           if(h!==null){hold++;const w=key[m].k+' > '+key[h].k;hk.set(w,(hk.get(w)||0)+1);}});
         const ks=[...by].sort((a,b)=>b[1]-a[1]),held=ks.filter(([,n])=>n>=5),cells=k=>k.split('+').length,lg=held.reduce((a,[k])=>Math.max(a,cells(k)),0),n=ks.reduce((a,[,v])=>a+v,0);
         if(lg>iEnd.longest){iEnd.longest=lg;iEnd.longAt=t;}if(t>steps/2){if(held.length>iEnd.maxHeld){iEnd.maxHeld=held.length;iEnd.maxAt=t;}iEnd.maxHold=Math.max(iEnd.maxHold,hold);}
         const top=[...hk].sort((a,b)=>b[1]-a[1])[0];
-        return `individuals ${n} kinds ${ks.length} held ${held.length} longestHeld ${lg} single ${one} holdingOther ${hold}${top?` (${top[1]}x ${top[0]})`:''} | ${ks.slice(0,4).map(([k,v])=>v+'x '+k).join(', ')||'-'}`;};
+        return `individuals ${n} kinds ${ks.length} held ${held.length} longestHeld ${lg} growing ${grow} single ${one} holdingOther ${hold}${top?` (${top[1]}x ${top[0]})`:''} | ${ks.slice(0,4).map(([k,v])=>v+'x '+k).join(', ')||'-'}`;};
       // two kinds: per kind its types, individuals (attached last cells), held, free parts, copies; extinction times
       // (counted 50 steps before the line: between two decay steps)
       let duoO=null;const DK2=K2?[{name:'pair',T:[cR,cS]},{name:'strip',T:K2.types.map(canon)}].map(k=>({...k,last:k.T[k.T.length-1],set:new Set(k.T),c0:0,ext:0,sum:0,m:0})):[],duoCount=()=>{
