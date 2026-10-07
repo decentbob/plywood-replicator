@@ -11,6 +11,43 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-1821, build)
+
+- **Kinds as food: every catcher farms its catch, so all catchers share the blanks; three classes need three resources**
+  (NEXT priority 19; theory in IDEAS "Every catcher farms its catch"). No rule change. New demo option `PA3='T0 T1'` with
+  `PA3T=t` (a third kit entering at step t, `PAEN` founders, as `PA1T`/`PA2T`). New checks `web-three` (4 of 4: 3 classes
+  at every census from 30k to 50k, 1 link) and `web-three-c` (pass: no X class after entry).
+  - **Theory.** In a complete individual every `&` side is spent and a caught head's front is bonded, so a head exposes
+    only its copy side, in its own body and in a catcher's alike: a catcher copies its prey as often as the prey does.
+    Fronts catch each other both ways (a catcher of heads is eaten by them), and a catcher of catchers has the first
+    level's front (it eats the first level's stock). Every catch is copied from blanks, so every catcher lives on one
+    resource; by competitive exclusion the classes are at most the limiting resources (blanks and each private stock).
+  - **The worlds** (the standard world `PAW=1` with 10 u catchers `U@&C@|u` holding `c@|-Z@&` entered at 10k, as check
+    `web-two`, and 10 of a third kit at 20k; 80k; seeds 1-4 each; `runs/food*.json`):
+    - (A) a farmer of U heads, `V@&c@|v` holding `C@|uU@&`: died out in 4 of 4, by 25k in 3 and by 30k in seed 2
+      (predicted: merges with U in 3 of 4; wrong, it never held).
+    - (B) a second farmer of Z heads, `W@&C@|w` holding `c@|-Z@&`: 3 classes and 3 links (`UZ~Z UZ~W Z>UZ Z~W`) for 20-30k
+      in 3 of 4 (seed 2: W never held), then one farmer excluded the other: W replaced U in seed 1 (U gone by 70k) and
+      held most individuals in seed 3 (243-304 against U's 8-19); U excluded W in seed 4 by 70k (predicted: 3 classes
+      at most censuses in 3 of 4; wrong, they are drift between equals).
+    - (C, D) a farmer of a private crop, `X@&D@|x` holding `d@|-Y@&` (C) or `d@|-Z@&` (D, the crop roots on host sites):
+      never held, 0 of 8. Blanks were 31-45 of 1000 from 20k on (about 600 before U entered).
+    - (E) the N host on a fourth stock K (`N@&k@|n` holding `K@-|-|`, K 150): 3 classes (`UZ`, `Z`, `N`) at every census
+      from 30k to 80k in 3 of 4, 1 link (`UZ~Z Z>UZ`); seed 2 held 3 classes to 70k, then U died out and N and Z
+      merged (`NZ 2/388`). Predicted from the theory (3 classes on 3 resources), right.
+    - (F) X first (10k, 120k steps), U at 20k: X held in 4 of 4 by 20k (244-290 individuals in 3; blanks fell to 40-62);
+      U never held in seeds 1-2 and excluded X in seeds 3-4 (by 60k and 30k); in seeds 1-2 X died out on its own by 60k
+      and 100k and nothing replaced it (blanks back to 115-142). At most 2 classes at 120k in 4 of 4 (predicted, right).
+  - Picture: [web-three.png](pictures/web-three.png) (E, seed 1 at 80k, by front glue: yellow `c`/`C` the host and
+    u-catcher classes, grey `k` the N class).
+  - Commands: `PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' PA3T=20000 PA3='N@&k@|n K@-|-|'
+    PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150 K@-|-|:150' node tri/demos.js pair SEED 80000 runs/x` (E; about 10 minutes);
+    the others with `PA3` as above and `PAF` unset; F: `PAKR='X@&D@|x' PAKS='d@|-Y@&' PA3='U@&C@|u c@|-Z@&'`. Batches:
+    `tri/batch.js` files with these env (`runs/food.json`: A, B; `food2`: C, D; `food3`: E; `food4`: F, 120k);
+    `grep '^web' runs/x.txt`.
+  - Status: **works** (three classes on three resources, 3 of 4); **not yet**, and argued impossible with 2-cell
+    kinds: a third level fed by the second (every predator farms its prey from blanks).
+
 ## 2026-10-07 (autorun run 20261007-1720, explore)
 
 - **A class that owns its seed letter: a seed site on the head's copy side roots its copies in place; on a site-free

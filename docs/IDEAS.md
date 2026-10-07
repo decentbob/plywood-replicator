@@ -28,6 +28,47 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Every catcher farms its catch; classes are at most the limiting resources (build run 20261007-1821, 2026-10-07)
+
+Derived first, then checked (INNOVATIONS run 1821). Notes, not the user's words.
+- **Exposure does not depend on the holder.** Contact copying reads the free sides of attached triangles. Once an
+  individual is complete, every `&` side in it is spent (the release spends all `&` sides of a triangle that hears no
+  open signal, bonded or not), and a caught head's front is bonded. So a head exposes exactly one copyable side, its copy
+  side, whether it sits in its own individual or in a catcher's. **Every catcher of heads farms them**: each catch is
+  also a template of its prey, copied as often as in the prey's own body. In a 2-cell body nothing can cover the
+  prey's copy side, so no predator can avoid making its prey; if that side is the prey's in-place seed site, the
+  predator also raises prey buds.
+- **The front bond is symmetric and alternates letters.** A waiting bud's open front `x@|` catches free parts with
+  `X@`, and a free head whose front is `X@|` is caught by waiting fronts `x@|`: two kinds of heads on one letter pair
+  eat each other (web-two holds both U+Z and Z+U). A catcher of catchers has the complement of the complement, the
+  first level's front, so it eats the first level's stock as well (a third level of catches is a second host). And a
+  head caught by its root is no catch: it completes and lets go (a front is a nursery, run 1720).
+- **Every catch is made of blanks.** A head is a copy blank that touched a copy side, and a farmer's crop is copied
+  from blanks at its catch's copy side. So every catcher of heads, whatever its letters, draws on one resource: the
+  blanks. A stock part is a resource of its own (prepared, never made, never decays). Competitive exclusion (run 1150's
+  R* rule) then bounds the web: **the classes that can coexist are at most the limiting resources** (blanks, and each
+  stock a class has to itself). Kinds as food add no resource. Run 1720's "classes are at most the separate foods"
+  is this rule, with blanks counted as a food.
+- **Measured** (the web-two world: u catchers entered at 10k, a third kit at 20k, 80k, seeds 1-4 each). A farmer of U
+  heads (`V@&c@|v` holding a U head) died out by 25-30k in 4 of 4: it shares the hosts' stock C and U's blanks. A second
+  farmer of Z heads (`W@&C@|w`) made 3 classes and 3 links for 20-30k in 3 of 4, then one of the two farmers excluded
+  the other (drift between equals). A farmer of a private crop (`X@&D@|x` holding `d@|-Y@&`, or its crop rooting on
+  `z`) never established, 0 of 8: U had drawn the blanks down from about 600 to 31 of 1000. Entered first, while blanks
+  were plenty, X held in 4 of 4; U then excluded it in 2 of 4 and never got in in the other 2 (X itself died out by
+  60-100k there): whoever is in first keeps the blanks. The N host on a fourth stock K beside host and u catchers
+  made 3 classes at every census from 30k to 80k in 3 of 4 (seed 2 until 70k): three classes on three resources (new
+  check `web-three`).
+- **No third level with 2-cell kinds; designed, not demonstrated, with three.** A predator that does not farm its prey
+  needs a third cell over the prey's copy side: for U prey, a cap part `U@--` bound to the U head's `u` (a non-`&`
+  attach side stays). Caps are copied from their own plain sides (blanks again) and cap every free `u` site, the
+  prey's own nurseries included, so they would sterilise the prey. Not built.
+- **What this asks for.** The web grows with resources, not with kinds. Contact copying makes every part from a
+  blank, so a resource that is not blanks has to be a part nobody copies (a stock, prepared) or a second kind of blank (candidate (t), a copy side that reads glue: blanks that copy
+  only sides of one glue are a resource of the kinds that carry it). A weaker route is a supply set by another class's
+  deaths: without `PAHB=2` the lysis rule returns parts as themselves, so a scavenger's food would be what a class's
+  deaths release (a flow set by the hazard, not by blanks; whether it limits anyone is open). The first two are the
+  way to more classes; the second is a core change (make the case under RULES Core changes).
+
 ## A class is a cycle of seed letters; a seed site on a head's copy side roots in place (explore run 20261007-1720, 2026-10-07)
 
 Derived first, then checked (INNOVATIONS run 1720). Notes, not the user's words.

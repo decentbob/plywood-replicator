@@ -406,7 +406,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // Two kinds on one supply (build run 20261006-1150), a labelled start, off by default: PA2='T0 T1 ...', a founder of a
     // second kind (stripKit: a strip of these types, each cell across the previous one's side 1) at (size/4, size/4);
     // PA1=0 leaves the pair founder out; PA1T=t, PA2T=t: that founder enters at step t instead (two or three free copy
-    // blanks become its cells, at a clear spot); PAEN=k founders enter (1). 'duo:' lines every PAP steps, per kind (pair; PA2): individuals (attached
+    // blanks become its cells, at a clear spot); PAEN=k founders enter (1); PA3='T0 T1 ...' with PA3T=t a third kit (stripKit) entering at step t (build run 20261007-1821: kinds as food). 'duo:' lines every PAP steps, per kind (pair; PA2): individuals (attached
     // triangles of its last type: a last cell is bonded only in a complete individual), held (its attached triangles),
     // free parts, copies since the previous line; mean blanks; a kind is extinct once nothing of it is attached
     // Heredity of combinations (explore run 20261006-1322), observation and labelled starts and drives, all off by default:
@@ -449,7 +449,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       const units=()=>{const c=new Int32Array(s.n).fill(-1),M=[];
         for(let u=0;u<s.n;u++){if(c[u]>=0||!s.bonded(u))continue;const L=[u];c[u]=M.length;for(let k=0;k<L.length;k++){const x=L[k];for(let i=0;i<3;i++){const q=s.bond[x*3+i];if(q<0||s.done[x*3+i]||s.done[q])continue;const y=(q/3)|0;if(c[y]<0){c[y]=M.length;L.push(y);}}}M.push(L);}
         return {c,M};};
-      const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
+      const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),K3=process.env.PA3?S.stripKit(process.env.PA3.trim().split(/\s+/)):null,T3=+(process.env.PA3T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
       const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB,...Object.fromEntries(FST)},params:{openRange:+(process.env.PAR||1)}});
       // joints (observation, the web census): an '&' side that bound a seed site (a caught head's '&' side is spent on
       // release too; a copy blank's bind is not a joint); cleared when its triangle comes free
@@ -610,6 +610,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
           for(let a=0;a<20;a++){const w=Math.floor(s.rng()*s.n);if(w===u||s.bonded(w)||s.ly[w])continue;for(const k of ['px','py','pa']){const x=s[k][u];s[k][u]=s[k][w];s[k][w]=x;}for(const v of [u,w]){s.resetShape(v);s._regrid(v);}break;}}
         if(T1&&t===T1)for(let q=0;q<EN;q++){const U=enter(K.tris,t);if(U)alive.set(U[0],{id:0,g:0,t});}
         if(T2&&t===T2&&K2)for(let q=0;q<EN;q++)enter(K2.tris,t);
+        if(T3&&t===T3&&K3)for(let q=0;q<EN;q++)enter(K3.tris,t);
         scan(t);
         if(VM&&PP&&t%PP===0&&t>=VT)marker(t);
         if(PS&&PP&&t%PP===0)parLine(t);

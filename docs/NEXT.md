@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-1720, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-1821, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,26 +10,27 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-1720, explore).** Priority 18 done (INNOVATIONS run 1720, IDEAS "A class is
-a cycle of seed letters"); no rule or demo change. **A class owns its seed letter when its head's copy side is its seed
-site** (`N@&k@|n`: the copies root in place) **and its stock part carries no site** (`K@-|-|`): entered into the
-standard world it is a second class beside the host class in 4 of 4 (new checks `own-letter` 4 of 4, `own-letter-c`
-pass). On the shared stock `C@-|z|` it merges (separate in 1 of 4: the stock part's `z` raises the host class and
-catchers holding N heads close the cycle). The n class of 1x seed 3 is this kind arisen by mutation without stock.
-**But owning letters does not make the web grow** (both predictions wrong): private stock letters gave no second class
-(0 of 4, 240k) and the site-free world (every class owns its letters) one class at every census of the second half (4 of
-4, one extinct): new private classes arise in two steps through a neutral site change and replace the old one on the
-same stock. Classes are at most the separate foods. Also found: a waiting head's open front is a nursery for any part
-with the complementary root (the census reads such kinds as unraised cheats). The run's worlds are not kept
-(regenerate: INNOVATIONS run 1720, Commands; about 7 minutes per 120k). Nothing is running.
+**Handoff status (autorun run 20261007-1821, build).** Priority 19 done (INNOVATIONS run 1821, IDEAS "Every catcher
+farms its catch"); no rule change; new demo option `PA3`/`PA3T` (a third kit entering late). **Every catcher farms its
+catch**: in a complete individual all `&` sides are spent, so a caught head exposes only its copy side, in a catcher's
+body as in its own, and a catcher copies its prey as often as the prey does. Fronts catch each other both ways, and a
+catcher of catchers has the first level's front (it eats the first level's stock). Every catch is copied from blanks,
+so all catchers live on one resource and **the classes are at most the limiting resources** (blanks, and each stock a
+class has to itself). Measured in the web-two world (80k, seeds 1-4): a farmer of U heads died out (4 of 4), a second
+farmer of Z heads held beside U for 20-30k and then one excluded the other (3 of 4), a farmer of a private crop never
+held (0 of 8; blanks 31-45 of 1000 once U lives); entered first while blanks are plenty it held (4 of 4) and then one of
+X and U excluded the other (4 of 4). The N host on its own stock K beside host and u catchers: **three classes on
+three resources** at every census 30k-80k in 3 of 4 (new checks `web-three` 4 of 4, `web-three-c` pass). No third
+level fed by the second with 2-cell kinds (argued; a 3-cell predator that caps its prey's copy side is designed, not
+built). The run's worlds are not kept (regenerate: INNOVATIONS run 1821, Commands; about 10 minutes per 80k with 4 at
+once). Nothing is running.
 
-**Next step (rotation 68, build): priority 19**, kinds as food. The web can outgrow the number of stocks only if kinds
-are food for kinds. Start from check `web-two` (u catchers `U@&C@|u` entered into the standard world: 2 classes, one
-link; the u copy side is its in-place seed site). Theory first: what a third level can eat (u catcher heads root in
-place and seldom reach the pool; the u individual's exposed sides are `u` and its held host head's `-`), design one
-(a front that catches a part the second level makes in surplus, an in-place seed letter of its own), predict, then
-enter it (`PA1T`, `PAEN`) and read the web (3 classes, 2 links?). If no third level can be fed, record why. Optional
-in the same run: the web census could count open fronts as seed sites (observation only).
+**Next step (rotation 69, explore): priority 20.** The web grows with resources, not with kinds (IDEAS run 1821). The
+most direct candidate is a second resource made by kinds: (t) a copy side that reads glue (blanks of a second type that
+copy only sides of one glue: a resource of the kinds that carry it; make the case under RULES Core changes first, with
+the prediction that a class carrying that glue coexists with the blank farmers as a fourth class), or, without a core
+change, deaths that return parts (`PAHB` off for one class's material: does a scavenger class limited by another class's
+deaths hold?). Other candidates as listed under 20.
 
 ## Direction and priorities
 
@@ -47,9 +48,9 @@ individuals (0050); 13 the standard world `PAW=1` (0420; `world`); 14 host and c
 standard world collapses into heads that never let go (3 of 4), the whole-body hazard `PAHU=3` holds (4 of 4) (0820;
 `web-two`); 16 the pair demo's options pruned (1051); 17 the whole-body hazard at h 0.07 is the standard world's
 (1351; `world`, `arc-root` pins `PAHU=2`); 18 a class that owns its seed letter: in place, on a site-free stock;
-it does not make the web grow (1720; `own-letter`). Open:
-19. [68 build] Kinds as food: a catcher class of its own letter on a host class, and a third level (Next step above).
-20. [69 explore] Candidates: a kind that pays for length through cheaper catches (IDEAS run 0622), a longer kind whose
+it does not make the web grow (1720; `own-letter`); 19 kinds as food: every catcher farms its catch from blanks, so
+the classes are at most the limiting resources, three on three (1821; `web-three`). Open:
+20. [69 explore] Candidates: a second resource kinds make ((t) a copy side that reads glue; deaths that return parts), a kind that pays for length through cheaper catches (IDEAS run 0622), a longer kind whose
     function is in what binds, (t), or a third food that kinds make for one another.
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
@@ -63,6 +64,8 @@ Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run
   side's glue (fixed type): local. It would let a second blank type be one kind's own resource (blanks `k?k?k?` copy only
   sides `K`), so a diet could be a copied side rather than a stock. Not needed while stock parts give a private resource
   (`PAF`); weigh it if a stock proves too special (it is a prepared supply of a kind's own part types).
+  Run 1821: the classes are at most the limiting resources and every copied part is a blank, so (t) is the one way in the
+  core to a resource kinds make; open: what keeps the second blank type in supply (`PAHB=2` returns plain blanks).
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
@@ -92,7 +95,7 @@ Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about 100 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 105 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (check world; about 7.5 minutes): the diet kind among stocks
@@ -108,6 +111,10 @@ PAW=1 PA1T=20000 PAEN=10 PAKR='N@&k@|n' PAKS='K@-|-|' PAF='C@-|z|:150 E@-|z|:150
                                                    # a class that owns its seed letter (check own-letter; about 2.5 minutes): an
                                                    # in-place seed site on a site-free stock; on the shared stock (PAKR='N@&c@|n'
                                                    # PAKS='C@-|z|', PAF unset; own-letter-c, seed 2) it merges with the host class
+PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' PA3T=20000 PA3='N@&k@|n K@-|-|' PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150 K@-|-|:150' node tri/demos.js pair 1 50000 runs/x
+                                                   # three classes on three resources (check web-three; about 3 minutes): PA3 a
+                                                   # third kit entering at PA3T; the farmer of a private crop PA3='X@&D@|x d@|-Y@&'
+                                                   # (PAF unset) never establishes (web-three-c)
 PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
                                                    # without stock (check catcher-free; 45 s); diets world with catchers entered:
                                                    # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)

@@ -215,6 +215,17 @@ const CHECKS=[
   {id:'own-letter-c',cap:'  control: the same head on the shared stock C (z) merges into one class with the host class',demo:'pair',seeds:[2],steps:50000,secs:150,env:{PAW:'1',PA1T:'20000',PAEN:'10',PAKR:'N@&c@|n',PAKS:'C@-|z|'},
     pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];
       return [/(^|, )[A-Z]*N[A-Z]*Z[A-Z]* \d|(^|, )[A-Z]*Z[A-Z]*N[A-Z]* \d/.test(w[5]),`at 50k ${w[3]} classes, ${w[4]} links (${w[5]})`];}},
+  // run 20261007-1821 (build): kinds as food (IDEAS "Every catcher farms its catch; classes are at most the limiting
+  // resources"). Every catch is farmed from blanks, so blank-eaters share one resource; a class needs a resource of its
+  // own. The standard world with u catchers entered at 10k (they live on blanks) and the N host on its own stock K at
+  // 20k (labelled starts): three classes on three resources (stock C, stock K, blanks); control: a farmer of a private
+  // crop instead of N ('X@&D@|x' holding 'd@|-Y@&': it lives on blanks too) never establishes (2 classes, no X)
+  {id:'web-three',cap:'Three classes on three resources: host on C, u catchers on blanks, N host on its own stock K',demo:'pair',seeds:[1,2,3,4],need:3,steps:50000,secs:150,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'U@&C@|u',PAKS:'c@|-Z@&',PA3T:'20000',PA3:'N@&k@|n K@-|-|',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150 K@-|-|:150'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)].filter(w=>+w[1]>30000);if(!W.length)return [false,'no result'];const three=W.filter(w=>+w[3]>=3).length,w=W[W.length-1];
+      return [three===W.length,`${three} of ${W.length} censuses after 30k with 3 classes or more; at 50k ${w[3]} classes, ${w[4]} links (${w[5]} | ${w[6]})`];}},
+  {id:'web-three-c',cap:'  control: a farmer of a private crop lives on blanks too and never establishes (no X class)',demo:'pair',seeds:[1],steps:50000,secs:150,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'U@&C@|u',PAKS:'c@|-Z@&',PA3T:'20000',PA3:'X@&D@|x d@|-Y@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)].filter(w=>+w[1]>20000);if(!W.length)return [false,'no result'];const x=W.filter(w=>/X/.test(w[5])).length,w=W[W.length-1];
+      return [x===0&&+w[3]<=2,`${x} of ${W.length} censuses after entry with an X class; at 50k ${w[3]} classes (${w[5]})`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
