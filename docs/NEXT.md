@@ -20,6 +20,15 @@ strength (h 0.15) still collapses into chains (3x: 2 of 4 by 240k, a third colla
 the suite is unchanged by construction. Old-standard runs: add `PAHU=2 PAH=0.1`. The run's worlds are not kept
 (regenerate: INNOVATIONS run 1351, Commands). Nothing is running.
 
+**Current slice (autorun run 20261007-1720, explore; priority 18).** Goal: a class that owns its seed letter. (a) Read
+the n host of 1x seed 3 (`PAW=1 node tri/demos.js pair 3 240000 runs/s3`): what it is. (b) Theory first: a head that
+carries its own seed site on its copy side (`N@&c@|n` on stock `C@-|z|`, the B host of run 0820) roots its copies in
+place, raises itself and, through its stock part's `z|`, the Z class: predict two classes and one link `N>Z`. (c) Enter
+it into the standard world (`PA1T`, `PAEN=10`, seeds 1-4, 120k) and alone. Done when: the entered class holds beside the
+Z class (two classes in at least half of the censuses after entry) in 3 of 4 worlds, or the records say why not.
+Prediction: N takes most of the C stock (its buds root without searching), Z persists on the z sites of both kinds,
+two classes and one link at most censuses; chains of waiting N buds are the risk (whole-body hazard kills them).
+
 **Next step (rotation 67, explore): priority 18**, a class that owns its seed letter. Start from the one that arose by
 mutation under the new standard: `PAW=1 node tri/demos.js pair 3 240000 runs/x` (about 16 minutes), an e-diet host with
 seed letter `n` (`E@Nn@&` holding `Z@&e@t`), two classes for most of the second half (`grep '^web' runs/x.txt`); look
