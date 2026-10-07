@@ -167,8 +167,8 @@ const CHECKS=[
   // 120k (in batch B: a head whose front became C, catching other heads by their fronts, in 3 of 4; held kinds of up to 6
   // cells with copied middles in 1)
   {id:'world',cap:'The standard world: individuals at every census and kinds that arose by mutation held at the end',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:440,env:{PAW:'1'},
-    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const mut=I.top.filter(([,k])=>k!=='-Z@&c@|+-|z|C@'),c=o.match(/census: maxHeld=(\d+) at \S+ longestHeld=(\d+)/);
-      return [I.min>0&&mut.length>0&&mut[0][0]>=10,`individuals fewest ${I.min}, at 120k ${I.end}; commonest kind not the founder's ${mut.length?mut[0][0]+'x '+mut[0][1]:'none'}; kinds held at once up to ${c?c[1]:'-'}, longest held ${c?c[2]:'-'} cells`];}},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const mut=I.top.filter(([,k])=>k!=='-Z@&c@|+-|z|C@'),c=o.match(/census: maxHeld=(\d+) at \S+ longestHeld=(\d+)/),w=o.match(/web: maxClasses=(\d+) at \S+ maxLinks=(\d+)/);
+      return [I.min>0&&mut.length>0&&mut[0][0]>=10,`individuals fewest ${I.min}, at 120k ${I.end}; commonest kind not the founder's ${mut.length?mut[0][0]+'x '+mut[0][1]:'none'}; kinds held at once up to ${c?c[1]:'-'}, longest held ${c?c[2]:'-'} cells; web (second half) up to ${w?w[1]:'-'} classes, ${w?w[2]:'-'} links`];}},
   // run 20261007-0622 (explore): host and catcher. The catchers that replaced the plain one in the standard world carry
   // a seed site of their own: founded alone in the standard world without stocks or mutagen, the u kind (a catcher head
   // 'U@&C@|u' holding a host head by its front) grows on blanks only; the plain catcher (no seed site) never buds alone
@@ -192,6 +192,14 @@ const CHECKS=[
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]>=0.8,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
   {id:'arc-root-c',cap:'  control: the 2-cell kind (head and stock end), fewer than 60% in place',demo:'pair',seeds:[1],steps:30000,secs:70,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|z|',PAF:'T@-|z|:150'},
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]<0.6,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
+  // run 20261007-0820 (build): the recognition web ('web:' lines, every pair world). The standard world with 10 catchers
+  // entered at 10k (a labelled start): u catchers (their own seed site u) form a second class, which the host class
+  // raises (a host's seed site takes the catcher individual's head) and whose front catches the host's parts: 2 classes,
+  // 1 link; control: plain catchers (no seed site) are cheats inside the host class (1 class, a cheat, no link)
+  {id:'web-two',cap:'The web census reads two classes and a link: u catchers entered into the standard world',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:95,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'U@&C@|u',PAKS:'c@|-Z@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+).*\| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]>=2&&+w[3]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links (${w[5]}), ${w[4]} cheats`];}},
+  {id:'web-two-c',cap:'  control: plain catchers are cheats inside the host class (1 class, no link)',demo:'pair',seeds:[1],steps:30000,secs:95,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'Z@&C@|-',PAKS:'c@|-Z@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+)/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]===1&&+w[3]===0&&+w[4]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links, ${w[4]} cheats`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s (PAPS); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share

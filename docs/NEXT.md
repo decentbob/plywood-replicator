@@ -1,46 +1,38 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-0622, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-0820, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`, the direction
-check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`, the handoff of run 2350 (length shrinks) at `0ed8f69`, the handoff of run 0050 (census) at `3b90c0a`, the handoff of run 0420 (the standard world) at `fdf323f`).
+check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`, the handoff of run 2350 (length shrinks) at `0ed8f69`, the handoff of run 0050 (census) at `3b90c0a`, the handoff of run 0420 (the standard world) at `fdf323f`, the handoff of run 0622 (host and catcher) at `6d1da94`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-0622, explore).** Priority 14 done, no rule change (INNOVATIONS run 0622,
-IDEAS "A bud gets one part by place and the rest by recognition"). (a) **The catchers.** The plain catcher `Z@&C@|-`
-(a head that catches the host's free heads by their fronts) never buds alone (0 of 4): a parasite of the host's
-nursery. The two that replaced it in run 0420's worlds carry a seed site of their own (`C@zZ@&`, `C@|uU@&`) and grow
-alone without stock (4 of 4 each, 178-378 individuals): pairs that eat blanks only (check `catcher-free`). (b) **No Red
-Queen; exclusion.** Predicted: switching diet gives a host no escape (the catcher's cost, the seed sites, is diet-blind).
-Measured in the diets world (three diets near their stocks, 10 catchers of diet c entered at 60k): e and g fall from
-about 125 hosts to 0-21 by 120k, c keeps 88-100 (controls 104-139; 4 of 4 each; check `diets-catcher`). Each catcher
-copies the c head it holds at two sides, so c and catcher heads fill every seed site: the parasite arms its host's diet.
-In the standard world seed 3 a private-letter catcher (u) replaced the plain ones, then a cheat inside the u class
-(`C@|WU@&`, seed side W binds nothing) rose to its size. (c) **Theory, checked by enumeration:** a fresh copy can bind
-before it drifts only beside a cell three or more bonds from its template, so contact copying gives a bud at most one
-part per gap from its own parent; a whole bud of 3-5 distinct cells never. What a bud inherits as a combination it
-inherits by recognition (binding glues), and the parental share matters only for cheats inside a recognition class.
-(d) **The 4-cell arc** `Z@&t@|- T@-a@| A@-b@| B@-z|` (picture `docs/pictures/arc-root.png`): its head's copies land on
-its own seed site (about half of births without drives; 91-93% with stock middles and end at h 0.03, check `arc-root`;
-the 2-cell kind 18% copied, 47-48% on a stock end). It pays nothing: with copied middles it dies under the standard
-drives, with stock middles it lives only at h 0.03, where the catcher costs the 2-cell kind just 8% (the arc 0).
-Nothing is running. Suite: about 100 minutes (six new checks, 8 of 8 pass with `pair` and `diets`, 12 minutes); tests 41.
+**Handoff status (autorun run 20261007-0820, build).** Priority 15 done, no rule change (INNOVATIONS run 0820, IDEAS
+"Recognition classes merge; completion is optional"). (a) **The `web:` census** in every pair world: a kind raises
+another when its seed site takes the other's root (joints tracked as they bind); a class is a set of kinds that raise
+one another (strongly connected), a cheat is raised and raises none of its raisers, links between classes are one-way
+raising (`>`) or a catch (`~`). Checks `web-two` (u catchers entered: 2 classes, 1 link) and `web-two-c` (plain
+catchers: cheats inside the host class); `world` reports the web. (b) **The web does not grow.** 1x (seeds 1-4,
+240k): one class at every census in 3 of 4 (cheats 1-10); a private u class in 1 of 4. 3x (`PAB=3000 PAS=87`, stocks
+450): a private class in 4 of 4 by 75-135k, merged back into the host class within 15-45k (stock parts all carry `z`;
+a catcher individual can root by either head). Predicted in shape (saturation). (c) **Unpredicted: at 3x the
+standard world collapses** (3 of 4, no complete individual from 180-205k): heads that never let go (a front nothing
+binds, or closed rosettes with an open lysis side) grow as chains and split by the hazard: a replicator with one blank
+per cell and no catch, the lowest R* (pictures `docs/pictures/web-3x-rosettes.png`, `web-3x-chains.png`). (d) **The
+whole-body hazard** `PAHU=3` (labelled drive: a hit lyses the hit individual's whole body, joints included, so a chain
+cannot split): 4 of 4 3x worlds keep individuals to 240k, one with 2-3 classes for most of its second half (picture
+`web-3x-whole-body.png`); cheats (plain catchers, never carrying a bud) outnumber hosts 2-3 to 1; it kills more
+(individuals about half), so harshness is not yet separated from the mechanism. Nothing is running. Runs are in
+`runs/` only (x1N 1x, x3N 3x, y3N 3x with `PAHU=3`); regenerate with the commands below. Suite: about 100 minutes
+plus `web-two` (about 4 minutes).
 
-**Next step (rotation 64, build): priority 15, a recognition census and a larger standard world.** Kinds in this world
-are recognition classes (types that bind one another by complementary glues); complexity so far grew as new classes
-and links between them (the catcher: one class catching another's free part; the u kind: a private seed letter; its
-cheat). Add one census every pair world prints (a `web:` line every PAP steps): classes (connected components of the
-held kinds under "a glue of one binds a glue of the other": fronts to attach sides, seed sites to attach sides), links
-between classes (a held kind whose front or seed site binds another class's part), the largest class, and kinds that
-use a class's sites without offering one (cheats). Then run the standard world at 3x (`PAB=3000 PAS=87`, seeds 1-4,
-240k; about 25 minutes per 120k: write the command in this file first) and ask: does the web grow (more classes and
-links over time) or saturate? Check: the census line in `world` (unchanged pass) and a 3x result in INNOVATIONS; done
-when 4 worlds have a web timeline and the answer is recorded. No rule change.
+**Next step (rotation 65, cleanup): priority 16.** The pair demo's options (about 34): retire settings the standard
+world supersedes, keeping every check's outputs byte for byte (CHECK_SAVE diff) or explaining each change; INNOVATIONS
+names the commit that holds removed options.
 
 ## Direction and priorities
 
@@ -83,17 +75,23 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
 14. Done (run 0622, explore, checks `catcher-free`, `diets-catcher`, `arc-root`): host and catcher (a nursery parasite;
     catchers with their own seed site are free-living; catchers of one diet exclude the others: no Red Queen), what place
     can deliver (one part per gap; recognition does the rest), the 4-cell arc (root in place, does not pay).
-15. [64 build] A recognition census (`web:` lines) and the standard world at 3x: does the web of classes and links grow?
-16. [65 cleanup] The pair demo's options: retire settings the standard world supersedes (about 33 options now).
-17. [67 explore] Candidates: a kind that pays for length through cheaper catches (parts made within reach of its own
-    fronts, IDEAS run 0622), a longer kind whose function is in what binds (two fronts, two diets), or (t).
+15. Done (run 0820, build, checks `web-two`, `web-two-c`): the recognition web does not grow (one class; private
+    classes merge back); the standard world at 3x collapses into heads that never let go (3 of 4); `PAHU=3` holds (4 of 4).
+16. [65 cleanup] The pair demo's options: retire settings the standard world supersedes (about 34 options now).
+17. [66 build] **The whole-body hazard at 1x and matched.** `world` with `PAHU=3` (seeds 1-4, 120k and 240k), and at 3x
+    `PAHU=2` at a higher h that leaves as many individuals as `PAHU=3` at 0.1 (about 500-700): does the matched hazard
+    per individual still collapse? If `PAHU=3` holds at 1x and 3x and the matched one does not, make it the standard
+    world's hazard (`PAW=1`; every check that uses `PAW=1` rerun, changed outcomes explained). Cheats then outnumber
+    hosts: say whether the web census still reads classes.
+18. [67 explore] Candidates: a class that owns its seed letter (a host whose head carries its own seed site, as the B
+    host at 3x seed 3; or a stock part with a private seed letter), a kind that pays for length through cheaper catches
+    (IDEAS run 0622), a longer kind whose function is in what binds, or (t).
 18. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
 Not taken from run 1750's list: (b) diets of different length (more prepared stocks with fronts) and (c) more diets
 than blanks (run 1150's R* rule again); either may return inside 11 or 13.
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 1851: the mix fits the order above):
-59 core-review, 60 build, 61 harden, 62 build, 63 explore, 64 build, 65 cleanup (the pair demo's 30 options: retire
-settings the standard world supersedes), 70 review-intent.
+65 cleanup, 66 build, 67 explore, 68 build, 69 explore, 70 review-intent, 71 core-review.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an
@@ -138,6 +136,11 @@ PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (ch
                                                    # C E G, openRange 9, PAHB=2, decay 1, PAHU=2 (hazard per individual, h 0.1),
                                                    # the general mutagen 0.01 (stock parts exempt); any option set overrides
                                                    # (PA1=1 adds the pair founder); 'kinds:' census lines, diets picture
+PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair 1 240000 runs/x   # the standard
+                                                   # world at 3x (about 70 minutes; PAHU=3: the whole-body hazard); every pair
+                                                   # world prints 'web:' lines (classes, links, cheats) after each 'kinds:' line
+PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' node tri/demos.js pair 1 30000 runs/x   # two classes: u catchers
+                                                   # entered (check web-two; about 1.5 minutes; plain catchers PAKR='Z@&C@|-': web-two-c)
 PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
                                                    # without stock (check catcher-free; 45 s); diets world with catchers entered:
                                                    # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)

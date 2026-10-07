@@ -10,6 +10,51 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-0820, build)
+
+- **The recognition web: a census of classes, links and cheats; the standard world's web stays one class, and at 3x
+  the world ends in heads that never let go** (NEXT priority 15; IDEAS "Recognition classes merge; completion is
+  optional"). No rule change. New in demo `pair` (observation, every pair world with `PAP`): a `web:` line after each
+  census and an end line `web:` (second half: most classes, links, cheats); joints are tracked as they bind (an `&` side
+  that bound a seed site; a caught head's `&` side is spent on release too, and a copy blank's bind is not a joint).
+  From the held kinds (5 or more complete individuals): a kind *raises* another when a seed site of the one takes the
+  root of the other; a *class* is a set of kinds that raise one another (a strongly connected component with a cycle);
+  a *cheat* is a held kind in no class (raised, raising none of its raisers); a *link* joins two classes where a kind of
+  one raises a kind of the other (`>`) or an attach side or seed site of one binds an attach side of the other (`~`).
+  New checks `web-two` (u catchers entered into the standard world: 2 classes, 1 link) and `web-two-c` (plain catchers:
+  cheats inside the host class). New labelled drive `PAHU=3` (a hit lyses the hit individual's whole body, joints
+  included). Pictures `docs/pictures/web-3x-rosettes.png`, `web-3x-chains.png`, `web-3x-whole-body.png`. Outputs are
+  byte for byte main's apart from the `web:` lines (standard world seed 1, 20k). Checks: `web-two` 4 of 4 (2 classes,
+  1 link: `UZ~Z Z>UZ`), `web-two-c` (1 class, 1 cheat), `world` 4 of 4 as before (web up to 1 class in the second half).
+  - **1x (the standard world `PAW=1`, seeds 1-4, 240k):** one class (Z: the diet kind on its stock parts) at every
+    census in 3 of 4, with 1-10 cheats (plain catchers and heads that lost their seed function); held kinds up to 5-16.
+    Seed 3: a private-letter catcher class (u) from 140k, two classes and one link (`Z>UZ`: host seed sites raise the
+    catcher individual's head; `UZ~Z`: its front catches host heads) in 5 of 48 censuses, merged with the host class in
+    between, two classes again at 240k.
+  - **3x (`PAB=3000 PAS=87`, stocks 450 each, seeds 1-4, 240k):** one class with up to 20 cheats and up to 27 held kinds
+    until 75-135k; then a private-letter class arises in 4 of 4 (catchers s, x and C, a host B with its own seed site b
+    on its head), grows to 3-4x the host's numbers (900-1100 individuals: blank eaters), and merges with the host class
+    within 15-45k. Then 3 of 4 worlds lose every complete individual (no held kind from 180k, 185k, 205k): the blanks
+    fall to 20-50 of 3000 and the material sits in chains and rosettes of heads that never let go (`X@&i@!x`: a root that
+    takes its own seed letter and a front nothing binds; `C@&c@z@!`: closed rosettes of six whose open `z@!` sides catch
+    and lyse host heads). Seed 3 keeps the B class to 240k with 850 growing chains at 200k.
+  - **3x with the whole-body hazard (`PAHU=3`, otherwise the same, seeds 1-4, 240k):** complete individuals at every
+    census in 4 of 4 (no chains: growing individuals 0-1; blanks 300-1400 of 3000), against 1 of 4 with `PAHU=2`. Seeds
+    2 and 3: one class at every census (up to 14-17 held kinds, 5-9 cheats); seed 1: two classes in 2 of 48 censuses;
+    seed 4: two or three classes in 31 of 48 from 60k (three classes and three links from 150k to 205k: the host class
+    Z, a catcher class o, a class M; up to 26 held kinds), classes splitting and merging; 2 classes, 1 link at 240k.
+    Plain catchers (cheats) outnumber their hosts 2-3 to 1 (330-440 against 100-140 at 75k in seeds 1-3): a kind with
+    no seed site never carries a waiting bud, so the whole-body hit costs it least. Not separated yet: `PAHU=3` also
+    kills more (individuals 500-700 against 1100-1270 with `PAHU=2`), so part of its effect may be a harsher hazard.
+  - Commands: `PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair N 240000 runs/x`
+    (about 70 minutes; add `PAHU=3` for the whole-body hazard); `grep '^web' runs/x.txt`.
+  - **Answer to priority 15:** the web does not grow. The standard world's recognition web saturates at one class with
+    turning-over kinds and cheats; private classes arise (more often at 3x) and merge back within tens of thousands of
+    steps, because stock parts carry one seed letter and catcher individuals can root by either head. Larger worlds
+    do not add classes; they reach the end state sooner, which under the standard drives is heads that never let go.
+    Status: census **works**; standard world at 3x **fails** (3 of 4 collapse); whole-body hazard **works at 3x** (4 of
+    4), 1x not yet measured.
+
 ## 2026-10-07 (autorun run 20261007-0622, explore)
 
 - **Host and catcher: the catchers with a seed site of their own are free-living; a catcher arms its host's diet
