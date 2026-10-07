@@ -10,6 +10,16 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261007-1821, build; priority 19, kinds as food).** Goal: a third class fed by the
+second, or a recorded reason why none can be. Done when: the theory is written (IDEAS), designs entered into the
+web-two world (U catchers at 10k, a third kit at 20k: new demo option `PA3`/`PA3T`), 4 seeds each, and the web read;
+a check if one holds in 3 of 4. Theory first (this run): the bond between two fronts is symmetric, so a catcher of heads
+is also their prey, and a 2-cell catcher always exposes at least the copyable sides its prey exposes in the prey's own
+individual (its root is unspent there): **every predator of heads farms them**. Predictions: (A) a farmer of U heads
+`V@&c@|v` (holding `C@|uU@&`) merges with the U class (V+U raises u, U+V raises v) in 3 of 4; (B) a second farmer of Z
+heads `W@&C@|w` (holding `c@|-Z@&`) makes 3 classes (Z, U, W) with links to Z at most censuses in 3 of 4.
+Batch: `runs/food.json` (regenerate: the commands under Commands with `PA3T=20000 PA3=...`).
+
 **Handoff status (autorun run 20261007-1720, explore).** Priority 18 done (INNOVATIONS run 1720, IDEAS "A class is
 a cycle of seed letters"); no rule or demo change. **A class owns its seed letter when its head's copy side is its seed
 site** (`N@&k@|n`: the copies root in place) **and its stock part carries no site** (`K@-|-|`): entered into the
