@@ -5,6 +5,15 @@ History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun l
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
 
+**Current slice (autorun run 20261007-2051, core-review; in progress).** Goal: a smaller core. Remove the option
+`copyGlue` (candidate (t), used by no check) and the demo drive values that serve only it (`PAHB=3` lettered blanks,
+`PADL`); audit every rule in `tri/sim.js` against locality and docs/RULES.md (independent reviewer); refresh the Core
+inventory with today's users from a coverage run of the whole suite; remove or merge anything else nothing needs. Done
+when: `node tri/test.js` and `node tri/check.js` pass on the branch, outputs of the pair checks unchanged against main,
+RULES (inventory, Core changes) current. Stop at: anything that needs a redesign is recorded, not built. Running: the
+suite with the coverage hook (`COV_OUT=$PWD/runs/cov.jsonl CHECK_SAVE=$PWD/runs/b NODE_OPTIONS="-r ./tri/coverage.js"
+node tri/check.js > runs/check.txt`, about 105 minutes).
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use

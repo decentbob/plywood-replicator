@@ -53,12 +53,12 @@ test('copy side: a copy blank binds any free side of an attached triangle, takes
   assert.notEqual(canon('fbA'),canon('fAb'),'test types are chiral');
   assert.ok(!run('f-b','---',1).bonded(2),'a blank without a copy side binds no inert side');
   assert.ok(!run('f-b','-?-?-?',1,false).ev.copy,'a free template is not copied (free triangles never bind each other)');});
-test('copy side: with the option copyGlue a glued copy side binds only a side with the complementary glue (candidate (t))',()=>{
+test('copy side: copying is glue-blind (a copy side binds a side whatever either glue; candidate (t), the option copyGlue, removed in run 20261007-2051)',()=>{
   // template welded by side 0, its side 1 glue A; a copy blank flush beside side 1
-  for(const [blank,cg,expect] of [['a?a?a?',true,true],['b?b?b?',true,false],['A?A?A?',true,false],['-?-?-?',true,true],['b?b?b?',false,true],['b?-?b?',true,true]]){
+  for(const blank of ['a?a?a?','b?b?b?','A?A?A?','b?-?b?']){
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fA.b@|'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:blank,loose:true}];
-    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10,copyGlue:cg},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
-    assert.equal(!!s.ev.copy,expect,blank+(cg?' copyGlue':''));if(expect)assert.equal(canon(s.typeName(2)),canon('fA.b@|'));else assert.equal(s.typeName(2),blank,'the blank stays');symmetric(s);}});
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
+    assert.equal(s.ev.copy,1,blank);assert.equal(canon(s.typeName(2)),canon('fA.b@|'));symmetric(s);}});
 test('copy side: a copy blank binds no anchor side (a waiting anchor is no template)',()=>{
   // template welded by side 0; a copy blank flush beside side 1: copied unless side 1 is an anchor side
   for(const [tmpl,expect] of [['fW@|-&',false],['fW@-&',true],['fW|-&',false]]){
