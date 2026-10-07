@@ -429,6 +429,11 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // side's glue changed to another letter of PAMA (a..z): the part then catches a different stock (its diet). 'diet:'
     // lines every PAP steps: per front letter (50 steps before each PAP step: between two decay steps), complete individuals (a root, a part with a front and an '&' side, whose
     // front is bonded), waiting roots (front unbonded), free roots; free stock by type; a 'diets:' result line
+    // The hazard's unit and a mutagen on letters (build run 20261007-0420), labelled drives, off by default: PAHU=2, the hazard
+    // per individual: every 100 steps each individual (bonded triangles joined by bonds that are not joints) is lysed at one of
+    // its triangles with probability h, so every attached triangle dies at rate h however it is joined; PAMF=2, the mutagen
+    // on glue letters only: one glued side of a free non-stock part takes another letter of PAMA in the same case (marks
+    // never change). Stock parts are exempt from every mutagen
     // The standard world (build run 20261007-0420; IDEAS "The hazard's unit decides between individuals and aggregates"):
     // PAW=1 sets each of these options that is not set: 1000 blanks in world 50, the diet kind 'Z@&c@|- C@-|z|' as the one
     // founder (PA1=0; PA1=1 adds the pair), stocks C, E, G of 150, openRange 9, and four labelled drives: deaths return
