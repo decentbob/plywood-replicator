@@ -167,8 +167,8 @@ const CHECKS=[
   // 120k (in batch B: a head whose front became C, catching other heads by their fronts, in 3 of 4; held kinds of up to 6
   // cells with copied middles in 1)
   {id:'world',cap:'The standard world: individuals at every census and kinds that arose by mutation held at the end',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:440,env:{PAW:'1'},
-    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const mut=I.top.filter(([,k])=>k!=='-Z@&c@|+-|z|C@'),c=o.match(/census: maxHeld=(\d+) at \S+ longestHeld=(\d+)/);
-      return [I.min>0&&mut.length>0&&mut[0][0]>=10,`individuals fewest ${I.min}, at 120k ${I.end}; commonest kind not the founder's ${mut.length?mut[0][0]+'x '+mut[0][1]:'none'}; kinds held at once up to ${c?c[1]:'-'}, longest held ${c?c[2]:'-'} cells`];}},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const mut=I.top.filter(([,k])=>k!=='-Z@&c@|+-|z|C@'),c=o.match(/census: maxHeld=(\d+) at \S+ longestHeld=(\d+)/),w=o.match(/web: maxClasses=(\d+) at \S+ maxLinks=(\d+)/);
+      return [I.min>0&&mut.length>0&&mut[0][0]>=10,`individuals fewest ${I.min}, at 120k ${I.end}; commonest kind not the founder's ${mut.length?mut[0][0]+'x '+mut[0][1]:'none'}; kinds held at once up to ${c?c[1]:'-'}, longest held ${c?c[2]:'-'} cells; web (second half) up to ${w?w[1]:'-'} classes, ${w?w[2]:'-'} links`];}},
   // run 20261007-0622 (explore): host and catcher. The catchers that replaced the plain one in the standard world carry
   // a seed site of their own: founded alone in the standard world without stocks or mutagen, the u kind (a catcher head
   // 'U@&C@|u' holding a host head by its front) grows on blanks only; the plain catcher (no seed site) never buds alone

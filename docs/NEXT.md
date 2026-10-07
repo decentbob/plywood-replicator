@@ -12,6 +12,10 @@ of the other; links: a held kind's attach side or seed site binding an attach si
 offering no seed site that takes a root of their class), then the standard world at 3x (`PAB=3000 PAS=87`, seeds 1-4,
 240k) with web timelines: does the web grow or saturate? Done when the census is in and `world` still passes, and 4
 worlds have a timeline with the answer recorded. Stop there; no rule change.
+Running (08:55 UTC, about an hour, then rerun any that are missing): the 3x standard world, stocks scaled with the
+area, `for n in 1 2 3 4; do PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair $n 240000
+runs/x3$n > runs/x3$n.txt; done` (in parallel; `grep '^web' runs/x3*.txt`). The `web:` census is committed on branch
+`claude/build-0820-web`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a

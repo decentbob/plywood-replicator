@@ -442,7 +442,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // Roots in place (explore run 20261007-0622), observation, off by default: PARP=1, for every root that binds a seed site
     // by its '&' side, whether its template was in the seed site's body (copied by its own parent); 'root:' lines every
     // PAP steps, a 'roots:' result line, a picture at the first (the 4-cell arc of IDEAS run 0622: PA2 with its four types)
-    pair(){steps=steps||200000;if(process.env.PAW==='1')for(const [k,v] of Object.entries({PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01'}))if(process.env[k]===undefined)process.env[k]=v;const {gcode:gc,gname}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
+    pair(){steps=steps||200000;if(process.env.PAW==='1')for(const [k,v] of Object.entries({PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01'}))if(process.env[k]===undefined)process.env[k]=v;const {gcode:gc,gname,comp}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
       const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',HI=process.env.PAHU==='2',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),MF=process.env.PAMF==='1',MG=process.env.PAMF==='2',MA=process.env.PAMA||'abcdefghijklmnopqrstuvwxyz',LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
       const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));const DW=MF||(MU>0&&FS.size>0);
       // individuals (census, PAHU=2): sets of bonded triangles joined by bonds that are not joints (no '&' side on either end)
@@ -451,6 +451,10 @@ function demo(name,seed=1,steps,dir='runs',extra){
         return {c,M};};
       const K2=process.env.PA2?S.stripKit(process.env.PA2.trim().split(/\s+/)):null,T1=+(process.env.PA1T||0),T2=+(process.env.PA2T||0),EN=+(process.env.PAEN||1),P1=process.env.PA1!=='0'&&!T1;
       const {s,structures}=createWorld({seed,size,structures:[...(P1?[{tris:K.tris,x:size/2,y:size/2}]:[]),...(K2&&!T2?[{tris:K2.tris,x:size/4,y:size/4}]:[])],supply:{'-?-?-?':NB,...Object.fromEntries(FST)},params:{openRange:+(process.env.PAR||1)}});
+      // joints (observation, the web census): an '&' side that bound a seed site (a caught head's '&' side is spent on
+      // release too; a copy blank's bind is not a joint); cleared when its triangle comes free
+      const jr=new Int8Array(3*s.n),_bd=s.bind.bind(s),_ct=s.cut.bind(s);s.bind=(u,i,ku,v,j,kv)=>{_bd(u,i,ku,v,j,kv);if(s.done[u*3+i]&&!s.cpy[v*3+j])jr[u*3+i]=1;if(s.done[v*3+j]&&!s.cpy[u*3+i])jr[v*3+j]=1;};
+      s.cut=(u,i)=>{const q=s.bond[u*3+i];_ct(u,i);if(q>=0)for(const w of [u,(q/3)|0])if(!s.bonded(w))jr.fill(0,w*3,w*3+3);};
       // alive: a living body's R -> {id (birth order), g (generation), t (birth)}; kids by body id
       const cR=canon(K.R),cS=canon(K.S),cB=canon('-?-?-?'),cV=canon(K.R.replace(/-(?![.@&|?!])/,'x')),RL=new Set([cR,cV]),all=[...Array(s.n).keys()],Y=gc('Y'),B=gc('B'),gb=gc('b'),alive=new Map(P1?[[structures[0][0],{id:0,g:0,t:0}]]:[]),kids=new Map(),dbl=[],dead=new Uint8Array(s.n),ev={births:1,deaths:0,hits:0,decayed:0,returned:0,life:0,lastBirth:0,reused:0,mutated:0},rec=new Int8Array(s.n),pg=new Int32Array(s.n).fill(-1),cp={},cx=new Float32Array(s.n).fill(NaN),cy=new Float32Array(s.n),dist={n:0,sum:0,near:0},src=new Int32Array(s.n).fill(-1),pid=new Int32Array(s.n).fill(-1),par={n:0,R:0,S:0,both:0,same:0,rand:0},parW={n:0,R:0,S:0,both:0,same:0,rand:0};let reached=0,maxGen=0;
       const side=(u,g)=>[0,1,2].find(i=>s.glue[u*3+i]===g),front=u=>{const i=side(u,gb);return i===undefined?-1:s.partner(u,i);};
@@ -532,15 +536,34 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // cells, an open front), lone bonded triangles (heads on a seed site), complete individuals holding by a joint a triangle of a
       // type not in their own kind (another kind's part), the commonest kinds. End line 'census:' (second half: most kinds
       // held at once, most holding; whole run: longest held)
-      const iEnd={maxHeld:0,maxAt:0,longest:0,longAt:0,maxHold:0},indiv=t=>{const {c,M}=units();
+      const iEnd={maxHeld:0,maxAt:0,longest:0,longAt:0,maxHold:0},wk=new Map();let wHeld=[];const indiv=t=>{const {c,M}=units();wk.clear();
         const by=new Map(),key=M.map(L=>{const T=L.map(u=>canon(s.typeName(u)));return {T:new Set(T),k:T.sort().join('+')};});let one=0,grow=0,hold=0;const hk=new Map();
         M.forEach((L,m)=>{if(L.length<2){one++;return;}if(L.some(x=>[0,1,2].some(i=>s.att[x*3+i]&&s.glue[x*3+i]&&!s.done[x*3+i]&&s.bond[x*3+i]<0))){grow++;return;}by.set(key[m].k,(by.get(key[m].k)||0)+1);let h=null;
+          const g=wk.get(key[m].k)||{r:new Set(),y:new Set(),a:new Set()};wk.set(key[m].k,g);for(const x of L)for(let i=0;i<3;i++){const k=x*3+i,q=s.glue[k];if(!q)continue;
+            if(s.done[k]){if(jr[k])g.r.add(q);}else if(s.att[k])g.a.add(q);else if(!s.cOnly[k]&&!s.cpy[k])g.y.add(q);}
           for(const x of L)for(let i=0;i<3;i++){const q=s.bond[x*3+i];if(q<0||s.done[x*3+i]||!s.done[q])continue;const y=(q/3)|0;if(!key[m].T.has(canon(s.typeName(y)))){h=c[y];break;}}
           if(h!==null){hold++;const w=key[m].k+' > '+key[h].k;hk.set(w,(hk.get(w)||0)+1);}});
         const ks=[...by].sort((a,b)=>b[1]-a[1]),held=ks.filter(([,n])=>n>=5),cells=k=>k.split('+').length,lg=held.reduce((a,[k])=>Math.max(a,cells(k)),0),n=ks.reduce((a,[,v])=>a+v,0);
-        if(lg>iEnd.longest){iEnd.longest=lg;iEnd.longAt=t;}if(t>steps/2){if(held.length>iEnd.maxHeld){iEnd.maxHeld=held.length;iEnd.maxAt=t;}iEnd.maxHold=Math.max(iEnd.maxHold,hold);}
+        wHeld=held;if(lg>iEnd.longest){iEnd.longest=lg;iEnd.longAt=t;}if(t>steps/2){if(held.length>iEnd.maxHeld){iEnd.maxHeld=held.length;iEnd.maxAt=t;}iEnd.maxHold=Math.max(iEnd.maxHold,hold);}
         const top=[...hk].sort((a,b)=>b[1]-a[1])[0];
         return `individuals ${n} kinds ${ks.length} held ${held.length} longestHeld ${lg} growing ${grow} single ${one} holdingOther ${hold}${top?` (${top[1]}x ${top[0]})`:''} | ${ks.slice(0,4).map(([k,v])=>v+'x '+k).join(', ')||'-'}`;};
+      // recognition web (every pair world with PAP; observation only; build run 20261007-0820), from the held kinds of the
+      // census above (5 or more complete individuals): per kind its roots (glues of '&' sides that bound a seed site, now or
+      // before their release), its seed sites (glued sides that are not attach, close-only or copy sides) and its attach sides ('@'
+      // without '&': fronts and the parts' attach sides). A class joins the kinds where a seed site of one takes the root
+      // of another (complementary glues): kinds that raise one another's buds. A link joins two classes where an attach side
+      // or a seed site of a kind in one binds an attach side of a kind in the other (a front that catches the other class's
+      // parts). A cheat offers no seed site that takes a root of its own class. 'web:' line after each census; end line
+      // 'web:' (second half: most classes, links and cheats at once)
+      const wEnd={maxC:0,maxCAt:0,maxL:0,maxLAt:0,maxX:0,n:0,sumC:0,sumL:0},web=(t,held)=>{const H=held.map(([k,n])=>({k,n,...(wk.get(k)||{r:new Set(),y:new Set(),a:new Set()})})),P=H.map((_,i)=>i),f=i=>P[i]===i?i:(P[i]=f(P[i]));
+        const meets=(A,B)=>{for(const q of A)if(B.has(comp(q)))return true;return false;};
+        for(let i=0;i<H.length;i++)for(let j=0;j<H.length;j++)if(i!==j&&meets(H[i].y,H[j].r))P[f(i)]=f(j);
+        const C=new Map();H.forEach((h,i)=>{const r=f(i),o=C.get(r)||{ks:[],n:0,r:new Set(),x:0};o.ks.push(h);o.n+=h.n;for(const q of h.r)o.r.add(q);C.set(r,o);});
+        for(const o of C.values())for(const h of o.ks)if(!meets(h.y,o.r))o.x++;
+        const lk=new Set();for(let i=0;i<H.length;i++)for(let j=0;j<H.length;j++){const a=f(i),b=f(j);if(a<b&&(meets(H[i].a,H[j].a)||meets(H[i].y,H[j].a)||meets(H[j].y,H[i].a)))lk.add(a+','+b);}
+        const name=o=>[...o.r].map(gname).sort().join('')||'-',cs=[...C.values()].sort((a,b)=>b.n-a.n),X=cs.reduce((a,o)=>a+o.x,0),big=cs[0];
+        if(t>steps/2){wEnd.n++;wEnd.sumC+=C.size;wEnd.sumL+=lk.size;if(C.size>wEnd.maxC){wEnd.maxC=C.size;wEnd.maxCAt=t;}if(lk.size>wEnd.maxL){wEnd.maxL=lk.size;wEnd.maxLAt=t;}wEnd.maxX=Math.max(wEnd.maxX,X);}
+        console.log(`web: t=${t} held ${H.length} classes ${C.size} links ${lk.size} largest ${big?big.ks.length:0}/${big?big.n:0} cheats ${X} | ${cs.slice(0,5).map(o=>`${name(o)} ${o.ks.length}/${o.n}${o.x?' x'+o.x:''}`).join(', ')||'-'} | ${[...lk].map(w=>{const [a,b]=w.split(',').map(Number);return name(C.get(a))+'-'+name(C.get(b));}).join(' ')||'-'}`);};
       // two kinds: per kind its types, individuals (attached last cells), held, free parts, copies; extinction times
       // (counted 50 steps before the line: between two decay steps)
       let duoO=null;const DK2=K2?[{name:'pair',T:[cR,cS]},{name:'strip',T:K2.types.map(canon)}].map(k=>({...k,last:k.T[k.T.length-1],set:new Set(k.T),c0:0,ext:0,sum:0,m:0})):[],duoCount=()=>{
@@ -599,11 +622,13 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(RP&&PP&&t%PP===0)rpLine(t);
         if(MU&&PP&&t%PP===0)census(t);
         if(DW&&PP>=100&&t%PP===PP-50){diet(t);kinds(t);}else if(PP>=100&&t%PP===PP-50)console.log(`kinds: t=${t} ${indiv(t)}`);
+        if(PP>=100&&t%PP===PP-50)web(t,wHeld);
         if(!first&&ev.births>1){first=t;const fu=[...alive.keys()];snap(s,'bud1',`t=${t}: the founder's first bud`,{units:fu,radius:3},true);}
         if(!reached&&ev.births>=goal){reached=t;snap(s,'goal',`t=${t}: ${ev.births} bodies, generation ${maxGen}`,null,false);}
         for(const k of [5,10]){if(!pic[k]&&ev.births>=k){pic[k]=t;snap(s,'b'+k,`t=${t}: ${ev.births} bodies`,null,false);}}
         if(PP){if(t%10===5)acc();if(K2&&PP>=100&&t%PP===PP-50)duoCount();if(K2&&t%PP===0)duo(t);if(t%PP===0)pop(t);}
         if(every(t,20))line(t);}
+      if(PP>=100)console.log(`t=${s.t} web: maxClasses=${wEnd.maxC} at ${wEnd.maxCAt||'-'} maxLinks=${wEnd.maxL} at ${wEnd.maxLAt||'-'} maxCheats=${wEnd.maxX} mean2 classes ${wEnd.n?(wEnd.sumC/wEnd.n).toFixed(1):'-'} links ${wEnd.n?(wEnd.sumL/wEnd.n).toFixed(1):'-'}`);
       if(PP>=100)console.log(`census: maxHeld=${iEnd.maxHeld} at ${iEnd.maxAt||'-'} longestHeld=${iEnd.longest} at ${iEnd.longAt||'-'} maxHoldingOther=${iEnd.maxHold}`);
       const P=pools(),gens={};for(const b of alive.values())gens[b.g]=(gens[b.g]||0)+1;
       snap(s,'end',`t=${s.t}: ${alive.size} bodies${ev.deaths?` alive (${ev.births} born, ${ev.deaths} died)`:''}, generation ${maxGen}${DK?'':`, free R ${P.r}, free S ${P.q}`}, blanks ${P.b}`,null,false);
