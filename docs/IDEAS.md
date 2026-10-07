@@ -28,6 +28,41 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The hazard's unit decides between individuals and aggregates; marks are where function changes (build run 20261007-0420, 2026-10-07)
+
+Derived first, then checked (INNOVATIONS run 0420). Notes, not the user's words.
+- **What a hit costs depends on how a triangle is joined.** Lysis takes apart an individual (what bonds that are not
+  joints join) and stops at `&` joints. Under the hazard *per triangle* (each attached triangle hit with probability
+  h/2) a triangle in a k-cell individual dies when any of the k is hit, about k h/2: the larger the individual, the
+  riskier each of its triangles, and the safest way to be attached is alone between joints. Under the hazard *per
+  physics body* (one hit per body) an aggregate of n parts shares one hit, h/n each: the more joined, the safer. Only a
+  hazard *per individual* (each individual lysed with probability h) gives every attached triangle the same risk h
+  whatever its length and however it is joined. So the two hazards used so far both paid for aggregates (run 0450
+  locked 4 of 4 worlds under the per-body hazard; pair-flow, per triangle, ended in 2 of 4 as rosettes and arcs in
+  which every bond is a joint), and a hazard per individual is the one that pays for neither length nor joining.
+- **Checked.** pair-flow's world with the hazard per individual (h 0.5, about as many pairs as per triangle at 0.6)
+  keeps 2-cell individuals at every census in 4 of 4 worlds (fewest 44-98, 101-252 at 200k; seeds 2 and 4 had none
+  left by 165k per triangle) and still sweeps (variants new after 100k in a tenth of the bodies: 1-4 per world).
+  An aggregate still saves a copy per birth (one part instead of two); without the risk advantage that is not enough.
+- **A mutagen on glue letters only keeps individuals and stops evolution.** Marks never changing (no part gains `&`
+  or a front), the pair world keeps its founder pair in 8 of 8 worlds (either hazard), and no variant ever reaches a
+  tenth of the bodies. Glue letters are labels: a letter mutation changes which partner a side binds, and in a world
+  with one kind that is almost always a loss. Marks decide what a side does (attach, release, anchor, copy, lysis), so
+  the variants that win (a seed site that lyses, an S with a joint, a head that catches heads) are mark or case changes.
+  The standard world keeps the general mutagen and fixes the hazard.
+- **A kind that lives on a kind, one mutation from the founder.** In the stock world under the general mutagen the
+  diet kind's head `Z@&c@|-` mutates its front to `C@|`; on a seed site that front catches a free head *by its front*
+  `c@|` (an attached `@` side binds a free part's `@` side; no `&` on either, so the two heads are one individual),
+  and the pair lets go. It needs no stock: its second cell is the host's copied head. It still needs the host: it buds
+  only on seed sites, which are on the stock parts that host individuals hold, and the host head it carries is copied at
+  its own `-`, feeding the host's head pool. It became the commonest kind in 3 of 4 worlds (119-232 individuals beside
+  61-85 hosts at 120k). This is the z route run 2350 closed (a front catching another kind's joint side) reopened
+  through a side that is not a joint: a front. Private seed letters (candidate 3 of "Joints make individuals") would
+  be the host's defence.
+- **Length by mutation, again, once.** In 1 of 4 standard worlds heads that lost `&` (`C@c@-`, a mark and a letter
+  mutation: a middle) joined chains head, middles, stock part: kinds of 3 to 6 cells held at 120k. Under the hazard per
+  individual a longer body costs no extra risk, so the shortcut's only advantage is fewer parts per birth.
+
 ## Joints make individuals; the shortcut makes length shrink (build run 20261006-2350, 2026-10-07)
 
 Derived from the rules first, then checked (INNOVATIONS run 2350). Notes, not the user's words.

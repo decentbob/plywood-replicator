@@ -10,6 +10,44 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-0420, build)
+
+- **The standard world: a hazard per individual keeps individuals, the general mutagen keeps evolution; a kind that
+  lives on a kind arises by one mutation** (NEXT priority 13; theory in IDEAS "The hazard's unit"). New checks `world`
+  (4 of 4) and `pair-flow-i` (2 of 2); no rule change; every other pair world byte for byte main's (20k-step diffs of
+  the pair-flow, diets, ladder and pair-host settings).
+  - **New in demo `pair`** (labelled drives, off by default): `PAHU=2`, the hazard per individual: every 100 steps each
+    individual (bonded triangles joined by bonds that are not joints, the census's unit) is lysed with probability h at
+    one of its triangles, so every attached triangle dies at rate h however it is joined. `PAMF=2`, the mutagen on glue
+    letters only: a glued side of a free non-stock part takes another letter of the same case; marks never change.
+    Stock parts are now exempt from the general mutagen as from decay (it changes no check world: none has both).
+    `PAW=1`, **the standard world**: sets every unset option to 1000 blanks in world 50, the diet kind `Z@&c@|- C@-|z|`
+    as the one founder, stocks C, E, G of 150, openRange 9, deaths return blanks (`PAHB=2`), decay 1, the hazard per
+    individual h 0.1 from step 4000, the general mutagen 0.01.
+  - **Batch A, the pair world (pair-flow's setting, seeds 1-4, 200k).** Hazard per individual (h 0.5), general mutagen:
+    complete 2-cell individuals at every census in 4 of 4 (fewest 44-98, 101-252 at 200k; under the hazard per triangle
+    seeds 2 and 4 had none left by 165k, run 0050), late sweeps in 4 of 4 (1-4 variant types first seen after 100k in a
+    tenth of the bodies), 16-29k copies per 5000 steps; seed 4 ends with 8 kinds held. Glue letters only (`PAMF=2`),
+    hazard per triangle or per individual: the founder pair stays the only kind in 8 of 8, no variant ever in a tenth
+    of the bodies (`common=0`): individuals kept, evolution stopped.
+  - **Batch B, the stock world (the diets world at openRange 9, general mutagen 0.01, seeds 1-4, 120k).** Hazard per
+    individual (= `PAW=1`): individuals at every census in 4 of 4 (fewest 91-114, 150-441 at 120k), 4-15 kinds held at
+    once. In seeds 1-3 the commonest kind at 120k is `Z@&C@|- + Z@&c@|-` (119-232 individuals beside 61-85 of the
+    founder's): a head whose front became `C@|` catches a free head by its front `c@|` (no `&` between them: one
+    individual) and lets go; it carries no stock part, buds only on seed sites held by host individuals, and its host
+    head is copied at its own `-`. In seed 4 heads that lost `&` serve as copied middles (`C@c@-`): kinds of 3, 4 and 6
+    cells held at 120k (18x head-middle-stock, 13x head-middle-middle-stock), all arising in the last 10k steps. Hazard per
+    body (`PAHU=0`): individuals kept in 4 of 4 as well (in the stock world, the hazard unit did not decide), the
+    front-catcher commonest in 2 of 4. Both founders (`PA1=1`, hazard per individual): 309-374 individuals at the fewest,
+    3-8 kinds held, pair-derived front-catchers `Y@&B@|- + Y@&b@|-` (111 in seed 1).
+  - **Checks.** `world` (`PAW=1`, seeds 1-4, 120k): individuals never 0 and a kind other than the founder's composition
+    held by 10 or more at 120k: 4 of 4. `pair-flow-i` (pair-flow with `PAHU=2 PAH=0.5`, seeds 2 and 4, the two that end
+    as aggregates per triangle): individuals at every census, 10k copies, a late sweep: 2 of 2. `pair-flow` now also
+    reports its individuals at 200k (unchanged pass).
+  - Status: **works** (the standard world: 4 of 4; individuals under the hazard per individual: 4 of 4 pair worlds).
+  - Commands: `PAW=1 node tri/demos.js pair SEED 120000 runs/x` (check `world`, about 7.5 minutes); batch A:
+    pair-flow's command with `PAHU=2 PAH=0.5`, or with `PAMF=2`; batch B: `PAW=1` with `PAHU=0`, or with `PA1=1`.
+
 ## 2026-10-07 (autorun run 20261007-0050, harden)
 
 - **A census of individuals in every pair world; the suite 27% faster** (NEXT priority 12). No rule change; every

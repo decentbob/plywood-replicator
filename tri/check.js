@@ -2,13 +2,18 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 80 minutes (run 20261007-0050), budcycle-3 the longest;
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 90 minutes (run 20261007-0420), budcycle-3 the longest;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Exit code 1 if a working capability fails.
 const {spawn}=require('child_process'),path=require('path');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
 const count=(L,re)=>(L.match(re)||[]).length;
+// the census of individuals (demo pair, 'kinds:' lines; run 20261007-0050): per census its complete individuals of 2 or more
+// cells and the commonest kinds; fewest over the run, the last census's count and kinds
+const indiv=o=>{const C=[...o.matchAll(/^kinds: t=(\d+) .*?individuals (\d+) kinds .*$/gm)];if(!C.length)return null;const last=C[C.length-1][0];
+  const top=last.slice(last.lastIndexOf(' | ')+3).split(', ').map(w=>w.match(/^(\d+)x (.+)$/)).filter(Boolean).map(m=>[+m[1],m[2]]);
+  return {min:Math.min(...C.map(m=>+m[2])),end:+C[C.length-1][2],top};};
 // each check: id, capability, demo name, seeds, steps, extra, env (variables for the demo), need (seeds that must pass), secs (rough time per world,
 // for scheduling), pass(last report line, all output) -> [ok, short evidence]; partial: reported, never fails
 const CHECKS=[
@@ -144,10 +149,26 @@ const CHECKS=[
   // (3000 blanks, world 87) 4 of 4 to 300k, too slow for a check (about 25 minutes per world; INNOVATIONS run 0621)
   {id:'pair-flow',cap:'A pair world that keeps evolving: dead material returns as blanks (labelled drive), copying goes on and new variants still sweep at 200k',demo:'pair',seeds:[1,2,3,4],need:3,steps:200000,secs:400,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000',PAHB:'2'},
     pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
-      return [+m[1]>0&&+m[5]>=10000&&+m[4]>=1,`${m[1]} bodies of ${m[2]} kinds, ${m[5]} copies in the last 5000 steps, blanks ${m[6]}; ${m[3]} variant types in a tenth of the bodies, ${m[4]} of them new after 100k`];}},
+      const I=indiv(o);return [+m[1]>0&&+m[5]>=10000&&+m[4]>=1,`${m[1]} bodies of ${m[2]} kinds, ${m[5]} copies in the last 5000 steps, blanks ${m[6]}; ${m[3]} variant types in a tenth of the bodies, ${m[4]} of them new after 100k; individuals at 200k ${I?I.end:'-'} (fewest ${I?I.min:'-'})`];}},
   {id:'pair-flow-c',cap:'  control: without the drive binding variants lock the material (under 10k copies per 5000 steps at 200k)',demo:'pair',seeds:[3,4],steps:200000,secs:410,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000'},
     pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
       return [+m[5]<10000,`${m[5]} copies in the last 5000 steps, blanks ${m[6]}, ${m[1]} bodies`];}},
+  // run 20261007-0420 (build): the hazard's unit decides between individuals and aggregates. pair-flow's setting with
+  // the hazard per individual (PAHU=2: each set of triangles joined by bonds that are not joints is lysed with
+  // probability h, so every attached triangle dies at the same rate however it is joined) at h 0.5 (about pair-flow's
+  // pairs): seeds 2 and 4, which end as joint-joined aggregates with no individual left under the hazard per triangle
+  // (pair-flow), keep 2-cell individuals at every census and still sweep (IDEAS "The hazard's unit")
+  {id:'pair-flow-i',cap:'  with the hazard per individual the pair world keeps individuals at every census and still evolves',demo:'pair',seeds:[2,4],need:2,steps:200000,secs:460,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.5',PAD:'1',PAM:'0.01',PAHU:'2',PAP:'5000',PAHB:'2'},
+    pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/),I=indiv(o);if(!m||!I)return [false,'no result'];
+      return [I.min>0&&+m[5]>=10000&&+m[4]>=1,`individuals fewest ${I.min}, at 200k ${I.end} (${I.top.slice(0,2).map(([n,k])=>n+'x '+k).join(', ')}); ${m[5]} copies in the last 5000 steps; ${m[3]} variant types in a tenth of the bodies, ${m[4]} new after 100k`];}},
+  // run 20261007-0420 (build): the standard world (demo pair, PAW=1: the diet kind among stocks C, E, G, openRange 9, deaths
+  // return blanks, decay, the hazard per individual, the general mutagen with stock parts exempt). Passes a world whose
+  // complete individuals of 2 or more cells never fall to 0 and where a kind other than the founder's holds 10 or more at
+  // 120k (in batch B: a head whose front became C, catching other heads by their fronts, in 3 of 4; held kinds of up to 6
+  // cells with copied middles in 1)
+  {id:'world',cap:'The standard world: individuals at every census and kinds that arose by mutation held at the end',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:440,env:{PAW:'1'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const mut=I.top.filter(([,k])=>k!=='-Z@&c@|+-|z|C@'),c=o.match(/census: maxHeld=(\d+) at \S+ longestHeld=(\d+)/);
+      return [I.min>0&&mut.length>0&&mut[0][0]>=10,`individuals fewest ${I.min}, at 120k ${I.end}; commonest kind not the founder's ${mut.length?mut[0][0]+'x '+mut[0][1]:'none'}; kinds held at once up to ${c?c[1]:'-'}, longest held ${c?c[2]:'-'} cells`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s (PAPS); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
