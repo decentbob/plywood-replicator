@@ -560,7 +560,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         // PAM=m (labelled drive, a mutagen): one side of a free part changed now and then (at mid-interval: PAD 1 would
         // turn a part mutated at the decay's step back into a blank at once)
         if(MU&&t%100===50)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2])continue;if(MG){if(stk(u)||s.rng()>=MU)continue;const G=[0,1,2].filter(i=>s.glue[u*3+i]);if(!G.length)continue;const i=G[Math.floor(s.rng()*G.length)],o=gname(s.glue[u*3+i]),up=o!==o.toLowerCase(),L=(up?MA.toUpperCase():MA).replace(o,'');s.glue[u*3+i]=gc(L[Math.floor(s.rng()*L.length)]);ev.mutated++;continue;}
-          if(MF){const i=fside(u);if(i<0||stk(u)||s.rng()>=MU)continue;const o=gname(s.glue[u*3+i]),L=MA.replace(o,'');s.glue[u*3+i]=gc(L[Math.floor(s.rng()*L.length)]);ev.mutated++;continue;}if(s.rng()>=MU)continue;mutate(u);ev.mutated++;}
+          if(MF){const i=fside(u);if(i<0||stk(u)||s.rng()>=MU)continue;const o=gname(s.glue[u*3+i]),L=MA.replace(o,'');s.glue[u*3+i]=gc(L[Math.floor(s.rng()*L.length)]);ev.mutated++;continue;}if(stk(u)||s.rng()>=MU)continue;mutate(u);ev.mutated++;}
         // PAMX=m (labelled drive, stirring): every step each free part, with probability m, changes places with a free
         // triangle drawn at random (blank or part; each takes the other's exact place, so nothing overlaps): copies no
         // longer stay near where they were made
