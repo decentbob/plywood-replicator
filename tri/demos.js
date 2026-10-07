@@ -439,6 +439,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // founder (PA1=0; PA1=1 adds the pair), stocks C, E, G of 150, openRange 9, and four labelled drives: deaths return
     // blanks (PAHB=2), free parts decay (PAD=1), the hazard per individual (PAHU=2, h 0.1 from step 4000) and the general
     // mutagen (PAM=0.01; stock parts exempt). Later pair slices and checks start from it (check world)
+    // Roots in place (explore run 20261007-0622), observation, off by default: PARP=1, for every root that binds a seed site
+    // by its '&' side, whether its template was in the seed site's body (copied by its own parent); 'root:' lines every
+    // PAP steps, a 'roots:' result line, a picture at the first (the 4-cell arc of IDEAS run 0622: PA2 with its four types)
     pair(){steps=steps||200000;if(process.env.PAW==='1')for(const [k,v] of Object.entries({PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01'}))if(process.env[k]===undefined)process.env[k]=v;const {gcode:gc,gname}=require('./sim');const K=S.pairKit(process.env.PAT==='1'),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
       const HB=+(process.env.PAHB||0),DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',HI=process.env.PAHU==='2',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),MF=process.env.PAMF==='1',MG=process.env.PAMF==='2',MA=process.env.PAMA||'abcdefghijklmnopqrstuvwxyz',LK=VM==='link',PS=process.env.PAPS==='1'||LK||VK==='selfish'||VK==='parasite';
       const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));const DW=MF||(MU>0&&FS.size>0);
@@ -554,8 +557,19 @@ function demo(name,seed=1,steps,dir='runs',extra){
           buildStructure(s,U,tris,x,y);for(const u of U)s._regrid(u);console.log(`t=${t} entry: ${tris.map(q=>q.type).join(' ')} at ${x.toFixed(1)},${y.toFixed(1)}`);return U;}
         return null;};
       snap(s,'t0',`t=0: one founder pair (R ${K.R}, S ${K.S}) among ${NB} copy blanks, no free parts`,null,false);
+      // roots in place (observation, PARP=1; explore run 20261007-0622): for every root (a triangle with an '&' side) that
+      // binds a seed site by it, whether its template (the triangle it was copied from) is in the seed site's body at that
+      // moment (made by its own parent), and the same for the roots whose bud then lets go complete (births); 'root:' lines
+      // every PAP steps and a 'roots:' result line
+      const RP=process.env.PARP==='1',rpPic={n:0},srcT=new Int32Array(s.n).fill(-1),jb=new Int8Array(s.n),ip=new Int8Array(s.n).fill(-1),rpW={b:0,bi:0,n:0,ni:0,u:0},rpA={b:0,bi:0,n:0,ni:0,u:0},
+        rootStep=()=>{for(let u=0;u<s.n;u++){let k=-1;for(let i=0;i<3;i++)if(s.done[u*3+i]){k=u*3+i;break;}if(k<0){jb[u]=0;continue;}
+          const b=s.bond[k]>=0;if(b&&!jb[u]){const q=(s.bond[k]/3)|0,w=srcT[u],x=w>=0&&s.bonded(w)&&s.bodyOf(q).includes(w)?1:0;ip[u]=w<0?2:x;for(const o of [rpW,rpA]){o.b++;o.bi+=x;if(w<0)o.u++;}if(x&&!rpPic.n){rpPic.n=1;snap(s,'root',`t=${s.t}: a root copied by its own parent binds the parent's seed site`,{units:s.bodyOf(q),radius:3},true);}}
+          else if(!b&&jb[u]&&s.spent[k]&&ip[u]>=0){for(const o of [rpW,rpA]){o.n++;o.ni+=ip[u]===1?1:0;}ip[u]=-1;}
+          jb[u]=b?1:0;}},
+        rpLine=t=>{const o=rpW;console.log(`root: t=${t} binds ${o.b} inPlace ${(o.bi/Math.max(1,o.b)).toFixed(3)} births ${o.n} inPlace ${(o.ni/Math.max(1,o.n)).toFixed(3)} notCopied ${o.u}`);for(const k in o)o[k]=0;};
       const pic={};let first=0;
-      for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,u,ty,w] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;cx[u]=s.px[u];cy[u]=s.py[u];if(PS)src[u]=bid(w);}s.copyLog.length=0;}
+      for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,u,ty,w] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;cx[u]=s.px[u];cy[u]=s.py[u];if(PS)src[u]=bid(w);srcT[u]=w;}s.copyLog.length=0;}
+        if(RP)rootStep();
         // PAHB (labelled drive): a dead triangle, once free, returns as a copy blank
         if(HZ)for(let u=0;u<s.n;u++){if(s.ly[u]){rec[u]=1;if(HB===2&&!stk(u))dead[u]=1;}else if(dead[u]&&!s.bonded(u)){dead[u]=0;s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.returned++;}}
         // PAD=d (labelled drive): free parts return to blanks (every PADI steps, 100)
@@ -582,6 +596,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(VM&&!LK&&PP&&t%PP===0&&t>=VT)marker(t);
         if(LK&&PP&&t%PP===0&&t>=VT)link(t);
         if(PS&&PP&&t%PP===0)parLine(t);
+        if(RP&&PP&&t%PP===0)rpLine(t);
         if(MU&&PP&&t%PP===0)census(t);
         if(DW&&PP>=100&&t%PP===PP-50){diet(t);kinds(t);}else if(PP>=100&&t%PP===PP-50)console.log(`kinds: t=${t} ${indiv(t)}`);
         if(!first&&ev.births>1){first=t;const fu=[...alive.keys()];snap(s,'bud1',`t=${t}: the founder's first bud`,{units:fu,radius:3},true);}
@@ -601,6 +616,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       // still evolving: variant types that were in at least a tenth of the bodies at some census, and those of them first
       // seen in a body in the run's second half; bodies, kinds and copies at the last census
       if(MU){const V=[...seenV.values()].filter(v=>(v.ms||0)>=0.1);console.log(`t=${s.t} evolving: bodies=${mutLast.bodies} kinds=${mutLast.kinds} common=${V.length} lateCommon=${V.filter(v=>v.first>steps/2).length} copiesLast=${mutLast.dc} blanks=${P.b}`);}
+      if(RP){const o=rpA;console.log(`t=${s.t} roots: binds=${o.b} inPlace=${(o.bi/Math.max(1,o.b)).toFixed(3)} births=${o.n} birthsInPlace=${(o.ni/Math.max(1,o.n)).toFixed(3)} notCopied=${o.u}`);}
       if(PS){const m=Math.max(1,par.n);console.log(`t=${s.t} parental: births=${par.n} R=${(par.R/m).toFixed(3)} S=${(par.S/m).toFixed(3)} both=${(par.both/m).toFixed(3)} sameBody=${(par.same/m).toFixed(3)} random=${(par.rand/m).toFixed(4)} alive=${alive.size} openSeed=${opened().S} copiesS=${cp[cS]||0} copiesSelfish=${cp[cSf]||0} copiesParasite=${cp[cSq]||0}${sCount()}${LK?` linkR0=${lkEnd.r0.toFixed(3)} linkHalf=${lkEnd.half||'not'} linkLast=${Number.isNaN(lkEnd.last)?'-':lkEnd.last.toFixed(3)}`:''}`);}
       // the diets picture (PAMF): a root filled by its front letter's colour, a stock part by its own letter's (bright when
       // attached, dim when free); blanks and other triangles as usual

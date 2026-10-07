@@ -33,8 +33,10 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 | Length by mutation: a 3-cell kind with a copied middle; mutant fronts lengthen or shorten it by one step | body length under selection | **not yet, a clear negative** (build run 20261006-2350, check `ladder` 4 of 4): 2-cell shortcuts (the head catching the stock) replace the 3-cell founder by 40-60k; longer chains arise (1 individual at a time; up to 6 under the full mutagen while its stock lasts). Reason: joints make individuals, and the shortcut eats the same stock with fewer parts; length needs a function only a longer body has (IDEAS) | demo pair `kinds:` census; check ladder |
 | One range for every length: strips of 2 to 5 cells bud at one openRange, every release complete (the open signal stops at `&` joints; a caught part emits at once) | individuality: a body hears only itself | **works** (core-review run 20261006-1920, check `strips` 4 of 4; RULES Core changes): the range is now a completion delay (about openRange passes for 3 or more cells), not a length limit |
 | The standard world: one founder (the diet kind), stocks, openRange 9, deaths return blanks, decay, the hazard per individual, the general mutagen (`PAW=1`) | an ecology where individuals persist and kinds arise | **works** (build run 20261007-0420, check `world` 4 of 4; `pair-flow-i` 2 of 2): individuals at every census; a head that catches heads by their fronts arises in 3 of 4 and lives on the founder's seed sites and copies; under the hazard per triangle the pair world ends as joint aggregates in 2 of 4 (IDEAS "The hazard's unit") | demo pair `PAW=1`, `PAHU=2` |
+| Kinds that live on kinds: a head that catches the host's free heads (a nursery parasite); catchers with a seed site of their own are free-living pairs; catchers of one diet exclude the other diets | brood parasites, apparent competition | **works** (explore run 20261007-0622, checks `catcher-free` 4 of 4, `diets-catcher` 4 of 4; no Red Queen: the catcher arms its host's diet) | demo pair (`PA1T` entry of `PAKR`/`PAKS`) |
+| A root delivered in place: a 4-cell arc whose head's copies are born beside its own seed site (contact copying gives a bud at most one part per gap from its parent; recognition gives the rest) | heredity by construction | **works for the root** (run 0622, check `arc-root`: 91-93% of births at h 0.03); does not pay: dies under the standard drives | demo pair `PARP=1`, IDEAS run 0622 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 90 minutes with 4 processes (run 20261007-0420); `budcycle-3` and `budcycle-lysis` 25-35 minutes per world, seeds 2 and 3 only since that run)
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 100 minutes with 4 processes (run 20261007-0622); `budcycle-3` and `budcycle-lysis` 25-35 minutes per world, seeds 2 and 3 only since that run)
 or by a test in `tri/test.js`.
 
 **Removed 2026-10-03 (core review run 20261003-2121; RULES, Core changes): the casting lineage.** Rows that worked and
@@ -79,8 +81,11 @@ A. **Evolution vehicle: the pair**, in order (NEXT priorities): (1) done (run 20
    joints and a caught part emits at once (check `strips`; the range is now a completion delay for 3 or more cells).
    (11) done, negative (build run 20261006-2350): length by mutation shrinks (the 2-cell shortcut; check `ladder`); the z
    kind was a nursery and is gone since (10); the full mutagen collapses the diets world (IDEAS "Joints make individuals").
-   Next (direction check run 20261006-1851, IDEAS "After nine slices on the pair"): (12) a kinds census in every pair world, (13) one standard evolving world with the fewest
-   drives, (14) grown instead of prepared resources (candidate (t), or kinds that live on kinds).
+   (12) done (run 20261007-0050): a census of individuals in every pair world. (13) done (run 20261007-0420): the standard
+   world `PAW=1` (check `world`). (14) done (run 20261007-0622): host and catcher (a nursery parasite; catchers of one diet
+   exclude the others), what place can deliver (one part per gap), the 4-cell arc (checks `catcher-free`, `diets-catcher`,
+   `arc-root`). Next: (15) a recognition census (classes of kinds that bind one another, links between classes) and the
+   standard world at 3x: does the web grow?
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
