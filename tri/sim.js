@@ -52,7 +52,7 @@ class TriSim extends Physics{
     super({...DEFAULTS,...params},n);
     const I8=k=>new Int8Array(k);
     this.bkind=I8(3*n);this.glue=I8(3*n);this.cOnly=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.lys=I8(3*n);
-    this.fill=I8(n);this.role=I8(n);this.nb=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);
+    this.fill=I8(n);this.role=I8(n);this.gap=I8(n).fill(-1);this.need=I8(n);
     this.zip=I8(n);this.fn=I8(n);this.ly=I8(n);this.op=new Int16Array(n).fill(-1);
     this.ev={};   // event counters (observation only)
   }
@@ -78,12 +78,14 @@ class TriSim extends Physics{
     const n=this.n,R=this._R=new Array(n),role=this.role,P=(u,i)=>this.partner(u,i);
     // previous-pass values, copied into buffers kept between passes
     const sv=this._sv||(this._sv={}),old=k=>{const a=this[k];let b=sv[k];if(!b||b.length!==a.length)b=sv[k]=new a.constructor(a.length);b.set(a);return b;};
-    const nb0=old('nb'),gap0=old('gap'),need0=old('need'),zip0=old('zip'),op0=old('op'),ly0=old('ly');
+    const gap0=old('gap'),need0=old('need'),zip0=old('zip'),op0=old('op'),ly0=old('ly');
     for(let u=0;u<n;u++){R[u]=this.roles(u);role[u]=R[u].role;}
-    // nb: my next partner is a back; gap: hidden backs after a face (0,1,2); need: fills still to place after a docked/fill
-    for(let u=0;u<n;u++){const r=R[u];this.nb[u]=0;this.gap[u]=-1;this.need[u]=0;
+    // gap: hidden backs from my next partner to the next face (0, 1, 2: two or more), relayed by backs (previous pass;
+    // run 20261007-2051 merged the value nb, "my next partner is a back", into it: the same need everywhere); need:
+    // fills still to place after a docked/fill
+    for(let u=0;u<n;u++){const r=R[u];this.gap[u]=-1;this.need[u]=0;
       if(r.role===SFACE||r.role===SBACK){const nx=r.next>=0?P(u,r.next):-1;
-        if(nx>=0){this.nb[u]=role[nx]===SBACK?1:0;if(r.role===SFACE)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+nb0[nx]:-1;}
+        if(nx>=0)this.gap[u]=role[nx]===SFACE?0:role[nx]===SBACK?1+(gap0[nx]>0?1:0):-1;
         if(r.fill&&nx>=0)this.need[u]=Math.max(0,need0[nx]-1);}
       else if(r.role===DOCKED){const t=P(u,r.face);this.need[u]=gap0[t]>=0?Math.max(0,2-gap0[t]):0;}}
     // zip: a strand's high end (no next bond) while its spare edge is held (only an anchor's catch binds it), a strand
@@ -120,7 +122,7 @@ class TriSim extends Physics{
   bind(u,i,ku,v,j,kv){if(this.bond[u*3+i]>=0||this.bond[v*3+j]>=0)throw Error('bind: side already bonded');this.link(u,i,v,j);this.bkind[u*3+i]=ku;this.bkind[v*3+j]=kv;}
   // binding pulls a free triangle in: v is placed exactly flush with side j against side i of u (it moves at most about
   // the binding tolerance), so every bond starts aligned (a tilted bond jams a strip against its own contacts)
-  _snap(v,j,u,i){if(this.bonded(v))return false;const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
+  _snap(v,j,u,i){const X=k=>this.px[u]+this.ox[u*3+k],Y=k=>this.py[u]+this.oy[u*3+k];
     const a=[X(i),Y(i)],b=[X((i+1)%3),Y((i+1)%3)],c=[X((i+2)%3),Y((i+2)%3)],x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];
     const V=[];V[j]=b;V[(j+1)%3]=a;V[(j+2)%3]=x;const cx=(a[0]+b[0]+x[0])/3,cy=(a[1]+b[1]+x[1])/3,ang=Math.atan2(V[0][1]-cy,V[0][0]-cx)-SNAP0;
     // binding needs the flush place to be free (a triangle cannot bind into an occupied site)
@@ -149,7 +151,7 @@ class TriSim extends Physics{
     if(r.role===GROWN)return (B[k]<0?1:0)|(B[k+1]<0?2:0)|(B[k+2]<0?4:0);
     return 0;}
   formBonds(){
-    const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>R[u].role===FREE&&!this.bonded(u);
+    const p=this.p,R=this._R,pairs=this.pairs,G=this.glue,gl=(u,i)=>G[u*3+i],bnd=(u,i)=>this.bond[u*3+i]>=0,free=u=>!this.bonded(u);
     const flush=(u,i,v,j,tol)=>this.flushGap(u,i,v,j)<=tol;
     // a free triangle binds (glue catch, dock, fill) by none of its close-only '.' or spent sides (an anchor side binds as
     // its glue does: run 0050's narrowing was removed in run 20261004-0820, RULES Core changes)
@@ -163,13 +165,13 @@ class TriSim extends Physics{
       if(free(u)&&free(v))continue;                    // free triangles never bind each other (activation by attachment)
       if(ly[u]||ly[v])continue;                        // a lysed triangle binds nothing (no part rejoins a body coming apart)
       if(free(u)||free(v)){if(free(u))[u,v]=[v,u];const r=R[u];let done=false;   // u attached, v free
-        // copy side '?': a free triangle that has one binds only by it, to any free (unbonded, not spent, not anchor)
-        // side of an attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets
+        // copy side '?': a free triangle that has one binds only by it (not by a close-only one: run 20261007-2051), to
+        // any free (unbonded, not spent, not anchor) side of an attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets
         // go, so it stays free here (it binds nothing else and is never a template). An anchor side is no template:
         // it binds only by catching a strand end
-        if(this.cpy[v*3]||this.cpy[v*3+1]||this.cpy[v*3+2]){if(this.bonded(v))continue;
+        if(this.cpy[v*3]||this.cpy[v*3+1]||this.cpy[v*3+2]){
           for(let e=0;e<3&&!done;e++){if(this.bond[u*3+e]>=0||this.spent[u*3+e]||this.anc[u*3+e])continue;
-            for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
+            for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&fs(v,j)&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
           continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only or spent sides)
@@ -177,21 +179,21 @@ class TriSim extends Physics{
           for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&(!part||this.att[v*3+j])&&(!this.att[u*3+e]||(part&&this.att[v*3+j]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);R[v]={role:GROWN};this.count('glue');this.caught(v);done=true;break;}
           if(done)break;}
         if(done||part)continue;
-        // dock on a free template face with the complementary glue (a close-only side binds no free triangle)
-        if(r.role===SFACE&&r.free>=0&&!bnd(u,r.free)&&this.zip[u]&&!this.cOnly[u*3+r.free]){const g=gl(u,r.free);
+        // dock on a free template face with the complementary glue (a close-only or spent side binds no free triangle)
+        if(r.role===SFACE&&!bnd(u,r.free)&&this.zip[u]&&!this.cOnly[u*3+r.free]&&!this.spent[u*3+r.free]){const g=gl(u,r.free);
           if(g)for(let j=0;j<3;j++)if(gl(v,j)===comp(g)&&fs(v,j)&&reach(u,r.free,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,r.free))continue;this.bind(u,r.free,TFACE,v,j,FACE);
             this.count('dock');R[v]={role:DOCKED};break;}
           continue;}
         // fill the prev edge of a docked or fill triangle that still needs fills, with the complement of that edge's glue
         // (an inert edge takes an inert side)
-        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1&&!this.cOnly[u*3+r.prev]){for(let j=0;j<3;j++)if(gl(v,j)===comp(gl(u,r.prev))&&fs(v,j)&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
+        if((r.role===DOCKED||r.fill)&&r.prev>=0&&!bnd(u,r.prev)&&this.need[u]>=1&&!this.cOnly[u*3+r.prev]&&!this.spent[u*3+r.prev]){for(let j=0;j<3;j++)if(gl(v,j)===comp(gl(u,r.prev))&&fs(v,j)&&reach(u,r.prev,v,j)&&this.rng()<p.pBond){
           if(!this._snap(v,j,u,r.prev))continue;this.bind(u,r.prev,PREV,v,j,NEXT);this.fill[v]=1;this.fn[v]=1;this.fn[u]=1;this.count('fill');R[v]={role:SBACK,fill:true};break;}}
         continue;}
       // anchor: an unbonded anchor side '|' of an attached triangle catches a strand end's seed (its unbonded spare edge,
       // also while the strand is being copied) with the complementary glue, as it would catch a free triangle: the end
       // comes within `capture` of the site and the strand is placed flush (physics moves it, with any partial copy
       // docked on it, as one body); a spent anchor side catches nothing
-      {let hit=false;for(let w=0;w<2;w++){const a=w?v:u,b=w?u:v,rb=w?ru:rv;if(rb.role!==SFACE||rb.inert<0)continue;
+      {let hit=false;for(let w=0;w<2;w++){const a=w?v:u,b=w?u:v,rb=w?ru:rv;if(rb.role!==SFACE||rb.inert===undefined)continue;
           for(let e=0;e<3&&!hit;e++){if(!this.anc[a*3+e]||this.bond[a*3+e]>=0||!this.glue[a*3+e]||this.spent[a*3+e])continue;const f=rb.inert;
             if(this.bond[b*3+f]>=0||this.glue[b*3+f]!==comp(this.glue[a*3+e])||!reach(a,e,b,f)||this.rng()>=p.pBond)continue;
             if(!this._snapBody(b,f,a,e))continue;this.bind(a,e,GLUE,b,f,GLUE);this.count('anchor');hit=true;}
@@ -203,10 +205,12 @@ class TriSim extends Physics{
         for(let f=0,av=this._active(v,rv);f<3;f++)if((av>>f&1)&&gl(v,f)===comp(g)&&!this.done[v*3+f]&&flush(u,e,v,f,p.triTolClose)&&this.rng()<p.pBond){this.bind(u,e,GLUE,v,f,GLUE);this.count('closeGlue');done=true;break;}
         if(done)break;}
       if(done)continue;
-      // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed
+      // copy closure: prev edge of one copy triangle to next edge of another, only when no more fills are needed (no
+      // completion side closes, as in glue closure). A triangle docked or filled in this pass closes from the next pass
+      // (its role record here has no chain edges yet)
       const cp=r=>r.role===DOCKED||r.fill;if(!cp(ru)||!cp(rv))continue;
       for(const [a,ra,b,rb] of [[u,ru,v,rv],[v,rv,u,ru]])
-        if(ra.prev>=0&&rb.next>=0&&this.need[a]===0&&!bnd(a,ra.prev)&&!bnd(b,rb.next)&&flush(a,ra.prev,b,rb.next,p.triTolClose)&&this.rng()<p.pBond){
+        if(ra.prev>=0&&rb.next>=0&&this.need[a]===0&&!bnd(a,ra.prev)&&!bnd(b,rb.next)&&!this.done[a*3+ra.prev]&&!this.done[b*3+rb.next]&&flush(a,ra.prev,b,rb.next,p.triTolClose)&&this.rng()<p.pBond){
           this.bind(a,ra.prev,PREV,b,rb.next,NEXT);this.count('close');break;}
     }
   }
@@ -227,11 +231,13 @@ class TriSim extends Physics{
     for(let u=0;u<n;u++)if(this.fill[u]&&!this.bonded(u))this.fill[u]=0;   // a free triangle keeps no chain state
     this._copy();
   }
-  // contact copying: a triangle bonded by a copy side '?' and by nothing else (a copy blank that bound this pass) takes
+  // contact copying: a triangle that was free when this pass began (a copy blank that bound this pass; since run
+  // 20261007-2051, before which a prepared triangle welded only by a '?' side was rewritten too) and is bonded by a copy
+  // side '?' and by nothing else takes
   // its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the partner turned about the
   // shared edge; glues and marks) and lets go (copyLog, observation only: time, copy, its new type, its template)
   _copy(){const A=['glue','cOnly','att','done','anc','cpy','lys'];
-    for(let u=0;u<this.n;u++)for(let i=0;i<3;i++){if(!this.cpy[u*3+i])continue;const q=this.bond[u*3+i];if(q<0||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
+    for(let u=0;u<this.n;u++)if(this.role[u]===FREE)for(let i=0;i<3;i++){if(!this.cpy[u*3+i])continue;const q=this.bond[u*3+i];if(q<0||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
       const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
       for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
       for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u),w]);break;}}

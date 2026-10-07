@@ -59,6 +59,16 @@ test('copy side: copying is glue-blind (a copy side binds a side whatever either
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fA.b@|'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:blank,loose:true}];
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
     assert.equal(s.ev.copy,1,blank);assert.equal(canon(s.typeName(2)),canon('fA.b@|'));symmetric(s);}});
+test('copy side: only a triangle free when the pass began copies, and never by a close-only copy side (run 20261007-2051)',()=>{
+  // two prepared triangles welded only by their '?' sides stay as they are (before, the lower index took the other's type)
+  {const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'f?Ab'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F?'}];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},2);buildStructure(s,[0,1],tris,5,5);s.derive();s.run(5);
+    assert.ok(!s.ev.copy,'no copy');assert.equal(s.typeName(0),'f?Ab');assert.equal(s.typeName(1),'--F?');assert.equal(s.partner(0,0),1);symmetric(s);}
+  // a blank whose copy sides are all close-only binds nothing beside a template; with one plain copy side it copies
+  for(const [blank,expect] of [['-.?-.?-.?',false],['-.?-.?-?',true]]){
+    const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fA.b@|'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:blank,loose:true}];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
+    assert.equal(!!s.ev.copy,expect,blank);symmetric(s);}});
 test('copy side: a copy blank binds no anchor side (a waiting anchor is no template)',()=>{
   // template welded by side 0; a copy blank flush beside side 1: copied unless side 1 is an anchor side
   for(const [tmpl,expect] of [['fW@|-&',false],['fW@-&',true],['fW|-&',false]]){
