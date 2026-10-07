@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-1921, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-2021, review-intent). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,26 +10,21 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-1921, explore).** Priority 20 tried (INNOVATIONS run 1921, IDEAS "A rare class
-wastes its parts"); no rule change: candidate (t) built as an option, `copyGlue` (default off; RULES Core changes, with
-its result: not adopted, kept for the core review to remove unless a slice uses it); demo `pair` gained `PAHB=3` (dead
-triangles return as blanks that keep their glues) and `PADL` (lettered blanks lose their letters). **Private recycling
-is not a resource:** with (t) and `PAHB=3` a class can be copied only from its own dead material, but it makes that
-material from plain blanks, so nothing enters it from outside and the R* argument still holds: two equal private
-classes exclude each other by 15-30k as fast as with (t) off (0 of 16 worlds with both at 80k, two designs), and an
-in-place head's lettered blanks pile up at the one template a bud usually covers (the world dies, 4 of 4, without
-`PADL`). **A rare class wastes its parts:** two equal blank farmers that each catch only second cells they make hold
-150-200 each for about 10k, then one falls to under 15 within 5k (20 of 20 worlds with part decay 0.1-1, faster when
-the pool is stirred); without decay both remain at 80k in 3 of 4. The rarer class's free parts decay or drift off
-before its few waiting buds catch them: an Allee effect, which also explains run 1821's private-crop farmer (never
-held, held when first). New checks `rare-waste` (4 of 4) and `rare-waste-c` (pass). The run's worlds are not kept
-(regenerate: INNOVATIONS run 1921, Commands; about 2.5 minutes per 80k world with 4 at once). Nothing is running.
+**Handoff status (autorun run 20261007-2021, review-intent).** Direction check after priorities 10-20; no building, no
+runs. Reasoning in IDEAS "Twenty slices on the pair" (one page). In short: the core is not growing (6 marks, 3 relays, 4
+values, 2 states, plus the option `copyGlue` to remove); the slices now combine in one standard world; but the web-size
+line (priorities 15, 18-20) has reached a bound the theory explains (classes are at most the limiting resources, and a
+class that makes its own parts cannot invade), every class beyond the first stands on a prepared stock, and bodies are
+still 2 cells. What is missing is an interaction whose payoff depends on frequency. The cheapest one is already in the
+world, the nursery cheat, and the stocks block it: a host's seed sites sit on prepared stock parts, which never
+mutate, so a host can never escape the cheats of its letter. Without stocks the seed site is on a copied cell, a host
+lineage can change its letter pair and its cheats follow: a predicted Red Queen of letters, and with it more host
+classes than resources. So the next build runs the standard world without stocks (priority 21). Rotation unchanged.
+Nothing is running.
 
-**Next step (rotation 70, review-intent).** A direction check after priorities 17-20: the web census holds at most the
-limiting resources (run 1821), and new classes that catch only their own parts cannot invade (run 1921). Candidates for
-the next build or explore: a class that invades on parts others make (a by-product of one class that another catches,
-the farmer limited by something other than blanks), or delivery without a pool. The next core review should remove
-`copyGlue` unless a slice has used it.
+**Next step (rotation 71, core-review).** Remove the option `copyGlue` and the drive values that serve only it (`PAHB=3`,
+`PADL`; the check `rare-waste` uses neither) unless the reviewer finds a use; review the core as usual. Then 72 build:
+priority 21.
 
 ## Direction and priorities
 
@@ -49,15 +44,34 @@ standard world collapses into heads that never let go (3 of 4), the whole-body h
 (1351; `world`, `arc-root` pins `PAHU=2`); 18 a class that owns its seed letter: in place, on a site-free stock;
 it does not make the web grow (1720; `own-letter`); 19 kinds as food: every catcher farms its catch from blanks, so
 the classes are at most the limiting resources, three on three (1821; `web-three`); 20 a resource each class makes for
-itself: private recycling under (t) is no resource, and a rare class wastes its parts (1921; `rare-waste`). Open:
-21. [70 review-intent, then 72 build] Candidates: a class that invades on parts others make (a by-product one class makes
-    and another catches), deaths that return parts (`PAHB` off for one class's material), a kind that pays for length
-    through cheaper catches (IDEAS run 0622), a longer kind whose function is in what binds.
+itself: private recycling under (t) is no resource, and a rare class wastes its parts (1921; `rare-waste`).
+Review-intent run 2021 (IDEAS "Twenty slices on the pair"): the web-size line stops here (its bound is derived and
+measured); the stocks block coevolution; next, frequency dependence, first through the nursery cheat that already
+arises. Open:
+21. [72 build] **The standard world without stocks: a Red Queen of letters?** `PAW=1 PAF= PA2='Z@&c@|- C@-z|'` (the pair
+    with the standard letters: the second cell's seed site `z|` is no longer an anchor-bound stock part `C@-|z|`, which
+    has no copyable side, but a copied cell with a copy side `-`, so its letter can mutate), the general mutagen, the
+    whole-body hazard, 240k, 4 worlds; compare with the stock world (`world`: one class in 3 of 4). Theory first, then
+    the runs. Predictions (IDEAS): (a) cheats on the founder's letter arise (heads `Z@&` with no seed site) and live only
+    where hosts of that letter are common; (b) host lineages change their letter pair in two steps through a neutral
+    site letter (run 1720 saw it) and cheats follow by one mutation, so the commonest seed letter turns over more than
+    once in a run (count: the leading class's letter at each census); (c) two or more host classes held at once in at
+    least 2 of 4 worlds for most of the second half, on blanks alone. Wrong if one class holds all run with cheats
+    present (then measure why: is the double change too rare, or do cheats not lower their hosts' births enough?).
+    If (c) holds, the stockless world becomes the standard world (one drive fewer) and the stock checks move to it.
+22. [75 explore] Whichever of (a)-(c) fails in 21, its cause; if letters do not turn over, killing as the frequency-
+    dependent interaction (IDEAS: with 2-cell kinds a killer gains only what cannot be copied: blanks near it, a nursery,
+    or with a third cell a prey whose copy side it covers; the drive `PAHB=2` would have to spare lysis by a `!` side).
+23. [after 21-22] Length as defence: once a cheat or killer takes a host's open sites, a third cell over the open site
+    is a function only a longer body has (the cap of run 1821, now on the host's own side). Designed, not demonstrated.
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 1851: the mix fits the order above):
-70 review-intent, 71 core-review, 72 build, 73 harden, 74 build, 75 explore, 76 build, 77 cleanup.
+Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 2021: the order above needs one build,
+then an explore, then a build, as the mix gives): 71 core-review, 72 build, 73 harden, 74 build, 75 explore, 76 build,
+77 cleanup, 78 build, 79 explore, 80 build, 81 explore, 82 review-intent. 73 harden: cut the frozen lineage's two checks
+(three quarters of the suite's CPU, about 105 minutes). 77 cleanup: prune the pair demo's 31 options to those a check or
+a command above uses.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an

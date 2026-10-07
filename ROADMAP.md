@@ -72,8 +72,11 @@ A. **Evolution vehicle: the pair**, in the order of NEXT's priorities (each done
    the pair demo's options pruned, the whole-body hazard as the standard world's, a class that owns its seed letter
    (in place, on a site-free stock; it does not make the web grow), kinds as food (every catcher farms its catch from
    blanks: classes are at most the limiting resources; three on three), a rare class wastes its parts (private
-   recycling, candidate (t) as an option, is no resource)). Next: NEXT's list (a class that invades on parts others
-   make).
+   recycling, candidate (t) as an option, is no resource)). Direction check run 2021 (IDEAS "Twenty slices on the
+   pair"): the web-size line has reached its bound (classes at most the limiting resources), and the prepared stocks
+   keep every host's seed letter fixed. Next: NEXT's list, starting with the standard world without stocks (a Red Queen
+   of seed letters between hosts and their nursery cheats?), then killing as a frequency-dependent enemy, then length
+   as defence.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
