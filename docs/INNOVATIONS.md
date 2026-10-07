@@ -7,8 +7,23 @@ reproduces each demo with the current engine (`tri/`), except demos marked remov
 below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `BUDNOP`, `BUDDBGA`, `BUDNOCA`,
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup); `budcycle`'s `BCHOLD`, `BCSEED`, `BCK`, `BCLK`
 at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`,
-`BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
+`BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup); `pair`'s `PAT`, `PADBG`, `PAPS`, `PAV=half|right|link`, `PAVK=selfish|front`,
+`PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
+
+## 2026-10-07 (autorun run 20261007-1051, cleanup)
+
+- **A leaner pair demo and a batch runner** — works (no capability or rule change; NEXT priority 16). Removed from demo
+  `pair` the options no check uses that later setups replaced (in git at `9c37d89`): `PAT=1` (the turned side order;
+  `PAKR`/`PAKS` give any R and S, check `pair-c`), `PADBG` (a debug census; the `kinds:` census replaced it), `PAPS=1`
+  (the parental share alone; its `par:` lines now come with the parasite variant `PAVK=parasite` they were built
+  for), `PAV=half|right` (marker by half of the world), `PAV=link` (two-marker linkage, run 1322), `PAVK=selfish`
+  (run 0621's `B@-y!`, lethal in the pair, run 1322) and `PAVK=front`, `PAHB=1` (only the hit triangle returns as a
+  blank; `PAHB=2` is every setup since run 0621) and `PAMF=2` (the mutagen on glue letters only, run 0420; the
+  standard world uses the general mutagen). `pairKit` lost its turned-order parameter. Evidence: pending (CHECK_SAVE diff of the pair checks). New `tri/batch.js`
+  (autorun feedback of run 0622): a batch of demo worlds from a JSON file, at most 4 at once, an output file and a
+  picture directory per world, no shell quoting of glue strings. NEXT 214 to about 165 lines and ROADMAP's backlog A
+  condensed (done priorities one line each). Command: `node tri/batch.js jobs.json`.
 
 ## 2026-10-07 (autorun run 20261007-0820, build)
 

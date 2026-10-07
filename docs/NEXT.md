@@ -1,83 +1,40 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-0820, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-1051, cleanup). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
-this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
-pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`, the direction
-check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`, the handoff of run 2350 (length shrinks) at `0ed8f69`, the handoff of run 0050 (census) at `3b90c0a`, the handoff of run 0420 (the standard world) at `fdf323f`, the handoff of run 0622 (host and catcher) at `6d1da94`).
+this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
+pair Direction of run 1850 in full at `20e9a88`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-0820, build).** Priority 15 done, no rule change (INNOVATIONS run 0820, IDEAS
-"Recognition classes merge; completion is optional"). (a) **The `web:` census** in every pair world: a kind raises
-another when its seed site takes the other's root (joints tracked as they bind); a class is a set of kinds that raise
-one another (strongly connected), a cheat is raised and raises none of its raisers, links between classes are one-way
-raising (`>`) or a catch (`~`). Checks `web-two` (u catchers entered: 2 classes, 1 link) and `web-two-c` (plain
-catchers: cheats inside the host class); `world` reports the web. (b) **The web does not grow.** 1x (seeds 1-4,
-240k): one class at every census in 3 of 4 (cheats 1-10); a private u class in 1 of 4. 3x (`PAB=3000 PAS=87`, stocks
-450): a private class in 4 of 4 by 75-135k, merged back into the host class within 15-45k (stock parts all carry `z`;
-a catcher individual can root by either head). Predicted in shape (saturation). (c) **Unpredicted: at 3x the
-standard world collapses** (3 of 4, no complete individual from 180-205k): heads that never let go (a front nothing
-binds, or closed rosettes with an open lysis side) grow as chains and split by the hazard: a replicator with one blank
-per cell and no catch, the lowest R* (pictures `docs/pictures/web-3x-rosettes.png`, `web-3x-chains.png`). (d) **The
-whole-body hazard** `PAHU=3` (labelled drive: a hit lyses the hit individual's whole body, joints included, so a chain
-cannot split): 4 of 4 3x worlds keep individuals to 240k, one with 2-3 classes for most of its second half (picture
-`web-3x-whole-body.png`); cheats (plain catchers, never carrying a bud) outnumber hosts 2-3 to 1; it kills more
-(individuals about half), so harshness is not yet separated from the mechanism. Nothing is running. Runs are in
-`runs/` only (x1N 1x, x3N 3x, y3N 3x with `PAHU=3`); regenerate with the commands below. Suite: about 100 minutes
-plus `web-two` (about 4 minutes).
+**Handoff status (autorun run 20261007-1051, cleanup).** Priority 16 done, no capability or rule change (INNOVATIONS
+run 1051). In progress: the pair checks with `CHECK_SAVE` on main (`runs/a`) and on this branch (`runs/b`), then `diff -r`; if interrupted, rerun both (`node tri/check.js $(cat runs/pair-ids.txt)`, ids: every check with demo pair or strip). New `tri/batch.js`: a batch of demo worlds from a JSON file, at most 4 processes, an output
+file and picture directory per world (no shell quoting of glue strings). NEXT, ROADMAP's backlog A: done priorities
+condensed. Nothing is running.
 
-**Next step (rotation 65, cleanup): priority 16.** The pair demo's options (about 34): retire settings the standard
-world supersedes, keeping every check's outputs byte for byte (CHECK_SAVE diff) or explaining each change; INNOVATIONS
-names the commit that holds removed options.
+**Next step (rotation 66, build): priority 17**, the whole-body hazard at 1x and matched (below). The previous run's
+3x worlds are not kept; regenerate with the 3x command below (about 70 minutes each, `PAHU=3` for the whole body), or
+as a batch: `tri/batch.js` with `{"demo":"pair","steps":240000,"env":{"PAW":"1","PAB":"3000","PAS":"87","PAF":"C@-|z|:450
+E@-|z|:450 G@-|z|:450","PAHU":"3"},"jobs":[{"id":"y3","seeds":[1,2,3,4]}]}`.
 
 ## Direction and priorities
 
 The user approved this order (run 0321): (1) a world that runs indefinitely under conservation with steady, labelled
 drives; (2) the simplest heritable variation; (3) a minimal competition test (two variants on one supply: does one
-win, and for a reason?). On the pair (each a slice; rotation index in brackets):
-1. Done: the pair in isolation (run 2320, checks `pair`, `pair-c`); speed for pair worlds 1.8-2.1x (run 0021).
-2. Done: (1) on the pair, hazard and decay drives (run 0251, check `pair-run`; 4 of 4 to 10^6 steps).
-3. Done: (2) heritable variation and selection with a labelled mutagen, no core change (run 0450, `pair-sel`).
-4. Done: a world that keeps evolving: deaths return blanks (`PAHB=2`; run 0621, `pair-flow`). By 500k a 3x world is
-   one-type chains and rosettes whose variants keep replacing one another; no world grows more complex.
-5. Done: cleanup (run 0920): budcycle's dead options pruned.
-6. Done: (3) Direction 3, two kinds on one supply (run 1150, checks `duo`, `duo-inv`, `duo-inv-c`): the pair beats a
-   3-cell strip from every start (lower R*); a trap for free parts on the extra cell does not pay.
-7. Done: heredity of combinations by locality (run 1322, checks `pair-host`, `-c`, `-mx`): s about 0.44, a lean pool
-   0.58; a parasite part is excluded once s > 1 - 1/k. By construction (s near 1): not in a pair (parity, IDEAS).
-8. Done: what pays for a longer kind (run 1620, checks `duo-stock`, `-inv`, `-c`, `-tri`, `-hi`): a stock of parts only it
-   binds, when risk is per individual (coexistence at stock 400, the strip wins at 600; hazard per triangle: the pair).
-9. Done: heritable diets (run 1750, checks `diets`, `-c`, `-ns`): front-glue mutants reach unused stocks and coexist
-   (three diets, 4 of 4); a z front that eats other kinds' roots makes an unplanned 3-cell kind.
-10. Done (run 1920, check `strips`): **one range for every length.** Was: [59 core-review] Measure budding of k-cell strips (demo `pair`, `PA1=0`
-    `PA2=...`, k = 2 to 5, own letters, no hazard, no mutagen) at openRange 1, 3, 5 and 120: does each bud let go only
-    once complete, and how long after? If the range a strip needs grows with k, weigh candidate (o) (binding sets the
-    caught part's open signal at once) as the fix, gated as usual (case in RULES first; `CHECK_SAVE` diff of the suite,
-    every changed outcome explained). Done when one range is shown to bud strips of 2 to 5 cells, with or without (o),
-    and the pair-world checks can run at it (or the reason they cannot is recorded). Why first: priority 11 asks
-    whether longer kinds evolve, and in a world tuned for one length the answer would be the parameter's.
-11. Done, negative (run 2350, check `ladder`): length shrinks to the 2-cell shortcut; the z kind was a nursery (above).
-    Was: [60 build] **The z kind and length by mutation** (candidate (a) of run 1750). In the diets world with the a..z
-    mutagen at one range (run 1920: any openRange above the longest kind's length; the delay grows with it, so about 9): what limits the z kind (other diets' free roots, seed sites, its own copies), do z
-    chains of 4 or more cells complete and persist; and the same world with the mutagen on every glue (`PAMF` off): do
-    diets and z survive, or does it collapse to aggregators as run 0621 did? Check: a kind of 3 or more cells that arose
-    by mutation holds 10 or more individuals at the end in 3 of 4 worlds, or a clear negative with its reason.
-12. Done (run 0050, harden): census of individuals in every pair world; suite 80 minutes. Was: [61 harden] **A kinds census** in every pair world (one `kinds:` line: kinds by body composition, how many hold 5
-    or more individuals, the longest body held, kinds holding another kind's parts; other output unchanged), and suite
-    time (follow-up below: the frozen lineage's checks to fewer seeds).
-13. Done (run 0420, build, checks `world`, `pair-flow-i`): the standard world `PAW=1` keeps individuals (hazard per
-    individual) and evolves (general mutagen); a front-catching kind lives on the founder. Was: [62 build] **One standard
-    evolving world** with the fewest drives, made the default for later pair slices and checks.
-14. Done (run 0622, explore, checks `catcher-free`, `diets-catcher`, `arc-root`): host and catcher (a nursery parasite;
-    catchers with their own seed site are free-living; catchers of one diet exclude the others: no Red Queen), what place
-    can deliver (one part per gap; recognition does the rest), the 4-cell arc (root in place, does not pay).
-15. Done (run 0820, build, checks `web-two`, `web-two-c`): the recognition web does not grow (one class; private
-    classes merge back); the standard world at 3x collapses into heads that never let go (3 of 4); `PAHU=3` holds (4 of 4).
-16. [65 cleanup] The pair demo's options: retire settings the standard world supersedes (about 34 options now).
+win, and for a reason?). On the pair, done (run; checks; INNOVATIONS has each): 1 the pair in isolation (2320; `pair`,
+`pair-c`), its speed (0021); 2 hazard and decay drives (0251; `pair-run`); 3 variation and selection under a labelled
+mutagen (0450; `pair-sel`); 4 deaths return blanks, a world that keeps evolving (0621; `pair-flow`); 5 budcycle's dead
+options pruned (0920); 6 two kinds on one supply: the pair beats a 3-cell strip (1150; `duo`, `duo-inv`); 7 heredity
+of combinations by locality, s about 0.44-0.58 (1322; `pair-host`); 8 a stock pays for length when risk is per
+individual (1620; `duo-stock`); 9 heritable diets (1750; `diets`); 10 one openRange for every length (1920;
+`strips`); 11 length by mutation shrinks to the 2-cell shortcut (2350; `ladder`, a negative); 12 the census of
+individuals (0050); 13 the standard world `PAW=1` (0420; `world`); 14 host and catcher, what place delivers, the
+4-cell arc (0622; `catcher-free`, `diets-catcher`, `arc-root`); 15 the recognition web does not grow; at 3x the
+standard world collapses into heads that never let go (3 of 4), the whole-body hazard `PAHU=3` holds (4 of 4) (0820;
+`web-two`); 16 the pair demo's options pruned (1051). Open:
 17. [66 build] **The whole-body hazard at 1x and matched.** `world` with `PAHU=3` (seeds 1-4, 120k and 240k), and at 3x
     `PAHU=2` at a higher h that leaves as many individuals as `PAHU=3` at 0.1 (about 500-700): does the matched hazard
     per individual still collapse? If `PAHU=3` holds at 1x and 3x and the matched one does not, make it the standard
@@ -86,12 +43,11 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
 18. [67 explore] Candidates: a class that owns its seed letter (a host whose head carries its own seed site, as the B
     host at 3x seed 3; or a stock part with a private seed letter), a kind that pays for length through cheaper catches
     (IDEAS run 0622), a longer kind whose function is in what binds, or (t).
-18. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
-Not taken from run 1750's list: (b) diets of different length (more prepared stocks with fronts) and (c) more diets
-than blanks (run 1150's R* rule again); either may return inside 11 or 13.
+Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
+list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 1851: the mix fits the order above):
-65 cleanup, 66 build, 67 explore, 68 build, 69 explore, 70 review-intent, 71 core-review.
+66 build, 67 explore, 68 build, 69 explore, 70 review-intent, 71 core-review, 72 build, 73 harden.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an
@@ -115,9 +71,6 @@ Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run
   Core inventory).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
-- Heredity by construction: settled by run 0622 (IDEAS "A bud gets one part by place"): contact copying gives a bud at
-  most one part per gap from its parent (the 4-cell arc's root, check `arc-root`); a whole body only by confinement (a
-  compartment) or by recognition. Recognition already does it for whatever binds.
 - Core review: same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);
   change only if a locality problem traces back to them.
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
@@ -131,7 +84,9 @@ Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about 80 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 100 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
+                                                   # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (check world; about 7.5 minutes): the diet kind among stocks
                                                    # C E G, openRange 9, PAHB=2, decay 1, PAHU=2 (hazard per individual, h 0.1),
                                                    # the general mutagen 0.01 (stock parts exempt); any option set overrides
@@ -150,7 +105,7 @@ PAW=1 PAM=0 PAH=0.03 PARP=1 PA2='Z@&t@|- T@-|a@| A@-|b@| B@-|z|' PAF='T@-|a@|:15
 node tri/demos.js strip 1 6000 runs/x 2345         # strips of 2 to 5 cells, one world each (check strips; 30 s): complete and
                                                    # incomplete releases, delay from the last cell; PAR openRange (default 120)
 node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world
-                                                   # (30), PAR openRange (1), PAT=1 the turned order, PAKR/PAKS other R/S types (pair-c:
+                                                   # (30), PAR openRange (1), PAKR/PAKS other R/S types (pair-c, the turned order:
                                                    # PAKS='B@y-|' PAKR='Y@&b@-'); result: bodies, gen, copies by type, doublings, children
 PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 1000000 runs/x   # the pair world that runs on
                                                    # (check pair-run at 100k steps; about 35 minutes per 10^6): PAH body hazard,
@@ -159,7 +114,7 @@ PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 10000
 PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair 1 300000 runs/x   # the mutagen
                                                    # world that keeps evolving (check pair-flow at 200k; about 7 minutes): PAHB=2 every
                                                    # lysed triangle returns as a blank; PAM the mutagen, PAHU=1 hazard per triangle
-                                                   # (PAHU=2 PAH=0.5: per individual, check pair-flow-i; PAMF=2 glue letters only);
+                                                   # (PAHU=2 PAH=0.5: per individual, check pair-flow-i);
                                                    # 'mut:' census lines, 'evolving:' result line; PAB=3000 PAS=87: 3x world
                                                    # (selection: PAV, PAVK, PAVP, PAVT, checks pair-sel, pair-sel-c)
 PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=1 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA2='Z@&c@|- C@d@|- D@-z|' node tri/demos.js pair 1 20000 runs/x
@@ -178,8 +133,8 @@ PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=9 PAD=1 PAH=0.1 PA1=0 PA2='
                                                    # copied middle; 'kinds:' lines (front letters per individual, cells per
                                                    # individual; in every world with diets, or the mutagen and stocks)
 PAHB=2 PAB=1000 PAS=50 PAHT=1000 PAD=1 PAHU=1 PAP=2000 PAH=0.3 PADI=10 PAV=mix PAVP=0.1 PAVK=parasite PAVT=20000 node tri/demos.js pair 1 40000 runs/x
-                                                   # heredity by locality (check pair-host; about 2 minutes): PAPS=1 'par:' lines
-                                                   # (parental share), PAV=link two-marker linkage, PAVK=parasite/selfish S variants,
+                                                   # heredity by locality (check pair-host; about 2 minutes): PAVK=parasite the S
+                                                   # variant, with it 'par:' lines (parental share),
                                                    # PADI decay interval (100), PAMX stirring; without PADI the parasite holds
                                                    # (pair-host-c), with PAMX=0.2 it spreads (pair-host-mx)
 BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 3 1200000 runs/x   # the frozen lineage (corner bud, closed walls, 20 blanks +

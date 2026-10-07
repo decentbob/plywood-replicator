@@ -110,9 +110,9 @@ function budKit(R=5,pore=7,letters=null,eSource=false,anchor={},wall='-&',seedAt
 // obtuse corner, a bud is its parent turned 120 degrees about it (three generations close a hexagon). Every adult
 // exposes exactly one copyable side of each type, R's '-' and S's '-'. The order first written in IDEAS (S 'B@y-|', y
 // the source) fails: a waiting bud covers S's only source and nothing makes S (run 2320).
-function pairKit(turn=false){const R={v:[[0,0],[1,0],[0.5,H]],type:'Y@&b@|-'},a=R.v[1],b=R.v[2],c=R.v[0];
-  const S={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:turn?'B@y|-':'B@-y|'};
-  return {tris:[R,S],R:R.type,S:S.type,rootSide:0,growSide:1,seedSide:turn?1:2};}
+function pairKit(){const R={v:[[0,0],[1,0],[0.5,H]],type:'Y@&b@|-'},a=R.v[1],b=R.v[2],c=R.v[0];
+  const S={v:[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]],type:'B@-y|'};
+  return {tris:[R,S],R:R.type,S:S.type,rootSide:0,growSide:1,seedSide:2};}
 // a strip of cells, types in order, each bound by its side 0 across the previous one's front (its side marked '@|' other
 // than side 0; side 1 if none: pairKit's geometry, a pair is a strip of two)
 function stripKit(types){const tris=[{v:[[0,0],[1,0],[0.5,H]],type:types[0]}];
