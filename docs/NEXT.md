@@ -18,9 +18,9 @@ unit, IDEAS "Joints make individuals"); its kind is its composition. All other o
 check worlds). (b) **What it shows:** no held kind longer than 3 cells in any check world, and 3 only where prepared;
 mutagen worlds hold 2-cell kinds only (up to 12 kinds held at once in pair-mut). In the diets world about half the
 complete individuals hold another diet's head on their seed site (every head binds every `z` site). **In pair-flow
-seeds 2 and 4 no individual is left by 155-165k**: what is still counted as bodies are chains in which every bond is
-a joint (`B@&R@b` x 5-6; pairs whose S took `&` on its attach side). The check passes, but its "keeps evolving" is in
-2 of 4 worlds an aggregate world (picture `docs/pictures/flow2-joint-chains.png`). (c) **Suite 110 -> 80 minutes**:
+seeds 2 and 4 no individual is left by 155-165k**: what is still counted as bodies are rosettes and arcs in which every
+bond is a joint (six `B@&R@b` round a vertex; pairs whose S took `&` on its attach side). The check passes, but its "keeps evolving" is in
+2 of 4 worlds an aggregate world (picture `docs/pictures/flow2-rosettes.png`). (c) **Suite 110 -> 80 minutes**:
 the frozen lineage's checks on seeds 2 and 3 (both 3 of 4 on main, seed 1 fails both), `secs` from measured times.
 A profile puts 75% of a pair world in physics (already tuned); the demo's bookkeeping is under 3%. Tests 41 pass,
 checks 36 of 36. Nothing is running.
@@ -28,7 +28,7 @@ checks 36 of 36. Nothing is running.
 **Next step (rotation 62, build): priority 13**, one standard evolving world, now with a requirement from this run:
 it must keep individuals (the census's complete individuals of 2 or more cells above zero to the end in 3 of 4
 worlds; pair-flow's setting loses them in 2 of 4 by 165k). Candidates to weigh first, by theory: what makes a joint
-chain win (a part that binds by its `&` side and never lets go because it keeps an open front of its own: no release,
+aggregate win (a part that binds by its `&` side and never lets go because it keeps an open front of its own: no release,
 no copy cost) and which setting removes that advantage without a core change (the diets world's front-only mutagen never makes
 `&` sides, and no diets world lost its individuals; pair-flow mutates every glue and mark). Then 63 explore: **a function only a longer body has** (IDEAS "Joints make individuals",
 candidates 1-4; first choice: heredity by construction in a 4-cell arc, designed from part types up before any batch).

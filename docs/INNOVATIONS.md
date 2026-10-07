@@ -28,8 +28,8 @@ not statistics.
     individuals (179-186 of about 400 at 60k) hold another diet's head on their seed site: every head binds every `z` seed
     site, so the diets raise each other's buds (IDEAS candidate 3, private seed letters, is the counter). **No
     individuals left:** in pair-flow seeds 2 and 4 the last individual is gone by 165k and 155k; what the `mut:` census
-    still counts as bodies (83 and 124) are chains in which every bond is a joint (`B@&R@b` x 5-6 in seed 2; pairs
-    whose S took `&` on its attach side, `-Y@&b@| + B@&X@y@`, in seed 4). The check passes (copying and sweeps go on),
+    still counts as bodies (83 and 124) are joint-joined aggregates: rosettes of six `B@&R@b` round a vertex (and 3-5-part arcs) in seed 2, every bond a joint (picture); pairs
+    whose S took `&` on its attach side, `-Y@&b@| + B@&X@y@`, in seed 4. The check passes (copying and sweeps go on),
     but in 2 of 4 worlds what evolves by 200k is joint-joined aggregates, not individuals: priority 13's standard
     world should keep individuals (a check can now require them).
   - **Suite time.** The frozen lineage's checks run seeds 2 and 3 (both must pass): at main `0ed8f69` both passed 3 of 4
@@ -38,7 +38,7 @@ not statistics.
     6569 s on main, 4781 s on the branch, all 36 checks pass in both. A profile of a stock-duo world: physics 75% of the
     time (overlap tests 24%, bond pairs 13%), the demo's own bookkeeping under 3%: further speed needs physics work.
   - Command: `PAB=1000 PAS=50 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 PAP=5000 PAHB=2 node tri/demos.js pair 2 200000
-    runs/x` (pair-flow seed 2; `kinds:` lines; picture `docs/pictures/flow2-joint-chains.png`).
+    runs/x` (pair-flow seed 2; `kinds:` lines; picture `docs/pictures/flow2-rosettes.png`).
   - Status: **works** (observation).
 
 ## 2026-10-07 (autorun run 20261006-2350, build)
