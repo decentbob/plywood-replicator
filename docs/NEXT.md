@@ -7,12 +7,12 @@ pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (herita
 check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`, the handoff of run 2350 (length shrinks) at `0ed8f69`, the handoff of run 0050 (census) at `3b90c0a`, the handoff of run 0420 (the standard world) at `fdf323f`).
 
 **Current slice (autorun run 20261007-0820, build; started 08:20 UTC): priority 15, the recognition web.** Goal: a
-`web:` census line in every pair world (recognition classes: held kinds joined when a seed site of one takes the root
-of the other; links: a held kind's attach side or seed site binding an attach side in another class; cheats: kinds
-offering no seed site that takes a root of their class), then the standard world at 3x (`PAB=3000 PAS=87`, seeds 1-4,
+`web:` census line in every pair world (recognition classes: held kinds that raise one another's buds, a seed site
+of one taking the root of the other; links between classes: one raises the other's kind, or a front catches its parts;
+cheats: kinds raised by a class that raise none of their raisers), then the standard world at 3x (`PAB=3000 PAS=87`, seeds 1-4,
 240k) with web timelines: does the web grow or saturate? Done when the census is in and `world` still passes, and 4
 worlds have a timeline with the answer recorded. Stop there; no rule change.
-Running (08:55 UTC, about an hour, then rerun any that are missing): the 3x standard world, stocks scaled with the
+Running (started 08:40-08:47 UTC, about an hour; rerun any that are missing): the 3x standard world, stocks scaled with the
 area, `for n in 1 2 3 4; do PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair $n 240000
 runs/x3$n > runs/x3$n.txt; done` (in parallel; `grep '^web' runs/x3*.txt`). The `web:` census is committed on branch
 `claude/build-0820-web`.

@@ -549,21 +549,25 @@ function demo(name,seed=1,steps,dir='runs',extra){
         return `individuals ${n} kinds ${ks.length} held ${held.length} longestHeld ${lg} growing ${grow} single ${one} holdingOther ${hold}${top?` (${top[1]}x ${top[0]})`:''} | ${ks.slice(0,4).map(([k,v])=>v+'x '+k).join(', ')||'-'}`;};
       // recognition web (every pair world with PAP; observation only; build run 20261007-0820), from the held kinds of the
       // census above (5 or more complete individuals): per kind its roots (glues of '&' sides that bound a seed site, now or
-      // before their release), its seed sites (glued sides that are not attach, close-only or copy sides) and its attach sides ('@'
-      // without '&': fronts and the parts' attach sides). A class joins the kinds where a seed site of one takes the root
-      // of another (complementary glues): kinds that raise one another's buds. A link joins two classes where an attach side
-      // or a seed site of a kind in one binds an attach side of a kind in the other (a front that catches the other class's
-      // parts). A cheat offers no seed site that takes a root of its own class. 'web:' line after each census; end line
-      // 'web:' (second half: most classes, links and cheats at once)
-      const wEnd={maxC:0,maxCAt:0,maxL:0,maxLAt:0,maxX:0,n:0,sumC:0,sumL:0},web=(t,held)=>{const H=held.map(([k,n])=>({k,n,...(wk.get(k)||{r:new Set(),y:new Set(),a:new Set()})})),P=H.map((_,i)=>i),f=i=>P[i]===i?i:(P[i]=f(P[i]));
-        const meets=(A,B)=>{for(const q of A)if(B.has(comp(q)))return true;return false;};
-        for(let i=0;i<H.length;i++)for(let j=0;j<H.length;j++)if(i!==j&&meets(H[i].y,H[j].r))P[f(i)]=f(j);
-        const C=new Map();H.forEach((h,i)=>{const r=f(i),o=C.get(r)||{ks:[],n:0,r:new Set(),x:0};o.ks.push(h);o.n+=h.n;for(const q of h.r)o.r.add(q);C.set(r,o);});
-        for(const o of C.values())for(const h of o.ks)if(!meets(h.y,o.r))o.x++;
-        const lk=new Set();for(let i=0;i<H.length;i++)for(let j=0;j<H.length;j++){const a=f(i),b=f(j);if(a<b&&(meets(H[i].a,H[j].a)||meets(H[i].y,H[j].a)||meets(H[j].y,H[i].a)))lk.add(a+','+b);}
-        const name=o=>[...o.r].map(gname).sort().join('')||'-',cs=[...C.values()].sort((a,b)=>b.n-a.n),X=cs.reduce((a,o)=>a+o.x,0),big=cs[0];
-        if(t>steps/2){wEnd.n++;wEnd.sumC+=C.size;wEnd.sumL+=lk.size;if(C.size>wEnd.maxC){wEnd.maxC=C.size;wEnd.maxCAt=t;}if(lk.size>wEnd.maxL){wEnd.maxL=lk.size;wEnd.maxLAt=t;}wEnd.maxX=Math.max(wEnd.maxX,X);}
-        console.log(`web: t=${t} held ${H.length} classes ${C.size} links ${lk.size} largest ${big?big.ks.length:0}/${big?big.n:0} cheats ${X} | ${cs.slice(0,5).map(o=>`${name(o)} ${o.ks.length}/${o.n}${o.x?' x'+o.x:''}`).join(', ')||'-'} | ${[...lk].map(w=>{const [a,b]=w.split(',').map(Number);return name(C.get(a))+'-'+name(C.get(b));}).join(' ')||'-'}`);};
+      // before their release), its seed sites (glued sides that are not attach, close-only or copy sides) and its attach
+      // sides ('@' without '&': fronts and the parts' attach sides). A kind raises another when a seed site of the one takes
+      // the root of the other (complementary glues). A class is a set of kinds that raise one another's buds (a strongly
+      // connected component with a cycle, a kind raising its own kind included); a cheat is a held kind in no class (it is
+      // raised but raises none of its raisers), counted with the first class that raises it. A link joins two classes where
+      // a kind of one raises a kind of the other ('>'), or an attach side or seed site of a kind of one binds an attach side
+      // of a kind of the other ('~': a front that catches the other class's parts). 'web:' line after each census
+      // (classes by size: roots, kinds/individuals, cheats); end line 'web:' (second half: most classes, links, cheats)
+      const wEnd={maxC:0,maxCAt:0,maxL:0,maxLAt:0,maxX:0,n:0,sumC:0,sumL:0},web=(t,held)=>{const H=held.map(([k,n])=>({k,n,...(wk.get(k)||{r:new Set(),y:new Set(),a:new Set()})})),n=H.length;
+        const meets=(A,B)=>{for(const q of A)if(B.has(comp(q)))return true;return false;},E=H.map(a=>H.map(b=>meets(a.y,b.r))),Q=E.map(r=>r.slice());
+        for(let k=0;k<n;k++)for(let i=0;i<n;i++)if(Q[i][k])for(let j=0;j<n;j++)if(Q[k][j])Q[i][j]=true;
+        const cl=new Int32Array(n).fill(-1),C=[];for(let i=0;i<n;i++){if(!Q[i][i]||cl[i]>=0)continue;const o={ks:[],n:0,r:new Set(),x:0,id:C.length};
+          for(let j=0;j<n;j++)if(Q[i][j]&&Q[j][i]){cl[j]=o.id;o.ks.push(H[j]);o.n+=H[j].n;for(const q of H[j].r)o.r.add(q);}C.push(o);}
+        let X=0,X0=0;for(let j=0;j<n;j++){if(cl[j]>=0)continue;X++;const i=H.findIndex((_,i)=>cl[i]>=0&&E[i][j]);if(i>=0)C[cl[i]].x++;else X0++;}
+        const lk=new Map(),pr=new Set();for(let i=0;i<n;i++)for(let j=0;j<n;j++){const a=cl[i],b=cl[j];if(a<0||b<0||a===b)continue;
+          if(E[i][j]){lk.set(a+'>'+b,[a,'>',b]);pr.add(Math.min(a,b)+','+Math.max(a,b));}if(a<b&&(meets(H[i].a,H[j].a)||meets(H[i].y,H[j].a)||meets(H[j].y,H[i].a))){lk.set(a+'~'+b,[a,'~',b]);pr.add(a+','+b);}}
+        const name=o=>[...o.r].map(gname).sort().join('')||'-',cs=C.slice().sort((a,b)=>b.n-a.n),big=cs[0];
+        if(t>steps/2){wEnd.n++;wEnd.sumC+=C.length;wEnd.sumL+=pr.size;if(C.length>wEnd.maxC){wEnd.maxC=C.length;wEnd.maxCAt=t;}if(pr.size>wEnd.maxL){wEnd.maxL=pr.size;wEnd.maxLAt=t;}wEnd.maxX=Math.max(wEnd.maxX,X);}
+        console.log(`web: t=${t} held ${n} classes ${C.length} links ${pr.size} largest ${big?big.ks.length:0}/${big?big.n:0} cheats ${X}${X0?` (${X0} unraised)`:''} | ${cs.slice(0,5).map(o=>`${name(o)} ${o.ks.length}/${o.n}${o.x?' x'+o.x:''}`).join(', ')||'-'} | ${[...lk.values()].map(([a,s,b])=>name(C[a])+s+name(C[b])).join(' ')||'-'}`);};
       // two kinds: per kind its types, individuals (attached last cells), held, free parts, copies; extinction times
       // (counted 50 steps before the line: between two decay steps)
       let duoO=null;const DK2=K2?[{name:'pair',T:[cR,cS]},{name:'strip',T:K2.types.map(canon)}].map(k=>({...k,last:k.T[k.T.length-1],set:new Set(k.T),c0:0,ext:0,sum:0,m:0})):[],duoCount=()=>{
