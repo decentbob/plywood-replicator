@@ -28,6 +28,46 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Recognition classes merge; completion is optional (build run 20261007-0820, 2026-10-07)
+
+Derived and measured (INNOVATIONS run 0820). Notes, not the user's words.
+- **What a class is, read from the world.** A kind *raises* another when one of its seed sites takes the other's root
+  (the `&` side that bound it). Recognition joins kinds in both directions only where they raise each other, so a class
+  is a strongly connected set of the "raises" graph (the first census joined kinds by any binding and every world read
+  as one class: a single kind that raises both sides bridges them). Between classes a link is one-way (a class whose
+  sites raise another's heads: a nursery) or a catch (a front of one binding parts of the other). A cheat is raised and
+  raises none of its raisers: the plain catcher, and any head whose seed site lost its letter.
+- **Why the web stays at one class.** Every stock part carries `z` (stocks are exempt from the mutagen), so every
+  individual that holds one raises the Z class. A catcher individual is two heads, and either may be its root (a catcher
+  head catching a host head, or a waiting host head catching a catcher head as its part), so a kind of catchers is
+  raised by both letters. A new private class (an attach letter and the seed letter that takes it, both changed) stays
+  separate only while none of its kinds holds a stock part or a host head with a `z` site and no host offers its
+  letter. Measured: 1 class at every census in 3 of 4 worlds at 1x; a private class in 1 of 4 (5 of 48 censuses); at 3x
+  a private class in 4 of 4 (catchers s, x, C, and once a host that put its own seed letter `b` on its head), each
+  merged into the host class within 15-45k. The web does not grow; it saturates at one class whose kinds turn over,
+  with cheats from 1 to 20. Predicted (at most 2 classes, 0-1 links; NEXT before the runs), right in shape.
+- **Completion is optional in the core.** A head lets go of its parent's seed site only when it hears no open signal,
+  so a head whose front catches nothing stays on its site. Contact copying still copies it (every attached triangle's
+  free sides), its copies take the seed sites of the chain, and the hazard splits chains (a hit lyses one individual,
+  and a never-released head is an individual of one cell). Growth plus splitting reproduces it with one blank per cell
+  and no catch: the lowest R* for blanks (run 1150's rule). At 3x, 3 of 4 standard worlds ended this way between 180k
+  and 205k (blanks 20-50 of 3000; chains `X@&i@!x`, rosettes of `C@&c@z@!` whose open `z@!` sides lyse the host heads
+  they catch); run 0621's 3x flow world ended the same way (rosettes and arcs). At 1x the same mutants are 3x rarer and
+  none took over by 240k. The hazard per individual (run 0420) does not stop it: a chain of n one-cell individuals is hit
+  n times, but each hit makes two chains.
+- **The whole body as the hazard's unit (`PAHU=3`, a labelled drive).** If a hit lyses the hit individual's whole body,
+  joints included, a chain of n heads is hit n times as often and dies whole each time: it cannot split, so it cannot
+  multiply. What it costs: a parent carrying a waiting bud is hit twice as often and loses both. So it pays to raise
+  nobody: the plain catcher (a cheat, no seed site, never carrying a bud) outnumbers its hosts 2-3 to 1.
+  Measured at 3x: complete individuals in 4 of 4 worlds to 240k (1 of 4 with the hazard per individual), and one world
+  held two or three classes for most of its second half, splitting and merging. It also kills more (about half the
+  individuals), so its effect is not yet separated from a harsher hazard.
+- **What this asks for.** Complexity in this world has two enemies found so far: kinds that raise nobody (cheats,
+  favoured whenever raising costs) and heads that never let go (favoured whenever splitting a body is a birth). The
+  whole-body hazard removes the second at the price of feeding the first. A web of several classes needs a seed letter
+  a class can own: a stock part with a private seed site (a prepared start) or a host that carries its own seed site
+  on a copied cell (the B host at 3x, seed 3: `B@&c@|b`, which then replaced the Z class).
+
 ## A bud gets one part by place and the rest by recognition; a catcher arms its host's diet (explore run 20261007-0622, 2026-10-07)
 
 Derived first, then checked (INNOVATIONS run 0622). Notes, not the user's words.
