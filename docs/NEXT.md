@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-1351, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-1720, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,21 +10,26 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-1351, build).** Priority 17 done (INNOVATIONS run 1351, IDEAS "The whole body
-as the hazard's unit"): **the standard world (`PAW=1`) now uses the whole-body hazard at h 0.07** (`PAHU=3 PAH=0.07`;
-before: `PAHU=2 PAH=0.1`). It holds at 1x and 3x (4 of 4 each, 240k, no chains); the hazard per individual at matched
-strength (h 0.15) still collapses into chains (3x: 2 of 4 by 240k, a third collapsing; 1x: 1 of 4); the whole body at
-0.1 was too harsh at 1x (catchers replace hosts, 1 of 4 extinct). Every `PAW=1` check was rerun: `world`, `web-two`,
-`web-two-c`, `catcher-free`, `catcher-free-c` pass; `arc-root` and its control now pin `PAHU=2` (the whole body leaves
-7-29 arcs at 30k: a bud waiting for three catches dies with its parent). No other check uses `PAW=1`, so the rest of
-the suite is unchanged by construction. Old-standard runs: add `PAHU=2 PAH=0.1`. The run's worlds are not kept
-(regenerate: INNOVATIONS run 1351, Commands). Nothing is running.
+**Handoff status (autorun run 20261007-1720, explore).** Priority 18 done (INNOVATIONS run 1720, IDEAS "A class is
+a cycle of seed letters"); no rule or demo change. **A class owns its seed letter when its head's copy side is its seed
+site** (`N@&k@|n`: the copies root in place) **and its stock part carries no site** (`K@-|-|`): entered into the
+standard world it is a second class beside the host class in 4 of 4 (new checks `own-letter` 4 of 4, `own-letter-c`
+pass). On the shared stock `C@-|z|` it merges (separate in 1 of 4: the stock part's `z` raises the host class and
+catchers holding N heads close the cycle). The n class of 1x seed 3 is this kind arisen by mutation without stock.
+**But owning letters does not make the web grow** (both predictions wrong): private stock letters gave no second class
+(0 of 4, 240k) and the site-free world (every class owns its letters) one class at every census of the second half (4 of
+4, one extinct): new private classes arise in two steps through a neutral site change and replace the old one on the
+same stock. Classes are at most the separate foods. Also found: a waiting head's open front is a nursery for any part
+with the complementary root (the census reads such kinds as unraised cheats). The run's worlds are not kept
+(regenerate: INNOVATIONS run 1720, Commands; about 7 minutes per 120k). Nothing is running.
 
-**Next step (rotation 67, explore): priority 18**, a class that owns its seed letter. Start from the one that arose by
-mutation under the new standard: `PAW=1 node tri/demos.js pair 3 240000 runs/x` (about 16 minutes), an e-diet host with
-seed letter `n` (`E@Nn@&` holding `Z@&e@t`), two classes for most of the second half (`grep '^web' runs/x.txt`); look
-at what it is, whether it holds in other seeds when entered (`PA1T`/`PAEN`/`PAKR`/`PAKS`), then the other candidates
-below.
+**Next step (rotation 68, build): priority 19**, kinds as food. The web can outgrow the number of stocks only if kinds
+are food for kinds. Start from check `web-two` (u catchers `U@&C@|u` entered into the standard world: 2 classes, one
+link; the u copy side is its in-place seed site). Theory first: what a third level can eat (u catcher heads root in
+place and seldom reach the pool; the u individual's exposed sides are `u` and its held host head's `-`), design one
+(a front that catches a part the second level makes in surplus, an in-place seed letter of its own), predict, then
+enter it (`PA1T`, `PAEN`) and read the web (3 classes, 2 links?). If no third level can be fed, record why. Optional
+in the same run: the web census could count open fronts as seed sites (observation only).
 
 ## Direction and priorities
 
@@ -41,15 +46,16 @@ individuals (0050); 13 the standard world `PAW=1` (0420; `world`); 14 host and c
 4-cell arc (0622; `catcher-free`, `diets-catcher`, `arc-root`); 15 the recognition web does not grow; at 3x the
 standard world collapses into heads that never let go (3 of 4), the whole-body hazard `PAHU=3` holds (4 of 4) (0820;
 `web-two`); 16 the pair demo's options pruned (1051); 17 the whole-body hazard at h 0.07 is the standard world's
-(1351; `world`, `arc-root` pins `PAHU=2`). Open:
-18. [67 explore] Candidates: a class that owns its seed letter (a host whose head carries its own seed site, as the B
-    host at 3x seed 3, or the n host of the new standard world at 1x seed 3; or a stock part with a private seed letter), a kind that pays for length through cheaper catches
-    (IDEAS run 0622), a longer kind whose function is in what binds, or (t).
+(1351; `world`, `arc-root` pins `PAHU=2`); 18 a class that owns its seed letter: in place, on a site-free stock;
+it does not make the web grow (1720; `own-letter`). Open:
+19. [68 build] Kinds as food: a catcher class of its own letter on a host class, and a third level (Next step above).
+20. [69 explore] Candidates: a kind that pays for length through cheaper catches (IDEAS run 0622), a longer kind whose
+    function is in what binds, (t), or a third food that kinds make for one another.
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 1851: the mix fits the order above):
-66 build, 67 explore, 68 build, 69 explore, 70 review-intent, 71 core-review, 72 build, 73 harden.
+68 build, 69 explore, 70 review-intent, 71 core-review, 72 build, 73 harden, 74 build, 75 explore.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an
@@ -98,6 +104,10 @@ PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js p
                                                    # world prints 'web:' lines (classes, links, cheats) after each 'kinds:' line
 PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' node tri/demos.js pair 1 30000 runs/x   # two classes: u catchers
                                                    # entered (check web-two; about 1.5 minutes; plain catchers PAKR='Z@&C@|-': web-two-c)
+PAW=1 PA1T=20000 PAEN=10 PAKR='N@&k@|n' PAKS='K@-|-|' PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150 K@-|-|:150' node tri/demos.js pair 1 50000 runs/x
+                                                   # a class that owns its seed letter (check own-letter; about 2.5 minutes): an
+                                                   # in-place seed site on a site-free stock; on the shared stock (PAKR='N@&c@|n'
+                                                   # PAKS='C@-|z|', PAF unset; own-letter-c, seed 2) it merges with the host class
 PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
                                                    # without stock (check catcher-free; 45 s); diets world with catchers entered:
                                                    # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)
