@@ -6,6 +6,16 @@ this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction o
 pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`, the direction
 check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`, the handoff of run 2350 (length shrinks) at `0ed8f69`, the handoff of run 0050 (census) at `3b90c0a`).
 
+**Current slice (explore run 20261007-0622, priority 14; in progress).** Host and catcher by theory, then runs; then a
+function only a longer body has. Goal: (a) predict and test whether the evolved catchers with a seed site of their own
+(`C@zZ@&`, `C@|uU@&`, each holding a copied host head) are free-living kinds (founded alone in a world without stocks)
+and whether catchers drive diet switching in their hosts (a Red Queen; prediction: no, seed sites are shared and diet-
+blind); (b) derive what contact copying can deliver in place (which cells of a bud can be its parent's own copies) and
+build the smallest kind that delivers one in place, a 4-cell arc whose root copy is born beside its own seed site;
+measure its root's parental share against the pair's 0.39 and test whether it resists a seed-site parasite. Done when
+(a) has a verdict from 4 worlds per setting and (b) a measured share and a 4-world test, or a recorded reason why not.
+Stop at a design argument for (b) if the arc cannot reproduce on its own. No rule change planned.
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
