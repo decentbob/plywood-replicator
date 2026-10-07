@@ -1,32 +1,38 @@
 # Next instance: start here
 
-State on 2026-10-06 (after autorun run 20261006-1920, core-review). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261006-2350, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`, the direction
-check of run 1851 at `e63366e`).
+check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261006-1920, core-review).** Priority 10 done with one core change: **the open signal
-stops at `&` joints** (a bud and its parent no longer hear each other; lysis already stopped there) and **a part caught
-with an open front emits in the pass it binds** (candidate (o)). Case, grid and suite diff in RULES Core changes
-("Candidate (o) with the joint"); evidence in INNOVATIONS (run 1920). In short: on main a k-cell strip needed openRange
-about k (smaller: roots let go half built) and a large range stalled 4- and 5-cell kinds (parents held by their buds);
-now openRange 120 buds 2- to 5-cell strips with every release complete (new demo `strip`, `structures.strip(k)`, check
-`strips` 4 of 4). Suite 34 of 34 (plus `strips`), every changed world explained; the pair-family checks pass at
-openRange 120. **What the range still does:** a body of 3 or more cells lets go about openRange passes after its last
-part binds (the signal echoes and fades one per pass), so at 120 the duo worlds' 3-cell strips are weaker than at 3
-(`duo-stock-hi` 3 of 4). The demos keep their own ranges (pair 1, duo and diets 3, lineage 9 and 50, imprint 1); for
-priority 11 use a small range that exceeds the longest kind expected (e.g. 9: delay about 8, lengths up to 10).
-Under the full mutagen (priority 11, `PAMF` off) a part that gains `&` on an inner side splits its body at that bond
-(independent review, RULES). Not changed: the lineage's incomplete root releases (`falseRel` in `budcycle-lysis`) are a different cause (they did
-not move). Tests 41 pass. Nothing is running.
+**Handoff status (autorun run 20261006-2350, build).** Priority 11 done as **a clear negative with its reason**, no
+rule change (INNOVATIONS run 2350; theory in IDEAS "Joints make individuals"). (a) **The z kind was never a 3-cell
+kind**: a z front catches a head by its `&` side, a joint; since run 1920 the caught head leaves as an ordinary 2-cell
+individual once it has its stock (a z head is a seed site one cell further out). On main: 0 of 4 a..z worlds at
+openRange 9 (120k) and 0 of 1 at 3; run 1750's code holds 27 (what it counted were z heads holding waiting heads).
+(b) **Under the mutagen on every glue** the diets world collapses (4 of 4: stocks drain because stock parts mutate and
+decay; one world dies, three end as self-catching and `&`-less chains or anchorless variants). (c) **Length needs
+middles** (plain attach side, front, copy side); the slice built the ladder world (`Z@&c@|- C@e@|- E@-|z|`, stocks E
+and G, front mutagen): **the 2-cell shortcut (head catching the stock) replaces the 3-cell founder in 4 of 4 worlds**
+(new check `ladder`); longer chains arise by one mutation but never hold. Controls without the mutagen agree (2 of 2),
+and two designs meant to make the third cell pay failed for reasons now in IDEAS (a middle has one free side).
+New: a `kinds:` census line in diet worlds (front letters per individual, cells per individual). The user asked
+(2026-10-07, IDEAS and AGENTS): more theory, concepts and structures designed ahead of need, not only small tested
+changes. Still true from run 1920: openRange is a completion delay for bodies of 3+ cells (about openRange passes;
+use a range just above the longest kind, e.g. 9); the lineage's `falseRel` has another cause. Tests 41 pass. Nothing
+is running.
 
-**Next step (rotation 60, build): priority 11, the z kind and length by mutation** (below), at openRange 9 or so.
+**Next step (rotation 61, harden): priority 12**, the kinds census in every pair world (extend this run's `kinds:`
+line beyond diet worlds: kinds by body composition, how many hold 5 or more, the longest body held, kinds holding
+another kind's parts) and suite time. Then 62 build (one standard world) and 63 explore, where this run proposes
+**a function only a longer body has** (IDEAS "Joints make individuals", candidates 1-4; first choice: heredity by
+construction in a 4-cell arc, designed from part types up before any batch).
 
 ## Direction and priorities
 
@@ -54,7 +60,8 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
     every changed outcome explained). Done when one range is shown to bud strips of 2 to 5 cells, with or without (o),
     and the pair-world checks can run at it (or the reason they cannot is recorded). Why first: priority 11 asks
     whether longer kinds evolve, and in a world tuned for one length the answer would be the parameter's.
-11. [60 build] **The z kind and length by mutation** (candidate (a) of run 1750). In the diets world with the a..z
+11. Done, negative (run 2350, check `ladder`): length shrinks to the 2-cell shortcut; the z kind was a nursery (above).
+    Was: [60 build] **The z kind and length by mutation** (candidate (a) of run 1750). In the diets world with the a..z
     mutagen at one range (run 1920: any openRange above the longest kind's length; the delay grows with it, so about 9): what limits the z kind (other diets' free roots, seed sites, its own copies), do z
     chains of 4 or more cells complete and persist; and the same world with the mutagen on every glue (`PAMF` off): do
     diets and z survive, or does it collapse to aggregators as run 0621 did? Check: a kind of 3 or more cells that arose
@@ -64,9 +71,10 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
     time (follow-up below: the frozen lineage's checks to fewer seeds).
 13. [62 build] **One standard evolving world**: the settings 10 and 11 need with the fewest drives (one hazard rule,
     one mutagen, blanks and stocks), made the default for later pair slices and checks, so results add up in one world.
-14. [63 explore] **Grown instead of prepared resources**: the stocks are the prepared structure doing most work now.
-    Candidate (t) (a copy side that reads glue: a blank type only some kinds copy) or kinds that live on kinds alone
-    (the z route without stocks), chosen by 11's result.
+14. [63 explore] **A function only a longer body has** (run 2350: without one, length shrinks; IDEAS "Joints make
+    individuals", candidates 1-4: heredity by construction in a 4-cell arc first), or **grown instead of prepared
+    resources** (candidate (t), a copy side that reads glue). The z route to kinds that live on kinds is closed (the z
+    front catches joints).
 15. Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage).
 Not taken from run 1750's list: (b) diets of different length (more prepared stocks with fronts) and (c) more diets
 than blanks (run 1150's R* rule again); either may return inside 11 or 13.
@@ -137,6 +145,10 @@ PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=3 PAD=1 PAH=0.1 PA1=0 PA2='
                                                    # heritable diets (check diets; about 5 minutes): PAMF=1 the mutagen on front
                                                    # glues only (letters PAMA, a..z), 'diet:' lines and a diets picture; PAM=0.02
                                                    # without PAMA: the a..z mutagen (z fronts eat other kinds' roots)
+PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=9 PAD=1 PAH=0.1 PA1=0 PA2='Z@&c@|- C@e@|- E@-|z|' PAMF=1 PAF='E@-|z|:150 G@-|z|:150' PAM=0.02 node tri/demos.js pair 1 60000 runs/x
+                                                   # the ladder world (check ladder; about 5 minutes): a 3-cell founder with a
+                                                   # copied middle; 'kinds:' lines (front letters per individual, cells per
+                                                   # individual; in every world with diets, or the mutagen and stocks)
 PAHB=2 PAB=1000 PAS=50 PAHT=1000 PAD=1 PAHU=1 PAP=2000 PAH=0.3 PADI=10 PAV=mix PAVP=0.1 PAVK=parasite PAVT=20000 node tri/demos.js pair 1 40000 runs/x
                                                    # heredity by locality (check pair-host; about 2 minutes): PAPS=1 'par:' lines
                                                    # (parental share), PAV=link two-marker linkage, PAVK=parasite/selfish S variants,

@@ -18,6 +18,63 @@ variation that changes what is built**: today the strand (`aAaA`) is copied but 
 kit is inherited by contact copying of the parent's parts, with no variant that copies itself; (3) **selection**:
 variants competing for the same blanks, so the ones that copy faster or waste less take over.
 
+## Think as much as test: concepts and prepared structures, small to big (user, 2026-10-07)
+
+The user, during autorun run 20261006-2350: "Btw in general i think a lot more progress can be made often by
+theorizing and think, not only small changes and many tests to try them out in practice. Much gain is new concepts or
+ways to think about something. Thinking about and already preparing new structures (from tiny building pieces to large
+ones with complex mechanisms). From small to big picture, practice and theory, some runs are needed for both."
+So a slice should spend real effort on the idea before the batch: name the concept that explains a result (what makes
+an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
+single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
+
+## Joints make individuals; the shortcut makes length shrink (build run 20261006-2350, 2026-10-07)
+
+Derived from the rules first, then checked (INNOVATIONS run 2350). Notes, not the user's words.
+- **An individual is what lies between joints.** The open signal stops at `&` joints, and an `&` side lets go once its
+  triangle hears nothing. So any part caught by its `&` side becomes an individual of its own as soon as its own fronts
+  are filled, whatever caught it. A body grows longer only by parts caught by a plain attach side (`X@`, no `&`); and a
+  part is copied only if, once attached, it still exposes a side that is neither bonded nor an anchor. So the cells of a
+  kind are of three sorts: a **head** (`Z@&` attach side, a front, a copy side), **middles** (plain attach side, a front,
+  a copy side) and an **end** (plain attach side, no front; a stock part, or a copied end with an open side).
+- **The z kind was never a 3-cell kind.** In the diets world every copied part is a head; only the stock parts have a
+  plain attach side, and they have no front. So a front mutation changes what an individual eats, never its length. The
+  z front catches heads by their joint side: on a parent's seed site a z head is a seed site one cell further out (a
+  nursery), and what it catches leaves as an ordinary 2-cell individual. Before run 1920 the parent heard the bud
+  across the joint and waited, so z heads were seen holding waiting heads (the diet census counted them as complete);
+  the end state of run 1750's long world shows exactly that (z head on a stock part, its front holding a head whose own
+  front is open). Since run 1920 the caught head leaves at once and the z kind is gone (0 of 4 worlds at openRange 9;
+  0 of 1 at openRange 3, where run 1750's code holds 27).
+- **Given middles, length changes by one mutation, and the shortcut wins.** For every chain head -> middles -> stock
+  part there is a 2-cell kind one front mutation away (the head's front takes the stock part's letter) that eats the
+  same stock with fewer parts per birth and fewer catches before it lets go. Where the stock limits, the shortcut
+  completes first and takes the stock: a 3-cell founder is replaced by its 2-cell shortcuts in 4 of 4 worlds by 40-60k
+  (check `ladder`), also without the mutagen (founded beside the shortcut, 2 of 2). Middles whose fronts mutate to an
+  unstocked letter wait forever on seed sites and clog them (one world nearly died of it at 40k).
+- **So length needs a reason, not a mechanism.** The mechanism exists (middles, one mutation). What is missing is a
+  thing that only a longer body can do. Not enough: a private stock that a middle catches (a head front can mutate to
+  the same letter); a second seed site on a middle (tried: `C@e@|z`, lost in 2 of 2, because every kind's head binds
+  every `z` seed site, so the extra site raises the shortcut's buds as often as its own); food without a seed site, so
+  that the shortcut is sterile and the seed must sit on a middle (tried: `Z@&c@|- C@e@|z E@-|-|`, dies within 10k in
+  2 of 2). **A middle has one free side** (attach, front, and one more): its seed site is then also its only copy
+  site, a waiting bud on it stops the copies of the very middle the bud needs, and the kind deadlocks. An end has two
+  free sides (the pair's S: a copy side and a seed site), so a kind's seed belongs on its end, and the end of a stock
+  kind is the stock part. Candidates, from small to large, for a later slice:
+  1. *Something a head front cannot reach:* a resource caught only where two cells of one body meet (a part bonded by
+     one side and then closing flush onto a second cell); the shortcut has no second cell to close onto.
+  2. *Heredity by construction* (IDEAS parity, run 1322): four or more cells in an arc round one vertex, so copies made
+     inside the arc are within reach of the body's own fronts: length buys parts made where they are used, and with
+     them resistance to cheats and mutants (s near 1). The first function in this world that needs a minimum length.
+  3. *Private seed letters:* a kind whose seed sites take only its own heads (`y` sites, `Y@&` heads) keeps its buds,
+     so its shortcut (a `Z@&` head) cannot be born on its sites. Two mutations (head attach glue and seed glue
+     together) make such a kind, so it is a prepared start, and its stock part must carry its letter.
+  4. *Copied ends:* an end that is copied (`D@-z|`, the duo strip) needs no stock, so a kind of copied cells only eats
+     blanks; its shortcut is the head alone, which has no end and cannot bud. Length 2 or more is then forced by the
+     need for an end, and the question becomes what a third cell adds (run 1150: nothing, the pair wins).
+- **The full mutagen** (every glue and mark, `PAMF` off) collapses the diets world: stock parts mutate and decay, the
+  stocks drain within 30k, and heads that mutate to catch their own kind (`C@&c@|-`) make stockless chains, the
+  aggregators of run 0621 (details in INNOVATIONS).
+
 ## After nine slices on the pair: one world, one range, one measure, then longer kinds by mutation (direction check, review-intent run 20261006-1851, 2026-10-06)
 
 Weighed after priority 9 (runs 2320-1750 on the pair; candidates (a) the z kind, (b) diets of different length,
