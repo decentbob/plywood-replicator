@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-1051, cleanup). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-1351, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,16 +10,21 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-1051, cleanup).** Priority 16 done, no capability or rule change (INNOVATIONS
-run 1051). Every pair and strip check (34, 117 worlds) passes and prints byte for byte main's output, apart from the
-parasite worlds' `par:` and `parental:` lines, which lost their always-zero selfish columns. New `tri/batch.js`: a
-batch of demo worlds from a JSON file, at most 4 processes, an output file and picture directory per world (no shell
-quoting of glue strings). NEXT, ROADMAP's backlog A: done priorities condensed. Nothing is running.
+**Handoff status (autorun run 20261007-1351, build).** Priority 17 done (INNOVATIONS run 1351, IDEAS "The whole body
+as the hazard's unit"): **the standard world (`PAW=1`) now uses the whole-body hazard at h 0.07** (`PAHU=3 PAH=0.07`;
+before: `PAHU=2 PAH=0.1`). It holds at 1x and 3x (4 of 4 each, 240k, no chains); the hazard per individual at matched
+strength (h 0.15) still collapses into chains (3x: 2 of 4 by 240k, a third collapsing; 1x: 1 of 4); the whole body at
+0.1 was too harsh at 1x (catchers replace hosts, 1 of 4 extinct). Every `PAW=1` check was rerun: `world`, `web-two`,
+`web-two-c`, `catcher-free`, `catcher-free-c` pass; `arc-root` and its control now pin `PAHU=2` (the whole body leaves
+7-29 arcs at 30k: a bud waiting for three catches dies with its parent). No other check uses `PAW=1`, so the rest of
+the suite is unchanged by construction. Old-standard runs: add `PAHU=2 PAH=0.1`. The run's worlds are not kept
+(regenerate: INNOVATIONS run 1351, Commands). Nothing is running.
 
-**Next step (rotation 66, build): priority 17**, the whole-body hazard at 1x and matched (below). The previous run's
-3x worlds are not kept; regenerate with the 3x command below (about 70 minutes each, `PAHU=3` for the whole body), or
-as a batch: `tri/batch.js` with `{"demo":"pair","steps":240000,"env":{"PAW":"1","PAB":"3000","PAS":"87","PAF":"C@-|z|:450
-E@-|z|:450 G@-|z|:450","PAHU":"3"},"jobs":[{"id":"y3","seeds":[1,2,3,4]}]}`.
+**Next step (rotation 67, explore): priority 18**, a class that owns its seed letter. Start from the one that arose by
+mutation under the new standard: `PAW=1 node tri/demos.js pair 3 240000 runs/x` (about 16 minutes), an e-diet host with
+seed letter `n` (`E@Nn@&` holding `Z@&e@t`), two classes for most of the second half (`grep '^web' runs/x.txt`); look
+at what it is, whether it holds in other seeds when entered (`PA1T`/`PAEN`/`PAKR`/`PAKS`), then the other candidates
+below.
 
 ## Direction and priorities
 
@@ -35,14 +40,10 @@ individual (1620; `duo-stock`); 9 heritable diets (1750; `diets`); 10 one openRa
 individuals (0050); 13 the standard world `PAW=1` (0420; `world`); 14 host and catcher, what place delivers, the
 4-cell arc (0622; `catcher-free`, `diets-catcher`, `arc-root`); 15 the recognition web does not grow; at 3x the
 standard world collapses into heads that never let go (3 of 4), the whole-body hazard `PAHU=3` holds (4 of 4) (0820;
-`web-two`); 16 the pair demo's options pruned (1051). Open:
-17. [66 build] **The whole-body hazard at 1x and matched.** `world` with `PAHU=3` (seeds 1-4, 120k and 240k), and at 3x
-    `PAHU=2` at a higher h that leaves as many individuals as `PAHU=3` at 0.1 (about 500-700): does the matched hazard
-    per individual still collapse? If `PAHU=3` holds at 1x and 3x and the matched one does not, make it the standard
-    world's hazard (`PAW=1`; every check that uses `PAW=1` rerun, changed outcomes explained). Cheats then outnumber
-    hosts: say whether the web census still reads classes.
+`web-two`); 16 the pair demo's options pruned (1051); 17 the whole-body hazard at h 0.07 is the standard world's
+(1351; `world`, `arc-root` pins `PAHU=2`). Open:
 18. [67 explore] Candidates: a class that owns its seed letter (a host whose head carries its own seed site, as the B
-    host at 3x seed 3; or a stock part with a private seed letter), a kind that pays for length through cheaper catches
+    host at 3x seed 3, or the n host of the new standard world at 1x seed 3; or a stock part with a private seed letter), a kind that pays for length through cheaper catches
     (IDEAS run 0622), a longer kind whose function is in what binds, or (t).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
@@ -89,11 +90,11 @@ node tri/check.js [id ...] > runs/check.txt         # capability checks: one PAS
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (check world; about 7.5 minutes): the diet kind among stocks
-                                                   # C E G, openRange 9, PAHB=2, decay 1, PAHU=2 (hazard per individual, h 0.1),
+                                                   # C E G, openRange 9, PAHB=2, decay 1, PAHU=3 (whole body, h 0.07; run 1351),
                                                    # the general mutagen 0.01 (stock parts exempt); any option set overrides
                                                    # (PA1=1 adds the pair founder); 'kinds:' census lines, diets picture
 PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair 1 240000 runs/x   # the standard
-                                                   # world at 3x (about 70 minutes; PAHU=3: the whole-body hazard); every pair
+                                                   # world at 3x (about 50 minutes; PAHU=2 PAH=0.1: the old hazard); every pair
                                                    # world prints 'web:' lines (classes, links, cheats) after each 'kinds:' line
 PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' node tri/demos.js pair 1 30000 runs/x   # two classes: u catchers
                                                    # entered (check web-two; about 1.5 minutes; plain catchers PAKR='Z@&C@|-': web-two-c)

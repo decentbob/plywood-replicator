@@ -28,6 +28,27 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The whole body as the hazard's unit; the strength is a second knob (build run 20261007-1351, 2026-10-07)
+
+Measured (INNOVATIONS run 1351). Notes, not the user's words.
+- **Unit and strength are separate.** Two things changed at once in run 0820: the unit (the hit individual's whole
+  body) and, through it, the kill rate (about half the individuals). Matching the kill rate separates them. At 3x the
+  hazard per individual collapses into chains at the matched h 0.15 as at 0.1, and the whole body at a gentler 0.07
+  keeps as many individuals as the old standard (900-1300) with no chain. So the unit stops the chains: a chain hit
+  anywhere dies whole, so the hazard no longer splits it into two growing chains.
+- **Too strong a hazard is its own failure, at either unit.** At 1x the whole body at 0.1 lets plain catchers replace
+  the hosts and then starve (1 of 4 extinct, 2 of 4 lose their stock hosts), and the hazard per individual at 0.15
+  collapses into chains (1 of 4). A harsh hazard favours whatever pays least for it: kinds that carry no waiting bud,
+  and aggregates that multiply by being cut.
+- **What the whole body charges.** A body pays per individual it holds, and loses all of them: a parent with a waiting
+  bud pays twice, a 4-cell arc whose bud waits for three catches pays for the whole wait (7-29 arcs at 30k against
+  84-96 at h 0.03). So the whole body selects for short waits: buds that complete and let go soon. That fits the goal
+  of individuals that separate, and it taxes long kinds whose buds wait for many catches.
+- **For the next slices.** The standard world now has no growth of chains at either size, so a world can be run longer
+  and larger before its end state. Cheats still outnumber the class in most worlds; a class that owns its seed letter
+  (priority 18) arose once by mutation (1x seed 3: an e-diet host with seed letter `n`, two classes for most of the
+  second half).
+
 ## Recognition classes merge; completion is optional (build run 20261007-0820, 2026-10-07)
 
 Derived and measured (INNOVATIONS run 0820). Notes, not the user's words.
@@ -61,7 +82,8 @@ Derived and measured (INNOVATIONS run 0820). Notes, not the user's words.
   nobody: the plain catcher (a cheat, no seed site, never carrying a bud) outnumbers its hosts 2-3 to 1.
   Measured at 3x: complete individuals in 4 of 4 worlds to 240k (1 of 4 with the hazard per individual), and one world
   held two or three classes for most of its second half, splitting and merging. It also kills more (about half the
-  individuals), so its effect is not yet separated from a harsher hazard.
+  individuals), so its effect is not yet separated from a harsher hazard (separated in run 1351: the unit, not the strength;
+  see above).
 - **What this asks for.** Complexity in this world has two enemies found so far: kinds that raise nobody (cheats,
   favoured whenever raising costs) and heads that never let go (favoured whenever splitting a body is a birth). The
   whole-body hazard removes the second at the price of feeding the first. A web of several classes needs a seed letter
