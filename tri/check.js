@@ -127,6 +127,15 @@ const CHECKS=[
   {id:'diets-ns',cap:'  control: with only the founder\'s stock no mutant diet spreads',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:150,env:{...env,PAF:'C@-|z|:150'},
     pass:(L,o)=>{const r=res(o);if(!r)return [false,'no result'];return [r.held===1&&big(r)==='c',ev(r)];}},
   ];})(),
+  // run 20261006-2350 (build): length by mutation shrinks. A 3-cell founder whose middle is copied ('Z@&c@|- C@e@|-
+  // E@-|z|', openRange 9) among stocks E and G and the front mutagen (a..z): the founder fills its stock first, then
+  // 2-cell kinds whose root front catches a stock directly (one mutation: the shortcut) replace it; no individual of 3
+  // or more cells is left at 60k (IDEAS "Joints make individuals")
+  {id:'ladder',cap:'Length by mutation shrinks: from a 3-cell founder with a copied middle, 2-cell shortcut kinds (the root catching the stock) replace it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:300,
+    env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'0',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@e@|- E@-|z|',PAMF:'1',PAF:'E@-|z|:150 G@-|z|:150',PAM:'0.02'},
+    pass:(L,o)=>{const m=o.match(/kinds: endLong=\S+ maxLong=(\S+) longest=(\d+) endByCells=(\S+)/);if(!m)return [false,'no result'];const c={};for(const w of m[3].split(','))if(w.includes(':'))c[w.split(':')[0]]=+w.split(':')[1];
+      const f=(m[1].match(/(?:^|,)ce:(\d+)/)||[])[1]||0,long=Object.entries(c).filter(([k])=>+k>=3).reduce((a,[,v])=>a+v,0);
+      return [f>=50&&long<=5&&(c[2]||0)>=30,`founder held up to ${f}; at 60k ${c[2]||0} individuals of 2 cells, ${long} of 3 or more; longest ever ${m[2]} cells`];}},
   // run 20261006-0621 (build): a world that keeps evolving. pair-mut's setting plus a labelled drive: every lysed triangle
   // returns as a copy blank once free (PAHB=2), so material held by binding variants flows through copying at the
   // hazard's rate. Passes a world with bodies at 200k, at least 10k copies in the last 5000 steps and a variant type first

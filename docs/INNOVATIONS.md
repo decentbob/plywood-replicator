@@ -10,6 +10,52 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261006-2350, build)
+
+- **Length by mutation: it arises in one step and shrinks in one step; the z kind was a nursery, not a kind** — a clear
+  negative with its reason (NEXT priority 11; theory in IDEAS "Joints make individuals"). New check `ladder` (the
+  shortcut replaces a 3-cell founder, 4 of 4); no rule change.
+  - **Census.** Demo `pair` gains a `kinds:` line (worlds with diets, or with the mutagen and stocks): an individual
+    is the chain of fronts from a head (a part with an `&` side not caught by a front) through what it caught to the
+    part with no front; its kind is its front letters (`c`: head and stock part; `ce`: head, middle with front e, stock
+    part). Complete and incomplete individuals per kind, cells per individual, and a result line
+    (`kinds: endLong maxLong longest endByCells`). The `diet:` lines now also print without `PAMF` when the mutagen
+    and stocks are on. Other worlds' output is unchanged.
+  - **The z kind on main.** run 1750's a..z diets world at openRange 9 (seeds 1-4, 120k): three diets in every world
+    (second-half means 130-137 each), no complete individual of 3 or more cells ever, a few z heads holding a waiting
+    head (`zc`, `zg`: 1 at a census). At openRange 3, seed 2, 60k: no z on main; run 1750's code (`65b7e54`) holds z at
+    27 (second-half mean). Why: a z front catches a head by its `&` side, a joint; since run 1920 the caught head no
+    longer hears across it and leaves as an ordinary 2-cell individual once it has its stock, so a z head on a seed site
+    is only a seed site one cell further out. run 1750's end state (seed 2, 60k, old code) shows what was counted then:
+    z heads on stock parts whose fronts hold heads still waiting for their stock (the parent heard them and waited).
+  - **The full mutagen** (`PAMF` off, every glue and mark, PAM 0.02, openRange 9, 60k, seeds 1-4): the stocks drain
+    (stock parts mutate, are no longer stock and decay into blanks; free stock 0 by 30-45k in 3 worlds); diets e and g
+    are never held; world 1 dies out by 30k; worlds 2 and 3 end as heads mutated to catch their own kind (`C@&c@|-`) and
+    `&`-less copies of them (`C@c@|-`, middles made by one mark mutation) in chains with no stock part; while C stock
+    lasted, world 3 held complete chains of 3 to 6 cells (head, `&`-less middles, a C part; at most 6 individuals of one
+    kind); world 4 ends as anchorless variants (`Z@&T@ + D@&t@d`). Diets and z do not survive; the world collapses to aggregators as in run 0621.
+  - **The ladder world** (the slice's construction): a 3-cell founder whose middle is copied, `Z@&c@|- C@e@|- E@-|z|`,
+    stocks E and G (150 each), the front mutagen a..z (PAM 0.02), openRange 9. Without the mutagen it holds 144
+    (stock-limited, 1 world). With it, the founder fills its stock first (held up to 92-143), then 2-cell kinds whose
+    head front catches a stock directly (one mutation: the shortcut) replace it in 4 of 4 worlds by 40-60k (at 100k:
+    208-268 individuals, all of 2 cells). Length also grows by one mutation (a middle whose front catches middles:
+    `cce`, 4 cells; `czce`, 5), but never more than 1 individual at a census. Middles whose fronts mutate to an
+    unstocked letter wait on seed sites forever and clog them (world 4 fell to 8 complete individuals at 40k).
+  - **Controls, no mutagen:** the 3-cell kind founded beside the 2-cell shortcut `Z@&e@|- E@-|z|` on stock E: the
+    shortcut wins (2 of 2); with a seed site on the middle (`C@e@|z`) it loses faster (2 of 2: every head binds every
+    `z` site); with food that has no seed site (`E@-|-|`), so that the shortcut is sterile, the 3-cell kind deadlocks
+    (2 of 2: the middle's one free side is both its seed and its copy site).
+  - **Status:** not yet: no kind of 3 or more cells that arose by mutation holds 10 individuals in any world (0 of 4
+    in each setting). Reason (IDEAS): joints make individuals; length needs middles, and given middles a 2-cell
+    shortcut is one mutation away and eats the same stock with fewer parts. Length needs a function only a longer body
+    has (IDEAS lists four candidates; heredity by construction in an arc is the first that needs a minimum length).
+  - Picture: [ladder-20k.png](pictures/ladder-20k.png) (world 1 at 20k: the 3-cell founder, yellow heads and orange
+    stock parts with grey middles, beside cyan 2-cell g shortcuts).
+  - Commands: `PAB=1000 PAS=50 PAHT=4000 PAHB=2 PAHU=0 PAP=5000 PAR=9 PAD=1 PAH=0.1 PA1=0 PA2='Z@&c@|- C@e@|- E@-|z|'
+    PAMF=1 PAF='E@-|z|:150 G@-|z|:150' PAM=0.02 node tri/demos.js pair SEED 60000 runs/x` (check `ladder`, about 5
+    minutes); the a..z diets world: check `diets`'s command with `PAR=9 PAM=0.02` and no `PAMA`; the full mutagen: the
+    same with `PAMF=0`; the controls: `PAKR='Z@&e@|-' PAKS='E@-|z|'` (the pair kit as the shortcut) with `PA1` unset.
+
 ## 2026-10-06 (autorun run 20261006-1920, core-review)
 
 - **One range for every length: strips of 2 to 5 cells bud at the default openRange, every release complete** — works

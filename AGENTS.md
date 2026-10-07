@@ -44,6 +44,9 @@ sim (chemistry), world, structures (kits), demos (one per capability), render, t
   capability: works in at least 3 of 4 worlds) and a sense of where to stop, written at the top of docs/NEXT.md
   before starting. A slice can build something new, make something reliable or faster, simplify the core, or settle
   a question by analysis. One that turns out wrong ends with what was learned.
+- **Theory as much as runs (user, 2026-10-07).** Much progress comes from new concepts and ways to think about a
+  problem, and from designing structures ahead of need (from single part types to large mechanisms), not only from
+  small changes tested in many runs. Derive what the rules imply, predict, then run to check; IDEAS keeps the quote.
 - **Build mechanisms in isolation, then combine them.** Keep demos as short as shows the behaviour, look at the
   pictures, fix the mechanics. Large batches only when a number changes what gets built next. Speed matters:
   optimise code when it limits iteration.
