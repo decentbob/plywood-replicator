@@ -20,6 +20,15 @@ classes that exclude each other under `PAHB=2` (or with (t) off) coexist with (t
 web-three world with a fourth such class. Check: a new check passing 3 of 4, with its control (t off). Stop: when the
 isolation test is decided either way (record "not yet" and why if it fails), with (t) built as an option (`copyGlue`,
 default off: no existing output changes) and its case under RULES Core changes.
+Smoke (20k, alone, seed 1): the private kind `U@&C@|u c@|C.Z@&` lives with (t) on (about 220 individuals, 394 with
+(t) off: about 130 of its material sits in its own lettered blanks); the u catcher with a generic second cell
+(`c@|-Z@&`) died out with (t) on: its U heads' material piled up as `C?u?U?` blanks (940 of 1000 by 15k) that only a
+free `u` site takes. **Revised prediction (theory, before the batch):** lettered blanks are not an independent supply
+(a class makes them from its deaths, its material from plain blanks), so growth stays linear in a class's size at a
+given plain level and the R* argument still says exclusion; what (t) changes is the leak (material leaves a class only
+as undelivered copies that decay). So two equal private classes should drift apart more slowly: both present at 80k
+in more worlds with (t) on than off. Running: `runs/two.json` (A `U@&C@|u c@|C.Z@&`, B `W@&E@|w e@|E.Y@&`, 5 each
+at 2000; on, off, on with `PADL=0.1`; seeds 1-4, 80k; `node tri/batch.js runs/two.json`, file in NEXT's slice commit).
 
 **Handoff status (autorun run 20261007-1821, build).** Priority 19 done (INNOVATIONS run 1821, IDEAS "Every catcher
 farms its catch"); no rule change; new demo option `PA3`/`PA3T` (a third kit entering late). **Every catcher farms its

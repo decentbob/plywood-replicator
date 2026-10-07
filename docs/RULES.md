@@ -249,6 +249,29 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
+### Option `copyGlue` (candidate (t)): a glued copy side binds only a complementary side, 2026-10-07, autorun run 20261007-1921 (explore)
+NEXT priority 20. The case, written before the code; the result follows when measured.
+1. **Capability and why the goal needs it.** A web of classes larger than its foods. Run 1821 showed that every catch
+   is copied from blanks, so every class that makes its parts draws on one resource, and by competitive exclusion the
+   classes are at most the limiting resources (blanks and each prepared stock). Complex evolution needs resources that
+   kinds make, not only ones the world is given.
+2. **Why the existing core cannot do it.** Contact copying is glue-blind: a copy blank binds any free side that is not
+   an anchor. Every part a kind makes is a blank turned into a copy, and any blank can become any part, so whatever a
+   dead body returns (as blanks, `PAHB=2`) is everyone's food. A stock of parts bound by glue is a private resource only
+   because nothing makes it (`PAF`, prepared, run 1620). No arrangement of types gives a blank that only some kinds can
+   use.
+3. **The rule.** A copy side with a glue binds only a side carrying the complementary glue; an inert copy side binds
+   any side, as now. Every existing blank is `-?-?-?`, so every existing world is unchanged except where the mutagen
+   makes a part with a glued copy side (as an option, default off, nothing changes).
+4. **Locality.** It reads the copy side's own glue (its own type) and the partner side's glue (a fixed type), as glue
+   binding already does. Nothing new is exposed or relayed.
+5. **Generality.** Copy binding then reads glue as every other binding does, with the inert side as the one wildcard:
+   one condition added to a rule that exists, no new mark, state or signal.
+6. **What it replaces.** If adopted, "whatever that side's glue" in Contact copying. With a drive under which a dead
+   triangle returns as a blank that keeps its glues (`PAHB=3`, labelled environment, the demo's), a class whose cells
+   carry the complement of their exposed glue is copied from its own dead material: each class makes a resource for
+   itself. Biology: monomers keep their identity when a body is broken down, and are reused by whoever reads them.
+
 ### Candidate (o) with the joint: one range for every length, 2026-10-06, autorun run 20261006-1920 (core-review)
 NEXT priority 10 (run 1851: openRange was set per kind, 1 for the pair, 3 for the 3-cell strip, 9 and 50 in the
 lineage, a body-length knob in disguise). The case, written before the rule; the measurement and the decision follow.
