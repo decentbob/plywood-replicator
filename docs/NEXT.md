@@ -28,11 +28,15 @@ it into the standard world (`PA1T`, `PAEN=10`, seeds 1-4, 120k) and alone. Done 
 Z class (two classes in at least half of the censuses after entry) in 3 of 4 worlds, or the records say why not.
 Prediction: N takes most of the C stock (its buds root without searching), Z persists on the z sites of both kinds,
 two classes and one link at most censuses; chains of waiting N buds are the risk (whole-body hazard kills them).
-Running (17:55): `runs/priv.json` (`tri/batch.js`), the standard world with a private seed letter per stock (`PAF='C@-|z|:150
-E@-|y|:150 G@-|x|:150'`, seeds 1-4, 240k, about 15 minutes each). Prediction (before the runs): a diet mutant `Z@&e@|-`
-(raised by Z, its individual raises y, which no head takes: a cheat living on the unused E) holds first, then a root
-mutant `Y@&e@|-` founds an e class on the empty y sites: a second class held to 240k in 3 of 4 worlds, three in at
-least one (the standard world: one class, two in 1 of 4).
+Done so far: (a) the n class of 1x seed 3 is a pair of copied cells with an in-place seed site (`E@Nn@&` roots by
+`n@&` on its parent's `N`, catches a `Z@&e@t` head), two classes at every census from 145k; the stock host died out
+there at 145k. (b-c) The N host on the shared stock C: present at 120k in 3 of 4, a separate class in 1 of 4 (merged by
+catchers that hold N heads, 2 of 4). On a site-free stock `K@-|-|` (`runs/ownk.json`): two classes in 20, 20, 12, 18 of
+20 censuses after entry (4 of 4); checks `own-letter` (4 of 4) and `own-letter-c` pass. Private stock letters (`runs/priv.json`,
+240k): no second class in 0 of 4 (prediction wrong: the diet mutant is a cheat there). Running (18:05): `runs/free.json`,
+the site-free world (`PA2='N@&c@|n C@-|-|' PAF='C@-|-|:150 E@-|-|:150 G@-|-|:150'`, seeds 1-4, 240k, about 15 minutes):
+prediction, classes multiply by root-and-site mutations and never merge through a nursery (at least 3 classes held at
+once in 2 of 4 worlds in the second half).
 
 **Next step (rotation 67, explore): priority 18**, a class that owns its seed letter. Start from the one that arose by
 mutation under the new standard: `PAW=1 node tri/demos.js pair 3 240000 runs/x` (about 16 minutes), an e-diet host with

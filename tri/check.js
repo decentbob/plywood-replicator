@@ -204,6 +204,17 @@ const CHECKS=[
     pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+).*\| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]>=2&&+w[3]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links (${w[5]}), ${w[4]} cheats`];}},
   {id:'web-two-c',cap:'  control: plain catchers are cheats inside the host class (1 class, no link)',demo:'pair',seeds:[1],steps:30000,secs:95,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'Z@&C@|-',PAKS:'c@|-Z@&'},
     pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+)/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]===1&&+w[3]===0&&+w[4]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links, ${w[4]} cheats`];}},
+  // run 20261007-1720 (explore): a class that owns its seed letter (IDEAS "A class is a cycle of seed letters"). A host
+  // whose head carries its seed site on its copy side ('N@&k@|n': its copies root in place) on a stock part with no seed
+  // site ('K@-|-|', a fourth stock), 10 entered at 20k (labelled start): its letters close a cycle of their own, so it is
+  // a second class with no link to the host class; control: the same head on the shared stock 'C@-|z|' (its stock part's
+  // z raises the host class's heads: catchers holding N heads join the two into one class)
+  {id:'own-letter',cap:'A class that owns its seed letter: an in-place seed site on a site-free stock is a second class, unlinked',demo:'pair',seeds:[1,2,3,4],need:3,steps:50000,secs:150,env:{PAW:'1',PA1T:'20000',PAEN:'10',PAKR:'N@&k@|n',PAKS:'K@-|-|',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150 K@-|-|:150'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)].filter(w=>+w[1]>20000);if(!W.length)return [false,'no result'];const two=W.filter(w=>+w[3]>=2&&/(^|, )[A-Z]*N[A-Z]* \d/.test(w[5])).length,w=W[W.length-1];
+      return [two===W.length,`${two} of ${W.length} censuses after entry with a separate N class; at 50k ${w[3]} classes, ${w[4]} links (${w[5]})`];}},
+  {id:'own-letter-c',cap:'  control: the same head on the shared stock C (z) merges into one class with the host class',demo:'pair',seeds:[2],steps:50000,secs:150,env:{PAW:'1',PA1T:'20000',PAEN:'10',PAKR:'N@&c@|n',PAKS:'C@-|z|'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];
+      return [/(^|, )[A-Z]*N[A-Z]*Z[A-Z]* \d|(^|, )[A-Z]*Z[A-Z]*N[A-Z]* \d/.test(w[5]),`at 50k ${w[3]} classes, ${w[4]} links (${w[5]})`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
