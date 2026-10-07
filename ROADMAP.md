@@ -64,31 +64,13 @@ copies (item 0) is frozen with its checks** (`budcycle-3`, `budcycle-lysis`; rea
 proportion to use": the 47-type kind's front, strand and lumen sinks come from unequal exposure, which a strip kind
 avoids by geometry).
 
-A. **Evolution vehicle: the pair**, in order (NEXT priorities): (1) done (run 20261005-2320): the pair in isolation,
-   one founder among copy blanks; (2) done (run 20261006-0021): speed for many small bodies, 1.8-2.1x, exact; (3) done (run 20261006-0251): a world that runs on, decay and body hazard as labelled
-   drives (Direction 1; 4 of 4 worlds to 10^6 steps); (4) done (run 20261006-0450): heritable variation and selection with a labelled mutagen, no core change (Direction 2);
-   (5) done (run 20261006-0621): a world that keeps evolving once binding variants appear (deaths return blanks, a labelled drive); (6) done (run 20261006-1150): two kinds
-   on one supply (Direction 3): the pair beats a 3-cell strip from every start (one resource: the kind that leaves
-   fewest free blanks wins; the strip wastes three quarters of its copies), and a trap for the pair's free parts on
-   the strip's extra cell does not pay (checks `duo`, `duo-inv`, `duo-inv-c`); (7) done (run 20261006-1322): heredity of
-   combinations by locality: a newborn's parts come from its parent about half the time, and a parasite part is excluded
-   once that share s exceeds 1 - 1/k (checks `pair-host`, `-c`, `-mx`);
-   (8) done (run 20261006-1620): what pays for a longer kind: a stock of parts only it binds, when its risk does not
-   grow with its size (coexistence at stock 400, the strip wins at 600; checks `duo-stock`, `-inv`, `-c`, `-tri`, `-hi`);
-   (9) done (run 20261006-1750): heritable diets: front-glue mutants reach unused stocks, spread and coexist (three diets,
-   4 of 4; checks `diets`, `-c`, `-ns`); unplanned, a front that eats other kinds' roots makes a 3-cell kind (IDEAS
-   "Diets evolve by one letter").
-   (10) done (core-review run 20261006-1920): one openRange buds strips of every length: the open signal stops at `&`
-   joints and a caught part emits at once (check `strips`; the range is now a completion delay for 3 or more cells).
-   (11) done, negative (build run 20261006-2350): length by mutation shrinks (the 2-cell shortcut; check `ladder`); the z
-   kind was a nursery and is gone since (10); the full mutagen collapses the diets world (IDEAS "Joints make individuals").
-   (12) done (run 20261007-0050): a census of individuals in every pair world. (13) done (run 20261007-0420): the standard
-   world `PAW=1` (check `world`). (14) done (run 20261007-0622): host and catcher (a nursery parasite; catchers of one diet
-   exclude the others), what place can deliver (one part per gap), the 4-cell arc (checks `catcher-free`, `diets-catcher`,
-   `arc-root`). (15) done (run 20261007-0820): the recognition web (`web:` lines; checks `web-two`, `-c`): it does not
-   grow, private classes merge back into one; at 3x the standard world ends in heads that never let go (3 of 4), the
-   whole-body hazard `PAHU=3` keeps individuals (4 of 4 at 3x). Next: (16) cleanup of the pair demo's options, (17) the
-   whole-body hazard at 1x and as the standard world's hazard, then a class that owns its seed letter.
+A. **Evolution vehicle: the pair**, in the order of NEXT's priorities (each done item there names its run and checks,
+   INNOVATIONS its evidence): done 1-16 (the pair in isolation, a world that runs on, variation and selection, deaths
+   return blanks, two kinds on one supply, heredity by locality, a stock pays for length, heritable diets, one openRange
+   for every length, length by mutation shrinks (a negative), the census of individuals, the standard world `PAW=1`,
+   host and catcher, the recognition web (one class; the 3x world collapses, the whole-body hazard `PAHU=3` holds),
+   the pair demo's options pruned). Next: (17) the whole-body hazard at 1x and as the standard world's hazard, then a
+   class that owns its seed letter.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held

@@ -202,7 +202,7 @@ const CHECKS=[
     pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+)/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]===1&&+w[3]===0&&+w[4]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links, ${w[4]} cheats`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
-  // from its own parent with share s (PAPS); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
+  // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
   // near ((1 - s) k - 1) / (k - 1). Free parts decaying every 10 steps at hazard 0.3: s about 0.58, the parasite dies out;
   // every 100 steps: s about 0.25, it holds near half the bodies; the first world stirred (PAMX, labelled): s about 0.22,
   // it spreads and the hosts crash
