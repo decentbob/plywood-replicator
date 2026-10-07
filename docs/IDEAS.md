@@ -28,6 +28,46 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A class is a cycle of seed letters; a seed site on a head's copy side roots in place (explore run 20261007-1720, 2026-10-07)
+
+Derived first, then checked (INNOVATIONS run 1720). Notes, not the user's words.
+- **The letter graph.** Every held kind joins its root letter (the glue of the `&` side it bound by) to every seed
+  letter its cells carry (glued sides that are not attach, close-only or copy sides). The census's classes of kinds are
+  the cycles of this graph of letters. Two things follow. A cell carries its seed letter into whatever individual holds
+  it: a stock part's `z`, or a caught head's own site. And a letter on every stock part is one node that every stock
+  eater with a `z` root passes through, so the standard world's hosts are one class whatever their diets (run 0820's
+  saturation, explained).
+- **What owning a letter takes.** A seed site that only the class's cells carry, and no cell of the class carrying
+  another class's letter. A head has one free plain side (its copy side), so on a head-and-stock kind the first means
+  the seed site is the head's copy side (`N@&c@|n`); the second means a stock part with no seed site (`K@-|-|`).
+- **A seed site on a copy side roots in place.** A blank that copies the head at `n` takes the head's type turned about
+  the shared edge, so the copy faces its parent with its own `n`; free from the next pass at almost no distance from
+  the site, it binds there by its root (binding places a part in any orientation). So the class's copies seldom reach
+  the pool and its letter stays its own. The cost: a bud is committed before its part is caught, its own `n` is copied
+  while it waits, and the whole-body hazard charges the parent for every waiting bud. Measured alone on `K` (30k): 69%
+  of all binds in place, falling to 24% as cheats (`IN@&k@|`, the site lost) and catchers take over.
+- **Measured.** The n class of 1x seed 3 is such a kind, arisen by mutation and without any stock: `E@Nn@&` roots by
+  `n@&` on its parent's `N` and catches a copied head `Z@&e@t` (two classes at every census from 145k, when the stock
+  host died out there). The designed N host on the shared stock C keeps its own class in only 1 of 4 (merged in 2:
+  catchers `Z@&C@` that hold an N head are raised by `z` and raise `n`, and every N individual raises `z`). On the
+  site-free stock K it is a second class in 4 of 4, linked to the host class in 2 censuses of 80 (checks `own-letter`, `own-letter-c`).
+- **Owning letters does not make the web grow** (both predictions of this run wrong). With a private seed letter on
+  each stock (`y` on E, `x` on G) no second class arose by 240k (0 of 4): the one-mutation diet switch `Z@&e@|-` raises
+  `y`, which no head takes, so it is a cheat and never held, and the class needs a second mutation on it. In the
+  site-free world (every stock without a site, the founder the N host, so every class must own its letters) the web
+  stayed one class at every census of the second half (4 of 4; one world died out at 125k). New private classes do
+  arise, in two steps through a neutral head that changed only its site letter (`N@&c@|x`, then `X@&c@|x`; seed 2,
+  and `M@&k@|m` beside N on K, seed 4), but they compete for the same stock and replace the old class (X replaced N in
+  seed 2). **Classes are at most the separate foods**: private letters separate nurseries, not food. N on K beside Z
+  on C coexist (4 of 4) because both letters and stocks differ.
+- **Fronts are nurseries too.** An attached `@` side binds any free part's complementary `@` side, so a waiting head's
+  open front `k@|` raises any part with root `K@&`. In the N-on-K world seed 3 the host class turned into `K@&c@|` heads
+  rooting on waiting N heads' fronts and taking their place, and the N class fell to 27 individuals by 120k. The web
+  census counts them as unraised cheats: it reads only plain seed sites.
+- **What this asks for.** A web larger than its foods needs kinds to be food for kinds: catcher classes that own their
+  letter (in-place, as the u catcher `U@&C@|u` of check `web-two`) eating another class's free heads, and catchers of
+  those catchers. That is the next question: does a third level hold?
+
 ## The whole body as the hazard's unit; the strength is a second knob (build run 20261007-1351, 2026-10-07)
 
 Measured (INNOVATIONS run 1351). Notes, not the user's words.

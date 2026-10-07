@@ -11,6 +11,45 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-1720, explore)
+
+- **A class that owns its seed letter: a seed site on the head's copy side roots its copies in place; on a site-free
+  stock it is a second class with no link (4 of 4), on the shared stock it merges; owning letters does not make the web
+  grow** (NEXT priority 18; theory in IDEAS "A class is a cycle of seed letters"). No rule change, no demo change: new
+  checks `own-letter` (4 of 4) and `own-letter-c`.
+  - **The n class of 1x seed 3** (`PAW=1`, 240k, rerun): an individual of two copied cells, no stock: `E@Nn@&` roots by
+    `n@&` on its parent's `N` (its copy side: in place) and catches a head `Z@&e@t` by its front; class `Zn` beside the
+    E-stock hosts `-|z|E@+Z@&e@t`, two classes and one link (`Z>Zn`) at every census from 145k, when the founder kind
+    (`Z@&c@|-` on C) died out there.
+  - **The N host on the shared stock** (`N@&c@|n` on `C@-|z|`, 10 entered at 20k, seeds 1-4, 120k; `runs/own.json`):
+    present at 120k in 3 of 4 (seed 1 died out by 30k); a separate class in 20 of 20 censuses after entry in seed 3 (`N>Z`:
+    its stock part's `z` raises the host's heads), merged into one class `NZ` in seeds 2 and 4 (catchers `Z@&C@` holding
+    an N head: raised by `z`, raising `n`). Predicted: two classes and one link at most censuses; right in 1 of 4.
+  - **The N host on a site-free stock** (`N@&k@|n` on `K@-|-|`, a fourth stock of 150, otherwise the same;
+    `runs/ownk.json`): two classes in 20, 20, 12 and 18 of the 20 censuses after entry, no `>` link but in 2 censuses of seed 4; at 120k
+    in seeds 1-2 N holds 89-97 individuals beside 61-68 in the host class. Seed 3: from 80k the host class turned into heads `K@&c@|`
+    that root on waiting N heads' open fronts (a front raises any complementary root), the stock host died out, N fell
+    to 27 by 120k. Seed 4: a sister class `M@&k@|m` arose by mutation (two letters changed) and outnumbered N (307 against
+    108 at 120k); the stock host died out.
+  - **Private stock letters** (`PAF='C@-|z|:150 E@-|y|:150 G@-|x|:150'`, the standard world otherwise, seeds 1-4, 240k;
+    `runs/priv.json`): one class at every census in 4 of 4; no e or g diet ever held (plain catchers dominate as in the
+    standard world). Predicted: a second class in 3 of 4; wrong: the one-mutation diet switch raises `y`, which no head
+    takes, so it is a cheat.
+  - **The site-free world** (`PA2='N@&c@|n C@-|-|' PAF='C@-|-|:150 E@-|-|:150 G@-|-|:150'`, seeds 1-4, 240k;
+    `runs/free.json`): one class at every census of the second half in 4 of 4; seed 3 died out at 125k; seed 2's N class
+    was replaced by `X@&c@|x` (from 80k, through the neutral `N@&c@|x`); seed 1 held one N class of up to 8 kinds
+    (catchers with roots I and N, all on `n`). Predicted: at least 3 classes at once in 2 of 4; wrong: new private
+    classes eat the same stock and replace the old.
+  - Picture: [own-letter.png](pictures/own-letter.png) (the N host on K entered into the standard world, seed 1 at 120k,
+    by front glue: grey fronts `k` the N class, yellow `c` the host class, two unlinked classes).
+  - Commands: `PAW=1 PA1T=20000 PAEN=10 PAKR='N@&k@|n' PAKS='K@-|-|' PAF='C@-|z|:150 E@-|z|:150 G@-|z|:150 K@-|-|:150'
+    node tri/demos.js pair SEED 120000 runs/x` (on C: `PAKR='N@&c@|n' PAKS='C@-|z|'`, `PAF` unset); the batches are
+    `tri/batch.js` files with these env (private letters: `PAW=1 PAF='C@-|z|:150 E@-|y|:150 G@-|x|:150'`; site-free:
+    `PAW=1 PA2='N@&c@|n C@-|-|' PAF='C@-|-|:150 E@-|-|:150 G@-|-|:150'`); `grep '^web' runs/x.txt`. In place:
+    `PAW=1 PARP=1 PA2='N@&k@|n K@-|-|' PAF='K@-|-|:150' node tri/demos.js pair 1 30000 runs/x` (0.685 of binds in place).
+  - Status: **works** (a class that owns its letter on a site-free stock: 4 of 4); **not yet** (a web that grows: one
+    class in the site-free world 4 of 4, none new with private stock letters 0 of 4).
+
 ## 2026-10-07 (autorun run 20261007-1351, build)
 
 - **The standard world's hazard is the whole body at h 0.07: it holds at 1x and at 3x, where the hazard per individual
