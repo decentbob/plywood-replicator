@@ -271,6 +271,14 @@ NEXT priority 20. The case, written before the code; the result follows when mea
    triangle returns as a blank that keeps its glues (`PAHB=3`, labelled environment, the demo's), a class whose cells
    carry the complement of their exposed glue is copied from its own dead material: each class makes a resource for
    itself. Biology: monomers keep their identity when a body is broken down, and are reused by whoever reads them.
+7. **Result (built as an option, `copyGlue`, default off; INNOVATIONS run 1921).** Outputs with the option off are
+   unchanged by construction (the condition is skipped; checks pair, catcher-free-c, web-two-c, imprint-genome and
+   strips byte for byte against `main`). With `PAHB=3` it does what it was built for (a class whose
+   cells carry the complement of their exposed glue is copied from its own dead material), but that is no resource: two
+   equal private classes exclude each other by 15-30k as with the option off (4 of 4 in each of two designs), and an
+   in-place head's lettered blanks pile up where only a free seed site takes them (the world dies, 4 of 4, without a
+   decay of letters). Reason (IDEAS run 1921): a class makes its lettered blanks from its own deaths, so nothing enters
+   it from outside. Not adopted; kept as an option for the next core review to remove unless a slice uses it.
 
 ### Candidate (o) with the joint: one range for every length, 2026-10-06, autorun run 20261006-1920 (core-review)
 NEXT priority 10 (run 1851: openRange was set per kind, 1 for the pair, 3 for the 3-cell strip, 9 and 50 in the

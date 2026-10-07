@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-1821, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-1921, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,57 +10,26 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Current slice (autorun run 20261007-1921, explore; priority 20): a resource each class makes for itself.**
-Idea (derived before any run): with candidate (t) (a glued copy side binds only a side with the complementary glue; an
-inert copy side binds any side, as now) and a drive under which a dead triangle returns as a blank that keeps its glues
-(`PAHB=3`: every side a copy side, its glue kept), a cell whose exposed copy side's glue complements one of its own glues
-(an in-place head `U@&C@|u`; a caught head with a close-only side `c@|C.Z@&`) is copied by its own dead material and by
-no one else's: each class recycles its own deaths, a resource it makes and only it uses. Prediction: two blank-farmer
-classes that exclude each other under `PAHB=2` (or with (t) off) coexist with (t) on, in 3 of 4 worlds; then the
-web-three world with a fourth such class. Check: a new check passing 3 of 4, with its control (t off). Stop: when the
-isolation test is decided either way (record "not yet" and why if it fails), with (t) built as an option (`copyGlue`,
-default off: no existing output changes) and its case under RULES Core changes.
-Smoke (20k, alone, seed 1): the private kind `U@&C@|u c@|C.Z@&` lives with (t) on (about 220 individuals, 394 with
-(t) off: about 130 of its material sits in its own lettered blanks); the u catcher with a generic second cell
-(`c@|-Z@&`) died out with (t) on: its U heads' material piled up as `C?u?U?` blanks (940 of 1000 by 15k) that only a
-free `u` site takes. **Revised prediction (theory, before the batch):** lettered blanks are not an independent supply
-(a class makes them from its deaths, its material from plain blanks), so growth stays linear in a class's size at a
-given plain level and the R* argument still says exclusion; what (t) changes is the leak (material leaves a class only
-as undelivered copies that decay). So two equal private classes should drift apart more slowly: both present at 80k
-in more worlds with (t) on than off. Running: `runs/two.json` (A `U@&C@|u c@|C.Z@&`, B `W@&E@|w e@|E.Y@&`, 5 each
-at 2000; on, off, on with `PADL=0.1`; seeds 1-4, 80k).
-**Result (`runs/two`): wrong.** (t) on: the world dies by 10-15k in 4 of 4 (head blanks `C?u?U?`, `E?w?W?` pile up to
-800-900 of 1000: a head's material has one template, a free in-place seed site, and that site usually holds a bud).
-(t) off: one class excludes the other by 15-30k in 4 of 4. (t) on with `PADL=0.1`: the same exclusion by 15-30k in 4
-of 4, at about 240 individuals instead of 390. Both classes hold 150-200 each for about 10k, then one falls within
-5k (132 to 13): too fast for drift (about 56 lifetimes in 80k at 390 individuals). **Explanation to test (before the
-batch):** a rare class wastes its copies. Each class's buds catch only its own second cells, which the class makes;
-a free part decays in about 50 steps (`PAD=1`), so the share of a class's second cells caught before they decay grows
-with the number of its waiting buds: an Allee effect, the majority wins (and run 1821's "whoever is in first keeps
-the blanks"). Prediction: slower decay weakens it: both classes present at 80k in 2 or more of 4 at `PAD=0.1`, fewer
-at 0.3, none at 1. Running: `runs/allee.json` ((t) off, `PAD` 0.1 and 0.3, seeds 1-4; `fine`: seed 1 at `PAP=1000`).
+**Handoff status (autorun run 20261007-1921, explore).** Priority 20 tried (INNOVATIONS run 1921, IDEAS "A rare class
+wastes its parts"); no rule change: candidate (t) built as an option, `copyGlue` (default off; RULES Core changes, with
+its result: not adopted, kept for the core review to remove unless a slice uses it); demo `pair` gained `PAHB=3` (dead
+triangles return as blanks that keep their glues) and `PADL` (lettered blanks lose their letters). **Private recycling
+is not a resource:** with (t) and `PAHB=3` a class can be copied only from its own dead material, but it makes that
+material from plain blanks, so nothing enters it from outside and the R* argument still holds: two equal private
+classes exclude each other by 15-30k as fast as with (t) off (0 of 16 worlds with both at 80k, two designs), and an
+in-place head's lettered blanks pile up at the one template a bud usually covers (the world dies, 4 of 4, without
+`PADL`). **A rare class wastes its parts:** two equal blank farmers that each catch only second cells they make hold
+150-200 each for about 10k, then one falls to under 15 within 5k (20 of 20 worlds with part decay 0.1-1, faster when
+the pool is stirred); without decay both remain at 80k in 3 of 4. The rarer class's free parts decay or drift off
+before its few waiting buds catch them: an Allee effect, which also explains run 1821's private-crop farmer (never
+held, held when first). New checks `rare-waste` (4 of 4) and `rare-waste-c` (pass). The run's worlds are not kept
+(regenerate: INNOVATIONS run 1921, Commands; about 2.5 minutes per 80k world with 4 at once). Nothing is running.
 
-**Handoff status (autorun run 20261007-1821, build).** Priority 19 done (INNOVATIONS run 1821, IDEAS "Every catcher
-farms its catch"); no rule change; new demo option `PA3`/`PA3T` (a third kit entering late). **Every catcher farms its
-catch**: in a complete individual all `&` sides are spent, so a caught head exposes only its copy side, in a catcher's
-body as in its own, and a catcher copies its prey as often as the prey does. Fronts catch each other both ways, and a
-catcher of catchers has the first level's front (it eats the first level's stock). Every catch is copied from blanks,
-so all catchers live on one resource and **the classes are at most the limiting resources** (blanks, and each stock a
-class has to itself). Measured in the web-two world (80k, seeds 1-4): a farmer of U heads died out (4 of 4), a second
-farmer of Z heads held beside U for 20-30k and then one excluded the other (3 of 4), a farmer of a private crop never
-held (0 of 8; blanks 31-45 of 1000 once U lives); entered first while blanks are plenty it held (4 of 4) and then one of
-X and U excluded the other (4 of 4). The N host on its own stock K beside host and u catchers: **three classes on
-three resources** at every census 30k-80k in 3 of 4 (new checks `web-three` 4 of 4, `web-three-c` pass). No third
-level fed by the second with 2-cell kinds (argued; a 3-cell predator that caps its prey's copy side is designed, not
-built). The run's worlds are not kept (regenerate: INNOVATIONS run 1821, Commands; about 10 minutes per 80k with 4 at
-once). Nothing is running.
-
-**Next step (rotation 69, explore): priority 20.** The web grows with resources, not with kinds (IDEAS run 1821). The
-most direct candidate is a second resource made by kinds: (t) a copy side that reads glue (blanks of a second type that
-copy only sides of one glue: a resource of the kinds that carry it; make the case under RULES Core changes first, with
-the prediction that a class carrying that glue coexists with the blank farmers as a fourth class), or, without a core
-change, deaths that return parts (`PAHB` off for one class's material: does a scavenger class limited by another class's
-deaths hold?). Other candidates as listed under 20.
+**Next step (rotation 70, review-intent).** A direction check after priorities 17-20: the web census holds at most the
+limiting resources (run 1821), and new classes that catch only their own parts cannot invade (run 1921). Candidates for
+the next build or explore: a class that invades on parts others make (a by-product of one class that another catches,
+the farmer limited by something other than blanks), or delivery without a pool. The next core review should remove
+`copyGlue` unless a slice has used it.
 
 ## Direction and priorities
 
@@ -79,14 +48,16 @@ standard world collapses into heads that never let go (3 of 4), the whole-body h
 `web-two`); 16 the pair demo's options pruned (1051); 17 the whole-body hazard at h 0.07 is the standard world's
 (1351; `world`, `arc-root` pins `PAHU=2`); 18 a class that owns its seed letter: in place, on a site-free stock;
 it does not make the web grow (1720; `own-letter`); 19 kinds as food: every catcher farms its catch from blanks, so
-the classes are at most the limiting resources, three on three (1821; `web-three`). Open:
-20. [69 explore] Candidates: a second resource kinds make ((t) a copy side that reads glue; deaths that return parts), a kind that pays for length through cheaper catches (IDEAS run 0622), a longer kind whose
-    function is in what binds, (t), or a third food that kinds make for one another.
+the classes are at most the limiting resources, three on three (1821; `web-three`); 20 a resource each class makes for
+itself: private recycling under (t) is no resource, and a rare class wastes its parts (1921; `rare-waste`). Open:
+21. [70 review-intent, then 72 build] Candidates: a class that invades on parts others make (a by-product one class makes
+    and another catches), deaths that return parts (`PAHB` off for one class's material), a kind that pays for length
+    through cheaper catches (IDEAS run 0622), a longer kind whose function is in what binds.
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 1851: the mix fits the order above):
-68 build, 69 explore, 70 review-intent, 71 core-review, 72 build, 73 harden, 74 build, 75 explore.
+70 review-intent, 71 core-review, 72 build, 73 harden, 74 build, 75 explore, 76 build, 77 cleanup.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
 - (t) *A copy side reads glue* (run 1620): a copy side with a glue binds only a side carrying the complementary glue; an
@@ -96,6 +67,9 @@ Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run
   (`PAF`); weigh it if a stock proves too special (it is a prepared supply of a kind's own part types).
   Run 1821: the classes are at most the limiting resources and every copied part is a blank, so (t) is the one way in the
   core to a resource kinds make; open: what keeps the second blank type in supply (`PAHB=2` returns plain blanks).
+  Run 1921: **built as the option `copyGlue`** (default off) with the drive `PAHB=3` (lettered blanks): a class copied
+  only from its own deaths, which is no resource (it makes them from plain blanks); exclusion as without it. Remove at
+  the next core review unless a slice uses it.
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
@@ -145,6 +119,10 @@ PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' PA3T=20000 PA3='N@&k@|n K
                                                    # three classes on three resources (check web-three; about 3 minutes): PA3 a
                                                    # third kit entering at PA3T; the farmer of a private crop PA3='X@&D@|x d@|-Y@&'
                                                    # (PAF unset) never establishes (web-three-c)
+PAW=1 PAF= PAM=0 PA2T=2000 PA3T=2000 PAEN=5 PA2='U@&C@|u c@|C.Z@&' PA3='W@&E@|w e@|E.Y@&' node tri/demos.js pair 1 30000 runs/x
+                                                   # two equal blank farmers (check rare-waste; about 2 minutes): one excludes
+                                                   # the other by 30k; PAD=0: both stay (rare-waste-c); PAHB=3 lettered blanks,
+                                                   # TRI_PARAMS='{"copyGlue":true}' candidate (t), PADL their decay
 PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
                                                    # without stock (check catcher-free; 45 s); diets world with catchers entered:
                                                    # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)

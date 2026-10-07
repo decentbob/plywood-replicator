@@ -226,6 +226,18 @@ const CHECKS=[
   {id:'web-three-c',cap:'  control: a farmer of a private crop lives on blanks too and never establishes (no X class)',demo:'pair',seeds:[1],steps:50000,secs:150,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'U@&C@|u',PAKS:'c@|-Z@&',PA3T:'20000',PA3:'X@&D@|x d@|-Y@&'},
     pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)].filter(w=>+w[1]>20000);if(!W.length)return [false,'no result'];const x=W.filter(w=>/X/.test(w[5])).length,w=W[W.length-1];
       return [x===0&&+w[3]<=2,`${x} of ${W.length} censuses after entry with an X class; at 50k ${w[3]} classes (${w[5]})`];}},
+  // run 20261007-1921 (explore): a rare class wastes its parts (IDEAS "A rare class wastes its parts"). Two blank farmers
+  // of one design with their own letters ('U@&C@|u' holding 'c@|C.Z@&', 'W@&E@|w' holding 'e@|E.Y@&'), 5 of each entered
+  // at 2000 (labelled start) into the standard world without stock or mutagen: each class catches only second cells it
+  // makes, and a free part decays (PAD 1), so the rarer class's parts decay before its few waiting buds catch them and
+  // one class excludes the other by 30k (also at PAD 0.1 and 0.3, and faster when stirred); control: no decay, both
+  // classes still there at 30k (and at 80k in 3 of 4, drifting)
+  {id:'rare-waste',cap:'A rare class wastes its parts: of two equal blank farmers one excludes the other by 30k',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:120,env:{PAW:'1',PAF:'',PAM:'0',PA2T:'2000',PA3T:'2000',PAEN:'5',PA2:'U@&C@|u c@|C.Z@&',PA3:'W@&E@|w e@|E.Y@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1],two=W.filter(w=>+w[3]>=2).length;
+      return [+w[3]===1,`at 30k ${w[3]} class (${w[5]}); 2 classes in ${two} of ${W.length} censuses`];}},
+  {id:'rare-waste-c',cap:'  control: without decay (PAD 0) both classes are still there at 30k',demo:'pair',seeds:[1],steps:30000,secs:120,env:{PAW:'1',PAF:'',PAM:'0',PAD:'0',PA2T:'2000',PA3T:'2000',PAEN:'5',PA2:'U@&C@|u c@|C.Z@&',PA3:'W@&E@|w e@|E.Y@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];
+      return [+w[3]===2,`at 30k ${w[3]} classes (${w[5]})`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
