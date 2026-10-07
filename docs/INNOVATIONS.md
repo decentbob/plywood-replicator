@@ -11,6 +11,50 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-1351, build)
+
+- **The standard world's hazard is the whole body at h 0.07: it holds at 1x and at 3x, where the hazard per individual
+  collapses into chains** (NEXT priority 17). No rule change; `PAW=1` now sets `PAHU=3 PAH=0.07` (was `PAHU=2 PAH=0.1`).
+  The question of run 0820 was whether `PAHU=3` holds the 3x world because hits take whole bodies or only because it
+  kills more. Answer: whole bodies; harshness alone makes it worse, and at 1x the earlier h 0.1 was too harsh.
+  - **Calibration (3x, `PAHU=2`, seed 1, 75k):** h 0.3 and 0.4 die by 10k; h 0.2 holds 150-250 individuals; h 0.15
+    holds 530-720 from 20k to 60k, as many as `PAHU=3` at 0.1 (500-700, run 0820).
+  - **Matched hazard per individual (3x, `PAHU=2 PAH=0.15`, seeds 1-4, 240k):** seed 1 loses every complete individual
+    by 210k (427-843 growing chains, blanks 40-80 of 3000), seed 4 falls to 10 individuals, all chain pieces of
+    `T@&U@t@` heads (a root that takes its own seed letter; 699 growing, 28 blanks), seed 3 turns to chains from 195k (205
+    growing and 300 blanks at 240k), seed 2 holds (510-690). So 2 of 4 collapse by 240k and a third is collapsing: the
+    hazard per individual fails at matched harshness as at h 0.1 (3 of 4). Predicted (2 of 4 or more), right.
+  - **Whole body at 1x, h 0.1 (`PAW=1 PAHU=3`, seeds 1-4, 240k):** worse than the standard world. Seed 1: plain
+    catchers `-Z@&C@` replace the stock hosts by 150k and then starve (0 individuals from 189k); seed 2: the stock hosts
+    are gone, 360 catcher individuals; seeds 3-4 keep hosts (116-220 individuals). `PAHU=2` at 0.1 keeps individuals
+    in 4 of 4 to 240k (run 0420, batch D). This is the cost run 0820 predicted (a parent with a waiting bud is hit
+    twice as often and loses both, so kinds that raise nobody gain).
+  - **Separating harshness from the whole body at 1x (seeds 1-4, 240k):** `PAHU=2` at the harsher h 0.15 collapses
+    into chains in seed 3 at 45-50k (blanks about 20 of 1000 to 240k, 6 individuals left); the others hold. `PAHU=3` at
+    the gentler h 0.07 holds 4 of 4 with no chains (fewest 88-107, 268-370 at 240k; `PAHU=2` at 0.1: 59-114, 338-387).
+  - **Whole body at 3x, h 0.07 (seeds 1-4, 240k):** 4 of 4 hold: 900-1300 individuals at every census after 20k, at
+    most 29 growing (chains never start), blanks never below 84 of 3000. The `PAHU=2` 3x world at h 0.1 has 1100-1270
+    before it collapses: as many individuals, and no collapse.
+  - **The web census under the whole body:** at least one class at every census in all 8 worlds (1x and 3x, h 0.07).
+    Cheats (plain catchers) outnumber the class in 5 of 8 at 240k (class 43-76 of 268-363 at 1x; 176-206 of 924-1008 at
+    3x); in 2 of the 3x worlds a class of 7-14 held kinds holds most individuals (1003-1114 of 1188-1285). 1x seed 3
+    holds two classes for most of its second half (mean 1.8, one link `Zn~Z Z>Zn`): an e-diet host with its own seed
+    letter `n` (`E@Nn@&` holding `Z@&e@t`), the kind of class priority 18 asks for, arisen by mutation.
+  - **Checks:** `world` 4 of 4 under the new hazard (fewest 88-107, 192-358 at 120k; commonest non-founder kinds are
+    catchers of c or g heads, up to 269); `web-two` 4 of 4 and `web-two-c` pass; `catcher-free` 4 of 4 (389-393) and
+    `catcher-free-c` pass. `arc-root` failed under the whole body (0 of 4: 7-29 individuals at 30k, births still
+    0.91-0.98 in place: a 4-cell arc's bud waits for three catches and dies with its parent), so it and its control now
+    pin `PAHU=2` (their outcomes as before: 80-100 individuals, 0.91-0.93 in place; control 0.485). No other check uses
+    `PAW=1`.
+  - Pictures: [hazard-whole-3x.png](pictures/hazard-whole-3x.png) (3x, whole body at h 0.07, seed 1 at 240k: 1285
+    individuals of 2-4 cells, no chain); [hazard-matched-3x-chains.png](pictures/hazard-matched-3x-chains.png) (3x, the
+    hazard per individual at the matched h 0.15, seed 1 at 240k: chains and rosettes, no complete individual).
+  - Commands: `PAW=1 node tri/demos.js pair N 240000 runs/x` (1x, now the whole body at 0.07); at 3x add `PAB=3000 PAS=87
+    PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450'` (about 50 minutes); the old standard: add `PAHU=2 PAH=0.1`. Batches as
+    `tri/batch.js` files: the commands' env with `PAHU`/`PAH` per job.
+  - Status: **works** (the whole-body standard world: 4 of 4 at 1x and 3x; the matched hazard per individual collapses
+    2 of 4 at 3x and 1 of 4 at 1x).
+
 ## 2026-10-07 (autorun run 20261007-1051, cleanup)
 
 - **A leaner pair demo and a batch runner** — works (no capability or rule change; NEXT priority 16). Removed from demo

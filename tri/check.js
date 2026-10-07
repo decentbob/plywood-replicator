@@ -162,7 +162,8 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/),I=indiv(o);if(!m||!I)return [false,'no result'];
       return [I.min>0&&+m[5]>=10000&&+m[4]>=1,`individuals fewest ${I.min}, at 200k ${I.end} (${I.top.slice(0,2).map(([n,k])=>n+'x '+k).join(', ')}); ${m[5]} copies in the last 5000 steps; ${m[3]} variant types in a tenth of the bodies, ${m[4]} new after 100k`];}},
   // run 20261007-0420 (build): the standard world (demo pair, PAW=1: the diet kind among stocks C, E, G, openRange 9, deaths
-  // return blanks, decay, the hazard per individual, the general mutagen with stock parts exempt). Passes a world whose
+  // return blanks, decay, the hazard per individual (since build run 20261007-1351 the whole body at h 0.07: fewest 88-107,
+  // 192-358 at 120k), the general mutagen with stock parts exempt). Passes a world whose
   // complete individuals of 2 or more cells never fall to 0 and where a kind other than the founder's holds 10 or more at
   // 120k (in batch B: a head whose front became C, catching other heads by their fronts, in 3 of 4; held kinds of up to 6
   // cells with copied middles in 1)
@@ -188,9 +189,12 @@ const CHECKS=[
   // born in the arc's gap beside its own seed site; middles and end from stocks (150 each), standard world at hazard
   // 0.03 (at 0.1 it dies: three catches per birth). Roots copied by the bud's own parent (PARP): about 0.9 of births;
   // control: the 2-cell kind with the same head and a stock end, about 0.48
-  {id:'arc-root',cap:'A 4-cell arc delivers its root in place: 80% or more of its births have a root its own parent copied',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:93,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|a@| A@-|b@| B@-|z|',PAF:'T@-|a@|:150 A@-|b@|:150 B@-|z|:150'},
+  // (build run 20261007-1351: the hazard per individual pinned, PAHU=2, when the standard world moved to the whole body;
+  // under PAHU=3 at 0.03 the arc keeps 7-29 individuals at 30k, its births still 0.91-0.98 in place: a bud that waits
+  // for three catches dies with its parent)
+  {id:'arc-root',cap:'A 4-cell arc delivers its root in place: 80% or more of its births have a root its own parent copied',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:93,env:{PAW:'1',PAM:'0',PAH:'0.03',PAHU:'2',PARP:'1',PA2:'Z@&t@|- T@-|a@| A@-|b@| B@-|z|',PAF:'T@-|a@|:150 A@-|b@|:150 B@-|z|:150'},
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]>=0.8,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
-  {id:'arc-root-c',cap:'  control: the 2-cell kind (head and stock end), fewer than 60% in place',demo:'pair',seeds:[1],steps:30000,secs:70,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|z|',PAF:'T@-|z|:150'},
+  {id:'arc-root-c',cap:'  control: the 2-cell kind (head and stock end), fewer than 60% in place',demo:'pair',seeds:[1],steps:30000,secs:70,env:{PAW:'1',PAM:'0',PAH:'0.03',PAHU:'2',PARP:'1',PA2:'Z@&t@|- T@-|z|',PAF:'T@-|z|:150'},
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]<0.6,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
   // run 20261007-0820 (build): the recognition web ('web:' lines, every pair world). The standard world with 10 catchers
   // entered at 10k (a labelled start): u catchers (their own seed site u) form a second class, which the host class
