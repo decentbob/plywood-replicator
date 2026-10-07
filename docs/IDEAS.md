@@ -28,6 +28,60 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Twenty slices on the pair: the web is bounded by resources; the stocks block coevolution (direction check, review-intent run 20261007-2021, 2026-10-07)
+
+Weighed after priorities 10-20 (runs 1920-1921). Notes, not the user's words.
+- **The core is not growing; the slices now combine.** Since run 1920: 6 marks, 3 relayed signals, 4 exposed values,
+  2 states, plus one option (`copyGlue`, a negative, for the core review to remove). Eleven slices came from
+  combinations, and since run 0420 nearly all of them run in or beside one standard world (`PAW=1`), each building on the
+  last (the hazard's unit, the census, classes as cycles of letters, kinds as food, rare classes). Run 1851's worry,
+  results in five settings and no world carrying them all, is settled. The environment grew a little (pair options 29
+  to 31; 52 checks, 17 of them controls; the suite about 105 minutes, three quarters of it the frozen lineage).
+- **The web-size line has reached its bound.** Priorities 15 and 18-20 asked why the standard world holds one class and
+  answered with one statement, derived and measured: contact copying makes every part from a blank, so kinds as food add
+  no resource (a catcher farms its catch), private letters separate nurseries but not food, and private recycling is a
+  stock a class grows for itself, not a supply. **The classes that coexist are at most the limiting resources**, and a
+  new class that catches only parts it makes cannot invade (a rare class wastes its parts). The one candidate left in the
+  line, a by-product that one class makes and another catches, is the host-catcher link `web-two` already shows; a third
+  level needs 3-cell kinds (the cap, run 1821). More slices there would measure the bound again.
+- **Prepared structure doing the work: the stocks.** The standard world's only resources besides blanks are the stocks
+  C, E, G: prepared, never decaying, never mutating, and carrying every host's seed site `z`. By the bound, every class
+  beyond the first stands on a stock. And because a stock part never mutates, **a host can never change its seed
+  letter**: run 0420 saw it (the parasite privatised its seed letter, the host could not), run 0820 called it
+  saturation (every stock carries `z`). The stocks were added to make diets (run 1620); they now hold the world in one
+  class.
+- **Bodies have not grown.** Still 2 cells. Every attempt at length lost for one reason: a body pays per cell, in
+  catches from a decaying pool (run 2350's shortcut, run 0622's arc with three catches per birth, a middle's seed site
+  that deadlocks, the whole-body hazard taxing long waits), and heredity is by part type and recognition, so nothing
+  copies a body as a unit. Length must earn its catches through a function only a longer body has; none is known yet.
+- **What is missing: an interaction whose payoff depends on frequency.** All interactions so far are exploitation of
+  blanks and nurseries (the commoner or the lower R* wins; equals drift), and farming. Ecology's routes past the R*
+  bound without new resources are frequency dependence (an enemy specific to its host grows where its host is common:
+  kill the winner, host-specific pathogens) and space. Frequency dependence is also the classic engine of evolution
+  that does not settle: a host escapes its enemy by changing, the enemy follows (a Red Queen), and defence is a
+  function a body can have, which could be the first reason for length.
+- **The cheapest such enemy already arises: the nursery cheat.** A cheat is a head with a host's attach letter and no
+  seed site of its own: it takes the host's seed sites and raises nobody (run 0820: 1-20 cheats per world, the plain
+  catcher outnumbering hosts 2-3 to 1 under the whole-body hazard). It is specific to one seed letter, so it is common
+  where its letter is common. A host lineage escapes by changing its letter pair (attach letter and seed letter), which
+  arises in two steps through a neutral seed-letter change (run 1720, seed 2: `N@&c@|x`, then `X@&c@|x`); the cheat
+  follows by one mutation (its attach letter). Predicted, in a world where seed sites are copied: the commonest seed
+  letter turns over again and again, and two or more host classes coexist on blanks alone, each held down by its own
+  cheats. In the stock world neither can happen: the seed sites are on stock parts.
+- **Order chosen** (NEXT priorities 21-23). 21 (build): the standard world without stocks, founder the pair with the
+  standard letters (`Z@&c@|-`, `C@-z|`; the stock part `C@-|z|` has no copyable side, so it cannot simply be left
+  unstocked), all other drives as now; tests (a) letter-specific cheats arise, (b) the leading letter turns over, (c)
+  two or more classes at once. If (c) holds, the stockless world becomes the standard (one drive fewer, nothing
+  prepared but blanks). 22 (explore): the cause of whatever fails; if letters do not turn over, killing as the
+  frequency-dependent enemy. With 2-cell kinds a killer gains only what cannot be copied (every part a 2-cell body holds
+  exposes its copy side, so a catcher already makes what it could kill for): blanks freed near it, a nursery, or, with a
+  third cell, a prey whose copy side it covers. Two obstacles in today's rules: the drive `PAHB=2` turns every lysed
+  triangle into a blank (a killer would make food for everyone); and the holder of a `!` side hears its victim's lysis
+  across their bond unless that bond is a joint (sim.js), so it is cut loose with its prey. 23: length as defence, a
+  third cell over the host's open site once cheats or killers take it. Designed, not demonstrated.
+- **Not chosen.** More classes through more prepared stocks (sideways, prepared); body length by more catches (the
+  pool's cost per cell is the reason it lost); reopening the 47-type organism (its sinks are unchanged).
+
 ## A rare class wastes its parts; private recycling is not a resource (explore run 20261007-1921, 2026-10-07)
 
 Derived first, then checked (INNOVATIONS run 1921). Notes, not the user's words.
