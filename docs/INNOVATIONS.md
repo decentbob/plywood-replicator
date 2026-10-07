@@ -10,6 +10,61 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-0622, explore)
+
+- **Host and catcher: the catchers with a seed site of their own are free-living; a catcher arms its host's diet
+  against the other diets; a bud can get only one part from its parent by place** (NEXT priority 14; theory in IDEAS
+  "A bud gets one part by place and the rest by recognition"). No rule change. New checks `catcher-free` (4 of 4),
+  `catcher-free-c`, `diets-catcher` (4 of 4), `diets-catcher-c`, `arc-root` (4 of 4), `arc-root-c`. New in demo `pair`
+  (observation, off by default): `PARP=1`, roots in place: for every root that binds a seed site by its `&` side,
+  whether its template is in the seed site's body at that moment (copied by its own parent), and the same for births;
+  'root:' lines every PAP steps, a 'roots:' result line, a picture at the first.
+  - **The catchers alone** (the standard world without stocks or mutagen: `PAW=1 PAF= PAM=0`, one founder individual,
+    40k, seeds 1-4). The u catcher (`U@&C@|u` holding a host head `Z@&c@|-` by its front): 352-378 individuals at 40k
+    (about 350 already at 5k), 4 of 4; the z catcher (`Z@&C@z`): 178-214, with 540-600 heads waiting on seed sites
+    (every head binds z), 4 of 4; the plain catcher (`Z@&C@|-`, no seed site): no bud, 0 individuals by 10k, 4 of 4. So
+    the plain catcher is a parasite of the host's nursery and the two that replaced it are pairs that eat blanks only.
+  - **Diet switching against catchers: none; exclusion instead** (the diets world at the standard world's drives:
+    `PAR=9 PAHU=2`, front mutagen c..h (`PAMF=1`, which cannot make a catcher), stocks C, E, G of 150; seeds 1-4, 120k).
+    Without catchers the three diets hold 104-139 hosts each from 30k to 120k (4 of 4). With 10 catchers of diet c
+    entered at 60k (a labelled start, `PA1T=60000 PAEN=10 PAKR='Z@&C@|-' PAKS='c@|-Z@&'`): e and g fall to 14-34 and
+    7-18 hosts by 80k and to 0-21 by 120k, c keeps 88-100, catchers 238-286 (4 of 4). Mutants that switch to e or g
+    reappear (up to about 20 hosts) but never hold. Predicted in direction (no escape by switching: the catcher's cost,
+    the seed sites, is diet-blind), not in size (exclusion). Mechanism: each catcher copies the c head it holds at two
+    sides and its own head at one, all binding every `z` seed site, so the nursery fills with c and catcher heads
+    (seed 2, 10k after entry: free heads c 66, catcher 57, g 8, e 1; before entry c 77, e 71, g 76).
+  - **The standard world to 240k** (`PAW=1`, seeds 1-4; byte for byte run 0420's batch D, now read by diet): diets
+    other than c are rare mutants (one letter in 53); the one that held (seed 4, g, 109 hosts at 140k, no catcher
+    present) fell to 3 by 190k as a catcher `Z@&C@-` rose from 160k to 253. Seed 3: the private-letter catcher
+    `C@|uU@&` replaced the plain catchers from 150k; from 220k `C@|WU@&` (takes u sites, its own seed side W binds
+    nothing) rose to about as many as the u kind (90-142 against 115-124 from 225k): a cheat inside the new recognition class.
+  - **What place can deliver** (theory, checked by enumeration of every body of 2-5 cells and every lattice motion): a
+    fresh copy can bind before it drifts only beside a cell three or more bonds from its template, so a bud gets at most
+    one part per gap from its own parent; no body of 3-5 distinct cells can have its whole bud delivered in place, and
+    the 2-cell cases leave the bud untouching its parent.
+  - **The 4-cell arc** (`Z@&t@|- T@-a@| A@-b@| B@-z|`, four cells round one vertex, the end's seed site `z|` facing the
+    two-site gap the head copies into; built with the strip kit). Without drives (1000 blanks, world 50, openRange 9) it
+    grows from one founder (130 individuals at 8k), about half its births with a root its parent copied. Under the
+    standard drives it dies (0 of 4 by 10k: three pool parts per birth decay before they meet). With middles and end from
+    stocks (`T@-|a@| A@-|b@| B@-|z|`, 150 each) it lives at hazard 0.03 (84-96 individuals at 60k, 4 of 4) with 91-93%
+    of births in place, against 47-48% for the 2-cell kind `Z@&t@|- T@-|z|` on a stock end (141-146 individuals) and
+    18% for the copied 2-cell kind `Z@&t@|- T@-z|` (370-400); at hazard 0.1 the stock arc dies (0 of 4).
+  - **A longer kind against the nursery parasite: weak, not shown.** The catcher of this head (`Z@&T@|-`, 10 entered at
+    20k) cuts the copied 2-cell kind from 370-400 to 46-60 (h 0.1, 4 of 4) and the stock 2-cell kind from 124-136 to
+    92-97 (h 0.1) or from 141-146 to 129-137 (h 0.03); the stock arc keeps 91-98 with it (84-96 without, h 0.03, 4 of 4).
+    But at h 0.03 both kinds are stock-limited and the catcher costs little anywhere, and at h 0.1, where it costs, the
+    arc cannot live: its length costs more than its in-place root saves.
+  - Pictures: [arc-root.png](pictures/arc-root.png) (t=14: the founder arc, head lower right, and its head's first copy,
+    born in the gap at the bottom, bound on the arc's own seed site: five of the six cells round the vertex);
+    [diets-catcher.png](pictures/diets-catcher.png) (diets world seed 1 at 80k, catchers entered at 40k, against no entry).
+  - Status: **works** (catchers free-living: 4 of 4; exclusion of the other diets: 4 of 4; roots in place: 4 of 4);
+    **not yet** (a longer kind that pays for itself through its in-place root).
+  - Commands: `PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair SEED 40000 runs/x` (u catcher alone;
+    z: `PA2='Z@&C@z c@|-Z@&'`; plain: `PA2='Z@&C@|- c@|-Z@&'`); the diets world with catchers: check `diets-catcher`'s
+    env with `PA1T=60000` and 120000 steps; the arcs: `PAW=1 PAM=0 PARP=1 PAH=0.03 PA2='Z@&t@|- T@-|a@| A@-|b@| B@-|z|'
+    PAF='T@-|a@|:150 A@-|b@|:150 B@-|z|:150' node tri/demos.js pair SEED 60000 runs/x` (add `PA1T=20000 PAEN=10
+    PAKR='Z@&T@|-' PAKS='t@|-Z@&'` for the catcher; copied arc: `PA2='Z@&t@|- T@-a@| A@-b@| B@-z|' PAF=` and `PAH` unset).
+
 ## 2026-10-07 (autorun run 20261007-0420, build)
 
 - **The standard world: a hazard per individual keeps individuals, the general mutagen keeps evolution; a kind that

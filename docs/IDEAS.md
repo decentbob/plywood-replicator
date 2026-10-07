@@ -64,9 +64,9 @@ Derived first, then checked (INNOVATIONS run 0622). Notes, not the user's words.
   s matters only for cheats inside a class (a part that keeps the class's glues but not its function: run 1322's
   threshold (1 - s) k > 1). A new private letter pair (an attach glue and the seed glue that takes it, changed
   together) closes a lineage off from the other classes: speciation by recognition. Seen in the standard world (seed 3,
-  240k): a catcher with a private seed letter `C@|uU@&` replaced the plain catchers from 150k; from 210k a variant
-  `C@|WU@&` (it takes u sites, its own seed side W binds nothing) rose to as many as the u kind (114-142 against
-  117-124): a cheat inside the new class, as the model says it must be.
+  240k): a catcher with a private seed letter `C@|uU@&` replaced the plain catchers from 150k; from 220k a variant
+  `C@|WU@&` (it takes u sites, its own seed side W binds nothing) rose to about as many as the u kind (90-142 against
+  115-124): a cheat inside the new class, as the model says it must be.
 - **Host and catcher.** The catcher's one mutation (front `c@|` to `C@|`) made a head that catches the host's free heads
   by their fronts and buds on the host's seed sites. Alone it never buds (0 of 4): a parasite of the host's nursery. The
   catchers that replaced it in two of the standard worlds carry a seed site of their own on the former copy side
@@ -76,20 +76,23 @@ Derived first, then checked (INNOVATIONS run 0622). Notes, not the user's words.
 - **No Red Queen, but exclusion: a catcher arms its host's diet.** Predicted: the catcher's cost is the seed sites it
   takes, which are diet-blind (`z` on every stock part), and the heads it eats are a surplus, so switching diet gives a
   host no escape and catchers do not select for it. Measured (the diets world, three diets near their stocks, catchers
-  of diet c entered at 60k): diets e and g fall from about 125 hosts each to 0-34 within 20k and to 0-21 by 120k, while
-  c keeps 88-100 (controls: all three 110-139 to 120k; 4 of 4 each). Diet switching away from c is selected against, not
+  of diet c entered at 60k): diets e and g fall from about 125 hosts each to 7-34 within 20k and to 0-21 by 120k, while
+  c keeps 88-100 (controls: all three 104-139 to 120k; 4 of 4 each). Diet switching away from c is selected against, not
   for. Why: a catcher individual copies its host head at two sides and its own head at one, and all of these bind every
   `z` seed site, so the c lineage (hosts and catchers) fills the shared nursery; e and g hosts make one head each and
   lose their own seed sites to c and catcher heads (10k after entry, free heads c 66 and catchers 57 against e 1). The
   same in the standard world, where a new diet is a rare mutant (the general mutagen picks one letter in 53): the one
   that took hold (seed 4, g, to 109 hosts at 140k with no catcher present) fell to 3 by 190k as a catcher (`Z@&C@-`)
-  rose from 160k to 253 individuals. A kind that lives on a
-  kind is here its ally against the others: the first interaction between three kinds.
+  rose from 160k to 253 individuals. A kind that lives on a kind is here its ally against the others: the first
+  interaction between three kinds.
 - **What this asks for.** Place cannot make whole bodies heritable; recognition can, for whatever binds. So complex
   bodies should keep their function in what binds (fronts, attach and seed glues, the marks on binding sides), and
   lineages separate by private letters. Next questions: does a private class arise and hold whenever a kind is
   parasitised (the u kind arose once in 4 worlds); can a longer kind pay for itself where its in-place root keeps out a
-  nursery parasite ([G]).
+  nursery parasite. Not here: the stock arc keeps its numbers beside the catcher (91-98 against 84-96 without, h 0.03)
+  while the 2-cell kind loses 8%, but both are stock-limited at that hazard, and at h 0.1, where the catcher takes 27%
+  of the 2-cell kind, the arc cannot live. A longer kind needs cheaper catches (more parts within reach of its fronts)
+  before its root can pay.
 
 ## The hazard's unit decides between individuals and aggregates; marks are where function changes (build run 20261007-0420, 2026-10-07)
 
