@@ -45,7 +45,7 @@ const CANON=new Map();
 const canon=name=>{let c=CANON.get(name);if(c!==undefined)return c;const t=[...name.matchAll(TOK)].map(m=>m[0]);c=[0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];
   if(CANON.size>=1e5)CANON.clear();CANON.set(name,c);return c;};
 
-const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,copyGlue:false};
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -167,9 +167,11 @@ class TriSim extends Physics{
         // side of an attached triangle, whatever its glue; it takes its partner's type in this pass (_copy) and lets
         // go, so it stays free here (it binds nothing else and is never a template). An anchor side is no template:
         // it binds only by catching a strand end
+        // option copyGlue (candidate (t), explore run 20261007-1921; RULES Core changes): a glued copy side binds only a
+        // side with the complementary glue; an inert copy side binds any side
         if(this.cpy[v*3]||this.cpy[v*3+1]||this.cpy[v*3+2]){if(this.bonded(v))continue;
           for(let e=0;e<3&&!done;e++){if(this.bond[u*3+e]>=0||this.spent[u*3+e]||this.anc[u*3+e])continue;
-            for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
+            for(let j=0;j<3;j++)if(this.cpy[v*3+j]&&(!p.copyGlue||!G[v*3+j]||G[v*3+j]===comp(G[u*3+e]))&&reach(u,e,v,j)&&this.rng()<p.pBond){if(!this._snap(v,j,u,e))continue;this.bind(u,e,GLUE,v,j,GLUE);this.count('copyBind');done=true;break;}}
           continue;}
         const part=this.att[v*3]||this.att[v*3+1]||this.att[v*3+2];   // a part (has an attach side '@') binds only by it, never docks or fills
         // glue binding on an active side (not close-only or spent sides)

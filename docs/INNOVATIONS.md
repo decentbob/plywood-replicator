@@ -11,6 +11,42 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-1921, explore)
+
+- **A rare class wastes its parts; private recycling does not make a resource** (NEXT priority 20; theory in IDEAS "A
+  rare class wastes its parts"). Candidate (t) built as an option, `copyGlue` (default off, so no existing output
+  changes; test "copy side: with the option copyGlue ..."; case under RULES Core changes): a glued copy side binds only
+  a side with the complementary glue, an inert one any side. Demo `pair`: `PAHB=3` (a dead triangle returns as a blank
+  that keeps its glues, every side a copy side), `PADL=d` (lettered blanks lose their letters), lettered blanks counted
+  in `pop:` lines. New checks `rare-waste` (4 of 4) and `rare-waste-c`.
+  - **Smoke** (alone, no stock, 20k, seed 1): the private kind `U@&C@|u` holding `c@|C.Z@&` lives with (t) on (about 220
+    individuals; 394 with (t) off: the rest of its material waits as its own blanks); the u catcher with a generic
+    second cell (`c@|-Z@&`) dies out by 15k with (t) on: its heads' material piles up as `C?u?U?` blanks (940 of 1000),
+    whose only template is a free `u` site, and a bud sits on it most of the time.
+  - **Two equal blank farmers** (`PAW=1 PAF= PAM=0 PAHB=3`, A `U@&C@|u c@|C.Z@&` and B `W@&E@|w e@|E.Y@&`, 5 of each at
+    2000, seeds 1-4, 80k; `runs/two.json`): (t) on, the world dies by 10-15k (4 of 4, head blanks); (t) off, one class
+    excludes the other by 15-30k (4 of 4); (t) on with `PADL=0.1`, the same exclusion by 15-30k (4 of 4) at about 240
+    individuals instead of 390. Predicted: both present at 80k in more worlds with (t) on; wrong.
+  - **A private pair without the head sink** (`X@&d@|x.` on `D@x|d.` and `V@&e@|v.` on `E@v|e.`: copy sides close-only,
+    no bud on any template; `runs/pp.json`): one class by 20k in 4 of 4 with (t) on (about 320 individuals) and off
+    (about 350).
+  - **Why the exclusion is fast** (the two-farmer world, (t) off; `runs/allee.json`, `mix.json`, `pad0.json`): both
+    classes hold 150-200 for about 10k, then one falls from about 130 to under 15 within 5k. Decay 0.1 or 0.3 per 100
+    steps: one class by 20-30k, 4 of 4 each (predicted 2 or more of 4 with both at 0.1: wrong). Stirring the pool
+    (`PAMX=0.2`): one class by 10k in 2 of 4, by 20k in 4 of 4. No decay (`PAD=0`): both still there at 80k in 3 of 4
+    (150/29, 78/56, 14/45; seed 3 lost U by 40k), but second cells pile up free (445 free c cells beside 14 U
+    individuals in seed 4) and individuals fall from about 330 to 60-180. So the rare class loses because its free parts
+    decay or drift off before its few waiting buds catch them: an Allee effect of parts only a class makes.
+  - Picture: [rare-waste.png](pictures/rare-waste.png) (two equal farmers at 15k, seed 1, `PAD=1`: the two classes in
+    two colours, clustered; one falls from 132 to 5 individuals in the next 6k).
+  - Commands: `PAW=1 PAF= PAM=0 PAHB=3 PA2T=2000 PA3T=2000 PAEN=5 PA2='U@&C@|u c@|C.Z@&' PA3='W@&E@|w e@|E.Y@&'
+    TRI_PARAMS='{"copyGlue":true}' node tri/demos.js pair SEED 80000 runs/x` (about 2.5 minutes with 4 at once; without
+    `TRI_PARAMS` (t) is off; add `PADL=0.1`, `PAD=0.1|0.3|0`, `PAMX=0.2` for the variants; the private pair:
+    `PA2='X@&d@|x. D@x|d.' PA3='V@&e@|v. E@v|e.'`); `grep '^web' runs/x.txt`.
+  - Status: **not yet** (a resource each class makes for itself: private recycling slows nothing, 0 of 16 worlds with
+    two classes at 80k); **works** as an explanation (a rare class wastes its parts: exclusion in 20 of 20 worlds with
+    decay, both classes in 3 of 4 without; checks `rare-waste`, `rare-waste-c`).
+
 ## 2026-10-07 (autorun run 20261007-1821, build)
 
 - **Kinds as food: every catcher farms its catch, so all catchers share the blanks; three classes need three resources**

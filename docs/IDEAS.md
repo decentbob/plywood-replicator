@@ -28,6 +28,39 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A rare class wastes its parts; private recycling is not a resource (explore run 20261007-1921, 2026-10-07)
+
+Derived first, then checked (INNOVATIONS run 1921). Notes, not the user's words.
+- **Private recycling, the idea.** With candidate (t) (a glued copy side binds only a side with the complementary glue)
+  and dead triangles returning as blanks that keep their glues (`PAHB=3`), a cell whose exposed copy side's glue
+  complements one of its own glues is copied from its own dead material and from no one else's: each class would make a
+  resource for itself, so the web could hold more classes than the world's foods.
+- **Why it is not a resource (theory, and the runs agree).** A class makes its lettered blanks from its own deaths and
+  its material from plain blanks, so nothing enters it from outside: at a given level of plain blanks its growth is
+  still proportional to its size, and two classes cannot both be at rest on one plain level (run 1150's R* argument
+  holds). Recycling lowers a class's leak (material leaves it only as undelivered copies that decay); it is a stock a
+  class grows for itself, not a supply. Measured: two equal private classes exclude each other by 15-30k as fast as with
+  (t) off (4 of 4 each), in both designs (an in-place head, and a pair whose copy sides are close-only).
+- **Sources out of proportion to use, again.** A dead in-place head (`U@&C@|u`) returns a blank whose only template is
+  a free `u` site, and that site holds a bud most of the time: head material piles up as blanks (800-900 of 1000) and
+  the world dies (4 of 4 without a decay of letters). The pair whose copy sides are close-only (`X@&d@|x.` on `D@x|d.`)
+  has no such sink: a template no bud sits on.
+- **A rare class wastes its parts (an Allee effect).** Two classes of one design, each catching only the second cells
+  it makes itself, hold 150-200 individuals each for about 10k and then one falls from about 130 to under 15 within
+  5k, the majority winning: about 15 generations, where neutral drift at 360 individuals would take hundreds. The cause
+  is the part pool: a class's free second cells decay (or drift away) before its waiting buds catch them, and the
+  fewer its waiting buds the larger the share lost, so per capita births fall as a class becomes rare. Evidence: with
+  no decay both classes are still there at 80k in 3 of 4 (0 of 12 with decay 0.1, 0.3 or 1); stirring the pool makes
+  exclusion faster (gone by 10-20k, 4 of 4): clustering helps a class deliver its parts near its own buds.
+- **What it explains.** Every new class starts rare, so a class that catches only parts it makes cannot invade: run
+  1821's farmer of a private crop never held (0 of 8) but held when it entered first (4 of 4), and "whoever is in first
+  keeps the blanks". A class whose parts others make in plenty (a stock, the hosts' heads that the u catchers take) has
+  no such barrier: web-three's classes are all of that kind.
+- **What this asks for.** A web grows where new classes can invade, so a new class should catch parts that are common
+  already (another class's products, a stock) or get its own delivered without a pool (in place, which contact copying
+  gives for one part per gap: IDEAS run 0622). The second resource made by kinds stays open: a part that one class
+  makes as a by-product and another catches (kinds as food, with the farmer limited by something other than blanks).
+
 ## Every catcher farms its catch; classes are at most the limiting resources (build run 20261007-1821, 2026-10-07)
 
 Derived first, then checked (INNOVATIONS run 1821). Notes, not the user's words.
