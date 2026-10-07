@@ -51,11 +51,11 @@ Derived first, then checked (INNOVATIONS run 0622). Notes, not the user's words.
   (each copy binds beside its own template): one-type chains and rosettes are the only heredity by construction so far.
 - **The 4-cell arc, built** (`Z@&t@|- T@-a@| A@-b@| B@-z|`: head, two middles, an end whose seed site `z|` faces the
   gap; each cell's one copyable side outward, the head's into the gap). The head's copies are born in the gap and land
-  on the arc's own seed site: about half of all births without drives, 91-100% when the middles and the end are stock
-  parts (the pool holds few heads), against 0.18 (copied end) and 0.48 (stock end) for the 2-cell kind with the same
+  on the arc's own seed site: about half of all births without drives, 91-93% when the middles and the end are stock
+  parts (the pool holds few heads), against 18% (copied end) and 47-48% (stock end) for the 2-cell kind with the same
   letters. The bud grows round the next vertex and shares the gap with its parent. The cost is length: three catches
   per birth. With copied middles it dies under the standard drives (0 of 4, the parts decay before they meet); with
-  stock middles it lives only below the standard hazard (h 0.03: about 100 individuals; h 0.1: 0 of 4).
+  stock middles it lives only below the standard hazard (h 0.03: 84-96 individuals; h 0.1: 0 of 4).
 - **Recognition is the other route, and it is exact.** Which parts a bud takes is decided by glue: a part binds only a
   site with the complementary glue. So variation in binding glues is inherited together wherever the parts were made (a
   head's attach glue and the seed site that takes it; a front and the part it catches), while variation on sides that

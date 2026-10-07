@@ -2,7 +2,7 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 105 minutes (run 20261007-0622), budcycle-3 the longest;
+//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 100 minutes (run 20261007-0622), budcycle-3 the longest;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Exit code 1 if a working capability fails.
@@ -172,25 +172,25 @@ const CHECKS=[
   // run 20261007-0622 (explore): host and catcher. The catchers that replaced the plain one in the standard world carry
   // a seed site of their own: founded alone in the standard world without stocks or mutagen, the u kind (a catcher head
   // 'U@&C@|u' holding a host head by its front) grows on blanks only; the plain catcher (no seed site) never buds alone
-  {id:'catcher-free',cap:'A catcher with its own seed site is a free-living kind: founded alone without stock it holds 100 or more individuals',demo:'pair',seeds:[1,2,3,4],need:3,steps:20000,secs:80,env:{PAW:'1',PAF:'',PAM:'0',PA2:'U@&C@|u c@|-Z@&'},
+  {id:'catcher-free',cap:'A catcher with its own seed site is a free-living kind: founded alone without stock it holds 100 or more individuals',demo:'pair',seeds:[1,2,3,4],need:3,steps:20000,secs:45,env:{PAW:'1',PAF:'',PAM:'0',PA2:'U@&C@|u c@|-Z@&'},
     pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const ok=I.end>=100&&I.top.length>0&&I.top[0][1]==='-Z@&c@|+C@|uU@&';return [ok,`${I.end} individuals at 20k${I.top.length?', '+I.top[0][0]+'x '+I.top[0][1]:''}`];}},
-  {id:'catcher-free-c',cap:'  control: the plain catcher (no seed site) founded alone never buds',demo:'pair',seeds:[1],steps:20000,secs:40,env:{PAW:'1',PAF:'',PAM:'0',PA2:'Z@&C@|- c@|-Z@&'},
+  {id:'catcher-free-c',cap:'  control: the plain catcher (no seed site) founded alone never buds',demo:'pair',seeds:[1],steps:20000,secs:32,env:{PAW:'1',PAF:'',PAM:'0',PA2:'Z@&C@|- c@|-Z@&'},
     pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];return [I.end===0,`${I.end} individuals at 20k`];}},
   // a catcher arms its host's diet: the diets world (front mutagen on c..h, openRange 9, hazard per individual) holds
   // three diets near their stocks by 40k; 10 catchers of diet c entered at 40k (a labelled start) drive diets e and g
   // below 50 hosts (hosts: stock parts held) by 80k while c keeps 50 or more (each catcher copies c heads at two sides,
   // and they take every seed site); control without them: all three keep 80 or more
-  {id:'diets-catcher',cap:'Catchers of one diet exclude the other diets (diets world, 10 catchers of diet c entered at 40k)',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:420,env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01',PAMA:'cdefgh',PA1T:'40000',PAEN:'10',PAKR:'Z@&C@|-',PAKS:'c@|-Z@&'},
+  {id:'diets-catcher',cap:'Catchers of one diet exclude the other diets (diets world, 10 catchers of diet c entered at 40k)',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:285,env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01',PAMA:'cdefgh',PA1T:'40000',PAEN:'10',PAKR:'Z@&C@|-',PAKS:'c@|-Z@&'},
     pass:(L,o)=>{const D=[...o.matchAll(/^diet: t=(\d+) .*free stock (\d+):(\d+):(\d+)/gm)];if(!D.length)return [false,'no result'];const h=D[D.length-1].slice(2).map(x=>150-+x);return [h[0]>=50&&h[1]<50&&h[2]<50,`hosts at 80k: c ${h[0]}, e ${h[1]}, g ${h[2]}`];}},
-  {id:'diets-catcher-c',cap:'  control: no catchers, the three diets keep 80 or more hosts each',demo:'pair',seeds:[1],steps:80000,secs:400,env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01',PAMA:'cdefgh'},
+  {id:'diets-catcher-c',cap:'  control: no catchers, the three diets keep 80 or more hosts each',demo:'pair',seeds:[1],steps:80000,secs:282,env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01',PAMA:'cdefgh'},
     pass:(L,o)=>{const D=[...o.matchAll(/^diet: t=(\d+) .*free stock (\d+):(\d+):(\d+)/gm)];if(!D.length)return [false,'no result'];const h=D[D.length-1].slice(2).map(x=>150-+x);return [h.every(x=>x>=80),`hosts at 80k: c ${h[0]}, e ${h[1]}, g ${h[2]}`];}},
   // a root delivered in place (IDEAS "A bud gets one part by place"): a 4-cell arc round one vertex whose head's copies are
   // born in the arc's gap beside its own seed site; middles and end from stocks (150 each), standard world at hazard
   // 0.03 (at 0.1 it dies: three catches per birth). Roots copied by the bud's own parent (PARP): about 0.9 of births;
   // control: the 2-cell kind with the same head and a stock end, about 0.48
-  {id:'arc-root',cap:'A 4-cell arc delivers its root in place: 80% or more of its births have a root its own parent copied',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:150,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|a@| A@-|b@| B@-|z|',PAF:'T@-|a@|:150 A@-|b@|:150 B@-|z|:150'},
+  {id:'arc-root',cap:'A 4-cell arc delivers its root in place: 80% or more of its births have a root its own parent copied',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:93,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|a@| A@-|b@| B@-|z|',PAF:'T@-|a@|:150 A@-|b@|:150 B@-|z|:150'},
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]>=0.8,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
-  {id:'arc-root-c',cap:'  control: the 2-cell kind (head and stock end), fewer than 60% in place',demo:'pair',seeds:[1],steps:30000,secs:120,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|z|',PAF:'T@-|z|:150'},
+  {id:'arc-root-c',cap:'  control: the 2-cell kind (head and stock end), fewer than 60% in place',demo:'pair',seeds:[1],steps:30000,secs:70,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|z|',PAF:'T@-|z|:150'},
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]<0.6,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes

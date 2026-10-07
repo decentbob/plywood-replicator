@@ -29,7 +29,7 @@ inherits by recognition (binding glues), and the parental share matters only for
 its own seed site (about half of births without drives; 91-93% with stock middles and end at h 0.03, check `arc-root`;
 the 2-cell kind 18% copied, 47-48% on a stock end). It pays nothing: with copied middles it dies under the standard
 drives, with stock middles it lives only at h 0.03, where the catcher costs the 2-cell kind just 8% (the arc 0).
-Nothing is running. Suite: about 105 minutes (six new checks, about 15 minutes); tests 41.
+Nothing is running. Suite: about 100 minutes (six new checks, 8 of 8 pass with `pair` and `diets`, 12 minutes); tests 41.
 
 **Next step (rotation 64, build): priority 15, a recognition census and a larger standard world.** Kinds in this world
 are recognition classes (types that bind one another by complementary glues); complexity so far grew as new classes
@@ -138,6 +138,12 @@ PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (ch
                                                    # C E G, openRange 9, PAHB=2, decay 1, PAHU=2 (hazard per individual, h 0.1),
                                                    # the general mutagen 0.01 (stock parts exempt); any option set overrides
                                                    # (PA1=1 adds the pair founder); 'kinds:' census lines, diets picture
+PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
+                                                   # without stock (check catcher-free; 45 s); diets world with catchers entered:
+                                                   # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)
+PAW=1 PAM=0 PAH=0.03 PARP=1 PA2='Z@&t@|- T@-|a@| A@-|b@| B@-|z|' PAF='T@-|a@|:150 A@-|b@|:150 B@-|z|:150' node tri/demos.js pair 1 30000 runs/x
+                                                   # the 4-cell arc on stock middles (check arc-root; 90 s): PARP=1 'root:' lines,
+                                                   # the share of births whose root its own parent copied, picture at the first
 node tri/demos.js strip 1 6000 runs/x 2345         # strips of 2 to 5 cells, one world each (check strips; 30 s): complete and
                                                    # incomplete releases, delay from the last cell; PAR openRange (default 120)
 node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world

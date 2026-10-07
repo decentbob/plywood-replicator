@@ -36,7 +36,7 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 | Kinds that live on kinds: a head that catches the host's free heads (a nursery parasite); catchers with a seed site of their own are free-living pairs; catchers of one diet exclude the other diets | brood parasites, apparent competition | **works** (explore run 20261007-0622, checks `catcher-free` 4 of 4, `diets-catcher` 4 of 4; no Red Queen: the catcher arms its host's diet) | demo pair (`PA1T` entry of `PAKR`/`PAKS`) |
 | A root delivered in place: a 4-cell arc whose head's copies are born beside its own seed site (contact copying gives a bud at most one part per gap from its parent; recognition gives the rest) | heredity by construction | **works for the root** (run 0622, check `arc-root`: 91-93% of births at h 0.03); does not pay: dies under the standard drives | demo pair `PARP=1`, IDEAS run 0622 |
 
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 105 minutes with 4 processes (run 20261007-0622); `budcycle-3` and `budcycle-lysis` 25-35 minutes per world, seeds 2 and 3 only since that run)
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 100 minutes with 4 processes (run 20261007-0622); `budcycle-3` and `budcycle-lysis` 25-35 minutes per world, seeds 2 and 3 only since that run)
 or by a test in `tri/test.js`.
 
 **Removed 2026-10-03 (core review run 20261003-2121; RULES, Core changes): the casting lineage.** Rows that worked and
