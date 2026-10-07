@@ -28,6 +28,69 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A bud gets one part by place and the rest by recognition; a catcher arms its host's diet (explore run 20261007-0622, 2026-10-07)
+
+Derived first, then checked (INNOVATIONS run 0622). Notes, not the user's words.
+- **What "in place" can mean.** A copy is born in the site beside its template's side (the template turned 180 degrees
+  about the shared edge) and is free from the next pass; it binds where its centre comes within capture (0.6) of a site
+  beside a side with the complementary glue. Within 0.6 of its birth site lie only that site and its three edge
+  neighbours (0.58 away; every other site is 1 or more away). So a copy can land before it drifts into the pool only
+  beside a cell three or more bonds from its template (the honeycomb of cells has no cycle shorter than six): the far
+  end of a 4-cell arc round one vertex (born in the arc's two-site gap, it binds in the gap's other site), or the far
+  end of a 5-cell arc (born in its one-site gap, it binds there).
+- **No whole bud by place.** For a kind whose cells have distinct types, a bud made entirely of its parent's own copies
+  delivered in place would be the parent moved by a rotation or translation of the lattice under which every cell moves
+  at most two sites through a free middle site. Translations by a unit step: every up-triangle's middle site lies in one
+  fixed edge direction and every down-triangle's in another, so no body cell may have a neighbour in those directions:
+  only isolated pairs, and then parent and bud do not touch, so the bud's first cell has nothing to bind. Rotations move
+  a cell far unless it lies within 1 of the centre (60 degrees about a vertex), 0.58 (120 degrees) or 0.5 (180
+  degrees): only the cells round one vertex or one triangle, whose images overlap the parent or whose middle site is a
+  parent cell. Checked by enumeration (every body of 2 to 5 cells, every motion): 3-5 cells, none; 2 cells, 6, none
+  touching its parent. So **contact copying gives a bud at most one cell per gap from its own parent** (its root, by a
+  4-arc; or its closing cell, by a 5-arc); the rest comes from the pool. A kind whose cells share one type escapes this
+  (each copy binds beside its own template): one-type chains and rosettes are the only heredity by construction so far.
+- **The 4-cell arc, built** (`Z@&t@|- T@-a@| A@-b@| B@-z|`: head, two middles, an end whose seed site `z|` faces the
+  gap; each cell's one copyable side outward, the head's into the gap). The head's copies are born in the gap and land
+  on the arc's own seed site: about half of all births without drives, 91-100% when the middles and the end are stock
+  parts (the pool holds few heads), against 0.18 (copied end) and 0.48 (stock end) for the 2-cell kind with the same
+  letters. The bud grows round the next vertex and shares the gap with its parent. The cost is length: three catches
+  per birth. With copied middles it dies under the standard drives (0 of 4, the parts decay before they meet); with
+  stock middles it lives only below the standard hazard (h 0.03: about 100 individuals; h 0.1: 0 of 4).
+- **Recognition is the other route, and it is exact.** Which parts a bud takes is decided by glue: a part binds only a
+  site with the complementary glue. So variation in binding glues is inherited together wherever the parts were made (a
+  head's attach glue and the seed site that takes it; a front and the part it catches), while variation on sides that
+  bind nothing (copy sides, plain markers) mixes through the pool (run 1322's markers on plain sides lost their linkage
+  within 35 generations). A kind is a **recognition class**, the types that bind one another, and the parental share
+  s matters only for cheats inside a class (a part that keeps the class's glues but not its function: run 1322's
+  threshold (1 - s) k > 1). A new private letter pair (an attach glue and the seed glue that takes it, changed
+  together) closes a lineage off from the other classes: speciation by recognition. Seen in the standard world (seed 3,
+  240k): a catcher with a private seed letter `C@|uU@&` replaced the plain catchers from 150k; from 210k a variant
+  `C@|WU@&` (it takes u sites, its own seed side W binds nothing) rose to as many as the u kind (114-142 against
+  117-124): a cheat inside the new class, as the model says it must be.
+- **Host and catcher.** The catcher's one mutation (front `c@|` to `C@|`) made a head that catches the host's free heads
+  by their fronts and buds on the host's seed sites. Alone it never buds (0 of 4): a parasite of the host's nursery. The
+  catchers that replaced it in two of the standard worlds carry a seed site of their own on the former copy side
+  (`C@zZ@&`, `C@|uU@&`): founded alone without stock they grow (4 of 4 each, 178-378 individuals). They are pairs that
+  eat blanks only (a root with a front and a seed site, plus a copied second cell); the "host head" is just their copied
+  part. The z kind is the host kind with its prepared stock part replaced by a copied part that also roots.
+- **No Red Queen, but exclusion: a catcher arms its host's diet.** Predicted: the catcher's cost is the seed sites it
+  takes, which are diet-blind (`z` on every stock part), and the heads it eats are a surplus, so switching diet gives a
+  host no escape and catchers do not select for it. Measured (the diets world, three diets near their stocks, catchers
+  of diet c entered at 60k): diets e and g fall from about 125 hosts each to 0-34 within 20k and to 0-21 by 120k, while
+  c keeps 88-100 (controls: all three 110-139 to 120k; 4 of 4 each). Diet switching away from c is selected against, not
+  for. Why: a catcher individual copies its host head at two sides and its own head at one, and all of these bind every
+  `z` seed site, so the c lineage (hosts and catchers) fills the shared nursery; e and g hosts make one head each and
+  lose their own seed sites to c and catcher heads (10k after entry, free heads c 66 and catchers 57 against e 1). The
+  same in the standard world, where a new diet is a rare mutant (the general mutagen picks one letter in 53): the one
+  that took hold (seed 4, g, to 109 hosts at 140k with no catcher present) fell to 3 by 190k as a catcher (`Z@&C@-`)
+  rose from 160k to 253 individuals. A kind that lives on a
+  kind is here its ally against the others: the first interaction between three kinds.
+- **What this asks for.** Place cannot make whole bodies heritable; recognition can, for whatever binds. So complex
+  bodies should keep their function in what binds (fronts, attach and seed glues, the marks on binding sides), and
+  lineages separate by private letters. Next questions: does a private class arise and hold whenever a kind is
+  parasitised (the u kind arose once in 4 worlds); can a longer kind pay for itself where its in-place root keeps out a
+  nursery parasite ([G]).
+
 ## The hazard's unit decides between individuals and aggregates; marks are where function changes (build run 20261007-0420, 2026-10-07)
 
 Derived first, then checked (INNOVATIONS run 0420). Notes, not the user's words.

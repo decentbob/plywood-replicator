@@ -169,6 +169,21 @@ const CHECKS=[
   {id:'world',cap:'The standard world: individuals at every census and kinds that arose by mutation held at the end',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:440,env:{PAW:'1'},
     pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const mut=I.top.filter(([,k])=>k!=='-Z@&c@|+-|z|C@'),c=o.match(/census: maxHeld=(\d+) at \S+ longestHeld=(\d+)/);
       return [I.min>0&&mut.length>0&&mut[0][0]>=10,`individuals fewest ${I.min}, at 120k ${I.end}; commonest kind not the founder's ${mut.length?mut[0][0]+'x '+mut[0][1]:'none'}; kinds held at once up to ${c?c[1]:'-'}, longest held ${c?c[2]:'-'} cells`];}},
+  // run 20261007-0622 (explore): host and catcher. The catchers that replaced the plain one in the standard world carry
+  // a seed site of their own: founded alone in the standard world without stocks or mutagen, the u kind (a catcher head
+  // 'U@&C@|u' holding a host head by its front) grows on blanks only; the plain catcher (no seed site) never buds alone
+  {id:'catcher-free',cap:'A catcher with its own seed site is a free-living kind: founded alone without stock it holds 100 or more individuals',demo:'pair',seeds:[1,2,3,4],need:3,steps:20000,secs:80,env:{PAW:'1',PAF:'',PAM:'0',PA2:'U@&C@|u c@|-Z@&'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const ok=I.end>=100&&I.top.length>0&&I.top[0][1]==='-Z@&c@|+C@|uU@&';return [ok,`${I.end} individuals at 20k${I.top.length?', '+I.top[0][0]+'x '+I.top[0][1]:''}`];}},
+  {id:'catcher-free-c',cap:'  control: the plain catcher (no seed site) founded alone never buds',demo:'pair',seeds:[1],steps:20000,secs:40,env:{PAW:'1',PAF:'',PAM:'0',PA2:'Z@&C@|- c@|-Z@&'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];return [I.end===0,`${I.end} individuals at 20k`];}},
+  // a catcher arms its host's diet: the diets world (front mutagen on c..h, openRange 9, hazard per individual) holds
+  // three diets near their stocks by 40k; 10 catchers of diet c entered at 40k (a labelled start) drive diets e and g
+  // below 50 hosts (hosts: stock parts held) by 80k while c keeps 50 or more (each catcher copies c heads at two sides,
+  // and they take every seed site); control without them: all three keep 80 or more
+  {id:'diets-catcher',cap:'Catchers of one diet exclude the other diets (diets world, 10 catchers of diet c entered at 40k)',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:420,env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01',PAMA:'cdefgh',PA1T:'40000',PAEN:'10',PAKR:'Z@&C@|-',PAKS:'c@|-Z@&'},
+    pass:(L,o)=>{const D=[...o.matchAll(/^diet: t=(\d+) .*free stock (\d+):(\d+):(\d+)/gm)];if(!D.length)return [false,'no result'];const h=D[D.length-1].slice(2).map(x=>150-+x);return [h[0]>=50&&h[1]<50&&h[2]<50,`hosts at 80k: c ${h[0]}, e ${h[1]}, g ${h[2]}`];}},
+  {id:'diets-catcher-c',cap:'  control: no catchers, the three diets keep 80 or more hosts each',demo:'pair',seeds:[1],steps:80000,secs:400,env:{PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'2',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.1',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAMF:'1',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01',PAMA:'cdefgh'},
+    pass:(L,o)=>{const D=[...o.matchAll(/^diet: t=(\d+) .*free stock (\d+):(\d+):(\d+)/gm)];if(!D.length)return [false,'no result'];const h=D[D.length-1].slice(2).map(x=>150-+x);return [h.every(x=>x>=80),`hosts at 80k: c ${h[0]}, e ${h[1]}, g ${h[2]}`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s (PAPS); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
