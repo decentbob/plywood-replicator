@@ -20,6 +20,9 @@ part gains `&` or a front) each remove the aggregate's advantage; test both in p
 choose the standard world (stocks, openRange 9, the chosen hazard and mutagen) and check it (individuals of 2 or more
 cells above zero to the end, diets still evolve, 3 of 4 worlds). Stop when the standard world has a check, or with
 the reason none of the settings keeps individuals.
+Running (if this run stopped here): batch A, pair-flow's command with `PAHU=2 PAH=0.5` (A1), `PAHU=1 PAH=0.6 PAMF=2` (A2),
+`PAHU=2 PAH=0.5 PAMF=2` (A3), seeds 1-4, 200k (`runs/lA.txt`, `runs/q.sh`, not in git: see commit `build 0420` messages).
+PAHU=2 at h 0.5 holds about as many pairs as PAHU=1 at 0.6 (10k, seed 1: 141-185 against 100-204); at 0.6 it died by 6k.
 
 **Handoff status (autorun run 20261007-0050, harden).** Priority 12 done, no rule change (INNOVATIONS run 0050).
 (a) **Census of individuals** in every pair world with `PAP`: a `kinds:` line per census (in diet worlds after `||` on
