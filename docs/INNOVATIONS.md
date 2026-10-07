@@ -8,7 +8,8 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup); `budcycle`'s `BCHOLD`, `BCSEED`, `BCK`, `BCLK`
 at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`,
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup); `pair`'s `PAT`, `PADBG`, `PAPS`, `PAV=half|right|link`, `PAVK=selfish|front`,
-`PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
+`PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup); the core option `copyGlue` with `pair`'s `PAHB=3`
+and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
 ## 2026-10-07 (autorun run 20261007-1921, explore)

@@ -249,7 +249,16 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
-### Option `copyGlue` (candidate (t)): a glued copy side binds only a complementary side, 2026-10-07, autorun run 20261007-1921 (explore)
+### Removal: the option `copyGlue` (candidate (t)), 2026-10-07, autorun run 20261007-2051 (core-review)
+Built in run 1921 (below) as an option, default off; no check, kit or command uses it, and its result was negative (a
+class copied only from its own deaths makes no resource). Removed with the demo drive values that served only it
+(`pair`'s `PAHB=3`, lettered blanks, and `PADL`, their decay); code in git at `25c68b9`. Contact copying stays glue-blind
+(test "copy side: copying is glue-blind"). Outputs unchanged by construction (the condition short-circuited before any
+random draw while the option was off; the drive values were read only when set); measured below. A future slice that
+needs a resource kinds make starts again from the case below, with what keeps the second blank type in supply answered
+first (NEXT, candidate (t)).
+
+### Option `copyGlue` (candidate (t)): a glued copy side binds only a complementary side, 2026-10-07, autorun run 20261007-1921 (explore) (removed run 2051)
 NEXT priority 20. The case, written before the code; the result follows when measured.
 1. **Capability and why the goal needs it.** A web of classes larger than its foods. Run 1821 showed that every catch
    is copied from blanks, so every class that makes its parts draws on one resource, and by competitive exclusion the

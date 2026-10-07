@@ -144,8 +144,7 @@ PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' PA3T=20000 PA3='N@&k@|n K
                                                    # (PAF unset) never establishes (web-three-c)
 PAW=1 PAF= PAM=0 PA2T=2000 PA3T=2000 PAEN=5 PA2='U@&C@|u c@|C.Z@&' PA3='W@&E@|w e@|E.Y@&' node tri/demos.js pair 1 30000 runs/x
                                                    # two equal blank farmers (check rare-waste; about 2 minutes): one excludes
-                                                   # the other by 30k; PAD=0: both stay (rare-waste-c); PAHB=3 lettered blanks,
-                                                   # TRI_PARAMS='{"copyGlue":true}' candidate (t), PADL their decay
+                                                   # the other by 30k; PAD=0: both stay (rare-waste-c)
 PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
                                                    # without stock (check catcher-free; 45 s); diets world with catchers entered:
                                                    # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)
