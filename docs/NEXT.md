@@ -20,7 +20,11 @@ individual (its root is unspent there): **every predator of heads farms them**. 
 heads `W@&C@|w` (holding `c@|-Z@&`) makes 3 classes (Z, U, W) with links to Z at most censuses in 3 of 4.
 Measured (80k, seeds 1-4): (A) V died out in 4 of 4 within 5k of entry; (B) W held beside U for 20-30k in 3 of 4 (3
 classes, 3 links), then one farmer excluded the other. Running `runs/food2.json`: (C) a farmer with a private crop
-`X@&D@|x` + `d@|-Y@&` (predicted: 3 classes, X unlinked, 4 of 4); (D) the same crop rooting on `z` (`d@|-Z@&`). Batch: `runs/food.json` (regenerate: the commands under Commands with `PA3T=20000 PA3=...`).
+`X@&D@|x` + `d@|-Y@&` (predicted: 3 classes, X unlinked, 4 of 4); (D) the same crop rooting on `z` (`d@|-Z@&`). Measured: C and D died out 4 of 4 (blanks ~31 of 1000 once U
+lives: every catch is farmed from blanks, so farmers share one resource and an invader cannot grow); (E) N on K
+(a second stock) beside host and U: 3 classes at every census 30k-80k in 3 of 4 (`runs/food3.json`). Running
+`runs/food4.json` (F: X first at 10k while blanks are plenty, U at 20k, 120k): predicted X establishes in 3 of 4,
+and at 120k at most 2 classes in 4 of 4 (one farmer excludes the other). Batch: `runs/food.json` (regenerate: the commands under Commands with `PA3T=20000 PA3=...`).
 
 **Handoff status (autorun run 20261007-1720, explore).** Priority 18 done (INNOVATIONS run 1720, IDEAS "A class is
 a cycle of seed letters"); no rule or demo change. **A class owns its seed letter when its head's copy side is its seed
