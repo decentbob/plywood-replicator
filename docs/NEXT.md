@@ -1,38 +1,37 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261006-2350, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-07 (after autorun run 20261007-0050, harden). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`; the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`, the handoff of run 1750 (heritable diets) at `65b7e54`, the direction
-check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`).
+check of run 1851 at `e63366e`, the handoff of run 1920 (one range) at `4539966`, the handoff of run 2350 (length shrinks) at `0ed8f69`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261006-2350, build).** Priority 11 done as **a clear negative with its reason**, no
-rule change (INNOVATIONS run 2350; theory in IDEAS "Joints make individuals"). (a) **The z kind was never a 3-cell
-kind**: a z front catches a head by its `&` side, a joint; since run 1920 the caught head leaves as an ordinary 2-cell
-individual once it has its stock (a z head is a seed site one cell further out). On main: 0 of 4 a..z worlds at
-openRange 9 (120k) and 0 of 1 at 3; run 1750's code holds 27 (what it counted were z heads holding waiting heads).
-(b) **Under the mutagen on every glue** the diets world collapses (4 of 4: stocks drain because stock parts mutate and
-decay; one world dies, three end as self-catching and `&`-less chains or anchorless variants). (c) **Length needs
-middles** (plain attach side, front, copy side); the slice built the ladder world (`Z@&c@|- C@e@|- E@-|z|`, stocks E
-and G, front mutagen): **the 2-cell shortcut (head catching the stock) replaces the 3-cell founder in 4 of 4 worlds**
-(new check `ladder`); longer chains arise by one mutation but never hold. Controls without the mutagen agree (2 of 2),
-and two designs meant to make the third cell pay failed for reasons now in IDEAS (a middle has one free side).
-New: a `kinds:` census line in diet worlds (front letters per individual, cells per individual). The user asked
-(2026-10-07, IDEAS and AGENTS): more theory, concepts and structures designed ahead of need, not only small tested
-changes. Still true from run 1920: openRange is a completion delay for bodies of 3+ cells (about openRange passes;
-use a range just above the longest kind, e.g. 9); the lineage's `falseRel` has another cause. Tests 41 pass. Nothing
-is running.
+**Handoff status (autorun run 20261007-0050, harden).** Priority 12 done, no rule change (INNOVATIONS run 0050).
+(a) **Census of individuals** in every pair world with `PAP`: a `kinds:` line per census (in diet worlds after `||` on
+the existing line) and a `census:` end line. An individual is what bonds that are not joints join (the open signal's
+unit, IDEAS "Joints make individuals"); its kind is its composition. All other output is byte for byte main's (126
+check worlds). (b) **What it shows:** no held kind longer than 3 cells in any check world, and 3 only where prepared;
+mutagen worlds hold 2-cell kinds only (up to 12 kinds held at once in pair-mut). In the diets world about half the
+complete individuals hold another diet's head on their seed site (every head binds every `z` site). **In pair-flow
+seeds 2 and 4 no individual is left by 155-165k**: what is still counted as bodies are chains in which every bond is
+a joint (`B@&R@b` x 5-6; pairs whose S took `&` on its attach side). The check passes, but its "keeps evolving" is in
+2 of 4 worlds an aggregate world (picture `docs/pictures/flow2-joint-chains.png`). (c) **Suite 110 -> 80 minutes**:
+the frozen lineage's checks on seeds 2 and 3 (both 3 of 4 on main, seed 1 fails both), `secs` from measured times.
+A profile puts 75% of a pair world in physics (already tuned); the demo's bookkeeping is under 3%. Tests 41 pass,
+checks 36 of 36. Nothing is running.
 
-**Next step (rotation 61, harden): priority 12**, the kinds census in every pair world (extend this run's `kinds:`
-line beyond diet worlds: kinds by body composition, how many hold 5 or more, the longest body held, kinds holding
-another kind's parts) and suite time. Then 62 build (one standard world) and 63 explore, where this run proposes
-**a function only a longer body has** (IDEAS "Joints make individuals", candidates 1-4; first choice: heredity by
-construction in a 4-cell arc, designed from part types up before any batch).
+**Next step (rotation 62, build): priority 13**, one standard evolving world, now with a requirement from this run:
+it must keep individuals (the census's complete individuals of 2 or more cells above zero to the end in 3 of 4
+worlds; pair-flow's setting loses them in 2 of 4 by 165k). Candidates to weigh first, by theory: what makes a joint
+chain win (a part that binds by its `&` side and never lets go because it keeps an open front of its own: no release,
+no copy cost) and which setting removes that advantage without a core change (the diets world's front-only mutagen never makes
+`&` sides, and no diets world lost its individuals; pair-flow mutates every glue and mark). Then 63 explore: **a function only a longer body has** (IDEAS "Joints make individuals",
+candidates 1-4; first choice: heredity by construction in a 4-cell arc, designed from part types up before any batch).
 
 ## Direction and priorities
 
@@ -66,10 +65,10 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
     chains of 4 or more cells complete and persist; and the same world with the mutagen on every glue (`PAMF` off): do
     diets and z survive, or does it collapse to aggregators as run 0621 did? Check: a kind of 3 or more cells that arose
     by mutation holds 10 or more individuals at the end in 3 of 4 worlds, or a clear negative with its reason.
-12. [61 harden] **A kinds census** in every pair world (one `kinds:` line: kinds by body composition, how many hold 5
+12. Done (run 0050, harden): census of individuals in every pair world; suite 80 minutes. Was: [61 harden] **A kinds census** in every pair world (one `kinds:` line: kinds by body composition, how many hold 5
     or more individuals, the longest body held, kinds holding another kind's parts; other output unchanged), and suite
     time (follow-up below: the frozen lineage's checks to fewer seeds).
-13. [62 build] **One standard evolving world**: the settings 10 and 11 need with the fewest drives (one hazard rule,
+13. [62 build] **One standard evolving world** (run 0050: it must keep individuals; pair-flow's setting loses them in 2 of 4): the settings 10 and 11 need with the fewest drives (one hazard rule,
     one mutagen, blanks and stocks), made the default for later pair slices and checks, so results add up in one world.
 14. [63 explore] **A function only a longer body has** (run 2350: without one, length shrinks; IDEAS "Joints make
     individuals", candidates 1-4: heredity by construction in a 4-cell arc first), or **grown instead of prepared
@@ -120,7 +119,7 @@ review-intent.
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about 85 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 80 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 node tri/demos.js strip 1 6000 runs/x 2345         # strips of 2 to 5 cells, one world each (check strips; 30 s): complete and
                                                    # incomplete releases, delay from the last cell; PAR openRange (default 120)
 node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s): one founder among copy blanks; PAB blanks (300), PAS world
@@ -128,9 +127,10 @@ node tri/demos.js pair 1 3000 runs                # the pair (check pair; 10 s):
                                                    # PAKS='B@y-|' PAKR='Y@&b@-'); result: bodies, gen, copies by type, doublings, children
 PAB=1000 PAS=50 PAP=20000 PAHT=1000 PAH=0.6 PAD=1 node tri/demos.js pair 1 1000000 runs/x   # the pair world that runs on
                                                    # (check pair-run at 100k steps; about 35 minutes per 10^6): PAH body hazard,
-                                                   # PAD decay of free parts (per 100 steps), PAHT hazard start, PAP 'pop:' lines
+                                                   # PAD decay of free parts (per 100 steps), PAHT hazard start, PAP 'pop:' lines and 'kinds:' census
+                                                   # lines (individuals between joints, kinds by composition; every pair world)
 PAHB=2 PAB=1000 PAS=50 PAP=5000 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 node tri/demos.js pair 1 300000 runs/x   # the mutagen
-                                                   # world that keeps evolving (check pair-flow at 200k; about 4 minutes): PAHB=2 every
+                                                   # world that keeps evolving (check pair-flow at 200k; about 7 minutes): PAHB=2 every
                                                    # lysed triangle returns as a blank; PAM the mutagen, PAHU=1 hazard per triangle;
                                                    # 'mut:' census lines, 'evolving:' result line; PAB=3000 PAS=87: 3x world
                                                    # (selection: PAV, PAVK, PAVP, PAVT, checks pair-sel, pair-sel-c)

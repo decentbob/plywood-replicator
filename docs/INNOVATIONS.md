@@ -10,6 +10,37 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-07 (autorun run 20261007-0050, harden)
+
+- **A census of individuals in every pair world; the suite 27% faster** (NEXT priority 12). No rule change; every
+  check world's output is byte for byte main's apart from the added lines (126 world outputs, `CHECK_SAVE` diff).
+  - **Census.** Demo `pair` prints a `kinds:` line every `PAP` steps (50 steps before each, between two decay steps;
+    appended after `||` to the diet worlds' existing `kinds:` line) and a `census:` end line. An **individual** is a set
+    of triangles joined by bonds that are not joints (RULES: a bond with `&` on either side), the unit the open signal
+    sees; its **kind** is its composition (sorted types). Complete individuals (2 or more cells, no open front) by
+    kind, kinds held (5 or more individuals), the most cells in a held kind, growing individuals (an open front), lone
+    bonded triangles, and complete individuals holding by a joint a triangle whose type is not in their kind (another
+    kind's part). `census: maxHeld (second half) longestHeld (whole run) maxHoldingOther (second half)`.
+  - **What it shows in the check worlds** (11 settings, 4 seeds each, `runs/b` of this run). No held kind longer than 3
+    cells anywhere; 3 only where a 3-cell founder was prepared (stock strip; the ladder's founder until replaced). Every
+    mutagen world holds only 2-cell kinds; the most kinds held at once is 12 (pair-mut seed 3; 5 to 12 in pair-mut,
+    mostly variants differing in one mark). **Other kinds' parts:** in the diets world about half the complete
+    individuals (179-186 of about 400 at 60k) hold another diet's head on their seed site: every head binds every `z` seed
+    site, so the diets raise each other's buds (IDEAS candidate 3, private seed letters, is the counter). **No
+    individuals left:** in pair-flow seeds 2 and 4 the last individual is gone by 165k and 155k; what the `mut:` census
+    still counts as bodies (83 and 124) are chains in which every bond is a joint (`B@&R@b` x 5-6 in seed 2; pairs
+    whose S took `&` on its attach side, `-Y@&b@| + B@&X@y@`, in seed 4). The check passes (copying and sweeps go on),
+    but in 2 of 4 worlds what evolves by 200k is joint-joined aggregates, not individuals: priority 13's standard
+    world should keep individuals (a check can now require them).
+  - **Suite time.** The frozen lineage's checks run seeds 2 and 3 (both must pass): at main `0ed8f69` both passed 3 of 4
+    (seed 1 fails both, generation 3 not reached by 1.2M steps), the record stays in their entries. Each check's
+    `secs` (scheduling order) is its measured time (pair-flow was scheduled at 200 s and took 400, so it ran last). Suite:
+    6569 s on main, 4781 s on the branch, all 36 checks pass in both. A profile of a stock-duo world: physics 75% of the
+    time (overlap tests 24%, bond pairs 13%), the demo's own bookkeeping under 3%: further speed needs physics work.
+  - Command: `PAB=1000 PAS=50 PAHT=1000 PAH=0.6 PAD=1 PAM=0.01 PAHU=1 PAP=5000 PAHB=2 node tri/demos.js pair 2 200000
+    runs/x` (pair-flow seed 2; `kinds:` lines; picture `docs/pictures/flow2-joint-chains.png`).
+  - Status: **works** (observation).
+
 ## 2026-10-07 (autorun run 20261006-2350, build)
 
 - **Length by mutation: it arises in one step and shrinks in one step; the z kind was a nursery, not a kind** — a clear
