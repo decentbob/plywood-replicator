@@ -16,6 +16,10 @@ Running (started 08:40-08:47 UTC, about an hour; rerun any that are missing): th
 area, `for n in 1 2 3 4; do PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair $n 240000
 runs/x3$n > runs/x3$n.txt; done` (in parallel; `grep '^web' runs/x3*.txt`). The `web:` census is committed on branch
 `claude/build-0820-web`.
+Result so far: 3x `web:` timelines in runs/x31-x34 (3 of 4 collapse by 180-210k into chains of heads that never let
+go); 1x in runs/x11-x14. Extension of the slice: the drive `PAHU=3` (a hit lyses the whole body, joints included;
+commit on the branch) at 3x, running since 09:40 UTC: the same command as above with `PAHU=3` and outputs
+`runs/y3$n` (seed 4 after x14 finishes). Done when 4 worlds of it have a web timeline.
 Prediction (written before the 3x results): **the web saturates.** A new class needs its own seed letter on a copied
 part (stock parts are exempt from the mutagen and all carry `z`), so it lives on blanks only, as the u kind does; it
 arises in two steps through a cheat (a head with root Z and a new site u that nothing takes, then a root mutant U that
