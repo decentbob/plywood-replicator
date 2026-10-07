@@ -22,7 +22,9 @@ quoting of glue strings). NEXT, ROADMAP's backlog A: done priorities condensed. 
 1-4, 240k: does it collapse like h 0.1 (3 of 4)? (c) 1x `PAW=1 PAHU=3` seeds 1-4, 240k. Done when: if `PAHU=3` holds at
 1x and 3x and the matched `PAHU=2` collapses, `PAW=1` uses `PAHU=3` and every `PAW=1` check is rerun (world, catcher-free,
 arc-root, web-two, with controls), changed outcomes explained; otherwise the records say which explanation (harsher
-hazard or whole body) holds and `PAW=1` stays. Prediction: the matched `PAHU=2` still collapses in at least 2 of 4
+hazard or whole body) holds and `PAW=1` stays. **Running (14:10 UTC):** (a) done: at 3x `PAHU=2` h 0.3 and 0.4 die
+by 10k, h 0.2 holds 150-250 individuals, h 0.15 holds 530-720 from 20k to 60k (the match). (b) `node tri/batch.js
+runs/m3.json` (3x, `PAHU=2 PAH=0.15`, seeds 1-4, 240k; the file is the 3x command's env plus those two, job id `m`). Prediction: the matched `PAHU=2` still collapses in at least 2 of 4
 (chains split when one head is hit, so a harsher hazard per head does not stop them growing).
 
 **Next step (rotation 66, build): priority 17**, the whole-body hazard at 1x and matched (below). The previous run's
