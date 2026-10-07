@@ -11,6 +11,16 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261007-0420, build; in progress).** Priority 13, one standard evolving world that keeps
+individuals. Theory first: a triangle's risk under each hazard unit (per triangle: lysis takes the whole individual, so
+a triangle in a k-cell individual dies k times as often as a lone one and a joint aggregate is the safest; per physics
+body: a joined aggregate's parts share one hit; per individual: every attached triangle dies at the same rate). Predict
+that a hazard per individual (new `PAHU=2`) and a mutagen on glue letters only (new `PAMF=2`: marks never change, so no
+part gains `&` or a front) each remove the aggregate's advantage; test both in pair-flow (2 x 2, 4 seeds, 200k), then
+choose the standard world (stocks, openRange 9, the chosen hazard and mutagen) and check it (individuals of 2 or more
+cells above zero to the end, diets still evolve, 3 of 4 worlds). Stop when the standard world has a check, or with
+the reason none of the settings keeps individuals.
+
 **Handoff status (autorun run 20261007-0050, harden).** Priority 12 done, no rule change (INNOVATIONS run 0050).
 (a) **Census of individuals** in every pair world with `PAP`: a `kinds:` line per census (in diet worlds after `||` on
 the existing line) and a `census:` end line. An individual is what bonds that are not joints join (the open signal's
