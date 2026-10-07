@@ -31,8 +31,9 @@ by 150k, then starved), seed 2 lost its stock hosts to catchers (360 catcher ind
 (116-220); `PAHU=2` holds 4 of 4 to 240k (run 0420 batch D). So the adoption condition fails at 1x. (d) running (15:22
 UTC): `node tri/batch.js runs/x1.json` (1x: `PAHU=2 PAH=0.15`, job `p`; `PAHU=3 PAH=0.07`, job `g`; seeds 1-4, 240k). (d) done: `p` collapses into chains in seed 3 at 45-50k (blanks about 20 to
 240k), the others hold; `g` holds 4 of 4 (fewest 88-107, 268-370 at 240k, no chains; `PAHU=2` h 0.1: 59-114, 338-387).
-(e) running (15:53 UTC): `node tri/batch.js runs/g3.json` (3x `PAHU=3 PAH=0.07`, seeds 1-4, 240k, job `g`). If 3 of 4
-hold: standard world `PAHU=3 PAH=0.07`, rerun the `PAW=1` checks. Prediction: the matched `PAHU=2` still collapses in at least 2 of 4
+(e) running (15:53 UTC): `node tri/batch.js runs/g3.json` (3x `PAHU=3 PAH=0.07`, seeds 1-4, 240k, job `g`). (e) done: 4 of 4 hold
+(900-1300 individuals after 20k, at most 29 growing, blanks never below 84). Adopted (commit on this branch): `PAW=1`
+now sets `PAHU=3 PAH=0.07`; the `PAW=1` checks are rerunning (16:47 UTC, `runs/check-paw.txt`). Prediction: the matched `PAHU=2` still collapses in at least 2 of 4
 (chains split when one head is hit, so a harsher hazard per head does not stop them growing).
 
 **Next step (rotation 66, build): priority 17**, the whole-body hazard at 1x and matched (below). The previous run's
