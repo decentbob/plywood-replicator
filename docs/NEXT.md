@@ -24,17 +24,19 @@ the general mutagen 0.01 (stock parts exempt). Individuals never fewer than 91; 
 that lives on a kind**, unplanned, commonest in 3 of 4 worlds at 120k: a head whose front became `C@|` catches free
 heads by their fronts `c@|` (one individual, no stock part); it buds only on the host's seed sites and copies host heads
 at its own `-`. In 1 of 4, heads that lost `&` became copied middles: held kinds of 3-6 cells at 120k.
-Running (if this run stopped here): batch D, `PAW=1 node tri/demos.js pair SEED 240000 runs/D/SEED` for seeds 1-4
-(pictures on): do the parasite and the long kinds persist to 240k?
+To 240k (4 of 4): the catcher holds in 2 worlds; in 2 it is replaced by catchers with a seed site of their own on the
+former copy side (`C@zZ@&`; `C@|uU@&` with a private seed letter u), and seed 3 holds a 3-cell kind (52 at 240k).
+Picture `docs/pictures/world-catchers.png`.
 Nothing is running. Suite: about 90 minutes (two new checks); tests 41.
 
 **Next step (rotation 63, explore): priority 14 in the standard world** (`PAW=1`; every later pair slice starts there).
-Take one of: (1) **the host's defence**: private seed letters (IDEAS "Joints make individuals", candidate 3) as a
-prepared variant of the founder (`Y@&c@|- C@-|y|`, own seed glue) entered at 60k into a world the front-catcher holds:
-does a host that the catcher cannot seed on win back its stock, and does the catcher then switch letters? This is the
-first host-parasite arms race the world offers, and it needs no rule change. (2) **A function only a longer body has**
-(heredity by construction in a 4-cell arc), designed from part types up before any batch. (1) is cheaper and builds on
-what evolved; take (2) if (1) is settled by theory alone.
+Take one of: (1) **host and catcher, by theory then a run**: the host cannot privatise its seed sites (they are
+on prepared stock parts, which never mutate); its one move is its diet (front `c` to `e` or `g` escapes `C@|` catchers,
+which must follow with `E@|`, `G@|`). Predict whether diet switching makes cycles (a Red Queen) in a world with several
+stocks, and whether the catcher with its own seed site (seed 4, `C@zZ@&`) is a parasite or a new free-living kind that
+merely eats copies; then test with a prepared catcher entered at 20k (labelled start), 4 seeds. No rule change. (2) **A
+function only a longer body has** (heredity by construction in a 4-cell arc), designed from part types up before any
+batch. (1) builds on what evolved; take (2) if (1) is settled by theory alone.
 
 ## Direction and priorities
 
@@ -74,8 +76,8 @@ win, and for a reason?). On the pair (each a slice; rotation index in brackets):
 13. Done (run 0420, build, checks `world`, `pair-flow-i`): the standard world `PAW=1` keeps individuals (hazard per
     individual) and evolves (general mutagen); a front-catching kind lives on the founder. Was: [62 build] **One standard
     evolving world** with the fewest drives, made the default for later pair slices and checks.
-14. [63 explore] In the standard world: **the host's defence** (private seed letters against the front-catcher: an arms
-    race) or **a function only a longer body has** (run 2350: without one, length shrinks; IDEAS "Joints make
+14. [63 explore] In the standard world: **host and catcher** (diet switching against the front-catcher: a Red Queen?;
+    the catcher with its own seed site) or **a function only a longer body has** (run 2350: without one, length shrinks; IDEAS "Joints make
     individuals", candidates 1-4: heredity by construction in a 4-cell arc first), or **grown instead of prepared
     resources** (candidate (t), a copy side that reads glue). Kinds that live on kinds: the z route is closed (the z
     front catches joints), the front route is open (run 0420).

@@ -40,6 +40,14 @@ not statistics.
     body (`PAHU=0`): individuals kept in 4 of 4 as well (in the stock world, the hazard unit did not decide), the
     front-catcher commonest in 2 of 4. Both founders (`PA1=1`, hazard per individual): 309-374 individuals at the fewest,
     3-8 kinds held, pair-derived front-catchers `Y@&B@|- + Y@&b@|-` (111 in seed 1).
+  - **To 240k (batch D, `PAW=1`, seeds 1-4).** Individuals at every census in 4 of 4 (fewest 59-114, 338-387 at 240k).
+    The front-catcher stays commonest in seeds 1 and 2 (174-220 beside 65-94 hosts). In seeds 3 and 4 it is replaced
+    by catchers with a seed site of their own on the former copy side: `C@zZ@&` (seed 4, 240 individuals at 240k,
+    arising after 175k; z binds every head) and `C@|uU@&` (seed 3, from 150k; attach and seed letter u, used only by
+    catchers), and in seed 3 a 3-cell kind (a head with front `U@` on the catcher's u side, plus the caught host head)
+    holds 52 individuals at 240k. Seed 4's 3-6-cell chains of 120k are gone by 150k. Picture:
+    [world-catchers.png](pictures/world-catchers.png) (seed 1 at 240k, diets colouring: yellow c heads and C stock;
+    catchers grey with the yellow host head they hold).
   - **Checks.** `world` (`PAW=1`, seeds 1-4, 120k): individuals never 0 and a kind other than the founder's composition
     held by 10 or more at 120k: 4 of 4. `pair-flow-i` (pair-flow with `PAHU=2 PAH=0.5`, seeds 2 and 4, the two that end
     as aggregates per triangle): individuals at every census, 10k copies, a late sweep: 2 of 2. `pair-flow` now also

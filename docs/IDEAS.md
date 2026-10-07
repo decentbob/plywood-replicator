@@ -57,8 +57,11 @@ Derived first, then checked (INNOVATIONS run 0420). Notes, not the user's words.
   only on seed sites, which are on the stock parts that host individuals hold, and the host head it carries is copied at
   its own `-`, feeding the host's head pool. It became the commonest kind in 3 of 4 worlds (119-232 individuals beside
   61-85 hosts at 120k). This is the z route run 2350 closed (a front catching another kind's joint side) reopened
-  through a side that is not a joint: a front. Private seed letters (candidate 3 of "Joints make individuals") would
-  be the host's defence.
+  through a side that is not a joint: a front. To 240k it holds in 2 of 4 worlds; in the other 2 it is replaced by
+  catchers that **carry a seed site of their own**: the inert copy side took a glue (`C@zZ@&`: z, which every head
+  binds; `C@|uU@&`: u, with the attach glue changed to U as well, a seed letter only catchers use), so the catcher no
+  longer needs the host's seed sites. That is candidate 3's private seed letter, evolved by the parasite, not the host:
+  the host's seed sites are on prepared stock parts, which do not mutate, so the host cannot privatise them.
 - **Length by mutation, again, once.** In 1 of 4 standard worlds heads that lost `&` (`C@c@-`, a mark and a letter
   mutation: a middle) joined chains head, middles, stock part: kinds of 3 to 6 cells held at 120k. Under the hazard per
   individual a longer body costs no extra risk, so the shortcut's only advantage is fewer parts per birth.
