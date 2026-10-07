@@ -10,9 +10,13 @@ pair Direction of run 1850 in full at `20e9a88`.
 `PADL`); audit every rule in `tri/sim.js` against locality and docs/RULES.md (independent reviewer); refresh the Core
 inventory with today's users from a coverage run of the whole suite; remove or merge anything else nothing needs. Done
 when: `node tri/test.js` and `node tri/check.js` pass on the branch, outputs of the pair checks unchanged against main,
-RULES (inventory, Core changes) current. Stop at: anything that needs a redesign is recorded, not built. Running: the
-suite with the coverage hook (`COV_OUT=$PWD/runs/cov.jsonl CHECK_SAVE=$PWD/runs/b NODE_OPTIONS="-r ./tri/coverage.js"
-node tri/check.js > runs/check.txt`, about 105 minutes).
+RULES (inventory, Core changes) current. Stop at: anything that needs a redesign is recorded, not built. State (22:30
+UTC): code done (removal, nb merged into gap, four fixes from an independent review: RULES Core changes, run 2051);
+baseline `main` 50 of 50 (all but the two lineage checks, outputs in the worktree `/home/user/pw-main/runs/a`); running:
+the whole suite on the branch with the coverage hook (`COV_OUT=$PWD/runs/cov.jsonl CHECK_SAVE=$PWD/runs/b
+NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js > runs/check.txt`, about 105 minutes). Then: `diff -r` a and b
+(expected: equal but for worlds with the general mutagen), fill RULES Result and the inventory's users from
+`runs/cov.jsonl`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
