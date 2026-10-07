@@ -15,6 +15,14 @@ build the smallest kind that delivers one in place, a 4-cell arc whose root copy
 measure its root's parental share against the pair's 0.39 and test whether it resists a seed-site parasite. Done when
 (a) has a verdict from 4 worlds per setting and (b) a measured share and a 4-world test, or a recorded reason why not.
 Stop at a design argument for (b) if the arc cannot reproduce on its own. No rule change planned.
+State at 07:05 UTC: (a) done for the catchers alone (`runs/a1`: u and z catchers grow alone 4 of 4, the plain catcher
+dies 4 of 4); standard world to 240k rerun (`runs/q/A2_*`, same as run 0420's batch D). (b) theory written (scratchpad,
+to IDEAS); demo `pair` gained `PARP=1` (roots in place: 'root:' lines, 'roots:' result). The copied 4-cell arc lives
+without drives (root in place about 0.5) but dies under the standard drives (0 of 4); the two-cell kind with the same
+letters: root in place 0.18, cut from about 390 to 46-60 by a catcher entered at 20k (`runs/q/B*`). Running: the queue
+`runs/q/runC.sh` (diets world, catchers entered at 60k, against no entry) then `runs/q/runF.sh` (the arc with stock
+middles and end against the two-cell stock kind, each with and without the catcher); job lines in `runs/q/jobs*.txt`,
+one job: `runs/q/job.sh NAME SEED STEPS ENV...`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
