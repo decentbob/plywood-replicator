@@ -498,16 +498,16 @@ function demo(name,seed=1,steps,dir='runs',extra){
         const Ls=Object.keys(by).sort(),held=Ls.filter(L=>by[L].n>=10);for(const L of held)if(!dEnd.first[L])dEnd.first[L]=t;if(t>steps/2){dEnd.m++;for(const L of Ls)dEnd.sum[L]=(dEnd.sum[L]||0)+by[L].n;if(held.length>dEnd.maxHeld){dEnd.maxHeld=held.length;dEnd.maxAt=t;}}
         console.log(`diet: t=${t} ${Ls.filter(L=>by[L].n||by[L].w).map(L=>`${L} ${by[L].n}/${by[L].w}/${by[L].f}`).join(' ')||'none'} | held ${held.join('')||'-'} | free stock ${FST.map(([ty])=>fs[canon(ty)]||0).join(':')} | blanks ${avg.n?(avg.b/avg.n).toFixed(0):'-'}`);};
       // kinds (with diets, or the mutagen and stocks): an individual is the chain of fronts from a head (a root not caught
-      // by another root's front) to the part with no front that ends it; its kind is its roots' front letters in order (c:
-      // root and stock part, 2 cells; ze: 3 cells). Per kind complete individuals (the chain ends in a stock part) and
+      // by a front) through the parts it caught to the part with no front that ends it; its kind is the front letters in
+      // order (c: root and stock part, 2 cells; ce: root, a middle part with front e, stock part: 3 cells). Per kind complete individuals (the chain ends in a stock part) and
       // incomplete ones (it ends in an open front); per kind of 3 or more cells the first census with 10 or more
       // complete individuals and the most held; the longest complete individual
-      const kEnd={first:{},max:{},last:{},longest:0},kinds=t=>{const R=[],caught=new Set();for(const u of all){if(!s.bonded(u))continue;const i=fside(u);if(i<0||!isRoot(u))continue;R.push(u);const p=s.partner(u,i);if(p>=0)caught.add(p);}
-        const n={},w={};let longest=0;for(const u of R){if(caught.has(u))continue;let x=u,L='',ok=false;for(let a=0;a<40;a++){const i=fside(x);if(i<0||!isRoot(x)){ok=stk(x);break;}L+=gname(s.glue[x*3+i]);const p=s.partner(x,i);if(p<0)break;x=p;}
+      const kEnd={first:{},max:{},last:{},longest:0},kinds=t=>{const R=[],caught=new Set();for(const u of all){if(!s.bonded(u))continue;const i=fside(u);if(i<0)continue;if(isRoot(u))R.push(u);const p=s.partner(u,i);if(p>=0)caught.add(p);}
+        const n={},w={};let longest=0;for(const u of R){if(caught.has(u))continue;let x=u,L='',ok=false;for(let a=0;a<40;a++){const i=fside(x);if(i<0){ok=stk(x);break;}L+=gname(s.glue[x*3+i]);const p=s.partner(x,i);if(p<0)break;x=p;}
           if(ok){n[L]=(n[L]||0)+1;longest=Math.max(longest,L.length+1);}else w[L]=(w[L]||0)+1;}
-        kEnd.last=n;kEnd.longest=Math.max(kEnd.longest,longest);for(const [L,k] of Object.entries(n))if(L.length>=2){kEnd.max[L]=Math.max(kEnd.max[L]||0,k);if(k>=10&&!kEnd.first[L])kEnd.first[L]=t;}
+        const len={};for(const [L,k] of Object.entries(n))len[L.length+1]=(len[L.length+1]||0)+k;kEnd.len=len;kEnd.last=n;kEnd.longest=Math.max(kEnd.longest,longest);for(const [L,k] of Object.entries(n))if(L.length>=2){kEnd.max[L]=Math.max(kEnd.max[L]||0,k);if(k>=10&&!kEnd.first[L])kEnd.first[L]=t;}
         const f=o=>Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([L,k])=>L+' '+k).join(', ')||'-';
-        console.log(`kinds: t=${t} complete ${f(n)} | incomplete ${f(w)} | longest ${longest}`);};
+        console.log(`kinds: t=${t} complete ${f(n)} | incomplete ${f(w)} | longest ${longest} | by cells ${Object.entries(len).map(([c,k])=>c+':'+k).join(' ')||'-'}`);};
       // two kinds: per kind its types, individuals (attached last cells), held, free parts, copies; extinction times
       // (counted 50 steps before the line: between two decay steps)
       let duoO=null;const DK2=K2?[{name:'pair',T:[cR,cS]},{name:'strip',T:K2.types.map(canon)}].map(k=>({...k,last:k.T[k.T.length-1],set:new Set(k.T),c0:0,ext:0,sum:0,m:0})):[],duoCount=()=>{
@@ -574,7 +574,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
       if(DW){const D={c:'#ffd31a',e:'#ff7a1a',g:'#3fd8e8',z:'#e83fd0'},dc=(u,L)=>{const c=D[L.toLowerCase()]||'#b9c2c9';return s.bonded(u)?c:c+'55';};
         snap(s,'diets',`t=${s.t}: diets by front glue (c yellow, e orange, g cyan, z magenta, others grey); dim: free`,null,false,u=>{const i=fside(u);if(i>=0&&isRoot(u))return dc(u,gname(s.glue[u*3+i]));if(stk(u)){for(let k=0;k<3;k++)if(s.att[u*3+k]&&s.glue[u*3+k])return dc(u,gname(s.glue[u*3+k]));}});}
       if(DW){const E=Object.entries(kEnd.last).filter(([L])=>L.length>=2).sort((a,b)=>b[1]-a[1]),M=Object.entries(kEnd.max).sort((a,b)=>b[1]-a[1]);
-        console.log(`t=${s.t} kinds: endLong=${E.map(([L,k])=>L+':'+k).slice(0,6).join(',')||'-'} maxLong=${M.slice(0,6).map(([L,k])=>L+':'+k+'@'+(kEnd.first[L]||'-')).join(',')||'-'} longest=${kEnd.longest}`);}
+        console.log(`t=${s.t} kinds: endLong=${E.map(([L,k])=>L+':'+k).slice(0,6).join(',')||'-'} maxLong=${M.slice(0,6).map(([L,k])=>L+':'+k+'@'+(kEnd.first[L]||'-')).join(',')||'-'} longest=${kEnd.longest} endByCells=${Object.entries(kEnd.len||{}).map(([c,k])=>c+':'+k).join(',')||'-'}`);}
       if(DW)console.log(`t=${s.t} diets: maxHeld=${dEnd.maxHeld} at ${dEnd.maxAt||'-'} first=${Object.entries(dEnd.first).map(([L,t])=>L+'@'+t).join(',')||'none'} mean2=${Object.entries(dEnd.sum).filter(([,v])=>v/dEnd.m>=1).map(([L,v])=>L+':'+(v/dEnd.m).toFixed(0)).join(',')||'-'} mutated=${ev.mutated}`);
       if(K2)console.log(`t=${s.t} duo: ${DK2.map(k=>`${k.name}=${k.ext?'extinct@'+k.ext:'alive'} mean2=${k.m?(k.sum/k.m).toFixed(0):'-'}`).join(' ')} strip=${K2.types.join(',')}`);
       if(MU)console.log(`t=${s.t} variants (in a body at some census; max bodies, first, last seen): ${[...seenV].sort((a,b)=>b[1].max-a[1].max).slice(0,15).map(([c,v])=>`${c} ${v.max} ${v.first}-${v.last}`).join(' | ')||'none'}`);
