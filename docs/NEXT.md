@@ -28,7 +28,17 @@ free `u` site takes. **Revised prediction (theory, before the batch):** lettered
 given plain level and the R* argument still says exclusion; what (t) changes is the leak (material leaves a class only
 as undelivered copies that decay). So two equal private classes should drift apart more slowly: both present at 80k
 in more worlds with (t) on than off. Running: `runs/two.json` (A `U@&C@|u c@|C.Z@&`, B `W@&E@|w e@|E.Y@&`, 5 each
-at 2000; on, off, on with `PADL=0.1`; seeds 1-4, 80k; `node tri/batch.js runs/two.json`, file in NEXT's slice commit).
+at 2000; on, off, on with `PADL=0.1`; seeds 1-4, 80k).
+**Result (`runs/two`): wrong.** (t) on: the world dies by 10-15k in 4 of 4 (head blanks `C?u?U?`, `E?w?W?` pile up to
+800-900 of 1000: a head's material has one template, a free in-place seed site, and that site usually holds a bud).
+(t) off: one class excludes the other by 15-30k in 4 of 4. (t) on with `PADL=0.1`: the same exclusion by 15-30k in 4
+of 4, at about 240 individuals instead of 390. Both classes hold 150-200 each for about 10k, then one falls within
+5k (132 to 13): too fast for drift (about 56 lifetimes in 80k at 390 individuals). **Explanation to test (before the
+batch):** a rare class wastes its copies. Each class's buds catch only its own second cells, which the class makes;
+a free part decays in about 50 steps (`PAD=1`), so the share of a class's second cells caught before they decay grows
+with the number of its waiting buds: an Allee effect, the majority wins (and run 1821's "whoever is in first keeps
+the blanks"). Prediction: slower decay weakens it: both classes present at 80k in 2 or more of 4 at `PAD=0.1`, fewer
+at 0.3, none at 1. Running: `runs/allee.json` ((t) off, `PAD` 0.1 and 0.3, seeds 1-4; `fine`: seed 1 at `PAP=1000`).
 
 **Handoff status (autorun run 20261007-1821, build).** Priority 19 done (INNOVATIONS run 1821, IDEAS "Every catcher
 farms its catch"); no rule change; new demo option `PA3`/`PA3T` (a third kit entering late). **Every catcher farms its
