@@ -10,6 +10,17 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261007-1921, explore; priority 20): a resource each class makes for itself.**
+Idea (derived before any run): with candidate (t) (a glued copy side binds only a side with the complementary glue; an
+inert copy side binds any side, as now) and a drive under which a dead triangle returns as a blank that keeps its glues
+(`PAHB=3`: every side a copy side, its glue kept), a cell whose exposed copy side's glue complements one of its own glues
+(an in-place head `U@&C@|u`; a caught head with a close-only side `c@|C.Z@&`) is copied by its own dead material and by
+no one else's: each class recycles its own deaths, a resource it makes and only it uses. Prediction: two blank-farmer
+classes that exclude each other under `PAHB=2` (or with (t) off) coexist with (t) on, in 3 of 4 worlds; then the
+web-three world with a fourth such class. Check: a new check passing 3 of 4, with its control (t off). Stop: when the
+isolation test is decided either way (record "not yet" and why if it fails), with (t) built as an option (`copyGlue`,
+default off: no existing output changes) and its case under RULES Core changes.
+
 **Handoff status (autorun run 20261007-1821, build).** Priority 19 done (INNOVATIONS run 1821, IDEAS "Every catcher
 farms its catch"); no rule change; new demo option `PA3`/`PA3T` (a third kit entering late). **Every catcher farms its
 catch**: in a complete individual all `&` sides are spent, so a caught head exposes only its copy side, in a catcher's
