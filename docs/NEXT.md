@@ -18,7 +18,9 @@ is also their prey, and a 2-cell catcher always exposes at least the copyable si
 individual (its root is unspent there): **every predator of heads farms them**. Predictions: (A) a farmer of U heads
 `V@&c@|v` (holding `C@|uU@&`) merges with the U class (V+U raises u, U+V raises v) in 3 of 4; (B) a second farmer of Z
 heads `W@&C@|w` (holding `c@|-Z@&`) makes 3 classes (Z, U, W) with links to Z at most censuses in 3 of 4.
-Batch: `runs/food.json` (regenerate: the commands under Commands with `PA3T=20000 PA3=...`).
+Measured (80k, seeds 1-4): (A) V died out in 4 of 4 within 5k of entry; (B) W held beside U for 20-30k in 3 of 4 (3
+classes, 3 links), then one farmer excluded the other. Running `runs/food2.json`: (C) a farmer with a private crop
+`X@&D@|x` + `d@|-Y@&` (predicted: 3 classes, X unlinked, 4 of 4); (D) the same crop rooting on `z` (`d@|-Z@&`). Batch: `runs/food.json` (regenerate: the commands under Commands with `PA3T=20000 PA3=...`).
 
 **Handoff status (autorun run 20261007-1720, explore).** Priority 18 done (INNOVATIONS run 1720, IDEAS "A class is
 a cycle of seed letters"); no rule or demo change. **A class owns its seed letter when its head's copy side is its seed
