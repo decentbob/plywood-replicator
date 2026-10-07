@@ -20,7 +20,10 @@ not statistics.
   for), `PAV=half|right` (marker by half of the world), `PAV=link` (two-marker linkage, run 1322), `PAVK=selfish`
   (run 0621's `B@-y!`, lethal in the pair, run 1322) and `PAVK=front`, `PAHB=1` (only the hit triangle returns as a
   blank; `PAHB=2` is every setup since run 0621) and `PAMF=2` (the mutagen on glue letters only, run 0420; the
-  standard world uses the general mutagen). `pairKit` lost its turned-order parameter. Evidence: pending (CHECK_SAVE diff of the pair checks). New `tri/batch.js`
+  standard world uses the general mutagen). `pairKit` lost its turned-order parameter. Evidence: the 34 checks of demos `pair` and `strip`
+  (117 worlds, `CHECK_SAVE` on main and on the branch, 89 and 86 minutes) all pass, and every output is byte for byte
+  main's apart from the `pair-host` worlds' `par:` and `parental:` lines, which lost the selfish columns (0 in every
+  world). New `tri/batch.js`
   (autorun feedback of run 0622): a batch of demo worlds from a JSON file, at most 4 at once, an output file and a
   picture directory per world, no shell quoting of glue strings. NEXT 214 to about 165 lines and ROADMAP's backlog A
   condensed (done priorities one line each). Command: `node tri/batch.js jobs.json`.

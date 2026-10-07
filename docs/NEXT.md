@@ -11,9 +11,10 @@ kind where every cell of a body exposes exactly one copyable side, so part types
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
 **Handoff status (autorun run 20261007-1051, cleanup).** Priority 16 done, no capability or rule change (INNOVATIONS
-run 1051). In progress: the pair checks with `CHECK_SAVE` on main (`runs/a`) and on this branch (`runs/b`), then `diff -r`; if interrupted, rerun both (`node tri/check.js $(cat runs/pair-ids.txt)`, ids: every check with demo pair or strip). New `tri/batch.js`: a batch of demo worlds from a JSON file, at most 4 processes, an output
-file and picture directory per world (no shell quoting of glue strings). NEXT, ROADMAP's backlog A: done priorities
-condensed. Nothing is running.
+run 1051). Every pair and strip check (34, 117 worlds) passes and prints byte for byte main's output, apart from the
+parasite worlds' `par:` and `parental:` lines, which lost their always-zero selfish columns. New `tri/batch.js`: a
+batch of demo worlds from a JSON file, at most 4 processes, an output file and picture directory per world (no shell
+quoting of glue strings). NEXT, ROADMAP's backlog A: done priorities condensed. Nothing is running.
 
 **Next step (rotation 66, build): priority 17**, the whole-body hazard at 1x and matched (below). The previous run's
 3x worlds are not kept; regenerate with the 3x command below (about 70 minutes each, `PAHU=3` for the whole body), or
