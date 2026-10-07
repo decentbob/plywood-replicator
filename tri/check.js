@@ -169,17 +169,20 @@ const CHECKS=[
   // its 47 parts and a later bud on the seed site is built from at least 40 of them
   {id:'lysis',cap:'Lysis: a stuck bud taken apart into its parts by a cutter at its waiting anchor; a new bud on the parent grows from them',demo:'lysis',seeds:[1,2,3,4],need:3,steps:1000000,secs:150,
     pass:(L,o)=>{const m=o.match(/result: lysedFirst=(\S+) .*max=(\d+) .*reused=(\d+) cuts=(\d+)/);return [!!m&&m[1]!=='not'&&+m[3]>=40,m?`apart at ${m[1]}, a later bud of ${m[2]} cells, ${m[3]} of them the stuck bud's parts, ${m[4]} cuts`:'no result'];}},
+  // The frozen lineage's two checks run 2 seeds each since run 20261007-0050 (harden; suite time): on main 0ed8f69 both
+  // passed 3 of 4 worlds (seed 1 fails both: generation 3 not reached by 1.2M steps), and while the lineage is frozen
+  // they are regression checks; seeds 2 and 3 must both pass (INNOVATIONS keeps the 3-of-4 records)
   // run 20261004-1021 (build): three generations on a slow supply (labelled environment drive: 400 inert pre-food turning
   // into copy blanks, the untyped building blocks, at 0.0003 per 100 steps; world 36) and a monomer loop (labelled: free genome monomers turn back into blanks, 0.002 per
   // 100 steps; without it 0 of 4, run 1021); the bud grows off its parent's corner
   // (closed walls, no harness). Replaces budcycle-free (two generations, 180 pre-food at 0.001, world 32; runs 0621-0751).
-  {id:'budcycle-3',cap:'Three generations from the kit on a slow supply: a bud of the bud\'s bud complete, let go and holding a caught strand',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:1200000,secs:2000,env:{BCAFTER:'900000',BCGEN:'3'},
+  {id:'budcycle-3',cap:'Three generations from the kit on a slow supply: a bud of the bud\'s bud complete, let go and holding a caught strand',demo:'budcycle',seeds:[2,3],need:2,steps:1200000,secs:2000,env:{BCAFTER:'900000',BCGEN:'3'},
     pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) gen3=(\S+) ownCopies=(\S+) stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`first split ${m[1]}, generation 2 at ${m[2]}, 3 at ${m[3]}, own copies after let-go (generation:copies) ${m[4]}, ${m[5]} stray`:'no result'];}},
   // run 20261004-2221 (build): lysis in the lineage. budcycle-3's setup with a lysis receptor 'Г@&' on each body's last
   // cell E (budKit receptor; kit only, no core change), openRange 50 and 2 cutters 'г@!-|-|' (labelled): the receptor
   // binds only while E hears its waiting anchor, so cutters take apart complete buds waiting for a catch and nothing
   // else. Passes a world that reaches generation 3 with every lysed bud complete (47 cells) and no stray part
-  {id:'budcycle-lysis',cap:'Lysis in the lineage: cutters at a receptor on the last cell take apart only complete buds waiting for a catch; three generations',demo:'budcycle',seeds:[1,2,3,4],need:3,steps:1200000,secs:2000,env:{BCAFTER:'900000',BCGEN:'3',BCQ:'1',BCR:'50',BCC:'2'},
+  {id:'budcycle-lysis',cap:'Lysis in the lineage: cutters at a receptor on the last cell take apart only complete buds waiting for a catch; three generations',demo:'budcycle',seeds:[2,3],need:2,steps:1200000,secs:2000,env:{BCAFTER:'900000',BCGEN:'3',BCQ:'1',BCR:'50',BCC:'2'},
     pass:(L,o)=>{const m=o.match(/result: .*gen3=(\S+) .*stray=(\d+) .*lysedBuds=(\d+) .*falseRel=(\d+) lysedAt=(\S+) poolMin=(\d+)/);const sel=m&&(m[5]==='none'||m[5].split(',').every(x=>x==='47'));
       return [!!m&&m[1]!=='not'&&+m[2]===0&&sel,m?`generation 3 at ${m[1]}, ${m[3]} buds lysed (cells: ${m[5]}), ${m[4]} roots released incomplete, fewest free part type ${m[6]}, ${m[2]} stray`:'no result'];}},
 ];
