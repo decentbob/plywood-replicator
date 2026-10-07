@@ -16,6 +16,15 @@ parasite worlds' `par:` and `parental:` lines, which lost their always-zero self
 batch of demo worlds from a JSON file, at most 4 processes, an output file and picture directory per world (no shell
 quoting of glue strings). NEXT, ROADMAP's backlog A: done priorities condensed. Nothing is running.
 
+**Current slice (autorun run 20261007-1351, build; priority 17).** Goal: decide whether the whole-body hazard
+(`PAHU=3`) becomes the standard world's hazard. Runs: (a) 3x `PAHU=2` calibration, seed 1, h 0.15/0.2/0.3/0.4 to 75k
+(`runs/cal.json`), to find the h whose individuals match `PAHU=3` at 0.1 (500-700); (b) 3x `PAHU=2` at that h, seeds
+1-4, 240k: does it collapse like h 0.1 (3 of 4)? (c) 1x `PAW=1 PAHU=3` seeds 1-4, 240k. Done when: if `PAHU=3` holds at
+1x and 3x and the matched `PAHU=2` collapses, `PAW=1` uses `PAHU=3` and every `PAW=1` check is rerun (world, catcher-free,
+arc-root, web-two, with controls), changed outcomes explained; otherwise the records say which explanation (harsher
+hazard or whole body) holds and `PAW=1` stays. Prediction: the matched `PAHU=2` still collapses in at least 2 of 4
+(chains split when one head is hit, so a harsher hazard per head does not stop them growing).
+
 **Next step (rotation 66, build): priority 17**, the whole-body hazard at 1x and matched (below). The previous run's
 3x worlds are not kept; regenerate with the 3x command below (about 70 minutes each, `PAHU=3` for the whole body), or
 as a batch: `tri/batch.js` with `{"demo":"pair","steps":240000,"env":{"PAW":"1","PAB":"3000","PAS":"87","PAF":"C@-|z|:450
