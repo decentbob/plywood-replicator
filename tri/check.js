@@ -192,6 +192,14 @@ const CHECKS=[
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]>=0.8,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
   {id:'arc-root-c',cap:'  control: the 2-cell kind (head and stock end), fewer than 60% in place',demo:'pair',seeds:[1],steps:30000,secs:70,env:{PAW:'1',PAM:'0',PAH:'0.03',PARP:'1',PA2:'Z@&t@|- T@-|z|',PAF:'T@-|z|:150'},
     pass:(L,o)=>{const I=indiv(o),m=o.match(/roots: binds=\d+ inPlace=\S+ births=(\d+) birthsInPlace=(\S+)/);if(!I||!m)return [false,'no result'];return [I.end>=30&&+m[2]<0.6,`${I.end} individuals at 30k, births ${m[1]}, in place ${m[2]}`];}},
+  // run 20261007-0820 (build): the recognition web ('web:' lines, every pair world). The standard world with 10 catchers
+  // entered at 10k (a labelled start): u catchers (their own seed site u) form a second class, which the host class
+  // raises (a host's seed site takes the catcher individual's head) and whose front catches the host's parts: 2 classes,
+  // 1 link; control: plain catchers (no seed site) are cheats inside the host class (1 class, a cheat, no link)
+  {id:'web-two',cap:'The web census reads two classes and a link: u catchers entered into the standard world',demo:'pair',seeds:[1,2,3,4],need:3,steps:30000,secs:95,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'U@&C@|u',PAKS:'c@|-Z@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+).*\| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]>=2&&+w[3]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links (${w[5]}), ${w[4]} cheats`];}},
+  {id:'web-two-c',cap:'  control: plain catchers are cheats inside the host class (1 class, no link)',demo:'pair',seeds:[1],steps:30000,secs:95,env:{PAW:'1',PA1T:'10000',PAEN:'10',PAKR:'Z@&C@|-',PAKS:'c@|-Z@&'},
+    pass:(L,o)=>{const W=[...o.matchAll(/^web: t=\d+ held (\d+) classes (\d+) links (\d+) .*?cheats (\d+)/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];return [+w[2]===1&&+w[3]===0&&+w[4]>=1,`at 30k: ${w[1]} held kinds, ${w[2]} classes, ${w[3]} links, ${w[4]} cheats`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s (PAPS); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
