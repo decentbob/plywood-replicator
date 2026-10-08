@@ -28,6 +28,60 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Eight slices on the lock: the letters turn, the shape does not (direction check, review-intent run 20261008-2151, 2026-10-08)
+
+Weighed after priorities 21-33 (runs 0121-1951; the last direction check was run 2021). Notes, not the user's words.
+- **What the line achieved.** Run 2021 predicted, in a world whose seed sites are copied, a letter that turns over
+  again and again (a Red Queen). Eight slices built toward it in one world (the stockless founder under copy error,
+  since run 0651), each on the last: cheats and nurseries (0121, 0551), variation where copies are made (0651), the
+  commons (1021), the race (1351), the trap (1522), the seal (1650), the lock (1951). With a trap that reads the joint
+  (`lysJoint`) the root letter turned 11-19 times in 480k in 4 of 8 worlds: the first evolution here that does not
+  settle. The concepts carry over (a side nobody needs escapes by sealing; a needed lock is frozen; turnable and
+  guardable exclude each other in the current core). Capabilities are being combined, not piled up as demos.
+- **The core.** Since run 2021: one rule branch (copy error, `pErr`), one removal (`copyGlue`), one merge (nb into gap),
+  and two guard parameters still at default 0 (`lysOneWay`, `lysJoint`), one of which (w) showed no gain in either long
+  test. Not growing faster than the capabilities, but the last three slices each answered a parasite with a guard, and two
+  of those guards were core parameters. The environment grew more: 52 to 76 checks, the suite about 2.5 hours in two
+  parts; pair options 31 to 32.
+- **Prepared structure.** The stocks are gone from the line's world (run 0121): only the founder pair and blanks are
+  prepared. The general mutagen (`PAM`) still drives the old standard world (`PAW=1`) and pins 21 checks; the line has
+  run under copy error alone since run 0651. The stockless world under copy error is the line's world in all but name.
+- **What has not changed: the shape.** Every body is still two cells. What evolves is letters and marks on a fixed
+  shape; complexity of the evolved thing has not grown since the pair began (run 2320, 2026-10-05). And the lock line,
+  continued as it is, is parasite by parasite: plug, trap, seal, public lock, joint-aware trap, and now the catcher and
+  the unguarded nursery, each answered by a guard. A guard per parasite is the core growing by the enemy.
+- **Where the two meet: one key and one lock per strip.** A triangle has three sides, and in the pair every cell
+  exposes one side to be copied and uses two: the head a root (its key) and a front, the second cell an attach side and
+  a site (its lock). In a strip of any length each cell keeps that budget, so every strip has exactly one key and one
+  lock. A spare lock (run 1951: "a needed lock that turns would need a spare lock on the same line") needs a cell that
+  gives up its inert side and is copied through a free site instead. That variant exists: the second cell with two
+  sites, `C@z!z!`, arose by itself and took every second cell of one long world under copy error (run 1650, `lysOneWay`;
+  that world then died of a lysing plug), and entered by hand it ended plug epidemics in 8 of 8 (run 1522). It is
+  **duplication**, one error away. Its next step is divergence: under `lysJoint` a guarded site raises
+  the keys of its letter and lyses the plugs, so a second cell carrying two guarded locks of two letters (`C@z|!y!`)
+  would raise two head classes on one carrier: run 2021's third test (two or more classes at once), reached by shape,
+  not by resources. Predicted, not tested. A catcher (`Z@&C@-`, a head in the second cell's place) is a shape variant
+  too: a body of two heads.
+- **Decision: chain copying (candidate (u)).** Retire it. Nothing in the pair line reads a sequence; heredity of
+  combinations there comes from place (a nursery in place: heredity 0.9, run 0121), not from a strand; a strand that
+  meant something would need a reader, a hidden program unless grown; contact copying already copies a held strand
+  (`imprint g`), so a sequence can come back without zip. The frozen lineage then returns from git, not as it is. The
+  core loses its largest unused part (zip, gap, need, fn, fill, the dock, fill, close and release rules, the strand
+  catch and its physics exception) and seven checks.
+- **Decision: the line's world.** Name the stockless world under copy error (founder `Z@&c@|- C@-z|` or its guarded
+  form, `pErr` 0.01, no stocks, no mutagen) as a preset and run new work in it. `PAW=1` and its checks stay as they are;
+  retiring the mutagen waits (it pins 21 checks, and the front-only mutagen has no copy-error equivalent).
+- **Order chosen** (NEXT priorities). 32 (core review 83): adopt or remove `lysJoint` and `lysOneWay`; then (u). 36
+  (build 84): the line's world as a preset, with the guarded lock if (v) is adopted, and whether a nursery keeps a guard
+  of its letter (old 35) inside it. 34 (explore 87): the catcher, theory first, with shape as the candidate answer
+  rather than a new guard rule. 37 (after 34): duplication and divergence, the second cell with two sites. **Stop rule
+  for the lock line:** no new core parameter for a guard until (v) and (w) are settled; after that, a parasite is
+  answered first by a shape the world can reach by one error, and a new guard rule only with the case that no shape
+  does it.
+- **Not chosen.** More guard rules (the core growing by the enemy); retiring the mutagen now (21 checks for no new
+  capability); space as a route past the R* bound (not needed while frequency dependence is working); reopening the
+  47-type organism (its sinks are unchanged).
+
 ## Who pays for a lock: needed locks are frozen, public locks cannot be guarded, a joint-aware trap guards them (explore run 20261008-1951, 2026-10-08)
 
 NEXT priority 33 (a site that can neither be sealed nor turned): derived first, then measured; one core candidate built

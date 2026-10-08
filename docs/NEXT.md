@@ -1,10 +1,11 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-1951, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-08 (after autorun run 20261008-2151, review-intent). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
 28-30 and 33, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
-(`git log -p docs/NEXT.md`; this run's slice record with its predictions at `explore-1951`'s WIP commits); the
-review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`.
+(`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
+review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
+direction check: IDEAS "Eight slices on the lock" (run 2151).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
@@ -21,57 +22,66 @@ does not lyse across a joint (`lysJoint`, candidate (v), default 0) guards a pub
 cell's place, carrying no lock) and nurseries whose second cells carry no lock of their letter (sunk by a plug): 4 of 8
 guarded worlds died of these.
 
-**Handoff status (autorun run 20261008-1951, explore): priority 33 done** (settled by derivation, then measured). One
-core candidate built as a parameter: `lysJoint` (RULES (v), default 0: every output unchanged, two worlds with lysis
-byte for byte main's), test "lysJoint". New checks `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0`
-(2 of 2) (`node tri/check.js seal-pool lock-guard lock-guard-0`); `tri/census.js --pool [--joint]` (the pool-raised
-class: majority root and its turns, nursery share, second cells with a working lock, sealed, trap). Records: INNOVATIONS
-run 1951, IDEAS "Who pays for a lock", RULES (v) with its result, ROADMAP (row, backlog A 33), picture `lock-guard.png`.
-The batches (`runs/` is not kept): the stockless world `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|- C@-z|'
-TRI_PARAMS='{"pErr":0.01}'`, seeds 1-4, 480k, 14-18 minutes per world (E2); E3 with `PA2='Z@&c@|-. C@-z|'`; E4 with
-`PA2='Z@&c@|- C@-z|!'` and `"lysJoint":1,"lysOneWay":1` (E4j: `"lysJoint":1` alone); read with `node tri/census.js
---pool [--joint] runs/x.txt`. The full suite was not rerun (a parameter at default 0 and three checks; a trap world
-under copy error and the lysis demo byte for byte main's; `node tri/check.js seal-pool lock-guard lock-guard-0`: 3 of 3
-pass, 364 s). Nothing is running.
+**Handoff status (autorun run 20261008-2151, review-intent): direction set, no building** (IDEAS "Eight slices on
+the lock"). The lock line combines its capabilities in one world and reached a loop of root letters that does not settle
+(`lysJoint`: 11-19 turns in 4 of 8 worlds), but every body is still two cells, and the last three slices each answered
+a parasite with a guard (two of them core parameters). A strip has one key and one lock (each cell uses two sides and
+exposes one), so a spare lock is a cell with two sites, `C@z!z!`, which has already arisen: duplication, then
+divergence (two guarded locks of two letters raising two classes on one carrier), is the shape step the lock theory
+points to. Decided: chain copying (candidate (u)) is retired at a core review; the stockless world under copy error
+becomes the line's preset; the mutagen stays for `PAW=1`'s checks. Stop rule for the lock line: no new core parameter
+for a guard until (v) and (w) are settled, then a shape the world reaches by one error before a new rule. Records:
+IDEAS, ROADMAP backlog A, RULES (u). Nothing is running.
 
-**Next step (rotation 82, review-intent)**: direction check with this run's result (the lock theory; whether the pair's
-next line is the guarded public lock, i.e. the stockless world with `lysJoint`). Then rotation 83 (core-review: adopt or
-remove `lysJoint` and `lysOneWay`, priority 32).
+**Next step (rotation 83, core-review)**: priority 32 ((v) and (w)), then (u) if the run has room.
 
 ## Priorities
 
 Done 1-24, 28-30 and 33: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
-Open (review-intent 82 may reorder):
+Open (set by review-intent run 2151):
 32. [83 core-review] **Adopt or remove `lysJoint` and `lysOneWay`** (RULES (v) item 5, (w) item 6). For (v): it alone
     makes a turnable lock guardable (`lock-guard`; 11-19 root turns in 4 of 8 long worlds, 0-3 without), and lysis then
     never crosses a joint (one condition for contact and relay). Against: outputs change wherever a `!` side holds a part
     across a joint: the head nursery's trap `z!` raises its pool-born heads instead of lysing them, budcycle's cutter on
     its `&` receptor lyses nothing (`budcycle-lysis` changes), the scavenger needs no `&`. (w): no gain shown in either
-    long test. Run the suite with each on as default before deciding.
-34. [later] **The catcher** (theory first). A head whose front became `C@` takes the second cell's place on host fronts
-    and carries no lock; it killed 2 of 4 guarded and 1 of 4 unguarded long stockless worlds. It is a parasite of the
-    lock's carrier, recognised by the frozen front/attach pair. Derive what guards the carrier role (a lock on the head's
-    front side? a second cell the catcher cannot replace?) and whether the guarded world's own variation answers it.
-35. [later] **A nursery and its guard.** Privatization is still the exit in the guarded world, and a nursery whose second
-    cells carry no lock of its letter dies of a plug (2 of 4 guarded deaths); in E4 seed 1 the nursery kept a guarded lock
-    of its letter on the second cell (`C!C@L!` under `Ll@&c@`) and lived. Measure how often the guard follows the root.
-31. [later] **Shape inside the loop.** Every class is one shape (a head and a second cell), so the loop is turnover of
-    letters. Complexity needs variants that differ in what they do and are selected inside it: a head with a second
-    site of its own (a commons class that is also a commons), or a third cell that covers the site (length as
-    defence, priority 25). Theory first: which one-error variant changes shape and pays inside the loop.
+    long test. Run the suite with each on as default before deciding. **Then (u), decided in run 2151: retire chain
+    copying** (RULES (u): zip, gap, need, fn, fill, the dock, fill, close and release rules, the strand catch and
+    `_snapBody`; checks `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis` leave, code
+    in git). Show the pair checks' outputs unchanged (`CHECK_SAVE` and `diff -r`). If the run has no room, (u) is the
+    next core review's first item.
+36. [84 build] **The line's world as a preset** (e.g. `PAW=2`: `PAF= PAM=0 PATN=30`, founder `Z@&c@|- C@-z|`, or
+    `C@-z|!` with `lysJoint` if 83 adopts (v), `pErr` 0.01; `PAW=1` and its checks unchanged), then old 35 in it: **a
+    nursery and its guard.** Privatization is still the exit in the guarded world, and a nursery whose second cells carry
+    no lock of its letter dies of a plug (2 of 4 guarded deaths); in E4 seed 1 the nursery kept a guarded lock of its
+    letter (`C!C@L!` under `Ll@&c@`) and lived. Measure how often the guard follows the root (8 seeds, 480k; census
+    `--pool --joint`), and count second cells with two sites (`census.js` may need a column) as the baseline for 37.
+34. [87 explore] **The catcher, shape first** (theory first). A head whose front became `C@` (`Z@&C@-`) takes the second
+    cell's place on host fronts and carries no lock; it killed 2 of 4 guarded and 1 of 4 unguarded long stockless
+    worlds. It is a parasite of the carrier role, read by the frozen front/attach pair, so a guard must read a second
+    side. By the stop rule, derive first which shape reachable by one error answers it (a second cell with two sites; a
+    third cell; the head's own side), and only then whether a rule is needed.
+37. [after 34] **Duplication and divergence** (IDEAS "Eight slices on the lock"). A strip has one key and one lock; a
+    second cell with two sites (`C@z!z!`) is the one-error spare lock. Predicted: under `lysJoint` a carrier with two
+    guarded locks of two letters (`C@z|!y!`) raises two head classes, so two classes live on one carrier (run 2021's
+    third test, by shape). Theory, then an entry test (both classes, one carrier) and the share of two-site cells under
+    copy error.
+31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 is its first
+    concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
     seed site) and preceded both collapses in run 0121 and all four in run 0551's control; a lysing site at the chain's
     tip stops them. Length as a function needs a chain that lets go (an `&` at its end) or a third cell that covers an
     open site (length as defence). Designed, not demonstrated.
 26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
     as a cheat, not as a predator, and guards against chains (run 0551).
-Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
-list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
+Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); with (u) its genome copying
+leaves the core and it returns from git. Not taken from run 1750's list: (b) diets of different length and (c) more
+diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 81 explore (done), 82
-review-intent, 83 core-review.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged by run 2151): 83 core-review, 84 build, 85 harden
+(suite time: 76 checks, about 2.5 hours in two parts; retire the checks a decided candidate makes redundant, e.g.
+`lock-guard-0` if (v) is adopted, `trap-oneway(-c)` if (w) is removed), 86 build, 87 explore, 88 build, 89 cleanup.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((w) built as `lysOneWay`, (v) built as `lysJoint`, (t), (u), (s), (r)'s open part, (j), (l);
 settled there: (f), (k) and the done ones).
@@ -84,10 +94,8 @@ settled there: (f), (k) and the done ones).
 - Suite time: 71 minutes at run 0250, about 100 with the nine checks added since, 160 in run 0651's container (hence
   `--part`); the frozen lineage's two checks (one world each, 15-17 minutes) are about 12% of the suite's CPU; the rest
   is pair worlds, whose time is lone blocks' physics (about 80%; a destination-only neighbour gather was 5% slower).
-- Copy error as the standard world's variation (cleanup run 1222 looked, did not do it): `PAM` is on in 21 checks, 5
-  of them the front-only mutagen (`PAMF=1`: `diets`, `diets-ns`, `diets-catcher(-c)`, `ladder`), which copy error
-  cannot replace (it errs on any side of a copy, not on free fronts). Retiring `PAM` changes the standard world
-  (`PAW=1`) and every check built on it: a `build` decision for the setup, after review-intent 82, not a cleanup.
+- Copy error as the standard world's variation: decided in run 2151 not to retire `PAM` now (on in 21 checks, 5 of them
+  the front-only mutagen `PAMF=1`, which copy error cannot replace); new work runs in the line's preset (priority 36).
 - Bigger cells and letter reuse (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if a
   slice needs a larger cell, reuse letters inside sealed compartments.
 

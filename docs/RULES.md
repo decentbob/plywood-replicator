@@ -313,6 +313,9 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   at review-intent 82 (run 73's harden cut the lineage's checks to one world each, not the code), with the question whether a heritable
   sequence (a genome) will be needed for complex evolution and whether contact copying of a held strand (`imprint g`)
   could carry it.
+  **Review-intent run 20261008-2151: retire it** (IDEAS "Eight slices on the lock": nothing in the pair line reads a
+  sequence, heredity of combinations there comes from place, and contact copying of a held strand can carry one back).
+  For core review 83 after (v) and (w) if the run has room, else the next core review; the checks above leave with it.
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
