@@ -10,6 +10,28 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261008-0551, build; in progress): priority 22, the head-nursery founder.** Goal: start
+the stockless world from the evolved design and see whether in-place heredity holds and what evolves next. Check: alive
+at 240k in at least 3 of 4 worlds, head cheats (no `z` side) under 10% of heads; if so a check `nursery` (shorter). Stop
+after the 8-world batch (4 `Z@&c@|z C@-z!`, 4 control `Z@&c@|z C@-z`) and at most one follow-up batch. Batch:
+`node tri/batch.js runs/hn.json` (written in the run; env `PAW=1 PAF=` with `PA2` as above, 240000 steps, seeds 1-4).
+Theory (before the batch; the head `Z@&c@|z`: front `Z@&`, catch site `c@|`, side `z` that raises heads; the second
+cell `C@-z!`: attach `C@`, an inert side, a seed site that lyses the root it binds):
+- A head's copy, made on its `z` side, lets go and binds the nearest free `z` side: usually its parent's (0.90 in place,
+  run 0121). A head mutant without `z` (or with another letter there) is born only from the pool, (1-λ) p of births:
+  with λ 0.9 it invades only if D c 0.1 > 1, so it stays at mutation-selection balance (P2). A head whose front letter
+  changes (`Y@&c@|z`) cannot bind its own copies' side: one mutation leaves the nursery, so the root letter is locked
+  (P3: `Z` and `z` in the commonest kind in 7 of 8).
+- The second cell is still caught from the pool (λ about 0.3), and in the head nursery few free roots reach it (most
+  heads are born in place). So its seed site is rarely occupied and costs little: in the control it is near neutral (P4).
+- The second cell's two free sides (`-` and the seed site) are its templates; a glue on its inert side, or an attach
+  letter matching a seed site, makes chains, which preceded both collapses in run 0121 (P5).
+Predictions: P1 alive at 240k in 4 of 4 in each design. P2 heads without a `z` side under 10% of heads at every census
+after 20k. P3 root letter `Z` with side `z` in the commonest kind at 240k in at least 7 of 8. P4 the control keeps the
+head nursery (commonest kind `Z@&c@|z` with any second cell) in at least 3 of 4; its seed site may drift. P5 chains of
+3 or more cells arise in at least 2 of 8 and precede any collapse. P6 individuals 400 or more (run 0121's founder
+world: 300-370).
+
 **Handoff status (autorun run 20261008-0250, harden).** The suite on `main` d76ac35: 56 of 56 (the partial control
 `pair-flow-c` 1 of 2, as recorded), 4728 s. The frozen lineage's two checks now run seed 3 alone (`budcycle-3`,
 `budcycle-lysis`): it reaches generation 3 first in both (735900, 736900) and is the one world where cutters lyse a bud;
