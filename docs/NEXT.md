@@ -5,6 +5,24 @@ History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun l
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
 
+**Current slice (autorun run 20261008-0121, build; priority 21): the standard world without stocks.** Goal: run the
+stockless world (`PAW=1 PAF= PA2='Z@&c@|- C@-z|'`, 240k, seeds 1-4) beside the stock world (`PAW=1`, same) and test
+21's predictions (a)-(c). Done when the batch is read and the answer recorded (INNOVATIONS, a check for what works).
+Theory first (this run, before the batch): **contact copying copies every attached part at one rate, whatever it
+does**, so a part's function changes its share only through (i) how long it stays attached and (ii) where its copies
+land; a seed site (a nursery) is a public good. Hence: a cheat on the seed letter (S `C@-q|`, q matched by no root) is
+made by mutation of the host's own S copies at a fixed rate and is caught by the host's fronts as often as S is, so it
+is not an enemy a host can escape by changing letters (its new letter's cheats follow by mutation from its own parts);
+locality (a parent's copies feed its own bud) purges it, the whole-body hazard favours it (no waiting bud, so it is hit
+less). A head whose front catches nothing (a blocker on a host seed site, root-specific) dies with its host body under
+`PAHU=3` (attached about half as long as a host's head): strongly purged; under `PAHU=2` it outlives its host as a free
+part and rebinds (run 0820's chains). A separate second class needs four letter changes (root/seed and front/attach
+pairs), each intermediate a cheat or blocker. Predictions: (a) seed-letter cheats held in 4 of 4 (a share at a balance,
+not cycles); (b) the leading class's root letter stays Z in at least 3 of 4 (letters join the class, not replace it);
+(c) one class in at least 3 of 4 for most of the second half: **(b) and (c) fail**. Control batch: the stockless world
+with `PAHU=2 PAH=0.1`: blockers spread and the world ends in heads that never let go (at least 2 of 4).
+Batch: `node tri/batch.js runs/sl.json` (jobs in that file: sl = stockless, st = stock world, s2 = stockless PAHU=2).
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
