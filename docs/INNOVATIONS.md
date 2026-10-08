@@ -657,6 +657,10 @@ not statistics.
     the bodies (late sweeps; 12-22 such types in all). By conservation, copies equal deaths in a steady state, so
     binding can no longer stop the flow; free blanks may still fall (34-150 in seeds 2-4 at 300k) because the winners
     draw blanks lowest (IDEAS).
+    Re-measured in core review run 20261007-2051 (seeds 1-8, no drive, `runs/pfc.json`): under 10k copies per 5000
+    steps at 200k in only 3 of 8 worlds on `main` `25c68b9` (seeds 3, 4, 5: 5407, 2203, 8719; the others 12.8-16.6k)
+    and 3 of 8 after that run's fixes (seeds 2, 3, 8). So the drive makes the flow certain (4 of 4), but most worlds
+    without it still copy at 200k; the seeds of the control were the locking ones. `pair-flow-c` is partial since.
   - **Extinction by a selfish part:** to 300k, seed 1 died out at 260k after an S whose seed site carries a lysis mark
     (`B@p!y`: an R that binds it is lysed, so the seed site is free and copied again, but no bud grows on it) swept;
     `PAHB=1` lost seeds 1 and 4 by 240k (variants copied less swept first). Heredity is by part type in a mixed pool,

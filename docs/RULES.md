@@ -307,7 +307,16 @@ never creates or destroys a triangle or changes a type except by copying.
    anyway); `capture` and `triTolClose` (different tests); `_snap` and `_snapBody` (a merge changes outputs); `fn` (not
    derivable without a relay).
 
-**Result (measured):** PENDING.
+**Result (measured):** `node tri/test.js` 43 of 43 (two new tests: copying is glue-blind; only a triangle free when
+the pass began copies, never by a close-only copy side, which fails on `main`'s rules). Whole suite on the
+branch 51 of 52, the one failure the control `pair-flow-c` (below). Outputs against `main` `25c68b9` (`CHECK_SAVE`, every
+check but the two lineage ones, 163 worlds): byte for byte the same in 153, among them every chain-copying world (`copy`,
+`imprint` `g` and `p`, `budpool`: the nb merge and the closure fixes change nothing) and every pair world without the
+general mutagen; different in 10, all with the general mutagen (`pair-mut` 1-4, `pair-flow` 4, `pair-flow-c` 3 and 4,
+`pair-flow-i` 4, `world` 3, `own-letter-c` 2), as fix 4 predicts; all pass but `pair-flow-c` seed 4. That control was
+weak on `main` too: over seeds 1-8 without the drive the material locks in 3 of 8 worlds on `main` and in 3 of 8 on the
+branch (INNOVATIONS run 0621, re-measured), so it is now partial (reported, never fails). The lineage checks pass
+(`budcycle-3` 2 of 2, `budcycle-lysis` 2 of 2).
 
 ### Option `copyGlue` (candidate (t)): a glued copy side binds only a complementary side, 2026-10-07, autorun run 20261007-1921 (explore) (removed run 2051)
 NEXT priority 20. The case, written before the code; the result follows when measured.
