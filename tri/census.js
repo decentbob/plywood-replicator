@@ -10,12 +10,13 @@
 //     the stockless world, where the lock is a site on the second cell: per row the majority root letter R, nursery heads
 //     (a plain side with R's complement: born in place), second cells with a working lock for R (a free side of R's
 //     complement, not close-only or '!'), sealed (a glued close-only side and no working lock), trapped (R's complement
-//     with '!'); then a summary: each turn of the majority root, the first census with nurseries on more than half of heads)
+//     with '!'; with --joint, for worlds with lysJoint, a lock with '!' is a working, guarded lock and counts as both); then a
+//     summary: each turn of the majority root, the first census with nurseries on more than half of heads)
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
 const fs=require('fs');
-const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),args=process.argv.slice(2).filter(a=>a!=='--loop'&&a!=='--pool'),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
+const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=process.argv.includes('--joint'),args=process.argv.slice(2).filter(a=>a!=='--loop'&&a!=='--pool'&&a!=='--joint'),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
 const sides=t=>t.match(/[-a-zA-Z][.@&|?!]*/g);
 const classify=t=>{const s=sides(t);if(!s||s.length!==3)return ['other',t];const h=s.find(x=>x.includes('@')&&x.includes('&'));if(h)return ['head',h[0]];
   const i=s.findIndex(x=>x[0]==='C'&&x.includes('@'));return i>=0?['second',s[(i+1)%3][0]]:['other',t];};
@@ -56,7 +57,7 @@ function poolSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.t
       const i=s.findIndex(x=>x[0]==='C'&&x.includes('@'));if(i>=0){r.cells.push([[s[(i+1)%3],s[(i+2)%3]],n]);r.ns+=n;}}
     const M=Object.keys(r.H).sort((a,b)=>r.H[b]-r.H[a])[0];r.M=M;
     if(M){const z=cp(M),plain=x=>!/[@|.!&?]/.test(x);r.nur=r.heads.filter(([L,o])=>L===M&&o.some(x=>x[0]===z&&plain(x))).reduce((a,h)=>a+h[2],0);
-      r.fit=0;r.seal=0;r.trap=0;for(const [o,n] of r.cells){const w=o.some(x=>x[0]===z&&!/[.!]/.test(x));if(w)r.fit+=n;else if(o.some(x=>x[0]!=='-'&&x.includes('.')))r.seal+=n;if(o.some(x=>x[0]===z&&x.includes('!')))r.trap+=n;}}
+      r.fit=0;r.seal=0;r.trap=0;for(const [o,n] of r.cells){const w=o.some(x=>x[0]===z&&!/[.!]/.test(x)||joint&&x[0]===z&&!x.includes('.'));if(w)r.fit+=n;else if(o.some(x=>x[0]!=='-'&&x.includes('.')))r.seal+=n;if(o.some(x=>x[0]===z&&x.includes('!')))r.trap+=n;}}
     R.push(r);}
   if(!R.length){console.log(f+': no types: lines');return;}
   console.log('# '+f);let j=0;
