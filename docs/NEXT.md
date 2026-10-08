@@ -41,6 +41,18 @@ E1 (B world with the anchorless site `C@-z`, no mutation, 10 sealed `C@-z.` pair
 share levels off below 80% and the world lives (4 of 4); control: 10 more of the resident pair (drift). E3 (B with the
 head's copy side close-only, `Z@&c@|-.`: a nursery then needs two errors, the first neutral): no nursery by 480k in 3 of
 4, and root letters still turn after 240k in at least 2 of 4.
+E2 read (before E3's results): 3 of 4 pool worlds **died** (seed 1 at 305k: a catcher `Z@&C@-` took the second
+cells' place on host fronts and the locks died out; seed 2 at 415k after 3 turns: a plug `-N.g@` on the public G locks;
+seed 3 at 145k: a plug `--D@` on a partial nursery whose second cells had no trap); seed 4 privatized (nursery from 195k,
+trap `z!` on 92-100% of second cells, no turn after). Derived from it: **a lock is guardable only if its rightful keys
+never travel free.** The guard is a trap of the lock's letter on the shared part; it cannot tell a pool-born child from a
+plug (they differ only by `&`), so a public lock cannot be guarded and dies of its parasites, while a private lock's
+children are born in place and the trap spares the class. Turnable and guardable exclude each other in the current core.
+Revised predictions: E3 (door narrowed) no nursery in 3 of 4 and 3 of 4 dead by 480k of a lock parasite. E4: candidate
+(v), contact lysis stops at a joint, as the parameter `lysJoint` with `lysOneWay` 1, and a guarded public lock (second
+cell `C@-z|!`): a trap that raises keys with `&` and lyses plugs. Pool world as E2: 3 of 4 alive at 480k, no plug death,
+root letters still turn in at least 2 of 4; control: the same second cell without `lysJoint` gives no class (every root
+landing is lysed).
 
 **Handoff status (autorun run 20261008-1650, build): priority 30 done.** No rule change. New checks `seal-evolve`
 (3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`: 3 of 3 pass, 1205 s);
