@@ -37,7 +37,9 @@ NEXT priority 30, the loop at length, measured to 1.2M (INNOVATIONS run 1650). N
   (`C@i.z!`, `C@n.z!`, `C@r.z!`). A close-only side binds no free part by glue but is still copied (RULES, Side marks),
   so the sealed site is a template and no target: commons heads and in-place chains cannot bind it. Sealed on more than
   half of second cells from 50k, 165k, 380k, 870k (current core), 380k in one of four `lysOneWay` worlds; 88-100% at
-  1.2M wherever it swept, with 2 site turns in 3.3M sealed world-steps against 9 in 1.47M open ones.
+  1.2M wherever it swept, with 2 site turns in 3.3M sealed world-steps against 9 in 1.47M open ones. By 480k 7 of
+  12 current-core worlds had sealed; the seal is a race of supply too, and a world can stay open for a long time
+  (seed 3: seven turns by 480k, never sealed).
 - **Why the seal and not the inert site.** Every escape from a parasite of the site is a change of that side; copy error
   takes a glue with 1/2 (inert 1/53 of it) and toggles one of six marks with 1/2. So a new letter is about 0.49 of the
   errors on that side, the close-only toggle 1/12, an inert glue 1/106. Letters come first (the turnover of run 1351), but

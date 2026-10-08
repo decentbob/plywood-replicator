@@ -19,7 +19,7 @@ evolving. One-way lysis (`lysOneWay`, candidate (w)) kept the trap in a forced p
 length (3 of 4 alive against the current core's 4 of 4).
 
 **Handoff status (autorun run 20261008-1650, build): priority 30 done.** No rule change. New checks `seal-evolve`
-(SEALEVO), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`);
+(3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`: 3 of 3 pass, 1205 s);
 `tri/census.js --loop` (one summary per world; it dropped the first file without `--every`: fixed). Records:
 INNOVATIONS run 1650, IDEAS "The shared site seals itself", RULES (w) item 6, ROADMAP (row, backlog A 30), picture
 `loop-long.png`. The batches (`runs/` is not kept): the race world (`node tri/check.js --cmd race`) to 1.2M, seeds 5-8,

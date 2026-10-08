@@ -15,7 +15,7 @@ not statistics.
 ## 2026-10-08 (autorun run 20261008-1650, build)
 
 - **The loop at length: it stops, because the shared site seals itself** (NEXT priority 30; theory in IDEAS "The
-  shared site seals itself"). No rule change. New checks `seal-evolve` (SEALEVO), `seal` (4 of 4; its control is
+  shared site seals itself"). No rule change. New checks `seal-evolve` (3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; its control is
   `commons`), `seal-turn` (4 of 4); `tri/census.js --loop` (one summary per world: site turns, commons episodes, trap,
   plugs, chains; it also dropped the first file when `--every` was absent: fixed).
   - **The race world to 1.2M** (`race`'s env, `pErr` 0.005, seeds 5-8; current core and `lysOneWay` 1; `runs/p30.json`,
@@ -27,7 +27,7 @@ not statistics.
     P7 no second trap side (no: `C@z!z!` on every second cell in the dying world), P8 one shape (yes).
   - **The sealed site** (unpredicted): the site side took the close-only mark (`C@i.z!`, `C@n.z!`, `C@r.z!`, `C@M.z!`):
     more than half of second cells from 50k, 165k, 380k, 870k (current core) and 380k (one `lysOneWay` world), 88-100%
-    at 1.2M where it swept; to 480k (current core, seeds 1-4 and 9-12, `runs/p30t.json`) SEAL480. After the seal: 2
+    at 1.2M where it swept; to 480k (current core, seeds 1-4 and 9-12, `runs/p30t.json`) sealed in 4 of 8 (seeds 1, 2, 4, 10: from 65k, 325k, 150k, 95k), so 7 of 12 current-core worlds by 480k; seed 9 died at 330k of a plug `H!Z@i!` on the heads' own sides (82 at 315k, the trap lost with its catches), the collapse of run 1351 again: 1 collapse in 12 current-core worlds. After the seal: 2
     site turns in 3.3M world-steps (9 in 1.47M before) and no commons class. Every sweep came during a parasite
     episode (commons class or in-place chain). Close-only was 3848 of the second-cell type entries in the 8 long worlds'
     censuses, inert sites 44: copy error toggles a mark with 1/2 (1/12 the close-only mark of a side), an inert glue
@@ -37,7 +37,10 @@ not statistics.
     founders (the sealed one at 100 steps), 20 free I heads at 20k: where I grew the sealed share rose (13% to 97%, 16%
     to 74%), where I was lost early it drifted as in the controls without I (16% to 0, 13% to 12%, 55-62%). 20 sealed
     nurseries entered at 35k while I spreads (as `commons-turn` with `C@i.z!` for the plain cell): I gone by 80k and
-    the sealed share at 85-95% at its peak, 4 of 4; afterwards it drifts (60-99% at 100k: neutral without I).
+    the sealed share at 85-95% at its peak, 4 of 4; afterwards it drifts (60-99% at 100k: neutral without I). As the
+    checks (no `types:` lines, so other worlds): `seal` 4 of 4 (0 I individuals at 80k), `seal-turn` 4 of 4 (I peaked at
+    76-86% of individuals, sealed cells then up to 96-100%), `seal-evolve` 3 of 4 (sealed 68-89% at 400k; seed 5 seals
+    at 870k); 1205 s for the three.
   - **One-way lysis at length:** the dying world (seed 6, 1090k): second cells `C@z!z!` and `C@c!z!`, then plugs
     `Z@c!z!` (98-169) and `V!Z@c!` (111-144) on the heads' own sides, whose `c!` side lyses free second cells; heads
     from about 510 to 0 in 50k. The current core had at most 8 plugs in any of its four worlds.
