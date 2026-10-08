@@ -20,7 +20,7 @@ not yet growth in complexity: every class has one shape.
 option `PATN=n` (`types:` lists n types; default 10, outputs unchanged); `tri/census.js` (heads by root letter, second
 cells by site letter, from `types:` lines). Records: INNOVATIONS run 1351, IDEAS "A common site is a target", ROADMAP
 (row, backlog A 28), pictures `race.png`, `race-long.png`. Evidence: tests 44 of 44; `node tri/check.js race copy-error`
-from a worktree (see the INNOVATIONS entry for the result); the batches (`runs/` is not kept: rebuild them as `tri/batch.js` files
+from a worktree of the branch: `race` 3 of 4 (566 s), `copy-error` 4 of 4 (`types:` unchanged by default); the batches (`runs/` is not kept: rebuild them as `tri/batch.js` files
 from INNOVATIONS' Commands: seeds 1-4 at 0.005, at 0.01, and the control; seeds 5-8 at 0.005; seeds 2, 3, 5, 6 at 0.005
 to 480k) are read with `node tri/census.js`. The full
 suite was not rerun: no rule, physics or shared structure changed, and `PATN` unset leaves every output as before.

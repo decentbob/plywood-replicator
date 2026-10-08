@@ -16,7 +16,8 @@ not statistics.
 
 - **The race under copy error: the commons' cheats always come first; a common site is a target, so the shared
   part's site letter turns over and commons classes of new letters arise by mutation** (NEXT priority 28; theory in
-  IDEAS "A common site is a target"). No rule change. New check `race` (6 of 8 worlds in the batch); demo option
+  IDEAS "A common site is a target"). No rule change. New check `race` (6 of 8 worlds in the batch; as a check 3 of 4,
+  566 s; `copy-error` still 4 of 4); demo option
   `PATN=n` (the `types:` line lists n types, default 10); reader `tri/census.js` (heads by root letter, second cells
   by site letter, from `types:` lines).
   - **The race** (`commons`'s world, copy error, mutagen off, 10 commons-class heads `I@&c@|z` at 20k, every second cell
