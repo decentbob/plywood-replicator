@@ -297,6 +297,25 @@ const CHECKS=[
   {id:'cheat-root-c',cap:'  control: without cheats first, the I roots are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:180,env,
     pass:(L,o)=>{const r=share(o);if(!r)return [false,'no result'];return [r.f<0.05&&r.end>=300,`at 70k ${r.n} of ${r.end} individuals with an I root`];}},
   ];})(),
+  // run 20261008-1021 (build): sites on the shared second cell are a commons (NEXT priority 23; IDEAS "A site on the
+  // shared part is a commons"). No mutation. The head nursery with an i site on every second cell ('C@iz!': labelled
+  // start, as after the site has drifted); 10 I heads that raise nobody on their own side ('I@&c@|z', a pool class) enter
+  // at 20k, are born only on the second cells' i sites, keep their template side free and replace the nursery (all I by
+  // 70k in 4 of 4). Control: the same heads without i sites are lost by 30k. The turn: 20 plain second cells ('C@-z!')
+  // entered at 35k, while I spreads, are copied more than those whose i site holds a waiting head; they take the second
+  // cells, I loses its sites and dies out, the nursery returns (4 of 4 by 80k)
+  ...(()=>{const env={PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|z C@iz!',PA1T:'20000',PAEN:'10',PAKR:'I@&c@|z',PAKS:'C@iz!'},
+    has=(k,p)=>k.split('+').includes(p),
+    census=o=>[...o.matchAll(/^kinds: t=(\d+) .*?individuals (\d+) kinds .*? \| (.*)$/gm)].map(m=>{const top=m[3].split(', ').map(w=>w.match(/^(\d+)x (.+)$/)).filter(Boolean).map(q=>[+q[1],q[2]]);
+      const n=p=>top.filter(([,k])=>has(k,p)).reduce((a,[v])=>a+v,0);return {t:+m[1],all:+m[2],I:n('I@&c@|z'),Z:n('Z@&c@|z'),plain:n('-z!C@')};});return [
+  {id:'commons',cap:'A site on the shared second cell is a commons: a head class born only there replaces the head nursery',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:180,env,
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1];return [e.all>=380&&e.I>=0.9*e.all,`at 80k ${e.I} of ${e.all} individuals with an I root`];}},
+  {id:'commons-c',cap:'  control: without i sites on the second cells, the I heads are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:180,env:{...env,PA2:'Z@&c@|z C@-z!',PAKS:'C@-z!'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1];return [e.I===0&&e.all>=380,`at 80k ${e.I} of ${e.all} individuals with an I root`];}},
+  {id:'commons-turn',cap:'Second cells without the site turn the commons class back: plain second cells spread, I dies out, the nursery returns',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:220,env:{...env,PAEN:'20',PA3T:'35000',PA3:'Z@&c@|z C@-z!'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const pk=C.reduce((a,c)=>c.all&&c.I/c.all>a.f?{f:c.I/c.all,t:c.t}:a,{f:0,t:0}),e=C[C.length-1];
+      return [pk.f>=0.3&&e.I===0&&e.Z>=0.9*e.all&&e.plain>=0.8*e.all,`I peaked at ${(100*pk.f).toFixed(0)}% of individuals (${pk.t}); at 100k I ${e.I}, Z ${e.Z}, plain second cells ${e.plain} of ${e.all}`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share

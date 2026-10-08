@@ -12,6 +12,47 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-1021, build)
+
+- **A site on the shared second cell is a commons: a head class born only there replaces the head nursery, and second
+  cells without the site turn it back** (NEXT priority 23; theory in IDEAS "A site on the shared part is a commons"). No
+  rule or demo change. New checks `commons` (4 of 4), `commons-c` (control, 4 of 4), `commons-turn` (4 of 4).
+  - **Under copy error, mutagen off** (head nursery `PAW=1 PAF= PAM=0 PA2='Z@&c@|z C@-z!'`, `pErr` 0.005 and 0.01, 480k,
+    seeds 1-4 each; `runs/p23.json`): alive 8 of 8 (354-437 individuals), **root letter Z kept in 8 of 8**. Site letters
+    on the second cell's inert side (`C@xz!`, raising nobody) drifted to 20% or more of second cells in 2 of 4 at 0.005
+    (L 73%, e 29%) and 3 of 4 at 0.01 (d 34%, H 33%, u 30%); the only other roots in any census were `l@&c@z` (3 heads
+    at 345k, 1 at 125k) in the world where L sat on 60-73% of second cells for about 300k. Heads drifted as in run 0651
+    (`Z@&c@z` swept 3 of 4 at 0.005, 2 of 4 at 0.01). Predicted (NEXT slice record): P2 no second root letter above 5%
+    (yes, 8 of 8), P3 no pool class replaces the nursery (yes), P4 alive (yes), P1 a site letter above 20% in 3 of 4
+    per rate (half: 2 and 3).
+  - **The stockless founder at the mutagen's supply** (`pErr` 0.005: 104 copy errors by 20k, the mutagen's 123-131; 240k,
+    seeds 1-4): root letters turned over in 2 of 4 (seed 2: Z, m at 60k, x at 130k, each after its seed site `-M|C@`,
+    `-XC@` had spread on second cells; seed 1: a d nursery `C@|Dd@&` at 230k, from heads `C@|DZ@&` that carried a D site
+    on their own side, 0 to 323 heads in 10k); seed 3 evolved the Z nursery (about 150k) and kept Z; seed 4 died of the
+    chain sink (`-zZ@`, 150k). Predicted at most 1 of 4 (P5): wrong; the mutagen turned letters over in 1 of 8 (run 0121),
+    so rate alone does not explain run 0651's difference.
+  - **Invasions, no mutation** (10 entered at 20k into the head nursery, 80k, seeds 1-4; `runs/p23e.json`): `I@&c@|z`
+    (a pool class: copies born on its own `z` side cannot bind it) with `C@iz!` as every second cell: **I replaced the
+    nursery in 4 of 4** (all individuals by 70k; predicted lost: wrong); without i sites lost by 30k (4 of 4); an I nursery
+    `I@&c@|i` drifted (lost 2 of 4, 17 and 138 individuals at 80k), with i sites replaced Z (3 of 4). One I head (seeds
+    1-8, `runs/p23f.json`): established in 1 of 8. Site share (a second founder with `C@iz!` at t=0, its share at 20k by
+    drift; seeds 1-8): 37-46% i sites, lost 6 of 6; 80-83%, invaded 2 of 2.
+  - **The turn** (`runs/p23h.json`: 20 I heads at 20k, 20 nurseries with plain second cells `C@-z!` at 35k, 100k, seeds
+    1-4): I peaked at 76-86% of individuals at 45-55k; plain second cells went from 4% to over 90% of second cells (an i
+    site holding a waiting head is no template); I died out by 60-80k and the Z nursery returned, 4 of 4 (check `commons-turn`, 236 s). With 10 plain
+    cells entered at 20k with the I heads (`runs/p23g.json`, 200k): the loop once (seed 3), the plain cells drifted out
+    before I grew and I kept the world (seeds 1, 4), I lost (seed 2).
+  - Pictures: [commons-invade.png](pictures/commons-invade.png) (seed 1 at 40k: I heads orange on second cells, Z
+    nursery blue; second cells light in their head's colour: a Z body raising an I head, an I head raising a leaked Z head);
+    [commons-turn.png](pictures/commons-turn.png) (`commons-turn`'s four worlds: Z, I and plain second cells over time).
+  - Commands: `PAW=1 PAF= PAM=0 PA2='Z@&c@|z C@iz!' PA1T=20000 PAEN=10 PAKR='I@&c@|z' PAKS='C@iz!' node tri/demos.js pair
+    SEED 80000 runs/x` (check `commons`, about 3 minutes; `PA2='Z@&c@|z C@-z!' PAKS='C@-z!'`: `commons-c`; add `PAEN=20
+    PA3T=35000 PA3='Z@&c@|z C@-z!'`, 100000 steps: `commons-turn`); the mutation worlds: the Commands' copy-error line with
+    `pErr` 0.005 or 0.01 and 480000 steps (about 18 minutes per world with 4 at once).
+  - Status: the commons class replacing the head nursery **works** (`commons`); its turn by second-cell cheats **works**
+    (`commons-turn`); root-letter turnover in the head nursery under copy error **not yet** (0 of 8 to 480k; supply-limited
+    by the theory); the own-side door to a new nursery seen once (**partial**, no check).
+
 ## 2026-10-08 (autorun run 20261008-0651, explore)
 
 - **Copy error in contact copying (core change, candidate (r)): heads of the head nursery vary, root letters turn over,
