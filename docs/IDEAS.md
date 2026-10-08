@@ -28,6 +28,46 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A common site is a target: the shared part's site letter turns over, and commons classes follow it (build run 20261008-1351, 2026-10-08)
+
+The race of NEXT priority 28, measured under copy error (INNOVATIONS run 1351). Notes, not the user's words.
+- **The race is decided by supply.** Copy error puts a given glue on a given side with probability pErr/318 per copy
+  (a side 1/3, a glue 1/2, one of 53). The nursery mutant of the commons class (`I@&c@|z` to `I@&c@|i`) is one such
+  change on one class's heads; a cheat of the commons is any change of the second cell's site side (pErr/3 per
+  second-cell copy, a hundred times more, on the commonest part), and by 20k such variants are already about 5% of
+  second cells by drift. So the cheats come first: no I nursery held in 16 worlds (one `I@&c@|i` head was seen once).
+- **A common site is a target.** A side that something binds is no template, so whatever binds a site costs the
+  site's carriers the copies made on that side, and second cells with another letter there win. Three kinds of
+  binders arose: the commons class itself (a head whose root fits the site), the **in-place chain** (the second cell
+  with its attach letter changed to the site's complement, `I@iz!` on i sites, `Mz!m@` on M, `E.z!e@` on E: one
+  error, and it binds the site and offers it again, so it grows on its own tip), and parts that only bind it
+  (`COz!` on o sites). Each is the commoner the commoner its site, so selection is negative frequency dependent: the
+  commonest site letter is replaced by a minority one, which then becomes the commonest. The second cell's site side
+  turned over in 10 of 16 worlds (twice or more in 8), i to M to V, i to m to a, i to o to i to X to f.
+- **Where a parasite binds decides whether it is a sink or a turnover.** Run 0551's chains (`-zZ@` on the heads'
+  own `z` sides) collapsed 4 of 4 worlds; here chains on the second cell's site collapsed none (predicted 2-6 of
+  12). The head needs its own side (in-place birth is its heredity; a head that changes it is a cheat, lost within
+  5k), so it cannot escape and needs a guard (a lysing tip, a release). The second cell does not need its site, so
+  its carriers escape by changing the letter and the chain dies with its sites: a side nobody needs guards itself by
+  turnover. The one collapse (1 of 16) came from the other kind: a plug `T!Z@i!` (a second cell's two-step variant
+  with attach letter Z) on the heads' own sides (priority 27).
+- **The commons door reopens by itself.** Turnover drives the new letter to nearly every second cell (M, m, Q, b:
+  98-100% of second cells), exactly the condition under which a commons class of the complementary root invades (run 1021:
+  80-100% of sites). The class comes from the nursery by one root error (`Z@&c@|z` to `q@&c@|z`, pErr/318 per head
+  copy, about one per 100-200k steps at 0.005). Seen: Q on all second cells from 125k, a `q` class from 215k, 84% of
+  heads at 240k (seed 5); in the control without any entered class, an I class by mutation on the starting i sites
+  (52% of heads, seed 4 at 0.01). So the loop runs by mutation alone: site sweeps prepare commons classes, commons
+  classes (and chains) end site sweeps.
+- **The nursery is also one error from every commons class.** In seed 6 the I class took every head (the Z nursery
+  extinct by 65k; individuals fell from about 420 to 250-330: pool classes alone are less productive), an N class
+  arose on n sites and lived beside I for about 80k (two classes on two site letters: run 1821's bound, classes at
+  most the resources, reached by evolution), then a head with root Z (`Z@&c@|z` is `I@&c@|z` with one root error)
+  re-founded the nursery and had every head within 10k.
+- **What it gives the goal.** A Red Queen of letters that needs no designer: root letters of commons classes and site
+  letters of the shared part chase each other, with the in-place nursery as the stable base it returns to. It is
+  turnover, not growth in complexity: every class has the same shape. Complexity needs classes that differ in what
+  they do; the next lever is a variant that changes shape (a third cell, a second site) and is selected inside this loop.
+
 ## A site on the shared part is a commons: a class born there beats the nursery, and the part's cheats turn it back (build run 20261008-1021, 2026-10-08)
 
 Derived, predicted wrong, then measured in the head-nursery world (INNOVATIONS run 1021). Notes, not the user's words.

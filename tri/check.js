@@ -317,6 +317,22 @@ const CHECKS=[
     pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const pk=C.reduce((a,c)=>c.all&&c.I/c.all>a.f?{f:c.I/c.all,t:c.t}:a,{f:0,t:0}),e=C[C.length-1];
       return [pk.f>=0.3&&e.I===0&&e.Z>=0.9*e.all&&e.plain>=0.8*e.all,`I peaked at ${(100*pk.f).toFixed(0)}% of individuals (${pk.t}); at 100k I ${e.I}, Z ${e.Z}, plain second cells ${e.plain} of ${e.all}`];}},
   ];})(),
+  // run 20261008-1351 (build): the race under copy error (NEXT priority 28; IDEAS "A common site is a target"). The
+  // commons world with copy error at 0.005 and no hand-entered cheats: the commons class rises (22-100% of heads) and dies
+  // out by 65-85k with no I nursery, the Z nursery returns, and the site letter common on second cells turns over (6 of
+  // 8 by 240k), each turn after a parasite of that site (the commons class, an in-place chain such as 'I@iz!', a cell
+  // that binds the site); in seed 5 a commons class of the new letter arises by one error ('q@&c@|z' on Q sites, 84% of
+  // heads at 240k). Read from 'types:' lines: heads (an attach side with '&') by root letter, second cells (an attach
+  // side of letter C) by the letter of the side after it
+  ...(()=>{const {TOK}=require('./sim'),sd=x=>[...x.matchAll(TOK)].map(m=>m[0]),
+    census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],Z:0,I:0,H:0,S:0,L:{}};for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),s=sd(x.slice(i+1));if(s.length!==3)continue;
+      const h=s.find(y=>y.includes('@')&&y.includes('&'));if(h){r.H+=n;if(h[0]==='Z')r.Z+=n;if(h[0]==='I')r.I+=n;continue;}const c=s.findIndex(y=>y[0]==='C'&&y.includes('@'));if(c>=0){const L=s[(c+1)%3][0];r.L[L]=(r.L[L]||0)+n;r.S+=n;}}return r;});return [
+  {id:'race',cap:'Under copy error the commons loop runs by itself: the commons class rises and falls, the nursery returns, the common site letter turns over',demo:'pair',seeds:[1,2,3,4],need:3,steps:240000,secs:540,
+    env:{PAW:'1',PAF:'',PAM:'0',PATN:'30',PA2:'Z@&c@|z C@iz!',PA1T:'20000',PAEN:'10',PAKR:'I@&c@|z',PAKS:'C@iz!',TRI_PARAMS:'{"pErr":0.005}'},
+    pass:(L,o)=>{const C=census(o),I=indiv(o);if(!C.length||!I)return [false,'no result'];const e=C[C.length-1],f=c=>c.H?c.I/c.H:0,pk=C.reduce((a,c,j)=>f(c)>f(C[a])?j:a,0),
+      back=C.slice(pk).find(c=>c.I===0&&c.Z>=0.9*c.H),turn=C.map(c=>Object.entries(c.L).find(([k,v])=>k!=='i'&&v>c.S/2)).find(Boolean);
+      return [f(C[pk])>=0.15&&!!back&&e.I===0&&!!turn&&I.end>=380,`I peaked at ${(100*f(C[pk])).toFixed(0)}% of heads, gone with Z at 90% or more by ${back?back.t/1000+'k':'never'}; site letter turned: ${turn?turn[0]:'no'}; at 240k Z ${e.Z} of ${e.H} heads, ${I.end} individuals`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
