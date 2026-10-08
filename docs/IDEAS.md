@@ -28,6 +28,70 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Who pays for a lock: needed locks are frozen, public locks cannot be guarded, a joint-aware trap guards them (explore run 20261008-1951, 2026-10-08)
+
+NEXT priority 33 (a site that can neither be sealed nor turned): derived first, then measured; one core candidate built
+as a parameter (RULES (v), `lysJoint`; INNOVATIONS run 1951). Notes, not the user's words.
+- **Recognition is one glue pair on two sides, and copy error changes one side of one copy.** So a lock changes letter
+  usefully only if a key of the new letter is already there, or arises while the changed lock waits. That needs standing
+  variation on one side, and only a side that binds nothing its carrier needs can drift: an unbound key is never copied
+  (only attached triangles are templates), and a lock its carrier needs loses that use when it changes.
+- **The pair's recognitions, one by one.** (a) The nursery, root `Z@&` and own side `z` on one type: a copy changes one
+  of them and its children are born on a site they cannot bind (lost within 5k, run 0551); frozen. (b) The front `c@`
+  and the second cell's attach `C@`: each carrier needs its side; frozen. (c) The second cell's site and a commons root:
+  the site's carrier does not need it, so it drifts and its carrier escapes every binder (letters, the seal): turnable,
+  and in the nursery world sealed for good (run 1650). (d) The trap `z!` and the plug `Z@`: both read the nursery's
+  letter, so the plug cannot leave the trap without leaving its target: a fixed guard (run 1522). **So no side of the
+  pair is both needed by its carrier and turnable by one error**: priority 33 as posed has no answer in the pair. A
+  needed lock that turns would need a spare lock on the same line (one used while the other drifts), and a head of three
+  sides has none.
+- **The nearest thing is a public lock:** a site the class needs and its carrier does not, the second cell's seed site
+  in the stockless world (heads `Z@&c@|-` born in the pool, raised on the second cell). Its cheats (another letter, the
+  seal) raise nobody and gain only the time an honest site holds a waiting head, which shrinks as heads become rare, so
+  they cannot sweep: 10 sealed second cells entered rose to 71-79% and stopped there, the world alive (4 of 4; E1). And a
+  common cheat letter is an empty nursery for a root mutant of its complement, so root letters can turn (run 0651).
+- **But a public lock cannot be guarded, and it dies of its parasites.** The core's one guard is a trap of the lock's
+  letter on the shared part, and a trap lyses whatever binds it: a pool-born child and a plug differ only by `&`. So a
+  trap can guard only a private lock, whose children are born in place and never meet it. Measured (E2, the stockless
+  world at `pErr` 0.01 to 480k): 3 of 4 worlds died of parasites on the lock (a plug `-N.g@` on the public G locks, 415k,
+  after three root turns; a catcher `Z@&C@-` that took the second cell's place on host fronts until no lock was left,
+  305k; a plug on a partial nursery without a trap, 145k); the fourth privatized (a nursery on 97-100% of heads from 195k,
+  the trap `z!` on 92-100% of second cells, no turn after). With the nursery's door narrowed (the pool head's copy side
+  close-only, `Z@&c@|-.`, so a nursery takes two errors; E3) a nursery formed in 1 of 4 by 480k, 1 of 4 died, and no
+  root letter turned in any: keeping the class public does not keep it turning. **Turnable and guardable exclude each
+  other in the current core**, and evolution ends where it can guard: the private lock with a trap on the shared part,
+  which is frozen. That is why run 1650's loop stopped.
+- **A trap that reads the joint guards a public lock (candidate (v), `lysJoint`).** If contact lysis does not cross a
+  joint, a lock with a lysis mark (`z!`) raises a key that binds by `Z@&` and lyses a part that binds by `Z@`: recognition
+  by the glue and by the `&` mark, the second side the plug lacks. With one-way lysis (`lysOneWay`) the lock also survives
+  its catch. The plug's way round it takes two errors (an `&`, and a front nothing fills, else it completes and leaves).
+- **Measured with the guard (E4: the same stockless world, second cell `C@-z|!`, `lysJoint` and `lysOneWay`, `pErr` 0.01,
+  480k).** In 2 of 4 worlds the majority root letter turned 12 and 11 times (Z, m, Z, A, Z, A, P, A, t, A, k, E, l;
+  Z, f, J, f, J, f, J, o, H, o, H, o), against 0, 3, 1 and 2 in the unguarded worlds and 5, 3, 0, 3 per 1.2M in the
+  race world (run 1650). New letters came as before, through cheat sites that kept the lysis mark (`C@M!a!`, `C@T!a!`,
+  `-p!C@`: a glue change of a guarded lock is a guarded lock of another letter), and both living worlds formed nurseries
+  late (from 280k and 325k) and still turned (k, E, l; o, H, o): the commons door stayed open, likely because a guarded
+  site costs its carrier little (a plug is lysed at once). The other 2 of 4 died: of a catcher (a head whose front became
+  `C@`, taking the second cell's place on host fronts until no lock was left, as in unguarded seed 1) and of a plug
+  `C!Z@D!` on a nursery whose second cells carried no lock of its letter (privatization without its guard). Without
+  `lysJoint` the same second cell lyses every head that lands on it: dead by 10k (4 of 4). With `lysJoint` alone (the
+  plug's lysis then comes back into the lock's carrier) the same picture: alive 2 of 4 with 19 and 15 turns, dead of a
+  catcher (385k, after 4 turns) and of a lysing plug `P!u@T.` on a nursery without a lock of its letter on its second
+  cells (440k, after 10 turns). So (v) does it alone; (w) adds nothing here. Without mutation the guard is clean: 20
+  plugs `--Z@` entered at 20k are lost on `z|!` (4 of 4, heads 553-568 at 60k) and take the unguarded `z|` locks (peak
+  181-193) and the class with them (dead by 35-45k, 4 of 4).
+- **What it gives the goal.** The loop of letters stopped (run 1650) because evolution ends where a lock can be guarded,
+  and in the current core that is a private lock, which is frozen. Recognition by a second side (the glue and the `&`
+  mark) lets a turnable lock be guarded, and in the worlds that live the loop then runs on (11-19 turns in 480k, 4 of 8
+  guarded worlds; 0-3 in 8 unguarded). Two killers are left, and neither is a parasite of the guarded lock: the
+  **catcher**, a head whose front became `C@`, which fills the second cell's place on host fronts and carries no lock
+  (2 of the 4 guarded deaths, 1 unguarded death, and E3's reduced world), a parasite of the lock's carrier; and
+  **privatization without its guard**, a nursery whose second cells carry no lock of its letter, sunk by a plug on its own
+  side (the other 2). Next: what guards the carrier role (the catcher binds a host's front by the second cell's letter,
+  so the same frozen pair as the front and the attach side), and whether a nursery keeps a guarded lock of its letter on
+  the second cell (in E4 seed 1 it did: `C!C@L!` under `Ll@&c@`). A core review weighs (v) (it does the work alone) and
+  (w) (one condition each; costs in RULES).
+
 ## The shared site seals itself: the loop of letters is transient (build run 20261008-1650, 2026-10-08)
 
 NEXT priority 30, the loop at length, measured to 1.2M (INNOVATIONS run 1650). Notes, not the user's words.

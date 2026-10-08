@@ -404,6 +404,17 @@ test('scavenger: an anchor side Z@|!& takes apart the strand it holds into monom
 // candidate (w), run 20261008-1522: with lysOneWay a lysis side passes no lysis back, so the scavenger needs no '&'
 test('lysOneWay: a lysis side lyses what it holds and passes no lysis back (the scavenger without & stays whole)',()=>{
   const w=scavengerCase(false,1);assert.ok(w.apart,'the held strand did not come apart');assert.ok(w.whole,'the scavenger came apart with lysOneWay');});
+// candidate (v), run 20261008-1951: with lysJoint a lysis side lyses no partner across a joint, so a lock z! raises a key
+// that binds by Z@& and lyses a plug Z@ (no &); with lysOneWay too, the lock's carrier survives the plug (nothing moves
+// here, so a lysed part binds again at once and is lysed again: the test reads lysis events and whether the lock is whole)
+const lockCase=(part,params)=>{const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fz!-'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:part,loose:true}];
+  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10,...params},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(8);
+  return {held:[0,1,2].some(i=>s.partner(0,i)===2),lysed:!!s.ev.lyse,whole:s.partner(0,0)===1};};
+test('lysJoint: a lock z! raises a key with & (a joint) and lyses a plug without; with lysOneWay the lock survives its catch',()=>{
+  const k=lockCase('Z@&c@-',{lysJoint:1});assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
+  const k0=lockCase('Z@&c@-',{});assert.ok(k0.lysed&&k0.whole,'without lysJoint the key was not lysed (nothing comes back across its joint)');
+  const p=lockCase('Z@--',{lysJoint:1});assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'without lysOneWay the lysis did not come back');
+  const p1=lockCase('Z@--',{lysJoint:1,lysOneWay:1});assert.ok(p1.lysed&&p1.whole,'with lysOneWay the lock did not survive its catch');});
 test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
   const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
 console.log(`${passed} tests passed`);

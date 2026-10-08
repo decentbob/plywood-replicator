@@ -373,6 +373,27 @@ const CHECKS=[
   {id:'trap-oneway-c',cap:'  control: the current core, the trap dies with its catch and the world with it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:mix,
     pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
+  // run 20261008-1951 (explore): who pays for a lock (NEXT priority 33; IDEAS "Who pays for a lock"; RULES candidate (v)).
+  // The stockless world's class is raised on a site of the shared second cell (a public lock: needed by the class, not by
+  // its carrier). Sealed second cells (close-only site, still copied) raise nobody and gain only while honest sites hold
+  // waiting heads, so entered at 20k they level off below all (seal-pool). The core's one guard, a trap of the lock's
+  // letter, lyses keys and plugs alike; with lysJoint (candidate (v): contact lysis does not cross a joint) and lysOneWay
+  // a lock 'z|!' raises heads that bind by 'Z@&' and lyses plugs '--Z@' (lock-guard; without lysJoint every head landing
+  // there is lysed: lock-guard-0). Read from 'types:' lines (pErr 1e-9 prints them; no copy error happens): heads (a side
+  // with '&'), second cells (attach letter C), sealed ones (a glued close-only side), plugs (attach letter Z, no '&')
+  ...(()=>{const {TOK}=require('./sim'),census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,sc:0,se:0,pl:0};
+      for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]),att=sd.filter(y=>y[1].includes('@')).map(y=>y[0]);
+        if(sd.some(y=>y[1].includes('&')))r.h+=n;else if(att.includes('C')){r.sc+=n;if(sd.some(y=>y[0]!=='-'&&y[1].includes('.')))r.se+=n;}else if(att.includes('Z'))r.pl+=n;}return r;}),
+    last=o=>{const C=census(o);return C.length?C[C.length-1]:null;},
+    pool={PAW:'1',PAF:'',PAM:'0',PATN:'20',PA2:'Z@&c@|- C@-z',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-z.'},
+    lock={PAW:'1',PAF:'',PAM:'0',PATN:'20',PA2:'Z@&c@|- C@-z|!',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":1,"lysOneWay":1}'},plug={...lock,PA3T:'20000',PAEN:'20',PA3:'--Z@'};return [
+  {id:'seal-pool',cap:'A public lock cannot be sealed away: sealed second cells entered into the pool-raised class level off below all, the world alive',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:240,env:pool,
+    pass:(L,o)=>{const e=last(o);if(!e||!e.sc)return [false,'no result'];const f=e.se/e.sc;return [f>=0.5&&f<=0.9&&e.h>=300,`at 100k sealed ${e.se} of ${e.sc} second cells (${(100*f).toFixed(0)}%), ${e.h} heads`];}},
+  {id:'lock-guard',cap:'With lysJoint a lock z|! guards the public lock: it raises heads that bind by Z@& and lyses 20 plugs --Z@ entered at 20k',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:plug,
+    pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const pk=Math.max(...C.map(c=>c.pl));return [e.pl===0&&e.h>=400,`plugs at most ${pk}, at 60k ${e.pl} plugs, ${e.h} heads`];}},
+  {id:'lock-guard-0',cap:'  control: the same lock without lysJoint lyses every head that lands on it, and the class dies',demo:'pair',seeds:[1,2],need:2,steps:20000,secs:30,env:{...lock,TRI_PARAMS:'{"pErr":1e-9,"lysOneWay":1}'},
+    pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
