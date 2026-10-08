@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-0121, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-08 (after autorun run 20261008-0250, harden). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,23 +10,16 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261008-0121, build; priority 21).** The world without stocks
-(`PAW=1 PAF= PA2='Z@&c@|- C@-z|'`) answers 21: **no Red Queen of letters** ((a) cheats hold, but they are second cells
-that raise nobody, not letter-specific; (b) root letter Z kept in 7 of 8; (c) one class in 8 of 8), and the theory
-written before the batch predicted (b) and (c) failing. Instead **the body plan evolves**: the seed site loses its
-anchor or gains a lysis mark (5 of 8 by 120k), and **the nursery moved onto the head** in 4 of 8 worlds (240k; seed 1
-in a continuation to 720k), three times the same design (`Z@&c@|z` with the second cell `-z!C@`), which then held.
-Concepts (IDEAS "A nursery is a crowd; a nursery in place is heredity"): a host's waiting head shares its blanks, so a
-body that raises nobody is copied 1.2-1.5x faster and holds beside its hosts at r* = (Dc(1-λ) - 1)/(cλ); a seed site
-that is a template of the part it raises gives births in place 0.90 (founder design 0.30), which shuts cheats out. New
-checks `world-free`, `seed-cheat`, `seed-cheat-c`, `seed-open` (4 of 4 each; about 8 minutes of the suite with 4
-processes), observation hook `tri/copyrate.js`. Records: INNOVATIONS run 0121, IDEAS, ROADMAP rows. Not run: the full
-suite (no rule, physics or shared-structure change: tests 43 of 43, the four new checks). Nothing is running. The
-stock world on today's `main` (`PAW=1`, 240k): 3 of 4 alive, one class; stockless 6 of 8 alive at 240k (seeds 2 and 6
-collapsed at 230-235k, each after chains of second cells, up to 6 cells, arose).
+**Handoff status (autorun run 20261008-0250, harden).** The suite on `main` d76ac35: 56 of 56 (the partial control
+`pair-flow-c` 1 of 2, as recorded), 4728 s. The frozen lineage's two checks now run seed 3 alone (`budcycle-3`,
+`budcycle-lysis`): it reaches generation 3 first in both (735900, 736900) and is the one world where cutters lyse a bud;
+the suite on the branch 56 of 56 in 4279 s (71 minutes), every shared world's output byte for byte main's. The lineage
+was about 20% of the suite's CPU, not three quarters (that figure predates the pair checks; this machine runs each world
+about twice as fast as the recorded `secs`). A speed attempt on lone blocks' physics (a destination-only neighbour
+gather for moves within a sub-step, same outputs) was 5% slower and is reverted. Weakest checks: `ring` and `imprint`
+3 of 4 (frozen, unchanged). Priority 21's results (run 0121): INNOVATIONS. Nothing is running.
 
-**Next step (rotation 73, harden).** As planned: cut the frozen lineage's two checks (three quarters of the suite's
-CPU). Then rotation 74 (build): priority 22 below (the head-nursery founder).
+**Next step (rotation 74, build): priority 22 below (the head-nursery founder).**
 
 ## Direction and priorities
 
@@ -71,8 +64,8 @@ list: (b) diets of different length and (c) more diets than blanks (run 1150's R
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 2021: the order above needs one build,
 then an explore, then a build, as the mix gives): 72 build (done), 73 harden, 74 build, 75 explore, 76 build,
-77 cleanup, 78 build, 79 explore, 80 build, 81 explore, 82 review-intent. 73 harden: cut the frozen lineage's two checks
-(three quarters of the suite's CPU, about 105 minutes). 77 cleanup: prune the pair demo's 31 options to those a check or
+77 cleanup, 78 build, 79 explore, 80 build, 81 explore, 82 review-intent. 73 harden: done (lineage checks on one
+seed). 77 cleanup: prune the pair demo's 31 options to those a check or
 a command above uses.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
@@ -93,7 +86,7 @@ a command above uses.
   Retiring both would leave contact copying as the one way to copy and roughly halve `tri/sim.js`, at the cost of the
   checks `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis` (code stays in git) and of
   the lineage returning as it is (its founder genome is a held strand). A capability decision, not a review's: weigh it
-  at review-intent 82 (or a harden that cuts the lineage's checks, run 73), with the question whether a heritable
+  at review-intent 82 (run 73's harden cut the lineage's checks to one world each, not the code), with the question whether a heritable
   sequence (a genome) will be needed for complex evolution and whether contact copying of a held strand (`imprint g`)
   could carry it.
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
@@ -117,8 +110,9 @@ a command above uses.
   change only if a locality problem traces back to them.
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time (run 0920): the frozen lineage's two checks are about three quarters of the suite's CPU time; a `harden`
-  or `review-intent` run may cut them to fewer seeds or shorter worlds while the lineage stays frozen.
+- Suite time (run 0250): 71 minutes; the frozen lineage's two checks (one world each, 15-17 minutes) are about 12% of
+  the suite's CPU; the rest is pair worlds, whose time is lone blocks' physics (about 80%; a destination-only neighbour
+  gather was tried and was 5% slower, reverted).
 - Bigger cells and letter reuse (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if a
   slice needs a larger cell, reuse letters inside sealed compartments.
 
@@ -126,7 +120,7 @@ a command above uses.
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about 113 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 71 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (check world; about 7.5 minutes): the diet kind among stocks

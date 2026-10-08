@@ -39,7 +39,7 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 
 | The world without stocks: the founder pair among blanks only, every part copied (`PAW=1 PAF= PA2='Z@&c@\|- C@-z\|'`) | an ecology that evolves its body plan | **works** (build run 20261008-0121, checks `world-free` 4 of 4, `seed-open` 4 of 4): the second cell's seed site changes form (anchor lost, lysis mark, letters); the nursery moved onto the head in 4 of 8 worlds by 240-720k (**partial**, no check); chains of second cells (up to 6 cells) in 3 of 8, before both collapses (2 of 8 by 240k) | demo pair, INNOVATIONS run 0121 |
 | Cheats that raise nobody hold beside their hosts (a nursery is a crowd: a host's waiting head shares its blanks); a nursery in place (a seed site that is a template of the part it raises) makes heredity 0.9 and shuts cheats out | cost of reproduction, parasites, kin selection | **works** (run 0121, checks `seed-cheat` 4 of 4, control `seed-cheat-c`): invades from 10 to 0.9-3 per host; copy advantage 1.2-1.5 measured (`tri/copyrate.js`); no Red Queen of letters (cheats are not letter-specific) | demo pair (`PA3`, `PA3T`, `PAEN`), IDEAS run 0121 |
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 100 minutes with 4 processes (run 20261007-0622); `budcycle-3` and `budcycle-lysis` 25-35 minutes per world, seeds 2 and 3 only since that run)
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 71 minutes with 4 processes (run 20261008-0250); `budcycle-3` and `budcycle-lysis` 15-17 minutes, seed 3 only since that run)
 or by a test in `tri/test.js`.
 
 **Removed 2026-10-03 (core review run 20261003-2121; RULES, Core changes): the casting lineage.** Rows that worked and

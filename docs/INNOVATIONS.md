@@ -12,6 +12,22 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-0250, harden)
+
+- **The frozen lineage's two checks on one world each; the suite in 71 minutes** — works (no capability change). The
+  suite on `main` d76ac35: 56 of 56 (partial control `pair-flow-c` 1 of 2), 4728 s with 4 processes. `budcycle-3` and
+  `budcycle-lysis` now run seed 3 alone (`tri/check.js`): it reaches generation 3 first in both (735900, 736900; seed 2
+  at 977300 and 785400) and is the one world where cutters lyse a bud (seed 2: none). On the branch: 56 of 56 in 4279
+  s, every shared world's output byte for byte main's (`CHECK_SAVE`, `diff -r`). The lineage was about 20% of the
+  suite's CPU (not three quarters: that figure predates the pair checks), now about 12%; each world runs about twice as
+  fast here as the `secs` recorded in `tri/check.js` (scheduling estimates, their order still right). Seeds 2 and 4 of
+  the lineage by command: `BCGEN=3 BCAFTER=900000 node tri/demos.js budcycle 2 1200000 runs/x` (add `BCQ=1 BCR=50
+  BCC=2` for lysis).
+  - **Speed, a negative:** a pair world (`PAW=1`, 30k steps, 58 s) spends about 80% in lone blocks' physics (`_single`
+    20%, `eqDepthN` 18%, `_sdepth` 13%, `_overlap` 10%). Gathering only the destination's neighbours for a move within
+    one sub-step (early depth tests are order-free, so outputs stay the same) was 5% slower (61 s vs 58 s): the capsule
+    gather is cheap and a blocked destination then pays twice. Reverted; not in git.
+
 ## 2026-10-08 (autorun run 20261008-0121, build)
 
 - **The world without stocks evolves its body plan: cheats that raise nobody hold beside their hosts, and the nursery
