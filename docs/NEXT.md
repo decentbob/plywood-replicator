@@ -17,7 +17,9 @@ head-nursery founder world with the mutagen off and `pErr` 0.01, head variants a
 worlds (none in 4 of 4 under the mutagen, run 0551); (B) in the founder world without stocks (`world-free` setup) with
 the mutagen off and `pErr` 0.01, the head nursery evolves (`Z@&c@|z`, a head with its own seed side) in at least 2 of 4
 (4 of 8 under the mutagen, run 0121): then copy error can stand in for the free-part mutagen. Stop after batches A and B
-(8 worlds of 240k, about 25 minutes) and at most one follow-up. Batch: `node tri/batch.js runs/ce.json`.
+(8 worlds of 240k, about 25 minutes) and at most one follow-up. Batch: `node tri/batch.js runs/ce.json` (running from
+06:56 UTC; env `PAW=1 PAF= PAM=0 TRI_PARAMS='{"pErr":0.01}'`, jobs `a` seeds 1-4 with `PA2='Z@&c@|z C@-z!'`, `b`
+seeds 1-4 with `PA2='Z@&c@|- C@-z|'`, 240000 steps; read the `types:` lines).
 Theory (head `Z@&c@|z`: sides root `Z@&`, front `c@|`, seed side `z`; one error changes one side: a glue (1/2) or one
 of six marks toggled (1/2)):
 - Lethal head errors: root glue (binds no site), seed glue (no in-place heredity: lost as cheat heads were, run 0551),
