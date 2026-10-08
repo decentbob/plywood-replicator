@@ -346,7 +346,7 @@ const CHECKS=[
   // run 20261008-1650 (build): the loop at length (NEXT priority 30; IDEAS "The shared site seals itself"). The same
   // world run longer: the site side takes the close-only mark (a sealed site binds no free part and is still copied),
   // during a parasite episode, and the loop of letters stops (no commons class after the seal in 4 worlds to 1.2M)
-  {id:'seal-evolve',cap:'The shared site seals itself: the close-only mark takes most second cells under copy error',demo:'pair',seeds:SEALSEEDS,need:3,steps:SEALSTEPS,secs:SEALSECS,
+  {id:'seal-evolve',cap:'The shared site seals itself: the close-only mark takes most second cells under copy error',demo:'pair',seeds:[5,6,7,8],need:3,steps:400000,secs:900,
     env:{PAW:'1',PAF:'',PAM:'0',PATN:'30',PA2:'Z@&c@|z C@iz!',PA1T:'20000',PAEN:'10',PAKR:'I@&c@|z',PAKS:'C@iz!',TRI_PARAMS:'{"pErr":0.005}'},
     pass:(L,o)=>{const C=census(o),I=indiv(o);if(!C.length||!I)return [false,'no result'];const e=C[C.length-1],f=c=>c.S?c.se/c.S:0,h=C.find(c=>f(c)>0.5);
       return [f(e)>0.5&&I.end>=380,`sealed on more than half of second cells from ${h?h.t/1000+'k':'never'}; at the end ${e.se} of ${e.S} (${(100*f(e)).toFixed(0)}%), non-Z heads ${e.H-e.Z}, ${I.end} individuals`];}},
