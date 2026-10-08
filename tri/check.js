@@ -2,7 +2,8 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...]     (names: the `id` column; default all; at most 4 processes; about 71 minutes (run 20261008-0250), budcycle-3 the longest;
+//   node tri/check.js [name ...] [--part k/n] [--cmd]   (names: the `id` column; default all; at most 4 processes; about 71 minutes
+//   in run 20261008-0250's container, 160 in run 0651's: run it as --part 1/2, then --part 2/2; budcycle-3 the longest;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Exit code 1 if a working capability fails.
@@ -364,8 +365,17 @@ function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'d
     if(process.env.CHECK_SAVE){require('fs').mkdirSync(process.env.CHECK_SAVE,{recursive:true});require('fs').writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);}   // whole output, to compare runs
     res({ok,ev,secs:(Date.now()-t0)/1000});});});}
 
-async function main(){const want=process.argv.slice(2),sel=CHECKS.filter(c=>!want.length||want.includes(c.id));
+// --part k/n: the k-th of n shares of the selection, whole checks balanced by secs x seeds (a suite longer than a
+// background job's 2-hour limit runs as parts, one after another); --cmd: print each selected check's demo command
+// (env, seeds) instead of running it
+const q=v=>/^[\w.,:\/=+-]*$/.test(v)?v:`'${v.replace(/'/g,"'\\''")}'`;
+async function main(){const argv=process.argv.slice(2),pi=argv.indexOf('--part'),part=pi>=0?argv[pi+1].split('/').map(Number):null,cmd=argv.includes('--cmd');
+  const want=argv.filter((a,i)=>!a.startsWith('--')&&!(pi>=0&&i===pi+1));let sel=CHECKS.filter(c=>!want.length||want.includes(c.id));
   if(want.length&&sel.length!==want.length)throw Error('unknown check; one of '+CHECKS.map(c=>c.id).join(' '));
+  if(part){const [k,n]=part,load=new Array(n).fill(0),bin=new Map();
+    for(const c of [...sel].sort((a,b)=>b.secs*b.seeds.length-a.secs*a.seeds.length)){const i=load.indexOf(Math.min(...load));bin.set(c,i);load[i]+=c.secs*c.seeds.length;}
+    sel=sel.filter(c=>bin.get(c)===k-1);}
+  if(cmd){for(const c of sel)console.log(`# ${c.id} (seeds ${c.seeds.join(' ')}): ${c.cap.trim()}\n${Object.entries(c.env||{}).map(([k,v])=>`${k}=${q(v)} `).join('')}node tri/demos.js ${c.demo} ${c.seeds[0]} ${c.steps} runs/x${c.extra?' '+q(c.extra):''}`);return;}
   // jobs longest first, at most 4 at once; each check's line is printed as soon as its last world finishes (a restart
   // loses only the checks still running)
   const jobs=sel.flatMap(c=>c.seeds.map(seed=>({c,seed}))).sort((a,b)=>b.c.secs-a.c.secs),res=new Map(),t0=Date.now(),left=new Map(sel.map(c=>[c,c.seeds.length]));

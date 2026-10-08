@@ -9,8 +9,24 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`,
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup); `pair`'s `PAT`, `PADBG`, `PAPS`, `PAV=half|right|link`, `PAVK=selfish|front`,
 `PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup); the core option `copyGlue` with `pair`'s `PAHB=3`
-and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
+and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
+
+## 2026-10-08 (autorun run 20261008-1222, cleanup)
+
+- **The suite in parts and every check as a command** — works (no capability, rule or output change). `tri/check.js
+  --part k/n` runs the k-th of n shares of the checks, whole checks balanced by `secs` x seeds (two parts of about 16 900
+  estimated CPU-seconds each, 33 and 32 checks), so a suite fits a background job's 2-hour limit even in run 0651's
+  container (160 minutes whole); `--cmd [id ...]` prints each check's demo command with its env, seeds and steps.
+  docs/NEXT.md (257 to 111 lines) no longer lists one command per capability; the pair's done priorities moved to
+  ROADMAP backlog A and the core-change candidates to RULES (Core changes, Open candidates). The demo `pool` (a
+  measurement of the frozen lineage, run 1221; no check used it) is removed, code in git at `9556170`. README describes
+  the pair line. Looked at and kept: every one of the pair demo's 30 options is used by a check; retiring the mutagen
+  `PAM` for copy error would change the standard world and 21 checks (5 use the front-only mutagen, which copy error
+  cannot replace): a setup decision for a build (NEXT, follow-ups). Evidence: tests 44 of 44; `--part 1/2` from a worktree of the branch: 33 of
+  33 pass (`pair-flow-c` partial as on main) in 4073 s; of part 2 the checks of its non-pair demos (`copy`, `strips`,
+  `budpool`, `lysis`) pass; its 26 pair checks were not rerun (no change reaches them).
+  Command: `node tri/check.js --part 1/2 > runs/check1.txt`, then `--part 2/2`; `node tri/check.js --cmd world`.
 
 ## 2026-10-08 (autorun run 20261008-1021, build)
 
@@ -1865,7 +1881,7 @@ not statistics.
   steady pool needs about r + 1 parts of each type per blank near the growing bud (r = openRange), up to a factor two
   for neighbouring sites: of the order of 46 to 92 parts per blank for the R 5 kind with the anchor on its root. With
   this run's narrowing the anchor cell follows the same law (before, a waiting anchor was copied for as long as it
-  waited). Command: `POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4`.
+  waited). Command: `POOLB=20 POOLISO=1 node tri/demos.js pool 1 100000 runs 4` (demo removed in cleanup run 20261008-1222: no check used it; code in git at `9556170`).
 
 ## 2026-10-03 (autorun run 20261003-1121, build)
 

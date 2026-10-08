@@ -42,7 +42,9 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 | The head-nursery founder: heads raise heads on their own side, the second cell's seed site lyses (`PAW=1 PAF= PA2='Z@&c@\|z C@-z!'`) | heredity in place, an immune site | **works** (build run 20261008-0551, checks `nursery` 4 of 4, `nursery-cheat` 4 of 4, control `nursery-c`): 420-450 individuals, head cheats lost within 5k; without the lysis mark one-letter chains (`-zZ@`) grow in place and collapse the world (4 of 4); invades the founder world in 2 of 4 (**partial**); the head never varies (the mutagen acts on free parts; nothing is free for long) | demo pair, IDEAS run 0551 |
 | Copy error in contact copying (`pErr`, core since run 0651, default 0): a copy takes one side wrong; variation where copies are made, also in lineages born in place; a common cheat site lets a new root letter in | replication errors, speciation by niche preparation | **works** (explore run 20261008-0651, checks `copy-error` 4 of 4, `cheat-root` 4 of 4, control `cheat-root-c`): head-nursery heads vary (none under the mutagen), neutral heads drift to large shares; in the stockless founder world the nursery evolves (2 of 4) and root letters turn over through cheat sites (2 of 4, **partial**); a plug part on the head's own side killed one nursery | sim.js `_copy`, demo pair `types:`, IDEAS run 0651 |
 | A site on the shared second cell is a commons: a head class born only there (`I@&c@\|z` on `C@iz!`) replaces the head nursery; second cells without the site turn it back | competition for a public good, negative frequency dependence across two levels, the parts of a Red Queen | **works** (build run 20261008-1021, checks `commons` 4 of 4, `commons-turn` 4 of 4, control `commons-c`; no mutation): invades at 80-100% site share, lost at 37-46%, one head establishes 1 in 8; under copy error (0.005, 0.01) the head nursery kept Z in 8 of 8 to 480k (the right root mutant while its site is common is rare: supply, not a barrier); stockless founder at the mutagen's supply turned letters over in 2 of 4 (place matters) | demo pair, IDEAS run 1021 |
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 71 minutes with 4 processes (run 20261008-0250; run 0551 added three checks, about 8 minutes; in run 0651's container the suite took about 160 minutes, and three checks were added, about 9 minutes; run 1021 added three, about 12 minutes); `budcycle-3` and `budcycle-lysis` 15-17 minutes, seed 3 only since that run)
+Every row marked works is guarded by `node tri/check.js` (one line per capability, 65 checks, 4 processes: about 71
+minutes at run 20261008-0250 plus about 29 for the nine checks added since; about 160 minutes in run 0651's container,
+so it runs as `--part 1/2` then `--part 2/2`; `budcycle-3` and `budcycle-lysis` 15-17 minutes, seed 3 only since run 0250)
 or by a test in `tri/test.js`.
 
 **Removed 2026-10-03 (core review run 20261003-2121; RULES, Core changes): the casting lineage.** Rows that worked and
@@ -69,32 +71,45 @@ copies (item 0) is frozen with its checks** (`budcycle-3`, `budcycle-lysis`; rea
 proportion to use": the 47-type kind's front, strand and lumen sinks come from unequal exposure, which a strip kind
 avoids by geometry).
 
-A. **Evolution vehicle: the pair**, in the order of NEXT's priorities (each done item there names its run and checks,
-   INNOVATIONS its evidence): done 1-16 (the pair in isolation, a world that runs on, variation and selection, deaths
-   return blanks, two kinds on one supply, heredity by locality, a stock pays for length, heritable diets, one openRange
-   for every length, length by mutation shrinks (a negative), the census of individuals, the standard world `PAW=1`,
-   host and catcher, the recognition web (one class; the 3x world collapses, the whole-body hazard `PAHU=3` holds),
-   the pair demo's options pruned, the whole-body hazard as the standard world's, a class that owns its seed letter
-   (in place, on a site-free stock; it does not make the web grow), kinds as food (every catcher farms its catch from
-   blanks: classes are at most the limiting resources; three on three), a rare class wastes its parts (private
-   recycling, candidate (t) as an option, is no resource)). Direction check run 2021 (IDEAS "Twenty slices on the
-   pair"): the web-size line has reached its bound (classes at most the limiting resources), and the prepared stocks
-   keep every host's seed letter fixed. Run 0121: the world without stocks (no Red Queen of letters: cheats raise nobody and
-   are not letter-specific; the body plan evolves instead, the nursery moving onto the head in 4 of 8). Run 0551: the head-nursery founder holds and keeps cheats out,
-   its lysing seed site guards against one-letter chains, and it stands still (no head variant: the mutagen acts on free
-   parts). Run 0651: copy error in contact copying (core, `pErr`): the head varies; root letters turn over through cheat sites. Run 1021: a site on
-   the shared second cell is a commons: a class born there replaces the head nursery, and second cells without the site turn it
-   back (a loop across two levels). Next: NEXT's list.
+A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261008-1222; INNOVATIONS has each run).
+   The user approved this order (run 0321): (1) a world that runs indefinitely under conservation with steady,
+   labelled drives; (2) the simplest heritable variation; (3) a minimal competition test (two variants on one supply:
+   does one win, and for a reason?). On the pair, done (run; checks; INNOVATIONS has each): 1 the pair in isolation
+   (2320; `pair`, `pair-c`), its speed (0021); 2 hazard and decay drives (0251; `pair-run`); 3 variation and
+   selection under a labelled mutagen (0450; `pair-sel`); 4 deaths return blanks, a world that keeps evolving (0621;
+   `pair-flow`); 5 budcycle's dead options pruned (0920); 6 two kinds on one supply: the pair beats a 3-cell strip
+   (1150; `duo`, `duo-inv`); 7 heredity of combinations by locality, s about 0.44-0.58 (1322; `pair-host`); 8 a stock
+   pays for length when risk is per individual (1620; `duo-stock`); 9 heritable diets (1750; `diets`); 10 one
+   openRange for every length (1920; `strips`); 11 length by mutation shrinks to the 2-cell shortcut (2350; `ladder`,
+   a negative); 12 the census of individuals (0050); 13 the standard world `PAW=1` (0420; `world`); 14 host and
+   catcher, what place delivers, the 4-cell arc (0622; `catcher-free`, `diets-catcher`, `arc-root`); 15 the
+   recognition web does not grow; at 3x the standard world collapses into heads that never let go (3 of 4), the
+   whole-body hazard `PAHU=3` holds (4 of 4) (0820; `web-two`); 16 the pair demo's options pruned (1051); 17 the
+   whole-body hazard at h 0.07 is the standard world's (1351; `world`, `arc-root` pins `PAHU=2`); 18 a class that
+   owns its seed letter: in place, on a site-free stock; it does not make the web grow (1720; `own-letter`); 19 kinds
+   as food: every catcher farms its catch from blanks, so the classes are at most the limiting resources, three on
+   three (1821; `web-three`); 20 a resource each class makes for itself: private recycling under (t) is no resource,
+   and a rare class wastes its parts (1921; `rare-waste`). Review-intent run 2021 (IDEAS "Twenty slices on the
+   pair"): the web-size line stops here (its bound is derived and measured); the stocks block coevolution; next,
+   frequency dependence, first through the nursery cheat that already arises. 21 the standard world without stocks:
+   no Red Queen of letters, the body plan evolves (0121; `world-free`, `seed-cheat`, `seed-open`). 22 the
+   head-nursery founder: holds, keeps cheats out, its lysing seed site guards against one-letter chains, and the head
+   never varies under a free-part mutagen (0551; `nursery`, `nursery-c`, `nursery-cheat`). 24 copy error in contact
+   copying (core, `pErr`): the head varies; root letters turn over through cheat sites; a common cheat site lets a
+   new root letter in (0651; `copy-error`, `cheat-root`, `cheat-root-c`). 23 the head nursery under copy error keeps
+   its letter (8 of 8 to 480k); a site on the shared second cell is a commons: a class born there replaces the
+   nursery, second cells without the site turn it back (1021; `commons`, `commons-c`, `commons-turn`). Open: NEXT's
+   priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
    copying as the rule, the corner bud, three generations on a slow supply (`budcycle-3`), lysis in the lineage
    (`budcycle-lysis`). Open when it returns: a lineage that does not burn down (feeding, candidate (n), the front sink).
-0b. **Speed** (harden runs): a three-generation `budcycle` world takes about 30 minutes, the check suite about an hour (run 0251; 36 minutes at run 1421;
-   run 0950: 1.34x, run 1421: 1.18x on the suite, both exact; run 20261006-0021: the pair world 1.8-2.1x, exact, about 500
-   steps per second at 1050 triangles); lone blocks (`_single`: about 780 free triangles in a
-   `budcycle` world) take most of the time; no single hot spot left inside them.
-   Since run 20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
+0b. **Speed** (harden runs): a three-generation `budcycle` world takes 15-17 minutes (seed 3); the check suite 71
+   minutes at run 0250 with 56 checks, now 65 and run in two parts (module table note); speed-ups so far exact (run
+   0950: 1.34x, run 1421: 1.18x on the suite; run 20261006-0021: the pair world 1.8-2.1x, about 500 steps per second
+   at 1050 triangles); lone blocks (`_single`) take most of the time; no single hot spot left inside them. Since run
+   20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
 
 Removed with the casting lineage (2026-10-03; in git at `7415fd4`): the heritable factory cycle, the factory on lid
 pockets, the pump through a wall, bud and feed on kits, division by doors. Still open from that list:
