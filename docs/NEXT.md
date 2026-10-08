@@ -34,6 +34,18 @@ in 8 of 8; the only non-Z roots in any census were the predicted pool class `l@&
 more of second cells in 2 of 4 at 0.005 (L 73%, e 29%) and 3 of 4 at 0.01 (d 34%, H 33%, u 30%); P3, P4 yes. Heads drift
 as in run 0651 (`Z@&c@z` sweeps 3 of 4 at 0.005, 2 of 4 at 0.01). Scratch scripts for these numbers: the slice's
 summary will name what they read (`types:` lines).
+Read (follow-ups, no mutation, 10 entered at 20k unless said): **the pool class replaces the nursery when its site is on
+the second cells** (e1: `I@&c@|z` with `C@iz!` everywhere: I 396-427 of 396-427 individuals at 80k, 4 of 4; predicted
+lost: wrong); without the sites lost by 30k (e1c, 4 of 4: yes); an I nursery drifts (e2: lost 2 of 4, 17 and 138 at
+80k); with i sites it replaces Z too (e3, 3 of 4). One I head (`runs/p23f.json` f1, seeds 1-8): established in 1 of 8.
+Site share (f2, a second founder with `C@iz!` at t=0, its share at 20k by drift): i sites on 37-46% of second cells:
+lost 6 of 6; 80-83%: invaded 2 of 2, and in f2_1 I rose to 257 of 405 at 50k while second cells without i went from 40
+to 373 (an i site holding a waiting head is no template), then I fell to 84 and Z came back: the predicted negative
+feedback, at the level of the second cell. Stockless founder at 0.005 (b5_): root letters turned over in 2 of 4 (seed 2
+Z, m, x after M and X sites spread on second cells; seed 1 a d nursery `C@|Dd@&` at 230k, from heads that carried a D
+site on their own side: a copy with root d is born on it); seed 3 evolved the Z nursery and kept Z; seed 4 died of
+the chain sink (`-zZ@`) at 150k. P5 wrong: 2 of 4 at the mutagen's supply (copy errors 104 by 20k), so place matters.
+Running: `runs/p23g.json` (the loop: e1's world plus 10 Z nurseries with plain second cells `C@-z!` at 20k, 200k).
 Follow-up queued (`runs/p23e.json`, no mutation, 10 I founders entered at 20k into the head nursery, 80k, seeds 1-4):
 e1 the pool class `I@&c@|z` with i sites on every second cell (`C@iz!` from the start), e1c the same without i sites,
 e2 an I nursery `I@&c@|i` (second cells `C@-z!`), e3 the I nursery with i sites. Predicted: e1 lost or under 2% of
