@@ -10,6 +10,34 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
+**Current slice (autorun run 20261008-0651, explore; in progress): priority 24 through candidate (r), copy error in
+contact copying.** Goal: variation where copies are made, so a lineage born in place (the head nursery) varies; one
+core change (RULES Core changes, run 0651), default off (`pErr` 0: every check's output unchanged). Check: (A) in the
+head-nursery founder world with the mutagen off and `pErr` 0.01, head variants are seen in bodies in at least 3 of 4
+worlds (none in 4 of 4 under the mutagen, run 0551); (B) in the founder world without stocks (`world-free` setup) with
+the mutagen off and `pErr` 0.01, the head nursery evolves (`Z@&c@|z`, a head with its own seed side) in at least 2 of 4
+(4 of 8 under the mutagen, run 0121): then copy error can stand in for the free-part mutagen. Stop after batches A and B
+(8 worlds of 240k, about 25 minutes) and at most one follow-up. Batch: `node tri/batch.js runs/ce.json`.
+Theory (head `Z@&c@|z`: sides root `Z@&`, front `c@|`, seed side `z`; one error changes one side: a glue (1/2) or one
+of six marks toggled (1/2)):
+- Lethal head errors: root glue (binds no site), seed glue (no in-place heredity: lost as cheat heads were, run 0551),
+  front glue (`d@|` catches no part: an open front that never completes, sits on its parent's seed side and grows a
+  chain of its own copies there until the body dies; an inert front `-@|` gives a one-cell head that lets go at once
+  and is never a template), `&` lost (`Z@c@|z`: never lets go; its copies grow in place on it, one sterile body that
+  dies whole), `|`, `.`, `!`, `?` or `&` on the seed side (no template, or kills or frees its own children once).
+- Near-neutral head errors: `@` lost on the root (`Z&c@|z` binds a `z` side by glue as a non-part; front unchanged),
+  `|` lost on the front (`Z@&c@z`: the front is a template while it waits). Drift only: with about 430 individuals and a
+  life of about 1400 steps, 240k is about 0.4 N generations, so a neutral variant stays rare.
+- So about 1/6 of head errors are neutral and the rest lethal: stabilising selection, the head stays.
+- The second cell (`C@-z!`) drifts as under the mutagen (its inert side takes a glue: a second site).
+- In batch B the head nursery came from one glue change on the founder head's inert side (`-` to `z`): 1/2 x 1/3 x 1/53
+  of head errors, so about 1 in 320 head copies at `pErr` 1 (1 in 32000 at 0.01). Heads are copied often in the pool
+  (about 10^4 to 10^5 head copies by 240k), so it should arise.
+Predictions: P1 head variants in bodies in 4 of 4 of A (at least one census). P2 the founder head at least 90% of heads
+at every census of A (stabilising selection). P3 every head variant seen in more than 1% of heads is one of the two
+near-neutral ones. P4 A alive at 240k in 4 of 4. P5 B evolves the nursery (`z` side on the head) in at least 2 of 4.
+P6 the second cell drifts in A as under the mutagen (a variant above 10% of second cells in at least 2 of 4).
+
 **Handoff status (autorun run 20261008-0551, build).** Priority 22 done (INNOVATIONS run 0551, IDEAS "In-place growth
 without a release is a sink"): the head-nursery founder (`PAW=1 PAF= PA2='Z@&c@|z C@-z!'`) holds in 4 of 4 to 240k at
 420-450 individuals, head cheats lost (check `nursery`, `nursery-cheat`, 4 of 4 each). Without the lysis mark on the
