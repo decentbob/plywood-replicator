@@ -306,6 +306,11 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
+- (w) *A lysis side passes no lysis back* (run 1522): built as the parameter `lysOneWay` (default 0); entry below.
+- (v) *Contact lysis stops at a joint* (run 1522, not built): a head's own side `z!` would then lyse plugs (no `&`) and
+  spare its children (`&` roots): a guard on the own side itself. Costs: a second cell's `z!` would no longer kill the
+  heads that land on it (they would be raised there), and budcycle's cutter, bound to an `&` receptor, would lyse
+  nothing. Weigh only if (w) does not suffice.
 - (r) *Copy error in contact copying*: **adopted** in run 0651 as the parameter `pErr`, default 0 (RULES Core changes).
   Open: a default above 0 (and the mutagen retired) would change every world's outputs; whether the core or the
   environment should limit parts that bind their own kind (`g@` and `G@` on one part).
@@ -318,6 +323,34 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051. Nothing else in the
   core is unused (RULES, Core inventory, run 2051 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Candidate (w): a lysis side passes no lysis back, 2026-10-08, autorun run 20261008-1522 (explore)
+NEXT priority 29 (the plug guard). Derivation and runs: IDEAS "A trap on the shared part", INNOVATIONS run 1522.
+1. **Capability and why the goal needs it.** A guard against plugs that holds while it is used. No head design guards
+   its own side in the core (a plug differs from a child only by `&`; a release fires on its own triangle's silence and
+   spends the side; contact lysis ignores joints): a plug leaves only when its individual dies. The guard the core does
+   give is a **trap** on the shared part: a lysing site of the root's complement (`z!` on the second cell) lyses every
+   free part with the root's attach letter. Without it 20 plugs `--Z@` sink the head nursery in 4 of 4 within 20k; with
+   it in 0 of 4. But a trap that catches a part without `&` dies with it: the part is lysed by contact, and in the next
+   pass its lysis is relayed back across the trap's bond (not a joint) into the second cell and on to its head. So the
+   trap is altruistic: in a plug epidemic trap carriers die and trapless second cells win. The one collapse of run 1351,
+   rerun: trap carriers fell from 334 to 59 of second cells in 10k while the plug `T!Z@i!` rose from 8 to 141; the
+   world was empty 10k later. The guard dissolves exactly when it is needed.
+2. **Can the existing core do it?** Only if the trap's bond is a joint. An `&` on the trap side is spent once the
+   individual is complete (it then catches nothing) unless a glued `@` side nothing matches keeps the individual open,
+   which here keeps the head from ever letting go of its parent (the scavenger of run 0721 uses that trick: `Z@|!&` with
+   `Ж@|`; test "scavenger"). Plugs carry no `&`. So no.
+3. **The rule.** Lysis is not relayed into a triangle across a bond on its own lysis side `!`: a lysis side lyses its
+   partner (contact, as now) and passes nothing back. Equivalently: lysis is relayed across a bond that carries neither
+   `&` nor `!` (a partner bonded to a `!` side is lysed by contact anyway). Reads its own side's mark (fixed type), as the
+   relay already reads both sides' `&`. Writes nothing new. Locality unchanged.
+4. **What it replaces and costs.** One condition in the relay. It makes the scavenger's `&` and open-front trick
+   unnecessary (a lysing anchor survives what it lyses). Outputs change wherever a `!` side holds a part without `&`
+   whose lysis now stops there: traps that catch plugs or chain cells, mutant `!` sides in mutagen and copy-error worlds,
+   the lysis demo's cutters (freed unlysed instead of lysed: the same type, no spent sides). budcycle's cutter binds an
+   `&` receptor (a joint): unchanged. Built as the parameter `lysOneWay` (default 0: every output unchanged) for this
+   run's test; adopt as the rule or remove at the next core review.
+5. **Result:** below (filled in when the test is read).
 
 ### Rule (r): copy error in contact copying, 2026-10-08, autorun run 20261008-0651 (explore)
 NEXT priority 24. The case of run 0450 (below) said: revisit if a rate per copy turns out to matter. It does now.
