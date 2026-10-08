@@ -333,6 +333,28 @@ const CHECKS=[
       back=C.slice(pk).find(c=>c.I===0&&c.Z>=0.9*c.H),turn=C.map(c=>Object.entries(c.L).find(([k,v])=>k!=='i'&&v>c.S/2)).find(Boolean);
       return [f(C[pk])>=0.15&&!!back&&e.I===0&&!!turn&&I.end>=380,`I peaked at ${(100*f(C[pk])).toFixed(0)}% of heads, gone with Z at 90% or more by ${back?back.t/1000+'k':'never'}; site letter turned: ${turn?turn[0]:'no'}; at 240k Z ${e.Z} of ${e.H} heads, ${I.end} individuals`];}},
   ];})(),
+  // run 20261008-1522 (explore): the plug guard (NEXT priority 29; IDEAS "A trap on the shared part"; RULES candidate
+  // (w)). No head design guards its own side; the guard the core gives is a trap on the shared part: a lysing site of
+  // the root's complement ('z!' on the second cell) lyses every free part with attach letter Z, plugs included. A trap
+  // that catches a part without '&' dies with it (the lysis comes back across the bond), so in a plug epidemic the trap
+  // carriers die; with lysOneWay (candidate (w), a lysis side passes no lysis back) the trap survives its catch. Read
+  // from 'types:' lines (pErr 1e-9 prints them; no copy error happens): heads (a side with '&'), second cells (attach
+  // letter C) and the share of them with a 'z!' side (the trap), plugs (attach letter Z, no '&')
+  ...(()=>{const {TOK}=require('./sim'),census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,sc:0,tr:0,pl:0};
+      for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]),att=sd.filter(y=>y[1].includes('@')).map(y=>y[0]);
+        if(sd.some(y=>y[1].includes('&')))r.h+=n;else if(att.includes('C')){r.sc+=n;if(sd.some(y=>y[0]==='z'&&y[1].includes('!')))r.tr+=n;}else if(att.includes('Z'))r.pl+=n;}return r;}),
+    env={PAW:'1',PAF:'',PAM:'0',PATN:'20',PA2:'Z@&c@|z C@-z!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'20',PA3:'--Z@'},
+    mix={...env,PA1T:'100',PAEN:'1',PAKR:'Z@&c@|z',PAKS:'C@-q!',PA3N:'200'},last=o=>{const C=census(o);return C.length?C[C.length-1]:null;};return [
+  {id:'trap',cap:'A trap on the shared part guards the head nursery: 20 plugs --Z@ entered at 20k are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:200,env,
+    pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const pk=Math.max(...C.map(c=>c.pl));return [e.pl===0&&e.h>=400,`plugs at most ${pk}, at 80k ${e.pl} plugs, ${e.h} heads`];}},
+  {id:'trap-c',cap:'  control: second cells without the trap (C@-q!): the plugs sink the nursery',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:{...env,PA2:'Z@&c@|z C@-q!'},
+    pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  {id:'trap-oneway',cap:'With lysOneWay the trap survives what it lyses: 200 plugs into trap and trapless second cells, the trap takes every second cell and the world holds',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:400,
+    env:{...mix,TRI_PARAMS:'{"pErr":1e-9,"lysOneWay":1}'},
+    pass:(L,o)=>{const e=last(o);if(!e)return [false,'no result'];return [e.h>=150&&e.sc&&e.tr/e.sc>=0.9,`at 60k ${e.h} heads, trap on ${e.tr} of ${e.sc} second cells, ${e.pl} plugs`];}},
+  {id:'trap-oneway-c',cap:'  control: the current core, the trap dies with its catch and the world with it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:mix,
+    pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share

@@ -28,6 +28,44 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A trap on the shared part: no head guards its own side, and the trap dies with its catch (explore run 20261008-1522, 2026-10-08)
+
+NEXT priority 29, the plug guard: derived, then tested without mutation (INNOVATIONS run 1522). Notes, not the user's words.
+- **No head design guards its own side.** A part bound to a side leaves it only by an `&` release (cut when that side's
+  triangle hears no open signal; the side is then spent) or by lysis (by contact with a `!` side, whatever the bond, or
+  relayed from a partner across a bond that is not a joint). A child and a plug differ at the bond only by `&`. An `&`
+  on the head's own side fires when the head is complete, not when its child is (the head cannot hear its child across
+  the joint), and spends the side: one child per head. A `!` there lyses the child too. Relay from the head would spare
+  the child and take the plug, but lyses the head. So a plug leaves only when its individual dies.
+- **The guard is a trap on the shared part.** A lysing site of the root's complement on the second cell (`z!`, evolved
+  in run 0121 as a cheat that raises nobody, and the chain guard of run 0551) binds every free part with attach letter Z
+  and lyses it: pool heads, chain copies, plugs. With it, 20 plugs `--Z@` entered into the head nursery were lost (4 of
+  4); with the same cell carrying `q!` instead (no trap), the same 20 plugs left no head within 20k (4 of 4). Plug
+  copies have at most 100 steps (decay) to find a free own side, and the nursery's own sides mostly hold a child, so a
+  trap on every second cell keeps the plug's copies below replacement.
+- **The trap dies with its catch.** A caught part without `&` is lysed by contact, and in the next pass its lysis is
+  relayed back across the bond into the second cell and its head: the trap kills its own individual for every plug it
+  stops. An altruist: while plugs are rare it costs nothing (pool heads carry `&`: their bond is a joint and nothing comes
+  back), in an epidemic it is selected away. The one collapse of run 1351, rerun: trap carriers 95% of second cells at
+  160k, then 59 of 247 at 175k while the plug `T!Z@i!` rose from 8 to 141 and trapless `C@i!T!`, `C@i!J!` took the rest;
+  empty at 185k. With 200 plugs entered into a world of trap and trapless second cells, the trap share fell to 0 within
+  5-10k and every world died (4 of 4). A guard that pays for each use with its carrier lasts only while it is not needed.
+- **One-way lysis keeps the guard (candidate (w)).** If a lysis side passes no lysis back (`lysOneWay`), the trap
+  survives what it lyses: in the same 200-plug worlds the trap took 98-100% of second cells and every world lived (4 of
+  4), at about half the heads, with the plug endemic (170-200 attached). The parasite stays; the collapse becomes a
+  burden. In the resumed collapse world the trap held in 5 of 5 continuations; the plug was lost in 1, endemic in 2,
+  and 1 world died at about 200k.
+- **Two trap sides end it under either rule.** With traps on both free sides of every second cell (`C@z!z!`) the same
+  200 plugs were lost in 8 of 8, current core or not, with no dip in heads. The epidemic of B needed trapless second
+  cells: their heads are the plug's reservoir, and the trap carriers' deaths feed them. So the current core's weakness
+  is not the trap's strength but its cost: a trap is counter-selected exactly while it works. Under copy error a
+  single trap is lost by one neutral error; two need two.
+- **What it gives the goal.** A guard is a function selected only in the presence of its parasite; whether it lasts
+  depends on who pays for its use. Under the current core the payer is the guard's carrier, so guard and parasite do not
+  cycle: the guard collapses and the world with it. With one-way lysis the guard is selected during an epidemic
+  (trap share up, not down), so a guard-parasite Red Queen becomes possible: next, whether copy error grows a second
+  trap side, and whether the loop of run 1351 runs longer with one-way lysis.
+
 ## A common site is a target: the shared part's site letter turns over, and commons classes follow it (build run 20261008-1351, 2026-10-08)
 
 The race of NEXT priority 28, measured under copy error (INNOVATIONS run 1351). Notes, not the user's words.
