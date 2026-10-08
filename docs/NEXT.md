@@ -28,6 +28,12 @@ worlds per rate; P2 a second root letter above 5% of heads at some census in at 
 complement on at least 10% of second cells before it; P3 no pool class replaces the nursery; P4 alive 4 of 4 at 0.005,
 at least 3 of 4 at 0.01 (plugs); P5 stockless founder at 0.005: root letter turns over in at most 1 of 4 by 240k (if 2
 or more, place matters beyond rate).
+Read so far (a5_, a10_ done, 480k): alive 8 of 8 (403-437 individuals); P2 yes: no second root letter above 5% of heads
+in 8 of 8; the only non-Z roots in any census were the predicted pool class `l@&c@z` (3 heads at 345k in a5_1, while
+`L` sat on 60-73% of second cells; gone by 350k) and one at 125k there; P1 half: a site letter (no `!`, no `.`) on 20% or
+more of second cells in 2 of 4 at 0.005 (L 73%, e 29%) and 3 of 4 at 0.01 (d 34%, H 33%, u 30%); P3, P4 yes. Heads drift
+as in run 0651 (`Z@&c@z` sweeps 3 of 4 at 0.005, 2 of 4 at 0.01). Scratch scripts for these numbers: the slice's
+summary will name what they read (`types:` lines).
 Follow-up queued (`runs/p23e.json`, no mutation, 10 I founders entered at 20k into the head nursery, 80k, seeds 1-4):
 e1 the pool class `I@&c@|z` with i sites on every second cell (`C@iz!` from the start), e1c the same without i sites,
 e2 an I nursery `I@&c@|i` (second cells `C@-z!`), e3 the I nursery with i sites. Predicted: e1 lost or under 2% of
