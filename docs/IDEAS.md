@@ -47,7 +47,7 @@ Derived, predicted wrong, then measured in the head-nursery world (INNOVATIONS r
 - **The commons has its own cheats.** A second cell whose site holds a waiting head is no template on that side, so as
   the commons class grows, second cells without the site are copied more and spread (plain ones from 4% to over 90% of
   second cells within 20-30k); the class loses its births and dies out, and the nursery, whose births never used the
-  commons, returns (4 of 4 when plain second cells are there while the class grows). Negative frequency dependence
+  commons, returns (4 of 4 when plain second cells are there while the class grows; the class at 76-86% of individuals at its peak). Negative frequency dependence
   across two levels, classes of heads and types of second cells, from one rule (every free side is a template): the
   first loop of its kind here. Without mutation the plain cells can drift out while the class is rare (2 of 4), and then
   the class keeps the world.

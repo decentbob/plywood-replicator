@@ -38,8 +38,8 @@ not statistics.
     1-8, `runs/p23f.json`): established in 1 of 8. Site share (a second founder with `C@iz!` at t=0, its share at 20k by
     drift; seeds 1-8): 37-46% i sites, lost 6 of 6; 80-83%, invaded 2 of 2.
   - **The turn** (`runs/p23h.json`: 20 I heads at 20k, 20 nurseries with plain second cells `C@-z!` at 35k, 100k, seeds
-    1-4): I rose to 59-85% of individuals by 40-50k; plain second cells went from 4% to over 90% of second cells (an i
-    site holding a waiting head is no template); I died out by 60-80k and the Z nursery returned, 4 of 4. With 10 plain
+    1-4): I peaked at 76-86% of individuals at 45-55k; plain second cells went from 4% to over 90% of second cells (an i
+    site holding a waiting head is no template); I died out by 60-80k and the Z nursery returned, 4 of 4 (check `commons-turn`, 236 s). With 10 plain
     cells entered at 20k with the I heads (`runs/p23g.json`, 200k): the loop once (seed 3), the plain cells drifted out
     before I grew and I kept the world (seeds 1, 4), I lost (seed 2).
   - Pictures: [commons-invade.png](pictures/commons-invade.png) (seed 1 at 40k: I heads orange on second cells, Z
