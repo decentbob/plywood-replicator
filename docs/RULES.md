@@ -80,6 +80,9 @@ the item entered the core (the repository restarted on 2026-10-01).
 | fill | state | chain copying, as zip | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
 | spent | state | `&` sides, as `&` | 10-01 |
 
+**Counts (2026-10-08, run 1951):** as run 1522, plus a second option of the same kind: `lysJoint` (default 0), no
+contact lysis across a joint (candidate (v), Core changes); every other output unchanged.
+
 **Counts (2026-10-08, run 1522):** as run 0651, plus one option (was none), a parameter that narrows a relay: `lysOneWay` (default 0), no lysis
 relayed into a triangle across a bond on its own `!` side (candidate (w), Core changes); every other output unchanged.
 
@@ -351,6 +354,15 @@ NEXT priority 33. Derivation: IDEAS "Who pays for a lock"; runs: INNOVATIONS run
    the nursery's pool-born heads), the scavenger test's lysing anchor (bound to `&`), budcycle's cutter (bound to an `&`
    receptor: it would lyse nothing, so budcycle's lysis check changes). Built as the parameter `lysJoint` (default 0:
    every output unchanged) for this run's test; adopt or remove at a core review.
+5. **Result (INNOVATIONS run 1951): built as a parameter, default 0; recommended for a core review together with (w).**
+   Without mutation a lock `z|!` on the stockless world's second cell raises the class and loses 20 plugs (4 of 4;
+   check `lock-guard`); unguarded (`z|`, current core) the plugs take the locks and the class dies (4 of 4); without
+   `lysJoint` the same lock lyses every head that lands (check `lock-guard-0`). Under copy error (0.01, 480k) the guarded
+   world turned its root letter 11-19 times in 4 of 8 worlds (with `lysOneWay` 2 of 4, without 2 of 4: (v) does it
+   alone), against 0-3 in 8 unguarded ones; alive 4 of 8 either way: the deaths left are a catcher (a head in the second
+   cell's place) and a nursery sunk by a plug where its second cells carried no lock of its letter. Adopting it changes
+   outputs wherever a `!` side holds a part across a joint (item 4); weigh at the core review with (w), whose case here
+   is weaker (no gain shown in either long test).
 
 ### Candidate (w): a lysis side passes no lysis back, 2026-10-08, autorun run 20261008-1522 (explore)
 NEXT priority 29 (the plug guard). Derivation and runs: IDEAS "A trap on the shared part", INNOVATIONS run 1522.

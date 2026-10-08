@@ -1,92 +1,60 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-1650, build). Read AGENTS.md first (rules of work), then this file.
-History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24
-and 28-30, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git
-log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at
-`20e9a88`.
+State on 2026-10-08 (after autorun run 20261008-1951, explore). Read AGENTS.md first (rules of work), then this file.
+History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
+28-30 and 33, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
+(`git log -p docs/NEXT.md`; this run's slice record with its predictions at `explore-1951`'s WIP commits); the
+review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
-Where the line stands (runs 1351, 1522, 1650, INNOVATIONS): under copy error the commons loop (commons classes and the
-second cell's site letter chasing each other) runs for a while and then **stops: the site seals itself** (the
-close-only mark: still copied, binds no free part, so no class is born there and nothing parasitizes it). The pair's
-two kinds of site split cleanly: the heads' own side is needed, and the head cannot guard it against its parasite, the
-plug (run 1522); the shared site is not needed and ends its parasites for good by sealing (run 1650). Neither keeps
-evolving. One-way lysis (`lysOneWay`, candidate (w)) kept the trap in a forced plug epidemic but showed no gain at
-length (3 of 4 alive against the current core's 4 of 4).
+Where the line stands (runs 1351-1951, INNOVATIONS; IDEAS "Who pays for a lock"): recognition is one glue pair and copy
+error changes one side, so **a lock its carrier needs is frozen** and only a lock its carrier does not need turns. In the
+nursery world that is the second cell's site, which seals for good (run 1650: the loop stops). In the stockless world it
+is a **public lock** (the pool-raised class's site on the second cell): it turns and its seal is self-limiting, but the
+core's guard (a trap of its letter) lyses keys and plugs alike, so **turnable and guardable exclude each other**: 3 of 4
+such worlds died of lock parasites by 480k, the fourth privatized (a nursery guarded by a trap) and froze. A trap that
+does not lyse across a joint (`lysJoint`, candidate (v), default 0) guards a public lock: the root letter then turned
+11-19 times in 480k in 4 of 8 worlds (0-3 unguarded). Left: the **catcher** (a head with a `C@` front in the second
+cell's place, carrying no lock) and nurseries whose second cells carry no lock of their letter (sunk by a plug): 4 of 8
+guarded worlds died of these.
 
-**Current slice (autorun run 20261008-1951, explore; priority 33; in progress).** Goal: settle by theory which site
-the core allows that its carrier needs and can still turn, then test the predictions. Done when the derivation is in
-IDEAS and each prediction below is measured (3 of 4 worlds where it is a capability). Stop at the measurements; no core
-change unless the derivation calls for one.
-Derivation (before the batches). Recognition is one glue pair on two sides; copy error changes one side per copy.
-(1) A lock its carrier needs is **frozen**: if its key is made by the carrier's own line (the nursery: root `Z@&` and own
-side `z` on one type) a one-error change of either breaks in-place birth; if the key comes from the pool and is needed by
-its own carrier too (front `c@` and attach `C@`), an unbound key is never copied, so no standing variation waits on the
-other letter. Either way the change needs two errors at once (about pErr^2/(36*53) per copy). (2) A lock turns by
-single errors only where one side drifts, i.e. where its carrier does not need it: the second cell's site. (3) So
-"needed by its carrier and turnable" is impossible in the pair; the nearest thing is a **public lock**: a site needed by
-a class but not by the part that carries it (the seed site of a pool-raised class on the second cell, the stockless
-world B of run 0551/0651). There cheats (other letters, the seal) raise nobody, so they spread only while hosts' sites
-are occupied: self-limiting (run 0551's cheats held at 0.9-3 per host); other-letter cheats are stepping stones, so root
-letters keep turning (run 0651: B turned over in 2 of 4). (4) The loop's exit is **privatization**: one glue error on the
-pool head's copy side (`-` to the root's complement) makes a nursery, which wins (run 0551: 410-440 individuals against
-300-370) and makes the public lock unneeded; then it seals or turns freely and the loop stops (the race world, run 1650).
-Predictions: E2 (B world, `pErr` 0.01, seeds 1-4, 480k): root-letter turns only before a nursery holds most heads; after
-it, no turn, and the sealed or trap share of second cells rises; while no nursery, the sealed share stays below half.
-E1 (B world with the anchorless site `C@-z`, no mutation, 10 sealed `C@-z.` pairs entered at 20k, 100k): the sealed
-share levels off below 80% and the world lives (4 of 4); control: 10 more of the resident pair (drift). E3 (B with the
-head's copy side close-only, `Z@&c@|-.`: a nursery then needs two errors, the first neutral): no nursery by 480k in 3 of
-4, and root letters still turn after 240k in at least 2 of 4.
-E2 read (before E3's results): 3 of 4 pool worlds **died** (seed 1 at 305k: a catcher `Z@&C@-` took the second
-cells' place on host fronts and the locks died out; seed 2 at 415k after 3 turns: a plug `-N.g@` on the public G locks;
-seed 3 at 145k: a plug `--D@` on a partial nursery whose second cells had no trap); seed 4 privatized (nursery from 195k,
-trap `z!` on 92-100% of second cells, no turn after). Derived from it: **a lock is guardable only if its rightful keys
-never travel free.** The guard is a trap of the lock's letter on the shared part; it cannot tell a pool-born child from a
-plug (they differ only by `&`), so a public lock cannot be guarded and dies of its parasites, while a private lock's
-children are born in place and the trap spares the class. Turnable and guardable exclude each other in the current core.
-Revised predictions: E3 (door narrowed) no nursery in 3 of 4 and 3 of 4 dead by 480k of a lock parasite. E4: candidate
-(v), contact lysis stops at a joint, as the parameter `lysJoint` with `lysOneWay` 1, and a guarded public lock (second
-cell `C@-z|!`): a trap that raises keys with `&` and lyses plugs. Pool world as E2: 3 of 4 alive at 480k, no plug death,
-root letters still turn in at least 2 of 4; control: the same second cell without `lysJoint` gives no class (every root
-landing is lysed).
-Read so far (21:05): E1 sealed 71-79% at 100k, alive 4 of 4 (yes); E3 no nursery 3 of 3 (yes), dead 1 of 3, no root
-turn in the living (no); E4 alive 2 of 4 (no: a catcher, and a plug on a nursery whose second cells carried no trap of
-its letter), 12 and 11 turns in the living two (yes, 2 of 4); controls without `lysJoint` dead by 10k (4 of 4). E5
-(no mutation, 20 plugs `--Z@` at 20k, 60k): guarded lock with `lysJoint` and `lysOneWay`: plugs lost, alive 4 of 4;
-unguarded `C@-z|`, current core: the plugs take the locks, dead in 3 of 4.
+**Handoff status (autorun run 20261008-1951, explore): priority 33 done** (settled by derivation, then measured). One
+core candidate built as a parameter: `lysJoint` (RULES (v), default 0: every output unchanged, BYTE), test "lysJoint".
+New checks `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0` (2 of 2) (`node tri/check.js seal-pool
+lock-guard lock-guard-0`); `tri/census.js --pool [--joint]` (the pool-raised class: majority root and its turns, nursery
+share, second cells with a working lock, sealed, trap). Records: INNOVATIONS run 1951, IDEAS "Who pays for a lock",
+RULES (v) with its result, ROADMAP (row, backlog A 33), picture `lock-guard.png`. The batches (`runs/` is not kept):
+the stockless world `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|- C@-z|' TRI_PARAMS='{"pErr":0.01}'`, seeds 1-4, 480k, 14-18
+minutes per world (E2); E3 with `PA2='Z@&c@|-. C@-z|'`; E4 with `PA2='Z@&c@|- C@-z|!'` and `"lysJoint":1,"lysOneWay":1`
+(E4j: `"lysJoint":1` alone); read with `node tri/census.js --pool [--joint] runs/x.txt`. The full suite was not rerun
+(a parameter at default 0 and three checks; a world with lysis byte for byte main's). Nothing is running.
 
-**Handoff status (autorun run 20261008-1650, build): priority 30 done.** No rule change. New checks `seal-evolve`
-(3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`: 3 of 3 pass, 1205 s);
-`tri/census.js --loop` (one summary per world; it dropped the first file without `--every`: fixed). Records:
-INNOVATIONS run 1650, IDEAS "The shared site seals itself", RULES (w) item 6, ROADMAP (row, backlog A 30), picture
-`loop-long.png`. The batches (`runs/` is not kept): the race world (`node tri/check.js --cmd race`) to 1.2M, seeds 5-8,
-with and without `"lysOneWay":1` in `TRI_PARAMS` (41-85 minutes per world); the same to 480k, seeds 1-4 and 9-12; the
-no-mutation worlds are the checks `seal` and `seal-turn`. Read any of them with `node tri/census.js --loop`. The full
-suite was not rerun: no rule, physics or shared structure changed (three checks and a reader added). Nothing is running.
-
-**Next step (rotation 81, explore): priority 33, a site that can neither be sealed nor turned** (below). Then rotation
-82 (review-intent) and 83 (core-review: adopt or remove `lysOneWay`, priority 32).
+**Next step (rotation 82, review-intent)**: direction check with this run's result (the lock theory; whether the pair's
+next line is the guarded public lock, i.e. the stockless world with `lysJoint`). Then rotation 83 (core-review: adopt or
+remove `lysJoint` and `lysOneWay`, priority 32).
 
 ## Priorities
 
-Done 1-24 and 28-30: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24, 28-30 and 33: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (review-intent 82 may reorder):
-33. [81 explore] **A site that can neither be sealed nor turned** (theory first; IDEAS "The shared site seals itself",
-    What it gives the goal). The loop of letters is transient: a site nobody needs seals (run 1650), a needed one has an
-    unguardable plug (run 1522). Derive which site the core allows that its carrier needs (so not close-only, not inert)
-    and whose parasite the carrier escapes only by a change that keeps its own use working: a head whose root letter
-    and own side change together (two errors, rare, but its plug must change too), or a part recognised by two sides.
-    Predict, then build the smallest such kind.
-32. [83 core-review] **Adopt or remove `lysOneWay`** (RULES (w); item 6: no gain at length, a lysing plug killed one of
-    four long worlds although every second cell carried two traps). For: the trap survives its catch, the scavenger's
-    `&` trick becomes unnecessary, one condition. Against: it changes outputs wherever a `!` side holds a part without
-    `&`. Run the suite with it on as default before deciding; the lysis demo's cutters and the scavenger test change.
+32. [83 core-review] **Adopt or remove `lysJoint` and `lysOneWay`** (RULES (v) item 5, (w) item 6). For (v): it alone
+    makes a turnable lock guardable (`lock-guard`; 11-19 root turns in 4 of 8 long worlds, 0-3 without), and lysis then
+    never crosses a joint (one condition for contact and relay). Against: outputs change wherever a `!` side holds a part
+    across a joint: the head nursery's trap `z!` raises its pool-born heads instead of lysing them, budcycle's cutter on
+    its `&` receptor lyses nothing (`budcycle-lysis` changes), the scavenger needs no `&`. (w): no gain shown in either
+    long test. Run the suite with each on as default before deciding.
+34. [later] **The catcher** (theory first). A head whose front became `C@` takes the second cell's place on host fronts
+    and carries no lock; it killed 2 of 4 guarded and 1 of 4 unguarded long stockless worlds. It is a parasite of the
+    lock's carrier, recognised by the frozen front/attach pair. Derive what guards the carrier role (a lock on the head's
+    front side? a second cell the catcher cannot replace?) and whether the guarded world's own variation answers it.
+35. [later] **A nursery and its guard.** Privatization is still the exit in the guarded world, and a nursery whose second
+    cells carry no lock of its letter dies of a plug (2 of 4 guarded deaths); in E4 seed 1 the nursery kept a guarded lock
+    of its letter on the second cell (`C!C@L!` under `Ll@&c@`) and lived. Measure how often the guard follows the root.
 31. [later] **Shape inside the loop.** Every class is one shape (a head and a second cell), so the loop is turnover of
     letters. Complexity needs variants that differ in what they do and are selected inside it: a head with a second
     site of its own (a commons class that is also a commons), or a third cell that covers the site (length as
@@ -100,10 +68,10 @@ Open (review-intent 82 may reorder):
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 80 build (done), 81 explore, 82
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 81 explore (done), 82
 review-intent, 83 core-review.
 
-**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((w) built as `lysOneWay`, (v), (t), (u), (s), (r)'s open part, (j), (l);
+**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((w) built as `lysOneWay`, (v) built as `lysJoint`, (t), (u), (s), (r)'s open part, (j), (l);
 settled there: (f), (k) and the done ones).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**

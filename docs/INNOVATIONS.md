@@ -12,6 +12,63 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-1951, explore)
+
+- **Who pays for a lock: no side of the pair is both needed and turnable; a public lock turns but cannot be guarded and
+  its worlds die of its parasites; a trap that reads the joint (candidate (v), `lysJoint`) guards it, and the loop of
+  letters runs on** (NEXT priority 33; derivation in IDEAS "Who pays for a lock"; RULES candidate (v)). New parameter
+  `lysJoint` (default 0: every output unchanged, BYTECHECK): a lysis side lyses no partner across a joint, so lysis never
+  crosses a joint. New checks `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0` (2 of 2); `tri/census.js --pool` (`--joint`: a lock with `!` counts as working); test
+  "lysJoint".
+  - **Derivation (before the batches).** Recognition is one glue pair; copy error changes one side of one copy. A lock
+    its carrier needs is frozen (the nursery's root and own side on one type; the front and the second cell's attach,
+    both needed); a lock turns only where one side drifts, i.e. where its carrier does not need it (the second cell's
+    site). So priority 33 has no answer in the pair; the nearest is a public lock (needed by the class, not its carrier):
+    the stockless world B (heads `Z@&c@|-` raised on the second cell's site).
+  - **E1, the seal of a public lock** (B with the anchorless site `C@-z`, no mutation, 10 sealed pairs `C@-z.` at 20k,
+    100k, seeds 1-4; `runs/p33e1.json`): sealed second cells 71-79% at 100k, the world alive (370-423 heads against
+    511-525 in the control), 4 of 4; control, a neutral marker `C@-.z`: lost (4 of 4). Predicted: below 80%, alive (yes).
+  - **E2, B under copy error at length** (`pErr` 0.01, 480k, seeds 1-4: run 0651's B worlds, identical to 240k;
+    `runs/p33b.json`, 14-18 minutes each): **3 of 4 died**: seed 1 at 305k (a catcher `Z@&C@-`, a head whose front
+    became `C@`, filled host fronts in the second cell's place until no lock was left), seed 2 at 415k after 3 turns (Z,
+    I, y, g; a plug `-N.g@`, a sealed second cell whose attach letter became g, on the public G locks), seed 3 at 145k
+    (a plug `--D@` on a partial D nursery whose second cells had no trap). Seed 4 privatized: a nursery on 97-100% of
+    heads from 195k, the trap `z!` on 92-100% of second cells, no turn after (2 turns before). Predicted: turns only
+    before a nursery (yes), the seal below half while no nursery (no: seed 2 sealed 58% before its plug).
+  - **Guardability (derived from E2).** The one guard the core gives is a trap of the lock's letter on the shared part;
+    it lyses a pool-born child and a plug alike (they differ only by `&`), so it guards only a private lock, whose
+    children are born in place. Turnable and guardable exclude each other: evolution ends in the guarded private lock.
+  - **E3, the nursery door narrowed** (the pool head's copy side close-only, `Z@&c@|-.`: a nursery then takes two
+    errors, the first neutral; otherwise E2): a nursery in 1 of 4 by 480k (seed 4 at 360k; E2: 2 of 4 had one at least
+    in part), dead 1 of 4 (seed 2 at 80k: cheats and plugs on the lock), no root turn in any (0, 0, 0, 0); seed 3 a
+    catcher world at a quarter of the numbers. Predicted: no nursery in 3 of 4 (yes), 3 of 4 dead (no), turns after
+    240k (no). Narrowing the exit keeps the world public but does not keep it turning.
+  - **E4, the guarded public lock** (second cell `C@-z|!`, `lysJoint` 1 and `lysOneWay` 1, otherwise E2): alive 2 of 4 at
+    480k, with **12 and 11 turns** of the majority root (Z, m, Z, A, Z, A, P, A, t, A, k, E, l; Z, f, J, f, J, f, J, o,
+    H, o, H, o); new letters came through cheat sites that kept the lysis mark (`C@M!a!`, `C@T!a!`, `-p!C@`); nurseries
+    formed late (280k, 325k) and turned on (k, E, l). Dead: seed 4 at 305k of a catcher, seed 3 at 360k of a lysing plug
+    `C!Z@D!` on a nursery whose second cells carried no lock of its letter. Controls without `lysJoint` (with and without
+    `lysOneWay`, 40k, seeds 1-2): every head that lands is lysed, dead by 10k (4 of 4). Predicted: 3 of 4 alive (no, 2),
+    turns in 2 of 4 (yes), no plug death (no: a plug on a private lock).
+  - **E4j, `lysJoint` alone** (E4 without `lysOneWay`; `runs/p33e4j*.json`): alive 2 of 4 with **19 and 15 turns**; dead
+    seed 3 at 385k of a catcher (after 4 turns), seed 4 at 440k of a lysing plug `P!u@T.` on a U nursery whose second
+    cells carried no u lock (after 10 turns). So (v) alone does it. Over the 8 guarded worlds: alive 4, turns 11-19 in
+    each living one; over the 8 unguarded (E2, E3): alive 4, turns 0-3.
+  - **E5, plugs on the public lock, no mutation** (B with `C@-z|!`, `lysJoint` and `lysOneWay`, 20 plugs `--Z@` at 20k,
+    60k, seeds 1-4; `runs/p33e5*.json`): plugs lost, 553-568 heads at 60k, 4 of 4 (check `lock-guard`); unguarded `C@-z|`,
+    current core: plugs peak at 181-193, no head from 35-45k, 4 of 4. Predicted: lost and alive 4 of 4 (yes); unguarded
+    dead in 3 of 4 (yes, 4).
+  - Picture: [lock-guard.png](pictures/lock-guard.png) (E2 and E4: heads by root letter, nursery share, second cells with a
+    working lock, sealed, trap).
+  - Commands: `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|- C@-z|' TRI_PARAMS='{"pErr":0.01}' node tri/demos.js pair SEED
+    480000 runs/x` (E2; `PA2='Z@&c@|-. C@-z|'` E3; `PA2='Z@&c@|- C@-z|!'` with `"lysJoint":1,"lysOneWay":1` E4); read
+    with `node tri/census.js --pool [--joint] runs/x.txt`; E1, E5 and the controls: `node tri/check.js --cmd seal-pool
+    lock-guard lock-guard-0`.
+  - Status: no needed-and-turnable site in the pair (**derived**); a public lock's seal is self-limiting (**works**,
+    `seal-pool`); unguarded public locks die of their parasites (3 of 4 by 480k; **measured**, no check: 15 minutes per
+    world); `lysJoint` guards a public lock (**works**, `lock-guard`, control `lock-guard-0`); the loop of letters at
+    length with the guard: **partial** (2 of 4 worlds, 11-12 turns; the catcher remains).
+
 ## 2026-10-08 (autorun run 20261008-1650, build)
 
 - **The loop at length: it stops, because the shared site seals itself** (NEXT priority 30; theory in IDEAS "The
