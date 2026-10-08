@@ -29,6 +29,29 @@ Nothing is running.
 **Next step (rotation 79, explore): priority 29, the plug guard** (below), the line's one observed collapse under copy
 error. Or, if the explore run prefers a new idea, priority 31's theory.
 
+## Current slice (autorun run 20261008-1522, explore): priority 29, the plug guard
+
+Goal: settle which guard against a plug on the head's own side the core allows, and test the answer in isolation.
+Done when: the derivation is written (IDEAS), each guard it leaves is tested without mutation in 4 worlds (works in 3
+of 4 or not), and the core candidate, if any, is entered in RULES (Open candidates) with its case. Stop there; no
+core change unless the derivation shows a small, general one.
+
+**Derivation (before the runs).** A part bound to a side leaves it only by (1) an `&` release (the bond of an `&` side
+is cut once that side's triangle hears no open signal, and the side is spent) or (2) lysis: by contact with a `!` side
+(whatever the bond) or relayed from a partner across a bond that is not a joint. A child and a plug differ at the bond
+only by `&` (child root `Z@&`, plug `Z@`). (1) The plug has none; an `&` on the head's own side fires when the head is
+complete (its front filled), not when a child is done (the head cannot hear its child across the joint), and the spent
+side never raises again: at most one child per head. (2) A `!` on the own side lyses the child too (contact ignores the
+joint); relay from the head spares the child and takes the plug, but lyses the head. So **no head design guards its own
+side in the current core**: a plug leaves only when its individual dies. What is left: (a) upstream, a plug that
+kills its own copies: the one-error plug from the second cell (`C@-z!` with attach letter Z: `-z!Z@`) makes half its
+copies on its own `z!` tip, where they bind and are lysed; a plug needs the tip gone first (`--Z@`, `T!Z@i!`); (b) a
+refuge: a commons class (`I@&c@|z`, born on second cells' `i` sites) does not use its own `z` side, so a plug of `z`
+cannot touch its births; (c) a core change (RULES, Open candidates).
+Predictions (written while batch p29a ran, before reading it): P1 `--Z@` entered as 20 at 20k into the head nursery
+(no mutation) sinks it (no Z head in a body) in 3 of 4 by 80k; P2 `-z!Z@` the same way is lost in 3 of 4 and the
+nursery holds.
+
 ## Priorities
 
 Done 1-24 and 28: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
