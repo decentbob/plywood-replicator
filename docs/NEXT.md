@@ -25,9 +25,26 @@ entries and commands; read them with the trap reader in the checks (`trap*`: hea
 `types:` lines). The full suite was not rerun: the option is off by default, and nothing else in the rules, physics or a
 shared structure changed. Nothing is running.
 
-**Next step (rotation 80, build): priority 30, the loop at length**, now with two arms: the current core and
-`lysOneWay` (does one-way lysis remove the plug collapse and keep the loop turning?). Then rotation 83 (core-review):
-adopt `lysOneWay` as the rule or remove it (adopting changes outputs: full suite).
+**Current slice (autorun run 20261008-1650, build): priority 30, the loop at length.** Goal: does the commons loop
+run indefinitely, and does one-way lysis change that? Worlds: the `race` world (`pErr` 0.005, I entry at 20k) to 1.2M,
+seeds 5-8, current core (`cur`) and `lysOneWay` 1 (`ow`): `node tri/batch.js runs/p30.json runs/p30` (the file: `race`'s
+env from `node tri/check.js --cmd race`, steps 1200000, jobs `cur` and `ow` seeds 5-8; about 45-60 minutes per world, 2
+waves). Done when: the 8 worlds are read (site turns, commons classes, collapses and their cause, trap share) and, if
+the loop holds through 3 or more turns in 3 of 4 of an arm, a check exists. Stop: no new mechanism this slice; if the
+loop fails, record how.
+Predictions (written while the batch started, before any census was read; run 1351: 16 turns in 1.92M world-steps,
+4 commons classes in 4.8M, 1 plug collapse in 16 worlds of 240k):
+- P1 current core: 3 of 4 alive at 1.2M; 0-2 collapses, each by a plug on the heads' own sides, none by chains.
+- P2 each living world turns its majority site letter 5 or more times (expected about 10); median within 2x of 10.
+- P3 a commons class (a root other than Z on 20% or more of heads at a census) in 2 or more of 4 worlds per arm.
+- P4 Z holds most heads at 1.2M in 3 of 4 living worlds per arm.
+- P5 `lysOneWay`: 4 of 4 alive; trap (`z!` on second cells) on more than half of second cells at 1.2M in 3 of 4.
+- P6 turn rate the same in both arms within 2x (one-way lysis acts on plugs and chains, not on site letters).
+- P7 no second trap side (`z!` twice) on 10% of second cells in any world (no selection for it without an epidemic).
+- P8 every class stays one shape (a head and a second cell): turnover, no growth in complexity.
+
+**After this slice:** rotation 83 (core-review): adopt `lysOneWay` as the rule or remove it (adopting changes outputs:
+full suite).
 
 ## Priorities
 
