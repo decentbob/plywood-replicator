@@ -28,6 +28,33 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Variation where copies are made: copy error moves the head, and root letters follow cheat letters (explore run 20261008-0651, 2026-10-08)
+
+Copy error in contact copying (`pErr`, RULES Core changes, run 0651) in place of the free-part mutagen. Notes, not the
+user's words.
+- **Where mutation acts decides what can evolve (confirmed).** Under the free-part mutagen no head of the head nursery
+  varied in 4 worlds of 240k (run 0551); with copy error at 0.01 per copy, head variants were in bodies in 4 of 4 by
+  60k, and the founder head fell below half in 2 of 4 by 240k. The rate is per copy, so the parts copied most vary
+  most, wherever they are born.
+- **Most head changes are lethal, but the survivors are not rare.** Predicted: about 1/6 of head errors neutral (marks on
+  sides whose role does not depend on them), the rest lethal or a cheat. Seen: two neutral heads took large shares
+  (`Z@&c@z`, a front without anchor, 99.6% in one world; `Z@&|c@|z`, an anchor on the root, which is bonded or spent all
+  its life, 56% in another), far faster than drift in 430 well-mixed individuals would give (0.4 N generations in
+  240k). In-place heredity makes a population of clonal lines (each head raises its children on its own side), so
+  drift is fast: the effective size is far below the census. (Is `Z@&c@z` neutral? Follow-up below.)
+- **A cheat's seed site is a stepping stone for a new root letter.** In the world without stocks the root letter turned
+  over in 2 of 4 worlds (one world three times: Z, I, y, g) and began to in a third, where the mutagen kept it in 7 of 8
+  (run 0121). Each new root letter was the complement of a seed site that had spread before it as a cheat (a seed site
+  of another letter raises nobody and so spreads, run 0121). A root mutant that fits a common cheat site finds many
+  free sites that no other root can use: an empty nursery, so no Allee barrier. Then the old letter's sites raise
+  fewer roots and are the cheats of the new class. This is the Red Queen of letters that priority 21 looked for, through
+  a different door: the cheat is not letter-specific, but it makes letters available.
+- **The nursery's weak point is a plug.** In one world the evolved nursery `D@&c@|d` died: a part `--D@` (the second
+  cell's attach letter changed to the nursery's root letter, no other glue) binds a head's own seed side and never lets
+  go, so in-place birth stops; its copies come from its two inert sides. The lysis rule of thumb (run 0551: every side
+  a part's own copies can bind needs a release or a lysing tip) applies to the head's own side too: a plug cannot be
+  lysed by the head that holds it.
+
 ## In-place growth without a release is a sink; in-place birth starves a free-part mutagen (build run 20261008-0551, 2026-10-08)
 
 Checked in the head-nursery founder world (INNOVATIONS run 0551). Notes, not the user's words.
