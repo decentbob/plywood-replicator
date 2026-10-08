@@ -120,26 +120,6 @@ function demo(name,seed=1,steps,dir='runs',extra){
       for(let t=1;t<=steps;t++){s.step();if(every(t,10))report(t);if(every(t,4))snap(s,`t${t}`,`t=${t}: ${pore?`${inside()} strands inside`:`${strands().length} free strands`}`,null,false);}
       const [g,w]=tally();console.log(`result: ${strands().length} free strands (founder included)${pore?`, ${inside()} inside`:''}, copies ${s.ev.copy||0}: genome ${g}, wall ${w}`);
       finish(pore?`Genome on copies in a cell fed through a pore${closed?' (control: no pore)':plain?' (control: plain walls)':''}`:`Genome on copies inside a sealed cell${plain?' (control: plain walls)':''}`);},
-    // pool (a measurement, explore run 20261003-1221; IDEAS "Closure: what a part pool costs"): does a waiting growth
-    // front get copies in proportion to blanks / parts? A prepared front A (fb@-&: weld, forward link b@, a '&' side that
-    // stays unspent while it hears the open signal) welded to a support, in a world of B copy blanks and n parts
-    // B@c@-& (the next cell). Harness (labelled, not a rule): every copy made is turned back into a blank and every part
-    // that binds A is cut, both put back at random places, so B and n stay fixed. Reports the binds at A's forward site
-    // (blanks: copies; parts: growth) and at its '&' site. extra: n (default 4); POOLB: blanks (default 20); POOLISO=1:
-    // every other free side of the body is an inert anchor side (never copied), so only the forward site takes blanks
-    pool(){steps=steps||200000;const n=parseInt(extra)||4,B=+(process.env.POOLB||20),size=16,iso=!!process.env.POOLISO;
-      const tris=[{v:[[0,0],[1,0],[0.5,H]],type:iso?'fb@-|':'fb@-&'},{v:[[0,0],[0.5,-H],[1,0]],type:iso?'-|-|F':'-&-&F'}];
-      const {s,structures}=createWorld({seed,size,structures:[{tris,x:size/2,y:size/2}],supply:{'-?-?-?':B,'B@c@-&':n}});const [A]=structures[0],all=[...Array(s.n).keys()];
-      const ev={fwd:0,amp:0,other:0,part:0},ob=s.bind.bind(s);
-      s.bind=(u,i,ku,v,j,kv)=>{const r=ob(u,i,ku,v,j,kv);if(s.cpy[v*3+j]){if(u===A&&i===1)ev.fwd++;else if(u===A&&i===2)ev.amp++;else ev.other++;}else if(u===A&&i===1&&s.att[v*3+j])ev.part++;return r;};
-      const back=u=>{placeFree(s,u,all.filter(x=>x!==u&&x!==A),()=>[size*s.rng(),size*s.rng()]);s.regrid(u);};
-      snap(s,'t0',`t=0: a waiting front A among ${B} blanks and ${n} parts`,null,false);
-      for(let t=1;t<=steps;t++){s.step();
-        for(let u=0;u<s.n;u++){if(u===A||u===structures[0][1])continue;const ty=s.typeName(u);
-          if(ty!=='-?-?-?'&&ty!=='B@c@-&'&&!s.bonded(u)){s.setType(u,'-?-?-?');back(u);}
-          else if(ty==='B@c@-&'&&s.bond[A*3+1]>=0&&((s.bond[A*3+1]/3)|0)===u){s.cut(A,1);back(u);}}
-        if(every(t,10))console.log(`t=${t} copies at A's forward site ${ev.fwd}, at its & site ${ev.amp}, elsewhere ${ev.other}; parts bound ${ev.part}; forward copies per part ${(ev.fwd/Math.max(1,ev.part)).toFixed(2)} (B/n = ${(B/n).toFixed(2)}); A's & side spent ${s.spent[A*3+2]}`);}
-      finish('A waiting front among blanks and parts');},
     // budpool (build run 20261003-1420; IDEAS "Closure: what a part pool costs"): the closure kind's bud grown from a
     // part pool, in isolation. A prepared parent of structures.budKit(5, 7) (labelled; no food, no strands; its anchor
     // holds a stand-in end w-&-&, so nothing in it emits and every wall side is spent) among P free parts of each of the
