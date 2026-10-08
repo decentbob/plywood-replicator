@@ -28,6 +28,51 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A site on the shared part is a commons: a class born there beats the nursery, and the part's cheats turn it back (build run 20261008-1021, 2026-10-08)
+
+Derived, predicted wrong, then measured in the head-nursery world (INNOVATIONS run 1021). Notes, not the user's words.
+- **The prediction and why it was wrong.** Before the batch: in the head nursery a new root letter X can only start as a
+  pool class (`X@&c@|z`: its copies are born on its own `z` side, cannot bind it, and must reach an x site on a second
+  cell within at most 100 steps, `PAD=1`), against a resident born about 0.9 in place; so X is at best near neutral.
+  Measured: with the x site on every second cell, 10 X heads replace the nursery in 4 of 4 by 70k. The theory compared
+  success per copy and left out the copy rate: a nursery head's own side holds its child until the child catches a
+  second cell, and that whole time it is no template; a pool head's side stays free, because its children wait on second
+  cells. Raising costs copies (run 0121); a class that raises on a shared part puts that cost on the shared part.
+- **A site on the shared part is a commons.** Every individual carries one second cell, copied in the pool and caught by
+  any head with the right front, so a site on it is a nursery for whatever root fits, owned by no class. A head nursery
+  owns one private site per head (its own side, which its in-place births nearly always fill). A class born on the
+  commons out-copies the nursery while most of the commons' sites are free: with i sites on 37-46% of second cells, 10 I
+  heads were lost (6 of 6); at 80-100% they invaded in 9 of 10 (20 entered: 4 of 4). One head alone: 1 of 8. An I nursery
+  (`I@&c@|i`) with the same sites replaced Z too (3 of 4); without them it drifted (lost 2 of 4).
+- **The commons has its own cheats.** A second cell whose site holds a waiting head is no template on that side, so as
+  the commons class grows, second cells without the site are copied more and spread (plain ones from 4% to over 90% of
+  second cells within 20-30k); the class loses its births and dies out, and the nursery, whose births never used the
+  commons, returns (4 of 4 when plain second cells are there while the class grows). Negative frequency dependence
+  across two levels, classes of heads and types of second cells, from one rule (every free side is a template): the
+  first loop of its kind here. Without mutation the plain cells can drift out while the class is rare (2 of 4), and then
+  the class keeps the world.
+- **Two doors for a new root letter.** (1) The commons door: a site of the complement common on second cells, then a
+  root mutant of that letter. Stockless founder world (run 0651, and here at `pErr` 0.005: Z, m, x in one world, each
+  after its seed site spread on second cells). (2) The own-side door: a head carrying a site on a side it does not need
+  (the founder head's inert side) is a template whose copies are born on that site, so a copy with the complementary root
+  binds in place: one error founds a nursery of a new letter (stockless world at 0.005, seed 1: heads `C@|DZ@&`, then
+  `C@|Dd@&`, 323 heads 10k later). In the head nursery the own side is the class's heredity (a head whose own side
+  changes is a cheat, lost within 5k: run 0551), so door (2) is closed and only (1) is open.
+- **Why the long mutation worlds kept Z (8 of 8 to 480k at `pErr` 0.005 and 0.01).** Door (1) needs a root mutant of
+  exactly the right letter while its site is on most second cells, and then a 1-in-8 establishment. Site letters
+  drifted up to 30-73% of second cells; only one world held one above half for long (L, 60-73% for about 300k), and two
+  `l` roots appeared there and were lost. About one mutant of a given root letter per 100k steps at 0.01 (head copies per
+  step times pErr/6/53), so turnover in the head nursery is a matter of millions of steps: supply, not a barrier.
+- **Rate against place.** At `pErr` 0.005 (copy errors 104 by 20k, the mutagen's 123-131) root letters turned over in 2
+  of 4 stockless founder worlds, as at 0.01, against 1 of 8 under the mutagen (run 0121). So the rate alone does not explain the
+  difference; the place is the remaining candidate (copy error acts on each part as it is made, the mutagen on free
+  parts).
+- **What it opens.** All parts of a Red Queen of letters now work in one world: the commons class invades the nursery,
+  commons cheats turn it back, and a commons class becomes a nursery of its own letter by one error (`I@&c@|z` to
+  `I@&c@|i`: the mutant's copy goes once to the pool, then raises in place). Under copy error the question is a race:
+  does the commons class become a nursery before the commons' cheats remove its sites? If it does, letters cycle; if not,
+  the old nursery returns.
+
 ## Variation where copies are made: copy error moves the head, and root letters follow cheat letters (explore run 20261008-0651, 2026-10-08)
 
 Copy error in contact copying (`pErr`, RULES Core changes, run 0651) in place of the free-part mutagen; checked in
