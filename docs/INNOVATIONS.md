@@ -12,6 +12,48 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-1522, explore)
+
+- **The plug guard: no head guards its own side; a trap on the shared part does, but dies with its catch; one-way
+  lysis keeps it** (NEXT priority 29; derivation in IDEAS "A trap on the shared part"; RULES candidate (w)). New
+  parameter `lysOneWay` (default 0: every output unchanged, a 15k copy-error world byte for byte main's): lysis is not
+  relayed into a triangle across a bond on its own `!` side. New checks `trap` (4 of 4), `trap-c` (control, 4 of 4),
+  `trap-oneway` (4 of 4), `trap-oneway-c` (control, 4 of 4); test "lysOneWay"; demo option `PA3N` (how many of the
+  third kit enter); a resumed world (`TRI_RESUME`) now takes `TRI_PARAMS` and `TRI_RESEED=k` (replicate
+  continuations of one saved state). No mutation in A-C (`pErr` 1e-9 only prints `types:` lines).
+  - **Derivation** (before the runs): a bound part leaves only by an `&` release (fires on its own triangle's silence,
+    spends the side) or lysis (contact with `!` ignores joints; relay does not cross them). A child and a plug differ
+    only by `&`, so the head cannot remove a plug without removing its children or itself.
+  - **A, the trap** (head nursery `Z@&c@|z C@-z!`, 20 plugs `--Z@` at 20k, 80k, seeds 1-4; `runs/p29a.json`): plugs
+    lost in 4 of 4 (at most 22 attached), heads 488-506; predicted to sink the nursery (P1): **wrong**. `-z!Z@` (the
+    one-error plug with its own trap) never established (4 of 4). Without the trap (`C@-q!`, `runs/p29b.json`) the
+    same plugs left no head by 35-40k (4 of 4; control without plugs 421-430 individuals, 4 of 4).
+  - **B, the trap dies with its catch.** The one collapse of run 1351 (race control seed 4 at 0.01), rerun: trap
+    carriers 95% of second cells at 160k (`C@i!z!` 347); the plug `T!Z@i!` (`C@i!T!` with attach letter Z) 2, 8, 37,
+    141 at 160-175k while trap carriers fell to 59 of 247 and trapless `C@i!T!`, `C@i!J!` rose from 29 to 154; empty
+    at 185k (predicted: the trap had drifted away first, P4: **wrong**). Mechanism: the caught part is lysed by contact
+    and its lysis is relayed back across the bond into the second cell and its head. 200 plugs at 20k into a world of
+    trap and trapless second cells (founders `C@-z!` at 0 and `C@-q!` at 100; `runs/p29c.json`, 60k): current core,
+    trap share 0.47-0.92 to 0 within 5-10k, every world empty by 35-40k (4 of 4); with `lysOneWay` the trap share rose to
+    0.98-1.00 and every world lived (4 of 4), heads 224-282 (plug-free control 488-510) with the plug endemic
+    (167-201 attached), to 200k in 4 of 4 (`runs/p29e.json`: plugs 135-201 at every census). Predicted P5, P6: right.
+  - **C, two trap sides** (`C@z!z!`, 200 plugs, `runs/p29f.json`): plugs lost in 8 of 8 under either rule, heads
+    457-506 throughout. Where every second cell carries traps and no trapless cell is there to win, no epidemic starts.
+  - **D, the natural epidemic resumed** (the 165k state of B's world, copy error 0.01, `TRI_RESEED` replicates;
+    `runs/p29d.json`, `runs/p29e.json`): current core, 3 of 5 continuations empty by 195k (in 2 the plug was lost by
+    chance); `lysOneWay`, the trap held (0.87-1.00) in 5 of 5, the plug was lost in 1, endemic to 255k in 2 (heads
+    220-311, plugs about 180), and one world died at about 200k (P8 half; P10 3 of 4 hold to 255k: right).
+  - Picture: [plug-trap.png](pictures/plug-trap.png) (C's 200-plug worlds: heads, plugs and trap share, current core
+    above, `lysOneWay` below).
+  - Commands: `node tri/check.js --cmd trap trap-c trap-oneway trap-oneway-c` (about 3-7 minutes per world); the
+    collapse world: `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|z C@iz!' TRI_PARAMS='{"pErr":0.01}' node tri/demos.js pair 4
+    165000 runs/ctl4s` (pictures on: saves `runs/ctl4s/pair_end.json.gz`), then the same with
+    `TRI_RESUME=$PWD/runs/ctl4s/pair_end.json.gz TRI_RESEED=1001 TRI_PARAMS='{"pErr":0.01,"lysOneWay":1}'` and 30000 steps.
+  - Status: the trap as the plug guard **works** (`trap`, `trap-c`); the trap's death with its catch **works** as a
+    control (`trap-oneway-c`); one-way lysis keeping the guard **works** in the forced epidemic (`trap-oneway`) and is
+    **partial** in the natural one (the plug endemic, 1 of 4 continuations died); a head guard on its own side: **none
+    in the core** (designed: candidate (v), not built).
+
 ## 2026-10-08 (autorun run 20261008-1351, build)
 
 - **The race under copy error: the commons' cheats always come first; a common site is a target, so the shared

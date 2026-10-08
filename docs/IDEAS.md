@@ -53,12 +53,18 @@ NEXT priority 29, the plug guard: derived, then tested without mutation (INNOVAT
 - **One-way lysis keeps the guard (candidate (w)).** If a lysis side passes no lysis back (`lysOneWay`), the trap
   survives what it lyses: in the same 200-plug worlds the trap took 98-100% of second cells and every world lived (4 of
   4), at about half the heads, with the plug endemic (170-200 attached). The parasite stays; the collapse becomes a
-  burden. In the resumed collapse world the trap held in 5 of 5 continuations, the plug still spread in 3.
+  burden. In the resumed collapse world the trap held in 5 of 5 continuations; the plug was lost in 1, endemic in 2,
+  and 1 world died at about 200k.
+- **Two trap sides end it under either rule.** With traps on both free sides of every second cell (`C@z!z!`) the same
+  200 plugs were lost in 8 of 8, current core or not, with no dip in heads. The epidemic of B needed trapless second
+  cells: their heads are the plug's reservoir, and the trap carriers' deaths feed them. So the current core's weakness
+  is not the trap's strength but its cost: a trap is counter-selected exactly while it works. Under copy error a
+  single trap is lost by one neutral error; two need two.
 - **What it gives the goal.** A guard is a function selected only in the presence of its parasite; whether it lasts
   depends on who pays for its use. Under the current core the payer is the guard's carrier, so guard and parasite do not
   cycle: the guard collapses and the world with it. With one-way lysis the guard is selected during an epidemic
-  (trap share up, not down), so a guard-parasite Red Queen becomes possible: the next things to test are a second trap
-  side (more traps per individual, below the plug's replacement) and whether copy error grows one.
+  (trap share up, not down), so a guard-parasite Red Queen becomes possible: next, whether copy error grows a second
+  trap side, and whether the loop of run 1351 runs longer with one-way lysis.
 
 ## A common site is a target: the shared part's site letter turns over, and commons classes follow it (build run 20261008-1351, 2026-10-08)
 

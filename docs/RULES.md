@@ -80,6 +80,9 @@ the item entered the core (the repository restarted on 2026-10-01).
 | fill | state | chain copying, as zip | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
 | spent | state | `&` sides, as `&` | 10-01 |
 
+**Counts (2026-10-08, run 1522):** as run 0651, plus one option (was none), a parameter that narrows a relay: `lysOneWay` (default 0), no lysis
+relayed into a triangle across a bond on its own `!` side (candidate (w), Core changes); every other output unchanged.
+
 **Counts (2026-10-08, run 0651):** as run 2051, plus one rule branch with its parameter: copy error in contact copying
 (`pErr`, default 0, so every other check's world is unchanged; Core changes).
 
@@ -271,6 +274,8 @@ random getting with 1/2 a glue drawn from inert and `a..z`, `A..Z`, else one of 
 - A lysed triangle binds nothing (no glue catch, dock, fill, copy, anchor catch or closure on it), so no freed part
   rejoins a body that is coming apart.
 - Lysis runs first in the chemistry of each pass. Gate entry: Core changes, run 2051.
+- With the parameter `lysOneWay` (default 0; candidate (w), run 20261008-1522) lysis is not relayed into a triangle
+  across a bond on its own `!` side: a lysis side lyses its partner and passes nothing back.
 
 ## Core changes
 
@@ -350,7 +355,13 @@ NEXT priority 29 (the plug guard). Derivation and runs: IDEAS "A trap on the sha
    the lysis demo's cutters (freed unlysed instead of lysed: the same type, no spent sides). budcycle's cutter binds an
    `&` receptor (a joint): unchanged. Built as the parameter `lysOneWay` (default 0: every output unchanged) for this
    run's test; adopt as the rule or remove at the next core review.
-5. **Result:** below (filled in when the test is read).
+5. **Result (INNOVATIONS run 1522): built as a parameter, default 0; recommended for adoption at the next core
+   review.** With 200 plugs entered into trap and trapless second cells (no mutation), the current core loses the trap
+   (share to 0 within 5-10k) and every world (4 of 4); with `lysOneWay` the trap takes 98-100% of second cells and every
+   world lives to 200k (4 of 4), at about half the heads, the plug endemic (checks `trap-oneway`, `trap-oneway-c`). In
+   the resumed collapse world (copy error 0.01) the trap held in 5 of 5 continuations; the plug was lost in 1, endemic
+   in 2, and 1 world died. Adopting it changes outputs wherever a `!` side holds a part without `&` (above): the whole
+   suite then, and the lysis demo's and the scavenger test's expectations (the scavenger would no longer need `&`).
 
 ### Rule (r): copy error in contact copying, 2026-10-08, autorun run 20261008-0651 (explore)
 NEXT priority 24. The case of run 0450 (below) said: revisit if a rate per copy turns out to matter. It does now.
@@ -1090,6 +1101,6 @@ copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
-capture 0.6, triTolClose 0.05, openRange 120, pErr 0` (copy error, run 0651); no options (`heldCopy` became the rule 2026-10-04, run 0820).
+capture 0.6, triTolClose 0.05, openRange 120, pErr 0` (copy error, run 0651), `lysOneWay 0` (candidate (w), run 1522: the one option; `heldCopy` became the rule 2026-10-04, run 0820).
 (Removed 2026-10-03 with the casting lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`,
 `pLoose`, `light`.)

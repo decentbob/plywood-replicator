@@ -1,109 +1,49 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-1351, build). Read AGENTS.md first (rules of work), then this file.
-History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24 and 28,
-each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p
+State on 2026-10-08 (after autorun run 20261008-1522, explore). Read AGENTS.md first (rules of work), then this file.
+History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24, 28
+and 29, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p
 docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
-Where the line stands (run 1351, INNOVATIONS): under copy error the commons loop runs by itself. A head class born on a
-site of the shared second cell (a commons) replaces the head nursery, its cheats always come first (no I nursery), and
-a common site is a target: whatever binds it (the class, an in-place chain, a binder) makes second cells with another
-letter win, so the site letter turns over, and commons classes of the new letters arise by one root error. Turnover,
-not yet growth in complexity: every class has one shape.
+Where the line stands (runs 1351, 1522, INNOVATIONS): under copy error the commons loop runs by itself (commons
+classes and the second cell's site letter chase each other; turnover, not yet growth in complexity: every class has
+one shape). Its one sink is a plug on the heads' own sides. No head can guard its own side; the guard is a trap on the
+shared part (`z!` on the second cell), and under the current core the trap dies with each plug it lyses, so it is
+selected away in an epidemic. One-way lysis (option `lysOneWay`, candidate (w)) keeps it.
 
-**Handoff status (autorun run 20261008-1351, build): priority 28 done.** No rule or physics change. New check `race`
-(the commons world under copy error at 0.005, 240k, about 9 minutes per world; 6 of 8 in the batch, need 3 of 4); demo
-option `PATN=n` (`types:` lists n types; default 10, outputs unchanged); `tri/census.js` (heads by root letter, second
-cells by site letter, from `types:` lines). Records: INNOVATIONS run 1351, IDEAS "A common site is a target", ROADMAP
-(row, backlog A 28), pictures `race.png`, `race-long.png`. Evidence: tests 44 of 44; `node tri/check.js race copy-error`
-from a worktree of the branch: `race` 3 of 4 (566 s), `copy-error` 4 of 4 (`types:` unchanged by default); the batches (`runs/` is not kept: rebuild them as `tri/batch.js` files
-from INNOVATIONS' Commands: seeds 1-4 at 0.005, at 0.01, and the control; seeds 5-8 at 0.005; seeds 2, 3, 5, 6 at 0.005
-to 480k) are read with `node tri/census.js`. The full
-suite was not rerun: no rule, physics or shared structure changed, and `PATN` unset leaves every output as before.
-Nothing is running.
+**Handoff status (autorun run 20261008-1522, explore): priority 29 done.** One core candidate built as an option:
+`lysOneWay` (default 0; RULES Core changes (w), with its case; every default output unchanged: a 15k copy-error world
+byte for byte main's). New checks `trap`, `trap-c`, `trap-oneway`, `trap-oneway-c` (`node tri/check.js trap trap-c trap-oneway
+trap-oneway-c`: 4 of 4 checks pass, each 4 of 4 worlds, 591 s); test "lysOneWay" (tests 45 of 45); demo option `PA3N`; a resumed world takes `TRI_PARAMS` and
+`TRI_RESEED=k`. Records: INNOVATIONS run 1522, IDEAS "A trap on the shared part", RULES (w) and (v), ROADMAP (row,
+backlog A 29), picture `plug-trap.png`. The batches (`runs/` is not kept) are rebuilt from INNOVATIONS run 1522's
+entries and commands; read them with the trap reader in the checks (`trap*`: heads, second cells with `z!`, plugs from
+`types:` lines). The full suite was not rerun: the option is off by default, and nothing else in the rules, physics or a
+shared structure changed. Nothing is running.
 
-**Next step (rotation 79, explore): priority 29, the plug guard** (below), the line's one observed collapse under copy
-error. Or, if the explore run prefers a new idea, priority 31's theory.
-
-## Current slice (autorun run 20261008-1522, explore): priority 29, the plug guard
-
-Goal: settle which guard against a plug on the head's own side the core allows, and test the answer in isolation.
-Done when: the derivation is written (IDEAS), each guard it leaves is tested without mutation in 4 worlds (works in 3
-of 4 or not), and the core candidate, if any, is entered in RULES (Open candidates) with its case. Stop there; no
-core change unless the derivation shows a small, general one.
-
-**Derivation (before the runs).** A part bound to a side leaves it only by (1) an `&` release (the bond of an `&` side
-is cut once that side's triangle hears no open signal, and the side is spent) or (2) lysis: by contact with a `!` side
-(whatever the bond) or relayed from a partner across a bond that is not a joint. A child and a plug differ at the bond
-only by `&` (child root `Z@&`, plug `Z@`). (1) The plug has none; an `&` on the head's own side fires when the head is
-complete (its front filled), not when a child is done (the head cannot hear its child across the joint), and the spent
-side never raises again: at most one child per head. (2) A `!` on the own side lyses the child too (contact ignores the
-joint); relay from the head spares the child and takes the plug, but lyses the head. So **no head design guards its own
-side in the current core**: a plug leaves only when its individual dies. What is left: (a) upstream, a plug that
-kills its own copies: the one-error plug from the second cell (`C@-z!` with attach letter Z: `-z!Z@`) makes half its
-copies on its own `z!` tip, where they bind and are lysed; a plug needs the tip gone first (`--Z@`, `T!Z@i!`); (b) a
-refuge: a commons class (`I@&c@|z`, born on second cells' `i` sites) does not use its own `z` side, so a plug of `z`
-cannot touch its births; (c) a core change (RULES, Open candidates).
-Predictions (written while batch p29a ran, before reading it): P1 `--Z@` entered as 20 at 20k into the head nursery
-(no mutation) sinks it (no Z head in a body) in 3 of 4 by 80k; P2 `-z!Z@` the same way is lost in 3 of 4 and the
-nursery holds.
-Batch p29a (`runs/p29a.json`, 80k, seeds 1-4 each): **P1 wrong**: `--Z@` lost in 4 of 4 (at most 22 attached, gone by
-45-75k), the nursery untouched (heads 488-506). P2 right (never more than none in a census). Reading: a free plug
-copy has at most 100 steps (decay) to find a free own side, nursery heads' own sides are mostly holding a child, and
-every second cell carries a `z!` site, which binds a free `Z@` part and lyses it. **The second cell's `z!` is a trap**
-for every free part with the root's attach letter: pool heads, the one-error plug's copies and any plug. So (a') the
-guard the core already gives is the trap on the shared part; it is neutral while no plug is around, so it can drift
-away, and then a plug spreads. Batch p29b (`runs/p29b.json`, running): P3 with second cells `C@-q!` (a lysing site of
-an unused letter: no trap), `--Z@` entered as above sinks the nursery in 3 of 4 by 80k; its control without the plug
-holds in 4 of 4. P4 the race control seed 4 at 0.01 (the one collapse, run 1351), rerun to 185k: before the collapse
-most second cells carry no `z!` side.
-Batch p29b read: **P3 right** (`C@-q!` second cells: 20 plugs sank the nursery in 4 of 4 by 35-40k; control 4 of 4
-holds at 421-430). **P4 wrong, and why matters**: at 160k 95% of second cells carried `z!` (`C@i!z!` 347); the plug
-`T!Z@i!` (`C@i!T!` with attach letter Z, one error) rose 2, 8, 37, 141 at 160-175k while trap carriers fell 347 to 59
-and trapless `C@i!T!` and `C@i!J!` rose 29 to 154 of 247; empty at 185k. **The trap dies with its catch**: a plug
-caught on `z!` is lysed by contact, and its lysis comes back across the bond (no joint) into the second cell and its
-head. A trap that catches a part without `&` kills its own individual: an altruist, lost in an epidemic. Core case
-(w) in RULES (a lysis side passes no lysis back), built as `lysOneWay` (default 0), test "lysOneWay"; resumed worlds
-now take `TRI_PARAMS` and `TRI_RESEED=k`; demo option `PA3N`.
-Running: p29c (`runs/p29c.json`, 60k, seeds 1-4 each; trap founder `C@-z!` at 0, trapless founder `C@-q!` at 100;
-200 plugs `--Z@` at 20k): P5 under the current core the trap share at 30-60k falls below the plug-free control's
-(`mixc`) in 3 of 4 seeds; P6 with `lysOneWay` it rises above it in 3 of 4, and the individuals' dip at 20-25k is
-smaller than without. Then p29d: the 165k state of the collapse world (`runs/ctl4s/pair_end.json.gz`, rerun of race
-control seed 4 at 0.01) resumed for 30k with `TRI_RESEED` 1-4: P7 current core collapses (no head in a body by
-195k) in 3 of 4; P8 `lysOneWay` holds in 3 of 4 with trap carriers above half of second cells.
-Read (picture `docs/pictures/plug-trap.png`): **P5 right, more than predicted**: under the current core the trap share
-fell from 0.47-0.92 to 0 within 5-10k of the plug pulse and every world was empty by 35-40k (4 of 4; the plug-free
-control `mixc` lived, trap share 0.69-1.00 by drift). **P6 right** (3 of 4 above the control, seed 3 equal at 1.00):
-with `lysOneWay` the trap share rose to 0.98-1.00 and every world lived (4 of 4), but at about half the heads
-(224-282 against 488-510), with the plug endemic (167-201 attached from 30k to 60k). p29d (resumed 165k state, 30k):
-**P7 3 of 5 collapsed** under the current core (`x0`, `r0s1`, `r0s2`; in `r0s3`, `r0s4` the plug was lost by
-chance); **P8 half**: with `lysOneWay` the trap held (0.87-1.00 in 5 of 5) but the plug spread in 3 of 5 (183-187
-attached, heads 237-281; `r1s1` 22 heads, 23 plugs at 195k), lost in 1, rising in 1 (`x1`). So the rule keeps the
-guard and turns a collapse into an endemic parasite in the forced epidemic; whether that state is stable is open.
-Running: p29e (`runs/p29e.json`): `mix1` to 200k (seeds 1-4) and the four `lysOneWay` continuations to 255k. P9 `mix1`
-holds to 200k in 3 of 4 with the plug endemic (100-250 attached at every census after 30k); P10 the continuations hold
-(heads above 100 at 255k) in 3 of 4.
+**Next step (rotation 80, build): priority 30, the loop at length**, now with two arms: the current core and
+`lysOneWay` (does one-way lysis remove the plug collapse and keep the loop turning?). Then rotation 83 (core-review):
+adopt `lysOneWay` as the rule or remove it (adopting changes outputs: full suite).
 
 ## Priorities
 
-Done 1-24 and 28: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24, 28 and 29: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (review-intent 82 may reorder):
-29. [79 explore] **The plug guard** (was 27). A part with the root letter as its attach side binds a nursery head's own
-    side and stops in-place birth: `--D@` killed run 0651's D nursery, `T!Z@i!` (a second cell two errors away, attach
-    letter Z) collapsed a race control world at 180k (run 1351, 1 of 16). Under copy error it is the one parasite that
-    sinks the world, because it binds a side the head needs (IDEAS run 1351: a side nobody needs escapes by turnover).
-    Guard designs: a release on the head's own side once a non-head binds (no such rule: a core candidate), a lysing
-    own side (kills its own children), a second own side. Theory first: which guard needs no new rule.
 30. [80 build] **The loop at length.** Does it run indefinitely? Worlds at 0.005 (the `race` world) to 1.2M, seeds 5
     and 6 plus two more (about 45 minutes each): count site turns (run 1351: about one per 110k steps in the 480k
     worlds), commons classes by mutation (4 in 4.8M world-steps), nursery losses and returns, collapses. A check if
-    the loop holds through several turns in 3 of 4.
+    the loop holds through several turns in 3 of 4. Second arm (run 1522): the same worlds with `lysOneWay` 1 (add it
+    to `TRI_PARAMS`): plug collapses (current core: 1 in 16 by 240k) and the trap's share over time (`z!` on second
+    cells: the `trap*` checks' reader); does a second trap side arise and spread during a plug epidemic?
+32. [83 core-review] **Adopt or remove `lysOneWay`** (RULES (w)). For: the trap survives its catch, the scavenger's
+    `&` trick becomes unnecessary, one condition. Against: it changes outputs wherever a `!` side holds a part without
+    `&`. Run the suite with it on as default before deciding; the lysis demo's cutters and the scavenger test change.
 31. [later] **Shape inside the loop.** Every class is one shape (a head and a second cell), so the loop is turnover of
     letters. Complexity needs variants that differ in what they do and are selected inside it: a head with a second
     site of its own (a commons class that is also a commons), or a third cell that covers the site (length as
@@ -117,10 +57,10 @@ Open (review-intent 82 may reorder):
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 78 build (done), 79 explore, 80 build, 81 explore, 82
-review-intent.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 79 explore (done), 80 build, 81 explore, 82
+review-intent, 83 core-review.
 
-**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((t), (u), (s), (r)'s open part, (j), (l);
+**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((w) built as `lysOneWay`, (v), (t), (u), (s), (r)'s open part, (j), (l);
 settled there: (f), (k) and the done ones).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
