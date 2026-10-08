@@ -12,6 +12,16 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261007-2051, core-review)
+
+- **A smaller core that matches its text** (no new capability; RULES Core changes, "Core review 2026-10-07"). The option
+  `copyGlue` removed (with `pair`'s `PAHB=3`, `PADL`); the exposed value nb merged into gap; four fixes from an
+  independent review (copying only by a triangle free when the pass began; no copy binding by a close-only copy side;
+  dock and fill take no spent side; no `&` edge closes). Evidence: tests 43 of 43; suite 51 of 52 (the failure `pair-flow-c`, now partial);
+  163 check worlds against `main`, 153 byte for byte the same, the 10 others all with the general mutagen. Coverage of
+  the whole suite in the Core inventory. Found on the way: the control `pair-flow-c` was seed-picked (without the drive
+  the material locks in 3 of 8 worlds; entry of run 0621). Status: **works** (core review).
+
 ## 2026-10-07 (autorun run 20261007-1921, explore)
 
 - **A rare class wastes its parts; private recycling does not make a resource** (NEXT priority 20; theory in IDEAS "A

@@ -1,43 +1,30 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-2021, review-intent). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-08 (after autorun run 20261007-2051, core-review). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
-
-**Current slice (autorun run 20261007-2051, core-review; in progress).** Goal: a smaller core. Remove the option
-`copyGlue` (candidate (t), used by no check) and the demo drive values that serve only it (`PAHB=3` lettered blanks,
-`PADL`); audit every rule in `tri/sim.js` against locality and docs/RULES.md (independent reviewer); refresh the Core
-inventory with today's users from a coverage run of the whole suite; remove or merge anything else nothing needs. Done
-when: `node tri/test.js` and `node tri/check.js` pass on the branch, outputs of the pair checks unchanged against main,
-RULES (inventory, Core changes) current. Stop at: anything that needs a redesign is recorded, not built. State (22:30
-UTC): code done (removal, nb merged into gap, four fixes from an independent review: RULES Core changes, run 2051);
-baseline `main` 50 of 50 (all but the two lineage checks, outputs in the worktree `/home/user/pw-main/runs/a`); running:
-the whole suite on the branch with the coverage hook (`COV_OUT=$PWD/runs/cov.jsonl CHECK_SAVE=$PWD/runs/b
-NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js > runs/check.txt`, about 105 minutes). Then: `diff -r` a and b
-(expected: equal but for worlds with the general mutagen), fill RULES Result and the inventory's users from
-`runs/cov.jsonl`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-2021, review-intent).** Direction check after priorities 10-20; no building, no
-runs. Reasoning in IDEAS "Twenty slices on the pair" (one page). In short: the core is not growing (6 marks, 3 relays, 4
-values, 2 states, plus the option `copyGlue` to remove); the slices now combine in one standard world; but the web-size
-line (priorities 15, 18-20) has reached a bound the theory explains (classes are at most the limiting resources, and a
-class that makes its own parts cannot invade), every class beyond the first stands on a prepared stock, and bodies are
-still 2 cells. What is missing is an interaction whose payoff depends on frequency. The cheapest one is already in the
-world, the nursery cheat, and the stocks block it: a host's seed sites sit on prepared stock parts, which never
-mutate, so a host can never escape the cheats of its letter. Without stocks the seed site is on a copied cell, a host
-lineage can change its letter pair and its cheats follow: a predicted Red Queen of letters, and with it more host
-classes than resources. So the next build runs the standard world without stocks (priority 21). Rotation unchanged.
-Nothing is running.
+**Handoff status (autorun run 20261007-2051, core-review).** The core is smaller and matches its text. Removed the
+option `copyGlue` (with `pair`'s `PAHB=3` and `PADL`); merged the exposed value nb into gap (3 exposed values, was 4);
+fixed four mismatches an independent reviewer found (only a triangle free when the pass began copies; a free triangle
+binds by none of its close-only copy sides; dock and fill take no spent side; no `&` edge closes); text fixes and dead
+checks (RULES Core changes, "Core review 2026-10-07"). Counts: 6 marks, 3 relays, 3 exposed values, 2 states, no option.
+Outputs against `main`: the same in 153 of 163 worlds; the 10 that differ all have the general mutagen (fix 4). Suite 51
+of 52, the failure the control `pair-flow-c` (seed 4), now partial: re-measured on 8 seeds, without the drive the material locks in only 3 of 8 worlds,
+on `main` as on the branch (INNOVATIONS run 0621). The coverage run (RULES Core inventory) shows chain copying fires only
+in `copy`, `imprint` and `budcycle`, and the anchor's catch with its physics exception only in `budcycle`: candidate (u)
+below, a capability decision for review-intent 82. Not changed: `pBond` (Core-change candidates, last line), the anchor's own-body limit
+(RULES Locality audit, Known limit). Nothing is running.
 
-**Next step (rotation 71, core-review).** Remove the option `copyGlue` and the drive values that serve only it (`PAHB=3`,
-`PADL`; the check `rare-waste` uses neither) unless the reviewer finds a use; review the core as usual. Then 72 build:
-priority 21.
+**Next step (rotation 72, build).** Priority 21 below (the standard world without stocks: a Red Queen of letters?).
+Theory first, then the runs. The worlds with the general mutagen now follow the close-only copy-side fix, so compare
+against the stock world (`world`) as run on today's `main`, not against older numbers.
 
 ## Direction and priorities
 
