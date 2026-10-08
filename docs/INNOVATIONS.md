@@ -53,7 +53,7 @@ not statistics.
   - Commands: `PAW=1 PAF= PA2='Z@&c@|- C@-z|' node tri/demos.js pair SEED 240000 runs/x` (about 7 minutes); invasion:
     add `PAM=0 PA3T=20000 PAEN=10 PA3='Z@&c@|- C@-q|'` (or `C@-z!`, `C@-z`, `C@wz|`; `PAHU=2 PAH=0.1`), 60000 steps;
     copy rates: `NODE_OPTIONS='-r ./tri/copyrate.js'` on any of these; continuation: `TRI_RESUME=runs/x/pair_end.json.gz`
-    (the steps count from the saved time).
+    (the steps run on from the saved state: 240000 more; census times restart at 0).
   - Status: priority 21's Red Queen **not yet** (no letter cycles, one class); the stockless world **works** as an
     evolving world (`world-free` 4 of 4: the seed site changes form by 120k); host-cheat balance **works** (`seed-cheat`
     4 of 4, control `seed-cheat-c`); the anchorless seed site **works** (`seed-open` 4 of 4); the head nursery
