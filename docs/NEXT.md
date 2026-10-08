@@ -40,7 +40,7 @@ at every census of A (stabilising selection). P3 every head variant seen in more
 near-neutral ones. P4 A alive at 240k in 4 of 4. P5 B evolves the nursery (`z` side on the head) in at least 2 of 4.
 P6 the second cell drifts in A as under the mutagen (a variant above 10% of second cells in at least 2 of 4).
 
-Batch read (08:00 UTC; `runs/ce/`, `types:` lines): A alive 4 of 4 (414-436 individuals at every census); head
+Batch read (07:20 UTC; `runs/ce/`, `types:` lines): A alive 4 of 4 (414-436 individuals at every census); head
 variants in bodies in 4 of 4 (P1 yes); the founder head fell to 0.4%, 44%, 74%, 77% of heads (P2 wrong): `Z@&c@z` (front
 without anchor, predicted near-neutral) swept seed 4 (99.6%) and reached 23% in seed 1; `Z@&|c@|z` (an anchor on the
 root, which is bonded or spent all its life: neutral, not listed) 56% in seed 3, 22% in seed 2; heads with another seed
@@ -62,6 +62,9 @@ Follow-up (one batch, 16 worlds, mutation off; `runs/cf.json`), predictions writ
   meets r free sites per Z-root's one shared site: no Allee barrier. Prediction Q2: with cheats, I roots above 20% of
   roots at 110k in at least 3 of 4; without, I lost (under 5%) in at least 3 of 4 (run 1921: a rare class wastes its
   parts).
+- Also 2 worlds of the founder world under the mutagen to 20k (`w`): its mutations against batch B's copy errors (236 by
+  20k), to compare the supplies. Running after the suite (`node tri/check.js > runs/check.txt`, from 07:31 UTC; the new
+  check `copy-error` then alone): `node tri/batch.js runs/cf.json` (file as above: jobs n, m, q, r, w).
 
 **Handoff status (autorun run 20261008-0551, build).** Priority 22 done (INNOVATIONS run 0551, IDEAS "In-place growth
 without a release is a sink"): the head-nursery founder (`PAW=1 PAF= PA2='Z@&c@|z C@-z!'`) holds in 4 of 4 to 240k at
