@@ -88,7 +88,7 @@ states, no option (was 1: `copyGlue` removed). Every mark and rule event still f
 serve only frozen or old demos: chain copying (zip, gap, need, fn, fill and the dock, fill, close and release rules:
 `copy`, `imprint`, `budcycle`) and, inside it, the anchor's catch of a strand end with its physics exception (the
 caught strand moves as one body: `budcycle` alone). The pair line uses neither. Retiring them is a capability decision
-(NEXT, Core-change candidates (u)), not a review's.
+(Core changes, Open candidates (u)), not a review's.
 
 **Counts (2026-10-06, run 1920):** unchanged (6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no
 option). The open signal now stops at `&` joints, the condition lysis already had (one condition for both relays), and a

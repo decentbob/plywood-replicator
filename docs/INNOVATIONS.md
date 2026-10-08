@@ -12,6 +12,20 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-1222, cleanup)
+
+- **The suite in parts and every check as a command** — works (no capability, rule or output change). `tri/check.js
+  --part k/n` runs the k-th of n shares of the checks, whole checks balanced by `secs` x seeds (two parts of about 16 900
+  estimated CPU-seconds each, 33 and 32 checks), so a suite fits a background job's 2-hour limit even in run 0651's
+  container (160 minutes whole); `--cmd [id ...]` prints each check's demo command with its env, seeds and steps.
+  docs/NEXT.md (257 to 111 lines) no longer lists one command per capability; the pair's done priorities moved to
+  ROADMAP backlog A and the core-change candidates to RULES (Core changes, Open candidates). The demo `pool` (a
+  measurement of the frozen lineage, run 1221; no check used it) is removed, code in git at `9556170`. README describes
+  the pair line. Looked at and kept: every one of the pair demo's 30 options is used by a check; retiring the mutagen
+  `PAM` for copy error would change the standard world and 21 checks (5 use the front-only mutagen, which copy error
+  cannot replace): a setup decision for a build (NEXT, follow-ups). Evidence: tests 44 of 44; RESULT1.
+  Command: `node tri/check.js --part 1/2 > runs/check1.txt`, then `--part 2/2`; `node tri/check.js --cmd world`.
+
 ## 2026-10-08 (autorun run 20261008-1021, build)
 
 - **A site on the shared second cell is a commons: a head class born only there replaces the head nursery, and second

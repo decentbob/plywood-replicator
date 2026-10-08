@@ -2,25 +2,25 @@
 
 An artificial-life simulation built from one kind of block: the unit triangle. Each side carries a glue from
 complementary pairs (`a` binds `A`), six side marks (close-only, attach, completion release, anchor, copy, lysis)
-shape how it binds, and every rule is local. From these pieces the world has replicating chains, contact copying (a
-uniform food blank touching a part becomes a copy of it), cells whose spent walls are never copied so that blanks
-entering through a pore copy only the genome (only a genome held by its cell is copied, so leaked strands are
-sterile), and three generations of a cell kind grown from its own kit: the parent copies its genome, grows its bud
-from a pool of parts, the bud catches a copy, splits off and buds in turn; and a reverse path: a cutter that binds a
-bud waiting in vain takes it apart into its parts, which grow the next bud. (An older line of casting pockets, driven
-machines and kits was removed on 2026-10-03; it is in git at `7415fd4`.) The goal is an organism that builds and
-feeds its offspring until it can split off.
+shape how it binds, and every rule is local. The goal is complex evolution from simple rules.
 
-![Two generations of the kind, grown from a pool of its parts](docs/pictures/budcycle_generations.png)
+The current line is **the pair**: a two-cell body whose cells are copied by contact copying (a uniform food blank
+touching a part becomes a copy of it, now and then with one side wrong) and whose second cell's seed site raises the
+next head. In a world where deaths return blanks and parts decay, pairs vary, compete and change their body plan:
+the nursery moved onto the head, cheats that raise nobody hold beside their hosts, and a site on the shared second
+cell is a commons that a new class can take over until cheats on it turn it back. An earlier line grew three
+generations of a 47-part cell kind with genome, pore, bud and cutters; it is frozen with its checks. (An older line of
+casting pockets, driven machines and kits was removed on 2026-10-03; it is in git at `7415fd4`.)
+
+![The head nursery: heads raise heads on their own side; the second cell's seed site lyses](docs/pictures/head-nursery.png)
 
 ## Quick start
 ```
-node tri/test.js                        # fast checks
-node tri/demos.js imprint 1 100000 runs 150p  # a cell fed through a pore copies its genome from blanks outside
-BCGEN=1 node tri/demos.js budcycle 1 800000 runs   # one generation: a parent grows its bud from parts, the bud catches a copy and splits
-node tri/demos.js lysis 1 1000000 runs        # a stuck bud taken apart into its parts; a new bud grows from them
-BCQ=1 BCR=50 BCC=2 node tri/demos.js budcycle 3 600000 runs   # the lineage with cutters that take apart only buds stuck waiting
-node tri/check.js                       # one PASS/FAIL line per working capability (about an hour)
+node tri/test.js                                   # fast checks (seconds)
+PAW=1 node tri/demos.js pair 1 120000 runs/x       # the standard pair world (about 8 minutes): kinds arise by mutation
+PAW=1 PAF= PA2='Z@&c@|z C@-z!' node tri/demos.js pair 1 240000 runs/x   # the head-nursery founder without stocks
+node tri/check.js --cmd                            # every capability's world as one command
+node tri/check.js --part 1/2; node tri/check.js --part 2/2   # one PASS/FAIL line per working capability (about an hour each)
 ```
 Pictures appear in `runs/` (needs Chromium; see tri/render.js). Plain Node.js, no dependencies.
 
