@@ -1,8 +1,8 @@
 'use strict';
 // Fast checks of the triangle engine (about 20 s): node tri/test.js
 const assert=require('assert/strict');
-const {TriSim,gcode,parseType,canon,FACE,TFACE,GLUE}=require('./sim');
-const {createWorld,buildStructure,placeTri,band,rolesFromGaps,census}=require('./world');
+const {TriSim,gcode,parseType,canon}=require('./sim');
+const {createWorld,buildStructure,placeTri}=require('./world');
 const S=require('./structures');
 const H=Math.sqrt(3)/2;let passed=0;
 const test=(name,fn)=>{const t0=Date.now();fn();passed++;console.log(`ok  ${name} (${Date.now()-t0} ms)`);};
@@ -14,28 +14,12 @@ test('types: parse, name, canonical rotation',()=>{
   {const q=new TriSim({},1);q.setType(0,'z@!-|-|');assert.equal(q.typeName(0),'z@!-|-|');}
   for(const old of ['K<dA*','a-b$','K%--',"Kb.'@X"])assert.throws(()=>parseType(old),/marks/,'removed mark accepted: '+old);});
 
-// a founder face with a docker placed exactly on it (no jostle): docks only with the complementary glue (the founder is
-// held by its high end: only a held strand is copied)
-function dockWorld(dockerType,end='high'){
-  const {s,founders}=createWorld({seed:3,size:12,founders:[{gaps:[1,1],faces:'aba',hold:'z',x:6,y:6}],supply:{[dockerType]:1},params:{sigma:0,sigmaRot:0}});
-  const f=founders[0],u=end==='high'?f[f.length-1]:f[0],r=s.roles(u),d=s.n-1,i=r.free,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
-  const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]];placeTri(s,d,[b,a,x]);   // reflection of the face triangle across its face
-  s.setType(d,dockerType);s.derive();return {s,u,d,i};}
-test('copy: complementary docking only',()=>{
-  for(const [type,expect] of [['A--',true],['B--',false],['a--',false]]){const {s,u,d,i}=dockWorld(type);s.run(30);
-    assert.equal(s.bond[u*3+i]>=0&&((s.bond[u*3+i]/3)|0)===d,expect,`docker ${type}`);symmetric(s);}});
-test('binding: a free triangle docks by none of its close-only or spent sides',()=>{
-  for(const type of ['A.--','A--']){const {s,u,d,i}=dockWorld(type);if(type==='A--')s.spent[d*3]=1;s.derive();s.run(30);
-    assert.ok(s.bond[u*3+i]<0,`docker ${type}${type==='A--'?' (side spent)':''} must not dock`);}});
-test('binding: an attached triangle\u2019s close-only side takes no dock or fill (a close-only side binds no free triangle)',()=>{
-  {const {s,u,i}=dockWorld('A--');s.cOnly[u*3+i]=1;s.derive();s.run(30);assert.ok(s.bond[u*3+i]<0,'a close-only face took a dock');}
-  // dockers whose prev side (the side a fill binds) is close-only: copies dock but take no fill (control: plain dockers)
-  for(const [mk,expect] of [['.',false],['',true]]){const {s}=createWorld({seed:2,size:18,founders:[{gaps:[1,0,2,1,1],faces:'abaabb',hold:'z'}],
-      supply:{[`A-${mk}-`]:14,[`B-${mk}-`]:14,'---':50}});s.run(3000);assert.ok((s.ev.dock||0)>0,'docks');assert.equal((s.ev.fill||0)>0,expect,`fills with dockers A-${mk}-`);}});
-test('copy: zip, a face takes a dock only from the high end on',()=>{
-  const {s,u,i}=dockWorld('A--','low');s.run(30);assert.ok(s.bond[u*3+i]<0,'low end docked before the faces above it');
-  const h=dockWorld('A--','high');h.s.run(30);assert.ok(h.s.bond[h.u*3+h.i]>=0,'the high end docks');});
-
+// a grown triangle (cell 0, welded to cell 1) with glue side `at` (side 2: glue a); a free triangle flush in the site beside it
+const glueCase=(tmpl,free,spent)=>{const tris=[{v:[[0,0],[1,0],[0.5,H]],type:tmpl},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[0,0],[0.5,H],[-0.5,H]],type:free,loose:true}];
+  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);if(spent)s.spent[2*3+spent-1]=1;s.derive();s.run(30);symmetric(s);return s.partner(0,2)===2;};
+test('binding: a free triangle binds by none of its close-only or spent sides',()=>{
+  assert.ok(glueCase('f-a','A--'),'control: a plain side binds');assert.ok(!glueCase('f-a','A.--'),'a close-only side bound');assert.ok(!glueCase('f-a','A--',1),'a spent side bound');});
+test('binding: an attached triangle\u2019s close-only side binds no free triangle',()=>{assert.ok(!glueCase('f-a.','A--'),'a close-only side caught a free triangle');});
 test('parts: a free triangle with an attach side binds only by it',()=>{
   for(const [part,expect] of [['A@--',true],['A-B@',false],['A--',true]]){
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'f-a'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[0,0],[0.5,H],[-0.5,H]],type:part,loose:true}];
@@ -85,60 +69,14 @@ test('copy side: a copy blank binds no anchor side (a waiting anchor is no templ
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
     assert.equal(!!s.ev.copy,expect,tmpl);if(!expect)assert.equal(s.typeName(2),'-?-?-?','the blank stays a blank');symmetric(s);}});
 
-test('anchor: an anchor side catches a strand end seed and the strand is placed flush as one body; a spent one catches nothing',()=>{
-  for(const [ag,expect,spent] of [['Z|',true],['Y|',false],['Z',false],['Z|',false,true]]){
-    const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':2},params:{sigma:0,sigmaRot:0}});
-    const F=founders[0],u=F[F.length-1],r=s.roles(u),i=r.inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
-    const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]],sh=[0.12,-0.08];
-    const V=[b,a,x].map(p=>[p[0]+sh[0],p[1]+sh[1]]);   // the anchor cell (its side 0 faces the end, a little off the flush place), welded on side 1
-    const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,ag+'f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);if(spent)s.spent[(s.n-2)*3]=1;   // a spent anchor side catches nothing
-    s.derive();s.run(3);const ok=s.partner(u,i)===s.n-2;assert.equal(ok,expect,ag+(spent?' (spent)':''));
-    if(ok){assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');for(let q=0;q+1<F.length;q++)for(let e=0;e<3;e++){const qq=s.bond[F[q]*3+e];if(qq>=0)assert.ok(s.flushGap(F[q],e,(qq/3)|0,qq%3)<1e-6,'strand stays rigid');}}
-    symmetric(s);}});
-test('anchor: catches a strand end while the strand is being copied (its docker moves with it)',()=>{
-  // the strand is held by its high end (so it is copied); a docker on the high end's face; a second anchor W| catches the low end w
-  const {s,founders,holds}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'w',hold:'z',x:6,y:8}],supply:{'---':3},params:{sigma:0,sigmaRot:0}});
-  const F=founders[0],h=F[F.length-1],rh=s.roles(h),u=F[0],r=s.roles(u),i=r.inert,P=(w,k)=>[s.px[w]+s.ox[w*3+k],s.py[w]+s.oy[w*3+k]],refl=(w,e)=>{const a=P(w,e),b=P(w,(e+1)%3),c=P(w,(e+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-  const D=s.n-3;placeTri(s,D,refl(h,rh.free));s.setType(D,'A--');s.derive();s.run(3);assert.ok(s.partner(h,rh.free)===D,'docked on the high end');
-  const sh=[0.12,-0.08],V=refl(u,i).map(p=>[p[0]+sh[0],p[1]+sh[1]]);
-  const W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-2,V);placeTri(s,s.n-1,W2);s.setType(s.n-2,'W|f-');s.setType(s.n-1,'F--');s.bind(s.n-2,1,GLUE,s.n-1,0,GLUE);
-  for(let k=0;k<6;k++)s.derive();s.run(3);assert.equal(s.partner(u,i),s.n-2,'caught while being copied');assert.equal(s.partner(h,rh.free),D,'the docker stays');
-  assert.equal(s.partner(h,rh.inert),holds[0][0],'the high end stays held');
-  assert.ok(s.flushGap(u,i,s.n-2,0)<1e-6,'flush');assert.ok(s.flushGap(h,rh.free,D,s.bond[h*3+rh.free]%3)<1e-6,'the docker moved with the strand');symmetric(s);});
-test('copy: only a strand held by its high end is copied (a free strand, or one held by its low end, takes no dock)',()=>{
-  // a strand's high end, a docker A-- at its face; the strand free, held by its high end (hold: an anchor Z| on the spare
-  // edge z), or held by its low end (an anchor W| on the low end's spare edge w). Only an anchor's catch binds a strand
-  // end (run 20261004-0022); the option heldCopy (run 20261003-1720) is the rule since run 20261004-0820
-  for(const [hold,expect] of [[null,false],['high',true],['low',false]]){
-    const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'w',hold:hold==='high'?'z':undefined,x:6,y:8}],supply:{'---':hold==='low'?3:1},params:{sigma:0,sigmaRot:0}});
-    const F=founders[0],u=F[F.length-1],r=s.roles(u),P=(w,k)=>[s.px[w]+s.ox[w*3+k],s.py[w]+s.oy[w*3+k]],refl=(w,e)=>{const a=P(w,e),b=P(w,(e+1)%3),c=P(w,(e+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-    if(hold==='low'){const l=F[0],V=refl(l,s.roles(l).inert),W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];placeTri(s,s.n-3,V);placeTri(s,s.n-2,W2);s.setType(s.n-3,'W|f-');s.setType(s.n-2,'F--');
-      s.bind(s.n-3,1,GLUE,s.n-2,0,GLUE);s.bind(l,s.roles(l).inert,GLUE,s.n-3,0,GLUE);}
-    const D=s.n-1;placeTri(s,D,refl(u,r.free));s.setType(D,'A--');s.derive();s.run(3);
-    assert.equal(s.partner(u,r.free)===D,expect,hold?'held by its '+hold+' end':'free');}});
-test('copy side: a strand triangle is a template whether or not its strand is held (candidate (p), heldContact, removed in run 20261005-1921)',()=>{
-  // a copy blank flush at the low end's free face of a 5-triangle strand, free or held by its high end: copied both times
-  const run=hold=>{const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',hold:hold?'z':undefined,x:6,y:8}],supply:{'-?-?-?':1},params:{sigma:0,sigmaRot:0}});
-    const F=founders[0],u=F[0],r=s.roles(u),P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(r.free),b=P((r.free+1)%3),c=P((r.free+2)%3);
-    for(let k=0;k<8;k++)s.derive();
-    const D=s.n-1;placeTri(s,D,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]]);s.derive();s.run(2);return !!s.ev.copy;};
-  assert.ok(run(false),'a free strand is copied');assert.ok(run(true),'a held strand is copied');});
 test('anchor: a free triangle\u2019s anchor side binds as its glue does (an inert one binds nothing)',()=>{
   // a free triangle beside a grown triangle's glue side z: binds by Z with or without the anchor mark (run 0050's
   // narrowing, a free anchor side binds nothing, was removed in run 20261004-0820); a closed side -| binds nothing
   for(const [ty,expect] of [['Z|--',true],['Z--',true],['-|--',false]]){
     const s=new TriSim({W:16,H:16,seed:5,sigma:0,sigmaRot:0},3),V=[[6,6],[7,6],[6.5,6+H]],W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];
-    placeTri(s,0,V);placeTri(s,1,W2);s.setType(0,'zf-');s.setType(1,'F--');s.bind(0,1,GLUE,1,0,GLUE);
+    placeTri(s,0,V);placeTri(s,1,W2);s.setType(0,'zf-');s.setType(1,'F--');s.bind(0,1,1,0);
     const a=V[0],b=V[1],c=V[2];placeTri(s,2,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(2,ty);s.derive();s.run(3);
     assert.equal(s.partner(0,0)===2,expect,ty);symmetric(s);}});
-test('binding: a strand end\u2019s seed and a strand\u2019s back bind no free triangle by glue (only an anchor catches an end)',()=>{
-  // a free triangle with the complementary glue beside the high end's spare edge z, or beside a back's free edge b
-  for(const [ty,where] of [['Z@--','end'],['Z--','end'],['B--','back']]){
-    const {s,founders}=createWorld({seed:5,size:16,founders:[{gaps:[1,1],faces:'aaa',ends:'-z',x:6,y:8}],supply:{'---':1},params:{sigma:0,sigmaRot:0}});
-    const F=founders[0],u=where==='end'?F[F.length-1]:F.find(w=>s.roles(w).role===2),r=s.roles(u),i=where==='end'?r.inert:r.free;if(where==='back')s.glue[u*3+i]=gcode('b');
-    const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);
-    const v=s.n-1;placeTri(s,v,[b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]].map(p=>[p[0]+0.1,p[1]-0.05]));s.setType(v,ty);s.derive();s.run(3);
-    assert.ok(s.partner(u,i)!==v&&!s.ev.glue,ty+' bound the '+where);symmetric(s);}});
 test('pair: a free R binds the seed site, a free S its front, the pair lets go; only the plain sides are copied',()=>{
   const K=S.pairKit(),tri=(s,u,V)=>{placeTri(s,u,V);s.regrid(u);};
   // the place across side i of attached unit u (free triangles moved there bind in the next pass: sigma 0)
@@ -176,7 +114,7 @@ test('budding: a ring on a seed lets go when complete (open signal), holds while
     assert.equal(s.partner(2,K.rootSide)<0,expect,missing?'incomplete ring must hold':'complete ring must let go');}});
 
 test('state: save and reload continue the same run',()=>{
-  const {s}=createWorld({seed:5,size:12,founders:[{gaps:[1,1],faces:'aba',hold:'z'}],supply:{'A--':4,'B--':4,'---':6}});s.run(50);
+  const {s}=createWorld({seed:5,size:12,structures:[{tris:S.ringKit(3,'z').tris,x:6,y:6}],supply:{'-?-?-?':12,'---':6}});s.run(50);
   const a=TriSim.fromState(JSON.parse(JSON.stringify(s.saveState())));s.run(40);a.run(40);
   assert.deepEqual(Array.from(a.px),Array.from(s.px));assert.deepEqual(Array.from(a.bond),Array.from(s.bond));});
 
@@ -185,7 +123,7 @@ test('physics: a closed ring keeps its tracers at the default jostle (no tunnell
   const {s,structures}=createWorld({seed:2,size:16,structures:[{tris,x:8,y:8}],params:{}});
   // tracers inside: placed near the centre
   const ring=structures[0],{placeFree}=require('./world'),n0=s.n;void n0;assert.ok(ring.length>30);
-  const s2=new TriSim({...s.p},s.n+6);for(const k of ['px','py','pa','ox','oy','bond','glue','bkind'])s2[k].set(s[k]);
+  const s2=new TriSim({...s.p},s.n+6);for(const k of ['px','py','pa','ox','oy','bond','glue'])s2[k].set(s[k]);
   const placed=[...ring],inside=[];for(let u=s.n;u<s2.n;u++){if(!placeFree(s2,u,placed,()=>{const a=2*Math.PI*s2.rng(),r=1.4*s2.rng();return [8+r*Math.cos(a),8+r*Math.sin(a)];}))throw Error('place');placed.push(u);inside.push(u);}
   s2.derive();const cx=()=>{let x=0,y=0;for(const u of ring){x+=s2._dx(s2.px[u]-s2.px[ring[0]]);y+=s2._dy(s2.py[u]-s2.py[ring[0]]);}return [s2.px[ring[0]]+x/ring.length,s2.py[ring[0]]+y/ring.length];};
   s2.run(1500);const [x,y]=cx();for(const u of inside)assert.ok(Math.hypot(s2._dx(s2.px[u]-x),s2._dy(s2.py[u]-y))<(R-1)*H,'tracer left the ring');symmetric(s2);});
@@ -223,40 +161,27 @@ test('physics: body overlap tests skipping far cells equal a scan over all block
     assert.equal(e>0,f>0,'early test differs');assert.ok(Math.abs(r-q)<1e-12,'depth sum differs');if(q>0)far++;}
   assert.ok(far>1000,'few overlapping tests');});
 test('physics: rigid parts never overlap, bonds stay flush (crowded copy world)',()=>{
-  const {triDepth}=require('./physics');
-  const {s}=createWorld({seed:4,size:12,founders:[{gaps:[1,0,2],faces:'abab',hold:'z'}],supply:{'A--':10,'B--':10,'a--':10,'b--':10,'---':20}});s.run(600);
+  const {triDepth}=require('./physics'),K=S.ringKit(3,'z'),sup={'-?-?-?':30,'---':10};for(const t of K.kit)sup[t]=(sup[t]||0)+4;
+  const {s}=createWorld({seed:4,size:12,structures:[{tris:K.tris.slice(0,1+K.P),x:6,y:6}],supply:sup});s.run(600);
   const A=new Float64Array(6),B=new Float64Array(6);let worst=0,gap=0;
   for(let u=0;u<s.n;u++)for(let v=u+1;v<s.n;v++){const dx=s._dx(s.px[v]-s.px[u]),dy=s._dy(s.py[v]-s.py[u]);if(dx*dx+dy*dy>1.4)continue;
     for(let q=0;q<3;q++){A[2*q]=s.ox[u*3+q];A[2*q+1]=s.oy[u*3+q];B[2*q]=dx+s.ox[v*3+q];B[2*q+1]=dy+s.oy[v*3+q];}worst=Math.max(worst,triDepth(A,B));}
   for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0)gap=Math.max(gap,s.flushGap(u,i,(q/3)|0,q%3));}
-  assert.ok(worst<1e-3,`overlap ${worst}`);assert.ok(gap<1e-6,`bond gap ${gap}`);assert.ok((s.ev.dock||0)+(s.ev.glue||0)>0,'something bound');symmetric(s);});
+  assert.ok(worst<1e-3,`overlap ${worst}`);assert.ok(gap<1e-6,`bond gap ${gap}`);assert.ok((s.ev.copy||0)+(s.ev.glue||0)>0,'something bound');symmetric(s);});
 
 test('physics: a body longer than half the world keeps its shape (offsets unwrapped along bonds)',()=>{
-  const roles=[...Array(24)].map((_,i)=>'FB'[i%2]),ccw=V=>((V[1][0]-V[0][0])*(V[2][1]-V[0][1])-(V[1][1]-V[0][1])*(V[2][0]-V[0][0]))<0?[V[0],V[2],V[1]]:V,B=band(roles).map(t=>({v:ccw(t.v),type:'---'}));   // a straight strip about 12 long
+  const B=[];for(let i=0;i<12;i++)B.push({v:[[i,0],[i+1,0],[i+0.5,H]],type:'---'},{v:[[i+1,0],[i+1.5,H],[i+0.5,H]],type:'---'});   // a straight welded row about 12 long
   const s=new TriSim({W:14,H:14,seed:4},B.length);buildStructure(s,B.map((_,k)=>k),B,7,7,0.4);s.derive();s.run(300);let worst=0;
   for(let u=0;u<s.n;u++)for(let i=0;i<3;i++){const q=s.bond[u*3+i];if(q>=0)worst=Math.max(worst,s.flushGap(u,i,(q/3)|0,q%3));}
   assert.ok(worst<1e-6,'bonds stay flush (worst gap '+worst+')');});
-test('locality: release reads its chain partners\' fill state from the previous pass (one bond per pass)',()=>{
-  // U (1) docked on T (0), prev partner P (2, docked on 3), next partner Y (6, docked on 7); P's prev is a fill W (4)
-  const {PREV,NEXT}=require('./sim');const s=new TriSim({W:40,H:40,seed:1},8);for(let u=0;u<8;u++){s.setType(u,'a--');s.px[u]=3*u+2;s.py[u]=5;}
-  const B=(u,i,ku,v,j,kv)=>{s.link(u,i,v,j);s.bkind[u*3+i]=ku;s.bkind[v*3+j]=kv;};
-  B(0,0,TFACE,1,0,FACE);B(3,0,TFACE,2,0,FACE);B(7,0,TFACE,6,0,FACE);B(1,1,PREV,2,2,NEXT);B(1,2,NEXT,6,1,PREV);B(2,1,PREV,4,0,NEXT);s.fill[4]=1;s.fn[2]=1;   // P exposed the fill in the previous pass
-  s.chemistry();assert.ok(s.bond[3]>=0,'U holds its face while P has a fill beside it');
-  B(4,1,PREV,5,0,NEXT);s.chemistry();assert.ok(s.bond[3]>=0,'the fill completed this pass: U hears it one pass later');
-  s.chemistry();assert.ok(s.bond[3]<0,'U lets go in the next pass');});
-test('copy: a docked triangle keeps its template while a fill that bound in this pass is incomplete',()=>{
-  const {PREV,NEXT}=require('./sim');const {s}=createWorld({seed:2,size:18,founders:[{gaps:[1,0,2,1,1],faces:'abaabb',hold:'z'}],supply:{'A--':14,'B--':14,'a--':14,'b--':14,'---':50}});
-  let bad=0;const chem=s.chemistry.bind(s);s.chemistry=()=>{const faces=[];for(let u=0;u<s.n;u++){const e=s._edges(u);if(e.face>=0)faces.push([u,e]);}chem();
-    for(const [u,e] of faces){if(s.bond[u*3+e.face]>=0)continue;for(const i of [e.prev,e.next]){if(i<0||s.bond[u*3+i]<0)continue;const w=s.partner(u,i),f=s._edges(w);if(s.fill[w]&&(f.prev<0||f.next<0))bad++;}}};
-  s.run(1500);assert.ok((s.ev.release||0)>=1,'copies release');assert.equal(bad,0,'a release left an incomplete fill behind');});
 test('copy side: only a triangle bonded by its copy side alone takes its partner\'s type',()=>{
   const s=new TriSim({W:40,H:40,seed:1},3);s.setType(0,'abc');s.setType(1,'a?-x');s.setType(2,'X--');for(let u=0;u<3;u++){s.px[u]=3*u+2;s.py[u]=5;}
-  s.link(0,0,1,0);s.bkind[0]=GLUE;s.bkind[3]=GLUE;s.link(1,2,2,0);s.bkind[5]=GLUE;s.bkind[6]=GLUE;s.chemistry();
+  s.link(0,0,1,0);s.link(1,2,2,0);s.chemistry();
   assert.equal(s.typeName(1),'a?-x','an attached triangle with a copy side is no copy blank');assert.ok(s.bond[3]>=0);
   s.cut(1,2);s.chemistry();assert.equal(s.typeName(1),'abc','bonded by its copy side alone it copies (the partner turned about the shared edge)');});
-test('conservation: blocks stay in play, types change only by copy (a ring kit, copy blanks, a founder and its dockers)',()=>{
+test('conservation: blocks stay in play, types change only by copy (a ring kit, copy blanks, plain triangles)',()=>{
   const {triDepth}=require('./physics');
-  const {s}=createWorld({seed:2,size:14,founders:[{gaps:[1,1],faces:'aba',hold:'z',x:3,y:3}],structures:[{tris:S.ringKit(3,'z').tris,x:8,y:8}],supply:{'A--':4,'B--':4,'---':10,'-?-?-?':12}});
+  const {s}=createWorld({seed:2,size:14,structures:[{tris:S.ringKit(3,'z').tris,x:8,y:8}],supply:{'A--':4,'B--':4,'---':10,'-?-?-?':12}});
   const before=[...Array(s.n).keys()].map(u=>s.typeName(u));s.run(3000);
   let changed=0,worst=0;const A=new Float64Array(6),B=new Float64Array(6);
   for(let u=0;u<s.n;u++){assert.ok(Number.isFinite(s.px[u])&&Number.isFinite(s.py[u])&&Number.isFinite(s.pa[u]),'block '+u+' left play');
@@ -273,28 +198,6 @@ test('physics: a block in a hole of a one-row wall never hops across it through 
     const u=tris.length;placeTri(s,u,[[11,12],[12,12],[11.5,12+H]]);s.gridSync();if(k===0){s._single(u,0,0.95,0);assert.ok(s.py[u]<12.3,'a direct kick of 0.95 hopped the wall');}
     for(let t=0;t<200;t++){s._single(u,0.3*sw*s._gauss(),0.3*sw*s._gauss(),0.45*sw*sw*s._gauss());if(s.py[u]-H/3>12+H-1e-6){up++;break;}if(s.py[u]+2*H/3<12+1e-6)break;}}
   assert.equal(up,0,`${up} of 300 blocks crossed the (frozen) wall`);});
-test('physics: an anchor never pulls a strand through a wall (the whole capture path must be clear)',()=>{
-  // a strand end lies within capture of an anchor site, the strand turned 100 degrees from its flush place and a welded
-  // wall row across the sweep of its far part: the destination is clear, the path is not (it was captured, 2026-10-02)
-  const {GLUE}=require("./sim"),phi=-100*Math.PI/180,R0=3,SH=0.55,tris=[];for(let k=0;k<4;k++)tris.push({v:[[k,0],[k+1,0],[k+0.5,H]],type:'---'},{v:[[k+1,0],[k+1.5,H],[k+0.5,H]],type:'---'});
-  const {s,founders}=createWorld({seed:5,size:30,founders:[{gaps:[1,1,1,1,1,1],faces:'aaaaaaa',ends:'-z',x:15,y:15}],supply:{'---':2+tris.length},params:{sigma:0,sigmaRot:0}});
-  const F=founders[0],u=F[F.length-1],i=s.roles(u).inert,P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];
-  const a=P(i),b=P((i+1)%3),c=P((i+2)%3),x=[a[0]+b[0]-c[0],a[1]+b[1]-c[1]],V=[b,a,x],W2=[V[2],V[1],[V[1][0]+V[2][0]-V[0][0],V[1][1]+V[2][1]-V[0][1]]];
-  const A=F.length,A2=A+1;placeTri(s,A,V);placeTri(s,A2,W2);s.setType(A,'Z|f-');s.setType(A2,'F--');s.bind(A,1,GLUE,A2,0,GLUE);
-  const units=tris.map((_,k)=>A2+1+k);for(const w of units)s.px[w]=-50;
-  const cx=s.px[u],cy=s.py[u],fin0=[s.px[F[0]],s.py[F[0]]],ax=s._dx(s.px[A]-cx),ay=s._dy(s.py[A]-cy),al=Math.hypot(ax,ay),sx=-SH*ax/al,sy=-SH*ay/al,co=Math.cos(phi),si=Math.sin(phi);
-  for(const w of F){const dx=s._dx(s.px[w]-cx),dy=s._dy(s.py[w]-cy);s.px[w]=s._wx(cx+co*dx-si*dy+sx);s.py[w]=s._wy(cy+si*dx+co*dy+sy);s.pa[w]+=phi;s.resetShape(w);}
-  const ang=(X,Y)=>Math.atan2(s._dy(Y-cy),s._dx(X-cx)),a0=ang(s.px[F[0]],s.py[F[0]]),a1=ang(fin0[0],fin0[1]),mid=Math.atan2(Math.sin(a0)+Math.sin(a1),Math.cos(a0)+Math.cos(a1));
-  buildStructure(s,units,tris,cx+R0*Math.cos(mid)+Math.sin(mid)*H/2,cy+R0*Math.sin(mid)-Math.cos(mid)*H/2,mid);s.gridSync();
-  assert.equal(s.moveDepth(F,0,0,0,s.px[F[0]],s.py[F[0]]),0,'start clear');s.derive();s.run(3);
-  assert.ok(s.partner(u,i)!==A&&!s.ev.anchor,'the strand was captured through the wall');});
-test('binding: a bonded triangle is never free (a docked template that lost its chain bonds is not caught again)',()=>{
-  const {FACE}=require('./sim'),s=new TriSim({W:16,H:16,seed:2,sigma:0,sigmaRot:0},4);
-  const refl=u=>i=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]];const a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-  const u=0,w=1,t=2,d=3;placeTri(s,u,[[8,8],[9,8],[8.5,8+H]]);s.setType(u,'a-f');placeTri(s,w,refl(u)(2));s.setType(w,'F--');s.bind(u,2,GLUE,w,0,GLUE);
-  const S=refl(u)(0),Sc=[(S[0][0]+S[1][0]+S[2][0])/3,(S[0][1]+S[1][1]+S[2][1])/3];placeTri(s,t,S.map(p=>[2*Sc[0]-p[0],2*Sc[1]-p[1]-0.5]));s.setType(t,'A--');
-  placeTri(s,d,refl(t)(0));s.setType(d,'a--');s.bind(t,0,TFACE,d,0,FACE);s.gridSync();s.physics();s.derive();s.formBonds();
-  assert.equal(s.bond[t*3],d*3,'the template keeps its face bond');symmetric(s);assert.throws(()=>s.bind(u,0,GLUE,t,0,GLUE),/already bonded/);});
 const closureCase=(K,range)=>{
   // no physics: cells are bonded in growth order (as parts arriving), each followed by signal passes (derive, release)
   const R=5,N=K.N,AK=K.anchorCell,SE=K.types[AK].includes('Z@|')?'z--':'w--',s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:range},2*N+2),O=[20,20],at=p=>[O[0]+p[0],O[1]+p[1]];
@@ -310,18 +213,18 @@ const closureCase=(K,range)=>{
   const pass=k=>{for(let q=0;q<k;q++){s.derive();s._release();}},state=U=>U.map(u=>[0,1,2].map(i=>(s.bond[u*3+i]>=0?'b':'-')+(s.spent[u*3+i]?'s':'-')).join(' '));
   // the parent: complete, its founder held by its root's anchor side (a stand-in strand end w)
   const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1;buildStructure(s,Pu,K.tris,O[0],O[1]);
-  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,SE);s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);pass(10);
+  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,SE);s.bind(Pu[AK],K.anchorSide,Ps,0);pass(10);
   const P0=state(Pu);assert.ok(Pu.every(u=>s.op[u]===0),'the parent hears no open signal');
   assert.ok(s.bond[Pu[SC]*3+K.seedSide]<0&&!s.spent[Pu[SC]*3+K.seedSide],'the parent seed site is free');
   Bv.forEach((v,k)=>{placeTri(s,Bu[k],v.map(at));s.setType(Bu[k],K.types[k]);});
   // growth: the root on the parent's seed site, then each cell on its predecessor; a stall of 300 passes half way
   const held=()=>s.bond[Bu[0]*3+K.rootSide]===Pu[SC]*3+K.seedSide;
-  s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);s.caught(Bu[0]);pass(5);assert.ok(held(),'root let go');
-  for(let k=1;k<N;k++){const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,GLUE,Bu[k-1],j,GLUE);s.caught(Bu[k]);pass(k===25?300:4);assert.ok(held(),'the bud let go while growing (cell '+k+')');}
+  s.bind(Bu[0],K.rootSide,Pu[SC],K.seedSide);s.caught(Bu[0]);pass(5);assert.ok(held(),'root let go');
+  for(let k=1;k<N;k++){const [i,j]=sh(Bv[k],Bv[k-1]);s.bind(Bu[k],i,Bu[k-1],j);s.caught(Bu[k]);pass(k===25?300:4);assert.ok(held(),'the bud let go while growing (cell '+k+')');}
   pass(20);assert.ok(held(),'the complete bud let go before its anchor caught');
   assert.deepEqual(Bu.filter(u=>s.op[u]>0),Bu.filter((u,k)=>Math.abs(k-AK)<range),'only the waiting anchor emits; its range only is unspent');assert.ok(s.op[Bu[0]]>0,'the root hears no open signal');
   // the catch: the bud's anchor takes a strand end; completion releases the root from the parent
-  placeTri(s,Bs,refl(Bu[AK],K.anchorSide));s.setType(Bs,SE);s.bind(Bu[AK],K.anchorSide,GLUE,Bs,0,GLUE);pass(10);
+  placeTri(s,Bs,refl(Bu[AK],K.anchorSide));s.setType(Bs,SE);s.bind(Bu[AK],K.anchorSide,Bs,0);pass(10);
   assert.ok(s.bond[Bu[0]*3+K.rootSide]<0,'the bud did not let go after its catch');
   assert.ok(s.bond[Pu[SC]*3+K.seedSide]<0&&!s.spent[Pu[SC]*3+K.seedSide],'the parent seed site is not free again');
   // closure: the bud is now in the parent's starting state (same types, bonds and spent sides cell by cell), and so is the parent
@@ -345,7 +248,7 @@ test('closure (budKit, seed site on cell 45): the bud off the corner holds until
 const lysisCase=cutter=>{const K=S.budKit(5,7,null,false,{at:6,glue:'Z'},'-|',45),N=K.N,AK=K.anchorCell,SC=K.seedCell,s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:9},2*N+2),O=[20,20];
   const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,C=2*N+1;buildStructure(s,Pu,K.tris,O[0],O[1]);buildStructure(s,Bu,K.tris.map(t=>({...t,v:t.v.map(K.pose)})),O[0],O[1]);
   const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,'z--');s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);
+  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,'z--');s.bind(Pu[AK],K.anchorSide,Ps,0);s.bind(Bu[0],K.rootSide,Pu[SC],K.seedSide);
   const wall=[0,1,2].find(i=>s.bond[Bu[20]*3+i]<0);s.spent[Bu[20]*3+wall]=1;   // a spent side (labelled: set by hand) to see the fresh state after lysis
   for(let k=0;k<40;k++)s.derive();assert.ok(s.op[Bu[0]]>0,'the waiting bud holds (its anchor emits)');
   placeTri(s,C,refl(Bu[AK],K.anchorSide));s.setType(C,cutter);s.gridSync();
@@ -368,53 +271,14 @@ test('lysis: a part with a lysis side bound to a waiting anchor takes the bud ap
   const c=lysisCase('z@-|-|');assert.ok([0,1,2].some(i=>c.s.partner(c.Bu[6],i)===c.C),'the control part did not bind the anchor');
   assert.ok(!c.apart&&c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud came apart without a lysis side');assert.ok(!c.s.ev.lyse,'lysis without a lysis side');
   assert.ok(c.s.spent[c.Bu[20]*3+c.wall],'the spent side was cleared without lysis');});
-// receptor (run 20261004-2221, build): the kit with a lysis receptor 'Г@&' on E's outer side (openRange 50, more than the
-// 40 bonds from the anchor cell 6 to E); a parent holding a stand-in strand end, its complete bud on the seed site (cell
-// 45), waiting for a catch or (caught) holding a stand-in strand end; a cutter 'г@!-|-|' placed at the bud's receptor; no motion
-const receptorCase=caught=>{const K=S.budKit(5,7,null,true,{at:6,glue:'Z'},'-|',45,'Г@&'),N=K.N,AK=K.anchorCell,SC=K.seedCell,E=N-1,s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:50},2*N+3),O=[20,20];
-  const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1,C=2*N+2;buildStructure(s,Pu,K.tris,O[0],O[1]);buildStructure(s,Bu,K.tris.map(t=>({...t,v:t.v.map(K.pose)})),O[0],O[1]);
-  const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
-  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,'z--');s.bind(Pu[AK],K.anchorSide,GLUE,Ps,0,GLUE);
-  if(caught){placeTri(s,Bs,refl(Bu[AK],K.anchorSide));s.setType(Bs,'z--');s.bind(Bu[AK],K.anchorSide,GLUE,Bs,0,GLUE);}else{placeTri(s,Bs,[[1,1],[2,1],[1.5,1+Math.sqrt(3)/2]]);s.px[Bs]=-30;}
-  // the parent stood alone once (as every parent has: it was a bud that caught and let go), so its receptor is spent; then the bud's root binds its seed site
-  for(let k=0;k<60;k++)s.derive();s.step();s.bind(Bu[0],K.rootSide,GLUE,Pu[SC],K.seedSide,GLUE);for(let k=0;k<60;k++)s.derive();s.step();
-  const parentSpent=!!s.spent[Pu[E]*3+K.receptorSide],budSpent=!!s.spent[Bu[E]*3+K.receptorSide];
-  placeTri(s,C,refl(Bu[E],K.receptorSide));s.setType(C,'г@!-|-|');s.gridSync();
-  let bound=0,apart=0;for(let k=1;k<=120;k++){s.step();if(!bound&&s.partner(Bu[E],K.receptorSide)===C)bound=k;if(!apart&&Bu.every(u=>!s.bonded(u)))apart=k;}
-  const whole=Pu.slice(1).every((u,k)=>[0,1,2].some(i=>s.partner(u,i)===Pu[k]))&&s.partner(Pu[AK],K.anchorSide)===Ps;
-  return {s,K,Bu,parentSpent,budSpent,bound,apart,whole};};
-test('receptor: a cutter binds the receptor on the last cell of a complete bud waiting for its catch and takes the bud apart; a bud that has caught and its parent are immune',()=>{
-  const w=receptorCase(false);assert.ok(w.parentSpent,'the parent\'s receptor (holding its strand) is not spent');assert.ok(!w.budSpent,'the waiting bud\'s receptor is spent');
-  assert.ok(w.bound>0,'the cutter did not bind the waiting bud\'s receptor');assert.ok(w.apart>0,`the waiting bud did not come apart (bound at pass ${w.bound})`);assert.ok(w.whole,'the parent did not stay whole');
-  const c=receptorCase(true);assert.ok(c.budSpent,'the receptor of a bud holding a strand is not spent');assert.ok(!c.bound&&!c.s.ev.lyse,'a cutter bound or lysed a bud that has caught');
-  assert.ok(c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud that has caught came apart');});
-// scavenger (designed in explore run 20261005-0721, NEXT step 1a; not yet in a demo): two welded triangles whose anchor side
-// Z@|!& holds a strand's high end, lyses it (!) and stops the lysis at that bond (&); its '@' keeps free monomers off it
-// (without it the freed high end, 'z' on its spare edge, glue-bound the side again every other pass); a glued attach side
-// no part matches (Ж@|) emits the open signal, so the & side never hears "complete" and is never spent. Without & the
-// lysis comes back and takes the scavenger apart too
-const scavengerCase=(amp,ow=0)=>{const {s,founders,holds}=createWorld({seed:5,size:16,founders:[{gaps:[1,1,1],faces:'aAaA',hold:'z',x:8,y:8}],params:{sigma:0,sigmaRot:0,lysOneWay:ow}});
-  const [A,A2]=holds[0],F=founders[0];s.setType(A,s.typeName(A).replace('Z|','Z@|!'+(amp?'&':'')).replace('-|','Ж@|'));
-  for(let k=0;k<5;k++)s.derive();for(let k=0;k<12;k++)s.step();   // the open signal settles first (the scavenger is prepared so)
-  return {s,A,A2,F,apart:F.every(u=>!s.bonded(u)),whole:[0,1,2].some(i=>s.partner(A,i)===A2),free:[0,1,2].every(i=>!(s.anc[A*3+i]&&s.glue[A*3+i]===s.glue[A*3+[0,1,2].find(j=>s.lys[A*3+j])])||s.bond[A*3+i]<0),
-    spent:[0,1,2].some(i=>s.lys[A*3+i]&&s.spent[A*3+i])};};
-test('scavenger: an anchor side Z@|!& takes apart the strand it holds into monomers and stays whole, its anchor free and unspent; without & it dies too',()=>{
-  const w=scavengerCase(true);assert.ok(w.apart,'the held strand did not come apart');assert.ok(w.whole,'the scavenger came apart');assert.ok(w.free,'the anchor side still holds');assert.ok(!w.spent,'the anchor side was spent');
-  const c=scavengerCase(false);assert.ok(c.apart,'the held strand did not come apart (no &)');assert.ok(!c.whole,'without & the scavenger stayed whole');});
-// candidate (w), run 20261008-1522: with lysOneWay a lysis side passes no lysis back, so the scavenger needs no '&'
-test('lysOneWay: a lysis side lyses what it holds and passes no lysis back (the scavenger without & stays whole)',()=>{
-  const w=scavengerCase(false,1);assert.ok(w.apart,'the held strand did not come apart');assert.ok(w.whole,'the scavenger came apart with lysOneWay');});
-// candidate (v), run 20261008-1951: with lysJoint a lysis side lyses no partner across a joint, so a lock z! raises a key
-// that binds by Z@& and lyses a plug Z@ (no &); with lysOneWay too, the lock's carrier survives the plug (nothing moves
-// here, so a lysed part binds again at once and is lysed again: the test reads lysis events and whether the lock is whole)
-const lockCase=(part,params)=>{const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fz!-'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:part,loose:true}];
-  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10,...params},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(8);
+// rule (v), core review run 20261008-2221 (built as the option lysJoint in run 20261008-1951): no lysis crosses a joint,
+// so a lock z! raises a key that binds by Z@& and lyses a plug Z@ (no &), and the plug's lysis comes back across the
+// lock's bond (not a joint) into the lock's carrier (nothing moves here, so a lysed part binds again at once and is lysed
+// again: the test reads lysis events and whether the lock is whole)
+const lockCase=part=>{const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fz!-'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:part,loose:true}];
+  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(8);
   return {held:[0,1,2].some(i=>s.partner(0,i)===2),lysed:!!s.ev.lyse,whole:s.partner(0,0)===1};};
-test('lysJoint: a lock z! raises a key with & (a joint) and lyses a plug without; with lysOneWay the lock survives its catch',()=>{
-  const k=lockCase('Z@&c@-',{lysJoint:1});assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
-  const k0=lockCase('Z@&c@-',{});assert.ok(k0.lysed&&k0.whole,'without lysJoint the key was not lysed (nothing comes back across its joint)');
-  const p=lockCase('Z@--',{lysJoint:1});assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'without lysOneWay the lysis did not come back');
-  const p1=lockCase('Z@--',{lysJoint:1,lysOneWay:1});assert.ok(p1.lysed&&p1.whole,'with lysOneWay the lock did not survive its catch');});
-test('worlds: founder census reads faces and gaps',()=>{const {s}=createWorld({seed:1,size:14,founders:[{gaps:[1,0,2],faces:'abab'}]});
-  const c=census(s);assert.equal(c.length,1);assert.equal(c[0].faces,'abab');assert.equal(c[0].gaps,'102');});
+test('lysis stops at a joint: a lock z! raises a key with & and lyses a plug without, whose lysis comes back into the lock\u2019s carrier',()=>{
+  const k=lockCase('Z@&c@-');assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
+  const p=lockCase('Z@--');assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'the lysis did not come back');});
 console.log(`${passed} tests passed`);

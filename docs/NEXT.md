@@ -7,6 +7,20 @@ History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backl
 review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
 direction check: IDEAS "Eight slices on the lock" (run 2151).
 
+**Slice in progress (autorun run 20261008-2221, core-review; branch `core-review-2221`): priority 32 whole.**
+Goal: (v) becomes the rule (lysis never crosses a joint, by contact or relay; the option `lysJoint` goes), (w) is removed
+(`lysOneWay`: no gain in either long test), (u) chain copying leaves the core (zip, gap, need, fn, fill, bond kinds,
+dock, fill, close, release, the anchor's catch and `_snapBody`; founder strands in `world.js`; checks `copy`,
+`imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis`, and with (v)/(w) `lock-guard-0`,
+`trap-oneway(-c)`). Done when: `node tri/test.js` passes; the branch suite passes, and every world that an observation
+hook found untouched by (v) is byte for byte main's (CHECK_SAVE, `diff`). Predicted: worlds with a `!` side that holds
+an `&` part change (the nursery family `z!`, `lysis`'s demo for its stand-in end); every other pair world is identical
+(no strand exists there, and the removed rules draw no random number without one); `lock-guard` passes without
+`lysOneWay` (the lock dies with each plug it lyses, but 20 plugs are few). Stop: if (v) breaks 3 or more checks beyond
+the nursery family, keep it an option and record why. Running: the baseline suite on main `1284bb4` in worktree
+`../wt-base` (`CHECK_SAVE=runs/base`, hook `runs/ld.jsonl`: per world the passes where `lysJoint`/`lysOneWay` would
+change a lysis value; the hook is in this run's scratchpad, its logic in the handoff below).
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
