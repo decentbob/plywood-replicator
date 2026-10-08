@@ -112,7 +112,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    for a lock: no needed side of the pair turns; a public lock turns but cannot be guarded in the current core, its
    worlds die of plugs and catchers or privatize; a trap that reads the joint (candidate (v), `lysJoint`) guards it and
    the root letter turns 11-19 times in 4 of 8 worlds (1951; `seal-pool`, `lock-guard`, `lock-guard-0`).
-   Open: NEXT's priorities.
+   Review-intent run 2151 (IDEAS "Eight slices on the lock"): the letters turn, the shape does not (every body two
+   cells); a strip has one key and one lock, so a spare lock is a cell with two sites (`C@z!z!`, already arisen):
+   duplication, then divergence, is the next shape step; the lock line gets no new guard parameter until (v) and (w)
+   are settled, and then a shape before a rule; chain copying (u) is retired; the stockless world under copy error
+   becomes the line's preset. Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
