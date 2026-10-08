@@ -17,9 +17,10 @@ not statistics.
 - **Who pays for a lock: no side of the pair is both needed and turnable; a public lock turns but cannot be guarded and
   its worlds die of its parasites; a trap that reads the joint (candidate (v), `lysJoint`) guards it, and the loop of
   letters runs on** (NEXT priority 33; derivation in IDEAS "Who pays for a lock"; RULES candidate (v)). New parameter
-  `lysJoint` (default 0: every output unchanged, BYTECHECK): a lysis side lyses no partner across a joint, so lysis never
-  crosses a joint. New checks `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0` (2 of 2); `tri/census.js --pool` (`--joint`: a lock with `!` counts as working); test
-  "lysJoint".
+  `lysJoint` (default 0: every output unchanged; a trap world with 20 plugs under copy error, 30k, and the lysis demo
+  byte for byte main's): a lysis side lyses no partner across a joint, so lysis never crosses a joint. New checks
+  `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0` (2 of 2); `tri/census.js --pool` (`--joint`: a
+  lock with `!` counts as working); test "lysJoint".
   - **Derivation (before the batches).** Recognition is one glue pair; copy error changes one side of one copy. A lock
     its carrier needs is frozen (the nursery's root and own side on one type; the front and the second cell's attach,
     both needed); a lock turns only where one side drifts, i.e. where its carrier does not need it (the second cell's

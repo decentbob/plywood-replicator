@@ -22,15 +22,17 @@ cell's place, carrying no lock) and nurseries whose second cells carry no lock o
 guarded worlds died of these.
 
 **Handoff status (autorun run 20261008-1951, explore): priority 33 done** (settled by derivation, then measured). One
-core candidate built as a parameter: `lysJoint` (RULES (v), default 0: every output unchanged, BYTE), test "lysJoint".
-New checks `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0` (2 of 2) (`node tri/check.js seal-pool
-lock-guard lock-guard-0`); `tri/census.js --pool [--joint]` (the pool-raised class: majority root and its turns, nursery
-share, second cells with a working lock, sealed, trap). Records: INNOVATIONS run 1951, IDEAS "Who pays for a lock",
-RULES (v) with its result, ROADMAP (row, backlog A 33), picture `lock-guard.png`. The batches (`runs/` is not kept):
-the stockless world `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|- C@-z|' TRI_PARAMS='{"pErr":0.01}'`, seeds 1-4, 480k, 14-18
-minutes per world (E2); E3 with `PA2='Z@&c@|-. C@-z|'`; E4 with `PA2='Z@&c@|- C@-z|!'` and `"lysJoint":1,"lysOneWay":1`
-(E4j: `"lysJoint":1` alone); read with `node tri/census.js --pool [--joint] runs/x.txt`. The full suite was not rerun
-(a parameter at default 0 and three checks; a world with lysis byte for byte main's). Nothing is running.
+core candidate built as a parameter: `lysJoint` (RULES (v), default 0: every output unchanged, two worlds with lysis
+byte for byte main's), test "lysJoint". New checks `seal-pool` (4 of 4), `lock-guard` (4 of 4), control `lock-guard-0`
+(2 of 2) (`node tri/check.js seal-pool lock-guard lock-guard-0`); `tri/census.js --pool [--joint]` (the pool-raised
+class: majority root and its turns, nursery share, second cells with a working lock, sealed, trap). Records: INNOVATIONS
+run 1951, IDEAS "Who pays for a lock", RULES (v) with its result, ROADMAP (row, backlog A 33), picture `lock-guard.png`.
+The batches (`runs/` is not kept): the stockless world `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|- C@-z|'
+TRI_PARAMS='{"pErr":0.01}'`, seeds 1-4, 480k, 14-18 minutes per world (E2); E3 with `PA2='Z@&c@|-. C@-z|'`; E4 with
+`PA2='Z@&c@|- C@-z|!'` and `"lysJoint":1,"lysOneWay":1` (E4j: `"lysJoint":1` alone); read with `node tri/census.js
+--pool [--joint] runs/x.txt`. The full suite was not rerun (a parameter at default 0 and three checks; a trap world
+under copy error and the lysis demo byte for byte main's; `node tri/check.js seal-pool lock-guard lock-guard-0`: 3 of 3
+pass, 364 s). Nothing is running.
 
 **Next step (rotation 82, review-intent)**: direction check with this run's result (the lock theory; whether the pair's
 next line is the guarded public lock, i.e. the stockless world with `lysJoint`). Then rotation 83 (core-review: adopt or
