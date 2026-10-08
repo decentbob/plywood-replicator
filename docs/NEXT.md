@@ -21,7 +21,7 @@ template meanwhile, while the commons class keeps its side free and raises on th
 the site turn it back** (check `commons-turn`, 4 of 4: they spread as the class fills its sites, the class dies out, the
 nursery returns): a loop across two levels. Stockless founder at `pErr` 0.005 (the mutagen's supply): letters turned
 over in 2 of 4 (rate alone does not explain run 0651's difference), one by a new door: a head with a site on its own
-inert side raised the complementary root in place (`C@|DZ@&` to a d nursery `C@|Dd@&`). My theory before the batch
+inert side raised the complementary root in place (`C@|DZ@&` to a d nursery `C@|Dd@&`). The theory before the batch
 predicted the commons class lost (wrong: it compared success per copy, not copies per head); the predictions and their
 outcomes are in INNOVATIONS run 1021. New checks on the branch: `commons` 4 of 4, `commons-c` 4 of 4, `commons-turn` 4 of 4 (601 s together); no rule, physics or shared-structure change, so the suite was not rerun (tests 44 of 44). Nothing is running. Batches: `runs/p23*.json` (commands in
 INNOVATIONS run 1021); the `types:`/`kinds:` readers used were throwaway scripts (counts of root letters and of
