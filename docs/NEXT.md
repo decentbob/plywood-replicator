@@ -95,8 +95,18 @@ a command above uses.
   Run 1821: the classes are at most the limiting resources and every copied part is a blank, so (t) is the one way in the
   core to a resource kinds make; open: what keeps the second blank type in supply (`PAHB=2` returns plain blanks).
   Run 1921: **built as the option `copyGlue`** (default off) with the drive `PAHB=3` (lettered blanks): a class copied
-  only from its own deaths, which is no resource (it makes them from plain blanks); exclusion as without it. Remove at
-  the next core review unless a slice uses it.
+  only from its own deaths, which is no resource (it makes them from plain blanks); exclusion as without it. **Removed**
+  in core review run 2051 (code at `25c68b9`); a new attempt answers first what keeps a second blank type in supply.
+- (u) *Retire chain copying with the frozen lineage* (core review run 2051, from its coverage run): chain copying (the
+  relay zip, the values gap, need, fn, the state fill, the dock, fill, close and release rules, four bond kinds) fires
+  only in `copy`, `imprint` (`g`, `p`) and `budcycle`; the anchor's catch of a strand end, with its physics exception
+  (the strand moves as one body, `_snapBody`), only in `budcycle` (23 catches in the suite). The pair line uses neither.
+  Retiring both would leave contact copying as the one way to copy and roughly halve `tri/sim.js`, at the cost of the
+  checks `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis` (code stays in git) and of
+  the lineage returning as it is (its founder genome is a held strand). A capability decision, not a review's: weigh it
+  at review-intent 82 (or a harden that cuts the lineage's checks, run 73), with the question whether a heritable
+  sequence (a genome) will be needed for complex evolution and whether contact copying of a held strand (`imprint g`)
+  could carry it.
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
@@ -109,8 +119,9 @@ a command above uses.
   lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
 - Settled, keep: (f) the seed site `y` is copied while no bud sits on it (the pair relies on it). Not needed: (k).
-  Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921. Nothing else in the core is unused (RULES,
-  Core inventory).
+  Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051. Nothing else in the
+  core is unused (RULES, Core inventory, run 2051 coverage); `pBond` is never set below 1 (removing it changes the
+  random stream, not the rules: take it with a run that changes outputs anyway).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
 - Core review: same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);

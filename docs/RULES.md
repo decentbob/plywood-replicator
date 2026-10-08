@@ -59,25 +59,32 @@ removed on 2026-10-03 and is the lysis side since 2026-10-04).
 - Labelled exceptions used by the chemistry: binding places a free triangle flush in a free site; an anchor's catch
   moves the caught strand (with anything bonded to it) as one body into a free flush place along a clear path.
 
-## Core inventory (2026-10-06, core review run 20261006-1920; table from run 20261005-1921)
-Users from the kept demos and checks ("demos": which of `copy`, `ring`, `imprint` (its rings, its `g` strand and its
-`p`/`m` cells), `pool`, `budpool`, `budcycle`, `closure` carry or fire it; `budpore` was retired in run 0820). Dates:
-when the item entered the core (the repository restarted on 2026-10-01).
+## Core inventory (2026-10-07, core review run 20261007-2051)
+"Fires in": the demos whose check worlds carry the mark or fire the rule, from the coverage hook over the whole suite
+(52 checks, 168 worlds, run 2051; `pair` covers its 39 checks, `imprint` its rings, `g` strand and `p` cells). Dates: when
+the item entered the core (the repository restarted on 2026-10-01).
 
-| Item | Kind | Used by | Since |
+| Item | Kind | Fires in (run 2051) | Since |
 |---|---|---|---|
-| `.` close-only | mark | ring kits (the root's closure side), `imprint`'s rings | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121) |
-| `@` attach | mark | ring kits, `budKit` (`budpool`, `budcycle`, `closure`), `pool`, the cell anchor `Z@\|` (`imprint p`) | 10-01 |
-| `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
-| `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
-| `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
-| `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`), `г@!-\|-\|` at a receptor `Г@&` on E (`budcycle` `BCQ`, run 2221) | 10-04 (run 2051) |
-| zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
-| open (`openRange` 120) | relayed signal | growth and `&` release | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
-| lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
-| gap, need, fn | exposed values (one bond) | chain copying (`copy`, `imprint`, `budpool`, `budcycle`) | 10-01; nb merged into gap 10-07 (run 2051) |
-| fill | state | copying | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
-| spent | state | `&` sides | 10-01 |
+| `.` close-only | mark | `ring` and `imprint` rings (the root's closure side), `pair` (`rare-waste`'s `c@\|C.Z@&`; mutants); glue closures: `pair`, `ring`, `imprint` | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121); no copy side binds by it 10-07 (run 2051) |
+| `@` attach | mark | every demo with growth: `pair`, `strip`, `ring`, `imprint`, `budpool`, `budcycle`, `lysis` | 10-01 |
+| `&` completion release | mark | `pair`, `strip`, `budpool`, `budcycle` (releases); `imprint`, `lysis` carry it | 10-01 |
+| `\|` anchor (seed site, front, catch) | mark | as a glue side everywhere (`pair`'s fronts `c@\|` and seed sites `z\|`); **the catch of a strand end only in `budcycle`** (23 catches in its 4 worlds) | 10-01; catches busy strands 10-02; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
+| `?` copy side | mark | `pair`, `strip`, `imprint`, `budpool`, `budcycle` (23 million copies, nearly all in `pair`) | 10-02 |
+| `!` lysis side | mark | `lysis`, `budcycle` (`BCQ`); in `pair` only as a mutant mark (its lyses come from the hazard drive) | 10-04 (run 2051) |
+| zip (chain) | relayed signal | chain copying: `copy`, `imprint` (`g`, `p`), `budcycle` (dock 812, fill 597, close 597, release 745 in the suite) | 10-01; from a held high end only 10-04 (run 0820) |
+| open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `budcycle` | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
+| lysis (one bit; not across `&` bonds) | relayed signal | `pair` (every hazard death), `lysis`, `budcycle` | 10-04 (run 2051) |
+| gap, need, fn | exposed values (one bond) | chain copying, as zip | 10-01; nb merged into gap 10-07 (run 2051) |
+| fill | state | chain copying, as zip | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
+| spent | state | `&` sides, as `&` | 10-01 |
+
+**Counts (2026-10-07, run 2051):** 6 marks, 3 relayed signals, 3 exposed one-bond values (was 4: nb merged into gap), 2
+states, no option (was 1: `copyGlue` removed). Every mark and rule event still fires in the suite. Two parts of the core
+serve only frozen or old demos: chain copying (zip, gap, need, fn, fill and the dock, fill, close and release rules:
+`copy`, `imprint`, `budcycle`) and, inside it, the anchor's catch of a strand end with its physics exception (the
+caught strand moves as one body: `budcycle` alone). The pair line uses neither. Retiring them is a capability decision
+(NEXT, Core-change candidates (u)), not a review's.
 
 **Counts (2026-10-06, run 1920):** unchanged (6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no
 option). The open signal now stops at `&` joints, the condition lysis already had (one condition for both relays), and a
