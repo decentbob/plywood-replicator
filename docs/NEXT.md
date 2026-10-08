@@ -5,6 +5,30 @@ History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun l
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
 
+**Current slice (autorun run 20261008-1021, build, in progress): priority 23, a second class in the head nursery
+under copy error.** Goal: theory of when an in-place class lets a second root letter in, checked in the head-nursery world
+(`PAW=1 PAF= PAM=0 PA2='Z@&c@|z C@-z!'`) at `pErr` 0.005 and 0.01 to 480k (seeds 1-4 each), with the stockless founder
+at 0.005 to 240k beside it (rate against place). Done when the batch is read against the predictions below and the
+mechanism it shows (or the gate it finds) has a check at 3 of 4. Running: `node tri/batch.js runs/p23.json` (jobs
+`a5_`, `a10_`, `b5_`; file in the run's NEXT commit history: env as the Commands' copy-error line, steps 480000, `b5_`
+240000 with `PA2='Z@&c@|- C@-z|'`).
+Theory (before the batch). Sites for a root letter X: heads' own sides (letter z only) and second cells' free sides. A
+glue x on the second cell's inert side (`C@xz!`) raises nobody while no X root exists, so it drifts (neutral; second
+cells are copied in the pool). A root mutant `X@&c@|z` (one error) is born on its parent's `z` side, cannot bind it and
+goes to the pool, where it lives at most 100 steps (`PAD=1`): it is a **pool class** (in-place share 0), born only on x
+sites. The resident's births are about 0.9 in place, so per copy Z succeeds with about 0.9 + 0.1 q_z and X with q_x (the
+chance a pool head reaches a free x site within its life), less the time its own `z` side holds leaked Z heads. So X is
+at best near neutral, only while x is on most second cells, and negatively frequency dependent (an x site that holds an
+X head is no template, so `C@xz!` is copied less as X grows). A nursery of the new letter (`X@&c@|x`) needs a second
+error in an X head: a three-step path (site drifts, pool class, nursery), and two nurseries are neutral to each other
+(same in-place share, shared blanks and second cells): drift, not coexistence. Rough rates: about 25k head copies per
+100k steps, a given root letter per copy pErr/6/53, so 0.4 (0.005) or 0.8 (0.01) mutants of one letter per 100k steps.
+Predictions: P1 a glue on the second cell's inert side above 20% of second cells at some census in at least 3 of 4
+worlds per rate; P2 a second root letter above 5% of heads at some census in at most 1 of 4 worlds per rate, and its
+complement on at least 10% of second cells before it; P3 no pool class replaces the nursery; P4 alive 4 of 4 at 0.005,
+at least 3 of 4 at 0.01 (plugs); P5 stockless founder at 0.005: root letter turns over in at most 1 of 4 by 240k (if 2
+or more, place matters beyond rate).
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
