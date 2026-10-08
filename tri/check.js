@@ -285,6 +285,18 @@ const CHECKS=[
         const h=ty.filter(([,c])=>c===H||one(c)),n=h.reduce((a,[k])=>a+k,0);for(const [k,c] of h)if(c!==H&&k/n>best){best=k/n;bt=c;}}
       return [best>=0.005&&I.end>=380,`commonest head variant ${bt} at ${(100*best).toFixed(1)}% of heads; ${I.end} individuals at 60k`];}},
   ];})(),
+  // run 20261008-0651 (explore): a cheat's seed site is a stepping stone for a new root letter (IDEAS "Variation where
+  // copies are made"). No mutation. Founder world without stocks; 10 cheats 'C@-i|' (seed sites of a letter no root has,
+  // on founder heads) at 10k spread; 10 I-hosts ('I@&c@|-' with 'C@-i|') at 50k find the cheats' free sites and hold
+  // beside the Z roots (42-70% of individuals at 70k). Control: no cheats first: the I roots are lost by 60k (their i
+  // cells spread as cheats instead)
+  ...(()=>{const env={PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|- C@-z|',PAEN:'10',PA1T:'50000',PAKR:'I@&c@|-',PAKS:'C@-i|'},
+    share=o=>{const I=indiv(o);if(!I)return null;const n=I.top.filter(([,k])=>k.split('+').includes('-I@&c@|')).reduce((a,[v])=>a+v,0);return {n,end:I.end,f:I.end?n/I.end:0};};return [
+  {id:'cheat-root',cap:'A common cheat site lets a new root letter in: I roots entered after i cheats hold beside the Z roots',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:450,env:{...env,PA3T:'10000',PA3:'Z@&c@|- C@-i|'},
+    pass:(L,o)=>{const r=share(o);if(!r)return [false,'no result'];return [r.f>=0.2,`at 70k ${r.n} of ${r.end} individuals with an I root`];}},
+  {id:'cheat-root-c',cap:'  control: without cheats first, the I roots are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:450,env,
+    pass:(L,o)=>{const r=share(o);if(!r)return [false,'no result'];return [r.f<0.05&&r.end>=300,`at 70k ${r.n} of ${r.end} individuals with an I root`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
