@@ -59,6 +59,15 @@ test('copy side: copying is glue-blind (a copy side binds a side whatever either
     const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fA.b@|'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:blank,loose:true}];
     const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
     assert.equal(s.ev.copy,1,blank);assert.equal(canon(s.typeName(2)),canon('fA.b@|'));symmetric(s);}});
+test('copy error (pErr, run 20261008-0651): a copy takes one side wrong (a glue, or one mark toggled); the template stays',()=>{
+  const {TOK}=require('./sim'),sides=x=>[...x.matchAll(TOK)].map(m=>m[0]);let diff=0;
+  for(let seed=1;seed<=40;seed++){const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fA.b@|'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:'-?-?-?',loose:true}];
+    const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10,seed,pErr:1},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(5);
+    // (a copy whose error gave it a copy side '?' is a blank again and may copy once more: read the first copy)
+    assert.ok(s.ev.copy>=1&&s.ev.copyError===s.ev.copy);assert.equal(s.typeName(0),'fA.b@|','the template is unchanged');
+    // the copy is the template turned about the shared edge: compare it side by side with the rotation that differs least
+    const c=sides(s.copyLog[0][2]),T=sides('fA.b@|'),d=Math.min(...[0,1,2].map(r=>[0,1,2].filter(k=>c[k]!==T[(k+r)%3]).length));assert.ok(d<=1,'at most one side differs: '+s.copyLog[0][2]);diff+=d;}
+  assert.ok(diff>=30,'nearly every error changes the copy ('+diff+' of 40)');});
 test('copy side: only a triangle free when the pass began copies, and never by a close-only copy side (run 20261007-2051)',()=>{
   // two prepared triangles welded only by their '?' sides stay as they are (before, the lower index took the other's type)
   {const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'f?Ab'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F?'}];

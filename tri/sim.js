@@ -45,7 +45,8 @@ const CANON=new Map();
 const canon=name=>{let c=CANON.get(name);if(c!==undefined)return c;const t=[...name.matchAll(TOK)].map(m=>m[0]);c=[0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];
   if(CANON.size>=1e5)CANON.clear();CANON.set(name,c);return c;};
 
-const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,pErr:0};
+const ERRG=[...'-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(gcode);   // glues a copy error draws from
 
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
@@ -235,11 +236,15 @@ class TriSim extends Physics{
   // 20261007-2051, before which a prepared triangle welded only by a '?' side was rewritten too) and is bonded by a copy
   // side '?' and by nothing else takes
   // its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the partner turned about the
-  // shared edge; glues and marks) and lets go (copyLog, observation only: time, copy, its new type, its template)
-  _copy(){const A=['glue','cOnly','att','done','anc','cpy','lys'];
+  // shared edge; glues and marks) and lets go (copyLog, observation only: time, copy, its new type, its template).
+  // Copy error (pErr, run 20261008-0651): with probability pErr one side of the copy, drawn at random, is taken wrong: with
+  // 1/2 a glue drawn from inert and a..z, A..Z, else one of the six marks toggled
+  _copy(){const A=['glue','cOnly','att','done','anc','cpy','lys'],pe=this.p.pErr;
     for(let u=0;u<this.n;u++)if(this.role[u]===FREE)for(let i=0;i<3;i++){if(!this.cpy[u*3+i])continue;const q=this.bond[u*3+i];if(q<0||this.bond[u*3+m3(i+1)]>=0||this.bond[u*3+m3(i+2)]>=0)continue;
       const w=(q/3)|0,j=q%3,src=[0,1,2].map(k=>A.map(a=>this[a][w*3+m3(j+k)]));
       for(let k=0;k<3;k++){const x=u*3+m3(i+k);A.forEach((a,z)=>{this[a][x]=src[k][z];});this.spent[x]=0;}
+      if(pe>0&&this.rng()<pe){const x=u*3+Math.floor(this.rng()*3);if(this.rng()<0.5)this.glue[x]=ERRG[Math.floor(this.rng()*ERRG.length)];
+        else{const a=A[1+Math.floor(this.rng()*6)];this[a][x]^=1;}this.count('copyError');}
       for(let k=0;k<3;k++)this.cut(u,k);this.count('copy');(this.copyLog||(this.copyLog=[])).push([this.t,u,typeName(this,u),w]);break;}}
   // completion release '&': the bond on this side is cut once its triangle hears no open signal (its part is complete);
   // the side is then spent: it binds nothing again, so the gap it leaves cannot be refilled
