@@ -28,6 +28,39 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A nursery is a crowd; a nursery in place is heredity (build run 20261008-0121, 2026-10-08)
+
+Derived first, then checked in the world without stocks (INNOVATIONS run 0121). Notes, not the user's words.
+- **Every free side is a template, whatever the part does.** Contact copying copies an attached part through each of
+  its free sides that is not an anchor, so a part's share changes only through (i) how many templates it shows and for
+  how long it stays attached, and (ii) where its copies land relative to the sites that take them. A seed site is a
+  public good: it raises whatever root arrives.
+- **A nursery is a crowd.** A host carries a waiting head on its seed site much of the time (36-44% in the stockless
+  world); that head is a template too and shares the blanks that reach the host. So a body that raises nobody keeps its
+  blank flux for its own parts and is copied faster (measured 1.2-1.5 times) and, under the whole-body hazard, dies less
+  (no bud to be hit with). Raising costs copies: the cost of reproduction in this world.
+- **Hence cheats hold at a balance, and the balance is set by heredity.** With c the cheat's copy advantage, D the
+  host's death rate over the cheat's, λ the share of a host's births whose part comes from its own parent, host births
+  B(λ + (1-λ)(1-p)) and cheat births B(1-λ)p (p the cheat's share of the free parts) give a cheat that invades iff
+  D c (1-λ) > 1 and settles at r* = (D c (1-λ) - 1)/(c λ) cheats per host: a stable, frequency-dependent coexistence.
+  Measured λ for the root: 0.30 when the seed site sits on the second cell. Cheats spread in 27 of 28 invasions (`q|`, `z!`, `z|!`), a
+  marked host in 0 of 8 (above 20%).
+- **The cheat is not specific to a letter, so there is no Red Queen of letters.** Any second cell that raises nobody
+  is a cheat of every host with the same front; it is made by mutation from the host's own parts. A host that changes
+  its seed letter makes cheats of its new letter at the same rate. (b) and (c) of priority 21 fail for this reason.
+- **A nursery in place is heredity.** If the seed site is a template of the very part it raises, a parent's copies
+  are born at its own seed site and bind it at once: births in place 0.90 (against 0.30). Then (1-λ)c is far below 1,
+  and cheats cannot get in. Evolution found this in 4 of 8 stockless worlds: the head's plain side became the
+  complement of its own root (`Z@&c@|z`), so heads raise heads on their own side, and the second cell, no longer a
+  nursery, took the root-lysing seed site (`-z!C@`) that had spread as a cheat. Once there it held (to 720k in one
+  world). It is the body plan the stocks made impossible (a stock part never mutates).
+- **What it opens.** (1) A world started from the evolved design: in-place heredity should remove the Allee barrier of
+  a rare class (IDEAS run 1921: a rare class wastes its parts in the pool; in place there is no pool for the root), so
+  a second head-nursery class might invade where none could before. (2) Length arose by mutation in 3 of 8 worlds as
+  chains of second cells whose attach letter complements a seed site (`-zZ@`, `-P|p@`, up to 6 cells), and both
+  collapses followed it: a chain that never lets go is the stockless world's sink, as heads that never let go were the
+  stock world's at 3x.
+
 ## Twenty slices on the pair: the web is bounded by resources; the stocks block coevolution (direction check, review-intent run 20261007-2021, 2026-10-07)
 
 Weighed after priorities 10-20 (runs 1920-1921). Notes, not the user's words.

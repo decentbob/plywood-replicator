@@ -12,6 +12,53 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-0121, build)
+
+- **The world without stocks evolves its body plan: cheats that raise nobody hold beside their hosts, and the nursery
+  moves onto the head** (NEXT priority 21; theory in IDEAS "A nursery is a crowd; a nursery in place is heredity"). No
+  rule or demo change: the stockless world is `PAW=1 PAF= PA2='Z@&c@|- C@-z|'` (the founder pair with the standard
+  letters among 1000 blanks; its second cell is copied, so its seed site can mutate). New checks `world-free` (4 of 4),
+  `seed-cheat` (4 of 4), `seed-cheat-c` (control), `seed-open` (4 of 4); new observation hook `tri/copyrate.js`.
+  - **Priority 21's predictions** (8 worlds of 240k, seeds 1-8; the stock world `PAW=1` beside it, seeds 1-4):
+    (a) cheats arise and hold: **yes, but not on letters**: the cheat is a second cell that raises nobody (a seed site
+    of another letter; `z!`, a lysis mark that kills each root landing there; in seed 8 a second head, two heads front
+    to front with no seed site), held beside its hosts at 0.5-8 cheats per host in 7 of 8 (not seed 5); (b) the leading root letter turns over: **no** (Z kept in 7 of 8; seed 2 went Z, n, z, D through
+    changes of body plan, not cycles); (c) two or more classes for most of the second half: **no** (one class in 8 of
+    8). The theory written before the batch predicted (b) and (c) failing (NEXT, slice record). The stock world on
+    today's `main`: one class, 3 of 4 alive at 240k (seed 3 dies at about 150k).
+  - **What evolved instead** (stockless, seeds 1-8). The seed site loses its anchor (`z|` to `z`, a template while no
+    bud sits on it) or gains a lysis mark (`z!`) in 5 of 8 by 120k (seeds 1, 3, 4, 6, 7; the others: other seed letters
+    in 2 and 8, an `&` mark on it in 5). **The nursery moved onto the head** in 4 of 8
+    (seeds 4, 7 at 135-160k, seed 1 at about 360k in a continuation to 720k, seed 2 by another path at 145k): the
+    head's plain side mutated to `z`, the complement of its own root, so a head raises heads on its own side
+    (`Z@&c@|z`), and the second cell became the root-lysing `-z!C@`; the same design three times. It swept within
+    20-40k (410-440 individuals against 300-370 before) and held to the end of the run in the three (seed 1 to 720k);
+    seed 2 left it (`c@|mz@&`) and collapsed at 235k. Longer bodies arose in 3 of 8 (chains of second cells whose
+    attach letter complements a seed site: `-P|p@`, `-zZ@`, up to 6 cells; a 3-cell kind in seed 2); they preceded
+    both collapses (seeds 2 and 6, at 230-235k).
+  - **Why cheats hold (invasion tests, no mutagen, 10 invaders entered at 20k into the founder world, 60k, seeds 1-4
+    each; `runs/inv.json`, `inv2.json`, `iw.json`).** A seed site that raises nobody (`q|`) invades to 0.9-3 cheats
+    per host (4 of 4), also with the hazard per individual (`PAHU=2`, 4 of 4, to about 1:1); `z!` (two templates:
+    the seed site has no anchor) to 2.5-5 per host (12 of 12, also with `PAHU=2` and without `PAHB`); the anchored
+    lysing site `z|!` in 7 of 8; a marked host (`C@wz|`: a glue on its copy side that nothing binds) does not spread
+    (lost by 40-50k in 7 of 8, 15% in the eighth). The anchorless host (`C@-z`) replaces the founder in 4 of 4 by 45k.
+    Copy rates (`tri/copyrate.js`, from 25k): the cheat's parts are copied 1.2-1.5 times as often as the host's
+    (S 13-29 against 11-19 copies per 10k steps): a host carries a waiting head on its seed site 36-44% of the time,
+    and that head, itself a template (8-13), takes a share of the blanks reaching the host. Births in place
+    (`PARP=1`): 0.30 of newborns' roots copied by their own parent in the founder design (0.31 anchorless), **0.90**
+    in the head nursery (seed 4 resumed at 240k).
+  - Pictures: [seed-cheat.png](pictures/seed-cheat.png) (cheat second cells `-z!C@` red beside hosts `-z|C@` green,
+    heads grey; seed 1 at 60k, invaded at 20k); [head-nursery.png](pictures/head-nursery.png) (seed 4 at 240k: heads
+    `Z@&c@|z` blue raising heads on their `z` side, second cells `-z!C@` red).
+  - Commands: `PAW=1 PAF= PA2='Z@&c@|- C@-z|' node tri/demos.js pair SEED 240000 runs/x` (about 7 minutes); invasion:
+    add `PAM=0 PA3T=20000 PAEN=10 PA3='Z@&c@|- C@-q|'` (or `C@-z!`, `C@-z`, `C@wz|`; `PAHU=2 PAH=0.1`), 60000 steps;
+    copy rates: `NODE_OPTIONS='-r ./tri/copyrate.js'` on any of these; continuation: `TRI_RESUME=runs/x/pair_end.json.gz`
+    (the steps count from the saved time).
+  - Status: priority 21's Red Queen **not yet** (no letter cycles, one class); the stockless world **works** as an
+    evolving world (`world-free` 4 of 4: the seed site changes form by 120k); host-cheat balance **works** (`seed-cheat`
+    4 of 4, control `seed-cheat-c`); the anchorless seed site **works** (`seed-open` 4 of 4); the head nursery
+    **partial** (4 of 8 worlds by 240-720k, not in a check: too slow and rare for one).
+
 ## 2026-10-08 (autorun run 20261007-2051, core-review)
 
 - **A smaller core that matches its text** (no new capability; RULES Core changes, "Core review 2026-10-07"). The option

@@ -1,58 +1,32 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261007-2051, core-review). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-08 (after autorun run 20261008-0121, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
-
-**Current slice (autorun run 20261008-0121, build; priority 21): the standard world without stocks.** Goal: run the
-stockless world (`PAW=1 PAF= PA2='Z@&c@|- C@-z|'`, 240k, seeds 1-4) beside the stock world (`PAW=1`, same) and test
-21's predictions (a)-(c). Done when the batch is read and the answer recorded (INNOVATIONS, a check for what works).
-Theory first (this run, before the batch): **contact copying copies every attached part at one rate, whatever it
-does**, so a part's function changes its share only through (i) how long it stays attached and (ii) where its copies
-land; a seed site (a nursery) is a public good. Hence: a cheat on the seed letter (S `C@-q|`, q matched by no root) is
-made by mutation of the host's own S copies at a fixed rate and is caught by the host's fronts as often as S is, so it
-is not an enemy a host can escape by changing letters (its new letter's cheats follow by mutation from its own parts);
-locality (a parent's copies feed its own bud) purges it, the whole-body hazard favours it (no waiting bud, so it is hit
-less). A head whose front catches nothing (a blocker on a host seed site, root-specific) dies with its host body under
-`PAHU=3` (attached about half as long as a host's head): strongly purged; under `PAHU=2` it outlives its host as a free
-part and rebinds (run 0820's chains). A separate second class needs four letter changes (root/seed and front/attach
-pairs), each intermediate a cheat or blocker. Predictions: (a) seed-letter cheats held in 4 of 4 (a share at a balance,
-not cycles); (b) the leading class's root letter stays Z in at least 3 of 4 (letters join the class, not replace it);
-(c) one class in at least 3 of 4 for most of the second half: **(b) and (c) fail**. Control batch: the stockless world
-with `PAHU=2 PAH=0.1`: blockers spread and the world ends in heads that never let go (at least 2 of 4).
-Batch 1 read (sl, s2, st; details to INNOVATIONS): (a) yes, but the cheat is a seed site that lyses roots (S
-`-z!C@`), held at about 2:1 with hosts in 3 of 4; (b) root letter Z kept in 3 of 4 (seed 2 turned over Z, n, z, D and
-collapsed at 235k); (c) one class in 4 of 4. New: the S seed site evolves (`z|` to `z`, `z!`), in seed 4 the seed site
-moved onto the head (`Z@&c@|z`, swept 160-180k). Model (before the invasion batch): every free non-anchor side is a
-template, so S `-z!C@` (two templates, never a bud) is copied c = 2 times as fast as the anchored host S `-z|C@`; with
-a parental share λ of the host's S, host births B(λ + (1-λ)(1-p)), cheat births B(1-λ)p (p its pool share), equal
-deaths: a stable balance r* = ((1-λ)c - 1)/(cλ) (cheats per host), invading iff (1-λ)c > 1. Predictions for
-`runs/inv.json` (no mutagen, 10 invaders at 20k, 60k): iz (S `z!`) invades to a balance; ip (anchorless host S `z`)
-replaces the anchored host; iz2 (`PAHU=2`) and iz0 (`PAHB=0`) invade as iz (neither the hazard nor recycling is
-needed); iq (S `q|`, c = 1) does not invade.
-Batch: `node tri/batch.js runs/sl.json` (jobs in that file: sl = stockless, st = stock world, s2 = stockless PAHU=2).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-2051, core-review).** The core is smaller and matches its text. Removed the
-option `copyGlue` (with `pair`'s `PAHB=3` and `PADL`); merged the exposed value nb into gap (3 exposed values, was 4);
-fixed four mismatches an independent reviewer found (only a triangle free when the pass began copies; a free triangle
-binds by none of its close-only copy sides; dock and fill take no spent side; no `&` edge closes); text fixes and dead
-checks (RULES Core changes, "Core review 2026-10-07"). Counts: 6 marks, 3 relays, 3 exposed values, 2 states, no option.
-Outputs against `main`: the same in 153 of 163 worlds; the 10 that differ all have the general mutagen (fix 4). Suite 51
-of 52, the failure the control `pair-flow-c` (seed 4), now partial: re-measured on 8 seeds, without the drive the material locks in only 3 of 8 worlds,
-on `main` as on the branch (INNOVATIONS run 0621). The coverage run (RULES Core inventory) shows chain copying fires only
-in `copy`, `imprint` and `budcycle`, and the anchor's catch with its physics exception only in `budcycle`: candidate (u)
-below, a capability decision for review-intent 82. Not changed: `pBond` (Core-change candidates, last line), the anchor's own-body limit
-(RULES Locality audit, Known limit). Nothing is running.
+**Handoff status (autorun run 20261008-0121, build; priority 21).** The world without stocks
+(`PAW=1 PAF= PA2='Z@&c@|- C@-z|'`) answers 21: **no Red Queen of letters** ((a) cheats hold, but they are second cells
+that raise nobody, not letter-specific; (b) root letter Z kept in 7 of 8; (c) one class in 8 of 8), and the theory
+written before the batch predicted (b) and (c) failing. Instead **the body plan evolves**: the seed site loses its
+anchor or gains a lysis mark (5 of 8 by 120k), and **the nursery moved onto the head** in 4 of 8 worlds (240k; seed 1
+in a continuation to 720k), three times the same design (`Z@&c@|z` with the second cell `-z!C@`), which then held.
+Concepts (IDEAS "A nursery is a crowd; a nursery in place is heredity"): a host's waiting head shares its blanks, so a
+body that raises nobody is copied 1.2-1.5x faster and holds beside its hosts at r* = (Dc(1-λ) - 1)/(cλ); a seed site
+that is a template of the part it raises gives births in place 0.90 (founder design 0.30), which shuts cheats out. New
+checks `world-free`, `seed-cheat`, `seed-cheat-c`, `seed-open` (4 of 4 each; about 8 minutes of the suite with 4
+processes), observation hook `tri/copyrate.js`. Records: INNOVATIONS run 0121, IDEAS, ROADMAP rows. Not run: the full
+suite (no rule, physics or shared-structure change: tests 43 of 43, the four new checks). Nothing is running. The
+stock world on today's `main` (`PAW=1`, 240k): 3 of 4 alive, one class; stockless 6 of 8 alive at 240k (seeds 2 and 6
+collapsed at 230-235k, each after chains of second cells, up to 6 cells, arose).
 
-**Next step (rotation 72, build).** Priority 21 below (the standard world without stocks: a Red Queen of letters?).
-Theory first, then the runs. The worlds with the general mutagen now follow the close-only copy-side fix, so compare
-against the stock world (`world`) as run on today's `main`, not against older numbers.
+**Next step (rotation 73, harden).** As planned: cut the frozen lineage's two checks (three quarters of the suite's
+CPU). Then rotation 74 (build): priority 22 below (the head-nursery founder).
 
 ## Direction and priorities
 
@@ -75,28 +49,28 @@ the classes are at most the limiting resources, three on three (1821; `web-three
 itself: private recycling under (t) is no resource, and a rare class wastes its parts (1921; `rare-waste`).
 Review-intent run 2021 (IDEAS "Twenty slices on the pair"): the web-size line stops here (its bound is derived and
 measured); the stocks block coevolution; next, frequency dependence, first through the nursery cheat that already
-arises. Open:
-21. [72 build] **The standard world without stocks: a Red Queen of letters?** `PAW=1 PAF= PA2='Z@&c@|- C@-z|'` (the pair
-    with the standard letters: the second cell's seed site `z|` is no longer an anchor-bound stock part `C@-|z|`, which
-    has no copyable side, but a copied cell with a copy side `-`, so its letter can mutate), the general mutagen, the
-    whole-body hazard, 240k, 4 worlds; compare with the stock world (`world`: one class in 3 of 4). Theory first, then
-    the runs. Predictions (IDEAS): (a) cheats on the founder's letter arise (heads `Z@&` with no seed site) and live only
-    where hosts of that letter are common; (b) host lineages change their letter pair in two steps through a neutral
-    site letter (run 1720 saw it) and cheats follow by one mutation, so the commonest seed letter turns over more than
-    once in a run (count: the leading class's letter at each census); (c) two or more host classes held at once in at
-    least 2 of 4 worlds for most of the second half, on blanks alone. Wrong if one class holds all run with cheats
-    present (then measure why: is the double change too rare, or do cheats not lower their hosts' births enough?).
-    If (c) holds, the stockless world becomes the standard world (one drive fewer) and the stock checks move to it.
-22. [75 explore] Whichever of (a)-(c) fails in 21, its cause; if letters do not turn over, killing as the frequency-
-    dependent interaction (IDEAS: with 2-cell kinds a killer gains only what cannot be copied: blanks near it, a nursery,
-    or with a third cell a prey whose copy side it covers; the drive `PAHB=2` would have to spare lysis by a `!` side).
-23. [after 21-22] Length as defence: once a cheat or killer takes a host's open sites, a third cell over the open site
-    is a function only a longer body has (the cap of run 1821, now on the host's own side). Designed, not demonstrated.
+arises. 21 the standard world without stocks: no Red Queen of letters, the body plan evolves (0121; `world-free`, `seed-cheat`,
+`seed-open`). Open (run 0121's proposals; review-intent 82 may reorder):
+22. [74 build] **The head-nursery founder.** Start the stockless world from the evolved design (`PA2='Z@&c@|z C@-z!'`,
+    and `C@-z` as its control: the second cell's seed site plays no part once the head raises), with the drives and the
+    mutagen as `world-free`, 240k, 4 worlds. Predictions: alive in 4 of 4 (no collapse); cheat heads (no `z` side) and
+    cheat second cells stay under 10% (λ 0.9: Dc(1-λ) far below 1); what evolves next is the question (length? a second
+    class?). If it holds better than the founder world, it is the candidate standard world (nothing prepared but
+    blanks and a founder): a decision for review-intent 82, with the stock checks moved over.
+23. [75 explore] **In-place heredity and the web.** A rare class lost because its parts decay in the pool before its
+    few buds catch them (run 1921); a head nursery delivers its root in place. Theory first: does that remove the Allee
+    barrier for a second head-nursery class (own root and seed letters, shared second cells) entered as 10 into the
+    head-nursery world, and does R* on blanks still exclude it? Then the runs.
+24. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
+    seed site) and preceded both collapses; length as a function needs a chain that lets go (an `&` at its end) or a
+    third cell that covers an open site (old 23, length as defence). Designed, not demonstrated.
+25. [later] Killing as a frequency-dependent enemy (old 22): the root-lysing seed site `z!` is the first killer to
+    arise and it spread as a cheat, not as a predator (it lyses roots, which return as blanks for everyone).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 2021: the order above needs one build,
-then an explore, then a build, as the mix gives): 71 core-review, 72 build, 73 harden, 74 build, 75 explore, 76 build,
+then an explore, then a build, as the mix gives): 72 build (done), 73 harden, 74 build, 75 explore, 76 build,
 77 cleanup, 78 build, 79 explore, 80 build, 81 explore, 82 review-intent. 73 harden: cut the frozen lineage's two checks
 (three quarters of the suite's CPU, about 105 minutes). 77 cleanup: prune the pair demo's 31 options to those a check or
 a command above uses.
@@ -152,13 +126,22 @@ a command above uses.
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about 105 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 113 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (check world; about 7.5 minutes): the diet kind among stocks
                                                    # C E G, openRange 9, PAHB=2, decay 1, PAHU=3 (whole body, h 0.07; run 1351),
                                                    # the general mutagen 0.01 (stock parts exempt); any option set overrides
                                                    # (PA1=1 adds the pair founder); 'kinds:' census lines, diets picture
+PAW=1 PAF= PA2='Z@&c@|- C@-z|' node tri/demos.js pair 1 240000 runs/x   # the world without stocks (check world-free at
+                                                   # 120k; about 7 minutes): blanks only, the founder pair copied whole;
+                                                   # PA2='Z@&c@|z C@-z!' the evolved head nursery (smoke run 0121: 420-430
+                                                   # individuals, 97% one kind at 30k, seed 1)
+PAW=1 PAF= PA2='Z@&c@|- C@-z|' PAM=0 PA3T=20000 PAEN=10 PA3='Z@&c@|- C@-q|' node tri/demos.js pair 1 60000 runs/x
+                                                   # a second cell that raises nobody invades its hosts (check seed-cheat; 2
+                                                   # minutes); PA3 'C@wz|' a marked host (seed-cheat-c), 'C@-z' the anchorless
+                                                   # host (seed-open, 50k); NODE_OPTIONS='-r ./tri/copyrate.js' adds a
+                                                   # 'copyrate:' line (copies per template class from CR_T0, 25000)
 PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair 1 240000 runs/x   # the standard
                                                    # world at 3x (about 50 minutes; PAHU=2 PAH=0.1: the old hazard); every pair
                                                    # world prints 'web:' lines (classes, links, cheats) after each 'kinds:' line
