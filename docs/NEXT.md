@@ -21,6 +21,16 @@ pairs), each intermediate a cheat or blocker. Predictions: (a) seed-letter cheat
 not cycles); (b) the leading class's root letter stays Z in at least 3 of 4 (letters join the class, not replace it);
 (c) one class in at least 3 of 4 for most of the second half: **(b) and (c) fail**. Control batch: the stockless world
 with `PAHU=2 PAH=0.1`: blockers spread and the world ends in heads that never let go (at least 2 of 4).
+Batch 1 read (sl, s2, st; details to INNOVATIONS): (a) yes, but the cheat is a seed site that lyses roots (S
+`-z!C@`), held at about 2:1 with hosts in 3 of 4; (b) root letter Z kept in 3 of 4 (seed 2 turned over Z, n, z, D and
+collapsed at 235k); (c) one class in 4 of 4. New: the S seed site evolves (`z|` to `z`, `z!`), in seed 4 the seed site
+moved onto the head (`Z@&c@|z`, swept 160-180k). Model (before the invasion batch): every free non-anchor side is a
+template, so S `-z!C@` (two templates, never a bud) is copied c = 2 times as fast as the anchored host S `-z|C@`; with
+a parental share λ of the host's S, host births B(λ + (1-λ)(1-p)), cheat births B(1-λ)p (p its pool share), equal
+deaths: a stable balance r* = ((1-λ)c - 1)/(cλ) (cheats per host), invading iff (1-λ)c > 1. Predictions for
+`runs/inv.json` (no mutagen, 10 invaders at 20k, 60k): iz (S `z!`) invades to a balance; ip (anchorless host S `z`)
+replaces the anchored host; iz2 (`PAHU=2`) and iz0 (`PAHB=0`) invade as iz (neither the hazard nor recycling is
+needed); iq (S `q|`, c = 1) does not invade.
 Batch: `node tri/batch.js runs/sl.json` (jobs in that file: sl = stockless, st = stock world, s2 = stockless PAHU=2).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
