@@ -39,7 +39,8 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 
 | The world without stocks: the founder pair among blanks only, every part copied (`PAW=1 PAF= PA2='Z@&c@\|- C@-z\|'`) | an ecology that evolves its body plan | **works** (build run 20261008-0121, checks `world-free` 4 of 4, `seed-open` 4 of 4): the second cell's seed site changes form (anchor lost, lysis mark, letters); the nursery moved onto the head in 4 of 8 worlds by 240-720k (**partial**, no check); chains of second cells (up to 6 cells) in 3 of 8, before both collapses (2 of 8 by 240k) | demo pair, INNOVATIONS run 0121 |
 | Cheats that raise nobody hold beside their hosts (a nursery is a crowd: a host's waiting head shares its blanks); a nursery in place (a seed site that is a template of the part it raises) makes heredity 0.9 and shuts cheats out | cost of reproduction, parasites, kin selection | **works** (run 0121, checks `seed-cheat` 4 of 4, control `seed-cheat-c`): invades from 10 to 0.9-3 per host; copy advantage 1.2-1.5 measured (`tri/copyrate.js`); no Red Queen of letters (cheats are not letter-specific) | demo pair (`PA3`, `PA3T`, `PAEN`), IDEAS run 0121 |
-Every row marked works is guarded by `node tri/check.js` (one line per capability, about 71 minutes with 4 processes (run 20261008-0250); `budcycle-3` and `budcycle-lysis` 15-17 minutes, seed 3 only since that run)
+| The head-nursery founder: heads raise heads on their own side, the second cell's seed site lyses (`PAW=1 PAF= PA2='Z@&c@\|z C@-z!'`) | heredity in place, an immune site | **works** (build run 20261008-0551, checks `nursery` 4 of 4, `nursery-cheat` 4 of 4, control `nursery-c`): 420-450 individuals, head cheats lost within 5k; without the lysis mark one-letter chains (`-zZ@`) grow in place and collapse the world (4 of 4); invades the founder world in 2 of 4 (**partial**); the head never varies (the mutagen acts on free parts; nothing is free for long) | demo pair, IDEAS run 0551 |
+Every row marked works is guarded by `node tri/check.js` (one line per capability, about 71 minutes with 4 processes (run 20261008-0250; run 0551 added three checks, about 8 minutes); `budcycle-3` and `budcycle-lysis` 15-17 minutes, seed 3 only since that run)
 or by a test in `tri/test.js`.
 
 **Removed 2026-10-03 (core review run 20261003-2121; RULES, Core changes): the casting lineage.** Rows that worked and
@@ -77,8 +78,9 @@ A. **Evolution vehicle: the pair**, in the order of NEXT's priorities (each done
    recycling, candidate (t) as an option, is no resource)). Direction check run 2021 (IDEAS "Twenty slices on the
    pair"): the web-size line has reached its bound (classes at most the limiting resources), and the prepared stocks
    keep every host's seed letter fixed. Run 0121: the world without stocks (no Red Queen of letters: cheats raise nobody and
-   are not letter-specific; the body plan evolves instead, the nursery moving onto the head in 4 of 8). Next: NEXT's
-   list (the head-nursery founder, in-place heredity and the web, length).
+   are not letter-specific; the body plan evolves instead, the nursery moving onto the head in 4 of 8). Run 0551: the head-nursery founder holds and keeps cheats out,
+   its lysing seed site guards against one-letter chains, and it stands still (no head variant: the mutagen acts on free
+   parts). Next: NEXT's list (mutation that reaches attached parts, in-place heredity and the web, length).
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held

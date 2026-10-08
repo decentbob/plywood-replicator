@@ -28,6 +28,35 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## In-place growth without a release is a sink; in-place birth starves a free-part mutagen (build run 20261008-0551, 2026-10-08)
+
+Checked in the head-nursery founder world (INNOVATIONS run 0551). Notes, not the user's words.
+- **In place is a mechanism, not a design.** A part whose attach side complements one of its own free sides is born in
+  place: the copy made on that side lets go and binds the same side at once. The head nursery is one case (`Z@&c@|z`).
+  The second cell is one letter away from another: `C@-z` with its attach letter changed to Z is `-zZ@`, which binds
+  any free `z` side and offers one. It has no release, so its in-place copies stay: a chain that grows from its own tip
+  on every head's `z` side, holds the material (11 blanks left) and blocks the heads' nursery. The world collapses
+  about 10k after the first chains (4 of 4 without the lysis mark). Run 0121's chains (`-zZ@` among them) preceded both
+  collapses there.
+- **A lysing seed site is a chain guard.** With the lysis mark the same mutant is `-z!Z@`: the copy binding its tip is
+  lysed, so the chain stops at one cell. So `z!` did two things in the evolved design: it raised nobody (a cheat, run
+  0121) and it made the one-letter chain mutant harmless. A rule of thumb for designs: every side a part's own copies
+  can bind needs either a release on the part or a lysing site at the tip.
+- **In-place heredity keeps cheats out, and keeps rare nurseries out too.** A head without the `z` side sends every copy
+  to the pool, where host `z` sides are nearly always taken by the host's own copy: lost within 5k (4 of 4). The
+  same arithmetic works against a rare nursery among founders: its free `z` sides are seed sites for the founders'
+  pool roots (λ 0.3 there), so 10 nursery heads were lost in 2 of 4; in the other 2 they took over within 15k, after
+  their lysing second cell had spread among the founders and killed founder roots raised on it. A priority effect: who
+  is common wins.
+- **Where mutation acts decides what evolves.** The labelled mutagen hits free parts. In the head nursery nothing is
+  free for long (at 240k no free part but blanks), so the head was never varied in 4 worlds of 240k: a stasis, not
+  because variants lose but because none are made. The second cell, caught from the pool, still drifts. To let an
+  in-place lineage evolve the mutation must reach attached parts: an environment drive on unbonded sides of attached
+  parts (somatic mutation that is heritable, because a template's copies take its whole type) or copy error in
+  contact copying (candidate (r), core). Prediction for either: the head is under strong stabilising selection (a
+  changed front cannot bind its own copies' side; `z|` leaves a head with no template side; `z.` raises nobody), the
+  second cell drifts as now, and new things come from the second cell's inert side (a glue there is a second site).
+
 ## A nursery is a crowd; a nursery in place is heredity (build run 20261008-0121, 2026-10-08)
 
 Derived first, then checked in the world without stocks (INNOVATIONS run 0121). Notes, not the user's words.

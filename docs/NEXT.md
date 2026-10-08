@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-0250, harden). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-08 (after autorun run 20261008-0551, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,43 +10,20 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Current slice (autorun run 20261008-0551, build; in progress): priority 22, the head-nursery founder.** Goal: start
-the stockless world from the evolved design and see whether in-place heredity holds and what evolves next. Check: alive
-at 240k in at least 3 of 4 worlds, head cheats (no `z` side) under 10% of heads; if so a check `nursery` (shorter). Stop
-after the 8-world batch (4 `Z@&c@|z C@-z!`, 4 control `Z@&c@|z C@-z`) and at most one follow-up batch. Batch:
-`node tri/batch.js runs/hn.json` (written in the run; env `PAW=1 PAF=` with `PA2` as above, 240000 steps, seeds 1-4).
-Theory (before the batch; the head `Z@&c@|z`: front `Z@&`, catch site `c@|`, side `z` that raises heads; the second
-cell `C@-z!`: attach `C@`, an inert side, a seed site that lyses the root it binds):
-- A head's copy, made on its `z` side, lets go and binds the nearest free `z` side: usually its parent's (0.90 in place,
-  run 0121). A head mutant without `z` (or with another letter there) is born only from the pool, (1-λ) p of births:
-  with λ 0.9 it invades only if D c 0.1 > 1, so it stays at mutation-selection balance (P2). A head whose front letter
-  changes (`Y@&c@|z`) cannot bind its own copies' side: one mutation leaves the nursery, so the root letter is locked
-  (P3: `Z` and `z` in the commonest kind in 7 of 8).
-- The second cell is still caught from the pool (λ about 0.3), and in the head nursery few free roots reach it (most
-  heads are born in place). So its seed site is rarely occupied and costs little: in the control it is near neutral (P4).
-- The second cell's two free sides (`-` and the seed site) are its templates; a glue on its inert side, or an attach
-  letter matching a seed site, makes chains, which preceded both collapses in run 0121 (P5).
-Predictions: P1 alive at 240k in 4 of 4 in each design. P2 heads without a `z` side under 10% of heads at every census
-after 20k. P3 root letter `Z` with side `z` in the commonest kind at 240k in at least 7 of 8. P4 the control keeps the
-head nursery (commonest kind `Z@&c@|z` with any second cell) in at least 3 of 4; its seed site may drift. P5 chains of
-3 or more cells arise in at least 2 of 8 and precede any collapse. P6 individuals 400 or more (run 0121's founder
-world: 300-370).
-Follow-up (invasions, no mutagen, 10 entered at 20k, 60k, seeds 1-4; `runs/hi.json`): P7 the head nursery
-(`Z@&c@|z C@-z!`) entered into the founder world (`Z@&c@|- C@-z|`) holds more than half the individuals by 60k in at
-least 3 of 4 (its copies are born in place; the founder's roots come from the pool). P8 a head without the `z` side
-(`Z@&c@|- C@-z!`) entered into the head-nursery world stays under 10% of individuals in 4 of 4: its copies all go to
-the pool and find only the few host `z` sides a host's own copy did not take (D c (1-λ) about 0.2 with λ 0.9, c 2).
+**Handoff status (autorun run 20261008-0551, build).** Priority 22 done (INNOVATIONS run 0551, IDEAS "In-place growth
+without a release is a sink"): the head-nursery founder (`PAW=1 PAF= PA2='Z@&c@|z C@-z!'`) holds in 4 of 4 to 240k at
+420-450 individuals, head cheats lost (check `nursery`, `nursery-cheat`, 4 of 4 each). Without the lysis mark on the
+second cell's seed site (`C@-z`) a one-letter mutant `-zZ@` grows chains in place on heads and the world collapses in 4
+of 4 (control `nursery-c`, 3 of 4 by 90k). The nursery entered into the founder world takes over in 2 of 4 (a priority
+effect). **The head never varied**: the mutagen acts on free parts and in-place birth leaves nothing free (59 blanks, no
+other free part at 240k), so the world is a stasis at the head; only the second cell drifts. Predictions P1-P8 (in the
+slice record, git `git log -p docs/NEXT.md`): P2, P3, P5, P6, P8 right; P1 (control alive), P4, P7 wrong. Suite: the
+three new checks pass (480 s together); the rest unchanged (no rule, demo or shared-structure change). Nothing is
+running. Candidate standard world for review-intent 82: the head-nursery founder is more robust than the founder pair
+world (0 of 4 collapses against 2 of 8) but makes no head variants under today's mutagen.
 
-**Handoff status (autorun run 20261008-0250, harden).** The suite on `main` d76ac35: 56 of 56 (the partial control
-`pair-flow-c` 1 of 2, as recorded), 4728 s. The frozen lineage's two checks now run seed 3 alone (`budcycle-3`,
-`budcycle-lysis`): it reaches generation 3 first in both (735900, 736900) and is the one world where cutters lyse a bud;
-the suite on the branch 56 of 56 in 4279 s (71 minutes), every shared world's output byte for byte main's. The lineage
-was about 20% of the suite's CPU, not three quarters (that figure predates the pair checks; this machine runs each world
-about twice as fast as the recorded `secs`). A speed attempt on lone blocks' physics (a destination-only neighbour
-gather for moves within a sub-step, same outputs) was 5% slower and is reverted. Weakest checks: `ring` and `imprint`
-3 of 4 (frozen, unchanged). Priority 21's results (run 0121): INNOVATIONS. Nothing is running.
-
-**Next step (rotation 74, build): priority 22 below (the head-nursery founder).**
+**Next step (rotation 75, explore): priority 23 below; priority 24 (mutation that reaches attached parts) is the
+alternative if the explore prefers the core candidate (r).**
 
 ## Direction and priorities
 
@@ -70,29 +47,35 @@ itself: private recycling under (t) is no resource, and a rare class wastes its 
 Review-intent run 2021 (IDEAS "Twenty slices on the pair"): the web-size line stops here (its bound is derived and
 measured); the stocks block coevolution; next, frequency dependence, first through the nursery cheat that already
 arises. 21 the standard world without stocks: no Red Queen of letters, the body plan evolves (0121; `world-free`, `seed-cheat`,
-`seed-open`). Open (run 0121's proposals; review-intent 82 may reorder):
-22. [74 build] **The head-nursery founder.** Start the stockless world from the evolved design (`PA2='Z@&c@|z C@-z!'`,
-    and `C@-z` as its control: the second cell's seed site plays no part once the head raises), with the drives and the
-    mutagen as `world-free`, 240k, 4 worlds. Predictions: alive in 4 of 4 (no collapse); cheat heads (no `z` side) and
-    cheat second cells stay under 10% (λ 0.9: Dc(1-λ) far below 1); what evolves next is the question (length? a second
-    class?). If it holds better than the founder world, it is the candidate standard world (nothing prepared but
-    blanks and a founder): a decision for review-intent 82, with the stock checks moved over.
+`seed-open`). 22 the head-nursery founder: holds, keeps cheats out, its lysing seed site guards against one-letter
+chains, and the head never varies under a free-part mutagen (0551; `nursery`, `nursery-c`, `nursery-cheat`).
+Open (review-intent 82 may reorder):
 23. [75 explore] **In-place heredity and the web.** A rare class lost because its parts decay in the pool before its
     few buds catch them (run 1921); a head nursery delivers its root in place. Theory first: does that remove the Allee
     barrier for a second head-nursery class (own root and seed letters, shared second cells) entered as 10 into the
-    head-nursery world, and does R* on blanks still exclude it? Then the runs.
-24. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
-    seed site) and preceded both collapses; length as a function needs a chain that lets go (an `&` at its end) or a
-    third cell that covers an open site (old 23, length as defence). Designed, not demonstrated.
-25. [later] Killing as a frequency-dependent enemy (old 22): the root-lysing seed site `z!` is the first killer to
-    arise and it spread as a cheat, not as a predator (it lyses roots, which return as blanks for everyone).
+    head-nursery world, and does R* on blanks still exclude it? Then the runs. Run 0551: a rare nursery of the *same*
+    root letter lost 2 of 4 entries because its free `z` sides raised the common class's pool roots; its own letters
+    remove that, so the question is the shared second cells and the blanks.
+24. [76 build, or with 23 as the explore's core change] **Mutation that reaches attached parts.** In the head nursery
+    nothing is free for long, so the free-part mutagen never varies the head (run 0551). Either a labelled drive (the
+    mutagen also changes one unbonded, unspent side of an attached part; a demo option, no core change; heritable,
+    since a template's copies take its whole type) or copy error in contact copying (candidate (r), core). Predictions
+    (IDEAS run 0551): the head under strong stabilising selection, the second cell drifting, new things from the second
+    cell's inert side; the chain guard `z!` kept. Check the chain sink again: a drive on attached parts makes `-zZ@`-like
+    mutants in place.
+25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
+    seed site) and preceded both collapses in run 0121 and all four in run 0551's control; a lysing site at the chain's
+    tip stops them. Length as a function needs a chain that lets go (an `&` at its end) or a third cell that covers an
+    open site (length as defence). Designed, not demonstrated.
+26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
+    as a cheat, not as a predator, and guards against chains (run 0551).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
 Rotation (autorun `projects/plywood/rotation.txt`), unchanged (review-intent run 2021: the order above needs one build,
-then an explore, then a build, as the mix gives): 72 build (done), 73 harden, 74 build, 75 explore, 76 build,
+then an explore, then a build, as the mix gives): 72 build (done), 73 harden, 74 build (done), 75 explore, 76 build,
 77 cleanup, 78 build, 79 explore, 80 build, 81 explore, 82 review-intent. 73 harden: done (lineage checks on one
-seed). 77 cleanup: prune the pair demo's 31 options to those a check or
+seed). 74 build: done (priority 22). 77 cleanup: prune the pair demo's 31 options to those a check or
 a command above uses.
 
 **Core-change candidates (for the next `core-review` or `explore`).**
@@ -122,6 +105,8 @@ a command above uses.
 - (r) *Copy error in contact copying* (run 0450): not needed yet; a labelled mutagen on free parts gives the same
   variants (RULES, Core changes). Open: whether the core or the environment should limit parts that bind their own
   kind (`g@` and `G@` on one part), which lock the material in the mutagen world.
+  Run 0551: no longer the same variants: a lineage born in place (the head nursery) is never free, so a free-part
+  mutagen never varies it; a labelled drive on attached parts' unbonded sides would (priority 24) without a core change.
 - (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
   lineage's false releases (`falseRel`) did not change and have another cause (trace one before any fix).
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
@@ -147,7 +132,7 @@ a command above uses.
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (about 71 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
+                                                   # (about 75 minutes, 4 processes; CHECK_SAVE=dir keeps each world's output)
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x            # THE STANDARD WORLD (check world; about 7.5 minutes): the diet kind among stocks
@@ -158,6 +143,10 @@ PAW=1 PAF= PA2='Z@&c@|- C@-z|' node tri/demos.js pair 1 240000 runs/x   # the wo
                                                    # 120k; about 7 minutes): blanks only, the founder pair copied whole;
                                                    # PA2='Z@&c@|z C@-z!' the evolved head nursery (smoke run 0121: 420-430
                                                    # individuals, 97% one kind at 30k, seed 1)
+PAW=1 PAF= PA2='Z@&c@|z C@-z!' node tri/demos.js pair 1 240000 runs/x   # the head-nursery founder (check nursery at 60k;
+                                                   # about 10 minutes at 240k): 420-450 individuals; C@-z the control (chains
+                                                   # -zZ@, collapse by 45-105k; nursery-c); add PAM=0 PA3T=20000 PAEN=10
+                                                   # PA3='Z@&c@|- C@-z!' for heads that raise nobody (nursery-cheat)
 PAW=1 PAF= PA2='Z@&c@|- C@-z|' PAM=0 PA3T=20000 PAEN=10 PA3='Z@&c@|- C@-q|' node tri/demos.js pair 1 60000 runs/x
                                                    # a second cell that raises nobody invades its hosts (check seed-cheat; 2
                                                    # minutes); PA3 'C@wz|' a marked host (seed-cheat-c), 'C@-z' the anchorless
