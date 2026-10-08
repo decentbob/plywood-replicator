@@ -53,6 +53,11 @@ Revised predictions: E3 (door narrowed) no nursery in 3 of 4 and 3 of 4 dead by 
 cell `C@-z|!`): a trap that raises keys with `&` and lyses plugs. Pool world as E2: 3 of 4 alive at 480k, no plug death,
 root letters still turn in at least 2 of 4; control: the same second cell without `lysJoint` gives no class (every root
 landing is lysed).
+Read so far (21:05): E1 sealed 71-79% at 100k, alive 4 of 4 (yes); E3 no nursery 3 of 3 (yes), dead 1 of 3, no root
+turn in the living (no); E4 alive 2 of 4 (no: a catcher, and a plug on a nursery whose second cells carried no trap of
+its letter), 12 and 11 turns in the living two (yes, 2 of 4); controls without `lysJoint` dead by 10k (4 of 4). E5
+(no mutation, 20 plugs `--Z@` at 20k, 60k): guarded lock with `lysJoint` and `lysOneWay`: plugs lost, alive 4 of 4;
+unguarded `C@-z|`, current core: the plugs take the locks, dead in 3 of 4.
 
 **Handoff status (autorun run 20261008-1650, build): priority 30 done.** No rule change. New checks `seal-evolve`
 (3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`: 3 of 3 pass, 1205 s);
