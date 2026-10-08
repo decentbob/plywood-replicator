@@ -12,6 +12,51 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-0651, explore)
+
+- **Copy error in contact copying (core change, candidate (r)): heads of the head nursery vary, root letters turn over,
+  and a common cheat site lets a new root letter in** (NEXT priority 24; RULES Core changes run 0651; IDEAS "Variation
+  where copies are made"). New parameter `pErr` (default 0: every other check's world byte for byte as before): with
+  probability `pErr` a copy takes one side wrong (a glue from inert and a..z, A..Z, or one of six marks toggled; the
+  same change as the pair demo's mutagen). New checks `copy-error` (4 of 4), `cheat-root` (4 of 4), `cheat-root-c`
+  (control, 4 of 4); new demo line `types:` (bonded triangles by type, when `pErr` is on); test "copy error".
+  - **A, the head-nursery founder, mutagen off, `pErr` 0.01** (240k, seeds 1-4; `runs/ce.json`): alive 4 of 4 at
+    414-436 individuals at every census (run 0551 under the mutagen: 420-450). Head variants in bodies in 4 of 4 by
+    60k (under the mutagen: none in 4 worlds of 240k). The founder head fell to 0.4%, 44%, 74%, 77% of heads at its
+    lowest: `Z@&c@z` (front without its anchor) swept seed 4 (99.6%) and reached 23% in seed 1; `Z@&|c@|z` (an anchor
+    on the root, a side bonded or spent all its life) 56% in seed 3, 22% in seed 2. Entered as 10 at 20k without
+    mutation (60k, seeds 1-4; `runs/cf.json`), `Z@&c@z` was lost in 4 of 4 and the marker `Z@&|c@|z` in 3 of 4: both
+    near neutral, so the sweeps were drift, fast because in-place heredity makes clonal lines. The second cell drifted
+    as under the mutagen (`-z!C@|`, `C@q!z!`, `-.z!C@` up to 81%).
+  - **B, the founder world without stocks, mutagen off, `pErr` 0.01** (240k, seeds 1-4): the head nursery evolved in 2
+    of 4 (seed 4 `Z@&c@|z` with `-z!C@` at about 190k, as under the mutagen; seed 3 `D@&c@|d` at about 80k). **The root
+    letter turned over** in 2 of 4 (seed 2: Z, I, y, g at 105k, 185k, 210k; seed 3: Z to D at 45-70k) and began to in a
+    third (seed 4: j to 30% at 100k, D to 15% at 170k); under the mutagen it was kept in 7 of 8 (run 0121). Every new
+    root letter is the complement of a seed site that spread before it as a cheat (`-iC@` before I, `-YC@` before y,
+    `-GC@` before g, `-d|C@` before D, `C@Jz!` before j). Seed 3 died at 140k: a plug `--D@` bound the nursery heads'
+    own `d` sides (no release, no lysis) and in-place birth stopped. Seed 1: `-Z@&c@` with a second head `-Z@&C@`,
+    declining (237 individuals at 240k). Copy error at 0.01 gives about twice the mutagen's supply here (222-274 copy
+    errors by 20k against 123-131 mutations under `PAM` 0.01), so the comparison with run 0121 mixes rate and place.
+  - **The stepping stone, tested without mutation** (110k, seeds 1-4; `runs/cf.json`): 10 cheats `C@-i|` on founder
+    heads at 10k, then 10 I-hosts (`I@&c@|-` with `C@-i|`) at 50k: I roots hold beside the Z roots in 4 of 4 (42-70% of
+    individuals at 70k, 18-54% at 110k; the cheat kind is gone: its sites raise I roots). Control, the I-hosts without
+    cheats first: I roots lost by 60k in 4 of 4, while their `i` cells spread as cheats among the Z hosts (3 of 4,
+    about 2 per host). Predicted: Q2 3 of 4 above 20% at 110k (yes, 3 of 4), control lost in 3 of 4 (yes, 4 of 4).
+  - Predictions written before the batch (NEXT slice record, git): P1 head variants in A 4 of 4 (yes); P2 the founder
+    head at least 90% (no: 0.4-77% at its lowest); P3 only the near-neutral variants above 1% (half: one predicted, one
+    neutral not listed, and seed-letter variants at 1-2.4%); P4 A alive 4 of 4 (yes); P5 nursery in B at least 2 of 4
+    (yes, 2); P6 the second cell drifts (yes). Q1 `Z@&c@z` neutral (yes, lost as the marker).
+  - Picture: [root-letters.png](pictures/root-letters.png) (heads by root letter in B seeds 2-4: seed 2's three
+    turnovers, seed 3's D and its collapse, seed 4's j and D excursions).
+  - Commands: `PAW=1 PAF= PAM=0 TRI_PARAMS='{"pErr":0.01}' PA2='Z@&c@|z C@-z!' node tri/demos.js pair SEED 240000 runs/x`
+    (A; about 10 minutes; `PA2='Z@&c@|- C@-z|'` for B, about 20 minutes); the stepping stone: `PAW=1 PAF= PAM=0
+    PA2='Z@&c@|- C@-z|' PA3T=10000 PAEN=10 PA3='Z@&c@|- C@-i|' PA1T=50000 PAKR='I@&c@|-' PAKS='C@-i|' node tri/demos.js
+    pair SEED 70000 runs/x` (check `cheat-root`; without `PA3T`/`PA3`: `cheat-root-c`).
+  - Status: copy error as variation in an in-place lineage **works** (`copy-error`); root-letter turnover under copy
+    error **partial** (2 of 4 by 240k, no check: 20 minutes per world); a common cheat site lets a new root letter in
+    **works** (`cheat-root`, `cheat-root-c`); copy error in place of the mutagen in the stockless world: the nursery
+    evolves (2 of 4), so `PAM` could retire there (not done).
+
 ## 2026-10-08 (autorun run 20261008-0551, build)
 
 - **The head-nursery founder holds without stocks, keeps cheats out, and stands still; without the lysis mark it

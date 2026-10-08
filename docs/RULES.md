@@ -71,6 +71,7 @@ the item entered the core (the repository restarted on 2026-10-01).
 | `&` completion release | mark | `pair`, `strip`, `budpool`, `budcycle` (releases); `imprint`, `lysis` carry it | 10-01 |
 | `\|` anchor (seed site, front, catch) | mark | as a glue side everywhere (`pair`'s fronts `c@\|` and seed sites `z\|`); **the catch of a strand end only in `budcycle`** (23 catches in its 4 worlds) | 10-01; catches busy strands 10-02; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
 | `?` copy side | mark | `pair`, `strip`, `imprint`, `budpool`, `budcycle` (23 million copies, nearly all in `pair`) | 10-02 |
+| copy error (`pErr`, default 0) | rule branch (noise in contact copying) | only `pair` with `TRI_PARAMS` (`copy-error`) | 10-08 (run 0651) |
 | `!` lysis side | mark | `lysis`, `budcycle` (`BCQ`); in `pair` only as a mutant mark (its lyses come from the hazard drive) | 10-04 (run 2051) |
 | zip (chain) | relayed signal | chain copying: `copy`, `imprint` (`g`, `p`), `budcycle` (dock 812, fill 597, close 597, release 745 in the suite) | 10-01; from a held high end only 10-04 (run 0820) |
 | open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `budcycle` | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
@@ -78,6 +79,9 @@ the item entered the core (the repository restarted on 2026-10-01).
 | gap, need, fn | exposed values (one bond) | chain copying, as zip | 10-01; nb merged into gap 10-07 (run 2051) |
 | fill | state | chain copying, as zip | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
 | spent | state | `&` sides, as `&` | 10-01 |
+
+**Counts (2026-10-08, run 0651):** as run 2051, plus one rule branch with its parameter: copy error in contact copying
+(`pErr`, default 0, so every other check's world is unchanged; Core changes).
 
 **Counts (2026-10-07, run 2051):** 6 marks, 3 relayed signals, 3 exposed one-bond values (was 4: nb merged into gap), 2
 states, no option (was 1: `copyGlue` removed). Every mark and rule event still fires in the suite. Two parts of the core
@@ -237,7 +241,10 @@ In the same pass, if it was free when the pass began (a copy blank that has just
 prepared triangles welded only by `?` sides were rewritten, the one with the lower index taking the other's type), it takes its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the
 partner turned about the shared edge; glues and marks) and lets go. It binds nothing else (no glue binding, dock or
 fill) and is never itself a template. Free triangles never bind each other, so only attached triangles are copied.
-This is the only way a type changes (casting, the other, was removed 2026-10-03). Gate entry: Core changes.
+This is the only way a type changes (casting, the other, was removed 2026-10-03). **Copy error** (since 2026-10-08, run
+0651; parameter `pErr`, default 0): with probability `pErr` a copy takes one of its three sides wrong, a side drawn at
+random getting with 1/2 a glue drawn from inert and `a..z`, `A..Z`, else one of the six marks toggled (noise, as
+`pBond`'s draw; the copy changes only its own type). Gate entry: Core changes.
 
 ## Open signal and completion release
 - **Open signal (completion):** an attached triangle with an unbonded attach side `@` that has a glue (an open growth
@@ -270,6 +277,31 @@ This is the only way a type changes (casting, the other, was removed 2026-10-03)
 Every core change (a new mark, signal, state, rule or rule branch, physics exception, or a default that changes
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
+
+### Rule (r): copy error in contact copying, 2026-10-08, autorun run 20261008-0651 (explore)
+NEXT priority 24. The case of run 0450 (below) said: revisit if a rate per copy turns out to matter. It does now.
+1. **Capability and why the goal needs it.** Heritable variation in every lineage, including one that is never free.
+   In the head nursery (run 0551) heads are born in place and caught at once, so the labelled free-part mutagen never
+   varied a head in 4 worlds of 240k: a stasis made by where the drive acts, not by selection. Evolution needs
+   variation at the place where copies are made.
+2. **Can the existing core do it?** Only with a second drive (a mutagen on unbonded sides of attached parts). That
+   changes a template, not a copy: the template's function changes in its own body at once (somatic, then inherited
+   by its later copies), and its rate is per part per time, not per copy, so a part that is copied faster does not vary
+   faster. It is a second environment rule beside the first, with the same reach as an error in the copy rule.
+3. **The rule.** Parameter `pErr` (default 0: no draw, every output unchanged). A triangle that takes its partner's type
+   by contact copying takes, with probability `pErr`, one of its three sides wrong: a side drawn at random gets, with
+   1/2, a glue drawn from inert and `a..z`, `A..Z` (53, possibly the same), else one of the six marks toggled. The same
+   change the pair demo's mutagen makes (so results compare). What it reads: nothing new (its own type, a random draw,
+   as `pBond`); what it changes: its own type, in the pass it copies. Locality: unchanged.
+4. **What it replaces.** Nothing yet in the core. If copy error does in the stockless worlds what the free-part
+   mutagen does (NEXT slice run 0651, batch B), the demo's drive `PAM` can retire in a cleanup (one labelled
+   environment rule fewer; checks that pin the mutagen's outputs would move to `pErr`). Cost: one parameter, one
+   branch in `_copy`.
+5. **Result (INNOVATIONS run 0651): adopted as a parameter, default 0.** At 0.01 with the mutagen off, heads of the
+   head nursery vary in 4 of 4 worlds by 60k (none in 4 of 4 under the mutagen), the world holds (414-436 individuals),
+   and in the stockless founder world the nursery evolves (2 of 4) and root letters turn over (2 of 4). So copy error
+   can stand in for the free-part mutagen; the default stays 0 until a cleanup moves the mutagen's checks to it (a
+   default above 0 changes every world's random stream and outputs).
 
 ### Core review 2026-10-07, autorun run 20261007-2051: one removal, one merge, four fixes
 An independent reviewer read every rule in `tri/sim.js` against locality and this file (findings below; the full list
@@ -984,6 +1016,6 @@ copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
-capture 0.6, triTolClose 0.05, openRange 120`; no options (`heldCopy` became the rule 2026-10-04, run 0820).
+capture 0.6, triTolClose 0.05, openRange 120, pErr 0` (copy error, run 0651); no options (`heldCopy` became the rule 2026-10-04, run 0820).
 (Removed 2026-10-03 with the casting lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`,
 `pLoose`, `light`.)
