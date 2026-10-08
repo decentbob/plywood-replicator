@@ -26,10 +26,10 @@ convention, not a rule).
 ### Side marks
 | Mark | Meaning |
 |---|---|
-| `.` | close-only: binds only triangles that are already attached, never a free one (no glue catch, dock or fill on it, and a free triangle binds by none of its close-only sides) |
-| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part); an attached triangle's `@` side binds only a free part's `@` side (a growth site for parts only); an unbonded glued `@` side of an attached triangle emits the open signal |
+| `.` | close-only: binds only triangles that are already attached, never a free one by glue (no glue catch, dock or fill on it; a copy blank still copies it), and a free triangle binds by none of its close-only sides (a copy side too, since run 20261007-2051) |
+| `@` | attach side: a free triangle that has one binds only by it, and never docks or fills (a part; if it also has a copy side, it binds only by that: Contact copying); an attached triangle's `@` side binds by glue only a free part's `@` side (a growth site for parts only; a copy blank still copies it, and an anchor `@\|` also catches a strand end); an unbonded glued `@` side of an attached triangle emits the open signal |
 | `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again |
-| `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). No copy blank binds an anchor side: an anchor is never a template. Otherwise an anchor side binds as its glue does (a free one too since run 20261004-0820; an inert one `-\|` binds nothing: a closed side) |
+| `\|` | anchor: an unbonded, unspent anchor side of an attached triangle catches a strand end's seed (complementary glue) as it would a free triangle; the strand is placed flush as one body (physics). No copy blank binds an anchor side: an anchor is never a template. Otherwise an anchor side binds as its glue does (a free one too since run 20261004-0820; an inert one `-\|` binds no glue and catches nothing: a closed side; the chain bonds, a fill (inert to inert) and copy closure, do not look at the mark, but no strand kit carries one) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle but an anchor side (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
 | `!` | lysis side (since 2026-10-04, run 2051): binds as its glue and other marks say; the triangle bonded to it is lysed (Lysis, below) |
 
@@ -59,25 +59,32 @@ removed on 2026-10-03 and is the lysis side since 2026-10-04).
 - Labelled exceptions used by the chemistry: binding places a free triangle flush in a free site; an anchor's catch
   moves the caught strand (with anything bonded to it) as one body into a free flush place along a clear path.
 
-## Core inventory (2026-10-06, core review run 20261006-1920; table from run 20261005-1921)
-Users from the kept demos and checks ("demos": which of `copy`, `ring`, `imprint` (its rings, its `g` strand and its
-`p`/`m` cells), `pool`, `budpool`, `budcycle`, `closure` carry or fire it; `budpore` was retired in run 0820). Dates:
-when the item entered the core (the repository restarted on 2026-10-01).
+## Core inventory (2026-10-07, core review run 20261007-2051)
+"Fires in": the demos whose check worlds carry the mark or fire the rule, from the coverage hook over the whole suite
+(52 checks, 168 worlds, run 2051; `pair` covers its 39 checks, `imprint` its rings, `g` strand and `p` cells). Dates: when
+the item entered the core (the repository restarted on 2026-10-01).
 
-| Item | Kind | Used by | Since |
+| Item | Kind | Fires in (run 2051) | Since |
 |---|---|---|---|
-| `.` close-only | mark | ring kits (the root's closure side), `imprint`'s rings | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121) |
-| `@` attach | mark | ring kits, `budKit` (`budpool`, `budcycle`, `closure`), `pool`, the cell anchor `Z@\|` (`imprint p`) | 10-01 |
-| `&` completion release | mark | ring kits (`bud`), `budKit`, spent walls (`imprint p/m`) | 10-01 |
-| `\|` anchor | mark | `budKit` (the catching anchor; closed walls `-\|` in `budcycle`), `imprint p/m`, founder holds (`copy`, `imprint g`, tests) | 10-01; catches busy strands 10-02; a free one binds nothing 10-03 (removed 10-04, run 0820); never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
-| `?` copy side | mark | every `imprint` variant, `pool`, `budpool`, `budcycle` | 10-02 |
-| `!` lysis side | mark | cutters `z@!-\|-\|` (`lysis`), `г@!-\|-\|` at a receptor `Г@&` on E (`budcycle` `BCQ`, run 2221) | 10-04 (run 2051) |
-| zip (chain) | relayed signal | all copying | 10-01; from a held high end only 10-04 (run 0820: was the option `heldCopy`) |
-| open (`openRange` 120) | relayed signal | growth and `&` release | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
-| lysis (one bit; not across `&` bonds) | relayed signal | `lysis` | 10-04 (run 2051) |
-| nb, gap, need, fn | exposed values (one bond) | copying | 10-01 |
-| fill | state | copying | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
-| spent | state | `&` sides | 10-01 |
+| `.` close-only | mark | `ring` and `imprint` rings (the root's closure side), `pair` (`rare-waste`'s `c@\|C.Z@&`; mutants); glue closures: `pair`, `ring`, `imprint` | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121); no copy side binds by it 10-07 (run 2051) |
+| `@` attach | mark | every demo with growth: `pair`, `strip`, `ring`, `imprint`, `budpool`, `budcycle`, `lysis` | 10-01 |
+| `&` completion release | mark | `pair`, `strip`, `budpool`, `budcycle` (releases); `imprint`, `lysis` carry it | 10-01 |
+| `\|` anchor (seed site, front, catch) | mark | as a glue side everywhere (`pair`'s fronts `c@\|` and seed sites `z\|`); **the catch of a strand end only in `budcycle`** (23 catches in its 4 worlds) | 10-01; catches busy strands 10-02; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
+| `?` copy side | mark | `pair`, `strip`, `imprint`, `budpool`, `budcycle` (23 million copies, nearly all in `pair`) | 10-02 |
+| `!` lysis side | mark | `lysis`, `budcycle` (`BCQ`); in `pair` only as a mutant mark (its lyses come from the hazard drive) | 10-04 (run 2051) |
+| zip (chain) | relayed signal | chain copying: `copy`, `imprint` (`g`, `p`), `budcycle` (dock 812, fill 597, close 597, release 745 in the suite) | 10-01; from a held high end only 10-04 (run 0820) |
+| open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `budcycle` | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
+| lysis (one bit; not across `&` bonds) | relayed signal | `pair` (every hazard death), `lysis`, `budcycle` | 10-04 (run 2051) |
+| gap, need, fn | exposed values (one bond) | chain copying, as zip | 10-01; nb merged into gap 10-07 (run 2051) |
+| fill | state | chain copying, as zip | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
+| spent | state | `&` sides, as `&` | 10-01 |
+
+**Counts (2026-10-07, run 2051):** 6 marks, 3 relayed signals, 3 exposed one-bond values (was 4: nb merged into gap), 2
+states, no option (was 1: `copyGlue` removed). Every mark and rule event still fires in the suite. Two parts of the core
+serve only frozen or old demos: chain copying (zip, gap, need, fn, fill and the dock, fill, close and release rules:
+`copy`, `imprint`, `budcycle`) and, inside it, the anchor's catch of a strand end with its physics exception (the
+caught strand moves as one body: `budcycle` alone). The pair line uses neither. Retiring them is a capability decision
+(NEXT, Core-change candidates (u)), not a review's.
 
 **Counts (2026-10-06, run 1920):** unchanged (6 marks, 3 relayed signals, 4 exposed one-bond values, 2 states, no
 option). The open signal now stops at `&` joints, the condition lysis already had (one condition for both relays), and a
@@ -114,7 +121,10 @@ Every chemistry rule reads only: the triangle's own type, state and bonds; the f
 glue and marks of the side bonded to it; for a copy blank, its whole type); values a direct partner exposed in the
 previous pass; and relayed signals that move one bond per pass and fade (zip, open, lysis; busy until run 20261005-1921). Convention (made explicit
 2026-10-02): a rule may also read a direct partner's own current state (its bonds, role, fill) as it stands when the
-rule runs; that state was not relayed from anywhere, so information still moves at most one bond per step. Writes: a
+rule runs; that state was not relayed from anywhere, so information still moves at most one bond per step. The binding
+rules read a binding candidate (a triangle in contact, about to become a direct partner) the same way: its fixed type,
+and for two attached triangles its role and chain edges (anchor catch, glue and copy closure; named in run
+20261007-2051). Writes: a
 rule changes its own state or one of its own bonds; binding sets the state of both parties of the new bond (the caught
 triangle's fill flag). Rules that were not local and were replaced: closures that asked whether two triangles belong
 to the same body (now one flush tolerance, 0.05), snapping the smaller of two bonding bodies (removed), copy release
@@ -126,18 +136,25 @@ place (all or nothing; never by size).
 | Rule (sim.js) | Reads | From where | Verdict |
 |---|---|---|---|
 | roles | own bonds and bond kinds, own fill | own | local |
-| nb, gap, need | next partner's role (its own bonds now), its nb / need / gap | partner current state; previous pass | local (convention) |
+| gap, need | next partner's role (its own bonds now), its gap / need; a docked triangle: its template's gap | partner current state; previous pass | local (convention; nb merged into gap in run 20261007-2051) |
 | zip | own bonds (whether the high end's spare edge is bonded: held); next partner's role and its copy bond (TFACE); its zip | own; partner current state; previous pass | local (convention) |
 | open signal | own sides; partners' values; the two sides' `&` marks of each bond (run 1920) | previous pass; fixed type | local (relay) |
-| copy bind | the blank's copy sides; the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
-| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags (a fill's fill flag; a caught part's open signal, run 1920) |
+| copy bind | the blank's copy sides and their close-only and spent marks (since run 20261007-2051); the site's bond and spent state, and its anchor mark (since run 1221) | own; partner current state; fixed type | local |
+| glue catch, dock, fill | own role (glue: grown triangles only, since run 20261004-0022), need, zip; own side's close-only and spent marks; free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's flags (a fill's fill flag and both parties' fn; a caught part's open signal, run 1920) |
 | `_snap`, anchor capture | is the place free; the strand's body moves as one; the end's role and whether its spare edge is bonded (own bonds); the anchor side's spent flag (own) | physics (labelled); own | physics; local |
-| glue closure, copy closure | own active sides, need; the other side's glue; flush geometry | own; fixed type; geometry | local |
-| release | own face bond; chain partners' fn; template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
+| glue closure | own active sides (role); the candidate's active sides and glue, both sides' `&` marks; flush geometry | own; candidate current state; fixed type; geometry | local (convention) |
+| copy closure | own and the candidate's roles and chain edges, own need; both edges' bonds and `&` marks (run 20261007-2051); flush geometry | own; candidate current state; fixed type; geometry | local (convention) |
+| release | own face bond; chain partners' fn (previous pass, or set this pass by a fill binding); template's chain bonds at the ends | previous pass; partner current state | local (fixed 2026-10-02) |
 | fn | own fill; chain partners' fill | partner current state | local (convention) |
-| copy (`?`) | the one partner's whole type | fixed type | local (gated, Core changes) |
+| copy (`?`) | own role when the pass began (free: since run 20261007-2051); the one partner's whole type | own; fixed type | local (gated, Core changes) |
 | `&` release | own open signal, own `&` sides | own | local |
 | lysis, `_lyse` (run 2051) | own bonds and lysis; a bonded partner's side mark `!` and the two sides' `&` marks; partners' lysis | own; fixed type; previous pass | local (relay); writes own bonds (all at once, as a copy blank lets go) and own state |
+
+Known limit (independent review, run 20261007-2051; part of the labelled physics exception, not fixed): an anchor
+catches no strand end of its own body (`_snapBody` cannot move a body into itself), and two attached strand triangles
+close no glue bond, so a strand caught at one anchor whose high end lands flush at a second anchor of the same structure
+is never held there; the same geometry across two bodies binds. Whether a kept kit (the lineage's pore cell) ever meets
+it was not checked.
 
 Note: `_pairs` (physics) never lists two free triangles, so no chain of catches through free triangles can form in one
 pass; the chemistry relies on this.
@@ -178,14 +195,18 @@ high end held by a completion-release side `&` started no copy (a case of zip, r
 ## Chains and copying
 A strand is triangles joined by chain bonds (PREV/NEXT ends). A strand triangle's free edge is a **face** if its
 next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Strand ends are faces with one spare
-(inert) edge. Letters by hidden backs: gap 0 (T), 1 (R), 2 (Z) between faces.
+(inert) edge. Letters by hidden backs: gap 0 (T), 1 (R), 2 (Z) between faces. **gap** (exposed, previous pass): how many
+hidden backs follow a strand triangle before the next face (0, 1, or 2 for two or more), relayed by backs (since run
+20261007-2051, which merged the value nb, "my next partner is a back", into it; the same need everywhere).
 - **dock:** a free triangle binds a template face with the complementary face glue (FACE on the copy end, TFACE on
   the template end).
 - **fill:** a free triangle binds the prev edge of a docked or fill triangle while that still needs fills
   (need = 2 - template gap, relayed), by the complement of that edge's glue (an inert edge takes an inert side), so
   backs are heritable. (Until 2026-10-03 fills were glue-agnostic unless the option `latGlue` was set; now it is the
   rule, Core changes.)
-- **close:** a copy triangle's free prev edge binds another's free next edge, only when no more fills are needed.
+- **close:** a copy triangle's free prev edge binds another's free next edge, only when no more fills are needed and
+  neither edge carries `&` (since run 20261007-2051). A triangle docked or filled in a pass closes from the next pass.
+  Dock and fill take no spent side (since run 20261007-2051; no strand kit has one).
 - **release:** a docked triangle lets go of its face once its prev and next partners are complete (each partner
   exposes `fn`: it is a fill or has a fill on a chain bond, from the previous pass, and from the pass a fill binds:
   fixed 2026-10-02, a fill bound in the same pass did not hold the release); at a copy end without a prev (next) bond,
@@ -209,10 +230,11 @@ next edge is its prev edge + 1 (counter-clockwise), else a hidden **back**. Stra
   20261002-0721) `capture: 0` with `triTol` (binding by a flush side instead of the capture radius).
 
 ## Contact copying (copy side `?`, 2026-10-02)
-A free triangle with a copy side binds by it to any free (unbonded, not spent, not anchor) side of an attached
-triangle, whatever that side's glue and marks (close-only `.` and attach `@` sides too; an anchor side `|` is the one
+A free triangle with a copy side binds by it (by none of its close-only copy sides, since run 20261007-2051) to any free
+(unbonded, not spent, not anchor) side of an attached triangle, whatever that side's glue and marks (close-only `.` and attach `@` sides too; an anchor side `|` is the one
 mark it skips, since 2026-10-03, run 1221), when its centre comes within `capture` of the site and the site is free.
-In the same pass it takes its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the
+In the same pass, if it was free when the pass began (a copy blank that has just bound; since run 20261007-2051: two
+prepared triangles welded only by `?` sides were rewritten, the one with the lower index taking the other's type), it takes its partner's type (side i+k takes the partner's side j+k, i and j the bonded sides: the
 partner turned about the shared edge; glues and marks) and lets go. It binds nothing else (no glue binding, dock or
 fill) and is never itself a template. Free triangles never bind each other, so only attached triangles are copied.
 This is the only way a type changes (casting, the other, was removed 2026-10-03). Gate entry: Core changes.
@@ -249,7 +271,54 @@ Every core change (a new mark, signal, state, rule or rule branch, physics excep
 behaviour everywhere) is entered here before any code (AGENTS.md). Newest first. Entries older than run 2121 also
 speak of rules removed with the casting lineage (triggers, latches, casting, fuel): they are history.
 
-### Option `copyGlue` (candidate (t)): a glued copy side binds only a complementary side, 2026-10-07, autorun run 20261007-1921 (explore)
+### Core review 2026-10-07, autorun run 20261007-2051: one removal, one merge, four fixes
+An independent reviewer read every rule in `tri/sim.js` against locality and this file (findings below; the full list
+in the run's NEXT handoff, git). Pass order is clean: no loop in derive or chemistry reads a value it writes in the same
+pass, nothing reads two bonds away, `bodyOf` is used only inside the anchor catch (labelled physics), and `sim.js`
+never creates or destroys a triangle or changes a type except by copying.
+1. **Removal: the option `copyGlue`** (candidate (t), run 1921, entry below). No check, kit or command uses it, and its
+   result was negative (a class copied only from its own deaths makes no resource). Removed with the demo drive values
+   that served only it (`pair`'s `PAHB=3`, lettered blanks, and `PADL`, their decay); code in git at `25c68b9`. Contact
+   copying stays glue-blind (test "copying is glue-blind"). A slice that needs a resource kinds make starts again from
+   the case below, with what keeps the second blank type in supply answered first.
+2. **Merge: the exposed value nb into gap.** nb ("my next partner is a back") served only to let a face's gap tell one
+   hidden back from two. Backs now expose gap too, 1 + (1 if the next partner's gap was above 0), capped at 2: a face
+   reads the same 0, 1 or 2 in every pass (gap0 > 0 exactly when nb0 was 1: both say the partner was a strand triangle
+   whose next was a back), so need and every copy are unchanged. One exposed value fewer.
+3. **Fix: copying only by a triangle free when the pass began.** `_copy` rewrote any triangle bonded by a `?` side and
+   nothing else: two prepared triangles welded only by `?` sides, and the one with the lower index took the other's type
+   (an index-order effect). Now the rule reads its own role from the pass's start (free), as "a copy blank that bound
+   this pass" always said. Only prepared structures reached the old case.
+4. **Fix: a free triangle binds by none of its close-only copy sides.** The mark's meaning (a free triangle binds by none
+   of its close-only sides) held for glue catch, dock and fill but not for copy binding: a blank `-.?-?-?` copied by its
+   `.?` side. The general mutagen makes such sides (it toggles marks on free parts), so this is the one change that
+   alters outputs, only in worlds with the general mutagen (measured below). Spent copy sides are excluded the same
+   way (rare: a free triangle keeps a spent flag only after a lone caught part lets go, and then needs the mutagen).
+5. **Fix: a spent side binds nothing; no `&` side closes.** Dock and fill did not test the spent flag, copy closure no
+   mark at all; now dock and fill skip spent sides and copy closure skips `&` edges, as glue closure does. No strand kit
+   carries `&`, so no output changes.
+6. **Text fixes (no code):** the inert anchor `-|` binds no glue but chain bonds ignore the mark; copy blanks copy `.`
+   and `@` sides (the marks' rows said "never a free one", "only a free part"); a free triangle with `?` and `@` binds
+   by `?`; the audit rows of copy closure (it reads roles and chain edges, not glue), gap and need, fill (it sets both
+   parties' fn) and release; the convention names the binding candidate. Dead checks removed (no change): `free()`'s
+   role test, a bonded test in the copy branch and in `_snap`, `r.free>=0` in dock; `rb.inert<0` (never true) is now
+   `rb.inert===undefined`. Not changed: the anchor catch refuses a strand of its own body (Locality audit, Known limit);
+   `pBond` (never set below 1: removing it changes the random stream, not the rules; left for a run that changes outputs
+   anyway); `capture` and `triTolClose` (different tests); `_snap` and `_snapBody` (a merge changes outputs); `fn` (not
+   derivable without a relay).
+
+**Result (measured):** `node tri/test.js` 43 of 43 (two new tests: copying is glue-blind; only a triangle free when
+the pass began copies, never by a close-only copy side, which fails on `main`'s rules). Whole suite on the
+branch 51 of 52, the one failure the control `pair-flow-c` (below). Outputs against `main` `25c68b9` (`CHECK_SAVE`, every
+check but the two lineage ones, 163 worlds): byte for byte the same in 153, among them every chain-copying world (`copy`,
+`imprint` `g` and `p`, `budpool`: the nb merge and the closure fixes change nothing) and every pair world without the
+general mutagen; different in 10, all with the general mutagen (`pair-mut` 1-4, `pair-flow` 4, `pair-flow-c` 3 and 4,
+`pair-flow-i` 4, `world` 3, `own-letter-c` 2), as fix 4 predicts; all pass but `pair-flow-c` seed 4. That control was
+weak on `main` too: over seeds 1-8 without the drive the material locks in 3 of 8 worlds on `main` and in 3 of 8 on the
+branch (INNOVATIONS run 0621, re-measured), so it is now partial (reported, never fails). The lineage checks pass
+(`budcycle-3` 2 of 2, `budcycle-lysis` 2 of 2).
+
+### Option `copyGlue` (candidate (t)): a glued copy side binds only a complementary side, 2026-10-07, autorun run 20261007-1921 (explore) (removed run 2051)
 NEXT priority 20. The case, written before the code; the result follows when measured.
 1. **Capability and why the goal needs it.** A web of classes larger than its foods. Run 1821 showed that every catch
    is copied from blanks, so every class that makes its parts draws on one resource, and by competitive exclusion the

@@ -145,12 +145,14 @@ const CHECKS=[
   // returns as a copy blank once free (PAHB=2), so material held by binding variants flows through copying at the
   // hazard's rate. Passes a world with bodies at 200k, at least 10k copies in the last 5000 steps and a variant type first
   // seen after 100k that was in a tenth of the bodies at some census (a late sweep). Control: without the drive, seeds 3
-  // and 4 lock (binding variants hold the material: under 10k copies per 5000 steps; INNOVATIONS run 0450). In a 3x world
+  // and 4 lock (binding variants hold the material: under 10k copies per 5000 steps; INNOVATIONS run 0450). Partial since
+  // core review run 20261007-2051: over seeds 1-8 the material locks in 3 of 8 worlds on main (25c68b9: seeds 3, 4, 5) and
+  // in 3 of 8 after that run's fixes (seeds 2, 3, 8): the drive is not what keeps most worlds copying at 200k. In a 3x world
   // (3000 blanks, world 87) 4 of 4 to 300k, too slow for a check (about 25 minutes per world; INNOVATIONS run 0621)
   {id:'pair-flow',cap:'A pair world that keeps evolving: dead material returns as blanks (labelled drive), copying goes on and new variants still sweep at 200k',demo:'pair',seeds:[1,2,3,4],need:3,steps:200000,secs:400,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000',PAHB:'2'},
     pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
       const I=indiv(o);return [+m[1]>0&&+m[5]>=10000&&+m[4]>=1,`${m[1]} bodies of ${m[2]} kinds, ${m[5]} copies in the last 5000 steps, blanks ${m[6]}; ${m[3]} variant types in a tenth of the bodies, ${m[4]} of them new after 100k; individuals at 200k ${I?I.end:'-'} (fewest ${I?I.min:'-'})`];}},
-  {id:'pair-flow-c',cap:'  control: without the drive binding variants lock the material (under 10k copies per 5000 steps at 200k)',demo:'pair',seeds:[3,4],steps:200000,secs:410,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000'},
+  {id:'pair-flow-c',cap:'  control (partial): without the drive binding variants lock the material in some worlds (under 10k copies per 5000 steps at 200k; 3 of 8)',partial:true,demo:'pair',seeds:[3,4],steps:200000,secs:410,env:{PAB:'1000',PAS:'50',PAHT:'1000',PAH:'0.6',PAD:'1',PAM:'0.01',PAHU:'1',PAP:'5000'},
     pass:(L,o)=>{const m=o.match(/evolving: bodies=(\d+) kinds=(\d+) common=(\d+) lateCommon=(\d+) copiesLast=(\d+) blanks=(\d+)/);if(!m)return [false,'no result'];
       return [+m[5]<10000,`${m[5]} copies in the last 5000 steps, blanks ${m[6]}, ${m[1]} bodies`];}},
   // run 20261007-0420 (build): the hazard's unit decides between individuals and aggregates. pair-flow's setting with

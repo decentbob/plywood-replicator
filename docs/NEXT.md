@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-07 (after autorun run 20261007-2021, review-intent). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-08 (after autorun run 20261007-2051, core-review). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), the autorun log, and git: each run's handoff is
 this file at its merge (`git log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the
 pair Direction of run 1850 in full at `20e9a88`.
@@ -10,21 +10,21 @@ Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEA
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 
-**Handoff status (autorun run 20261007-2021, review-intent).** Direction check after priorities 10-20; no building, no
-runs. Reasoning in IDEAS "Twenty slices on the pair" (one page). In short: the core is not growing (6 marks, 3 relays, 4
-values, 2 states, plus the option `copyGlue` to remove); the slices now combine in one standard world; but the web-size
-line (priorities 15, 18-20) has reached a bound the theory explains (classes are at most the limiting resources, and a
-class that makes its own parts cannot invade), every class beyond the first stands on a prepared stock, and bodies are
-still 2 cells. What is missing is an interaction whose payoff depends on frequency. The cheapest one is already in the
-world, the nursery cheat, and the stocks block it: a host's seed sites sit on prepared stock parts, which never
-mutate, so a host can never escape the cheats of its letter. Without stocks the seed site is on a copied cell, a host
-lineage can change its letter pair and its cheats follow: a predicted Red Queen of letters, and with it more host
-classes than resources. So the next build runs the standard world without stocks (priority 21). Rotation unchanged.
-Nothing is running.
+**Handoff status (autorun run 20261007-2051, core-review).** The core is smaller and matches its text. Removed the
+option `copyGlue` (with `pair`'s `PAHB=3` and `PADL`); merged the exposed value nb into gap (3 exposed values, was 4);
+fixed four mismatches an independent reviewer found (only a triangle free when the pass began copies; a free triangle
+binds by none of its close-only copy sides; dock and fill take no spent side; no `&` edge closes); text fixes and dead
+checks (RULES Core changes, "Core review 2026-10-07"). Counts: 6 marks, 3 relays, 3 exposed values, 2 states, no option.
+Outputs against `main`: the same in 153 of 163 worlds; the 10 that differ all have the general mutagen (fix 4). Suite 51
+of 52, the failure the control `pair-flow-c` (seed 4), now partial: re-measured on 8 seeds, without the drive the material locks in only 3 of 8 worlds,
+on `main` as on the branch (INNOVATIONS run 0621). The coverage run (RULES Core inventory) shows chain copying fires only
+in `copy`, `imprint` and `budcycle`, and the anchor's catch with its physics exception only in `budcycle`: candidate (u)
+below, a capability decision for review-intent 82. Not changed: `pBond` (Core-change candidates, last line), the anchor's own-body limit
+(RULES Locality audit, Known limit). Nothing is running.
 
-**Next step (rotation 71, core-review).** Remove the option `copyGlue` and the drive values that serve only it (`PAHB=3`,
-`PADL`; the check `rare-waste` uses neither) unless the reviewer finds a use; review the core as usual. Then 72 build:
-priority 21.
+**Next step (rotation 72, build).** Priority 21 below (the standard world without stocks: a Red Queen of letters?).
+Theory first, then the runs. The worlds with the general mutagen now follow the close-only copy-side fix, so compare
+against the stock world (`world`) as run on today's `main`, not against older numbers.
 
 ## Direction and priorities
 
@@ -82,8 +82,18 @@ a command above uses.
   Run 1821: the classes are at most the limiting resources and every copied part is a blank, so (t) is the one way in the
   core to a resource kinds make; open: what keeps the second blank type in supply (`PAHB=2` returns plain blanks).
   Run 1921: **built as the option `copyGlue`** (default off) with the drive `PAHB=3` (lettered blanks): a class copied
-  only from its own deaths, which is no resource (it makes them from plain blanks); exclusion as without it. Remove at
-  the next core review unless a slice uses it.
+  only from its own deaths, which is no resource (it makes them from plain blanks); exclusion as without it. **Removed**
+  in core review run 2051 (code at `25c68b9`); a new attempt answers first what keeps a second blank type in supply.
+- (u) *Retire chain copying with the frozen lineage* (core review run 2051, from its coverage run): chain copying (the
+  relay zip, the values gap, need, fn, the state fill, the dock, fill, close and release rules, four bond kinds) fires
+  only in `copy`, `imprint` (`g`, `p`) and `budcycle`; the anchor's catch of a strand end, with its physics exception
+  (the strand moves as one body, `_snapBody`), only in `budcycle` (23 catches in the suite). The pair line uses neither.
+  Retiring both would leave contact copying as the one way to copy and roughly halve `tri/sim.js`, at the cost of the
+  checks `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis` (code stays in git) and of
+  the lineage returning as it is (its founder genome is a held strand). A capability decision, not a review's: weigh it
+  at review-intent 82 (or a harden that cuts the lineage's checks, run 73), with the question whether a heritable
+  sequence (a genome) will be needed for complex evolution and whether contact copying of a held strand (`imprint g`)
+  could carry it.
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
@@ -96,8 +106,9 @@ a command above uses.
   lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
 - Settled, keep: (f) the seed site `y` is copied while no bud sits on it (the pair relies on it). Not needed: (k).
-  Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921. Nothing else in the core is unused (RULES,
-  Core inventory).
+  Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051. Nothing else in the
+  core is unused (RULES, Core inventory, run 2051 coverage); `pBond` is never set below 1 (removing it changes the
+  random stream, not the rules: take it with a run that changes outputs anyway).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
 - Core review: same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);
@@ -135,8 +146,7 @@ PAW=1 PA1T=10000 PAEN=10 PAKR='U@&C@|u' PAKS='c@|-Z@&' PA3T=20000 PA3='N@&k@|n K
                                                    # (PAF unset) never establishes (web-three-c)
 PAW=1 PAF= PAM=0 PA2T=2000 PA3T=2000 PAEN=5 PA2='U@&C@|u c@|C.Z@&' PA3='W@&E@|w e@|E.Y@&' node tri/demos.js pair 1 30000 runs/x
                                                    # two equal blank farmers (check rare-waste; about 2 minutes): one excludes
-                                                   # the other by 30k; PAD=0: both stay (rare-waste-c); PAHB=3 lettered blanks,
-                                                   # TRI_PARAMS='{"copyGlue":true}' candidate (t), PADL their decay
+                                                   # the other by 30k; PAD=0: both stay (rare-waste-c)
 PAW=1 PAF= PAM=0 PA2='U@&C@|u c@|-Z@&' node tri/demos.js pair 1 20000 runs/x   # a catcher with its own seed site, alone
                                                    # without stock (check catcher-free; 45 s); diets world with catchers entered:
                                                    # check diets-catcher's env (PA1T, PAEN, PAKR, PAKS: a late entry of any 2-cell kit)

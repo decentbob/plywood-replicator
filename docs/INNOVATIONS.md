@@ -8,8 +8,19 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 `BUDCAPL`, `BUDDC` at `7a98831` (removed in run 20261003-1351, cleanup); `budcycle`'s `BCHOLD`, `BCSEED`, `BCK`, `BCLK`
 at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`,
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup); `pair`'s `PAT`, `PADBG`, `PAPS`, `PAV=half|right|link`, `PAVK=selfish|front`,
-`PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup). Results are from one or a few worlds; they show mechanisms,
+`PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup); the core option `copyGlue` with `pair`'s `PAHB=3`
+and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
+
+## 2026-10-08 (autorun run 20261007-2051, core-review)
+
+- **A smaller core that matches its text** (no new capability; RULES Core changes, "Core review 2026-10-07"). The option
+  `copyGlue` removed (with `pair`'s `PAHB=3`, `PADL`); the exposed value nb merged into gap; four fixes from an
+  independent review (copying only by a triangle free when the pass began; no copy binding by a close-only copy side;
+  dock and fill take no spent side; no `&` edge closes). Evidence: tests 43 of 43; suite 51 of 52 (the failure `pair-flow-c`, now partial);
+  163 check worlds against `main`, 153 byte for byte the same, the 10 others all with the general mutagen. Coverage of
+  the whole suite in the Core inventory. Found on the way: the control `pair-flow-c` was seed-picked (without the drive
+  the material locks in 3 of 8 worlds; entry of run 0621). Status: **works** (core review).
 
 ## 2026-10-07 (autorun run 20261007-1921, explore)
 
@@ -656,6 +667,10 @@ not statistics.
     the bodies (late sweeps; 12-22 such types in all). By conservation, copies equal deaths in a steady state, so
     binding can no longer stop the flow; free blanks may still fall (34-150 in seeds 2-4 at 300k) because the winners
     draw blanks lowest (IDEAS).
+    Re-measured in core review run 20261007-2051 (seeds 1-8, no drive, `runs/pfc.json`): under 10k copies per 5000
+    steps at 200k in only 3 of 8 worlds on `main` `25c68b9` (seeds 3, 4, 5: 5407, 2203, 8719; the others 12.8-16.6k)
+    and 3 of 8 after that run's fixes (seeds 2, 3, 8). So the drive makes the flow certain (4 of 4), but most worlds
+    without it still copy at 200k; the seeds of the control were the locking ones. `pair-flow-c` is partial since.
   - **Extinction by a selfish part:** to 300k, seed 1 died out at 260k after an S whose seed site carries a lysis mark
     (`B@p!y`: an R that binds it is lysed, so the seed site is free and copied again, but no bud grows on it) swept;
     `PAHB=1` lost seeds 1 and 4 by 240k (variants copied less swept first). Heredity is by part type in a mixed pool,
