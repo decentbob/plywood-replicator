@@ -42,8 +42,9 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 | The head-nursery founder: heads raise heads on their own side, the second cell's seed site lyses (`PAW=1 PAF= PA2='Z@&c@\|z C@-z!'`) | heredity in place, an immune site | **works** (build run 20261008-0551, checks `nursery` 4 of 4, `nursery-cheat` 4 of 4, control `nursery-c`): 420-450 individuals, head cheats lost within 5k; without the lysis mark one-letter chains (`-zZ@`) grow in place and collapse the world (4 of 4); invades the founder world in 2 of 4 (**partial**); the head never varies (the mutagen acts on free parts; nothing is free for long) | demo pair, IDEAS run 0551 |
 | Copy error in contact copying (`pErr`, core since run 0651, default 0): a copy takes one side wrong; variation where copies are made, also in lineages born in place; a common cheat site lets a new root letter in | replication errors, speciation by niche preparation | **works** (explore run 20261008-0651, checks `copy-error` 4 of 4, `cheat-root` 4 of 4, control `cheat-root-c`): head-nursery heads vary (none under the mutagen), neutral heads drift to large shares; in the stockless founder world the nursery evolves (2 of 4) and root letters turn over through cheat sites (2 of 4, **partial**); a plug part on the head's own side killed one nursery | sim.js `_copy`, demo pair `types:`, IDEAS run 0651 |
 | A site on the shared second cell is a commons: a head class born only there (`I@&c@\|z` on `C@iz!`) replaces the head nursery; second cells without the site turn it back | competition for a public good, negative frequency dependence across two levels, the parts of a Red Queen | **works** (build run 20261008-1021, checks `commons` 4 of 4, `commons-turn` 4 of 4, control `commons-c`; no mutation): invades at 80-100% site share, lost at 37-46%, one head establishes 1 in 8; under copy error (0.005, 0.01) the head nursery kept Z in 8 of 8 to 480k (the right root mutant while its site is common is rare: supply, not a barrier); stockless founder at the mutagen's supply turned letters over in 2 of 4 (place matters) | demo pair, IDEAS run 1021 |
-Every row marked works is guarded by `node tri/check.js` (one line per capability, 65 checks, 4 processes: about 71
-minutes at run 20261008-0250 plus about 29 for the nine checks added since; about 160 minutes in run 0651's container,
+| The race under copy error: the commons' cheats come first (no I nursery); a common site is a target (the commons class, in-place chains `I@iz!` and binders cost its carriers copies), so the second cell's site letter turns over, and commons classes of the new letters arise by one root error | a Red Queen of letters without a designer, negative frequency dependence | **works** (build run 20261008-1351, check `race` 6 of 8): I gone by 65-85k with no I nursery in 12 of 12; site letter turned in 10 of 16 by 240k; chains collapse nothing (a side nobody needs escapes by turnover); new commons classes q, M, N, I by mutation in 4 of 20 worlds (partial); one plug collapse | demo pair, IDEAS run 1351 |
+Every row marked works is guarded by `node tri/check.js` (one line per capability, 66 checks, 4 processes: about 71
+minutes at run 20261008-0250 plus about 38 for the ten checks added since; about 160 minutes in run 0651's container,
 so it runs as `--part 1/2` then `--part 2/2`; `budcycle-3` and `budcycle-lysis` 15-17 minutes, seed 3 only since run 0250)
 or by a test in `tri/test.js`.
 
@@ -98,8 +99,10 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    copying (core, `pErr`): the head varies; root letters turn over through cheat sites; a common cheat site lets a
    new root letter in (0651; `copy-error`, `cheat-root`, `cheat-root-c`). 23 the head nursery under copy error keeps
    its letter (8 of 8 to 480k); a site on the shared second cell is a commons: a class born there replaces the
-   nursery, second cells without the site turn it back (1021; `commons`, `commons-c`, `commons-turn`). Open: NEXT's
-   priorities.
+   nursery, second cells without the site turn it back (1021; `commons`, `commons-c`, `commons-turn`). 28 the race
+   under copy error: the commons' cheats always come first (no I nursery in 16 worlds); a common site is a target, so
+   the second cell's site letter turns over (10 of 16), and a commons class of the new letter arises by mutation
+   (1351; `race`). Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held

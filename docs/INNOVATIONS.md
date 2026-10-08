@@ -12,6 +12,49 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-1351, build)
+
+- **The race under copy error: the commons' cheats always come first; a common site is a target, so the shared
+  part's site letter turns over and commons classes of new letters arise by mutation** (NEXT priority 28; theory in
+  IDEAS "A common site is a target"). No rule change. New check `race` (6 of 8 worlds in the batch; as a check 3 of 4,
+  566 s; `copy-error` still 4 of 4); demo option
+  `PATN=n` (the `types:` line lists n types, default 10); reader `tri/census.js` (heads by root letter, second cells
+  by site letter, from `types:` lines).
+  - **The race** (`commons`'s world, copy error, mutagen off, 10 commons-class heads `I@&c@|z` at 20k, every second cell
+    `C@iz!` at start; 240k; `runs/race.json`, `runs/race2.json`): at `pErr` 0.005 (seeds 1-8) I rose to 22-100% of
+    heads (above half in 7 of 8) and was gone by 65-85k in 7 (185k in seed 6); at 0.01 (seeds 1-4) it peaked at 7-52%
+    (chains came before it grew: `I@iz!` 293 cells at 35k in seed 1, 320 at 45k in seed 4; F then on most second cells
+    by 40k in seed 1). **No I
+    nursery** (`I@&c@|i`) held in any of 12 race worlds (one head at one census, seed 3 at 0.01). The Z nursery held at
+    240k in 11 of 12; in seed 5 at 0.005 a new class had most heads (below).
+  - **The site letter turns over** (a letter other than the commonest on more than half of second cells later):
+    10 of 16 worlds by 240k (0.005: 6 of 8; 0.01: 2 of 4; control without the I entry at 0.01: 2 of 4), twice or more
+    in 8; to 480k (seeds 2, 3, 5, 6 at 0.005, `runs/race3.json`): i, M, V, g; i, m, a, m, a, m, a, m (a two-letter
+    oscillation from 235k); i, Q, k, F, Q; i, q, n. Each turn followed a parasite of the site: the commons class, an
+    **in-place chain** (the second cell with its attach letter changed to the site's complement: `I@iz!` 354 cells at
+    125k in seed 3; `Mz!m@` 255 at 145k, seed 2; `E.z!e@` 169 at 145k, seed 4), or a cell that binds the site (`COz!`
+    on o sites, control seed 3). Chains cut individuals to 215-245 for about 10k (5 worlds) and **collapsed no world** (predicted
+    2-6 of 12: wrong); the one collapse (control seed 4, 180k) was a plug `T!Z@i!` on the heads' own sides.
+  - **New commons classes by mutation** (root letters complementary to the new common site, one root error from the
+    nursery head): `q@&c@|z` on Q sites (Q on all second cells from about 125k; q from 215k, 98% of heads at 250k, gone
+    when k replaced Q at 255k; seed 5); `M@&c@|z` on m sites (420-480k, 53% at 430k; seed 3); `N@&c@|z` on n sites beside
+    I (95-170k, two commons classes on two site letters; seed 6, where I had taken every head and the Z nursery came
+    back by one root error at about 170k, all heads within 10k); `I@&c@|z` on the starting i sites in the control
+    (70-105k, 52%; seed 4 at 0.01).
+  - Predictions (NEXT slice record, written before the batch): P1 I above half in 3 of 4 per rate: 0.005 yes (3 of 4;
+    7 of 8), 0.01 no (1 of 4). P2 cheats first, Z holds, at most 1 of 8 with an I nursery: yes (0). P3 chains in every
+    world with common sites, 2-6 collapses: chains yes, collapses no (0 by chains, 1 by a plug). P4 several letters after
+    the turn in 2 of 4 per rate: yes.
+  - Pictures: [race.png](pictures/race.png) (the 12 worlds of `runs/race.json`: heads by root letter, i sites, the
+    commonest other site letter, chain cells; the sequence of majority site letters above each);
+    [race-long.png](pictures/race-long.png) (seeds 2, 3, 5, 6 at 0.005 to 480k).
+  - Commands: `PAW=1 PAF= PAM=0 PATN=30 PA2='Z@&c@|z C@iz!' PA1T=20000 PAEN=10 PAKR='I@&c@|z' PAKS='C@iz!'
+    TRI_PARAMS='{"pErr":0.005}' node tri/demos.js pair SEED 240000 runs/x` (check `race`, about 9 minutes; `pErr` 0.01 for
+    the second rate; without `PA1T PAEN PAKR PAKS` the control); `node tri/census.js runs/x.txt` reads one.
+  - Status: the commons class losing the race to its cheats **works** (12 of 12, inside `race`); site-letter turnover
+    by parasites of the common site **works** (`race`, 6 of 8 at 0.005); a commons class of a new letter by mutation
+    **partial** (4 of 20 worlds, no check of its own); an I nursery by mutation **not seen**.
+
 ## 2026-10-08 (autorun run 20261008-1222, cleanup)
 
 - **The suite in parts and every check as a command** — works (no capability, rule or output change). `tri/check.js
