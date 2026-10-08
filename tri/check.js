@@ -274,6 +274,17 @@ const CHECKS=[
   {id:'nursery-cheat',cap:'In-place heredity keeps cheats out: heads that raise nobody, entered at 20k, are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:150,env:{PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|z C@-z!',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-z!'},
     pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const n=p=>I.top.filter(([,k])=>k.split('+').includes(p)).reduce((a,[v])=>a+v,0),x=n('-Z@&c@|'),h=n('Z@&c@|z');
       return [x<h/10&&h>=300,`at 40k ${x} cheat heads beside ${h} nursery heads`];}},
+  // run 20261008-0651 (explore): copy error in contact copying (pErr, RULES Core changes; NEXT priority 24). In the head
+  // nursery the free-part mutagen never varied a head (run 0551); with copy error instead (mutagen off) heads vary where
+  // they are copied ('types:' lines: bonded triangles by type, the commonest 10): a head one side away from 'Z@&c@|z' at
+  // 0.5% of heads or more at some census (1.2-1.9% by 60k in run 0651's 4 worlds), and the world holds
+  ...(()=>{const {TOK,canon}=require('./sim'),sd=x=>[...x.matchAll(TOK)].map(m=>m[0]),H=canon('Z@&c@|z'),
+    one=c=>{const A=sd(c),B=sd(H);return Math.min(...[0,1,2].map(r=>[0,1,2].filter(k=>A[k]!==B[(k+r)%3]).length))===1;};return [
+  {id:'copy-error',cap:'Copy error varies a lineage born in place: head variants in the head nursery without a mutagen',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:{PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|z C@-z!',TRI_PARAMS:'{"pErr":0.01}'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];let best=0,bt='-';for(const m of o.matchAll(/^types: t=\d+ .*? \| (.*)$/gm)){const ty=m[1].split(', ').map(x=>{const i=x.indexOf(' ');return [+x.slice(0,i),x.slice(i+1)];});
+        const h=ty.filter(([,c])=>c===H||one(c)),n=h.reduce((a,[k])=>a+k,0);for(const [k,c] of h)if(c!==H&&k/n>best){best=k/n;bt=c;}}
+      return [best>=0.005&&I.end>=380,`commonest head variant ${bt} at ${(100*best).toFixed(1)}% of heads; ${I.end} individuals at 60k`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
