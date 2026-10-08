@@ -596,9 +596,9 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(PS&&PP&&t%PP===0)parLine(t);
         if(RP&&PP&&t%PP===0)rpLine(t);
         if(MU&&PP&&t%PP===0)census(t);
-        // copy error (pErr, run 20261008-0651; observation only): bonded triangles by type, the commonest 10, and the copy errors so far
+        // copy error (pErr, run 20261008-0651; observation only): bonded triangles by type, the commonest 10 (PATN=n: n), and the copy errors so far
         if(s.p.pErr&&PP&&t%PP===0){const by=new Map();let nb=0;for(const u of all)if(s.bonded(u)){nb++;const c=canon(s.typeName(u));by.set(c,(by.get(c)||0)+1);}
-          console.log(`types: t=${t} bonded ${nb} kinds ${by.size} copyErrors ${s.ev.copyError||0} copies ${s.ev.copy||0} | ${[...by].sort((a,b)=>b[1]-a[1]).slice(0,10).map(([c,k])=>k+' '+c).join(', ')}`);}
+          console.log(`types: t=${t} bonded ${nb} kinds ${by.size} copyErrors ${s.ev.copyError||0} copies ${s.ev.copy||0} | ${[...by].sort((a,b)=>b[1]-a[1]).slice(0,+(process.env.PATN||10)).map(([c,k])=>k+' '+c).join(', ')}`);}
         if(DW&&PP>=100&&t%PP===PP-50){diet(t);kinds(t);}else if(PP>=100&&t%PP===PP-50)console.log(`kinds: t=${t} ${indiv(t)}`);
         if(PP>=100&&t%PP===PP-50)web(t,wHeld);
         if(!first&&ev.births>1){first=t;const fu=[...alive.keys()];snap(s,'bud1',`t=${t}: the founder's first bud`,{units:fu,radius:3},true);}

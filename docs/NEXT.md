@@ -26,6 +26,33 @@ Nothing is running.
 (counts of root letters and of second-cell site letters per `types:`/`kinds:` census); rewrite them from the line
 formats (about 20 lines each).
 
+## Current slice (autorun run 20261008-1351, build): priority 28, the race
+
+**Goal.** Under copy error, in `commons`'s world (Z nursery `Z@&c@|z`, every second cell `C@iz!`, 10 commons-class heads
+`I@&c@|z` at 20k), measure which comes first: an I nursery `I@&c@|i` (letters cycle) or the commons' cheats (second cells
+whose i side changed; the Z nursery returns). Done when 12 worlds are read (`pErr` 0.005 and 0.01 x seeds 1-4, 240k;
+control at 0.01 without the I entry, seeds 1-4) and recorded; a check if one outcome holds in 3 of 4 worlds of one rate
+within a check's budget. Tools: `tri/census.js` (heads by root letter, second cells by site letter, from `types:` lines;
+demo option `PATN=n` lists n types). Stop: the record, whatever wins.
+
+**Theory (before the batch).** Copy error: per copy, one side (1/3), half the time a glue from 53, else a mark toggled;
+so a given glue on a given side is pErr/318 per copy. (1) The nursery mutant `I@&c@|i` is one error on a commons-class
+head's own side: pErr/318 per I copy. With head copies about 0.3 per step (IDEAS run 1021) and I about half of heads
+for some 30-60k, that is about 0.2-0.3 mutants per world at 0.01 (half at 0.005), each establishing perhaps 1 time in 3
+(one I head on the commons: 1 of 8; 10 I nurseries with i sites: 3 of 4). (2) A cheat is any change on the second
+cell's i side: pErr/3 per second-cell copy, a hundred times the nursery's supply; at 20k i-side variants (`C@bz!`,
+`C@i!z!`, `C@Fz!`, `C@iz`) are already about 5% of second cells by drift, so once I is common they are selected at once
+(run 1021: plain cells from 4% to over 90% in 20-30k). (3) A third player, seen in a 30k test (seed 1, 0.01: 2 at 15k,
+142 at 30k): `I@iz!`, the second cell with its attach letter C changed to I (pErr/318 per second-cell copy, about one per
+30k steps at 0.01). It binds any free i site and offers one, with no release and no lysis: an in-place chain, the sink of
+run 0551 (`-zZ@` on `z` sides). Chains also occupy i sites, so they too favour second cells without the site.
+Predictions: P1 I above half of heads at some census in at least 3 of 4 per rate. P2 the cheats come first: at 240k the
+Z nursery holds (Z above half of heads, I below 10%) in at least 3 of 4 of the surviving race worlds per rate; an I
+nursery above 20% of heads in at most 1 of 8. P3 `I@iz!` chains in every world with i sites common; collapses (under
+50 individuals) in 2-6 of the 12, each preceded by chains. P4 after the turn the i side carries several letters (3 or
+more at 5% of second cells or more) in at least 2 of 4 per rate: the commons door opened for other letters.
+Batch: `runs/race.json` (in NEXT's Commands form: `node tri/batch.js runs/race.json`; jobs r5, r10, c10, 240k, `PATN=30`).
+
 ## Priorities
 
 Done 1-24: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
