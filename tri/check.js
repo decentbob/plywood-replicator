@@ -292,9 +292,9 @@ const CHECKS=[
   // cells spread as cheats instead)
   ...(()=>{const env={PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|- C@-z|',PAEN:'10',PA1T:'50000',PAKR:'I@&c@|-',PAKS:'C@-i|'},
     share=o=>{const I=indiv(o);if(!I)return null;const n=I.top.filter(([,k])=>k.split('+').includes('-I@&c@|')).reduce((a,[v])=>a+v,0);return {n,end:I.end,f:I.end?n/I.end:0};};return [
-  {id:'cheat-root',cap:'A common cheat site lets a new root letter in: I roots entered after i cheats hold beside the Z roots',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:450,env:{...env,PA3T:'10000',PA3:'Z@&c@|- C@-i|'},
+  {id:'cheat-root',cap:'A common cheat site lets a new root letter in: I roots entered after i cheats hold beside the Z roots',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:180,env:{...env,PA3T:'10000',PA3:'Z@&c@|- C@-i|'},
     pass:(L,o)=>{const r=share(o);if(!r)return [false,'no result'];return [r.f>=0.2,`at 70k ${r.n} of ${r.end} individuals with an I root`];}},
-  {id:'cheat-root-c',cap:'  control: without cheats first, the I roots are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:450,env,
+  {id:'cheat-root-c',cap:'  control: without cheats first, the I roots are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:70000,secs:180,env,
     pass:(L,o)=>{const r=share(o);if(!r)return [false,'no result'];return [r.f<0.05&&r.end>=300,`at 70k ${r.n} of ${r.end} individuals with an I root`];}},
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two

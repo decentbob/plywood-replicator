@@ -297,6 +297,11 @@ NEXT priority 24. The case of run 0450 (below) said: revisit if a rate per copy 
    mutagen does (NEXT slice run 0651, batch B), the demo's drive `PAM` can retire in a cleanup (one labelled
    environment rule fewer; checks that pin the mutagen's outputs would move to `pErr`). Cost: one parameter, one
    branch in `_copy`.
+5. **Result (INNOVATIONS run 0651): adopted as a parameter, default 0.** At 0.01 with the mutagen off, heads of the
+   head nursery vary in 4 of 4 worlds by 60k (none in 4 of 4 under the mutagen), the world holds (414-436 individuals),
+   and in the stockless founder world the nursery evolves (2 of 4) and root letters turn over (2 of 4). So copy error
+   can stand in for the free-part mutagen; the default stays 0 until a cleanup moves the mutagen's checks to it (a
+   default above 0 changes every world's random stream and outputs).
 
 ### Core review 2026-10-07, autorun run 20261007-2051: one removal, one merge, four fixes
 An independent reviewer read every rule in `tri/sim.js` against locality and this file (findings below; the full list
