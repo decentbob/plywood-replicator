@@ -10,7 +10,8 @@
 //   chain copying    dock (face glue complement), fill (2 - gap fills, lateral glue complement), close, release,
 //                    zip (from a strand's high end while an anchor holds it: only held
 //                    strands are copied)
-//   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go
+//   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go (with probability
+//                    pErr one side of it wrong: copy error)
 //   completion       the open signal from open growth fronts (not across '&' joints); '&' sides let go and are spent
 //                    once none is heard
 //   lysis            a triangle bonded to a lysis side ('!') is lysed; lysis is relayed one bond per pass (not across
