@@ -40,6 +40,29 @@ at every census of A (stabilising selection). P3 every head variant seen in more
 near-neutral ones. P4 A alive at 240k in 4 of 4. P5 B evolves the nursery (`z` side on the head) in at least 2 of 4.
 P6 the second cell drifts in A as under the mutagen (a variant above 10% of second cells in at least 2 of 4).
 
+Batch read (08:00 UTC; `runs/ce/`, `types:` lines): A alive 4 of 4 (414-436 individuals at every census); head
+variants in bodies in 4 of 4 (P1 yes); the founder head fell to 0.4%, 44%, 74%, 77% of heads (P2 wrong): `Z@&c@z` (front
+without anchor, predicted near-neutral) swept seed 4 (99.6%) and reached 23% in seed 1; `Z@&|c@|z` (an anchor on the
+root, which is bonded or spent all its life: neutral, not listed) 56% in seed 3, 22% in seed 2; heads with another seed
+letter 1-2.4% (P3 half right). B: the head nursery evolved in 2 of 4 (seed 4 `Z@&c@|z` at about 190k, seed 3
+`D@&c@|d` at about 80k; P5 yes); **the root letter turned over** in 2 of 4 (seed 2 Z, I, y, g at 105k, 185k, 210k;
+seed 3 Z to D at 45-70k) and began to in a third (seed 4: j to 30% at 100k, D 15% at 170k): each new root letter is the
+complement of a seed site that had spread before it as a cheat (`-iC@` before I, `-YC@` before y, `-GC@` before g,
+`-d|C@` before D, `C@Jz!` before j). Seed 3 died at 140k: a plug `--D@` (attach letter of the nursery's own seed
+side, no other glue) bound the heads' `d` sides and stopped in-place births. Seed 1 lives on as `-Z@&c@` with a
+second head `-Z@&C@`, declining (237 individuals at 240k).
+Follow-up (one batch, 16 worlds, mutation off; `runs/cf.json`), predictions written before it:
+- (i) Is `Z@&c@z` neutral? 10 entered at 20k into the head-nursery world (`PA3='Z@&c@z C@-z!'`, 60k, seeds 1-4) against
+  the neutral marker `Z@&|c@|z` (same entry). Theory: its front is a template while it waits, so the head is copied
+  more, but those copies go to the pool, where few `z` sides are free: a small cost or none. Prediction Q1: both lost
+  or both held at similar shares (within 2x), i.e. `Z@&c@z` neutral; the sweep in A seed 4 was drift.
+- (ii) Does a common cheat letter let a root of that letter in? Founder world `Z@&c@|- C@-z|`; 10 cheats `C@-i|`
+  (on founder heads) at 10k; 10 I-hosts (`PAKR='I@&c@|-' PAKS='C@-i|'`) at 50k; to 110k, seeds 1-4; control: no cheats.
+  Theory: a cheat's seed site raises nobody until a root of its complement exists, so at r cheats per host the I-root
+  meets r free sites per Z-root's one shared site: no Allee barrier. Prediction Q2: with cheats, I roots above 20% of
+  roots at 110k in at least 3 of 4; without, I lost (under 5%) in at least 3 of 4 (run 1921: a rare class wastes its
+  parts).
+
 **Handoff status (autorun run 20261008-0551, build).** Priority 22 done (INNOVATIONS run 0551, IDEAS "In-place growth
 without a release is a sink"): the head-nursery founder (`PAW=1 PAF= PA2='Z@&c@|z C@-z!'`) holds in 4 of 4 to 240k at
 420-450 individuals, head cheats lost (check `nursery`, `nursery-cheat`, 4 of 4 each). Without the lysis mark on the
