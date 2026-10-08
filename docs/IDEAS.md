@@ -28,6 +28,39 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The shared site seals itself: the loop of letters is transient (build run 20261008-1650, 2026-10-08)
+
+NEXT priority 30, the loop at length, measured to 1.2M (INNOVATIONS run 1650). Notes, not the user's words.
+- **The loop stops.** Run 1351's loop (commons classes and the second cell's site letter chasing each other) slowed
+  and stopped in 1.2M-step worlds: 5, 3, 0, 3 site turns (current core; predicted about 10), and no commons class after
+  165k in any of them. What ended it was not a collapse but a guard: the site side took the **close-only mark**
+  (`C@i.z!`, `C@n.z!`, `C@r.z!`). A close-only side binds no free part by glue but is still copied (RULES, Side marks),
+  so the sealed site is a template and no target: commons heads and in-place chains cannot bind it. Sealed on more than
+  half of second cells from 50k, 165k, 380k, 870k (current core), 380k in one of four `lysOneWay` worlds; 88-100% at
+  1.2M wherever it swept, with 2 site turns in 3.3M sealed world-steps against 9 in 1.47M open ones.
+- **Why the seal and not the inert site.** Every escape from a parasite of the site is a change of that side; copy error
+  takes a glue with 1/2 (inert 1/53 of it) and toggles one of six marks with 1/2. So a new letter is about 0.49 of the
+  errors on that side, the close-only toggle 1/12, an inert glue 1/106. Letters come first (the turnover of run 1351), but
+  each new letter is a target again once it is common; the seal and the inert site are permanent, and the seal is nine
+  times likelier. Sealed and open cells are neutral without a parasite (controls drift: 16% to 0, 55% to 62%); with the
+  commons class growing the seal spreads (13% to 97% while I had half the heads), as plain cells did in run 1021's
+  turn. In the long worlds every sweep of the seal came during a parasite episode (a commons class or a chain spike).
+- **A side nobody needs guards itself, for good.** Run 1351 found that the second cell escapes its parasites by
+  turnover because it does not need its site; here it escapes them once and for all by sealing it, the same freedom
+  taken to its end. The Red Queen of letters needs targets that cannot be sealed: a side whose carrier needs a free part
+  to bind it (the head's own side, where its child is born) cannot be close-only, and there no guard is possible
+  (run 1522: plugs). So in the pair the two kinds of site split cleanly: needed sites have unguardable parasites (plugs,
+  collapse), unneeded sites end their parasites by sealing (stasis). Neither keeps evolving.
+- **What it gives the goal.** Lasting coevolution needs a site that is needed and can be defended only by changing
+  what binds it: a lock whose key is made by the same individual (a head's root letter and the site that raises its
+  children change together, so a one-error change of either breaks the pair) or a site whose rightful partner and its
+  parasite differ in a second side (recognition by two sides, which copy error must change twice to fool). Designed,
+  not demonstrated; this is the shape question of priority 31 seen from the parasite's side.
+- **One-way lysis in the long worlds.** Alive 3 of 4 to 1.2M; the fourth died at 1090k of a lysing plug (`Z@c!z!`,
+  then `V!Z@c!`: a second cell whose site had become `c!`, with attach letter Z) while every second cell carried two
+  traps (`C@z!z!`): the plug's `c!` side lyses the free second cells that heads need. The current core lost none of four.
+  One-way lysis keeps the trap, but the plug's own `!` sides are a second weapon the trap does not answer.
+
 ## A trap on the shared part: no head guards its own side, and the trap dies with its catch (explore run 20261008-1522, 2026-10-08)
 
 NEXT priority 29, the plug guard: derived, then tested without mutation (INNOVATIONS run 1522). Notes, not the user's words.

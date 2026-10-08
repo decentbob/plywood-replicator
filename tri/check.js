@@ -308,7 +308,7 @@ const CHECKS=[
   ...(()=>{const env={PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|z C@iz!',PA1T:'20000',PAEN:'10',PAKR:'I@&c@|z',PAKS:'C@iz!'},
     has=(k,p)=>k.split('+').includes(p),
     census=o=>[...o.matchAll(/^kinds: t=(\d+) .*?individuals (\d+) kinds .*? \| (.*)$/gm)].map(m=>{const top=m[3].split(', ').map(w=>w.match(/^(\d+)x (.+)$/)).filter(Boolean).map(q=>[+q[1],q[2]]);
-      const n=p=>top.filter(([,k])=>has(k,p)).reduce((a,[v])=>a+v,0);return {t:+m[1],all:+m[2],I:n('I@&c@|z'),Z:n('Z@&c@|z'),plain:n('-z!C@')};});return [
+      const n=p=>top.filter(([,k])=>has(k,p)).reduce((a,[v])=>a+v,0);return {t:+m[1],all:+m[2],I:n('I@&c@|z'),Z:n('Z@&c@|z'),plain:n('-z!C@'),sealed:n('C@i.z!')};});return [
   {id:'commons',cap:'A site on the shared second cell is a commons: a head class born only there replaces the head nursery',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:180,env,
     pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1];return [e.all>=380&&e.I>=0.9*e.all,`at 80k ${e.I} of ${e.all} individuals with an I root`];}},
   {id:'commons-c',cap:'  control: without i sites on the second cells, the I heads are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:180,env:{...env,PA2:'Z@&c@|z C@-z!',PAKS:'C@-z!'},
@@ -316,6 +316,15 @@ const CHECKS=[
   {id:'commons-turn',cap:'Second cells without the site turn the commons class back: plain second cells spread, I dies out, the nursery returns',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:220,env:{...env,PAEN:'20',PA3T:'35000',PA3:'Z@&c@|z C@-z!'},
     pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const pk=C.reduce((a,c)=>c.all&&c.I/c.all>a.f?{f:c.I/c.all,t:c.t}:a,{f:0,t:0}),e=C[C.length-1];
       return [pk.f>=0.3&&e.I===0&&e.Z>=0.9*e.all&&e.plain>=0.8*e.all,`I peaked at ${(100*pk.f).toFixed(0)}% of individuals (${pk.t}); at 100k I ${e.I}, Z ${e.Z}, plain second cells ${e.plain} of ${e.all}`];}},
+  // run 20261008-1650 (build): the sealed site (NEXT priority 30; IDEAS "The shared site seals itself"). The close-only
+  // mark on the site ('C@i.z!': binds no free part, still copied) is the form copy error gives the escape from the
+  // commons (a mark toggle, about 9 times an inert site's supply): the same I individuals are lost (control: commons),
+  // and sealed second cells entered while I spreads take the second cells as plain ones do (commons-turn)
+  {id:'seal',cap:'A sealed site (close-only, still copied) is no commons: the same I heads are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:160,env:{...env,PA2:'Z@&c@|z C@i.z!',PAKS:'C@i.z!'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1];return [e.I===0&&e.all>=380,`at 80k ${e.I} of ${e.all} individuals with an I root`];}},
+  {id:'seal-turn',cap:'Sealed second cells turn the commons class back: they spread, I dies out, the nursery returns',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:220,env:{...env,PAEN:'20',PA3T:'35000',PA3:'Z@&c@|z C@i.z!'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const pk=C.reduce((a,c)=>c.all&&c.I/c.all>a.f?{f:c.I/c.all,t:c.t}:a,{f:0,t:0}),e=C[C.length-1];
+      return [pk.f>=0.3&&e.I===0&&e.Z>=0.9*e.all&&e.sealed>=0.8*e.all,`I peaked at ${(100*pk.f).toFixed(0)}% of individuals (${pk.t}); at 100k I ${e.I}, Z ${e.Z}, sealed second cells ${e.sealed} of ${e.all}`];}},
   ];})(),
   // run 20261008-1351 (build): the race under copy error (NEXT priority 28; IDEAS "A common site is a target"). The
   // commons world with copy error at 0.005 and no hand-entered cheats: the commons class rises (22-100% of heads) and dies
