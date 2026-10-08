@@ -23,7 +23,9 @@ not statistics.
   measurement of the frozen lineage, run 1221; no check used it) is removed, code in git at `9556170`. README describes
   the pair line. Looked at and kept: every one of the pair demo's 30 options is used by a check; retiring the mutagen
   `PAM` for copy error would change the standard world and 21 checks (5 use the front-only mutagen, which copy error
-  cannot replace): a setup decision for a build (NEXT, follow-ups). Evidence: tests 44 of 44; RESULT1.
+  cannot replace): a setup decision for a build (NEXT, follow-ups). Evidence: tests 44 of 44; `--part 1/2` from a worktree of the branch: 33 of
+  33 pass (`pair-flow-c` partial as on main) in 4073 s; of part 2 the checks of its non-pair demos (`copy`, `strips`,
+  `budpool`, `lysis`) pass; its 26 pair checks were not rerun (no change reaches them).
   Command: `node tri/check.js --part 1/2 > runs/check1.txt`, then `--part 2/2`; `node tri/check.js --cmd world`.
 
 ## 2026-10-08 (autorun run 20261008-1021, build)

@@ -18,7 +18,9 @@ suite fits a background job's 2-hour limit even in run 0651's slow container) an
 demo command with its env and seeds: every capability's world is one command, so this file no longer lists them). The
 demo `pool` (a frozen-lineage measurement no check used) is removed (code in git at `9556170`). The pair's done list
 moved to ROADMAP backlog A and the core-change candidates to RULES (Core changes, Open candidates). `PAM` stays
-(follow-ups). Suite `--part 1/2` run from a worktree of the branch: RESULT1.
+(follow-ups). Suite `--part 1/2` from a worktree of the branch: 33 of 33 pass (`pair-flow-c` partial as on main), 4073 s; of part 2
+only its non-pair demos were run (`copy`, `strips`, `budpool`, `lysis`: 4 of 4 pass), since nothing a check runs changed.
+Nothing is running.
 
 **Next step (rotation 78, build): priority 28, the race.** The batch readers run 1021 used were throwaway scripts
 (counts of root letters and of second-cell site letters per `types:`/`kinds:` census); rewrite them from the line
