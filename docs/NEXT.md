@@ -43,6 +43,17 @@ Predictions (written while the batch started, before any census was read; run 13
 - P7 no second trap side (`z!` twice) on 10% of second cells in any world (no selection for it without an epidemic).
 - P8 every class stays one shape (a head and a second cell): turnover, no growth in complexity.
 
+Read so far (wave 1, current core, seeds 5-8 to 1.2M, 41 minutes per world): alive 4 of 4 (P1 right, no collapse);
+site turns 5, 3, 0, 3 (P2 wrong: the loop slows and stops); commons episodes by mutation 1, 3, 0, 0 after the I entry.
+**Unpredicted: the second cell's site evolves the close-only mark** (`C@i.z!`, `C@n.z!`, `C@r.z!`: binds no free
+part, still copied): sealed on more than half of second cells from 50k, 165k, 380k, 870k (seeds 7, 6, 8, 5), 88-100%
+at 1.2M in 4 of 4. After the seal no commons episode and almost no turn (2 turns in 3.3M sealed world-steps against 9
+in 1.47M unsealed): the sealed site is no target. Theory: a letter change is about 50x likelier than the mark toggle
+(52 of 59 changes of a side against 1), so letters turn first; each letter escape is temporary, the seal is permanent.
+Next in this slice: wave 2 (`ow`), then no-mutation tests (`seal`: I heads into sealed sites are lost; `seal-sel`:
+sealed and open second cells with I heads entered, the seal spreads; `seal-sel-c` without I), more seeds for the seal
+time (seeds 1-4, 9-12 to 480k), checks.
+
 **After this slice:** rotation 83 (core-review): adopt `lysOneWay` as the rule or remove it (adopting changes outputs:
 full suite).
 
