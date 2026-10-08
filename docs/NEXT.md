@@ -75,6 +75,18 @@ Running: p29c (`runs/p29c.json`, 60k, seeds 1-4 each; trap founder `C@-z!` at 0,
 smaller than without. Then p29d: the 165k state of the collapse world (`runs/ctl4s/pair_end.json.gz`, rerun of race
 control seed 4 at 0.01) resumed for 30k with `TRI_RESEED` 1-4: P7 current core collapses (no head in a body by
 195k) in 3 of 4; P8 `lysOneWay` holds in 3 of 4 with trap carriers above half of second cells.
+Read (picture `docs/pictures/plug-trap.png`): **P5 right, more than predicted**: under the current core the trap share
+fell from 0.47-0.92 to 0 within 5-10k of the plug pulse and every world was empty by 35-40k (4 of 4; the plug-free
+control `mixc` lived, trap share 0.69-1.00 by drift). **P6 right** (3 of 4 above the control, seed 3 equal at 1.00):
+with `lysOneWay` the trap share rose to 0.98-1.00 and every world lived (4 of 4), but at about half the heads
+(224-282 against 488-510), with the plug endemic (167-201 attached from 30k to 60k). p29d (resumed 165k state, 30k):
+**P7 3 of 5 collapsed** under the current core (`x0`, `r0s1`, `r0s2`; in `r0s3`, `r0s4` the plug was lost by
+chance); **P8 half**: with `lysOneWay` the trap held (0.87-1.00 in 5 of 5) but the plug spread in 3 of 5 (183-187
+attached, heads 237-281; `r1s1` 22 heads, 23 plugs at 195k), lost in 1, rising in 1 (`x1`). So the rule keeps the
+guard and turns a collapse into an endemic parasite in the forced epidemic; whether that state is stable is open.
+Running: p29e (`runs/p29e.json`): `mix1` to 200k (seeds 1-4) and the four `lysOneWay` continuations to 255k. P9 `mix1`
+holds to 200k in 3 of 4 with the plug endemic (100-250 attached at every census after 30k); P10 the continuations hold
+(heads above 100 at 255k) in 3 of 4.
 
 ## Priorities
 
