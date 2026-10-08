@@ -51,6 +51,16 @@ cannot touch its births; (c) a core change (RULES, Open candidates).
 Predictions (written while batch p29a ran, before reading it): P1 `--Z@` entered as 20 at 20k into the head nursery
 (no mutation) sinks it (no Z head in a body) in 3 of 4 by 80k; P2 `-z!Z@` the same way is lost in 3 of 4 and the
 nursery holds.
+Batch p29a (`runs/p29a.json`, 80k, seeds 1-4 each): **P1 wrong**: `--Z@` lost in 4 of 4 (at most 22 attached, gone by
+45-75k), the nursery untouched (heads 488-506). P2 right (never more than none in a census). Reading: a free plug
+copy has at most 100 steps (decay) to find a free own side, nursery heads' own sides are mostly holding a child, and
+every second cell carries a `z!` site, which binds a free `Z@` part and lyses it. **The second cell's `z!` is a trap**
+for every free part with the root's attach letter: pool heads, the one-error plug's copies and any plug. So (a') the
+guard the core already gives is the trap on the shared part; it is neutral while no plug is around, so it can drift
+away, and then a plug spreads. Batch p29b (`runs/p29b.json`, running): P3 with second cells `C@-q!` (a lysing site of
+an unused letter: no trap), `--Z@` entered as above sinks the nursery in 3 of 4 by 80k; its control without the plug
+holds in 4 of 4. P4 the race control seed 4 at 0.01 (the one collapse, run 1351), rerun to 185k: before the collapse
+most second cells carry no `z!` side.
 
 ## Priorities
 
