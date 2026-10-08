@@ -12,6 +12,46 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-1650, build)
+
+- **The loop at length: it stops, because the shared site seals itself** (NEXT priority 30; theory in IDEAS "The
+  shared site seals itself"). No rule change. New checks `seal-evolve` (3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; its control is
+  `commons`), `seal-turn` (4 of 4); `tri/census.js --loop` (one summary per world: site turns, commons episodes, trap,
+  plugs, chains; it also dropped the first file when `--every` was absent: fixed).
+  - **The race world to 1.2M** (`race`'s env, `pErr` 0.005, seeds 5-8; current core and `lysOneWay` 1; `runs/p30.json`,
+    41 minutes per world for the current core, 85 with 4 `lysOneWay` worlds at once): current core alive 4 of 4, site
+    turns 5, 3, 0, 3, commons episodes after the entered I: 1, 3, 0, 0, none after 170k; `lysOneWay` alive 3 of 4, turns
+    5, 3, 9, 2. Predicted (NEXT slice record): P1 current 3 of 4 alive (yes, 4), P2 5 or more turns per living world
+    (no: 2 of 8), P3 a commons class in 2 of 4 per arm (current 2 of 4; `lysOneWay` 1 of 4, a 23% blip), P4 Z holds most
+    heads at 1.2M (yes, 7 of 7 living), P5 `lysOneWay` 4 of 4 alive (no, 3), P6 turn rate alike (yes: 11 against 19),
+    P7 no second trap side (no: `C@z!z!` on every second cell in the dying world), P8 one shape (yes).
+  - **The sealed site** (unpredicted): the site side took the close-only mark (`C@i.z!`, `C@n.z!`, `C@r.z!`, `C@M.z!`):
+    more than half of second cells from 50k, 165k, 380k, 870k (current core) and 380k (one `lysOneWay` world), 88-100%
+    at 1.2M where it swept; to 480k (current core, seeds 1-4 and 9-12, `runs/p30t.json`) sealed in 4 of 8 (seeds 1, 2, 4, 10: from 65k, 325k, 150k, 95k), so 7 of 12 current-core worlds by 480k; seed 9 died at 330k of a plug `H!Z@i!` on the heads' own sides (82 at 315k, the trap lost with its catches), the collapse of run 1351 again: 1 collapse in 12 current-core worlds. After the seal: 2
+    site turns in 3.3M world-steps (9 in 1.47M before) and no commons class. Every sweep came during a parasite
+    episode (commons class or in-place chain). Close-only was 3848 of the second-cell type entries in the 8 long worlds'
+    censuses, inert sites 44: copy error toggles a mark with 1/2 (1/12 the close-only mark of a side), an inert glue
+    with 1/106.
+  - **Without mutation** (`runs/p30s.json`, `runs/p30t.json`, 80-100k): the commons world with sealed sites (`C@i.z!`):
+    the 10 I individuals lost by 25k, 4 of 4 (with open sites they replace the nursery: `commons`). Sealed and open
+    founders (the sealed one at 100 steps), 20 free I heads at 20k: where I grew the sealed share rose (13% to 97%, 16%
+    to 74%), where I was lost early it drifted as in the controls without I (16% to 0, 13% to 12%, 55-62%). 20 sealed
+    nurseries entered at 35k while I spreads (as `commons-turn` with `C@i.z!` for the plain cell): I gone by 80k and
+    the sealed share at 85-95% at its peak, 4 of 4; afterwards it drifts (60-99% at 100k: neutral without I). As the
+    checks (no `types:` lines, so other worlds): `seal` 4 of 4 (0 I individuals at 80k), `seal-turn` 4 of 4 (I peaked at
+    76-86% of individuals, sealed cells then up to 96-100%), `seal-evolve` 3 of 4 (sealed 68-89% at 400k; seed 5 seals
+    at 870k); 1205 s for the three.
+  - **One-way lysis at length:** the dying world (seed 6, 1090k): second cells `C@z!z!` and `C@c!z!`, then plugs
+    `Z@c!z!` (98-169) and `V!Z@c!` (111-144) on the heads' own sides, whose `c!` side lyses free second cells; heads
+    from about 510 to 0 in 50k. The current core had at most 8 plugs in any of its four worlds.
+  - Picture: [loop-long.png](pictures/loop-long.png) (the 8 long worlds: heads by root, plugs, chains, trap and
+    sealed shares, the majority site letter above).
+  - Commands: `node tri/check.js --cmd race` with 1200000 steps (and `"lysOneWay":1` in `TRI_PARAMS`) for the long
+    worlds; `node tri/check.js --cmd seal seal-turn seal-evolve`; `node tri/census.js --loop runs/x.txt`.
+  - Status: the loop of letters at length **stops** (the sealed site); the seal's evolution **works** (`seal-evolve`);
+    the sealed site as no commons and its spread under the commons class **work** (`seal`, `seal-turn`); one-way lysis
+    in the long worlds: 3 of 4 alive, **no gain shown** over the current core (4 of 4).
+
 ## 2026-10-08 (autorun run 20261008-1522, explore)
 
 - **The plug guard: no head guards its own side; a trap on the shared part does, but dies with its catch; one-way

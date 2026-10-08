@@ -362,6 +362,12 @@ NEXT priority 29 (the plug guard). Derivation and runs: IDEAS "A trap on the sha
    the resumed collapse world (copy error 0.01) the trap held in 5 of 5 continuations; the plug was lost in 1, endemic
    in 2, and 1 world died. Adopting it changes outputs wherever a `!` side holds a part without `&` (above): the whole
    suite then, and the lysis demo's and the scavenger test's expectations (the scavenger would no longer need `&`).
+6. **The long worlds (build run 20261008-1650).** The race world to 1.2M (copy error 0.005, seeds 5-8): current core
+   alive 4 of 4 (no plug epidemic, at most 8 plugs), `lysOneWay` 3 of 4: the fourth died at 1090k of a lysing plug
+   (`Z@c!z!`, `V!Z@c!`) although every second cell carried two traps (`C@z!z!`): the plug's own `!` side lyses free
+   second cells, a weapon the trap does not answer. So in these worlds one-way lysis neither prevented a collapse nor
+   was needed to avoid one; its case stays the forced epidemic (`trap-oneway`). Weigh at the core review: the loop of
+   letters ends by the sealed site in either arm (IDEAS "The shared site seals itself"), not by plugs.
 
 ### Rule (r): copy error in contact copying, 2026-10-08, autorun run 20261008-0651 (explore)
 NEXT priority 24. The case of run 0450 (below) said: revisit if a rate per copy turns out to matter. It does now.

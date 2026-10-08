@@ -1,47 +1,49 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-1522, explore). Read AGENTS.md first (rules of work), then this file.
-History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24, 28
-and 29, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p
-docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`.
+State on 2026-10-08 (after autorun run 20261008-1650, build). Read AGENTS.md first (rules of work), then this file.
+History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24
+and 28-30, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git
+log -p docs/NEXT.md`); the review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at
+`20e9a88`.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
 them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
-Where the line stands (runs 1351, 1522, INNOVATIONS): under copy error the commons loop runs by itself (commons
-classes and the second cell's site letter chase each other; turnover, not yet growth in complexity: every class has
-one shape). Its one sink is a plug on the heads' own sides. No head can guard its own side; the guard is a trap on the
-shared part (`z!` on the second cell), and under the current core the trap dies with each plug it lyses, so it is
-selected away in an epidemic. One-way lysis (option `lysOneWay`, candidate (w)) keeps it.
+Where the line stands (runs 1351, 1522, 1650, INNOVATIONS): under copy error the commons loop (commons classes and the
+second cell's site letter chasing each other) runs for a while and then **stops: the site seals itself** (the
+close-only mark: still copied, binds no free part, so no class is born there and nothing parasitizes it). The pair's
+two kinds of site split cleanly: the heads' own side is needed, and the head cannot guard it against its parasite, the
+plug (run 1522); the shared site is not needed and ends its parasites for good by sealing (run 1650). Neither keeps
+evolving. One-way lysis (`lysOneWay`, candidate (w)) kept the trap in a forced plug epidemic but showed no gain at
+length (3 of 4 alive against the current core's 4 of 4).
 
-**Handoff status (autorun run 20261008-1522, explore): priority 29 done.** One core candidate built as an option:
-`lysOneWay` (default 0; RULES Core changes (w), with its case; every default output unchanged: a 15k copy-error world
-byte for byte main's). New checks `trap`, `trap-c`, `trap-oneway`, `trap-oneway-c` (`node tri/check.js trap trap-c trap-oneway
-trap-oneway-c`: 4 of 4 checks pass, each 4 of 4 worlds, 591 s); test "lysOneWay" (tests 45 of 45); demo option `PA3N`; a resumed world takes `TRI_PARAMS` and
-`TRI_RESEED=k`. Records: INNOVATIONS run 1522, IDEAS "A trap on the shared part", RULES (w) and (v), ROADMAP (row,
-backlog A 29), picture `plug-trap.png`. The batches (`runs/` is not kept) are rebuilt from INNOVATIONS run 1522's
-entries and commands; read them with the trap reader in the checks (`trap*`: heads, second cells with `z!`, plugs from
-`types:` lines). The full suite was not rerun: the option is off by default, and nothing else in the rules, physics or a
-shared structure changed. Nothing is running.
+**Handoff status (autorun run 20261008-1650, build): priority 30 done.** No rule change. New checks `seal-evolve`
+(3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`: 3 of 3 pass, 1205 s);
+`tri/census.js --loop` (one summary per world; it dropped the first file without `--every`: fixed). Records:
+INNOVATIONS run 1650, IDEAS "The shared site seals itself", RULES (w) item 6, ROADMAP (row, backlog A 30), picture
+`loop-long.png`. The batches (`runs/` is not kept): the race world (`node tri/check.js --cmd race`) to 1.2M, seeds 5-8,
+with and without `"lysOneWay":1` in `TRI_PARAMS` (41-85 minutes per world); the same to 480k, seeds 1-4 and 9-12; the
+no-mutation worlds are the checks `seal` and `seal-turn`. Read any of them with `node tri/census.js --loop`. The full
+suite was not rerun: no rule, physics or shared structure changed (three checks and a reader added). Nothing is running.
 
-**Next step (rotation 80, build): priority 30, the loop at length**, now with two arms: the current core and
-`lysOneWay` (does one-way lysis remove the plug collapse and keep the loop turning?). Then rotation 83 (core-review):
-adopt `lysOneWay` as the rule or remove it (adopting changes outputs: full suite).
+**Next step (rotation 81, explore): priority 33, a site that can neither be sealed nor turned** (below). Then rotation
+82 (review-intent) and 83 (core-review: adopt or remove `lysOneWay`, priority 32).
 
 ## Priorities
 
-Done 1-24, 28 and 29: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24 and 28-30: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (review-intent 82 may reorder):
-30. [80 build] **The loop at length.** Does it run indefinitely? Worlds at 0.005 (the `race` world) to 1.2M, seeds 5
-    and 6 plus two more (about 45 minutes each): count site turns (run 1351: about one per 110k steps in the 480k
-    worlds), commons classes by mutation (4 in 4.8M world-steps), nursery losses and returns, collapses. A check if
-    the loop holds through several turns in 3 of 4. Second arm (run 1522): the same worlds with `lysOneWay` 1 (add it
-    to `TRI_PARAMS`): plug collapses (current core: 1 in 16 by 240k) and the trap's share over time (`z!` on second
-    cells: the `trap*` checks' reader); does a second trap side arise and spread during a plug epidemic?
-32. [83 core-review] **Adopt or remove `lysOneWay`** (RULES (w)). For: the trap survives its catch, the scavenger's
+33. [81 explore] **A site that can neither be sealed nor turned** (theory first; IDEAS "The shared site seals itself",
+    What it gives the goal). The loop of letters is transient: a site nobody needs seals (run 1650), a needed one has an
+    unguardable plug (run 1522). Derive which site the core allows that its carrier needs (so not close-only, not inert)
+    and whose parasite the carrier escapes only by a change that keeps its own use working: a head whose root letter
+    and own side change together (two errors, rare, but its plug must change too), or a part recognised by two sides.
+    Predict, then build the smallest such kind.
+32. [83 core-review] **Adopt or remove `lysOneWay`** (RULES (w); item 6: no gain at length, a lysing plug killed one of
+    four long worlds although every second cell carried two traps). For: the trap survives its catch, the scavenger's
     `&` trick becomes unnecessary, one condition. Against: it changes outputs wherever a `!` side holds a part without
     `&`. Run the suite with it on as default before deciding; the lysis demo's cutters and the scavenger test change.
 31. [later] **Shape inside the loop.** Every class is one shape (a head and a second cell), so the loop is turnover of
@@ -57,7 +59,7 @@ Open (review-intent 82 may reorder):
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage). Not taken from run 1750's
 list: (b) diets of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 79 explore (done), 80 build, 81 explore, 82
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged): 80 build (done), 81 explore, 82
 review-intent, 83 core-review.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((w) built as `lysOneWay`, (v), (t), (u), (s), (r)'s open part, (j), (l);
@@ -89,6 +91,8 @@ node tri/check.js --cmd [id ...]                   # each check's demo command (
                                                    # capability; change the steps (third argument) to run it longer
 node tri/census.js runs/x.txt [--every k]         # heads by root letter, second cells by site letter, from 'types:' lines
                                                    # (copy error on; PATN=30 in the world lists 30 types)
+node tri/census.js --loop runs/x.txt [...]        # one summary per world: site turns, commons episodes, sealed site,
+                                                   # trap, plugs, chains
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
 PAW=1 node tri/demos.js pair 1 120000 runs/x       # THE STANDARD WORLD (check world): the diet kind among stocks C E G,
