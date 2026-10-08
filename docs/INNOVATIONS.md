@@ -12,6 +12,42 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-08 (autorun run 20261008-0551, build)
+
+- **The head-nursery founder holds without stocks, keeps cheats out, and stands still; without the lysis mark it
+  collapses into chains** (NEXT priority 22; theory in IDEAS "In-place growth without a release is a sink"). No rule or
+  demo change. New checks `nursery` (4 of 4), `nursery-c` (control, 3 of 4), `nursery-cheat` (4 of 4).
+  - **The founder** (`PAW=1 PAF= PA2='Z@&c@|z C@-z!'`: heads `Z@&c@|z` raise heads on their own `z` side, the second
+    cell's seed site lyses the root it binds; drives and mutagen as `world-free`; 240k, seeds 1-4; `runs/hn.json`):
+    alive in 4 of 4, 420-450 individuals at every census (run 0121's founder world: 300-370), one class, heads without
+    a `z` side at most 1% of heads after 20k. **No head variant was in a body at any census** in the 4 worlds; only the
+    second cell drifted (`-@z!C@` up to 226 bodies, `C@Iz!` 71, `C@Dz!` 45; all keep the lysing site). At 240k (seed 1)
+    no part is free but 59 blanks: heads are born in place and every second cell is caught at once, so the mutagen,
+    which acts on free parts, reaches heads only in the few steps a copy is free.
+  - **The control** (`C@-z`: the same seed site without the lysis mark): collapsed in 4 of 4 (by 45k, 55k, 85k, 105k).
+    In each, a one-letter mutant of the second cell, `-zZ@` (its attach letter C to Z), sat on heads' `z` sides and
+    grew chains in place (its copy binds the `z` side it was made on, as a head's does; it has no release): up to 10
+    cells per body, about 10k from the first chains to none left (seed 2: 436 individuals at 30k, 146 at 45k, 0 at 55k;
+    blanks 11). With the mark the same mutant, `-z!Z@`, lyses its own copy at its tip: never seen in a body.
+    Predicted: the control near neutral (P4, 3 of 4 holding): **wrong**; the second cell's seed site is the chain guard.
+  - **Invasions** (no mutagen, 10 entered at 20k, 60k, seeds 1-4; `runs/hi.json`): heads without the `z` side
+    (`Z@&c@|- C@-z!`) entered into the head-nursery world are gone by 25k in 4 of 4 (predicted under 10%: yes). The head
+    nursery entered into the founder world (`Z@&c@|- C@-z|`) took it over in 2 of 4 (seeds 3, 4: 7 nursery
+    individuals at 25k, 202 at 30k, all by 45k); in seeds 1 and 2 its heads were lost by 25k, while its second cell
+    `-z!C@` spread among the founders (to about 80%, a cheat as in run 0121). Predicted 3 of 4: wrong; a rare nursery's
+    `z` sides are free seed sites for the founder's many pool roots.
+  - Predictions written before the batch (NEXT, slice record): P1 alive 4 of 4 in both designs (half right: the control
+    died), P2 head cheats under 10% (yes), P3 root `Z` with `z` kept (yes, 4 of 4 alive), P4 control holds (no), P5 chains
+    in at least 2 of 8 and before any collapse (yes: all 4 controls), P6 400 or more individuals (yes).
+  - Picture: [chain-sink.png](pictures/chain-sink.png) (control seed 2 at 45k: chains of `-zZ@` orange on heads blue;
+    second cells `-zC@` green; the world empty 10k later).
+  - Commands: `PAW=1 PAF= PA2='Z@&c@|z C@-z!' node tri/demos.js pair SEED 240000 runs/x` (about 10 minutes with 4 at
+    once; `C@-z` for the control); invasions: add `PAM=0 PA3T=20000 PAEN=10 PA3='Z@&c@|- C@-z!'` (cheat heads) or use
+    `PA2='Z@&c@|- C@-z|' PA3='Z@&c@|z C@-z!'` (nursery into the founder world), 60000 steps.
+  - Status: the head nursery as a founder **works** (`nursery` 4 of 4, `nursery-cheat` 4 of 4); the chain sink without
+    the lysis mark **works** as a control (`nursery-c` 3 of 4 by 90k, 4 of 4 by 120k); invasion of the founder world
+    **partial** (2 of 4); what evolves next: **nothing at the head** under a free-part mutagen.
+
 ## 2026-10-08 (autorun run 20261008-0250, harden)
 
 - **The frozen lineage's two checks on one world each; the suite in 71 minutes** — works (no capability change). The

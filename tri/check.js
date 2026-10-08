@@ -260,6 +260,20 @@ const CHECKS=[
   {id:'seed-open',cap:'A seed site without its anchor is copied too: the anchorless host replaces the founder by 50k',demo:'pair',seeds:[1,2,3,4],need:3,steps:50000,secs:100,env:{PAW:'1',PAF:'',PA2:'Z@&c@|- C@-z|',PAM:'0',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-z'},
     pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const n=p=>I.top.filter(([,k])=>k.split('+').includes(p)).reduce((a,[v])=>a+v,0),a=n('-zC@'),z=n('-z|C@');
       return [a>=9*z,`at 50k ${a} anchorless hosts beside ${z} anchored`];}},
+  // run 20261008-0551 (build): the head-nursery founder (NEXT priority 22; IDEAS "In-place growth without a release is a
+  // sink"). Heads 'Z@&c@|z' raise heads on their own z side (a copy binds its parent's z side at once); the second cell's
+  // seed site carries the lysis mark. Without the mark (control) a one-letter mutant of the second cell, '-zZ@' (attach C
+  // to Z), grows chains in place on the heads' z sides that never let go, and the world collapses
+  {id:'nursery',cap:'The head nursery holds without stocks: heads raise heads on their own side, no head cheats',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:{PAW:'1',PAF:'',PA2:'Z@&c@|z C@-z!'},
+    pass:(L,o)=>{const I=indiv(o);if(!I||!I.top.length)return [false,'no result'];const h=I.top.filter(([,k])=>k.split('+').includes('Z@&c@|z')).reduce((a,[v])=>a+v,0);
+      return [I.min>0&&I.end>=380&&h>=0.9*I.end,`individuals fewest ${I.min}, at 60k ${I.end}, ${h} with the nursery head; commonest ${I.top[0][0]}x ${I.top[0][1]}`];}},
+  {id:'nursery-c',cap:'  control: without the lysis mark on the second cell, chains of -zZ@ grow on heads and the world collapses by 90k',demo:'pair',seeds:[1,2,3,4],need:3,steps:90000,secs:200,env:{PAW:'1',PAF:'',PA2:'Z@&c@|z C@-z'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const ch=/-zZ@\+-zZ@/.test(o);return [I.end<20&&ch,`at 90k ${I.end} individuals; chains of -zZ@ ${ch?'seen':'not seen'}`];}},
+  // a head without the z side, entered as 10 individuals at 20k (no mutagen), sends all its copies to the pool, where host
+  // heads' z sides are nearly always taken by their own copies: lost within 5k in 4 of 4 (D c (1-λ) about 0.2)
+  {id:'nursery-cheat',cap:'In-place heredity keeps cheats out: heads that raise nobody, entered at 20k, are lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:150,env:{PAW:'1',PAF:'',PAM:'0',PA2:'Z@&c@|z C@-z!',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-z!'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const n=p=>I.top.filter(([,k])=>k.split('+').includes(p)).reduce((a,[v])=>a+v,0),x=n('-Z@&c@|'),h=n('Z@&c@|z');
+      return [x<h/10&&h>=300,`at 40k ${x} cheat heads beside ${h} nursery heads`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
