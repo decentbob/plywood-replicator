@@ -240,6 +240,26 @@ const CHECKS=[
   {id:'rare-waste-c',cap:'  control: without decay (PAD 0) both classes are still there at 30k',demo:'pair',seeds:[1],steps:30000,secs:120,env:{PAW:'1',PAF:'',PAM:'0',PAD:'0',PA2T:'2000',PA3T:'2000',PAEN:'5',PA2:'U@&C@|u c@|C.Z@&',PA3:'W@&E@|w e@|E.Y@&'},
     pass:(L,o)=>{const W=[...o.matchAll(/^web: t=(\d+) held (\d+) classes (\d+) links (\d+) .*?\| (.*) \| (.*)$/gm)];if(!W.length)return [false,'no result'];const w=W[W.length-1];
       return [+w[3]===2,`at 30k ${w[3]} classes (${w[5]})`];}},
+  // run 20261008-0121 (build): the standard world without stocks (NEXT priority 21; IDEAS "A nursery is a crowd"). The
+  // founder pair with the standard letters among blanks only ('Z@&c@|- C@-z|': the second cell is copied, so its seed site
+  // can mutate). Passes a world with individuals at every census whose commonest kind at 120k has a second cell other
+  // than the founder's (its seed site changed: anchor lost, a lysis mark, another letter)
+  {id:'world-free',cap:'The world without stocks: the second cell evolves; its seed site changes form by 120k',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:220,env:{PAW:'1',PAF:'',PA2:'Z@&c@|- C@-z|'},
+    pass:(L,o)=>{const I=indiv(o);if(!I||!I.top.length)return [false,'no result'];const k=I.top[0];
+      return [I.min>0&&!k[1].split('+').includes('-z|C@'),`individuals fewest ${I.min}, at 120k ${I.end}; commonest ${k[0]}x ${k[1]}`];}},
+  // a second cell whose seed site raises nobody (q: no root carries Q) is copied faster than the host's (its body never
+  // carries a waiting head, which shares the host's blanks: 1.2-1.5x, runs/copyrate.js) and invades from 10 at 20k to a
+  // balance with its hosts (no mutagen); passes a world where it holds at least half as many individuals as the host at 60k
+  {id:'seed-cheat',cap:'A nursery is a crowd: a second cell that raises nobody invades its hosts and holds beside them',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{PAW:'1',PAF:'',PA2:'Z@&c@|- C@-z|',PAM:'0',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-q|'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const n=p=>I.top.filter(([,k])=>k.split('+').includes(p)).reduce((a,[v])=>a+v,0),q=n('-q|C@'),z=n('-z|C@');
+      return [q>=z/2,`at 60k ${q} cheats beside ${z} hosts`];}},
+  {id:'seed-cheat-c',cap:'  control: a marked host (copy side glue w, nothing binds it) entered the same way does not spread',demo:'pair',seeds:[1],steps:60000,secs:120,env:{PAW:'1',PAF:'',PA2:'Z@&c@|- C@-z|',PAM:'0',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@wz|'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const n=p=>I.top.filter(([,k])=>k.split('+').includes(p)).reduce((a,[v])=>a+v,0),w=n('C@wz|'),z=n('-z|C@');
+      return [w<z/5,`at 60k ${w} marked beside ${z} hosts`];}},
+  // the seed site without its anchor is a template while no bud sits on it: the anchorless host replaces the anchored one
+  {id:'seed-open',cap:'A seed site without its anchor is copied too: the anchorless host replaces the founder by 50k',demo:'pair',seeds:[1,2,3,4],need:3,steps:50000,secs:100,env:{PAW:'1',PAF:'',PA2:'Z@&c@|- C@-z|',PAM:'0',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-z'},
+    pass:(L,o)=>{const I=indiv(o);if(!I)return [false,'no result'];const n=p=>I.top.filter(([,k])=>k.split('+').includes(p)).reduce((a,[v])=>a+v,0),a=n('-zC@'),z=n('-z|C@');
+      return [a>=9*z,`at 50k ${a} anchorless hosts beside ${z} anchored`];}},
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
