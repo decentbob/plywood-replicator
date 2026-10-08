@@ -15,7 +15,8 @@
 //   completion       the open signal from open growth fronts (not across '&' joints); '&' sides let go and are spent
 //                    once none is heard
 //   lysis            a triangle bonded to a lysis side ('!') is lysed; lysis is relayed one bond per pass (not across
-//                    a bond on an '&' side); a lysed triangle cuts all its bonds and returns to a fresh state
+//                    a bond on an '&' side; with lysOneWay, not into a triangle through its own '!' side); a lysed
+//                    triangle cuts all its bonds and returns to a fresh state
 // (The casting lineage's rules, casting, hinges and machines, energy, proofreading, were removed on 2026-10-03: git
 // `7415fd4`, docs/RULES.md Core changes.)
 const {Physics}=require('./physics');
@@ -46,7 +47,7 @@ const CANON=new Map();
 const canon=name=>{let c=CANON.get(name);if(c!==undefined)return c;const t=[...name.matchAll(TOK)].map(m=>m[0]);c=[0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];
   if(CANON.size>=1e5)CANON.clear();CANON.set(name,c);return c;};
 
-const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,pErr:0};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,pErr:0,lysOneWay:0};
 const ERRG=[...'-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(gcode);   // glues a copy error draws from
 
 class TriSim extends Physics{
@@ -109,10 +110,13 @@ class TriSim extends Physics{
       this.op[u]=b?v:-1;}
     // ly (lysis): 1 for a triangle bonded to a partner's lysis side '!', or hearing lysis from a partner (previous pass)
     // across a bond on which neither side carries '&' (the joint between a bud and its parent stops it); 2 for a
-    // bonded triangle that was lysed in the previous pass (its partners have heard it: it cuts its bonds this pass)
+    // bonded triangle that was lysed in the previous pass (its partners have heard it: it cuts its bonds this pass).
+    // lysOneWay (candidate (w), run 20261008-1522; default 0): no lysis is relayed into a triangle across a bond on its
+    // own lysis side '!' (a lysis side lyses its partner and passes nothing back)
+    const ow=this.p.lysOneWay;
     for(let u=0;u<n;u++){let L=0;
       for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;if(ly0[u]){L=2;break;}
-        if(this.lys[q]||ly0[(q/3)|0]&&!this.done[u*3+i]&&!this.done[q])L=1;}
+        if(this.lys[q]||ly0[(q/3)|0]&&!this.done[u*3+i]&&!this.done[q]&&!(ow&&this.lys[u*3+i]))L=1;}
       this.ly[u]=L;}
   }
   // an open front: an unbonded glued attach side '@' that is not '&'. A triangle caught by glue with one emits the open

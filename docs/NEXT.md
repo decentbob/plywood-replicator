@@ -61,6 +61,20 @@ away, and then a plug spreads. Batch p29b (`runs/p29b.json`, running): P3 with s
 an unused letter: no trap), `--Z@` entered as above sinks the nursery in 3 of 4 by 80k; its control without the plug
 holds in 4 of 4. P4 the race control seed 4 at 0.01 (the one collapse, run 1351), rerun to 185k: before the collapse
 most second cells carry no `z!` side.
+Batch p29b read: **P3 right** (`C@-q!` second cells: 20 plugs sank the nursery in 4 of 4 by 35-40k; control 4 of 4
+holds at 421-430). **P4 wrong, and why matters**: at 160k 95% of second cells carried `z!` (`C@i!z!` 347); the plug
+`T!Z@i!` (`C@i!T!` with attach letter Z, one error) rose 2, 8, 37, 141 at 160-175k while trap carriers fell 347 to 59
+and trapless `C@i!T!` and `C@i!J!` rose 29 to 154 of 247; empty at 185k. **The trap dies with its catch**: a plug
+caught on `z!` is lysed by contact, and its lysis comes back across the bond (no joint) into the second cell and its
+head. A trap that catches a part without `&` kills its own individual: an altruist, lost in an epidemic. Core case
+(w) in RULES (a lysis side passes no lysis back), built as `lysOneWay` (default 0), test "lysOneWay"; resumed worlds
+now take `TRI_PARAMS` and `TRI_RESEED=k`; demo option `PA3N`.
+Running: p29c (`runs/p29c.json`, 60k, seeds 1-4 each; trap founder `C@-z!` at 0, trapless founder `C@-q!` at 100;
+200 plugs `--Z@` at 20k): P5 under the current core the trap share at 30-60k falls below the plug-free control's
+(`mixc`) in 3 of 4 seeds; P6 with `lysOneWay` it rises above it in 3 of 4, and the individuals' dip at 20-25k is
+smaller than without. Then p29d: the 165k state of the collapse world (`runs/ctl4s/pair_end.json.gz`, rerun of race
+control seed 4 at 0.01) resumed for 30k with `TRI_RESEED` 1-4: P7 current core collapses (no head in a body by
+195k) in 3 of 4; P8 `lysOneWay` holds in 3 of 4 with trap carriers above half of second cells.
 
 ## Priorities
 

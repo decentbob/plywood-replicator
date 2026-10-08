@@ -65,9 +65,13 @@ function createWorld({seed=1,size=18,founders=[],structures=[],supply={},params=
   for(const [t,c] of Object.entries(supply))for(let q=0;q<c;q++){const u=next++;s.setType(u,t);
     if(!placeFree(s,u,placed,()=>[size*s.rng(),size*s.rng()]))throw Error('could not place '+t);placed.push(u);}
   for(let k=0;k<40;k++)s.derive();   // settle the relayed signals of the founders
-  // TRI_RESUME (environment): a saved state (.json.gz from a demo's pictures) of this same world continues from there
+  // TRI_RESUME (environment): a saved state (.json.gz from a demo's pictures) of this same world continues from there;
+  // TRI_PARAMS still overrides the saved parameters, and TRI_RESEED=k restarts the random stream from k (replicate
+  // continuations of one state; explore run 20261008-1522)
   if(process.env.TRI_RESUME){const st=JSON.parse(require('zlib').gunzipSync(require('fs').readFileSync(process.env.TRI_RESUME)));
-    if(st.n===n){const r=s.constructor.fromState(st);for(const k of Object.keys(r))s[k]=r[k];s._cells=null;console.log('resumed from',process.env.TRI_RESUME,'at t='+s.t);}}
+    if(st.n===n){const r=s.constructor.fromState(st);for(const k of Object.keys(r))s[k]=r[k];s._cells=null;s.p={...s.p,...JSON.parse(process.env.TRI_PARAMS||'{}')};
+      if(process.env.TRI_RESEED){s.rng.setState(+process.env.TRI_RESEED);s._spare=NaN;}
+      console.log('resumed from',process.env.TRI_RESUME,'at t='+s.t+(process.env.TRI_RESEED?' reseeded '+process.env.TRI_RESEED:''));}}
   return out;}
 
 // place free triangle u at random points from gen() without overlapping `placed`; true on success
