@@ -28,6 +28,11 @@ worlds per rate; P2 a second root letter above 5% of heads at some census in at 
 complement on at least 10% of second cells before it; P3 no pool class replaces the nursery; P4 alive 4 of 4 at 0.005,
 at least 3 of 4 at 0.01 (plugs); P5 stockless founder at 0.005: root letter turns over in at most 1 of 4 by 240k (if 2
 or more, place matters beyond rate).
+Follow-up queued (`runs/p23e.json`, no mutation, 10 I founders entered at 20k into the head nursery, 80k, seeds 1-4):
+e1 the pool class `I@&c@|z` with i sites on every second cell (`C@iz!` from the start), e1c the same without i sites,
+e2 an I nursery `I@&c@|i` (second cells `C@-z!`), e3 the I nursery with i sites. Predicted: e1 lost or under 2% of
+heads by 80k in at least 3 of 4 (per copy below the resident); e1c lost by 25k in 4 of 4; e2 lost in at least 3 of 4
+(neutral, drift; its leaked heads find no site); e3 lost in at least 2 of 4 (neutral).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
