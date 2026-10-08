@@ -105,11 +105,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
    copying as the rule, the corner bud, three generations on a slow supply (`budcycle-3`), lysis in the lineage
    (`budcycle-lysis`). Open when it returns: a lineage that does not burn down (feeding, candidate (n), the front sink).
-0b. **Speed** (harden runs): a three-generation `budcycle` world takes about 30 minutes, the check suite about an hour (run 0251; 36 minutes at run 1421;
-   run 0950: 1.34x, run 1421: 1.18x on the suite, both exact; run 20261006-0021: the pair world 1.8-2.1x, exact, about 500
-   steps per second at 1050 triangles); lone blocks (`_single`: about 780 free triangles in a
-   `budcycle` world) take most of the time; no single hot spot left inside them.
-   Since run 20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
+0b. **Speed** (harden runs): a three-generation `budcycle` world takes 15-17 minutes (seed 3); the check suite 71
+   minutes at run 0250 with 56 checks, now 65 and run in two parts (module table note); speed-ups so far exact (run
+   0950: 1.34x, run 1421: 1.18x on the suite; run 20261006-0021: the pair world 1.8-2.1x, about 500 steps per second
+   at 1050 triangles); lone blocks (`_single`) take most of the time; no single hot spot left inside them. Since run
+   20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
 
 Removed with the casting lineage (2026-10-03; in git at `7415fd4`): the heritable factory cycle, the factory on lid
 pockets, the pump through a wall, bud and feed on kits, division by doors. Still open from that list:
