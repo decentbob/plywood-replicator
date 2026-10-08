@@ -31,6 +31,11 @@ after 20k. P3 root letter `Z` with side `z` in the commonest kind at 240k in at 
 head nursery (commonest kind `Z@&c@|z` with any second cell) in at least 3 of 4; its seed site may drift. P5 chains of
 3 or more cells arise in at least 2 of 8 and precede any collapse. P6 individuals 400 or more (run 0121's founder
 world: 300-370).
+Follow-up (invasions, no mutagen, 10 entered at 20k, 60k, seeds 1-4; `runs/hi.json`): P7 the head nursery
+(`Z@&c@|z C@-z!`) entered into the founder world (`Z@&c@|- C@-z|`) holds more than half the individuals by 60k in at
+least 3 of 4 (its copies are born in place; the founder's roots come from the pool). P8 a head without the `z` side
+(`Z@&c@|- C@-z!`) entered into the head-nursery world stays under 10% of individuals in 4 of 4: its copies all go to
+the pool and find only the few host `z` sides a host's own copy did not take (D c (1-λ) about 0.2 with λ 0.9, c 2).
 
 **Handoff status (autorun run 20261008-0250, harden).** The suite on `main` d76ac35: 56 of 56 (the partial control
 `pair-flow-c` 1 of 2, as recorded), 4728 s. The frozen lineage's two checks now run seed 3 alone (`budcycle-3`,
