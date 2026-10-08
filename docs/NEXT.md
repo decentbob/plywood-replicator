@@ -18,6 +18,30 @@ plug (run 1522); the shared site is not needed and ends its parasites for good b
 evolving. One-way lysis (`lysOneWay`, candidate (w)) kept the trap in a forced plug epidemic but showed no gain at
 length (3 of 4 alive against the current core's 4 of 4).
 
+**Current slice (autorun run 20261008-1951, explore; priority 33; in progress).** Goal: settle by theory which site
+the core allows that its carrier needs and can still turn, then test the predictions. Done when the derivation is in
+IDEAS and each prediction below is measured (3 of 4 worlds where it is a capability). Stop at the measurements; no core
+change unless the derivation calls for one.
+Derivation (before the batches). Recognition is one glue pair on two sides; copy error changes one side per copy.
+(1) A lock its carrier needs is **frozen**: if its key is made by the carrier's own line (the nursery: root `Z@&` and own
+side `z` on one type) a one-error change of either breaks in-place birth; if the key comes from the pool and is needed by
+its own carrier too (front `c@` and attach `C@`), an unbound key is never copied, so no standing variation waits on the
+other letter. Either way the change needs two errors at once (about pErr^2/(36*53) per copy). (2) A lock turns by
+single errors only where one side drifts, i.e. where its carrier does not need it: the second cell's site. (3) So
+"needed by its carrier and turnable" is impossible in the pair; the nearest thing is a **public lock**: a site needed by
+a class but not by the part that carries it (the seed site of a pool-raised class on the second cell, the stockless
+world B of run 0551/0651). There cheats (other letters, the seal) raise nobody, so they spread only while hosts' sites
+are occupied: self-limiting (run 0551's cheats held at 0.9-3 per host); other-letter cheats are stepping stones, so root
+letters keep turning (run 0651: B turned over in 2 of 4). (4) The loop's exit is **privatization**: one glue error on the
+pool head's copy side (`-` to the root's complement) makes a nursery, which wins (run 0551: 410-440 individuals against
+300-370) and makes the public lock unneeded; then it seals or turns freely and the loop stops (the race world, run 1650).
+Predictions: E2 (B world, `pErr` 0.01, seeds 1-4, 480k): root-letter turns only before a nursery holds most heads; after
+it, no turn, and the sealed or trap share of second cells rises; while no nursery, the sealed share stays below half.
+E1 (B world with the anchorless site `C@-z`, no mutation, 10 sealed `C@-z.` pairs entered at 20k, 100k): the sealed
+share levels off below 80% and the world lives (4 of 4); control: 10 more of the resident pair (drift). E3 (B with the
+head's copy side close-only, `Z@&c@|-.`: a nursery then needs two errors, the first neutral): no nursery by 480k in 3 of
+4, and root letters still turn after 240k in at least 2 of 4.
+
 **Handoff status (autorun run 20261008-1650, build): priority 30 done.** No rule change. New checks `seal-evolve`
 (3 of 4: seeds 5-8 at 400k), `seal` (4 of 4; control `commons`), `seal-turn` (4 of 4) (`node tri/check.js seal-evolve seal seal-turn`: 3 of 3 pass, 1205 s);
 `tri/census.js --loop` (one summary per world; it dropped the first file without `--every`: fixed). Records:
