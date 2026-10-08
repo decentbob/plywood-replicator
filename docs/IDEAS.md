@@ -55,7 +55,7 @@ The race of NEXT priority 28, measured under copy error (INNOVATIONS run 1351). 
   98-100% of second cells), exactly the condition under which a commons class of the complementary root invades (run 1021:
   80-100% of sites). The class comes from the nursery by one root error (`Z@&c@|z` to `q@&c@|z`, pErr/318 per head
   copy, about one per 100-200k steps at 0.005). Seen: Q on all second cells from 125k, a `q` class from 215k, 84% of
-  heads at 240k (seed 5); in the control without any entered class, an I class by mutation on the starting i sites
+  heads at 250k (seed 5); `M@&c@|z` on m sites at 420-480k (seed 3, after m and a had alternated four times); in the control without any entered class, an I class by mutation on the starting i sites
   (52% of heads, seed 4 at 0.01). So the loop runs by mutation alone: site sweeps prepare commons classes, commons
   classes (and chains) end site sweeps.
 - **The nursery is also one error from every commons class.** In seed 6 the I class took every head (the Z nursery
