@@ -24,7 +24,7 @@ function buildStructure(s,units,tris,x,y,rot=0){const cs=Math.cos(rot),sn=Math.s
     if(gu&&gv===comp(gu))s.bind(u,i,v,j);}
   return W;}
 // structures: {tris, x, y, rot?}; supply: {type: count}
-function createWorld({seed=1,size=18,structures=[],supply={},params={}}={}){
+function createWorld({seed=1,size=18,structures=[],supply={},params={},founders}={}){if(founders)throw Error('createWorld: founder strands left with chain copying (git 1284bb4)');
   const n=structures.reduce((a,t)=>a+t.tris.length,0)+Object.values(supply).reduce((a,b)=>a+b,0);
   // TRI_PARAMS (environment, JSON) overrides parameters for experiments, e.g. TRI_PARAMS='{"sigma":0.2}'
   const s=new TriSim({...params,...JSON.parse(process.env.TRI_PARAMS||'{}'),seed,W:size,H:size},n);let next=0;const placed=[],out={s,structures:[]};
