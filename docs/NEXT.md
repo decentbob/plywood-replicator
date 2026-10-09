@@ -1,11 +1,12 @@
 # Next instance: start here
 
-State on 2026-10-08 (after autorun run 20261008-2151, review-intent). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-09 (after autorun run 20261008-2221, core-review). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
-28-30 and 33, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
+28-30, 32 and 33, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
 (`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
 review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
-direction check: IDEAS "Eight slices on the lock" (run 2151).
+direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
+progress) at its WIP commits on `core-review-2221` (`git log -p docs/NEXT.md`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
@@ -17,42 +18,32 @@ nursery world that is the second cell's site, which seals for good (run 1650: th
 is a **public lock** (the pool-raised class's site on the second cell): it turns and its seal is self-limiting, but the
 core's guard (a trap of its letter) lyses keys and plugs alike, so **turnable and guardable exclude each other**: 3 of 4
 such worlds died of lock parasites by 480k, the fourth privatized (a nursery guarded by a trap) and froze. A trap that
-does not lyse across a joint (`lysJoint`, candidate (v), default 0) guards a public lock: the root letter then turned
+does not lyse across a joint (`lysJoint`, candidate (v), an option, default 0) guards a public lock: the root letter then turned
 11-19 times in 480k in 4 of 8 worlds (0-3 unguarded). Left: the **catcher** (a head with a `C@` front in the second
 cell's place, carrying no lock) and nurseries whose second cells carry no lock of their letter (sunk by a plug): 4 of 8
 guarded worlds died of these.
 
-**Handoff status (autorun run 20261008-2151, review-intent): direction set, no building** (IDEAS "Eight slices on
-the lock"). The lock line combines its capabilities in one world and reached a loop of root letters that does not settle
-(`lysJoint`: 11-19 turns in 4 of 8 worlds), but every body is still two cells, and the last three slices each answered
-a parasite with a guard (two of them core parameters). A strip has one key and one lock (each cell uses two sides and
-exposes one), so a spare lock is a cell with two sites, `C@z!z!`, which has already arisen: duplication, then
-divergence (two guarded locks of two letters raising two classes on one carrier), is the shape step the lock theory
-points to. Decided: chain copying (candidate (u)) is retired at a core review; the stockless world under copy error
-becomes the line's preset; the mutagen stays for `PAW=1`'s checks. Stop rule for the lock line: no new core parameter
-for a guard until (v) and (w) are settled, then a shape the world reaches by one error before a new rule. Records:
-IDEAS, ROADMAP backlog A, RULES (u). Nothing is running.
+**Handoff status (autorun run 20261008-2221, core-review): priority 32 done, the core smaller** (RULES Core changes,
+core review run 2221; INNOVATIONS 2026-10-09). Chain copying left the core (strands, zip, gap, need, fn, fill, dock,
+fill, close, release, the anchor's catch and its physics exception; `tri/sim.js` 269 -> 167 lines; 7 checks retired, code
+in git `1284bb4`); `lysOneWay` removed (with `trap-oneway(-c)`); `lysJoint` **kept an option**: as the rule it turns
+every trap into a lock, which opens the nursery, and it failed `seal-evolve` (0 of 4, worlds dead), `pair-flow`,
+`commons-turn`, `nursery-cheat`, `nursery-c` (IDEAS "A trap or a lock": a world needs both, one `!` cannot be both).
+Evidence: all 66 checks pass; 223 of 231 worlds byte for byte main's, the 8 others the predicted (`lysis` with its
+stand-in end, `lock-guard` without `lysOneWay`); an independent review found no divergence outside (v). The core: 6 marks,
+2 relayed signals, 2 states, 1 option (`lysJoint`), 1 rule branch, 1 physics exception. Nothing is running.
 
-**Next step (rotation 83, core-review)**: priority 32 ((v) and (w)), then (u) if the run has room.
+**Next step (rotation 84, build)**: priority 36, the line's world as a preset (with `lysJoint` set in the preset where
+the guarded lock is wanted: it is a per-world parameter now).
 
 ## Priorities
 
-Done 1-24, 28-30 and 33: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24, 28-30, 32 and 33: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
-Open (set by review-intent run 2151):
-32. [83 core-review] **Adopt or remove `lysJoint` and `lysOneWay`** (RULES (v) item 5, (w) item 6). For (v): it alone
-    makes a turnable lock guardable (`lock-guard`; 11-19 root turns in 4 of 8 long worlds, 0-3 without), and lysis then
-    never crosses a joint (one condition for contact and relay). Against: outputs change wherever a `!` side holds a part
-    across a joint: the head nursery's trap `z!` raises its pool-born heads instead of lysing them, budcycle's cutter on
-    its `&` receptor lyses nothing (`budcycle-lysis` changes), the scavenger needs no `&`. (w): no gain shown in either
-    long test. Run the suite with each on as default before deciding. **Then (u), decided in run 2151: retire chain
-    copying** (RULES (u): zip, gap, need, fn, fill, the dock, fill, close and release rules, the strand catch and
-    `_snapBody`; checks `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis` leave, code
-    in git). Show the pair checks' outputs unchanged (`CHECK_SAVE` and `diff -r`). If the run has no room, (u) is the
-    next core review's first item.
+Open (set by review-intent run 2151; 32 done in core review run 2221):
 36. [84 build] **The line's world as a preset** (e.g. `PAW=2`: `PAF= PAM=0 PATN=30`, founder `Z@&c@|- C@-z|`, or
-    `C@-z|!` with `lysJoint` if 83 adopts (v), `pErr` 0.01; `PAW=1` and its checks unchanged), then old 35 in it: **a
+    `C@-z|!` with `TRI_PARAMS` `lysJoint` 1 (an option since run 2221, not the rule), `pErr` 0.01; `PAW=1` and its checks unchanged), then old 35 in it: **a
     nursery and its guard.** Privatization is still the exit in the guarded world, and a nursery whose second cells carry
     no lock of its letter dies of a plug (2 of 4 guarded deaths); in E4 seed 1 the nursery kept a guarded lock of its
     letter (`C!C@L!` under `Ll@&c@`) and lived. Measure how often the guard follows the root (8 seeds, 480k; census
@@ -75,25 +66,25 @@ Open (set by review-intent run 2151):
     open site (length as defence). Designed, not demonstrated.
 26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
     as a cheat, not as a predator, and guards against chains (run 0551).
-Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); with (u) its genome copying
-leaves the core and it returns from git. Not taken from run 1750's list: (b) diets of different length and (c) more
+Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); its genome copying left the
+core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged by run 2151): 83 core-review, 84 build, 85 harden
-(suite time: 76 checks, about 2.5 hours in two parts; retire the checks a decided candidate makes redundant, e.g.
-`lock-guard-0` if (v) is adopted, `trap-oneway(-c)` if (w) is removed), 86 build, 87 explore, 88 build, 89 cleanup.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151 and 2221): 84 build, 85 harden (suite time:
+66 checks, about 80 minutes per part in run 2221's container), 86 build, 87 explore, 88 build, 89 cleanup.
 
-**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((w) built as `lysOneWay`, (v) built as `lysJoint`, (t), (u), (s), (r)'s open part, (j), (l);
-settled there: (f), (k) and the done ones).
+**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
+(k) and the done ones, (u) and (w) in run 2221).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
-- Core review: same-pass partner reads (zip, gap, release, fn) are allowed by convention (RULES, Locality audit);
-  change only if a locality problem traces back to them.
+- Core review: the convention of reading a partner's current state is now used only by binding (the chain rules'
+  same-pass reads left with them, run 2221; RULES, Locality audit). `pBond` is never below 1 (removing it changes the
+  random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 71 minutes at run 0250, about 100 with the nine checks added since, 160 in run 0651's container (hence
-  `--part`); the frozen lineage's two checks (one world each, 15-17 minutes) are about 12% of the suite's CPU; the rest
-  is pair worlds, whose time is lone blocks' physics (about 80%; a destination-only neighbour gather was 5% slower).
+- Suite time: 71 minutes at run 0250, 160 in run 0651's container (hence `--part`); the frozen lineage's two long
+  checks left in run 2221; the rest is pair worlds, whose time is lone blocks' physics (about 80%; a destination-only
+  neighbour gather was 5% slower); `seal-evolve` (4 x 400k) and `race` are the longest.
 - Copy error as the standard world's variation: decided in run 2151 not to retire `PAM` now (on in 21 checks, 5 of them
   the front-only mutagen `PAMF=1`, which copy error cannot replace); new work runs in the line's preset (priority 36).
 - Bigger cells and letter reuse (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if a
@@ -127,7 +118,7 @@ NODE_OPTIONS='-r ./tri/copyrate.js' ...            # adds a 'copyrate:' line (co
 COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js   # coverage: marks present, rule
                                                    # events, one JSON line per demo world
 node tri/demos.js closure                          # the designed organism kind (budKit) drawn, no physics
-node tri/demos.js imprint 1 100000 runs 150ph      # a hooded pore (150pw: a 7-cell pore); the checked ones: --cmd imprint-pore
+node tri/demos.js imprint 1 200000 runs/x           # contact copying: a ring with one of each part closes, a second grows
 ```
 Pictures go to `runs/NAME.png` with saved states; `TRI_NOPIC=1` turns them off. `TRI_RESUME=runs/x/NAME_tNNN.json.gz`
 continues a demo world from a saved state; `TRI_PARAMS='{...}'` overrides parameters. To show a change leaves outputs

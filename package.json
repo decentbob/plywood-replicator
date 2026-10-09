@@ -1,7 +1,7 @@
 {
   "name": "typed-triangle-world",
   "version": "0.2.0",
-  "description": "Artificial life from one block, the unit triangle with glued sides: replicating chains, casting, machines, energy.",
+  "description": "Artificial life from one block, the unit triangle with glued sides: contact copying, budding, lysis and evolving pairs.",
   "license": "MIT",
   "private": true,
   "scripts": {

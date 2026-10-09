@@ -28,6 +28,25 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A trap or a lock: one lysis mark cannot be both (core review run 20261008-2221, 2026-10-09)
+
+Notes, not the user's words. The core review ran the whole suite with candidate (v) (`lysJoint`) as the rule.
+- **Without (v) a `!` side is a trap**: it lyses every part that binds it, keys with `&` included. That is what keeps
+  the head nursery closed: a pool-born head that lands on a second cell's `z!` dies, so heads are born in place, the
+  head's own side (the nursery site `z`) is needed and frozen, and heads that raise nobody stay out (`nursery-cheat`).
+- **With (v) the same side is a lock**: it lyses only parts without `&` (plugs) and raises every head. As the rule, the
+  nursery worlds open: heads are raised on second cells, the head's own side is no longer needed and drifts (in
+  `seal-evolve` seed 5 the head's site went z, x, q, h by 180k), and the worlds die later of length (seed 5 at about
+  370k, after a chain kind, second cells `Q@i.z.!` on the heads' new side q, held 111 of 246 individuals at 360k; 4 of 4
+  dead by 400k). `pair-flow` (3 of 4 failed), `commons-turn` (3 of 4), `nursery-cheat` (0 of 4), `nursery-c` (2 of 4)
+  failed too; the `pair-flow` deaths were not traced.
+- **Lesson.** Whether a lysis side reads the joint decides which guard it is, and the line needs both: a nursery needs
+  a trap, a public lock needs a lock. With one `!` mark and one rule, one of the two is lost in every world. (v) stays a
+  parameter set per world (the line's preset can set it, priority 36); a world where a nursery and a public lock must
+  live together is the case for telling a key some other way, by shape before a new mark (stop rule of run 2151).
+- **Also seen:** with the nursery open the letters turn faster, and what killed the worlds was length (chains of second
+  cells), priority 25's sink, not a plug.
+
 ## Eight slices on the lock: the letters turn, the shape does not (direction check, review-intent run 20261008-2151, 2026-10-08)
 
 Weighed after priorities 21-33 (runs 0121-1951; the last direction check was run 2021). Notes, not the user's words.

@@ -3,7 +3,7 @@
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
 //   node tri/check.js [name ...] [--part k/n] [--cmd]   (names: the `id` column; default all; at most 4 processes; about 71 minutes
-//   in run 20261008-0250's container, 160 in run 0651's: run it as --part 1/2, then --part 2/2; budcycle-3 the longest;
+//   in run 20261008-0250's container, 160 in run 0651's: run it as --part 1/2, then --part 2/2; seal-evolve the longest;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Exit code 1 if a working capability fails.
@@ -24,23 +24,14 @@ const CHECKS=[
   // budpore-held, budpore-kind (doorway pairs: the corner bud needs no doorway), budpool-e (the sealed pair's last
   // cell), budcycle-2 (two generations with the pool harness: budcycle-free has none). Retired 2026-10-05 (run
   // 20261005-0251, cleanup; code in git `a2f3914`): budcycle (one generation of the doorway kind with budpool's harness:
-  // budcycle-3 shows the same steps three times in the default setup, the corner bud without harness)
-  {id:'copy',cap:'Genome: typed chain copying (zip; the founder held by its high end)',demo:'copy',seeds:[1,2,3,4],need:3,steps:20000,secs:5,
-    pass:L=>{const n=count(L,/BBAABA\//g);return [n>=2,`${n} complete copies BBAABA`];}},
+  // budcycle-3 shows the same steps three times in the default setup, the corner bud without harness). Retired 2026-10-08
+  // (run 20261008-2221, core-review; checks and code in git `1284bb4`): copy, imprint-genome(-c), imprint-pore(-c, -n),
+  // budcycle-3 and budcycle-lysis (chain copying and the anchor's catch left the core: RULES (u)); trap-oneway(-c) (the
+  // option lysOneWay removed: RULES (w))
   {id:'ring',cap:'Membrane growth: ring kit closes (R=3)',demo:'ring',seeds:[1,2,3,4],need:3,steps:60000,extra:'3',secs:5,
     pass:L=>{const m=L.match(/closed=at (\d+)/);return [!!m,m?`closed at ${m[1]}`:'open '+(L.match(/cells=(\S+)/)||[])[1]];}},
   {id:'imprint',cap:'Contact copying: a ring with one of each part closes, a second grows from copies',demo:'imprint',seeds:[1,2,3,4],need:3,steps:200000,secs:110,
     pass:(L,o)=>{const m=o.match(/result: ring cells (\d+) (\d+) of 30, closed at (\S+) \/ (\S+)/);return [!!m&&m[3]!=='not'&&m[4]!=='not',m?`rings ${m[1]}/${m[2]} cells, closed ${m[3]} / ${m[4]}`:'no result'];}},
-  {id:'imprint-genome',cap:'Contact copying: a strand copied from copies of its own triangles',demo:'imprint',seeds:[1,2,3,4],need:3,steps:30000,extra:'g',secs:10,
-    pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n>=4,`${n} strands`];}},
-  {id:'imprint-genome-c',cap:'  control: plain blanks, no copies',demo:'imprint',seeds:[1],steps:30000,extra:'gc',secs:10,
-    pass:(L,o)=>{const n=num(o,/result: (\d+) free strands/);return [n===1,`${n} strands`];}},
-  {id:'imprint-pore',cap:'A cell fed through a pore: copy blanks from outside copy only its held genome (spent walls); 3 rival strands outside stay sterile',demo:'imprint',seeds:[1,2,3,4],need:3,steps:100000,extra:'150px',secs:50,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]>=4&&+m[5]===0,m?`${m[2]} strands inside (${m[1]} in all), copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
-  {id:'imprint-pore-c',cap:'  control: no pore, no blank gets in',demo:'imprint',seeds:[1],steps:60000,extra:'150pc',secs:20,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+)/);return [!!m&&+m[3]===0&&+m[1]===1,m?`${m[1]} strand, ${m[3]} copies`:'no result'];}},
-  {id:'imprint-pore-n',cap:'  control: plain walls take the blanks',demo:'imprint',seeds:[1],steps:60000,extra:'150pn',secs:20,
-    pass:(L,o)=>{const m=o.match(/result: (\d+) free strands \(founder included\), (\d+) inside, copies (\d+): genome (\d+), wall (\d+)/);return [!!m&&+m[2]<=2&&+m[5]>+m[4],m?`${m[2]} inside, copies to genome ${m[4]}, wall ${m[5]}`:'no result'];}},
   {id:'budpool',cap:'The closure kind\'s bud grows from a pool of its 47 part types (8 each, 40 of the last; 8 blanks), splits on a stand-in catch',demo:'budpool',seeds:[1,2,3,4],need:3,steps:250000,secs:150,
     pass:(L,o)=>{const m=o.match(/result: cells=(\d+)\/47 complete=(\S+) split=(\S+) refilled=\S+ copies=(\d+) .*stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`${m[1]}/47 cells, split ${m[3]}, ${m[4]} copies, ${m[5]} stray`:'no result'];}},
   // run 20261005-2320 (build): the pair (pairKit, 2 cells, 2 types; IDEAS "Sources in proportion to use"): one founder
@@ -355,7 +346,7 @@ const CHECKS=[
   // (w)). No head design guards its own side; the guard the core gives is a trap on the shared part: a lysing site of
   // the root's complement ('z!' on the second cell) lyses every free part with attach letter Z, plugs included. A trap
   // that catches a part without '&' dies with it (the lysis comes back across the bond), so in a plug epidemic the trap
-  // carriers die; with lysOneWay (candidate (w), a lysis side passes no lysis back) the trap survives its catch. Read
+  // carriers die (lysOneWay, candidate (w), which let the trap survive its catch, was removed in run 20261008-2221). Read
   // from 'types:' lines (pErr 1e-9 prints them; no copy error happens): heads (a side with '&'), second cells (attach
   // letter C) and the share of them with a 'z!' side (the trap), plugs (attach letter Z, no '&')
   ...(()=>{const {TOK}=require('./sim'),census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,sc:0,tr:0,pl:0};
@@ -367,31 +358,26 @@ const CHECKS=[
     pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const pk=Math.max(...C.map(c=>c.pl));return [e.pl===0&&e.h>=400,`plugs at most ${pk}, at 80k ${e.pl} plugs, ${e.h} heads`];}},
   {id:'trap-c',cap:'  control: second cells without the trap (C@-q!): the plugs sink the nursery',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:{...env,PA2:'Z@&c@|z C@-q!'},
     pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
-  {id:'trap-oneway',cap:'With lysOneWay the trap survives what it lyses: 200 plugs into trap and trapless second cells, the trap takes every second cell and the world holds',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:400,
-    env:{...mix,TRI_PARAMS:'{"pErr":1e-9,"lysOneWay":1}'},
-    pass:(L,o)=>{const e=last(o);if(!e)return [false,'no result'];return [e.h>=150&&e.sc&&e.tr/e.sc>=0.9,`at 60k ${e.h} heads, trap on ${e.tr} of ${e.sc} second cells, ${e.pl} plugs`];}},
-  {id:'trap-oneway-c',cap:'  control: the current core, the trap dies with its catch and the world with it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:mix,
-    pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
   // run 20261008-1951 (explore): who pays for a lock (NEXT priority 33; IDEAS "Who pays for a lock"; RULES candidate (v)).
   // The stockless world's class is raised on a site of the shared second cell (a public lock: needed by the class, not by
   // its carrier). Sealed second cells (close-only site, still copied) raise nobody and gain only while honest sites hold
   // waiting heads, so entered at 20k they level off below all (seal-pool). The core's one guard, a trap of the lock's
-  // letter, lyses keys and plugs alike; with lysJoint (candidate (v): contact lysis does not cross a joint) and lysOneWay
-  // a lock 'z|!' raises heads that bind by 'Z@&' and lyses plugs '--Z@' (lock-guard; without lysJoint every head landing
-  // there is lysed: lock-guard-0). Read from 'types:' lines (pErr 1e-9 prints them; no copy error happens): heads (a side
+  // letter, lyses keys and plugs alike; with lysJoint (candidate (v): contact lysis does not cross a joint; until run
+  // 20261008-2221 also with lysOneWay, since removed) a lock 'z|!' raises heads that bind by 'Z@&' and lyses plugs '--Z@'
+  // (lock-guard; without lysJoint every head landing there is lysed: lock-guard-0). Read from 'types:' lines (pErr 1e-9 prints them; no copy error happens): heads (a side
   // with '&'), second cells (attach letter C), sealed ones (a glued close-only side), plugs (attach letter Z, no '&')
   ...(()=>{const {TOK}=require('./sim'),census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,sc:0,se:0,pl:0};
       for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]),att=sd.filter(y=>y[1].includes('@')).map(y=>y[0]);
         if(sd.some(y=>y[1].includes('&')))r.h+=n;else if(att.includes('C')){r.sc+=n;if(sd.some(y=>y[0]!=='-'&&y[1].includes('.')))r.se+=n;}else if(att.includes('Z'))r.pl+=n;}return r;}),
     last=o=>{const C=census(o);return C.length?C[C.length-1]:null;},
     pool={PAW:'1',PAF:'',PAM:'0',PATN:'20',PA2:'Z@&c@|- C@-z',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'10',PA3:'Z@&c@|- C@-z.'},
-    lock={PAW:'1',PAF:'',PAM:'0',PATN:'20',PA2:'Z@&c@|- C@-z|!',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":1,"lysOneWay":1}'},plug={...lock,PA3T:'20000',PAEN:'20',PA3:'--Z@'};return [
+    lock={PAW:'1',PAF:'',PAM:'0',PATN:'20',PA2:'Z@&c@|- C@-z|!',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":1}'},plug={...lock,PA3T:'20000',PAEN:'20',PA3:'--Z@'};return [
   {id:'seal-pool',cap:'A public lock cannot be sealed away: sealed second cells entered into the pool-raised class level off below all, the world alive',demo:'pair',seeds:[1,2,3,4],need:3,steps:100000,secs:240,env:pool,
     pass:(L,o)=>{const e=last(o);if(!e||!e.sc)return [false,'no result'];const f=e.se/e.sc;return [f>=0.5&&f<=0.9&&e.h>=300,`at 100k sealed ${e.se} of ${e.sc} second cells (${(100*f).toFixed(0)}%), ${e.h} heads`];}},
   {id:'lock-guard',cap:'With lysJoint a lock z|! guards the public lock: it raises heads that bind by Z@& and lyses 20 plugs --Z@ entered at 20k',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:plug,
     pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const pk=Math.max(...C.map(c=>c.pl));return [e.pl===0&&e.h>=400,`plugs at most ${pk}, at 60k ${e.pl} plugs, ${e.h} heads`];}},
-  {id:'lock-guard-0',cap:'  control: the same lock without lysJoint lyses every head that lands on it, and the class dies',demo:'pair',seeds:[1,2],need:2,steps:20000,secs:30,env:{...lock,TRI_PARAMS:'{"pErr":1e-9,"lysOneWay":1}'},
+  {id:'lock-guard-0',cap:'  control: the same lock without lysJoint lyses every head that lands on it, and the class dies',demo:'pair',seeds:[1,2],need:2,steps:20000,secs:30,env:{...lock,TRI_PARAMS:'{"pErr":1e-9}'},
     pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
@@ -415,23 +401,6 @@ const CHECKS=[
   // its 47 parts and a later bud on the seed site is built from at least 40 of them
   {id:'lysis',cap:'Lysis: a stuck bud taken apart into its parts by a cutter at its waiting anchor; a new bud on the parent grows from them',demo:'lysis',seeds:[1,2,3,4],need:3,steps:1000000,secs:120,
     pass:(L,o)=>{const m=o.match(/result: lysedFirst=(\S+) .*max=(\d+) .*reused=(\d+) cuts=(\d+)/);return [!!m&&m[1]!=='not'&&+m[3]>=40,m?`apart at ${m[1]}, a later bud of ${m[2]} cells, ${m[3]} of them the stuck bud's parts, ${m[4]} cuts`:'no result'];}},
-  // The frozen lineage's two checks are regression checks while the lineage is frozen (INNOVATIONS keeps the 3-of-4
-  // records): 2 seeds since run 20261007-0050 (harden), seed 3 alone since run 20261008-0250 (harden; suite time): on
-  // main d76ac35 seed 3 reaches generation 3 first in both (735900, 736900) and is the one world where cutters lyse a
-  // bud (seed 2: none); seeds 1-4 by command (INNOVATIONS run 0250)
-  // run 20261004-1021 (build): three generations on a slow supply (labelled environment drive: 400 inert pre-food turning
-  // into copy blanks, the untyped building blocks, at 0.0003 per 100 steps; world 36) and a monomer loop (labelled: free genome monomers turn back into blanks, 0.002 per
-  // 100 steps; without it 0 of 4, run 1021); the bud grows off its parent's corner
-  // (closed walls, no harness). Replaces budcycle-free (two generations, 180 pre-food at 0.001, world 32; runs 0621-0751).
-  {id:'budcycle-3',cap:'Three generations from the kit on a slow supply: a bud of the bud\'s bud complete, let go and holding a caught strand',demo:'budcycle',seeds:[3],steps:1200000,secs:1970,env:{BCAFTER:'900000',BCGEN:'3'},
-    pass:(L,o)=>{const m=o.match(/result: .*split=(\S+) .*gen2=(\S+) gen3=(\S+) ownCopies=(\S+) stray=(\d+)/);return [!!m&&m[3]!=='not'&&+m[5]===0,m?`first split ${m[1]}, generation 2 at ${m[2]}, 3 at ${m[3]}, own copies after let-go (generation:copies) ${m[4]}, ${m[5]} stray`:'no result'];}},
-  // run 20261004-2221 (build): lysis in the lineage. budcycle-3's setup with a lysis receptor 'Г@&' on each body's last
-  // cell E (budKit receptor; kit only, no core change), openRange 50 and 2 cutters 'г@!-|-|' (labelled): the receptor
-  // binds only while E hears its waiting anchor, so cutters take apart complete buds waiting for a catch and nothing
-  // else. Passes a world that reaches generation 3 with every lysed bud complete (47 cells) and no stray part
-  {id:'budcycle-lysis',cap:'Lysis in the lineage: cutters at a receptor on the last cell take apart only complete buds waiting for a catch; three generations',demo:'budcycle',seeds:[3],steps:1200000,secs:1910,env:{BCAFTER:'900000',BCGEN:'3',BCQ:'1',BCR:'50',BCC:'2'},
-    pass:(L,o)=>{const m=o.match(/result: .*gen3=(\S+) .*stray=(\d+) .*lysedBuds=(\d+) .*falseRel=(\d+) lysedAt=(\S+) poolMin=(\d+)/);const sel=m&&(m[5]==='none'||m[5].split(',').every(x=>x==='47'));
-      return [!!m&&m[1]!=='not'&&+m[2]===0&&sel,m?`generation 3 at ${m[1]}, ${m[3]} buds lysed (cells: ${m[5]}), ${m[4]} roots released incomplete, fewest free part type ${m[6]}, ${m[2]} stray`:'no result'];}},
 ];
 
 function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'demos.js'),c.demo,String(seed),String(c.steps),path.join('runs','check')];if(c.extra)args.push(c.extra);

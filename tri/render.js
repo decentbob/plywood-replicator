@@ -1,9 +1,8 @@
 'use strict';
 // Pictures: SVG drawn by headless Chromium into PNG, plus the saved state (OUT.json.gz) next to it.
-// Colours: strand face triangles tan, hidden backs brown, fills teal-dark, docked (copy in progress) pale teal, grown
-// (glue-bonded) grey-blue, free dark grey. A coloured bar inside each glued side (dashed: upper case).
+// Colours: attached (bonded) grey-blue, free dark grey (the strand roles' colours left with chain copying, 2026-10-08). A coloured bar inside each glued side (dashed: upper case).
 const fs=require('fs'),path=require('path'),zlib=require('zlib'),{execFileSync}=require('child_process');
-const {SFACE,SBACK,DOCKED,GROWN,gname}=require('./sim');
+const {gname}=require('./sim');
 const PAL=['#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#46f0f0','#f032e6','#bcf60c','#fabebe','#008080','#e6beff'];
 // titles may carry type names ('&', '<'): escaped for the SVG
 const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
@@ -21,10 +20,10 @@ function render(s,out,title,focus=null,labels=false,fillOf=null){
     for(let u=0;u<s.n;u++)if(Math.hypot(s._dx(s.px[u]-fx),s._dy(s.py[u]-fy))<focus.radius*1.5)keep.add(u);k=S/(2*focus.radius);}
   const svg=[`<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S+30}"><rect width="${S}" height="${S+30}" fill="#f5f7f8"/><rect width="${S}" height="${S}" fill="#15222d"/><clipPath id="v"><rect width="${S}" height="${S}"/></clipPath><g clip-path="url(#v)">`];
   const th=focus&&focus.align?focus.align.a0-s.angle(focus.align.u):0,cs=Math.cos(th),sn=Math.sin(th);
-  for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;const r=s.roles(u);
+  for(let u=0;u<s.n;u++){if(focus&&!keep.has(u))continue;
     const P=q=>{if(!focus)return [(s._wx(s.px[u])+s.ox[u*3+q])*k,(W-s._wy(s.py[u])-s.oy[u*3+q])*k];
       const x=s._dx(s.px[u]-fx)+s.ox[u*3+q],y=s._dy(s.py[u]-fy)+s.oy[u*3+q];return [(focus.radius+cs*x-sn*y)*k,(focus.radius-(sn*x+cs*y))*k];};
-    const fill=(fillOf&&fillOf(u))||(r.role===DOCKED?'#9fd8cf':r.role===SFACE?'#f6cf8a':r.role===SBACK?(r.fill?'#3f9e8f':'#c98f2e'):r.role===GROWN?'#8a9bb0':'#3a4852');
+    const fill=(fillOf&&fillOf(u))||(s.bonded(u)?'#8a9bb0':'#3a4852');
     svg.push(`<polygon points="${[0,1,2].map(q=>P(q).map(z=>z.toFixed(1)).join(',')).join(' ')}" fill="${fill}" stroke="#1b2a33" stroke-width="0.8"/>`);
     const c=[[0,1,2].reduce((a,q)=>a+P(q)[0],0)/3,[0,1,2].reduce((a,q)=>a+P(q)[1],0)/3];
     for(let i=0;i<3;i++){const g=s.glue[u*3+i];if(!g)continue;const a=P(i),b=P((i+1)%3),sh=0.22;
