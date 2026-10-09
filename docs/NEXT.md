@@ -23,7 +23,13 @@ change a lysis value; the hook is in this run's scratchpad, its logic in the han
 the one failure, `budcycle-lysis`, stopped by hand, retired); (v) touches 13 of its checks (every mutagen or copy-error
 world: mutant `!` sides meet `&` sides), so the stop rule reads failures, not changes. Part 2 running (the remaining
 checks but the retired ones), then the branch suite with `COV_OUT` (coverage for the Core inventory). Code review by an
-independent agent: no divergence outside (v), random stream identical (oldv vs new bit for bit in 9 worlds).
+independent agent: no divergence outside (v), random stream identical (oldv vs new bit for bit in 9 worlds). **Branch part 1
+(02:49): 74 worlds untouched by (v) byte for byte main's ((u) is output-neutral); (v) as the rule failed `seal-evolve` 0/4
+(all worlds die), `pair-flow` 1/4, `commons-turn` 1/4, `nursery-cheat` 0/4, `nursery-c` 2/4: stop rule met, (v) reverted
+to the option `lysJoint` (commit 506f954; IDEAS "A trap or a lock"). Now running** in worktree `../wt-br` (detached at
+506f954): the 46 checks (v) touched or not yet run (`runs/rerun.txt`), `CHECK_SAVE=runs/br2`, `COV_OUT=runs/cov2.jsonl`,
+`--part 1/2` then `2/2`; expected byte for byte main's except `lysis` (stand-in end) and `lock-guard(-0)` (no
+`lysOneWay`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
