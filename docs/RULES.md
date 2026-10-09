@@ -29,10 +29,10 @@ convention, not a rule).
 |---|---|
 | `.` | close-only: binds only triangles that are already attached, never a free one by glue (no glue catch on it; a copy blank still copies it), and a free triangle binds by none of its close-only sides (a copy side too, since run 20261007-2051) |
 | `@` | attach side: a free triangle that has one binds only by it (a part; if it also has a copy side, it binds only by that: Contact copying); an attached triangle's `@` side binds by glue only a free part's `@` side (a growth site for parts only; a copy blank still copies it); an unbonded glued `@` side of an attached triangle emits the open signal |
-| `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again. A bond with `&` on either side is a **joint**: no open signal and no lysis crosses it |
+| `&` | completion release: the bond on this side is cut once its triangle hears no open signal (its part is complete); the side is then spent and binds nothing again. A bond with `&` on either side is a **joint**: no open signal and no relayed lysis crosses it |
 | `\|` | anchor: no copy blank binds an anchor side, so an anchor is never a template (a seed site `z\|` or front `c@\|` is not copied); otherwise it binds as its glue does (an inert one `-\|` binds nothing: a closed side). Until 2026-10-08 (run 20261008-2221) an unbonded anchor side of an attached triangle also caught a strand end and pulled the strand flush as one body; that catch left with chain copying (Core changes) |
 | `?` | copy side: a free triangle that has one binds only by it, to any free side of an attached triangle but an anchor side (any glue, inert too), takes that triangle's whole type and lets go (contact copying, below) |
-| `!` | lysis side (since 2026-10-04, run 2051): binds as its glue and other marks say; the triangle bonded to it is lysed unless the bond is a joint (Lysis, below) |
+| `!` | lysis side (since 2026-10-04, run 2051): binds as its glue and other marks say; the triangle bonded to it is lysed (Lysis, below) |
 
 A type string with any other mark is rejected (the removed marks `< > * ~ $ + = % ' ^ #`; `!`, the casting lineage's drop, was
 removed on 2026-10-03 and is the lysis side since 2026-10-04).
@@ -149,7 +149,7 @@ an anchor side moved as one body until run 2221).
 |---|---|---|---|
 | attached flag (`role`) | own bonds, when the pass begins (`derive`) | own | local |
 | open signal | own sides and bonds; partners' values; the two sides' `&` marks of each bond (run 1920) | previous pass; fixed type | local (relay) |
-| lysis signal | own bonds and lysis; a partner's `!` mark and the two sides' `&` marks of each bond (contact stops at a joint since run 2221); partners' lysis | own; fixed type; previous pass | local (relay) |
+| lysis signal | own bonds and lysis; a partner's `!` mark and the two sides' `&` marks of each bond; partners' lysis | own; fixed type; previous pass | local (relay) |
 | copy bind | the blank's copy sides and their close-only and spent marks (run 20261007-2051); the site's bond, spent state and anchor mark (run 1221) | own; partner current state; fixed type | local (convention) |
 | glue catch | own attached flag and free sides, their glue, close-only, attach and spent marks; the free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's attached flag and its open signal (run 1920) |
 | `_snap` | is the flush place free | physics (labelled) | physics |
@@ -223,21 +223,20 @@ random getting with 1/2 a glue drawn from inert and `a..z`, `A..Z`, else one of 
   an attached one (also before it is spent). The release runs first in each step, before physics.
 
 ## Lysis (lysis side `!`, 2026-10-04, run 2051)
-- A triangle bonded to a partner's lysis side `!` is **lysed**, unless the bond is a joint (either side carries `&`).
-  Lysis is relayed one bond per pass (previous pass), across every bond but a joint. So lysis never crosses a joint, by
-  contact or relay: the joint between a bud and its parent stops it, as it stops the open signal (contact lysis across a
-  joint until 2026-10-08: rule (v) of core review run 20261008-2221, Core changes). A side `!` binds as its glue and other
-  marks say; no binding rule of its own.
+- A triangle bonded to a partner's lysis side `!` is **lysed**. Lysis is relayed one bond per pass (previous pass)
+  across every bond but a joint, one on which either side carries `&` (the joint between a bud and its parent stops it,
+  as it stops the open signal since run 1920). A side `!` binds as its glue and other marks say; no binding rule of its
+  own.
 - A triangle lysed for a whole pass (its partners have heard it) cuts all its bonds. A lysed triangle that is then free
   (by its own cuts or its partners') returns to a fresh state of its type: spent sides cleared, and it hears nothing
   (open -1). So a body comes apart whole, one bond further per pass, each part as the part it was made as.
 - A lysed triangle binds nothing (no glue catch, copy or closure on it), so no freed part rejoins a body that is coming
   apart.
 - Lysis runs first in the chemistry of each pass. Gate entry: Core changes, run 2051.
-- A lock `z!` (a lysis side with a glue) therefore raises a part that binds it by `Z@&` (a joint: the part is not lysed)
-  and lyses one that binds by `Z@` without `&`; the plug's lysis then comes back across the lock's bond (not a joint)
-  into the lock's carrier (test "lysis stops at a joint"; the option `lysOneWay`, which stopped that, was removed in run
-  2221: candidate (w)).
+- With the parameter `lysJoint` (default 0; candidate (v), run 20261008-1951, kept an option in core review run
+  20261008-2221) a lysis side lyses no partner across a joint either: lysis then never crosses a joint, and a lock `z!`
+  raises a part that binds it by `Z@&` and lyses one that binds by `Z@` without `&`, whose lysis comes back across the
+  lock's bond into the lock's carrier (test "lysJoint"; `lysOneWay`, which stopped that, was removed in run 2221).
 
 ## Core changes
 
@@ -1102,7 +1101,7 @@ copied.
 
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
-capture 0.6, triTolClose 0.05, openRange 120, pErr 0` (copy error, run 0651). No option (`lysOneWay` and `lysJoint`
-removed or made the rule in run 20261008-2221; `heldCopy` became the rule 2026-10-04, run 0820).
+capture 0.6, triTolClose 0.05, openRange 120, pErr 0` (copy error, run 0651), `lysJoint 0` (candidate (v), run 1951: the
+one option; `lysOneWay` removed in run 20261008-2221; `heldCopy` became the rule 2026-10-04, run 0820).
 (Removed 2026-10-03 with the casting lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`,
 `pLoose`, `light`.)
