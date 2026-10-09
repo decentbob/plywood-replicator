@@ -10,14 +10,13 @@
 //     the stockless world, where the lock is a site on the second cell: per row the majority root letter R, nursery heads
 //     (a plain side with R's complement: born in place), second cells with a working lock for R (a free side of R's
 //     complement, not close-only or '!'), sealed (a glued close-only side and no working lock), trapped (R's complement
-//     with '!'; a lock with '!' is a working, guarded lock and counts as both, since lysis stops at a joint, rule (v) of core
-//     review run 20261008-2221; --nojoint for worlds run before it without lysJoint, where such a lock lyses its keys); then a
+//     with '!'; with --joint, for worlds with lysJoint, a lock with '!' is a working, guarded lock and counts as both); then a
 //     summary: each turn of the majority root, the first census with nurseries on more than half of heads)
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
 const fs=require('fs');
-const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=!process.argv.includes('--nojoint'),args=process.argv.slice(2).filter(a=>a!=='--loop'&&a!=='--pool'&&a!=='--joint'&&a!=='--nojoint'),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
+const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=process.argv.includes('--joint'),args=process.argv.slice(2).filter(a=>a!=='--loop'&&a!=='--pool'&&a!=='--joint'),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
 const sides=t=>t.match(/[-a-zA-Z][.@&|?!]*/g);
 const classify=t=>{const s=sides(t);if(!s||s.length!==3)return ['other',t];const h=s.find(x=>x.includes('@')&&x.includes('&'));if(h)return ['head',h[0]];
   const i=s.findIndex(x=>x[0]==='C'&&x.includes('@'));return i>=0?['second',s[(i+1)%3][0]]:['other',t];};

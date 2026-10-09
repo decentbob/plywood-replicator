@@ -9,9 +9,9 @@
 //   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go (with probability
 //                    pErr one side of it wrong: copy error); no copy blank binds an anchor side ('|')
 //   completion       the open signal from open growth fronts; '&' sides let go and are spent once none is heard
-//   lysis            a triangle bonded to a lysis side ('!') is lysed; lysis is relayed one bond per pass; a lysed
-//                    triangle cuts all its bonds and returns to a fresh state
-//   joints           no signal and no lysis crosses a joint, a bond on which either side carries '&'
+//   lysis            a triangle bonded to a lysis side ('!') is lysed (with lysJoint, not across a joint); lysis is
+//                    relayed one bond per pass; a lysed triangle cuts all its bonds and returns to a fresh state
+//   joints           no signal and no relayed lysis crosses a joint, a bond on which either side carries '&'
 // (Chain copying, strands and the anchor's catch of a strand end were retired on 2026-10-08, core review run
 // 20261008-2221: git `1284bb4`; the casting lineage's rules on 2026-10-03: git `7415fd4`; docs/RULES.md Core changes.)
 const {Physics}=require('./physics');
@@ -39,7 +39,7 @@ const CANON=new Map();
 const canon=name=>{let c=CANON.get(name);if(c!==undefined)return c;const t=[...name.matchAll(TOK)].map(m=>m[0]);c=[0,1,2].map(r=>[0,1,2].map(i=>t[(i+r)%3]).join('')).sort()[0];
   if(CANON.size>=1e5)CANON.clear();CANON.set(name,c);return c;};
 
-const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,pErr:0};
+const DEFAULTS={pBond:1,capture:0.6,triTolClose:0.05,openRange:120,pErr:0,lysJoint:0};
 const ERRG=[...'-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(gcode);   // glues a copy error draws from
 
 class TriSim extends Physics{
@@ -69,13 +69,15 @@ class TriSim extends Physics{
       if(b&&this._front(u))v=this.p.openRange;
       // -1: free (not yet heard)
       this.op[u]=b?v:-1;}
-    // ly (lysis): 1 for a triangle bonded to a partner's lysis side '!', or hearing lysis from a partner (previous pass),
-    // across a bond that is not a joint (neither side carries '&': the joint between a bud and its parent stops both, as
-    // it stops the open signal; contact lysis stops there since core review run 20261008-2221, candidate (v)); 2 for a
-    // bonded triangle that was lysed in the previous pass (its partners have heard it: it cuts its bonds this pass)
+    // ly (lysis): 1 for a triangle bonded to a partner's lysis side '!', or hearing lysis from a partner (previous pass)
+    // across a bond that is not a joint (neither side carries '&': the joint between a bud and its parent stops it, as it
+    // stops the open signal); 2 for a bonded triangle that was lysed in the previous pass (its partners have heard it: it
+    // cuts its bonds this pass). lysJoint (candidate (v), run 20261008-1951; default 0, kept an option in core review run
+    // 20261008-2221): a lysis side lyses no partner across a joint either (lysis never crosses a joint)
+    const lj=this.p.lysJoint;
     for(let u=0;u<n;u++){let L=0;
-      for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;if(ly0[u]){L=2;break;}
-        if(!this.done[u*3+i]&&!this.done[q]&&(this.lys[q]||ly0[(q/3)|0]))L=1;}
+      for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;if(ly0[u]){L=2;break;}const jt=this.done[u*3+i]||this.done[q];
+        if(this.lys[q]&&!(lj&&jt)||ly0[(q/3)|0]&&!jt)L=1;}
       this.ly[u]=L;}
   }
   // an open front: an unbonded glued attach side '@' that is not '&'. A triangle caught by glue with one emits the open

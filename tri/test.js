@@ -271,14 +271,35 @@ test('lysis: a part with a lysis side bound to a waiting anchor takes the bud ap
   const c=lysisCase('z@-|-|');assert.ok([0,1,2].some(i=>c.s.partner(c.Bu[6],i)===c.C),'the control part did not bind the anchor');
   assert.ok(!c.apart&&c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud came apart without a lysis side');assert.ok(!c.s.ev.lyse,'lysis without a lysis side');
   assert.ok(c.s.spent[c.Bu[20]*3+c.wall],'the spent side was cleared without lysis');});
-// rule (v), core review run 20261008-2221 (built as the option lysJoint in run 20261008-1951): no lysis crosses a joint,
-// so a lock z! raises a key that binds by Z@& and lyses a plug Z@ (no &), and the plug's lysis comes back across the
-// lock's bond (not a joint) into the lock's carrier (nothing moves here, so a lysed part binds again at once and is lysed
-// again: the test reads lysis events and whether the lock is whole)
-const lockCase=part=>{const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fz!-'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:part,loose:true}];
-  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(8);
+// receptor (run 20261004-2221, build): the kit with a lysis receptor 'Г@&' on E's outer side (openRange 50, more than the
+// 40 bonds from the anchor cell 6 to E); a parent holding a stand-in strand end, its complete bud on the seed site (cell
+// 45), waiting for a catch or (caught) holding a stand-in strand end; a cutter 'г@!-|-|' placed at the bud's receptor; no motion
+const receptorCase=caught=>{const K=S.budKit(5,7,null,true,{at:6,glue:'Z'},'-|',45,'Г@&'),N=K.N,AK=K.anchorCell,SC=K.seedCell,E=N-1,s=new TriSim({W:40,H:40,sigma:0,sigmaRot:0,openRange:50},2*N+3),O=[20,20];
+  const Pu=[...Array(N).keys()],Bu=Pu.map(k=>N+k),Ps=2*N,Bs=2*N+1,C=2*N+2;buildStructure(s,Pu,K.tris,O[0],O[1]);buildStructure(s,Bu,K.tris.map(t=>({...t,v:t.v.map(K.pose)})),O[0],O[1]);
+  const refl=(u,i)=>{const P=k=>[s.px[u]+s.ox[u*3+k],s.py[u]+s.oy[u*3+k]],a=P(i),b=P((i+1)%3),c=P((i+2)%3);return [b,a,[a[0]+b[0]-c[0],a[1]+b[1]-c[1]]];};
+  placeTri(s,Ps,refl(Pu[AK],K.anchorSide));s.setType(Ps,'z--');s.bind(Pu[AK],K.anchorSide,Ps,0);
+  if(caught){placeTri(s,Bs,refl(Bu[AK],K.anchorSide));s.setType(Bs,'z--');s.bind(Bu[AK],K.anchorSide,Bs,0);}else{placeTri(s,Bs,[[1,1],[2,1],[1.5,1+Math.sqrt(3)/2]]);s.px[Bs]=-30;}
+  // the parent stood alone once (as every parent has: it was a bud that caught and let go), so its receptor is spent; then the bud's root binds its seed site
+  for(let k=0;k<60;k++)s.derive();s.step();s.bind(Bu[0],K.rootSide,Pu[SC],K.seedSide);for(let k=0;k<60;k++)s.derive();s.step();
+  const parentSpent=!!s.spent[Pu[E]*3+K.receptorSide],budSpent=!!s.spent[Bu[E]*3+K.receptorSide];
+  placeTri(s,C,refl(Bu[E],K.receptorSide));s.setType(C,'г@!-|-|');s.gridSync();
+  let bound=0,apart=0;for(let k=1;k<=120;k++){s.step();if(!bound&&s.partner(Bu[E],K.receptorSide)===C)bound=k;if(!apart&&Bu.every(u=>!s.bonded(u)))apart=k;}
+  const whole=Pu.slice(1).every((u,k)=>[0,1,2].some(i=>s.partner(u,i)===Pu[k]))&&s.partner(Pu[AK],K.anchorSide)===Ps;
+  return {s,K,Bu,parentSpent,budSpent,bound,apart,whole};};
+test('receptor: a cutter binds the receptor on the last cell of a complete bud waiting for its catch and takes the bud apart; a bud that has caught and its parent are immune',()=>{
+  const w=receptorCase(false);assert.ok(w.parentSpent,'the parent\'s receptor (holding its strand) is not spent');assert.ok(!w.budSpent,'the waiting bud\'s receptor is spent');
+  assert.ok(w.bound>0,'the cutter did not bind the waiting bud\'s receptor');assert.ok(w.apart>0,`the waiting bud did not come apart (bound at pass ${w.bound})`);assert.ok(w.whole,'the parent did not stay whole');
+  const c=receptorCase(true);assert.ok(c.budSpent,'the receptor of a bud holding a strand is not spent');assert.ok(!c.bound&&!c.s.ev.lyse,'a cutter bound or lysed a bud that has caught');
+  assert.ok(c.Bu.slice(1).every((u,k)=>[0,1,2].some(i=>c.s.partner(u,i)===c.Bu[k])),'the bud that has caught came apart');});
+// candidate (v), run 20261008-1951 (kept an option in core review run 20261008-2221): with lysJoint a lysis side lyses no
+// partner across a joint, so a lock z! raises a key that binds by Z@& and lyses a plug Z@ (no &), whose lysis comes back
+// across the lock's bond (not a joint) into the lock's carrier (nothing moves here, so a lysed part binds again at once and
+// is lysed again: the test reads lysis events and whether the lock is whole)
+const lockCase=(part,params)=>{const tris=[{v:[[0,0],[1,0],[0.5,H]],type:'fz!-'},{v:[[0,0],[0.5,-H],[1,0]],type:'--F'},{v:[[1,0],[1.5,H],[0.5,H]],type:part,loose:true}];
+  const s=new TriSim({sigma:0,sigmaRot:0,W:10,H:10,...params},3);buildStructure(s,[0,1,2],tris,5,5);for(let i=0;i<3;i++)s.cut(2,i);s.derive();s.run(8);
   return {held:[0,1,2].some(i=>s.partner(0,i)===2),lysed:!!s.ev.lyse,whole:s.partner(0,0)===1};};
-test('lysis stops at a joint: a lock z! raises a key with & and lyses a plug without, whose lysis comes back into the lock\u2019s carrier',()=>{
-  const k=lockCase('Z@&c@-');assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
-  const p=lockCase('Z@--');assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'the lysis did not come back');});
+test('lysJoint: a lock z! raises a key with & (a joint) and lyses a plug without, whose lysis comes back into the lock\u2019s carrier',()=>{
+  const k=lockCase('Z@&c@-',{lysJoint:1});assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
+  const k0=lockCase('Z@&c@-',{});assert.ok(k0.lysed&&k0.whole,'without lysJoint the key was not lysed (nothing comes back across its joint)');
+  const p=lockCase('Z@--',{lysJoint:1});assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'the lysis did not come back');});
 console.log(`${passed} tests passed`);
