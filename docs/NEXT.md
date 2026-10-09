@@ -19,7 +19,11 @@ an `&` part change (the nursery family `z!`, `lysis`'s demo for its stand-in end
 `lysOneWay` (the lock dies with each plug it lyses, but 20 plugs are few). Stop: if (v) breaks 3 or more checks beyond
 the nursery family, keep it an option and record why. Running: the baseline suite on main `1284bb4` in worktree
 `../wt-base` (`CHECK_SAVE=runs/base`, hook `runs/ld.jsonl`: per world the passes where `lysJoint`/`lysOneWay` would
-change a lysis value; the hook is in this run's scratchpad, its logic in the handoff below).
+change a lysis value; the hook is in this run's scratchpad, its logic in the handoff below). Part 1 done 00:05 (36 of 37:
+the one failure, `budcycle-lysis`, stopped by hand, retired); (v) touches 13 of its checks (every mutagen or copy-error
+world: mutant `!` sides meet `&` sides), so the stop rule reads failures, not changes. Part 2 running (the remaining
+checks but the retired ones), then the branch suite with `COV_OUT` (coverage for the Core inventory). Code review by an
+independent agent: no divergence outside (v), random stream identical (oldv vs new bit for bit in 9 worlds).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
