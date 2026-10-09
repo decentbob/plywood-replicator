@@ -259,24 +259,14 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Run 1921: **built as the option `copyGlue`** (default off) with the drive `PAHB=3` (lettered blanks): a class copied
   only from its own deaths, which is no resource (it makes them from plain blanks); exclusion as without it. **Removed**
   in core review run 2051 (code at `25c68b9`); a new attempt answers first what keeps a second blank type in supply.
-- (u) *Retire chain copying with the frozen lineage* (core review run 2051, from its coverage run): chain copying (the
-  relay zip, the values gap, need, fn, the state fill, the dock, fill, close and release rules, four bond kinds) fires
-  only in `copy`, `imprint` (`g`, `p`) and `budcycle`; the anchor's catch of a strand end, with its physics exception
-  (the strand moves as one body, `_snapBody`), only in `budcycle` (23 catches in the suite). The pair line uses neither.
-  Retiring both would leave contact copying as the one way to copy and roughly halve `tri/sim.js`, at the cost of the
-  checks `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`, `budcycle-3`, `budcycle-lysis` (code stays in git) and of
-  the lineage returning as it is (its founder genome is a held strand). A capability decision, not a review's: weigh it
-  at review-intent 82 (run 73's harden cut the lineage's checks to one world each, not the code), with the question whether a heritable
-  sequence (a genome) will be needed for complex evolution and whether contact copying of a held strand (`imprint g`)
-  could carry it.
-  **Review-intent run 20261008-2151: retire it** (IDEAS "Eight slices on the lock": nothing in the pair line reads a
-  sequence, heredity of combinations there comes from place, and contact copying of a held strand can carry one back).
-  For core review 83 after (v) and (w) if the run has room, else the next core review; the checks above leave with it.
+- (u) *Retire chain copying with the frozen lineage*: **done** in core review run 20261008-2221 (entry below).
 - (s) *Lysed material returns as blanks* (run 0621): the labelled drive `PAHB=2` as physics (a lysed triangle that comes
   free becomes a copy blank, replacing "returns to a fresh state of its type"). Not needed while the drive does it; it
   would make every death return raw material, and lysis stop recycling parts (the lysis demo's bud regrows from them).
-- (w) *A lysis side passes no lysis back* (run 1522): built as the parameter `lysOneWay` (default 0); entry below.
-- (v) *Contact lysis stops at a joint* (run 1522; **built as the parameter `lysJoint`**, default 0, in run 1951): entry below.
+- (w) *A lysis side passes no lysis back* (run 1522, the parameter `lysOneWay`): **removed** in core review run 2221.
+- (v) *Contact lysis stops at a joint* (the parameter `lysJoint`, run 1951): **kept an option** (default 0) in core review
+  run 2221: as the rule it lost the nursery's trap and killed worlds (entry below; IDEAS "A trap or a lock"). Open: a
+  world that needs a trap and a lock at once (a key told by shape, before a new mark).
 - (r) *Copy error in contact copying*: **adopted** in run 0651 as the parameter `pErr`, default 0 (RULES Core changes).
   Open: a default above 0 (and the mutagen retired) would change every world's outputs; whether the core or the
   environment should limit parts that bind their own kind (`g@` and `G@` on one part).
@@ -286,9 +276,46 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   lineage; frozen with it.
 - (j) *Monomer mix* (run 0022) and (l) *a copy side with a glued anchor side* (run 0820): no design, no such type.
 - Settled, keep: (f) the seed site `y` is copied while no bud sits on it (the pair relies on it). Not needed: (k).
-  Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051. Nothing else in the
-  core is unused (RULES, Core inventory, run 2051 coverage); `pBond` is never set below 1 (removing it changes the
+  Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051, (u) and (w) in run
+  2221. Nothing else in the core is unused (RULES, Core inventory, run 2221 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Core review 2026-10-08, autorun run 20261008-2221: chain copying retired, (w) removed, (v) kept an option
+NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221`; the removed code at `1284bb4`.
+1. **(u) Chain copying leaves the core.** Removed: the four strand bond kinds (PREV, NEXT, FACE, TFACE: every bond is
+   now plain), the roles derived from them (face, back, docked; a triangle is free or attached, and the one bit kept is
+   whether it was attached when the pass began), the relay zip, the exposed values gap, need and fn, the state fill, the
+   rules dock, fill, copy closure and release, the anchor's catch of a strand end and its physics exception
+   (`_snapBody`: the caught strand moved as one body). Also founder strands and the strand census (`world.js`), the
+   demos `copy`, `imprint g/m/p` and `budcycle`, 7 checks (`copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`,
+   `budcycle-3`, `budcycle-lysis`) and 15 strand tests; 6 tests that used a founder strand as scenery were rewritten on
+   kits and blanks (glue catch by close-only or spent sides, a close-only site, save and reload, a crowded world, a long
+   body, conservation). The `lysis` demo's parent now holds a stand-in end `z--` on its anchor (as `closure` and
+   `budpool` do) instead of a held founder strand. `tri/sim.js` 269 -> 167 lines (25 -> 15 kB); `tri/` 621 lines fewer.
+   **Evidence that nothing else changed:** the suite on the branch against main's (`CHECK_SAVE`, observation hook below):
+   every world that no lysis option touches is byte for byte main's (74 in the first branch run, all 46 rerun checks'
+   worlds but those named in item 4); an independent review traced the diff and ran old and new side by side (random
+   stream and state bit for bit in 9 worlds, with the lysis expression aligned); `node tri/test.js` 32 tests.
+   The anchor mark `|` keeps one meaning: no copy blank binds it (never a template). The 47-type kind keeps its pool
+   growth (`budpool`), closure by design (`closure`, tests), lysis of a stuck bud (`lysis`) and the receptor test; a
+   lineage that copies a genome returns from git if a design needs one (IDEAS "Eight slices on the lock").
+2. **(w) `lysOneWay` removed.** No gain in either long test (race to 1.2M, the guarded lock at 480k); its case was the
+   forced plug epidemic (`trap-oneway`, retired with `trap-oneway-c`). `lock-guard` now runs with `lysJoint` alone
+   (result in item 4); the scavenger tests (a strand held by `Z@|!&`) left with strands.
+3. **(v) tried as the rule, kept an option.** An observation hook (this run; per world, the passes in which `lysJoint`
+   would change a lysis value) found 89 of main's 240 check worlds touched: every mutagen and copy-error world (mutant
+   `!` sides meet `&` sides), not only the nursery family. Run as the rule (part 1 of the branch suite): `seal-evolve`
+   0 of 4 (every world dead by 400k), `pair-flow` 1 of 4, `commons-turn` 1 of 4, `nursery-cheat` 0 of 4, `nursery-c` 2
+   of 4. Mechanism (IDEAS "A trap or a lock"): without (v) a `!` side is a trap that lyses heads too, which keeps the
+   nursery closed and the head's own side needed; with it the same side is a lock, the nursery opens, the head's side
+   drifts and the worlds later die of chains of second cells. The slice's stop rule (3 or more failures beyond the
+   nursery family) was met, so `lysJoint` stays a parameter, default 0, set per world (`lock-guard`, the line's preset).
+4. **Checks.** RESULT_PENDING
+5. **Locality** re-checked rule by rule against the code (Locality audit above): every remaining rule reads its own
+   triangle, its bonds, partners' fixed types and previous-pass values; the convention of reading a partner's current
+   state is now used only by binding (the chain rules' same-pass reads left with them, closing the follow-up of run 2051).
+6. **What is left** (Core inventory): 6 marks, 2 relayed signals, no exposed one-bond value, 2 states, 1 option, 1 rule
+   branch (copy error), 1 physics exception.
 
 ### Candidate (v): contact lysis stops at a joint, 2026-10-08, autorun run 20261008-1951 (explore)
 NEXT priority 33. Derivation: IDEAS "Who pays for a lock"; runs: INNOVATIONS run 1951.
@@ -322,6 +349,9 @@ NEXT priority 33. Derivation: IDEAS "Who pays for a lock"; runs: INNOVATIONS run
    cell's place) and a nursery sunk by a plug where its second cells carried no lock of its letter. Adopting it changes
    outputs wherever a `!` side holds a part across a joint (item 4); weigh at the core review with (w), whose case here
    is weaker (no gain shown in either long test).
+6. **Core review run 20261008-2221: kept an option.** As the rule it failed five checks (`seal-evolve`, `pair-flow`,
+   `commons-turn`, `nursery-cheat`, `nursery-c`): it turns every trap into a lock, and the nursery worlds need the trap
+   (entry above; IDEAS "A trap or a lock").
 
 ### Candidate (w): a lysis side passes no lysis back, 2026-10-08, autorun run 20261008-1522 (explore)
 NEXT priority 29 (the plug guard). Derivation and runs: IDEAS "A trap on the shared part", INNOVATIONS run 1522.
@@ -362,6 +392,7 @@ NEXT priority 29 (the plug guard). Derivation and runs: IDEAS "A trap on the sha
    second cells, a weapon the trap does not answer. So in these worlds one-way lysis neither prevented a collapse nor
    was needed to avoid one; its case stays the forced epidemic (`trap-oneway`). Weigh at the core review: the loop of
    letters ends by the sealed site in either arm (IDEAS "The shared site seals itself"), not by plugs.
+7. **Core review run 20261008-2221: removed** (no gain in either long test; checks `trap-oneway(-c)` retired).
 
 ### Rule (r): copy error in contact copying, 2026-10-08, autorun run 20261008-0651 (explore)
 NEXT priority 24. The case of run 0450 (below) said: revisit if a rate per copy turns out to matter. It does now.
