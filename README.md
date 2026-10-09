@@ -9,7 +9,8 @@ touching a part becomes a copy of it, now and then with one side wrong) and whos
 next head. In a world where deaths return blanks and parts decay, pairs vary, compete and change their body plan:
 the nursery moved onto the head, cheats that raise nobody hold beside their hosts, and a site on the shared second
 cell is a commons that a new class can take over until cheats on it turn it back. An earlier line grew three
-generations of a 47-part cell kind with genome, pore, bud and cutters; it is frozen with its checks. (An older line of
+generations of a 47-part cell kind with genome, pore, bud and cutters; it is frozen, and its genome copying (typed
+chain copying) left the core on 2026-10-08 (git `1284bb4`). (An older line of
 casting pockets, driven machines and kits was removed on 2026-10-03; it is in git at `7415fd4`.)
 
 ![The head nursery: heads raise heads on their own side; the second cell's seed site lyses](docs/pictures/head-nursery.png)

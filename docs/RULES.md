@@ -61,26 +61,31 @@ removed on 2026-10-03 and is the lysis side since 2026-10-04).
   anchor's catch moving a caught strand as one body into a free flush place along a clear path, left with chain
   copying on 2026-10-08, run 20261008-2221.)
 
-## Core inventory (2026-10-07, core review run 20261007-2051)
-"Fires in": the demos whose check worlds carry the mark or fire the rule, from the coverage hook over the whole suite
-(52 checks, 168 worlds, run 2051; `pair` covers its 39 checks, `imprint` its rings, `g` strand and `p` cells). Dates: when
-the item entered the core (the repository restarted on 2026-10-01).
+## Core inventory (2026-10-09, core review run 20261008-2221)
+"Fires in": the demos whose check worlds carry the mark or fire the rule, from the coverage hook over the suite on the
+branch (66 checks; `pair` covers 58 of them, `imprint` its rings, `strip`, `budpool`, `lysis`, `ring`). Dates: when the
+item entered the core (the repository restarted on 2026-10-01).
 
-| Item | Kind | Fires in (run 2051) | Since |
+| Item | Kind | Fires in (run 2221) | Since |
 |---|---|---|---|
-| `.` close-only | mark | `ring` and `imprint` rings (the root's closure side), `pair` (`rare-waste`'s `c@\|C.Z@&`; mutants); glue closures: `pair`, `ring`, `imprint` | 10-01; a free triangle binds by none 10-03; takes no dock or fill 10-03 (run 2121); no copy side binds by it 10-07 (run 2051) |
-| `@` attach | mark | every demo with growth: `pair`, `strip`, `ring`, `imprint`, `budpool`, `budcycle`, `lysis` | 10-01 |
-| `&` completion release | mark | `pair`, `strip`, `budpool`, `budcycle` (releases); `imprint`, `lysis` carry it | 10-01 |
-| `\|` anchor (seed site, front, catch) | mark | as a glue side everywhere (`pair`'s fronts `c@\|` and seed sites `z\|`); **the catch of a strand end only in `budcycle`** (23 catches in its 4 worlds) | 10-01; catches busy strands 10-02; never copied 10-03 (run 1221); a spent one catches nothing 10-03 (run 2121) |
-| `?` copy side | mark | `pair`, `strip`, `imprint`, `budpool`, `budcycle` (23 million copies, nearly all in `pair`) | 10-02 |
-| copy error (`pErr`, default 0) | rule branch (noise in contact copying) | only `pair` with `TRI_PARAMS` (`copy-error`) | 10-08 (run 0651) |
-| `!` lysis side | mark | `lysis`, `budcycle` (`BCQ`); in `pair` only as a mutant mark (its lyses come from the hazard drive) | 10-04 (run 2051) |
-| zip (chain) | relayed signal | chain copying: `copy`, `imprint` (`g`, `p`), `budcycle` (dock 812, fill 597, close 597, release 745 in the suite) | 10-01; from a held high end only 10-04 (run 0820) |
-| open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `budcycle` | 10-01; stops at `&` joints, a caught part emits at once 10-06 (run 1920) |
-| lysis (one bit; not across `&` bonds) | relayed signal | `pair` (every hazard death), `lysis`, `budcycle` | 10-04 (run 2051) |
-| gap, need, fn | exposed values (one bond) | chain copying, as zip | 10-01; nb merged into gap 10-07 (run 2051) |
-| fill | state | chain copying, as zip | 10-01 (refractory, its companion state, removed 10-05, run 1921) |
+| `.` close-only | mark | `pair` (seals `C@i.z!`, `rare-waste`'s `c@\|C.Z@&`, mutants), `ring` and `imprint` rings (the root's closure side) | 10-01; a free triangle binds by none 10-03; no copy side binds by it 10-07 (run 2051) |
+| `@` attach | mark | every demo with growth: `pair`, `strip`, `ring`, `imprint`, `budpool`, `lysis` | 10-01 |
+| `&` completion release, joints | mark | `pair`, `strip`, `budpool` (8.6 million releases); `lysis` carries it | 10-01; joints stop the open signal 10-06 (run 1920), lysis 10-04 |
+| `\|` anchor (never a template) | mark | `pair` (seed sites `z\|`, fronts `c@\|`), `strip`, `budpool`, `lysis` | 10-01; never copied 10-03 (run 1221); its catch of a strand end removed 10-08 (run 2221) |
+| `?` copy side | mark | `pair`, `strip`, `imprint`, `budpool` (44 million copies, nearly all in `pair`) | 10-02 |
+| copy error (`pErr`, default 0) | rule branch | `pair` with `TRI_PARAMS` (35 thousand errors) | 10-08 (run 0651) |
+| `!` lysis side | mark | `pair` (nursery traps, locks, mutants), `lysis` | 10-04 (run 2051) |
+| open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `lysis`, `ring`, `imprint` | 10-01; stops at joints, a caught part emits at once 10-06 (run 1920) |
+| lysis (one bit; relay stops at joints) | relayed signal | `pair` (every hazard death, traps), `lysis` | 10-04 (run 2051) |
+| `lysJoint` (default 0) | option (contact lysis stops at joints too) | `pair` (`lock-guard`) | 10-08 (run 1951); kept an option 10-09 (run 2221) |
+| attached flag | state (attached when the pass began; set when caught by glue) | every rule that binds or copies | 10-01 as the roles; one bit since run 2221 |
 | spent | state | `&` sides, as `&` | 10-01 |
+
+**Counts (2026-10-09, run 2221):** 6 marks, 2 relayed signals (open, lysis; zip removed), no exposed one-bond value (gap,
+need, fn removed), 2 states (spent and the attached flag; fill removed), 1 option (`lysJoint`; `lysOneWay` removed), 1
+rule branch (copy error), 1 physics exception (binding places a free triangle flush; the strand catch's removed).
+Rules: glue catch, glue closure, copy bind and copy, completion release, lysis (contact, relay, cut). Every mark, rule
+event and the option fire in the suite. `tri/sim.js` 269 -> 167 lines.
 
 **Counts (2026-10-08, run 1951):** as run 1522, plus a second option of the same kind: `lysJoint` (default 0), no
 contact lysis across a joint (candidate (v), Core changes); every other output unchanged.
@@ -293,8 +298,7 @@ NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221
    body, conservation). The `lysis` demo's parent now holds a stand-in end `z--` on its anchor (as `closure` and
    `budpool` do) instead of a held founder strand. `tri/sim.js` 269 -> 167 lines (25 -> 15 kB); `tri/` 621 lines fewer.
    **Evidence that nothing else changed:** the suite on the branch against main's (`CHECK_SAVE`, observation hook below):
-   every world that no lysis option touches is byte for byte main's (74 in the first branch run, all 46 rerun checks'
-   worlds but those named in item 4); an independent review traced the diff and ran old and new side by side (random
+   223 of the suite's 231 worlds are byte for byte main's, the other 8 those item 4 predicts; an independent review traced the diff and ran old and new side by side (random
    stream and state bit for bit in 9 worlds, with the lysis expression aligned); `node tri/test.js` 32 tests.
    The anchor mark `|` keeps one meaning: no copy blank binds it (never a template). The 47-type kind keeps its pool
    growth (`budpool`), closure by design (`closure`, tests), lysis of a stuck bud (`lysis`) and the receptor test; a
@@ -310,7 +314,11 @@ NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221
    nursery closed and the head's own side needed; with it the same side is a lock, the nursery opens, the head's side
    drifts and the worlds later die of chains of second cells. The slice's stop rule (3 or more failures beyond the
    nursery family) was met, so `lysJoint` stays a parameter, default 0, set per world (`lock-guard`, the line's preset).
-4. **Checks.** RESULT_PENDING
+4. **Checks** (66, was 76: 7 retired with chain copying, `trap-oneway(-c)` with (w); `lock-guard-0` kept): all pass.
+   Every world byte for byte main's (223 of the suite's 231) but 8, as predicted: `lysis` (the stand-in end:
+   apart at 2338-12106 against 4005-10498 on main, a later bud of 45-46 cells built wholly from the stuck bud's parts,
+   4 of 4) and `lock-guard` (`lysJoint` without `lysOneWay`: 0 plugs and 545-560 heads at 60k against 553-568, 4 of 4;
+   the lock dies with each plug it lyses, which 20 plugs do not tell). `lock-guard-0` is unchanged by `lysOneWay`.
 5. **Locality** re-checked rule by rule against the code (Locality audit above): every remaining rule reads its own
    triangle, its bonds, partners' fixed types and previous-pass values; the convention of reading a partner's current
    state is now used only by binding (the chain rules' same-pass reads left with them, closing the follow-up of run 2051).

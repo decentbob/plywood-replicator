@@ -9,8 +9,35 @@ below and later removed are in git: `budpore`'s `BUDTOOTH`, `BUDPA`/`BUDPAG`, `B
 at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`, `BCHT`, `BCP`, `BCW`, `BCO`, `BCSC`,
 `BCSV`, `BCGATE` and the chart `node tri/render.js pop` at `20e9a88` (removed in run 20261006-0920, cleanup); `pair`'s `PAT`, `PADBG`, `PAPS`, `PAV=half|right|link`, `PAVK=selfish|front`,
 `PAHB=1`, `PAMF=2` at `9c37d89` (removed in run 20261007-1051, cleanup); the core option `copyGlue` with `pair`'s `PAHB=3`
-and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). Results are from one or a few worlds; they show mechanisms,
+and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
+
+## 2026-10-09 (autorun run 20261008-2221, core-review)
+
+- **A smaller core: chain copying retired, `lysOneWay` removed, `lysJoint` kept an option** (NEXT priority 32; RULES
+  Core changes, core review run 2221; IDEAS "A trap or a lock"). Not a capability: the same capabilities on a smaller
+  rule set. Removed: strands and their four bond kinds, the relay zip, the values gap, need and fn, the state fill, the
+  dock, fill, copy closure and release rules, the anchor's catch of a strand end with its physics exception; the option
+  `lysOneWay`. `tri/sim.js` 269 -> 167 lines; the core is now 6 marks, 2 relayed signals, 2 states, 1 option, 1 rule
+  branch and 1 physics exception (RULES, Core inventory).
+  - **Evidence.** The suite on main `1284bb4` (`CHECK_SAVE`) against the branch: all 66 kept checks pass, 223 of 231
+    worlds byte for byte main's; the 8 others are the two predicted: `lysis` (its parent now holds a stand-in end
+    instead of a held founder strand; 4 of 4, later buds of 45-46 cells all from the stuck bud's parts) and
+    `lock-guard` (`lysJoint` without `lysOneWay`: 4 of 4, 0 plugs, 545-560 heads at 60k). An independent review ran old
+    and new code side by side: random stream and state bit for bit (9 worlds, the lysis expression aligned). Tests 32.
+  - **(v) as the rule, measured and declined.** An observation hook (per world, the passes in which `lysJoint` would
+    change a lysis value) found 89 of 240 main worlds touched, every mutagen and copy-error world among them. With (v)
+    as the rule: `seal-evolve` 0 of 4 (all dead by 400k), `pair-flow` 1 of 4, `commons-turn` 1 of 4, `nursery-cheat`
+    0 of 4, `nursery-c` 2 of 4. Without (v) a `!` side is a trap (it lyses heads too, which keeps the nursery closed
+    and the head's own side needed); with it a lock, the nursery opens, the head's site drifts (seal-evolve seed 5: z, x,
+    q, h by 180k) and the worlds die later of chains of second cells. Predicted before the run: only the nursery family
+    changes (no: 13 checks of part 1 changed); stop rule (3 or more failures beyond the nursery family) met.
+  - **Retired checks** (code and records in git `1284bb4`): `copy`, `imprint-genome(-c)`, `imprint-pore(-c, -n)`,
+    `budcycle-3`, `budcycle-lysis` (their capabilities' entries below stay as records), `trap-oneway(-c)`.
+  - Commands: the suite as usual (`node tri/check.js --part 1/2`, `--part 2/2`); to compare with main,
+    `CHECK_SAVE=$PWD/runs/a` in a worktree of `1284bb4` and `CHECK_SAVE=$PWD/runs/b` here, then `diff -r`; (v) as the
+    rule: `TRI_PARAMS='{"lysJoint":1}'` on a check's command (`node tri/check.js --cmd seal-evolve`).
+  - Status: **done** (a simplification; no new capability).
 
 ## 2026-10-08 (autorun run 20261008-1951, explore)
 
