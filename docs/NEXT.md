@@ -23,7 +23,7 @@ nursery's share is n* = c rB / (pi rho), where only the free copies' reach rho m
 plan in the core changes it; a recess cannot be built (the two-wall notch is the kid's front's place) and shape is
 public (fillers); **candidate (x)**, a lysis side that spares across a joint only a partner carrying the identical side
 (`lysJoint: 2`, an option), lets no head that does not raise itself be raised on a guarded site: under copy error the
-lock held in every census to 480k (4 of 4), the nursery then took up flux itself (its front lost the anchor and sprays
+lock held in every census to 480k (4 of 4), the nursery added flux to place (its front lost the anchor and sprays
 kin), and the lock's letters froze.
 
 **Handoff status (autorun run 20261016-2258, explore): done; one core change as an option (`lysJoint: 2`, default 0:
