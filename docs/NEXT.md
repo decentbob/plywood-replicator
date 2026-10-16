@@ -90,6 +90,14 @@ and the records say what holds. **Stop** if the entry tests contradict the theor
   in a letter other than the catchers' root holds most root-carrying cells, host-shaped (front `c@`) in at least one and
   catcher-shaped (front `C@`) in at least one; dead by 240k at most 4 of 8. E5 (`runs/p34b.json`) is queued after the
   three new checks (`--write`).
+- **E6, the two lineages under copy error** (`runs/p34f.json`: `{"demo":"pair","steps":240000,"env":{"PAW":"2",
+  "TRI_NOPIC":"1"},"jobs":[{"id":"h","seeds":[1,2,3,4],"env":{"PA2":"Y@&c@|y! C@|-Z@&"}},{"id":"f","seeds":[1,2,3,4],
+  "env":{"PA2":"F@&C@|f! c@|-Z@&"}}]}`, the bodies `hc` and `kc` ended with, as founders, `pErr` 0.01), queued after E5.
+  Predictions: P6 alive at 240k in 3 of 4 per design; P7 the filler lineage (root carriers without a lock of their own
+  root, most of them root Z) holds 10% or more of root carriers at most censuses from 100k in 3 of 4 per design; P8 the
+  nursery's root letter turns at least once in 2 of 8 or more while the fillers' root stays Z. A risk seen before the
+  run: a nursery copy that loses its lock (`Y@&c@|-`) is raised on nursery sites and copied on a plain side (run 0551's
+  nursery cheat).
 - Checks written, not yet run: `catcher-mix` (E1 at 80k), `catcher-letter` (`my` at 60k), `catcher-letter-z` (`mz` at
   60k). `tri/linechart.js` takes `LC_MAX` (bars as head counts).
 - Regenerated run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
