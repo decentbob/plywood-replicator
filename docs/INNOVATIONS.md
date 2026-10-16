@@ -35,7 +35,9 @@ not statistics.
     `race` and `seal-evolve` were the one pair with one setting (the others: `pair-mut` and `pair-flow-c`, but
     `pair-mut` reads a result line): `race` now reads `seal-evolve`'s seeds 5-8 to 240k (3 of 4: seed 7 sealed its site
     at 50k, so its letter never turned; as on its own seeds 1-4 in the baseline: seed 1 turned no letter), 4 worlds (about 36 CPU-minutes) less per suite.
-  - The baseline suite on `main` d23abd1: SUITE1; SUITE2.
+  - The baseline suite on `main` d23abd1 (worktree, `CHECK_SAVE`): 69 of 69 pass (partial control `pair-flow-c` 1 of 2),
+    part 1 34 checks in 5210 s, part 2 35 checks in about as long (a waiting job's 2-hour limit stopped it after 11;
+    the other 24 reran by id in 2180 s). Its 239 world outputs are the first digests.
 
 ## 2026-10-16 (autorun run 20261016-0727, build)
 

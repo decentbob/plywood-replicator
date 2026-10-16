@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-16 (after autorun run 20261016-0727, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-16 (after autorun run 20261016-0902, harden). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
 28-30, 32, 33 and 36, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
 (`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
@@ -8,15 +8,6 @@ review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of 
 direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
 progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36, with its predictions) on `build-0727`
 (`git log -p docs/NEXT.md`).
-
-**Slice in progress (autorun run 20261016-0902, harden; branch `harden-0902`).** Goal: no more suites on main for a
-baseline. `tri/check.js` hashes each world's whole output and compares it with main's digest in `tri/digests.txt`
-(`[same]`, `[changed: seeds]`, `[new]`, `[redefined]` per check, a count at the end); `--write` (or `--write --from DIR`,
-a CHECK_SAVE directory) rewrites them; `tri/test.js` fails while a check world has no digest for its current command.
-And `race` reads `seal-evolve`'s worlds (same settings) to 240k instead of its own (`share`), if it passes 3 of 4 on
-seeds 5-8. Done when: main's suite (baseline, worktree `../base`, `runs/a`, started 09:04) has written every digest, the
-outputs match an earlier container's numbers, and the branch's checks report `[same]`. Running: the baseline,
-`CHECK_SAVE=/home/user/base/runs/a node tri/check.js --part 1/2 > runs/check1.txt` in `../base`, then part 2/2.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
@@ -37,20 +28,23 @@ on any cell (catchers only) died. The second cell's lock never follows a nursery
 second cell's place in 4 of 8, and the two that lived moved the lock onto a cell's own side: the host head (seed 1) or
 the catcher itself (seed 5, roles swapped).
 
-**Handoff status (autorun run 20261016-0727, build): priority 36 done** (INNOVATIONS 2026-10-16; IDEAS "A nursery guards
-itself"). The line's world is the preset `PAW=2` (`PAW=1` without stocks or mutagen, `PATN=30`, founder `Z@&c@|- C@-z|!`,
-`pErr` 0.01, `lysJoint` 1; byte for byte run 1951's E4j command; `PAW=1` unchanged). New checks `line` (240k, the root
-letter turns at least twice), `nursery-guard` and its control `nursery-guard-c` (no copy error, 20 plugs: the guarded
-nursery `Z@&c@|z!` loses them, the plain one dies); `tri/census.js --pool` now reads catchers (a C attach side with a root
-is a second cell), heads with a lock, two-site second cells, guarded nurseries. No core change. Nothing is running. The 8
-worlds are in `runs/p36` only: `node tri/batch.js runs/p36.json` (file:
-`{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"w","seeds":[1,2,3,4,5,6,7,8]}]}`, about
-35 minutes with 4 at once), read with `node tri/census.js --pool --joint runs/p36/w*.txt`; the picture with `node
-tri/linechart.js docs/pictures/line-world.png runs/p36/w*.txt`.
+**Handoff status (autorun run 20261016-0902, harden): done, no capability or rule change** (INNOVATIONS 2026-10-16,
+harden). **No suite on main is needed for a baseline any more:** `tri/check.js` compares every world's whole output with
+main's digest in `tri/digests.txt` (each check line ends `[same]`, `[changed: seeds]`, `[new]` or `[redefined]`; the
+last line counts them). A pull request that changes a check world's output, or adds or redefines a check, rewrites its
+digests (`--write`, or `--write --from DIR` from a CHECK_SAVE directory; AGENTS.md, Delivery); `tri/test.js` fails while
+a check world has no digest for its current command. The digests were written from main d23abd1's suite in this
+container (69 of 69 pass; part 1 in 87 minutes, part 2 about as long); outputs carry no times, and two earlier
+containers' numbers (`nursery-guard` heads, `line` turns) came out the same. If a branch that changes no output shows
+`[changed]` worlds, rerun only those in a worktree of main (`git worktree add ../base origin/main`) to tell a container
+difference from a change, and record it. `race` now reads `seal-evolve`'s worlds to 240k (`share`; seeds 5-8, 3 of 4,
+as on its old seeds 1-4): 68 checks run worlds (239), about 171 minutes of work at the `secs` estimates. Nothing is
+running. Run 0727's 8 line worlds (priority 34 starts from them) are regenerated with `node tri/batch.js runs/p36.json`
+(file: `{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"w","seeds":[1,2,3,4,5,6,7,8]}]}`,
+about 35 minutes), read with `node tri/census.js --pool --joint runs/p36/w*.txt`.
 
-**Next step (rotation 85, harden)**: suite time with 69 checks (`line` adds about 9 minutes per part it lands in), and
-whether `world-free`/`seal-evolve`-style long checks can share worlds; then 86 build, 87 explore (priority 34, which
-now starts from run 0727's two bodies).
+**Next step (rotation 86, build)**; then 87 explore (priority 34, which starts from run 0727's two bodies). A run that
+changes outputs runs its checks once and writes the digests in its pull request.
 
 ## Priorities
 
@@ -82,8 +76,8 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221 and 0727): 85 harden (suite time: 69
-checks, about 80 minutes per part in run 2221's container before `line`), 86 build, 87 explore, 88 build, 89 cleanup.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221, 0727 and 0902): 86 build, 87 explore,
+88 build, 89 cleanup, 90 build.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
@@ -94,9 +88,10 @@ checks, about 80 minutes per part in run 2221's container before `line`), 86 bui
   random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 71 minutes at run 0250, 160 in run 0651's container (hence `--part`); the frozen lineage's two long
-  checks left in run 2221; the rest is pair worlds, whose time is lone blocks' physics (about 80%; a destination-only
-  neighbour gather was 5% slower); `seal-evolve` (4 x 400k) and `race` are the longest.
+- Suite time: 87 minutes per part in run 0902's container (69 checks); lone blocks' physics is most of it (`_overlap`
+  30%, `_pairs` 15%, `tryMove` 13% in a `PAW=2` world; a cell-distance cut in `_pairs` would rarely skip a cell: the
+  pair reach, 1.39, is about a cell, 1.4). Worlds shared between checks: only `race`/`seal-evolve` had one setting
+  (`pair-mut` reads a result line, which a longer world does not repeat).
 - Copy error as the standard world's variation: decided in run 2151 not to retire `PAM` now (on in 21 checks, 5 of them
   the front-only mutagen `PAMF=1`, which copy error cannot replace); new work runs in the line's preset (priority 36).
 - Bigger cells and letter reuse (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if a
@@ -108,7 +103,10 @@ node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
                                                    # (4 processes; 71-160 minutes by container: as two background jobs,
                                                    # --part 1/2 then --part 2/2, from a worktree if you edit code meanwhile);
-                                                   # CHECK_SAVE=dir keeps each world's output
+                                                   # CHECK_SAVE=dir keeps each world's output; each line ends [same] etc.
+                                                   # against main's digests (tri/digests.txt)
+node tri/check.js --write [id ...]                  # ... and rewrite the digests of the worlds run (a PR that changes outputs)
+node tri/check.js --write --from runs/a            # digests from a CHECK_SAVE directory, nothing run
 node tri/check.js --cmd [id ...]                   # each check's demo command (env, seeds, steps): the world of every
                                                    # capability; change the steps (third argument) to run it longer
 node tri/census.js runs/x.txt [--every k]         # heads by root letter, second cells by site letter, from 'types:' lines
