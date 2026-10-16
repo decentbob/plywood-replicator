@@ -19,6 +19,14 @@ needed there and drifts), in public censuses in over 90%; P4 two-site second cel
 Stop: if seeds 1-4 differ from E4j, find why before anything else. Running: `node tri/batch.js runs/p36.json` (file:
 `{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"w","seeds":[1,2,3,4,5,6,7,8]}]}`), about
 18 minutes per world, 4 at once.
+Seeds 1-4 read (P1 yes: alive 1 and 2, seed 3 dead at 385k, seed 4 at 440k, as E4j). Found: in seed 1 catchers took the
+second cell's place by 65k and the lock moved onto the head's own side; the root followed it, so the nursery there is a
+**guarded nursery** (`I!i@&c@`: root i, own side `I!`), alive with 24 turns; the unguarded nurseries of seeds 3 and 4 died.
+Next, entry test `runs/g36.json` (lysJoint 1, no copy error, 20 plugs `--Z@` at 20k, 60k): g, the guarded nursery head
+`Z@&c@|z!` with second cells `C@-q!` (no lock): predicted plugs lost, 400 or more heads at 60k, 4 of 4 (a plug on `z!` is
+lysed with its head and is never copied); c, the plain nursery `Z@&c@|z`: no heads at 60k, 3 of 4 or more (as `trap-c`);
+heads at 20k (before the plugs) in g within 10% of c (the guard costs nothing without plugs). Job `pic`: seed 1 to 200k
+with pictures.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a

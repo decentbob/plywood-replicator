@@ -380,6 +380,17 @@ const CHECKS=[
   {id:'lock-guard-0',cap:'  control: the same lock without lysJoint lyses every head that lands on it, and the class dies',demo:'pair',seeds:[1,2],need:2,steps:20000,secs:30,env:{...lock,TRI_PARAMS:'{"pErr":1e-9}'},
     pass:(L,o)=>{const C=census(o),e=last(o);if(!e)return [false,'no result'];const d=C.find(c=>c.h===0);return [e.h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
+  // run 20261016-0727 (build): the line's world as a preset (NEXT priority 36; PAW=2: no stocks, no mutagen, the guarded
+  // public lock 'Z@&c@|- C@-z|!' as founder, copy error 0.01, lysJoint 1). Its root letter turns: the majority root
+  // letter (on more than half of heads) changes again and again. Read from 'types:' lines: heads (a side with '@&', not a
+  // second cell: a type with a C attach side without '&' is a second cell, also when it carries a root) by root letter
+  ...(()=>{const {TOK}=require('./sim'),census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,H:{}};
+      for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]);if(sd.length!==3)continue;
+        if(sd.some(y=>y[0]==='C'&&y[1].includes('@')&&!y[1].includes('&')))continue;const h=sd.find(y=>y[1].includes('@')&&y[1].includes('&'));if(h){r.h+=n;r.H[h[0]]=(r.H[h[0]]||0)+n;}}return r;}),
+    turns=C=>{const q=[];for(const c of C){const M=Object.keys(c.H).find(L=>c.H[L]>c.h/2);if(M&&M!==q[q.length-1])q.push(M);}return q;};return [
+  {id:'line',cap:'The line\'s world (PAW=2): under copy error the guarded public lock\'s root letter turns over and over',demo:'pair',seeds:[1,2,3,4],need:3,steps:240000,secs:520,env:{PAW:'2'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1],q=turns(C);return [q.length>=3&&e.h>=200,`majority root ${q.join(' ')} (${q.length-1} turns), ${e.h} heads at 240k`];}},
+  ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
   // from its own parent with share s ('par:' lines); the parasite (k = 2 copy sources) can spread only if (1 - s) k > 1, to a share
