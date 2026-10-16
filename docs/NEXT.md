@@ -41,6 +41,36 @@ catchers hold it (4 of 4 on each shape). Under copy error the plain nursery come
 from the takeover bodies, head-shaped and catcher-shaped lineages hold together (7 of 8 to 240k) with the lock moving
 between them and both turning their letters.
 
+**Slice in progress (autorun run 20261016-1902, build; priority 38): which lineage carries the lock.**
+Goal: say what decides which of the two lineages (nursery and filler, IDEAS "The catcher") holds the lock, test it by
+entry, and turn what holds into checks. Done when the theory's predictions are read against entry worlds (4 each) and
+any capability that holds 3 of 4 has a check. Stop when the entry tests are read; no new long batches beyond E6's 8
+worlds (regenerated as `runs/p34f.json` for the new reader `node tri/census.js --shape`).
+Theory (written after reading h1 and h2 of E6 to 60k with the new reader, before any entry test):
+- T1 **A lock is private when the copy its site makes binds back there**: the site is the complement of its cell's own
+  root and the cell's only copied side. The filler's root is vestigial: its `&` side is spent when the body completes,
+  so it is never bound and never copied, and its letter drifts (h1: Z, m, P by 50k; h2: Z, S, G, Y by 60k).
+- T2 **The nursery's cheat is a head whose site turned** (`Y@&c@|y!` to `Y@&c@|m!`, one error): it is raised as a kid
+  (root Y) but its own copies go free and bind other Y nurseries' sites by a joint (the guard does not lyse them), and
+  it never waits on its own site. Seen: such public heads held 60-75% of head-shaped cells from 15k in h1 and h2, the
+  guarded nursery 20-30%: a mix, since the cheat is born only on the nursery's sites.
+- T3 **The two lineages are one cell up to letters**: the head nursery (root, front `c@`, site) and a catcher-shaped
+  nursery (front `C@`, site, root) are rotations of each other, as are their plain fillers. So neither shape is favoured;
+  what decides is letters: a nursery's kids need free cells of the other shape, and a filler whose vestigial root is a
+  nursery's letter is raised on that nursery's sites (h2 at 60k: catcher-shaped cells with root Y).
+Predictions (entry tests `runs/p38a.json`: the founder `Y@&c@|y! C@|-Z@&`, no copy error, 10 bodies at 20k, 120k):
+- P1 `a`, both cells locked (`Y@&c@|y! C@|x!X@&`): the X lineage is lost, 4 of 4 (its kids wait for a free head-shaped
+  cell, which no Y nursery makes).
+- P2 `b`, an X catcher nursery with plain fillers of root Y (`Y@&c@|- C@|x!X@&`): the fillers also take Y nurseries' sites
+  (T3), so the lock moves to the catcher shape: X nurseries on most catcher-shaped cells and Y nurseries on less than a
+  quarter of head-shaped cells at 120k, 3 of 4.
+- P3 `w`, the same with fillers of root W (`W@&c@|- C@|x!X@&`): the two systems share nothing but blanks and space, so
+  both hold to 120k (each 10% or more of bonded cells), 3 of 4: two classes in each shape at once.
+- P4 `m`, the founder's fillers of root X (`Y@&c@|y! C@|-X@&`) against `b`'s entry: each system's fillers take the other's
+  sites, so the common one wins: X entered rare is lost, 3 of 4.
+- P5 `c`, the founder alone without copy error: alive 4 of 4 at 120k.
+Progress: E6 regenerating (`runs/p34f.log`); `tri/census.js --shape` added.
+
 **Handoff status (autorun run 20261016-1602, explore): done; the catcher derived and tested by entry, three checks**
 (INNOVATIONS 2026-10-16, explore; IDEAS "The catcher"). No rule, demo or structure change. New checks `catcher-mix`,
 `catcher-letter`, `catcher-letter-z` (4 of 4 each, digests written); no other check world changed. `tri/linechart.js`
