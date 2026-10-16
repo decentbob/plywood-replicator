@@ -387,9 +387,20 @@ const CHECKS=[
   ...(()=>{const {TOK}=require('./sim'),census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,H:{}};
       for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]);if(sd.length!==3)continue;
         if(sd.some(y=>y[0]==='C'&&y[1].includes('@')&&!y[1].includes('&')))continue;const h=sd.find(y=>y[1].includes('@')&&y[1].includes('&'));if(h){r.h+=n;r.H[h[0]]=(r.H[h[0]]||0)+n;}}return r;}),
+    plugs=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],h:0,pl:0};for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]);
+      if(sd.some(y=>y[1].includes('&')))r.h+=n;else if(sd.some(y=>y[0]==='Z'&&y[1].includes('@')))r.pl+=n;}return r;}),
     turns=C=>{const q=[];for(const c of C){const M=Object.keys(c.H).find(L=>c.H[L]>c.h/2);if(M&&M!==q[q.length-1])q.push(M);}return q;};return [
   {id:'line',cap:'The line\'s world (PAW=2): under copy error the guarded public lock\'s root letter turns over and over',demo:'pair',seeds:[1,2,3,4],need:3,steps:240000,secs:520,env:{PAW:'2'},
     pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1],q=turns(C);return [q.length>=3&&e.h>=200,`majority root ${q.join(' ')} (${q.length-1} turns), ${e.h} heads at 240k`];}},
+  // a nursery guards itself: in the line's world (lysJoint) a head whose own side is its root's complement with the lysis
+  // mark ('Z@&c@|z!') raises its children there (they bind by 'Z@&', a joint) and lyses a plug '--Z@' together with itself,
+  // so the plug is never copied; second cells 'C@-q!' carry no lock of its letter. 20 plugs entered at 20k, no copy error
+  {id:'nursery-guard',cap:'A nursery guards its own side: with lysJoint the head nursery Z@&c@|z! loses 20 plugs --Z@ entered at 20k',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,
+    env:{PAW:'2',PA2:'Z@&c@|z! C@-q!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'20',PA3:'--Z@'},
+    pass:(L,o)=>{const C=plugs(o);if(!C.length)return [false,'no result'];const e=C[C.length-1],pk=Math.max(...C.map(c=>c.pl));return [e.pl===0&&e.h>=400,`plugs at most ${pk}, at 60k ${e.pl} plugs, ${e.h} heads`];}},
+  {id:'nursery-guard-c',cap:'  control: the plain nursery Z@&c@|z in the same world: the plugs sink it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,
+    env:{PAW:'2',PA2:'Z@&c@|z C@-q!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'20',PA3:'--Z@'},
+    pass:(L,o)=>{const C=plugs(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [!!d,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes

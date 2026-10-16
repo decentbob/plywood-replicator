@@ -12,6 +12,50 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-0727, build)
+
+- **The line's world as a preset (`PAW=2`), and a nursery that guards its own side** (NEXT priority 36 with old 35; IDEAS
+  "A nursery guards itself"). No rule change. `PAW=2` is `PAW=1` without stocks or mutagen (`PAF= PAM=0`, `PATN=30`),
+  founder `Z@&c@|- C@-z|!`, `pErr` 0.01 and `lysJoint` 1 (run 1951's E4j world; any option or `TRI_PARAMS` overrides).
+  New checks `line`, `nursery-guard`, control `nursery-guard-c`; `tri/census.js --pool` reads catchers (a type with a C
+  attach side and a root is a second cell, not a head), heads with a lock, two-site second cells and guarded nurseries.
+  - **The preset.** Seed 1, 20k: byte for byte the explicit E4j command; `PAW=1`, seed 1, 20k: byte for byte main's.
+  - **8 worlds to 480k** (`runs/p36.json`, 16-35 minutes each): alive 4 of 8 (seeds 1, 2, 5, 6), dead seeds 3 (385k), 4
+    (440k), 7 (245k), 8 (405k); seeds 1-4 repeat E4j's outcomes and death times. Turns of the majority root (heads,
+    catchers left out): 24, 15, 2, 10, 2, 17, 0, 2. **A world's fate followed where its lock sat:**
+    - public locks on the second cells, no nursery: seeds 2 and 6, alive, with two root classes alternating on a mixed
+      pool of locks for long stretches (seed 2: U and b from 305k to 480k; seed 6: R and p from 355k);
+    - a plain nursery (a head's own side its root's complement, no `!`) on most heads: seeds 3, 4 and 8, **all dead
+      10-160k after it formed** (3: sealed own sides `D.d@&c@|` beside catchers; 4: the lysing plug `P!u@T.`; 8: the
+      lysing plug `-S!o@`); seed 2's nursery lasted one census;
+    - a **guarded nursery** (own side the root's complement with `!` alone): seeds 1 and 5, **both alive**. In seed 1 on
+      the host heads (`I!i@&c@`, `A@&c@a!`: up to 62% of root carriers, on most in 15 censuses), reached after catchers
+      took the second cell's place (55k): heads took a lock on their plain side (`Z@&c@y!`, all heads by 85k), and the
+      root followed it (Y at 110k). In seed 5 on the catcher (`C@f!F@&`, 55% at 400k): the catcher raises its own kind on
+      its own side and the old head (`-N@&c@`) binds its front as the second cell: the roles swapped;
+    - no lock on any cell: seed 7 (catchers on most second cells from 15k, no head with a lock), dead at 245k.
+  - **The second cell's lock does not follow a nursery:** a lock for the root on most second cells in 0 of 46 nursery
+    censuses. Catchers held most second cells in 4 of 8 worlds; the two with a guarded self-raising lock lived.
+  - **Entry test** (`runs/g36.json`: `PAW=2`, no copy error, second cells `C@-q!` with no lock, 20 plugs `--Z@` at 20k,
+    60k): the guarded nursery `Z@&c@|z!` loses the plugs (none at any later census, 504-516 heads at 60k, 4 of 4); the
+    plain nursery `Z@&c@|z` has no head from 35-40k (4 of 4). Up to 20k the two worlds are byte for byte the same: the
+    guard costs nothing without plugs.
+  - Two-site second cells (both free sides glued): mean 0-28% per world, at most 88% (seed 6) and 79% (seed 4), mostly
+    the copy side taking a glue (`C@Tz!`, `C@T.P!`); what binds the new side was not traced.
+  - Predictions (NEXT slice record): P1 seeds 1-4 repeat E4j (yes); P2 seeds 5-8 alive 2 of 4 (yes); P3 the second
+    cell's lock on under half of nursery censuses (yes, 0 of 46) and on over 90% of public ones (no: locks of several
+    letters, sealed sites and cheats share the second cells; a lock for the majority root sits on most second cells in a
+    minority of public censuses); P4 two-site cells under 10% on average, never over 30% (no: up to 28% and 88%);
+    entry test g 4 of 4 and c dead 3 of 4 or more (yes, 4 and 4).
+  - Pictures: [line-world.png](pictures/line-world.png) (8 worlds: heads by root letter, catchers, nursery, guarded
+    nursery); [line-world-seed1.png](pictures/line-world-seed1.png) (seed 1 at 200k: hosts with the lock on their own
+    side, held by catchers).
+  - Commands: `PAW=2 node tri/demos.js pair SEED 480000 runs/x` (the 8 worlds); read with `node tri/census.js --pool
+    --joint runs/x.txt`; the entry test and its control: `node tri/check.js --cmd nursery-guard nursery-guard-c`.
+  - Status: the preset **works** (`line`); a nursery guards its own side under `lysJoint` (**works**, `nursery-guard`,
+    control `nursery-guard-c`); in the line's world plain nurseries die and guarded ones live (**measured**, 8 worlds, no
+    check: 16-35 minutes per world).
+
 ## 2026-10-09 (autorun run 20261008-2221, core-review)
 
 - **A smaller core: chain copying retired, `lysOneWay` removed, `lysJoint` kept an option** (NEXT priority 32; RULES

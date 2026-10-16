@@ -16,7 +16,7 @@
 //     20261016-0727: two sites, second cells whose two free sides are both glued; the guard, censuses with a nursery on
 //     most heads and how many of them have a lock for the root on most second cells or on most heads of the root; a
 //     type with a C attach side and no '&' on it is a second cell, also when another side is a root (a catcher, its
-//     share 'with a root'); heads with a lock: a lysis side '!' on a free side)
+//     share 'with a root'); heads with a lock: a glued lysis side '!' on a free side)
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
@@ -59,7 +59,7 @@ function poolSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.t
     for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const n=+c,s=sides(t);if(!s||s.length!==3)continue;
       const i=s.findIndex(x=>x[0]==='C'&&x.includes('@')&&!x.includes('&'));if(i>=0){const o=[s[(i+1)%3],s[(i+2)%3]];r.cells.push([o,n]);r.ns+=n;if(o.some(x=>x.includes('@')&&x.includes('&')))r.cat+=n;continue;}
       const h=s.findIndex(x=>x.includes('@')&&x.includes('&'));
-      if(h>=0){const L=s[h][0],o=s.filter((x,i)=>i!==h);r.H[L]=(r.H[L]||0)+n;r.nh+=n;r.heads.push([L,o,n]);if(o.some(x=>x.includes('!')&&!x.includes('@')))r.hl+=n;}}
+      if(h>=0){const L=s[h][0],o=s.filter((x,i)=>i!==h);r.H[L]=(r.H[L]||0)+n;r.nh+=n;r.heads.push([L,o,n]);if(o.some(x=>x[0]!=='-'&&x.includes('!')&&!x.includes('@')))r.hl+=n;}}
     const M=Object.keys(r.H).sort((a,b)=>r.H[b]-r.H[a])[0];r.M=M;
     if(M){const z=cp(M),plain=x=>!/[@|.!&?]/.test(x);r.nur=r.heads.filter(([L,o])=>L===M&&o.some(x=>x[0]===z&&(plain(x)||joint&&x===z+'!'))).reduce((a,h)=>a+h[2],0);
       r.nurG=r.heads.filter(([L,o])=>L===M&&o.some(x=>x===z+'!')).reduce((a,h)=>a+h[2],0);
@@ -74,4 +74,4 @@ function poolSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.t
     live=R.filter(r=>r.ns&&r.nh),g=r=>r.fit>r.ns/2||r.nurG>r.H[r.M]/2,nr=live.filter(r=>r.nur>r.nh/2),gd=nr.filter(g),pr=live.filter(r=>r.nur<=r.nh/2),tw=live.map(r=>r.two/r.ns);
   console.log(`  majority root ${turns.join(', ')} (${turns.length-1} turns); nursery on most heads from ${nu?k(nu.t):'never'}${dead?'; no heads from '+k(dead.t):''}
   before the nursery: sealed at most ${pc(mx(pre,r=>r.seal/r.ns),1)}, trap at most ${pc(mx(pre,r=>r.trap/r.ns),1)}; after: sealed at most ${post.length?pc(mx(post,r=>r.seal/r.ns),1):'-'}, trap at most ${post.length?pc(mx(post,r=>r.trap/r.ns),1):'-'}, lock for the root at least ${post.length?pc(Math.min(...post.map(r=>r.fit/r.ns)),1):'-'}
-  guard: rows with a nursery on most heads ${nr.length}, of them guarded (a lock for the root on most second cells or on most of the root's heads) ${gd.length}${gd.length<nr.length?' (not: '+nr.filter(r=>!gd.includes(r)).map(r=>k(r.t)).join(' ')+')':''}; rows without ${pr.length}, guarded ${pr.filter(g).length}; two sites mean ${pc(tw.reduce((a,b)=>a+b,0),tw.length)}, at most ${pc(mx(live,r=>r.two/r.ns),1)}`);}
+  guard: rows with a nursery on most heads ${nr.length}, of them guarded (a lock for the root on most second cells or on most of the root's heads) ${gd.length}${gd.length<nr.length?' (not: '+nr.filter(r=>!gd.includes(r)).map(r=>k(r.t)).join(' ')+')':''}; rows without ${pr.length}, guarded ${pr.filter(g).length}; two sites mean ${pc(tw.reduce((a,b)=>a+b,0),tw.length)}, at most ${pc(mx(live,r=>r.two/r.ns),1)}; second cells with a root (catchers) on most from ${(live.find(r=>r.cat>r.ns/2)||{t:0}).t?k(live.find(r=>r.cat>r.ns/2).t):'never'}, on most in ${live.filter(r=>r.cat>r.ns/2).length} of ${live.length} censuses; heads with a lock at most ${pc(mx(live,r=>r.hl/r.nh),1)}`);}

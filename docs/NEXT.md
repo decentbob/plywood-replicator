@@ -1,32 +1,13 @@
 # Next instance: start here
 
-State on 2026-10-09 (after autorun run 20261008-2221, core-review). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-16 (after autorun run 20261016-0727, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
-28-30, 32 and 33, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
+28-30, 32, 33 and 36, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
 (`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
 review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
 direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
-progress) at its WIP commits on `core-review-2221` (`git log -p docs/NEXT.md`).
-
-**Slice in progress (autorun run 20261016-0727, build; priority 36).** Goal: the line's world as a preset (`PAW=2`:
-`PAW=1` without stocks or mutagen, `PATN=30`, founder `Z@&c@|- C@-z|!`, `pErr` 0.01, `lysJoint` 1; run 1951's E4j world)
-with a check, then measure in it how often the guard follows the root (8 seeds, 480k, `census.js --pool --joint`, new
-columns: two-site second cells, guarded nursery rows). Done when: the preset reproduces the explicit command byte for
-byte (yes, 20k seed 1), a check passes 3 of 4, the 8 worlds are read and recorded. Predictions: P1 seeds 1-4 repeat E4j
-(alive 1 and 2 with 19 and 15 turns; 3 dead of a catcher at 385k, 4 of a plug at 440k); P2 seeds 5-8 alive 2 of 4 (1-3);
-P3 in censuses with a nursery on most heads a lock for the root on most second cells in under half (the lock is not
-needed there and drifts), in public censuses in over 90%; P4 two-site second cells under 10% on average, never over 30%.
-Stop: if seeds 1-4 differ from E4j, find why before anything else. Running: `node tri/batch.js runs/p36.json` (file:
-`{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"w","seeds":[1,2,3,4,5,6,7,8]}]}`), about
-18 minutes per world, 4 at once.
-Seeds 1-4 read (P1 yes: alive 1 and 2, seed 3 dead at 385k, seed 4 at 440k, as E4j). Found: in seed 1 catchers took the
-second cell's place by 65k and the lock moved onto the head's own side; the root followed it, so the nursery there is a
-**guarded nursery** (`I!i@&c@`: root i, own side `I!`), alive with 24 turns; the unguarded nurseries of seeds 3 and 4 died.
-Next, entry test `runs/g36.json` (lysJoint 1, no copy error, 20 plugs `--Z@` at 20k, 60k): g, the guarded nursery head
-`Z@&c@|z!` with second cells `C@-q!` (no lock): predicted plugs lost, 400 or more heads at 60k, 4 of 4 (a plug on `z!` is
-lysed with its head and is never copied); c, the plain nursery `Z@&c@|z`: no heads at 60k, 3 of 4 or more (as `trap-c`);
-heads at 20k (before the plugs) in g within 10% of c (the guard costs nothing without plugs). Job `pic`: seed 1 to 200k
-with pictures.
+progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36, with its predictions) on `build-0727`
+(`git log -p docs/NEXT.md`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
@@ -39,40 +20,42 @@ is a **public lock** (the pool-raised class's site on the second cell): it turns
 core's guard (a trap of its letter) lyses keys and plugs alike, so **turnable and guardable exclude each other**: 3 of 4
 such worlds died of lock parasites by 480k, the fourth privatized (a nursery guarded by a trap) and froze. A trap that
 does not lyse across a joint (`lysJoint`, candidate (v), an option, default 0) guards a public lock: the root letter then turned
-11-19 times in 480k in 4 of 8 worlds (0-3 unguarded). Left: the **catcher** (a head with a `C@` front in the second
-cell's place, carrying no lock) and nurseries whose second cells carry no lock of their letter (sunk by a plug): 4 of 8
-guarded worlds died of these.
+11-19 times in 480k in 4 of 8 worlds (0-3 unguarded). Run 0727 (the line's world `PAW=2`, 8 worlds to 480k; IDEAS
+"A nursery guards itself"): a world's fate follows where its lock sits. Plain nurseries (own side without `!`) died
+(3 of 3); **guarded nurseries** (own side the root's complement with `!`: under `lysJoint` it raises the children and lyses
+plugs with itself) lived (2 of 2); public worlds lived (2 of 2) with two root classes alternating; a world with no lock
+on any cell (catchers only) died. The second cell's lock never follows a nursery (0 of 46 censuses). Catchers took the
+second cell's place in 4 of 8, and the two that lived moved the lock onto a cell's own side: the host head (seed 1) or
+the catcher itself (seed 5, roles swapped).
 
-**Handoff status (autorun run 20261008-2221, core-review): priority 32 done, the core smaller** (RULES Core changes,
-core review run 2221; INNOVATIONS 2026-10-09). Chain copying left the core (strands, zip, gap, need, fn, fill, dock,
-fill, close, release, the anchor's catch and its physics exception; `tri/sim.js` 269 -> 167 lines; 7 checks retired, code
-in git `1284bb4`); `lysOneWay` removed (with `trap-oneway(-c)`); `lysJoint` **kept an option**: as the rule it turns
-every trap into a lock, which opens the nursery, and it failed `seal-evolve` (0 of 4, worlds dead), `pair-flow`,
-`commons-turn`, `nursery-cheat`, `nursery-c` (IDEAS "A trap or a lock": a world needs both, one `!` cannot be both).
-Evidence: all 66 checks pass; 223 of 231 worlds byte for byte main's, the 8 others the predicted (`lysis` with its
-stand-in end, `lock-guard` without `lysOneWay`); an independent review found no divergence outside (v). The core: 6 marks,
-2 relayed signals, 2 states, 1 option (`lysJoint`), 1 rule branch, 1 physics exception. Nothing is running.
+**Handoff status (autorun run 20261016-0727, build): priority 36 done** (INNOVATIONS 2026-10-16; IDEAS "A nursery guards
+itself"). The line's world is the preset `PAW=2` (`PAW=1` without stocks or mutagen, `PATN=30`, founder `Z@&c@|- C@-z|!`,
+`pErr` 0.01, `lysJoint` 1; byte for byte run 1951's E4j command; `PAW=1` unchanged). New checks `line` (240k, the root
+letter turns at least twice), `nursery-guard` and its control `nursery-guard-c` (no copy error, 20 plugs: the guarded
+nursery `Z@&c@|z!` loses them, the plain one dies); `tri/census.js --pool` now reads catchers (a C attach side with a root
+is a second cell), heads with a lock, two-site second cells, guarded nurseries. No core change. Nothing is running. The 8
+worlds are in `runs/p36` only: `node tri/batch.js runs/p36.json` (file:
+`{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"w","seeds":[1,2,3,4,5,6,7,8]}]}`, about
+35 minutes with 4 at once), read with `node tri/census.js --pool --joint runs/p36/w*.txt`; the picture with `node
+tri/linechart.js docs/pictures/line-world.png runs/p36/w*.txt`.
 
-**Next step (rotation 84, build)**: priority 36, the line's world as a preset (with `lysJoint` set in the preset where
-the guarded lock is wanted: it is a per-world parameter now).
+**Next step (rotation 85, harden)**: suite time with 69 checks (`line` adds about 9 minutes per part it lands in), and
+whether `world-free`/`seal-evolve`-style long checks can share worlds; then 86 build, 87 explore (priority 34, which
+now starts from run 0727's two bodies).
 
 ## Priorities
 
-Done 1-24, 28-30, 32 and 33: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24, 28-30, 32, 33 and 36: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
-Open (set by review-intent run 2151; 32 done in core review run 2221):
-36. [84 build] **The line's world as a preset** (e.g. `PAW=2`: `PAF= PAM=0 PATN=30`, founder `Z@&c@|- C@-z|`, or
-    `C@-z|!` with `TRI_PARAMS` `lysJoint` 1 (an option since run 2221, not the rule), `pErr` 0.01; `PAW=1` and its checks unchanged), then old 35 in it: **a
-    nursery and its guard.** Privatization is still the exit in the guarded world, and a nursery whose second cells carry
-    no lock of its letter dies of a plug (2 of 4 guarded deaths); in E4 seed 1 the nursery kept a guarded lock of its
-    letter (`C!C@L!` under `Ll@&c@`) and lived. Measure how often the guard follows the root (8 seeds, 480k; census
-    `--pool --joint`), and count second cells with two sites (`census.js` may need a column) as the baseline for 37.
-34. [87 explore] **The catcher, shape first** (theory first). A head whose front became `C@` (`Z@&C@-`) takes the second
-    cell's place on host fronts and carries no lock; it killed 2 of 4 guarded and 1 of 4 unguarded long stockless
-    worlds. It is a parasite of the carrier role, read by the frozen front/attach pair, so a guard must read a second
-    side. By the stop rule, derive first which shape reachable by one error answers it (a second cell with two sites; a
-    third cell; the head's own side), and only then whether a rule is needed.
+Open (set by review-intent run 2151; 32 done in core review run 2221, 36 in build run 0727):
+34. [87 explore] **The catcher, shape first** (theory first). A head whose front became `C@` takes the second cell's place
+    on host fronts and carries no lock. Run 0727 saw the shape answer twice in the line's world (`PAW=2`): catchers took
+    most second cells in 4 of 8 worlds, and the two that lived put a guarded lock on a cell's own side (the host head,
+    `I!i@&c@`, seed 1; the catcher itself, `C@f!F@&`, seed 5, roles swapped); the two that died kept no guarded lock on
+    any cell. Derive why the lock goes where it does (which cell's own kind it raises, who pays for a plug), predict
+    which cell keeps it from the order of errors, then an entry test: catchers entered into a public world with and
+    without hosts carrying `z!` on their own side. Only then whether anything else is needed.
 37. [after 34] **Duplication and divergence** (IDEAS "Eight slices on the lock"). A strip has one key and one lock; a
     second cell with two sites (`C@z!z!`) is the one-error spare lock. Predicted: under `lysJoint` a carrier with two
     guarded locks of two letters (`C@z|!y!`) raises two head classes, so two classes live on one carrier (run 2021's
@@ -90,8 +73,8 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151 and 2221): 84 build, 85 harden (suite time:
-66 checks, about 80 minutes per part in run 2221's container), 86 build, 87 explore, 88 build, 89 cleanup.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221 and 0727): 85 harden (suite time: 69
+checks, about 80 minutes per part in run 2221's container before `line`), 86 build, 87 explore, 88 build, 89 cleanup.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
@@ -125,6 +108,9 @@ node tri/census.js --loop runs/x.txt [...]        # one summary per world: site 
                                                    # trap, plugs, chains
 node tri/batch.js runs/b.json                      # a batch of demo worlds from a JSON file, 4 at a time, an output file and
                                                    # picture directory per world (format in the file's head comment)
+PAW=2 node tri/demos.js pair 1 480000 runs/x       # THE LINE'S WORLD (run 0727): no stocks or mutagen, founder
+                                                   # 'Z@&c@|- C@-z|!', pErr 0.01, lysJoint 1 (check line at 240k); read
+                                                   # with census --pool --joint, chart with tri/linechart.js
 PAW=1 node tri/demos.js pair 1 120000 runs/x       # THE STANDARD WORLD (check world): the diet kind among stocks C E G,
                                                    # openRange 9, deaths return blanks, decay, the whole-body hazard h 0.07,
                                                    # the general mutagen 0.01; any option set overrides (demos.js, comments
