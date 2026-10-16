@@ -37,12 +37,21 @@ not statistics.
     160k), the catcher form by 80k with the old heads `-Z@&c@|` as its fillers (`kc`: 559-569 beside 404-416); bonded
     cells about 975 against about 580 in the catcher world. The catcher with a lock of the common root `C@|z!Z@&` (E3) was
     lost in 4 of 4: the pool's heads take its site.
-  - E5_PLACEHOLDER
+  - **Under copy error** (E5, `runs/p34b.json`: the line's world, `pErr` 0.01, catchers with hosts at 20k, 8 worlds to
+    240k, 9-18 minutes each): catchers on most second cells in 8 of 8 from 25-35k; the catcher mix held to 240k in 5 of
+    8 (catchers 70-94% of second cells from 45k, heads 120-370, the root letter Z throughout but one census). In 3 of 8 a nursery in a new letter took most
+    heads or catchers, always plain first (the `!` is a second error): on the host in seed 4 (`Gg@&c@|`, from 140k; the
+    guard `G!g@&c@|` on 6% of root carriers at 240k, alive), on the catcher in seed 7 (`C@eE@&`, dead at 175k), on the
+    host and then the catcher in seed 8 (`Ii@&c@|` from 85k, then `C@|uU@&`; dead at 170k). Dead 2 of 8, both after a
+    plain nursery, as plain nurseries died in run 0727 (3 of 3). Both shapes took the new letter; a guarded private lock
+    held most root carriers in 0 of 8 by 240k (run 0727's took 110k and 400k).
   - Predictions (NEXT slice record): P1 most second cells 3 of 4 (4 of 4), heads below half (yes), dead 2 of 4 (no: 0 of
     4); P2 alive 4 of 4 (no: 2 of 4 dead); P3 the catcher with `z!` takes over (no: lost 4 of 4); P4 the symmetric body
     alive (no: dead by 5k; found by a sanity run before the batch). P1-P4 were wrong where they assumed a lock on a cell
-    with a root is private whatever its letter; the restated theory (the letter, the filler, the order) predicted
-    `my`/`mz`, `kc`/`hc` and `kf`/`hp` before they ran, P5 below.
+    with a root is private whatever its letter; the restated theory (the letter, the filler, the order) was written before
+    `my`/`mz`, `kc`/`hc` and `kf`/`hp` ran, and they came out as it says. P5 (restated before E5): catchers on most
+    second cells 6 of 8 (8 of 8); a guarded private lock on most root carriers in 3 of 8 (no: 0 of 8, plain nurseries
+    in new letters in 3); both shapes (yes, among the plain ones); dead at most 4 of 8 (2).
   - Pictures: [catcher.png](pictures/catcher.png) (heads as bars, catchers among second cells, guarded nurseries: E1,
     the two letters, the private catcher and host in the public and in the catcher world).
   - Commands: `node tri/check.js --cmd catcher-mix catcher-letter catcher-letter-z`; the batches `node tri/batch.js

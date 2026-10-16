@@ -66,6 +66,12 @@ with catchers entered (INNOVATIONS run 1602). Notes, not the user's words.
   of a new letter on a root-bearer's copied side (neutral while no root of its letter exists, then a root error in a copy
   made at that side: the copy binds at once) gives a private nursery, which takes over. **Which cell keeps it is a coin
   the order of errors throws**: host and catcher are the same cell up to the front letter, and either can take the lock.
+- **Under copy error the plain nursery comes first, and the guard is a second error.** With catchers entered into the
+  line's world (8 worlds to 240k) the catcher mix held in 5; in 3 a nursery in a new letter took over on the host (seed
+  4, `Gg@&c@|`), on the catcher (seed 7, `C@eE@&`) or on both in turn (seed 8), always plain: a lock of the root's
+  letter without `!` is one error, the guard another. Two of the three died, as plain nurseries do (run 0727); the third
+  had the guard on 6% at 240k. So the order of errors matters twice: which root-bearer gets the new letter (either), and
+  whether the guard comes before a plug.
 - **Two lineages that need each other (designed, for priority 38).** After the swap the body is a nursery cell (root X,
   front, own site x!, copied only there) and a filler (another root, a plain copied side, made only by being caught on a
   nursery's front). The nursery cannot replace its filler by raising its own kind: a filler from its own lineage keeps

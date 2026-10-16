@@ -1,107 +1,14 @@
 # Next instance: start here
 
-State on 2026-10-16 (after autorun run 20261016-1227, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-16 (after autorun run 20261016-1602, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
-28-30, 32, 33, 36 and 37, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
+28-30, 32-34, 36 and 37, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
 (`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
 review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
 direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
-progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36, with its predictions) on `build-0727`
-and run 1227's (priority 37: theory, runs, predictions P1-P6, progress) on `build-1227` (`git log -p docs/NEXT.md`).
-
-## Slice in progress (autorun run 20261016-1602, explore): priority 34, the catcher, shape first
-
-**Goal.** Derive why a lock goes where it does once a catcher takes the second cell's place, predict which cell keeps it,
-and test by entry: catchers in a public world, with and without hosts that carry `z!` on their own side; then the
-line's world with catchers entered (which cell takes the lock). No core change planned (stop rule of run 2151: shape
-first). **Done when** the theory is written (IDEAS), the entry tests are read against the predictions (4 worlds each),
-and the records say what holds. **Stop** if the entry tests contradict the theory twice: record what was learned.
-
-**Theory (before the runs).**
-- Roles. The head `H = Z@&c@|-` has a root, a front and a plain copied side. The second cell `S = C@-z|!` has an attach
-  side, a plain copied side and the site; it has no root, so no site ever raises its kind: S is made only by filling a
-  front. The catcher `K = Z@&C@|-` is H with its front letter turned (one glue error). As a free part it has two attach
-  sides: its `C@|` fills a host's front (it takes S's place) and its root can be raised on a site like H (its front then
-  catches a free head by its front). Either way the body is H + K bonded front to front: two cells with a root each, two
-  plain copied sides, no site. **H and K are the same cell up to the front letter: a body H + K is symmetric.**
-- Who a lock pays. A site raises root-bearers; the raised kid's front is then filled by whatever filler is free near it.
-  A lock on S raises H, and S's kind gains only through the fronts those H offer, which any filler (S, a sealed S, K) can
-  take: **a lock on a cell without a root is a public good** (IDEAS run 1227). K is the cheapest filler (no site, no
-  waiting kid: the whole-body hazard takes a waiting kid with its parent, so it carries fewer hits) and as a root-bearer
-  it can also take sites. A lock on a root-bearer's own copied side raises the bearer's own copies, made at that side
-  (heredity in place, run 0121): **the only lock that pays its bearer is on a cell with a root, raising its own kind.**
-  Under `lysJoint` such a lock is guarded (a plug is lysed, its bearer pays: run 0727), and the bearer is the one that
-  gains, so it is not a public good.
-- Which cell keeps it. Once catchers take the fillers' role, the cells with a root are H and K, and each is two errors
-  from a guarded nursery of its own kind on its plain side (`-` to `z` then `z!`, or `-!` then `z!`; the plain nursery
-  `z` is a selected step, run 0551). The rates are the same per copy, so **which of the two keeps the lock is decided by
-  which error comes first, about even odds when both are common**; the other becomes its filler (H's front `c@|` takes K or
-  S; K's front `C@|` takes H). Run 0727 saw one of each: seed 1 on the host (`Z@&c@y!`, then root Y), seed 5 on the
-  catcher (`C@f!F@&`, roles swapped). A world where neither comes before the locks on S are gone dies (seed 7).
-- A body of two self-raising cells. H with `z!` and K with `z!` bonded front to front (`Z@&c@|z! C@|z!Z@&`) needs no S:
-  each cell raises its own kind on its own side and each is the other's filler. It is what the two lived worlds of run
-  0727 were one error from.
-
-**Predictions** (entry tests, `PAW=2`, no copy error `pErr` 1e-9, 4 worlds each to 120k; batch `runs/p34a.json`):
-- P1 (E1: 10 bodies H + K entered at 20k into the public world `Z@&c@|- C@-z|!`): K takes most second cells in 3 of 4 by
-  120k and heads fall below half the control's (E1c, no K) in 3 of 4; dead in 2 of 4 or more.
-- P2 (E2: the same with hosts carrying `z!`, `Z@&c@|z! C@-z|!`, H's copies `Z@&c@|z!` with K): alive 4 of 4, heads at
-  least 80% of the control's (E2c); K above S among fillers in 3 of 4.
-- P3 (E3: 10 bodies H + K with `z!` on K, `C@|z!Z@&`, entered into the public world): the catcher with its own lock
-  takes most second cells in 3 of 4 and the world lives 4 of 4 (the role swap of seed 5, by entry).
-- P4 (E4: the symmetric body `Z@&c@|z! C@|z!Z@&` as founder, no S): alive 4 of 4, heads within a factor 2 of E2c's.
-- P5 (E5: the line's world, `pErr` 0.01, 10 bodies H + K at 20k, 8 worlds to 240k; batch `runs/p34b.json`): catchers on
-  most second cells in 6 of 8 or more; every world alive at 240k has a guarded self-raising lock (a root-bearer whose own
-  side is its root's complement with `!`) on most heads or on most second cells with a root; both H and K take it in at
-  least one world each; worlds without it die.
-
-**Progress.**
-- A sanity run before the batch: P4's body deadlocks (seed 1: 10 copies by 4k, extinct at 5k when the hazard starts).
-  Each cell's one copied side is its own site, so a copy made there binds back as a kid, and the kid waits for a filler
-  of the other kind, which nobody makes free. **A self-raising cell needs a filler copied on a plain side.** (E4 kept at
-  10k as the record: `e4` in `runs/p34a.json`.)
-- `runs/p34a.json` read (20 worlds to 120k, 6.5-19 minutes each): E1 catchers to 82-92% of second cells by 45k, then a
-  held mix (S 8-18%), heads 227-347 against 545-572 in the control c1, **alive 4 of 4** (P1: most yes, below half yes,
-  dead no). E2 (hosts `Z@&c@|z!`): the catchers were lost in 2 (by 45k) and **killed the world in 2** (dead by 35k and
-  40k: catchers 102 to 218 and 67 to 365 in 5k while the nursery fell); control c2 alive 4 of 4 (P2 no). E3 (the catcher
-  with `z!`): lost in 4 of 4 by 35k (P3 no). E4 dead by 5k (4 of 4).
-- Reading: the catcher shares the host's root, so a host's own site raises catchers too, and a catcher raised there
-  needs a host as filler, which a nursery cell (copied only at its site) does not make free: the E4 deadlock, reached
-  by entry. And a lock of the common root's letter on the catcher is a public site for the pool's heads, which take it
-  before the catcher's own copies (made only at that site). **A self-raising lock pays its bearer only in a letter its
-  filler and the pool's heads do not carry**: run 0727's two living worlds both had one (Y with catchers of root Z in
-  seed 1; F with fillers of root N in seed 5). Next batch `runs/p34c.json` (120k, `pErr` 1e-9, 10 bodies at 20k): `ny`
-  (`Y@&c@|y! C@-q!` with catchers `C@|-Z@&`: alive 4 of 4 predicted), `nz` (the same in Z: dead in 2 of 4 or more),
-  `kf` (the catcher with a lock of its own letter `C@|f!F@&` into the public world: takes most second cells, alive 4 of 4).
-- `runs/p34c.json` read: `ny` alive 4 of 4, the catchers lost by 25k in 4 (the filler `C@-q!` has two copied sides, K
-  one: K loses as a filler); `nz` dead 1 of 4 (55k), K lost in 3; `kf` (the catcher with the private lock `C@|f!F@&`
-  into the public world) lost in 4 of 4 by 45k. Not a clean test (fillers unequal), so `runs/p34d.json` (the same with
-  the second cell `C@-q|!`, one copied side): **`my` (Y nursery) alive 4 of 4, `mz` (Z nursery, the catchers' root)
-  dead 4 of 4 by 35-40k.** A probe of `mz` seed 1 (a preload counting what holds each host's own site, every 1000 steps):
-  catchers waiting with an open front on 13, 39, 104, 170 host sites at 22-28k, filled 0, free hosts 0-4, while empty
-  host sites fell 413 to 29: the deadlock as derived.
-- `runs/p34e.json` (160k): **`kc` (the private catcher `C@|f!F@&`, 10 bodies at 60k into E1's catcher world): it takes
-  over in 4 of 4 by 80k** (553-569 of it beside 405-412 hosts `-Z@&c@|` as its fillers; S and the plain catchers gone;
-  bonded cells about 975 against 580 before): the role swap of run 0727's seed 5, by entry, and only after the catchers
-  (`kf`: lost in the public world). `hc` (the host with `Y@&c@|y!` at 60k into the catcher world) and `hp` (into the
-  public world at 20k) running.
-- **P5 restated before E5 runs** (the theory changed with E2-E4): catchers on most second cells in 6 of 8 or more by
-  60k; at 240k, in 3 of 8 or more a guarded self-raising lock (a root-bearer's own side its root's complement with `!`)
-  in a letter other than the catchers' root holds most root-carrying cells, host-shaped (front `c@`) in at least one and
-  catcher-shaped (front `C@`) in at least one; dead by 240k at most 4 of 8. E5 (`runs/p34b.json`) is queued after the
-  three new checks (`--write`).
-- **E6, the two lineages under copy error** (`runs/p34f.json`: `{"demo":"pair","steps":240000,"env":{"PAW":"2",
-  "TRI_NOPIC":"1"},"jobs":[{"id":"h","seeds":[1,2,3,4],"env":{"PA2":"Y@&c@|y! C@|-Z@&"}},{"id":"f","seeds":[1,2,3,4],
-  "env":{"PA2":"F@&C@|f! c@|-Z@&"}}]}`, the bodies `hc` and `kc` ended with, as founders, `pErr` 0.01), queued after E5.
-  Predictions: P6 alive at 240k in 3 of 4 per design; P7 the filler lineage (root carriers without a lock of their own
-  root, most of them root Z) holds 10% or more of root carriers at most censuses from 100k in 3 of 4 per design; P8 the
-  nursery's root letter turns at least once in 2 of 8 or more while the fillers' root stays Z. A risk seen before the
-  run: a nursery copy that loses its lock (`Y@&c@|-`) is raised on nursery sites and copied on a plain side (run 0551's
-  nursery cheat).
-- Checks written, not yet run: `catcher-mix` (E1 at 80k), `catcher-letter` (`my` at 60k), `catcher-letter-z` (`mz` at
-  60k). `tri/linechart.js` takes `LC_MAX` (bars as head counts).
-- Regenerated run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
-{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"s","seeds":[1,5,7,2]}]}`) to read the order of errors.
+progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36) on `build-0727`, run 1227's (priority 37,
+predictions P1-P6) on `build-1227` and run 1602's (priority 34: theory, P1-P8 with the restated theory, progress) on
+`explore-1602` (`git log -p docs/NEXT.md`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
@@ -124,50 +31,56 @@ the catcher itself (seed 5, roles swapped). Run 1227 (IDEAS "Two locks on one ca
 locks of two letters (`C@y!z|!`) holds **two head classes in a mix** without copy error (about 40% Y, reached from both
 sides; one carrier per class holds none), but under copy error the carrier sheds a lock (each lock is a public good on
 it), and heads that raise each other turn into heads that raise themselves: **a lock stays only where it pays its
-bearer, and the most private lock (a guarded nursery of one's own kind) wins.**
+bearer, and the most private lock (a guarded nursery of one's own kind) wins.** Run 1602 (IDEAS "The catcher"): the
+catcher (a head with its front letter turned) is a cheaper filler of the second cell's place; it takes 77-96% of second
+cells and stops there (the lock's carriers keep a minority, likely by place), and the class lives at half its heads. The
+lock then moves onto a root-bearer (host or catcher, either) as a nursery **in a new letter**: a nursery in the
+catchers' root letter raises them on its own sites, where they wait for a host as filler, and dies (4 of 4); a cell that
+raises itself needs a filler copied on a plain side. A private nursery loses in the public world and takes over once
+catchers hold it (4 of 4 on each shape). Under copy error the plain nursery comes first and dies unless the guard follows.
 
-**Handoff status (autorun run 20261016-1227, build): done; one capability without copy error, two negatives under it**
-(INNOVATIONS 2026-10-16, build; IDEAS "Two locks on one carrier"). No rule or demo change; `tri/census.js --pool` counts
-the second root and second cells with locks for both roots (a `two classes` summary line), `tri/linechart.js` takes
-`LC_T`, `LC_TITLE`, `LC_NAMES`. New checks `two-locks` (the mix, from a Y majority), `two-locks-c` (one carrier per class:
-no mix held) and `two-locks-y` (the Y class alone dies), their digests written; no other check world changed (no
-demo, rule or structure code touched). Nothing is running. The worlds behind every number are regenerated with
-`node tri/batch.js runs/NAME.json` from these files (each about 10-40 minutes; read with `node tri/census.js --pool --joint`):
-- `p37e.json`: `{"demo":"pair","steps":240000,"env":{"PAW":"2","TRI_NOPIC":"1","TRI_PARAMS":"{\"pErr\":1e-9}","PA3T":"20000","PA3N":"10"},"jobs":[{"id":"a","seeds":[1,2,3,4],"env":{"PA2":"Z@&c@|- C@y!z|!","PA3":"Y@&c@|- C@y!z|!"}},{"id":"b","seeds":[1,2,3,4],"env":{"PA2":"Y@&c@|- C@y!z|!","PA3":"Z@&c@|- C@y!z|!"}},{"id":"c","seeds":[1,2,3,4],"env":{"PA2":"Z@&c@|- C@-z|!","PA3":"Y@&c@|- C@-y|!"}}]}`
-- `p37f.json`: the same head (no `PA3T`/`PA3N`), jobs `d` (`PA2` `Z@&c@|- C@y!z|!`, `PA3` `Y@&c@|- C@y!z|!`, `PA3T` 100,
-  `PA3N` 10) and `s` (`C@y!z!` in both, `PA3T` 20000, `PA3N` 10)
-- `p37h.json`: the same head, steps 120000, `PA3T` 100: `dc` (`Z@&c@|- C@-z|!` and `Y@&c@|- C@-y|!`, `PA3N` 10) and `alt` (60000 steps,
-  `Z@&c@|y! C@-q!` and `Y@&c@|z! C@-q!`, `PA3N` 1)
-- `p37l.json`: steps 480000, env `PAW` 2: `w` (seeds 1-4, `PA2` `Z@&c@|- C@y!z|!`, `PA3` `Y@&c@|- C@y!z|!`, `PA3T` 20000,
-  `PA3N` 10) and `p` (seeds 1-8, nothing else: run 0727's worlds, the old `p36.json`)
-- `p37i.json`: steps 480000, env `PAW` 2, `PA2T` 100, `PAEN` 10, `PA3T` 100, `PA3N` 10, `PA2` `Z@&c@|y! C@-q!`, `PA3`
-  `Y@&c@|z! C@-q!`: `e` (seeds 1-4) and `n` (120000 steps, `TRI_PARAMS` pErr 1e-9)
+**Handoff status (autorun run 20261016-1602, explore): done; the catcher derived and tested by entry, three checks**
+(INNOVATIONS 2026-10-16, explore; IDEAS "The catcher"). No rule, demo or structure change. New checks `catcher-mix`,
+`catcher-letter`, `catcher-letter-z` (4 of 4 each, digests written); no other check world changed. `tri/linechart.js`
+takes `LC_MAX` (bars as head counts); `tri/siteprobe.js` is a preload that prints what holds the host nurseries' own
+sites. E6 (`runs/p34f.json`, the two lineages under copy error, predictions P6-P8 in the slice record) was running at this commit. The worlds behind every number are regenerated with `node tri/batch.js runs/NAME.json` from these files
+(env always `PAW` 2 and `TRI_NOPIC` 1; read with `node tri/census.js --pool --joint`; 5-18 minutes per world):
+- `r0.json`: steps 160000, `s` seeds 1, 5, 7, 2 (run 0727's worlds, regenerated)
+- `p34a.json`: steps 120000, `TRI_PARAMS` `{"pErr":1e-9}`; `e1` (`PA3` `Z@&c@|- C@|-Z@&`), `e2` (`PA2` `Z@&c@|z! C@-z|!`,
+  `PA3` `Z@&c@|z! C@|-Z@&`), `e3` (`PA3` `Z@&c@|- C@|z!Z@&`), `e4` (10000 steps, `PA2` `Z@&c@|z! C@|z!Z@&`), `c1` (nothing
+  else), `c2` (`PA2` `Z@&c@|z! C@-z|!`); every `PA3` with `PA3T` 20000, `PA3N` 10; seeds 1-4 each
+- `p34c.json`: the same head with `PA3T` 20000, `PA3N` 10: `ny` (`PA2` `Y@&c@|y! C@-q!`, `PA3` `Y@&c@|y! C@|-Z@&`), `nz`
+  (the same in Z: `Z@&c@|z! C@-q!`, `Z@&c@|z! C@|-Z@&`), `kf` (`PA3` `Z@&c@|- C@|f!F@&`)
+- `p34d.json`: as `p34c.json` with the second cell `C@-q|!`: `my` (Y) and `mz` (Z) (the checks `catcher-letter(-z)` at 60k)
+- `p34e.json`: steps 160000, `TRI_PARAMS` `{"pErr":1e-9}`, `PA1` 1, `PAEN` 10: `kc` and `hc` (`PA3` `Z@&c@|- C@|-Z@&`, `PA3T`
+  20000, `PA3N` 10, `PA1T` 60000, `PAKR` `Z@&c@|-` with `PAKS` `C@|f!F@&`, or `PAKR` `Y@&c@|y!` with `PAKS` `C@-z|!`) and
+  `hp` (`PA1T` 20000, `PAKR` `Y@&c@|y!`, `PAKS` `C@-z|!`)
+- `p34b.json`: steps 240000, `k` seeds 1-8 (`PA3` `Z@&c@|- C@|-Z@&`, `PA3T` 20000, `PA3N` 10; copy error on)
+- `p34f.json`: steps 240000, `h` (`PA2` `Y@&c@|y! C@|-Z@&`) and `f` (`PA2` `F@&C@|f! c@|-Z@&`), seeds 1-4 (copy error on)
 
-**Next step (rotation 87, explore): priority 34** (the catcher), which starts from run 0727's two bodies (`p37l.json` `p`
-regenerates those worlds). Then 88 build: priority 38. A run that changes outputs runs its checks once and writes the
-digests in its pull request.
+**Next step (rotation 88, build): priority 38**, now with a candidate from this run: the nursery and its filler as two
+lineages (IDEAS "The catcher", last bullets; E6 above). Then 89 cleanup. A run that changes outputs runs its checks once
+and writes the digests in its pull request.
 
 ## Priorities
 
-Done 1-24, 28-30, 32, 33, 36 and 37: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24, 28-30, 32-34, 36 and 37: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (set by review-intent run 2151; 32 done in core review run 2221, 36 in build run 0727, 37 in build run 1227, which
-set 38):
-34. [87 explore] **The catcher, shape first** (theory first). A head whose front became `C@` takes the second cell's place
-    on host fronts and carries no lock. Run 0727 saw the shape answer twice in the line's world (`PAW=2`): catchers took
-    most second cells in 4 of 8 worlds, and the two that lived put a guarded lock on a cell's own side (the host head,
-    `I!i@&c@`, seed 1; the catcher itself, `C@f!F@&`, seed 5, roles swapped); the two that died kept no guarded lock on
-    any cell. Derive why the lock goes where it does (which cell's own kind it raises, who pays for a plug), predict
-    which cell keeps it from the order of errors, then an entry test: catchers entered into a public world with and
-    without hosts carrying `z!` on their own side. Only then whether anything else is needed.
+set 38, 34 in explore run 1602):
 38. [88 build] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier").
     Run 1227: two locks on one carrier hold two classes without copy error, but each is a public good on the carrier
     (its kids catch carriers, never raise them), so copy error removes one; heads that raise each other (`Z@&c@|y!`,
     `Y@&c@|z!`) are one error from a guarded nursery of their own kind, which wins. Theory first: what makes a class
     unable to drop the other (each must gain from the other more than from raising itself); candidates: an obligate
     class whose host gains from it (in the two-lock mix Y needs Z, Z does not need Y), a lock whose kid raises carriers
-    (a carrier with a root, the catcher's shape: priority 34 first), space. Only then a run.
+    (a carrier with a root, the catcher's shape), space. **Run 1602's candidate** (IDEAS "The catcher"): a nursery cell
+    (root X, own site x!, copied only there) and its filler (another root, a plain copied side, made only by being caught
+    on a nursery front) need each other: the nursery cannot make its filler by one error (a filler of its own root is
+    raised on its sites and deadlocks; one with a plain side, the matching front and another root is three errors away),
+    and the filler is caught only on nursery fronts. E6 measures it under copy error (running). Next: whether two
+    nursery classes can share one filler lineage, or one nursery class two fillers, and what holds each.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -180,8 +93,8 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221, 0727, 0902 and 1227): 87 explore,
-88 build, 89 cleanup, 90 build, 91 explore.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221, 0727, 0902, 1227 and 1602): 88 build,
+89 cleanup, 90 build, 91 explore.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
