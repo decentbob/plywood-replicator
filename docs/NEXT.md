@@ -38,8 +38,13 @@ needs none, so this build takes it first.
   0.35 on `C@y!z|!`). E4 (`runs/p37l.json`, `w`): P4 fails: the lock for both roots left most carriers by 35-65k (3 of 4;
   seed 1 dead of catchers by 45k), 3 of 4 dead by 200k, two classes in over half the censuses from 100k in 0 of 4; the
   one-site worlds (`p`, run 0727's 8 worlds, reproduced exactly) 1 of 8, and none of them had locks for both roots on
-  most second cells at any census. Records drafted (IDEAS); checks `two-locks(-c, -y)` running; next a pilot of heads
-  that raise each other (`runs/p37g.json`).
+  most second cells at any census. Checks: Y entered rare with 20 bodies established in 2 of 4 (seeds 1 and 4 lost
+  by 35k), so `two-locks` reads the mix from the Y-majority start instead (Y 30-49% at every census 40-120k, 4 of 4),
+  control the same start on one carrier per class (`runs/p37h.json` `dc`: Z lost, or Y ranging 19-83%, 4 of 4).
+  Alternation pilot (`p37h` `alt`, heads that raise each other, `Z@&c@|y! C@-q!` and `Y@&c@|z! C@-q!`, one founder of
+  each): 3 of 4 died at the start, seed 3 lives at Z 240 Y 232 (60k). **Next (P5, P6):** `runs/p37i.json`, 10 founders
+  of each at step 100: without copy error (120k) alive 3 of 4 with Y 40-60%; under copy error (480k) two classes in over
+  half the censuses from 100k in 2 of 4 or more (one-site worlds: 1 of 8).
 - **Stop rule.** If E1 and E2 do not show mutual invasion, trace why (site occupancy, waiting times), try the symmetric
   carrier `C@y!z!` once, and record the negative. No core change in this run (a need for one goes to RULES, Open
   candidates).
