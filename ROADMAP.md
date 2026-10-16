@@ -128,7 +128,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    guards its own side (a `!` on it raises its children and lyses plugs under `lysJoint`): in 8 worlds plain nurseries
    died (3 of 3) and guarded ones lived (2 of 2), the second cell's lock never followed a nursery, and catchers were
    answered by shape (the lock moved onto the host head or the catcher itself) (0727; `line`, `nursery-guard`,
-   `nursery-guard-c`; IDEAS "A nursery guards itself"). Open: NEXT's priorities.
+   `nursery-guard-c`; IDEAS "A nursery guards itself"). 37 two locks of two letters on one carrier (`C@y!z|!`) hold two
+   head classes in a mix without copy error (about 40% Y from both sides; one carrier per class holds none; the class on
+   the carrier's copied side cannot live alone); under copy error the carrier sheds a lock (a public good on it) and heads
+   that raise each other become heads that raise themselves: a lock goes to the bearer it pays soonest (1227;
+   `two-locks`, `two-locks-c`, `two-locks-y`; IDEAS "Two locks on one carrier"). Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held

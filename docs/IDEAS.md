@@ -28,7 +28,7 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
-## Two locks on one carrier: two classes live together, but the carrier sheds a lock that does not pay it (build run 20261016-1227, 2026-10-16)
+## Two locks on one carrier: two classes live together until copy error; a lock goes to the bearer it pays soonest (build run 20261016-1227, 2026-10-16)
 
 NEXT priority 37 (duplication and divergence), theory first, then entry tests and the line's world (INNOVATIONS run
 1227). Notes, not the user's words.
@@ -67,7 +67,15 @@ NEXT priority 37 (duplication and divergence), theory first, then entry tests an
   For two classes: heads that raise each other, `Z@&c@|y!` and `Y@&c@|z!` on a plain carrier. A Z head's copies are made
   at its own side and bind the nearest Y head's site, which is often its own kid, so the Y kid raises its parent's
   copies: a two-generation nursery, private by place. The mix is pinned too (each class is born only on the other's
-  sites). Designed here; first pilot in INNOVATIONS run 1227.
+  sites). Measured: without copy error it lives at a pinned mix (Y 38-64% of heads, 4 of 4); under copy error one class
+  took over by 35-60k in 3 of 4 (the fourth died by 50k) and guarded nurseries of one class followed. **An alternating
+  head is one glue error from a head that raises its own kind** (`Z@&c@|y!` to `Z@&c@|z!`), and a one-generation private
+  lock pays sooner than a two-generation one, so it wins.
+- **Lesson.** Under copy error a lock drifts toward the bearer it pays soonest: off a carrier (pays nobody), from the
+  other class to one's own kind. Two classes on one body plan therefore need a class that gains more from the other than
+  from raising itself, which neither design gives: in the two-lock mix Y needs Z and Z gains nothing from Y; in the
+  alternation each needs the other only until one error lets it raise itself. Next (NEXT priority 38): theory for a
+  partner a class cannot replace by itself, before any run.
 
 ## A nursery guards itself: the lock goes where it is private (build run 20261016-0727, 2026-10-16)
 
