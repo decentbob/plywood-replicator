@@ -62,7 +62,9 @@ sim (chemistry), world, structures (kits), demos (one per capability), render, t
   in the chat (the session's file-send tool) of what is being worked on, or when something interesting happens (a
   new capability working, a surprising failure), with a one-line caption. This applies to unattended runs too.
 - `node tri/test.js` before committing; `node tri/check.js` before merging any rule, physics or shared-structure
-  change. At most four simulation processes at once.
+  change. It compares every world's output with main's digest in `tri/digests.txt`, so no suite on main is needed as a
+  baseline; a pull request that changes a check world's output, or adds or redefines a check, rewrites its digests
+  (`--write`). At most four simulation processes at once.
 - Standing approval to commit, push and merge into `main`, preferably through a pull request (GitHub then deletes
   the branch).
 - **Always ready for handoff:** at every checkpoint, results recorded, docs/NEXT.md current (what is in progress,
