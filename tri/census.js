@@ -101,4 +101,6 @@ function shapeSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.
   const mv=[];let cur=null,prev=null;for(const r of R){if(!r.H.n&&!r.K.n)break;if(r.lock!==cur){const o=cur&&cur!=='-'&&cur.length===1&&prev?prev[cur]:null;
       mv.push(`${r.lock} ${k(r.t)}${o?' (before: '+cur+' public '+pc(o.S+o.P,o.n)+')':''}`);cur=r.lock;}prev=r;}
   const dead=R.find(r=>r.t>20000&&!r.H.n&&!r.K.n),live=R.filter(r=>r.H.n||r.K.n),both=live.filter(r=>r.H.n>0.1*(r.H.n+r.K.n)&&r.K.n>0.1*(r.H.n+r.K.n));
-  console.log(`  lock: ${mv.join(', ')}${dead?'; dead from '+k(dead.t):''}; both shapes (10% or more each) in ${both.length} of ${live.length} censuses`);}
+  const M=q=>Object.keys(q.R).sort((a,b)=>q.R[b]-q.R[a])[0],same=live.filter(r=>r.H.n&&r.K.n&&M(r.H)===M(r.K)),n=x=>live.filter(r=>r.lock===x).length;
+  console.log(`  lock: ${mv.join(', ')}${dead?'; dead from '+k(dead.t):''}; both shapes (10% or more each) in ${both.length} of ${live.length} censuses
+  lock on H in ${n('H')}, on K in ${n('K')}, on neither in ${n('-')}; the two shapes' commonest roots the same letter (a mimic) in ${same.length}${same.length?' (from '+k(same[0].t)+')':''}`);}

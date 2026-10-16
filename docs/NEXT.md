@@ -69,7 +69,22 @@ Predictions (entry tests `runs/p38a.json`: the founder `Y@&c@|y! C@|-Z@&`, no co
 - P4 `m`, the founder's fillers of root X (`Y@&c@|y! C@|-X@&`) against `b`'s entry: each system's fillers take the other's
   sites, so the common one wins: X entered rare is lost, 3 of 4.
 - P5 `c`, the founder alone without copy error: alive 4 of 4 at 120k.
-Progress: E6 regenerating (`runs/p34f.log`); `tri/census.js --shape` added.
+Read (19:40): P1 yes (X lost 4 of 4). P2 no: the X catcher nursery was lost (4 of 4), and its fillers, plain heads of
+root Y, became the Y nursery's cheats: plain heads 70-80% of head-shaped cells from 35-45k to 120k, the guarded
+nursery 18-30%, 4 of 4 (T2's mix without copy error). P3 no: the X system with fillers of root W, which share nothing
+with the Y system, was lost too (4 of 4 by 25k). P4: X lost 4 of 4 (as in P3, so not for P4's reason), the same cheat
+mix as `b`. P5 yes (the guarded nursery on every head-shaped cell at every census, 4 of 4).
+E6 by shape (`runs/p34f`, 8 worlds, 48 censuses each): the nursery shape keeps the lock (guarded or plain nurseries on
+most of its cells) in 0-19 censuses; on neither shape in 26-45; the lock on the other shape in h2 (110-120k) and f3
+(from 110k) only. The common state is T2's mix: guarded nurseries 10-30% of their shape, site-turned heads the rest;
+a nursery in a new root letter sweeps now and then (h1 145k G, h2 165k J, h3 65k h, 105k F; f1 95k P, 185k l; f2
+155k n, 215k s) and its own cheats follow within 5-20k. The filler shape's root took the nursery's letter (a mimic,
+raised on the nursery's sites) in h2-h4, f2-f4.
+Restated (T4, before `p38b`): **a nursery whose filler is made only by its own kind has an Allee effect**: a kid's filler
+comes from nearby bodies of its system (free parts decay within 100 steps), so a rare system's kids wait longer, and
+two such systems exclude each other: whichever is common wins. P6 `we` (one X body with a W filler beside the Y
+founder at step 100): one system lost by 120k in 3 of 4, X winning at least once. P7 `wq` (10 X bodies at step 100):
+the Y founder's system lost, 3 of 4.
 
 **Handoff status (autorun run 20261016-1602, explore): done; the catcher derived and tested by entry, three checks**
 (INNOVATIONS 2026-10-16, explore; IDEAS "The catcher"). No rule, demo or structure change. New checks `catcher-mix`,
