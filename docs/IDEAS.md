@@ -70,7 +70,11 @@ run 2258). Notes, not the user's words.
   them is a stepping stone (the loop nursery, cheat, catcher, nursery of run 1902 is cut at its first step). The public
   lock dies under it, as under the core's plain trap. So the guard trades the transient lock for a frozen one; what it
   opens is a lineage that keeps its heredity, on which variation elsewhere (fillers, a second site, a second shape) can
-  build. LONGRUN
+  build. To 480k (4 of 4) the lock held in every census and the first thing that evolved on it was the nursery's front:
+  it lost its anchor mark by 20-35k (`Y@&c@y!`), so blanks copy the open front while the head waits for its filler and
+  the nursery sprays free copies of itself. Beside cheats that would feed them; with the guard only kin can use a
+  site, so **the nursery took up the cheat's own strategy, flux, once flux could no longer be stolen.** On the filler
+  shape the root letter, never bound, drifts freely.
 
 ## One encounter against two: the nursery's number is set by how long free cheats live (build run 20261016-2151, 2026-10-16)
 

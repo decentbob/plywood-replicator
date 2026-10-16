@@ -38,7 +38,11 @@ not statistics.
     nursery-alone level, 4 of 4; with `lysJoint` 1 about 100 beside 290 cheats); under copy error 0.01 to 120k the guarded
     nursery holds every head-shaped cell in 24 of 24 censuses in 4 of 4 worlds (with `lysJoint` 1: a guarded majority in
     0-8 of 24, run 2151 and this run's first form). The public world (`PAW=2` founder) dies by 10k under it (4 of 4: its
-    heads carry no `z!`). LONGRUN
+    heads carry no `z!`). To 480k (`runs/kgl.json`, 4 seeds): the lock on every head-shaped cell in 96 of 96 censuses, 4
+    of 4. **The nursery then took up the cheat's flux:** its front lost the anchor mark (`Y@&c@y!`, majority by 20-35k in
+    4 of 4), so the open front is copied while it waits for its filler and the nursery sprays free copies of itself, which
+    only its own sites take; on the filler shape the never-bound root letter drifts (Z to M, Q, S, H, P, i; a world
+    whose fillers lost their root, `BC@|q`).
   - Picture: [recess.png](pictures/recess.png) (a: the two-wall notch, the kid's front cell on the wall; b: the fan).
   - Commands: `node tri/check.js --cmd kin-guard kin-guard-evolve`; the probe `RP_T0=25000 NODE_OPTIONS='-r
     ./tri/raceprobe.js'`; the batches' JSON in NEXT's handoff.
