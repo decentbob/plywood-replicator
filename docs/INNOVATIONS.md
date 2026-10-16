@@ -12,6 +12,42 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-2258, explore)
+
+- **The nursery's share is the environment's; a guard that spares only the same side keeps the lock under copy error**
+  (NEXT priority 38, third step; candidate (x), RULES; IDEAS "The nursery's share is the environment's"). One core
+  change as an option: `lysJoint: 2` (default 0: every output the same). Worlds as `nursery-mix` (`PAW=2`, the
+  two-lineage body, 10 cheat bodies at 20k, `pErr` 1e-9) unless said.
+  - **T1 restated and measured** (`tri/raceprobe.js` 'fate:' lines: every free copy of a nursery or cheat head followed
+    to a site, decay or elsewhere; batch `runs/fz.json`, 5 worlds, 2 seeds, to 60k): n* = c rB / (pi rho), rB blank
+    arrivals per empty site, pi copies per attached cheat, rho the share of a cheat copy binding a site per empty site,
+    c the cheats' death rate over the nursery's. c is 0.55-0.66 in all 10 worlds (nurseries die about 1.6x as often);
+    pi/rB 1.28-1.60 everywhere; rho alone moves: base 4.4e-3, PADI 50 2.1e-3, PADI 200 8.0e-3, twice the area 2.2e-3,
+    **twice the material 2.4e-3**: crowded, a free cheat copy travels 2.0 instead of 3.4 before it decays (1.7 instead of
+    2.7 to a site). Run 2151's failed prediction (crowding) is the reach term: bodies are obstacles. Predictions P2-P4
+    yes, P1 (c = 1) no.
+  - **The recess, on paper: not buildable.** A lattice search of every chain body to six cells (each cell across the
+    previous one's front): a site walled on two sides is always the kid's own front's place (picture a); the best
+    one-wall fan (head and three cells around the front-site corner) lowers the access to 0.78 (Monte Carlo of
+    placements; picture b), for the cheat as much as the nursery, since a body's shape is made of public fillers.
+  - **Candidate (x) as `lysJoint: 2`**: across a joint a lysis side lyses a partner unless that partner carries an
+    identical side (glue and marks). First form (the same glue only): cheats lost without copy error (P5 yes, 4 of 4), but
+    under copy error 0 of 4 kept the lock: the cheat became `Y@&c@|y.!` (a close-only site, copied there, its copies
+    cannot bind back), which carries a `y!`-glued lysis side. Identical side (`runs/kg2.json`): without copy error the
+    entered cheats are lysed on the nursery's sites and lost, the nursery 566-570 head-shaped cells at 80k (the
+    nursery-alone level, 4 of 4; with `lysJoint` 1 about 100 beside 290 cheats); under copy error 0.01 to 120k the guarded
+    nursery holds every head-shaped cell in 24 of 24 censuses in 4 of 4 worlds (with `lysJoint` 1: a guarded majority in
+    0-8 of 24, run 2151 and this run's first form). The public world (`PAW=2` founder) dies by 10k under it (4 of 4: its
+    heads carry no `z!`). LONGRUN
+  - Picture: [recess.png](pictures/recess.png) (a: the two-wall notch, the kid's front cell on the wall; b: the fan).
+  - Commands: `node tri/check.js --cmd kin-guard kin-guard-evolve`; the probe `RP_T0=25000 NODE_OPTIONS='-r
+    ./tri/raceprobe.js'`; the batches' JSON in NEXT's handoff.
+  - Checks: `kin-guard` (no cheat at 80k, 500 or more nurseries), `kin-guard-evolve` (the nursery on more than 80% of
+    head-shaped cells in every census from 20k under copy error); digests written.
+  - Status: T1 restated (**measured**, 5 worlds, no check); the recess (**designed, not buildable**); the identical-side
+    guard keeps a nursery's lock under copy error (**works**, `kin-guard`, `kin-guard-evolve`; an option, for a core
+    review: it freezes the nursery's letters and kills the public lock).
+
 ## 2026-10-16 (autorun run 20261016-2151, build)
 
 - **One encounter against two: the cheat wins a nursery's site with free copies from afar, and the nursery's number is

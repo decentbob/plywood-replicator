@@ -321,7 +321,13 @@ NEXT priority 38. Derivation: IDEAS "The nursery's share is the environment's" (
    (its own type; the glue and marks of the side it is bonded to). A head that passes then carries the site exactly, so
    its copies made there bind back: **no head that does not raise itself can be raised on a guarded site**, by any number
    of errors (a copy is its template's type, the site catches its copies' root).
-6. **Result:** below, when the run ends.
+6. **Result (INNOVATIONS run 2258): built as `lysJoint: 2`, default 0 (every output the same; option, not adopted).**
+   Without copy error the nursery's entered cheats are lysed on its sites and lost (4 of 4, check `kin-guard`); under
+   copy error 0.01 the guarded nursery holds every head-shaped cell in 24 of 24 censuses (4 of 4 to 120k, check
+   `kin-guard-evolve`), against a guarded majority in 0-8 of 24 with `lysJoint` 1. Costs: the public lock dies under it
+   (4 of 4 by 10k), as without `lysJoint`; the nursery's letters are frozen (its root and site turn only together, and no
+   cheat of them is a stepping stone). For a core review: adopt as the rule only with a world that needs a trap and a
+   lock at once; the line's preset (`PAW=2`) uses `lysJoint` 1.
 
 ### Core review 2026-10-08, autorun run 20261008-2221: chain copying retired, (w) removed, (v) kept an option
 NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221`; the removed code at `1284bb4`.

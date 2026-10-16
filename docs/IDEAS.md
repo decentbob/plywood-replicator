@@ -57,6 +57,20 @@ run 2258). Notes, not the user's words.
   lysis side of the same glue (no new read: its own type and the glue of the side it is bonded to). Every one-error
   cheat of the guarded nursery lacks that side (plain, another letter, no `!`), and a head that keeps root and site
   raises its own kind. It is run 1902's "second recognition step the cheat lacks", made by lysis instead of geometry.
+- **A falsebeard appears at once, and the cure is to read the side that does the work.** In biology's terms the guard
+  is a greenbeard (a trait that marks its bearer and favours bearers), and the classic failure is the falsebeard: a
+  bearer of the mark without the behaviour. Reading the lysis side's glue only, copy error found it within 30k in 4 of
+  4 worlds: `Y@&c@|y.!`, the site with a close-only mark, is copied there but catches nothing, so its copies go free
+  like any cheat's. Any part of the beard that can be kept while the catch is broken lets a cheat through; the catch
+  itself cannot. Reading the whole side (glue and marks) makes the beard the behaviour: a head raised on the site
+  carries the site, so the copies made there bind back. **No head that does not raise itself is raised on a guarded
+  site, by any number of errors.** Under copy error the nursery then held every head-shaped cell in 24 of 24 censuses
+  in 4 of 4 worlds.
+- **What it costs, and what it opens.** The lock stops turning: root and site must change together, and no cheat of
+  them is a stepping stone (the loop nursery, cheat, catcher, nursery of run 1902 is cut at its first step). The public
+  lock dies under it, as under the core's plain trap. So the guard trades the transient lock for a frozen one; what it
+  opens is a lineage that keeps its heredity, on which variation elsewhere (fillers, a second site, a second shape) can
+  build. LONGRUN
 
 ## One encounter against two: the nursery's number is set by how long free cheats live (build run 20261016-2151, 2026-10-16)
 

@@ -487,6 +487,19 @@ const CHECKS=[
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const b=R.every(r=>r.c.n>=0.1*(r.c.n+r.C.n)&&r.C.n>=0.1*(r.c.n+r.C.n)),late=R.filter(r=>r.t>=20000),
         mix=late.filter(r=>r.c.G<=r.c.n/2&&r.C.G<=r.C.n/2).length;
       return [b&&e.c.n+e.C.n>=200&&2*mix>=late.length,`${e.c.n}+${e.C.n} cells at 120k, both shapes ${b?'throughout':'not throughout'}, no guarded majority in ${mix} of ${late.length} censuses from 20k`];}},
+  // run 20261016-2258 (explore; candidate (x), the option lysJoint 2): across a joint a lysis side lyses a partner unless
+  // that partner carries the same side (glue and marks). A head raised on the nursery's site must then carry the site, so
+  // its copies made there bind back: no head that does not raise itself is raised there. The entered cheats are lysed on
+  // the nursery's sites and are lost (the nursery about 570 head-shaped cells at 80k, as alone); under copy error the
+  // nursery keeps every census (24 of 24 in 4 of 4, against a guarded majority in 5-8 of 24 with lysJoint 1 or with a
+  // guard that compares the glue only, whose cheat was a close-only site 'y.!')
+  {id:'kin-guard',cap:'With lysJoint 2 (a lysis side spares across a joint only a partner carrying the same side) the nursery\'s entered cheats are lysed on its sites and lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:150,
+    env:{...ent,TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}',PA3T:'20000',PA3:'Y@&c@|- C@|-Z@&'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [e.c.G>=500&&e.c.n===e.c.G,`at 80k guarded nursery ${e.c.G} of ${e.c.n} head-shaped cells (cheats and others ${e.c.n-e.c.G})`];}},
+  {id:'kin-guard-evolve',cap:'  under copy error the guarded nursery keeps most head-shaped cells in every census: its cheats cannot use its sites',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:220,
+    env:{...body,TRI_PARAMS:'{"pErr":0.01,"lysJoint":2}'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const late=R.filter(r=>r.t>=20000),held=late.filter(r=>r.c.G>0.8*r.c.n).length;
+      return [held===late.length&&e.c.n>=400,`guarded nursery on more than 80% of head-shaped cells in ${held} of ${late.length} censuses from 20k, ${e.c.G} of ${e.c.n} at 120k`];}},
   ];})(),
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
