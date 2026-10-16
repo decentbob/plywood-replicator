@@ -28,6 +28,39 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A nursery guards itself: the lock goes where it is private (build run 20261016-0727, 2026-10-16)
+
+Measured in the line's world (`PAW=2`, 8 worlds to 480k) and an entry test (INNOVATIONS run 0727). Notes, not the
+user's words.
+- **Under `lysJoint` a `!` on a nursery's own side is a lock, not a trap.** The head's own side (its root's complement)
+  raises its children in place; they bind by `Z@&`, a joint, so the `!` does not touch them. A plug binds by `Z@`, no
+  joint: it is lysed at once and its lysis comes back into the head. So the guard costs the carrier when it works, like
+  the trap of run 1522, but here the carrier loses nothing it would have kept: a plug on a nursery site blocks that
+  site for good and is copied there (a lysing plug kills the head anyway). What the guard changes is the plug's fate: it
+  is lysed in the pass after it binds, never a template. The children of a nursery live beside it, so the plugs it
+  removes are its kin's plugs: locality makes the guard pay. Without plugs it costs nothing (the entry worlds are byte
+  for byte the plain nursery's until the plugs come).
+- **The second cell's lock is a public good in a nursery, and it drifts away.** A lock on the second cell raises pool
+  heads of any lineage and lyses plugs from the pool; once heads are born in place nobody needs it. In 46 censuses with a
+  nursery on most heads, none had a lock for the root on most second cells. So in this core the guard of a nursery is on
+  its own side or nowhere, and a nursery without it is sunk by a plug or crowded by sealed cheats (3 of 3 such worlds
+  died, 10-160k after the nursery formed).
+- **The catcher answered by shape, twice.** A catcher (a head whose front became `C@`) takes the second cell's place and
+  carries no lock, so its body raises nobody; run 1951 saw it kill worlds. Here it took most second cells in 4 of 8
+  worlds, and the two that lived moved the lock onto one of the two cells' own side: in seed 1 the host heads took a lock
+  on their plain side and the root followed it (`I!i@&c@`), in seed 5 the catcher itself did (`C@f!F@&`, raising its own
+  kind on itself while the old head binds its front as the second cell). Both bodies are two cells with a root each. The
+  two that died kept no guarded lock on any cell. That is priority 34's "shape first" seen before it was derived: the
+  answer to a parasite of the carrier role was not a new guard but a lock on a cell whose own kind it raises.
+- **What it gives the goal.** The line's world now evolves its body plan, not only its letters: the lock moved between
+  cells, roles swapped (seed 5), two root classes alternated on one pool of locks for 175k (seed 2) and 125k (seed 6),
+  and in seed 1 a host lineage with a lock of another letter on its own side (`a!i@&c@`) raised the other class (`A@&c@a!`
+  heads; i and A alternated 10 times from 180k to 300k, then i and F 10 times). A guarded nursery is frozen in the sense of run 1951 (a needed
+  lock), but in seed 1 the classes still turned: the commons door stays open on the head's own side, where a lock of
+  another letter (`a!`) is a public lock again.
+- Next: the catcher as a shape (priority 34) can start from these two bodies: which cell keeps the lock, and whether a
+  body with a lock on each cell (a guarded nursery and a public lock) holds two classes on one carrier (priority 37).
+
 ## A trap or a lock: one lysis mark cannot be both (core review run 20261008-2221, 2026-10-09)
 
 Notes, not the user's words. The core review ran the whole suite with candidate (v) (`lysJoint`) as the rule.

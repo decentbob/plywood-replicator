@@ -123,7 +123,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    are settled, and then a shape before a rule; chain copying (u) is retired; the stockless world under copy error
    becomes the line's preset. 32 core review: chain copying retired (output-neutral: every world no lysis option touches
    byte for byte main's), `lysOneWay` removed, `lysJoint` kept an option: as the rule it turns every trap into a lock and
-   kills nursery worlds (2221; IDEAS "A trap or a lock"). Open: NEXT's priorities.
+   kills nursery worlds (2221; IDEAS "A trap or a lock"). 36 the line's world as a preset (`PAW=2`); a nursery
+   guards its own side (a `!` on it raises its children and lyses plugs under `lysJoint`): in 8 worlds plain nurseries
+   died (3 of 3) and guarded ones lived (2 of 2), the second cell's lock never followed a nursery, and catchers were
+   answered by shape (the lock moved onto the host head or the catcher itself) (0727; `line`, `nursery-guard`,
+   `nursery-guard-c`; IDEAS "A nursery guards itself"). Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
