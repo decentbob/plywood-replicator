@@ -408,6 +408,22 @@ const CHECKS=[
   {id:'nursery-guard-c',cap:'  control: the plain nursery Z@&c@|z in the same world: the plugs sink it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,
     env:{PAW:'2',PA2:'Z@&c@|z C@-q!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'20',PA3:'--Z@'},
     pass:(L,o)=>{const C=plugs(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [!!d,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  // run 20261016-1227 (build): two classes on one carrier (NEXT priority 37). A second cell with two guarded locks of two
+  // letters, 'C@y!z|!' (its 'y!' side is also its one copied side), raises Z heads on 'z|!' and Y heads on 'y!'. In the
+  // line's world without copy error a Y class entered rare (20 bodies at 20k) rises beside the Z founder's class to a mix
+  // of about 40% Y and holds (each class's sites are its own, so a rare class finds them free); control: each class on its
+  // own one-site carrier, where carriers are copied whatever they raise: Y is lost and its carriers become cheats; and the
+  // Y class alone on the two-site carrier dies (its waiting kid covers its carrier's only copied side: pair-c's deadlock)
+  {id:'two-locks',cap:'Two classes on one carrier: on C@y!z|! a Y class entered rare (20 bodies at 20k) rises beside Z and holds (both 20% of heads or more at 120k)',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,
+    env:{PAW:'2',PA2:'Z@&c@|- C@y!z|!',PA3:'Y@&c@|- C@y!z|!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PA3N:'20'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const e=C[C.length-1],f=k=>(e.H[k]||0)/Math.max(1,e.h),pc=x=>(100*x).toFixed(0)+'%';
+      return [f('Y')>=0.2&&f('Z')>=0.2,`Y ${pc(f('Y'))}, Z ${pc(f('Z'))} of ${e.h} heads at 120k`];}},
+  {id:'two-locks-c',cap:'  control: each class on its own one-site carrier (C@-z|!, C@-y|!): the entered Y class is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,
+    env:{PAW:'2',PA2:'Z@&c@|- C@-z|!',PA3:'Y@&c@|- C@-y|!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PA3N:'20'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.t>20000&&!c.H.Y);return [!!d&&!C[C.length-1].H.Y,`no Y head from ${d?d.t/1000+'k':'never'}`];}},
+  {id:'two-locks-y',cap:'  the Y class alone on C@y!z|! dies: its waiting kid covers its carrier\'s only copied side',demo:'pair',seeds:[1,2,3,4],need:3,steps:10000,secs:20,
+    env:{PAW:'2',PA2:'Y@&c@|- C@y!z|!',TRI_PARAMS:'{"pErr":1e-9}'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.h===0);return [!!d&&C[C.length-1].h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
