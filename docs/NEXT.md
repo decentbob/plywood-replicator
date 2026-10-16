@@ -9,6 +9,15 @@ direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice r
 progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36, with its predictions) on `build-0727`
 (`git log -p docs/NEXT.md`).
 
+**Slice in progress (autorun run 20261016-0902, harden; branch `harden-0902`).** Goal: no more suites on main for a
+baseline. `tri/check.js` hashes each world's whole output and compares it with main's digest in `tri/digests.txt`
+(`[same]`, `[changed: seeds]`, `[new]`, `[redefined]` per check, a count at the end); `--write` (or `--write --from DIR`,
+a CHECK_SAVE directory) rewrites them; `tri/test.js` fails while a check world has no digest for its current command.
+And `race` reads `seal-evolve`'s worlds (same settings) to 240k instead of its own (`share`), if it passes 3 of 4 on
+seeds 5-8. Done when: main's suite (baseline, worktree `../base`, `runs/a`, started 09:04) has written every digest, the
+outputs match an earlier container's numbers, and the branch's checks report `[same]`. Running: the baseline,
+`CHECK_SAVE=/home/user/base/runs/a node tri/check.js --part 1/2 > runs/check1.txt` in `../base`, then part 2/2.
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use

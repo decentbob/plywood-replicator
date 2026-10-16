@@ -302,4 +302,9 @@ test('lysJoint: a lock z! raises a key with & (a joint) and lyses a plug without
   const k=lockCase('Z@&c@-',{lysJoint:1});assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
   const k0=lockCase('Z@&c@-',{});assert.ok(k0.lysed&&k0.whole,'without lysJoint the key was not lysed (nothing comes back across its joint)');
   const p=lockCase('Z@--',{lysJoint:1});assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'the lysis did not come back');});
+// tri/digests.txt holds main's output digest of every check world (tri/check.js compares each suite's worlds with it): a
+// new or redefined check needs its worlds' digests (node tri/check.js --write ID), so this fails until they are written
+test('digests: every check world has a digest for its current command',()=>{const {CHECKS,readDigests,cmdHash}=require('./check');const {D}=readDigests();
+  const bad=CHECKS.filter(c=>!c.share).flatMap(c=>c.seeds.filter(seed=>{const d=D.get(`${c.id}_${seed}`);return !d||d.cmd!==cmdHash(c,seed);}).map(seed=>`${c.id}_${seed}`));
+  assert.ok(!bad.length,`${bad.length} check worlds have no current digest (node tri/check.js --write with their checks): ${bad.join(' ')}`);});
 console.log(`${passed} tests passed`);

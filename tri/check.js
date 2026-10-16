@@ -6,8 +6,13 @@
 //   in run 20261008-0250's container, 160 in run 0651's: run it as --part 1/2, then --part 2/2; seal-evolve the longest;
 //   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
 //   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
+// Every world's output is compared with main's digest of it in tri/digests.txt (harden run 20261016-0902): each line ends
+// [same], [changed: seeds], [new] (no digest yet) or [redefined] (its command changed), the last line counts them, so a
+// branch's one suite is compared with main without running main again. A pull request that changes any check world's output
+// (or adds or redefines a check) rewrites its lines: --write (only the worlds run), or --write --from DIR without running,
+// from a CHECK_SAVE directory of whole outputs; tri/test.js fails while a check world has no current digest.
 // Exit code 1 if a working capability fails.
-const {spawn}=require('child_process'),path=require('path');
+const {spawn}=require('child_process'),path=require('path'),fs=require('fs'),crypto=require('crypto');
 const num=(L,re)=>{const m=L.match(re);return m?+m[1]:NaN;};
 const count=(L,re)=>(L.match(re)||[]).length;
 // the census of individuals (demo pair, 'kinds:' lines; run 20261007-0050): per census its complete individuals of 2 or more
@@ -425,32 +430,70 @@ const CHECKS=[
     pass:(L,o)=>{const m=o.match(/result: lysedFirst=(\S+) .*max=(\d+) .*reused=(\d+) cuts=(\d+)/);return [!!m&&m[1]!=='not'&&+m[3]>=40,m?`apart at ${m[1]}, a later bud of ${m[2]} cells, ${m[3]} of them the stuck bud's parts, ${m[4]} cuts`:'no result'];}},
 ];
 
+// a check may read another check's worlds instead of running its own (share: that check's id; the same demo, env and
+// seeds, at most its steps): its pass reads the lines up to its own steps ('types:', 'kinds:', 'pop:' and the other
+// census lines every PAP steps are the same in a longer world; progress and result lines are not, so a sharing check
+// reads census lines only)
+const byId=id=>CHECKS.find(c=>c.id===id);
+for(const c of CHECKS)if(c.share){const src=byId(c.share);
+  if(!src||src.share||src.demo!==c.demo||JSON.stringify(src.env||{})!==JSON.stringify(c.env||{})||src.extra!==c.extra||src.steps<c.steps||c.seeds.some(x=>!src.seeds.includes(x)))throw Error(`check ${c.id}: share ${c.share} needs the same demo, env and seeds and no fewer steps`);}
+const cut=(out,steps)=>out.split('\n').filter(l=>{const m=l.match(/\bt=(\d+)/);return m&&+m[1]<=steps;}).join('\n');
+function judge(c,out,code,err){const lines=out.split('\n').filter(l=>l.startsWith('t=')),L=lines[lines.length-1]||'';
+  return code!==0?[false,'crashed: '+(err.trim().split('\n').find(l=>/Error/.test(l))||'exit '+code)]:c.pass(L,out);}
 function run(c,seed){return new Promise(res=>{const args=[path.join(__dirname,'demos.js'),c.demo,String(seed),String(c.steps),path.join('runs','check')];if(c.extra)args.push(c.extra);
   const p=spawn(process.execPath,args,{env:{...process.env,TRI_NOPIC:'1',...(c.env||{})}});let out='',err='';const t0=Date.now();
   p.stdout.on('data',d=>out+=d);p.stderr.on('data',d=>err+=d);
-  p.on('close',code=>{const lines=out.split('\n').filter(l=>l.startsWith('t='));const L=lines[lines.length-1]||'';
-    let ok=false,ev='';if(code!==0)ev='crashed: '+(err.trim().split('\n').find(l=>/Error/.test(l))||'exit '+code);else[ok,ev]=c.pass(L,out);
-    if(process.env.CHECK_SAVE){require('fs').mkdirSync(process.env.CHECK_SAVE,{recursive:true});require('fs').writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);}   // whole output, to compare runs
-    res({ok,ev,secs:(Date.now()-t0)/1000});});});}
+  p.on('close',code=>{if(process.env.CHECK_SAVE){fs.mkdirSync(process.env.CHECK_SAVE,{recursive:true});fs.writeFileSync(path.join(process.env.CHECK_SAVE,`${c.id}_${seed}.txt`),out);}   // whole output, to compare runs
+    res({out,code,err,secs:(Date.now()-t0)/1000});});});}
+
+// digests (tri/digests.txt): per world '<id>_<seed> <output hash> <command hash>', 16 hex digits of sha256 each; the
+// command is the demo, seed, steps, extra and env, so a redefined check is told from a changed output
+const DIG=path.join(__dirname,'digests.txt'),hash=x=>crypto.createHash('sha256').update(x).digest('hex').slice(0,16);
+const cmdHash=(c,seed)=>hash(JSON.stringify([c.demo,seed,c.steps,c.extra||'',Object.entries(c.env||{}).sort()]));
+function readDigests(){const D=new Map();let node='';if(!fs.existsSync(DIG))return {D,node};
+  for(const l of fs.readFileSync(DIG,'utf8').split('\n')){const m=l.match(/^(\S+) ([0-9a-f]{16}) ([0-9a-f]{16})$/);if(m)D.set(m[1],{out:m[2],cmd:m[3]});const v=l.match(/^# node (\S+)/);if(v)node=v[1];}
+  return {D,node};}
+function writeDigests(D){const keys=new Set(CHECKS.filter(c=>!c.share).flatMap(c=>c.seeds.map(s=>`${c.id}_${s}`)));
+  fs.writeFileSync(DIG,['# Output digests of every check world on main (tri/check.js): <check>_<seed> <sha256 of the world\'s whole output>',
+    '# <sha256 of its command>, 16 hex digits each. A pull request that changes a check world\'s output, or adds or redefines',
+    '# a check, rewrites its lines: node tri/check.js --write [id ...], or --write --from DIR (a CHECK_SAVE directory).',
+    `# node ${process.version}`,...[...D].filter(([k])=>keys.has(k)).sort(([a],[b])=>a<b?-1:1).map(([k,v])=>`${k} ${v.out} ${v.cmd}`)].join('\n')+'\n');}
+// a world against its digest: same, changed, new (no digest), redefined (the command changed)
+const verdict=(D,c,seed,out)=>{const d=D.get(`${c.id}_${seed}`);return !d?'new':d.cmd!==cmdHash(c,seed)?'redefined':d.out===out?'same':'changed';};
 
 // --part k/n: the k-th of n shares of the selection, whole checks balanced by secs x seeds (a suite longer than a
 // background job's 2-hour limit runs as parts, one after another); --cmd: print each selected check's demo command
 // (env, seeds) instead of running it
 const q=v=>/^[\w.,:\/=+-]*$/.test(v)?v:`'${v.replace(/'/g,"'\\''")}'`;
 async function main(){const argv=process.argv.slice(2),pi=argv.indexOf('--part'),part=pi>=0?argv[pi+1].split('/').map(Number):null,cmd=argv.includes('--cmd');
-  const want=argv.filter((a,i)=>!a.startsWith('--')&&!(pi>=0&&i===pi+1));let sel=CHECKS.filter(c=>!want.length||want.includes(c.id));
+  const fi=argv.indexOf('--from'),from=fi>=0?argv[fi+1]:null,write=argv.includes('--write'),{D,node}=readDigests();
+  const want=argv.filter((a,i)=>!a.startsWith('--')&&!(pi>=0&&i===pi+1)&&!(fi>=0&&i===fi+1));let sel=CHECKS.filter(c=>!want.length||want.includes(c.id));
   if(want.length&&sel.length!==want.length)throw Error('unknown check; one of '+CHECKS.map(c=>c.id).join(' '));
+  if(!cmd)sel=CHECKS.filter(c=>sel.includes(c)||sel.some(x=>x.share===c.id));   // a sharing check brings the check whose worlds it reads
   if(part){const [k,n]=part,load=new Array(n).fill(0),bin=new Map();
-    for(const c of [...sel].sort((a,b)=>b.secs*b.seeds.length-a.secs*a.seeds.length)){const i=load.indexOf(Math.min(...load));bin.set(c,i);load[i]+=c.secs*c.seeds.length;}
-    sel=sel.filter(c=>bin.get(c)===k-1);}
-  if(cmd){for(const c of sel)console.log(`# ${c.id} (seeds ${c.seeds.join(' ')}): ${c.cap.trim()}\n${Object.entries(c.env||{}).map(([k,v])=>`${k}=${q(v)} `).join('')}node tri/demos.js ${c.demo} ${c.seeds[0]} ${c.steps} runs/x${c.extra?' '+q(c.extra):''}`);return;}
+    for(const c of [...sel].filter(c=>!c.share).sort((a,b)=>b.secs*b.seeds.length-a.secs*a.seeds.length)){const i=load.indexOf(Math.min(...load));bin.set(c,i);load[i]+=c.secs*c.seeds.length;}
+    sel=sel.filter(c=>bin.get(c.share?byId(c.share):c)===k-1);}
+  // --write --from DIR: digests from saved outputs (DIR/<id>_<seed>.txt), nothing run
+  if(from){let k=0;for(const c of sel.filter(c=>!c.share))for(const seed of c.seeds){const f=path.join(from,`${c.id}_${seed}.txt`);if(!fs.existsSync(f))continue;
+      const o=hash(fs.readFileSync(f,'utf8')),v=verdict(D,c,seed,o);D.set(`${c.id}_${seed}`,{out:o,cmd:cmdHash(c,seed)});k++;if(v!=='same')console.log(`${c.id}_${seed}: ${v}`);}
+    if(write)writeDigests(D);console.log(`${k} worlds read from ${from}${write?', digests written':' (add --write to write them)'}`);return;}
+  if(cmd){for(const c of sel)console.log(`# ${c.id} (seeds ${c.seeds.join(' ')}${c.share?`; the suite reads ${c.share}'s worlds to ${c.steps} steps`:''}): ${c.cap.trim()}\n${Object.entries(c.env||{}).map(([k,v])=>`${k}=${q(v)} `).join('')}node tri/demos.js ${c.demo} ${c.seeds[0]} ${c.steps} runs/x${c.extra?' '+q(c.extra):''}`);return;}
   // jobs longest first, at most 4 at once; each check's line is printed as soon as its last world finishes (a restart
   // loses only the checks still running)
-  const jobs=sel.flatMap(c=>c.seeds.map(seed=>({c,seed}))).sort((a,b)=>b.c.secs-a.c.secs),res=new Map(),t0=Date.now(),left=new Map(sel.map(c=>[c,c.seeds.length]));
-  let next=0,fails=0;const report=c=>{const rs=c.seeds.map(seed=>[seed,res.get(jobs.find(j=>j.c===c&&j.seed===seed))]),k=rs.filter(([,r])=>r.ok).length,need=c.need||c.seeds.length,ok=k>=need;
+  const jobs=sel.filter(c=>!c.share).flatMap(c=>c.seeds.map(seed=>({c,seed}))).sort((a,b)=>b.c.secs-a.c.secs),res=new Map(),t0=Date.now(),left=new Map(sel.map(c=>[c,c.seeds.length]));
+  let next=0,fails=0;const tally={same:0,changed:0,new:0,redefined:0},changed=[];const report=c=>{const rs=c.seeds.map(seed=>[seed,res.get(`${c.id}_${seed}`)]),k=rs.filter(([,r])=>r.ok).length,need=c.need||c.seeds.length,ok=k>=need;
     if(!ok&&!c.partial)fails++;const tag=ok?'PASS':c.partial?'PART':'FAIL',w=c.seeds.length>1?` ${k}/${c.seeds.length} worlds (need ${need}):`:':';
-    console.log(`${tag} ${c.id.padEnd(12)} ${c.cap}${w} ${rs.map(([seed,r])=>(c.seeds.length>1?`[${seed}${r.ok?'+':'-'}] `:'')+r.ev).join('; ')} (${Math.max(...rs.map(([,r])=>r.secs)).toFixed(0)} s)`);};
-  const worker=async()=>{while(next<jobs.length){const j=jobs[next++];res.set(j,await run(j.c,j.seed));left.set(j.c,left.get(j.c)-1);if(!left.get(j.c))report(j.c);}};
+    // a sharing check's worlds are digested (and counted) under the check it reads
+    const V=rs.map(([seed,r])=>[seed,verdict(D,c.share?byId(c.share):c,seed,r.out)]);if(!c.share)for(const [,v] of V)tally[v]++;const ch=V.filter(([,v])=>v==='changed').map(([seed])=>seed);if(ch.length&&!c.share)changed.push(`${c.id} ${ch.join(',')}`);
+    const dv=(ch.length?`changed: ${ch.join(' ')}`:V.some(([,v])=>v==='redefined')?'redefined':V.some(([,v])=>v==='new')?'new':'same')+(c.share?`, ${c.share}'s worlds to ${c.steps/1000}k`:'');
+    console.log(`${tag} ${c.id.padEnd(12)} ${c.cap}${w} ${rs.map(([seed,r])=>(c.seeds.length>1?`[${seed}${r.ok?'+':'-'}] `:'')+r.ev).join('; ')} (${Math.max(...rs.map(([,r])=>r.secs)).toFixed(0)} s) [${dv}]`);};
+  const worker=async()=>{while(next<jobs.length){const j=jobs[next++],r=await run(j.c,j.seed),h=hash(r.out);
+    for(const c of sel.filter(x=>x===j.c||(x.share===j.c.id&&x.seeds.includes(j.seed)))){const [ok,ev]=judge(c,c===j.c?r.out:cut(r.out,c.steps),r.code,r.err);
+      res.set(`${c.id}_${j.seed}`,{ok,ev,secs:r.secs,out:h});left.set(c,left.get(c)-1);if(!left.get(c))report(c);}}};
   await Promise.all([1,2,3,4].map(worker));
-  console.log(`${sel.length-fails} of ${sel.length} checks pass (partial ones never fail); ${((Date.now()-t0)/1000).toFixed(0)} s`);process.exitCode=fails?1:0;}
-main();
+  console.log(`${sel.length-fails} of ${sel.length} checks pass (partial ones never fail); ${((Date.now()-t0)/1000).toFixed(0)} s`);
+  console.log(`outputs against tri/digests.txt (main's${node&&node!==process.version?', written with node '+node+', this is '+process.version:''}): ${tally.same} worlds same, ${tally.changed} changed${changed.length?' ('+changed.join('; ')+')':''}, ${tally.new} new, ${tally.redefined} redefined`);
+  if(write){for(const j of jobs)D.set(`${j.c.id}_${j.seed}`,{out:res.get(`${j.c.id}_${j.seed}`).out,cmd:cmdHash(j.c,j.seed)});writeDigests(D);console.log(`digests of ${jobs.length} worlds written to tri/digests.txt`);}
+  process.exitCode=fails?1:0;}
+if(require.main===module)main();
+module.exports={CHECKS,readDigests,cmdHash};
