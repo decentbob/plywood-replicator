@@ -11,7 +11,9 @@
 //     (a plain side with R's complement: born in place), second cells with a working lock for R (a free side of R's
 //     complement, not close-only or '!'), sealed (a glued close-only side and no working lock), trapped (R's complement
 //     with '!'; with --joint, for worlds with lysJoint, a lock with '!' is a working, guarded lock and counts as both); then a
-//     summary: each turn of the majority root, the first census with nurseries on more than half of heads)
+//     summary: each turn of the majority root, the first census with nurseries on more than half of heads; build run
+//     20261016-0727: two sites, second cells whose two free sides are both glued; the guard, censuses with a nursery on
+//     most heads and how many of them have a lock for the root on most second cells)
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
@@ -57,13 +59,15 @@ function poolSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.t
       const i=s.findIndex(x=>x[0]==='C'&&x.includes('@'));if(i>=0){r.cells.push([[s[(i+1)%3],s[(i+2)%3]],n]);r.ns+=n;}}
     const M=Object.keys(r.H).sort((a,b)=>r.H[b]-r.H[a])[0];r.M=M;
     if(M){const z=cp(M),plain=x=>!/[@|.!&?]/.test(x);r.nur=r.heads.filter(([L,o])=>L===M&&o.some(x=>x[0]===z&&plain(x))).reduce((a,h)=>a+h[2],0);
-      r.fit=0;r.seal=0;r.trap=0;for(const [o,n] of r.cells){const w=o.some(x=>x[0]===z&&!/[.!]/.test(x)||joint&&x[0]===z&&!x.includes('.'));if(w)r.fit+=n;else if(o.some(x=>x[0]!=='-'&&x.includes('.')))r.seal+=n;if(o.some(x=>x[0]===z&&x.includes('!')))r.trap+=n;}}
+      r.fit=0;r.seal=0;r.trap=0;r.two=0;for(const [o,n] of r.cells){const w=o.some(x=>x[0]===z&&!/[.!]/.test(x)||joint&&x[0]===z&&!x.includes('.'));if(w)r.fit+=n;else if(o.some(x=>x[0]!=='-'&&x.includes('.')))r.seal+=n;if(o.some(x=>x[0]===z&&x.includes('!')))r.trap+=n;if(o.every(x=>x[0]!=='-'))r.two+=n;}}
     R.push(r);}
   if(!R.length){console.log(f+': no types: lines');return;}
   console.log('# '+f);let j=0;
   for(const r of R){if(j++%every&&r!==R[R.length-1])continue;
-    console.log(`t=${k(r.t)} heads ${r.nh} (${top(r.H,3)}) nursery ${pc(r.nur,r.H[r.M])} | second ${r.ns}: lock for ${r.M} ${pc(r.fit,r.ns)} sealed ${pc(r.seal,r.ns)} trap ${pc(r.trap,r.ns)}`);}
+    console.log(`t=${k(r.t)} heads ${r.nh} (${top(r.H,3)}) nursery ${pc(r.nur,r.H[r.M])} | second ${r.ns}: lock for ${r.M} ${pc(r.fit,r.ns)} sealed ${pc(r.seal,r.ns)} trap ${pc(r.trap,r.ns)} two sites ${pc(r.two,r.ns)}`);}
   const turns=[];let cur=null;for(const r of R){if(!r.nh)continue;if(r.H[r.M]>r.nh/2&&r.M!==cur){turns.push(r.M+' '+k(r.t));cur=r.M;}}
-  const nu=R.find(r=>r.nh&&r.nur>r.nh/2),dead=R.find(r=>r.t>20000&&!r.nh),pre=R.filter(r=>r.ns&&(!nu||r.t<nu.t)),post=nu?R.filter(r=>r.ns&&r.t>=nu.t):[],mx=(a,g)=>a.length?Math.max(...a.map(g)):NaN;
+  const nu=R.find(r=>r.nh&&r.nur>r.nh/2),dead=R.find(r=>r.t>20000&&!r.nh),pre=R.filter(r=>r.ns&&(!nu||r.t<nu.t)),post=nu?R.filter(r=>r.ns&&r.t>=nu.t):[],mx=(a,g)=>a.length?Math.max(...a.map(g)):NaN,
+    live=R.filter(r=>r.ns&&r.nh),g=r=>r.fit>r.ns/2,nr=live.filter(r=>r.nur>r.nh/2),gd=nr.filter(g),pr=live.filter(r=>r.nur<=r.nh/2),tw=live.map(r=>r.two/r.ns);
   console.log(`  majority root ${turns.join(', ')} (${turns.length-1} turns); nursery on most heads from ${nu?k(nu.t):'never'}${dead?'; no heads from '+k(dead.t):''}
-  before the nursery: sealed at most ${pc(mx(pre,r=>r.seal/r.ns),1)}, trap at most ${pc(mx(pre,r=>r.trap/r.ns),1)}; after: sealed at most ${post.length?pc(mx(post,r=>r.seal/r.ns),1):'-'}, trap at most ${post.length?pc(mx(post,r=>r.trap/r.ns),1):'-'}, lock for the root at least ${post.length?pc(Math.min(...post.map(r=>r.fit/r.ns)),1):'-'}`);}
+  before the nursery: sealed at most ${pc(mx(pre,r=>r.seal/r.ns),1)}, trap at most ${pc(mx(pre,r=>r.trap/r.ns),1)}; after: sealed at most ${post.length?pc(mx(post,r=>r.seal/r.ns),1):'-'}, trap at most ${post.length?pc(mx(post,r=>r.trap/r.ns),1):'-'}, lock for the root at least ${post.length?pc(Math.min(...post.map(r=>r.fit/r.ns)),1):'-'}
+  guard: rows with a nursery on most heads ${nr.length}, of them a lock for the root on most second cells ${gd.length}${gd.length<nr.length?' (not: '+nr.filter(r=>!gd.includes(r)).map(r=>k(r.t)).join(' ')+')':''}; rows without ${pr.length}, guarded ${pr.filter(g).length}; two sites mean ${pc(tw.reduce((a,b)=>a+b,0),tw.length)}, at most ${pc(mx(live,r=>r.two/r.ns),1)}`);}

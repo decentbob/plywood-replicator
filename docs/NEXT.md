@@ -8,6 +8,18 @@ review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of 
 direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
 progress) at its WIP commits on `core-review-2221` (`git log -p docs/NEXT.md`).
 
+**Slice in progress (autorun run 20261016-0727, build; priority 36).** Goal: the line's world as a preset (`PAW=2`:
+`PAW=1` without stocks or mutagen, `PATN=30`, founder `Z@&c@|- C@-z|!`, `pErr` 0.01, `lysJoint` 1; run 1951's E4j world)
+with a check, then measure in it how often the guard follows the root (8 seeds, 480k, `census.js --pool --joint`, new
+columns: two-site second cells, guarded nursery rows). Done when: the preset reproduces the explicit command byte for
+byte (yes, 20k seed 1), a check passes 3 of 4, the 8 worlds are read and recorded. Predictions: P1 seeds 1-4 repeat E4j
+(alive 1 and 2 with 19 and 15 turns; 3 dead of a catcher at 385k, 4 of a plug at 440k); P2 seeds 5-8 alive 2 of 4 (1-3);
+P3 in censuses with a nursery on most heads a lock for the root on most second cells in under half (the lock is not
+needed there and drifts), in public censuses in over 90%; P4 two-site second cells under 10% on average, never over 30%.
+Stop: if seeds 1-4 differ from E4j, find why before anything else. Running: `node tri/batch.js runs/p36.json` (file:
+`{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"w","seeds":[1,2,3,4,5,6,7,8]}]}`), about
+18 minutes per world, 4 at once.
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
