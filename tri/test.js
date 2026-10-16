@@ -302,11 +302,11 @@ test('lysJoint: a lock z! raises a key with & (a joint) and lyses a plug without
   const k=lockCase('Z@&c@-',{lysJoint:1});assert.ok(k.held&&!k.lysed,'the key was not raised on the lock');assert.ok(k.whole);
   const k0=lockCase('Z@&c@-',{});assert.ok(k0.lysed&&k0.whole,'without lysJoint the key was not lysed (nothing comes back across its joint)');
   const p=lockCase('Z@--',{lysJoint:1});assert.ok(p.lysed,'the plug was not lysed');assert.ok(!p.whole,'the lysis did not come back');});
-// candidate (x), run 20261016-2258: with lysJoint 2 a lock z! raises a key with & that carries z! itself and lyses one
-// without it, or with a lysis side of another glue; a plug without & is lysed as before
-test('lysJoint 2: a lock z! raises a key with & only if the key carries z! itself',()=>{
+// candidate (x), run 20261016-2258: with lysJoint 2 a lock z! raises a key with & that carries the same side z! itself
+// and lyses one without it (another glue, no '!', or another mark on it); a plug without & is lysed as before
+test('lysJoint 2: a lock z! raises a key with & only if the key carries the same side z! itself',()=>{
   const k=lockCase('Z@&c@z!',{lysJoint:2});assert.ok(k.held&&!k.lysed,'the kin key was not raised on the lock');assert.ok(k.whole);
-  for(const t of ['Z@&c@-','Z@&c@m!','Z@&c@z']){const c=lockCase(t,{lysJoint:2});assert.ok(c.lysed&&c.whole,`the key ${t} was not lysed`);}
+  for(const t of ['Z@&c@-','Z@&c@m!','Z@&c@z','Z@&c@z.!']){const c=lockCase(t,{lysJoint:2});assert.ok(c.lysed&&c.whole,`the key ${t} was not lysed`);}
   const p=lockCase('Z@-z!',{lysJoint:2});assert.ok(p.lysed,'the plug was not lysed');});
 // tri/digests.txt holds main's output digest of every check world (tri/check.js compares each suite's worlds with it): a
 // new or redefined check needs its worlds' digests (node tri/check.js --write ID), so this fails until they are written

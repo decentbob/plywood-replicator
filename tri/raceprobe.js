@@ -51,7 +51,7 @@ const fate=(s,u,f)=>{const o=FT.get(u);FT.delete(u);const k=o.k+':'+f,e=FA[k]||(
 const _bind2=TriSim.prototype.bind;TriSim.prototype.bind=function(u,i,v,j){const fu=!this.bonded(u),fv=!this.bonded(v);_bind2.call(this,u,i,v,j);if(this.t<T0)return;
   for(const [a,x,b,y,fb] of [[u,i,v,j,fv],[v,j,u,i,fu]]){if(!fb)continue;const st=siteSide(this,a)===x&&this.bonded(a)&&this.att[b*3+y]&&this.done[b*3+y];
     if(siteSide(this,a)===x&&this.bonded(a)){if(this.cpy[b*3+y])SB.blank++;else if(FT.has(b))SB[FT.get(b).k]++;}
-    if(FT.has(b))fate(this,b,st?'site':'other');}};
+    if(FT.has(b))fate(this,b,this.cpy[b*3+y]?'decay':st?'site':'other');}};   // a copy that decayed and bound as a blank in the same pass
 const _copy2=TriSim.prototype._copy;TriSim.prototype._copy=function(){if(this.t>=T0)for(const u of [...FT.keys()])if(this.cpy[u*3]||this.cpy[u*3+1]||this.cpy[u*3+2])fate(this,u,'decay');
   const L0=this.copyLog?this.copyLog.length:0;_copy2.call(this);const L=this.copyLog||[];
   if(this.t>=T0){for(let k=L0;k<L.length;k++){const [,c,,w]=L[k],kw=kind(this,w);if(kw!=='C'&&kw!=='N')continue;CP[kw]++;if(FT.has(c))FT.delete(c);FT.set(c,{t:this.t,x:this.px[c],y:this.py[c],k:kw});}

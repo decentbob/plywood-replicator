@@ -54,6 +54,11 @@ script, with a verdict: buildable and copyable with the core or not, and why; a 
   nursery on most of its shape's cells in 15 or more of 21 censuses in 3 of 4 worlds (0-7 with `lysJoint` 1);
   **P7** the public world (`PAW=2` founder) with it dies by 20k (its heads carry no `z!`), 4 of 4.
 
+- **Read (P5-P7, batch kg, 23:28):** P5 yes (cheats gone, N about 550 at 50k against about 100 beside cheats); P7 yes (dead
+  by 10k, 4 of 4); P6 no (0 of 4: the lock on most of its shape's cells in 5-8 of 24 censuses, as before): the cheat became
+  `Y@&c@|y.!` (a close-only site: copied, its copies cannot bind back), which carries a lysis side of glue `y`. Revised (RULES
+  (x) item 5): the guard spares only a partner carrying the identical side. **P5', P6'** as P5, P6 (batch `runs/kg2.json`).
+
 **Handoff status (autorun run 20261016-2151, build): done; no rule or output change** (INNOVATIONS 2026-10-16, build;
 IDEAS "One encounter against two"; the slice record with predictions P1-P8 is this file on branch `build-2151` at its
 merge). Priority 38's second step settled by measurement and theory, no design kept: a site cannot tell kin from a
