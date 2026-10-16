@@ -471,6 +471,12 @@ const CHECKS=[
     env:{...ent,PA3T:'20000',PA3:'Y@&c@|- C@|-Z@&'},
     pass:(L,o)=>{const R=shp(o).filter(r=>r.t>=45000);if(!R.length)return [false,'no result'];const g=R.map(r=>r.c.n?r.c.G/r.c.n:0),e=R[R.length-1];
       return [g.every(x=>x>=0.1&&x<=0.45)&&e.c.n>=300,`guarded nursery ${pc(Math.min(...g))}-${pc(Math.max(...g))} of head-shaped cells from 45k, ${e.c.n} of them at 80k`];}},
+  {id:'nursery-decay',cap:'  with free parts decaying twice as often (PADI 50) the guarded nursery about doubles: its number is set by how long free cheats live',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,
+    env:{...ent,PA3T:'20000',PA3:'Y@&c@|- C@|-Z@&',PADI:'50'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [e.c.G>=150&&e.c.n-e.c.G>=150,`at 60k guarded nursery ${e.c.G}, cheats and others ${e.c.n-e.c.G} of ${e.c.n} head-shaped cells (85-120 nurseries at the default PADI 100)`];}},
+  {id:'self-nursery',cap:'One type, no filler: a head with two guarded sites of its root (Y@&y@!y@!) raises itself; a kid lets go only once both its sites hold kids',demo:'pair',seeds:[1,2,3,4],need:3,steps:20000,secs:40,
+    env:{PAW:'2',TRI_PARAMS:'{"pErr":1e-9}',PA2:'Y@&y@!y@! Y@&y@!y@!'},
+    pass:(L,o)=>{const m=[...o.matchAll(/^types: t=(\d+) bonded (\d+) kinds (\d+) /gm)].pop();if(!m)return [false,'no result'];return [+m[2]>=900&&m[3]==='1',`at ${m[1]} bonded ${m[2]}, ${m[3]} type`];}},
   {id:'mutualist-rare',cap:'A second nursery system on the other shape (C@|x!X@&, fillers W@&c@|-) entered rare is lost: an Allee effect',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:70,
     env:{...ent,PA3T:'20000',PA3:'W@&c@|- C@|x!X@&'},
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [!(e.C.R.X||0)&&!(e.c.R.W||0)&&e.c.G>e.c.n/2,`at 40k X cells ${e.C.R.X||0}, W cells ${e.c.R.W||0}, Y nurseries ${pc(e.c.n?e.c.G/e.c.n:0)} of head-shaped cells`];}},

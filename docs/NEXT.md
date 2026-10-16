@@ -63,6 +63,14 @@ holds a mix as before, record why and stop.
 - P6 (T1 on the old design, written before `runs/tau2.json` ran): with PAB 2000 at PAS 50 (`mb`) the guarded nursery
   stays at 85-120 heads at 60-80k and the cheat about doubles; with PAS 71 and PAB 2000 (`ma`: twice the area, the same
   density) the nursery doubles (170-240); 3 of 4 each.
+- P7 (the access a in T1, written before `runs/cap.json` ran): a smaller capture radius (0.45 instead of 0.6, a core
+  parameter, so everything binds less often) raises the guarded nursery by 1.3-1.8 times at 60k (110-190 heads), 3 of 4.
+- Read: P6 half: area yes (`ma` 178-248 at 60-80k, about 2x), supply no (`mb` 160-195, 1.6-1.9x, with the same mean
+  free blank pool, 56, as at PAB 1000: not b; crowding or the free cheats' binding elsewhere must shorten their reach).
+  P7 yes in 3 of 4 (150-228 at 60k, 1.5-2.2x). Checks `nursery-decay` and `self-nursery` written (4 of 4 each).
+- P8 (under copy error, written before `runs/tl.json` ran): the two-lineage world (`two-lineages`' command) with PADI
+  50 has a lock (G+N on most of a shape's cells, `census.js --shape`) in 4 or more of the 21 censuses from 20k to 120k
+  in 3 of 4 worlds, against 0-3 in the check's worlds at PADI 100 (`tl0`, regenerated beside it).
 - Running: `node tri/batch.js runs/sc.json` (env `PAW` 2, `TRI_NOPIC` 1, `PA2` `Y@&y@!y@! Y@&y@!y@!`, `TRI_PARAMS`
   `{"pErr":1e-9}`; `a` alone 60k, `h` with `PA3` `Y@&y@!- Y@&y@!-` `PA3T` 20000 `PA3N` 10 to 80k, `e` with `pErr` 0.01 to
   120k; seeds 1-4).
