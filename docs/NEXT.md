@@ -45,6 +45,24 @@ holds a mix as before, record why and stop.
   P2 the one-site cheat entered (10 bodies at 20k) stays below half of cells in 3 of 4 at 80k (it still wins races by
   free copies, but its kid must raise first and it cannot grow alone); P3 under copy error (pErr 0.01, 120k) alive 4 of
   4 and the two-site nursery of the root on most cells at 120k in 3 of 4.
+- Read: P1 yes (4 of 4, 988-996 of about 1000 triangles bonded at 60k, one type). P2 no: the one-site cheat
+  `-Y@&y@!` took 64-70% of cells by 30k and held to 80k (4 of 4; the nursery 190-327 cells): the same flux mix, the
+  nursery a little larger than the old one's 20-31%. Stop rule met for the design; T1 is the question now.
+  P3 no: under copy error dead 4 of 4 by 15-20k. A site of a letter no root carries (`Y@&s@!y@!`, `Y@&y.@q@!`) is an
+  open front nothing fills: its cell never lets go of its parent, so it holds the parent's site for good, and with a
+  close-only or plain side it sprays free copies meanwhile (`Y@&y.@q@!` 125 of 209 bonded at 15k, then none).
+- P4 (T1, written before `runs/tau.json` ran; decay every PADI steps, so free parts live about PADI/2): the nursery's
+  cell count about doubles with PADI 50 and halves with PADI 200, in both designs (`h50`, `h200`; `m50`, `m200` the old
+  head and cheat), and stays near `h`'s 190-330 with twice the blanks (`hb`, PAB 2000), the cheat taking the extra
+  material; 3 of 4 worlds each.
+- Read (`runs/tau.json`): the old design follows T1: guarded nursery heads 175-272 at PADI 50 and 33-72 at PADI 200,
+  against 85-118 at the default 100 (40-80k, 4 of 4 each); the cheat's count about the same (208-330). The new design
+  does not: the nursery 187-253 cells at PADI 200 (as at 100), at PADI 50 the cheat was lost in 3 of 4 and in the fourth
+  held the same 1:2 mix; with twice the blanks both doubled (nursery 395-516, cheat 1009-1075): a fixed ratio. Likely
+  why: its free cheat copies are binding-limited (every waiting cell has an open site to take them), not decay-limited.
+- P6 (T1 on the old design, written before `runs/tau2.json` ran): with PAB 2000 at PAS 50 (`mb`) the guarded nursery
+  stays at 85-120 heads at 60-80k and the cheat about doubles; with PAS 71 and PAB 2000 (`ma`: twice the area, the same
+  density) the nursery doubles (170-240); 3 of 4 each.
 - Running: `node tri/batch.js runs/sc.json` (env `PAW` 2, `TRI_NOPIC` 1, `PA2` `Y@&y@!y@! Y@&y@!y@!`, `TRI_PARAMS`
   `{"pErr":1e-9}`; `a` alone 60k, `h` with `PA3` `Y@&y@!- Y@&y@!-` `PA3T` 20000 `PA3N` 10 to 80k, `e` with `pErr` 0.01 to
   120k; seeds 1-4).

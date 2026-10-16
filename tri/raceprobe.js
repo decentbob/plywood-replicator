@@ -3,8 +3,8 @@
 // (an attached triangle's lysis side whose glue is the complement of its own root '@&') from step RP_T0 (20000): when a
 // head that waited there leaves (its root lets go), which head takes the site next and how long it stays empty. Heads are
 // N (a nursery: its own side is its root's complement with '!') or C (a cheat: any other head of that root); a taker's
-// origin is 'here' (copied at this site), 'left' (copied from the head that just left it), 'kin' (copied from another N),
-// 'cheat' (from another C), '?' (no copy seen). 'race:' lines every RP_EVERY (10000) steps and a summary at exit; and
+// origin is 'here' (copied at this site), 'left' (copied from the head that just left it), 'home' (from another head
+// raised on this same site), 'kin' (copied from another N), 'cheat' (from another C), '?' (no copy seen). 'race:' lines every RP_EVERY (10000) steps and a summary at exit; and
 // the copies made from C heads, by where the template was: waiting on a site (front open), on a site with its front
 // filled, or free of any site. NODE_OPTIONS='-r ./tri/raceprobe.js' node tri/demos.js pair ...
 const {TriSim,comp}=require('./sim');const T0=+(process.env.RP_T0||20000),EV=+(process.env.RP_EVERY||10000);
@@ -12,14 +12,14 @@ const root=(s,u)=>{for(let i=0;i<3;i++){const k=u*3+i;if(s.att[k]&&s.done[k]&&s.
 // the nursery site side of u, or -1: a lysis side whose glue is the complement of u's root
 const siteSide=(s,u)=>{const r=root(s,u);if(r<0)return -1;for(let i=0;i<3;i++){const k=u*3+i;if(i!==r&&s.lys[k]&&s.glue[k]===comp(s.glue[u*3+r]))return i;}return -1;};
 const kind=(s,u)=>root(s,u)<0?'O':siteSide(s,u)>=0?'N':'C';
-let tpl=null,emptyAt,lastKid,lastKind,blank;const R={},W={},tot={},cc={wait:0,filled:0,free:0},ccT={wait:0,filled:0,free:0};
+let tpl=null,emptyAt,lastKid,lastKind,blank,born;const R={},W={},tot={},cc={wait:0,filled:0,free:0},ccT={wait:0,filled:0,free:0};
 const add=(o,k,d)=>{const e=o[k]||(o[k]={n:0,d:0});e.n++;e.d+=d;};
-function init(s){tpl=new Int32Array(s.n).fill(-1);emptyAt=new Float64Array(s.n).fill(-1);lastKid=new Int32Array(s.n).fill(-1);lastKind=new Array(s.n).fill('');blank=new Int32Array(s.n).fill(-1);}
+function init(s){tpl=new Int32Array(s.n).fill(-1);emptyAt=new Float64Array(s.n).fill(-1);lastKid=new Int32Array(s.n).fill(-1);lastKind=new Array(s.n).fill('');blank=new Int32Array(s.n).fill(-1);born=new Int32Array(s.n).fill(-1);}
 const _bind=TriSim.prototype.bind;TriSim.prototype.bind=function(u,i,v,j){_bind.call(this,u,i,v,j);if(!tpl)init(this);if(this.t<T0)return;
   for(const [a,x,b,y] of [[u,i,v,j],[v,j,u,i]]){if(siteSide(this,a)!==x||!this.bonded(a))continue;
     if(this.cpy[b*3+y]){blank[a]=b;continue;}
-    if(this.done[b*3+y]&&this.att[b*3+y]){const o=tpl[b],org=o<0?'?':o===a?'here':o===lastKid[a]?'left':kind(this,o)==='N'?'kin':'cheat',k=kind(this,b)+':'+org;
-      if(emptyAt[a]>=0&&lastKind[a]){add(R,lastKind[a]+' -> '+k,this.t-emptyAt[a]);add(tot,lastKind[a]+' -> '+kind(this,b),0);}emptyAt[a]=-1;}}};
+    if(this.done[b*3+y]&&this.att[b*3+y]){const o=tpl[b],org=o<0?'?':o===a?'here':o===lastKid[a]?'left':born[o]===a?'home':kind(this,o)==='N'?'kin':'cheat',k=kind(this,b)+':'+org;
+      if(emptyAt[a]>=0&&lastKind[a]){add(R,lastKind[a]+' -> '+k,this.t-emptyAt[a]);add(tot,lastKind[a]+' -> '+kind(this,b),0);}emptyAt[a]=-1;born[b]=a;}}};
 const _cut=TriSim.prototype.cut;TriSim.prototype.cut=function(u,i){const q=this.bond[u*3+i];if(q<0||!tpl||this.t<T0)return _cut.call(this,u,i);const v=(q/3)|0,j=q%3;
   for(const [a,x,b] of [[u,i,v],[v,j,u]]){if(siteSide(this,a)!==x)continue;if(blank[a]===b){blank[a]=-1;continue;}
     // a kid leaves (its root lets go) or the site's body comes apart (lysis: not a race)
