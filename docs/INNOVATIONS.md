@@ -12,6 +12,48 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-1902, build)
+
+- **Which lineage carries the lock: the nursery's cheat holds a mix, a rare nursery system is lost (an Allee effect), and
+  under copy error every new lock is born from public cells, on the shape that carries their site** (NEXT priority 38;
+  IDEAS "The lock is reborn from its cheats"). No rule, demo or structure change. All in the line's world (`PAW=2`) with
+  the two-lineage body `Y@&c@|y! C@|-Z@&` (run 1602's `hc` ending) as founder; entry tests without copy error (`pErr`
+  1e-9). New reader `node tri/census.js --shape` (cells by shape, head-shaped front `c@` H and catcher-shaped `C@` K, and
+  by own side: guarded nursery G, plain nursery N, plain P, a site of another letter S); `tri/linechart.js` `LC_SHAPE=1`.
+  - **The nursery's cheat** (`runs/p38c.json` `p`: 10 bodies `Y@&c@|- C@|-Z@&` at 20k, 80k): plain heads of the
+    nursery's root took 72-80% of head-shaped cells from 35k, the guarded nursery 20-31% (4 of 4). The site-turned
+    cheat `Y@&c@|m!` (`s`) gave the same counts at every census. Also in `runs/p38a.json` `b` and `m` (the cheats as fillers
+    of a second system): 20-35% from 35k to 120k, 8 of 8.
+  - **A rare nursery system is lost** (`runs/p38a.json`): a catcher-shaped nursery `C@|x!X@&` with fillers `W@&c@|-` (`w`),
+    with fillers `Y@&c@|-` (`b`, `m`) or with both cells locked (`a`), 10 bodies at 20k: lost by 25k in 16 of 16. From
+    one body of each at the start (`runs/p38b.json` `we`) one system lost by 10-35k in 4 of 4 (X won in seed 2); 10 X
+    bodies at step 100 (`wq`): X won 4 of 4. Control `c` (the founder alone): the nursery on every head-shaped cell, 4 of 4.
+  - **Under copy error** (E6 regenerated, `runs/p34f.json`, 8 worlds to 240k, read by shape): a guarded nursery on most
+    of a shape's cells in 0-19 of 48 censuses, the nursery-and-cheat mix most of the time; new nursery letters swept
+    (h1 G 140k, A 190k, q 235k; h2 X 110k, l 185k; h3 h 65k, F 100k; f1 P 85k, l 180k; f2 I 55k, n 155k, s 210k; f3 t
+    35k, r 105k), and in 13 of the 15 first rises the census before had 138-303 public cells with the new letter's
+    site on the new nursery's shape. The lock changed shape twice: h2 (X on the catcher shape, from catchers of the head
+    cheats `C@|x!Y@&`) and f3 (r on the head shape, from `R!t@&c@|`). Both shapes in every census of 7 of 8 worlds (h4
+    dead at 145k).
+  - Predictions (NEXT slice record, written after reading h1, h2 to 60k): P1 both cells locked, X lost 4 of 4 (yes); P2
+    the lock moves to the catcher shape with fillers of root Y (no: X lost 4 of 4, its fillers became the nursery's
+    cheats); P3 two systems on separate letters both held (no: X lost 4 of 4); P4 X rare lost (yes, 4 of 4, but as in
+    P3, not by its fillers); P5 control alive (yes). Restated T4 (the Allee effect) before `p38b`: P6 one system lost from
+    1:1 in 3 of 4 (4 of 4, X once), P7 X majority wins in 3 of 4 (4 of 4).
+  - Pictures: [lineage-entry.png](pictures/lineage-entry.png) (no copy error: alone, the cheat mix, X rare, 1:1 in two
+    seeds, X majority); [lineage-copyerror.png](pictures/lineage-copyerror.png) (E6 by shape: red guarded nursery, blue
+    plain, orange a site of another letter).
+  - Commands: `node tri/check.js --cmd nursery-mix mutualist-rare mutualist-major two-lineages`; the batches
+    `node tri/batch.js runs/p38a.json` (and `p38b`, `p38c`, `p34f`: their JSON in NEXT's handoff), read with
+    `node tri/census.js --shape FILES`; charts `LC_SHAPE=1 LC_T=120000 node tri/linechart.js out.png FILES`.
+  - Checks: `nursery-mix` 4 of 4 (guarded nursery 20-31% of head-shaped cells from 45k), `mutualist-rare` 4 of 4,
+    `mutualist-major` 4 of 4, `two-lineages` 4 of 4 (both shapes throughout to 120k, no guarded majority in 18-21 of 21
+    censuses from 20k); digests written.
+  - Status: the cheat mix (**works**, `nursery-mix`); two nursery systems exclude each other, the common one wins
+    (**works**, `mutualist-rare`, `mutualist-major`); the two-lineage body under copy error keeps both shapes with
+    transient locks (**works**, `two-lineages`); every new lock from public cells' sites (**measured**, 13 of 15 rises,
+    no check).
+
 ## 2026-10-16 (autorun run 20261016-1602, explore)
 
 - **The catcher, shape first: catchers hold a mix, a self-raising lock is private only in a letter its filler does not

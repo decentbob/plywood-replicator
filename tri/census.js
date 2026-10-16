@@ -17,16 +17,22 @@
 //     most heads and how many of them have a lock for the root on most second cells or on most heads of the root; a
 //     type with a C attach side and no '&' on it is a second cell, also when another side is a root (a catcher, its
 //     share 'with a root'); heads with a lock: a glued lysis side '!' on a free side)
+//   node tri/census.js --shape runs/b/x1.txt [more files] [--every k]  (build run 20261016-1902: two lineages, NEXT priority
+//     38): cells by shape, head-shaped (front 'c@') and catcher-shaped (front 'C@'), and per shape by the own side (the side
+//     that is neither the front nor the root '@&'): G a guarded nursery (the root's complement with '!'), N a plain nursery
+//     (the root's complement without '!'), P plain (inert), S a site of another letter (its copies go free: a public head),
+//     O no root; the root letters; then a summary: the shape that holds the lock (G+N on most of its cells) at each census,
+//     each move of the lock, and the S+P share of the old lock shape in the census before each move
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
 const fs=require('fs');
-const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=process.argv.includes('--joint'),args=process.argv.slice(2).filter(a=>a!=='--loop'&&a!=='--pool'&&a!=='--joint'),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
+const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=process.argv.includes('--joint'),shape=process.argv.includes('--shape'),args=process.argv.slice(2).filter(a=>!['--loop','--pool','--joint','--shape'].includes(a)),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
 const sides=t=>t.match(/[-a-zA-Z][.@&|?!]*/g);
 const classify=t=>{const s=sides(t);if(!s||s.length!==3)return ['other',t];const h=s.find(x=>x.includes('@')&&x.includes('&'));if(h)return ['head',h[0]];
   const i=s.findIndex(x=>x[0]==='C'&&x.includes('@'));return i>=0?['second',s[(i+1)%3][0]]:['other',t];};
 const top=(m,n)=>Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([k,v])=>k+' '+v).join(' ')||'-';
-if(loop)files.forEach(summary);else if(pool)files.forEach(poolSummary);else for(const f of files){console.log('# '+f);let k=0;
+if(loop)files.forEach(summary);else if(pool)files.forEach(poolSummary);else if(shape)files.forEach(shapeSummary);else for(const f of files){console.log('# '+f);let k=0;
   for(const line of fs.readFileSync(f,'utf8').split('\n')){const m=line.match(/^types: t=(\d+) .*?\| (.*)$/);if(!m||(k++%every))continue;
     const H={},S={},O={};let nh=0,ns=0;for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const [cl,key]=classify(t),n=+c;
       if(cl==='head'){H[key]=(H[key]||0)+n;nh+=n;}else if(cl==='second'){S[key]=(S[key]||0)+n;ns+=n;}else O[key]=(O[key]||0)+n;}
@@ -81,3 +87,25 @@ function poolSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.t
   guard: rows with a nursery on most heads ${nr.length}, of them guarded (a lock for the root on most second cells or on most of the root's heads) ${gd.length}${gd.length<nr.length?' (not: '+nr.filter(r=>!gd.includes(r)).map(r=>k(r.t)).join(' ')+')':''}; rows without ${pr.length}, guarded ${pr.filter(g).length}; two sites mean ${pc(tw.reduce((a,b)=>a+b,0),tw.length)}, at most ${pc(mx(live,r=>r.two/r.ns),1)}; second cells with a root (catchers) on most from ${(live.find(r=>r.cat>r.ns/2)||{t:0}).t?k(live.find(r=>r.cat>r.ns/2).t):'never'}, on most in ${live.filter(r=>r.cat>r.ns/2).length} of ${live.length} censuses; heads with a lock at most ${pc(mx(live,r=>r.hl/r.nh),1)}`);
   const late=live.filter(r=>r.t>=100000),two=late.filter(r=>r.M2&&r.H[r.M2]>=0.1*r.nh);
   console.log(`  two classes (build run 20261016-1227): a second root letter on 10% or more of heads in ${two.length} of ${late.length} censuses from 100k; second root's share mean ${pc(late.reduce((a,r)=>a+(r.M2?r.H[r.M2]/r.nh:0),0),late.length)}; locks for both roots on most second cells in ${late.filter(r=>r.both>r.ns/2).length}`);}
+function shapeSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.toLowerCase(),k=t=>(t/1000)+'k',pc=(a,b)=>b?(100*a/b).toFixed(0)+'%':'-',sh={c:'H',C:'K'};
+  for(const line of fs.readFileSync(f,'utf8').split('\n')){const m=line.match(/^types: t=(\d+) .*?\| (.*)$/);if(!m)continue;
+    const r={t:+m[1]};for(const x of ['H','K'])r[x]={n:0,G:0,N:0,P:0,S:0,O:0,R:{},L:{}};
+    for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const n=+c,s=sides(t);if(!s||s.length!==3)continue;
+      const i=s.findIndex(x=>(x[0]==='c'||x[0]==='C')&&x.includes('@')&&!x.includes('&'));if(i<0)continue;const q=r[sh[s[i][0]]];q.n+=n;
+      const h=s.findIndex(x=>x.includes('@')&&x.includes('&'));if(h<0){q.O+=n;continue;}const L=s[h][0],o=s[3-i-h];q.R[L]=(q.R[L]||0)+n;
+      const role=o[0]===cp(L)&&!o.includes('.')?(o.includes('!')?'G':'N'):o[0]==='-'?'P':'S';q[role]+=n;if(role==='G'||role==='N')q.L[L]=(q.L[L]||0)+n;if(role==='S'){q.Q=q.Q||{};q.Q[o[0]]=(q.Q[o[0]]||0)+n;}}
+    r.lock=['H','K'].filter(x=>r[x].n&&r[x].G+r[x].N>r[x].n/2).join('+')||'-';R.push(r);}
+  if(!R.length){console.log(f+': no types: lines');return;}
+  console.log('# '+f);let j=0;const row=q=>`${q.n}: G ${q.G} N ${q.N} P ${q.P} S ${q.S}${q.O?' O '+q.O:''} (roots ${top(q.R,3)})`;
+  for(const r of R){if(j++%every&&r!==R[R.length-1])continue;console.log(`t=${k(r.t)} lock ${r.lock} | H ${row(r.H)} | K ${row(r.K)}`);}
+  const mv=[];let cur=null,prev=null;for(const r of R){if(!r.H.n&&!r.K.n)break;if(r.lock!==cur){const o=cur&&cur!=='-'&&cur.length===1&&prev?prev[cur]:null;
+      mv.push(`${r.lock} ${k(r.t)}${o?' (before: '+cur+' public '+pc(o.S+o.P,o.n)+')':''}`);cur=r.lock;}prev=r;}
+  const dead=R.find(r=>r.t>20000&&!r.H.n&&!r.K.n),live=R.filter(r=>r.H.n||r.K.n),both=live.filter(r=>r.H.n>0.1*(r.H.n+r.K.n)&&r.K.n>0.1*(r.H.n+r.K.n));
+  const M=q=>Object.keys(q.R).sort((a,b)=>q.R[b]-q.R[a])[0],same=live.filter(r=>r.H.n&&r.K.n&&M(r.H)===M(r.K)),n=x=>live.filter(r=>r.lock===x).length;
+  // sweeps: a nursery letter new on a shape (nurseries of it on 30% or more of the shape's cells, not so in the census
+  // before), and in the census before, the public cells (S) whose site raises that letter, on the same shape and the other
+  const sw=[];for(let i=1;i<R.length;i++)for(const x of ['H','K']){const q=R[i][x],p=R[i-1][x],y=x==='H'?'K':'H';for(const L of Object.keys(q.L))if(q.L[L]>=0.3*q.n&&!((p.L[L]||0)>=0.3*p.n)){
+      const z=cp(L),a=(p.Q||{})[z]||0,b=(R[i-1][y].Q||{})[z]||0;sw.push(`${L} on ${x} ${k(R[i].t)} (sites ${z} before: ${a} on ${x}, ${b} on ${y})`);}}
+  console.log(`  lock: ${mv.join(', ')}${dead?'; dead from '+k(dead.t):''}; both shapes (10% or more each) in ${both.length} of ${live.length} censuses
+  lock on H in ${n('H')}, on K in ${n('K')}, on neither in ${n('-')}; the two shapes' commonest roots the same letter (catchers of the other shape) in ${same.length}${same.length?' (from '+k(same[0].t)+')':''}
+  new nursery letters: ${sw.join(', ')||'-'}`);}

@@ -451,6 +451,37 @@ const CHECKS=[
     env:{PAW:'2',...ent,PA2:'Z@&c@|z! C@-q|!',PA3:'Z@&c@|z! C@|-Z@&'},
     pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [!!d&&C[C.length-1].h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
+  // run 20261016-1902 (build): which lineage carries the lock (NEXT priority 38). The two-lineage body: a guarded nursery
+  // 'Y@&c@|y!' (head-shaped: front 'c@') and its filler 'C@|-Z@&' (catcher-shaped: front 'C@'), copied on its plain side.
+  // A head of the nursery's root whose own side is plain, 'Y@&c@|-', is raised on the nursery's sites (it binds by a joint:
+  // the guard does not lyse it) and its copies go free: the nursery's cheat. Entered (10 bodies at 20k, no copy error) it
+  // takes most head-shaped cells and the nursery holds a minority (20-35% from 35k in run 1902's worlds): the cheat is born only on
+  // the nursery's sites. A nursery whose filler is made only by its own system has an Allee effect (a kid's filler comes
+  // from nearby bodies of its kind; free parts decay within 100 steps): a second system on the other shape, 'C@|x!X@&' with
+  // fillers 'W@&c@|-' (it shares nothing with the first but blanks and space), is lost when entered rare (10 bodies at 20k)
+  // and wins when it is the majority (10 bodies at step 100 beside the one founder). Under copy error the body keeps both
+  // shapes, and most of the time neither shape has a guarded nursery on most of its cells (nurseries and their cheats).
+  // Read: cells by shape and own side from 'types:' lines (census --shape)
+  ...(()=>{const cpl=L=>L===L.toLowerCase()?L.toUpperCase():L.toLowerCase(),shp=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],c:{n:0,G:0,R:{}},C:{n:0,G:0,R:{}}};
+      for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]);if(sd.length!==3)continue;
+        const f=sd.findIndex(y=>(y[0]==='c'||y[0]==='C')&&y[1].includes('@')&&!y[1].includes('&')),h=sd.findIndex(y=>y[1].includes('@')&&y[1].includes('&'));if(f<0)continue;const q=r[sd[f][0]];q.n+=n;if(h<0)continue;
+        const L=sd[h][0],w=sd[3-f-h];q.R[L]=(q.R[L]||0)+n;if(w[0]===cpl(L)&&w[1].includes('!')&&!w[1].includes('.'))q.G+=n;}return r;}),
+    pc=x=>(100*x).toFixed(0)+'%',body={PAW:'2',PA2:'Y@&c@|y! C@|-Z@&'},ent={...body,TRI_PARAMS:'{"pErr":1e-9}',PA3N:'10'};return [
+  {id:'nursery-mix',cap:'A guarded nursery holds a minority beside its cheat: plain heads of its root (Y@&c@|-) entered into the two-lineage body\'s world',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:150,
+    env:{...ent,PA3T:'20000',PA3:'Y@&c@|- C@|-Z@&'},
+    pass:(L,o)=>{const R=shp(o).filter(r=>r.t>=45000);if(!R.length)return [false,'no result'];const g=R.map(r=>r.c.n?r.c.G/r.c.n:0),e=R[R.length-1];
+      return [g.every(x=>x>=0.1&&x<=0.45)&&e.c.n>=300,`guarded nursery ${pc(Math.min(...g))}-${pc(Math.max(...g))} of head-shaped cells from 45k, ${e.c.n} of them at 80k`];}},
+  {id:'mutualist-rare',cap:'A second nursery system on the other shape (C@|x!X@&, fillers W@&c@|-) entered rare is lost: an Allee effect',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:70,
+    env:{...ent,PA3T:'20000',PA3:'W@&c@|- C@|x!X@&'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [!(e.C.R.X||0)&&!(e.c.R.W||0)&&e.c.G>e.c.n/2,`at 40k X cells ${e.C.R.X||0}, W cells ${e.c.R.W||0}, Y nurseries ${pc(e.c.n?e.c.G/e.c.n:0)} of head-shaped cells`];}},
+  {id:'mutualist-major',cap:'  the same system as the majority (10 bodies at step 100 beside the one founder) wins: the Y system is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:70,
+    env:{...ent,PA3T:'100',PA3:'W@&c@|- C@|x!X@&'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [!(e.c.R.Y||0)&&!(e.C.R.Z||0)&&e.C.G>e.C.n/2,`at 40k Y cells ${e.c.R.Y||0}, Z cells ${e.C.R.Z||0}, X nurseries ${pc(e.C.n?e.C.G/e.C.n:0)} of catcher-shaped cells`];}},
+  {id:'two-lineages',cap:'Under copy error the two-lineage body keeps both shapes, and most of the time no shape has a guarded nursery on most of its cells',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:220,env:body,
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const b=R.every(r=>r.c.n>=0.1*(r.c.n+r.C.n)&&r.C.n>=0.1*(r.c.n+r.C.n)),late=R.filter(r=>r.t>=20000),
+        mix=late.filter(r=>r.c.G<=r.c.n/2&&r.C.G<=r.C.n/2).length;
+      return [b&&e.c.n+e.C.n>=200&&2*mix>=late.length,`${e.c.n}+${e.C.n} cells at 120k, both shapes ${b?'throughout':'not throughout'}, no guarded majority in ${mix} of ${late.length} censuses from 20k`];}},
+  ];})(),
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes

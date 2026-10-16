@@ -28,6 +28,47 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The lock is reborn from its cheats: a public cell's site turns private by a root error, on the shape that carries it (build run 20261016-1902, 2026-10-16)
+
+NEXT priority 38 (which lineage carries the lock), theory first, then entry tests without copy error and the two-lineage
+worlds of run 1602 (E6) read by shape (`census.js --shape`; INNOVATIONS run 1902). Notes, not the user's words.
+- **A lock is private when the copy its site makes binds back there**: the site is the complement of its cell's own
+  root and the cell's only copied side, so the copy a blank takes there is the kid. The filler's root is never bound
+  (its `&` side is spent when the body completes), so it is not part of what the filler does.
+- **The nursery's cheat is a head of its root that does not raise itself**: a plain own side (`Y@&c@|-`), or a site of a
+  letter nothing carries as a root (`Y@&c@|m!`, one error from the nursery; its worlds have the plain one's counts at every census).
+  It is raised on the nursery's sites (it binds by a joint, so the guard does not lyse it), never waits on its own side,
+  and its copies go free. Entered without copy error (10 bodies at 20k) it took 72-80% of head-shaped cells from 35k
+  to 80k and the guarded nursery held 20-31% (4 of 4): a mix, since the cheat is born only on the nursery's sites. Under
+  copy error the same mix is the common state (E6: guarded nurseries on most of a shape's cells in 0-19 of 48
+  censuses). The guard keeps plugs out, not kin.
+- **A nursery whose filler only its own system makes has an Allee effect.** The second system on the other shape
+  (`C@|x!X@&` with fillers `W@&c@|-`) shares nothing with the first but blanks and space, and the two are the same body
+  up to letters (the catcher-shaped nursery is a rotation of the head nursery, and so are their fillers). Entered rare
+  (10 bodies at 20k) it was lost by 25k, 4 of 4; one body of each at the start: one system lost by 10-35k in 4 of 4 (X
+  won once); 10 X bodies against the one founder: X won 4 of 4. A kid's filler comes from nearby bodies of its own
+  system (free parts decay within 100 steps), so a rare system's kids wait longer: **two such systems exclude each
+  other and the common one wins, whatever its shape.** So "two classes in each shape at once" as two nursery systems
+  does not hold; the lock sits where it is common.
+- **How a lock arises under copy error.** Every new nursery letter in E6 came from public cells: a root error in a copy
+  made at a public cell's site gives a cell whose root is that site's complement, and the copy binds back: a private
+  nursery, born where its fillers (the other shape's public cells) are already common and the old cheats cannot use its
+  sites, so it sweeps; its own cheats follow within 5-20k. In the census before each first rise of a nursery letter
+  (15, the founders' letters left out), 138-303 public cells of the new nursery's shape carried its site in 13. The
+  loop is four one-error steps and no rule: nursery, cheat (site), catcher of the cheat on the other shape (front),
+  nursery again (root).
+- **What decides which lineage carries the lock**: which shape's public cells carry the site that takes the root error.
+  Mostly the nursery's own cheats (same shape); twice (h2 at 110k, f3 at 105k) catchers of the cheats, cells of the other
+  shape with the nursery's root and a cheat's site (`C@|x!Y@&`, `R!t@&c@|`), and the lock changed shape. Cells of the
+  other shape with the nursery's root were that shape's commonest in at least one census in 7 of 8 worlds. Neither shape is favoured
+  by itself: they are one cell up to letters.
+- **What it gives the goal.** Under copy error the two-lineage body is the stable thing (both shapes in every census of
+  7 of 8 worlds) and every lock is transient: it is lost to its cheats and reborn from them, on either lineage, by
+  single errors. A lock pays its bearer only between sweeps. Priority 38's question becomes: what would let a nursery
+  keep its kin's births from its cheats, when the site reads only the root letter (locality forbids reading more)?
+  Candidates (not tried): place (a site the cheat's free copy cannot reach before the nursery's own copy), or a second
+  recognition step the cheat lacks (a kid that must also bind its parent's other side).
+
 ## The catcher: a lock pays only on a cell with a root, in a letter its filler does not carry (explore run 20261016-1602, 2026-10-16)
 
 NEXT priority 34 (the catcher, shape first), derived first, then entry tests without copy error and the line's world
