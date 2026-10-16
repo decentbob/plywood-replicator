@@ -28,6 +28,65 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The catcher: a lock pays only on a cell with a root, in a letter its filler does not carry (explore run 20261016-1602, 2026-10-16)
+
+NEXT priority 34 (the catcher, shape first), derived first, then entry tests without copy error and the line's world
+with catchers entered (INNOVATIONS run 1602). Notes, not the user's words.
+- **Two root-bearers, one shape.** The catcher `Z@&C@|-` is the head `Z@&c@|-` with its front letter turned (one glue
+  error). As a free part it has two attach sides: it fills a host's front in the second cell's place, or it is raised on
+  a site like a head and then catches a free head by its front. Either way the body is a head and a catcher bonded front
+  to front: **two cells with a root each, two plain copied sides, no site.** The second cell `C@-z|!` has no root, so no
+  site ever raises its kind: it is made only by filling a front.
+- **The second cell's lock pays it by place, not by kind.** A lock on a cell without a root raises heads whose fronts
+  any filler may take, so a catcher (no site, no waiting kid, the cheaper filler) gains from it without paying. Entered
+  into the public world without copy error, catchers took 82-92% of second cells within 25k (4 of 4), but **the lock's
+  carriers kept 8-18%** and the class lived at about half its heads (227-347 against 545-572), the same shares as the
+  catcher worlds under copy error (80-95%, run 0727's seeds 1, 5, 7 regenerated). Likely why (not measured): the carrier's
+  copies are made on its plain side, a corner away from the front of the kid it raises, so the kid often takes its
+  parent's copy: the lock pays its carrier by place, enough to hold a minority, never enough to keep the catchers out.
+- **A cell that raises itself needs a filler copied elsewhere.** A head with a lock of its root on its own side (a
+  guarded nursery) is copied only at that side, and a copy made there binds back as its kid. Two such cells bonded front
+  to front (`Z@&c@|z! C@|z!Z@&`) each wait for a free copy of the other, which nobody makes: dead by 5k (4 of 4). The
+  filler must have a plain copied side.
+- **The nursery's letter decides.** The catcher's root is the head's root, so a nursery in that letter (`Z@&c@|z!`)
+  raises catchers on its own sites; a catcher raised there waits for a host as its filler, and hosts are made free only
+  at empty host sites: the sites fill with waiting catchers (a probe: 13, 39, 104, 170 at 22-28k, none filled, free hosts
+  0-4) and the world dies (4 of 4 by 40k; 2 of 4 with the public lock beside it). The same nursery in another letter
+  (`Y@&c@|y!`) lives (4 of 4). **A self-raising lock is private only in a letter its filler and the pool's heads do not
+  carry as a root**; a catcher with a lock of the common root (`Z@&C@|z!`) is a public site whose catches the pool's
+  heads take before its own copies (lost, 4 of 4).
+- **The private lock wins only after the catchers.** A self-raising lock in a new letter loses in the public world,
+  where births are plentiful and a cell copied only at its own empty site is a slow copier: the host form `Y@&c@|y!` and
+  the catcher form `F@&C@|f!` were each lost in 4 of 4. Entered at 60k into a world the catchers already hold (births
+  only on the 8-18% of second cells with the lock, most copies waiting for a place), **each took over in 4 of 4 within
+  5-20k**, the other root-bearer becoming its filler: the host form with the catchers `-Z@&C@|` as fillers, the catcher
+  form with the old heads `-Z@&c@|` (the roles swapped). Run 0727's two living catcher worlds were these two outcomes
+  (seed 1 on the host, Y; seed 5 on the catcher, F). So the lock goes where it does in three steps: a public lock on the
+  second cell; catchers, a cheat of its carrier's role one error away, take most second cells and hold there; then a lock
+  of a new letter on a root-bearer's copied side (neutral while no root of its letter exists, then a root error in a copy
+  made at that side: the copy binds at once) gives a private nursery, which takes over. **Which cell keeps it is a coin
+  the order of errors throws**: host and catcher are the same cell up to the front letter, and either can take the lock.
+- **Under copy error the plain nursery comes first, and the guard is a second error.** With catchers entered into the
+  line's world (8 worlds to 240k) the catcher mix held in 5; in 3 a nursery in a new letter took over on the host (seed
+  4, `Gg@&c@|`), on the catcher (seed 7, `C@eE@&`) or on both in turn (seed 8), always plain: a lock of the root's
+  letter without `!` is one error, the guard another. Two of the three died, as plain nurseries do (run 0727); the third
+  had the guard on 6% at 240k. So the order of errors matters twice: which root-bearer gets the new letter (either), and
+  whether the guard comes before a plug.
+- **Two lineages that need each other (designed, for priority 38).** After the swap the body is a nursery cell (root X,
+  front, own site x!, copied only there) and a filler (another root, a plain copied side, made only by being caught on a
+  nursery's front). The nursery cannot replace its filler by raising its own kind: a filler from its own lineage keeps
+  its root letter X and is raised on the nursery's sites, where it waits (the `mz` deadlock); one with a plain side, the
+  matching front and another root is three errors away. And the filler cannot live without the nursery (it is caught
+  only on nursery fronts). In run 0727 seed 1 the nursery's root turned (Y, m, R) while its fillers kept root Z: two
+  lineages, one turning its letters, one not. Measured (E6: the two takeover bodies as founders, copy error, 8 worlds
+  to 240k): alive 7 of 8, head-shaped and catcher-shaped lineages bonded front to front throughout, a lock on one
+  lineage's own side on most root carriers in most censuses, but **the lock moved between the lineages and both turned
+  their root letters** (heads 3-8 times; the other lineage 1-7 times). Not the one-sided picture of seed 1: the pair of
+  shapes is the stable thing, the letters and the lock's place are not.
+- **What it gives the goal.** The body plan evolved by shape, with no new rule: from a head and a second cell with a
+  public lock to a self-raising cell and a filler that is a former head, through a parasite that holds a mix. The stop
+  rule of run 2151 (a shape before a guard) held: the catcher needed no guard.
+
 ## Two locks on one carrier: two classes live together until copy error; a lock goes to the bearer it pays soonest (build run 20261016-1227, 2026-10-16)
 
 NEXT priority 37 (duplication and divergence), theory first, then entry tests and the line's world (INNOVATIONS run

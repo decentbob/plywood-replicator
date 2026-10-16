@@ -1,13 +1,14 @@
 # Next instance: start here
 
-State on 2026-10-16 (after autorun run 20261016-1227, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-16 (after autorun run 20261016-1602, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
-28-30, 32, 33, 36 and 37, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
+28-30, 32-34, 36 and 37, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
 (`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
 review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
 direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
-progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36, with its predictions) on `build-0727`
-and run 1227's (priority 37: theory, runs, predictions P1-P6, progress) on `build-1227` (`git log -p docs/NEXT.md`).
+progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36) on `build-0727`, run 1227's (priority 37,
+predictions P1-P6) on `build-1227` and run 1602's (priority 34: theory, P1-P8 with the restated theory, progress) on
+`explore-1602` (`git log -p docs/NEXT.md`).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
@@ -30,50 +31,60 @@ the catcher itself (seed 5, roles swapped). Run 1227 (IDEAS "Two locks on one ca
 locks of two letters (`C@y!z|!`) holds **two head classes in a mix** without copy error (about 40% Y, reached from both
 sides; one carrier per class holds none), but under copy error the carrier sheds a lock (each lock is a public good on
 it), and heads that raise each other turn into heads that raise themselves: **a lock stays only where it pays its
-bearer, and the most private lock (a guarded nursery of one's own kind) wins.**
+bearer, and the most private lock (a guarded nursery of one's own kind) wins.** Run 1602 (IDEAS "The catcher"): the
+catcher (a head with its front letter turned) is a cheaper filler of the second cell's place; it takes 77-96% of second
+cells and stops there (the lock's carriers keep a minority, likely by place), and the class lives at half its heads. The
+lock then moves onto a root-bearer (host or catcher, either) as a nursery **in a new letter**: a nursery in the
+catchers' root letter raises them on its own sites, where they wait for a host as filler, and dies (4 of 4); a cell that
+raises itself needs a filler copied on a plain side. A private nursery loses in the public world and takes over once
+catchers hold it (4 of 4 on each shape). Under copy error the plain nursery comes first and dies unless the guard follows;
+from the takeover bodies, head-shaped and catcher-shaped lineages hold together (7 of 8 to 240k) with the lock moving
+between them and both turning their letters.
 
-**Handoff status (autorun run 20261016-1227, build): done; one capability without copy error, two negatives under it**
-(INNOVATIONS 2026-10-16, build; IDEAS "Two locks on one carrier"). No rule or demo change; `tri/census.js --pool` counts
-the second root and second cells with locks for both roots (a `two classes` summary line), `tri/linechart.js` takes
-`LC_T`, `LC_TITLE`, `LC_NAMES`. New checks `two-locks` (the mix, from a Y majority), `two-locks-c` (one carrier per class:
-no mix held) and `two-locks-y` (the Y class alone dies), their digests written; no other check world changed (no
-demo, rule or structure code touched). Nothing is running. The worlds behind every number are regenerated with
-`node tri/batch.js runs/NAME.json` from these files (each about 10-40 minutes; read with `node tri/census.js --pool --joint`):
-- `p37e.json`: `{"demo":"pair","steps":240000,"env":{"PAW":"2","TRI_NOPIC":"1","TRI_PARAMS":"{\"pErr\":1e-9}","PA3T":"20000","PA3N":"10"},"jobs":[{"id":"a","seeds":[1,2,3,4],"env":{"PA2":"Z@&c@|- C@y!z|!","PA3":"Y@&c@|- C@y!z|!"}},{"id":"b","seeds":[1,2,3,4],"env":{"PA2":"Y@&c@|- C@y!z|!","PA3":"Z@&c@|- C@y!z|!"}},{"id":"c","seeds":[1,2,3,4],"env":{"PA2":"Z@&c@|- C@-z|!","PA3":"Y@&c@|- C@-y|!"}}]}`
-- `p37f.json`: the same head (no `PA3T`/`PA3N`), jobs `d` (`PA2` `Z@&c@|- C@y!z|!`, `PA3` `Y@&c@|- C@y!z|!`, `PA3T` 100,
-  `PA3N` 10) and `s` (`C@y!z!` in both, `PA3T` 20000, `PA3N` 10)
-- `p37h.json`: the same head, steps 120000, `PA3T` 100: `dc` (`Z@&c@|- C@-z|!` and `Y@&c@|- C@-y|!`, `PA3N` 10) and `alt` (60000 steps,
-  `Z@&c@|y! C@-q!` and `Y@&c@|z! C@-q!`, `PA3N` 1)
-- `p37l.json`: steps 480000, env `PAW` 2: `w` (seeds 1-4, `PA2` `Z@&c@|- C@y!z|!`, `PA3` `Y@&c@|- C@y!z|!`, `PA3T` 20000,
-  `PA3N` 10) and `p` (seeds 1-8, nothing else: run 0727's worlds, the old `p36.json`)
-- `p37i.json`: steps 480000, env `PAW` 2, `PA2T` 100, `PAEN` 10, `PA3T` 100, `PA3N` 10, `PA2` `Z@&c@|y! C@-q!`, `PA3`
-  `Y@&c@|z! C@-q!`: `e` (seeds 1-4) and `n` (120000 steps, `TRI_PARAMS` pErr 1e-9)
+**Handoff status (autorun run 20261016-1602, explore): done; the catcher derived and tested by entry, three checks**
+(INNOVATIONS 2026-10-16, explore; IDEAS "The catcher"). No rule, demo or structure change. New checks `catcher-mix`,
+`catcher-letter`, `catcher-letter-z` (4 of 4 each, digests written); no other check world changed. `tri/linechart.js`
+takes `LC_MAX` (bars as head counts); `tri/siteprobe.js` is a preload that prints what holds the host nurseries' own
+sites. Nothing is running. The worlds behind every number are regenerated with `node tri/batch.js runs/NAME.json` from these files
+(env always `PAW` 2 and `TRI_NOPIC` 1; read with `node tri/census.js --pool --joint`; 5-18 minutes per world):
+- `r0.json`: steps 160000, `s` seeds 1, 5, 7, 2 (run 0727's worlds, regenerated)
+- `p34a.json`: steps 120000, `TRI_PARAMS` `{"pErr":1e-9}`; `e1` (`PA3` `Z@&c@|- C@|-Z@&`), `e2` (`PA2` `Z@&c@|z! C@-z|!`,
+  `PA3` `Z@&c@|z! C@|-Z@&`), `e3` (`PA3` `Z@&c@|- C@|z!Z@&`), `e4` (10000 steps, `PA2` `Z@&c@|z! C@|z!Z@&`), `c1` (nothing
+  else), `c2` (`PA2` `Z@&c@|z! C@-z|!`); every `PA3` with `PA3T` 20000, `PA3N` 10; seeds 1-4 each
+- `p34c.json`: the same head with `PA3T` 20000, `PA3N` 10: `ny` (`PA2` `Y@&c@|y! C@-q!`, `PA3` `Y@&c@|y! C@|-Z@&`), `nz`
+  (the same in Z: `Z@&c@|z! C@-q!`, `Z@&c@|z! C@|-Z@&`), `kf` (`PA3` `Z@&c@|- C@|f!F@&`)
+- `p34d.json`: as `p34c.json` with the second cell `C@-q|!`: `my` (Y) and `mz` (Z) (the checks `catcher-letter(-z)` at 60k)
+- `p34e.json`: steps 160000, `TRI_PARAMS` `{"pErr":1e-9}`, `PA1` 1, `PAEN` 10: `kc` and `hc` (`PA3` `Z@&c@|- C@|-Z@&`, `PA3T`
+  20000, `PA3N` 10, `PA1T` 60000, `PAKR` `Z@&c@|-` with `PAKS` `C@|f!F@&`, or `PAKR` `Y@&c@|y!` with `PAKS` `C@-z|!`) and
+  `hp` (`PA1T` 20000, `PAKR` `Y@&c@|y!`, `PAKS` `C@-z|!`)
+- `p34b.json`: steps 240000, `k` seeds 1-8 (`PA3` `Z@&c@|- C@|-Z@&`, `PA3T` 20000, `PA3N` 10; copy error on)
+- `p34f.json`: steps 240000, `h` (`PA2` `Y@&c@|y! C@|-Z@&`) and `f` (`PA2` `F@&C@|f! c@|-Z@&`), seeds 1-4 (copy error on)
 
-**Next step (rotation 87, explore): priority 34** (the catcher), which starts from run 0727's two bodies (`p37l.json` `p`
-regenerates those worlds). Then 88 build: priority 38. A run that changes outputs runs its checks once and writes the
-digests in its pull request.
+**Next step (rotation 88, build): priority 38**, now with a candidate from this run: the nursery and its filler as two
+lineages (IDEAS "The catcher", last bullets; E6 above). Then 89 cleanup. A run that changes outputs runs its checks once
+and writes the digests in its pull request.
 
 ## Priorities
 
-Done 1-24, 28-30, 32, 33, 36 and 37: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
+Done 1-24, 28-30, 32-34, 36 and 37: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (set by review-intent run 2151; 32 done in core review run 2221, 36 in build run 0727, 37 in build run 1227, which
-set 38):
-34. [87 explore] **The catcher, shape first** (theory first). A head whose front became `C@` takes the second cell's place
-    on host fronts and carries no lock. Run 0727 saw the shape answer twice in the line's world (`PAW=2`): catchers took
-    most second cells in 4 of 8 worlds, and the two that lived put a guarded lock on a cell's own side (the host head,
-    `I!i@&c@`, seed 1; the catcher itself, `C@f!F@&`, seed 5, roles swapped); the two that died kept no guarded lock on
-    any cell. Derive why the lock goes where it does (which cell's own kind it raises, who pays for a plug), predict
-    which cell keeps it from the order of errors, then an entry test: catchers entered into a public world with and
-    without hosts carrying `z!` on their own side. Only then whether anything else is needed.
+set 38, 34 in explore run 1602):
 38. [88 build] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier").
     Run 1227: two locks on one carrier hold two classes without copy error, but each is a public good on the carrier
     (its kids catch carriers, never raise them), so copy error removes one; heads that raise each other (`Z@&c@|y!`,
     `Y@&c@|z!`) are one error from a guarded nursery of their own kind, which wins. Theory first: what makes a class
     unable to drop the other (each must gain from the other more than from raising itself); candidates: an obligate
     class whose host gains from it (in the two-lock mix Y needs Z, Z does not need Y), a lock whose kid raises carriers
-    (a carrier with a root, the catcher's shape: priority 34 first), space. Only then a run.
+    (a carrier with a root, the catcher's shape), space. **Run 1602's candidate** (IDEAS "The catcher"): a nursery cell
+    (root X, own site x!, copied only there) and its filler (another root, a plain copied side, made only by being caught
+    on a nursery front) need each other: the nursery cannot make its filler by one error (a filler of its own root is
+    raised on its sites and deadlocks; one with a plain side, the matching front and another root is three errors away),
+    and the filler is caught only on nursery fronts. Under copy error (E6, 8 worlds to 240k) the pair of shapes held
+    in 7 of 8, but the lock moved between the two lineages and both turned their root letters. Next: what decides
+    which lineage carries the lock at a time (theory first: who gains from a lock raising its own kind against one
+    raising the other shape), and whether the two-shape body holds two classes in each shape at once.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -86,8 +97,8 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221, 0727, 0902 and 1227): 87 explore,
-88 build, 89 cleanup, 90 build, 91 explore.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221, 0727, 0902, 1227 and 1602): 88 build,
+89 cleanup, 90 build, 91 explore.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
@@ -138,11 +149,16 @@ PAW=1 PAF= PAM=0 TRI_PARAMS='{"pErr":0.01}' PA2='Z@&c@|z C@-z!' node tri/demos.j
 PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair 1 240000 runs/x
                                                    # the standard world at 3x (about 50 minutes); 'web:' lines
 NODE_OPTIONS='-r ./tri/copyrate.js' ...            # adds a 'copyrate:' line (copies per template class from CR_T0, 25000)
+NODE_OPTIONS='-r ./tri/siteprobe.js' ...           # run 1602: 'probe:' lines every 1000 steps from SP_T0 (20000): what holds
+                                                   # the host nurseries' own sites (empty, kid, catcher waiting or filled)
 COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js   # coverage: marks present, rule
                                                    # events, one JSON line per demo world
 node tri/check.js --cmd two-locks two-locks-c two-locks-y
                                                    # run 1227: two classes on the two-lock carrier C@y!z|! (the mix from a
                                                    # Y majority), one carrier per class, the copied-side class alone
+node tri/check.js --cmd catcher-mix catcher-letter catcher-letter-z
+                                                   # run 1602: catchers entered hold a mix; a nursery in another letter
+                                                   # survives them, one in their root letter dies
 node tri/demos.js closure                          # the designed organism kind (budKit) drawn, no physics
 node tri/demos.js imprint 1 200000 runs/x           # contact copying: a ring with one of each part closes, a second grows
 ```
