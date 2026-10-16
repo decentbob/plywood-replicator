@@ -12,6 +12,34 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-0902, harden)
+
+- **Main's outputs kept as digests: no suite on main for a baseline; `race` reads `seal-evolve`'s worlds** — works (no
+  capability or rule change). `tri/check.js` hashes each world's whole output (sha256, 16 hex digits) and compares it
+  with main's digest in `tri/digests.txt` (one line per check world: output and command hashes, the node version in
+  the head): each check's line ends `[same]`, `[changed: seeds]`, `[new]` or `[redefined]` (its command changed), and
+  the last line counts them. `--write` rewrites the digests of the worlds run, `--write --from DIR` those of a CHECK_SAVE
+  directory without running; `tri/test.js` fails while a check world has no digest for its current command, so a new
+  or redefined check gets its digests in its own pull request. A pull request that changes a check world's output
+  rewrites its lines (AGENTS.md, Delivery), so main's file always describes main and a branch's one suite is compared
+  with main directly: core-review runs spent 4 and 6.6 hours, mostly on a second suite.
+  - **Across containers:** demo outputs contain no times (the only clocks are in check.js and batch.js); the baseline's
+    `nursery-guard` heads at 60k (515, 516, 514, 504) are run 0727's entry-test numbers (504-516, another container),
+    and the baseline's `line` turns (6, 7, 2, 4 by 240k) its "2-7"; run 0727's seeds 1-4 repeated run 1951's E4j
+    outcomes and death times. Every suite from now on is the test: a
+    `[changed]` world on a branch that changes no output is a container difference (rerun that world in a worktree of
+    main to tell).
+  - **Shared worlds:** a check may read another check's worlds (`share`: the same demo, env and seeds, no fewer steps)
+    cut at its own steps; census lines (`types:`, `kinds:`, every `PAP` steps) of a longer world are the same as a
+    shorter one's (shown: seeds 5-6 at 25k against 30k worlds, identical evidence), progress and result lines are not.
+    `race` and `seal-evolve` were the one pair with one setting (the others: `pair-mut` and `pair-flow-c`, but
+    `pair-mut` reads a result line): `race` now reads `seal-evolve`'s seeds 5-8 to 240k (3 of 4: seed 7 sealed its site
+    at 50k, so its letter never turned; as on its own seeds 1-4 in the baseline: seed 1 turned no letter), 4 worlds (about 36 CPU-minutes) less per suite.
+  - The baseline suite on `main` d23abd1 (worktree, `CHECK_SAVE`): 69 of 69 pass (partial control `pair-flow-c` 1 of 2),
+    part 1 34 checks in 5210 s, part 2 35 checks in about as long (a waiting job's 2-hour limit stopped it after 11;
+    the other 24 reran by id in 2180 s). Its 239 world outputs are the first digests. The branch then: `race` (through
+    `seal-evolve`'s worlds) and 11 short checks, 13 of 13 pass, 40 worlds `[same]` (1185 s).
+
 ## 2026-10-16 (autorun run 20261016-0727, build)
 
 - **The line's world as a preset (`PAW=2`), and a nursery that guards its own side** (NEXT priority 36 with old 35; IDEAS
