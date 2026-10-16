@@ -33,8 +33,13 @@ needs none, so this build takes it first.
   25k); E3 4 of 4 (Y heads lost by 25-30k, Y's carriers then cheats on 67-75% of carriers in 3, gone with them in seed
   3). E2 as designed is void: **Y alone on `C@y!z|!` dies by 5k (4 of 4)**: its kid waits on its carrier's only copy
   side, so no carrier is made (pair-c's deadlock). E2' `runs/p37f.json` `d` (10 Y bodies and the Z founder from the
-  start): Z rises to the majority by 5k and the mix settles at Y 38-42% (4 of 4), the same mix as E1. Running: `s`, the
-  symmetric carrier `C@y!z!` (both sites copy sides), Y enters at 20k.
+  start): Z rises to the majority by 5k and the mix settles at Y 38-42% (4 of 4), the same mix as E1. `s`, the
+  symmetric carrier `C@y!z!` (both sites copied sides): Y lost by drift (0 of 4; waiting heads per carrier 0.17 against
+  0.35 on `C@y!z|!`). E4 (`runs/p37l.json`, `w`): P4 fails: the lock for both roots left most carriers by 35-65k (3 of 4;
+  seed 1 dead of catchers by 45k), 3 of 4 dead by 200k, two classes in over half the censuses from 100k in 0 of 4; the
+  one-site worlds (`p`, run 0727's 8 worlds, reproduced exactly) 1 of 8, and none of them had locks for both roots on
+  most second cells at any census. Records drafted (IDEAS); checks `two-locks(-c, -y)` running; next a pilot of heads
+  that raise each other (`runs/p37g.json`).
 - **Stop rule.** If E1 and E2 do not show mutual invasion, trace why (site occupancy, waiting times), try the symmetric
   carrier `C@y!z!` once, and record the negative. No core change in this run (a need for one goes to RULES, Open
   candidates).
