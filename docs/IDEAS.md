@@ -78,7 +78,11 @@ with catchers entered (INNOVATIONS run 1602). Notes, not the user's words.
   its root letter X and is raised on the nursery's sites, where it waits (the `mz` deadlock); one with a plain side, the
   matching front and another root is three errors away. And the filler cannot live without the nursery (it is caught
   only on nursery fronts). In run 0727 seed 1 the nursery's root turned (Y, m, R) while its fillers kept root Z: two
-  lineages, one turning its letters, one not. Whether this pair holds under copy error is the next measurement.
+  lineages, one turning its letters, one not. Measured (E6: the two takeover bodies as founders, copy error, 8 worlds
+  to 240k): alive 7 of 8, head-shaped and catcher-shaped lineages bonded front to front throughout, a lock on one
+  lineage's own side on most root carriers in most censuses, but **the lock moved between the lineages and both turned
+  their root letters** (heads 3-8 times; the other lineage 1-7 times). Not the one-sided picture of seed 1: the pair of
+  shapes is the stable thing, the letters and the lock's place are not.
 - **What it gives the goal.** The body plan evolved by shape, with no new rule: from a head and a second cell with a
   public lock to a self-raising cell and a filler that is a former head, through a parasite that holds a mix. The stop
   rule of run 2151 (a shape before a guard) held: the catcher needed no guard.

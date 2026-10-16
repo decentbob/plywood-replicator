@@ -45,15 +45,27 @@ not statistics.
     host and then the catcher in seed 8 (`Ii@&c@|` from 85k, then `C@|uU@&`; dead at 170k). Dead 2 of 8, both after a
     plain nursery, as plain nurseries died in run 0727 (3 of 3). Both shapes took the new letter; a guarded private lock
     held most root carriers in 0 of 8 by 240k (run 0727's took 110k and 400k).
+  - **Two lineages under copy error** (E6, `runs/p34f.json`: the bodies `hc` and `kc` ended with as founders, `Y@&c@|y!
+    C@|-Z@&` (`h`) and `F@&C@|f! c@|-Z@&` (`f`), `pErr` 0.01, 4 worlds each to 240k): alive 7 of 8 (`h` seed 4 dead at
+    145k). In every living world head-shaped cells (front `c@`) and catcher-shaped cells (front `C@`) stayed bonded
+    front to front, every second cell carrying a root, and most root carriers had a lock on their own side in 23-48 of
+    48 censuses; the lock's letter was its bearer's own root's (a guarded nursery) on most in only 2-9 of them,
+    and moved between the lineages (`h` seed 2 at 120k: the catcher-shaped `C@|x!X@&` raising its own kind beside heads
+    `Y@&c@|l!`). **Both lineages' root letters turned**: in `h` the heads' 3, 8 and 4 times and the catcher-shaped
+    lineage's 4, 6 and 1 times; in `f` the head-shaped fillers' 2, 4, 7 and 1 times while the catcher-shaped nursery
+    kept F most of the time (excursions to P, l, I, n, s, t, b, x).
   - Predictions (NEXT slice record): P1 most second cells 3 of 4 (4 of 4), heads below half (yes), dead 2 of 4 (no: 0 of
     4); P2 alive 4 of 4 (no: 2 of 4 dead); P3 the catcher with `z!` takes over (no: lost 4 of 4); P4 the symmetric body
     alive (no: dead by 5k; found by a sanity run before the batch). P1-P4 were wrong where they assumed a lock on a cell
     with a root is private whatever its letter; the restated theory (the letter, the filler, the order) was written before
     `my`/`mz`, `kc`/`hc` and `kf`/`hp` ran, and they came out as it says. P5 (restated before E5): catchers on most
     second cells 6 of 8 (8 of 8); a guarded private lock on most root carriers in 3 of 8 (no: 0 of 8, plain nurseries
-    in new letters in 3); both shapes (yes, among the plain ones); dead at most 4 of 8 (2).
+    in new letters in 3); both shapes (yes, among the plain ones); dead at most 4 of 8 (2). P6 alive 3 of 4 per design
+    (yes: 3 and 4); P7 the filler lineage 10% or more of root carriers (yes: in `h` every second cell is a catcher-shaped
+    root carrier, about 45% of them); P8 the nursery's root turns while the fillers' stays Z (half: both turn).
   - Pictures: [catcher.png](pictures/catcher.png) (heads as bars, catchers among second cells, guarded nurseries: E1,
-    the two letters, the private catcher and host in the public and in the catcher world).
+    the two letters, the private catcher and host in the public and in the catcher world);
+    [catcher-lineages.png](pictures/catcher-lineages.png) (E6: the two lineages under copy error, 8 worlds).
   - Commands: `node tri/check.js --cmd catcher-mix catcher-letter catcher-letter-z`; the batches `node tri/batch.js
     runs/p34a.json` (and `p34b`-`p34e`, `r0`: their JSON in NEXT's handoff), read with `node tri/census.js --pool
     --joint FILES`; the probe `NODE_OPTIONS='-r ./tri/siteprobe.js'`.
@@ -62,7 +74,7 @@ not statistics.
   - Status: catchers hold a mix (**works**, `catcher-mix`); a nursery in the catchers' root letter dies, in another
     lives (**works**, `catcher-letter`, `catcher-letter-z`); the private lock takes over after the catchers, on either
     root-bearer (**measured**, 4 + 4 worlds, no check); two lineages that need each other (nursery and filler): designed,
-    not demonstrated under copy error (E5 below).
+    held under copy error in 7 of 8 worlds to 240k with both lineages' letters turning (**measured**, E6; no check).
 
 ## 2026-10-16 (autorun run 20261016-1227, build)
 

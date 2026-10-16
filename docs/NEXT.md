@@ -37,13 +37,15 @@ cells and stops there (the lock's carriers keep a minority, likely by place), an
 lock then moves onto a root-bearer (host or catcher, either) as a nursery **in a new letter**: a nursery in the
 catchers' root letter raises them on its own sites, where they wait for a host as filler, and dies (4 of 4); a cell that
 raises itself needs a filler copied on a plain side. A private nursery loses in the public world and takes over once
-catchers hold it (4 of 4 on each shape). Under copy error the plain nursery comes first and dies unless the guard follows.
+catchers hold it (4 of 4 on each shape). Under copy error the plain nursery comes first and dies unless the guard follows;
+from the takeover bodies, head-shaped and catcher-shaped lineages hold together (7 of 8 to 240k) with the lock moving
+between them and both turning their letters.
 
 **Handoff status (autorun run 20261016-1602, explore): done; the catcher derived and tested by entry, three checks**
 (INNOVATIONS 2026-10-16, explore; IDEAS "The catcher"). No rule, demo or structure change. New checks `catcher-mix`,
 `catcher-letter`, `catcher-letter-z` (4 of 4 each, digests written); no other check world changed. `tri/linechart.js`
 takes `LC_MAX` (bars as head counts); `tri/siteprobe.js` is a preload that prints what holds the host nurseries' own
-sites. E6 (`runs/p34f.json`, the two lineages under copy error, predictions P6-P8 in the slice record) was running at this commit. The worlds behind every number are regenerated with `node tri/batch.js runs/NAME.json` from these files
+sites. Nothing is running. The worlds behind every number are regenerated with `node tri/batch.js runs/NAME.json` from these files
 (env always `PAW` 2 and `TRI_NOPIC` 1; read with `node tri/census.js --pool --joint`; 5-18 minutes per world):
 - `r0.json`: steps 160000, `s` seeds 1, 5, 7, 2 (run 0727's worlds, regenerated)
 - `p34a.json`: steps 120000, `TRI_PARAMS` `{"pErr":1e-9}`; `e1` (`PA3` `Z@&c@|- C@|-Z@&`), `e2` (`PA2` `Z@&c@|z! C@-z|!`,
@@ -79,8 +81,10 @@ set 38, 34 in explore run 1602):
     (root X, own site x!, copied only there) and its filler (another root, a plain copied side, made only by being caught
     on a nursery front) need each other: the nursery cannot make its filler by one error (a filler of its own root is
     raised on its sites and deadlocks; one with a plain side, the matching front and another root is three errors away),
-    and the filler is caught only on nursery fronts. E6 measures it under copy error (running). Next: whether two
-    nursery classes can share one filler lineage, or one nursery class two fillers, and what holds each.
+    and the filler is caught only on nursery fronts. Under copy error (E6, 8 worlds to 240k) the pair of shapes held
+    in 7 of 8, but the lock moved between the two lineages and both turned their root letters. Next: what decides
+    which lineage carries the lock at a time (theory first: who gains from a lock raising its own kind against one
+    raising the other shape), and whether the two-shape body holds two classes in each shape at once.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -145,11 +149,16 @@ PAW=1 PAF= PAM=0 TRI_PARAMS='{"pErr":0.01}' PA2='Z@&c@|z C@-z!' node tri/demos.j
 PAW=1 PAB=3000 PAS=87 PAF='C@-|z|:450 E@-|z|:450 G@-|z|:450' node tri/demos.js pair 1 240000 runs/x
                                                    # the standard world at 3x (about 50 minutes); 'web:' lines
 NODE_OPTIONS='-r ./tri/copyrate.js' ...            # adds a 'copyrate:' line (copies per template class from CR_T0, 25000)
+NODE_OPTIONS='-r ./tri/siteprobe.js' ...           # run 1602: 'probe:' lines every 1000 steps from SP_T0 (20000): what holds
+                                                   # the host nurseries' own sites (empty, kid, catcher waiting or filled)
 COV_OUT=$PWD/runs/cov.jsonl NODE_OPTIONS="-r ./tri/coverage.js" node tri/check.js   # coverage: marks present, rule
                                                    # events, one JSON line per demo world
 node tri/check.js --cmd two-locks two-locks-c two-locks-y
                                                    # run 1227: two classes on the two-lock carrier C@y!z|! (the mix from a
                                                    # Y majority), one carrier per class, the copied-side class alone
+node tri/check.js --cmd catcher-mix catcher-letter catcher-letter-z
+                                                   # run 1602: catchers entered hold a mix; a nursery in another letter
+                                                   # survives them, one in their root letter dies
 node tri/demos.js closure                          # the designed organism kind (budKit) drawn, no physics
 node tri/demos.js imprint 1 200000 runs/x           # contact copying: a ring with one of each part closes, a second grows
 ```
