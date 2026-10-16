@@ -55,7 +55,25 @@ and the records say what holds. **Stop** if the entry tests contradict the theor
   side is its root's complement with `!`) on most heads or on most second cells with a root; both H and K take it in at
   least one world each; worlds without it die.
 
-**Progress.** Regenerating run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
+**Progress.**
+- A sanity run before the batch: P4's body deadlocks (seed 1: 10 copies by 4k, extinct at 5k when the hazard starts).
+  Each cell's one copied side is its own site, so a copy made there binds back as a kid, and the kid waits for a filler
+  of the other kind, which nobody makes free. **A self-raising cell needs a filler copied on a plain side.** (E4 kept at
+  10k as the record: `e4` in `runs/p34a.json`.)
+- `runs/p34a.json` read (20 worlds to 120k, 6.5-19 minutes each): E1 catchers to 82-92% of second cells by 45k, then a
+  held mix (S 8-18%), heads 227-347 against 545-572 in the control c1, **alive 4 of 4** (P1: most yes, below half yes,
+  dead no). E2 (hosts `Z@&c@|z!`): the catchers were lost in 2 (by 45k) and **killed the world in 2** (dead by 35k and
+  40k: catchers 102 to 218 and 67 to 365 in 5k while the nursery fell); control c2 alive 4 of 4 (P2 no). E3 (the catcher
+  with `z!`): lost in 4 of 4 by 35k (P3 no). E4 dead by 5k (4 of 4).
+- Reading: the catcher shares the host's root, so a host's own site raises catchers too, and a catcher raised there
+  needs a host as filler, which a nursery cell (copied only at its site) does not make free: the E4 deadlock, reached
+  by entry. And a lock of the common root's letter on the catcher is a public site for the pool's heads, which take it
+  before the catcher's own copies (made only at that site). **A self-raising lock pays its bearer only in a letter its
+  filler and the pool's heads do not carry**: run 0727's two living worlds both had one (Y with catchers of root Z in
+  seed 1; F with fillers of root N in seed 5). Next batch `runs/p34c.json` (120k, `pErr` 1e-9, 10 bodies at 20k): `ny`
+  (`Y@&c@|y! C@-q!` with catchers `C@|-Z@&`: alive 4 of 4 predicted), `nz` (the same in Z: dead in 2 of 4 or more),
+  `kf` (the catcher with a lock of its own letter `C@|f!F@&` into the public world: takes most second cells, alive 4 of 4).
+- Regenerated run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
 {"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"s","seeds":[1,5,7,2]}]}`) to read the order of errors.
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
