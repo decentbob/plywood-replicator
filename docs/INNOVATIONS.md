@@ -52,6 +52,8 @@ not statistics.
     side, held by catchers).
   - Commands: `PAW=2 node tri/demos.js pair SEED 480000 runs/x` (the 8 worlds); read with `node tri/census.js --pool
     --joint runs/x.txt`; the entry test and its control: `node tri/check.js --cmd nursery-guard nursery-guard-c`.
+  - Checks: `line` 4 of 4 (seeds 1-4 at 240k: 6, 7, 2, 4 turns, 373-493 heads; 528 s), `nursery-guard` 4 of 4 (no plug
+    at any census, 504-516 heads), `nursery-guard-c` 4 of 4 (no head from 35-40k).
   - Status: the preset **works** (`line`); a nursery guards its own side under `lysJoint` (**works**, `nursery-guard`,
     control `nursery-guard-c`); in the line's world plain nurseries die and guarded ones live (**measured**, 8 worlds, no
     check: 16-35 minutes per world).
