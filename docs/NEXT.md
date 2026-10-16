@@ -24,6 +24,22 @@ root error in a copy made at a public cell's site, sometimes on the other shape 
 ("One encounter against two"): a site cannot tell kin from cheat; the cheat wins with free copies from afar, so the
 nursery's number is set by how long free cheats live (and by area and access), not by the cheats.
 
+## Slice in progress (autorun run 20261016-2258, explore; started 22:58 UTC)
+
+**Goal: priority 38, close T1's crowding gap, then the recess on paper.** Done when (a) T1 is restated with factors the
+probe measures directly in five worlds (base `nursery-mix`, twice the material `PAB` 2000, twice the area `PAS` 71, PADI
+50 and 200; seeds 1-2 to 60k, batch `runs/fz.json`, probe from 25k) and the crowding result is placed in one factor;
+(b) a recess body is designed cell by cell (kit, fronts, copied sides, where a kid sits) and its geometry checked with a
+script, with a verdict: buildable and copyable with the core or not, and why; a short run only if it is. Stop there.
+- **T1 restated (theory, before the batch).** A guarded site's race is won by a blank (the nursery's kid: rate rB per
+  empty site) or by a free cheat copy (rate rC per empty site). Births follow the race and deaths are equal per body, so
+  n/m = rB/rC; with rC = m pi rho (pi: copies per attached cheat per step; rho: the share of a cheat copy that binds a
+  site, per empty site) **n* = rB / (pi rho)**. T1's n* = A/(k a tau) is this with rB = pi = b a and rho = k a tau / A.
+  `tri/raceprobe.js` now counts each factor ('fate:' lines: copies followed to a site, decay or elsewhere).
+- Predictions: **P1** the births ratio rB C / rC is within 25% of the sampled N in 9 of 10 worlds; **P2** crowding (PAB 2000)
+  acts through rho: rho 1.4-2x lower than base, pi/rB within 20%; **P3** PADI 50 halves rho (0.4-0.65x), PADI 200 raises it
+  1.6-2.5x, pi/rB within 20% in both; **P4** twice the area halves rho (0.4-0.65x), pi/rB within 20%.
+
 **Handoff status (autorun run 20261016-2151, build): done; no rule or output change** (INNOVATIONS 2026-10-16, build;
 IDEAS "One encounter against two"; the slice record with predictions P1-P8 is this file on branch `build-2151` at its
 merge). Priority 38's second step settled by measurement and theory, no design kept: a site cannot tell kin from a
