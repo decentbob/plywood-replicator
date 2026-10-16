@@ -427,6 +427,30 @@ const CHECKS=[
   {id:'two-locks-y',cap:'  the Y class alone on C@y!z|! dies: its waiting kid covers its carrier\'s only copied side',demo:'pair',seeds:[1,2,3,4],need:3,steps:10000,secs:20,
     env:{PAW:'2',PA2:'Y@&c@|- C@y!z|!',TRI_PARAMS:'{"pErr":1e-9}'},
     pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.h===0);return [!!d&&C[C.length-1].h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  // run 20261016-1602 (explore): the catcher (NEXT priority 34). A catcher is a head whose front letter turned
+  // ('Z@&C@|-'): it fills a host's front in the second cell's place and carries no site. 10 bodies of a host and a catcher
+  // entered at 20k without copy error. In the public world ('Z@&c@|- C@-z|!') the catchers take most second cells and the
+  // second cells with the lock hold a minority (8-18% in run 1602's worlds: the lock's carrier's copies are made beside
+  // the kid it raises, so its lock pays it by place); the class lives at about half its heads. In a world of guarded
+  // nurseries ('Z@&c@|z! C@-q|!', the second cell without a lock and with one copied side) the catcher shares the hosts'
+  // root, so the hosts' own sites raise catchers too; a catcher raised there waits for a host as its filler, and hosts are
+  // made free only at empty host sites: the hosts' sites fill with waiting catchers and the world dies. The same world in
+  // another letter ('Y@&c@|y!') does not raise the catchers, and lives. Read: catchers (second cells with a root) and
+  // heads (catchers left out) from 'types:' lines
+  ...(()=>{const cat=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],s:0,c:0};for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),sd=[...x.slice(i+1).matchAll(TOK)].map(y=>[y[1],y[2]]);
+      if(sd.length===3&&sd.some(y=>y[0]==='C'&&y[1].includes('@')&&!y[1].includes('&'))){r.s+=n;if(sd.some(y=>y[1].includes('@')&&y[1].includes('&')))r.c+=n;}}return r;}),
+    ent={TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PA3N:'10'};return [
+  {id:'catcher-mix',cap:'Catchers Z@&C@|- entered into the public world take most second cells; the lock\'s carriers hold a minority and the class lives',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:200,
+    env:{PAW:'2',...ent,PA3:'Z@&c@|- C@|-Z@&'},
+    pass:(L,o)=>{const K=cat(o).filter(r=>r.t>=45000),C=census(o);if(!K.length)return [false,'no result'];const f=K.map(r=>r.s?r.c/r.s:0),e=C[C.length-1],pc=x=>(100*x).toFixed(0)+'%';
+      return [f.every(x=>x>0.5&&x<0.97)&&e.h>=150,`catchers ${pc(Math.min(...f))}-${pc(Math.max(...f))} of second cells from 45k, ${e.h} heads at 80k`];}},
+  {id:'catcher-letter',cap:'A guarded nursery in another letter (Y@&c@|y!) survives catchers of root Z entered beside it: its sites do not raise them',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,
+    env:{PAW:'2',...ent,PA2:'Y@&c@|y! C@-q|!',PA3:'Y@&c@|y! C@|-Z@&'},
+    pass:(L,o)=>{const C=census(o),e=C[C.length-1];if(!e)return [false,'no result'];return [e.h>=400,`${e.h} heads at 60k`];}},
+  {id:'catcher-letter-z',cap:'  control: the same nursery in the catchers\' root letter (Z@&c@|z!) raises them on its own sites and dies',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,
+    env:{PAW:'2',...ent,PA2:'Z@&c@|z! C@-q|!',PA3:'Z@&c@|z! C@|-Z@&'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [!!d&&C[C.length-1].h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  ];})(),
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes

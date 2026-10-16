@@ -73,6 +73,20 @@ and the records say what holds. **Stop** if the entry tests contradict the theor
   seed 1; F with fillers of root N in seed 5). Next batch `runs/p34c.json` (120k, `pErr` 1e-9, 10 bodies at 20k): `ny`
   (`Y@&c@|y! C@-q!` with catchers `C@|-Z@&`: alive 4 of 4 predicted), `nz` (the same in Z: dead in 2 of 4 or more),
   `kf` (the catcher with a lock of its own letter `C@|f!F@&` into the public world: takes most second cells, alive 4 of 4).
+- `runs/p34c.json` read: `ny` alive 4 of 4, the catchers lost by 25k in 4 (the filler `C@-q!` has two copied sides, K
+  one: K loses as a filler); `nz` dead 1 of 4 (55k), K lost in 3; `kf` (the catcher with the private lock `C@|f!F@&`
+  into the public world) lost in 4 of 4 by 45k. Not a clean test (fillers unequal), so `runs/p34d.json` (the same with
+  the second cell `C@-q|!`, one copied side): **`my` (Y nursery) alive 4 of 4, `mz` (Z nursery, the catchers' root)
+  dead 4 of 4 by 35-40k.** A probe of `mz` seed 1 (a preload counting what holds each host's own site, every 1000 steps):
+  catchers waiting with an open front on 13, 39, 104, 170 host sites at 22-28k, filled 0, free hosts 0-4, while empty
+  host sites fell 413 to 29: the deadlock as derived.
+- `runs/p34e.json` (160k): **`kc` (the private catcher `C@|f!F@&`, 10 bodies at 60k into E1's catcher world): it takes
+  over in 4 of 4 by 80k** (553-569 of it beside 405-412 hosts `-Z@&c@|` as its fillers; S and the plain catchers gone;
+  bonded cells about 975 against 580 before): the role swap of run 0727's seed 5, by entry, and only after the catchers
+  (`kf`: lost in the public world). `hc` (the host with `Y@&c@|y!` at 60k into the catcher world) and `hp` (into the
+  public world at 20k) running.
+- Checks written, not yet run: `catcher-mix` (E1 at 80k), `catcher-letter` (`my` at 60k), `catcher-letter-z` (`mz` at
+  60k). `tri/linechart.js` takes `LC_MAX` (bars as head counts).
 - Regenerated run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
 {"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"s","seeds":[1,5,7,2]}]}`) to read the order of errors.
 
