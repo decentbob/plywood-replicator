@@ -85,6 +85,11 @@ and the records say what holds. **Stop** if the entry tests contradict the theor
   bonded cells about 975 against 580 before): the role swap of run 0727's seed 5, by entry, and only after the catchers
   (`kf`: lost in the public world). `hc` (the host with `Y@&c@|y!` at 60k into the catcher world) and `hp` (into the
   public world at 20k) running.
+- **P5 restated before E5 runs** (the theory changed with E2-E4): catchers on most second cells in 6 of 8 or more by
+  60k; at 240k, in 3 of 8 or more a guarded self-raising lock (a root-bearer's own side its root's complement with `!`)
+  in a letter other than the catchers' root holds most root-carrying cells, host-shaped (front `c@`) in at least one and
+  catcher-shaped (front `C@`) in at least one; dead by 240k at most 4 of 8. E5 (`runs/p34b.json`) is queued after the
+  three new checks (`--write`).
 - Checks written, not yet run: `catcher-mix` (E1 at 80k), `catcher-letter` (`my` at 60k), `catcher-letter-z` (`mz` at
   60k). `tri/linechart.js` takes `LC_MAX` (bars as head counts).
 - Regenerated run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
