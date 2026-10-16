@@ -77,7 +77,7 @@ item entered the core (the repository restarted on 2026-10-01).
 | `!` lysis side | mark | `pair` (nursery traps, locks, mutants), `lysis` | 10-04 (run 2051) |
 | open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `lysis`, `ring`, `imprint` | 10-01; stops at joints, a caught part emits at once 10-06 (run 1920) |
 | lysis (one bit; relay stops at joints) | relayed signal | `pair` (every hazard death, traps), `lysis` | 10-04 (run 2051) |
-| `lysJoint` (default 0) | option (contact lysis stops at joints too) | `pair` (`lock-guard`; the line's preset `PAW=2`: `line`, `nursery-guard`) | 10-08 (run 1951); kept an option 10-09 (run 2221) |
+| `lysJoint` (default 0) | option (contact lysis stops at joints too) | `pair` (`lock-guard`; the line's preset `PAW=2`: `line`, `nursery-guard`, `two-locks`) | 10-08 (run 1951); kept an option 10-09 (run 2221) |
 | attached flag | state (attached when the pass began; set when caught by glue) | every rule that binds or copies | 10-01 as the roles; one bit since run 2221 |
 | spent | state | `&` sides, as `&` | 10-01 |
 

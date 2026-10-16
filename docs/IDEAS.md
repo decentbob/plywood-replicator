@@ -28,6 +28,55 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Two locks on one carrier: two classes live together until copy error; a lock goes to the bearer it pays soonest (build run 20261016-1227, 2026-10-16)
+
+NEXT priority 37 (duplication and divergence), theory first, then entry tests and the line's world (INNOVATIONS run
+1227). Notes, not the user's words.
+- **Two nurseries on one carrier are two resources.** The classes that coexist are at most the limiting resources (run
+  2021). With one site per carrier a class's resource is the carriers of its letter, and carriers are copied whatever
+  they raise: two classes on two carrier types share one resource, so the carriers drift and a class whose carriers win
+  loses nothing, while a class whose heads are gone leaves its carriers as cheats (a site that raises nobody spares its
+  carrier the waits; runs 1650, 1951). Measured (control): a Y class entered beside Z with its own carrier `C@-y|!` lost
+  its heads by 25-30k in 4 of 4, and its carriers then held 67-75% of second cells. On `C@y!z|!` every carrier carries
+  both sites: each class has its own nursery on every body, so **a rare class finds its sites free while the common one
+  fills its own**: Y entered rare rose to 37-41% of heads and held to 240k (3 of 4; in the fourth the 10 entered bodies
+  died out by 25k), and from a Y majority at the start the mix fell to the same 38-42% (4 of 4). One stable mix, reached
+  from both sides: a polymorphism held by frequency dependence, the first two classes at once on one body plan (run
+  2021's third test).
+- **A class on a carrier's only copied side cannot live alone.** A triangle has three sides and a carrier binds the head
+  by one, so a carrier with two sites has one of them as its copied side (an anchored side is never copied). A kid
+  waiting there covers the side that makes carriers: Y alone on `C@y!z|!` died by 5k (4 of 4; pair-c's deadlock). So the
+  pair is a facultative class (Z, on the anchored site) and an obligate one (Y, on the copied side) that lives only
+  beside Z, and Z holds the larger share (about 60%).
+- **The rare class's edge is the share of the common class's sites its kids hold.** Waiting heads per carrier, from
+  100k (heads minus second cells): Z alone on `C@y!z|!` 0.35; on the symmetric carrier `C@y!z!` (both sites copied
+  sides, so the carrier is copied through the free one) 0.17: carriers are made faster, waits are short and sites
+  mostly empty, so a rare class gains little and Y entered there was lost by drift (4 of 4). The mix holds 1.00 waiting
+  head per carrier (half of all sites full) and a third fewer complete bodies (275 against 413 carriers): every carrier
+  pays for both classes' waits (the whole-body hazard takes a waiting kid with its parent).
+- **Under copy error the two locks part.** The line's world with the two-site carrier (both classes, `pErr` 0.01, 4
+  worlds to 480k): a lock for both roots on most second cells lasted until 35-65k in 3 of 4 (the fourth died of catchers
+  by 45k), never came back, and 3 of 4 worlds were dead by 200k. Why: each lock is a public good on its carrier (its kids
+  catch carriers, they never raise them), and a two-lock carrier pays three times a one-lock carrier's waits, so a copy
+  error that removes either lock (another letter, a seal) is a cheat with more to gain than on a one-site carrier. Once
+  the locks sit on different carriers the classes are back on one-site carriers, where one is lost. The second lock
+  does not stay unless it pays its carrier.
+- **What pays a lock: the kid raises the lock-bearer's kind back.** A carrier's kids are heads; a head never raises a
+  carrier (carriers are caught, not raised), so no lock on a carrier ever pays it. A lock on a head pays when the kid it
+  raises later raises copies of that head: the guarded nursery of run 0727 (`Z@&c@|z!`, kids of its own kind beside it).
+  For two classes: heads that raise each other, `Z@&c@|y!` and `Y@&c@|z!` on a plain carrier. A Z head's copies are made
+  at its own side and bind the nearest Y head's site, which is often its own kid, so the Y kid raises its parent's
+  copies: a two-generation nursery, private by place. The mix is pinned too (each class is born only on the other's
+  sites). Measured: without copy error it lives at a pinned mix (Y 38-64% of heads, 4 of 4); under copy error one class
+  took over by 35-60k in 3 of 4 (the fourth died by 50k) and guarded nurseries of one class followed. **An alternating
+  head is one glue error from a head that raises its own kind** (`Z@&c@|y!` to `Z@&c@|z!`), and a one-generation private
+  lock pays sooner than a two-generation one, so it wins.
+- **Lesson.** Under copy error a lock drifts toward the bearer it pays soonest: off a carrier (pays nobody), from the
+  other class to one's own kind. Two classes on one body plan therefore need a class that gains more from the other than
+  from raising itself, which neither design gives: in the two-lock mix Y needs Z and Z gains nothing from Y; in the
+  alternation each needs the other only until one error lets it raise itself. Next (NEXT priority 38): theory for a
+  partner a class cannot replace by itself, before any run.
+
 ## A nursery guards itself: the lock goes where it is private (build run 20261016-0727, 2026-10-16)
 
 Measured in the line's world (`PAW=2`, 8 worlds to 480k) and an entry test (INNOVATIONS run 0727). Notes, not the

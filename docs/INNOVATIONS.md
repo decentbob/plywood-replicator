@@ -12,6 +12,50 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-1227, build)
+
+- **Two classes on one carrier: two guarded locks of two letters hold a mix of two head classes** (NEXT priority 37; IDEAS
+  "Two locks on one carrier"). No rule change. The second cell `C@y!z|!` (z anchored, y its one copied side) raises Z
+  heads on `z|!` and Y heads on `y!` under `lysJoint`. All in the line's world (`PAW=2`); without copy error `pErr` 1e-9
+  (the census still prints). New checks `two-locks`, controls `two-locks-c`, `two-locks-y`; `tri/census.js --pool` counts
+  the second root and second cells with locks for both roots; `tri/linechart.js` takes `LC_T`, `LC_TITLE`, `LC_NAMES`.
+  - **A held mix.** From a Y majority (the Z founder and 10 Y bodies at step 100; `runs/p37f.json` `d`) Z takes the
+    majority by 5k and Y settles at 38-42% to 240k (4 of 4; Y 30-49% at every census from 40k). Y entered rare (10
+    bodies at 20k, `runs/p37e.json` `a`) rose to the same 37-41% in 3 of 4 (seed 4: lost by 25k); with 20 bodies (the
+    first `two-locks` worlds) in 2 of 4 (seeds 1 and 4 lost by 35k): **establishing from rare is chancy, the mix is not.**
+  - **Controls.** Each class on its own one-site carrier (`C@-z|!`, `C@-y|!`): Y entered rare lost by 25-30k (4 of 4;
+    its carriers then cheats on 67-75% of second cells in 3); from the Y majority no mix is held (Z lost in seed 1, Y's
+    share 19-83% in the others; `runs/p37h.json` `dc`). The Y class alone on `C@y!z|!` dies by 5k (4 of 4): its kid
+    waits on its carrier's only copied side. The symmetric carrier `C@y!z!` (both sites copied): Y entered rare lost by
+    drift (0 of 4; `runs/p37f.json` `s`).
+  - **Site occupancy** (waiting heads per second cell, heads minus second cells, censuses from 100k): Z alone on
+    `C@y!z|!` 0.35, on `C@y!z!` 0.17; the mix 1.00, with a third fewer complete bodies (275 against 413 second cells).
+  - **Under copy error** (`runs/p37l.json`: `w`, the two-site carrier with Z and 10 Y bodies at 20k, `pErr` 0.01, 480k;
+    `p`, run 0727's 8 one-site worlds, reproduced exactly: turns 24, 15, 2, 10, 2, 17, 0, 2, the same deaths): the lock
+    for both roots left most second cells by 35-65k (3 of 4; seed 1 died of catchers `-Z@&C@|` by 45k) and never came
+    back; 3 of 4 worlds dead by 200k (45k, 165k, 195k; seed 3 alive at 480k, 12 turns). Two root classes (the second on
+    10% of heads or more) in over half the censuses from 100k: 0 of 4, against 1 of 8 one-site worlds (seed 2, 47 of
+    77); no one-site world had locks for both roots on most second cells at any census, although two-site cells reached
+    79% and 88% (seeds 4 and 6).
+  - **Heads that raise each other** (`Z@&c@|y!` and `Y@&c@|z!` on the plain carrier `C@-q!`: each class is born only on
+    the other's own side; `runs/p37i.json`, 10 founders of each at step 100): without copy error alive 4 of 4 to 120k at a
+    pinned mix (Y 38-64% of heads at every census from 40k, the majority swapping 4-9 times); one founder of each lived
+    in 1 of 4 (`p37h` `alt`). Under copy error (480k) 1 of 4 died by 50k, and in the other 3 one class took over by
+    35-60k (a new root letter, Q in all three), then guarded nurseries of one class (a head raising its own kind; from
+    an alternating head that is one glue error on its lock) held most heads from 105-135k, letters turning 5-11 times;
+    two classes in over half the censuses from 100k in 0 of 4 (10-23 of 77).
+  - Predictions (NEXT slice record): P1 Y to 15-50% by 240k, 4 of 4 (3 of 4); P2 mutual invasion (void: Y alone dies;
+    from the Y majority the same mix, yes, with Z the majority, yes); P3 control loses Y, 3 of 4 or more (4 of 4); P4
+    two classes under copy error in 2 of 4 or more (no: 0 of 4); P5 alternation alive 3 of 4 with Y 40-60% (4 of 4, Y
+    38-64%); P6 alternation under copy error, two classes in 2 of 4 or more (no: 0 of 4).
+  - Pictures: [two-locks.png](pictures/two-locks.png) (heads by root letter: Y entered rare, Y majority, controls, the
+    symmetric carrier); [two-locks-line.png](pictures/two-locks-line.png) (under copy error: two-site against one-site).
+  - Commands: `node tri/check.js --cmd two-locks two-locks-c two-locks-y`; the batches `node tri/batch.js runs/p37e.json`
+    (and `p37f`, `p37h`, `p37l`, `p37i`: their JSON in NEXT's handoff), read with `node tri/census.js --pool --joint FILES`.
+  - Status: two classes on one carrier **work** without copy error (a held mix, `two-locks` 4 of 4, controls 4 of 4);
+    under copy error **not yet**: the carrier sheds a lock that does not pay it, and heads that raise each other become
+    heads that raise themselves (measured, 4 + 4 worlds; no check).
+
 ## 2026-10-16 (autorun run 20261016-0902, harden)
 
 - **Main's outputs kept as digests: no suite on main for a baseline; `race` reads `seal-evolve`'s worlds** — works (no

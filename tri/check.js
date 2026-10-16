@@ -408,6 +408,25 @@ const CHECKS=[
   {id:'nursery-guard-c',cap:'  control: the plain nursery Z@&c@|z in the same world: the plugs sink it',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,
     env:{PAW:'2',PA2:'Z@&c@|z C@-q!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'20000',PAEN:'20',PA3:'--Z@'},
     pass:(L,o)=>{const C=plugs(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.t>20000&&c.h===0);return [!!d,`no head from ${d?d.t/1000+'k':'never'}`];}},
+  // run 20261016-1227 (build): two classes on one carrier (NEXT priority 37). A second cell with two guarded locks of two
+  // letters, 'C@y!z|!' (its 'y!' side is also its one copied side), raises Z heads on 'z|!' and Y heads on 'y!'. In the
+  // line's world without copy error, from a Y majority at the start (the Z founder and 10 Y bodies at step 100) the mix
+  // falls to about 40% Y and stays there: each class's sites are its own, so a rare class finds them free (Y 30-49% at
+  // every census from 40k to 120k in run 1227's worlds); control: the same start with each class on its own one-site
+  // carrier, where carriers are copied whatever they raise: no mix is held (a class lost, or Y's share wandering 19-83%);
+  // and the Y class alone on the two-site carrier dies (its waiting kid covers its carrier's only copied side: pair-c's
+  // deadlock). Read: Y's share of heads (catchers left out) at every census from 40k
+  ...(()=>{const ys=(C,t0)=>C.filter(c=>c.t>=t0).map(c=>c.h?(c.H.Y||0)/c.h:0),pc=x=>(100*x).toFixed(0)+'%',rg=y=>`Y ${pc(Math.min(...y))}-${pc(Math.max(...y))} of heads from 40k`;return [
+  {id:'two-locks',cap:'Two classes on one carrier: on C@y!z|! the Z and Y classes hold a mix (from a Y majority, Y 25-55% of heads at every census from 40k to 120k)',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,
+    env:{PAW:'2',PA2:'Z@&c@|- C@y!z|!',PA3:'Y@&c@|- C@y!z|!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'100',PA3N:'10'},
+    pass:(L,o)=>{const y=ys(census(o),40000);if(!y.length)return [false,'no result'];return [y.every(v=>v>=0.25&&v<=0.55),rg(y)];}},
+  {id:'two-locks-c',cap:'  control: the same start, each class on its own one-site carrier (C@-z|!, C@-y|!): no mix is held (a class lost, or Y leaves 25-55%)',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,
+    env:{PAW:'2',PA2:'Z@&c@|- C@-z|!',PA3:'Y@&c@|- C@-y|!',TRI_PARAMS:'{"pErr":1e-9}',PA3T:'100',PA3N:'10'},
+    pass:(L,o)=>{const y=ys(census(o),40000);if(!y.length)return [false,'no result'];return [y.some(v=>v<0.25||v>0.55),rg(y)];}},
+  ];})(),
+  {id:'two-locks-y',cap:'  the Y class alone on C@y!z|! dies: its waiting kid covers its carrier\'s only copied side',demo:'pair',seeds:[1,2,3,4],need:3,steps:10000,secs:20,
+    env:{PAW:'2',PA2:'Y@&c@|- C@y!z|!',TRI_PARAMS:'{"pErr":1e-9}'},
+    pass:(L,o)=>{const C=census(o);if(!C.length)return [false,'no result'];const d=C.find(c=>c.h===0);return [!!d&&C[C.length-1].h===0,`no head from ${d?d.t/1000+'k':'never'}`];}},
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two
   // sides, never buds) put into 1 in 10 S at 20k (labelled start) in the flow world without mutagen. A newborn's S comes
