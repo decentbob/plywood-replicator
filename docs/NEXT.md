@@ -22,6 +22,33 @@ cheats"): a head of the nursery's root that does not raise itself is its cheat a
 systems exclude each other (an Allee effect); under copy error every lock is transient and a new nursery comes from a
 root error in a copy made at a public cell's site, sometimes on the other shape (the lock changed lineage).
 
+**Slice in progress (autorun run 20261016-2151, build; priority 38): a nursery that keeps its kin's births from its
+cheats.** Goal: a design within the core in which a head that raises nobody cannot hold a nursery's site; done when it
+lives in 3 of 4 worlds, the cheat is lost in 3 of 4, and a check holds it. Stop: if the design's own one-error cheat
+holds a mix as before, record why and stop.
+- M1 (measured, `tri/raceprobe.js` on `nursery-mix` seeds 1-2 to 60k): after a kid leaves, the nursery wins 33-37% of
+  the races for its site; the site stays empty 110-130 steps whoever takes it; copies left by the cheat kid that just
+  left take 5-10% of the cheat's wins: **the cheat wins by the free copies of whole cheat bodies elsewhere** (34-41
+  copies per cheat per 10k steps, about 90% decay unbound), not by place. NEXT's "leftover copies" guess is wrong.
+- T1: recognition is one glue pair, so a site cannot tell its kin from a head of the same root; the race is flux. With
+  free cheats' density proportional to cheats m times their lifetime tau, and blanks reaching the site and the cheats'
+  plain sides alike, the blank density cancels: the nursery's win share p = 1/(1 + k m tau), and at steady state
+  m/n = (1-p)/p gives **n* = 1/(k tau): the nursery's number is fixed by how long free cheats live**, not by the cheats'
+  number or the blank supply (not yet tested).
+- T2 (design, "the kid raises before it leaves"): drop the filler. A head `Y@&y@!y@!` (root, two guarded sites of its
+  root's complement, both attach sides) hears the open signal while either site is empty, so a kid stays on its parent
+  until both its sites hold kids, and leaves carrying them. A head that raises nobody has no open side: it lets go a pass
+  after it binds, alone, a free triangle with a spent root that is never a template. So the old cheat cannot hold a
+  site; the least cheat must raise one kid of its own in place first (`Y@&y@!-`, one site and a plain side copied
+  always), and alone it cannot grow (its one kid's leaving frees it). One type, no filler.
+- Predictions (written before `runs/sc.json` ran): P1 `Y@&y@!y@!` alone lives 4 of 4 to 60k with most material bonded;
+  P2 the one-site cheat entered (10 bodies at 20k) stays below half of cells in 3 of 4 at 80k (it still wins races by
+  free copies, but its kid must raise first and it cannot grow alone); P3 under copy error (pErr 0.01, 120k) alive 4 of
+  4 and the two-site nursery of the root on most cells at 120k in 3 of 4.
+- Running: `node tri/batch.js runs/sc.json` (env `PAW` 2, `TRI_NOPIC` 1, `PA2` `Y@&y@!y@! Y@&y@!y@!`, `TRI_PARAMS`
+  `{"pErr":1e-9}`; `a` alone 60k, `h` with `PA3` `Y@&y@!- Y@&y@!-` `PA3T` 20000 `PA3N` 10 to 80k, `e` with `pErr` 0.01 to
+  120k; seeds 1-4).
+
 **Handoff status (autorun run 20261016-2102, cleanup): done; no rule or output change** (INNOVATIONS 2026-10-16,
 cleanup; the `lysis` demo's unused debug print `LYDBG` removed, check `lysis` same as its digest). NEXT shortened
 (the line's history is in INNOVATIONS and IDEAS), ROADMAP's retired genome-copying rows folded into one (their last
