@@ -29,6 +29,12 @@ needs none, so this build takes it first.
   after. P4 (E4): two root classes each on 10% or more of heads in over half the censuses after 100k in 2 of 4 or more,
   against at most 2 of 8 one-site worlds; two-site carriers fall (their one-site cheats spare the waiting cost) but stay
   above 20% at 480k in 2 of 4 or more.
+- **Progress (13:50).** E1 3 of 4 (Y 37-41% of heads from 85k to 240k, seeds 1-3; seed 4: the 10 Y bodies died out by
+  25k); E3 4 of 4 (Y heads lost by 25-30k, Y's carriers then cheats on 67-75% of carriers in 3, gone with them in seed
+  3). E2 as designed is void: **Y alone on `C@y!z|!` dies by 5k (4 of 4)**: its kid waits on its carrier's only copy
+  side, so no carrier is made (pair-c's deadlock). E2' `runs/p37f.json` `d` (10 Y bodies and the Z founder from the
+  start): Z rises to the majority by 5k and the mix settles at Y 38-42% (4 of 4), the same mix as E1. Running: `s`, the
+  symmetric carrier `C@y!z!` (both sites copy sides), Y enters at 20k.
 - **Stop rule.** If E1 and E2 do not show mutual invasion, trace why (site occupancy, waiting times), try the symmetric
   carrier `C@y!z!` once, and record the negative. No core change in this run (a need for one goes to RULES, Open
   candidates).
