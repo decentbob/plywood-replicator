@@ -40,6 +40,20 @@ script, with a verdict: buildable and copyable with the core or not, and why; a 
   acts through rho: rho 1.4-2x lower than base, pi/rB within 20%; **P3** PADI 50 halves rho (0.4-0.65x), PADI 200 raises it
   1.6-2.5x, pi/rB within 20% in both; **P4** twice the area halves rho (0.4-0.65x), pi/rB within 20%.
 
+- **Read (P1-P4, batch fz, 23:15):** P1 no: the sampled N is 0.55-0.66 of the births ratio in 10 of 10 (nurseries die
+  about 1.6x as often as cheats, the same in every world), so n* = c rB / (pi rho) with c 0.6; P2-P4 yes: rho falls 1.8x
+  with twice the material (the free copies travel 2.0 instead of 3.4 before decaying), 2.1x at PADI 50, 2.0x with twice
+  the area, rises 1.8x at PADI 200; pi/rB within 20% (1.28-1.60 against 1.39). Crowding acts on the free parts' reach.
+- **The recess on paper:** a lattice search (every chain body to six cells) finds no site walled on two sides where a kid
+  can be built: the wall is the kid's own front's place; the best one-wall fan cuts the access to 0.78, for the cheat as
+  much as the nursery (a body's shape is public fillers). Closed.
+- **Then the core-change candidate (x), case in RULES before the code:** across a joint a lysis side spares only a
+  partner with a lysis side of the same glue (`lysJoint: 2`, default 0). Predictions: **P5** `nursery-mix` with it: the
+  entered cheats' heads gone by 30k and no cheat head at 80k in 4 of 4, the guarded nursery at 80k at least the
+  nursery-alone level; **P6** the same world under copy error 0.01 (`two-lineages` with `lysJoint` 2, 120k): a guarded
+  nursery on most of its shape's cells in 15 or more of 21 censuses in 3 of 4 worlds (0-7 with `lysJoint` 1);
+  **P7** the public world (`PAW=2` founder) with it dies by 20k (its heads carry no `z!`), 4 of 4.
+
 **Handoff status (autorun run 20261016-2151, build): done; no rule or output change** (INNOVATIONS 2026-10-16, build;
 IDEAS "One encounter against two"; the slice record with predictions P1-P8 is this file on branch `build-2151` at its
 merge). Priority 38's second step settled by measurement and theory, no design kept: a site cannot tell kin from a

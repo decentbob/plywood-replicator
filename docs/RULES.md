@@ -275,6 +275,7 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
 - (r) *Copy error in contact copying*: **adopted** in run 0651 as the parameter `pErr`, default 0 (RULES Core changes).
   Open: a default above 0 (and the mutagen retired) would change every world's outputs; whether the core or the
   environment should limit parts that bind their own kind (`g@` and `G@` on one part).
+- (x) *A lysis side spares a joint partner of its own guard* (run 2258): built as `lysJoint: 2` (entry below).
 - (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
   lineage's false releases (`falseRel`) did not change and have another cause (trace one before any fix).
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
@@ -284,6 +285,34 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051, (u) and (w) in run
   2221. Nothing else in the core is unused (RULES, Core inventory, run 2221 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Candidate (x): a lysis side spares a joint partner of its own guard, 2026-10-16, autorun run 20261016-2258 (explore)
+NEXT priority 38. Derivation: IDEAS "The nursery's share is the environment's" (this run); runs: INNOVATIONS run 2258.
+1. **Capability and why the goal needs it.** A lock that pays its bearer under copy error. Every lock in the line has been
+   transient for five slices: a guarded nursery's cheat (a head of its root without its site, one error away) is raised
+   on the nursery's sites and wins them with free copies (run 2151), so under copy error the nursery is swept by its
+   cheats and reborn from them (run 1902). (v)'s open part asks for the same thing: a world with a trap and a lock at
+   once, "a key told by shape, before a new mark".
+2. **Can the existing core do it?** No, by three results. (a) A site reads only the root letter of what binds it, and a
+   cheat has the nursery's root (run 2151). (b) The nursery's share is n* = c rB / (pi rho) (this run, measured in five
+   worlds): rB and pi are the same side of the same shape, rho is the environment's (the free parts' life, the area, the
+   crowd), c the death ratio; nothing in it is the nursery's own. (c) Shape cannot do it either: a site walled on two
+   sides is the kid's own front's place (every chain body to six cells, lattice search this run), a one-wall fan lowers
+   the access to 0.78 for nursery and cheat alike, and in the pair line a body's shape is made of public fillers, so a
+   recess is everyone's (IDEAS, this run).
+3. **The rule.** A triangle bonded across a joint to a partner's lysis side `!` is lysed unless it carries a lysis side
+   of the same glue itself. Across a bond that is not a joint, contact lysis is unchanged; so is the relay (it never
+   crosses a joint). Reads its own fixed type (its sides' glue and `!` marks) and the glue of the partner side it is
+   bonded to (fixed type, already read for the `!` mark): no new read, no new mark, signal, state or value. So a guarded
+   nursery `Y@&c@|y!` raises its kid (which carries `y!`) and lyses every other head that binds by `Y@&`: the plain cheat
+   `Y@&c@|-`, a site-letter cheat `Y@&c@|m!`, a plain nursery `Y@&c@|y`. A one-error head that passes must keep the root
+   `Y@&` and the side `y!`: it raises its own kind, so it is no cheat of the site.
+4. **What it replaces and costs.** It generalizes `lysJoint` (0: lysis by contact crosses joints; 1: it never does; 2:
+   it crosses a joint only to a partner without a lysis side of the same glue), so no new parameter. Built as
+   `lysJoint: 2`; default 0, so every output stays the same. Cost: a public lock dies under it (a head raised on a second
+   cell's `z|!` carries no `z!`), as without `lysJoint`; the kin guard keeps the trap for strangers (run 2221's reason
+   for not adopting (v)) and spares only kin.
+5. **Result:** below, when the run ends.
 
 ### Core review 2026-10-08, autorun run 20261008-2221: chain copying retired, (w) removed, (v) kept an option
 NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221`; the removed code at `1284bb4`.
