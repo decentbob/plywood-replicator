@@ -330,11 +330,13 @@ const CHECKS=[
   // 8 by 240k), each turn after a parasite of that site (the commons class, an in-place chain such as 'I@iz!', a cell
   // that binds the site); in seed 5 a commons class of the new letter arises by one error ('q@&c@|z' on Q sites, 84% of
   // heads at 240k). Read from 'types:' lines: heads (an attach side with '&') by root letter, second cells (an attach
-  // side of letter C) by the letter of the side after it
+  // side of letter C) by the letter of the side after it. Since harden run 20261016-0902 it reads seal-evolve's worlds (the same setting,
+  // seeds 5-8) to 240k instead of its own seeds 1-4 (share; 4 worlds less per suite): 3 of 4 there (seed 7 sealed its site
+  // at 50k, so its letter never turned), 4 of 4 on seeds 1-4
   ...(()=>{const {TOK}=require('./sim'),sd=x=>[...x.matchAll(TOK)].map(m=>m[0]),
     census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],Z:0,I:0,H:0,S:0,se:0,L:{}};for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),s=sd(x.slice(i+1));if(s.length!==3)continue;
       const h=s.find(y=>y.includes('@')&&y.includes('&'));if(h){r.H+=n;if(h[0]==='Z')r.Z+=n;if(h[0]==='I')r.I+=n;continue;}const c=s.findIndex(y=>y[0]==='C'&&y.includes('@'));if(c>=0){const L=s[(c+1)%3][0];r.L[L]=(r.L[L]||0)+n;r.S+=n;if(s[(c+1)%3].includes('.'))r.se+=n;}}return r;});return [
-  {id:'race',cap:'Under copy error the commons loop runs by itself: the commons class rises and falls, the nursery returns, the common site letter turns over',demo:'pair',seeds:[1,2,3,4],need:3,steps:240000,secs:540,
+  {id:'race',cap:'Under copy error the commons loop runs by itself: the commons class rises and falls, the nursery returns, the common site letter turns over',demo:'pair',seeds:[5,6,7,8],need:3,steps:240000,secs:540,share:'seal-evolve',
     env:{PAW:'1',PAF:'',PAM:'0',PATN:'30',PA2:'Z@&c@|z C@iz!',PA1T:'20000',PAEN:'10',PAKR:'I@&c@|z',PAKS:'C@iz!',TRI_PARAMS:'{"pErr":0.005}'},
     pass:(L,o)=>{const C=census(o),I=indiv(o);if(!C.length||!I)return [false,'no result'];const e=C[C.length-1],f=c=>c.H?c.I/c.H:0,pk=C.reduce((a,c,j)=>f(c)>f(C[a])?j:a,0),
       back=C.slice(pk).find(c=>c.I===0&&c.Z>=0.9*c.H),turn=C.map(c=>Object.entries(c.L).find(([k,v])=>k!=='i'&&v>c.S/2)).find(Boolean);
