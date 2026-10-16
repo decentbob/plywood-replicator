@@ -1,5 +1,38 @@
 # Next instance: start here
 
+## Slice in progress (autorun run 20261016-1227, build): two locks of two letters on one carrier (priority 37)
+
+Branch `build-1227`. Priority 34 (the catcher) stays with explore run 87, which may need a core change; 37's entry test
+needs none, so this build takes it first.
+- **Goal.** Two head classes live on one carrier: a second cell with two guarded locks of two letters, `C@y!z|!` (the
+  `y!` side is also its copy side: a triangle has three sides, and the carrier needs one copied side), raises Z heads on
+  `z|!` and Y heads on `y!` under `lysJoint`.
+- **Theory (before the runs).** The classes that coexist are at most the limiting resources (run 2021). With one site per
+  carrier a class's resource is the carriers of its letter, and carriers are copied whatever they raise, so the classes
+  share one resource: a class's carriers either drift with the rest or, once its heads are gone, become cheats (a site
+  that raises nobody spares its carrier the whole-body hazard of a waiting bud, runs 1951 and 1650). With both sites on
+  every carrier each class has a nursery of its own on the same carrier: two resources in equal supply, so a rare class
+  finds free sites of its letter everywhere while the common one fills its own (negative frequency dependence), and
+  carriers cannot cheat one class without a copy error. Asymmetry: a Y head waiting on `y!` blocks its own carrier's
+  copying (a copy blank binds only a free side), so it waits for a carrier from a neighbour, while a Z head on `z|!`
+  catches the copies its own carrier makes. Pilot (seed 1, 60k): Y entered as 10 bodies at 20k rose to 75 of 565 heads;
+  in the control (each class on its own one-site carrier) Y heads were gone by 30k and Y's carriers (then cheats) rose
+  to 61% of carriers.
+- **Runs.** `runs/p37e.json` (the line's world `PAW=2` without copy error, `pErr` 1e-9 so the census prints; 10 bodies of
+  the second class enter at 20k; 240k; seeds 1-4): E1 `a` Z resident on `C@y!z|!`, Y enters; E2 `b` Y resident, Z
+  enters; E3 `c` control, Z on `C@-z|!`, Y enters with `C@-y|!`. Then E4 `runs/p37l.json`: the line's world under copy
+  error with the two-site carrier and both classes (Z founder, 10 Y bodies at 20k), 480k, seeds 1-4, against run 0727's
+  8 one-site worlds (`runs/p36.json`).
+- **Predictions.** P1 (E1): Y rises to 15-50% of heads by 240k and is present at every census, 4 of 4. P2 (E2): Z invades
+  Y residents too, and both runs approach one mix (within 15 points of each other at 240k) in which Z, on the anchored
+  site, holds more than half. P3 (E3): Y heads lost by 120k in 3 of 4 or more; Y's carriers on over half the carriers
+  after. P4 (E4): two root classes each on 10% or more of heads in over half the censuses after 100k in 2 of 4 or more,
+  against at most 2 of 8 one-site worlds; two-site carriers fall (their one-site cheats spare the waiting cost) but stay
+  above 20% at 480k in 2 of 4 or more.
+- **Stop rule.** If E1 and E2 do not show mutual invasion, trace why (site occupancy, waiting times), try the symmetric
+  carrier `C@y!z!` once, and record the negative. No core change in this run (a need for one goes to RULES, Open
+  candidates).
+
 State on 2026-10-16 (after autorun run 20261016-0902, harden). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
 28-30, 32, 33 and 36, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
