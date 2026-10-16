@@ -1,68 +1,41 @@
 # Next instance: start here
 
-State on 2026-10-16 (after autorun run 20261016-1902, build). Read AGENTS.md first (rules of work), then this file.
-History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (the pair's done priorities 1-24,
-28-30, 32-34, 36 and 37, each with its run and checks), the autorun log, and git: each run's handoff is this file at its merge
-(`git log -p docs/NEXT.md`; run 1951's slice record with its predictions at `explore-1951`'s WIP commits); the
-review-intent Direction of run 0751 in full at `a2f3914`, the pair Direction of run 1850 at `20e9a88`; the latest
-direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice record (goal, predictions, stop rule,
-progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36) on `build-0727`, run 1227's (priority 37,
-predictions P1-P6) on `build-1227`, run 1602's (priority 34: theory, P1-P8 with the restated theory, progress) on
-`explore-1602` and run 1902's (priority 38: T1-T4, P1-P7) on `build-1902` (`git log -p docs/NEXT.md`).
+State on 2026-10-16 (after autorun run 20261016-2102, cleanup). Read AGENTS.md first (rules of work), then this file.
+History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its run
+and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
+slice record with its predictions is on its run's branch (`build-1902`, `explore-1602`, `build-1227`, `build-0727`,
+`core-review-2221`, `explore-1951`); the latest direction check is IDEAS "Eight slices on the lock" (run 2151).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
-Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
-kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
-them. The 47-type organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
-Where the line stands (runs 1351-1951, INNOVATIONS; IDEAS "Who pays for a lock"): recognition is one glue pair and copy
-error changes one side, so **a lock its carrier needs is frozen** and only a lock its carrier does not need turns. In the
-nursery world that is the second cell's site, which seals for good (run 1650: the loop stops). In the stockless world it
-is a **public lock** (the pool-raised class's site on the second cell): it turns and its seal is self-limiting, but the
-core's guard (a trap of its letter) lyses keys and plugs alike, so **turnable and guardable exclude each other**: 3 of 4
-such worlds died of lock parasites by 480k, the fourth privatized (a nursery guarded by a trap) and froze. A trap that
-does not lyse across a joint (`lysJoint`, candidate (v), an option, default 0) guards a public lock: the root letter then turned
-11-19 times in 480k in 4 of 8 worlds (0-3 unguarded). Run 0727 (the line's world `PAW=2`, 8 worlds to 480k; IDEAS
-"A nursery guards itself"): a world's fate follows where its lock sits. Plain nurseries (own side without `!`) died
-(3 of 3); **guarded nurseries** (own side the root's complement with `!`: under `lysJoint` it raises the children and lyses
-plugs with itself) lived (2 of 2); public worlds lived (2 of 2) with two root classes alternating; a world with no lock
-on any cell (catchers only) died. The second cell's lock never follows a nursery (0 of 46 censuses). Catchers took the
-second cell's place in 4 of 8, and the two that lived moved the lock onto a cell's own side: the host head (seed 1) or
-the catcher itself (seed 5, roles swapped). Run 1227 (IDEAS "Two locks on one carrier"): a second cell with two guarded
-locks of two letters (`C@y!z|!`) holds **two head classes in a mix** without copy error (about 40% Y, reached from both
-sides; one carrier per class holds none), but under copy error the carrier sheds a lock (each lock is a public good on
-it), and heads that raise each other turn into heads that raise themselves: **a lock stays only where it pays its
-bearer, and the most private lock (a guarded nursery of one's own kind) wins.** Run 1602 (IDEAS "The catcher"): the
-catcher (a head with its front letter turned) is a cheaper filler of the second cell's place; it takes 77-96% of second
-cells and stops there (the lock's carriers keep a minority, likely by place), and the class lives at half its heads. The
-lock then moves onto a root-bearer (host or catcher, either) as a nursery **in a new letter**: a nursery in the
-catchers' root letter raises them on its own sites, where they wait for a host as filler, and dies (4 of 4); a cell that
-raises itself needs a filler copied on a plain side. A private nursery loses in the public world and takes over once
-catchers hold it (4 of 4 on each shape). Under copy error the plain nursery comes first and dies unless the guard follows;
-from the takeover bodies, head-shaped and catcher-shaped lineages hold together (7 of 8 to 240k) with the lock moving
-between them and both turning their letters. Run 1902 (IDEAS "The lock is reborn from its cheats"): a head of the
-nursery's root that does not raise itself (plain own side, or a site nothing roots in) is the nursery's cheat: raised on
-its sites by a joint, copied free, it holds 70-80% beside a guarded nursery of 20-35%; a nursery system whose filler only
-its own kind makes has an Allee effect (two such systems exclude each other, the common one wins, on either shape).
-Under copy error the two-lineage body keeps both shapes while every lock is transient: a new nursery comes from a root
-error in a copy made at a public cell's site (13 of 15 first rises), on the shape that carries the site, the nursery's
-own cheats mostly and twice catchers of them on the other shape (the lock changed lineage).
+Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): every
+cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use them. The 47-type
+organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
+Where the line stands (runs 1351-1902; INNOVATIONS has the numbers, IDEAS the reasoning): recognition is one glue pair
+and copy error changes one side, so **a lock its carrier needs is frozen** and only a lock its carrier does not need
+turns ("Who pays for a lock"). Public locks turn but the core's trap lyses keys and plugs alike; a trap that does not
+lyse across a joint (`lysJoint`, candidate (v), default 0; on in the line's world `PAW=2`) guards them. **A lock stays
+only where it pays its bearer**: guarded nurseries (own side the root's complement with `!`) live, plain ones die ("A
+nursery guards itself"); two locks on one carrier hold two classes until copy error sheds one ("Two locks on one
+carrier"); catchers (a head with its front letter turned) take the second cell's place, and the lock moves onto a
+root-bearer of either shape as a nursery in a new letter ("The catcher"). Run 1902 ("The lock is reborn from its
+cheats"): a head of the nursery's root that does not raise itself is its cheat and holds 70-80% beside it; two nursery
+systems exclude each other (an Allee effect); under copy error every lock is transient and a new nursery comes from a
+root error in a copy made at a public cell's site, sometimes on the other shape (the lock changed lineage).
 
-**Handoff status (autorun run 20261016-1902, build): done; priority 38's first step (which lineage carries the lock),
-four checks** (INNOVATIONS 2026-10-16, build; IDEAS "The lock is reborn from its cheats"). No rule, demo or structure
-change. New checks `nursery-mix`, `mutualist-rare`, `mutualist-major`, `two-lineages` (4 of 4 each, digests written); no
-other check world changed (only readers and check.js changed). `tri/census.js --shape` reads cells by shape and own side
-(and where each new nursery letter came from); `tri/linechart.js` `LC_SHAPE=1` draws it. Predictions: P1 yes, P2-P3 no
-(the second system was lost, its fillers turned cheats), P4 yes for P3's reason, P5 yes; T4 (Allee) restated, P6, P7
-yes. Nothing is running. The worlds behind every number are regenerated with `node tri/batch.js runs/NAME.json` from
-these files (env always `PAW` 2, `TRI_NOPIC` 1 and the founder `PA2` `Y@&c@|y! C@|-Z@&`; read with `node tri/census.js
---shape`; 3-7 minutes per world):
+**Handoff status (autorun run 20261016-2102, cleanup): done; no rule or output change** (INNOVATIONS 2026-10-16,
+cleanup; the `lysis` demo's unused debug print `LYDBG` removed, check `lysis` same as its digest). NEXT shortened
+(the line's history is in INNOVATIONS and IDEAS), ROADMAP's retired genome-copying rows folded into one (their last
+text at `9b590df`), check count and suite time corrected (79 checks, about 87 minutes per part), a retired known issue
+removed. Nothing is running. Run 1902's worlds (priority 38's first step; INNOVATIONS 2026-10-16, build) are
+regenerated with `node tri/batch.js runs/NAME.json` from these files (env always `PAW` 2, `TRI_NOPIC` 1 and the founder
+`PA2` `Y@&c@|y! C@|-Z@&`; read with `node tri/census.js --shape`; 3-7 minutes per world):
 - `p34f.json` (run 1602's E6): steps 240000, `h` seeds 1-4 (that founder) and `f` (`PA2` `F@&C@|f! c@|-Z@&`), copy error on
 - `p38a.json`: steps 120000, `TRI_PARAMS` `{"pErr":1e-9}`, `PA3T` 20000, `PA3N` 10: `a` (`PA3` `Y@&c@|y! C@|x!X@&`), `b`
   (`Y@&c@|- C@|x!X@&`), `w` (`W@&c@|- C@|x!X@&`), `m` (`PA2` `Y@&c@|y! C@|-X@&` with `b`'s `PA3`), `c` (`PA3` empty); seeds 1-4
 - `p38b.json`: as `w` with `PA3T` 100: `we` (`PA3N` 1) and `wq` (`PA3N` 10)
 - `p38c.json`: steps 80000, as `p38a`: `p` (`PA3` `Y@&c@|- C@|-Z@&`) and `s` (`Y@&c@|m! C@|-Z@&`)
 
-**Next step (rotation 89, cleanup; then 90 build): priority 38, a nursery that keeps its kin's births from its cheats.**
+**Next step (rotation 90, build): priority 38, a nursery that keeps its kin's births from its cheats.**
 Theory first: in the cheat mix the cheats win about 3 of 4 nursery-site cycles (S/G = c/(1-c) with equal death rates);
 likely because a cheat waiting on a site makes free copies beside it, which take the site when its kid leaves, while
 the nursery's own copy needs a blank to touch the empty site (measure: who takes a site after a cheat's kid and after
@@ -76,24 +49,15 @@ design must work by place or by shape, not by reading kin.
 Done 1-24, 28-30, 32-34, 36 and 37: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
-Open (set by review-intent run 2151; 32 done in core review run 2221, 36 in build run 0727, 37 in build run 1227, which
-set 38, 34 in explore run 1602, 38's first step in build run 1902):
-38. [88 build] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier").
-    Run 1227: two locks on one carrier hold two classes without copy error, but each is a public good on the carrier
-    (its kids catch carriers, never raise them), so copy error removes one; heads that raise each other (`Z@&c@|y!`,
-    `Y@&c@|z!`) are one error from a guarded nursery of their own kind, which wins. Theory first: what makes a class
-    unable to drop the other (each must gain from the other more than from raising itself); candidates: an obligate
-    class whose host gains from it (in the two-lock mix Y needs Z, Z does not need Y), a lock whose kid raises carriers
-    (a carrier with a root, the catcher's shape), space. **Run 1602's candidate** (IDEAS "The catcher"): a nursery cell
-    (root X, own site x!, copied only there) and its filler (another root, a plain copied side, made only by being caught
-    on a nursery front) need each other: the nursery cannot make its filler by one error (a filler of its own root is
-    raised on its sites and deadlocks; one with a plain side, the matching front and another root is three errors away),
-    and the filler is caught only on nursery fronts. Under copy error (E6, 8 worlds to 240k) the pair of shapes held
-    in 7 of 8, but the lock moved between the two lineages and both turned their root letters. **Run 1902** (first
-    step): the lock goes where a public cell's site takes a root error, mostly the nursery's own cheats, sometimes
-    catchers of them on the other shape; the nursery's cheat (a head of its root that does not raise itself) holds
-    70-80% beside it; two nursery systems exclude each other (an Allee effect), so two classes in each shape at once do
-    not hold as two systems. Next: a nursery that keeps its kin's births from its cheats (NEXT's next step).
+Open (set by review-intent run 2151; since then 32, 36, 37 and 34 done, 38 set by run 1227, its first step done in
+run 1902):
+38. [90 build] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier",
+    "The catcher", "The lock is reborn from its cheats"). Each class must gain from the other more than from raising
+    itself. Run 1602's candidate: a nursery cell (root X, own site x!, copied only there) and its filler (another root,
+    a plain copied side, made only by being caught on a nursery front) need each other; under copy error the two
+    shapes held in 7 of 8 worlds, but the lock moved between them. Run 1902 (first step): the nursery's cheat holds
+    70-80% beside it, two nursery systems exclude each other, and every lock is transient. Next: a nursery that keeps
+    its kin's births from its cheats (the next step above).
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -106,8 +70,7 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged by runs 2151, 2221, 0727, 0902, 1227, 1602 and 1902): 89
-cleanup, 90 build, 91 explore.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 2151): 90 build, 91 explore, 92 build.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
@@ -131,8 +94,9 @@ cleanup, 90 build, 91 explore.
 ```
 node tri/test.js                                   # fast checks (~5 s)
 node tri/check.js [id ...] > runs/check.txt         # capability checks: one PASS/FAIL line each, printed as each finishes
-                                                   # (4 processes; 71-160 minutes by container: as two background jobs,
-                                                   # --part 1/2 then --part 2/2, from a worktree if you edit code meanwhile);
+                                                   # (4 processes; about 1.5 hours per part: as two background jobs,
+                                                   # --part 2/2 started from --part 1/2's notification, from a worktree
+                                                   # if you edit code meanwhile);
                                                    # CHECK_SAVE=dir keeps each world's output; each line ends [same] etc.
                                                    # against main's digests (tri/digests.txt)
 node tri/check.js --write [id ...]                  # ... and rewrite the digests of the worlds run (a PR that changes outputs)

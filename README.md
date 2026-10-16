@@ -21,7 +21,7 @@ node tri/test.js                                   # fast checks (seconds)
 PAW=1 node tri/demos.js pair 1 120000 runs/x       # the standard pair world (about 8 minutes): kinds arise by mutation
 PAW=1 PAF= PA2='Z@&c@|z C@-z!' node tri/demos.js pair 1 240000 runs/x   # the head-nursery founder without stocks
 node tri/check.js --cmd                            # every capability's world as one command
-node tri/check.js --part 1/2; node tri/check.js --part 2/2   # one PASS/FAIL line per working capability (about an hour each),
+node tri/check.js --part 1/2; node tri/check.js --part 2/2   # one PASS/FAIL line per working capability (1-1.5 hours each),
                                                    # each world's output compared with main's digest (tri/digests.txt)
 ```
 Pictures appear in `runs/` (needs Chromium; see tri/render.js). Plain Node.js, no dependencies.

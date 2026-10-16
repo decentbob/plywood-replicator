@@ -12,6 +12,17 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-2102, cleanup)
+
+- **Shorter handoff and roadmap** — works (no capability, rule or output change). docs/NEXT.md 189 to about 150 lines:
+  the line's state is one paragraph pointing at IDEAS, priority 38 one entry, history pointers one list of branches.
+  ROADMAP: the nine retired genome-copying rows are one row (their last text at `9b590df`), the check count (79) and
+  suite time (87 minutes per part in run 0902's container) corrected, the retired zip-copying known issue removed.
+  The `lysis` demo's debug print `LYDBG` (no doc or check used it) is removed (check `lysis` unchanged against its
+  digest). Looked at and kept: every picture in docs/pictures is linked; every demo and every `PA*` option is used by
+  a check; the `budpool`/`lysis` options are the frozen kit's, cited in INNOVATIONS. The autorun plywood preamble now
+  says to start `--part 2/2` from part 1's notification (run 0902's chained wait hit the 2-hour limit).
+
 ## 2026-10-16 (autorun run 20261016-1902, build)
 
 - **Which lineage carries the lock: the nursery's cheat holds a mix, a rare nursery system is lost (an Allee effect), and
