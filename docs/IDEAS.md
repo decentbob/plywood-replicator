@@ -28,6 +28,48 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## One encounter against two: the nursery's number is set by how long free cheats live (build run 20261016-2151, 2026-10-16)
+
+NEXT priority 38 (a nursery that keeps its kin's births from its cheats): measured first, then theory, then a design and
+the law's tests (INNOVATIONS run 2151). Notes, not the user's words.
+- **The race is not won by place.** `tri/raceprobe.js` follows every guarded site after a kid leaves (the cheat-mix world,
+  seeds 1-2 to 60k): the nursery takes 33-37% of the races, the site stays empty 110-130 steps whoever takes it, and
+  copies of the cheat kid that just left take only 4-8% of the cheat's wins (other cheats raised on the same site 2-4%).
+  The cheat wins with copies of cheat bodies elsewhere (35-44 copies per cheat per 10k steps, about 80% of them decay
+  unbound). Run 1902's guess (the leaving cheat's
+  copies wait beside the site) was wrong.
+- **A site cannot tell kin from cheat.** Recognition is one glue pair and a rule reads only the bonded side, so any head
+  of the nursery's root binds its site; a cheat is one error from the nursery and has its root and front. Whatever a
+  design does at the site, the cheat does too. What differs is how the two are born: **the nursery's kid needs one
+  encounter** (a blank at the empty site: the copy binds where it is made), **the cheat's needs two** (a blank at the
+  cheat's plain side, then the free copy at an empty site before it decays).
+- **Hence the law (T1).** With free cheats m b a tau / A dense (m cheats, b blanks, a the access of the shared own side,
+  tau a free part's life, A the area) and blanks reaching the site at b a, the nursery wins a race with p = 1/(1 + k m a
+  tau / A); births in proportion to numbers (equal death rates) give m/n = (1-p)/p, so **n* = A / (k a tau)**: the
+  nursery's number does not depend on the cheats' number or on the blank supply (b cancels: blanks make cheat copies and
+  nursery kids alike), only on how fast the second encounter happens. Measured: decay every 50 steps instead of 100
+  doubled the guarded nursery (175-272 heads against 85-118), every 200 halved it (33-72), 4 of 4 each, while the
+  cheat's count stayed 208-330; twice the area at the same density doubled it (178-248); a smaller capture radius (0.45,
+  a lower a) raised it 1.5-2.2 times (3 of 4 in the predicted 1.3-1.8). One prediction failed: twice the material in the
+  same area raised the nursery 1.6-1.9 times (160-195), where T1 said unchanged. The free blank pool was the same (a mean
+  of 56), so it is not b; a crowded world (1500 bonded triangles in 2500) shortens the free cheats' reach or life in a
+  way T1 leaves out. So T1 holds for the free part's life, the area and the access, not yet for crowding.
+- **What a nursery can do with it.** It cannot shorten the cheats' free life, but it can make encounters slower: a
+  recess around its own side lowers a for the cheat's copying and for its copies' arrival (two factors) and for the
+  nursery's blank (one): n* rises as 1/a. A recess needs cells beside the site place (a triangle beside two others' edges
+  is three cells from the head through the filler: four cells at least); designed, not demonstrated. The same argument
+  says any world where free parts are short-lived or move little favours in-place heredity over public copies.
+- **The kid that raises before it leaves (a design that failed, and why).** Drop the filler: `Y@&y@!y@!`, a root and two
+  guarded sites of its root's complement, both attach sides, so a kid hears its own empty sites and lets go only once
+  both hold kids. A head that raises nobody lets go a pass after binding, alone and never a template: the old cheat
+  cannot hold a site. Alone it lives (4 of 4, about 990 of 1000 triangles bonded: one type, no filler). But the cheat one
+  error away raises one kid in place and sprays copies from a plain side (`-Y@&y@!`): it took 64-70% of cells (4 of 4).
+  Its copies are binding-limited (every waiting cell has an open site), so tau does not matter (the same 1:2 mix at decay
+  every 200 steps; with twice the blanks both doubled). And under copy error it died 4 of 4 by 20k: **a wait for
+  something no one can give is a sink**: a site of a letter no root carries is an open front nothing fills, so its cell
+  never lets go and holds its parent's site for good. A design that makes completion depend on the kid's own sites gives
+  every site mutation that power; a filler that many bodies make is a safer thing to wait for.
+
 ## The lock is reborn from its cheats: a public cell's site turns private by a root error, on the shape that carries it (build run 20261016-1902, 2026-10-16)
 
 NEXT priority 38 (which lineage carries the lock), theory first, then entry tests without copy error and the two-lineage

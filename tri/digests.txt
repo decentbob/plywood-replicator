@@ -139,6 +139,10 @@ nursery-cheat_1 cda0e262eda6f4f5 77824a1569463959
 nursery-cheat_2 4a604f366d789bad 8b384c48a943355c
 nursery-cheat_3 4b6653178b791a8e 0e7043519be6c7ba
 nursery-cheat_4 2e9111d519c37ac8 1a4aac347713cb29
+nursery-decay_1 129ff45f68bb34e6 0aad6a9ce8917d92
+nursery-decay_2 8fe4ddb322dc1202 7605e1f9b3ac0aa3
+nursery-decay_3 0478b0a0cd11701d ee3863e9880763d9
+nursery-decay_4 f8e303ad40517ada 8020ab298926011b
 nursery-guard-c_1 33c1b240ff1e96fb 39db076bc634183b
 nursery-guard-c_2 5c8d0ce941b8ce9b 1c1adfb3f94eac78
 nursery-guard-c_3 4328514c5202cd7c 131f15c40603bc95
@@ -235,6 +239,10 @@ seed-open_1 8316e8000377efab ab8d8d0da2136206
 seed-open_2 36e4676cba204dcf bc80bc499f058de3
 seed-open_3 5c6e55a302eebe6e eee75a648a58f7a8
 seed-open_4 aed0a17522a3ac63 0f217702a0b08c71
+self-nursery_1 01260692ed75fdeb fa41826f2706c4ca
+self-nursery_2 e4146ef6ad48f509 4a6c90c175ba22f9
+self-nursery_3 7ab5631ec39f7e8d 8311da3311848d78
+self-nursery_4 60bbc961073f2e90 fbf7d7cfc97ccdb0
 strips_1 5dd2b53ff649342a e9f4045c33a14624
 strips_2 ddb03823cefc05ef 4003e79f5cf21215
 strips_3 ddc0f58992657a2d 9f277d1101795bd8
