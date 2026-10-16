@@ -9,6 +9,55 @@ direction check: IDEAS "Eight slices on the lock" (run 2151); run 2221's slice r
 progress) at its WIP commits on `core-review-2221`; run 0727's (priority 36, with its predictions) on `build-0727`
 and run 1227's (priority 37: theory, runs, predictions P1-P6, progress) on `build-1227` (`git log -p docs/NEXT.md`).
 
+## Slice in progress (autorun run 20261016-1602, explore): priority 34, the catcher, shape first
+
+**Goal.** Derive why a lock goes where it does once a catcher takes the second cell's place, predict which cell keeps it,
+and test by entry: catchers in a public world, with and without hosts that carry `z!` on their own side; then the
+line's world with catchers entered (which cell takes the lock). No core change planned (stop rule of run 2151: shape
+first). **Done when** the theory is written (IDEAS), the entry tests are read against the predictions (4 worlds each),
+and the records say what holds. **Stop** if the entry tests contradict the theory twice: record what was learned.
+
+**Theory (before the runs).**
+- Roles. The head `H = Z@&c@|-` has a root, a front and a plain copied side. The second cell `S = C@-z|!` has an attach
+  side, a plain copied side and the site; it has no root, so no site ever raises its kind: S is made only by filling a
+  front. The catcher `K = Z@&C@|-` is H with its front letter turned (one glue error). As a free part it has two attach
+  sides: its `C@|` fills a host's front (it takes S's place) and its root can be raised on a site like H (its front then
+  catches a free head by its front). Either way the body is H + K bonded front to front: two cells with a root each, two
+  plain copied sides, no site. **H and K are the same cell up to the front letter: a body H + K is symmetric.**
+- Who a lock pays. A site raises root-bearers; the raised kid's front is then filled by whatever filler is free near it.
+  A lock on S raises H, and S's kind gains only through the fronts those H offer, which any filler (S, a sealed S, K) can
+  take: **a lock on a cell without a root is a public good** (IDEAS run 1227). K is the cheapest filler (no site, no
+  waiting kid: the whole-body hazard takes a waiting kid with its parent, so it carries fewer hits) and as a root-bearer
+  it can also take sites. A lock on a root-bearer's own copied side raises the bearer's own copies, made at that side
+  (heredity in place, run 0121): **the only lock that pays its bearer is on a cell with a root, raising its own kind.**
+  Under `lysJoint` such a lock is guarded (a plug is lysed, its bearer pays: run 0727), and the bearer is the one that
+  gains, so it is not a public good.
+- Which cell keeps it. Once catchers take the fillers' role, the cells with a root are H and K, and each is two errors
+  from a guarded nursery of its own kind on its plain side (`-` to `z` then `z!`, or `-!` then `z!`; the plain nursery
+  `z` is a selected step, run 0551). The rates are the same per copy, so **which of the two keeps the lock is decided by
+  which error comes first, about even odds when both are common**; the other becomes its filler (H's front `c@|` takes K or
+  S; K's front `C@|` takes H). Run 0727 saw one of each: seed 1 on the host (`Z@&c@y!`, then root Y), seed 5 on the
+  catcher (`C@f!F@&`, roles swapped). A world where neither comes before the locks on S are gone dies (seed 7).
+- A body of two self-raising cells. H with `z!` and K with `z!` bonded front to front (`Z@&c@|z! C@|z!Z@&`) needs no S:
+  each cell raises its own kind on its own side and each is the other's filler. It is what the two lived worlds of run
+  0727 were one error from.
+
+**Predictions** (entry tests, `PAW=2`, no copy error `pErr` 1e-9, 4 worlds each to 120k; batch `runs/p34a.json`):
+- P1 (E1: 10 bodies H + K entered at 20k into the public world `Z@&c@|- C@-z|!`): K takes most second cells in 3 of 4 by
+  120k and heads fall below half the control's (E1c, no K) in 3 of 4; dead in 2 of 4 or more.
+- P2 (E2: the same with hosts carrying `z!`, `Z@&c@|z! C@-z|!`, H's copies `Z@&c@|z!` with K): alive 4 of 4, heads at
+  least 80% of the control's (E2c); K above S among fillers in 3 of 4.
+- P3 (E3: 10 bodies H + K with `z!` on K, `C@|z!Z@&`, entered into the public world): the catcher with its own lock
+  takes most second cells in 3 of 4 and the world lives 4 of 4 (the role swap of seed 5, by entry).
+- P4 (E4: the symmetric body `Z@&c@|z! C@|z!Z@&` as founder, no S): alive 4 of 4, heads within a factor 2 of E2c's.
+- P5 (E5: the line's world, `pErr` 0.01, 10 bodies H + K at 20k, 8 worlds to 240k; batch `runs/p34b.json`): catchers on
+  most second cells in 6 of 8 or more; every world alive at 240k has a guarded self-raising lock (a root-bearer whose own
+  side is its root's complement with `!`) on most heads or on most second cells with a root; both H and K take it in at
+  least one world each; worlds without it die.
+
+**Progress.** Regenerating run 0727's seeds 1, 5, 7, 2 to 160k (`runs/r0.json`: `{"demo":"pair","steps":160000,"env":
+{"PAW":"2","TRI_NOPIC":"1"},"jobs":[{"id":"s","seeds":[1,5,7,2]}]}`) to read the order of errors.
+
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): a
 kind where every cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use
