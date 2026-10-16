@@ -332,7 +332,7 @@ const CHECKS=[
   // heads at 240k). Read from 'types:' lines: heads (an attach side with '&') by root letter, second cells (an attach
   // side of letter C) by the letter of the side after it. Since harden run 20261016-0902 it reads seal-evolve's worlds (the same setting,
   // seeds 5-8) to 240k instead of its own seeds 1-4 (share; 4 worlds less per suite): 3 of 4 there (seed 7 sealed its site
-  // at 50k, so its letter never turned), 4 of 4 on seeds 1-4
+  // at 50k, so its letter never turned), as on seeds 1-4 (3 of 4 in the same suite: seed 1 turned no letter)
   ...(()=>{const {TOK}=require('./sim'),sd=x=>[...x.matchAll(TOK)].map(m=>m[0]),
     census=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],Z:0,I:0,H:0,S:0,se:0,L:{}};for(const x of m[2].split(', ')){const i=x.indexOf(' '),n=+x.slice(0,i),s=sd(x.slice(i+1));if(s.length!==3)continue;
       const h=s.find(y=>y.includes('@')&&y.includes('&'));if(h){r.H+=n;if(h[0]==='Z')r.Z+=n;if(h[0]==='I')r.I+=n;continue;}const c=s.findIndex(y=>y[0]==='C'&&y.includes('@'));if(c>=0){const L=s[(c+1)%3][0];r.L[L]=(r.L[L]||0)+n;r.S+=n;if(s[(c+1)%3].includes('.'))r.se+=n;}}return r;});return [

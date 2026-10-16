@@ -25,7 +25,8 @@ not statistics.
   with main directly: core-review runs spent 4 and 6.6 hours, mostly on a second suite.
   - **Across containers:** demo outputs contain no times (the only clocks are in check.js and batch.js); the baseline's
     `nursery-guard` heads at 60k (515, 516, 514, 504) are run 0727's entry-test numbers (504-516, another container),
-    and run 0727's seeds 1-4 repeated run 1951's E4j outcomes and death times. Every suite from now on is the test: a
+    and the baseline's `line` turns (6, 7, 2, 4 by 240k) its "2-7"; run 0727's seeds 1-4 repeated run 1951's E4j
+    outcomes and death times. Every suite from now on is the test: a
     `[changed]` world on a branch that changes no output is a container difference (rerun that world in a worktree of
     main to tell).
   - **Shared worlds:** a check may read another check's worlds (`share`: the same demo, env and seeds, no fewer steps)
@@ -33,7 +34,7 @@ not statistics.
     shorter one's (shown: seeds 5-6 at 25k against 30k worlds, identical evidence), progress and result lines are not.
     `race` and `seal-evolve` were the one pair with one setting (the others: `pair-mut` and `pair-flow-c`, but
     `pair-mut` reads a result line): `race` now reads `seal-evolve`'s seeds 5-8 to 240k (3 of 4: seed 7 sealed its site
-    at 50k, so its letter never turned; RACE14 on its own seeds 1-4), 4 worlds (about 36 CPU-minutes) less per suite.
+    at 50k, so its letter never turned; as on its own seeds 1-4 in the baseline: seed 1 turned no letter), 4 worlds (about 36 CPU-minutes) less per suite.
   - The baseline suite on `main` d23abd1: SUITE1; SUITE2.
 
 ## 2026-10-16 (autorun run 20261016-0727, build)
