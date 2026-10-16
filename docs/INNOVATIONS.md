@@ -12,6 +12,48 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-16 (autorun run 20261016-2151, build)
+
+- **One encounter against two: the cheat wins a nursery's site with free copies from afar, and the nursery's number is
+  set by how long those copies live; a one-type nursery whose kid lets go only after raising its own kids** (NEXT
+  priority 38; IDEAS "One encounter against two"). No rule, demo or structure change. All in the line's world (`PAW=2`)
+  without copy error (`pErr` 1e-9) unless said, 10 cheat bodies entered at 20k.
+  - **The site race** (`tri/raceprobe.js`, new, observation only; `nursery-mix` seeds 1-2 to 60k): after a kid leaves, the
+    guarded nursery `Y@&c@|y!` takes 33-37% of the races for its site, the site stays empty 110-130 steps whoever takes
+    it, and copies of the cheat kid that just left take 4-8% of the cheat's wins (other cheats raised on that site 2-4%);
+    cheats are copied 35-44 times per 10k steps, about 80% of the copies decay unbound. Run 1902's guess (the leaving cheat's copies wait beside the site) is
+    wrong: the cheat wins by flux.
+  - **The law (T1, theory first):** the nursery's kid needs one encounter (a blank at its empty site), the cheat's two (a
+    blank at the cheat's plain side, then the free copy at an empty site within its life tau), so n* = A / (k a tau),
+    whatever the cheats' number (a the own side's access, A the area). Measured on `nursery-mix` (4 seeds each, 60-80k):
+    free parts decaying every 50 steps (`PADI` 50) 175-272 guarded nursery heads, every 200 33-72, against 85-118 at
+    100; the cheat's count 208-330 throughout; twice the area at the same density (`PAS` 71, `PAB` 2000) 178-248; capture
+    radius 0.45 150-228 (predicted 110-190: 3 of 4). Failed: twice the material in the same area (`PAB` 2000) 160-195
+    where T1 said unchanged (the free blank pool the same, 56): crowding is missing from T1.
+  - **Under copy error** (the `two-lineages` world, PADI 50 against 100, 4 seeds each to 120k): a lock (a nursery on most
+    of a shape's cells) in 2, 3, 19, 3 of the 21 censuses from 20k, against 0, 3, 7, 0: more, but transient as before
+    (predicted 4 or more in 3 of 4: 1 of 4).
+  - **The kid raises before it leaves** (`runs/sc.json`): `Y@&y@!y@!` (a root and two guarded attach sites of its root's
+    complement, no filler) hears its own empty sites, so a kid lets go only once both hold kids, carrying them; a head
+    that raises nobody lets go at once, alone, and is never a template. Alone it lives (4 of 4 to 60k, 988-996 of about
+    1000 triangles bonded, one type). Its one-error cheat `-Y@&y@!` (one site, a plain side) took 64-70% of cells by 30k
+    and held (4 of 4 to 80k); the same 1:2 mix at PADI 200, and with twice the blanks both doubled (its free copies find
+    open sites everywhere: binding-limited, so tau does not matter); at PADI 50 the entered cheat was lost in 3 of 4.
+    Under copy error dead 4 of 4 by 20k: a site of a letter no root carries is an open front nothing fills, so its cell
+    never lets go and holds its parent's site for good (`Y@&y.@q@!` 125 of 209 bonded at 15k).
+  - Predictions (NEXT slice record): P1 alone alive (yes); P2 the one-site cheat below half (no: 64-70%); P3 alive under
+    copy error (no: 0 of 4); P4 the nursery doubles at PADI 50 and halves at 200 in both designs (yes for the old, no for
+    the new); P6 supply no change (no: 1.6-1.9x), area doubles (yes); P7 capture (yes, 3 of 4); P8 (1 of 4).
+  - Picture: [nursery-decay.png](pictures/nursery-decay.png) (head-shaped cells, red the guarded nursery, blue the cheat,
+    at PADI 50, 100, 200).
+  - Commands: `node tri/check.js --cmd nursery-decay self-nursery`; the probe `NODE_OPTIONS='-r ./tri/raceprobe.js'`
+    (`RP_T0`, `RP_EVERY`); the batches' JSON in NEXT's handoff.
+  - Checks: `nursery-decay` 4 of 4 (guarded nursery 150 or more of head-shaped cells at 60k with PADI 50), `self-nursery`
+    4 of 4 (one type, 900 or more bonded at 20k); digests written.
+  - Status: the race is flux, not place (**measured**, 2 worlds, no check); the nursery's number set by the free cheats'
+    life (**works**, `nursery-decay`), by area and access (**measured**), not yet by crowding; the self-completing one-type
+    nursery (**works** alone, `self-nursery`; its one-error cheat holds a 1:2 mix, dead under copy error).
+
 ## 2026-10-16 (autorun run 20261016-2102, cleanup)
 
 - **Shorter handoff and roadmap** — works (no capability, rule or output change). docs/NEXT.md 189 to about 150 lines:

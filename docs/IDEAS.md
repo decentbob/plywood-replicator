@@ -34,8 +34,9 @@ NEXT priority 38 (a nursery that keeps its kin's births from its cheats): measur
 the law's tests (INNOVATIONS run 2151). Notes, not the user's words.
 - **The race is not won by place.** `tri/raceprobe.js` follows every guarded site after a kid leaves (the cheat-mix world,
   seeds 1-2 to 60k): the nursery takes 33-37% of the races, the site stays empty 110-130 steps whoever takes it, and
-  copies of the cheat kid that just left take only 5-10% of the cheat's wins. The cheat wins with copies of cheat bodies
-  elsewhere (34-41 copies per cheat per 10k steps, about 90% of them decay unbound). Run 1902's guess (the leaving cheat's
+  copies of the cheat kid that just left take only 4-8% of the cheat's wins (other cheats raised on the same site 2-4%).
+  The cheat wins with copies of cheat bodies elsewhere (35-44 copies per cheat per 10k steps, about 80% of them decay
+  unbound). Run 1902's guess (the leaving cheat's
   copies wait beside the site) was wrong.
 - **A site cannot tell kin from cheat.** Recognition is one glue pair and a rule reads only the bonded side, so any head
   of the nursery's root binds its site; a cheat is one error from the nursery and has its root and front. Whatever a
@@ -47,8 +48,12 @@ the law's tests (INNOVATIONS run 2151). Notes, not the user's words.
   tau / A); births in proportion to numbers (equal death rates) give m/n = (1-p)/p, so **n* = A / (k a tau)**: the
   nursery's number does not depend on the cheats' number or on the blank supply (b cancels: blanks make cheat copies and
   nursery kids alike), only on how fast the second encounter happens. Measured: decay every 50 steps instead of 100
-  doubled the guarded nursery (175-272 heads against 85-118), every 200 halved it (33-72), 4 of 4 each; the cheat's count
-  stayed 208-330.
+  doubled the guarded nursery (175-272 heads against 85-118), every 200 halved it (33-72), 4 of 4 each, while the
+  cheat's count stayed 208-330; twice the area at the same density doubled it (178-248); a smaller capture radius (0.45,
+  a lower a) raised it 1.5-2.2 times (3 of 4 in the predicted 1.3-1.8). One prediction failed: twice the material in the
+  same area raised the nursery 1.6-1.9 times (160-195), where T1 said unchanged. The free blank pool was the same (a mean
+  of 56), so it is not b; a crowded world (1500 bonded triangles in 2500) shortens the free cheats' reach or life in a
+  way T1 leaves out. So T1 holds for the free part's life, the area and the access, not yet for crowding.
 - **What a nursery can do with it.** It cannot shorten the cheats' free life, but it can make encounters slower: a
   recess around its own side lowers a for the cheat's copying and for its copies' arrival (two factors) and for the
   nursery's blank (one): n* rises as 1/a. A recess needs cells beside the site place (a triangle beside two others' edges
