@@ -123,6 +123,14 @@ lysis_1 ee8a4c2d96e4bd39 792e5f8969e7191c
 lysis_2 ea894bd6a428706f 059046738c9197d4
 lysis_3 6077bb60eefc2601 62f67be1ac71773d
 lysis_4 c0be4d652c9440c3 457023d09de26a88
+mutualist-major_1 40563ea5c5784616 a767ab973510df22
+mutualist-major_2 7e38eec05470a145 d367cf1dc2a06c10
+mutualist-major_3 fccb31479104e584 83d4c98730ddc097
+mutualist-major_4 d2d5c58b4966c673 a6c2db8ced8cddd7
+mutualist-rare_1 dbd71b48d7163fb4 d6fdd656edce4f7d
+mutualist-rare_2 bf0dee559f193d97 7eb82d7d0a8a82ce
+mutualist-rare_3 5050e981c3f11456 f2fa67918deefe72
+mutualist-rare_4 51f3944ddab0e112 8cb02ed968388642
 nursery-c_1 8d9d03ddf39504ea 761c1ebdcdeb4fff
 nursery-c_2 a211e3775fb8ea38 fc8171f12aba331a
 nursery-c_3 7cc00223b83546b0 c35baaa876737221
@@ -139,6 +147,10 @@ nursery-guard_1 26850ccf85419f4f 44c988a9b1f4999c
 nursery-guard_2 2b8dda3f6a9933cb e68937f2aaa8569d
 nursery-guard_3 30727caf877a95f7 34b95d2a16afc786
 nursery-guard_4 0488645a319eebfe 97988cc3099132ea
+nursery-mix_1 c768fd54f6a0f8fd 76c4fe86688f9244
+nursery-mix_2 d0e18e1b1da57029 a6ccc2265bc6f338
+nursery-mix_3 6ae1d4952632c65c d0aa90fdfcd069f8
+nursery-mix_4 3f36e23a848dcd43 f7effde8e13f30b7
 nursery_1 36b925f7a61af5b4 32634762572ad850
 nursery_2 339c8fb96079f455 9b3f790501e9dd93
 nursery_3 75b433e3248b1c17 7e60f469fbbde93a
@@ -235,6 +247,10 @@ trap_1 2f4b67872b29ae22 0a04684e75157b4a
 trap_2 94b9a89a8680d90d 49a4bb1e88512f96
 trap_3 c30e24f17320123f b154e0d1d6a251b1
 trap_4 b313079e1f89df4e e307913beae9c92d
+two-lineages_1 7e4a4c1b8e8cd8e3 77f7a4ba7dbb8004
+two-lineages_2 3b912c8820e96176 607122d62f6b66d1
+two-lineages_3 7e0782414d537a4a 0caf168f62b06931
+two-lineages_4 61b0cb78d8603060 c8d6caf98162dda4
 two-locks-c_1 aab0b408c43887c2 6ed195aff0481575
 two-locks-c_2 a81a3649cef9ed77 15dfe2e61ac7bec0
 two-locks-c_3 c16efd38e63a69b0 f9bb8755b2cbcbf2

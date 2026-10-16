@@ -93,7 +93,7 @@ function shapeSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.
     for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const n=+c,s=sides(t);if(!s||s.length!==3)continue;
       const i=s.findIndex(x=>(x[0]==='c'||x[0]==='C')&&x.includes('@')&&!x.includes('&'));if(i<0)continue;const q=r[sh[s[i][0]]];q.n+=n;
       const h=s.findIndex(x=>x.includes('@')&&x.includes('&'));if(h<0){q.O+=n;continue;}const L=s[h][0],o=s[3-i-h];q.R[L]=(q.R[L]||0)+n;
-      const role=o[0]===cp(L)&&!o.includes('.')?(o.includes('!')?'G':'N'):o[0]==='-'?'P':'S';q[role]+=n;if(role==='G'||role==='N')q.L[L]=(q.L[L]||0)+n;}
+      const role=o[0]===cp(L)&&!o.includes('.')?(o.includes('!')?'G':'N'):o[0]==='-'?'P':'S';q[role]+=n;if(role==='G'||role==='N')q.L[L]=(q.L[L]||0)+n;if(role==='S'){q.Q=q.Q||{};q.Q[o[0]]=(q.Q[o[0]]||0)+n;}}
     r.lock=['H','K'].filter(x=>r[x].n&&r[x].G+r[x].N>r[x].n/2).join('+')||'-';R.push(r);}
   if(!R.length){console.log(f+': no types: lines');return;}
   console.log('# '+f);let j=0;const row=q=>`${q.n}: G ${q.G} N ${q.N} P ${q.P} S ${q.S}${q.O?' O '+q.O:''} (roots ${top(q.R,3)})`;
@@ -102,5 +102,10 @@ function shapeSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.
       mv.push(`${r.lock} ${k(r.t)}${o?' (before: '+cur+' public '+pc(o.S+o.P,o.n)+')':''}`);cur=r.lock;}prev=r;}
   const dead=R.find(r=>r.t>20000&&!r.H.n&&!r.K.n),live=R.filter(r=>r.H.n||r.K.n),both=live.filter(r=>r.H.n>0.1*(r.H.n+r.K.n)&&r.K.n>0.1*(r.H.n+r.K.n));
   const M=q=>Object.keys(q.R).sort((a,b)=>q.R[b]-q.R[a])[0],same=live.filter(r=>r.H.n&&r.K.n&&M(r.H)===M(r.K)),n=x=>live.filter(r=>r.lock===x).length;
+  // sweeps: a nursery letter new on a shape (nurseries of it on 30% or more of the shape's cells, not so in the census
+  // before), and in the census before, the public cells (S) whose site raises that letter, on the same shape and the other
+  const sw=[];for(let i=1;i<R.length;i++)for(const x of ['H','K']){const q=R[i][x],p=R[i-1][x],y=x==='H'?'K':'H';for(const L of Object.keys(q.L))if(q.L[L]>=0.3*q.n&&!((p.L[L]||0)>=0.3*p.n)){
+      const z=cp(L),a=(p.Q||{})[z]||0,b=(R[i-1][y].Q||{})[z]||0;sw.push(`${L} on ${x} ${k(R[i].t)} (sites ${z} before: ${a} on ${x}, ${b} on ${y})`);}}
   console.log(`  lock: ${mv.join(', ')}${dead?'; dead from '+k(dead.t):''}; both shapes (10% or more each) in ${both.length} of ${live.length} censuses
-  lock on H in ${n('H')}, on K in ${n('K')}, on neither in ${n('-')}; the two shapes' commonest roots the same letter (a mimic) in ${same.length}${same.length?' (from '+k(same[0].t)+')':''}`);}
+  lock on H in ${n('H')}, on K in ${n('K')}, on neither in ${n('-')}; the two shapes' commonest roots the same letter (catchers of the other shape) in ${same.length}${same.length?' (from '+k(same[0].t)+')':''}
+  new nursery letters: ${sw.join(', ')||'-'}`);}

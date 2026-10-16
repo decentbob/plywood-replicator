@@ -138,7 +138,13 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    a cell that raises itself needs a filler copied on a plain side; a self-raising lock is private only in a letter its
    filler does not carry as a root (in the catchers' root letter the nursery raises them and dies); a private lock loses
    in the public world and takes over once catchers hold it, on the host or on the catcher alike (1602; `catcher-mix`,
-   `catcher-letter`, `catcher-letter-z`; IDEAS "The catcher"). Open: NEXT's priorities.
+   `catcher-letter`, `catcher-letter-z`; IDEAS "The catcher"). 38 (first step) which lineage carries the lock: plain
+   heads of the nursery's root are its cheats (raised on its sites by a joint, copied free) and hold 70-80% beside it; a
+   nursery system whose filler only its own kind makes has an Allee effect (two such systems exclude each other, the
+   common one wins, either shape); under copy error the two-lineage body keeps both shapes while every lock is
+   transient: a new nursery comes from a root error in a public cell's copy, on the shape that carries the site (1902;
+   `nursery-mix`, `mutualist-rare`, `mutualist-major`, `two-lineages`; IDEAS "The lock is reborn from its cheats").
+   Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
    fed through a pore, closure designed (`budKit`), the part pool law, the bud from a part pool (`budpool`), held
