@@ -89,6 +89,10 @@ Stop: no rule change unless the runs show a sink the core cannot leave.
   - Read (k4): P10 **no**: the guarded form won 8 of 8 (ahead at 5k in 7 of 8). Checks `root-guard` (even start) and
     `root-guard-rare` (k3's entry) 4 of 4 each. Threshold (`runs/k5.json`: guarded 5 of 20 and 2 of 20 bodies at the
     start, 4 seeds each). P11: at 25% the guarded form wins 3 of 4 or more; at 10% it wins at most 2 of 4.
+  - Read (k5): at 25% the guarded form won 3 of 4 (the fourth mixed, 29% at 60k), at 10% also 3 of 4 (P11 first part
+    yes, second **no**). So k3's loss may be the held world's barrier (the neutral control was lost there too), not a
+    threshold of the guard. `runs/k6.json`: the guard at 1 of 50 bodies from a shared start; control, the anchored root
+    at 2 of 20. P12: the guarded form wins 1 or more of 4 at 2%; the anchored root wins at most 1 of 4 at 10%.
 
 ## Priorities
 
