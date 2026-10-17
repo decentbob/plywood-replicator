@@ -66,7 +66,18 @@ commonest bonded types, the rest and free blanks in ten bins of x. Without `PADZ
   (3 of 4 each).
   P7 under copy error (`pErr` 0.01, 240k), the split even start of P5: both halves held to 240k (2 of 4), and the plain
   half holds more bonded cells of other types than the guarded half.
-- Batches: `runs/z1.json` (P1, P2), `runs/z2.json` (P3, P5), then P4, P6, P7.
+- Read so far (`runs/z1`, `runs/z2`): P1 3 of 4 settings (with `C@s!T` at 100 steps the platform wins the even start,
+  4 of 4); P2 first part **no** (kin entered into `C@s!T` at 25 is lost, 4 of 4), second yes (4 of 4); P3 **no**: with
+  `C@s!T` kin is lost in both halves, with `C@s!T|` it takes the fast half and then the slow one (4 of 4 each); P5
+  **no**: no difference between halves (`C@s!T|`: plain everywhere 4 of 4; `C@s!T`: guard 10-58% in both halves).
+  Revised theory: every setting but (`C@s!T|`, 25) is bistable (a held world keeps the other out), and from an even
+  start one side is stronger; between two bistable states the stronger one's front advances. So a front stops only
+  where the stronger side changes. Before `runs/z3`: **P8** split, `C@s!T`, even start (kin stronger at 25, the
+  platform at 100): kin over 80% of kin and platform cells in bins 0-4 and under 20% in bins 5-9 at 60k, 3 of 4 (side
+  by side, pinned at the edge). **P9** in time (5000 steps each, `C@s!T`, even start, both orders): one line holds the
+  world by 60k in 3 of 4 each, the platform (it took the even start at 100 from 22% of cells; kin takes only free
+  material).
+- Batches: `runs/z1.json` (P1, P2), `runs/z2.json` (P3, P5), `runs/z3.json` (P4, P6, P8, P9), then P7.
 
 **Handoff status (autorun run 20261017-2158, build): priority 44 done (progressed).** The root guard counted
 (`tri/lysprobe.js`, new: 'lys:', 'raise:', 'bounce:' lines) and put on the platform head, even and entered in four
