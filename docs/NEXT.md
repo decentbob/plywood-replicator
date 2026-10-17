@@ -28,7 +28,7 @@ kin), and the lock's letters froze.
 
 **Handoff status (autorun run 20261016-2258, explore): done; one core change as an option (`lysJoint: 2`, default 0:
 no output changes)** (INNOVATIONS 2026-10-16, explore; IDEAS "The nursery's share is the environment's"; RULES Core
-changes, candidate (x); the slice record with predictions P1-P7 is this file on branch `explore-2258` at its merge).
+changes, candidate (x); the slice record with predictions P1-P7 is this file at `f5f5229`, on branch `explore-2258`).
 - T1 restated and measured (`tri/raceprobe.js` 'fate:' lines, batch `fz`): c = 0.55-0.66 in 10 of 10 worlds (P1 with c 1
   failed), pi/rB 1.28-1.60, rho 4.4e-3 base, 2.1e-3 PADI 50, 8.0e-3 PADI 200, 2.2e-3 twice the area, 2.4e-3 twice the
   material (P2-P4 yes): crowding is the reach term.
