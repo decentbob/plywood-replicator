@@ -41,6 +41,38 @@ running.
 **Next step (rotation 103, explore): priority 43** (kin in place of the partner). Then 104 build, 105 explore, 106
 review-intent.
 
+## Current slice (autorun run 20261017-2102, explore): priority 43, kin in place of the partner
+
+Goal: say what the one-type head `Y@&y@!y!` (run 1602's `pe1`) is: what its kid waits for, which bodies leave and how
+big they are, whether it is a sink; then alone (4 seeds, 60k, no copy error), entered into the platform's world and the
+platform into its world, with partners scarce (`C@s!T|`, `PADI` 25) and common (`C@s!T`, default decay), and alone
+under copy error. Done when the worlds are read against the predictions below; one check if a number holds in 3 of 4.
+Stop: no rule change unless the runs show a sink the core cannot leave.
+- **Running**: `runs/k2.json` (alone `a`, kin entered `ks`/`kc`, platform entered `ps`/`pc`; seeds 1-4, 60k, bodyprobe
+  `BP_RIGID` and waitprobe preloaded; waitprobe now takes the attach side as the front when both free sides are lysis
+  sides). Rerun: `node tri/batch.js runs/k2.json` with the file as in this commit's message.
+- **Theory.** The head's root is its only `&` side, and every bond in a one-type world holds a root, so every bond is a
+  joint and each cell hears only its own front: a cell is held by its parent exactly until its front is bound (the kid
+  waits for its front only). Both free sides raise kin, and by the same rule: the site `y!` takes a kin root, the front
+  `y@!` takes a kin root, and each such kin leaves once its own front is bound. So the head has two sites and no
+  partner, and a kin cell costs one triangle where a platform head costs two. A cell leaves carrying its front kin and
+  any site kid (each waiting); waiting cells raise at their sites (fans about a vertex, at most six), so bodies are one
+  elder (spent root) with waiting cells, 2 to about 6 cells. The elder is lost (a free cell nothing binds) once both its
+  sides are empty at once, so each generation sheds a cell: the line persists, not the body. Not a sink: no cell keeps a
+  joint once its front is bound, and every front faces out. The front is filled mostly by a copy made at the front
+  (a copy blank takes the cell's type there), so its wait is local, like the site's, while the platform's partner wait
+  depends on travel. A kin site raises a platform head too (both carry `y!`: spared), and a platform site raises kin;
+  a kin front lyses a platform head (no `y@!` on it).
+- **Predictions (before any output of the batch):**
+  - P1 alone: alive 4 of 4 at 60k with 800 or more kin cells (the platform alone: about 520 heads).
+  - P2 alone: 90% or more of kin cells in rigid bodies of two or more roots; no body above 8 roots at any census from
+    10k; the mean front wait within a factor 1.5 of the mean site wait.
+  - P3 kin entered (10 bodies at 10k) where partners are scarce: more kin cells than platform heads at 60k, 4 of 4.
+  - P4 kin entered where partners are common (the platform's best case, wait ratio 0.4): the same, 3 of 4 or more.
+  - P5 the platform entered into the kin world: no platform head at 60k, 4 of 4 in both settings.
+  - P6 (copy error, `pErr` 0.01, 240k, from the kin founder; batch after this one): `Y@&y@!y!` stays the commonest head
+    type in 3 of 4; no partner-type cell (a head front that is not `y`) reaches 10% of cells.
+
 ## Priorities
 
 Done 1-24, 28-30, 32-34, 36-42: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
