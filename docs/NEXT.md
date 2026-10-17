@@ -41,6 +41,42 @@ The `secs` estimates are 0.8x the measured times throughout, so the parts stay b
 **Next step (rotation 98, build): priority 39, second slice** (below): the immune partner and a ring that pays its head,
 on `rosette`'s world (`node tri/check.js --cmd rosette`).
 
+## Slice in progress (autorun run 20261017-1302, build): priority 39, second slice
+
+Goal: settle (a) the immune partner and (b) a ring that pays its head on `rosette`'s world, by theory first, then entry
+tests (4 seeds, 60k, `runs/f1.json`). Done when one holds in 3 of 4 as a check, or the argument settles it. Stop after
+the entry tests and one copy-error batch for whichever holds.
+
+**Theory (before any run).**
+- *Lysis is death in this world.* With deaths returning blanks (`PAHB=2`, set by `PAW=2`) every lysed triangle becomes
+  a copy blank once free, not only the hazard's: contact lysis kills. A chain cell `t@` that binds the immune partner's
+  `T!` is lysed (no joint: `lysJoint` does not apply), its lysis comes back across that bond into the partner and on into
+  the head (not into a kid on the head's site: a joint). So `C@s!T!` is not immune but a trap: the chain cell and the
+  whole body die together (IDEAS run 2221, "A trap or a lock": the same mark again, one cell over).
+- *So it is not an escape like A.* A chained `T` partner lives on in a ring (hit by the hazard as any individual) and is
+  copied at one side; an `A` partner is never touched and copied at two; a `T!` partner is copied at two until the first
+  chain cell finds it, then dies. Killing the chain cell is a public good (it spares the `T` partners as much as itself).
+- *Without selection it sits at a third.* Under copy error a side drawn at random toggles one of six marks half the
+  time: the partner loses one of its two `!` at 2 x 1/3 x 1/2 x 1/6 = 1/18 per copy error and gains the one it lacks at
+  1/36, so the immune share drifts to 1/3 by mutation alone (run 0726's control without chains: 33%).
+- *The paying ring.* `t@y!T` has `t@s!T`'s front and plain side, so it chains and closes the same way; the four chain
+  cells' outward sides are then `y!` sites: four nursery sites per ring for any head `Y@&c@y!` (the kin guard spares a
+  root that carries `y!`), and the kid leaves with its partner as on a head. But head copies come only from heads' own
+  empty sites (a blank on a chain cell's `y!` copies the chain cell), and the ring's own head is still covered. An
+  occupied `y!` is not copied, so a `y` chain cell is copied less than an `s` one, while the heads it raises make fronts
+  and partners for every chain: the benefit is public, the cost private.
+
+**Predictions.**
+- Pa1: `C@s!T!` entered as 10 bodies at 10k beside the chain does not take the partners (below half at 60k in 3 of 4,
+  where `A` took 95-100%); the chain is still there at 60k. Pa0 (control, no chain): it stays rare (the 1/3 balance needs
+  copy error).
+- Pb1: `t@y!T` alone (20 at 10k) closes rings of six that hold, and its world has more heads at 60k than `rosette`'s
+  (208-281) in 4 of 4: the ring raises kids. Fewer heads than the world without a chain (about 530): its head is still
+  sterile and head copies come only from fertile heads.
+- Pb2: both entered (10 each at 10k): `t@s!T` ends with more chain cells than `t@y!T` in 3 of 4 (the cheat wins by flux).
+- If Pb1 holds and Pb2 too, the paying ring is a mutualism that its own site error undoes; no copy-error batch for it
+  beyond one 4-world check of that.
+
 ## Priorities
 
 Done 1-24, 28-30, 32-34, 36-38: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
