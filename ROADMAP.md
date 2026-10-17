@@ -1,4 +1,4 @@
-# Roadmap — typed-triangle world (2026-10-16)
+# Roadmap — typed-triangle world (2026-10-17)
 
 ## BIG goal (user, 2026-10-05)
 
@@ -155,6 +155,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    without a filler (slower: half their cells are waiting kids); the guard traps its root's public cells, but a public
    partner of a foreign root takes the partner role at any frequency, and under copy error a root error makes one (run 0252;
    `mutual-pair`, `mutual-pair-a`, `mutual-filler`, `mutual-trap`, `mutual-pair-evolve`; IDEAS "Each completes the other").
+   38 (partner choice, explore) checking and keeping exclude each other: a bond that outlasts completion reads one
+   letter, and the kin check bites only across a joint to a waiting cell, so no body checks the partner it keeps; the
+   one checked partner is raised on the host's front and leaves (D1: dies, every bond a joint); candidate (y), the kin
+   check on every bond, makes a kept partner that catches its own kind (not proposed) (run 0416; no checks; IDEAS
+   "Checking and keeping exclude each other").
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell

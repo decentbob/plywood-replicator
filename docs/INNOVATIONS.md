@@ -12,6 +12,37 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-0416, explore)
+
+- **Checking and keeping exclude each other: no body in the core checks the partner it keeps; the one checked partner
+  is raised and leaves, and it does not live** (NEXT step 93, partner choice on paper first; IDEAS "Checking and keeping
+  exclude each other"; RULES candidate (y), not proposed). No rule, demo or structure change. Worlds: `PAW=2`,
+  `lysJoint` 2, `pErr` 1e-9, 4 seeds unless said.
+  - **Theory.** A bond that is not a joint reads one glue pair (binding, closure) or lyses whatever it holds (contact
+    lysis, every mode); (x)'s kin check reads a second feature but only across a joint, and only on a cell that hears an
+    open front for two passes, because the joint is cut at the release after completion, before a lysis can cut. So a
+    checked partner is a raised one (D1: the host's front `c@!` identical to the partner's site) and a kept one is
+    public.
+  - **D1** (host `Y@&c@!y!`, partner `C@&c@!-|` or `C@&c@!-`): grew until the hazard starts (4000), then died by 5-10k (0
+    of 8 at 40k); with the per-individual hazard (`PAHU` 2) 3 of 4 died and one ended as about 970 waiting heads with 11
+    partners; with no hazard (`PAHT` 1e9, 12 worlds with and without entries) 8 died and 4 ended with all 1002 triangles
+    bonded and frozen (no copies after 10-25k). Every bond in D1 is a joint, so a host whose kid and partner have left
+    is free with its root spent: nothing keeps it. Partners short: waiting kin kids close rings of six around a vertex,
+    all fronts open (a sink). The entry tests of public partners (`C@&-|-`, `C@&z@|-`, 10 bodies at 10k) showed nothing
+    (the worlds died or froze with or without them; wherever they entered, the entered partners were gone by 15k).
+  - **Candidate (y) as a throwaway** (`lysJoint` 3, kin check on every bond; not committed): host `Y@&c@!y!`, kept partner
+    `C@c@!-|` or `C@-|c@!` (it carries the host's side to pass, so it catches its own copies): the partners fan around a
+    vertex of the host's front until the last front is blocked; every cell hears it and the body freezes at 9-10 cells
+    until the hazard (0 of 8 alive at 5k).
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `5e29fa2` on branch `explore-0416`): P1 (D1 lives in 3 of 4) no, P2 (public
+    partners lost) not testable (D1 died), P3 (a kept, kin-checked partner binds its own kind) yes.
+  - Picture: [partner-check.png](pictures/partner-check.png) (left, a D1 ring of six waiting kin kids at 3500; right, the
+    frozen fan of candidate (y) at 4000).
+  - Commands: the batches `runs/p1.json`, `runs/p2.json` (NEXT's handoff lists their jobs); candidate (y) needs the
+    one-line patch in RULES (y) item 4 on a copy of `tri/`.
+  - Status: partner choice for a kept partner (**not yet**, and not in the core: settled by analysis); a raised partner
+    (D1, **not yet**: dies).
+
 ## 2026-10-17 (autorun run 20261017-0252, build)
 
 - **Each completes the other: two guarded nurseries front to front that make each other's fillers only while their kids
