@@ -57,7 +57,8 @@ tests and checks (INNOVATIONS run 0726; [rosette.png](pictures/rosette.png),
 - **The tempo is set by two error rates.** An escape is any other letter, one glue error (about 0.01 x 1/3 x 1/2 =
   1.6e-3 per partner copy); a new chain needs one particular letter on the front (about 3e-5, fifty times rarer). So
   escapes are quick (the letter turned within 10-20k in every copy-error world) and new chains rare (2 of 8 worlds by
-  480k from the evolve founders; once in 4 worlds in 150k after an entry): the letters turn in bursts.
+  480k from the evolve founders; five episodes in 3 of 4 worlds started on the platform, to 480k): the letters turn in
+  bursts, each chain followed by its letter's fall, with drift between them (some turns came without a chain).
 - **An immune partner is one mark away.** A partner whose two free sides both lyse cannot be chained (a chain cell bound
   to a lysis side by a bond that is not a joint is lysed), and it costs nothing (a copy blank copies in the pass it
   binds, before lysis acts). It rose to 35-62% in 2 of 4 copy-error worlds by 160k, but also to 33% in a control

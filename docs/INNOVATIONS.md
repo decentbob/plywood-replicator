@@ -48,7 +48,7 @@ not statistics.
     to 17%, T to k 86%, k 67% to 27%); the majority letter turned 1-4 times per world, some turns without a chain
     (drift: in seed 2 T gave way to p at 140k with at most 10 chain cells). Picture
     [rosette-turns.png](pictures/rosette-turns.png).
-  - Predictions (NEXT slice record): P1 yes for `mutual-pair-evolve` (3 of 3 living), no for `kin-guard-evolve` (1 of
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `4ed80eb` on branch `build-0726`): P1 yes for `mutual-pair-evolve` (3 of 3 living), no for `kin-guard-evolve` (1 of
     4); P2 yes in 2 of 8 (chains arose and bodies of 3 to 5 cells held while they lasted); P3 no: a chain does not grow
     until its body is hit, it closes after four cells (no sink), and the worlds live.
   - Pictures: [rosette.png](pictures/rosette.png) (the ring world at 40k and one ring: the last chain cell's `T`

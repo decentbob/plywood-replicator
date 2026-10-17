@@ -1,9 +1,9 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-0518, core-review). Read AGENTS.md first (rules of work), then this
+State on 2026-10-17 (after autorun run 20261017-0726, build). Read AGENTS.md first (rules of work), then this
 file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
 run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
+slice record with its predictions is on its run's branch (`build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
 `build-1902`, `explore-1602`, `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check
 is IDEAS "What a lineage owns is what it raises" (run 0456).
 
@@ -19,45 +19,32 @@ is the environment's. **Candidate (x)** (`lysJoint: 2`, an option: a lysis side 
 carrying the identical side) keeps a guarded lineage's lock under copy error (24 of 24 censuses) and freezes its
 letters. Two guarded nurseries front to front are two obligate classes (run 0252), but a public partner of a foreign
 root takes either role, and **no body in the core checks the partner it keeps** (run 0416): every kept structure is
-public, and what a lineage owns is what it raises, one triangle per generation. **Every body is still two cells**
-(since 2026-10-05): the size of what evolves has not grown, and that is the gap this direction check aims the next
-slices at.
+public, and what a lineage owns is what it raises, one triangle per generation. **The first bodies of more than two
+cells** (run 0726): on the guarded platform the public partner is rootless, and one front error makes it a chain cell
+that binds the partner's plain side and its own; a chain closes after four cells into a **ring of six** that covers
+its head's site. It is the parasite's body, not the host's, and it lives on the partners' commonest letter, which
+escapes it: so the guarded head keeps its letters while the partner's letter turns in bursts (IDEAS "Rings of six").
 
-**Slice in progress (autorun run 20261017-0726, build): priority 39, first slice.** Goal: what grows on the guarded
-platform. Done when a body of three or more cells or a third class holds in 3 of 4 worlds (a check), or the argument says
-why nothing does. Stop at the end of this run either way.
-- Theory (before the runs). (T1) A root `X@&` on a complete cell is spent: it binds nothing and is no template. So the
-  partner `C@s!T@&` has one copyable side, and one that lost its root (`C@s!T`) has two: twice the copies, which is
-  why run 0252's partners drifted to rootless forms. (T2) On the rootless partner `C@a!B` the one-error variants are:
-  an anchor on a free side (one copyable side: lost); a lysis mark on `B` (neutral: copies are made in the pass a blank
-  binds); the site letter to the head's root (`C@y!B`: a second guarded site per body, raising heads as kin; it costs the
-  partner a copy side while a kid waits: lost or drifts); the front letter to `b` (`b@a!B`): it binds the `B` side of any
-  partner and its own copies bind its `B`: **a chain**, a third class raised on a site every partner carries, with no
-  joint and no release. Its copies find a site on every partner (about 500), the partner's copies only on waiting kids'
-  fronts, so it should invade within a few thousand steps of its first appearance. (T3) The kin-guard world's filler
-  `C@|-Z@&` is the same case: its root is spent, a rootless filler copies at two sides, and then `z@|-Z` chains.
-- Predictions. P1: in the copy-error end states (`mutual-pair-evolve`, `kin-guard-evolve` to 480k) the partner is rootless
-  in 3 of 4 worlds of each. P2: chain cells (an attach letter equal to the complement of the partner's plain side, no
-  `&`) appear wherever the partner has a glued plain side, and individuals of 3 or more cells exist. P3: a chain grows
-  until its body is hit (hazard per individual, about 1400 steps) and takes blanks from the partner's copies; whether the
-  world survives it is open (chains preceded collapses in runs 0121 and 0551).
-- Runs: `runs/e1.json` (both evolve worlds, 4 seeds each to 480k, saved end states), then the end states resumed with
-  `NODE_OPTIONS='-r ./tri/bodyprobe.js'` ('body:' lines: individuals by cells).
+**Handoff status (autorun run 20261017-0726, build): priority 39, first slice, done.** Rings of six (INNOVATIONS run
+0726; IDEAS "Rings of six"; pictures `rosette.png`, `rosette-escape.png`, `rosette-turns.png`). No rule change.
+- Theory: a complete cell's root is spent, so a rootless partner is copied at two sides (why the end states' partners
+  are rootless: 3 of 3 living `mutual-pair-evolve` worlds, 1 of 4 `kin-guard-evolve`). One front error to the complement
+  of the partner's own plain letter (`C@s!T` to `t@s!T`) makes a chain cell.
+- Checks (digests written): `rosette` 4 of 4 (chain cells entered at 10k on `Y@&c@y! C@s!T`: six-cell bodies held from
+  15-20k; the ring's last cell covers the head's site; heads halved), `rosette-escape` 3 of 4 (a partner letter A entered
+  as 10 bodies takes 95-100% of partners, the chain lost), `rosette-escape-c` 4 of 4 (without the chain A is lost).
+- Watched: natural chains in 2 of 8 evolve end states to 480k and in 3 of 4 platform worlds under copy error (five
+  episodes to 480k), each followed by its letter's fall; the letter also drifts between episodes. Partners whose two
+  free sides lyse (immune) rose to 35-62% in 2 of 4 copy-error worlds, also 33% in a control: selection not shown.
+- Tools: `census.js --partner`, `linechart.js` `LC_PARTNER=1`, `tri/bodyprobe.js` ('body:' lines, individuals by cells).
+- Batches (`runs/` is ignored, so their JSON is here): e1 both evolve settings to 480k
+  (`{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_PARAMS":"{\"pErr\":0.01,\"lysJoint\":2}"},"jobs":[{"id":"mp",
+  "seeds":[1,2,3,4],"env":{"PA2":"Y@&c@y! C@x!X@&"}},{"id":"kg","seeds":[1,2,3,4],"env":{"PA2":"Y@&c@|y! C@|-Z@&"}}]}`);
+  e6 the platform watch: the same with `PA2` `Y@&c@y! C@s!T`, one job; e5 `rq`: `rosette`'s command with
+  `{"pErr":0.01,"lysJoint":2}` to 160k. Nothing is running.
 
-**Handoff status (autorun run 20261017-0518, core-review): done; no rule, demo or check change kept.** Decided (x):
-it stays the option mode `lysJoint: 2` (RULES Core changes "Core review 2026-10-17"; IDEAS "A guard that knows its own
-stops the loop"; INNOVATIONS run 0518).
-- Tried as the rule (the kin guard in place of the trap, mode 0; branch commit `4aa1a96`): suite part 1, 127 of 150
-  worlds main's, 11 changed, `race` 2 of 4 and `seal-evolve` 1 of 4 fail. One mark error makes the head `Z@&c@|z!`, a
-  guarded nursery under the kin guard, which takes the world and freezes the letters.
-- The guard's three modes are three regimes, each with checks only it passes: 0 trap (letters turn: `race`,
-  `seal-evolve`), 1 lock (a public lock: the line's preset, `line`, `two-locks`, `lock-guard`), 2 kin guard (heredity
-  under copy error: `kin-guard-evolve`, `mutual-*`). The line keeps preset 1; priority 39's worlds set 2 in TRI_PARAMS.
-- `lysJoint` refuses values other than 0, 1, 2 (no output change). Core inventory and locality audit refreshed in RULES.
-- Nothing is running.
-
-**Next step (rotation 96, build): priority 39**, growth on the guarded platform (below). The platform's letters are
-frozen under the kin guard (this run): what can vary is the public partner's two free sides and shape.
+**Next step (rotation 97, harden):** the suite has 91 checks (`rosette*` add 12 worlds, about 100 s each): keep both
+parts inside two hours. Then **run 98 (build): priority 39, second slice** (below).
 
 ## Priorities
 
@@ -65,16 +52,16 @@ Done 1-24, 28-30, 32-34, 36-38: ROADMAP backlog A (each with its run and checks;
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
 Open (set by review-intent run 20261017-0456; reasoning in IDEAS "What a lineage owns is what it raises"):
-39. [96 build] **Growth on the guarded platform.** Start from the copy-error end state of a guarded world (one guarded
-    lineage under `lysJoint: 2`, its partner public: `node tri/check.js --cmd mutual-pair-evolve` and
-    `kin-guard-evolve`, saved states or reruns to 120k). Theory first: list the one-error variants of the public
-    partner (rootless `C@s!T`, `C@|R!I`: a front and two copied sides) and of the guarded head's front, and what each
-    pays its carrier by place (s about 0.44-0.58, run 1322) under the guard: a third cell bound on a free side (length),
-    a third class raised on a site the partner carries (a commons under the guard), a side that covers or lyses
-    (defence). Predict, then run the end state long (4 seeds, 480k or more) and census by shape (`census.js --shape`,
-    extended to 3-cell bodies if needed). Done when a body of three or more cells, or a third class, holds in 3 of 4
-    worlds (a capability with a check), or the argument shows why nothing grows on the platform (a result). Stop after
-    two slices either way.
+39. [98 build] **Growth on the guarded platform, second and last slice.** First slice (run 0726): rings of six, a
+    parasite of the public partner's plain side that the letter escapes (`rosette*`). Theory first, then entry tests
+    on `rosette`'s world: (a) **the immune partner** `C@s!T!` (both free sides lysing: no chain binds it) entered rare
+    beside the chain: predict it escapes like A; then under copy error, whether it fixes and the partner's letter stops
+    turning (the guard once more, one cell over); (b) **a ring that pays its head**: a chain cell carrying the head's
+    site (`t@y!T`, one site error from `t@s!T`) makes each ring four nursery sites for the head's kin; an occupied site
+    is not copied, so predict whether it spreads against `t@s!T` and whether heads on such rings out-raise plain ones.
+    Done when one of them holds in 3 of 4 (a check) or the argument settles it. After it, 39 goes back to the direction
+    check (stop rule: four slices without a capability that holds under copy error; the rings hold only without an
+    escape letter).
 40. [99 explore] **When a joint lets go (on paper first).** The one route to a body that owns more than one cell per
     generation is a checked bond that outlasts completion (IDEAS run 0416: (x)'s check bites only across a joint, and a
     joint is cut at completion). Design the smallest change on the keeping side, say exactly what it reads (locality),
@@ -85,15 +72,16 @@ Open (set by review-intent run 20261017-0456; reasoning in IDEAS "What a lineage
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
     seed site) and preceded both collapses in run 0121 and all four in run 0551's control; a lysing site at the chain's
     tip stops them. Length as a function needs a chain that lets go (an `&` at its end) or a third cell that covers an
-    open site (length as defence). Designed, not demonstrated. 39 tests it on the platform.
+    open site (length as defence). On the platform (run 0726) the lattice stops a chain: bound by one side each time it
+    closes after four cells into a ring of six (`rosette`); that ring is a parasite's, covering its head's site.
 26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
     as a cheat, not as a predator, and guards against chains (run 0551).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); its genome copying left the
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456 and 0518): 95 core-review, 96 build, 97 harden, 98 build,
-99 explore. Run 98 (build) takes 39's second slice or whatever 39's first left as the next step.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518 and 0726): 95 core-review, 96 build, 97
+harden, 98 build, 99 explore. Run 98 (build) takes 39's second slice.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) the option mode `lysJoint: 2` since run
 2258, tried as the rule and kept an option in run 0518; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
@@ -162,6 +150,13 @@ RP_T0=25000 NODE_OPTIONS='-r ./tri/raceprobe.js' ... # run 2151: 'race:' lines e
                                                    # site after a kid leaves, how long it was empty, the taker's origin;
                                                    # run 2258: 'fate:' lines (copies to site, decay or elsewhere; rB, pi,
                                                    # rho, c's births ratio against the N count)
+node tri/check.js --cmd rosette rosette-escape rosette-escape-c
+                                                   # run 0726: chain cells t@s!T entered on the platform close into rings
+                                                   # of six; a rare partner letter escapes them; control
+node tri/census.js --partner runs/x.txt            # run 0726: rootless partners by plain letter ('immune': both free sides
+                                                   # lyse), chain cells, cells in 3+ bodies (from 'body:' lines); chart:
+                                                   # LC_PARTNER=1 node tri/linechart.js out.png FILES
+NODE_OPTIONS='-r ./tri/bodyprobe.js' ...           # run 0726: 'body:' lines every 5000 steps, individuals by cells
 node tri/check.js --cmd kin-guard kin-guard-evolve   # run 2258: candidate (x), lysJoint 2 (TRI_PARAMS): the nursery's
                                                    # cheats lost; under copy error the lock in every census
 node tri/check.js --cmd mutual-pair mutual-pair-a mutual-filler mutual-trap mutual-pair-evolve
