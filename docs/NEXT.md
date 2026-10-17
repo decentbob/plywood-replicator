@@ -77,7 +77,16 @@ commonest bonded types, the rest and free blanks in ten bins of x. Without `PADZ
   by side, pinned at the edge). **P9** in time (5000 steps each, `C@s!T`, even start, both orders): one line holds the
   world by 60k in 3 of 4 each, the platform (it took the even start at 100 from 22% of cells; kin takes only free
   material).
-- Batches: `runs/z1.json` (P1, P2), `runs/z2.json` (P3, P5), `runs/z3.json` (P4, P6, P8, P9), then P7.
+- Read `runs/z3` (z3b reran what a container restart stopped): **P8 no** (kin took both halves, 4 of 4); P9 one line
+  holds the world (8 of 8) but it is **kin**, in both orders; P4 entered with `C@s!T|` in a fast phase kin took the
+  world 3 of 4, in a slow phase it was lost 3 of 4 (the fourth survived to the next fast phase and took it); with `C@s!T`
+  lost 8 of 8 (a held common world keeps it out in both phases); **P6 no**: the plain head won 8 of 8, both orders.
+  Material moves (`tri/moveprobe.js`, rms displacement of every triangle): 3 units in 100 steps, 10 in 1000, 21-23 in
+  5000, 30-32 in 10k, in kin and platform worlds alike: a 25-wide zone is crossed in the time a takeover takes
+  (5-15k), so the split world acts as one well-mixed world with a mean drive, and any fast zone or phase feeds the flow.
+  **P10** (before `runs/z4`): in a world three times as wide (150, 9000 blanks, 90 bodies of each), split, `C@s!T`,
+  even start: at 60k the platform over 80% of kin and platform cells in bins 6-8 and kin over 80% in bins 1-3, 2 of 4.
+- Batches: `runs/z1.json` (P1, P2), `runs/z2.json` (P3, P5), `runs/z3.json` (P4, P6, P8, P9), `runs/z4.json` (P10).
 
 **Handoff status (autorun run 20261017-2158, build): priority 44 done (progressed).** The root guard counted
 (`tri/lysprobe.js`, new: 'lys:', 'raise:', 'bounce:' lines) and put on the platform head, even and entered in four
