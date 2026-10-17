@@ -30,6 +30,32 @@ filler: **two obligate classes, each with its own heredity**; but a cell that sp
 out-sprays one that sprays always, so a public partner of a foreign root takes the role at any frequency (the guard
 traps public cells of its own root only), and under copy error a root error makes one.
 
+## Slice in progress (autorun run 20261017-0416, explore; started 04:16 UTC)
+
+**Goal: partner choice on paper (NEXT step 93).** Done when it is argued whether any body in the core can check the
+partner it keeps (the pair's front bond), the one design the argument leaves is built and run (4 worlds), and either the
+smallest core candidate that would do it is written (RULES, Open candidates) or the reason none is small. Stop there; no
+core change unless the argument finds a small one.
+- **Theory (before the runs).** (T1) A partner reaches a rule only through the side it is bonded by. Binding and closure
+  read one glue pair (with `@`, `.`, spent); contact lysis across a bond that is not a joint lyses whatever binds, in every
+  `lysJoint` mode. So a bond that is not a joint checks one letter: any cell with the complementary front is the partner
+  (run 0252's foreign-root filler). (T2) The one read of a second feature is (x)'s kin check, across a joint only; a joint
+  holds only while the triangle with the `&` hears an open front, and lysis cuts only after a whole pass lysed. So a check
+  bites only on a cell that waits; a joint between two complete cells is cut at the next release. **Checking and keeping
+  exclude each other**: a checked bond is a joint to a waiting cell; a bond that outlasts completion reads one letter.
+  (T3) So the one checked partner is a raised one: the host's front is a lysis side identical to the partner's own site,
+  and the partner binds it by an `&` root and waits there (D1: host `Y@&c@!y!`, partner `C@&c@!-|` or `C@&c@!-`). It
+  completes the host's kid (the kid lets go of its parent) and leaves the host when its own site gets a kid. (T4) A
+  stranger on the host kid's front (root `C@&` without `c@!`) is cut loose or lysed in the pass the kid lets go of its
+  parent: the kid is then a free triangle with its root spent, dead; the stranger gains nothing. (T5) Nothing keeps a
+  D1 host: its root is spent, so once its front and site are both empty it is free and dead (every bond in D1 is a joint).
+- **Predictions.** P1: D1 lives to 40k in at least 3 of 4 worlds of the line's preset (`PAW=2`, `lysJoint` 2), either
+  partner. P2: without the hazard, a public partner of root C (`C@&-|-` silent, `C@&z@|-` waiting) entered as 10 bodies at
+  10k is lost in 4 of 4. P3 (paper): a kept partner that passes a kin check must carry the host's lysis side, a glued side
+  beside the complement it binds by, so it catches its own free copies: a chain.
+- **Runs.** `runs/p1.json` (D1 a, b at 40k: **P1 failed, 0 of 8**; both grew until the hazard starts at 4000, then died by
+  5-10k), `runs/p2.json` (30k: `e1` per-individual hazard `PAHU` 2, `e0` no hazard `PAHT` 1e9, `z1`, `z2` P2's entries).
+
 **Handoff status (autorun run 20261017-0252, build): done; no rule, demo or structure change; checks `mutual-pair`,
 `mutual-pair-a`, `mutual-filler`, `mutual-trap`, `mutual-pair-evolve` (88 checks)** (INNOVATIONS 2026-10-17; IDEAS "Each
 completes the other"; the slice record with predictions P1-P10 is this file at `99ea2f5`, on branch `build-0252`).
