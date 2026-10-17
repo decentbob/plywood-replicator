@@ -73,6 +73,11 @@ check), else what was learned. Stop there.
   sites; only a public cell of another root, or one whose root cannot bind, escapes, and that one floods the partner's
   waiting kids. **P9** a public catcher of root X (`X@&C@|-`) entered rare into the pair is lost (3 of 4); **P10** a public
   head of a foreign root (`Q@&c@|-` on X) takes the head role, Y lost by 60k (3 of 4) (batch `runs/m3.json`).
+- **Read (P9-P10, batch m3; long run m4 to 480k; probe m5):** P9 yes, P10 yes (4 of 4 each): the root letter decides.
+  Long run: the lost lock never reborn (0 of 4); the partner lineage loses its root altogether by 150-245k (3 of 4); one
+  world dead at 340k (`I@y!Y@&`, a Y-root cell with another front, raised on Y sites as kin). Probe: 48-49% of each
+  class's cells are waiting kids; the P4 body count was a census artefact (the pair is slower, about 250 bodies against
+  360). T6 (IDEAS): a cell that sprays only while it waits never out-sprays one that sprays always.
 
 **Handoff status (autorun run 20261016-2258, explore): done; one core change as an option (`lysJoint: 2`, default 0:
 no output changes)** (INNOVATIONS 2026-10-16, explore; IDEAS "The nursery's share is the environment's"; RULES Core
