@@ -312,9 +312,11 @@ NEXT step 95 (set by review-intent run 0456): decide (x); the guard is three mod
    not committed; `copy-error` world seed 1, 20k: 2307 spared passes, 1819 of them `Z@&c@|z!` raised on its own kind). It is a guarded nursery under
    copy error, as (x) predicts, so it takes the world and the letters stop: in `seal-evolve`'s worlds (to 240k) Z ends on
    94-100% of heads in 4 of 4, the commons class I is gone by 25-85k, and the site seals in 1 of 4. Checks (part 1 of
-   the branch suite, PART1N checks): `race` 2 of 4 (need 3) and `seal-evolve` 1 of 4 (need 3) fail, `pair-flow-i` passes
-   with one world changed, PART1REST. Two working capabilities lost (the loop of letters, the self-sealing site) for
-   one option mode is the wrong trade; the slice stopped there (part 2 not run).
+   the branch suite, 44 checks, 150 worlds): 127 worlds byte for byte main's, the 12 of the 3 checks there that set mode 2 (now
+   0) main's too (digest of the output), 11 changed; `race` 2 of 4 (need 3) and `seal-evolve` 1 of 4 (need 3) fail;
+   `copy-error` (4 worlds changed), `nursery` (1), `own-letter` (1) and `pair-flow-i` (1) still pass. Two working capabilities lost (the loop of letters, the self-sealing site) for
+   one option mode is the wrong trade; the slice stopped there (part 2 not run). Picture
+   `docs/pictures/kin-rule.png`: heads by root letter in `seal-evolve`'s four worlds, main against the trial.
 3. **Decision.** (x) stays `lysJoint: 2`, an option mode. The guard needs its three modes, each for a capability the
    others lose: 0, the trap, keeps the loop of letters turning (the trap culls kin as well, so no head guards a nursery
    for long: `race`, `seal-evolve`); 1, the lock, keeps a public lock (the line's preset: `line`,

@@ -12,6 +12,24 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-0518, core-review)
+
+- **The kin guard as the rule, tried and declined: it freezes the loop of letters** (NEXT step 95, decide (x); RULES
+  Core changes "Core review 2026-10-17"; IDEAS "A guard that knows its own stops the loop"). No rule, demo or check
+  change kept (`lysJoint` now refuses values other than 0, 1, 2).
+  - **Trial** (branch `core-review-0518`, commit `4aa1a96`): contact lysis across a joint spares a partner carrying the
+    identical side in every world (mode 0 replaced by (x)), `lysJoint` 1 the one option. Suite part 1 (44 checks, 150
+    worlds): 127 worlds byte for byte main's, the 12 worlds of the checks that set mode 2 main's too, 11 changed: `race`
+    2 of 4 and `seal-evolve` 1 of 4 fail (Z on 94-100% of heads at 240k in 4 of 4, the commons class I gone by 25-85k,
+    the site sealed in 1 of 4); `copy-error`, `nursery`, `own-letter`, `pair-flow-i` still pass with changed worlds.
+  - **Mechanism** (independent review's observation hook, `copy-error` seed 1, 20k): 2307 passes in which the rule spared
+    a joint partner, 1819 of them the one-error head `Z@&c@|z!` raised on its own kind, the rest on the second cells'
+    `z!` traps: a guarded nursery made by one mark error.
+  - Picture: `docs/pictures/kin-rule.png` (heads by root letter in `seal-evolve`'s worlds, main above, the trial below).
+  - Command: the trial is `git checkout 4aa1a96 && node tri/check.js race seal-evolve` (with `CHECK_SAVE=dir` for the
+    chart: `LC_T=240000 node tri/linechart.js out.png dir/seal-evolve_*.txt`).
+  - Status: **not adopted**; (x) stays the option mode `lysJoint: 2`.
+
 ## 2026-10-17 (autorun run 20261017-0416, explore)
 
 - **Checking and keeping exclude each other: no body in the core checks the partner it keeps; the one checked partner
