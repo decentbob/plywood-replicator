@@ -12,6 +12,47 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-1406, explore)
+
+- **Keeping is waiting: a joint holds while its cell waits; kept for good, a lineage is one ring of six; a kid that
+  waits for its own kid makes buds of two raised cells, which hold under copy error and lose to the bud of one** (NEXT
+  priority 40, on paper first; IDEAS "Keeping is waiting"; RULES candidate (z), not proposed). No rule change;
+  bodyprobe gained `BP_RIGID=1` ('rigid:' lines: bodies joined by any bond, joints included, by their root cells).
+  Worlds: `PAW=2`, `lysJoint` 2, `pErr` 1e-9 unless said, seeds 1-4, 60k.
+  - **Theory.** The release reads the `&` triangle's own open signal, and its own `@` sides count, so a raised cell keeps
+    its joint while it waits for anything (the keeping side is in the core, by time). Cells raised root on site turn 60
+    degrees per cell about one vertex (the vertex between root and site is shared, for either order of the two), so a
+    lineage that keeps every kid is one fan of at most six.
+  - **Candidate (z) as a throwaway** (`runs/keep.js`, not committed: a kin joint is never cut) on the platform `Y@&c@y!
+    C@s!T`: one twelve-cell star (six heads about one vertex, six partners outward) within 500 steps, the only body in
+    the world, no head copied after it; dead at the hazard, 4 of 4 by 5k (P1 yes).
+  - **The kid that waits for its own kid** (`Y@&c@y@! C@s!T`, check `bud-two`, control `bud-two-c`): alive 4 of 4 (P2
+    yes); heads in rigid bodies of two or more roots 78-79% (mean of the 30-60k censuses) against 30-33% on the platform
+    (P3 yes); heads 502-508 against 516-525 (P4, a cost of 0.5-0.9, no). The body that leaves is a daughter carrying its
+    waiting granddaughter, both checked by the guard while they waited.
+  - **Under copy error** (`pErr` 0.01 to 240k, `runs/e2.json`; no predictions written): the site `y@!` on 98-100% of
+    root cells at every 10k census (4 of 4; run 2151's unguarded `Y@&y@!y@!` died 4 of 4 by 20k of site errors);
+    heads in bodies of two or more roots 77-79% from 120k (platform 32-34%); the front lost its attach mark in 4 of 4
+    (`Y@&cy@!` 87-97% of root cells at 240k; waiting fronts below half of root cells by 90k, 100k, 130k, 200k; none at
+    240k): the kid waits only for its own kid, and a partner binds the plain `c` when one comes by. On the platform the
+    front kept its mark (4 of 4) and the partner letters turned as in run 0726.
+  - **Entered against each other** (`runs/e3.json`, `runs/e4.json`; kits at 10k): the two heads are strangers to each
+    other's guard. The platform head entered as 10 bodies took the waiting-kid world in 4 of 4 (116-236 of about 510
+    root cells at 15k, all by 30k), and took the world of the evolved `Y@&cy@!` in 4 of 4 (all by 20-30k); the
+    waiting-kid head entered as 10 or as 100 bodies, and `Y@&cy@!` as 10, were lost in 4 of 4 each by 15-20k. P5 (the
+    common one wins) **wrong**; P6 (the platform wins against the evolved form) yes. A kept daughter keeps its mother's
+    site busy until it has raised: per site a birth every 1/a + 1/a instead of 1/a + tau_c (a the arrival rate of a kin
+    copy at a site, tau_c the wait for a partner), so the bud of one grows faster at any frequency; the guard isolates
+    the two (a copy error between `y@!` and `y!` makes a cell no site raises), so the slower one persists where it is.
+  - Predictions: NEXT slice record (`docs/NEXT.md` on branch `explore-1406`, first commit; P5 and P6 added before their
+    batches).
+  - Picture: [joint-keep.png](pictures/joint-keep.png) (left, the (z) star at 1500; middle, `Y@&c@y@!` at 60k: a mother
+    with its daughter and waiting granddaughter; right, `Y@&cy@!` at 240k under copy error, partners `C@|MX.`).
+  - Commands: `node tri/check.js --cmd bud-two bud-two-c`; batches `runs/e1.json`-`e4.json` (NEXT's handoff lists them);
+    the throwaway rule is RULES (z) item 4.
+  - Status: buds of two raised cells (**works**, `bud-two`, existing core); held under copy error (**works**, 4 of 4 to
+    240k, no check); against the bud of one (**loses**, 4 of 4 each way); candidate (z) (**not proposed**: a sink).
+
 ## 2026-10-17 (autorun run 20261017-1302, build)
 
 - **The partner's defence is a closed side, not a lysing one; a ring that pays its head is a public good its cheat

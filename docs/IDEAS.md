@@ -70,6 +70,19 @@ proposed). Notes, not the user's words.
   catches nothing), and there the front kept its mark in 4 of 4. **A lineage that waits for what it raises drops its wait for what the public gives**:
   the partner becomes optional, bound when one comes by. In one world the partner then closed both its free sides to
   readers (`C@|MX.`: an anchor and a close-only side).
+- **But owning costs a generation.** The two heads are strangers to each other's guard (`y@!` against `y!`). The
+  platform head entered as 10 bodies took the waiting-kid world in 4 of 4, and the world of its evolved form `Y@&cy@!`
+  too; the waiting kid, entered as 10 or 100, was lost (4 of 4 each). A kept daughter keeps its mother's site busy
+  until the daughter has raised: a site gives a birth every 1/a + 1/a (a the arrival rate of a kin copy) instead of
+  1/a + tau_c (the wait for a partner, short where partners are common), so the bud of one grows faster at any
+  frequency. The bud of two persists only because the guard isolates it: the one error between the two sites makes a
+  cell that no site raises.
+- **What follows.** In this core a body owns the cells that still wait, and every one of them holds a site that could
+  have raised again. So owning more than one cell per generation pays only where the kept cell gives the body more than
+  a generation: where the public partner is scarce (the bud of two needs none; the platform's kid cannot leave without
+  one), or where a kept cell does work for the body while it waits. Keeping for good is a sink; keeping by waiting is in the core and
+  costs a generation. No core change: candidate (z) is not proposed, and the next question is an environment or a
+  design in which the kept cell pays.
 
 ## A closed side, not a lysing one: the partner's shield; a ring that pays its head is a public good (build run 20261017-1302, 2026-10-17)
 

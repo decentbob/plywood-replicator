@@ -323,7 +323,8 @@ NEXT priority 40 (when a joint lets go, on paper first). Derivation: IDEAS "Keep
    the one before turns 60 degrees per cell about one vertex, and the sixth place is the first's: under (z) a lineage
    is one fan of at most six heads, its last site facing the first root, every head side bonded or blocked, so no head
    is copied again. Throwaway (`runs/keep.js`, not committed: `_release` skips an `&` side whose partner side is a
-   lysis side its triangle carries identically) on the guarded platform `Y@&c@y! C@s!T`, `lysJoint` 2: within 500
+   lysis side its triangle carries identically: in `_release`, `if(q>=0&&this.lys[q]&&kin(u,q))continue;` before the
+   side is spent, `kin` as in `derive`) on the guarded platform `Y@&c@y! C@s!T`, `lysJoint` 2: within 500
    steps one star of twelve cells (six heads about one vertex, fronts outward with six partners) was the only body in
    the world; it froze and died at the hazard (4 of 4 dead by 5k). A kin of the other order of root and site (two
    errors away) would make a strip, which never closes: a body that never lets go. So keeping for good is a sink either
