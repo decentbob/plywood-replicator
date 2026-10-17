@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-1802, cleanup). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-17 (after autorun run 20261017-1902, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first; each entry names its checks, commands and the commit of its slice record
 with the predictions), RULES (Core changes), ROADMAP backlog A (every done priority with its run and checks), the
 autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`). Run branches are
@@ -25,63 +25,29 @@ Where the line stands (INNOVATIONS has the numbers, IDEAS the reasoning under th
 - **The wait that pays** (run 1602): the ratio of the wait for a partner to the wait for a kid orders every entry test;
   where partners are scarce the head that does not wait for its partner (`Y@&cy@!`) wins. Scarcity is not kept under
   copy error, and in one world kin replaced the partner (`Y@&y@!y!`, a one-type world: priority 43).
+- **The seal** (run 1902, "The seal is a race of standing minorities"): a parasite selects every partner it cannot read
+  alike, so the escape goes to the class that stood larger, closed or another letter (22 of 23 episodes), and a letter
+  usually stands larger (six times likelier per copy error). Under a seal no reader finds a side, so nothing keeps it:
+  to 1.2M it drifts out and comes back with the episodes; only letters and marks vary, never the shape.
 
-**Handoff status (autorun run 20261017-1802, cleanup): done (progressed); no code or output change.** This file
-shortened (the state as four points, run 1602's details and batch settings moved to its INNOVATIONS entry, the per-run
-`--cmd` lines folded into one); INNOVATIONS gained harden run 20261017-0902's record (it had none) and commits in place
-of the deleted branch names its prediction pointers gave; the unlinked picture `kin-guard.png` linked from run 2258's
-entry; ROADMAP's speed item brought up to date. Nothing is running.
+**Handoff status (autorun run 20261017-1902, build): priority 41 done (progressed).** The closed platform watched to
+1.2M (8 worlds, sealed and open founders) and the escape race entered: checks `rosette-race`, `rosette-race-r` (3 of 4
+each, digests written; no rule or output change elsewhere); `census.js --partner` gained the closed share and readers,
+`census.js --race` reads each episode, `linechart.js` `LC_CLOSED=1`; picture `seal-race.png`. Predictions: P2, P4, P5,
+P6 yes; P1, P3 (first part), P7 no (INNOVATIONS run 1902 has each). The slice record is this file at `9846f0f`. The
+1.2M worlds are only in `runs/` (gone): `runs/h1.json` is in INNOVATIONS (42 minutes per world, 4 at once). Nothing is
+running.
 
-**Next step (rotation 102, build): priority 41.** Then 103 explore: priority 43 (kin in place of the partner).
-
-## Current slice (autorun run 20261017-1902, build): priority 41, the closed platform at length
-
-Goal: watch the guarded platform with copy error to 1.2M from the sealed partner `C@s!T.` and from the open `C@s!T`, and
-say whether the seal comes (or stays), whether chain episodes stop once it has, and what varies on a body nothing reads.
-Done when the 8 worlds are read against the predictions below; one check only if a number holds in 3 of 4 (and at a
-length the suite can afford). Stop: one batch, read; no new mechanism this run.
-- **Running**: `runs/h1.json` (detached `node tri/batch.js runs/h1.json runs/h1`, started 19:04 UTC): `PAW=2`, `PATN` 60,
-  `TRI_PARAMS` `{"pErr":0.01,"lysJoint":2}`, bodyprobe every 10k; `sd` seeds 1-4 `PA2='Y@&c@y! C@s!T.'`, `op` seeds 1-4
-  `PA2='Y@&c@y! C@s!T'`; 1.2M steps. Read with `node tri/census.js --partner runs/h1/*.txt --every 10` and the closed
-  share (partners whose plain side carries `.`).
-- **Theory.** On `Y@&c@y! C@s!T.` every free side is closed to a free reader: the head's site is guarded (only its kin is
-  raised, any other reader is lysed across the joint), the partner's `s!` is a trap (a reader binds it by a bond that is
-  not a joint and dies with the partner's body), `T.` binds no free triangle. Copy blanks still copy all of them. So the
-  partner's plain letter under `.` and the letter under `!` are read by nothing: they drift. The ways out are one mark
-  each: `.` lost (1/36 per copy error) reopens the plain side to a chain on its letter; `!` lost opens `s` to a reader
-  that keeps it. By mutation alone the mark toggles at 0.01/36 per partner copy, about 20% open by 1.2M (about 850
-  partner generations) if nothing selects it either way; a chain on an open partner selects the closed one back.
-- **Predictions (before reading any output):**
-  - P1 sealed arm: the closed share stays at or above half of partners at every 100k census to 1.2M in 3 of 4 worlds.
-  - P2 chain episodes (20 or more chain cells): fewer in the sealed arm than in the open arm (summed over 4 worlds);
-    every chain in the sealed arm is on a partner that lost its `.` or its `!`.
-  - P3 open arm: the closed share passes half of partners in at most 1 of 4 by 1.2M; chain episodes still come after
-    480k in at least 2 of 4 (the loop of letters does not end by itself in this time).
-  - P4 sealed arm: the partner's majority plain letter turns at least once in 3 of 4 worlds (drift on a closed side);
-    bodies stay of two cells (90% or more of complete individuals at 1.2M, 4 of 4).
-  - P5 all 8 worlds alive at 1.2M.
-- **Second step (after reading the batch: 23 episodes of 20 or more cells reading a partner side, each escaped toward the
-  larger standing class of unreadable partners, closed or of another letter; the closed share among them about the same
-  after as before).** Theory: under a parasite both unreadable classes are immune and neither reads the other, so they
-  grow at the same rate and their ratio holds through the sweep; the seal wins only if it stood larger. Test (`runs/h2.json`,
-  `rosette-dot`'s world, chain cells `t@s!T` at 10k): arm X enters 12 sealed bodies (`PAKS` `C@s!T.`) and 6 of another
-  letter (`PA3` kit `Y@&c@y! C@s!A`, with 6 chain cells), arm Y the reverse; 4 seeds each, 60k (a first try with 30, 15
-  and 15 chain cells ran out of free blanks at 10k: the `PA3` kits never entered).
-  - P6: the closed partners are the majority of partners at 60k in X in 3 of 4, and the minority in Y in 3 of 4.
-  - P7: in worlds where the chain spread, the closed share among closed and A partners at 60k is within 0.2 of its
-    entered share (2/3 in X, 1/3 in Y) in 3 of 4 per arm.
+**Next step (rotation 103, explore): priority 43** (kin in place of the partner). Then 104 build, 105 explore, 106
+review-intent.
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36-40, 42: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+Done 1-24, 28-30, 32-34, 36-42: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
-Open (set by review-intent run 20261017-0456, 43 by build run 1602; reasoning in IDEAS "What a lineage owns is what it
+Open (set by review-intent run 20261017-0456, 43 by build run 1602, 41 done in run 1902; reasoning in IDEAS "What a lineage owns is what it
 raises" and "The wait that pays"):
-41. [102 build] **The closed platform at length.** `Y@&c@y! C@s!T.` under copy error
-    (the body has no side a free reader can hold): watched to 1.2M from the platform with and without the closed side,
-    does the seal come in the end as in run 1650, do chain episodes stop once it has, and what varies on a body nothing
-    reads (drift only, or a new shape)? Watch first, then one check if a number holds in 3 of 4.
 43. [103 explore] **Kin in place of the partner.** In one copy-error world from the scarce platform (run 1602, `pe1`)
     the front changed to the root's complement and the partner went extinct: `Y@&y@!y!`, one type whose front (`y@!`,
     attach and guarded) and site (`y!`, guarded) both raise kin. Theory first: what a kid waits for (its front only),
@@ -115,13 +81,16 @@ Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 0456): 10
   random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 99 since run 1602, about 10 minutes
+- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 101 since run 1902, about 12 minutes
   more per part); physics is most of it (INNOVATIONS run 20261017-0902; a cell-distance cut in `_pairs` would rarely
   skip a cell: the pair reach, 1.39, is about a cell, 1.4). When a
   part nears 2 hours, `--part k/3` balances three parts the same way. Worlds shared between checks: only `race`/`seal-evolve` had one setting
   (`pair-mut` reads a result line, which a longer world does not repeat).
 - Copy error as the standard world's variation: decided in run 2151 not to retire `PAM` now (on in 21 checks, 5 of them
   the front-only mutagen `PAMF=1`, which copy error cannot replace); new work runs in the line's preset (priority 36).
+- A seal that is kept (run 1902): on the platform the close-only mark drifts out between parasite episodes. It would
+  stay only with a cost for open sides between episodes or episodes often enough to outpace drift (several readers
+  of different letters at once); not a priority, a direction for when parasites diversify.
 - Bigger cells and letter reuse (user, 2026-10-03; IDEAS): R 5 is the largest all-unique kind (46 letters); if a
   slice needs a larger cell, reuse letters inside sealed compartments.
 
@@ -157,9 +126,10 @@ Readers (`runs/x.txt` is a world's output):
 node tri/census.js runs/x.txt [--every k]         # heads by root letter, second cells by site letter, from 'types:' lines
                                                    # (copy error on; PATN=30 in the world lists 30 types)
 node tri/census.js --loop|--partner|--shape runs/x.txt   # per world: site turns, commons, seal, chains (--loop);
-                                                   # rootless partners by plain letter, chain cells (--partner, from 'body:'
-                                                   # lines); cells by shape and own side (--shape); also --pool --joint
-LC_PARTNER=1 | LC_SHAPE=1 node tri/linechart.js out.png FILES   # charts of the above
+                                                   # rootless partners by plain letter, closed share, chain cells, readers
+                                                   # (--partner); cells by shape and own side (--shape); each parasite
+                                                   # episode and where it escaped (--race); also --pool --joint
+LC_PARTNER=1 [LC_CLOSED=1] | LC_SHAPE=1 node tri/linechart.js out.png FILES   # charts of the above
 ```
 Probes (added to any demo world with `NODE_OPTIONS='-r ./tri/NAME.js'`; each prints its own lines):
 ```
