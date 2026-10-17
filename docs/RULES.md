@@ -61,10 +61,10 @@ removed on 2026-10-03 and is the lysis side since 2026-10-04).
   anchor's catch moving a caught strand as one body into a free flush place along a clear path, left with chain
   copying on 2026-10-08, run 20261008-2221.)
 
-## Core inventory (2026-10-09, core review run 20261008-2221)
-"Fires in": the demos whose check worlds carry the mark or fire the rule, from the coverage hook over the suite on the
-branch (66 checks; `pair` covers 58 of them, `imprint` its rings, `strip`, `budpool`, `lysis`, `ring`). Dates: when the
-item entered the core (the repository restarted on 2026-10-01).
+## Core inventory (2026-10-17, core review run 20261017-0518; coverage from run 20261008-2221)
+"Fires in": the demos whose check worlds carry the mark or fire the rule, from the coverage hook over the suite in run
+2221 (66 checks; `pair` covers 58 of them, `imprint` its rings, `strip`, `budpool`, `lysis`, `ring`), plus the checks
+added since that use a mode. Dates: when the item entered the core (the repository restarted on 2026-10-01).
 
 | Item | Kind | Fires in (run 2221) | Since |
 |---|---|---|---|
@@ -77,9 +77,13 @@ item entered the core (the repository restarted on 2026-10-01).
 | `!` lysis side | mark | `pair` (nursery traps, locks, mutants), `lysis` | 10-04 (run 2051) |
 | open (`openRange` 120) | relayed signal | growth and `&` release: `pair`, `strip`, `budpool`, `lysis`, `ring`, `imprint` | 10-01; stops at joints, a caught part emits at once 10-06 (run 1920) |
 | lysis (one bit; relay stops at joints) | relayed signal | `pair` (every hazard death, traps), `lysis` | 10-04 (run 2051) |
-| `lysJoint` (default 0) | option (contact lysis stops at joints too) | `pair` (`lock-guard`; the line's preset `PAW=2`: `line`, `nursery-guard`, `two-locks`) | 10-08 (run 1951); kept an option 10-09 (run 2221) |
+| `lysJoint` (default 0) | option, three modes of contact lysis across a joint: 0 every partner (a trap), 1 none (a lock), 2 every partner but one carrying the identical side (a kin guard) | 0: every world without the option (nursery traps, `lock-guard-0`); 1: `lock-guard` and the line's preset `PAW=2` (`line`, `nursery-guard`, `two-locks`, `self-nursery`, ...); 2: `kin-guard(-evolve)`, `mutual-*` | 1: 10-08 (run 1951), kept an option 10-09 (run 2221); 2: 10-16 (run 2258), kept an option 10-17 (run 0518) |
 | attached flag | state (attached when the pass began; set when caught by glue) | every rule that binds or copies | 10-01 as the roles; one bit since run 2221 |
 | spent | state | `&` sides, as `&` | 10-01 |
+
+**Counts (2026-10-17, run 0518):** as run 2221 (6 marks, 2 relayed signals, 2 states, 1 option, 1 rule branch, 1
+physics exception); the option has a third mode since run 2258 (`lysJoint: 2`, candidate (x)), tried as the rule and kept
+an option in this run (Core changes); `tri/sim.js` 171 lines; 88 checks.
 
 **Counts (2026-10-09, run 2221):** 6 marks, 2 relayed signals (open, lysis; zip removed), no exposed one-bond value (gap,
 need, fn removed), 2 states (spent and the attached flag; fill removed), 1 option (`lysJoint`; `lysOneWay` removed), 1
@@ -133,7 +137,7 @@ grown triangles bind by glue) and zip its `&` case (Core changes).
 Previous inventories: 2026-10-03 run 0450 (16 marks, 5 signals, 9 exposed values, 9 states, 2 options), 2026-10-02
 run 0721 (17 marks, 5 signals, 9 values, 9 states, 4 options): RULES.md in git at `7415fd4`.
 
-## Locality audit (2026-10-02, rule by rule; re-checked against the code in core review run 20261008-2221)
+## Locality audit (2026-10-02, rule by rule; re-checked against the code in core review runs 20261008-2221 and 20261017-0518)
 Every chemistry rule reads only: the triangle's own type, state and bonds; the fixed type of a direct partner (the
 glue and marks of the side bonded to it; for a copy blank, its whole type); values a direct partner exposed in the
 previous pass; and relayed signals that move one bond per pass and fade (open, lysis; zip until run 2221, busy until run
@@ -154,7 +158,7 @@ an anchor side moved as one body until run 2221).
 |---|---|---|---|
 | attached flag (`role`) | own bonds, when the pass begins (`derive`) | own | local |
 | open signal | own sides and bonds; partners' values; the two sides' `&` marks of each bond (run 1920) | previous pass; fixed type | local (relay) |
-| lysis signal | own bonds and lysis; a partner's `!` mark and the two sides' `&` marks of each bond; partners' lysis | own; fixed type; previous pass | local (relay) |
+| lysis signal | own bonds and lysis; a partner's `!` mark and the two sides' `&` marks of each bond; partners' lysis; with `lysJoint: 2` its own three sides' glue and marks against the partner's side (run 2258) | own; fixed type; previous pass | local (relay) |
 | copy bind | the blank's copy sides and their close-only and spent marks (run 20261007-2051); the site's bond, spent state and anchor mark (run 1221) | own; partner current state; fixed type | local (convention) |
 | glue catch | own attached flag and free sides, their glue, close-only, attach and spent marks; the free triangle's side glue and marks | own; fixed type | local; sets the caught triangle's attached flag and its open signal (run 1920) |
 | `_snap` | is the flush place free | physics (labelled) | physics |
@@ -279,7 +283,9 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
 - (r) *Copy error in contact copying*: **adopted** in run 0651 as the parameter `pErr`, default 0 (RULES Core changes).
   Open: a default above 0 (and the mutagen retired) would change every world's outputs; whether the core or the
   environment should limit parts that bind their own kind (`g@` and `G@` on one part).
-- (x) *A lysis side spares a joint partner that carries the same side* (run 2258): built as `lysJoint: 2` (entry below).
+- (x) *A lysis side spares a joint partner that carries the same side* (run 2258): built as `lysJoint: 2`; tried as the
+  rule in core review run 20261017-0518 and **kept an option mode** (entry below): as the rule it freezes the loop of
+  letters in the copy-error trap worlds.
 - (y) *A lysis side spares, on any bond, a partner that carries the same side* (run 20261017-0416): **not proposed**
   (entry below): a kept partner that passes it binds its own kind.
 - (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
@@ -291,6 +297,34 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051, (u) and (w) in run
   2221. Nothing else in the core is unused (RULES, Core inventory, run 2221 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Core review 2026-10-17, autorun run 20261017-0518: (x) tried as the rule, kept an option mode
+NEXT step 95 (set by review-intent run 0456): decide (x); the guard is three modes of one parameter. Branch
+`core-review-0518`; the trial is its first commit (`4aa1a96`), reverted before merge.
+1. **The trial.** The kin guard as the rule in place of mode 0 (`lysJoint` 0: across a joint a lysis side lyses a
+   partner unless it carries the identical side; 1 kept as the option, 2 dropped). Reads as (x) (own fixed type, the
+   bonded side's glue and marks: local, independent review). It changes no world without copy error or the mutagen
+   (no founder of a mode-0 check carries the side it binds by across a joint; independent review of every founder), and
+   it would have removed one option mode.
+2. **Why it was not kept.** In the copy-error trap worlds one error makes the head `Z@&c@|z` into `Z@&c@|z!` (the `!`
+   toggled on its own side), the nursery-guard head. Mode 0 lyses it on every `z!` (the second cells' traps and its own
+   kind); the kin guard spares it, and it raises its own kind on itself and on the traps (an observation hook of the independent review,
+   not committed; `copy-error` world seed 1, 20k: 2307 spared passes, 1819 of them `Z@&c@|z!` raised on its own kind). It is a guarded nursery under
+   copy error, as (x) predicts, so it takes the world and the letters stop: in `seal-evolve`'s worlds (to 240k) Z ends on
+   94-100% of heads in 4 of 4, the commons class I is gone by 25-85k, and the site seals in 1 of 4. Checks (part 1 of
+   the branch suite, PART1N checks): `race` 2 of 4 (need 3) and `seal-evolve` 1 of 4 (need 3) fail, `pair-flow-i` passes
+   with one world changed, PART1REST. Two working capabilities lost (the loop of letters, the self-sealing site) for
+   one option mode is the wrong trade; the slice stopped there (part 2 not run).
+3. **Decision.** (x) stays `lysJoint: 2`, an option mode. The guard needs its three modes, each for a capability the
+   others lose: 0, the trap, keeps the loop of letters turning (the trap culls kin as well, so no head guards a nursery
+   for long: `race`, `seal-evolve`); 1, the lock, keeps a public lock (the line's preset: `line`,
+   `two-locks`, `lock-guard`); 2, the kin guard, keeps a lineage's heredity under copy error (`kin-guard-evolve`,
+   `mutual-*`, priority 39's platform). Mode 2 is a trap for strangers and a lock for kin, so it is both for a nursery,
+   but it is no public lock (the key raised on a public lock carries no lock) and it freezes the letters (IDEAS "A
+   guard that knows its own stops the loop"). The line keeps preset 1; priority 39's worlds set 2.
+4. **Also.** `lysJoint` now refuses any value but 0, 1 and 2 (no output changes). Locality re-checked against the code
+   (audit above): unchanged since run 2221 but for mode 2's read, local. `pBond` stays (its removal changes the random
+   stream: still waiting for a change that changes outputs anyway).
 
 ### Candidate (y): a lysis side spares, on any bond, a partner that carries the same side, 2026-10-17, autorun run 20261017-0416 (explore): not proposed
 NEXT step 93 (partner choice). Derivation: IDEAS "Checking and keeping exclude each other"; runs: INNOVATIONS run 0416.
@@ -1216,6 +1250,6 @@ copied.
 ## Parameters (defaults)
 Physics: `sigma 0.3, sigmaRot 0.45, pairTol 0.35, direct 1.0, subStep 0.8, bisect 1, split true`. Chemistry: `pBond 1,
 capture 0.6, triTolClose 0.05, openRange 120, pErr 0` (copy error, run 0651), `lysJoint 0` (candidate (v), run 1951: the
-one option; `lysOneWay` removed in run 20261008-2221; `heldCopy` became the rule 2026-10-04, run 0820).
+one option, modes 0, 1 and 2 (candidate (x), run 2258), any other value refused since run 20261017-0518; `lysOneWay` removed in run 20261008-2221; `heldCopy` became the rule 2026-10-04, run 0820).
 (Removed 2026-10-03 with the casting lineage: `hingeAngle`, `hingeRate`, `dropTol`, `lockRange`, `sigRange`,
 `pLoose`, `light`.)
