@@ -29,6 +29,33 @@ in 480k); a lysing side is a trap that kills the body. A ring whose chain cells 
 four sites and loses to the chain that keeps its side for copies: a gain a body gives away is public (IDEAS "A closed
 side, not a lysing one").
 
+## Slice in progress (autorun run 20261017-1406, explore): priority 40, when a joint lets go (on paper first)
+
+Goal: the smallest change on the keeping side (a checked bond that outlasts completion), what it reads, and whether it
+makes bodies that never let go or self-binders; build only if neither; test what the existing core already offers.
+Done when: the argument is written (IDEAS, RULES Core changes) and its predictions read in 4 worlds each. Stop: one
+design tested, no tuning.
+Theory (before any run):
+- T1 **The keeping side is already in the core, by time.** A joint is cut when the `&` triangle's own body (between
+  joints) hears no open front, and its own `@` sides count. So a kid whose site is an attach side (`Y@&c@y@!`) keeps
+  its parent's bond until its own kid arrives: buds of two raised cells, both checked while they wait (run 2151 tried it
+  without the guard, `Y@&y@!y@!`, and lost to a one-site cheat and to site errors that nobody fills).
+- T2 **Keeping for good makes a ring of six.** Cells bonded one to the next by the same pair of sides turn 60 degrees
+  about one shared vertex (run 0726's rings, run 0416's fans). A rule that keeps every checked joint (candidate (z): an
+  `&` side bonded to a lysis side it carries itself is never cut) makes a lineage one fan: at most six heads about one
+  vertex, its last site facing the first root, every site bonded or blocked: no head is copied again (a sink).
+- T3 **So keeping must alternate with letting go**, and on a cell of identical copies the alternation can come from
+  the side (two sites: keep and let go; with root and front that is a fourth role on a three-sided cell, (y)'s cost
+  again) or from time (T1, in the core). Under the kin guard run 2151's site-error sink is gone (a kid whose only `y@!`
+  changed is no kin and is lysed while it waits).
+Predictions (batch `runs/e1.json`: `PAW=2`, `lysJoint` 2, `pErr` 1e-9, 60k, seeds 1-4, bodyprobe with `BP_RIGID=1`;
+`p` the platform `Y@&c@y! C@s!T`, `w` `Y@&c@y@! C@s!T`, `k` the platform under (z) as a throwaway `runs/keep.js`):
+- P1 (z): no rigid body holds more than six roots at any census, and every `k` world dies or freezes (no copies) by 30k.
+- P2 `w` lives in 3 of 4 to 60k.
+- P3 the share of heads in rigid bodies of two or more roots in `w` is at least twice `p`'s (30-60k censuses).
+- P4 `w` holds fewer heads than `p` (0.5-0.9 of it): its waiting site is no copy side for most of a kid's life, and the
+  whole-body hazard takes mother and daughter together.
+
 **Handoff status (autorun run 20261017-1302, build): priority 39's second and last slice done (progressed).** Theory,
 then entry tests on `rosette`'s world (4 seeds, 60k) and one copy-error watch; slice record with predictions in
 `docs/NEXT.md` at `5b9516d` (branch `build-1302`); INNOVATIONS and IDEAS ("A closed side, not a lysing one") have it all.

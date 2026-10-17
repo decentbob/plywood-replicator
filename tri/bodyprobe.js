@@ -14,3 +14,12 @@ const orig=TriSim.prototype._copy;TriSim.prototype._copy=function(){orig.call(th
     done[k]=(done[k]||0)+1;if(k>=3){cells3+=k;const key=L.map(u=>canon(this.typeName(u))).sort().join('+');big.set(key,(big.get(key)||0)+1);}}
   const h=o=>Object.keys(o).sort((a,b)=>a-b).map(k=>k+':'+o[k]).join(' ')||'-';
   console.log(`body: t=${this.t} individuals ${h(all)} | complete ${h(done)} | cells in complete 3+ ${cells3} | ${[...big].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v])=>v+'x '+k).join(', ')||'-'}`);};
+// BP_RIGID=1 (explore run 20261017-1406): also a 'rigid:' line at the same times: rigid bodies (triangles joined by any
+// bond, joints included: what moves as one) by their number of root cells (cells with an '&' side), and the cells of
+// bodies with two or more root cells
+if(process.env.BP_RIGID){const o2=TriSim.prototype._copy;TriSim.prototype._copy=function(){o2.call(this);if(this.t<T0||this.t%EV)return;
+  const n=this.n,P=new Int32Array(n).map((_,i)=>i),f=x=>{while(P[x]!==x)x=P[x]=P[P[x]];return x;};
+  for(let u=0;u<n;u++)for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;const a=f(u),b=f((q/3)|0);if(a!==b)P[a]=b;}
+  const R=new Map(),C=new Map();for(let u=0;u<n;u++){if(!this.bonded(u))continue;const r=f(u);C.set(r,(C.get(r)||0)+1);if(this.done[u*3]||this.done[u*3+1]||this.done[u*3+2])R.set(r,(R.get(r)||0)+1);}
+  const by={};let c2=0;for(const [r,c] of C){const k=R.get(r)||0;by[k]=(by[k]||0)+1;if(k>=2)c2+=c;}
+  console.log(`rigid: t=${this.t} bodies by roots ${Object.keys(by).sort((a,b)=>a-b).map(k=>k+':'+by[k]).join(' ')} | cells in 2+ roots ${c2}`);};}
