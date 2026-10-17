@@ -9,9 +9,9 @@
 //   contact copying  a free copy blank ('?') bound to an attached triangle takes its type and lets go (with probability
 //                    pErr one side of it wrong: copy error); no copy blank binds an anchor side ('|')
 //   completion       the open signal from open growth fronts; '&' sides let go and are spent once none is heard
-//   lysis            a triangle bonded to a lysis side ('!') is lysed (with lysJoint, not across a joint; lysJoint 2:
-//                    across a joint only if it does not carry that same side itself); lysis is
-//                    relayed one bond per pass; a lysed triangle cuts all its bonds and returns to a fresh state
+//   lysis            a triangle bonded to a lysis side ('!') is lysed, across a joint only if it does not carry that same
+//                    side itself (with lysJoint, never across a joint); lysis is relayed one bond per pass; a lysed
+//                    triangle cuts all its bonds and returns to a fresh state
 //   joints           no signal and no relayed lysis crosses a joint, a bond on which either side carries '&'
 // (Chain copying, strands and the anchor's catch of a strand end were retired on 2026-10-08, core review run
 // 20261008-2221: git `1284bb4`; the casting lineage's rules on 2026-10-03: git `7415fd4`; docs/RULES.md Core changes.)
@@ -73,15 +73,15 @@ class TriSim extends Physics{
     // ly (lysis): 1 for a triangle bonded to a partner's lysis side '!', or hearing lysis from a partner (previous pass)
     // across a bond that is not a joint (neither side carries '&': the joint between a bud and its parent stops it, as it
     // stops the open signal); 2 for a bonded triangle that was lysed in the previous pass (its partners have heard it: it
-    // cuts its bonds this pass). lysJoint (candidate (v), run 20261008-1951; default 0, kept an option in core review run
-    // 20261008-2221): a lysis side lyses no partner across a joint either (lysis never crosses a joint); lysJoint 2
-    // (candidate (x), run 20261016-2258): across a joint it lyses a partner unless that partner carries a side identical
-    // to it, glue and marks (it reads its own type and the side it is bonded to)
+    // cuts its bonds this pass). Across a joint a lysis side lyses a partner unless that partner carries a side identical
+    // to it, glue and marks (it reads its own type and the side it is bonded to; candidate (x), run 20261016-2258, the rule
+    // since core review run 20261017-0518). lysJoint (candidate (v), run 20261008-1951; default 0, an option): a lysis
+    // side lyses no partner across a joint at all (lysis never crosses a joint)
     const lj=this.p.lysJoint,same=(x,q)=>this.glue[x]===this.glue[q]&&this.cOnly[x]===this.cOnly[q]&&this.att[x]===this.att[q]&&this.done[x]===this.done[q]&&this.anc[x]===this.anc[q]&&this.cpy[x]===this.cpy[q]&&this.lys[x]===this.lys[q],
       kin=(u,q)=>same(u*3,q)||same(u*3+1,q)||same(u*3+2,q);
     for(let u=0;u<n;u++){let L=0;
       for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;if(ly0[u]){L=2;break;}const jt=this.done[u*3+i]||this.done[q];
-        if(this.lys[q]&&!(jt&&(lj===1||lj===2&&kin(u,q)))||ly0[(q/3)|0]&&!jt)L=1;}
+        if(this.lys[q]&&!(jt&&(lj||kin(u,q)))||ly0[(q/3)|0]&&!jt)L=1;}
       this.ly[u]=L;}
   }
   // an open front: an unbonded glued attach side '@' that is not '&'. A triangle caught by glue with one emits the open

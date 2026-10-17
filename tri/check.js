@@ -494,10 +494,10 @@ const CHECKS=[
   // nursery keeps every census (24 of 24 in 4 of 4, against a guarded majority in 5-8 of 24 with lysJoint 1 or with a
   // guard that compares the glue only, whose cheat was a close-only site 'y.!')
   {id:'kin-guard',cap:'With lysJoint 2 (a lysis side spares across a joint only a partner carrying the same side) the nursery\'s entered cheats are lysed on its sites and lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:80000,secs:150,
-    env:{...ent,TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}',PA3T:'20000',PA3:'Y@&c@|- C@|-Z@&'},
+    env:{...ent,TRI_PARAMS:'{"pErr":1e-9,"lysJoint":0}',PA3T:'20000',PA3:'Y@&c@|- C@|-Z@&'},
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [e.c.G>=500&&e.c.n===e.c.G,`at 80k guarded nursery ${e.c.G} of ${e.c.n} head-shaped cells (cheats and others ${e.c.n-e.c.G})`];}},
   {id:'kin-guard-evolve',cap:'  under copy error the guarded nursery keeps most head-shaped cells in every census: its cheats cannot use its sites',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:220,
-    env:{...body,TRI_PARAMS:'{"pErr":0.01,"lysJoint":2}'},
+    env:{...body,TRI_PARAMS:'{"pErr":0.01,"lysJoint":0}'},
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const late=R.filter(r=>r.t>=20000),held=late.filter(r=>r.c.G>0.8*r.c.n).length;
       return [held===late.length&&e.c.n>=400,`guarded nursery on more than 80% of head-shaped cells in ${held} of ${late.length} censuses from 20k, ${e.c.G} of ${e.c.n} at 120k`];}},
   // run 20261017-0252 (build; priority 38, two classes under the guard): two leaky nurseries front to front, a head 'Y@&c@y!'
@@ -508,7 +508,7 @@ const CHECKS=[
   // dies at once. A public filler of a foreign root (Z@&C@|-) entered rare takes the catcher role; a public head of
   // the guarded root (Y@&c@|-) is lost, its free copies lysed on the empty Y sites (the guard traps its root's public cells).
   // Under copy error both locks hold for 30-115k, then one is lost to a public partner made by a root error.
-  ...(()=>{const mu={PAW:'2',PA2:'Y@&c@y! C@x!X@&',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}'},
+  ...(()=>{const mu={PAW:'2',PA2:'Y@&c@y! C@x!X@&',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":0}'},
     ge=q=>q.n>0&&q.G>q.n/2;return [
   {id:'mutual-pair',cap:'Two obligate classes under the guard: two leaky nurseries front to front (Y@&c@y! C@x!X@&, lysJoint 2, no filler) complete each other\'s kids with their waiting kids\' copies',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:90,env:mu,
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];
@@ -519,7 +519,7 @@ const CHECKS=[
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [!(e.C.R.X||0)&&(e.C.R.Z||0)>=200&&e.c.G===e.c.n,`at 60k X cells ${e.C.R.X||0}, Z fillers ${e.C.R.Z||0}, Y nurseries ${e.c.G} of ${e.c.n}`];}},
   {id:'mutual-trap',cap:'  a public head of the guarded root (Y@&c@|-) entered rare is lost: its free copies are lysed on the empty Y sites',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:{...mu,PA3N:'10',PA3T:'20000',PA3:'Y@&c@|- C@x!X@&'},
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [e.c.G===e.c.n&&e.C.G===e.C.n&&e.c.n>=400,`at 60k Y nurseries ${e.c.G} of ${e.c.n} head-shaped cells, X nurseries ${e.C.G} of ${e.C.n}`];}},
-  {id:'mutual-pair-evolve',cap:'  under copy error both locks hold to 25k or longer; at 120k a guarded shape and its partner shape remain',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,env:{...mu,TRI_PARAMS:'{"pErr":0.01,"lysJoint":2}'},
+  {id:'mutual-pair-evolve',cap:'  under copy error both locks hold to 25k or longer; at 120k a guarded shape and its partner shape remain',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,env:{...mu,TRI_PARAMS:'{"pErr":0.01,"lysJoint":0}'},
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const both=R.filter(r=>r.t<=25000).every(r=>ge(r.c)&&ge(r.C)),k=R.filter(r=>ge(r.c)&&ge(r.C)).pop(),
         one=(e.c.G>0.8*e.c.n&&e.C.n>=0.1*(e.c.n+e.C.n))||(e.C.G>0.8*e.C.n&&e.c.n>=0.1*(e.c.n+e.C.n));
       return [both&&one,`both locks to ${k?k.t/1000+'k':'-'}; at 120k head-shaped ${e.c.G} guarded of ${e.c.n}, catcher-shaped ${e.C.G} of ${e.C.n}`];}},
