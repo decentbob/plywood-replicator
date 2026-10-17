@@ -611,6 +611,16 @@ const CHECKS=[
     pass:win('Y@&!y@!y!','Y@&y@!y!',true)},
   {id:'root-guard-rare',cap:'  entered rare (10 bodies at 10k into the one-type world) the guarded form is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...nw,PADI:'100',PA2:'Y@&y@!y! Y@&y@!y!',PA3:'Y@&!y@!y! Y@&!y@!y!'},
     pass:win('Y@&!y@!y!','Y@&y@!y!',false)},
+  // the root guard on the platform head (build run 20261017-2158): Y@&!c@y! guards both its joints (root and site). From
+  // 10 bodies of each head at the start it takes the world where free parts live 100 steps, and loses it where they live
+  // 25 (there the kid that lysed its raiser is lost about as often as the raiser it freed); there the plain head entered
+  // as 10 bodies takes the guarded world
+  {id:'guard-plat',cap:'The root guard on the platform head (Y@&!c@y! C@s!T), 10 bodies of each at the start, free parts living 100 steps: the guarded head takes the world',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...nw,PADI:'100',PA3T:'1',PA2T:'1',PAEN:'10',PA2:'Y@&c@y! C@s!T',PA3:'Y@&!c@y! C@s!T'},
+    pass:win('Y@&!c@y!','Y@&c@y!',true)},
+  {id:'guard-plat-s',cap:'  where free parts live 25 steps and partners are copied at one side (C@s!T|) the plain head takes the world from the same start',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...nw,PA3T:'1',PA2T:'1',PAEN:'10',PA2:'Y@&c@y! C@s!T|',PA3:'Y@&!c@y! C@s!T|'},
+    pass:win('Y@&!c@y!','Y@&c@y!',false)},
+  {id:'guard-plat-in',cap:'  and the plain head entered there (10 bodies at 10k) takes the guarded head\'s world',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...nw,PA2:'Y@&!c@y! C@s!T|',PA3:'Y@&c@y! C@s!T|'},
+    pass:win('Y@&c@y!','Y@&!c@y!',true)},
   ];})(),
   ];})(),
   ];})(),
