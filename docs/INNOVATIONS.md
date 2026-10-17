@@ -12,6 +12,56 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-2102, explore)
+
+- **Kin in place of the partner: the one-type head `Y@&y@!y!` has two sites and no partner; it is a flow that takes a
+  world whose material lies free and is kept out of one whose material is held; under copy error its root guard
+  (`Y@&!y@!y!`) is a ratchet, lost when rare and selected once common** (NEXT priority 43; IDEAS "Two sites and no
+  partner"). No rule change; `tri/waitprobe.js` takes the attach side as the front when both free sides are lysis sides.
+  Worlds: `PAW=2`, `lysJoint` 2, `pErr` 1e-9 unless said; the one-type founder is two cells, `PA2='Y@&y@!y! Y@&y@!y!'`
+  (a one-cell strip binds nothing: a free triangle).
+  - **Theory** (before the runs): every bond holds a root, so every bond is a joint and a cell is held by its parent
+    exactly until its own front is bound; both free sides raise kin by the same rule; a body is an elder with the
+    cells it raised that still wait (fans about a vertex), and the elder is lost once both its sides are empty at once.
+  - **Alone** (4 seeds, 60k, `runs/k2.json` `a`): alive 4 of 4 with 936-967 kin cells (P1 yes; the platform has about
+    520 heads); every cell in a rigid body of two or more roots, 35-41% in pairs, the largest body 7-8 roots at any
+    census from 10k (P2 yes); front wait 503-566 against site 397-431 steps (ratio 1.3, P2's factor 1.5 yes): the front
+    is filled in place, like a site. Copies 130k by 60k (the platform with common partners: 77k).
+  - **Entered against the platform** (10 two-cell bodies at 10k): where partners are scarce (`C@s!T|`, `PADI` 25) the
+    kin head took the world in 4 of 4 (957 of 1000 cells by 15k, the platform extinct by 20k; P3 yes; check
+    `kin-take`); where they are common (`C@s!T`, default decay; wait ratio 0.4) it was lost in 4 of 4 by 12.5-15k (P4
+    **no**; check `kin-take-c`). The platform entered into the kin world was lost in both settings (4 of 4 each, P5
+    yes). Fine time course (`PAP=500`, seed 1): free blanks 99-141 in the scarce world against 9-11 in the common one.
+    The kin line sheds an elder every generation and needs births to keep its bodies; the platform's body keeps its
+    partner with none. So free material decides, not the waits.
+  - **Under copy error** (`pErr` 0.01, 240k, `PATN` 30, `runs/kE.json`): no partner arose (no cell of another front
+    letter above 2%) and bodies stayed 2-8 roots (4 of 4); `Y@&y@!y!` stayed the commonest head in 2 of 4 (P6 **no**):
+    in the other two the root guard `Y@&!y@!y!` replaced it (more than half of cells by 100k and 80k), and it reached
+    20% and 4% in the first two. Drift alone: the anchored root `Y@&|y@!y!` (read by no rule on a bonded root) rose to
+    10-18% and fell back.
+  - **The root guard** (`runs/k3.json`, `k4.json`): its kid, raised by a cell without the guard, lyses that cell across
+    the joint; a plain kid at a guarded cell is spared. Entered as 10 bodies into the kin world it was lost 4 of 4 (P7
+    **no**; check `root-guard-rare`), as was the anchored root (P9 yes), and the kin entered into its world was lost 4
+    of 4 (P8 yes); from 10 bodies of each at the start it won 8 of 8, both orders (P10, "3 to 5 of 8, as drift",
+    **no**; check `root-guard`, seeds 1-4). **Threshold** (`runs/k5.json`,
+    `k6.json`, shared start, 4 seeds each): the guarded form won at 25% of bodies 3 of 4 (the fourth mixed), at 10% 3 of
+    4, and at 2% (1 of 50) it was lost 4 of 4 by 20k (P11: 25% yes, 10% "at most 2 of 4" **no**; P12, "1 or more of 4
+    at 2%", **no**); the neutral anchored root at 10% won 1 of 4 and lingered at 29% in another (P12's control yes).
+    Lost faster than drift when rare, selected when common: positive frequency dependence with a threshold between 2%
+    and 10%, which copy error's drift crossed in 2 of 4 worlds (the anchored root drifted to 10-18%).
+  - Predictions: NEXT slice record (`docs/NEXT.md` at `327c043`; P7-P9 at `0d2a859`, P10 at `993c1e5`, P11 at
+    `d0c14de`, each before its batch).
+  - Picture: [kin-front.png](pictures/kin-front.png) (left, the kin head alone at 12k: bodies of two to eight kin
+    cells; right, 10 kin bodies entered at 10k into the scarce platform's world, at 12k).
+  - Commands: `node tri/check.js --cmd kin-take kin-take-c root-guard root-guard-rare`; alone: `PAW=2
+    TRI_PARAMS='{"pErr":1e-9,"lysJoint":2}' PA2='Y@&y@!y! Y@&y@!y!' node tri/demos.js pair 1 60000 runs/x` (with
+    `NODE_OPTIONS='-r ./tri/bodyprobe.js -r ./tri/waitprobe.js' BP_RIGID=1`); batches as in the slice record's
+    commit messages (`runs/k2.json`-`k5.json`, `kE.json`).
+  - Status: the one-type head alone (**works**, 4 of 4), takes the scarce platform's world (**works**, `kin-take`),
+    lost where partners are common (`kin-take-c`); the root guard selected once common, lost when rare (**works**,
+    `root-guard`, `root-guard-rare`); a body that persists or grows in the one-type world (**not**: the body is a
+    conveyor).
+
 ## 2026-10-17 (autorun run 20261017-1902, build)
 
 - **The closed platform at length: the seal is not kept; each parasite escapes toward the larger standing class of

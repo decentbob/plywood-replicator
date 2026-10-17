@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-1902, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-17 (after autorun run 20261017-2102, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first; each entry names its checks, commands and the commit of its slice record
 with the predictions), RULES (Core changes), ROADMAP backlog A (every done priority with its run and checks), the
 autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`). Run branches are
@@ -25,36 +25,43 @@ Where the line stands (INNOVATIONS has the numbers, IDEAS the reasoning under th
 - **The wait that pays** (run 1602): the ratio of the wait for a partner to the wait for a kid orders every entry test;
   where partners are scarce the head that does not wait for its partner (`Y@&cy@!`) wins. Scarcity is not kept under
   copy error, and in one world kin replaced the partner (`Y@&y@!y!`, a one-type world: priority 43).
+- **Kin in place of the partner** (run 2102, "Two sites and no partner"): the one-type head `Y@&y@!y!` raises kin at both
+  free sides, every bond a joint; its body is a conveyor (an elder and the cells it raised that still wait, 2-8 cells),
+  not an individual that persists. A flow: it takes a world whose blanks lie free and is lost where a stock (the
+  platform with common partners) holds the material; each keeps the other out. Under copy error no partner returns;
+  the root guard `Y@&!y@!y!` is a ratchet (lost below 2-10% of bodies, selected above).
 - **The seal** (run 1902, "The seal is a race of standing minorities"): a parasite selects every partner it cannot read
   alike, so the escape goes to the class that stood larger, closed or another letter (22 of 23 episodes), and a letter
   usually stands larger (six times likelier per copy error). Under a seal no reader finds a side, so nothing keeps it:
   to 1.2M it drifts out and comes back with the episodes; only letters and marks vary, never the shape.
 
-**Handoff status (autorun run 20261017-1902, build): priority 41 done (progressed).** The closed platform watched to
-1.2M (8 worlds, sealed and open founders) and the escape race entered: checks `rosette-race`, `rosette-race-r` (3 of 4
-each, digests written; no rule or output change elsewhere); `census.js --partner` gained the closed share and readers,
-`census.js --race` reads each episode, `linechart.js` `LC_CLOSED=1`; picture `seal-race.png`. Predictions: P2, P4, P5,
-P6 yes; P1, P3 (first part), P7 no (INNOVATIONS run 1902 has each). The slice record is this file at `9846f0f`. The
-1.2M worlds are only in `runs/` (gone): `runs/h1.json` is in INNOVATIONS (42 minutes per world, 4 at once). Nothing is
-running.
+**Handoff status (autorun run 20261017-2102, explore): priority 43 done (progressed).** Kin in place of the partner,
+alone, entered both ways with partners scarce and common, under copy error, and the root guard that arose there: checks
+`kin-take`, `kin-take-c`, `root-guard`, `root-guard-rare` (4 of 4 each, digests written; no rule or output change
+elsewhere); `tri/waitprobe.js` reads a front that is a lysis side; picture `kin-front.png`. Predictions: P1-P3, P5, P8,
+P9, P11 (25%) yes; P4, P6, P7, P10, P11 (10%), P12 (2%) no (INNOVATIONS run 2102 has each). The slice record is this file
+at `cb48429` (batches `runs/k2.json`-`k6.json` and `kE.json` in the commit messages from `327c043` on; 60k worlds take
+2-5 minutes, the 240k copy-error ones 7). Nothing is running.
 
-**Next step (rotation 103, explore): priority 43** (kin in place of the partner). Then 104 build, 105 explore, 106
-review-intent.
+**Next step (rotation 104, build): priority 44** (the guard on every side). Then 105 explore (45), 106 review-intent.
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36-42: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+Done 1-24, 28-30, 32-34, 36-43: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
-Open (set by review-intent run 20261017-0456, 43 by build run 1602, 41 done in run 1902; reasoning in IDEAS "What a lineage owns is what it
-raises" and "The wait that pays"):
-43. [103 explore] **Kin in place of the partner.** In one copy-error world from the scarce platform (run 1602, `pe1`)
-    the front changed to the root's complement and the partner went extinct: `Y@&y@!y!`, one type whose front (`y@!`,
-    attach and guarded) and site (`y!`, guarded) both raise kin. Theory first: what a kid waits for (its front only),
-    which bodies leave and how big they are (fans about a vertex?), whether it is a sink. Then alone (4 seeds, without
-    copy error, from one founder; `PA2='Y@&y@!y!'` is a one-type strip: check the founder binds), entered into the
-    platform's world and the platform into its world, with partners common and scarce. One check if a number holds
-    in 3 of 4.
+Open (set by review-intent run 20261017-0456; 44 and 45 by explore run 2102; reasoning in IDEAS "What a lineage owns is
+what it raises", "The wait that pays" and "Two sites and no partner"):
+44. [104 build] **The guard on every side.** In the one-type world the root guard (`Y@&!y@!y!`: a kid lyses a raiser
+    without the guard) is lost below a threshold between 2% and 10% of bodies and selected above it (run 2102); the
+    mechanism (a guarded kid takes a plain body apart, a plain kid is raised by a guarded cell) is inferred, not
+    counted. Count it (a probe of lysis events by the lysing side's owner and the lysed cell's type), then put the same
+    mark on the platform head (`Y@&!c@y! C@s!T`: even start and entered, partners scarce and common) and say whether a
+    head guarded on every side freezes its letters under copy error (no one-error variant is raised by it).
+45. [105 explore] **Flow and stock.** The kin line (a flow) wins where blanks lie free, the platform (a stock) where its
+    partners hold the material, and each keeps the other out (run 2102). Theory first: under a labelled drive that
+    varies in space or time (free parts decaying fast in part of the world), can both persist, side by side or in turn,
+    and does copy error then make variants that use both? A drive map may need a demo option.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. 39 is its next.
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -63,13 +70,14 @@ raises" and "The wait that pays"):
     open site (length as defence). On the platform (run 0726) the lattice stops a chain: bound by one side each time it
     closes after four cells into a ring of six (`rosette`); that ring is a parasite's, covering its head's site.
 26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
-    as a cheat, not as a predator, and guards against chains (run 0551).
+    as a cheat, not as a predator, and guards against chains (run 0551). The root guard of the one-type head (run 2102)
+    is the first case with a measured threshold (priority 44).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); its genome copying left the
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 0456): 102 build, 103 explore, 104 build,
-105 explore, 106 review-intent (the direction check 39's stop rule sends it to).
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 0456): 104 build, 105 explore, 106 review-intent
+(the direction check 39's stop rule sends it to).
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) the option mode `lysJoint: 2` since run
 2258, tried as the rule and kept an option in run 0518; (y) written and not proposed in run 0416; (z) written and not proposed in run 1406; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
@@ -81,7 +89,7 @@ Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 0456): 10
   random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 101 since run 1902, about 12 minutes
+- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 105 since run 2102, about 15 minutes
   more per part); physics is most of it (INNOVATIONS run 20261017-0902; a cell-distance cut in `_pairs` would rarely
   skip a cell: the pair reach, 1.39, is about a cell, 1.4). When a
   part nears 2 hours, `--part k/3` balances three parts the same way. Worlds shared between checks: only `race`/`seal-evolve` had one setting

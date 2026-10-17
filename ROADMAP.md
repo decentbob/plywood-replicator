@@ -204,6 +204,13 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    same counts); between episodes the seal drifts. On a body nothing reads only letters and marks drift; the guarded
    head's letters never changed and bodies stayed of two cells (8 of 8) (run 1902; `rosette-race`, `rosette-race-r`;
    IDEAS "The seal is a race of standing minorities").
+   43 (explore) kin in place of the partner: the one-type head `Y@&y@!y!` has two sites and no partner (every bond a
+   joint, each cell held until its own front is bound); its body is a conveyor (an elder and the cells it raised that
+   still wait, 2-8 cells, the elder lost each generation), alone 936-967 cells (4 of 4); a flow, it takes the scarce
+   platform's world where blanks lie free and is lost where common partners hold the material, and the platform
+   entered into its world is lost either way; under copy error no partner returns, and the root guard `Y@&!y@!y!`
+   replaced it in 2 of 4: lost below a threshold between 2% and 10% of bodies, selected above it (run 2102; `kin-take`,
+   `kin-take-c`, `root-guard`, `root-guard-rare`; IDEAS "Two sites and no partner").
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell

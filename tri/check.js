@@ -597,6 +597,20 @@ const CHECKS=[
     pass:win('Y@&c@y!','Y@&cy@!',false)},
   {id:'no-wait-c',cap:'  control: with partners copied at two sides (C@s!T) and the same drive, the head that does not wait is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...nw,PA2:'Y@&c@y! C@s!T',PA3:'Y@&cy@! C@s!T'},
     pass:win('Y@&cy@!','Y@&c@y!',false)},
+  // Kin in place of the partner (explore run 20261017-2102): the one-type head Y@&y@!y! (front and site both raise kin, each
+  // guarded) entered as 10 two-cell bodies at 10k. It takes the world where free parts decay fast and blanks lie free;
+  // where the platform's partners come quickly and hold the material, it is lost
+  {id:'kin-take',cap:'Kin in place of the partner: the one-type head Y@&y@!y! (10 bodies at 10k) takes the scarce platform\'s world (C@s!T|, free parts living 25 steps)',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...nw,PA2:'Y@&c@y! C@s!T|',PA3:'Y@&y@!y! Y@&y@!y!'},
+    pass:win('Y@&y@!y!','Y@&c@y!',true)},
+  {id:'kin-take-c',cap:'  control: where partners are common (C@s!T, free parts living 100 steps) and blanks few, the kin head is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:{...nw,PADI:'100',PA2:'Y@&c@y! C@s!T',PA3:'Y@&y@!y! Y@&y@!y!'},
+    pass:win('Y@&y@!y!','Y@&c@y!',false)},
+  // the root guard on the one-type head (Y@&!y@!y!: its kid lyses a raiser without the guard across the joint), which
+  // replaced Y@&y@!y! in 2 of 4 worlds under copy error: selected once common, lost when rare (both start at step 1 or
+  // enter at 10k as 10 bodies)
+  {id:'root-guard',cap:'The root guard (Y@&!y@!y!) against the one-type head (Y@&y@!y!), 10 bodies of each at the start: the guarded form takes the world',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...nw,PADI:'100',PA3T:'1',PA2T:'1',PAEN:'10',PA2:'Y@&y@!y! Y@&y@!y!',PA3:'Y@&!y@!y! Y@&!y@!y!'},
+    pass:win('Y@&!y@!y!','Y@&y@!y!',true)},
+  {id:'root-guard-rare',cap:'  entered rare (10 bodies at 10k into the one-type world) the guarded form is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...nw,PADI:'100',PA2:'Y@&y@!y! Y@&y@!y!',PA3:'Y@&!y@!y! Y@&!y@!y!'},
+    pass:win('Y@&!y@!y!','Y@&y@!y!',false)},
   ];})(),
   ];})(),
   ];})(),
