@@ -244,7 +244,8 @@ random getting with 1/2 a glue drawn from inert and `a..z`, `A..Z`, else one of 
   lock's bond into the lock's carrier (test "lysJoint"; `lysOneWay`, which stopped that, was removed in run 2221).
   `lysJoint: 2` (candidate (x), run 20261016-2258): across a joint a lysis side lyses a partner unless that partner
   carries a side identical to it (glue and marks); a lock `z!` raises a key `Z@&` that carries `z!` itself and lyses any
-  other (test "lysJoint 2"; checks `kin-guard`, `kin-guard-evolve`).
+  other (test "lysJoint 2"; checks `kin-guard`, `kin-guard-evolve`, and the pair of two guarded nurseries `mutual-pair`,
+  `mutual-trap`, run 20261017-0252).
 
 ## Core changes
 
@@ -331,6 +332,11 @@ NEXT priority 38. Derivation: IDEAS "The nursery's share is the environment's" (
    (4 of 4 by 10k), as without `lysJoint`; the nursery's letters are frozen (its root and site turn only together, and no
    cheat of them is a stepping stone). For a core review: adopt as the rule only with a world that needs a trap and a
    lock at once; the line's preset (`PAW=2`) uses `lysJoint` 1.
+7. **Used by build run 20261017-0252 (no change to the rule).** Two guarded nurseries front to front (`Y@&c@y! C@x!X@&`)
+   live under it with no filler; the guard also traps public cells of its own root (a public head of root Y or catcher
+   of root X entered rare is lysed on the empty sites and lost, 4 of 4 each; checks `mutual-trap`, `mutual-filler`), so
+   a class's site-error cheats die on its sites and only root errors make a public partner. It reads no bond that is not
+   a joint, so the partnership itself (a front bond) is unguarded (IDEAS "Each completes the other").
 
 ### Core review 2026-10-08, autorun run 20261008-2221: chain copying retired, (w) removed, (v) kept an option
 NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221`; the removed code at `1284bb4`.

@@ -42,7 +42,7 @@ not statistics.
     its attach mark (`Y&c@y.!`), and the other kept its nursery on every cell of its shape. The lost lock was not reborn
     (0 of 4): the partner lineage lost its root altogether (`C@s!T`, `C@|R!I`, `Pc@y.!`) by 150-245k in 3 of 4; the
     fourth world died at 340k after a Y-root cell with another front (`I@y!Y@&`, raised on Y's sites as kin) spread.
-  - Predictions (NEXT slice record, this file at the merge's parent on branch `build-0252`): P1 yes, P2 no, P3 yes (shows
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `99ea2f5` on branch `build-0252`): P1 yes, P2 no, P3 yes (shows
     nothing: P2 failed), P4 yes (its first reading, 1.3x the bodies, was a census artefact: corrected), P5 yes, P6 yes,
     P6b no, P7 yes, P8 yes, P9 yes, P10 yes.
   - Picture: [mutual-pair.png](pictures/mutual-pair.png) (the pair's world at 20k, Y heads red, X catchers blue; a zoom
