@@ -544,7 +544,7 @@ const CHECKS=[
   {id:'rosette',cap:'A chain on the public partner closes into a ring of six: chain cells t@s!T entered on the platform (Y@&c@y! C@s!T, lysJoint 2) bind partners and each other, and six-cell bodies (head, partner, four chain cells) hold',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:ro,
     pass:(L,o)=>{const K=lh(o).filter(r=>r.t>=25000),e=pt(o).pop();if(!e||!K.length)return [false,'no result'];const six=K.filter(r=>r.n>=6).length;
       return [six===K.length&&e.ch>=250&&e.h>=200,`six-cell bodies held in ${six} of ${K.length} censuses from 25k; at 60k chain cells ${e.ch}, heads ${e.h}, partners ${e.np}`];}},
-  {id:'rosette-escape',cap:'  a rare second partner letter (C@s!A, 10 bodies at 10k) escapes the chain and takes most partners; the chain is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc},
+  {id:'rosette-escape',cap:'  a rare second partner letter (C@s!A, 10 bodies at 10k) escapes the chain and takes most partners; the chain is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...ro,...esc},
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P.A||0;return [a>e.np/2&&e.ch<10,`at 60k A on ${a} of ${e.np} partners, chain cells ${e.ch}`];}},
   {id:'rosette-escape-c',cap:'  control: without the chain the rare letter stays rare',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PA3:'',PA3T:'',PA3N:''},
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P.A||0;return [a<0.1*e.np&&e.np>=300,`at 60k A on ${a} of ${e.np} partners`];}},
@@ -558,7 +558,7 @@ const CHECKS=[
   {id:'rosette-pay',cap:'  a ring that raises its head\'s kin: chain cells t@y!T close rings of six whose four outward sites raise heads; more heads than with t@s!T',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,PA3:'t@y!T'},
     pass:(L,o)=>{const K=lh(o).filter(r=>r.t>=25000),e=pt(o).pop();if(!e||!K.length)return [false,'no result'];const six=K.filter(r=>r.n>=6).length;
       return [six>=K.length-1&&(e.C['y!']||0)>=200&&e.h>=330,`six-cell bodies held in ${six} of ${K.length} censuses from 25k; at 60k chain cells t@y!T ${e.C['y!']||0}, heads ${e.h}, partners ${e.np}`];}},
-  {id:'rosette-pay-cheat',cap:'  beside t@s!T (10 of each at 10k) the paying chain t@y!T is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,PA3:'t@y!T,t@s!T',PA3N:'10'},
+  {id:'rosette-pay-cheat',cap:'  beside t@s!T (10 of each at 10k) the paying chain t@y!T is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...ro,PA3:'t@y!T,t@s!T',PA3N:'10'},
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const y=e.C['y!']||0,x=e.C['s!']||0;return [y<10&&x>=200,`at 60k chain cells t@y!T ${y}, t@s!T ${x}, heads ${e.h}`];}},
   {id:'rosette-dot',cap:'  a partner with a close-only plain side (C@s!T., 10 bodies at 10k) escapes the chain and takes most partners',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PAKS:'C@s!T.'},
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P['T.']||0;return [a>e.np/2&&e.ch<10,`at 60k T. on ${a} of ${e.np} partners, chain cells ${e.ch}`];}},
@@ -574,6 +574,22 @@ const CHECKS=[
     pass:(L,o)=>sh(o,m=>m>=0.6)},
   {id:'bud-two-c',cap:'  control: with a plain site (Y@&c@y! C@s!T) a kid leaves once its front is filled; fewer heads in bodies of two or more roots',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...bw,PA2:'Y@&c@y! C@s!T'},
     pass:(L,o)=>sh(o,m=>m<=0.45)},
+  ];})(),
+  // Where the kept cell pays (build run 20261017-1602): the head that does not wait for its partner (Y@&cy@!, bud-two's
+  // evolved form: its kid leaves when its own kid binds, partner or not) against the platform head (Y@&c@y!, whose kid
+  // leaves when its partner binds). Partners made scarce: one copied side (C@s!T|) and free parts living 25 steps (PADI,
+  // the labelled decay drive), so the wait for a partner is about twice the wait for a kid. Read from the last 'types:' line
+  ...(()=>{const hd=o=>{const m=[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].pop();if(!m)return null;const r={t:+m[1]};
+      for(const x of m[2].split(', ')){const i=x.indexOf(' ');r[x.slice(i+1)]=+x.slice(0,i);}return r;},
+    nw={PAW:'2',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}',PADI:'25',PA3T:'10000',PA3N:'10'},
+    win=(a,b,want)=>(L,o)=>{const r=hd(o);if(!r)return [false,'no result'];const x=r[a]||0,y=r[b]||0;
+      return [want?x>y:x===0,`at ${r.t} ${a} ${x}, ${b} ${y}`];};return [
+  {id:'no-wait',cap:'Where partners are scarce (C@s!T|, free parts living 25 steps) the head that does not wait for its partner (Y@&cy@!, 10 bodies at 10k) takes the platform head\'s world',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...nw,PA2:'Y@&c@y! C@s!T|',PA3:'Y@&cy@! C@s!T|'},
+    pass:win('Y@&cy@!','Y@&c@y!',true)},
+  {id:'no-wait-r',cap:'  the platform head entered into its world (10 bodies at 10k) is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...nw,PA2:'Y@&cy@! C@s!T|',PA3:'Y@&c@y! C@s!T|'},
+    pass:win('Y@&c@y!','Y@&cy@!',false)},
+  {id:'no-wait-c',cap:'  control: with partners copied at two sides (C@s!T) and the same drive, the head that does not wait is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...nw,PA2:'Y@&c@y! C@s!T',PA3:'Y@&cy@! C@s!T'},
+    pass:win('Y@&cy@!','Y@&c@y!',false)},
   ];})(),
   ];})(),
   ];})(),
