@@ -29,7 +29,8 @@
 //     whose letter complements another side of the same type: it binds its own kind), and from 'body:' lines
 //     (tri/bodyprobe.js) the cells in complete individuals of 3 or more; then the first census with chain cells, the
 //     largest share of chain cells and the partners' commonest letter at each change of it
-//     ('closed': partners whose every side that is neither front nor lysis carries '.', build run 20261017-1902)
+//     ('closed': partners with no side a free reader keeps, each side but the front close-only or lysing, build run
+//     20261017-1902)
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
@@ -122,7 +123,7 @@ function partnerSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():
     for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const n=+c,s=sides(t);if(!s||s.length!==3)continue;r.cells+=n;if(s.some(x=>x.includes('&')))continue;
       const i=s.findIndex(x=>x.includes('@'));if(i<0||s.filter(x=>x.includes('@')).length>1)continue;const o=s.filter((x,j)=>j!==i);
       if(o.some(y=>y[0]===cp(s[i][0])&&!y.includes('.'))){r.ch+=n;continue;}if(!'cC'.includes(s[i][0]))continue;
-      const pl=o.filter(y=>!y.includes('!')),L=pl.length?pl.map(y=>y[0]).join(''):'immune';r.P[L]=(r.P[L]||0)+n;r.np+=n;if(pl.length&&pl.every(y=>y.includes('.')))r.cl+=n;}
+      const pl=o.filter(y=>!y.includes('!')),L=pl.length?pl.map(y=>y[0]).join(''):'immune';r.P[L]=(r.P[L]||0)+n;r.np+=n;if(o.every(y=>y.includes('.')||y.includes('!')))r.cl+=n;}
     R.push(r);}
   if(!R.length){console.log(f+': no types: lines');return;}
   const big=t=>{const ks=Object.keys(B).map(Number).filter(x=>x<=t&&x>t-5000);return ks.length?B[ks[ks.length-1]]:null;};
