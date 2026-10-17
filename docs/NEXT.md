@@ -64,8 +64,9 @@ length the suite can afford). Stop: one batch, read; no new mechanism this run.
   larger standing class of unreadable partners, closed or of another letter; the closed share among them about the same
   after as before).** Theory: under a parasite both unreadable classes are immune and neither reads the other, so they
   grow at the same rate and their ratio holds through the sweep; the seal wins only if it stood larger. Test (`runs/h2.json`,
-  `rosette-dot`'s world, chain cells `t@s!T` at 10k): arm X enters 30 sealed bodies (`PAKS` `C@s!T.`) and 15 of another
-  letter (`PA3` kit `Y@&c@y! C@s!A`), arm Y the reverse; 4 seeds each, 60k.
+  `rosette-dot`'s world, chain cells `t@s!T` at 10k): arm X enters 12 sealed bodies (`PAKS` `C@s!T.`) and 6 of another
+  letter (`PA3` kit `Y@&c@y! C@s!A`, with 6 chain cells), arm Y the reverse; 4 seeds each, 60k (a first try with 30, 15
+  and 15 chain cells ran out of free blanks at 10k: the `PA3` kits never entered).
   - P6: the closed partners are the majority of partners at 60k in X in 3 of 4, and the minority in Y in 3 of 4.
   - P7: in worlds where the chain spread, the closed share among closed and A partners at 60k is within 0.2 of its
     entered share (2/3 in X, 1/3 in Y) in 3 of 4 per arm.

@@ -562,6 +562,13 @@ const CHECKS=[
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const y=e.C['y!']||0,x=e.C['s!']||0;return [y<10&&x>=200,`at 60k chain cells t@y!T ${y}, t@s!T ${x}, heads ${e.h}`];}},
   {id:'rosette-dot',cap:'  a partner with a close-only plain side (C@s!T., 10 bodies at 10k) escapes the chain and takes most partners',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PAKS:'C@s!T.'},
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P['T.']||0;return [a>e.np/2&&e.ch<10,`at 60k T. on ${a} of ${e.np} partners, chain cells ${e.ch}`];}},
+  // The escape is a race of the standing unreadable classes (build run 20261017-1902): the sealed partner and one of
+  // another letter, both immune to the chain and blind to each other, keep their ratio through its sweep, so the larger
+  // one takes the partners; with the two swapped the worlds run the same random stream and give the same counts
+  {id:'rosette-race',cap:'  the sealed partner entered as 12 bodies beside 6 of another letter (C@s!A) and the chain takes most partners',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PAKS:'C@s!T.',PAEN:'12',PA3:'t@s!T,Y@&c@y! C@s!A',PA3N:'6'},
+    pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P['T.']||0,b=e.P.A||0;return [a>e.np/2&&e.ch<10,`at 60k T. on ${a} of ${e.np} partners, A on ${b}, chain cells ${e.ch}`];}},
+  {id:'rosette-race-r',cap:'  swapped (C@s!A as 12, the sealed partner as 6): the other letter takes most partners',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PAEN:'12',PA3:'t@s!T,Y@&c@y! C@s!T.',PA3N:'6'},
+    pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P['T.']||0,b=e.P.A||0;return [b>e.np/2&&e.ch<10,`at 60k A on ${b} of ${e.np} partners, T. on ${a}, chain cells ${e.ch}`];}},
   ];})(),
   // The kid that waits for its own kid (explore run 20261017-1406): a head whose site is an attach side (Y@&c@y@!) hears its
   // own empty site, so a kid keeps its parent's joint until its own kid binds, and leaves carrying it: buds of two raised

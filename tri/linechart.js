@@ -15,7 +15,7 @@
 // sides lysis, dark grey; the majority letter written at each turn), and a black line: chain cells (an attach side that
 // complements another side of the same type) as a share of the cells listed
 // LC_CLOSED=1 (build run 20261017-1902) with LC_PARTNER: a white dashed line, partners with no side a free reader keeps
-// (each side but the front close-only or lysing) as a share of partners
+// (each side but the front close-only, lysing or inert '-') as a share of partners
 //   node tri/linechart.js out.png runs/p36/w1.txt [more files]
 const fs=require('fs'),path=require('path'),{execFileSync}=require('child_process');
 const sides=t=>t.match(/[-a-zA-Z][.@&|?!]*/g),cp=L=>L===L.toLowerCase()?L.toUpperCase():L.toLowerCase();
@@ -41,7 +41,7 @@ if(SH)files.forEach((f,k)=>{const R=[];for(const line of fs.readFileSync(f,'utf8
 if(PT)files.forEach((f,k)=>{const R=[];for(const line of fs.readFileSync(f,'utf8').split('\n')){const m=line.match(/^types: t=(\d+) .*?\| (.*)$/);if(!m)continue;const r={t:+m[1],P:{},np:0,ch:0,cells:0,cl:0};
     for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const n=+c,s=sides(t);if(!s||s.length!==3)continue;r.cells+=n;if(s.some(x=>x.includes('&')))continue;
       const i=s.findIndex(x=>x.includes('@'));if(i<0||s.filter(x=>x.includes('@')).length>1)continue;const o=s.filter((x,j)=>j!==i);
-      if(o.some(y=>y[0]===cp(s[i][0])&&!y.includes('.'))){r.ch+=n;continue;}if(s[i][0]!=='C')continue;const L=o.filter(y=>!y.includes('!')).map(y=>y[0]).join('')||'immune';r.P[L]=(r.P[L]||0)+n;r.np+=n;if(o.every(y=>y.includes('.')||y.includes('!')))r.cl+=n;}
+      if(o.some(y=>y[0]===cp(s[i][0])&&!y.includes('.'))){r.ch+=n;continue;}if(s[i][0]!=='C')continue;const L=o.filter(y=>!y.includes('!')).map(y=>y[0]).join('')||'immune';r.P[L]=(r.P[L]||0)+n;r.np+=n;if(o.every(y=>y[0]==='-'||y.includes('.')||y.includes('!')))r.cl+=n;}
     R.push(r);}rows[k].push(R);});
 rows.forEach(([name,R,R2],k)=>{const y0=top+k*(h+24)+10;if(PT){svg.push(`<text x="6" y="${y0+h/2}" font-family="Arial" font-size="13">${NM[k]||name}</text><rect x="60" y="${y0}" width="${W-80}" height="${h}" fill="#eee"/>`);let last=null;
     for(const r of R2){if(!r.np)continue;const x0=X(r.t-5000),x1=X(r.t);let acc=0;for(const [L,n] of Object.entries(r.P).sort((a,b)=>b[1]-a[1])){const hh=n/r.np*h;
