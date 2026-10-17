@@ -28,6 +28,48 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Rings of six: the partner's free letter is where a parasite lives and where it is escaped (build run 20261017-0726, 2026-10-17)
+
+NEXT priority 39 (growth on the guarded platform), theory first, then the copy-error end states watched to 480k, entry
+tests and checks (INNOVATIONS run 0726; [rosette.png](pictures/rosette.png),
+[rosette-escape.png](pictures/rosette-escape.png)). Notes, not the user's words.
+- **Spent roots make the partner rootless.** A complete cell's root `X@&` is spent: it binds nothing and no blank copies
+  it. So a partner that keeps a root is copied at one side and one that lost it at two, and run 0252's partners drifted
+  to `C@s!T` and `C@|R!I` for that reason (losing only the `&` would leave an open front, which no body survives; losing
+  only the `@` is neutral, so the path takes two steps).
+- **The free letter.** On the guarded platform the head's letters are frozen (root and site change together; the front
+  is the lineage's partner choice). The rootless partner has two sides that nothing reads but copy blanks: its plain
+  letter and its lysis side's letter. They drift freely, until something reads one.
+- **One error makes the reader.** A front error to the complement of the partner's own plain letter (`C@s!T` to
+  `t@s!T`) makes a cell that binds what it carries: it is raised on every partner and on its own kind. That is a third
+  class raised on a site the partner carries, and the line's first held bodies of more than two cells.
+- **Geometry closes it.** A chain bound by the same side each time turns around one vertex (as run 0416's fans did),
+  so after the partner and four chain cells the ring of six is closed, and its last cell lies flush on the head's site.
+  The chain stops itself (length without a sink, priority 25, comes from the lattice here, not from a lysing tip) and
+  sterilises the head it grew on: the ring raises no more of the head's kids, while its five free lysis sides spray
+  four chain copies to one partner copy. With no other partner letter about, ring and host live together (half the
+  heads, two thirds of the cells in bodies of three or more).
+- **The common letter pays, so the rare one wins.** A partner whose plain side is chained is copied at one side for
+  the rest of its life and its body's head goes sterile; a partner of any other letter keeps both sides and a fertile
+  head. A letter entered as 10 cells took 95-100% of partners within 25k beside the chain (3 of 4) and was lost without
+  it (4 of 4). The parasite lives on the commonest letter, and its host escapes by turning the letter: negative
+  frequency dependence, the first host-parasite coevolution in the line, arisen by one error on each side.
+- **The tempo is set by two error rates.** An escape is any other letter, one glue error (about 0.01 x 1/3 x 1/2 =
+  1.6e-3 per partner copy); a new chain needs one particular letter on the front (about 3e-5, fifty times rarer). So
+  escapes are quick (the letter turned within 10-20k in every copy-error world) and new chains rare (2 of 8 worlds by
+  480k from the evolve founders; once in 4 worlds in 150k after an entry): the letters turn in bursts.
+- **An immune partner is one mark away.** A partner whose two free sides both lyse cannot be chained (a chain cell bound
+  to a lysis side by a bond that is not a joint is lysed), and it costs nothing (a copy blank copies in the pass it
+  binds, before lysis acts). It rose to 35-62% in 2 of 4 copy-error worlds by 160k, but also to 33% in a control
+  without chains, so selection for it is not shown. If it fixes, nothing chains the partner again: the guard once more,
+  one cell over, and the letters freeze.
+- **What it gives the goal.** One world now holds a lineage that keeps its letters (the guarded head) and letters that
+  turn (the partner's, under a parasite). Run 0518 thought that would need a guard that comes and goes; it needs a free
+  letter and a reader of it. The six-cell body is real and holds, but it is the parasite's body, not the host's: what
+  the head lineage owns is still what it raises. A ring that pays its head (a chain cell carrying the head's site, one
+  site error from `t@s!T`, would make the ring four nursery sites for the head's kin, while an occupied site costs the
+  chain a copy side) is the next question; so is whether the immune partner ends the turning.
+
 ## A guard that knows its own stops the loop: three guards, three capabilities (core review run 20261017-0518, 2026-10-17)
 
 Notes, not the user's words. The core review ran candidate (x), the kin guard, as the rule in place of the trap (mode 0).
