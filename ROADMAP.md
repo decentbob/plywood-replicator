@@ -160,6 +160,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    one checked partner is raised on the host's front and leaves (D1: dies, every bond a joint); candidate (y), the kin
    check on every bond, makes a kept partner that catches its own kind (not proposed) (run 0416; no checks; IDEAS
    "Checking and keeping exclude each other").
+   Review-intent run 20261017-0456 (IDEAS "What a lineage owns is what it raises"): 38 is closed at the core's limit
+   (every kept structure is public; a lineage owns what it raises, one triangle per generation); every body is still
+   two cells, so the next slices aim at shape: growth on the guarded platform (39, the copy-error end state of a
+   guarded world, its public partner free in two sides) and, on paper, when a joint lets go (40). A priority that takes
+   four slices without a capability that holds under copy error goes back to the direction check.
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
