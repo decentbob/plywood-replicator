@@ -28,6 +28,55 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The nursery's share is the environment's: crowding is reach, shape is public, and a guard that knows its own (explore run 20261016-2258, 2026-10-16)
+
+NEXT priority 38 (close T1's crowding gap, then the recess on paper), then core-change candidate (x) (RULES; INNOVATIONS
+run 2258). Notes, not the user's words.
+- **T1 restated with factors one can count.** A guarded site's race is won by a blank (the nursery's kid; rB per empty
+  site per step) or by a free cheat copy (rC = m pi rho: pi copies per attached cheat per step, rho the share of a copy
+  that binds a site, per empty site). Births follow the race, so with deaths in proportion **n* = c rB / (pi rho)**, c
+  the cheats' death rate over the nursery's. `tri/raceprobe.js` now counts each factor; in five worlds (`nursery-mix`, twice
+  the material, twice the area, PADI 50 and 200; 2 seeds each to 60k) the formula with c = 1 overestimates the nursery
+  1.5-1.8 times, by the same factor in every world: nurseries die about 1.6 times as often as cheats (likely the
+  whole-body hazard: a nursery dies with the kids it holds; not measured). pi/rB is 1.28-1.60 everywhere (the same side
+  of the same shape); rho alone moves: half at PADI 50 or twice the area, 1.8x at PADI 200, and **0.54x with twice the
+  material**: the free copies travel 2.0 instead of 3.4 before they decay and 1.7 instead of 2.7 to a site. Crowding is
+  not missing from T1, it is in its reach term: bodies are obstacles. So the nursery's share is set by the free parts'
+  reach (life, area, crowd) and by c; nothing in it is the nursery's own.
+- **The recess is not buildable, and would not help.** On the lattice a site walled on two sides is the kid's own
+  front's place: the kid sits in the notch with its root on the site, so its front faces the wall's edge, whichever
+  chirality the head has (the two are mirror images, and the mirror keeps this relation). A lattice search of every
+  chain body to six cells finds no such notch where the kid can be built ([recess.png](pictures/recess.png), a); a
+  wall reached around the site's other corner passes through the parent's place or closes the notch. The best one-wall
+  fan (head and three cells around the front-site corner) lowers the access to 0.78 (Monte Carlo of placements; b): the
+  law's 1/a would give 1.28x, but the fan's cells are fillers, public parts that any head of the root catches, so the
+  cheat gets the recess as much as the nursery, and a filler error that ends the chain makes every body short. In the
+  pair line **a body's shape belongs to the filler pool, not to the head lineage**.
+- **What is left to tell kin from cheat is the kid itself.** The site reads the root letter only; the kid reads its own
+  type. Candidate (x) lets the kid decide: across a joint a lysis side lyses a partner unless that partner carries the
+  same side (no new read: its own type and the side it is bonded to). It is run 1902's "second recognition step the
+  cheat lacks", made by lysis instead of geometry. Its first form compared the glue only: every cheat seen so far
+  (plain, another letter, no `!`) lacks a lysis side of that glue.
+- **A falsebeard appears at once, and the cure is to read the side that does the work.** In biology's terms the guard
+  is a greenbeard (a trait that marks its bearer and favours bearers), and the classic failure is the falsebeard: a
+  bearer of the mark without the behaviour. Reading the lysis side's glue only, copy error found it within 30k in 4 of
+  4 worlds: `Y@&c@|y.!`, the site with a close-only mark, is copied there but catches nothing, so its copies go free
+  like any cheat's. Any part of the beard that can be kept while the catch is broken lets a cheat through; the catch
+  itself cannot. Reading the whole side (glue and marks) makes the beard the behaviour: a head raised on the site
+  carries the site, so the copies made there bind back. **No head that does not raise itself is raised on a guarded
+  site, by any number of errors.** Under copy error the nursery then held every head-shaped cell in 24 of 24 censuses
+  in 4 of 4 worlds.
+- **What it costs, and what it opens.** The lock stops turning: root and site must change together, and no cheat of
+  them is a stepping stone (the loop nursery, cheat, catcher, nursery of run 1902 is cut at its first step). The public
+  lock dies under it, as under the core's plain trap. So the guard trades the transient lock for a frozen one; what it
+  opens is a lineage that keeps its heredity, on which variation elsewhere (fillers, a second site, a second shape) can
+  build. To 480k (4 of 4) the lock held in every census and the first thing that evolved on it was the nursery's front:
+  it lost its anchor mark by 20-35k (`Y@&c@y!`), so blanks copy the open front while the head waits for its filler and
+  the nursery sprays free copies of itself, which take empty sites as a cheat's copies do: **the nursery added the
+  cheat's flux to its own place.** It is not the guard's doing (the same front was a minority beside the falsebeard,
+  104 of 474 head-shaped cells at 45k in one world), but under the guard it is the nursery's alone. On the filler shape
+  the root letter, never bound, drifts freely.
+
 ## One encounter against two: the nursery's number is set by how long free cheats live (build run 20261016-2151, 2026-10-16)
 
 NEXT priority 38 (a nursery that keeps its kin's births from its cheats): measured first, then theory, then a design and

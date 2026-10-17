@@ -242,6 +242,9 @@ random getting with 1/2 a glue drawn from inert and `a..z`, `A..Z`, else one of 
   20261008-2221) a lysis side lyses no partner across a joint either: lysis then never crosses a joint, and a lock `z!`
   raises a part that binds it by `Z@&` and lyses one that binds by `Z@` without `&`, whose lysis comes back across the
   lock's bond into the lock's carrier (test "lysJoint"; `lysOneWay`, which stopped that, was removed in run 2221).
+  `lysJoint: 2` (candidate (x), run 20261016-2258): across a joint a lysis side lyses a partner unless that partner
+  carries a side identical to it (glue and marks); a lock `z!` raises a key `Z@&` that carries `z!` itself and lyses any
+  other (test "lysJoint 2"; checks `kin-guard`, `kin-guard-evolve`).
 
 ## Core changes
 
@@ -275,6 +278,7 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
 - (r) *Copy error in contact copying*: **adopted** in run 0651 as the parameter `pErr`, default 0 (RULES Core changes).
   Open: a default above 0 (and the mutagen retired) would change every world's outputs; whether the core or the
   environment should limit parts that bind their own kind (`g@` and `G@` on one part).
+- (x) *A lysis side spares a joint partner that carries the same side* (run 2258): built as `lysJoint: 2` (entry below).
 - (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
   lineage's false releases (`falseRel`) did not change and have another cause (trace one before any fix).
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
@@ -284,6 +288,49 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051, (u) and (w) in run
   2221. Nothing else in the core is unused (RULES, Core inventory, run 2221 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Candidate (x): a lysis side spares a joint partner that carries the same side, 2026-10-16, autorun run 20261016-2258 (explore)
+NEXT priority 38. Derivation: IDEAS "The nursery's share is the environment's" (this run); runs: INNOVATIONS run 2258.
+1. **Capability and why the goal needs it.** A lock that pays its bearer under copy error. Every lock in the line has been
+   transient for five slices: a guarded nursery's cheat (a head of its root without its site, one error away) is raised
+   on the nursery's sites and wins them with free copies (run 2151), so under copy error the nursery is swept by its
+   cheats and reborn from them (run 1902). (v)'s open part asks for the same thing: a world with a trap and a lock at
+   once, "a key told by shape, before a new mark".
+2. **Can the existing core do it?** No, by three results. (a) A site reads only the root letter of what binds it, and a
+   cheat has the nursery's root (run 2151). (b) The nursery's share is n* = c rB / (pi rho) (this run, measured in five
+   worlds): rB and pi are the same side of the same shape, rho is the environment's (the free parts' life, the area, the
+   crowd), c the death ratio; nothing in it is the nursery's own. (c) Shape cannot do it either: a site walled on two
+   sides is the kid's own front's place (every chain body to six cells, lattice search this run), a one-wall fan lowers
+   the access to 0.78 for nursery and cheat alike, and in the pair line a body's shape is made of public fillers, so a
+   recess is everyone's (IDEAS, this run).
+3. **The rule (first form; revised in item 5).** A triangle bonded across a joint to a partner's lysis side `!` is lysed
+   unless it carries a lysis side of the same glue itself. Across a bond that is not a joint, contact lysis is unchanged; so is the relay (it never
+   crosses a joint). Reads its own fixed type (its sides' glue and `!` marks) and the glue of the partner side it is
+   bonded to (fixed type, already read for the `!` mark): no new read, no new mark, signal, state or value. So a guarded
+   nursery `Y@&c@|y!` raises its kid (which carries `y!`) and lyses every other head that binds by `Y@&`: the plain cheat
+   `Y@&c@|-`, a site-letter cheat `Y@&c@|m!`, a plain nursery `Y@&c@|y`. A one-error head that passes must keep the root
+   `Y@&` and the side `y!`: it raises its own kind, so it is no cheat of the site.
+4. **What it replaces and costs.** It generalizes `lysJoint` (0: lysis by contact crosses joints; 1: it never does; 2:
+   it crosses a joint only to a partner without a lysis side of the same glue), so no new parameter. Built as
+   `lysJoint: 2`; default 0, so every output stays the same. Cost: a public lock dies under it (a head raised on a second
+   cell's `z|!` carries no `z!`), as without `lysJoint`; the kin guard keeps the trap for strangers (run 2221's reason
+   for not adopting (v)) and spares only kin.
+5. **Revised in the same run (23:30), before any adoption: the same side, not the same glue.** The glue-only guard
+   failed under copy error (P6, 0 of 4): its cheat became `Y@&c@|y.!`, the site with a close-only mark (one mark error),
+   which carries a lysis side of glue `y`, so it passes, is copied there, and its copies cannot bind back (a close-only
+   side catches nothing). Any feature the guard reads that the cheat can keep while breaking its own catch lets it
+   through; the one feature it cannot keep is the side that catches. So the rule reads: a triangle bonded across a joint
+   to a partner's lysis side is lysed unless it carries a side identical to that side (glue and every mark). Same reads
+   (its own type; the glue and marks of the side it is bonded to). A head that passes then carries the site exactly, so
+   its copies made there bind back: **no head that does not raise itself can be raised on a guarded site**, by any number
+   of errors (a copy is its template's type, the site catches its copies' root).
+6. **Result (INNOVATIONS run 2258): built as `lysJoint: 2`, default 0 (every output the same; option, not adopted).**
+   Without copy error the nursery's entered cheats are lysed on its sites and lost (4 of 4, check `kin-guard`); under
+   copy error 0.01 the guarded nursery holds every head-shaped cell in 24 of 24 censuses (4 of 4 to 120k, check
+   `kin-guard-evolve`), against a guarded majority in 0-8 of 24 with `lysJoint` 1. Costs: the public lock dies under it
+   (4 of 4 by 10k), as without `lysJoint`; the nursery's letters are frozen (its root and site turn only together, and no
+   cheat of them is a stepping stone). For a core review: adopt as the rule only with a world that needs a trap and a
+   lock at once; the line's preset (`PAW=2`) uses `lysJoint` 1.
 
 ### Core review 2026-10-08, autorun run 20261008-2221: chain copying retired, (w) removed, (v) kept an option
 NEXT priority 32 (set by review-intent run 2151). Code: branch `core-review-2221`; the removed code at `1284bb4`.

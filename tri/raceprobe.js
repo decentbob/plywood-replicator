@@ -38,3 +38,28 @@ const fmt=o=>Object.entries(o).sort((a,b)=>b[1].n-a[1].n).map(([k,e])=>`${k} ${e
 function report(t){const ce=Object.entries(cc).map(([k,n])=>`${k} ${n} (${ccT[k]?(100*n/ccT[k]).toFixed(2):'-'}/10k)`).join(', ');
   console.log(`race: t=${t} | ${fmt(R)} | by leaver ${fmt(tot)} | C copies by template place: ${ce}`);
   for(const o of [R,tot])for(const k in o)delete o[k];for(const k in cc){cc[k]=0;ccT[k]=0;}}
+// Fates (explore run 20261016-2258, observation only): every free copy of a head of kind C or N made from RP_T0 on is
+// followed to its fate: 'site' (it binds an empty nursery site by its root), 'decay' (it turns back into a blank while
+// free), 'other' (it binds anything else); per kind the share, the mean age at its fate and the mean distance from where
+// it was made. Every 100 steps (at step 25 of each 100, between decay steps) a sample of attached C and N heads, empty
+// nursery sites (an attached N's site side unbonded), free C copies and free blanks. 'fate:' lines with each 'race:'
+// line give the restated law's three factors: rB, blank arrivals per empty site per step; pi, C copies per attached C per
+// step; rho, the share of C copies that bind a site per empty site; and n* = rB / (pi rho) against the sampled N count;
+// rC, C arrivals per empty site per step, and the births ratio rB C / rC (the N count if births follow the race)
+const FT=new Map(),FA={},SM={n:0,C:0,N:0,E:0,F:0,B:0},SB={blank:0,C:0,N:0},CP={C:0,N:0};
+const fate=(s,u,f)=>{const o=FT.get(u);FT.delete(u);const k=o.k+':'+f,e=FA[k]||(FA[k]={n:0,age:0,d:0});e.n++;e.age+=s.t-o.t;e.d+=Math.hypot(s._dx(s.px[u]-o.x),s._dy(s.py[u]-o.y));};
+const _bind2=TriSim.prototype.bind;TriSim.prototype.bind=function(u,i,v,j){const fu=!this.bonded(u),fv=!this.bonded(v);_bind2.call(this,u,i,v,j);if(this.t<T0)return;
+  for(const [a,x,b,y,fb] of [[u,i,v,j,fv],[v,j,u,i,fu]]){if(!fb)continue;const st=siteSide(this,a)===x&&this.bonded(a)&&this.att[b*3+y]&&this.done[b*3+y];
+    if(siteSide(this,a)===x&&this.bonded(a)){if(this.cpy[b*3+y])SB.blank++;else if(FT.has(b))SB[FT.get(b).k]++;}
+    if(FT.has(b))fate(this,b,this.cpy[b*3+y]?'decay':st?'site':'other');}};   // a copy that decayed and bound as a blank in the same pass
+const _copy2=TriSim.prototype._copy;TriSim.prototype._copy=function(){if(this.t>=T0)for(const u of [...FT.keys()])if(this.cpy[u*3]||this.cpy[u*3+1]||this.cpy[u*3+2])fate(this,u,'decay');
+  const L0=this.copyLog?this.copyLog.length:0;_copy2.call(this);const L=this.copyLog||[];
+  if(this.t>=T0){for(let k=L0;k<L.length;k++){const [,c,,w]=L[k],kw=kind(this,w);if(kw!=='C'&&kw!=='N')continue;CP[kw]++;if(FT.has(c))FT.delete(c);FT.set(c,{t:this.t,x:this.px[c],y:this.py[c],k:kw});}
+    if(this.t%100===25){SM.n++;for(let u=0;u<this.n;u++){const kd=kind(this,u);if(this.bonded(u)){if(kd==='C')SM.C++;else if(kd==='N'){SM.N++;const e=siteSide(this,u);if(this.bond[u*3+e]<0)SM.E++;}}
+      else if(this.cpy[u*3]||this.cpy[u*3+1]||this.cpy[u*3+2])SM.B++;else if(FT.has(u)&&FT.get(u).k==='C')SM.F++;}}
+    if(this.t%EV===0)fateReport(this.t);}};
+function fateReport(t){const m=Math.max(1,SM.n),E=SM.E/m,C=SM.C/m,N=SM.N/m,steps=100*SM.n,rB=SB.blank/Math.max(1,SM.E*100),pi=CP.C/Math.max(1,SM.C*100),rC=SB.C/Math.max(1,SM.E*100),
+    nC=Object.entries(FA).filter(([k])=>k[0]==='C').reduce((a,[,e])=>a+e.n,0),rho=(FA['C:site']?FA['C:site'].n:0)/Math.max(1,nC)/Math.max(1e-9,E);
+  const f=Object.entries(FA).sort().map(([k,e])=>`${k} ${e.n} (age ${(e.age/e.n).toFixed(0)}, dist ${(e.d/e.n).toFixed(1)})`).join(', ');
+  console.log(`fate: t=${t} | ${f} | sample: N ${N.toFixed(0)} C ${C.toFixed(0)} emptySites ${E.toFixed(1)} freeC ${(SM.F/m).toFixed(1)} blanks ${(SM.B/m).toFixed(0)} | site binds: blank ${SB.blank} C ${SB.C} N ${SB.N} | copies C ${CP.C} N ${CP.N} | rB ${rB.toExponential(2)} pi ${pi.toExponential(2)} rho ${rho.toExponential(2)} rC ${rC.toExponential(2)} n* ${(rB/Math.max(1e-12,pi*rho)).toFixed(0)} births ratio ${(rB*C/Math.max(1e-12,rC)).toFixed(0)} (N ${N.toFixed(0)}) over ${steps} steps`);
+  for(const k in FA)delete FA[k];for(const k in SM)SM[k]=0;for(const k in SB)SB[k]=0;CP.C=CP.N=0;}

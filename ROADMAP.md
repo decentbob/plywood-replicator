@@ -40,8 +40,9 @@ it until it can live on its own, then splits it off. Build every mechanism in is
 | Who pays for a lock: no side of the pair is both needed and turnable; a public lock (the class's site on the shared second cell) turns, its seal is self-limiting, but the core's guard (a trap of its letter) lyses keys and plugs alike, so public locks die of their parasites and evolution ends in the frozen, guarded private lock; a trap that does not lyse across a joint (`lysJoint`, candidate (v), default 0) guards a public lock | lock and key coevolution, immunity that tells self from parasite | **works** (explore run 20261008-1951, checks `seal-pool` 4 of 4, `lock-guard` 4 of 4, control `lock-guard-0`): sealed second cells level off at 71-79%; unguarded stockless worlds under copy error die of lock parasites in 3 of 4 by 480k (plugs, a catcher) or privatize; with `lysJoint` the root letter turned 11-19 times in 4 of 8 worlds (0-3 unguarded); alive 4 of 8 either way (a catcher; a nursery without a lock of its letter): **partial** | sim.js `lysJoint`, census.js `--pool`, IDEAS run 1951, RULES (v) |
 | The catcher: a head whose front letter turned fills the second cell's place and carries no site; catchers hold a mix (the lock's carriers keep a minority); a self-raising lock is private only in a letter its filler does not carry; after the catchers a private lock takes over on the host or the catcher | cheats that hold a mix, mutualism of two lineages, role swaps | **works** (explore run 20261016-1602, checks `catcher-mix`, `catcher-letter`, `catcher-letter-z` 4 of 4): the takeover after the catchers measured (4 + 4 worlds), two lineages under copy error not yet (IDEAS "The catcher") |
 | One encounter against two: a site cannot tell kin from a cheat of its root; the cheat wins races with free copies from afar (the nursery's kid needs one encounter, the cheat's two), so the guarded nursery's number is set by how long free cheats live, by area and access, not by the cheats' number; a one-type nursery whose kid lets go only after raising its own kids keeps the no-site cheat out but not its one-site cheat | kin selection by place, r and K, the cost of public copies | **works** (build run 20261016-2151, checks `nursery-decay` 4 of 4, `self-nursery` 4 of 4): PADI 50 / 100 / 200: 175-272 / 85-118 / 33-72 nursery heads (4 of 4 each); twice the area 2x; twice the material 1.6-1.9x (T1 said unchanged: **partial**); the one-type nursery's cheat holds 64-70%, dead under copy error | raceprobe.js, IDEAS run 2151 |
-Every row marked works is guarded by `node tri/check.js` (one line per capability, 81 checks since build run
-20261016-2151, 4 processes; it runs as `--part 1/2` then `--part 2/2`, and compares every world's output with main's
+| The nursery's share is the environment's, and a guard that knows its own: n* = c rB / (pi rho), where only the free copies' reach rho moves (life, area, crowd); a recess cannot be built on the lattice and shape is public; a lysis side that spares across a joint only a partner carrying the same side (candidate (x), `lysJoint: 2`) lets no head that does not raise itself be raised on a guarded site | kin recognition, greenbeards that cannot be faked, cheater-proof heredity | **works** (explore run 20261016-2258, checks `kin-guard` 4 of 4, `kin-guard-evolve` 4 of 4; an option): cheats lost, the nursery 566-570 at 80k; under copy error the lock on every head-shaped cell in 24 of 24 censuses (0-8 with `lysJoint` 1); the guard freezes the nursery's letters and kills the public lock | raceprobe.js (fates), IDEAS run 2258 |
+Every row marked works is guarded by `node tri/check.js` (one line per capability, 83 checks since explore run
+20261016-2258, 4 processes; it runs as `--part 1/2` then `--part 2/2`, and compares every world's output with main's
 digest in `tri/digests.txt`, harden run 20261016-0902) or by a test in `tri/test.js`.
 
 **Retired 2026-10-08 (core review run 20261008-2221; RULES, Core changes (u)): chain copying with the frozen lineage's
@@ -142,6 +143,12 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    encounter against two), not by crowding yet; a one-type nursery whose kid raises before it leaves keeps the no-site
    cheat out, but its one-site cheat holds 64-70% and site mutants sink it under copy error (2151; `nursery-decay`,
    `self-nursery`; IDEAS "One encounter against two").
+   38 (third step, explore) the nursery's share is the environment's: n* = c rB / (pi rho) measured in five worlds, only
+   the free copies' reach rho moves (life, area, crowd: crowding is reach); a recess is not buildable on the lattice (the
+   two-wall notch is the kid's front's place) and shape is public; candidate (x) `lysJoint: 2` (a lysis side spares across
+   a joint only a partner carrying the same side) keeps the nursery's lock under copy error in 24 of 24 censuses, freezes
+   its letters and kills the public lock (2258; `kin-guard`, `kin-guard-evolve`; IDEAS "The nursery's share is the
+   environment's").
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
@@ -149,7 +156,7 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    copying as the rule, the corner bud, three generations on a slow supply (`budcycle-3`), lysis in the lineage
    (`budcycle-lysis`). Open when it returns: a lineage that does not burn down (feeding, candidate (n), the front sink).
    Its genome copying (chain copying, the anchor's catch) left the core in run 20261008-2221 (git `1284bb4`).
-0b. **Speed** (harden runs): the check suite 71 minutes at run 0250 with 56 checks; 81 checks since run 2151, run in
+0b. **Speed** (harden runs): the check suite 71 minutes at run 0250 with 56 checks; 83 checks since run 2258, run in
    two parts (87 minutes per part in run 0902's container, 69 checks); speed-ups so far exact (run
    0950: 1.34x, run 1421: 1.18x on the suite; run 20261006-0021: the pair world 1.8-2.1x, about 500 steps per second
    at 1050 triangles); lone blocks (`_single`) take most of the time; no single hot spot left inside them. Since run
