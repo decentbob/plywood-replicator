@@ -53,10 +53,12 @@ not the user's words.
   4); what varies is marks. In 2 of 4 worlds the **root guard** (`Y@&!y@!y!`, a guard on all three sides) replaced the
   head. Its kid, raised by a cell without the guard, lyses that cell across the joint (the cell carries no `Y@&!`); a
   plain kid at a guarded cell is spared both ways. So the guarded form's slots raise both kinds and the plain form's
-  raise only its own, and a guarded kid that lands on a plain body takes it apart. Entered rare (10 bodies) it is lost
-  (4 of 4, as a neutral mark is); from an even start it wins (8 of 8, both orders, `root-guard`): its cost (raising the
-  stranger) grows with the stranger's frequency, its effect (taking stranger bodies apart) with its own. A ratchet:
-  drift carries it over the threshold, then the plain form cannot come back. Run 0551's question (killing as a
+  raise only its own, and a guarded kid that lands on a plain body takes it apart. Entered rare (10 bodies into a held
+  world) it is lost (4 of 4, `root-guard-rare`); from a shared start it is lost at 2% of bodies (4 of 4, by 20k, faster
+  than a neutral mark drifts) and wins at 10% (3 of 4), 25% (3 of 4) and 50% (8 of 8, both orders, `root-guard`): its
+  cost (raising the stranger) grows with the stranger's frequency, its effect (taking stranger bodies apart) with its
+  own. A ratchet with a threshold between 2% and 10%: drift carries it over (a neutral mark reached 10-18% under copy
+  error), then the plain form cannot come back. The mechanism is inferred from the rule, not counted. Run 0551's question (killing as a
   frequency-dependent enemy, priority 26) has its first clean case here, inside one lineage.
 - **For the direction.** Kin in place of the partner is what "What a lineage owns is what it raises" asked for: every
   cell of every body is raised and checked by the lineage. But it is reached by giving up the kept partner, and with

@@ -43,7 +43,12 @@ not statistics.
     the joint; a plain kid at a guarded cell is spared. Entered as 10 bodies into the kin world it was lost 4 of 4 (P7
     **no**; check `root-guard-rare`), as was the anchored root (P9 yes), and the kin entered into its world was lost 4
     of 4 (P8 yes); from 10 bodies of each at the start it won 8 of 8, both orders (P10, "3 to 5 of 8, as drift",
-    **no**; check `root-guard`, seeds 1-4). K5_RESULT
+    **no**; check `root-guard`, seeds 1-4). **Threshold** (`runs/k5.json`,
+    `k6.json`, shared start, 4 seeds each): the guarded form won at 25% of bodies 3 of 4 (the fourth mixed), at 10% 3 of
+    4, and at 2% (1 of 50) it was lost 4 of 4 by 20k (P11: 25% yes, 10% "at most 2 of 4" **no**; P12, "1 or more of 4
+    at 2%", **no**); the neutral anchored root at 10% won 1 of 4 and lingered at 29% in another (P12's control yes).
+    Lost faster than drift when rare, selected when common: positive frequency dependence with a threshold between 2%
+    and 10%, which copy error's drift crossed in 2 of 4 worlds (the anchored root drifted to 10-18%).
   - Predictions: NEXT slice record (`docs/NEXT.md` at `327c043`; P7-P9 at `0d2a859`, P10 at `993c1e5`, P11 at
     `d0c14de`, each before its batch).
   - Picture: [kin-front.png](pictures/kin-front.png) (left, the kin head alone at 12k: bodies of two to eight kin
