@@ -23,16 +23,22 @@
 //     (the root's complement without '!'), P plain (inert), S a site of another letter (its copies go free: a public head),
 //     O no root; the root letters; then a summary: the shape that holds the lock (G+N on most of its cells) at each census,
 //     each move of the lock, and the S+P share of the old lock shape in the census before each move
+//   node tri/census.js --partner runs/b/x1.txt [more files] [--every k]  (build run 20261017-0726, priority 39: the guarded
+//     platform): partners (one attach side, 'c@' or 'C@', no '&': rootless fillers and catchers) by the letters of their
+//     sides that are neither the front nor a lysis side ('immune' when both free sides lyse), chain cells (an attach side
+//     whose letter complements another side of the same type: it binds its own kind), and from 'body:' lines
+//     (tri/bodyprobe.js) the cells in complete individuals of 3 or more; then the first census with chain cells, the
+//     largest share of chain cells and the partners' commonest letter at each change of it
 // A head is a type with an attach side carrying '&' (its letter is the root letter); a second cell a type with an attach side
 // of letter C and no '&' (its site letter: the glue of the side after that one, counter-clockwise; '-' inert); anything else is
 // 'other' (chains, plugs), listed by type. Counts are of the types the line lists, so rare types may be missing.
 const fs=require('fs');
-const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=process.argv.includes('--joint'),shape=process.argv.includes('--shape'),args=process.argv.slice(2).filter(a=>!['--loop','--pool','--joint','--shape'].includes(a)),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
+const loop=process.argv.includes('--loop'),pool=process.argv.includes('--pool'),joint=process.argv.includes('--joint'),shape=process.argv.includes('--shape'),partner=process.argv.includes('--partner'),args=process.argv.slice(2).filter(a=>!['--loop','--pool','--joint','--shape','--partner'].includes(a)),ei=args.indexOf('--every'),every=ei>=0?+args[ei+1]:2,files=args.filter((a,i)=>ei<0||(i!==ei&&i!==ei+1));
 const sides=t=>t.match(/[-a-zA-Z][.@&|?!]*/g);
 const classify=t=>{const s=sides(t);if(!s||s.length!==3)return ['other',t];const h=s.find(x=>x.includes('@')&&x.includes('&'));if(h)return ['head',h[0]];
   const i=s.findIndex(x=>x[0]==='C'&&x.includes('@'));return i>=0?['second',s[(i+1)%3][0]]:['other',t];};
 const top=(m,n)=>Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([k,v])=>k+' '+v).join(' ')||'-';
-if(loop)files.forEach(summary);else if(pool)files.forEach(poolSummary);else if(shape)files.forEach(shapeSummary);else for(const f of files){console.log('# '+f);let k=0;
+if(loop)files.forEach(summary);else if(pool)files.forEach(poolSummary);else if(shape)files.forEach(shapeSummary);else if(partner)files.forEach(partnerSummary);else for(const f of files){console.log('# '+f);let k=0;
   for(const line of fs.readFileSync(f,'utf8').split('\n')){const m=line.match(/^types: t=(\d+) .*?\| (.*)$/);if(!m||(k++%every))continue;
     const H={},S={},O={};let nh=0,ns=0;for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const [cl,key]=classify(t),n=+c;
       if(cl==='head'){H[key]=(H[key]||0)+n;nh+=n;}else if(cl==='second'){S[key]=(S[key]||0)+n;ns+=n;}else O[key]=(O[key]||0)+n;}
@@ -109,3 +115,18 @@ function shapeSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.
   console.log(`  lock: ${mv.join(', ')}${dead?'; dead from '+k(dead.t):''}; both shapes (10% or more each) in ${both.length} of ${live.length} censuses
   lock on H in ${n('H')}, on K in ${n('K')}, on neither in ${n('-')}; the two shapes' commonest roots the same letter (catchers of the other shape) in ${same.length}${same.length?' (from '+k(same[0].t)+')':''}
   new nursery letters: ${sw.join(', ')||'-'}`);}
+function partnerSummary(f){const R=[],cp=L=>L===L.toLowerCase()?L.toUpperCase():L.toLowerCase(),k=t=>(t/1000)+'k',pc=(a,b)=>b?(100*a/b).toFixed(0)+'%':'-',B={};
+  const lines=fs.readFileSync(f,'utf8').split('\n');for(const line of lines){const m=line.match(/^body: t=(\d+) .*cells in complete 3\+ (\d+)/);if(m)B[m[1]]=+m[2];}
+  for(const line of lines){const m=line.match(/^types: t=(\d+) .*?\| (.*)$/);if(!m)continue;const r={t:+m[1],P:{},np:0,ch:0,cells:0};
+    for(const e of m[2].split(', ')){const [c,t]=e.split(' ');if(!t)continue;const n=+c,s=sides(t);if(!s||s.length!==3)continue;r.cells+=n;if(s.some(x=>x.includes('&')))continue;
+      const i=s.findIndex(x=>x.includes('@'));if(i<0||s.filter(x=>x.includes('@')).length>1)continue;const o=s.filter((x,j)=>j!==i);
+      if(o.some(y=>y[0]===cp(s[i][0])&&!y.includes('.'))){r.ch+=n;continue;}if(!'cC'.includes(s[i][0]))continue;
+      const pl=o.filter(y=>!y.includes('!')),L=pl.length?pl.map(y=>y[0]).join(''):'immune';r.P[L]=(r.P[L]||0)+n;r.np+=n;}
+    R.push(r);}
+  if(!R.length){console.log(f+': no types: lines');return;}
+  const big=t=>{const ks=Object.keys(B).map(Number).filter(x=>x<=t&&x>t-5000);return ks.length?B[ks[ks.length-1]]:null;};
+  console.log('# '+f);let j=0;for(const r of R){if(j++%every&&r!==R[R.length-1])continue;const b=big(r.t);
+    console.log(`t=${k(r.t)} partners ${r.np}: ${Object.entries(r.P).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([L,n])=>L+' '+pc(n,r.np)).join(' ')||'-'} | chain cells ${r.ch}${b!==null?' | cells in 3+ bodies '+b:''}`);}
+  const fc=R.find(r=>r.ch>=5),mx=R.reduce((a,r)=>r.ch/r.cells>a.ch/a.cells?r:a,R[0]),turns=[];let cur=null;
+  for(const r of R){const M=Object.keys(r.P).sort((a,b)=>r.P[b]-r.P[a])[0];if(M&&M!==cur&&r.P[M]>r.np/2){turns.push(M+' '+k(r.t));cur=M;}}
+  console.log(`  chain cells (5 or more) first at ${fc?k(fc.t):'never'}, at most ${pc(mx.ch,mx.cells)} of cells (${k(mx.t)}); partners' majority letter: ${turns.join(', ')||'-'}`);}

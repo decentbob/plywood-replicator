@@ -524,6 +524,30 @@ const CHECKS=[
         one=(e.c.G>0.8*e.c.n&&e.C.n>=0.1*(e.c.n+e.C.n))||(e.C.G>0.8*e.C.n&&e.c.n>=0.1*(e.c.n+e.C.n));
       return [both&&one,`both locks to ${k?k.t/1000+'k':'-'}; at 120k head-shaped ${e.c.G} guarded of ${e.c.n}, catcher-shaped ${e.C.G} of ${e.C.n}`];}},
   ];})(),
+  // run 20261017-0726 (build; priority 39, growth on the guarded platform): the copy-error end state of the guarded worlds
+  // is the leaky guarded head Y@&c@y! with a rootless public partner C@s!T (its plain side T copied, a root would be spent).
+  // One front error makes the partner a chain cell t@s!T: it binds the T of any partner and of its own kind. Entered at 10k
+  // (20 free cells), chains bind partners' T sides and each other; a chain bound by the same side each time turns around one
+  // vertex, so it closes after four cells into a ring of six (head, partner, four chain cells) whose last cell covers the
+  // head's site: the parasite stops itself and sterilises its host's body, and with no other partner letter about it lives
+  // with its hosts. A rare partner letter (C@s!A, 10 bodies entered at 10k) escapes it and takes the partners; without the
+  // chain the rare letter stays rare
+  ...(()=>{const ro={PAW:'2',PA2:'Y@&c@y! C@s!T',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}',PA3:'t@s!T',PA3T:'10000',PA3N:'20'},esc={PAKR:'Y@&c@y!',PAKS:'C@s!A',PA1T:'10000',PAEN:'10'},
+    cp=L=>L===L.toLowerCase()?L.toUpperCase():L.toLowerCase(),sd=t=>t.match(/[-a-zA-Z][.@&|?!]*/g),
+    // per 'types:' line: chain cells (an attach side that complements another side of the same type), partners (one attach
+    // side 'C@', no '&') by the letters of their sides that are neither the front nor a lysis side, heads (a root '@&')
+    pt=o=>[...o.matchAll(/^types: t=(\d+) .*? \| (.*)$/gm)].map(m=>{const r={t:+m[1],ch:0,np:0,P:{},h:0};for(const e of m[2].split(', ')){const [c,t]=e.split(' '),s=t&&sd(t);if(!s||s.length!==3)continue;const n=+c;
+      if(s.some(x=>x.includes('@')&&x.includes('&'))){r.h+=n;continue;}const i=s.findIndex(x=>x.includes('@'));if(i<0)continue;const q=s.filter((x,j)=>j!==i);
+      if(q.some(y=>y[0]===cp(s[i][0])&&!y.includes('.'))){r.ch+=n;continue;}if(s[i][0]!=='C')continue;const L=q.filter(y=>!y.includes('!')).map(y=>y[0]).join('')||'!';r.P[L]=(r.P[L]||0)+n;r.np+=n;}return r;}),
+    lh=o=>[...o.matchAll(/^kinds: t=(\d+) .*?longestHeld (\d+)/gm)].map(m=>({t:+m[1],n:+m[2]}));return [
+  {id:'rosette',cap:'A chain on the public partner closes into a ring of six: chain cells t@s!T entered on the platform (Y@&c@y! C@s!T, lysJoint 2) bind partners and each other, and six-cell bodies (head, partner, four chain cells) hold',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:ro,
+    pass:(L,o)=>{const K=lh(o).filter(r=>r.t>=25000),e=pt(o).pop();if(!e||!K.length)return [false,'no result'];const six=K.filter(r=>r.n>=6).length;
+      return [six===K.length&&e.ch>=250&&e.h>=200,`six-cell bodies held in ${six} of ${K.length} censuses from 25k; at 60k chain cells ${e.ch}, heads ${e.h}, partners ${e.np}`];}},
+  {id:'rosette-escape',cap:'  a rare second partner letter (C@s!A, 10 bodies at 10k) escapes the chain and takes most partners; the chain is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc},
+    pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P.A||0;return [a>e.np/2&&e.ch<10,`at 60k A on ${a} of ${e.np} partners, chain cells ${e.ch}`];}},
+  {id:'rosette-escape-c',cap:'  control: without the chain the rare letter stays rare',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PA3:'',PA3T:'',PA3N:''},
+    pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P.A||0;return [a<0.1*e.np&&e.np>=300,`at 60k A on ${a} of ${e.np} partners`];}},
+  ];})(),
   ];})(),
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two

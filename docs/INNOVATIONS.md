@@ -12,6 +12,57 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-0726, build)
+
+- **Rings of six: one front error turns the platform's public partner into a chain that closes on itself; it lives on
+  the partner's commonest letter, and the letter escapes it** (NEXT priority 39, first slice; IDEAS "Rings of six").
+  No rule change. Worlds: `PAW=2`, `lysJoint` 2, 4 seeds unless said; read with `census.js --partner` and the body probe
+  (`tri/bodyprobe.js`: individuals by cells).
+  - **The end states** (both evolve checks' worlds to 480k, `runs/e1.json`): the partner lost its root in 3 of the 3
+    living `mutual-pair-evolve` worlds (`C@s!T`, `C@|R!I`, `Pc@y.!`, as in run 0252) and in 1 of 4 `kin-guard-evolve`
+    worlds (`-QC@|`, `BC@|q`; the other three keep a root on the filler). A complete cell's root is spent (it binds
+    nothing and is no template), so a rootless partner is copied at two sides, a rooted one at one.
+  - **Natural chains** in 2 of these 8 worlds: a front error of the rootless partner to the complement of its own plain
+    letter (`Gg@|R!` on `C@|R!G`, `-Zz@|` on `-ZC@|`) binds that side of any partner and of its own kind. Both spread
+    within 10k (to 282 and 249 cells, a third of all cells; held bodies of 4 and 5 cells) and ended within 25k when the
+    partners' plain letter turned (G 98% to I 63%, then I, G, L and V mixed; Z to B and Q); kg3 had a second chain on the
+    new letter (`Bb@|q`, 465-480k).
+  - **The ring** (check `rosette`, 4 of 4): chain cells `t@s!T` entered at 10k (20 free cells) on the platform
+    (`Y@&c@y! C@s!T`, no copy error): a chain binds by the same side each time, so it turns around one vertex and closes
+    after four cells into a ring of six (head, partner, four chain cells). Its last cell lies on the head's site: the
+    ring's head raises no more kids, while the ring's five free lysis sides are copied (chain cells four to one). Six-cell
+    bodies held in every census from 15-20k to 60k; at 60k 587-629 cells in bodies of three or more, chain cells
+    355-377, heads 208-281 and partners 140-174 (about 530 and 430 without the chain): the parasite halves its hosts.
+  - **Escape** (checks `rosette-escape`, 3 of 4, and `rosette-escape-c`, 4 of 4): 10 bodies with partner `C@s!A`
+    entered at 10k beside the chain: A on 95-100% of partners at 60k and the chain gone by 35k (3 of 4; in the fourth A
+    was lost before the chain spread). Without the chain A is lost (4 of 4). Resumed from `mutual-pair-evolve` seed 1's
+    end state with copy error (`runs/e2.json`, `e3.json`): the entered chain spread in 4 of 4 and left by 25-45k; T fell
+    from 66-68% to 11-30% in 3 of 4, but drift alone took it to 26-29% in 2 of 4 controls, so that comparison is weak.
+  - **Under copy error** (`pErr` 0.01, chains entered at 10k, to 160k): the plain letter turned away from T in 4 of 4 by
+    25k (to z, E, u, r), the chain gone by 30-45k; in one world a new chain arose on the new letter (`R@s!r`, 80-95k) and
+    the letter turned again (r, h, r). Partners with both free sides lysing (immune to any chain) rose to 35-62% in 2 of
+    4 by 160k, but also to 33% in a control without chains: not shown to be selected.
+  - **Watched from the platform** (`Y@&c@y! C@s!T`, copy error 0.01, no entries, to 480k, `runs/e6.json`): chain
+    episodes of 20 or more chain cells in 3 of 4 worlds, five in all (on T at 20-45k twice and at 135k, on the new
+    letters e at 265-280k and k at 95-120k), each followed by its letter's fall (T 100% to R 66%, T 88% to 28%, e 70%
+    to 17%, T to k 86%, k 67% to 27%); the majority letter turned 1-4 times per world, some turns without a chain
+    (drift: in seed 2 T gave way to p at 140k with at most 10 chain cells). Picture
+    [rosette-turns.png](pictures/rosette-turns.png).
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `4ed80eb` on branch `build-0726`): P1 yes for `mutual-pair-evolve` (3 of 3 living), no for `kin-guard-evolve` (1 of
+    4); P2 yes in 2 of 8 (chains arose and bodies of 3 to 5 cells held while they lasted); P3 no: a chain does not grow
+    until its body is hit, it closes after four cells (no sink), and the worlds live.
+  - Pictures: [rosette.png](pictures/rosette.png) (the ring world at 40k and one ring: the last chain cell's `T`
+    against the head's site `y`); [rosette-escape.png](pictures/rosette-escape.png) (chains entered at 10k in copy-error
+    worlds, to 160k) and [rosette-turns.png](pictures/rosette-turns.png) (no entries, to 480k): partners by plain letter
+    (colours by letter, reused across rows), chain cells as the black line.
+  - Commands: `node tri/check.js --cmd rosette rosette-escape rosette-escape-c`; the batches `runs/e1.json` to
+    `runs/e6.json` (NEXT's handoff); `node tri/census.js --partner FILES`; `LC_PARTNER=1 node tri/linechart.js out.png
+    FILES`; `NODE_OPTIONS='-r ./tri/bodyprobe.js'` for 'body:' lines.
+  - Status: a body of six cells that holds (**works**, `rosette`, while no other partner letter is about); a parasite
+    of the public partner that its letter escapes (**works**, `rosette-escape`, `rosette-escape-c`); the letter turning
+    again on a new chain under copy error (**seen**: twice in 4 platform worlds to 480k, once after an entry; no check:
+    episodes come in 3 of 4 worlds but not by a fixed time).
+
 ## 2026-10-17 (autorun run 20261017-0518, core-review)
 
 - **The kin guard as the rule, tried and declined: it freezes the loop of letters** (NEXT step 95, decide (x); RULES
