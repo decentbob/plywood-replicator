@@ -218,12 +218,17 @@ function demo(name,seed=1,steps,dir='runs',extra){
     // Roots in place (explore run 20261007-0622), observation, off by default: PARP=1, for every root that binds a seed site
     // by its '&' side, whether its template was in the seed site's body (copied by its own parent); 'root:' lines every
     // PAP steps, a 'roots:' result line, a picture at the first (the 4-cell arc of IDEAS run 0622: PA2 with its four types)
+    // A decay map (explore run 20261017-2304; NEXT priority 45), a labelled drive, off by default: PADZ=k, free parts whose
+    // x lies in the zone (x < PADZX * world, the left half by default; PADZX=1: everywhere) decay every k steps instead of
+    // PADI; PADZT=T: the zone is on for T steps, then off for T, in turn (PADZO=o shifts that phase by o steps). With it a
+    // 'zone:' line every PAP steps: the four commonest bonded types, the other bonded triangles, and free blanks, in each of
+    // ten bins of x
     // The line's world (build run 20261016-0727; NEXT priority 36): PAW=2 is PAW=1 without stocks or the mutagen (PAF=
     // PAM=0, PATN=30), the guarded public lock 'Z@&c@|- C@-z|!' as founder, copy error 0.01 and lysJoint 1 (TRI_PARAMS
     // overrides both); every option set overrides, as with PAW=1 (run 1951's E4j world)
     pair(){steps=steps||200000;const W2=process.env.PAW==='2';if(W2)for(const [k,v] of Object.entries({PAF:'',PAM:'0',PATN:'30',PA2:'Z@&c@|- C@-z|!'}))if(process.env[k]===undefined)process.env[k]=v;
       if(process.env.PAW==='1'||W2)for(const [k,v] of Object.entries({PAB:'1000',PAS:'50',PAHT:'4000',PAHB:'2',PAHU:'3',PAP:'5000',PAR:'9',PAD:'1',PAH:'0.07',PA1:'0',PA2:'Z@&c@|- C@-|z|',PAF:'C@-|z|:150 E@-|z|:150 G@-|z|:150',PAM:'0.01'}))if(process.env[k]===undefined)process.env[k]=v;const {gcode:gc,gname,comp}=require('./sim');const K=S.pairKit(),_kr=process.env.PAKR,_ks=process.env.PAKS;if(_kr)K.tris[0]={...K.tris[0],type:K.R=_kr};if(_ks)K.tris[1]={...K.tris[1],type:K.S=_ks};const NB=+(process.env.PAB||300),size=+(process.env.PAS||30),goal=parseInt(extra)||20;
-      const HB=+(process.env.PAHB||0)>0,DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',HI=process.env.PAHU==='2'||process.env.PAHU==='3',HW=process.env.PAHU==='3',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),MX=+(process.env.PAMX||0),MF=process.env.PAMF==='1',MA=process.env.PAMA||'abcdefghijklmnopqrstuvwxyz',PS=VK==='parasite';
+      const HB=+(process.env.PAHB||0)>0,DK=+(process.env.PAD||0),HZ=+(process.env.PAH||0),HT=+(process.env.PAHT||0),PP=+(process.env.PAP||0),VM=process.env.PAV||'',VT=+(process.env.PAVT||100000),MU=+(process.env.PAM||0),HU=process.env.PAHU==='1',HI=process.env.PAHU==='2'||process.env.PAHU==='3',HW=process.env.PAHU==='3',VK=process.env.PAVK||'x',VP=+(process.env.PAVP||0.5),DI=+(process.env.PADI||100),DZ=+(process.env.PADZ||0),ZX=+(process.env.PADZX||0.5),ZT=+(process.env.PADZT||0),ZO=+(process.env.PADZO||0),MX=+(process.env.PAMX||0),MF=process.env.PAMF==='1',MA=process.env.PAMA||'abcdefghijklmnopqrstuvwxyz',PS=VK==='parasite';
       const FST=(process.env.PAF||'').trim().split(/\s+/).filter(Boolean).map(w=>{const i=w.lastIndexOf(':');return [w.slice(0,i),+w.slice(i+1)];}),FS=new Set(FST.map(([t])=>canon(t))),stk=u=>FS.size>0&&FS.has(canon(s.typeName(u)));const DW=MF||(MU>0&&FS.size>0);
       // individuals (census, PAHU=2): sets of bonded triangles joined by bonds that are not joints (no '&' side on either end)
       const units=()=>{const c=new Int32Array(s.n).fill(-1),M=[];
@@ -366,13 +371,20 @@ function demo(name,seed=1,steps,dir='runs',extra){
           else if(!b&&jb[u]&&s.spent[k]&&ip[u]>=0){for(const o of [rpW,rpA]){o.n++;o.ni+=ip[u]===1?1:0;}ip[u]=-1;}
           jb[u]=b?1:0;}},
         rpLine=t=>{const o=rpW;console.log(`root: t=${t} binds ${o.b} inPlace ${(o.bi/Math.max(1,o.b)).toFixed(3)} births ${o.n} inPlace ${(o.ni/Math.max(1,o.n)).toFixed(3)} notCopied ${o.u}`);for(const k in o)o[k]=0;};
+      // the decay map (PADZ): whether a free part lies in the zone while it is on; 'zone:' lines (observation)
+      const inZone=(t,u)=>(!ZT||Math.floor((t+ZO)/ZT)%2===0)&&s.px[u]<ZX*size,zone=t=>{const by=new Map(),bl=new Array(10).fill(0),bin=u=>Math.min(9,Math.floor(10*s.px[u]/size));
+        for(const u of all){const c=canon(s.typeName(u));if(c===cB){if(!s.bonded(u))bl[bin(u)]++;continue;}if(!s.bonded(u))continue;let a=by.get(c);if(!a)by.set(c,a=new Array(10).fill(0));a[bin(u)]++;}
+        const srt=[...by].sort((a,b)=>b[1].reduce((x,y)=>x+y)-a[1].reduce((x,y)=>x+y)),top=srt.slice(0,4),ot=new Array(10).fill(0);for(const [,a] of srt.slice(4))a.forEach((k,i)=>{ot[i]+=k;});
+        console.log(`zone: t=${t} on ${!ZT||Math.floor((t+ZO)/ZT)%2===0?1:0} | ${top.map(([c,a])=>c+' '+a.join(' ')).join(' | ')} | other ${ot.join(' ')} | blanks ${bl.join(' ')}`);};
       const pic={};let first=0;
       for(let t=1;t<=steps;t++){s.step();if(s.copyLog){for(const [,u,ty,w] of s.copyLog){const c=canon(ty);cp[c]=(cp[c]||0)+1;cx[u]=s.px[u];cy[u]=s.py[u];if(PS)src[u]=bid(w);srcT[u]=w;}s.copyLog.length=0;}
         if(RP)rootStep();
         // PAHB (labelled drive): a dead triangle, once free, returns as a copy blank
         if(HZ)for(let u=0;u<s.n;u++){if(s.ly[u]){rec[u]=1;if(HB&&!stk(u))dead[u]=1;}else if(dead[u]&&!s.bonded(u)){dead[u]=0;s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.returned++;}}
         // PAD=d (labelled drive): free parts return to blanks (every PADI steps, 100)
-        if(DK&&t%DI===0)for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||stk(u))continue;if(s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.decayed++;}}
+        // PADZ (labelled drive): in the zone, while it is on, every PADZ steps instead
+        if(DK&&(t%DI===0||DZ&&t%DZ===0))for(const u of all){if(s.bonded(u)||s.ly[u]||s.cpy[u*3]||s.cpy[u*3+1]||s.cpy[u*3+2]||stk(u))continue;
+          if(DZ&&t%(inZone(t,u)?DZ:DI))continue;if(s.rng()<DK){s.setType(u,'-?-?-?');rec[u]=0;pg[u]=-1;pid[u]=-1;src[u]=-1;cx[u]=NaN;ev.decayed++;}}
         // PAH=h (labelled drive): a body hazard, mean life 100/h steps
         if(HZ&&t>HT&&t%100===0&&HI){for(const m of units().M)if(s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){ev.hits++;for(const v of HW?s.bodyOf(u):[u])if(!s.ly[v]){s.ly[v]=1;if(HB&&!stk(v))dead[v]=1;}}}}
         else if(HZ&&t>HT&&t%100===0){const {members}=s.bodies();if(HU){for(const m of members)if(m.length>1)for(const u of m)if(s.rng()<HZ/2&&!s.ly[u]){s.ly[u]=1;if(HB&&!stk(u))dead[u]=1;ev.hits++;}}else for(const m of members)if(m.length>1&&s.rng()<HZ){const u=m[Math.floor(s.rng()*m.length)];if(!s.ly[u]){s.ly[u]=1;if(HB&&!stk(u))dead[u]=1;ev.hits++;}}}
@@ -395,6 +407,7 @@ function demo(name,seed=1,steps,dir='runs',extra){
         if(VM&&PP&&t%PP===0&&t>=VT)marker(t);
         if(PS&&PP&&t%PP===0)parLine(t);
         if(RP&&PP&&t%PP===0)rpLine(t);
+        if(DZ&&PP&&t%PP===0)zone(t);
         if(MU&&PP&&t%PP===0)census(t);
         // copy error (pErr, run 20261008-0651; observation only): bonded triangles by type, the commonest 10 (PATN=n: n), and the copy errors so far
         if(s.p.pErr&&PP&&t%PP===0){const by=new Map();let nb=0;for(const u of all)if(s.bonded(u)){nb++;const c=canon(s.typeName(u));by.set(c,(by.get(c)||0)+1);}

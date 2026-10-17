@@ -40,6 +40,34 @@ Where the line stands (INNOVATIONS has the numbers, IDEAS the reasoning under th
   usually stands larger (six times likelier per copy error). Under a seal no reader finds a side, so nothing keeps it:
   to 1.2M it drifts out and comes back with the episodes; only letters and marks vary, never the shape.
 
+**Slice in progress (autorun run 20261017-2304, explore): priority 45, flow and stock under a varying drive.** New
+labelled drive `PADZ` (demos.js, pair): free parts in a zone (the left half; `PADZX` its share) decay every `PADZ` steps
+instead of `PADI`; `PADZT=T` turns the zone on and off every T steps (`PADZO` shifts the phase); 'zone:' lines give the
+commonest bonded types, the rest and free blanks in ten bins of x. Without `PADZ` outputs are unchanged.
+- **Theory.** From the six measured settings: the kin line (a flow) takes the scarce platform's world (`kin-take`)
+  and is kept out of the common one (`kin-take-c`), and the platform entered into a kin world is lost in both: the
+  platform never takes, it only keeps what it holds. A drive that varies therefore cannot hold both by alternation in
+  time: the first fast phase after kin is present hands it the world, and a slow phase gives nothing back (one switch,
+  never "in turn"). In space it can: if each zone's holder keeps the other out, the front between them has no reason to
+  move off the place where the drive changes (a bistable front pinned by the map). The guard is the same with a
+  threshold: p* (run 2158) is 0.29 for `C@s!T|` at 100 steps and 0.56 at 25, so from an even start (0.5) the slow half
+  should go guarded and the fast half plain; in time the first phase decides.
+- **Predictions** (before the runs; 60k worlds, 4 seeds; split = `PADI=100 PADZ=25`, fast half bins 0-4):
+  P1 from an even start (10 bodies each) the kin line wins in all four settings (partner `C@s!T`/`C@s!T|` x 25/100
+  steps), 3 of 4 or better each: a flow outgrows a stock that holds nothing yet.
+  P2 kin entered (10 bodies at 10k): with `C@s!T` at 25 steps it takes the world, with `C@s!T|` at 100 it is lost (3 of
+  4 each): the decay decides, not the partner.
+  P3 split, the platform alone first and kin entered at 10k: kin takes the fast half and stops near its edge (at 60k kin
+  over 80% of bonded cells in bins 0-4 and under 20% in bins 6-9), 3 of 4, with either partner.
+  P4 in time (whole world, 25 and 100 in turn every 5000 steps), the same start: kin entered in a fast phase takes the
+  world (3 of 4), entered in a slow phase it is lost (3 of 4).
+  P5 the guard (`Y@&!c@y!` against `Y@&c@y!`, `C@s!T|`, even start), split: guarded over 70% of heads in bins 6-9 and
+  under 30% in bins 0-3 at 60k, 3 of 4. P6 in time: slow phase first, the guard wins; fast phase first, the plain head
+  (3 of 4 each).
+  P7 under copy error (`pErr` 0.01, 240k), the split even start of P5: both halves held to 240k (2 of 4), and the plain
+  half holds more bonded cells of other types than the guarded half.
+- Batches: `runs/z1.json` (P1, P2), `runs/z2.json` (P3, P5), then P4, P6, P7.
+
 **Handoff status (autorun run 20261017-2158, build): priority 44 done (progressed).** The root guard counted
 (`tri/lysprobe.js`, new: 'lys:', 'raise:', 'bounce:' lines) and put on the platform head, even and entered in four
 settings and under copy error: checks `guard-plat`, `guard-plat-s` (4 of 4 each), `guard-plat-in` (3 of 4), digests
