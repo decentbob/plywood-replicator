@@ -28,6 +28,42 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Two sites and no partner: the kin head is a flow, and its root guard a ratchet (explore run 20261017-2102, 2026-10-17)
+
+NEXT priority 43 (kin in place of the partner), INNOVATIONS run 2102, [kin-front.png](pictures/kin-front.png). Notes,
+not the user's words.
+- **What the one-type head is.** `Y@&y@!y!` (run 1602's `pe1`) has one `&` side, its root, and in a one-type world every
+  bond holds a root, so every bond is a joint and a cell hears only its own front: it is held by its parent exactly
+  until its front is bound. Both free sides raise kin by the same rule (the site `y!` and the front `y@!` each take a
+  kin root, each guarded), and each kin leaves once its own front is bound. So the head has **two sites and no
+  partner**; a cell costs one triangle where a platform head with its partner costs two, and the front's wait is local
+  like the site's (a copy made at the front binds back: 503-566 steps against 397-431 at the site).
+- **The body is a conveyor, not an individual.** A cell leaves carrying the kin it raised that still wait; waiting cells
+  raise at their sites (fans about a vertex), so a body is an elder with a spent root and 1 to 7 waiting cells (bodies
+  of 2 to 8 cells, every cell in one, about 37% in pairs). The elder is lost, a free cell nothing binds, once both its
+  sides are empty at once: each generation sheds a cell, and a body lasts only while it keeps raising. Not a sink:
+  copies run at 130k per 60k steps against the platform's 77k, and the world holds 93-100% of its material in bodies.
+- **Flow against stock: free material decides, not the waits.** The kin line needs births to keep its bodies; the
+  platform's body with its partner stays without any. Where free parts decay fast and the scarce partner leaves blanks
+  free (100-140), 10 kin bodies entered took the platform's world in 5k steps (4 of 4, `kin-take`); where common
+  partners hold the material (9-11 blanks free) they were lost within 2.5k (4 of 4, `kin-take-c`), although a cell
+  raises at two sides. The platform entered into the kin world was lost in both settings (4 of 4 each): a world that
+  holds its material bound keeps an entrant out, whichever kind holds it.
+- **Under copy error nothing grows a partner back**, and the one-type body keeps its shape (2 to 8 cells at 240k, 4 of
+  4); what varies is marks. In 2 of 4 worlds the **root guard** (`Y@&!y@!y!`, a guard on all three sides) replaced the
+  head. Its kid, raised by a cell without the guard, lyses that cell across the joint (the cell carries no `Y@&!`); a
+  plain kid at a guarded cell is spared both ways. So the guarded form's slots raise both kinds and the plain form's
+  raise only its own, and a guarded kid that lands on a plain body takes it apart. Entered rare (10 bodies) it is lost
+  (4 of 4, as a neutral mark is); from an even start it wins (8 of 8, both orders, `root-guard`): its cost (raising the
+  stranger) grows with the stranger's frequency, its effect (taking stranger bodies apart) with its own. A ratchet:
+  drift carries it over the threshold, then the plain form cannot come back. Run 0551's question (killing as a
+  frequency-dependent enemy, priority 26) has its first clean case here, inside one lineage.
+- **For the direction.** Kin in place of the partner is what "What a lineage owns is what it raises" asked for: every
+  cell of every body is raised and checked by the lineage. But it is reached by giving up the kept partner, and with
+  it the body that persists: the individual becomes the line. Growth of shape in this world needs a cell that is kept
+  without waiting (a third role on three sides, or a second type the lineage raises and keeps), which the core gives
+  only by a bond without `&` (a kept partner, public again) or by waiting.
+
 ## The seal is a race of standing minorities: a parasite selects whatever it cannot read, in the proportions it finds (build run 20261017-1902, 2026-10-17)
 
 NEXT priority 41 (the closed platform at length), INNOVATIONS run 1902, [seal-race.png](pictures/seal-race.png). Notes,

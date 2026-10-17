@@ -86,6 +86,9 @@ Stop: no rule change unless the runs show a sink the core cannot leave.
     (`runs/k4.json`: 10 bodies of each at step 1, both orders, 4 seeds each). P10: if the asymmetry is weak (kin are
     raised mostly by copies made in place), the guarded form has the majority at 60k in 3 to 5 of 8, as drift would
     give; 6 or more of 8 would mean it is selected once common.
+  - Read (k4): P10 **no**: the guarded form won 8 of 8 (ahead at 5k in 7 of 8). Checks `root-guard` (even start) and
+    `root-guard-rare` (k3's entry) 4 of 4 each. Threshold (`runs/k5.json`: guarded 5 of 20 and 2 of 20 bodies at the
+    start, 4 seeds each). P11: at 25% the guarded form wins 3 of 4 or more; at 10% it wins at most 2 of 4.
 
 ## Priorities
 

@@ -270,6 +270,14 @@ ring_1 1e696496ce3db787 af57104a8f7ff211
 ring_2 320161ae0dc4061b a101d60040932648
 ring_3 f23dec55e32b7805 0b54b7c0f72ceb71
 ring_4 6c5eaef89975b6d2 82bbb6b19c3a8890
+root-guard-rare_1 ca1b2a6173c0192e f2b6ef8c2f9b5278
+root-guard-rare_2 1145f37d2d18d9c4 57960c35b12fbe11
+root-guard-rare_3 3edff149827d460f 38433de264dbe7b1
+root-guard-rare_4 b85ecc86b227105a 5e0591fd6a316d9c
+root-guard_1 19f2a9cc4de10333 82249dff6a0e3968
+root-guard_2 5701d2e68006cdc0 146c09dc56844375
+root-guard_3 005535dad941b2da 828b89f864c252de
+root-guard_4 5945bed10fe70997 baf4267bcab1fdd9
 rosette-dot_1 f18c1e76e18debd5 4d6e7984b8e6eb1a
 rosette-dot_2 f5f345a9d39b1b3f 3abf53a3ca920bef
 rosette-dot_3 4bf8d3970905e3ca f40419d080986263
