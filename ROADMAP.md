@@ -203,10 +203,11 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    copying as the rule, the corner bud, three generations on a slow supply (`budcycle-3`), lysis in the lineage
    (`budcycle-lysis`). Open when it returns: a lineage that does not burn down (feeding, candidate (n), the front sink).
    Its genome copying (chain copying, the anchor's catch) left the core in run 20261008-2221 (git `1284bb4`).
-0b. **Speed** (harden runs): the check suite 71 minutes at run 0250 with 56 checks; 83 checks since run 2258, run in
-   two parts (87 minutes per part in run 0902's container, 69 checks); speed-ups so far exact (run
-   0950: 1.34x, run 1421: 1.18x on the suite; run 20261006-0021: the pair world 1.8-2.1x, about 500 steps per second
-   at 1050 triangles); lone blocks (`_single`) take most of the time; no single hot spot left inside them. Since run
+0b. **Speed** (harden runs): the check suite 71 minutes at run 0250 with 56 checks; run in two parts since run
+   20261016-0902 (85 and 89 minutes per part with 91 checks in run 20261017-0902; 99 checks since run 1602); speed-ups
+   so far exact (run 0950: 1.34x, run 1421: 1.18x on the suite; run 20261006-0021: the pair world 1.8-2.1x, about 500
+   steps per second at 1050 triangles); physics is most of it, bodies now more than lone blocks, with no single hot
+   spot (profile: INNOVATIONS run 20261017-0902). Since run
    20261003-1321 one `harden` run per twelve (design, not run time, limits the work).
 
 Removed with the casting lineage (2026-10-03; in git at `7415fd4`): the heritable factory cycle, the factory on lid
