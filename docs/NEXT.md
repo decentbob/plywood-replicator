@@ -72,6 +72,15 @@ Stop: no rule change unless the runs show a sink the core cannot leave.
   - P5 the platform entered into the kin world: no platform head at 60k, 4 of 4 in both settings.
   - P6 (copy error, `pErr` 0.01, 240k, from the kin founder; batch after this one): `Y@&y@!y!` stays the commonest head
     type in 3 of 4; no partner-type cell (a head front that is not `y`) reaches 10% of cells.
+- **Second batch** (`runs/k3.json`, after `runs/kE` showed the root-guarded form `Y@&!y@!y!` taking 2 of 4 worlds under
+  copy error). Theory: a root-guarded kid raised by a cell without the guard lyses that cell across the joint (it
+  carries no `Y@&!`); the cell cuts its bonds and comes back fresh, freeing its other kin. A plain kid at a root-guarded
+  cell is spared both ways (it carries `y!` and `y@!`). So the guarded form raises both kinds and the plain form raises
+  only its own: an asymmetry that should select the guard.
+  - P7 `Y@&!y@!y!` entered (10 bodies at 10k) into the kin world: more than half of the cells at 60k in 3 of 4.
+  - P8 the plain kin entered into the root-guarded world: below 10% of cells at 60k in 4 of 4.
+  - P9 control, the anchored root `Y@&|y@!y!` (neutral: no rule reads an anchor on a bonded root) entered the same
+    way: below 10% at 60k in 3 of 4.
 
 ## Priorities
 

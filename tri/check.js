@@ -597,6 +597,13 @@ const CHECKS=[
     pass:win('Y@&c@y!','Y@&cy@!',false)},
   {id:'no-wait-c',cap:'  control: with partners copied at two sides (C@s!T) and the same drive, the head that does not wait is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:140,env:{...nw,PA2:'Y@&c@y! C@s!T',PA3:'Y@&cy@! C@s!T'},
     pass:win('Y@&cy@!','Y@&c@y!',false)},
+  // Kin in place of the partner (explore run 20261017-2102): the one-type head Y@&y@!y! (front and site both raise kin, each
+  // guarded) entered as 10 two-cell bodies at 10k. It takes the world where free parts decay fast and blanks lie free;
+  // where the platform's partners come quickly and hold the material, it is lost
+  {id:'kin-take',cap:'Kin in place of the partner: the one-type head Y@&y@!y! (10 bodies at 10k) takes the scarce platform\'s world (C@s!T|, free parts living 25 steps)',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...nw,PA2:'Y@&c@y! C@s!T|',PA3:'Y@&y@!y! Y@&y@!y!'},
+    pass:win('Y@&y@!y!','Y@&c@y!',true)},
+  {id:'kin-take-c',cap:'  control: where partners are common (C@s!T, free parts living 100 steps) and blanks few, the kin head is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:150,env:{...nw,PADI:'100',PA2:'Y@&c@y! C@s!T',PA3:'Y@&y@!y! Y@&y@!y!'},
+    pass:win('Y@&y@!y!','Y@&c@y!',false)},
   ];})(),
   ];})(),
   ];})(),
