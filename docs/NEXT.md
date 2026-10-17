@@ -23,6 +23,27 @@ public, and what a lineage owns is what it raises, one triangle per generation. 
 (since 2026-10-05): the size of what evolves has not grown, and that is the gap this direction check aims the next
 slices at.
 
+**Slice in progress (autorun run 20261017-0726, build): priority 39, first slice.** Goal: what grows on the guarded
+platform. Done when a body of three or more cells or a third class holds in 3 of 4 worlds (a check), or the argument says
+why nothing does. Stop at the end of this run either way.
+- Theory (before the runs). (T1) A root `X@&` on a complete cell is spent: it binds nothing and is no template. So the
+  partner `C@s!T@&` has one copyable side, and one that lost its root (`C@s!T`) has two: twice the copies, which is
+  why run 0252's partners drifted to rootless forms. (T2) On the rootless partner `C@a!B` the one-error variants are:
+  an anchor on a free side (one copyable side: lost); a lysis mark on `B` (neutral: copies are made in the pass a blank
+  binds); the site letter to the head's root (`C@y!B`: a second guarded site per body, raising heads as kin; it costs the
+  partner a copy side while a kid waits: lost or drifts); the front letter to `b` (`b@a!B`): it binds the `B` side of any
+  partner and its own copies bind its `B`: **a chain**, a third class raised on a site every partner carries, with no
+  joint and no release. Its copies find a site on every partner (about 500), the partner's copies only on waiting kids'
+  fronts, so it should invade within a few thousand steps of its first appearance. (T3) The kin-guard world's filler
+  `C@|-Z@&` is the same case: its root is spent, a rootless filler copies at two sides, and then `z@|-Z` chains.
+- Predictions. P1: in the copy-error end states (`mutual-pair-evolve`, `kin-guard-evolve` to 480k) the partner is rootless
+  in 3 of 4 worlds of each. P2: chain cells (an attach letter equal to the complement of the partner's plain side, no
+  `&`) appear wherever the partner has a glued plain side, and individuals of 3 or more cells exist. P3: a chain grows
+  until its body is hit (hazard per individual, about 1400 steps) and takes blanks from the partner's copies; whether the
+  world survives it is open (chains preceded collapses in runs 0121 and 0551).
+- Runs: `runs/e1.json` (both evolve worlds, 4 seeds each to 480k, saved end states), then the end states resumed with
+  `NODE_OPTIONS='-r ./tri/bodyprobe.js'` ('body:' lines: individuals by cells).
+
 **Handoff status (autorun run 20261017-0518, core-review): done; no rule, demo or check change kept.** Decided (x):
 it stays the option mode `lysJoint: 2` (RULES Core changes "Core review 2026-10-17"; IDEAS "A guard that knows its own
 stops the loop"; INNOVATIONS run 0518).
