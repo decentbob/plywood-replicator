@@ -1,9 +1,9 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-0902, harden). Read AGENTS.md first (rules of work), then this
+State on 2026-10-17 (after autorun run 20261017-1302, build). Read AGENTS.md first (rules of work), then this
 file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
 run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
+slice record with its predictions is on its run's branch (`build-1302`, `build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
 `build-1902`, `explore-1602`, `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check
 is IDEAS "What a lineage owns is what it raises" (run 0456).
 
@@ -23,81 +23,53 @@ public, and what a lineage owns is what it raises, one triangle per generation. 
 cells** (run 0726): on the guarded platform the public partner is rootless, and one front error makes it a chain cell
 that binds the partner's plain side and its own; a chain closes after four cells into a **ring of six** that covers
 its head's site. It is the parasite's body, not the host's, and it lives on the partners' commonest letter, which
-escapes it: so the guarded head keeps its letters while the partner's letter turns in bursts (IDEAS "Rings of six").
+escapes it: so the guarded head keeps its letters while the partner's letter turns in bursts (IDEAS "Rings of six"). Its
+escapes (run 1302): a new letter (quick, transient) or a close-only plain side (permanent, but not found under copy error
+in 480k); a lysing side is a trap that kills the body. A ring whose chain cells carry the head's site raises heads on
+four sites and loses to the chain that keeps its side for copies: a gain a body gives away is public (IDEAS "A closed
+side, not a lysing one").
 
-**Handoff status (autorun run 20261017-0902, harden): nothing needed fixing (idle).** The suite on main in a fresh
-container: 91 of 91 checks pass, all 327 worlds byte for byte main's digests (so the digests hold across containers);
-part 1 85 minutes, part 2 89 (each about 30 minutes inside the 2-hour limit, room for some 70 worlds of 100 s more).
-The `secs` estimates are 0.8x the measured times throughout, so the parts stay balanced. At 3 of 4 (need 3): `ring`,
-`imprint`, `race`, `seal-evolve`, `nursery-c`, `rosette-escape`; `pair-flow-c` partial 1 of 2 as before. No code change.
-- Profile (`PAW=2` world, 30k steps): `_overlap` 30%, `_pairs` 15%, `tryMove` 10%, `eqDepthN` 6%, `_jostle` 6%. Bodies
-  make 0.75 million `tryMove` calls per 1000 steps, 75% of them free at once, 1.5 `_overlap` calls each: a neighbour list
-  gathered once per move (what made lone blocks fast, run 1421) would not pay for bodies. A finer grid could cut the
-  cells scanned (about 0.8 blocks per 1.43-unit cell in world 50) but changes the order of the rare overlap-reducing
-  sums, so outputs could change: not worth a suite while both parts fit.
-- Run 0726's batches (e1, e5, e6: the evolve settings, the platform watch, `rosette` under copy error) are in its
-  handoff: `git show fd0101b:docs/NEXT.md`. Nothing is running.
+**Handoff status (autorun run 20261017-1302, build): priority 39's second and last slice done (progressed).** Theory,
+then entry tests on `rosette`'s world (4 seeds, 60k) and one copy-error watch; slice record with predictions in
+`docs/NEXT.md` at `5b9516d` (branch `build-1302`); INNOVATIONS and IDEAS ("A closed side, not a lysing one") have it all.
+- **The lysing partner `C@s!T!` is a trap, not a shield:** every lysed triangle dies (deaths return blanks) and lysis
+  comes back across a bond that is not a joint, so a chain cell that binds `T!` dies with the partner's whole body. Lost
+  beside the chain 4 of 4 (no check).
+- **The close-only partner `C@s!T.` is the shield** (`rosette-dot`, 3 of 4): no free reader binds a `.` side, a blank
+  still copies it; entered as 10 bodies it took 95-100% of partners and the chain left. Under copy error it never spread
+  (0-12% of partners, four platform worlds to 480k, `runs/f4`): a new letter is six times likelier and chain episodes
+  (one to three per world) are too few to select the mark (run 1650's seal had many).
+- **The paying ring** `t@y!T` (`rosette-pay`, 4 of 4): the same ring of six with four nursery sites `y!` outward; heads
+  349-419 at 60k against 208-281 with `t@s!T`. **Its cheat wins** (`rosette-pay-cheat`, 4 of 4): beside `t@s!T` it was
+  gone by 40k (an occupied site is not copied; the heads it raises serve every chain). Under copy error it spread in 2 of
+  4 and its site cheat `t@q!T` overtook it in one.
+- Code: `PA3` enters several kits (`PA3='K1,K2'`, `PA3N` of each); `tri/check.js` keys partners by their marks and
+  chain cells by their other side. The three new checks' digests are written; `rosette*` outputs unchanged.
+- Batches (`runs/` is ignored; JSON here): the world is `rosette`'s env (`{"PAW":"2","PA2":"Y@&c@y! C@s!T",
+  "TRI_PARAMS":"{\"pErr\":1e-9,\"lysJoint\":2}","PA3":"t@s!T","PA3T":"10000","PA3N":"20"}`, 60k, seeds 1-4, with
+  `NODE_OPTIONS='-r ./tri/bodyprobe.js'`); f1 jobs `s` (as is), `n` (`PA3` ''), `y` (`PA3` `t@y!T`), `ys` (`t@y!T,t@s!T`,
+  `PA3N` 10), `i` (`PAKR` `Y@&c@y!`, `PAKS` `C@s!T!`, `PA1T` 10000, `PAEN` 10), `ic` (`i` without `PA3`); f3 the same
+  with `PAKS` `C@s!T.`; f2 `y` and `s` with `pErr` 0.01 to 120k; f4 run 0726's platform watch (`PAW=2`, `PA2`
+  `Y@&c@y! C@s!T`, `pErr` 0.01, `lysJoint` 2, 480k, `PATN` 60). Nothing is running.
 
-**Next step (rotation 98, build): priority 39, second slice** (below): the immune partner and a ring that pays its head,
-on `rosette`'s world (`node tri/check.js --cmd rosette`).
-
-## Slice in progress (autorun run 20261017-1302, build): priority 39, second slice
-
-Goal: settle (a) the immune partner and (b) a ring that pays its head on `rosette`'s world, by theory first, then entry
-tests (4 seeds, 60k, `runs/f1.json`). Done when one holds in 3 of 4 as a check, or the argument settles it. Stop after
-the entry tests and one copy-error batch for whichever holds.
-
-**Theory (before any run).**
-- *Lysis is death in this world.* With deaths returning blanks (`PAHB=2`, set by `PAW=2`) every lysed triangle becomes
-  a copy blank once free, not only the hazard's: contact lysis kills. A chain cell `t@` that binds the immune partner's
-  `T!` is lysed (no joint: `lysJoint` does not apply), its lysis comes back across that bond into the partner and on into
-  the head (not into a kid on the head's site: a joint). So `C@s!T!` is not immune but a trap: the chain cell and the
-  whole body die together (IDEAS run 2221, "A trap or a lock": the same mark again, one cell over).
-- *So it is not an escape like A.* A chained `T` partner lives on in a ring (hit by the hazard as any individual) and is
-  copied at one side; an `A` partner is never touched and copied at two; a `T!` partner is copied at two until the first
-  chain cell finds it, then dies. Killing the chain cell is a public good (it spares the `T` partners as much as itself).
-- *Without selection it sits at a third.* Under copy error a side drawn at random toggles one of six marks half the
-  time: the partner loses one of its two `!` at 2 x 1/3 x 1/2 x 1/6 = 1/18 per copy error and gains the one it lacks at
-  1/36, so the immune share drifts to 1/3 by mutation alone (run 0726's control without chains: 33%).
-- *The paying ring.* `t@y!T` has `t@s!T`'s front and plain side, so it chains and closes the same way; the four chain
-  cells' outward sides are then `y!` sites: four nursery sites per ring for any head `Y@&c@y!` (the kin guard spares a
-  root that carries `y!`), and the kid leaves with its partner as on a head. But head copies come only from heads' own
-  empty sites (a blank on a chain cell's `y!` copies the chain cell), and the ring's own head is still covered. An
-  occupied `y!` is not copied, so a `y` chain cell is copied less than an `s` one, while the heads it raises make fronts
-  and partners for every chain: the benefit is public, the cost private.
-
-**Predictions.**
-- Pa1: `C@s!T!` entered as 10 bodies at 10k beside the chain does not take the partners (below half at 60k in 3 of 4,
-  where `A` took 95-100%); the chain is still there at 60k. Pa0 (control, no chain): it stays rare (the 1/3 balance needs
-  copy error).
-- Pb1: `t@y!T` alone (20 at 10k) closes rings of six that hold, and its world has more heads at 60k than `rosette`'s
-  (208-281) in 4 of 4: the ring raises kids. Fewer heads than the world without a chain (about 530): its head is still
-  sterile and head copies come only from fertile heads.
-- Pb2: both entered (10 each at 10k): `t@s!T` ends with more chain cells than `t@y!T` in 3 of 4 (the cheat wins by flux).
-- If Pb1 holds and Pb2 too, the paying ring is a mutualism that its own site error undoes; no copy-error batch for it
-  beyond one 4-world check of that.
+**Next step (rotation 99, explore): priority 40** (below), on paper first. Then 100 (build): what 99 leaves to build;
+if nothing, priority 41.
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36-38: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+Done 1-24, 28-30, 32-34, 36-39: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
 Open (set by review-intent run 20261017-0456; reasoning in IDEAS "What a lineage owns is what it raises"):
-39. [98 build] **Growth on the guarded platform, second and last slice.** First slice (run 0726): rings of six, a
-    parasite of the public partner's plain side that the letter escapes (`rosette*`). Theory first, then entry tests
-    on `rosette`'s world: (a) **the immune partner** `C@s!T!` (both free sides lysing: no chain binds it) entered rare
-    beside the chain: predict it escapes like A; then under copy error, whether it fixes and the partner's letter stops
-    turning (the guard once more, one cell over); (b) **a ring that pays its head**: a chain cell carrying the head's
-    site (`t@y!T`, one site error from `t@s!T`) makes each ring four nursery sites for the head's kin; an occupied site
-    is not copied, so predict whether it spreads against `t@s!T` and whether heads on such rings out-raise plain ones.
-    Done when one of them holds in 3 of 4 (a check) or the argument settles it. After it, 39 goes back to the direction
-    check (stop rule: four slices without a capability that holds under copy error; the rings hold only without an
-    escape letter).
 40. [99 explore] **When a joint lets go (on paper first).** The one route to a body that owns more than one cell per
     generation is a checked bond that outlasts completion (IDEAS run 0416: (x)'s check bites only across a joint, and a
     joint is cut at completion). Design the smallest change on the keeping side, say exactly what it reads (locality),
     and derive whether it makes bodies that never let go (run 0820's collapse at 3x) or self-binders (candidate (y)).
     Build only if the argument says it does neither; record it under Core changes either way.
+41. [100 build, if 99 leaves nothing to build] **The closed platform at length.** `Y@&c@y! C@s!T.` under copy error
+    (the body has no side a free reader can hold): watched to 1.2M from the platform with and without the closed side,
+    does the seal come in the end as in run 1650, do chain episodes stop once it has, and what varies on a body nothing
+    reads (drift only, or a new shape)? Watch first, then one check if a number holds in 3 of 4.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. 39 is its next.
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -111,8 +83,9 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518 and 0726): 95 core-review, 96 build, 97
-harden, 98 build, 99 explore. Run 98 (build) takes 39's second slice.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518, 0726 and 1302): 99 explore, 100
+build, 101 cleanup, 102 build, 103 explore, 104 build, 105 explore, 106 review-intent (the direction check 39's stop
+rule sends it to).
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) the option mode `lysJoint: 2` since run
 2258, tried as the rule and kept an option in run 0518; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
@@ -124,7 +97,7 @@ harden, 98 build, 99 explore. Run 98 (build) takes 39's second slice.
   random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks); physics is most of it (handoff
+- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 94 since run 1302, about 5 minutes more per part); physics is most of it (handoff
   above; a cell-distance cut in `_pairs` would rarely skip a cell: the pair reach, 1.39, is about a cell, 1.4). When a
   part nears 2 hours, `--part k/3` balances three parts the same way. Worlds shared between checks: only `race`/`seal-evolve` had one setting
   (`pair-mut` reads a result line, which a longer world does not repeat).
@@ -184,6 +157,9 @@ RP_T0=25000 NODE_OPTIONS='-r ./tri/raceprobe.js' ... # run 2151: 'race:' lines e
 node tri/check.js --cmd rosette rosette-escape rosette-escape-c
                                                    # run 0726: chain cells t@s!T entered on the platform close into rings
                                                    # of six; a rare partner letter escapes them; control
+node tri/check.js --cmd rosette-pay rosette-pay-cheat rosette-dot
+                                                   # run 1302: the paying chain t@y!T alone and beside t@s!T; the closed
+                                                   # partner C@s!T. entered beside the chain
 node tri/census.js --partner runs/x.txt            # run 0726: rootless partners by plain letter ('immune': both free sides
                                                    # lyse), chain cells, cells in 3+ bodies (from 'body:' lines); chart:
                                                    # LC_PARTNER=1 node tri/linechart.js out.png FILES

@@ -176,6 +176,13 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    bodies of more than two cells: the parasite's, not the host's); it lives on the commonest partner letter and a rare
    letter escapes it (negative frequency dependence), so under copy error the partner's letter turns in bursts while the
    guarded head keeps its letters (run 0726; `rosette`, `rosette-escape`, `rosette-escape-c`; IDEAS "Rings of six").
+   39 (second and last slice, build) the partner's defence and a ring that pays: a lysing plain side `T!` is a trap
+   (lysis is death and comes back: the reader and the partner's body die; lost 4 of 4); a close-only plain side `T.` is
+   the shield (no free reader binds it; entered, it takes the partners beside the chain, 3 of 4), but under copy error a
+   new letter comes first and the mark never spread (0 of 4 to 480k); a chain cell carrying the head's site, `t@y!T`,
+   closes a ring that raises heads on four sites (more heads than `rosette`, 4 of 4) and loses to `t@s!T`, which keeps
+   its side for copies (4 of 4): a gain given away is public (run 1302; `rosette-pay`, `rosette-pay-cheat`,
+   `rosette-dot`; IDEAS "A closed side, not a lysing one"). 39 goes back to the direction check (stop rule).
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell

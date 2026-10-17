@@ -25,7 +25,8 @@ not statistics.
     `rosette-escape`), and by 60k without the chain (4 of 4). No check (a negative).
   - **The close-only partner escapes** (check `rosette-dot`, 3 of 4): `C@s!T.` (a free chain cell cannot bind a `.`
     side; a copy blank still copies it) took 93-95% of partners by 40k and 95-100% at 60k, the chain gone; in the
-    fourth world it was lost before the chain spread. Without the chain it was lost (4 of 4, no check: the same world as
+    fourth world it was lost before the chain spread. Its counts are those of `rosette-escape`'s `A` to the cell (the
+    same random stream: no chain binds either, so the worlds run alike). Without the chain it was lost (4 of 4, no check: the same world as
     `rosette-escape-c` with another rare type).
   - **The paying ring** (check `rosette-pay`, 4 of 4): chain cells `t@y!T` (the head's site in place of `s!`) close the
     same ring of six, whose four outward sides are nursery sites `y!` for any head (the kin guard spares a root carrying
@@ -38,17 +39,22 @@ not statistics.
   - **Under copy error** (`pErr` 0.01, 20 chain cells at 10k, to 120k, `runs/f2.json`): `t@y!T` spread in 2 of 4 and was
     gone by 40-60k; at 40k in one world its site cheat `t@q!T` (44 cells) had overtaken it (11). `t@s!T` spread in 4 of
     4 and was gone by 40k (the letter turned to z, E, u, r).
-  - PLATFORM_WATCH
+  - **The closed side under copy error** (`runs/f4.json`: the platform with copy error 0.01 and no entries, to 480k,
+    the four worlds of run 0726's platform watch): partners with a closed plain side (`.`, the other free side `!` or
+    `.`) were 0% in most 40k censuses and at most 12%, at most 6% when a chain episode began (seven episodes of 5 or more
+    chain cells in 4 worlds); every fall of a chained letter went to another letter. A letter is six times likelier per
+    copy error than the mark (1/6 against 1/36), so the quick escape comes first each time, and one to three episodes
+    per world are too few to select the mark (run 1650's seal had many).
   - Predictions (NEXT slice record, `docs/NEXT.md` on branch `build-1302` at its first commit): Pa1 yes (the `!`
     partner did not take the partners; it was lost); Pa0 yes; Pb1 yes (more heads than `rosette` in 4 of 4, fewer than
     without a chain in 4 of 4); Pb2 yes (4 of 4). Not predicted: the close-only side as the partner's real shield.
-  - Picture: [rosette-pay.png](pictures/rosette-pay.png) (a `t@y!T` world at 40k and one ring with the kids raised on
-    its chain cells).
+  - Picture: [rosette-pay.png](pictures/rosette-pay.png) (a `t@y!T` world at 40k, seed 2; one ring with three kids
+    waiting on its chain cells' sites).
   - Commands: `node tri/check.js --cmd rosette-pay rosette-pay-cheat rosette-dot`; the batches in NEXT's handoff;
     `node tri/census.js --partner FILES`.
   - Status: a body of six that raises its host's kin (**works**, `rosette-pay`, alone); lost to its cheat (**works** as a
-    negative, `rosette-pay-cheat`); the closed partner side escapes the chain (**works**, `rosette-dot`); the lysing side
-    as a shield (**not**: a trap).
+    negative, `rosette-pay-cheat`); the closed partner side escapes the chain (**works**, `rosette-dot`, entered); found
+    under copy error (**not yet**: 0 of 4 worlds to 480k); the lysing side as a shield (**not**: a trap).
 
 ## 2026-10-17 (autorun run 20261017-0726, build)
 

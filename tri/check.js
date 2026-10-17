@@ -3,7 +3,8 @@
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
 //   node tri/check.js [name ...] [--part k/n] [--cmd]   (names: the `id` column; default all; at most 4 processes; about 3 hours
-//   for 91 checks in run 20261017-0902's container, 85 and 89 minutes per part: run it as --part 1/2, then --part 2/2;
+//   for 91 checks in run 20261017-0902's container, 85 and 89 minutes per part (94 since run 1302: 12 worlds of about
+//   100 s more): run it as --part 1/2, then --part 2/2;
 //   seal-evolve the longest; each check prints when its last world finishes, so lines come in finishing order;
 //   CHECK_SAVE=dir keeps each world's whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Every world's output is compared with main's digest of it in tri/digests.txt (harden run 20261016-0902): each line ends
