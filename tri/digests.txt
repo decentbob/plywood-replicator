@@ -282,6 +282,14 @@ rosette-pay_1 07eb5d0b2ec009e7 d279a04cfb5abb9a
 rosette-pay_2 ebcfa5c9ce3b5445 0e273bb2860cd6a7
 rosette-pay_3 1926443779ba4bad 295b2e45c504af61
 rosette-pay_4 d861811ce3464378 43480bfb6017e177
+rosette-race-r_1 f3da8abff780b027 e850b9e3bfaa7c7e
+rosette-race-r_2 84fd45743bbbaa01 e7c02e0cb5e106e2
+rosette-race-r_3 89e747b8aae275a3 bf37d7a8ab63624e
+rosette-race-r_4 d602b75618a6b754 dea942d409cebeee
+rosette-race_1 2d9cfec711284179 b89a39c4e303785b
+rosette-race_2 d8ef63dbeb49ebfb 2c064b8d68bc55b0
+rosette-race_3 f2506114d7f32cd7 cf6b98c2a8225c9b
+rosette-race_4 d255d676af341f15 55636065114574c0
 rosette_1 0b29fcca0bfe3694 3c7bf225aa1b01ed
 rosette_2 382aea7f0df8f9b1 476e196b1a65d473
 rosette_3 ee69e805527c4c2a 8cb72c234664e6bb

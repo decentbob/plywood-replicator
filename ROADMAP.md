@@ -196,6 +196,14 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    2.1 (partner `C@s!T|` and free parts living 25 steps), the platform entered against it lost 4 of 4; one copied side
    alone is not enough; under copy error the partner's anchor is lost (7 of 8) and in one world kin replaced the partner
    (`Y@&y@!y!`) (run 1602; `no-wait`, `no-wait-r`, `no-wait-c`; IDEAS "The wait that pays").
+   41 (build) the closed platform at length (`Y@&c@y! C@s!T.` under copy error to 1.2M, sealed and open founders, 4
+   each): the seal is not kept (closed on 99, 27, 82, 100% of censuses from the sealed founder; on 0, 28, 33, 0% from
+   the open one) and no parasite episode began while it held (0 of 23); each episode escapes toward the larger
+   standing class of unreadable partners, closed or of another letter (22 of 23, the 23rd a tie), which keep their ratio through the
+   sweep (both immune, neither reads the other: swapped, the entry worlds run the same random stream and give the
+   same counts); between episodes the seal drifts. On a body nothing reads only letters and marks drift; the guarded
+   head's letters never changed and bodies stayed of two cells (8 of 8) (run 1902; `rosette-race`, `rosette-race-r`;
+   IDEAS "The seal is a race of standing minorities").
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
@@ -204,7 +212,7 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    (`budcycle-lysis`). Open when it returns: a lineage that does not burn down (feeding, candidate (n), the front sink).
    Its genome copying (chain copying, the anchor's catch) left the core in run 20261008-2221 (git `1284bb4`).
 0b. **Speed** (harden runs): the check suite 71 minutes at run 0250 with 56 checks; run in two parts since run
-   20261016-0902 (85 and 89 minutes per part with 91 checks in run 20261017-0902; 99 checks since run 1602); speed-ups
+   20261016-0902 (85 and 89 minutes per part with 91 checks in run 20261017-0902; 101 checks since run 1902); speed-ups
    so far exact (run 0950: 1.34x, run 1421: 1.18x on the suite; run 20261006-0021: the pair world 1.8-2.1x, about 500
    steps per second at 1050 triangles); physics is most of it, bodies now more than lone blocks, with no single hot
    spot (profile: INNOVATIONS run 20261017-0902). Since run

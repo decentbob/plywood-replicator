@@ -12,6 +12,53 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-1902, build)
+
+- **The closed platform at length: the seal is not kept; each parasite escapes toward the larger standing class of
+  partners it cannot read, closed or of another letter, and those classes keep their ratio through the sweep** (NEXT
+  priority 41; IDEAS "The seal is a race of standing minorities"). No rule change. `census.js --partner` gained the
+  closed share (partners with no side a free reader keeps: each side but the front close-only, lysing or inert) and
+  readers (other one-attach cells that do not bind their own kind); `census.js --race` (new) reads each episode;
+  `linechart.js` `LC_CLOSED=1` draws the closed share.
+  - **Watched to 1.2M** (`PAW=2`, `pErr` 0.01, `lysJoint` 2, `PATN` 60; `runs/h1.json`, 42 minutes per world, 4 at
+    once; 8 worlds): founder `Y@&c@y! C@s!T.` (sd) or `C@s!T` (op), seeds 1-4. All 8 alive (P5 yes). Closed share at
+    half or more of partners: sd on 99, 27, 82, 100% of censuses, ending 100, 19, 100, 96%; op on 0, 28, 33, 0%, two
+    spells (op2 505-845k, through the inert letter `-`; op3 585-790k and 1020k to the end). P1 (sd at or above half at
+    every 100k census in 3 of 4) **no**, 2 of 4; P3 (op passes half in at most 1 of 4) **no**, 2 of 4.
+  - **Episodes** (20 or more chain cells and readers): 3 from the sealed founder, 20 from the open one (P2 yes); every
+    one in the sealed arm on a partner that had lost a mark (`.` in sd2, `!` in sd3: `S@sT.` read the opened `s`);
+    after 480k in 3 of 4 open worlds (P3's second part yes). **None began while closed partners were half or more**
+    (0 of 23). Readers that do not chain count: in op3 `P.p@|W.!` (104 cells at 580k) reads the open `P` and its own `P`
+    is closed.
+  - **The race** (unpredicted; `census.js --race`): in 22 of 23 episodes the partners escaped toward the class that
+    stood larger before it, closed (`.` on every side of the read letter) or another letter: the seal won where it stood
+    larger (sd2 875k, 23% against 5%; op3 575k, 9% against 2%), the letter in the other 20 (other letters mostly 6-40%
+    before, closed 0-5%); in op2 875k neither stood and a letter turn on a partner with the read letter already closed
+    on its other side ended as a seal. The closed share among the unreadable classes is about the same after as before
+    (sd2 82% to 89%, op3 82% to 88%).
+  - **Entered** (`rosette-dot`'s world, chain cells `t@s!T` at 10k, no copy error; `runs/h2.json`): 12 sealed bodies
+    and 6 of letter A, then swapped (P6 yes: closed the majority at 60k in 3 of 4, the minority in 4 of 4; P7, the ratio
+    within 0.2 of the entered one, **no**, 1 of 4 per arm: 6 bodies are lost to drift as often as not). Swapped, the
+    worlds draw the same random numbers and give the same counts (seed 1: 339 and 87 partners either way): a close-only
+    mark and a new letter are the same variant to everything but the reader. Checks `rosette-race` and `rosette-race-r`
+    (3 of 4 each; the fourth world's chain held both).
+  - **What varies on a body nothing reads**: the letters under the closed and lysing marks (the majority plain letter
+    turned 3-9 times per sd world; P4 yes, 4 of 4), marks with no effect (`|` on every cell of sd4, op1, op2's heads;
+    sides closed and lysing, `C@Z!h.!`, `C@|W.!D.!`), the inert letter. The guarded head's letters never changed (8 of
+    8) and complete bodies were of two cells (99-100% at 1.2M; one body of four in sd2; P4 yes): drift, no new shape.
+  - Predictions: NEXT slice record (`docs/NEXT.md` at `840d784`; P6-P7 at `9846f0f`, before `runs/h2`; its first try entered
+    30, 15 and 15 chain cells, ran out of free blanks so the `PA3` kits never entered, and was rerun with 12, 6 and 6).
+  - Picture: [seal-race.png](pictures/seal-race.png) (the 8 worlds: partners by plain letter, chain cells black, the
+    closed share as white dashes).
+  - Commands: `node tri/check.js --cmd rosette-race rosette-race-r`; the long worlds: `node tri/batch.js runs/h1.json`
+    with base env `{"PAW":"2","PATN":"60","TRI_PARAMS":"{\"pErr\":0.01,\"lysJoint\":2}","NODE_OPTIONS":"-r
+    $PWD/tri/bodyprobe.js","BP_EVERY":"10000"}`, jobs `sd` (`PA2` `Y@&c@y! C@s!T.`) and `op` (`PA2` `Y@&c@y! C@s!T`),
+    seeds 1-4, 1200000 steps; read with `node tri/census.js --partner|--race FILES` and `LC_PARTNER=1 LC_CLOSED=1
+    LC_T=1200000 node tri/linechart.js out.png FILES`.
+  - Status: the seal kept under copy error (**not**: it drifts out between episodes, 2 of 4 from the sealed founder,
+    spells in 2 of 4 from the open one); no episode while it holds (**seen**, 0 of 23); the escape as a race of standing
+    classes (**works**, `rosette-race`, `rosette-race-r`, and 22 of 23 natural episodes).
+
 ## 2026-10-17 (autorun run 20261017-1802, cleanup)
 
 - **Records kept findable; no code or output change.** NEXT shortened (210 to about 145 lines: the line's state as four
