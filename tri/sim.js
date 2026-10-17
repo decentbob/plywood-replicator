@@ -46,6 +46,7 @@ const ERRG=[...'-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(gcod
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
+    if(this.p.lysJoint!==0&&this.p.lysJoint!==1)throw Error('lysJoint is 0 (the kin guard, the rule) or 1 (no contact lysis across a joint); 2 is the rule since run 20261017-0518');
     const I8=k=>new Int8Array(k);
     this.glue=I8(3*n);this.cOnly=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.lys=I8(3*n);
     this.role=I8(n);this.ly=I8(n);this.op=new Int16Array(n).fill(-1);   // role: 1 attached (bonded) when the pass began
@@ -81,7 +82,7 @@ class TriSim extends Physics{
       kin=(u,q)=>same(u*3,q)||same(u*3+1,q)||same(u*3+2,q);
     for(let u=0;u<n;u++){let L=0;
       for(let i=0;i<3;i++){const q=this.bond[u*3+i];if(q<0)continue;if(ly0[u]){L=2;break;}const jt=this.done[u*3+i]||this.done[q];
-        if(this.lys[q]&&!(jt&&(lj||kin(u,q)))||ly0[(q/3)|0]&&!jt)L=1;}
+        if(this.lys[q]&&!(jt&&(lj===1||kin(u,q)))||ly0[(q/3)|0]&&!jt)L=1;}
       this.ly[u]=L;}
   }
   // an open front: an unbonded glued attach side '@' that is not '&'. A triangle caught by glue with one emits the open
