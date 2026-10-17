@@ -12,6 +12,14 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-1802, cleanup)
+
+- **Records kept findable; no code or output change.** NEXT shortened (210 to about 145 lines: the line's state as four
+  points under IDEAS headings, run 1602's handoff details moved to its entry below, the per-run `--cmd` lines folded
+  into one, probes in one table). Run branches are deleted at merge, so prediction pointers name commits now (runs
+  1602, 1406, 1302, 0726, 0416, 0252); harden run 20261017-0902 got its record (below); `kin-guard.png` linked (run
+  2258); ROADMAP's speed item current (99 checks, physics in bodies).
+
 ## 2026-10-17 (autorun run 20261017-1602, build)
 
 - **Where the kept cell pays: where partners are scarce, the head that does not wait for its partner takes the
@@ -53,12 +61,17 @@ not statistics.
     partner lost its anchor in 4 of 4 by 30-70k (P7 yes, 7 of 8 with the platform's three); once partners are copied at
     two sides again, each head holds the world it has (the platform's three at 240k, the non-waiting head's four). In
     one of these the partner's chain parasite arose (`Tt@s!`, 169 cells at 240k: run 0726's chain cell).
-  - Predictions: NEXT slice record (`docs/NEXT.md` on branch `build-1602`, first commit; P5-P7 before the copy-error batch).
+  - Predictions: NEXT slice record (`docs/NEXT.md` at `d1b57db`; P5-P7 at `f3d04d5`, before the copy-error batch).
   - Picture: [no-wait.png](pictures/no-wait.png) (seed 7 at 18k, `PADI` 25: the non-waiting head, orange, often two
     heads with no partner, beside the platform head, blue; partners light); [kin-partner.png](pictures/kin-partner.png)
     (`pe1` at 120k: no partner left, bodies of two to four kin heads, `Y@&y@!y!` green, its root-anchored form yellow).
   - Commands: `node tri/check.js --cmd no-wait no-wait-r no-wait-c`; waits: `NODE_OPTIONS='-r ./tri/waitprobe.js'`
-    (`WP_T0`, `WP_EVERY`); the batches in NEXT's handoff.
+    (`WP_T0` 10000, `WP_EVERY`; 30k). Batches (`tri/batch.js`): base env
+    `{"PAW":"2","TRI_PARAMS":"{\"pErr\":1e-9,\"lysJoint\":2}"}`; entries `PA3T` 10000 `PA3N` 10, `PA2` the resident
+    head with its partner, `PA3` the entrant with its partner; copy error (`g7`): `TRI_PARAMS`
+    `{"pErr":0.01,"lysJoint":2}`, `PADI` 25, `PA2` `Y@&c@y! C@s!T|` (pe) or `Y@&cy@! C@s!T|` (ne), seeds 1-4, 240k
+    (about 9 minutes each). The one-type world is `pe` seed 1 (`Y@&y@!y!` with its root-anchored form `Y@&|y@!y!`:
+    98% of cells at 240k).
   - Status: the non-waiting head wins where partners are scarce (**works**, `no-wait` 3 of 4 and 4 of 4 more seeds,
     `no-wait-r` 4 of 4, control `no-wait-c` 4 of 4); scarcity by the partner's copy sides alone (**not enough**, 0 of 4);
     scarcity kept under copy error (**not**: the anchor is lost, 3 of 4); the partner replaced by kin (**seen**, 1 of 4).
@@ -95,8 +108,8 @@ not statistics.
     site busy until it has raised: per site a birth every 1/a + 1/a instead of 1/a + tau_c (a the arrival rate of a kin
     copy at a site, tau_c the wait for a partner), so the bud of one grows faster at any frequency; the guard isolates
     the two (a copy error between `y@!` and `y!` makes a cell no site raises), so the slower one persists where it is.
-  - Predictions: NEXT slice record (`docs/NEXT.md` on branch `explore-1406`, first commit; P5 and P6 added before their
-    batches).
+  - Predictions: NEXT slice record (`docs/NEXT.md` at `735e46e`; P5 at `c5130b5` and P6 at `69a1304`, each before its
+    batch).
   - Picture: [joint-keep.png](pictures/joint-keep.png) (left, the (z) star at 1500; middle, `Y@&c@y@!` at 60k: a mother
     with its daughter and waiting granddaughter; right, `Y@&cy@!` at 240k under copy error, partners `C@|MX.`).
   - Commands: `node tri/check.js --cmd bud-two bud-two-c`; batches `runs/e1.json`-`e4.json` (NEXT's handoff lists them);
@@ -137,7 +150,7 @@ not statistics.
     chain cells in 4 worlds); every fall of a chained letter went to another letter. A letter is six times likelier per
     copy error than the mark (1/6 against 1/36), so the quick escape comes first each time, and one to three episodes
     per world are too few to select the mark (run 1650's seal had many).
-  - Predictions (NEXT slice record, `docs/NEXT.md` on branch `build-1302` at its first commit): Pa1 yes (the `!`
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `5b9516d`): Pa1 yes (the `!`
     partner did not take the partners; it was lost); Pa0 yes; Pb1 yes (more heads than `rosette` in 4 of 4, fewer than
     without a chain in 4 of 4); Pb2 yes (4 of 4). Not predicted: the close-only side as the partner's real shield.
   - Picture: [rosette-pay.png](pictures/rosette-pay.png) (a `t@y!T` world at 40k, seed 2; one ring with three kids
@@ -147,6 +160,18 @@ not statistics.
   - Status: a body of six that raises its host's kin (**works**, `rosette-pay`, alone); lost to its cheat (**works** as a
     negative, `rosette-pay-cheat`); the closed partner side escapes the chain (**works**, `rosette-dot`, entered); found
     under copy error (**not yet**: 0 of 4 worlds to 480k); the lysing side as a shield (**not**: a trap).
+
+## 2026-10-17 (autorun run 20261017-0902, harden)
+
+- **Nothing needed fixing (idle); recorded here in cleanup run 20261017-1802 from its handoff (`git show
+  bd2bdba:docs/NEXT.md`).** The suite on main in a fresh container: 91 of 91 checks pass, all 327 worlds byte for byte
+  main's digests (the digests hold across containers); part 1 85 minutes, part 2 89. The `secs` estimates are 0.8x the
+  measured times throughout, so the parts stay balanced. At 3 of 4: `ring`, `imprint`, `race`, `seal-evolve`,
+  `nursery-c`, `rosette-escape`; `pair-flow-c` 1 of 2 as before.
+  - Profile (`PAW=2` world, 30k steps): `_overlap` 30%, `_pairs` 15%, `tryMove` 10%, `eqDepthN` 6%, `_jostle` 6%.
+    Bodies make 0.75 million `tryMove` calls per 1000 steps, 75% of them free at once, 1.5 `_overlap` calls each: a
+    neighbour list gathered once per move (what made lone blocks fast, run 1421) would not pay for bodies. A finer grid
+    could cut the cells scanned but changes the order of the rare overlap-reducing sums (outputs could change).
 
 ## 2026-10-17 (autorun run 20261017-0726, build)
 
@@ -184,7 +209,7 @@ not statistics.
     to 17%, T to k 86%, k 67% to 27%); the majority letter turned 1-4 times per world, some turns without a chain
     (drift: in seed 2 T gave way to p at 140k with at most 10 chain cells). Picture
     [rosette-turns.png](pictures/rosette-turns.png).
-  - Predictions (NEXT slice record, `docs/NEXT.md` at `4ed80eb` on branch `build-0726`): P1 yes for `mutual-pair-evolve` (3 of 3 living), no for `kin-guard-evolve` (1 of
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `4ed80eb`): P1 yes for `mutual-pair-evolve` (3 of 3 living), no for `kin-guard-evolve` (1 of
     4); P2 yes in 2 of 8 (chains arose and bodies of 3 to 5 cells held while they lasted); P3 no: a chain does not grow
     until its body is hit, it closes after four cells (no sink), and the worlds live.
   - Pictures: [rosette.png](pictures/rosette.png) (the ring world at 40k and one ring: the last chain cell's `T`
@@ -242,7 +267,7 @@ not statistics.
     `C@c@!-|` or `C@-|c@!` (it carries the host's side to pass, so it catches its own copies): the partners fan around a
     vertex of the host's front until the last front is blocked; every cell hears it and the body freezes at 9-10 cells
     until the hazard (0 of 8 alive at 5k).
-  - Predictions (NEXT slice record, `docs/NEXT.md` at `5e29fa2` on branch `explore-0416`): P1 (D1 lives in 3 of 4) no, P2 (public
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `5e29fa2`): P1 (D1 lives in 3 of 4) no, P2 (public
     partners lost) not testable (D1 died), P3 (a kept, kin-checked partner binds its own kind) yes.
   - Picture: [partner-check.png](pictures/partner-check.png) (left, a D1 ring of six waiting kin kids at 3500; right, the
     frozen fan of candidate (y) at 4000).
@@ -281,7 +306,7 @@ not statistics.
     its attach mark (`Y&c@y.!`), and the other kept its nursery on every cell of its shape. The lost lock was not reborn
     (0 of 4): the partner lineage lost its root altogether (`C@s!T`, `C@|R!I`, `Pc@y.!`) by 150-245k in 3 of 4; the
     fourth world died at 340k after a Y-root cell with another front (`I@y!Y@&`, raised on Y's sites as kin) spread.
-  - Predictions (NEXT slice record, `docs/NEXT.md` at `99ea2f5` on branch `build-0252`): P1 yes, P2 no, P3 yes (shows
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `99ea2f5`): P1 yes, P2 no, P3 yes (shows
     nothing: P2 failed), P4 yes (its first reading, 1.3x the bodies, was a census artefact: corrected), P5 yes, P6 yes,
     P6b no, P7 yes, P8 yes, P9 yes, P10 yes.
   - Picture: [mutual-pair.png](pictures/mutual-pair.png) (the pair's world at 20k, Y heads red, X catchers blue; a zoom
@@ -327,7 +352,9 @@ not statistics.
     of 4; also a minority beside the falsebeard), so the open front is copied while it waits for its filler and the
     nursery sprays free copies of itself into empty sites; on the filler shape the never-bound root letter drifts (Z to M, Q, S, H, P, i; a world
     whose fillers lost their root, `BC@|q`).
-  - Picture: [recess.png](pictures/recess.png) (a: the two-wall notch, the kid's front cell on the wall; b: the fan).
+  - Pictures: [recess.png](pictures/recess.png) (a: the two-wall notch, the kid's front cell on the wall; b: the fan);
+    [kin-guard.png](pictures/kin-guard.png) (under copy error to 120k, head- and filler-shaped cells by root letter: the
+    glue-only guard's heads turn in both worlds, the identical-side guard's stay `Y`).
   - Commands: `node tri/check.js --cmd kin-guard kin-guard-evolve`; the probe `RP_T0=25000 NODE_OPTIONS='-r
     ./tri/raceprobe.js'`; the batches' JSON in NEXT's handoff.
   - Checks: `kin-guard` (no cheat at 80k, 500 or more nurseries), `kin-guard-evolve` (the nursery on more than 80% of
