@@ -60,6 +60,12 @@ Predictions (batch `runs/e1.json`: `PAW=2`, `lysJoint` 2, `pErr` 1e-9, 60k, seed
   heads are strangers to each other's guard (`y@!` against `y!`), so each one's kids are lysed on the other's sites and
   the common one wins: the entered kind is lost in at least 3 of 4 in each job (`wi`/`pi` 10 bodies, `wh`/`ph` 100).
 
+- P5 read: **wrong.** The platform head entered as 10 bodies took the waiting-kid world in 4 of 4 (116-236 of about 510
+  root cells at 15k, all by 30k), and the waiting-kid head was lost entered as 10 or as 100 (4 of 4 each): no frequency
+  dependence; the bud of one grows faster.
+- P6 (before e4, `runs/e4.json`, as e3 with the evolved form `Y@&cy@!`): the platform head still wins both ways (4 of 4
+  each): the daughter that raises before it leaves keeps its mother's site busy for a generation, partner wait or not.
+
 **Handoff status (autorun run 20261017-1302, build): priority 39's second and last slice done (progressed).** Theory,
 then entry tests on `rosette`'s world (4 seeds, 60k) and one copy-error watch; slice record with predictions in
 `docs/NEXT.md` at `5b9516d` (branch `build-1302`); INNOVATIONS and IDEAS ("A closed side, not a lysing one") have it all.
