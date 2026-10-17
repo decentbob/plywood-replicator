@@ -500,6 +500,30 @@ const CHECKS=[
     env:{...body,TRI_PARAMS:'{"pErr":0.01,"lysJoint":2}'},
     pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const late=R.filter(r=>r.t>=20000),held=late.filter(r=>r.c.G>0.8*r.c.n).length;
       return [held===late.length&&e.c.n>=400,`guarded nursery on more than 80% of head-shaped cells in ${held} of ${late.length} censuses from 20k, ${e.c.G} of ${e.c.n} at 120k`];}},
+  // run 20261017-0252 (build; priority 38, two classes under the guard): two leaky nurseries front to front, a head 'Y@&c@y!'
+  // and a catcher 'C@x!X@&' (fronts without the anchor, so a kid's front is copied while it waits), with lysJoint 2 and no
+  // filler: each class's kids are completed only by free copies of the other class's waiting kids, every body is one of
+  // each, and each lineage is raised in place; nearly every site holds a waiting kid (about half of each class's cells are
+  // waiting kids: the spray is made only where a kid waits); with anchored fronts nobody makes a free copy and the pair
+  // dies at once. A public filler of a foreign root (Z@&C@|-) entered rare takes the catcher role; a public head of
+  // the guarded root (Y@&c@|-) is lost, its free copies lysed on the empty Y sites (the guard traps its root's public cells).
+  // Under copy error both locks hold for 30-115k, then one is lost to a public partner made by a root error.
+  ...(()=>{const mu={PAW:'2',PA2:'Y@&c@y! C@x!X@&',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}'},
+    ge=q=>q.n>0&&q.G>q.n/2;return [
+  {id:'mutual-pair',cap:'Two obligate classes under the guard: two leaky nurseries front to front (Y@&c@y! C@x!X@&, lysJoint 2, no filler) complete each other\'s kids with their waiting kids\' copies',demo:'pair',seeds:[1,2,3,4],need:3,steps:40000,secs:90,env:mu,
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];
+      return [e.c.G===e.c.n&&e.C.G===e.C.n&&e.c.n>=400&&e.C.n>=400,`at 40k Y nurseries ${e.c.G} of ${e.c.n} head-shaped cells, X nurseries ${e.C.G} of ${e.C.n} catcher-shaped`];}},
+  {id:'mutual-pair-a',cap:'  control: with anchored fronts (Y@&c@|y! C@|x!X@&) nobody makes a free copy and the pair dies',demo:'pair',seeds:[1,2,3,4],need:3,steps:5000,secs:10,env:{...mu,PA2:'Y@&c@|y! C@|x!X@&'},
+    pass:(L,o)=>{const m=[...o.matchAll(/^types: t=(\d+) bonded (\d+) /gm)].pop();return [!!m&&m[2]==='0',m?`bonded ${m[2]} at ${m[1]}`:'no result'];}},
+  {id:'mutual-filler',cap:'  a public filler of a foreign root (Z@&C@|-) entered rare takes the catcher role: the X nursery is lost',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:{...mu,PA3N:'10',PA3T:'20000',PA3:'Y@&c@y! C@|-Z@&'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [!(e.C.R.X||0)&&(e.C.R.Z||0)>=200&&e.c.G===e.c.n,`at 60k X cells ${e.C.R.X||0}, Z fillers ${e.C.R.Z||0}, Y nurseries ${e.c.G} of ${e.c.n}`];}},
+  {id:'mutual-trap',cap:'  a public head of the guarded root (Y@&c@|-) entered rare is lost: its free copies are lysed on the empty Y sites',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:130,env:{...mu,PA3N:'10',PA3T:'20000',PA3:'Y@&c@|- C@x!X@&'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];return [e.c.G===e.c.n&&e.C.G===e.C.n&&e.c.n>=400,`at 60k Y nurseries ${e.c.G} of ${e.c.n} head-shaped cells, X nurseries ${e.C.G} of ${e.C.n}`];}},
+  {id:'mutual-pair-evolve',cap:'  under copy error both locks hold to 25k or longer; at 120k a guarded shape and its partner shape remain',demo:'pair',seeds:[1,2,3,4],need:3,steps:120000,secs:260,env:{...mu,TRI_PARAMS:'{"pErr":0.01,"lysJoint":2}'},
+    pass:(L,o)=>{const R=shp(o),e=R[R.length-1];if(!e)return [false,'no result'];const both=R.filter(r=>r.t<=25000).every(r=>ge(r.c)&&ge(r.C)),k=R.filter(r=>ge(r.c)&&ge(r.C)).pop(),
+        one=(e.c.G>0.8*e.c.n&&e.C.n>=0.1*(e.c.n+e.C.n))||(e.C.G>0.8*e.C.n&&e.c.n>=0.1*(e.c.n+e.C.n));
+      return [both&&one,`both locks to ${k?k.t/1000+'k':'-'}; at 120k head-shaped ${e.c.G} guarded of ${e.c.n}, catcher-shaped ${e.C.G} of ${e.C.n}`];}},
+  ];})(),
   ];})(),
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two

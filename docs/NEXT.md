@@ -50,17 +50,18 @@ check), else what was learned. Stop there.
   4; **P3** entered the same way beside the anchored nursery `Y@&c@|y!` (no spray) it is lost, 4 of 4; **P4** the two
   leaky nurseries alone live, 4 of 4; **P5** with only the head's front leaky (`Y@&c@y! C@|x!X@&`) it lives with every
   head's site holding a kid that never completes (a sprayer).
-- **Read (P1-P5, batch m1, 03:15):** P1 yes (Y about 625 cells, 340-350 bodies, 4 of 4); P2 no: the 7 bodies that
+- **Read (P1-P5, batch m1, 03:05):** P1 yes (Y about 625 cells, 340-350 bodies, 4 of 4); P2 no: the 7 bodies that
   entered were gone by 25k (4 of 4); P3 yes (lost, as in P2, so it shows nothing); P4 yes: the two leaky nurseries
-  alone live, 4 of 4, Y 490-517 and X 475-494 cells, **447-469 complete bodies against 337-346 with the public
-  filler** (12.2k copies per 5k steps against 7.2k); P5 yes (Y 576-606, X 328-348: about 260 Y kids that never
-  complete). So the obligate pair is the better system, but its partner cannot invade the filler's world.
+  alone live, 4 of 4, Y 490-517 and X 475-494 cells; P5 yes (Y 576-606, X 328-348: about 260 Y kids that never
+  complete). (Corrected at 03:50 by a probe: the duo line's count includes waiting kids. About half of each class's cells
+  are waiting kids, so the pair has about 250 complete bodies against about 360 with the public filler: it is
+  spray-limited, nearly every site holding a waiting kid.) Its partner cannot invade the filler's world.
 - Next (batch `runs/m2.json`): **P6** a public filler entered rare into the pair's world (10 bodies on leaky heads at 20k)
   spreads and the X nursery falls below half of the catcher-shaped cells by 60k in 3 of 4 (T4); **P6b** the same for a
   public head `Y@&c@|-` entered on X; **P7** under copy error 0.01 (120k) the pair falls back to one guarded shape in 3
   of 4; **P8** the anchored pair dies by 10k (run 1602); the pair entered at 20k into the filler world (rare) is lost
   and at step 100 (10 bodies beside the founder) wins (the more efficient system as majority).
-- **Read (P6-P8, batch m2, 03:45):** P6 yes: the public filler `Z@&C@|-` entered rare took the catcher role, X lost by
+- **Read (P6-P8, batch m2, 03:20):** P6 yes: the public filler `Z@&C@|-` entered rare took the catcher role, X lost by
   35-55k (4 of 4); P6b no: the public head `Y@&c@|-` was lost and the pair held (4 of 4, 453-460 bodies at 60k): its free
   copies bind empty Y sites by their root and are lysed there; P7 yes: both locks held until 30, 40, 80 and 115k, then
   one shape lost its lock to a public partner made by a **root** error (`C@s!T@&`, `B!r@&C@`, head-shaped `Y&c@y.!`
