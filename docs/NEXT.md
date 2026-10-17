@@ -33,6 +33,30 @@ kid whose site is an attach side keeps its checked joint until its own kid binds
 kept for good (candidate (z)) a lineage is one ring of six, a sink. The bud of two holds under copy error and drops its
 wait for the partner, but loses to the bud of one at any frequency: a kept daughter keeps its mother's site busy.
 
+## Slice in progress (autorun run 20261017-1602, build): priority 42, where the kept cell pays
+
+**Goal.** Make the public partner scarce by its copy sides (`C@s!T|`: one copied side instead of two) and enter each
+head into the other's world: does a head that does not wait for its partner win there, where it lost with `C@s!T`?
+Done when the entry test has a number that holds in 3 of 4 worlds (then one check), or the theory below is shown wrong.
+Stop after the entries and one follow-up; no core change.
+**Theory (before the runs).** A body is a head with its partner bonded on its front; a lone head whose root is spent is
+a free triangle, which no copy and no part binds, so only bodies raise. a = arrival rate of a kin copy at an empty site,
+c = arrival rate of a free partner at a waiting front. The platform's kid (`Y@&c@y!`) leaves when its partner binds:
+per site a birth every 1/a + 1/c, every kid a body. The bud of two (`Y@&c@y@!`) leaves when both its partner and its
+own kid are bound: every 1/a + max(1/c, 1/a) or more, never sooner than the platform (with scarce partners the
+platform's waiting kid raises its own kid too and leaves carrying it, so the two converge). The head that does not wait
+for its partner (`Y@&cy@!`, run 1406's evolved form) leaves when its own kid binds, every 2/a, partner or not; it stays
+a body only if a partner binds its plain `c` before its kid leaves it (about 2/a after it bound), else it is a lone free
+cell, lost. Its non-persistent kids still pass the line on, one kid each, a generation per 1/a, and each becomes a body
+with chance about q = 1 - exp(-2c/a). For c >> a the platform grows about twice as fast per site (run 1406); for
+c << a the platform's growth is about c per body and the non-waiting head's about c times the generations a carried
+line makes in a lifetime. So the crossing is near 1/c ~ 1/a (the wait for a partner about one generation).
+**Predictions.** P1: the platform with `C@s!T|` lives alone 4 of 4 to 60k, with fewer partners per head than with
+`C@s!T` and more heads waiting on a front. P2: `Y@&cy@!` lives alone with either partner (4 of 4 each). P3: with
+`C@s!T|`, `Y@&cy@!` entered as 10 bodies at 10k takes the platform's world (3 of 4 or more), and the platform entered
+into its world is lost (3 of 4 or more): the reverse of run 1406. P4: `Y@&c@y@!` entered into the platform's world with
+`C@s!T|` is lost (3 of 4 or more): waiting for both never pays.
+
 **Handoff status (autorun run 20261017-1406, explore): priority 40 done (progressed); no core change.** Slice record
 with predictions in `docs/NEXT.md` at `735e46e` (branch `explore-1406`; P5, P6 added before their batches); INNOVATIONS
 run 1406, IDEAS "Keeping is waiting", RULES candidate (z) have it all; picture `docs/pictures/joint-keep.png`.
