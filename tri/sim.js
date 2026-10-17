@@ -46,6 +46,7 @@ const ERRG=[...'-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(gcod
 class TriSim extends Physics{
   constructor(params={},n=params.n||0){
     super({...DEFAULTS,...params},n);
+    if(![0,1,2].includes(this.p.lysJoint))throw Error('lysJoint is 0, 1 or 2: '+this.p.lysJoint);
     const I8=k=>new Int8Array(k);
     this.glue=I8(3*n);this.cOnly=I8(3*n);this.att=I8(3*n);this.done=I8(3*n);this.spent=I8(3*n);this.anc=I8(3*n);this.cpy=I8(3*n);this.lys=I8(3*n);
     this.role=I8(n);this.ly=I8(n);this.op=new Int16Array(n).fill(-1);   // role: 1 attached (bonded) when the pass began

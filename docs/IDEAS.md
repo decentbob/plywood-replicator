@@ -28,6 +28,25 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A guard that knows its own stops the loop: three guards, three capabilities (core review run 20261017-0518, 2026-10-17)
+
+Notes, not the user's words. The core review ran candidate (x), the kin guard, as the rule in place of the trap (mode 0).
+- **One error makes a nursery that knows its own.** In the copy-error trap worlds the head `Z@&c@|z` is one mark toggle
+  from `Z@&c@|z!`: its own side gains the lysis mark the second cells' traps carry. Under the trap that head is lysed on
+  every `z!`, its own kind's too, so it never lasts. Under the kin guard it carries the trap's side, so every trap and
+  every kin raise it, and it is a guarded nursery: its cheats cannot use its sites. It took the world: Z on 94-100% of
+  heads in 4 of 4 of `seal-evolve`'s worlds, the commons class gone, the site no longer sealing (`race` 2 of 4,
+  `seal-evolve` 1 of 4).
+- **Lesson.** The trap's cost is the loop's engine. A trap kills kin and strangers alike, so no lineage keeps its sites
+  under copy error, and the site letters keep turning (cheats, commons, seal, return). A guard that spares kin ends the
+  turning for any lineage that finds it, and in these worlds one error finds it. So the three modes of `lysJoint` are
+  three regimes, not one rule and two leftovers: the trap (letters turn, nothing is kept), the lock (a public lock, a
+  class whose site anyone with the key uses), the kin guard (heredity holds, letters freeze). Which one a world runs
+  decides whether it turns over or keeps. "A trap or a lock" (run 2221) had two of them; this is the third.
+- **For the next slices.** Priority 39 grows on the kin-guard platform, where letters are frozen: what can vary there is
+  the public partner's two free sides and shape, not the guarded letters. A world with turning letters and a kept
+  lineage would need the guard to come and go (a lineage that keeps for a while, then loses it), which no mode does.
+
 ## What a lineage owns is what it raises: the lock line at the core's limit; next, growth on the guarded platform (direction check, review-intent run 20261017-0456, 2026-10-17)
 
 Weighed after runs 2221-0416 (eleven runs; the last direction check was run 2151, "Eight slices on the lock"). Notes,

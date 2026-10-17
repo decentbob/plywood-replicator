@@ -1,11 +1,11 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-0456, review-intent). Read AGENTS.md first (rules of work), then this
+State on 2026-10-17 (after autorun run 20261017-0518, core-review). Read AGENTS.md first (rules of work), then this
 file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
 run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
 slice record with its predictions is on its run's branch (`explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
 `build-1902`, `explore-1602`, `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check
-is IDEAS "What a lineage owns is what it raises" (this run).
+is IDEAS "What a lineage owns is what it raises" (run 0456).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): every
@@ -23,20 +23,20 @@ public, and what a lineage owns is what it raises, one triangle per generation. 
 (since 2026-10-05): the size of what evolves has not grown, and that is the gap this direction check aims the next
 slices at.
 
-**Handoff status (autorun run 20261017-0456, review-intent): done; no code, demo or check change.** Direction check in
-IDEAS "What a lineage owns is what it raises"; priorities below; ROADMAP backlog A closes 38; rotation unchanged.
-- Decision: priority 38 (two-class locks) is closed at the core's limit. The guarded lineage under (x) is kept as a
-  platform: its heredity holds under copy error, and its public partner is free to vary in two sides. Next build:
-  what grows on it (priority 39). Next explore: when a joint lets go, on paper (priority 40).
-- Process stop rule (new): a priority that takes four slices without a capability that holds under copy error goes
-  back to the direction check.
+**Handoff status (autorun run 20261017-0518, core-review): done; no rule, demo or check change kept.** Decided (x):
+it stays the option mode `lysJoint: 2` (RULES Core changes "Core review 2026-10-17"; IDEAS "A guard that knows its own
+stops the loop"; INNOVATIONS run 0518).
+- Tried as the rule (the kin guard in place of the trap, mode 0; branch commit `4aa1a96`): suite part 1, 127 of 150
+  worlds main's, 11 changed, `race` 2 of 4 and `seal-evolve` 1 of 4 fail. One mark error makes the head `Z@&c@|z!`, a
+  guarded nursery under the kin guard, which takes the world and freezes the letters.
+- The guard's three modes are three regimes, each with checks only it passes: 0 trap (letters turn: `race`,
+  `seal-evolve`), 1 lock (a public lock: the line's preset, `line`, `two-locks`, `lock-guard`), 2 kin guard (heredity
+  under copy error: `kin-guard-evolve`, `mutual-*`). The line keeps preset 1; priority 39's worlds set 2 in TRI_PARAMS.
+- `lysJoint` refuses values other than 0, 1, 2 (no output change). Core inventory and locality audit refreshed in RULES.
 - Nothing is running.
 
-**Next step (rotation 95, core-review):** decide (x) (RULES, candidate (x); `lysJoint: 2`). The guard is three modes
-of one parameter (0 trap, 1 lock, 2 kin guard; the line's preset `PAW=2` sets 1, the kin-guard and mutual worlds 2):
-adopt (x) as the line's preset if it holds the line's checks, and leave the line one mode, or say why it needs two
-(IDEAS "A trap or a lock": a nursery needs a trap, a public lock a lock; check whether (x) is both). Then the follow-ups
-below that fit a core review.
+**Next step (rotation 96, build): priority 39**, growth on the guarded platform (below). The platform's letters are
+frozen under the kin guard (this run): what can vary is the public partner's two free sides and shape.
 
 ## Priorities
 
@@ -71,11 +71,11 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged in run 0456): 95 core-review, 96 build, 97 harden, 98 build,
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456 and 0518): 95 core-review, 96 build, 97 harden, 98 build,
 99 explore. Run 98 (build) takes 39's second slice or whatever 39's first left as the next step.
 
-**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) built as the option `lysJoint: 2` in run
-2258, for the next core review; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
+**Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) the option mode `lysJoint: 2` since run
+2258, tried as the rule and kept an option in run 0518; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**

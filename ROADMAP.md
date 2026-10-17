@@ -165,6 +165,10 @@ A. **Evolution vehicle: the pair** (moved from docs/NEXT.md in cleanup run 20261
    two cells, so the next slices aim at shape: growth on the guarded platform (39, the copy-error end state of a
    guarded world, its public partner free in two sides) and, on paper, when a joint lets go (40). A priority that takes
    four slices without a capability that holds under copy error goes back to the direction check.
+   Core review run 20261017-0518: (x) as the rule (the kin guard in place of the trap) loses `race` and `seal-evolve` (a
+   one-error head `Z@&c@|z!` becomes a guarded nursery and freezes the letters), so the guard keeps its three modes,
+   each a regime: trap (letters turn), lock (a public lock), kin guard (heredity holds, letters freeze) (IDEAS "A guard
+   that knows its own stops the loop"; no check change).
    Open: NEXT's priorities.
 
 0. **Organism on copies** (frozen; full record in git at `20e9a88`): grown on copies so far: contact copying, a cell
