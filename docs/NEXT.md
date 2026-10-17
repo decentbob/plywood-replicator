@@ -34,6 +34,33 @@ entry; ROADMAP's speed item brought up to date. Nothing is running.
 
 **Next step (rotation 102, build): priority 41.** Then 103 explore: priority 43 (kin in place of the partner).
 
+## Current slice (autorun run 20261017-1902, build): priority 41, the closed platform at length
+
+Goal: watch the guarded platform with copy error to 1.2M from the sealed partner `C@s!T.` and from the open `C@s!T`, and
+say whether the seal comes (or stays), whether chain episodes stop once it has, and what varies on a body nothing reads.
+Done when the 8 worlds are read against the predictions below; one check only if a number holds in 3 of 4 (and at a
+length the suite can afford). Stop: one batch, read; no new mechanism this run.
+- **Running**: `runs/h1.json` (detached `node tri/batch.js runs/h1.json runs/h1`, started 19:04 UTC): `PAW=2`, `PATN` 60,
+  `TRI_PARAMS` `{"pErr":0.01,"lysJoint":2}`, bodyprobe every 10k; `sd` seeds 1-4 `PA2='Y@&c@y! C@s!T.'`, `op` seeds 1-4
+  `PA2='Y@&c@y! C@s!T'`; 1.2M steps. Read with `node tri/census.js --partner runs/h1/*.txt --every 10` and the closed
+  share (partners whose plain side carries `.`).
+- **Theory.** On `Y@&c@y! C@s!T.` every free side is closed to a free reader: the head's site is guarded (only its kin is
+  raised, any other reader is lysed across the joint), the partner's `s!` is a trap (a reader binds it by a bond that is
+  not a joint and dies with the partner's body), `T.` binds no free triangle. Copy blanks still copy all of them. So the
+  partner's plain letter under `.` and the letter under `!` are read by nothing: they drift. The ways out are one mark
+  each: `.` lost (1/36 per copy error) reopens the plain side to a chain on its letter; `!` lost opens `s` to a reader
+  that keeps it. By mutation alone the mark toggles at 0.01/36 per partner copy, about 20% open by 1.2M (about 850
+  partner generations) if nothing selects it either way; a chain on an open partner selects the closed one back.
+- **Predictions (before reading any output):**
+  - P1 sealed arm: the closed share stays at or above half of partners at every 100k census to 1.2M in 3 of 4 worlds.
+  - P2 chain episodes (20 or more chain cells): fewer in the sealed arm than in the open arm (summed over 4 worlds);
+    every chain in the sealed arm is on a partner that lost its `.` or its `!`.
+  - P3 open arm: the closed share passes half of partners in at most 1 of 4 by 1.2M; chain episodes still come after
+    480k in at least 2 of 4 (the loop of letters does not end by itself in this time).
+  - P4 sealed arm: the partner's majority plain letter turns at least once in 3 of 4 worlds (drift on a closed side);
+    bodies stay of two cells (90% or more of complete individuals at 1.2M, 4 of 4).
+  - P5 all 8 worlds alive at 1.2M.
+
 ## Priorities
 
 Done 1-24, 28-30, 32-34, 36-40, 42: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
