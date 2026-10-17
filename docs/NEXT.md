@@ -26,6 +26,31 @@ public (fillers); **candidate (x)**, a lysis side that spares across a joint onl
 lock held in every census to 480k (4 of 4), the nursery added flux to place (its front lost the anchor and sprays
 kin), and the lock's letters froze.
 
+## Slice in progress (autorun run 20261017-0252, build; started 02:52 UTC)
+
+**Goal: priority 38's remaining clause, two classes under the guard (`lysJoint: 2`).** Done when a second class that
+lives on the first's product is designed on paper, entered rare (10 bodies at 20k) and common (step 100) into the
+guarded nursery's world, read by shape, and run under copy error; a capability if it holds in 3 of 4 worlds (then a
+check), else what was learned. Stop there.
+- **Theory (before the batch).** (T1) NEXT's partner, a front `y@|` that catches a free head by its root `Y@&`, is
+  transient: the caught head's root is `&`, so it lets go once its own front is filled, and the catcher is a lone, free
+  triangle whenever it holds neither a kid nor a head (free triangles are never copied and catch nothing). A partner
+  must bond the head by a side without `&`: by the head's front. (T2) So the second class is the catcher-shaped guarded
+  nursery `X@&C@|x!` (the filler `Z@&C@|-` with its plain side a lock of its own root): its kids catch free heads by
+  their front `c@`, and the body is a Y nursery and an X nursery front to front. Free heads exist only if the head's
+  front is copied while it waits: the leaky front `Y@&c@y!` (evolved in run 2258, 4 of 4). Its spray is made only
+  by waiting kids, so it is a source in proportion to use. (T3) Without the filler F, two leaky nurseries
+  `Y@&c@y! C@x!X@&` complete each other's kids and nothing else does: two obligate classes in every body, 1:1 in bodies
+  by construction, each lineage inherited in place (the anchored pair died by 5k in run 1602: nobody made a free copy).
+  (T4) Under copy error a site error turns a free copy into a public filler (a head whose own side raises nothing and
+  is copied all the time); it floods the other class's waiting kids, the spray that completes its own class dries up,
+  and the pair falls back to one nursery and a public filler.
+- Predictions (batch `runs/m1.json`, 40k, `lysJoint` 2, `pErr` 1e-9): **P1** the leaky nursery with F lives (4 of 4);
+  **P2** the catcher nursery `C@|x!X@&` entered rare there (10 bodies, each on a leaky head, at 20k) holds at 40k in 3 of
+  4; **P3** entered the same way beside the anchored nursery `Y@&c@|y!` (no spray) it is lost, 4 of 4; **P4** the two
+  leaky nurseries alone live, 4 of 4; **P5** with only the head's front leaky (`Y@&c@y! C@|x!X@&`) it lives with every
+  head's site holding a kid that never completes (a sprayer).
+
 **Handoff status (autorun run 20261016-2258, explore): done; one core change as an option (`lysJoint: 2`, default 0:
 no output changes)** (INNOVATIONS 2026-10-16, explore; IDEAS "The nursery's share is the environment's"; RULES Core
 changes, candidate (x); the slice record with predictions P1-P7 is this file at `f5f5229`, on branch `explore-2258`).
