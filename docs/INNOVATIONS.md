@@ -12,6 +12,56 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-1602, build)
+
+- **Where the kept cell pays: where partners are scarce, the head that does not wait for its partner takes the
+  platform's world, and the order of the waits says who wins** (NEXT priority 42; IDEAS "The wait that pays"). No rule
+  change; `tri/waitprobe.js` (new, observation: 'wait:' lines, per head type the mean wait for its front, its cut, its
+  site, and kids lost). Worlds: `PAW=2`, `lysJoint` 2, `pErr` 1e-9 unless said, entries of 10 bodies at 10k, 60k.
+  - **Theory** (before the runs): only bodies raise (a lone head with a spent root is a free cell, which nothing
+    binds). The platform's kid (`Y@&c@y!`) leaves with its partner, the bud of two (`Y@&c@y@!`) with its partner and its
+    own kid, the non-waiting head (`Y@&cy@!`, run 1406's evolved form) with its own kid, partner or not, and stays a
+    body only if a partner binds its plain `c` before its kid leaves it. Predicted crossing: the wait for a partner
+    about one generation (the wait for a kid).
+  - **The waits** (platform alone, two seeds, means over 10-30k): front (wait for a partner) against site (an empty site
+    until a kid binds), with partners `C@s!T` 215-227 against 538-626 steps (ratio 0.4); `C@s!T` and free parts living
+    25 steps (`PADI` 25, the labelled decay drive) 311-316 against 348 (0.9); `C@s!T|` (one copied side) 343-383 against
+    281-326 (1.2); `C@s!T|` with `PADI` 50, 347-364 against 199-219 (1.7); with `PADI` 25, 303-304 against 141-148 (2.1).
+    A site is filled mostly by a copy of its own head made there (59% of root bindings in place, 74% at `PADI` 25,
+    `PARP`), so the site's wait is local and the partner's is not: decay cuts travel, which a partner needs.
+  - **Entries, in the order of that ratio**: the non-waiting head entered into the platform's world was lost at 0.4
+    (4 of 4, run 1406), 0.9 (4 of 4), 1.2 (4 of 4, also entered as 100), took it in 1 of 4 at 1.7 and in **7 of 8 at
+    2.1** (check `no-wait`, seeds 1-4: 3 of 4; seeds 5-8: 4 of 4). The platform entered into the non-waiting head's
+    world took it in 4 of 4 at 0.4 (run 1406), one of 4 with a second spreading at 0.9, became the majority in 2 of 4
+    at 1.2, and was **lost in 4 of 4 at 2.1** (check `no-wait-r`). Control: the same drive with `C@s!T` (0.9), the
+    non-waiting head lost 4 of 4 (check `no-wait-c`). P3 (the reverse at `C@s!T|` alone) **wrong**: one copied side
+    is not enough; the decay drive added makes it hold.
+  - **The non-waiting head's cost is the kid that leaves alone**: kids lost (left with no partner ever bound, a free
+    cell) 13% of departures with `C@s!T`, 32% with `PADI` 25, 38% with `C@s!T|`, 60% with both; the model
+    1 - (a/(a+c))^2 gives 15% and 31% for the first two settings measured, and too few where partners are scarcest. It
+    wins anyway: a kid that leaves carries its own kid, which keeps the line going whether or not the kid stays a body.
+  - **The bud of two that waits for both** (`Y@&c@y@!`) entered at `C@s!T|` was lost 4 of 4 (P4 yes): waiting for both
+    never leaves sooner than the platform.
+  - **Under copy error** (`pErr` 0.01, `PADI` 25, partner `C@s!T|`, to 240k, `runs/g7.json`; predictions before the
+    batch): from the platform, the non-waiting head never arose (P5 yes, 4 of 4); the partner lost its anchor (a
+    partner copied at two sides took most partners, `C@s!T`, `C@s.!h`, `C@s!z`) in 3 of 4 by 10-35k, so the scarcity
+    does not hold by itself; in the fourth world **the partner was replaced by kin**: the front's letter
+    turned to the root's complement (`Y@&y@y!`, 15k), the partner was gone by 35k, and by 95k the front carried the
+    guard too (`Y@&y@!y!`): a one-type world in which every cell of a body is raised by the lineage and checked by its
+    guard.
+    From the non-waiting head: it kept its form in 4 of 4 (P6 yes; the `@` never came back to its front), and the
+    partner lost its anchor in 4 of 4 by 30-70k (P7 yes, 7 of 8 with the platform's three); once partners are copied at
+    two sides again, each head holds the world it has (the platform's three at 240k, the non-waiting head's four). In
+    one of these the partner's chain parasite arose (`Tt@s!`, 169 cells at 240k: run 0726's chain cell).
+  - Predictions: NEXT slice record (`docs/NEXT.md` on branch `build-1602`, first commit; P5-P7 before the copy-error batch).
+  - Picture: [no-wait.png](pictures/no-wait.png) (seed 7 at 18k, `PADI` 25: the non-waiting head, orange, often two
+    heads with no partner, beside the platform head, blue; partners light).
+  - Commands: `node tri/check.js --cmd no-wait no-wait-r no-wait-c`; waits: `NODE_OPTIONS='-r ./tri/waitprobe.js'`
+    (`WP_T0`, `WP_EVERY`); the batches in NEXT's handoff.
+  - Status: the non-waiting head wins where partners are scarce (**works**, `no-wait` 3 of 4 and 4 of 4 more seeds,
+    `no-wait-r` 4 of 4, control `no-wait-c` 4 of 4); scarcity by the partner's copy sides alone (**not enough**, 0 of 4);
+    scarcity kept under copy error (**not**: the anchor is lost, 3 of 4); the partner replaced by kin (**seen**, 1 of 4).
+
 ## 2026-10-17 (autorun run 20261017-1406, explore)
 
 - **Keeping is waiting: a joint holds while its cell waits; kept for good, a lineage is one ring of six; a kid that

@@ -28,6 +28,37 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The wait that pays: who wins is the order of two waits; scarce partners are not kept, and kin can replace them (build run 20261017-1602, 2026-10-17)
+
+NEXT priority 42 (where the kept cell pays), INNOVATIONS run 1602, [no-wait.png](pictures/no-wait.png). Notes, not the
+user's words.
+- **Two waits decide it.** A head's site is filled mostly by a copy of that very head, made at the site (59% of root
+  bindings in place, 74% when free parts live 25 steps): the wait for a kid is local and does not depend on the
+  head's frequency. The partner is public and comes from another body's side: its wait depends on travel and on how
+  many sides copy it. So the ratio of the two waits (partner over kid) is set by the partner's copy sides and by how
+  long free parts live, and it orders every entry test: at 0.4 and 0.9 the head that does not wait for its partner
+  (`Y@&cy@!`) is lost entered, at 1.2 still lost (the platform, entered into its world, wins half), at 1.7 it wins 1
+  of 4, at 2.1 it wins 7 of 8 and the platform entered against it is lost 4 of 4 (checks `no-wait`, `no-wait-r`,
+  `no-wait-c`). Run 1406's "the bud of one wins at any frequency" holds only where partners come quickly.
+- **The kept cell pays as a carried line, not as a body.** The non-waiting kid leaves when its own kid binds and stays
+  a body only if a partner bound its plain front meanwhile; where partners are scarcest it loses 60% of its kids so (a
+  lone head with a spent root is lost). It wins anyway because the kid it carries keeps the line going: every
+  generation the line sheds one cell, which becomes a body when a partner comes by. The platform's kid cannot leave
+  before its partner, so its site is idle as long as the partner is late. The crossing was predicted at a ratio of
+  about 1 (one generation); it is nearer 2, the price of the lost kids.
+- **Waiting for both never pays** (`Y@&c@y@!` lost 4 of 4 at ratio 1.2): it leaves no sooner than either.
+- **Scarcity is a public good the partner does not keep.** A partner copied at one side is copied half as often; one
+  error (the anchor dropped) doubles it. Under copy error the anchor went in 7 of 8 worlds (10-70k); then each head held
+  the world it had. So partner scarcity is an environment, not something a lineage maintains: a lineage cannot make its
+  public partner scarce for its competitor without making it scarce for itself.
+- **Kin can replace the partner.** In one of the eight worlds the platform's front changed its letter to the root's
+  complement (`Y@&y@y!`, by 15k): the front now catches a kin root instead of a partner, the partner went extinct by 20-25k,
+  and by 95k the front carried the guard too (`Y@&y@!y!`): a one-type world in which every cell of every body is raised
+  by the lineage and checked by its guard on both sides. That is what IDEAS "What a lineage owns is what it raises"
+  asked for, reached by two letter errors where the partner was scarce. Run 2151's unguarded `Y@&y@!y@!` died of its
+  site errors; this one has guarded sites and a plain front side. Next: alone, entered, and whether its bodies are
+  more than buds of two (priority 43).
+
 ## Keeping is waiting: a joint holds while its cell waits; kept for good, a lineage is one ring of six (explore run 20261017-1406, 2026-10-17)
 
 NEXT priority 40 (when a joint lets go, on paper first), then the one design the core already offers, alone, under copy

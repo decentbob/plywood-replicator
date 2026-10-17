@@ -1,9 +1,9 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-1406, explore). Read AGENTS.md first (rules of work), then this
+State on 2026-10-17 (after autorun run 20261017-1602, build). Read AGENTS.md first (rules of work), then this
 file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
 run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`explore-1406`, `build-1302`, `build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
+slice record with its predictions is on its run's branch (`build-1602`, `explore-1406`, `build-1302`, `build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
 `build-1902`, `explore-1602`, `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check
 is IDEAS "What a lineage owns is what it raises" (run 0456).
 
@@ -31,76 +31,56 @@ side, not a lysing one").
 **Keeping is waiting** (run 1406): a joint holds while its `&` cell hears an open front, its own `@` sides included, so a
 kid whose site is an attach side keeps its checked joint until its own kid binds (buds of two raised cells, existing core);
 kept for good (candidate (z)) a lineage is one ring of six, a sink. The bud of two holds under copy error and drops its
-wait for the partner, but loses to the bud of one at any frequency: a kept daughter keeps its mother's site busy.
+wait for the partner, but loses to the bud of one where partners come quickly: a kept daughter keeps its mother's site busy.
+**The wait that pays** (run 1602): a site is filled mostly in place, a partner comes from elsewhere, so the ratio of the
+wait for a partner to the wait for a kid orders every entry test; where partners are scarce (ratio 2.1: `C@s!T|` and free
+parts living 25 steps) the head that does not wait for its partner (`Y@&cy@!`) wins 7 of 8 entered and its kid is a
+carried line, not a body. Scarcity is not kept under copy error (the partner's anchor is lost, 7 of 8), and in one
+world **kin replaced the partner** (`Y@&y@!y!`, a one-type world: every cell raised by the lineage and guarded).
 
-## Slice in progress (autorun run 20261017-1602, build): priority 42, where the kept cell pays
+**Handoff status (autorun run 20261017-1602, build): priority 42 done (progressed); no core change.** Slice record
+with predictions in `docs/NEXT.md` at the branch's first commits (branch `build-1602`; P5-P7 added before the copy-error
+batch); INNOVATIONS run 1602, IDEAS "The wait that pays"; picture `docs/pictures/no-wait.png`.
+- **The order of two waits decides it** (platform alone, partner wait over site wait): `C@s!T` 0.4, with `PADI` 25 0.9,
+  `C@s!T|` 1.2, with `PADI` 50 1.7, with `PADI` 25 2.1. The non-waiting head entered as 10 is lost at 0.4-1.2 (4 of 4
+  each; P3 wrong: one copied side alone is not enough), wins 1 of 4 at 1.7 and 7 of 8 at 2.1 (check `no-wait`); the
+  platform entered against it is lost at 2.1 (4 of 4, `no-wait-r`); control `no-wait-c` (0.9: lost 4 of 4).
+  `Y@&c@y@!` (waits for both) lost 4 of 4 at 1.2 (P4 yes).
+- Its cost: kids that leave with no partner are lost (13% at 0.4 to 60% at 2.1); it wins because a leaving kid carries
+  its own kid (a line that sheds a cell per generation). Sites fill in place (59%, 74% at `PADI` 25: `PARP=1`).
+- **Under copy error** (`pErr` 0.01, `PADI` 25, `C@s!T|`, to 240k): the platform never found `Y@&cy@!` (P5 yes, 4 of 4);
+  the non-waiting head kept its form (P6 yes, 4 of 4); the partner lost its anchor in 7 of 8 (10-70k), after which each
+  head held its world; in `pe1` (seed 1 from the platform) the front turned to `y@` by 15k, the partner was extinct by
+  20-25k and the front carried the guard by 95k (`Y@&y@!y!` with its root-anchored form `Y@&|y@!y!`: 98% of cells at 240k): a one-type world.
+- Code: `tri/waitprobe.js` ('wait:' lines: per head type the mean wait for its front, its cut, its site, and kids lost);
+  checks `no-wait`, `no-wait-r`, `no-wait-c` (digests written). Batches (`runs/` is ignored; JSON here): base env
+  `{"PAW":"2","TRI_PARAMS":"{\"pErr\":1e-9,\"lysJoint\":2}"}`; entries `PA3T` 10000 `PA3N` 10, `PA2` the resident head
+  with its partner, `PA3` the entrant with its partner; waits with `NODE_OPTIONS='-r ./tri/waitprobe.js'` `WP_T0` 10000
+  (30k); copy error `runs/g7.json`: `TRI_PARAMS` `{"pErr":0.01,"lysJoint":2}`, `PADI` 25, `PA2` `Y@&c@y! C@s!T|` (pe) or
+  `Y@&cy@! C@s!T|` (ne), seeds 1-4, 240k (about 9 minutes each). The one-type world: `pe` seed 1 (its state at 120k:
+  rerun with pictures on, `runs/pe1p/pair_end.json.gz`, not kept). Nothing is running.
 
-**Goal.** Make the public partner scarce by its copy sides (`C@s!T|`: one copied side instead of two) and enter each
-head into the other's world: does a head that does not wait for its partner win there, where it lost with `C@s!T`?
-Done when the entry test has a number that holds in 3 of 4 worlds (then one check), or the theory below is shown wrong.
-Stop after the entries and one follow-up; no core change.
-**Theory (before the runs).** A body is a head with its partner bonded on its front; a lone head whose root is spent is
-a free triangle, which no copy and no part binds, so only bodies raise. a = arrival rate of a kin copy at an empty site,
-c = arrival rate of a free partner at a waiting front. The platform's kid (`Y@&c@y!`) leaves when its partner binds:
-per site a birth every 1/a + 1/c, every kid a body. The bud of two (`Y@&c@y@!`) leaves when both its partner and its
-own kid are bound: every 1/a + max(1/c, 1/a) or more, never sooner than the platform (with scarce partners the
-platform's waiting kid raises its own kid too and leaves carrying it, so the two converge). The head that does not wait
-for its partner (`Y@&cy@!`, run 1406's evolved form) leaves when its own kid binds, every 2/a, partner or not; it stays
-a body only if a partner binds its plain `c` before its kid leaves it (about 2/a after it bound), else it is a lone free
-cell, lost. Its non-persistent kids still pass the line on, one kid each, a generation per 1/a, and each becomes a body
-with chance about q = 1 - exp(-2c/a). For c >> a the platform grows about twice as fast per site (run 1406); for
-c << a the platform's growth is about c per body and the non-waiting head's about c times the generations a carried
-line makes in a lifetime. So the crossing is near 1/c ~ 1/a (the wait for a partner about one generation).
-**Predictions.** P1: the platform with `C@s!T|` lives alone 4 of 4 to 60k, with fewer partners per head than with
-`C@s!T` and more heads waiting on a front. P2: `Y@&cy@!` lives alone with either partner (4 of 4 each). P3: with
-`C@s!T|`, `Y@&cy@!` entered as 10 bodies at 10k takes the platform's world (3 of 4 or more), and the platform entered
-into its world is lost (3 of 4 or more): the reverse of run 1406. P4: `Y@&c@y@!` entered into the platform's world with
-`C@s!T|` is lost (3 of 4 or more): waiting for both never pays.
-**Follow-up predictions (written after the entries, before the copy-error batch `runs/g7.json`: `pErr` 0.01, `PADI`
-25, partner `C@s!T|`, to 240k).** P5: from the platform, `Y@&cy@!` (two errors away, through the losing `Y@&c@y@!`)
-does not take the world in 3 of 4. P6: from `Y@&cy@!`, the head keeps its form (no `@` regained on its front) in 4 of 4.
-P7: the partner's anchor is lost (a partner copied at two sides takes most partners) in 3 of 4 or more of the 8 worlds,
-so the scarcity does not hold by itself.
-
-**Handoff status (autorun run 20261017-1406, explore): priority 40 done (progressed); no core change.** Slice record
-with predictions in `docs/NEXT.md` at `735e46e` (branch `explore-1406`; P5, P6 added before their batches); INNOVATIONS
-run 1406, IDEAS "Keeping is waiting", RULES candidate (z) have it all; picture `docs/pictures/joint-keep.png`.
-- **The keeping side is in the core, by time:** the release reads the `&` cell's own open signal and its own `@` sides
-  count, so a raised cell keeps its joint while it waits for anything.
-- **Candidate (z)** (a kin joint is never cut; reads as (x)): cells raised root on site turn 60 degrees about one vertex,
-  so a lineage is one fan of at most six; throwaway (`runs/keep.js`): one twelve-cell star, the world dead by 5k (4 of
-  4). Not proposed (RULES).
-- **Buds of two** (`Y@&c@y@! C@s!T`, checks `bud-two` 4 of 4, `bud-two-c` 4 of 4): 78-79% of heads in rigid bodies of
-  two or more roots against 30-33%, as many heads. Under copy error (to 240k): site held 4 of 4, front lost its `@` 4 of
-  4 (`Y@&cy@!`). Entered against the platform head either way: the bud of one wins 4 of 4 (also against `Y@&cy@!`).
-- Code: bodyprobe `BP_RIGID=1` ('rigid:' lines: bodies joined by any bond by their root cells); checks `bud-two`,
-  `bud-two-c` (digests written). Batches (`runs/` is ignored; JSON here): base env `{"PAW":"2","TRI_PARAMS":
-  "{\"pErr\":1e-9,\"lysJoint\":2}","NODE_OPTIONS":"-r ./tri/bodyprobe.js","BP_RIGID":"1"}`, seeds 1-4: e1 (60k) `p`
-  `PA2='Y@&c@y! C@s!T'`, `w` `PA2='Y@&c@y@! C@s!T'`, `k` `p` with `-r runs/keep.js` (RULES (z) item 4) to 30k; e2 `w`, `p`
-  with `pErr` 0.01 to 240k (`BP_EVERY` 10000); e3/e4 (60k, `PA3T` 10000) `PA2` one head, `PA3` the other with its
-  partner, `PA3N` 10 or 100 (heads `Y@&c@y!`, `Y@&c@y@!`, `Y@&cy@!`). Nothing is running.
-
-**Next step (rotation 100, build): priority 42** (below): where the kept cell pays, an entry test with one number. Then
-101 cleanup; 102 build: priority 41.
+**Next step (rotation 101, cleanup).** Then 102 build: priority 41; 103 explore: priority 43 (kin in place of the
+partner).
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36-40: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+Done 1-24, 28-30, 32-34, 36-40, 42: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
-Open (set by review-intent run 20261017-0456, 42 by explore run 1406; reasoning in IDEAS "What a lineage owns is what it
-raises" and "Keeping is waiting"):
-42. [100 build] **Where the kept cell pays.** The bud of two (`Y@&c@y@!`, or its evolved `Y@&cy@!`, which needs no partner
-    to leave) loses to the bud of one at any frequency where partners are common (run 1406): a kept daughter holds its
-    mother's site for a generation. It should win where the platform's kid waits long for a partner. Make partners
-    scarce by their copy sides (a partner with one copied side, e.g. an anchored plain side `C@s!T|`, or none) or by a
-    labelled drive, and enter each head into the other's world: does the bud of two win once the wait for a partner is
-    longer than a generation? Theory first (the birth interval per site, 1/a + tau_c against 1/a + 1/a), then 4 seeds per
-    setting; one check if a number holds in 3 of 4.
+Open (set by review-intent run 20261017-0456, 43 by build run 1602; reasoning in IDEAS "What a lineage owns is what it
+raises" and "The wait that pays"):
 41. [102 build] **The closed platform at length.** `Y@&c@y! C@s!T.` under copy error
     (the body has no side a free reader can hold): watched to 1.2M from the platform with and without the closed side,
     does the seal come in the end as in run 1650, do chain episodes stop once it has, and what varies on a body nothing
     reads (drift only, or a new shape)? Watch first, then one check if a number holds in 3 of 4.
+43. [103 explore] **Kin in place of the partner.** In one copy-error world from the scarce platform (run 1602, `pe1`)
+    the front changed to the root's complement and the partner went extinct: `Y@&y@!y!`, one type whose front (`y@!`,
+    attach and guarded) and site (`y!`, guarded) both raise kin. Theory first: what a kid waits for (its front only),
+    which bodies leave and how big they are (fans about a vertex?), whether it is a sink. Then alone (4 seeds, without
+    copy error, from one founder; `PA2='Y@&y@!y!'` is a one-type strip: check the founder binds), entered into the
+    platform's world and the platform into its world, with partners common and scarce. One check if a number holds
+    in 3 of 4.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. 39 is its next.
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -114,7 +94,7 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518, 0726, 1302 and 1406): 100
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518, 0726, 1302, 1406 and 1602): 100
 build, 101 cleanup, 102 build, 103 explore, 104 build, 105 explore, 106 review-intent (the direction check 39's stop
 rule sends it to).
 
@@ -199,6 +179,10 @@ NODE_OPTIONS='-r ./tri/bodyprobe.js' ...           # run 0726: 'body:' lines eve
                                                    # (joints too) by their root cells
 node tri/check.js --cmd bud-two bud-two-c          # run 1406: the kid that waits for its own kid (Y@&c@y@!): buds of two
                                                    # raised cells; control with the platform's plain site
+node tri/check.js --cmd no-wait no-wait-r no-wait-c   # run 1602: where partners are scarce (C@s!T|, PADI 25) the head that
+                                                   # does not wait for its partner (Y@&cy@!) wins entered both ways; control
+NODE_OPTIONS='-r ./tri/waitprobe.js' ...           # run 1602: 'wait:' lines every WP_EVERY (10000) from WP_T0 (10000): per head
+                                                   # type the mean wait for its front, its cut, its site, and kids lost
 node tri/check.js --cmd kin-guard kin-guard-evolve   # run 2258: candidate (x), lysJoint 2 (TRI_PARAMS): the nursery's
                                                    # cheats lost; under copy error the lock in every census
 node tri/check.js --cmd mutual-pair mutual-pair-a mutual-filler mutual-trap mutual-pair-evolve
