@@ -28,6 +28,33 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## The seal is a race of standing minorities: a parasite selects whatever it cannot read, in the proportions it finds (build run 20261017-1902, 2026-10-17)
+
+NEXT priority 41 (the closed platform at length), INNOVATIONS run 1902, [seal-race.png](pictures/seal-race.png). Notes,
+not the user's words.
+- **What a parasite selects.** A chain or reader binds one letter on an open side. Every partner it cannot read is
+  immune to it alike: a closed side (`.`), a lysing side it would die on, an inert `-`, or another letter. Those classes
+  do not read each other either, so through the sweep they grow at the same rate and keep their ratio: the class that
+  stood larger when the parasite came takes the partners. In 8 worlds to 1.2M, 22 of 23 episodes escaped that way: the
+  seal won the 2 where a closed minority stood larger than the other letters (23% against 5%, 9% against 2%), the letter
+  the 20 where it did not; in the 23rd neither stood (one cell each) and a new letter on a partner whose other side of
+  the read letter was already closed ended it as a seal. Entered (`rosette-race`), 12 sealed bodies against 6 of letter A took the partners in 3 of 4, and
+  swapped the letter did, with the same counts: the two runs draw the same random numbers, so to the world the mark and
+  the letter are one variant under two names.
+- **Why the letter usually wins.** Copy error turns a letter six times as often as the close-only mark, and both are
+  neutral between episodes, so the standing class of other letters is usually the larger (mostly 6-40% of partners
+  before an episode, against 0-5% closed). Run 1302's "the quick escape comes first" was this race seen from one side.
+- **A seal is not kept.** Once closed partners are most of them, no reader finds a side (0 of 23 episodes began while
+  closed partners were half or more) and nothing selects the mark any more: it drifts out at the rate partners drift
+  (closed on 27% and 82% of censuses in two of the sealed founder's worlds, spells of 180-340k from the open founder).
+  Run 1650's sealed site held because its parasite came back often; here a reader needs one front letter, about one
+  episode per 240k per world, so the seal comes and goes with the episodes. A lineage that kept its seal would need a
+  cost for open sides between episodes, or episodes often enough to outpace drift.
+- **What varies on a body nothing reads.** Letters under the closed and lysing marks turn by drift (3-9 times per
+  sealed world in 1.2M), and marks with no effect pile up: `|` on every cell of a world, sides both closed and lysing
+  (`C@Z!h.!`, `C@|W.!D.!`), the inert letter as the plain side (op2, 300k). The guarded head's letters (`Y`, `c`, `y`)
+  never changed and every complete body kept two cells: on this platform the free sides drift and the shape does not.
+
 ## The wait that pays: who wins is the order of two waits; scarce partners are not kept, and kin can replace them (build run 20261017-1602, 2026-10-17)
 
 NEXT priority 42 (where the kept cell pays), INNOVATIONS run 1602, [no-wait.png](pictures/no-wait.png). Notes, not the
