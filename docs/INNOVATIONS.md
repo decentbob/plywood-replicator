@@ -55,7 +55,8 @@ not statistics.
     one of these the partner's chain parasite arose (`Tt@s!`, 169 cells at 240k: run 0726's chain cell).
   - Predictions: NEXT slice record (`docs/NEXT.md` on branch `build-1602`, first commit; P5-P7 before the copy-error batch).
   - Picture: [no-wait.png](pictures/no-wait.png) (seed 7 at 18k, `PADI` 25: the non-waiting head, orange, often two
-    heads with no partner, beside the platform head, blue; partners light).
+    heads with no partner, beside the platform head, blue; partners light); [kin-partner.png](pictures/kin-partner.png)
+    (`pe1` at 120k: no partner left, bodies of two to four kin heads, `Y@&y@!y!` green, its root-anchored form yellow).
   - Commands: `node tri/check.js --cmd no-wait no-wait-r no-wait-c`; waits: `NODE_OPTIONS='-r ./tri/waitprobe.js'`
     (`WP_T0`, `WP_EVERY`); the batches in NEXT's handoff.
   - Status: the non-waiting head wins where partners are scarce (**works**, `no-wait` 3 of 4 and 4 of 4 more seeds,

@@ -55,7 +55,8 @@ user's words.
   complement (`Y@&y@y!`, by 15k): the front now catches a kin root instead of a partner, the partner went extinct by 20-25k,
   and by 95k the front carried the guard too (`Y@&y@!y!`): a one-type world in which every cell of every body is raised
   by the lineage and checked by its guard on both sides. That is what IDEAS "What a lineage owns is what it raises"
-  asked for, reached by two letter errors where the partner was scarce. Run 2151's unguarded `Y@&y@!y@!` died of its
+  asked for, reached by two letter errors where the partner was scarce
+  ([kin-partner.png](pictures/kin-partner.png): bodies of two to four kin heads at 120k). Run 2151's unguarded `Y@&y@!y@!` died of its
   site errors; this one has guarded sites and a plain front side. Next: alone, entered, and whether its bodies are
   more than buds of two (priority 43).
 
