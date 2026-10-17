@@ -121,6 +121,14 @@ kin-guard_1 680e758caf09cd68 cbda2d05d9d77d78
 kin-guard_2 2487cca6f36cd6c1 4fb0fbf869acec22
 kin-guard_3 c33acde1b1904018 eb74179915859dd6
 kin-guard_4 f53acf3c0e4ba358 1556a71f74fdf7d2
+kin-take-c_1 8192c3040f4b7d82 88d5270cf2b0b781
+kin-take-c_2 d099087e49025a34 cb0aa50fb4ffaa2c
+kin-take-c_3 a635bf9c9cf1ec2f 80c2dafb6e8457b7
+kin-take-c_4 70d87657d0d3f4c0 3b804e2c8c278dc1
+kin-take_1 5563d8bdee8ba6ce 680faa316f1b48c6
+kin-take_2 5c0722829876468b f36cb7c47d3cfb3a
+kin-take_3 b11ffe34a603d07d 3b2568e4a6eb4d37
+kin-take_4 cb0321a4b0fe23e3 eb613922496127c1
 ladder_1 bea502f67f0d08a5 0110ca46677f38ec
 ladder_2 c406782c6f42fc66 92d76694ff6ce4b5
 ladder_3 e6f14d50e0dfd0a2 c52ce81c4e14160d
