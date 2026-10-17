@@ -563,6 +563,18 @@ const CHECKS=[
   {id:'rosette-dot',cap:'  a partner with a close-only plain side (C@s!T., 10 bodies at 10k) escapes the chain and takes most partners',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:110,env:{...ro,...esc,PAKS:'C@s!T.'},
     pass:(L,o)=>{const e=pt(o).pop();if(!e)return [false,'no result'];const a=e.P['T.']||0;return [a>e.np/2&&e.ch<10,`at 60k T. on ${a} of ${e.np} partners, chain cells ${e.ch}`];}},
   ];})(),
+  // The kid that waits for its own kid (explore run 20261017-1406): a head whose site is an attach side (Y@&c@y@!) hears its
+  // own empty site, so a kid keeps its parent's joint until its own kid binds, and leaves carrying it: buds of two raised
+  // cells, each checked by the kin guard while it waits. Read from bodyprobe's 'rigid:' lines (BP_RIGID: bodies joined by
+  // any bond, by their root cells), every 5000 steps from 30k
+  ...(()=>{const rg=o=>[...o.matchAll(/^rigid: t=(\d+) bodies by roots (.*?) \|/gm)].map(m=>{let h=0,h2=0;for(const e of m[2].trim().split(' ')){if(!e)continue;const [k,c]=e.split(':').map(Number);h+=k*c;if(k>=2)h2+=k*c;}return {t:+m[1],h,s:h?h2/h:0};}),
+    bw={PAW:'2',TRI_PARAMS:'{"pErr":1e-9,"lysJoint":2}',NODE_OPTIONS:'-r ./tri/bodyprobe.js',BP_RIGID:'1',BP_T0:'30000'},
+    sh=(o,ok)=>{const R=rg(o);if(!R.length)return [false,'no result'];const m=R.reduce((a,r)=>a+r.s,0)/R.length,e=R[R.length-1];return [ok(m)&&e.h>=400,`heads in bodies of 2+ roots ${m.toFixed(2)} (mean of ${R.length} censuses from 30k); heads at 60k ${e.h}`];};return [
+  {id:'bud-two',cap:'Buds of two raised cells: a head whose site is an attach side (Y@&c@y@! C@s!T, lysJoint 2) keeps its kid until the kid\'s own kid binds; most heads are in bodies of two or more roots',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:240,env:{...bw,PA2:'Y@&c@y@! C@s!T'},
+    pass:(L,o)=>sh(o,m=>m>=0.6)},
+  {id:'bud-two-c',cap:'  control: with a plain site (Y@&c@y! C@s!T) a kid leaves once its front is filled; fewer heads in bodies of two or more roots',demo:'pair',seeds:[1,2,3,4],need:3,steps:60000,secs:120,env:{...bw,PA2:'Y@&c@y! C@s!T'},
+    pass:(L,o)=>sh(o,m=>m<=0.45)},
+  ];})(),
   ];})(),
   ];})(),
   // run 20261006-1322 (explore): heredity of combinations by locality. A parasite S (seed site q, no anchor: copied at two

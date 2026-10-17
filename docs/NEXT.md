@@ -1,9 +1,9 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-1302, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-17 (after autorun run 20261017-1406, explore). Read AGENTS.md first (rules of work), then this
 file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
 run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`build-1302`, `build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
+slice record with its predictions is on its run's branch (`explore-1406`, `build-1302`, `build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
 `build-1902`, `explore-1602`, `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check
 is IDEAS "What a lineage owns is what it raises" (run 0456).
 
@@ -28,45 +28,47 @@ escapes (run 1302): a new letter (quick, transient) or a close-only plain side (
 in 480k); a lysing side is a trap that kills the body. A ring whose chain cells carry the head's site raises heads on
 four sites and loses to the chain that keeps its side for copies: a gain a body gives away is public (IDEAS "A closed
 side, not a lysing one").
+**Keeping is waiting** (run 1406): a joint holds while its `&` cell hears an open front, its own `@` sides included, so a
+kid whose site is an attach side keeps its checked joint until its own kid binds (buds of two raised cells, existing core);
+kept for good (candidate (z)) a lineage is one ring of six, a sink. The bud of two holds under copy error and drops its
+wait for the partner, but loses to the bud of one at any frequency: a kept daughter keeps its mother's site busy.
 
-**Handoff status (autorun run 20261017-1302, build): priority 39's second and last slice done (progressed).** Theory,
-then entry tests on `rosette`'s world (4 seeds, 60k) and one copy-error watch; slice record with predictions in
-`docs/NEXT.md` at `5b9516d` (branch `build-1302`); INNOVATIONS and IDEAS ("A closed side, not a lysing one") have it all.
-- **The lysing partner `C@s!T!` is a trap, not a shield:** every lysed triangle dies (deaths return blanks) and lysis
-  comes back across a bond that is not a joint, so a chain cell that binds `T!` dies with the partner's whole body. Lost
-  beside the chain 4 of 4 (no check).
-- **The close-only partner `C@s!T.` is the shield** (`rosette-dot`, 3 of 4): no free reader binds a `.` side, a blank
-  still copies it; entered as 10 bodies it took 95-100% of partners and the chain left. Under copy error it never spread
-  (0-12% of partners, four platform worlds to 480k, `runs/f4`): a new letter is six times likelier and chain episodes
-  (one to three per world) are too few to select the mark (run 1650's seal had many).
-- **The paying ring** `t@y!T` (`rosette-pay`, 4 of 4): the same ring of six with four nursery sites `y!` outward; heads
-  349-419 at 60k against 208-281 with `t@s!T`. **Its cheat wins** (`rosette-pay-cheat`, 4 of 4): beside `t@s!T` it was
-  gone by 40k (an occupied site is not copied; the heads it raises serve every chain). Under copy error it spread in 2 of
-  4 and its site cheat `t@q!T` overtook it in one.
-- Code: `PA3` enters several kits (`PA3='K1,K2'`, `PA3N` of each); `tri/check.js` keys partners by their marks and
-  chain cells by their other side. The three new checks' digests are written; `rosette*` outputs unchanged.
-- Batches (`runs/` is ignored; JSON here): the world is `rosette`'s env (`{"PAW":"2","PA2":"Y@&c@y! C@s!T",
-  "TRI_PARAMS":"{\"pErr\":1e-9,\"lysJoint\":2}","PA3":"t@s!T","PA3T":"10000","PA3N":"20"}`, 60k, seeds 1-4, with
-  `NODE_OPTIONS='-r ./tri/bodyprobe.js'`); f1 jobs `s` (as is), `n` (`PA3` ''), `y` (`PA3` `t@y!T`), `ys` (`t@y!T,t@s!T`,
-  `PA3N` 10), `i` (`PAKR` `Y@&c@y!`, `PAKS` `C@s!T!`, `PA1T` 10000, `PAEN` 10), `ic` (`i` without `PA3`); f3 the same
-  with `PAKS` `C@s!T.`; f2 `y` and `s` with `pErr` 0.01 to 120k; f4 run 0726's platform watch (`PAW=2`, `PA2`
-  `Y@&c@y! C@s!T`, `pErr` 0.01, `lysJoint` 2, 480k, `PATN` 60). Nothing is running.
+**Handoff status (autorun run 20261017-1406, explore): priority 40 done (progressed); no core change.** Slice record
+with predictions in `docs/NEXT.md` at `735e46e` (branch `explore-1406`; P5, P6 added before their batches); INNOVATIONS
+run 1406, IDEAS "Keeping is waiting", RULES candidate (z) have it all; picture `docs/pictures/joint-keep.png`.
+- **The keeping side is in the core, by time:** the release reads the `&` cell's own open signal and its own `@` sides
+  count, so a raised cell keeps its joint while it waits for anything.
+- **Candidate (z)** (a kin joint is never cut; reads as (x)): cells raised root on site turn 60 degrees about one vertex,
+  so a lineage is one fan of at most six; throwaway (`runs/keep.js`): one twelve-cell star, the world dead by 5k (4 of
+  4). Not proposed (RULES).
+- **Buds of two** (`Y@&c@y@! C@s!T`, checks `bud-two` 4 of 4, `bud-two-c` 4 of 4): 78-79% of heads in rigid bodies of
+  two or more roots against 30-33%, as many heads. Under copy error (to 240k): site held 4 of 4, front lost its `@` 4 of
+  4 (`Y@&cy@!`). Entered against the platform head either way: the bud of one wins 4 of 4 (also against `Y@&cy@!`).
+- Code: bodyprobe `BP_RIGID=1` ('rigid:' lines: bodies joined by any bond by their root cells); checks `bud-two`,
+  `bud-two-c` (digests written). Batches (`runs/` is ignored; JSON here): base env `{"PAW":"2","TRI_PARAMS":
+  "{\"pErr\":1e-9,\"lysJoint\":2}","NODE_OPTIONS":"-r ./tri/bodyprobe.js","BP_RIGID":"1"}`, seeds 1-4: e1 (60k) `p`
+  `PA2='Y@&c@y! C@s!T'`, `w` `PA2='Y@&c@y@! C@s!T'`, `k` `p` with `-r runs/keep.js` (RULES (z) item 4) to 30k; e2 `w`, `p`
+  with `pErr` 0.01 to 240k (`BP_EVERY` 10000); e3/e4 (60k, `PA3T` 10000) `PA2` one head, `PA3` the other with its
+  partner, `PA3N` 10 or 100 (heads `Y@&c@y!`, `Y@&c@y@!`, `Y@&cy@!`). Nothing is running.
 
-**Next step (rotation 99, explore): priority 40** (below), on paper first. Then 100 (build): what 99 leaves to build;
-if nothing, priority 41.
+**Next step (rotation 100, build): priority 42** (below): where the kept cell pays, an entry test with one number. Then
+101 cleanup; 102 build: priority 41.
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36-39: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+Done 1-24, 28-30, 32-34, 36-40: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
-Open (set by review-intent run 20261017-0456; reasoning in IDEAS "What a lineage owns is what it raises"):
-40. [99 explore] **When a joint lets go (on paper first).** The one route to a body that owns more than one cell per
-    generation is a checked bond that outlasts completion (IDEAS run 0416: (x)'s check bites only across a joint, and a
-    joint is cut at completion). Design the smallest change on the keeping side, say exactly what it reads (locality),
-    and derive whether it makes bodies that never let go (run 0820's collapse at 3x) or self-binders (candidate (y)).
-    Build only if the argument says it does neither; record it under Core changes either way.
-41. [100 build, if 99 leaves nothing to build] **The closed platform at length.** `Y@&c@y! C@s!T.` under copy error
+Open (set by review-intent run 20261017-0456, 42 by explore run 1406; reasoning in IDEAS "What a lineage owns is what it
+raises" and "Keeping is waiting"):
+42. [100 build] **Where the kept cell pays.** The bud of two (`Y@&c@y@!`, or its evolved `Y@&cy@!`, which needs no partner
+    to leave) loses to the bud of one at any frequency where partners are common (run 1406): a kept daughter holds its
+    mother's site for a generation. It should win where the platform's kid waits long for a partner. Make partners
+    scarce by their copy sides (a partner with one copied side, e.g. an anchored plain side `C@s!T|`, or none) or by a
+    labelled drive, and enter each head into the other's world: does the bud of two win once the wait for a partner is
+    longer than a generation? Theory first (the birth interval per site, 1/a + tau_c against 1/a + 1/a), then 4 seeds per
+    setting; one check if a number holds in 3 of 4.
+41. [102 build] **The closed platform at length.** `Y@&c@y! C@s!T.` under copy error
     (the body has no side a free reader can hold): watched to 1.2M from the platform with and without the closed side,
     does the seal come in the end as in run 1650, do chain episodes stop once it has, and what varies on a body nothing
     reads (drift only, or a new shape)? Watch first, then one check if a number holds in 3 of 4.
@@ -83,12 +85,12 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518, 0726 and 1302): 99 explore, 100
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged in runs 0456, 0518, 0726, 1302 and 1406): 100
 build, 101 cleanup, 102 build, 103 explore, 104 build, 105 explore, 106 review-intent (the direction check 39's stop
 rule sends it to).
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) the option mode `lysJoint: 2` since run
-2258, tried as the rule and kept an option in run 0518; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
+2258, tried as the rule and kept an option in run 0518; (y) written and not proposed in run 0416; (z) written and not proposed in run 1406; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
@@ -97,7 +99,7 @@ rule sends it to).
   random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 94 since run 1302, about 5 minutes more per part); physics is most of it (handoff
+- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks; 96 since run 1406, about 7 minutes more per part); physics is most of it (handoff
   above; a cell-distance cut in `_pairs` would rarely skip a cell: the pair reach, 1.39, is about a cell, 1.4). When a
   part nears 2 hours, `--part k/3` balances three parts the same way. Worlds shared between checks: only `race`/`seal-evolve` had one setting
   (`pair-mut` reads a result line, which a longer world does not repeat).
@@ -164,6 +166,10 @@ node tri/census.js --partner runs/x.txt            # run 0726: rootless partners
                                                    # lyse), chain cells, cells in 3+ bodies (from 'body:' lines); chart:
                                                    # LC_PARTNER=1 node tri/linechart.js out.png FILES
 NODE_OPTIONS='-r ./tri/bodyprobe.js' ...           # run 0726: 'body:' lines every 5000 steps, individuals by cells
+                                                   # BP_RIGID=1 (run 1406): 'rigid:' lines, bodies joined by any bond
+                                                   # (joints too) by their root cells
+node tri/check.js --cmd bud-two bud-two-c          # run 1406: the kid that waits for its own kid (Y@&c@y@!): buds of two
+                                                   # raised cells; control with the platform's plain site
 node tri/check.js --cmd kin-guard kin-guard-evolve   # run 2258: candidate (x), lysJoint 2 (TRI_PARAMS): the nursery's
                                                    # cheats lost; under copy error the lock in every census
 node tri/check.js --cmd mutual-pair mutual-pair-a mutual-filler mutual-trap mutual-pair-evolve

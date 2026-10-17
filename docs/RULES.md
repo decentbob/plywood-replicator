@@ -288,6 +288,9 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   letters in the copy-error trap worlds.
 - (y) *A lysis side spares, on any bond, a partner that carries the same side* (run 20261017-0416): **not proposed**
   (entry below): a kept partner that passes it binds its own kind.
+- (z) *A kin joint is never cut* (run 20261017-1406): **not proposed** (entry below): kept for good, a lineage is one
+  fan of at most six cells about one vertex (a sink); the keeping side is already in the core by time (a kid keeps its
+  joint while it waits, and its own `@` sides count).
 - (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
   lineage's false releases (`falseRel`) did not change and have another cause (trace one before any fix).
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
@@ -297,6 +300,37 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051, (u) and (w) in run
   2221. Nothing else in the core is unused (RULES, Core inventory, run 2221 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Candidate (z): a kin joint is never cut, 2026-10-17, autorun run 20261017-1406 (explore): not proposed
+NEXT priority 40 (when a joint lets go, on paper first). Derivation: IDEAS "Keeping is waiting"; runs: INNOVATIONS run
+1406; picture `docs/pictures/joint-keep.png`.
+1. **Capability.** A body that keeps a cell it checked after that cell is complete: the one route the core leaves to a
+   body that owns more than one cell per generation (run 0416: checking and keeping exclude each other; a joint is cut
+   at the first release in which its `&` triangle hears no open front).
+2. **What the core already does: the keeping side by time.** The release reads the `&` triangle's own open signal, and
+   the open signal comes from every unbonded glued `@` side of its body between joints, its own included. So a cell
+   keeps the joint it was raised on while it waits for anything, and its type says what: a kid whose site is an attach
+   side (`Y@&c@y@!`) keeps its checked joint past its front's completion, until its own kid binds, and leaves carrying
+   it. Built from the existing core (checks `bud-two`, `bud-two-c`): buds of two raised cells, each checked by the kin
+   guard while it waited. What the core cannot do is keep a cell that waits for nothing.
+3. **The rule (the smallest on the keeping side).** An `&` side bonded to a partner's lysis side that its own triangle
+   carries identically (the kin relation of (x)) is not cut at completion. Reads its own type, the side it is bonded to
+   (glue and marks) and its own open signal: the reads of (x) and of the release, one bond, local. No new mark, signal,
+   state or value; it would be a fourth mode of `lysJoint` or a branch of the release.
+4. **Why not (derived, then a throwaway).** Any two sides of a triangle share one vertex, and a kid placed flush with
+   its root on its parent's site shares that vertex with its parent: the vertex between its own root and site is the
+   parent's (both orders of root and site, from the binding placement). So a line of cells each raised root on site by
+   the one before turns 60 degrees per cell about one vertex, and the sixth place is the first's: under (z) a lineage
+   is one fan of at most six heads, its last site facing the first root, every head side bonded or blocked, so no head
+   is copied again. Throwaway (`runs/keep.js`, not committed: `_release` skips an `&` side whose partner side is a
+   lysis side its triangle carries identically: in `_release`, `if(q>=0&&this.lys[q]&&kin(u,q))continue;` before the
+   side is spent, `kin` as in `derive`) on the guarded platform `Y@&c@y! C@s!T`, `lysJoint` 2: within 500
+   steps one star of twelve cells (six heads about one vertex, fronts outward with six partners) was the only body in
+   the world; it froze and died at the hazard (4 of 4 dead by 5k). A kin of the other order of root and site (two
+   errors away) would make a strip, which never closes: a body that never lets go. So keeping for good is a sink either
+   way; keeping must alternate with letting go. By side it needs a budding site that (z) does not keep, so not a lysis
+   side: a site the guard does not read, public, and a fourth role on a three-sided cell beside root, keeping site and
+   front. By time it is in the core (item 2). Not proposed; no code.
 
 ### Core review 2026-10-17, autorun run 20261017-0518: (x) tried as the rule, kept an option mode
 NEXT step 95 (set by review-intent run 0456): decide (x); the guard is three modes of one parameter. Branch

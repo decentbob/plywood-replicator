@@ -28,6 +28,62 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Keeping is waiting: a joint holds while its cell waits; kept for good, a lineage is one ring of six (explore run 20261017-1406, 2026-10-17)
+
+NEXT priority 40 (when a joint lets go, on paper first), then the one design the core already offers, alone, under copy
+error and entered (INNOVATIONS run 1406; [joint-keep.png](pictures/joint-keep.png); RULES candidate (z), not
+proposed). Notes, not the user's words.
+- **The keeping side is already in the core.** A joint is cut at the first release in which its `&` triangle hears no
+  open front, and the open signal comes from every unbonded glued `@` side of its body between joints, its own
+  included. So a raised cell keeps its joint while it waits for anything, and its type says what it waits for. Run
+  0416's "checking and keeping exclude each other" is exact for a cell that waits only for its front. A cell whose site
+  is an attach side (`Y@&c@y@!`) also waits for its own kid: it keeps the joint it was checked on past its front's
+  completion and leaves when its kid binds, carrying the kid. **Keeping is waiting**: a body owns, besides its mother,
+  the raised cells that still wait, and what a cell waits for is set by its own sides.
+- **Kept for good, a lineage is one ring of six.** Any two sides of a triangle share one vertex. A kid lies with its
+  root flush on its parent's site, and the vertex between its own root and site is the parent's (true for either order
+  of root and site: it follows from the binding placement). So cells raised root on site, one by the next, turn 60
+  degrees per cell about one vertex, and the sixth place is the first's: run 0726's rings and run 0416's fans are two
+  cases. Candidate (z) (a kin joint is never cut) makes every lineage one fan: within 500 steps one twelve-cell star
+  (six heads about a vertex, fronts outward, six partners) was the only body in the world, every head side bonded or
+  blocked, so no head was copied again; dead at the hazard, 4 of 4 by 5k. A kin of the other order (root and site
+  swapped, two errors away) turns about another vertex each step: a strip that never closes. So keeping for good is a
+  sink, closed or open, and keeping must alternate with letting go. By side that needs a budding site the rule does not
+  keep (not a lysis side, so one the guard does not read: public) beside root, keeping site and front, four roles on
+  three sides. By time it is already in the core.
+- **Buds of two raised cells, with no rule change.** `Y@&c@y@! C@s!T` on the guarded platform lived 4 of 4, with as many
+  heads as the platform (502-508 against 516-525), and 78-79% of its heads in rigid bodies of two or more roots against
+  30-33% (checks `bud-two`, `bud-two-c`). The body that leaves is a daughter with its waiting granddaughter, both raised
+  by the lineage and both checked by the guard while they waited: **the first body in the line that owns two cells per
+  generation.** Predicted to cost heads (0.5-0.9 of the platform's): it did not; a waiting kid's empty site is the copy
+  side its mother's would have been.
+- **The guard removes run 2151's sink.** Run 2151 tried the same wait without the guard (`Y@&y@!y@!`) and died under copy
+  error (4 of 4 by 20k): a site error made a site nobody fills, and its cell held its parent's site for good. Under the
+  kin guard that kid carries no `y@!`, so it is lysed while it waits. Under copy error 0.01 to 240k the site stayed on
+  98-100% of root cells at every census in 4 of 4, and bodies of two or more roots held 77-79% of heads (the platform
+  32-34%).
+- **It stops waiting for its partner.** Under copy error the front lost its attach mark in 4 of 4 (`Y@&cy@!`, below half
+  of root cells waiting on a front by 90k, 100k, 130k and 200k; 87-97% of root cells at 240k, and none with a waiting
+  front): a plain `c` still catches a partner by glue (an attached side without `@` binds a part by its `@` side), but
+  the kid no longer waits for one; it leaves once its own kid binds. The platform's head cannot drop it (`Y@&cy!` lets
+  go of its mother a pass after it binds, mostly before a partner comes by: alone, a free cell with a spent root, which
+  catches nothing), and there the front kept its mark in 4 of 4. **A lineage that waits for what it raises drops its wait for what the public gives**:
+  the partner becomes optional, bound when one comes by. In one world the partner then closed both its free sides to
+  readers (`C@|MX.`: an anchor and a close-only side).
+- **But owning costs a generation.** The two heads are strangers to each other's guard (`y@!` against `y!`). The
+  platform head entered as 10 bodies took the waiting-kid world in 4 of 4, and the world of its evolved form `Y@&cy@!`
+  too; the waiting kid, entered as 10 or 100, was lost (4 of 4 each). A kept daughter keeps its mother's site busy
+  until the daughter has raised: a site gives a birth every 1/a + 1/a (a the arrival rate of a kin copy) instead of
+  1/a + tau_c (the wait for a partner, short where partners are common), so the bud of one grows faster at any
+  frequency. The bud of two persists only because the guard isolates it: the one error between the two sites makes a
+  cell that no site raises.
+- **What follows.** In this core a body owns the cells that still wait, and every one of them holds a site that could
+  have raised again. So owning more than one cell per generation pays only where the kept cell gives the body more than
+  a generation: where the public partner is scarce (the bud of two needs none; the platform's kid cannot leave without
+  one), or where a kept cell does work for the body while it waits. Keeping for good is a sink; keeping by waiting is in the core and
+  costs a generation. No core change: candidate (z) is not proposed, and the next question is an environment or a
+  design in which the kept cell pays.
+
 ## A closed side, not a lysing one: the partner's shield; a ring that pays its head is a public good (build run 20261017-1302, 2026-10-17)
 
 NEXT priority 39, second and last slice: theory first, then entry tests on `rosette`'s world and one copy-error watch
