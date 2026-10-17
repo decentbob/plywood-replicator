@@ -60,6 +60,18 @@ check), else what was learned. Stop there.
   public head `Y@&c@|-` entered on X; **P7** under copy error 0.01 (120k) the pair falls back to one guarded shape in 3
   of 4; **P8** the anchored pair dies by 10k (run 1602); the pair entered at 20k into the filler world (rare) is lost
   and at step 100 (10 bodies beside the founder) wins (the more efficient system as majority).
+- **Read (P6-P8, batch m2, 03:45):** P6 yes: the public filler `Z@&C@|-` entered rare took the catcher role, X lost by
+  35-55k (4 of 4); P6b no: the public head `Y@&c@|-` was lost and the pair held (4 of 4, 453-460 bodies at 60k): its free
+  copies bind empty Y sites by their root and are lysed there; P7 yes: both locks held until 30, 40, 80 and 115k, then
+  one shape lost its lock to a public partner made by a **root** error (`C@s!T@&`, `B!r@&C@`, head-shaped `Y&c@y.!`
+  without an attach root), never by a site error while the guarded sites were common; P8 yes: the anchored pair dead by
+  5k (4 of 4); the leaky catcher entered rare into the filler world lost (4 of 4); the pair as the majority (10 bodies at
+  step 100 beside one filler founder) lost to the filler in 3 of 4 by 20k.
+- **T5 (from P6b, P7): the guard is a trap for its root's public cells.** With `lysJoint` 2 a guarded site lyses every
+  non-kin part that binds it by its root, so a class's public cells (one site error away, root kept) die on its empty
+  sites; only a public cell of another root, or one whose root cannot bind, escapes, and that one floods the partner's
+  waiting kids. **P9** a public catcher of root X (`X@&C@|-`) entered rare into the pair is lost (3 of 4); **P10** a public
+  head of a foreign root (`Q@&c@|-` on X) takes the head role, Y lost by 60k (3 of 4) (batch `runs/m3.json`).
 
 **Handoff status (autorun run 20261016-2258, explore): done; one core change as an option (`lysJoint: 2`, default 0:
 no output changes)** (INNOVATIONS 2026-10-16, explore; IDEAS "The nursery's share is the environment's"; RULES Core
