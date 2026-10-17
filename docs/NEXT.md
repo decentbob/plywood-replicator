@@ -35,6 +35,36 @@ Where the line stands (INNOVATIONS has the numbers, IDEAS the reasoning under th
   usually stands larger (six times likelier per copy error). Under a seal no reader finds a side, so nothing keeps it:
   to 1.2M it drifts out and comes back with the episodes; only letters and marks vary, never the shape.
 
+**Slice in progress (autorun run 20261017-2158, build): priority 44, the guard on every side.** Goal: count the root
+guard's mechanism in the one-type world, then put the same mark on the platform head and say whether a head guarded at
+both its joints keeps its letters under copy error. Done when: the mechanism is counted (new `tri/lysprobe.js`: 'lys:'
+contact lysis by lysing type and side and lysed type; 'raise:' root bindings by raiser and kid), the guarded platform
+`Y@&!c@y! C@s!T` is run even (10 bodies of each head at step 1) and entered (10 bodies at 10k, both ways) with partners
+scarce (`C@s!T|`, `PADI` 25) and common (`C@s!T`, `PADI` 100), and under copy error (0.01, 240k) against the plain
+platform; checks for what works in 3 of 4. Stop there (no threshold sweep unless a number needs it).
+Theory (before the runs). Under `lysJoint` 2 a lysis side across a joint spares a partner carrying the identical side.
+The platform head has two joints, its root (to its raiser) and its site (to its kid); its front binds the partner by a
+bond that is no joint, where `lysJoint` does not apply. A guarded raiser `Y@&!c@y!` therefore spares exactly the kids
+that carry `y!` (its site) and `Y@&!` (its root, else the kid lyses it only if the kid's root lyses): of the one-error
+copies of it, a site error is lysed at its site, a root letter error never binds there (only `Y` binds `y`), a root
+`&` dropped makes the bond no joint (both lysed), `.` or `?` on the root keeps it from binding by that side; raised and
+spared are every front error (a third of errors) and the root without its `!` (the plain head), while the root with an
+added anchor (`Y@&|!`) is raised and lyses its raiser (another guard). So the guard does not freeze every letter: it
+freezes the site's and the root's letters; the front is frozen, if at all, by the partner it must catch.
+Predictions (written before any platform run):
+- P1 (one-type world, the probe): every contact lysis in `root-guard`'s world is a guarded root lysing a plain raiser
+  across a joint (more than 99%), and their number equals the guarded kids raised by plain raisers within 5%; no plain
+  kid at a guarded raiser is lysed. (Seen in a 20k test world before writing: 1064 against 1062.)
+- P2 (even start, platform): the guarded head takes the world from 10 bodies of each in 3 or more of 4, scarce and common
+  alike (the ratchet does not depend on the partner, which both share).
+- P3 (entered): 10 guarded bodies at 10k into the plain platform's world are lost in 3 or more of 4 in each setting (rare
+  is below the threshold, as `root-guard-rare`); 10 plain bodies entered into the guarded world are lost 4 of 4.
+- P4 (copy error, 240k): in the guarded founder's worlds the founder head stays the commonest head at every 10k census
+  and above 80% of heads in 3 of 4; no head with another site or root letter reaches 2% (frozen); variants raised by
+  it (the probe's 'raise:' lines) are front errors and the plain root, and none of them reaches 20% of heads.
+- P5 (control): in the plain founder's worlds a neutral root mark (`Y@&|c@y!`) drifts above 5% of heads in 2 or more of 4,
+  and the root guard arises (one mark toggle, about 3e-4 per copy) but stays below 5% in 3 or more of 4 (rare, lost).
+
 **Handoff status (autorun run 20261017-2102, explore): priority 43 done (progressed).** Kin in place of the partner,
 alone, entered both ways with partners scarce and common, under copy error, and the root guard that arose there: checks
 `kin-take`, `kin-take-c`, `root-guard`, `root-guard-rare` (4 of 4 each, digests written; no rule or output change
