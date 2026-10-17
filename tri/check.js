@@ -2,10 +2,10 @@
 // Capability checks: one line per capability that ROADMAP's module table marks as working (plus partial ones, which
 // report but do not fail). Each check runs an existing demo (tri/demos.js, pictures off) on fixed seeds and reads the
 // demo's own last report line; a capability claimed "N of 4 worlds" needs that many seeds to pass.
-//   node tri/check.js [name ...] [--part k/n] [--cmd]   (names: the `id` column; default all; at most 4 processes; about 71 minutes
-//   in run 20261008-0250's container, 160 in run 0651's: run it as --part 1/2, then --part 2/2; seal-evolve the longest;
-//   each check prints when its last world finishes, so lines come in finishing order; CHECK_SAVE=dir keeps each world's
-//   whole output there, e.g. to show that a change leaves outputs byte for byte the same)
+//   node tri/check.js [name ...] [--part k/n] [--cmd]   (names: the `id` column; default all; at most 4 processes; about 3 hours
+//   for 91 checks in run 20261017-0902's container, 85 and 89 minutes per part: run it as --part 1/2, then --part 2/2;
+//   seal-evolve the longest; each check prints when its last world finishes, so lines come in finishing order;
+//   CHECK_SAVE=dir keeps each world's whole output there, e.g. to show that a change leaves outputs byte for byte the same)
 // Every world's output is compared with main's digest of it in tri/digests.txt (harden run 20261016-0902): each line ends
 // [same], [changed: seeds], [new] (no digest yet) or [redefined] (its command changed), the last line counts them, so a
 // branch's one suite is compared with main without running main again. A pull request that changes any check world's output

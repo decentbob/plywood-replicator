@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-0726, build). Read AGENTS.md first (rules of work), then this
+State on 2026-10-17 (after autorun run 20261017-0902, harden). Read AGENTS.md first (rules of work), then this
 file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
 run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
 slice record with its predictions is on its run's branch (`build-0726`, `explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
@@ -25,26 +25,21 @@ that binds the partner's plain side and its own; a chain closes after four cells
 its head's site. It is the parasite's body, not the host's, and it lives on the partners' commonest letter, which
 escapes it: so the guarded head keeps its letters while the partner's letter turns in bursts (IDEAS "Rings of six").
 
-**Handoff status (autorun run 20261017-0726, build): priority 39, first slice, done.** Rings of six (INNOVATIONS run
-0726; IDEAS "Rings of six"; pictures `rosette.png`, `rosette-escape.png`, `rosette-turns.png`). No rule change.
-- Theory: a complete cell's root is spent, so a rootless partner is copied at two sides (why the end states' partners
-  are rootless: 3 of 3 living `mutual-pair-evolve` worlds, 1 of 4 `kin-guard-evolve`). One front error to the complement
-  of the partner's own plain letter (`C@s!T` to `t@s!T`) makes a chain cell.
-- Checks (digests written): `rosette` 4 of 4 (chain cells entered at 10k on `Y@&c@y! C@s!T`: six-cell bodies held from
-  15-20k; the ring's last cell covers the head's site; heads halved), `rosette-escape` 3 of 4 (a partner letter A entered
-  as 10 bodies takes 95-100% of partners, the chain lost), `rosette-escape-c` 4 of 4 (without the chain A is lost).
-- Watched: natural chains in 2 of 8 evolve end states to 480k and in 3 of 4 platform worlds under copy error (five
-  episodes to 480k), each followed by its letter's fall; the letter also drifts between episodes. Partners whose two
-  free sides lyse (immune) rose to 35-62% in 2 of 4 copy-error worlds, also 33% in a control: selection not shown.
-- Tools: `census.js --partner`, `linechart.js` `LC_PARTNER=1`, `tri/bodyprobe.js` ('body:' lines, individuals by cells).
-- Batches (`runs/` is ignored, so their JSON is here): e1 both evolve settings to 480k
-  (`{"demo":"pair","steps":480000,"env":{"PAW":"2","TRI_PARAMS":"{\"pErr\":0.01,\"lysJoint\":2}"},"jobs":[{"id":"mp",
-  "seeds":[1,2,3,4],"env":{"PA2":"Y@&c@y! C@x!X@&"}},{"id":"kg","seeds":[1,2,3,4],"env":{"PA2":"Y@&c@|y! C@|-Z@&"}}]}`);
-  e6 the platform watch: the same with `PA2` `Y@&c@y! C@s!T`, one job; e5 `rq`: `rosette`'s command with
-  `{"pErr":0.01,"lysJoint":2}` to 160k. Nothing is running.
+**Handoff status (autorun run 20261017-0902, harden): nothing needed fixing (idle).** The suite on main in a fresh
+container: 91 of 91 checks pass, all 327 worlds byte for byte main's digests (so the digests hold across containers);
+part 1 85 minutes, part 2 89 (each about 30 minutes inside the 2-hour limit, room for some 70 worlds of 100 s more).
+The `secs` estimates are 0.8x the measured times throughout, so the parts stay balanced. At 3 of 4 (need 3): `ring`,
+`imprint`, `race`, `seal-evolve`, `nursery-c`, `rosette-escape`; `pair-flow-c` partial 1 of 2 as before. No code change.
+- Profile (`PAW=2` world, 30k steps): `_overlap` 30%, `_pairs` 15%, `tryMove` 10%, `eqDepthN` 6%, `_jostle` 6%. Bodies
+  make 0.75 million `tryMove` calls per 1000 steps, 75% of them free at once, 1.5 `_overlap` calls each: a neighbour list
+  gathered once per move (what made lone blocks fast, run 1421) would not pay for bodies. A finer grid could cut the
+  cells scanned (about 0.8 blocks per 1.43-unit cell in world 50) but changes the order of the rare overlap-reducing
+  sums, so outputs could change: not worth a suite while both parts fit.
+- Run 0726's batches (e1, e5, e6: the evolve settings, the platform watch, `rosette` under copy error) are in its
+  handoff: `git show fd0101b:docs/NEXT.md`. Nothing is running.
 
-**Next step (rotation 97, harden):** the suite has 91 checks (`rosette*` add 12 worlds, about 100 s each): keep both
-parts inside two hours. Then **run 98 (build): priority 39, second slice** (below).
+**Next step (rotation 98, build): priority 39, second slice** (below): the immune partner and a ring that pays its head,
+on `rosette`'s world (`node tri/check.js --cmd rosette`).
 
 ## Priorities
 
@@ -93,9 +88,9 @@ harden, 98 build, 99 explore. Run 98 (build) takes 39's second slice.
   random stream only: take it with a change that changes outputs anyway).
 - Speed (run 1721): a supply drive that keeps its stock outside the world, about 1.6x early in a run, changes
   outputs; decide it in a `build` that changes the setup.
-- Suite time: 87 minutes per part in run 0902's container (69 checks); lone blocks' physics is most of it (`_overlap`
-  30%, `_pairs` 15%, `tryMove` 13% in a `PAW=2` world; a cell-distance cut in `_pairs` would rarely skip a cell: the
-  pair reach, 1.39, is about a cell, 1.4). Worlds shared between checks: only `race`/`seal-evolve` had one setting
+- Suite time: 85 and 89 minutes per part in harden run 20261017-0902 (91 checks); physics is most of it (handoff
+  above; a cell-distance cut in `_pairs` would rarely skip a cell: the pair reach, 1.39, is about a cell, 1.4). When a
+  part nears 2 hours, `--part k/3` balances three parts the same way. Worlds shared between checks: only `race`/`seal-evolve` had one setting
   (`pair-mut` reads a result line, which a longer world does not repeat).
 - Copy error as the standard world's variation: decided in run 2151 not to retire `PAM` now (on in 21 checks, 5 of them
   the front-only mutagen `PAMF=1`, which copy error cannot replace); new work runs in the line's preset (priority 36).
