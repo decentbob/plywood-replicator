@@ -60,6 +60,15 @@ length the suite can afford). Stop: one batch, read; no new mechanism this run.
   - P4 sealed arm: the partner's majority plain letter turns at least once in 3 of 4 worlds (drift on a closed side);
     bodies stay of two cells (90% or more of complete individuals at 1.2M, 4 of 4).
   - P5 all 8 worlds alive at 1.2M.
+- **Second step (after reading the batch: 23 episodes of 20 or more cells reading a partner side, each escaped toward the
+  larger standing class of unreadable partners, closed or of another letter; the closed share among them about the same
+  after as before).** Theory: under a parasite both unreadable classes are immune and neither reads the other, so they
+  grow at the same rate and their ratio holds through the sweep; the seal wins only if it stood larger. Test (`runs/h2.json`,
+  `rosette-dot`'s world, chain cells `t@s!T` at 10k): arm X enters 30 sealed bodies (`PAKS` `C@s!T.`) and 15 of another
+  letter (`PA3` kit `Y@&c@y! C@s!A`), arm Y the reverse; 4 seeds each, 60k.
+  - P6: the closed partners are the majority of partners at 60k in X in 3 of 4, and the minority in Y in 3 of 4.
+  - P7: in worlds where the chain spread, the closed share among closed and A partners at 60k is within 0.2 of its
+    entered share (2/3 in X, 1/3 in Y) in 3 of 4 per arm.
 
 ## Priorities
 
