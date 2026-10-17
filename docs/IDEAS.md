@@ -28,6 +28,39 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A kill pays only if the killer is raised again: the root guard is a ratchet where free parts live, a loss where they decay (build run 20261017-2158, 2026-10-17)
+
+NEXT priority 44 (the guard on every side), INNOVATIONS run 2158, [guard-plat.png](pictures/guard-plat.png). Notes,
+not the user's words.
+- **What the guard does, counted.** In the one-type world every contact lysis is one act: a guarded kid (`Y@&!`) lysing
+  the plain cell that raised it, across the joint, as often as plain cells raise guarded kids (within 1%); a plain kid
+  at a guarded cell is never lysed. Alone the guard never fires: a guarded founder alone runs the same random stream
+  as a plain one. It is a mark that acts only on a stranger, and only on the stranger that raises it.
+- **The kill is a bounce.** A lysed cell cuts every bond, so the killer comes free with its root unspent and the cell
+  it lysed returns as a fresh part of its type: both are free parts again, and each is worth what its chance of being
+  raised again is worth before it decays. Where free parts live 100 steps the killer is raised again 76-93% of the
+  time and the lysed raiser 28-42%; where they live 25 steps on the platform, 42-46% and 44-55%. So with k and r the two
+  chances, a guarded part landing on a stranger's site costs its line 1-k and the stranger's line 1-r, while a
+  stranger's part at a guarded site is raised and costs nothing. With the guard's share p, the guard gains while
+  p(1-r) > (1-p)(1-k): a threshold p* = (1-k)/((1-k)+(1-r)), set by how long a free part lives and how crowded the
+  sites are, not by the guard. It ranks the six even starts (p* 0.11 to 0.56; won where it is well below half, lost
+  above) and brackets the kin world's measured threshold (2-10% against 0.11); it leaves out the stranger kids the
+  guarded sites spend their time on and misses one entry (the plain head took the scarce guarded world from 10 bodies).
+- **So killing is an enemy whose worth the environment sets** (priority 26's question). The same mark is a ratchet
+  where free parts live long (lost when rare, kept when common) and a cost at any share where they decay fast. Which
+  way a world goes is a labelled drive's choice, not the lineage's.
+- **What the guard freezes.** A guard acts only across a joint, and a head has joints only at its root and its site:
+  its front's bond to the partner is no joint, and a lysing front lyses its own partner. So "guarded on every side" is
+  guarded at both joints. Under copy error that freezes the site (every site error is lysed in the next pass) and
+  the root's letter (no other letter binds the site) by rule, and the root's marks by the ratchet (the plain root and
+  another guard, `Y@&|!`, are raised but each is a rare stranger to the common guard); the front varies by rule and is
+  held only by the partner it must catch. The guarded platform kept its head on 95-99% of heads to 240k; the plain one
+  let a neutral anchor drift to 6-14%.
+- **For the direction.** Two concepts to carry: a lineage's own mark acts on strangers only, so it costs nothing at home
+  and its worth is set by encounters; and the price of a kill is the killer's own bounce. Priority 45 (flow and stock
+  under a drive that varies in space or time) gains an axis: where decay is fast the guard should be lost and where it
+  is slow kept, so a varying drive could hold both a frozen and a turning line side by side.
+
 ## Two sites and no partner: the kin head is a flow, and its root guard a ratchet (explore run 20261017-2102, 2026-10-17)
 
 NEXT priority 43 (kin in place of the partner), INNOVATIONS run 2102, [kin-front.png](pictures/kin-front.png). Notes,

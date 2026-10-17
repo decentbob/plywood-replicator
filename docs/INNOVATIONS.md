@@ -12,6 +12,68 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-2158, build)
+
+- **The root guard on both joints: a kill pays only if the killer is raised again. Counted, the guard's one act is its
+  kid lysing a plain raiser; on the platform head (`Y@&!c@y! C@s!T`) it is a ratchet where free parts live 100 steps
+  and a loss where they live 25; under copy error it freezes the root and the site, not the front** (NEXT priority 44;
+  IDEAS "A kill pays only if the killer is raised again"). No rule change. New probe `tri/lysprobe.js`: 'lys:' contact
+  lysis by lysing type and side and lysed type, 'raise:' root bindings by raiser and kid, 'bounce:' whether a kid that
+  lysed its raiser, and the raiser, are raised again within 200 steps. Worlds: `PAW=2`, `lysJoint` 2, `pErr` 1e-9 unless
+  said; an even start is 10 bodies of each head at step 1 (`PA2T=1 PA3T=1 PAEN=10`), an entry 10 bodies at 10k.
+  - **Theory** (before the runs): `lysJoint` acts only across a joint, and the platform head has two, its root (to its
+    raiser) and its site (to its kid); its front's bond to the partner is none. So a guarded raiser lyses every kid that
+    lacks `y!`, and a guarded kid lyses a raiser that lacks `Y@&!`. Of its one-error copies, the front errors and the
+    plain root are raised and spared, the anchored guard `Y@&|!` is raised and lyses its raiser, site errors are lysed,
+    root letter errors never bind. A front that lyses (`c@!`) lyses its partner on any bond.
+  - **Counted** (`runs/g1`: `root-guard`'s and `root-guard-rare`'s worlds with the probe): every contact lysis was a
+    guarded root lysing a plain raiser across the joint (1005-1617 per even world to 60k; 75-1899 per rare world from
+    10k to 30k), equal within 1% to the guarded kids raised by plain raisers; no plain kid at a guarded raiser (680-1050
+    per even world) was lysed (P1 yes, 8 of 8). A lysed raiser cuts every bond, so the kid comes free with its root
+    unspent and the raiser returns as a fresh free part: both can be raised again (the 'bounce:' line).
+  - **Platform, even start** (`runs/g2`, `runs/g4`): where free parts live 100 steps the guarded head took the world 4 of
+    4 with the partner copied at both sides (`C@s!T`, check `guard-plat`) and 3 of 4 at one side (`C@s!T|`); where they
+    live 25 steps it was lost 4 of 4 with `C@s!T|` (check `guard-plat-s`) and lost or held near half 2 and 2 with
+    `C@s!T`. P2 ("3 of 4 scarce and common alike") **no**: the life of a free part decides, not the partner. The
+    one-type world at 25 steps: 2 of 4 (4 of 4 at 100, `root-guard`).
+  - **Entered**: the guarded head into the plain platform's world was lost 4 of 4 in both settings (P3 yes); the plain
+    head into the guarded world was lost 4 of 4 where free parts live 100 steps and **took it 3 of 4** where they live
+    25 (P3's second part **no**; check `guard-plat-in`).
+  - **Bounce fates** (`runs/g4`, `runs/g5`, even starts to 30k, summed; kid raised again / lysed raiser raised again):
+    one-type world, parts living 100 steps, 93% / 42%; platform `C@s!T`, 100: 83% / 28%; `C@s!T|`, 100: 76% / 41%;
+    one-type, 25: 75% / 44%; `C@s!T`, 25: 46% / 44%; `C@s!T|`, 25: 42% / 55%. A threshold p* = (1-k)/((1-k)+(1-r))
+    (k, r: the two fates; the guard's share above which the raisers its kids take apart outweigh its kids lost in
+    the bounce, IDEAS) is 0.11, 0.19, 0.29, 0.31, 0.49, 0.56: the even start (0.5) was won 4, 4, 3 and 2 of 4, mixed
+    at 0.49 and lost 4 of 4 at 0.56; the kin world's measured threshold (2-10%, run 2102) brackets 0.11. It leaves out
+    the stranger kids raised at guarded sites, and it does not explain the plain head's entry into the scarce guarded
+    world (it predicts a loss).
+  - **Alone the guard is neutral**: a guarded and a plain founder alone (scarce setting, seeds 1-2, to 12k) draw the
+    same random numbers and give the same counts; the root's lysis acts only on a stranger. In the scarce mixed world
+    (`guard-plat-in`'s seed 2, 10-20k) the plain line raised about 10% more of its own per head (23.6 against 21.5 per
+    10k steps) and lost fewer heads per head to the whole-body hazard: not explained.
+  - **Under copy error** (`runs/g3`: `pErr` 0.01, 240k, `PATN` 40, partner `C@s!T`, 4 seeds per founder): from the
+    guarded founder the founder head was 95-99% of heads at every census from 10k, 4 of 4 (P4 yes); no head of another
+    root or site letter reached 2%. Its raisers raised front variants (0.5-0.85% of their raises, kept; at most 4% of
+    heads: `c@|`, `c@!`, `c.@`, other letters), site variants (about 0.1%, each lysed in the next pass) and root-mark
+    variants (0.14-0.23%: the plain root at most 2% of heads; the anchored guard `Y@&|!c@y!` lysed its raiser 120-132
+    times per world and stayed below 1%). From the plain founder (control) the founder was at 85-93% at its lowest; the
+    anchored root `Y@&|c@y!` drifted to 14, 9 and 6% (P5 yes, 3 of 4), the root guard reached 6% and 4% in 2 of 4 and
+    never was among the 40 commonest types in the other 2 (P5's "below 5% in 3 of 4" yes). So the guard on both joints
+    freezes the site's and root's letters by rule and the root's marks by the ratchet (every raised root variant is a
+    stranger to the common guard); the front is free by rule and held by the partner it must catch.
+  - Predictions: NEXT slice record (`docs/NEXT.md` at `a31839c`).
+  - Picture: [guard-plat.png](pictures/guard-plat.png) (the guarded share of heads from an even start, 4 seeds, in the
+    six settings with their bounce fates).
+  - Commands: `node tri/check.js --cmd guard-plat guard-plat-s guard-plat-in root-guard root-guard-rare` with
+    `NODE_OPTIONS='-r ./tri/lysprobe.js' LY_EVERY=2000`; the other even starts as `guard-plat` with `PADI` (25, 100) and
+    the partner (`C@s!T`, `C@s!T|`) changed, 30000 steps, and as `root-guard` with `PADI=25`; under copy error `PAW=2
+    PATN=40 TRI_PARAMS='{"pErr":0.01,"lysJoint":2}' PA2='Y@&!c@y! C@s!T'` (or `'Y@&c@y! C@s!T'`) `node tri/demos.js
+    pair SEED 240000 runs/x` with the probe and `LY_EVERY=20000 LY_N=20` (7-9 minutes a world).
+  - Status: the guard's mechanism (**counted**, 8 of 8); the guarded platform takes an even world where free parts live
+    long (**works**, `guard-plat`) and loses it where they decay fast (**works**, `guard-plat-s`; the plain head entered
+    takes it, `guard-plat-in`); its root and site letters frozen under copy error (**works**, 4 of 4, no check: 240k
+    worlds); the threshold from bounce fates (**designed**, matches 5 of 6 even starts, not the scarce entry).
+
 ## 2026-10-17 (autorun run 20261017-2102, explore)
 
 - **Kin in place of the partner: the one-type head `Y@&y@!y!` has two sites and no partner; it is a flow that takes a

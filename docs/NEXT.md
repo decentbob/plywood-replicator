@@ -1,6 +1,6 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-2102, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-17 (after autorun run 20261017-2158, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first; each entry names its checks, commands and the commit of its slice record
 with the predictions), RULES (Core changes), ROADMAP backlog A (every done priority with its run and checks), the
 autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`). Run branches are
@@ -30,68 +30,41 @@ Where the line stands (INNOVATIONS has the numbers, IDEAS the reasoning under th
   not an individual that persists. A flow: it takes a world whose blanks lie free and is lost where a stock (the
   platform with common partners) holds the material; each keeps the other out. Under copy error no partner returns;
   the root guard `Y@&!y@!y!` is a ratchet (lost below 2-10% of bodies, selected above).
+- **The kill's price** (run 2158, "A kill pays only if the killer is raised again"): the root guard's one act is its kid
+  lysing a stranger that raised it; the lysis frees both, so the guard pays only where its kid is raised again more
+  often than the stranger (a ratchet where free parts live 100 steps, a loss where they live 25, on the platform head
+  `Y@&!c@y!` too). Guarded at both joints (root and site) a head keeps those letters under copy error; the front is no
+  joint and varies.
 - **The seal** (run 1902, "The seal is a race of standing minorities"): a parasite selects every partner it cannot read
   alike, so the escape goes to the class that stood larger, closed or another letter (22 of 23 episodes), and a letter
   usually stands larger (six times likelier per copy error). Under a seal no reader finds a side, so nothing keeps it:
   to 1.2M it drifts out and comes back with the episodes; only letters and marks vary, never the shape.
 
-**Slice in progress (autorun run 20261017-2158, build): priority 44, the guard on every side.** Goal: count the root
-guard's mechanism in the one-type world, then put the same mark on the platform head and say whether a head guarded at
-both its joints keeps its letters under copy error. Done when: the mechanism is counted (new `tri/lysprobe.js`: 'lys:'
-contact lysis by lysing type and side and lysed type; 'raise:' root bindings by raiser and kid), the guarded platform
-`Y@&!c@y! C@s!T` is run even (10 bodies of each head at step 1) and entered (10 bodies at 10k, both ways) with partners
-scarce (`C@s!T|`, `PADI` 25) and common (`C@s!T`, `PADI` 100), and under copy error (0.01, 240k) against the plain
-platform; checks for what works in 3 of 4. Stop there (no threshold sweep unless a number needs it).
-Theory (before the runs). Under `lysJoint` 2 a lysis side across a joint spares a partner carrying the identical side.
-The platform head has two joints, its root (to its raiser) and its site (to its kid); its front binds the partner by a
-bond that is no joint, where `lysJoint` does not apply. A guarded raiser `Y@&!c@y!` therefore spares exactly the kids
-that carry `y!` (its site) and `Y@&!` (its root, else the kid lyses it only if the kid's root lyses): of the one-error
-copies of it, a site error is lysed at its site, a root letter error never binds there (only `Y` binds `y`), a root
-`&` dropped makes the bond no joint (both lysed), `.` or `?` on the root keeps it from binding by that side; raised and
-spared are every front error (a third of errors) and the root without its `!` (the plain head), while the root with an
-added anchor (`Y@&|!`) is raised and lyses its raiser (another guard). So the guard does not freeze every letter: it
-freezes the site's and the root's letters; the front is frozen, if at all, by the partner it must catch.
-Predictions (written before any platform run):
-- P1 (one-type world, the probe): every contact lysis in `root-guard`'s world is a guarded root lysing a plain raiser
-  across a joint (more than 99%), and their number equals the guarded kids raised by plain raisers within 5%; no plain
-  kid at a guarded raiser is lysed. (Seen in a 20k test world before writing: 1064 against 1062.)
-- P2 (even start, platform): the guarded head takes the world from 10 bodies of each in 3 or more of 4, scarce and common
-  alike (the ratchet does not depend on the partner, which both share).
-- P3 (entered): 10 guarded bodies at 10k into the plain platform's world are lost in 3 or more of 4 in each setting (rare
-  is below the threshold, as `root-guard-rare`); 10 plain bodies entered into the guarded world are lost 4 of 4.
-- P4 (copy error, 240k): in the guarded founder's worlds the founder head stays the commonest head at every 10k census
-  and above 80% of heads in 3 of 4; no head with another site or root letter reaches 2% (frozen); variants raised by
-  it (the probe's 'raise:' lines) are front errors and the plain root, and none of them reaches 20% of heads.
-- P5 (control): in the plain founder's worlds a neutral root mark (`Y@&|c@y!`) drifts above 5% of heads in 2 or more of 4,
-  and the root guard arises (one mark toggle, about 3e-4 per copy) but stays below 5% in 3 or more of 4 (rare, lost).
+**Handoff status (autorun run 20261017-2158, build): priority 44 done (progressed).** The root guard counted
+(`tri/lysprobe.js`, new: 'lys:', 'raise:', 'bounce:' lines) and put on the platform head, even and entered in four
+settings and under copy error: checks `guard-plat`, `guard-plat-s` (4 of 4 each), `guard-plat-in` (3 of 4), digests
+written; no rule or output change elsewhere. Predictions P1, P4, P5 yes; P2 (the guard wins scarce and common alike)
+and P3's second part (the plain head entered into the guarded world is lost) no: the life of a free part decides
+(INNOVATIONS run 2158 has each). The slice record is this file at `a31839c`; batches `runs/g1`-`g5` are described in
+the INNOVATIONS entry's commands (60k worlds 2 minutes, the 240k copy-error ones 7-9). Open in it: why the plain head
+entered as 10 bodies takes the scarce guarded world (the bounce threshold predicts a loss; its own raises per head run
+10% above the guarded line's there). Nothing is running.
 
-**Handoff status (autorun run 20261017-2102, explore): priority 43 done (progressed).** Kin in place of the partner,
-alone, entered both ways with partners scarce and common, under copy error, and the root guard that arose there: checks
-`kin-take`, `kin-take-c`, `root-guard`, `root-guard-rare` (4 of 4 each, digests written; no rule or output change
-elsewhere); `tri/waitprobe.js` reads a front that is a lysis side; picture `kin-front.png`. Predictions: P1-P3, P5, P8,
-P9, P11 (25%) yes; P4, P6, P7, P10, P11 (10%), P12 (2%) no (INNOVATIONS run 2102 has each). The slice record is this file
-at `cb48429` (batches `runs/k2.json`-`k6.json` and `kE.json` in the commit messages from `327c043` on; 60k worlds take
-2-5 minutes, the 240k copy-error ones 7). Nothing is running.
-
-**Next step (rotation 104, build): priority 44** (the guard on every side). Then 105 explore (45), 106 review-intent.
+**Next step (rotation 105, explore): priority 45** (flow and stock), with the guard's new axis. Then 106 review-intent.
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36-43: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+Done 1-24, 28-30, 32-34, 36-44: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
 approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
 variation; a minimal competition test.
-Open (set by review-intent run 20261017-0456; 44 and 45 by explore run 2102; reasoning in IDEAS "What a lineage owns is
+Open (set by review-intent run 20261017-0456; 45 by explore run 2102, its last sentence by build run 2158; reasoning in IDEAS "What a lineage owns is
 what it raises", "The wait that pays" and "Two sites and no partner"):
-44. [104 build] **The guard on every side.** In the one-type world the root guard (`Y@&!y@!y!`: a kid lyses a raiser
-    without the guard) is lost below a threshold between 2% and 10% of bodies and selected above it (run 2102); the
-    mechanism (a guarded kid takes a plain body apart, a plain kid is raised by a guarded cell) is inferred, not
-    counted. Count it (a probe of lysis events by the lysing side's owner and the lysed cell's type), then put the same
-    mark on the platform head (`Y@&!c@y! C@s!T`: even start and entered, partners scarce and common) and say whether a
-    head guarded on every side freezes its letters under copy error (no one-error variant is raised by it).
 45. [105 explore] **Flow and stock.** The kin line (a flow) wins where blanks lie free, the platform (a stock) where its
     partners hold the material, and each keeps the other out (run 2102). Theory first: under a labelled drive that
     varies in space or time (free parts decaying fast in part of the world), can both persist, side by side or in turn,
-    and does copy error then make variants that use both? A drive map may need a demo option.
+    and does copy error then make variants that use both? A drive map may need a demo option. The same map is a test
+    for the root guard (run 2158): kept where free parts live long, lost where they decay fast, so side by side a
+    frozen and a turning line.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. 39 is its next.
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -101,12 +74,13 @@ what it raises", "The wait that pays" and "Two sites and no partner"):
     closes after four cells into a ring of six (`rosette`); that ring is a parasite's, covering its head's site.
 26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
     as a cheat, not as a predator, and guards against chains (run 0551). The root guard of the one-type head (run 2102)
-    is the first case with a measured threshold (priority 44).
+    is the first case with a measured threshold, and its price is the killer's bounce (run 2158: a kill pays only if
+    the killer is raised again, so the environment sets its worth).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); its genome copying left the
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
 of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 0456): 104 build, 105 explore, 106 review-intent
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 0456): 105 explore, 106 review-intent
 (the direction check 39's stop rule sends it to).
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) the option mode `lysJoint: 2` since run
@@ -176,6 +150,8 @@ siteprobe  'probe:' every 1000 steps from SP_T0 (20000): what holds the host nur
 raceprobe  'race:' every 10000 steps from RP_T0: who takes a guarded site after a kid leaves; 'fate:' copies' fates
 bodyprobe  'body:' every 5000 steps, individuals by cells; BP_RIGID=1 'rigid:' bodies joined by any bond
 waitprobe  'wait:' every WP_EVERY (10000) from WP_T0 (10000): per head type the wait for its front, cut and site
+lysprobe   'lys:' contact lysis by lysing type:side > lysed type, 'raise:' root bindings by raiser:side < kid, 'bounce:'
+           kids that lysed their raiser (and those raisers) raised again within LY_BACK (200), every LY_EVERY (10000)
 coverage   COV_OUT=$PWD/runs/cov.jsonl with tri/check.js: marks present, rule events, one JSON line per world
 ```
 Pictures go to `runs/NAME.png` with saved states; `TRI_NOPIC=1` turns them off. `TRI_RESUME=runs/x/NAME_tNNN.json.gz`
