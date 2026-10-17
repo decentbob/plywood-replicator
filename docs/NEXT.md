@@ -35,8 +35,8 @@ changes, candidate (x); the slice record with predictions P1-P7 is this file on 
 - The recess on paper: closed (lattice search, picture `recess.png`).
 - Candidate (x): the glue-only form failed under copy error (0 of 4: the falsebeard `Y@&c@|y.!`); the identical-side form:
   P5 yes (cheats lost, nursery 566-570), P6 yes (24 of 24 censuses, 4 of 4; 96 of 96 to 480k), P7 yes (the public world
-  dies by 10k). Checks `kin-guard`, `kin-guard-evolve` (83 checks); the suite ran on the branch with every other world
-  [same] (CHECKRESULT).
+  dies by 10k). Checks `kin-guard`, `kin-guard-evolve` (83 checks); the suite on the branch: 83 of 83 pass (two parts, 86 and
+  85 minutes), 287 worlds the same as main's digests, 8 new.
 - Nothing is running. Worlds regenerate with `node tri/batch.js runs/NAME.json` from these files (env always `PAW` 2,
   `TRI_NOPIC` 1, `PA2` `Y@&c@|y! C@|-Z@&`):
   - `fz.json` (60000 steps, `TRI_PARAMS` `{"pErr":1e-9}`, `PA3N` 10, `PA3T` 20000, `PA3` `Y@&c@|- C@|-Z@&`, `RP_T0` 25000,

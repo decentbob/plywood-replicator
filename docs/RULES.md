@@ -242,6 +242,9 @@ random getting with 1/2 a glue drawn from inert and `a..z`, `A..Z`, else one of 
   20261008-2221) a lysis side lyses no partner across a joint either: lysis then never crosses a joint, and a lock `z!`
   raises a part that binds it by `Z@&` and lyses one that binds by `Z@` without `&`, whose lysis comes back across the
   lock's bond into the lock's carrier (test "lysJoint"; `lysOneWay`, which stopped that, was removed in run 2221).
+  `lysJoint: 2` (candidate (x), run 20261016-2258): across a joint a lysis side lyses a partner unless that partner
+  carries a side identical to it (glue and marks); a lock `z!` raises a key `Z@&` that carries `z!` itself and lyses any
+  other (test "lysJoint 2"; checks `kin-guard`, `kin-guard-evolve`).
 
 ## Core changes
 

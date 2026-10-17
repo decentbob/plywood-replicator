@@ -105,6 +105,14 @@ imprint_1 4bddbcab067242b5 0df87d2fb479798d
 imprint_2 926f5fd592ed5b6b 2669f1dcf5c385ae
 imprint_3 c875a38ab17e488d 3eb6e18a3d749008
 imprint_4 27ecd4e62279bea2 d61ed57bda392081
+kin-guard-evolve_1 709d961f7a38155d 99c9a2533d43b526
+kin-guard-evolve_2 15f5cfc6571af671 e284b1eccf7943cd
+kin-guard-evolve_3 4423f13a7b848dba 293f3b4d8530c7f0
+kin-guard-evolve_4 c07e260d5abf15d5 51fd86a018cee6d0
+kin-guard_1 680e758caf09cd68 cbda2d05d9d77d78
+kin-guard_2 2487cca6f36cd6c1 4fb0fbf869acec22
+kin-guard_3 c33acde1b1904018 eb74179915859dd6
+kin-guard_4 f53acf3c0e4ba358 1556a71f74fdf7d2
 ladder_1 bea502f67f0d08a5 0110ca46677f38ec
 ladder_2 c406782c6f42fc66 92d76694ff6ce4b5
 ladder_3 e6f14d50e0dfd0a2 c52ce81c4e14160d
