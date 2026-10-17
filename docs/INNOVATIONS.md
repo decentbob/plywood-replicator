@@ -12,6 +12,44 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-1302, build)
+
+- **The partner's defence is a closed side, not a lysing one; a ring that pays its head is a public good its cheat
+  outgrows** (NEXT priority 39, second and last slice; IDEAS "A closed side, not a lysing one"). No rule change; `PA3`
+  now enters several kits (`PA3='K1,K2'`, `PA3N` of each). Worlds: `rosette`'s (`PAW=2`, platform `Y@&c@y! C@s!T`,
+  `lysJoint` 2, no copy error, chain cells entered at 10k), 4 seeds, 60k unless said; batches `runs/f1.json` to
+  `f4.json` (NEXT's handoff).
+  - **The lysing partner is a trap** (theory first: deaths return blanks for every lysed triangle, and contact lysis
+    passes back across a bond that is not a joint, so a chain cell that binds `T!` dies with the partner's whole body):
+    `C@s!T!` entered as 10 bodies at 10k beside the chain was gone by 40k in 4 of 4 (`A` took 95-100% in
+    `rosette-escape`), and by 60k without the chain (4 of 4). No check (a negative).
+  - **The close-only partner escapes** (check `rosette-dot`, 3 of 4): `C@s!T.` (a free chain cell cannot bind a `.`
+    side; a copy blank still copies it) took 93-95% of partners by 40k and 95-100% at 60k, the chain gone; in the
+    fourth world it was lost before the chain spread. Without the chain it was lost (4 of 4, no check: the same world as
+    `rosette-escape-c` with another rare type).
+  - **The paying ring** (check `rosette-pay`, 4 of 4): chain cells `t@y!T` (the head's site in place of `s!`) close the
+    same ring of six, whose four outward sides are nursery sites `y!` for any head (the kin guard spares a root carrying
+    `y!`). Rings held at 40k and 60k in 4 of 4; at 60k heads 349-419 and partners 221-290, against 208-281 and 140-174
+    with `t@s!T` (`rosette`) and 521-529 and 425-439 without a chain: the ring raises kids, but its own head stays
+    covered.
+  - **Its cheat wins** (check `rosette-pay-cheat`, 4 of 4): 10 of each chain at 10k: `t@y!T` gone by 40k in 4 of 4,
+    `t@s!T` 348-408 cells at 60k. An occupied `y!` is not copied, and the heads it raises make fronts and partners for
+    every chain: the cost is private, the gain public.
+  - **Under copy error** (`pErr` 0.01, 20 chain cells at 10k, to 120k, `runs/f2.json`): `t@y!T` spread in 2 of 4 and was
+    gone by 40-60k; at 40k in one world its site cheat `t@q!T` (44 cells) had overtaken it (11). `t@s!T` spread in 4 of
+    4 and was gone by 40k (the letter turned to z, E, u, r).
+  - PLATFORM_WATCH
+  - Predictions (NEXT slice record, `docs/NEXT.md` on branch `build-1302` at its first commit): Pa1 yes (the `!`
+    partner did not take the partners; it was lost); Pa0 yes; Pb1 yes (more heads than `rosette` in 4 of 4, fewer than
+    without a chain in 4 of 4); Pb2 yes (4 of 4). Not predicted: the close-only side as the partner's real shield.
+  - Picture: [rosette-pay.png](pictures/rosette-pay.png) (a `t@y!T` world at 40k and one ring with the kids raised on
+    its chain cells).
+  - Commands: `node tri/check.js --cmd rosette-pay rosette-pay-cheat rosette-dot`; the batches in NEXT's handoff;
+    `node tri/census.js --partner FILES`.
+  - Status: a body of six that raises its host's kin (**works**, `rosette-pay`, alone); lost to its cheat (**works** as a
+    negative, `rosette-pay-cheat`); the closed partner side escapes the chain (**works**, `rosette-dot`); the lysing side
+    as a shield (**not**: a trap).
+
 ## 2026-10-17 (autorun run 20261017-0726, build)
 
 - **Rings of six: one front error turns the platform's public partner into a chain that closes on itself; it lives on
