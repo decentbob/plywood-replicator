@@ -280,6 +280,8 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Open: a default above 0 (and the mutagen retired) would change every world's outputs; whether the core or the
   environment should limit parts that bind their own kind (`g@` and `G@` on one part).
 - (x) *A lysis side spares a joint partner that carries the same side* (run 2258): built as `lysJoint: 2` (entry below).
+- (y) *A lysis side spares, on any bond, a partner that carries the same side* (run 20261017-0416): **not proposed**
+  (entry below): a kept partner that passes it binds its own kind.
 - (o) the open relay's one-pass lag: **adopted** in run 1920 together with the joint (RULES Core changes); the
   lineage's false releases (`falseRel`) did not change and have another cause (trace one before any fix).
 - (n) *Bud only after letting go* (run 1721): its oracle `BCGATE` was removed in run 0920 (git `20e9a88`). Organism
@@ -289,6 +291,26 @@ here). Each names its run; an adopted or removed one moves to its dated entry be
   Done: (e), (i), (m) first step (lysis), (p) and (q) removed in run 1921, (t) removed in run 2051, (u) and (w) in run
   2221. Nothing else in the core is unused (RULES, Core inventory, run 2221 coverage); `pBond` is never set below 1 (removing it changes the
   random stream, not the rules: take it with a run that changes outputs anyway).
+
+### Candidate (y): a lysis side spares, on any bond, a partner that carries the same side, 2026-10-17, autorun run 20261017-0416 (explore): not proposed
+NEXT step 93 (partner choice). Derivation: IDEAS "Checking and keeping exclude each other"; runs: INNOVATIONS run 0416.
+1. **Capability.** A body that checks the partner it keeps: the pair `Y@&c@y! C@x!X@&` loses its partner role to any cell
+   with a `C@` front (run 0252), because the front bond is not a joint and reads one letter.
+2. **Can the existing core do it?** No. Binding and closure read one glue pair; contact lysis across a bond that is not
+   a joint lyses whatever is bonded; (x)'s kin check acts across a joint only, and a joint is cut at the first release
+   in which its `&` triangle hears no open front, before a lysis (which needs a whole pass) can cut. So a check bites
+   only on a waiting cell. The one checked partner the core allows is raised (the host's front identical to the
+   partner's site, D1) and leaves when it completes; D1 does not live (16 worlds: it dies, or ends as a mass of
+   waiting kids; nothing keeps its host).
+3. **The rule.** (x) without its joint condition: contact lysis spares a partner that carries a side identical to the
+   lysis side, on every bond. Same reads as (x). It would replace `lysJoint: 2`'s two cases by one.
+4. **Why not.** A kept partner that passes must carry the host's lysis side as well as the complement it binds by, so it
+   catches its own free copies (the host's side catches free cells, so the partner's identical side does too). Run as a
+   throwaway (`lysJoint` 3, not committed: `jt&&(lj===1||lj===2&&kin(u,q))||lj===3&&kin(u,q)` in `derive`'s lysis
+   test), host `Y@&c@!y!` with partner `C@c@!-|` or `C@-|c@!`, line's world, 4 seeds each: the partners fan around one
+   vertex of the host's front until the last front is blocked, every cell hears it and the body freezes at 9-10 cells
+   (0 of 8 alive at 5k). A check on a kept bond costs a fourth side's role on a three-sided cell. Not proposed; a way on
+   is on the keeping side (when a joint lets go), not designed.
 
 ### Candidate (x): a lysis side spares a joint partner that carries the same side, 2026-10-16, autorun run 20261016-2258 (explore)
 NEXT priority 38. Derivation: IDEAS "The nursery's share is the environment's" (this run); runs: INNOVATIONS run 2258.

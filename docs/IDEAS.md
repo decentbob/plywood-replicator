@@ -28,6 +28,52 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Checking and keeping exclude each other: a body checks only the cell it raises (explore run 20261017-0416, 2026-10-17)
+
+NEXT step 93 (partner choice, on paper first), then the one design the argument leaves (D1) and the smallest candidate
+as a throwaway (INNOVATIONS run 0416; [partner-check.png](pictures/partner-check.png)). Notes, not the user's words.
+- **A bond that lasts reads one letter.** A partner reaches a rule only through the side it is bonded by. Binding and
+  closure read one glue pair (with `@`, `.`, spent); contact lysis across a bond that is not a joint lyses whatever is
+  bonded, in every `lysJoint` mode. So the pair's front bond cannot tell X from any cell with a `C@` front: this is why
+  a public partner of a foreign root took the role in run 0252.
+- **A check needs a cell that waits.** The one rule that reads a second feature of a partner is (x)'s kin check, across a
+  joint only. A joint is cut at the first release in which the triangle carrying `&` hears no open front, and lysis cuts
+  only after a whole pass lysed, so the check bites only on a cell that hears an open front for two passes after it
+  binds; a joint between two complete cells is cut before the check acts. **Checking and keeping exclude each other**: a
+  checked bond is a joint to a waiting cell, and a bond that outlasts completion is read by one letter. No body in the
+  core can check the partner it keeps.
+- **The one checked partner is raised, and it leaves.** The argument leaves one design: the host's front is a lysis side
+  identical to the partner's own site, so the host raises its partner there as kin (D1: host `Y@&c@!y!`, partner
+  `C@&c@!-|` or `C@&c@!-`). The partner completes the host's waiting kid (the kid lets go of its parent) and leaves the
+  host when its own site gets a kid. A stranger on the kid's front (a root `C@&` without `c@!`) is cut loose or lysed in
+  the pass the kid lets go, so the kid it completed is a free triangle with its root spent: dead, and the stranger gains
+  nothing. D1 does not live (0 of 8 in the line's world; 0 of 4 with the per-individual hazard or with none: it dies, or
+  ends as a frozen mass of waiting kids that holds all the material): every bond in it is a joint, so nothing keeps the
+  host. Once its kid and its partner have left, its root is spent and it is free, and a free triangle catches nothing.
+  Where partners were short, kin kids waiting on each other's sites fanned around a vertex and closed rings of six, all
+  six fronts open (picture, left): a sink.
+- **A kept partner that passes a kin check catches its own kind.** The smallest candidate that would check a kept
+  partner is (x) without its joint condition (candidate (y): a lysis side spares, on any bond, a partner that carries an
+  identical side). The partner must then carry the host's lysis side beside the complementary side it binds by: a glued
+  side and its complement on one cell, so it catches its own free copies (a close-only side catches no free triangle,
+  and the host's side must catch one). Built as a throwaway (`lysJoint` 3, not committed) with host `Y@&c@!y!` and
+  partner `C@c@!-|` or `C@-|c@!`: the partners fan around one vertex of the host's front (each binds the previous one's
+  side, all sharing the vertex) until the last one's open front faces the host's kids; it stays open, so every cell
+  hears it, nothing completes, and the body froze at 9-10 cells until the hazard (0 of 8 alive; picture, right). A fan
+  whose last front does close closes onto its neighbour and joins the two bodies.
+- **What follows.** Every kept structure in the core is public: any cell with the letter fits (run 2258's public shape
+  and run 0252's public partner are two cases of it). What a lineage owns is what it raises: per generation one
+  triangle, its root and site checked while it waits. Under the guard a head's front is not part of its kin (kin
+  carries the site, the root binds it), so a front error is raised in place: **the front letter, which partner the
+  lineage's kids take, is the guarded lineage's one heritable trait that varies without making cheats**. Partner choice
+  exists only as that letter, every carrier of the complement shares it, and a new letter needs the partner's front to
+  change at once, so the front is frozen while the lineage needs its partner (the lock again, one side over).
+- **For the direction check (rotation 94).** Priority 38 has reached the core's limit for two classes: partners are
+  public, and the smallest change that would check a kept one makes self-binders. Open ways on: (a) take the public
+  partner as given and select on what partners do through place (heredity of combinations is locality, run 1322),
+  from the copy-error end state (one guarded lineage, a rootless partner that drifts in two free sides); (b) a core
+  change on the keeping side (when a joint lets go), not on the checking side: not designed; (c) leave two-class locks.
+
 ## Each completes the other: two nurseries that make each other's fillers only while they wait (build run 20261017-0252, 2026-10-17)
 
 NEXT priority 38's remaining clause (two classes under the guard, `lysJoint: 2`), theory first, then entry tests and

@@ -1,9 +1,9 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-0252, build). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-17 (after autorun run 20261017-0416, explore). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its run
 and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`build-0252`, `explore-2258`, `build-2151`, `build-1902`, `explore-1602`,
+slice record with its predictions is on its run's branch (`explore-0416`, `build-0252`, `explore-2258`, `build-2151`, `build-1902`, `explore-1602`,
 `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check is IDEAS "Eight slices on the
 lock" (run 2151).
 
@@ -11,7 +11,7 @@ lock" (run 2151).
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): every
 cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use them. The 47-type
 organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
-Where the line stands (runs 1351-0252; INNOVATIONS has the numbers, IDEAS the reasoning): recognition is one glue pair
+Where the line stands (runs 1351-0416; INNOVATIONS has the numbers, IDEAS the reasoning): recognition is one glue pair
 and copy error changes one side, so **a lock its carrier needs is frozen** and only a lock its carrier does not need
 turns ("Who pays for a lock"). Public locks turn but the core's trap lyses keys and plugs alike; a trap that does not
 lyse across a joint (`lysJoint` 1, candidate (v); on in the line's world `PAW=2`) guards them. **A lock stays only where
@@ -28,39 +28,40 @@ kin), and the lock's letters froze. Run 0252 ("Each completes the other"): two g
 leaky fronts (`Y@&c@y! C@x!X@&`) complete each other's kids with copies of their own waiting kids and live with no
 filler: **two obligate classes, each with its own heredity**; but a cell that sprays only while it waits never
 out-sprays one that sprays always, so a public partner of a foreign root takes the role at any frequency (the guard
-traps public cells of its own root only), and under copy error a root error makes one.
+traps public cells of its own root only), and under copy error a root error makes one. Run 0416 ("Checking and keeping exclude
+each other"): **no body in the core checks the partner it keeps**: a bond that outlasts completion reads one letter, and
+the kin check bites only across a joint to a waiting cell; the one checked partner is raised on the host's front and
+leaves (D1, dies), and the smallest candidate for a kept one, (y), makes partners that catch their own kind.
 
-**Handoff status (autorun run 20261017-0252, build): done; no rule, demo or structure change; checks `mutual-pair`,
-`mutual-pair-a`, `mutual-filler`, `mutual-trap`, `mutual-pair-evolve` (88 checks)** (INNOVATIONS 2026-10-17; IDEAS "Each
-completes the other"; the slice record with predictions P1-P10 is this file at `99ea2f5`, on branch `build-0252`).
-- Theory: a partner that catches a head by its root lets go (the root is `&`); the lasting partner bonds front to front,
-  so it is the catcher-shaped nursery `X@&C@x!`; its kids need free heads, made only by a leaky front while its kid waits.
-- The pair `Y@&c@y! C@x!X@&` lives alone (4 of 4), every cell a guarded nursery, about half of each class's cells waiting
-  kids (about 250 complete bodies against about 360 for nursery and filler); anchored fronts die at once.
-- Entry tests (4 of 4 each): the catcher nursery cannot enter the filler world; a public partner of a foreign root (Z
-  filler, Q head) takes its role in the pair; public cells of the pair's own roots (Y head, X catcher) are lost, lysed
-  on the empty sites of their root. Under copy error both locks held 30-115k, then one was lost to a root-error public
-  partner, never reborn to 480k (the partner lost its root altogether).
-- Nothing is running. Worlds regenerate with `node tri/batch.js runs/NAME.json` from these files (env always `PAW` 2,
-  `TRI_NOPIC` 1, `TRI_PARAMS` `{"pErr":1e-9,"lysJoint":2}`, `PA2` `Y@&c@y! C@x!X@&` unless said; entries `PA3N` 10, `PA3T`
-  20000):
-  - `m1.json` (40k): `yf` (`PA2` `Y@&c@y! C@|-Z@&`), `yfB` (and `PA3` `Y@&c@y! C@|x!X@&`), `afB` (`PA2` `Y@&c@|y! C@|-Z@&`,
-    `PA3` `Y@&c@|y! C@|x!X@&`), `mu`, `mu1` (`PA2` `Y@&c@y! C@|x!X@&`); seeds 1-4
-  - `m2.json` (60k): `mue` (`pErr` 0.01, 120k), `muF` (`PA3` `Y@&c@y! C@|-Z@&`), `muP` (`PA3` `Y@&c@|- C@x!X@&`), `yfBL` and
-    `yfMU` (40k, `PA2` as `yf`, `PA3` the pair; `yfMU` with `PA3T` 100), `mua` (anchored pair, 20k)
-  - `m3.json` (60k): `muX` (`PA3` `Y@&c@y! C@|-X@&`), `muQ` (`PA3` `Q@&c@|- C@x!X@&`); `m4.json`: `mue` to 480k
-  - the probe (open fronts per class, fates of free head copies) was a throwaway hook, not committed: its numbers are in
-    INNOVATIONS.
+**Handoff status (autorun run 20261017-0416, explore): done; no rule, demo, structure or check change; candidate (y)
+written and not proposed** (INNOVATIONS 2026-10-17 run 0416; IDEAS "Checking and keeping exclude each other"; RULES (y);
+the slice record with predictions P1-P3 is this file at `5e29fa2` on branch `explore-0416`).
+- Theory: binding and closure read one glue pair, contact lysis on a bond that is not a joint lyses whatever it holds,
+  and (x)'s kin check reads a second feature only across a joint and only on a cell that hears an open front for two
+  passes (the joint is cut at the release after completion, before lysis can cut). So a checked bond is a joint to a
+  waiting cell and a kept bond is read by one letter; every kept structure is public.
+- D1, the one checked partner (host `Y@&c@!y!` raises `C@&c@!-|` or `C@&c@!-` on its front as kin): dies in the line's
+  world (0 of 8 at 40k); with the per-individual hazard or none it dies or ends as a frozen mass of waiting kids (16
+  worlds). Every bond is a joint, so nothing keeps the host. A stranger on the kid's front kills the kid.
+- Candidate (y) (kin check on every bond) as a throwaway (`lysJoint` 3, not committed; the patch is in RULES (y) item 4):
+  a kept partner must carry the host's side, so it catches its own copies; the fan freezes at 9-10 cells (0 of 8).
+- Under the guard a head's front is not part of its kin, so the front letter (which partner the kids take) is the
+  guarded lineage's one heritable trait that varies without cheats; it is frozen while the lineage needs its partner.
+- Nothing is running. Worlds regenerate with `node tri/batch.js runs/NAME.json` (env always `PAW` 2, `TRI_NOPIC` 1,
+  `TRI_PARAMS` `{"pErr":1e-9,"lysJoint":2}`):
+  - `p1.json` (40k): `da` (`PA2` `Y@&c@!y! C@&c@!-|`), `db` (`PA2` `Y@&c@!y! C@&c@!-`); seeds 1-4
+  - `p2.json` (30k, `PA2` as `db`): `e1` (`PAHU` 2), `e0` (`PAHT` 1e9), `z1` and `z2` (`PAHT` 1e9, `PA3N` 10, `PA3T` 10000, `PA3`
+    `Y@&c@!y! C@&-|-` and `Y@&c@!y! C@&z@|-`)
+  - `p3.json` (20k, `lysJoint` 3 on a patched copy of `tri/`, `node runs/ytri/batch.js`): `r1` (`PA2` `Y@&c@!y! C@c@!-|`),
+    `r2` (`PA2` `Y@&c@!y! C@-|c@!`)
 
-**Next step (rotation 93, explore): partner choice, on paper first.** The pair's weakness is that the bond between its
-classes is a front bond, which no rule reads; the guard reads only joints, and a joint lets go when its cell completes.
-Argue whether any body in the core can check its partner (a cell has three sides, and in the pair all three are used:
-root, front, site; a partner's identity reaches a rule only through the side it is bonded by, the complement of the
-front, which carries no information): if not, write the smallest candidate that would (RULES, Core changes), or take the
-end state of the copy-error worlds as the next base: one guarded lineage with a rootless public partner (`C@s!T`,
-`C@|R!I`) that varies in two free sides without making cheats, the place where a function on the partner (priority 31's
-shape, 25's length) could evolve. The direction check (review-intent, rotation 94) should weigh the obligate pair against
-the frozen lock; the core review (rotation 95) decides (x).
+**Next step (rotation 94, review-intent): the direction check.** Weigh priority 38 as it stands: the guard keeps one
+lineage's lock under copy error (frozen), two obligate classes live (run 0252) but a kept partner is public in the core
+(this run), so two-class locks have reached the core's limit. Choose the line's next vehicle: (a) the public partner as
+given, selecting on what partners do through place (heredity of combinations is locality, IDEAS run 1322), from the
+copy-error end state (one guarded lineage with a rootless partner `C@s!T`, `C@|R!I` that drifts in two free sides:
+`node tri/check.js --cmd mutual-pair-evolve`, run to 240k); (b) a core change on the keeping side (when a joint lets go),
+not designed; (c) leave locks for another capability (ROADMAP backlog). The core review (rotation 95) decides (x).
 
 ## Priorities
 
@@ -68,8 +69,9 @@ Done 1-24, 28-30, 32-34, 36 and 37: ROADMAP backlog A (each with its run and che
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (set by review-intent run 2151; since then 32, 36, 37 and 34 done, 38 set by run 1227, its first step done in
-run 1902, its second in run 20261016-2151, its third in run 20261016-2258, its fourth in run 20261017-0252):
-38. [93 explore] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier",
+run 1902, its second in run 20261016-2151, its third in run 20261016-2258, its fourth in run 20261017-0252, partner
+choice settled on paper in run 20261017-0416):
+38. [94 review-intent] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier",
     "The catcher", "The lock is reborn from its cheats"). Each class must gain from the other more than from raising
     itself. Run 1602's candidate: a nursery cell (root X, own site x!, copied only there) and its filler (another root,
     a plain copied side, made only by being caught on a nursery front) need each other; under copy error the two
@@ -80,7 +82,9 @@ run 1902, its second in run 20261016-2151, its third in run 20261016-2258, its f
     environment's (crowding is reach), the recess is not buildable; candidate (x) (`lysJoint: 2`) keeps the lock under
     copy error and freezes it. Run 0252 (fourth step): two guarded nurseries that complete each other's kids live without
     a filler (two obligate classes), but a public partner of a foreign root takes either role at any frequency, and
-    copy error makes one. Next: partner choice on paper (the next step above).
+    copy error makes one. Run 0416 (explore): partner choice on paper: no body checks the partner it keeps (a kept bond
+    reads one letter; the kin check bites only across a joint to a waiting cell); a raised partner (D1) dies; candidate
+    (y) makes self-binders. Next: the direction check (the next step above).
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -96,7 +100,7 @@ diets than blanks (run 1150's R* rule again).
 Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 2151): 93 explore, 94 review-intent, 95 core-review.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) built as the option `lysJoint: 2` in run
-2258, for the next core review; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
+2258, for the next core review; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
 (k) and the done ones, (u) and (w) in run 2221).
 
 **Open follow-ups (not priorities; take when a run's kind fits).**
