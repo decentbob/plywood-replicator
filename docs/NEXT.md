@@ -81,6 +81,11 @@ Stop: no rule change unless the runs show a sink the core cannot leave.
   - P8 the plain kin entered into the root-guarded world: below 10% of cells at 60k in 4 of 4.
   - P9 control, the anchored root `Y@&|y@!y!` (neutral: no rule reads an anchor on a bonded root) entered the same
     way: below 10% at 60k in 3 of 4.
+  - Read (k3): P7 **no** (the guarded form lost 4 of 4; 187 cells at 20k in one world, then gone), P8 yes (4 of 4), P9
+    yes (4 of 4). Entered at 2%, each form holds its world, as the neutral control does. Next, an even start
+    (`runs/k4.json`: 10 bodies of each at step 1, both orders, 4 seeds each). P10: if the asymmetry is weak (kin are
+    raised mostly by copies made in place), the guarded form has the majority at 60k in 3 to 5 of 8, as drift would
+    give; 6 or more of 8 would mean it is selected once common.
 
 ## Priorities
 
