@@ -25,7 +25,10 @@ not statistics.
   - **Mechanism** (independent review's observation hook, `copy-error` seed 1, 20k): 2307 passes in which the rule spared
     a joint partner, 1819 of them the one-error head `Z@&c@|z!` raised on its own kind, the rest on the second cells'
     `z!` traps: a guarded nursery made by one mark error.
-  - Picture: `docs/pictures/kin-rule.png` (heads by root letter in `seal-evolve`'s worlds, main above, the trial below).
+  - Picture: `docs/pictures/kin-rule.png` (heads by root letter in `seal-evolve`'s worlds, main above, the trial below):
+    the commons episode (I, green) still comes and goes early, then the guarded nursery (red line: heads whose own side
+    is `z!`) rises to nearly every head between 100k and 240k in 4 of 4, the plain nursery (blue line) falls to 0; on
+    main the red line stays at 0. `tri/linechart.js` fixed (its plain mode failed since run 1902's `LC_SHAPE`).
   - Command: the trial is `git checkout 4aa1a96 && node tri/check.js race seal-evolve` (with `CHECK_SAVE=dir` for the
     chart: `LC_T=240000 node tri/linechart.js out.png dir/seal-evolve_*.txt`).
   - Status: **not adopted**; (x) stays the option mode `lysJoint: 2`.
