@@ -1,9 +1,9 @@
 # Next instance: start here
 
-State on 2026-10-16 (after autorun run 20261016-2258, explore). Read AGENTS.md first (rules of work), then this file.
+State on 2026-10-17 (after autorun run 20261017-0252, build). Read AGENTS.md first (rules of work), then this file.
 History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its run
 and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`explore-2258`, `build-2151`, `build-1902`, `explore-1602`,
+slice record with its predictions is on its run's branch (`build-0252`, `explore-2258`, `build-2151`, `build-1902`, `explore-1602`,
 `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check is IDEAS "Eight slices on the
 lock" (run 2151).
 
@@ -11,7 +11,7 @@ lock" (run 2151).
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): every
 cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use them. The 47-type
 organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
-Where the line stands (runs 1351-2258; INNOVATIONS has the numbers, IDEAS the reasoning): recognition is one glue pair
+Where the line stands (runs 1351-0252; INNOVATIONS has the numbers, IDEAS the reasoning): recognition is one glue pair
 and copy error changes one side, so **a lock its carrier needs is frozen** and only a lock its carrier does not need
 turns ("Who pays for a lock"). Public locks turn but the core's trap lyses keys and plugs alike; a trap that does not
 lyse across a joint (`lysJoint` 1, candidate (v); on in the line's world `PAW=2`) guards them. **A lock stays only where
@@ -24,37 +24,43 @@ plan in the core changes it; a recess cannot be built (the two-wall notch is the
 public (fillers); **candidate (x)**, a lysis side that spares across a joint only a partner carrying the identical side
 (`lysJoint: 2`, an option), lets no head that does not raise itself be raised on a guarded site: under copy error the
 lock held in every census to 480k (4 of 4), the nursery added flux to place (its front lost the anchor and sprays
-kin), and the lock's letters froze.
+kin), and the lock's letters froze. Run 0252 ("Each completes the other"): two guarded nurseries front to front with
+leaky fronts (`Y@&c@y! C@x!X@&`) complete each other's kids with copies of their own waiting kids and live with no
+filler: **two obligate classes, each with its own heredity**; but a cell that sprays only while it waits never
+out-sprays one that sprays always, so a public partner of a foreign root takes the role at any frequency (the guard
+traps public cells of its own root only), and under copy error a root error makes one.
 
-**Handoff status (autorun run 20261016-2258, explore): done; one core change as an option (`lysJoint: 2`, default 0:
-no output changes)** (INNOVATIONS 2026-10-16, explore; IDEAS "The nursery's share is the environment's"; RULES Core
-changes, candidate (x); the slice record with predictions P1-P7 is this file at `f5f5229`, on branch `explore-2258`).
-- T1 restated and measured (`tri/raceprobe.js` 'fate:' lines, batch `fz`): c = 0.55-0.66 in 10 of 10 worlds (P1 with c 1
-  failed), pi/rB 1.28-1.60, rho 4.4e-3 base, 2.1e-3 PADI 50, 8.0e-3 PADI 200, 2.2e-3 twice the area, 2.4e-3 twice the
-  material (P2-P4 yes): crowding is the reach term.
-- The recess on paper: closed (lattice search, picture `recess.png`).
-- Candidate (x): the glue-only form failed under copy error (0 of 4: the falsebeard `Y@&c@|y.!`); the identical-side form:
-  P5 yes (cheats lost, nursery 566-570), P6 yes (24 of 24 censuses, 4 of 4; 96 of 96 to 480k), P7 yes (the public world
-  dies by 10k). Checks `kin-guard`, `kin-guard-evolve` (83 checks); the suite on the branch: 83 of 83 pass (two parts, 86 and
-  85 minutes), 287 worlds the same as main's digests, 8 new.
+**Handoff status (autorun run 20261017-0252, build): done; no rule, demo or structure change; checks `mutual-pair`,
+`mutual-pair-a`, `mutual-filler`, `mutual-trap`, `mutual-pair-evolve` (88 checks)** (INNOVATIONS 2026-10-17; IDEAS "Each
+completes the other"; the slice record with predictions P1-P10 is this file at `99ea2f5`, on branch `build-0252`).
+- Theory: a partner that catches a head by its root lets go (the root is `&`); the lasting partner bonds front to front,
+  so it is the catcher-shaped nursery `X@&C@x!`; its kids need free heads, made only by a leaky front while its kid waits.
+- The pair `Y@&c@y! C@x!X@&` lives alone (4 of 4), every cell a guarded nursery, about half of each class's cells waiting
+  kids (about 250 complete bodies against about 360 for nursery and filler); anchored fronts die at once.
+- Entry tests (4 of 4 each): the catcher nursery cannot enter the filler world; a public partner of a foreign root (Z
+  filler, Q head) takes its role in the pair; public cells of the pair's own roots (Y head, X catcher) are lost, lysed
+  on the empty sites of their root. Under copy error both locks held 30-115k, then one was lost to a root-error public
+  partner, never reborn to 480k (the partner lost its root altogether).
 - Nothing is running. Worlds regenerate with `node tri/batch.js runs/NAME.json` from these files (env always `PAW` 2,
-  `TRI_NOPIC` 1, `PA2` `Y@&c@|y! C@|-Z@&`):
-  - `fz.json` (60000 steps, `TRI_PARAMS` `{"pErr":1e-9}`, `PA3N` 10, `PA3T` 20000, `PA3` `Y@&c@|- C@|-Z@&`, `RP_T0` 25000,
-    `NODE_OPTIONS` `-r <abs path>/tri/raceprobe.js`): `base`, `mb` (`PAB` 2000), `d50`, `d200` (`PADI`), `ma` (`PAB` 2000,
-    `PAS` 71); seeds 1-2
-  - `kg2.json`: `p5` as `fz`'s base with `TRI_PARAMS` `{"pErr":1e-9,"lysJoint":2}`, 80000 steps; `p6` without `PA3`/probe,
-    `TRI_PARAMS` `{"pErr":0.01,"lysJoint":2}`, 120000 steps; seeds 1-4. `kgl.json`: `p6` to 480000. The glue-only form is
-    in git (this branch, commit `24de8a9`).
+  `TRI_NOPIC` 1, `TRI_PARAMS` `{"pErr":1e-9,"lysJoint":2}`, `PA2` `Y@&c@y! C@x!X@&` unless said; entries `PA3N` 10, `PA3T`
+  20000):
+  - `m1.json` (40k): `yf` (`PA2` `Y@&c@y! C@|-Z@&`), `yfB` (and `PA3` `Y@&c@y! C@|x!X@&`), `afB` (`PA2` `Y@&c@|y! C@|-Z@&`,
+    `PA3` `Y@&c@|y! C@|x!X@&`), `mu`, `mu1` (`PA2` `Y@&c@y! C@|x!X@&`); seeds 1-4
+  - `m2.json` (60k): `mue` (`pErr` 0.01, 120k), `muF` (`PA3` `Y@&c@y! C@|-Z@&`), `muP` (`PA3` `Y@&c@|- C@x!X@&`), `yfBL` and
+    `yfMU` (40k, `PA2` as `yf`, `PA3` the pair; `yfMU` with `PA3T` 100), `mua` (anchored pair, 20k)
+  - `m3.json` (60k): `muX` (`PA3` `Y@&c@y! C@|-X@&`), `muQ` (`PA3` `Q@&c@|- C@x!X@&`); `m4.json`: `mue` to 480k
+  - the probe (open fronts per class, fates of free head copies) was a throwaway hook, not committed: its numbers are in
+    INNOVATIONS.
 
-**Next step (rotation 92, build): two classes under the guard (priority 38's remaining clause).** With `lysJoint: 2` no
-cheat can use a nursery's site, so the question becomes the one priority 38 started from: can two classes need each
-other more than they need themselves? Theory first: two guarded nurseries of different root letters on one filler
-pool share blanks and fillers and nothing else, so expect exclusion (classes are at most the limiting resources) unless
-one makes a part the other uses. The leaky front (`Y@&c@y!`, evolved in 4 of 4) makes free copies of the nursery: a
-second class whose front catches them (a front `y@|` binds a free head's root `Y@&`) would live on them. Design one such pair on
-paper, enter it rare and common (10 bodies at 20k, as `mutualist-rare` / `-major`), with and without copy error. The
-core review (candidate (x): adopt, keep an option or remove) is the `core-review` run's; the direction check
-(review-intent, rotation 100) should weigh the frozen lock against the transient one.
+**Next step (rotation 93, explore): partner choice, on paper first.** The pair's weakness is that the bond between its
+classes is a front bond, which no rule reads; the guard reads only joints, and a joint lets go when its cell completes.
+Argue whether any body in the core can check its partner (a cell has three sides, and in the pair all three are used:
+root, front, site; a partner's identity reaches a rule only through the side it is bonded by, the complement of the
+front, which carries no information): if not, write the smallest candidate that would (RULES, Core changes), or take the
+end state of the copy-error worlds as the next base: one guarded lineage with a rootless public partner (`C@s!T`,
+`C@|R!I`) that varies in two free sides without making cheats, the place where a function on the partner (priority 31's
+shape, 25's length) could evolve. The direction check (review-intent, rotation 94) should weigh the obligate pair against
+the frozen lock; the core review (rotation 95) decides (x).
 
 ## Priorities
 
@@ -62,8 +68,8 @@ Done 1-24, 28-30, 32-34, 36 and 37: ROADMAP backlog A (each with its run and che
 (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
 competition test.
 Open (set by review-intent run 2151; since then 32, 36, 37 and 34 done, 38 set by run 1227, its first step done in
-run 1902, its second in run 20261016-2151, its third in run 20261016-2258):
-38. [92 build] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier",
+run 1902, its second in run 20261016-2151, its third in run 20261016-2258, its fourth in run 20261017-0252):
+38. [93 explore] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier",
     "The catcher", "The lock is reborn from its cheats"). Each class must gain from the other more than from raising
     itself. Run 1602's candidate: a nursery cell (root X, own site x!, copied only there) and its filler (another root,
     a plain copied side, made only by being caught on a nursery front) need each other; under copy error the two
@@ -72,7 +78,9 @@ run 1902, its second in run 20261016-2151, its third in run 20261016-2258):
     cheat wins the site by flux (one encounter against two), the nursery's number is set by the free cheats' life, area
     and access; no design within the core keeps the cheat off the site. Run 2258 (third step): the share is the
     environment's (crowding is reach), the recess is not buildable; candidate (x) (`lysJoint: 2`) keeps the lock under
-    copy error and freezes it. Next: two classes under the guard (the next step above).
+    copy error and freezes it. Run 0252 (fourth step): two guarded nurseries that complete each other's kids live without
+    a filler (two obligate classes), but a public partner of a foreign root takes either role at any frequency, and
+    copy error makes one. Next: partner choice on paper (the next step above).
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
     two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
@@ -85,7 +93,7 @@ Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in t
 core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
 diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 2151): 91 explore, 92 build, 93 explore.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 2151): 93 explore, 94 review-intent, 95 core-review.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) built as the option `lysJoint: 2` in run
 2258, for the next core review; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
@@ -156,6 +164,10 @@ RP_T0=25000 NODE_OPTIONS='-r ./tri/raceprobe.js' ... # run 2151: 'race:' lines e
                                                    # rho, c's births ratio against the N count)
 node tri/check.js --cmd kin-guard kin-guard-evolve   # run 2258: candidate (x), lysJoint 2 (TRI_PARAMS): the nursery's
                                                    # cheats lost; under copy error the lock in every census
+node tri/check.js --cmd mutual-pair mutual-pair-a mutual-filler mutual-trap mutual-pair-evolve
+                                                   # run 0252: two leaky guarded nurseries front to front, no filler;
+                                                   # anchored control; a foreign-root public filler takes the role; a
+                                                   # public head of root Y is lost; copy error to 120k
 node tri/census.js --shape runs/x.txt              # run 1902: cells by shape (H front c@, K front C@) and own side (G
                                                    # guarded nursery, N plain nursery, P plain, S another letter's site);
                                                    # chart: LC_SHAPE=1 node tri/linechart.js out.png FILES

@@ -28,6 +28,55 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## Each completes the other: two nurseries that make each other's fillers only while they wait (build run 20261017-0252, 2026-10-17)
+
+NEXT priority 38's remaining clause (two classes under the guard, `lysJoint: 2`), theory first, then entry tests and
+copy error (INNOVATIONS run 0252). Notes, not the user's words.
+- **A partner must hold the head by a side without `&`.** NEXT proposed a class whose front catches a free head by its
+  root (`y@|` on `Y@&`). The root carries `&`, so the caught head lets go as soon as its own front is filled, and the
+  catcher is then a lone, free triangle unless a kid sits on its site; a free triangle is never copied and catches
+  nothing. The bond that lasts is front to front: the partner is a catcher-shaped cell, and the one that is also a class
+  is the guarded catcher nursery `X@&C@|x!` (the public filler `Z@&C@|-` with its plain side a lock of its own root).
+- **A free head exists only where a front is copied, and the leaky front copies it only while it waits.** The anchored
+  pair (`Y@&c@|y! C@|x!X@&`) dies at once (run 1602: nobody makes a free copy of either). With both fronts unanchored
+  (`Y@&c@y! C@x!X@&`, the leaky front evolved in run 2258), a kid that waits on its parent's site has its open front
+  copied, and the copy is exactly what the other class's waiting kids need. **Each class makes the other's filler, and
+  only while one of its own kids is hungry**: a source in proportion to use (IDEAS run 1850), now between two lineages.
+  Every body is one Y and one X, each raised in place by its own parent and completed by a copy of the other class's
+  waiting kid: two lineages, each inherited apart, that live only together. Without a filler it lives (4 of 4), but
+  slowly: about half of each class's cells are waiting kids (nearly every site holds one), about 250 complete bodies
+  against about 360 for the nursery with its public filler, because a kid is completed only by a copy that another
+  hungry kid made.
+- **But a constant source beats a source on demand.** A public filler of a foreign root entered rare took the catcher
+  role (4 of 4), and beat the pair even as the minority (3 of 4). Roughly, per capita (mass action, every copied side
+  spraying alike): a public filler is born at k wY (its plain side always sprays; wY the waiting Y kids), an X cell at
+  about 2 k wY (wX/nX) (born as a kid that catches a Y copy, or as its own waiting kid's copy caught by a Y kid; wX/nX
+  the share of X cells that are waiting kids). A waiting kid sits on an adult of its class, so wX/nX is at most about
+  one half (0.48-0.49 measured): **a cell that sprays only while it waits never out-sprays one that sprays always**,
+  at any frequency, and the public filler's copies are not trapped (below). Once it holds the role, Y kids wait less,
+  the Y spray dries up and the X kids starve.
+- **The guard is a trap for its root's public cells.** Under `lysJoint: 2` a guarded site lyses any non-kin part that
+  binds it by its root, so a public head of root Y (`Y@&c@|-`) or a public catcher of root X (`X@&C@|-`), entered rare,
+  is lost (4 of 4 each): its free copies land on the many empty sites of their root and are lysed. A public head of a
+  foreign root (`Q@&c@|-`) or a public filler of root Z takes the role (4 of 4 each). The root letter decides, not the
+  shape. So a class's own one-error cheats (a site error keeps the root) die on its sites, and the dangerous ones are
+  root errors.
+- **Under copy error.** Both locks held until 30, 40, 80 and 115k (4 of 4), then one class lost its lock to a public
+  partner made by a root error (`C@s!T@&`, `B!r@&C@`), or by a root that lost its attach mark (`Y&c@y.!`), never by a
+  site error while the guarded sites were common; the other class kept its guarded nursery. To 480k the lost lock was
+  never reborn (0 of 4): the partner lineage went on to lose its root altogether (`C@s!T`, `C@|R!I`, `Pc@y.!`: a front
+  and two copied sides, 3 of 4 by 150-245k), and a cell with no root is two errors from a nursery, not one (run 1902's
+  rebirth needs a root error on a cell that has a root). The fourth world died at 340k after a cell of root Y with
+  another front (`I@y!Y@&`) spread: it carries `y!`, so the Y sites raise it as kin; the guard reads the site, not the
+  shape.
+- **What it gives the goal.** The first two classes in the line that each need the other and each keep their own
+  heredity, with no filler: a symbiosis of two lineages. It is slower than the nursery with a public filler and loses
+  the partner role to one, at any frequency; and the partnership itself is unguarded: the bond between the classes is a
+  front bond, which the guard does not read. A partner choice would need a joint between the two cells (the only bond
+  the guard reads), and a joint lets go when its cell completes. Under copy error the end state is one guarded lineage
+  with a rootless public partner that drifts freely: two lineages, one of them free to vary in every side but its
+  front, which is where variation without a cheat problem could build next.
+
 ## The nursery's share is the environment's: crowding is reach, shape is public, and a guard that knows its own (explore run 20261016-2258, 2026-10-16)
 
 NEXT priority 38 (close T1's crowding gap, then the recess on paper), then core-change candidate (x) (RULES; INNOVATIONS

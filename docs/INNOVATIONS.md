@@ -12,6 +12,51 @@ at `a2f3914` (removed in run 20261005-0251, cleanup); `budcycle`'s `BCLK`, `BCH`
 and `PADL` at `25c68b9` (removed in run 20261007-2051, core-review); the demo `pool` (`POOLB`, `POOLISO`) at `9556170` (removed in run 20261008-1222, cleanup). The demos `copy`, `imprint g/m/p` and `budcycle`, founder strands (`createWorld`'s founders) and the option `lysOneWay` at `1284bb4` (removed with chain copying in run 20261008-2221, core-review). Results are from one or a few worlds; they show mechanisms,
 not statistics.
 
+## 2026-10-17 (autorun run 20261017-0252, build)
+
+- **Each completes the other: two guarded nurseries front to front that make each other's fillers only while their kids
+  wait; the guard traps its root's public cells, but a public partner of a foreign root takes the role** (NEXT priority
+  38, fourth step; IDEAS "Each completes the other"). No rule, demo or structure change. Worlds: `PAW=2`, `lysJoint` 2,
+  `pErr` 1e-9 unless said, 40-60k, 4 seeds; read by shape (`census.js --shape`).
+  - **Theory first.** A partner that catches a free head by its root (`y@|` on `Y@&`, NEXT's proposal) is transient: the
+    root carries `&` and lets go once the head's front is filled. The lasting bond is front to front, so the partner
+    class is the catcher-shaped guarded nursery `X@&C@x!`; its kids need free heads, which exist only where a head's
+    front is copied: the leaky front of run 2258, copied only while its kid waits.
+  - **The pair** `Y@&c@y! C@x!X@&` (both fronts leaky, no filler): alive 4 of 4 at 40k, Y 490-517 and X 475-494 cells,
+    every cell of both shapes a guarded nursery; each class's kids are completed only by free copies of the other
+    class's waiting kids, so every body is one of each and each lineage is raised in place. A throwaway probe (free head
+    copies by first bond, and open fronts sampled every 500 steps from 15k, seeds 1-2): 48-49% of each class's cells are
+    waiting kids (nearly every site holds one), so about 250 complete bodies against about 360 for the nursery with its
+    public filler (`Y@&c@y! C@|-Z@&`, 42% of its heads waiting); of the head copies that bind, 19% are caught by waiting
+    X kids' fronts (the rest are kids raised in place). With anchored fronts (`Y@&c@|y! C@|x!X@&`) dead by 5k (4 of 4); with
+    only the head's front leaky alive, every head's site holding a kid that never completes (Y 576-606, X 328-348).
+  - **Entry tests.** The catcher nursery entered rare (10 bodies on leaky heads at 20k) into the nursery-and-filler world
+    is lost by 25k (4 of 4; also with its front leaky); the pair entered as the majority (10 bodies at step 100 beside one
+    filler founder) loses to the filler in 3 of 4 by 20k. Into the pair's world: a public filler of root Z (`Z@&C@|-`)
+    takes the catcher role, X lost by 35-55k (4 of 4); a public head of root Q (`Q@&c@|-`) takes the head role, Y lost by
+    45k (4 of 4); a public head of root Y (`Y@&c@|-`) and a public catcher of root X (`X@&C@|-`) are lost and the pair holds
+    (4 of 4 each). **The root letter decides, not the shape**: a guarded site lyses a non-kin part bound by its root, so
+    public cells of a guarded root die on its empty sites (the guard is a trap for them).
+  - **Under copy error** (`pErr` 0.01, to 480k, 4 seeds): both locks on most of their shape's cells until 30, 40, 80 and
+    115k; then one class lost its lock to a public partner made by a root error (`C@s!T@&`, `B!r@&C@`) or a root without
+    its attach mark (`Y&c@y.!`), and the other kept its nursery on every cell of its shape. The lost lock was not reborn
+    (0 of 4): the partner lineage lost its root altogether (`C@s!T`, `C@|R!I`, `Pc@y.!`) by 150-245k in 3 of 4; the
+    fourth world died at 340k after a Y-root cell with another front (`I@y!Y@&`, raised on Y's sites as kin) spread.
+  - Predictions (NEXT slice record, `docs/NEXT.md` at `99ea2f5` on branch `build-0252`): P1 yes, P2 no, P3 yes (shows
+    nothing: P2 failed), P4 yes (its first reading, 1.3x the bodies, was a census artefact: corrected), P5 yes, P6 yes,
+    P6b no, P7 yes, P8 yes, P9 yes, P10 yes.
+  - Picture: [mutual-pair.png](pictures/mutual-pair.png) (the pair's world at 20k, Y heads red, X catchers blue; a zoom
+    with kids waiting on their parents' sites).
+  - Commands: `node tri/check.js --cmd mutual-pair mutual-pair-a mutual-filler mutual-trap mutual-pair-evolve`; the
+    batches' JSON in NEXT's handoff.
+  - Checks: `mutual-pair` (every cell of both shapes a guarded nursery, 400 or more each at 40k), `mutual-pair-a`
+    (anchored: dead by 5k), `mutual-filler` (X lost, Z fillers 200 or more at 60k), `mutual-trap` (the pair holds at 60k),
+    `mutual-pair-evolve` (both locks to 25k or longer; at 120k one shape guarded on more than 80% and the other kept);
+    digests written.
+  - Status: two obligate classes with their own heredity (**works**, `mutual-pair`); the guard as a trap for its root's
+    public cells (**works**, `mutual-trap`, `mutual-filler`, 2 more entry tests without a check); the pair as a stable
+    partnership (**not yet**: a public partner of a foreign root takes the role at any frequency, and copy error makes one).
+
 ## 2026-10-16 (autorun run 20261016-2258, explore)
 
 - **The nursery's share is the environment's; a guard that spares only the same side keeps the lock under copy error**
