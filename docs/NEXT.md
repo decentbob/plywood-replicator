@@ -56,6 +56,11 @@ line makes in a lifetime. So the crossing is near 1/c ~ 1/a (the wait for a part
 `C@s!T|`, `Y@&cy@!` entered as 10 bodies at 10k takes the platform's world (3 of 4 or more), and the platform entered
 into its world is lost (3 of 4 or more): the reverse of run 1406. P4: `Y@&c@y@!` entered into the platform's world with
 `C@s!T|` is lost (3 of 4 or more): waiting for both never pays.
+**Follow-up predictions (written after the entries, before the copy-error batch `runs/g7.json`: `pErr` 0.01, `PADI`
+25, partner `C@s!T|`, to 240k).** P5: from the platform, `Y@&cy@!` (two errors away, through the losing `Y@&c@y@!`)
+does not take the world in 3 of 4. P6: from `Y@&cy@!`, the head keeps its form (no `@` regained on its front) in 4 of 4.
+P7: the partner's anchor is lost (a partner copied at two sides takes most partners) in 3 of 4 or more of the 8 worlds,
+so the scarcity does not hold by itself.
 
 **Handoff status (autorun run 20261017-1406, explore): priority 40 done (progressed); no core change.** Slice record
 with predictions in `docs/NEXT.md` at `735e46e` (branch `explore-1406`; P5, P6 added before their batches); INNOVATIONS
