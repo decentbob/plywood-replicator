@@ -56,6 +56,10 @@ Predictions (batch `runs/e1.json`: `PAW=2`, `lysJoint` 2, `pErr` 1e-9, 60k, seed
 - P4 `w` holds fewer heads than `p` (0.5-0.9 of it): its waiting site is no copy side for most of a kid's life, and the
   whole-body hazard takes mother and daughter together.
 
+- P5 (written after e1 and the first half of e2, before e3; batch `runs/e3.json`, 60k, kits entered at 10k): the two
+  heads are strangers to each other's guard (`y@!` against `y!`), so each one's kids are lysed on the other's sites and
+  the common one wins: the entered kind is lost in at least 3 of 4 in each job (`wi`/`pi` 10 bodies, `wh`/`ph` 100).
+
 **Handoff status (autorun run 20261017-1302, build): priority 39's second and last slice done (progressed).** Theory,
 then entry tests on `rosette`'s world (4 seeds, 60k) and one copy-error watch; slice record with predictions in
 `docs/NEXT.md` at `5b9516d` (branch `build-1302`); INNOVATIONS and IDEAS ("A closed side, not a lysing one") have it all.
