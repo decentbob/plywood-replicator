@@ -28,6 +28,49 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## What a lineage owns is what it raises: the lock line at the core's limit; next, growth on the guarded platform (direction check, review-intent run 20261017-0456, 2026-10-17)
+
+Weighed after runs 2221-0416 (eleven runs; the last direction check was run 2151, "Eight slices on the lock"). Notes,
+not the user's words.
+- **What the line achieved.** Run 2151's order was done: (v) and (w) settled and chain copying retired (2221), the
+  line's world as a preset (0727), the catcher (1602), duplication and divergence as two locks on one carrier (1227).
+  Then six slices on one priority (38: 1902, 2151, 2258, 0252, 0416, with 1227 before it) asked for two classes that
+  keep their locks under copy error. They left concepts that hold beyond this line: a lock goes to the bearer it pays
+  soonest; a lock is reborn from its cheats; one encounter against two (flux beats place); the nursery's share is the
+  environment's; a guard that knows its own (candidate (x)) holds a lock under copy error (24 of 24 censuses), and
+  freezes it; two obligate classes live together; and the last one closes the line: **checking and keeping exclude
+  each other**, so every kept structure in the core is public and **what a lineage owns is what it raises**, one
+  triangle per generation, checked while it waits.
+- **Combined or piled up.** Combined: every slice ran in or beside the line's world (`PAW=2`) and built on the last.
+  But from run 1227 on most slices started from a designed two-class founder (`C@y!z|!`, `Y@&c@y! C@x!X@&`, D1) and
+  asked whether copy error keeps it; each answer was "transient" or "frozen". Designed founders are labelled starting
+  conditions and fine, but the line has been testing designs more than watching what grows. What grew by itself in
+  those runs: the leaky front (2258), lock rebirth from cheats (1902), the rootless partner that drifts (0252).
+- **The core.** Smaller than at run 2151 (chain copying out, `lysOneWay` out; `sim.js` about 100 lines shorter). One
+  option mode was added, `lysJoint: 2` (x), by the stop rule's terms (no shape builds a recess, run 2258). The guard is
+  now three modes of one parameter (0 trap, 1 lock, 2 kin guard) used by different worlds: the core review (rotation
+  95) should leave the line one, or say why it needs two. The environment grew more: 76 to 88 checks.
+- **What has not changed: the shape.** Every body is still two cells, as on 2026-10-05: twelve days and about 45 runs
+  with no growth in the size of what evolves. This is the gap against the goal, and run 0416 says why the lock line
+  could not close it: a body can keep only public partners, so the heredity of anything larger than a raised triangle
+  comes from place (s about 0.44-0.58, run 1322) or not at all. More two-class lock designs would measure the same
+  limit again.
+- **The choice among run 0416's three.** (c) for two-class locks: they stop here. (a) in a form aimed at shape: the
+  guarded lineage under (x) is the first heredity in the line that holds under copy error, and the copy-error end state
+  (one guarded lineage, a rootless public partner `C@s!T`, `C@|R!I` with two free copied sides) is a stable platform
+  with a part that is free to vary. What grows on it (a third cell on a free side, a third class on a site the partner
+  carries, a defence) is the next build, theory first, then long worlds that watch rather than test a design. (b) is
+  the one route to a body that owns more than one cell per generation (a checked bond that outlasts completion); it
+  risks bodies that never let go (run 0820's collapse at 3x), so it is designed on paper in the next explore before
+  anything is built.
+- **Stop rule (process).** A priority that has taken four slices without a capability that holds under copy error
+  goes back to the direction check (38 took six). The run 2151 rule stays: a parasite is answered first by a shape the
+  world reaches by one error, a new guard only with the case that no shape does it.
+- **Not chosen.** More two-class lock designs (the limit is derived); a fourth guard mode; reopening the 47-type
+  organism (its sinks are unchanged); retiring the mutagen (it still pins checks, and it adds no capability).
+- **Rotation:** unchanged (95 core-review, 96 build, 97 harden, 98 build, 99 explore): a build to watch the platform,
+  the harden to keep the 88-check suite inside two parts, an explore for (b).
+
 ## Checking and keeping exclude each other: a body checks only the cell it raises (explore run 20261017-0416, 2026-10-17)
 
 NEXT step 93 (partner choice, on paper first), then the one design the argument leaves (D1) and the smallest candidate

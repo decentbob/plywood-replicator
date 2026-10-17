@@ -1,103 +1,78 @@
 # Next instance: start here
 
-State on 2026-10-17 (after autorun run 20261017-0416, explore). Read AGENTS.md first (rules of work), then this file.
-History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its run
-and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
-slice record with its predictions is on its run's branch (`explore-0416`, `build-0252`, `explore-2258`, `build-2151`, `build-1902`, `explore-1602`,
-`build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check is IDEAS "Eight slices on the
-lock" (run 2151).
+State on 2026-10-17 (after autorun run 20261017-0456, review-intent). Read AGENTS.md first (rules of work), then this
+file. History: docs/INNOVATIONS.md (newest first), RULES (Core changes), ROADMAP backlog A (every done priority with its
+run and checks), the autorun log, and git: each run's handoff is this file at its merge (`git log -p docs/NEXT.md`); a
+slice record with its predictions is on its run's branch (`explore-0416`, `build-0252`, `explore-2258`, `build-2151`,
+`build-1902`, `explore-1602`, `build-1227`, `build-0727`, `core-review-2221`, `explore-1951`); the latest direction check
+is IDEAS "What a lineage owns is what it raises" (this run).
 
 **Goal (user, 2026-10-05): complex evolution** (AGENTS.md, IDEAS); the organism that feeds its bud is a direction.
 Since review-intent run 1850 the vehicle is **the pair** (2 cells, 2 types; IDEAS "Sources in proportion to use"): every
 cell of a body exposes exactly one copyable side, so part types are made in the proportion buds use them. The 47-type
 organism lineage is frozen; it returns as the complex end once the pair world varies and competes.
 Where the line stands (runs 1351-0416; INNOVATIONS has the numbers, IDEAS the reasoning): recognition is one glue pair
-and copy error changes one side, so **a lock its carrier needs is frozen** and only a lock its carrier does not need
-turns ("Who pays for a lock"). Public locks turn but the core's trap lyses keys and plugs alike; a trap that does not
-lyse across a joint (`lysJoint` 1, candidate (v); on in the line's world `PAW=2`) guards them. **A lock stays only where
-it pays its bearer**: guarded nurseries (own side the root's complement with `!`) live, plain ones die; catchers take
-the second cell's place ("The catcher"); a head of the nursery's root that does not raise itself is its cheat, and under
-copy error every lock is transient, lost to its cheats and reborn from them ("The lock is reborn from its cheats"); the
-cheat wins the site by flux ("One encounter against two"). Run 2258 ("The nursery's share is the environment's"): the
-nursery's share is n* = c rB / (pi rho), where only the free copies' reach rho moves (life, area, crowd), so no body
-plan in the core changes it; a recess cannot be built (the two-wall notch is the kid's front's place) and shape is
-public (fillers); **candidate (x)**, a lysis side that spares across a joint only a partner carrying the identical side
-(`lysJoint: 2`, an option), lets no head that does not raise itself be raised on a guarded site: under copy error the
-lock held in every census to 480k (4 of 4), the nursery added flux to place (its front lost the anchor and sprays
-kin), and the lock's letters froze. Run 0252 ("Each completes the other"): two guarded nurseries front to front with
-leaky fronts (`Y@&c@y! C@x!X@&`) complete each other's kids with copies of their own waiting kids and live with no
-filler: **two obligate classes, each with its own heredity**; but a cell that sprays only while it waits never
-out-sprays one that sprays always, so a public partner of a foreign root takes the role at any frequency (the guard
-traps public cells of its own root only), and under copy error a root error makes one. Run 0416 ("Checking and keeping exclude
-each other"): **no body in the core checks the partner it keeps**: a bond that outlasts completion reads one letter, and
-the kin check bites only across a joint to a waiting cell; the one checked partner is raised on the host's front and
-leaves (D1, dies), and the smallest candidate for a kept one, (y), makes partners that catch their own kind.
+and copy error changes one side, so a lock its carrier needs is frozen and only a lock its carrier does not need turns
+("Who pays for a lock"); a lock stays only where it pays its bearer, and under copy error every lock is transient, lost
+to its cheats and reborn from them; the cheat wins the site by flux ("One encounter against two"); the nursery's share
+is the environment's. **Candidate (x)** (`lysJoint: 2`, an option: a lysis side spares across a joint only a partner
+carrying the identical side) keeps a guarded lineage's lock under copy error (24 of 24 censuses) and freezes its
+letters. Two guarded nurseries front to front are two obligate classes (run 0252), but a public partner of a foreign
+root takes either role, and **no body in the core checks the partner it keeps** (run 0416): every kept structure is
+public, and what a lineage owns is what it raises, one triangle per generation. **Every body is still two cells**
+(since 2026-10-05): the size of what evolves has not grown, and that is the gap this direction check aims the next
+slices at.
 
-**Handoff status (autorun run 20261017-0416, explore): done; no rule, demo, structure or check change; candidate (y)
-written and not proposed** (INNOVATIONS 2026-10-17 run 0416; IDEAS "Checking and keeping exclude each other"; RULES (y);
-the slice record with predictions P1-P3 is this file at `5e29fa2` on branch `explore-0416`).
-- Theory: binding and closure read one glue pair, contact lysis on a bond that is not a joint lyses whatever it holds,
-  and (x)'s kin check reads a second feature only across a joint and only on a cell that hears an open front for two
-  passes (the joint is cut at the release after completion, before lysis can cut). So a checked bond is a joint to a
-  waiting cell and a kept bond is read by one letter; every kept structure is public.
-- D1, the one checked partner (host `Y@&c@!y!` raises `C@&c@!-|` or `C@&c@!-` on its front as kin): dies in the line's
-  world (0 of 8 at 40k); with the per-individual hazard or none it dies or ends as a frozen mass of waiting kids (16
-  worlds). Every bond is a joint, so nothing keeps the host. A stranger on the kid's front kills the kid.
-- Candidate (y) (kin check on every bond) as a throwaway (`lysJoint` 3, not committed; the patch is in RULES (y) item 4):
-  a kept partner must carry the host's side, so it catches its own copies; the fan freezes at 9-10 cells (0 of 8).
-- Under the guard a head's front is not part of its kin, so the front letter (which partner the kids take) is the
-  guarded lineage's one heritable trait that varies without cheats; it is frozen while the lineage needs its partner.
-- Nothing is running. Worlds regenerate with `node tri/batch.js runs/NAME.json` (env always `PAW` 2, `TRI_NOPIC` 1,
-  `TRI_PARAMS` `{"pErr":1e-9,"lysJoint":2}`):
-  - `p1.json` (40k): `da` (`PA2` `Y@&c@!y! C@&c@!-|`), `db` (`PA2` `Y@&c@!y! C@&c@!-`); seeds 1-4
-  - `p2.json` (30k, `PA2` as `db`): `e1` (`PAHU` 2), `e0` (`PAHT` 1e9), `z1` and `z2` (`PAHT` 1e9, `PA3N` 10, `PA3T` 10000, `PA3`
-    `Y@&c@!y! C@&-|-` and `Y@&c@!y! C@&z@|-`)
-  - `p3.json` (20k, `lysJoint` 3 on a patched copy of `tri/`, `node runs/ytri/batch.js`): `r1` (`PA2` `Y@&c@!y! C@c@!-|`),
-    `r2` (`PA2` `Y@&c@!y! C@-|c@!`)
+**Handoff status (autorun run 20261017-0456, review-intent): done; no code, demo or check change.** Direction check in
+IDEAS "What a lineage owns is what it raises"; priorities below; ROADMAP backlog A closes 38; rotation unchanged.
+- Decision: priority 38 (two-class locks) is closed at the core's limit. The guarded lineage under (x) is kept as a
+  platform: its heredity holds under copy error, and its public partner is free to vary in two sides. Next build:
+  what grows on it (priority 39). Next explore: when a joint lets go, on paper (priority 40).
+- Process stop rule (new): a priority that takes four slices without a capability that holds under copy error goes
+  back to the direction check.
+- Nothing is running.
 
-**Next step (rotation 94, review-intent): the direction check.** Weigh priority 38 as it stands: the guard keeps one
-lineage's lock under copy error (frozen), two obligate classes live (run 0252) but a kept partner is public in the core
-(this run), so two-class locks have reached the core's limit. Choose the line's next vehicle: (a) the public partner as
-given, selecting on what partners do through place (heredity of combinations is locality, IDEAS run 1322), from the
-copy-error end state (one guarded lineage with a rootless partner `C@s!T`, `C@|R!I` that drifts in two free sides:
-`node tri/check.js --cmd mutual-pair-evolve`, run to 240k); (b) a core change on the keeping side (when a joint lets go),
-not designed; (c) leave locks for another capability (ROADMAP backlog). The core review (rotation 95) decides (x).
+**Next step (rotation 95, core-review):** decide (x) (RULES, candidate (x); `lysJoint: 2`). The guard is three modes
+of one parameter (0 trap, 1 lock, 2 kin guard; the line's preset `PAW=2` sets 1, the kin-guard and mutual worlds 2):
+adopt (x) as the line's preset if it holds the line's checks, and leave the line one mode, or say why it needs two
+(IDEAS "A trap or a lock": a nursery needs a trap, a public lock a lock; check whether (x) is both). Then the follow-ups
+below that fit a core review.
 
 ## Priorities
 
-Done 1-24, 28-30, 32-34, 36 and 37: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user approved the order
-(run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable variation; a minimal
-competition test.
-Open (set by review-intent run 2151; since then 32, 36, 37 and 34 done, 38 set by run 1227, its first step done in
-run 1902, its second in run 20261016-2151, its third in run 20261016-2258, its fourth in run 20261017-0252, partner
-choice settled on paper in run 20261017-0416):
-38. [94 review-intent] **A lock that pays its bearer, for two classes under copy error** (IDEAS "Two locks on one carrier",
-    "The catcher", "The lock is reborn from its cheats"). Each class must gain from the other more than from raising
-    itself. Run 1602's candidate: a nursery cell (root X, own site x!, copied only there) and its filler (another root,
-    a plain copied side, made only by being caught on a nursery front) need each other; under copy error the two
-    shapes held in 7 of 8 worlds, but the lock moved between them. Run 1902 (first step): the nursery's cheat holds
-    70-80% beside it, two nursery systems exclude each other, and every lock is transient. Run 2151 (second step): the
-    cheat wins the site by flux (one encounter against two), the nursery's number is set by the free cheats' life, area
-    and access; no design within the core keeps the cheat off the site. Run 2258 (third step): the share is the
-    environment's (crowding is reach), the recess is not buildable; candidate (x) (`lysJoint: 2`) keeps the lock under
-    copy error and freezes it. Run 0252 (fourth step): two guarded nurseries that complete each other's kids live without
-    a filler (two obligate classes), but a public partner of a foreign root takes either role at any frequency, and
-    copy error makes one. Run 0416 (explore): partner choice on paper: no body checks the partner it keeps (a kept bond
-    reads one letter; the kin check bites only across a joint to a waiting cell); a raised partner (D1) dies; candidate
-    (y) makes self-binders. Next: the direction check (the next step above).
+Done 1-24, 28-30, 32-34, 36-38: ROADMAP backlog A (each with its run and checks; INNOVATIONS has the evidence). The user
+approved the order (run 0321): a world that runs indefinitely under steady, labelled drives; the simplest heritable
+variation; a minimal competition test.
+Open (set by review-intent run 20261017-0456; reasoning in IDEAS "What a lineage owns is what it raises"):
+39. [96 build] **Growth on the guarded platform.** Start from the copy-error end state of a guarded world (one guarded
+    lineage under `lysJoint: 2`, its partner public: `node tri/check.js --cmd mutual-pair-evolve` and
+    `kin-guard-evolve`, saved states or reruns to 120k). Theory first: list the one-error variants of the public
+    partner (rootless `C@s!T`, `C@|R!I`: a front and two copied sides) and of the guarded head's front, and what each
+    pays its carrier by place (s about 0.44-0.58, run 1322) under the guard: a third cell bound on a free side (length),
+    a third class raised on a site the partner carries (a commons under the guard), a side that covers or lyses
+    (defence). Predict, then run the end state long (4 seeds, 480k or more) and census by shape (`census.js --shape`,
+    extended to 3-cell bodies if needed). Done when a body of three or more cells, or a third class, holds in 3 of 4
+    worlds (a capability with a check), or the argument shows why nothing grows on the platform (a result). Stop after
+    two slices either way.
+40. [99 explore] **When a joint lets go (on paper first).** The one route to a body that owns more than one cell per
+    generation is a checked bond that outlasts completion (IDEAS run 0416: (x)'s check bites only across a joint, and a
+    joint is cut at completion). Design the smallest change on the keeping side, say exactly what it reads (locality),
+    and derive whether it makes bodies that never let go (run 0820's collapse at 3x) or self-binders (candidate (y)).
+    Build only if the argument says it does neither; record it under Core changes either way.
 31. [later] **Shape inside the loop.** Every class is one shape, so the loop is turnover of letters; 37 (done, run 1227:
-    two locks hold two classes until copy error parts them) was its first concrete case. Others: a head with a second site of its own, a third cell that covers the site (length as defence).
+    two locks hold two classes until copy error parts them) was its first concrete case. 39 is its next.
 25. [later] **Length without sinks.** Chains of second cells arise by one mutation (an attach letter that complements a
     seed site) and preceded both collapses in run 0121 and all four in run 0551's control; a lysing site at the chain's
     tip stops them. Length as a function needs a chain that lets go (an `&` at its end) or a third cell that covers an
-    open site (length as defence). Designed, not demonstrated.
+    open site (length as defence). Designed, not demonstrated. 39 tests it on the platform.
 26. [later] Killing as a frequency-dependent enemy: the root-lysing seed site `z!` is the first killer to arise; it spread
     as a cheat, not as a predator, and guards against chains (run 0551).
 Frozen: the 47-type organism (feeding, candidate (n), the front sink, lysis in the lineage); its genome copying left the
-core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets of different length and (c) more
-diets than blanks (run 1150's R* rule again).
+core in run 2221 (git `1284bb4`); `budpool`, `closure` and `lysis` keep its kit. Not taken from run 1750's list: (b) diets
+of different length and (c) more diets than blanks (run 1150's R* rule again).
 
-Rotation (autorun `projects/plywood/rotation.txt`, unchanged since run 2151): 93 explore, 94 review-intent, 95 core-review.
+Rotation (autorun `projects/plywood/rotation.txt`, unchanged in run 0456): 95 core-review, 96 build, 97 harden, 98 build,
+99 explore. Run 98 (build) takes 39's second slice or whatever 39's first left as the next step.
 
 **Core-change candidates:** docs/RULES.md, Core changes, Open candidates ((x) built as the option `lysJoint: 2` in run
 2258, for the next core review; (y) written and not proposed in run 0416; (v) kept as the option `lysJoint`, (t), (s), (r)'s open part, (j), (l); settled there: (f),
