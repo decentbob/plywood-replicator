@@ -28,6 +28,45 @@ So a slice should spend real effort on the idea before the batch: name the conce
 an individual, what sets its length), derive what follows from the rules, and design structures ahead of need, from
 single part types to whole mechanisms. Runs then test a prediction instead of searching for one.
 
+## A closed side, not a lysing one: the partner's shield; a ring that pays its head is a public good (build run 20261017-1302, 2026-10-17)
+
+NEXT priority 39, second and last slice: theory first, then entry tests on `rosette`'s world and one copy-error watch
+(INNOVATIONS run 1302; [rosette-pay.png](pictures/rosette-pay.png)). Notes, not the user's words.
+- **Lysis is death, and it comes back.** In the line's world every lysed triangle returns as a blank once free (the
+  hazard's and contact lysis alike), and lysis passes back across any bond that is not a joint. So a `!` on a side that a
+  reader binds without a joint kills the reader and the bearer's whole body (head included; a kid on its site is spared by
+  the joint). Run 0726 called the partner with both free sides lysing "immune"; it is a trap, the nursery trap of run
+  1522 one cell over: `C@s!T!` was lost beside the chain (4 of 4) where a new letter took the partners. Lysis guards only
+  across a joint (the kin guard), where the reader is a waiting kid.
+- **The close-only mark is the shield.** A free triangle never binds a `.` side by glue, and a copy blank still copies it,
+  so `C@s!T.` costs nothing and no chain on any letter can read that side: it took 95-100% of partners beside the chain (3
+  of 4) and stayed rare without it. The same mark sealed the shared site in run 1650 ("the shared site seals itself"); a
+  side that only closures between attached cells can use is closed to every free reader at once. One mark toggle away
+  (1/36 per copy error, as likely as a `!`), and unlike a new letter it does not have to be found again after the next
+  chain.
+- **A body with no readable side.** The guarded head's free side is its site (kin guard: only a kid carrying it is
+  raised, any other reader dies), the partner's lysing side is a trap, and a closed plain side reads nothing: such a body
+  offers a free reader nothing to hold. That is the end of the parasite line on this platform: what can still vary is
+  letters nothing reads (drift).
+- **A ring that pays is a public good.** `t@y!T` closes the same ring with four nursery sites outward; the world keeps
+  more heads (349-419 against 208-281 with `t@s!T`). But kids leave at completion, and the fronts and partners they make
+  serve every chain, while an occupied site is a copy side lost: beside `t@s!T` the paying chain was gone by 40k (4 of 4),
+  and under copy error its site cheat `t@q!T` overtook it within 30k. The law is "One encounter against two" (run 2151)
+  again: flux beats place; a gain a body gives away does not hold against the cell that keeps its side for copies.
+- **The quick escape comes first.** Under copy error the closed side did not spread (0-12% of partners in four worlds to
+  480k): a new letter is six times likelier per copy error than the mark, so every chain episode ended in a letter turn,
+  and between episodes nothing selects the mark, which drifts in at 0.01 x 1/36 per copy (about 340 partner generations
+  in 480k is too few). Run 1650's seal met the same odds and still won (7 of 12 worlds by 480k), because its parasite
+  came back often (commons classes and chains, each sweep of the seal during an episode); a chain here needs one
+  particular front letter, about fifty times rarer than an escape, so one to three episodes per world in 480k select it
+  too seldom. So the parasite line keeps turning letters as run 0726 saw, and the closed side is a designed answer, not
+  yet an evolved one; a much longer watch (1.2M or more) would say whether it seals in the end.
+- **Where 39 ends.** Two slices: a parasite body of six (rings), its two escapes (a new letter, quick and transient; a
+  closed side, permanent), and a mutualist body of six that loses to its cheat. The bodies of more than two cells are
+  real, but none is a lineage's own: the line is back at "What a lineage owns is what it raises". Next is the direction
+  check (stop rule), with priority 40 (when a joint lets go) as the one route the core offers to a body that keeps more
+  than one cell.
+
 ## Rings of six: the partner's free letter is where a parasite lives and where it is escaped (build run 20261017-0726, 2026-10-17)
 
 NEXT priority 39 (growth on the guarded platform), theory first, then the copy-error end states watched to 480k, entry

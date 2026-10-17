@@ -242,6 +242,10 @@ ring_1 1e696496ce3db787 af57104a8f7ff211
 ring_2 320161ae0dc4061b a101d60040932648
 ring_3 f23dec55e32b7805 0b54b7c0f72ceb71
 ring_4 6c5eaef89975b6d2 82bbb6b19c3a8890
+rosette-dot_1 f18c1e76e18debd5 4d6e7984b8e6eb1a
+rosette-dot_2 f5f345a9d39b1b3f 3abf53a3ca920bef
+rosette-dot_3 4bf8d3970905e3ca f40419d080986263
+rosette-dot_4 317b7fd2fab39c99 4e1ada9ac9a52776
 rosette-escape-c_1 2a2dbb824a868fcf 3100d8a20a20a49a
 rosette-escape-c_2 59ba69b1f6c06ab1 1435807e731980fc
 rosette-escape-c_3 70396ec5f9993025 9abd6467ea179d57
@@ -250,6 +254,14 @@ rosette-escape_1 5e3f1fb3386e997f 3ed5680e7978a210
 rosette-escape_2 f8a96e041db85e26 b12664e857380b3a
 rosette-escape_3 9d6c26284b2f8865 ccb24393995b6efd
 rosette-escape_4 64faff3ac1de9652 01e4a88505b88625
+rosette-pay-cheat_1 a48aecad352ab0f1 f6245634c8b38188
+rosette-pay-cheat_2 e555b551ff5a851d 205caa724ed34588
+rosette-pay-cheat_3 5eb785913695b869 dd3c81109e2740e7
+rosette-pay-cheat_4 af59ed0bea547790 6094f86333240b87
+rosette-pay_1 07eb5d0b2ec009e7 d279a04cfb5abb9a
+rosette-pay_2 ebcfa5c9ce3b5445 0e273bb2860cd6a7
+rosette-pay_3 1926443779ba4bad 295b2e45c504af61
+rosette-pay_4 d861811ce3464378 43480bfb6017e177
 rosette_1 0b29fcca0bfe3694 3c7bf225aa1b01ed
 rosette_2 382aea7f0df8f9b1 476e196b1a65d473
 rosette_3 ee69e805527c4c2a 8cb72c234664e6bb

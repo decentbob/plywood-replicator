@@ -68,7 +68,7 @@ added since that use a mode. Dates: when the item entered the core (the reposito
 
 | Item | Kind | Fires in (run 2221) | Since |
 |---|---|---|---|
-| `.` close-only | mark | `pair` (seals `C@i.z!`, `rare-waste`'s `c@\|C.Z@&`, mutants), `ring` and `imprint` rings (the root's closure side) | 10-01; a free triangle binds by none 10-03; no copy side binds by it 10-07 (run 2051) |
+| `.` close-only | mark | `pair` (seals `C@i.z!`, `rare-waste`'s `c@\|C.Z@&`, the closed partner `C@s!T.` of `rosette-dot` (run 1302), mutants), `ring` and `imprint` rings (the root's closure side) | 10-01; a free triangle binds by none 10-03; no copy side binds by it 10-07 (run 2051) |
 | `@` attach | mark | every demo with growth: `pair`, `strip`, `ring`, `imprint`, `budpool`, `lysis` | 10-01 |
 | `&` completion release, joints | mark | `pair`, `strip`, `budpool` (8.6 million releases); `lysis` carries it | 10-01; joints stop the open signal 10-06 (run 1920), lysis 10-04 |
 | `\|` anchor (never a template) | mark | `pair` (seed sites `z\|`, fronts `c@\|`), `strip`, `budpool`, `lysis` | 10-01; never copied 10-03 (run 1221); its catch of a strand end removed 10-08 (run 2221) |
